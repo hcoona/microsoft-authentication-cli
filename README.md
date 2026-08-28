@@ -28,7 +28,7 @@ extend the v1 flag-based orchestration model.
 
 ## Current State
 
-- **Phase:** foundation and evidence capture
+- **Phase:** Phase 1 - empirical baseline
 - **Implementation:** none
 - **Default development branch:** `main-v2`
 - **Upstream baseline under review:** `de20930c34b3b86c8a0ed7bbdeeca3f662dae918`

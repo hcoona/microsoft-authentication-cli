@@ -7,7 +7,7 @@ questions, blocked work, and next permitted task.
 
 - **Last updated:** 2026-08-28
 - **Branch:** `main-v2`
-- **Phase:** Phase 0 - Foundation and Handoff
+- **Phase:** Phase 1 - Empirical Baseline
 - **Implementation status:** Not started
 - **Release status:** No v2 release exists
 
@@ -43,17 +43,23 @@ questions, blocked work, and next permitted task.
   a GUI, and ADO PAT lifecycle are outside the v2 core.
 - Downstream credential-provider products remain separate consumers.
 
+## Completed Foundation
+
+- The orphan `main-v2` baseline is committed and published.
+- `main-v2` is the repository default branch.
+- The repository description identifies the fork as unofficial and experimental.
+- Issues and GitHub private vulnerability reporting are enabled.
+- The initial handoff, evidence, governance, architecture, requirements, threat model,
+  validation strategy, roadmap, and decisions are durable.
+
 ## Active Work
 
-Phase 0 documentation and repository setup are being completed. The immediate permitted
-task is to commit this baseline, publish `main-v2`, set it as the repository default,
-enable the documented reporting channels, and verify the rendered repository state. No
-authentication code or Phase 1 experiment may be started during this phase.
+Phase 1 public empirical-baseline work is permitted. No production authentication code,
+wire-contract freeze, packaging, migration, or compatibility implementation is active.
 
 ## Next Permitted Task
 
-After the publication step updates this record and activates Phase 1, the next bounded
-task is:
+The next bounded task is:
 
 > Establish the Phase 1 public empirical baseline: document reproducible upstream build
 > and test prerequisites; determine how the authenticated Office feed and

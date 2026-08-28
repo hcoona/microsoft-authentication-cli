@@ -23,11 +23,16 @@ evidence.
 
 ### User and Credential State
 
-- Use dedicated, authorized test identities and tenants where practical.
+- Use dedicated, authorized test identities and tenants.
 - Do not embed personal account names, tenant details, screenshots, tokens, or policy
   output in committed evidence.
-- Use a disposable operating-system profile, home directory, container, VM, or explicitly
-  isolated cache and configuration root.
+- For WAM, OS-account, Windows-helper, or other broker experiments, use a disposable
+  operating-system user or VM whose broker contains only the dedicated test identities.
+  If that environment is unavailable, do not run the broker experiment.
+- An isolated home, cache, or configuration root is sufficient only for a non-broker
+  experiment that cannot enumerate or use operating-system account state.
+- WSL invocation of a Windows helper inherits the Windows-side broker boundary and
+  therefore requires the same disposable Windows user or VM.
 - Never point an experiment at an upstream production cache, keychain, keyring, registry
   value, PAT store, or installation path unless the experiment explicitly studies that
   store and has a read-only plan.

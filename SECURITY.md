@@ -4,8 +4,8 @@ This is an unofficial, pre-release fork with no production-support or response-t
 commitment.
 
 Do not report a suspected vulnerability that contains sensitive details through a public
-issue. Use this repository's private vulnerability reporting or a private draft security
-advisory when available.
+issue. Use GitHub private vulnerability reporting from this repository's **Security**
+page.
 
 If the issue also affects the Microsoft-owned upstream project, follow the upstream
 security policy and report it to Microsoft through the appropriate private channel.

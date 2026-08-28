@@ -39,6 +39,8 @@ establish broker, browser, secure-store, or WSL behavior.
 
 Real broker and host behavior must be exercised on supported systems. Mocked MSAL builders
 cannot prove UI ownership, account picker behavior, keyring integration, or cancellation.
+Broker tests must use the dedicated operating-system user or VM required by
+`experiment-safety.md`; cache-directory isolation alone does not isolate OS accounts.
 
 ## Account-State Matrix
 

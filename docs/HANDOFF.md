@@ -122,12 +122,10 @@ expected result, and sanitized observation.
 
 ## Current Work Boundary
 
-Phase 0 establishes the public handoff and repository constitution. Production
-authentication code is blocked. Until the initial branch is committed, pushed, made the
-repository default, and reflected in `project-state.md`, the only permitted work is
-finishing that Phase 0 publication.
+Phase 0 established the public handoff and repository constitution. It is complete.
+Production authentication code remains blocked.
 
-The queued Phase 1 empirical baseline is:
+Phase 1 is active. Its bounded work is:
 
 1. prove a clean public build or identify every private dependency that must be removed;
 2. inventory exact MSAL, native broker, cache, telemetry, and packaging dependencies;
@@ -135,9 +133,8 @@ The queued Phase 1 empirical baseline is:
 4. reproduce v1 account, interaction, cancellation, cache, and host behavior;
 5. record facts separately from hypotheses.
 
-Phase 1 remains blocked until `project-state.md` explicitly activates it. When activated,
-all experiments must follow [`experiment-safety.md`](experiment-safety.md). Do not freeze
-the v2 wire contract or begin platform implementation during that task.
+All experiments must follow [`experiment-safety.md`](experiment-safety.md). Do not freeze
+the v2 wire contract or begin platform implementation during this phase.
 
 ## Reading Map
 
