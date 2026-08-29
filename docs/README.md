@@ -16,9 +16,10 @@ navigation, not an independent authority.
 | --- | --- |
 | Why does v2 exist and what is outside its boundary? | [`product/vision.md`](product/vision.md) |
 | What behavior must v2 provide? | [`product/requirements/`](product/requirements/) |
-| What is the current architectural direction? | [`architecture.md`](architecture.md) |
-| What threats and trust boundaries apply? | [`threat-model.md`](threat-model.md) |
-| What evidence is required for a support claim? | [`validation-strategy.md`](validation-strategy.md) |
+| What is the current architectural direction? | [`architecture/overview.md`](architecture/overview.md) |
+| How are client application registrations modeled? | [`architecture/client-application-identity.md`](architecture/client-application-identity.md) |
+| What threats and trust boundaries apply? | [`security/threat-model.md`](security/threat-model.md) |
+| What evidence is required for a support claim? | [`validation/strategy.md`](validation/strategy.md) |
 | Which durable choices have been made? | [`decisions/`](decisions/) |
 
 ## Research and Upstream
@@ -39,7 +40,6 @@ navigation, not an independent authority.
 | What project identity and public-record rules apply? | [`governance/project.md`](governance/project.md) |
 | What compatibility or migration is currently promised? | [`product/compatibility-and-migration.md`](product/compatibility-and-migration.md) |
 | Which operational identifiers must remain separate? | [`namespaces.md`](namespaces.md) until its structured replacement is merged |
-| How are public-client application registrations treated? | [`client-application-identity.md`](client-application-identity.md) |
 
 The root [`README.md`](../README.md) is the public landing page. The root
 [`AGENTS.md`](../AGENTS.md) is an AI-agent interface and is not human onboarding

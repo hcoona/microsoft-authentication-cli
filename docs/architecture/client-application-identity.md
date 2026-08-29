@@ -1,9 +1,8 @@
 # Client Application Identity
 
-## Status
-
-This record defines how v2 treats OAuth public-client application registrations. It does
-not claim ownership of any Microsoft registration.
+This architecture view defines how v2 treats OAuth public-client application
+registrations. It does not claim ownership of any Microsoft registration or freeze a
+client-profile contract.
 
 ## Public Does Not Mean Ownerless
 
@@ -65,7 +64,7 @@ See
 This makes client-application identity a functional input, not a replaceable cosmetic
 constant.
 
-## V2 Policy
+## Architecture Model
 
 1. The authentication core accepts explicit client-application configuration.
 2. The core does not embed a client secret for a native public-client flow.
@@ -79,7 +78,7 @@ constant.
 7. No result may imply that this fork owns, represents, or is supported by the
    registration owner.
 
-## Decisions Still Required
+## Pending Evidence and Decisions
 
 - Whether the initial v2 proof uses only the existing Visual Studio compatibility client
   or also an independently owned test registration.
@@ -90,3 +89,7 @@ constant.
 - Whether the relevant application owner recognizes this reuse as an intended supported
   scenario.
 - How client-profile changes affect cache partitioning and migration.
+
+These items do not authorize implementation. Mutable external claims must be rechecked
+through the Phase 1 research workflow, and product choices require downstream Issues and
+repository-owner decisions.

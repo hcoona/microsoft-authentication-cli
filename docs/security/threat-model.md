@@ -1,6 +1,6 @@
 # Preliminary Threat Model
 
-## Status and Scope
+## Scope
 
 This threat model applies to the planned delegated public-client authentication engine.
 It is preliminary and must be revised before implementation contracts are frozen.
