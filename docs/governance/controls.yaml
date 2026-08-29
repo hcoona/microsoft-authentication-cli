@@ -180,7 +180,7 @@ controls:
     producer: Reviewer independent of the change author and implementation agent
     maintainer: Research maintainer
     consumers:
-      - Change author and repository owner during research, phase-transition, and release review
+      - Change author and repository owner during research, recheck-trigger, phase-transition, and release review
     governing_rules:
       - docs/research/experiment-safety.md
       - docs/governance/record-system.md
@@ -189,6 +189,7 @@ controls:
     implementation: .github/skills/research-evidence-review/SKILL.md
     execution_points:
       - pull-request-review
+      - recheck-trigger
       - phase-transition
       - release
     failure_mode: Research conclusions overstate evidence or expose unsafe experimental detail.
@@ -208,6 +209,7 @@ controls:
     implementation: Material-finding triage instructions in each active review Skill
     execution_points:
       - pull-request-review
+      - recheck-trigger
       - phase-transition
       - release
     failure_mode: A self-confirming review creates false assurance or unnecessary changes.

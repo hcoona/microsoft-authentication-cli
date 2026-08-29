@@ -59,8 +59,8 @@ observations, stop conditions, and cleanup plan.
 - Use hk for deterministic checks. Do not replace contextual product, architecture,
   evidence, or risk judgment with mechanical linting.
 - Apply Agent Skills routed for changed record families and controls required by the
-  current execution point. Phase-transition and release controls apply even when the
-  event does not otherwise change a routed record family.
+  current execution point. Phase-transition, release, and fired-recheck controls apply
+  even when the event does not otherwise change a routed record family.
 - A reviewer who authored or implemented a change cannot satisfy an independent review
   required for that change.
 - Update the canonical record in the same change as the behavior or policy it governs.

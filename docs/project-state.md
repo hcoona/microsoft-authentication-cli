@@ -6,6 +6,10 @@ This record authorizes work only as accepted on the target branch, normally `mai
 On a pull-request or feature branch, changes to this file propose the state after merge;
 the target branch's accepted copy continues to govern work before merge.
 
+Preparing and reviewing an explicitly repository-owner-approved pull request whose sole
+substantive purpose is a project-state transition is permitted. Work newly authorized by
+that proposal may begin only after the transition merges.
+
 ## Current Stage
 
 **Empirical Baseline**

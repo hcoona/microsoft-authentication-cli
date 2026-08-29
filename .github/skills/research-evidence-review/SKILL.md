@@ -1,6 +1,6 @@
 ---
 name: research-evidence-review
-description: Review public-source research, rechecks, experiment protocols, observations, and evidence-backed claims for provenance, safety, reproducibility, and bounded conclusions. Use for pull requests that change docs/research, empirical claims elsewhere, experiment procedures, mutable-source rechecks, or support claims based on observed platform behavior, and at every phase transition or fired release recheck even when no research file has changed yet.
+description: Review public-source research, rechecks, experiment protocols, observations, and evidence-backed claims for provenance, safety, reproducibility, and bounded conclusions. Use for pull requests that change docs/research, empirical claims elsewhere, experiment procedures, mutable-source rechecks, or support claims based on observed platform behavior, and at every phase transition or fired recheck trigger even when no research file has changed yet.
 ---
 
 # Research-Evidence Review
