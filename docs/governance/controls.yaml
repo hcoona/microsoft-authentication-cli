@@ -71,7 +71,7 @@ controls:
       - GitHub Actions and reviewers at CI before merge
     governing_rules:
       - docs/governance/record-system.md#workflows
-    invariant: Each V2 requirement identifier is defined exactly once.
+    invariant: Each established V2 requirement identifier remains defined exactly once.
     runner: hk
     implementation: hk.pkl
     execution_points:
@@ -101,15 +101,15 @@ controls:
   - id: record-family-path-consistency
     state: current
     class: mechanical
-    enforcement: advisory
+    enforcement: blocking
     producer: hk and the repository record checker
     maintainer: Record-system maintainer
     consumers:
-      - Record-system reviewers reading local-fast and CI advisory output
+      - Record authors and reviewers at local-fast and CI
     governing_rules:
       - docs/governance/governance-system.md#gov-002-one-canonical-authority
       - docs/governance/record-system.md#authority-by-concern
-    invariant: Current record-family paths exist and governed records match a declared family.
+    invariant: Current record-family paths exist, governed records match one declared family, and the documentation portal routes to every retained Markdown record.
     runner: hk
     implementation: hk.pkl
     execution_points:
@@ -198,7 +198,7 @@ controls:
     state: current
     class: procedural-review
     enforcement: review-required
-    producer: Reviewer independent of the originating review
+    producer: Reviewer independent of the originating review, change author, and implementation agent
     maintainer: Repository owner
     consumers:
       - Change author and repository owner before remediation or disposition

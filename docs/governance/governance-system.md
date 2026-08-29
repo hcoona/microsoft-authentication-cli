@@ -118,9 +118,9 @@ release manifest, or a tag.
 ### GOV-011: Separate Findings From Disposition
 
 A reviewer must not solely adjudicate its own material findings. A reviewer independent
-of the originating review must classify each material finding as a true positive, false
-positive, or unresolved and record the evidence for that classification in the pull
-request or other governing review carrier.
+of the originating review, change author, and implementation agent must classify each
+material finding as a true positive, false positive, or unresolved and record the
+evidence for that classification in the pull request or other governing review carrier.
 
 The repository owner decides the disposition of unresolved findings and any finding that
 requires a value, risk, scope, governance, or release decision.
@@ -143,6 +143,13 @@ already deterministic and well exercised.
 
 A normal policy or control change uses a reviewable pull request and the review procedure
 applicable to the affected scope.
+
+The accepted target-branch versions of `AGENTS.md`, this policy, the record-system
+policy, the control catalog, and the applicable review Skill govern review of a proposed
+governance amendment. Proposed versions are review subjects before merge. They may impose
+additional validation on the proposal, but they cannot waive or weaken an accepted
+obligation during their own review. If an accepted authority needed for review is
+unavailable or ambiguous, stop and request repository-owner disposition.
 
 A change to this governance system must also:
 

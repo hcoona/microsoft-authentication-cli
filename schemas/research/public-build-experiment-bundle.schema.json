@@ -356,8 +356,7 @@
           ]
         },
         "command": {
-          "type": "string",
-          "minLength": 1
+          "$ref": "#/$defs/commandInvocation"
         },
         "depends_on": {
           "type": "array",
@@ -369,6 +368,28 @@
         },
         "expected_observations": {
           "$ref": "#/$defs/nonEmptyStringArray"
+        }
+      }
+    },
+    "commandInvocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executable",
+        "arguments"
+      ],
+      "properties": {
+        "executable": {
+          "type": "string",
+          "minLength": 1
+        },
+        "arguments": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
@@ -420,8 +441,7 @@
           "$ref": "#/$defs/nonEmptyStringArray"
         },
         "command": {
-          "type": "string",
-          "minLength": 1
+          "$ref": "#/$defs/commandInvocation"
         },
         "status": {
           "enum": [
@@ -492,8 +512,39 @@
           },
           "then": {
             "properties": {
+              "exit_code": {
+                "type": "integer",
+                "not": {
+                  "const": 0
+                }
+              },
               "reproduction_count": {
                 "minimum": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "blocked",
+                  "not-applicable"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "exit_code": {
+                "const": null
+              },
+              "reproduction_count": {
+                "const": 0
               }
             }
           }
@@ -669,6 +720,7 @@
       "additionalProperties": false,
       "required": [
         "id",
+        "kind",
         "version_constraint",
         "declaration_location",
         "targets"
@@ -677,6 +729,9 @@
         "id": {
           "type": "string",
           "minLength": 1
+        },
+        "kind": {
+          "$ref": "#/$defs/dependencyKind"
         },
         "version_constraint": {
           "type": "string",
@@ -691,14 +746,48 @@
         }
       }
     },
+    "dependencyObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "result_id",
+        "retrieval_source",
+        "access",
+        "cache_state"
+      ],
+      "properties": {
+        "result_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "retrieval_source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access": {
+          "enum": [
+            "anonymous",
+            "authenticated",
+            "unknown"
+          ]
+        },
+        "cache_state": {
+          "enum": [
+            "empty",
+            "populated",
+            "unknown"
+          ]
+        }
+      }
+    },
     "resolvedDependency": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "id",
+        "kind",
         "version",
-        "retrieval_source",
-        "observed_in",
+        "observations",
         "targets"
       ],
       "properties": {
@@ -706,16 +795,20 @@
           "type": "string",
           "minLength": 1
         },
+        "kind": {
+          "$ref": "#/$defs/dependencyKind"
+        },
         "version": {
           "type": "string",
           "minLength": 1
         },
-        "retrieval_source": {
-          "type": "string",
-          "minLength": 1
-        },
-        "observed_in": {
-          "$ref": "#/$defs/nonEmptyStringArray"
+        "observations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/dependencyObservation"
+          }
         },
         "targets": {
           "$ref": "#/$defs/nonEmptyStringArray"
@@ -727,16 +820,20 @@
       "additionalProperties": false,
       "required": [
         "id",
+        "kind",
         "version_constraint",
         "requested_by",
         "failure_point",
-        "observed_in",
+        "observations",
         "unknown_transitive_scope"
       ],
       "properties": {
         "id": {
           "type": "string",
           "minLength": 1
+        },
+        "kind": {
+          "$ref": "#/$defs/dependencyKind"
         },
         "version_constraint": {
           "type": "string",
@@ -749,14 +846,26 @@
           "type": "string",
           "minLength": 1
         },
-        "observed_in": {
-          "$ref": "#/$defs/nonEmptyStringArray"
+        "observations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/dependencyObservation"
+          }
         },
         "unknown_transitive_scope": {
           "type": "string",
           "minLength": 1
         }
       }
+    },
+    "dependencyKind": {
+      "enum": [
+        "package",
+        "tool",
+        "sdk"
+      ]
     },
     "conclusion": {
       "type": "object",

@@ -1,6 +1,10 @@
 amends "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Builtins.pkl"
 
+env {
+  ["PYTHONDONTWRITEBYTECODE"] = "1"
+}
+
 local fastSteps = new Mapping<String, Step> {
   ["merge-conflict"] = Builtins.check_merge_conflict
   ["trailing-whitespace"] = Builtins.trailing_whitespace
@@ -35,15 +39,14 @@ local fastSteps = new Mapping<String, Step> {
         "run",
         "tools/check_repository_records.py",
         "catalog-paths",
-        "--advisory",
       )
     }
-    output_summary = "stderr"
   }
 }
 
 local preCommitSteps = new Mapping<String, Step> {
   ["staged-worktree-consistency"] {
+    exclusive = true
     check = new Command {
       argv = List("uv", "run", "tools/check_staged_worktree.py")
     }

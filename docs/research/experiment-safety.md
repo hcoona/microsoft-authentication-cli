@@ -99,9 +99,27 @@ Use the bundle states as follows:
 - `completed` contains the two restore modes, every required stage outcome, dependency
   inventory, conclusions, and explicit overall public-build outcome.
 
-A `blocked` downstream command result identifies the prerequisite result that blocked it.
-When a restore does not pass, every downstream stage for that source mode is blocked by
-that restore. Executed build, test, and package commands use `--no-restore`.
+Each protocol command records a direct executable and ordered argument list and is run
+without a shell wrapper. Restore commands have no command dependency. Each build, test, or
+package command depends only on the restore for the same source mode and passes
+`--no-restore` directly to the matching `dotnet` verb.
+
+A `blocked` downstream command result identifies exactly the same-mode restore result that
+blocked it. When a restore does not pass, every applicable downstream stage for that
+source mode is blocked by that restore. Use `not-applicable` only when the target or stage
+does not exist. Both statuses represent commands that were not executed and therefore
+record a null exit code and zero reproductions.
+
+Each resolved or unresolved dependency observation names the restore result, exact
+retrieval source, access mode, and cache state that produced it. Treat a dependency as
+publicly retrievable only when its public-only observation records anonymous access and
+an empty cache. A `publicly-reproducible` outcome requires passing or not-applicable
+public-only stage results, public-only resolved observations for every resolved and
+source-declared dependency, and no unresolved edge in the public-only attempted graph. A
+`not-publicly-reproducible` outcome requires an observed failed public-only stage or
+unresolved public-only edge. An `inconclusive` outcome identifies the evidence
+limitation; the contract does not mechanically decide whether contextual evidence is
+sufficient.
 
 The contract is limited to the public restore, build, test, and non-publishing package
 work authorized by issue #1. It does not define a generic authentication-experiment

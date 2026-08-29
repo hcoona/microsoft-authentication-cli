@@ -135,6 +135,11 @@ a global overview and scoped views. Designs are created only for coherent implem
 boundaries that need independent review. Research is organized by question and baseline;
 experiments are organized by reproducible protocol.
 
+Requirement identifiers are permanent once merged into the accepted target branch. If a
+requirement is retired, replaced, or moved, retain its identifier exactly once as a
+nonnormative marker that names the replacement or current authority. Never assign an
+established identifier to a different requirement.
+
 ## Enforcement
 
 Use:

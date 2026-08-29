@@ -20,6 +20,10 @@ logs/
 *.log
 *.dmp
 
+# Python tooling caches
+__pycache__/
+*.py[cod]
+
 # Operating-system files
 .DS_Store
 Thumbs.db

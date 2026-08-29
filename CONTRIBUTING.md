@@ -66,11 +66,15 @@ Before merge:
 2. Evaluate every fired entry in
    [`docs/research/rechecks.yaml`](docs/research/rechecks.yaml), even when no research file
    changed before the trigger.
-3. Send each material review finding to a reviewer independent of the originating review
-   for triage before remediation or dismissal.
-4. Obtain repository-owner disposition when an applicable control, unresolved finding,
+3. For governance amendments, use the accepted target-branch versions of `AGENTS.md`, the
+   governance policies, `controls.yaml`, and the applicable review Skill as the review
+   authority. Treat proposed versions as review subjects until merge.
+4. Send each material review finding to a reviewer independent of the originating
+   review, change author, and implementation agent for triage before remediation or
+   dismissal.
+5. Obtain repository-owner disposition when an applicable control, unresolved finding,
    or owner-decision finding requires it.
-5. Record the review, triage, recheck, and owner-disposition evidence in the pull request.
+6. Record the review, triage, recheck, and owner-disposition evidence in the pull request.
 
 ## Commits
 

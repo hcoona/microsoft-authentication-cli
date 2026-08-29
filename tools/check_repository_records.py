@@ -6,8 +6,8 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
-import shlex
 import subprocess
 import sys
 from collections import Counter
@@ -18,9 +18,13 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
-REQUIREMENT_PATTERN = re.compile(r"^## (V2-REQ-[0-9]{3}[A-Z]?):", re.MULTILINE)
+REQUIREMENT_PATTERN = re.compile(
+    r"^#{1,6} (V2-REQ-[0-9]{3}[A-Z]?):", re.MULTILINE
+)
 DECISION_PATTERN = re.compile(r"^([0-9]{4})-.*\.md$")
+MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)\s]+)\)")
 GLOB_MARKERS = frozenset("*?[")
+ZERO_SHA = "0" * 40
 
 
 def load_yaml_path(path: Path) -> dict[str, Any]:
@@ -39,6 +43,60 @@ def duplicates(values: list[str]) -> list[str]:
     return sorted(value for value, count in Counter(values).items() if count > 1)
 
 
+def git_output(*arguments: str) -> str | None:
+    result = subprocess.run(
+        ["git", *arguments],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return None
+    return result.stdout.strip()
+
+
+def resolve_accepted_base(errors: list[str]) -> str | None:
+    explicit_base = os.environ.get("HK_BASE_REF")
+    if explicit_base and explicit_base != ZERO_SHA:
+        resolved_base = git_output(
+            "rev-parse", "--verify", f"{explicit_base}^{{commit}}"
+        )
+        if resolved_base is None:
+            errors.append(
+                f"cannot resolve HK_BASE_REF for requirement-ID comparison: {explicit_base}"
+            )
+            return None
+        return resolved_base
+
+    for candidate in ("origin/main-v2", "main-v2"):
+        resolved_base = git_output("rev-parse", "--verify", f"{candidate}^{{commit}}")
+        if resolved_base is not None:
+            return resolved_base
+
+    return git_output("rev-parse", "--verify", "HEAD^{commit}")
+
+
+def requirement_ids_at_commit(commit: str, errors: list[str]) -> set[str]:
+    listing = git_output("ls-tree", "-r", "--name-only", commit, "--", "docs")
+    if listing is None:
+        errors.append(f"cannot list accepted documentation at {commit}")
+        return set()
+
+    requirement_ids: set[str] = set()
+    for relative_path in listing.splitlines():
+        if not relative_path.endswith(".md"):
+            continue
+        content = git_output("show", f"{commit}:{relative_path}")
+        if content is None:
+            errors.append(
+                f"cannot read accepted requirement definitions from {relative_path}"
+            )
+            continue
+        requirement_ids.update(REQUIREMENT_PATTERN.findall(content))
+    return requirement_ids
+
+
 def check_identifiers() -> list[str]:
     errors: list[str] = []
 
@@ -47,6 +105,12 @@ def check_identifiers() -> list[str]:
         requirement_ids.extend(REQUIREMENT_PATTERN.findall(path.read_text(encoding="utf-8")))
     for identifier in duplicates(requirement_ids):
         errors.append(f"duplicate requirement identifier: {identifier}")
+
+    accepted_base = resolve_accepted_base(errors)
+    if accepted_base is not None:
+        accepted_ids = requirement_ids_at_commit(accepted_base, errors)
+        for identifier in sorted(accepted_ids - set(requirement_ids)):
+            errors.append(f"established requirement identifier was removed: {identifier}")
 
     decision_numbers = [
         match.group(1)
@@ -84,6 +148,32 @@ def matches(path: str, pattern: str) -> bool:
     if not contains_glob(pattern):
         return path == pattern
     return PurePosixPath(path).match(pattern)
+
+
+def check_documentation_portal() -> list[str]:
+    portal = ROOT / "docs/README.md"
+    linked_records: set[str] = set()
+    for target in MARKDOWN_LINK_PATTERN.findall(portal.read_text(encoding="utf-8")):
+        path_part = target.split("#", maxsplit=1)[0]
+        if not path_part or "://" in path_part:
+            continue
+        resolved = (portal.parent / path_part).resolve()
+        try:
+            relative_path = resolved.relative_to(ROOT)
+        except ValueError:
+            continue
+        if relative_path.suffix == ".md":
+            linked_records.add(relative_path.as_posix())
+
+    retained_records = {
+        path.relative_to(ROOT).as_posix()
+        for path in (ROOT / "docs").rglob("*.md")
+        if path != portal
+    }
+    return [
+        f"documentation portal does not route to retained record: {relative_path}"
+        for relative_path in sorted(retained_records - linked_records)
+    ]
 
 
 def check_catalog_paths() -> list[str]:
@@ -124,6 +214,49 @@ def check_catalog_paths() -> list[str]:
                 f"({', '.join(matching_families)})"
             )
 
+    errors.extend(check_documentation_portal())
+    return errors
+
+
+DOTNET_STAGE_ARGUMENT = {
+    "restore": "restore",
+    "build": "build",
+    "test": "test",
+    "package": "pack",
+}
+
+
+def validate_dotnet_invocation(
+    command: dict[str, Any], relative_path: str
+) -> list[str]:
+    errors: list[str] = []
+    invocation = command["command"]
+    executable = invocation["executable"].replace("\\", "/").rsplit("/", maxsplit=1)[-1]
+    if executable.lower() not in {"dotnet", "dotnet.exe"}:
+        errors.append(
+            f"{relative_path}: protocol command {command['id']} must invoke dotnet "
+            "directly without a shell wrapper"
+        )
+
+    arguments = invocation["arguments"]
+    expected_stage_argument = DOTNET_STAGE_ARGUMENT[command["stage"]]
+    if arguments[0].lower() != expected_stage_argument:
+        errors.append(
+            f"{relative_path}: protocol command {command['id']} must invoke "
+            f"'dotnet {expected_stage_argument}'"
+        )
+
+    if command["stage"] == "restore":
+        if "--no-restore" in arguments:
+            errors.append(
+                f"{relative_path}: restore command {command['id']} must not include "
+                "--no-restore"
+            )
+    elif "--no-restore" not in arguments:
+        errors.append(
+            f"{relative_path}: protocol command {command['id']} must include "
+            "--no-restore as a direct dotnet argument"
+        )
     return errors
 
 
@@ -160,43 +293,23 @@ def validate_public_build_bundle_value(
             "source-mode and stage combination"
         )
 
+    for command in commands:
+        errors.extend(validate_dotnet_invocation(command, relative_path))
+        restore = commands_by_slot.get((command["source_mode"], "restore"))
+        expected_dependencies = [] if command["stage"] == "restore" else (
+            [restore["id"]] if restore is not None else []
+        )
+        if command["depends_on"] != expected_dependencies:
+            errors.append(
+                f"{relative_path}: protocol command {command['id']} must declare exactly "
+                f"the dependencies {expected_dependencies}"
+            )
+
     isolation_controls = bundle["isolation_controls"]
     isolation_ids = [control["id"] for control in isolation_controls]
     for identifier in duplicates(isolation_ids):
         errors.append(f"{relative_path}: duplicate isolation control id: {identifier}")
     isolation_id_set = set(isolation_ids)
-
-    for command in commands:
-        for dependency in command["depends_on"]:
-            if dependency == command["id"]:
-                errors.append(
-                    f"{relative_path}: protocol command {command['id']} depends on itself"
-                )
-            elif dependency not in commands_by_id:
-                errors.append(
-                    f"{relative_path}: protocol command {command['id']} depends on "
-                    f"unknown command {dependency}"
-                )
-
-        if command["stage"] != "restore":
-            restore = commands_by_slot.get((command["source_mode"], "restore"))
-            if restore is not None and restore["id"] not in command["depends_on"]:
-                errors.append(
-                    f"{relative_path}: protocol command {command['id']} must depend on "
-                    f"the {command['source_mode']} restore"
-                )
-            try:
-                command_arguments = shlex.split(command["command"])
-            except ValueError:
-                errors.append(
-                    f"{relative_path}: protocol command {command['id']} cannot be parsed"
-                )
-            else:
-                if "--no-restore" not in command_arguments:
-                    errors.append(
-                        f"{relative_path}: protocol command {command['id']} must include "
-                        "--no-restore"
-                    )
 
     results = bundle["command_results"]
     result_ids = [result["command_id"] for result in results]
@@ -243,44 +356,31 @@ def validate_public_build_bundle_value(
                     f"{relative_path}: result {command_id} references unknown isolation "
                     f"control {isolation_id}"
                 )
-        blocking_ids = result.get("blocked_by", [])
-        if result["status"] == "blocked" and result["stage"] != "restore":
-            if not blocking_ids:
+
+        status = result["status"]
+        if status in {"blocked", "not-applicable"}:
+            if result["exit_code"] is not None or result["reproduction_count"] != 0:
                 errors.append(
-                    f"{relative_path}: blocked result {command_id} must identify a "
-                    "blocking prerequisite"
+                    f"{relative_path}: unexecuted result {command_id} must use a null "
+                    "exit code and zero reproductions"
                 )
-        elif blocking_ids:
+        elif result["reproduction_count"] < 1:
             errors.append(
-                f"{relative_path}: non-blocked or restore result {command_id} must not "
-                "declare blocked_by"
+                f"{relative_path}: executed result {command_id} must record at least "
+                "one reproduction"
             )
 
-        for blocking_id in blocking_ids:
-            if blocking_id == command_id:
-                errors.append(f"{relative_path}: result {command_id} blocks itself")
-            elif blocking_id not in result_id_set:
-                errors.append(
-                    f"{relative_path}: result {command_id} is blocked by unknown result "
-                    f"{blocking_id}"
-                )
-            else:
-                if command is not None and blocking_id not in command["depends_on"]:
-                    errors.append(
-                        f"{relative_path}: result {command_id} is blocked by "
-                        f"{blocking_id}, which is not a declared prerequisite"
-                    )
-                if results_by_id[blocking_id]["status"] == "passed":
-                    errors.append(
-                        f"{relative_path}: result {command_id} is blocked by passing "
-                        f"result {blocking_id}"
-                    )
+        blocking_ids = result.get("blocked_by", [])
+        if status != "blocked" and blocking_ids:
+            errors.append(
+                f"{relative_path}: non-blocked result {command_id} must not declare "
+                "blocked_by"
+            )
 
         if result["stage"] == "restore":
-            if result["status"] == "not-applicable":
+            if status in {"blocked", "not-applicable"}:
                 errors.append(
-                    f"{relative_path}: {result['source_mode']} restore cannot be "
-                    "not-applicable"
+                    f"{relative_path}: {result['source_mode']} restore must be executed"
                 )
             continue
 
@@ -290,33 +390,72 @@ def validate_public_build_bundle_value(
                 f"{relative_path}: {result['source_mode']} {result['stage']} result "
                 "requires the corresponding restore result"
             )
-        elif result["status"] in {"passed", "failed"}:
-            if restore["status"] != "passed":
+            continue
+
+        restore_id = restore["command_id"]
+        if status == "blocked":
+            if blocking_ids != [restore_id]:
                 errors.append(
-                    f"{relative_path}: executed {result['source_mode']} "
-                    f"{result['stage']} requires a passed restore result"
+                    f"{relative_path}: blocked result {command_id} must name exactly "
+                    f"the corresponding restore result {restore_id}"
                 )
-        elif restore["status"] != "passed":
-            if restore["command_id"] not in blocking_ids:
+            if restore["status"] == "passed":
                 errors.append(
-                    f"{relative_path}: {result['source_mode']} {result['stage']} must "
-                    "link its blocked status to the restore result"
+                    f"{relative_path}: result {command_id} cannot be blocked by a "
+                    "passing restore"
                 )
+        elif status in {"passed", "failed"} and restore["status"] != "passed":
+            errors.append(
+                f"{relative_path}: executed {result['source_mode']} "
+                f"{result['stage']} requires a passed restore result"
+            )
 
     inventory = bundle["dependency_inventory"]
+    public_resolved_observations: list[dict[str, Any]] = []
+    public_unresolved_observations: list[dict[str, Any]] = []
+    resolved_without_public_observations: list[str] = []
+    public_resolved_dependency_ids: set[str] = set()
     for collection in ("resolved", "unresolved"):
         for dependency in inventory[collection]:
-            for command_id in dependency["observed_in"]:
-                if command_id not in result_id_set:
+            dependency_has_public_observation = False
+            for observation in dependency["observations"]:
+                command_id = observation["result_id"]
+                result = results_by_id.get(command_id)
+                if result is None:
                     errors.append(
                         f"{relative_path}: {collection} dependency {dependency['id']} "
                         f"references unknown result {command_id}"
                     )
-                elif results_by_id[command_id]["status"] not in {"passed", "failed"}:
+                    continue
+                if result["stage"] != "restore":
+                    errors.append(
+                        f"{relative_path}: {collection} dependency {dependency['id']} "
+                        f"must cite a restore result, not {command_id}"
+                    )
+                if result["status"] not in {"passed", "failed"}:
                     errors.append(
                         f"{relative_path}: {collection} dependency {dependency['id']} "
                         f"cites unexecuted result {command_id}"
                     )
+                if collection == "unresolved" and result["status"] == "passed":
+                    errors.append(
+                        f"{relative_path}: unresolved dependency {dependency['id']} "
+                        f"conflicts with passing restore result {command_id}"
+                    )
+                if result["source_mode"] == "public-only":
+                    dependency_has_public_observation = True
+                    target = (
+                        public_resolved_observations
+                        if collection == "resolved"
+                        else public_unresolved_observations
+                    )
+                    target.append(observation)
+            if collection == "resolved" and not dependency_has_public_observation:
+                resolved_without_public_observations.append(
+                    f"{dependency['id']} {dependency['version']}"
+                )
+            elif collection == "resolved":
+                public_resolved_dependency_ids.add(dependency["id"])
 
     if bundle["status"] != "completed":
         return errors
@@ -331,15 +470,26 @@ def validate_public_build_bundle_value(
         errors.append(
             f"{relative_path}: completed bundle must inventory source-declared dependencies"
         )
+    observed_dependency_ids = {
+        dependency["id"]
+        for collection in ("resolved", "unresolved")
+        for dependency in inventory[collection]
+    }
+    for dependency in inventory["source_declared_direct"]:
+        if dependency["id"] not in observed_dependency_ids:
+            errors.append(
+                f"{relative_path}: source-declared dependency {dependency['id']} has no "
+                "resolved or unresolved observation"
+            )
 
+    public_results = [
+        result
+        for (source_mode, _stage), result in results_by_slot.items()
+        if source_mode == "public-only"
+    ]
     completion = bundle["completion"]
     if completion["outcome"] == "publicly-reproducible":
-        public_results = [
-            results_by_slot[(source_mode, stage)]
-            for source_mode, stage in expected_slots
-            if source_mode == "public-only"
-        ]
-        if any(
+        if len(public_results) != len(stages) or any(
             result["status"] not in {"passed", "not-applicable"}
             for result in public_results
         ):
@@ -347,11 +497,54 @@ def validate_public_build_bundle_value(
                 f"{relative_path}: publicly-reproducible outcome conflicts with "
                 "public-only command results"
             )
-        if not inventory["resolved"]:
+        if not public_resolved_observations:
             errors.append(
-                f"{relative_path}: publicly-reproducible outcome requires resolved "
-                "dependency observations"
+                f"{relative_path}: publicly-reproducible outcome requires public-only "
+                "resolved dependency observations"
             )
+        for observation in [
+            *public_resolved_observations,
+            *public_unresolved_observations,
+        ]:
+            if observation["access"] != "anonymous":
+                errors.append(
+                    f"{relative_path}: publicly-reproducible outcome requires anonymous "
+                    "public-only dependency access"
+                )
+            if observation["cache_state"] != "empty":
+                errors.append(
+                    f"{relative_path}: publicly-reproducible outcome requires empty-cache "
+                    "public-only dependency observations"
+                )
+        for dependency in sorted(resolved_without_public_observations):
+            errors.append(
+                f"{relative_path}: publicly-reproducible outcome lacks a public-only "
+                f"observation for resolved dependency {dependency}"
+            )
+        for dependency in inventory["source_declared_direct"]:
+            if dependency["id"] not in public_resolved_dependency_ids:
+                errors.append(
+                    f"{relative_path}: publicly-reproducible outcome lacks a public-only "
+                    f"resolved observation for direct dependency {dependency['id']}"
+                )
+        if public_unresolved_observations:
+            errors.append(
+                f"{relative_path}: publicly-reproducible outcome conflicts with "
+                "unresolved public-only dependency edges"
+            )
+    elif completion["outcome"] == "not-publicly-reproducible":
+        has_failed_public_stage = any(
+            result["status"] == "failed" for result in public_results
+        )
+        if not has_failed_public_stage and not public_unresolved_observations:
+            errors.append(
+                f"{relative_path}: not-publicly-reproducible outcome lacks a failed "
+                "public-only stage or unresolved public-only dependency edge"
+            )
+    elif not bundle["limitations"]:
+        errors.append(
+            f"{relative_path}: inconclusive outcome must identify an evidence limitation"
+        )
 
     return errors
 
@@ -413,8 +606,7 @@ def main() -> int:
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("identifiers")
     subparsers.add_parser("schemas")
-    catalog_parser = subparsers.add_parser("catalog-paths")
-    catalog_parser.add_argument("--advisory", action="store_true")
+    subparsers.add_parser("catalog-paths")
     args = parser.parse_args()
 
     if args.command == "schemas":
@@ -424,10 +616,9 @@ def main() -> int:
     if not errors:
         return 0
 
-    prefix = "ADVISORY" if getattr(args, "advisory", False) else "ERROR"
     for error in errors:
-        print(f"{prefix}: {error}", file=sys.stderr)
-    return 0 if getattr(args, "advisory", False) else 1
+        print(f"ERROR: {error}", file=sys.stderr)
+    return 1
 
 
 if __name__ == "__main__":

@@ -30,8 +30,10 @@ and navigation routes. Do not copy their governing policy into this description.
 ## Review and Disposition
 
 <!-- Link the applicable control results, independent reviews, fired recheck IDs and
-outcomes, independent finding triage, and required owner disposition. Use "Not
-applicable" where the governing controls do not require an item. -->
+outcomes, finding triage independent of the originating reviewer, author, and
+implementation agent, and required owner disposition. For governance amendments, identify
+the accepted target-branch authorities used for review. Use "Not applicable" where the
+governing controls do not require an item. -->
 
 ## Upstream Provenance
 
