@@ -109,7 +109,7 @@ controls:
     governing_rules:
       - docs/governance/governance-system.md#gov-002-one-canonical-authority
       - docs/governance/record-system.md#authority-by-concern
-    invariant: Current record-family paths exist, governed records match one declared family, and the documentation portal routes to every retained Markdown record.
+    invariant: Current record-family paths exist, governed records match one declared family, and the documentation portal routes to every retained current record.
     runner: hk
     implementation: hk.pkl
     execution_points:

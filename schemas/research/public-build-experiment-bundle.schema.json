@@ -297,6 +297,8 @@
         "expected_observations",
         "stop_conditions",
         "cleanup",
+        "stage_applicability",
+        "restore_configurations",
         "commands"
       ],
       "properties": {
@@ -316,6 +318,60 @@
         "cleanup": {
           "$ref": "#/$defs/nonEmptyStringArray"
         },
+        "stage_applicability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "build",
+            "test",
+            "package"
+          ],
+          "properties": {
+            "build": {
+              "$ref": "#/$defs/stageApplicability"
+            },
+            "test": {
+              "$ref": "#/$defs/stageApplicability"
+            },
+            "package": {
+              "$ref": "#/$defs/stageApplicability"
+            }
+          }
+        },
+        "restore_configurations": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/restoreConfiguration"
+          },
+          "allOf": [
+            {
+              "contains": {
+                "properties": {
+                  "source_mode": {
+                    "const": "source-faithful"
+                  }
+                },
+                "required": [
+                  "source_mode"
+                ]
+              }
+            },
+            {
+              "contains": {
+                "properties": {
+                  "source_mode": {
+                    "const": "public-only"
+                  }
+                },
+                "required": [
+                  "source_mode"
+                ]
+              }
+            }
+          ]
+        },
         "commands": {
           "type": "array",
           "minItems": 1,
@@ -332,6 +388,7 @@
         "id",
         "stage",
         "source_mode",
+        "restore_configuration_id",
         "command",
         "depends_on",
         "expected_observations"
@@ -354,6 +411,10 @@
             "source-faithful",
             "public-only"
           ]
+        },
+        "restore_configuration_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
         },
         "command": {
           "$ref": "#/$defs/commandInvocation"
@@ -380,16 +441,119 @@
       ],
       "properties": {
         "executable": {
-          "type": "string",
-          "minLength": 1
+          "const": "dotnet"
         },
         "arguments": {
           "type": "array",
-          "minItems": 1,
+          "minItems": 2,
           "items": {
             "type": "string",
             "minLength": 1
           }
+        }
+      }
+    },
+    "stageApplicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicable",
+        "reason",
+        "evidence_references"
+      ],
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence_references": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "applicable": {
+                "const": true
+              }
+            },
+            "required": [
+              "applicable"
+            ]
+          },
+          "then": {
+            "properties": {
+              "reason": {
+                "const": null
+              },
+              "evidence_references": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence_references": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "restoreConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source_mode",
+        "origin",
+        "path",
+        "sha256",
+        "sources"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "source_mode": {
+          "enum": [
+            "source-faithful",
+            "public-only"
+          ]
+        },
+        "origin": {
+          "enum": [
+            "audited-upstream",
+            "isolated-public"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "sources": {
+          "$ref": "#/$defs/nonEmptyStringArray"
         }
       }
     },
@@ -719,6 +883,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "declaration_id",
         "id",
         "kind",
         "version_constraint",
@@ -726,6 +891,10 @@
         "targets"
       ],
       "properties": {
+        "declaration_id": {
+          "type": "string",
+          "pattern": "^decl-[a-z0-9][a-z0-9-]*$"
+        },
         "id": {
           "type": "string",
           "minLength": 1
@@ -753,7 +922,8 @@
         "result_id",
         "retrieval_source",
         "access",
-        "cache_state"
+        "cache_state",
+        "targets"
       ],
       "properties": {
         "result_id": {
@@ -777,6 +947,9 @@
             "populated",
             "unknown"
           ]
+        },
+        "targets": {
+          "$ref": "#/$defs/nonEmptyStringArray"
         }
       }
     },
@@ -787,8 +960,8 @@
         "id",
         "kind",
         "version",
-        "observations",
-        "targets"
+        "declaration_ids",
+        "observations"
       ],
       "properties": {
         "id": {
@@ -802,6 +975,14 @@
           "type": "string",
           "minLength": 1
         },
+        "declaration_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^decl-[a-z0-9][a-z0-9-]*$"
+          },
+          "uniqueItems": true
+        },
         "observations": {
           "type": "array",
           "minItems": 1,
@@ -809,9 +990,6 @@
           "items": {
             "$ref": "#/$defs/dependencyObservation"
           }
-        },
-        "targets": {
-          "$ref": "#/$defs/nonEmptyStringArray"
         }
       }
     },
@@ -822,6 +1000,7 @@
         "id",
         "kind",
         "version_constraint",
+        "declaration_ids",
         "requested_by",
         "failure_point",
         "observations",
@@ -838,6 +1017,14 @@
         "version_constraint": {
           "type": "string",
           "minLength": 1
+        },
+        "declaration_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^decl-[a-z0-9][a-z0-9-]*$"
+          },
+          "uniqueItems": true
         },
         "requested_by": {
           "$ref": "#/$defs/nonEmptyStringArray"

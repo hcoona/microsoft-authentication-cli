@@ -54,6 +54,17 @@ is navigation, not an independent authority.
 | Human contributors | Contribution and review workflow | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) |
 | Security reporters | Vulnerability reporting process | [`../SECURITY.md`](../SECURITY.md) |
 
+## Workflow and Machine Contracts
+
+| Audience | Authoritative subject | Canonical record |
+| --- | --- | --- |
+| Change authors and reviewers | Pull-request evidence and disposition prompts | [Pull-request template](../.github/pull_request_template.md) |
+| Record-system automation | Record-family catalog schema | [`record-families.schema.json`](../schemas/governance/record-families.schema.json) |
+| Control automation | Control catalog schema | [`controls.schema.json`](../schemas/governance/controls.schema.json) |
+| Packaging and runtime automation | Operational-identity registry schema | [`operational-identities.schema.json`](../schemas/governance/operational-identities.schema.json) |
+| Research automation | Mutable-source recheck schema | [`rechecks.schema.json`](../schemas/research/rechecks.schema.json) |
+| Phase 1 experiment authors and automation | Public-build experiment-bundle schema | [`public-build-experiment-bundle.schema.json`](../schemas/research/public-build-experiment-bundle.schema.json) |
+
 The root [`README.md`](../README.md) is the public landing page. The root
 [`AGENTS.md`](../AGENTS.md) is an AI-agent interface and is not human onboarding
 documentation.

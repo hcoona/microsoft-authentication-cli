@@ -99,10 +99,22 @@ Use the bundle states as follows:
 - `completed` contains the two restore modes, every required stage outcome, dependency
   inventory, conclusions, and explicit overall public-build outcome.
 
-Each protocol command records a direct executable and ordered argument list and is run
-without a shell wrapper. Restore commands have no command dependency. Each build, test, or
-package command depends only on the restore for the same source mode and passes
-`--no-restore` directly to the matching `dotnet` verb.
+The protocol declares build, test, and package applicability once for both source modes.
+An inapplicable stage requires a reason and evidence reference; both mode results then use
+`not-applicable`. An applicable stage cannot use that status.
+
+Each protocol command records a direct executable and canonical ordered argument list and
+is run without a shell wrapper. The list begins with the matching `dotnet` verb and the
+recorded build entry point. Restore commands have no command dependency and use exactly
+the configuration recorded for their source mode. Build, test, and package commands
+depend only on the restore for the same mode, pass `--no-restore`, and use the recorded
+build configuration.
+
+The protocol records exactly two restore configurations. The source-faithful
+configuration identifies the audited checkout's unmodified `nuget.config`; the
+public-only configuration identifies the isolated generated file. Each record includes a
+content hash and the exact source identifiers it contains. Dependency observations cite
+only a source declared by the configuration used for their restore result.
 
 A `blocked` downstream command result identifies exactly the same-mode restore result that
 blocked it. When a restore does not pass, every applicable downstream stage for that
@@ -111,15 +123,17 @@ does not exist. Both statuses represent commands that were not executed and ther
 record a null exit code and zero reproductions.
 
 Each resolved or unresolved dependency observation names the restore result, exact
-retrieval source, access mode, and cache state that produced it. Treat a dependency as
-publicly retrievable only when its public-only observation records anonymous access and
-an empty cache. A `publicly-reproducible` outcome requires passing or not-applicable
-public-only stage results, public-only resolved observations for every resolved and
-source-declared dependency, and no unresolved edge in the public-only attempted graph. A
+retrieval source, access mode, cache state, and attempted targets that produced it. Treat
+a dependency as publicly retrievable only when its public-only observation records
+anonymous access and an empty cache. Every source declaration has a stable bundle-local
+identifier; resolved and unresolved entries cite the declarations they cover and preserve
+the declared dependency kind, version constraint, and target coverage. A
+`publicly-reproducible` outcome requires passing or not-applicable public-only stage
+results, public-only resolved observations for every source-declared dependency target,
+and no unresolved edge in the public-only attempted graph. A
 `not-publicly-reproducible` outcome requires an observed failed public-only stage or
-unresolved public-only edge. An `inconclusive` outcome identifies the evidence
-limitation; the contract does not mechanically decide whether contextual evidence is
-sufficient.
+unresolved public-only edge. An `inconclusive` outcome identifies the evidence limitation;
+the contract does not mechanically decide whether contextual evidence is sufficient.
 
 The contract is limited to the public restore, build, test, and non-publishing package
 work authorized by issue #1. It does not define a generic authentication-experiment
