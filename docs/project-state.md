@@ -25,8 +25,8 @@ questions, blocked work, and next permitted task.
 
 | Policy | Authority |
 | --- | --- |
-| Keep the project unofficial and make no current support or compatibility promise. | `../README.md`, `governance.md` |
-| Use only public, reviewable evidence in committed records. | `../AGENTS.md`, `governance.md` |
+| Keep the project unofficial and make no current support or compatibility promise. | `../README.md`, `governance/project.md` |
+| Use only public, reviewable evidence in committed records. | `../AGENTS.md`, `governance/project.md` |
 | Follow the isolation protocol before any build, authentication, cache, installer, or migration experiment. | `experiment-safety.md` |
 
 ## Current Architectural Direction
