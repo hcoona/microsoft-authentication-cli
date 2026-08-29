@@ -71,7 +71,7 @@ def main() -> int:
             "git",
             "--redact",
             "--no-banner",
-            f"--log-opts={log_options}",
+            f"--log-opts=--diff-merges=first-parent {log_options}",
             str(ROOT),
         ],
         cwd=ROOT,
