@@ -152,7 +152,7 @@ families:
     producer: Control maintainer
     maintainer: Control maintainer
     consumers:
-      - hk, reviewer agents, and repository-owner gate reviews
+      - hk when loading controls, reviewer agents when routing review, and the repository owner at gates
     creation_trigger: More than one control class must be routed consistently.
     failure_mode: Controls drift from policy or execute at the wrong gate.
     review_point: Pull requests that add, retire, or change a control
@@ -167,7 +167,7 @@ families:
     producer: Architecture and release maintainers
     maintainer: Repository owner
     consumers:
-      - Implementation, packaging, cache, telemetry, and release reviews
+      - Architecture, implementation, packaging, cache, telemetry, and release maintainers when selecting or consuming an identity
     creation_trigger: The fork must coexist without impersonating or mutating upstream state.
     failure_mode: The project collides with or appears to be the upstream product.
     review_point: Pull requests that select or consume an operational identity
@@ -181,7 +181,7 @@ families:
     producer: Repository owner
     maintainer: Repository owner
     consumers:
-      - Requirement, architecture, and scope decisions
+      - Requirement authors, architecture maintainers, and the repository owner when defining or reviewing product scope
     creation_trigger: The project needs a durable product boundary.
     failure_mode: Requirements or implementation expand without a product basis.
     review_point: Pull requests that change product purpose or scope
@@ -195,7 +195,7 @@ families:
     producer: Repository owner
     maintainer: Repository owner
     consumers:
-      - Requirement, architecture, validation, and release decisions
+      - Requirement, architecture, validation, and release maintainers when evaluating compatibility or migration commitments
     creation_trigger: Compatibility posture must be distinguished from upstream behavior.
     failure_mode: Internal reuse or observed behavior becomes an accidental support promise.
     review_point: Pull requests that change a compatibility or migration commitment
@@ -209,7 +209,7 @@ families:
     producer: Repository owner with engineering input
     maintainer: Repository owner
     consumers:
-      - Architecture, design, implementation, and validation work
+      - Architecture, design, implementation, and validation owners when deriving or reviewing required behavior
     creation_trigger: A capability has independently reviewable required behavior.
     failure_mode: Behavior is implemented or tested without an accepted requirement.
     review_point: Pull requests that add or change product behavior
@@ -223,7 +223,7 @@ families:
     producer: Architecture maintainer
     maintainer: Architecture maintainer
     consumers:
-      - Design, implementation, security, and validation work
+      - Design, implementation, security, and validation owners when applying system boundaries or invariants
     creation_trigger: A system-wide or independently reviewable architecture concern exists.
     failure_mode: Implementations adopt incompatible boundaries or ownership.
     review_point: Pull requests that change system structure or architecture invariants
@@ -251,7 +251,7 @@ families:
     producer: Researcher
     maintainer: Research maintainer
     consumers:
-      - Architecture and implementation-boundary decisions
+      - Architecture and implementation maintainers when evaluating whether v1 structure can be reused
     creation_trigger: The inherited implementation is evaluated as a possible foundation.
     failure_mode: v2 reuses unsafe or unsuitable v1 structure without evidence.
     review_point: Pull requests that rely on or materially revise the v1 audit
@@ -280,7 +280,7 @@ families:
     producer: Researcher
     maintainer: Research maintainer
     consumers:
-      - Phase-transition and trigger-driven research reviews
+      - Research reviewers at every phase transition and when a recorded trigger fires
     creation_trigger: A mutable public source could materially change a current conclusion.
     failure_mode: A decision continues to rely on stale public behavior or guidance.
     review_point: Recorded trigger events and every phase transition
@@ -294,7 +294,7 @@ families:
     producer: Security and architecture maintainers
     maintainer: Repository owner
     consumers:
-      - Architecture, design, implementation, experiment, and release reviews
+      - Architecture, design, implementation, experiment, and release reviewers when evaluating security effects
     creation_trigger: The project handles credentials, tokens, caches, or external identity systems.
     failure_mode: Security controls address the wrong assets or trust boundaries.
     review_point: Pull requests that change assets, trust boundaries, or security posture
@@ -322,7 +322,7 @@ families:
     producer: Validation maintainer
     maintainer: Repository owner
     consumers:
-      - Requirement, implementation, and release reviews
+      - Requirement authors, implementers, and release reviewers when selecting evidence for a claim
     creation_trigger: Claims require consistent validation depth and evidence carriers.
     failure_mode: Passing checks are mistaken for unsupported real-platform claims.
     review_point: Pull requests that change claim scope or validation obligations
@@ -350,7 +350,7 @@ families:
     producer: Contract maintainer
     maintainer: Contract maintainer
     consumers:
-      - Implementations, protocol adapters, and compatibility validation
+      - Implementation owners, protocol-adapter maintainers, and validation reviewers when consuming a public contract
     creation_trigger: Contract and Architecture work is authorized for a bounded interface.
     failure_mode: Consumers depend on undocumented or unstable wire behavior.
     review_point: Contract freeze and every compatible or breaking contract change
@@ -379,24 +379,25 @@ families:
       action: Create the design record and activate design review routing.
       fallback_review: Every transition into Incremental Implementation and Validation
 
-  - id: research-experiment-bundles
+  - id: public-build-experiment-bundles
     state: scheduled
-    concern: Reproducible protocols, observations, and conclusions for approved experiments
+    concern: Reproducible protocols, command results, dependency observations, and conclusions for the issue #1 public-build experiments
     carrier: repository-files
-    path: docs/research/experiments/**/*
-    format: mixed-bundle
+    path: docs/research/experiments/public-build-*.yaml
+    format: yaml
+    schema: schemas/research/public-build-experiment-bundle.schema.json
     producer: Experiment owner
     maintainer: Research maintainer
     consumers:
-      - Architecture, requirement, and support-claim decisions
-    creation_trigger: An authorized research question requires direct observation.
-    failure_mode: Experimental claims cannot be reproduced or separated from interpretation.
+      - Issue #1 implementers and research reviewers when reproducing commands or evaluating public-build conclusions
+    creation_trigger: Before the first command authorized by issue #1 is executed.
+    failure_mode: Public-build commands, dependency observations, and conclusions cannot be reproduced or distinguished from interpretation.
     review_point: Before execution and when conclusions are recorded
     activation:
-      trigger: An issue authorizes an experiment under the experiment-safety policy.
+      trigger: Work is ready to execute the first issue #1 restore, build, test, or package command.
       evaluator: Research maintainer
-      action: Define the bundle contract and create the first protocol.
-      fallback_review: Every phase transition with unresolved empirical questions
+      action: Create the initial planned bundle, change this family to current, and validate the protocol before execution.
+      fallback_review: Issue #1 closure and every phase transition while issue #1 remains open
 
   - id: validation-cases
     state: scheduled

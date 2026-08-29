@@ -74,6 +74,21 @@ Every committed result must state:
 - reproduction count and known variability;
 - whether the record is a source finding, runtime observation, inference, or hypothesis.
 
+### Phase 1 Public-Build Record
+
+Issue #1 public-build experiments use the YAML contract in
+[`public-build-experiment-bundle.schema.json`](../../schemas/research/public-build-experiment-bundle.schema.json).
+Create the first `planned` bundle under `docs/research/experiments/` before running any
+command. The same bundle carries the approved protocol, command-result matrix, observed
+dependency inventory, conclusions, and limitations as the work progresses.
+
+The contract is limited to the public restore, build, test, and non-publishing package
+work authorized by issue #1. It does not define a generic authentication-experiment
+format, release SBOM, or v2 product protocol. Its dependency inventory records
+issue-specific source and runtime observations, including unresolved edges that a release
+SBOM cannot yet assert. Narrative research may synthesize the structured bundle but must
+not maintain a second copy of its command results or dependency inventory.
+
 ## Stop Conditions
 
 Stop the experiment if:
