@@ -67,7 +67,7 @@ controls:
     governing_rules:
       - docs/governance/record-system.md#formats
       - docs/governance/record-system.md#record-system-gate
-    invariant: Every active YAML or JSON structured record validates against its declared schema.
+    invariant: Every active YAML or JSON record validates against its declared schema, and every active JSON Schema validates against its metaschema.
     runner: hk
     implementation:
       kind: hk-steps
@@ -122,7 +122,7 @@ controls:
       - GitHub Actions and reviewers at CI before merge
     governing_rules:
       - docs/governance/record-system.md#workflows
-    invariant: Each established V2 requirement identifier remains defined exactly once.
+    invariant: Each established V2 requirement identifier remains defined exactly once as an active nonempty requirement or an explicit retirement marker naming its current authority.
     runner: hk
     implementation:
       kind: hk-steps
@@ -134,7 +134,7 @@ controls:
     execution_points:
       - local-fast
       - ci
-    failure_mode: Requirements become ambiguous across capability modules.
+    failure_mode: Requirements become ambiguous across capability modules, disappear, or remain as empty retirement placeholders.
 
   - id: decision-number-uniqueness
     state: current

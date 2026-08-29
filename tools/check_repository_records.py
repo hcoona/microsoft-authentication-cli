@@ -28,18 +28,13 @@ ROOT_RESOLVED = ROOT.resolve()
 MARKDOWN = MarkdownIt("commonmark", {"html": True})
 REQUIREMENT_ID_PATTERN = re.compile(r"^V2-REQ-[0-9]{3}[A-Z]?$")
 REQUIREMENT_PREFIX_PATTERN = re.compile(r"^V2-REQ-")
+RETIRED_REQUIREMENT_PREFIX = "Retired - current authority: "
 DECISION_PATTERN = re.compile(r"^([0-9]{4})-.*\.md$")
 GLOB_MARKERS = frozenset("*?[")
 ZERO_SHA = "0" * 40
 EXACT_VERSION_PATTERN = re.compile(
     r"^[0-9]+(?:\.[0-9]+){1,3}(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$"
 )
-PKL_MAPPING_START_PATTERN = re.compile(
-    r"^local ([A-Za-z][A-Za-z0-9]*) = new Mapping<String, Step> \{$"
-)
-PKL_STEP_PATTERN = re.compile(r'^\s*\["([^"]+)"\]\s*(?:=|\{)')
-PKL_SPREAD_PATTERN = re.compile(r"^\s*\.\.\.([A-Za-z][A-Za-z0-9]*)")
-
 ROOT_RECORD_PATHS = frozenset(
     {
         ".github/pull_request_template.md",
@@ -66,10 +61,9 @@ BOOTSTRAP_SCHEMA_BINDINGS = (
         "docs/governance/controls.yaml",
     ),
 )
-BOOTSTRAP_FAMILY_IDS = frozenset({"record-family-catalog", "control-catalog"})
-HK_EXECUTION_MAPPINGS = {
-    "local-fast": "preCommitSteps",
-    "ci": "fullSteps",
+HK_EXECUTION_PLANS = {
+    "local-fast": ("run", "pre-commit"),
+    "ci": ("check",),
 }
 SOURCE_FAITHFUL_CONFIG_SHA256 = (
     "be2776f78f5af30efb8836a32c4467ca0dcd9220c17d778ed8332b33dd309a6b"
@@ -148,18 +142,35 @@ def walk_tokens(tokens: list[Token]) -> list[Token]:
     return walked
 
 
-def requirement_headings(text: str) -> tuple[list[str], list[str]]:
-    identifiers: list[str] = []
+def requirement_headings(
+    text: str,
+) -> tuple[list[tuple[str, str | None]], list[str]]:
+    requirements: list[tuple[str, str | None]] = []
     malformed: list[str] = []
     for heading_text in markdown_headings(text):
         if not REQUIREMENT_PREFIX_PATTERN.match(heading_text):
             continue
-        identifier, separator, _title = heading_text.partition(":")
-        if separator and REQUIREMENT_ID_PATTERN.fullmatch(identifier):
-            identifiers.append(identifier)
-        else:
+        identifier, separator, title = heading_text.partition(":")
+        title = title.strip()
+        if (
+            not separator
+            or REQUIREMENT_ID_PATTERN.fullmatch(identifier) is None
+            or not title
+        ):
             malformed.append(heading_text)
-    return identifiers, malformed
+            continue
+        if title.startswith("Retired"):
+            if not title.startswith(RETIRED_REQUIREMENT_PREFIX):
+                malformed.append(heading_text)
+                continue
+            authority = title.removeprefix(RETIRED_REQUIREMENT_PREFIX).strip()
+            if not authority:
+                malformed.append(heading_text)
+                continue
+            requirements.append((identifier, authority))
+        else:
+            requirements.append((identifier, None))
+    return requirements, malformed
 
 
 def markdown_link_destinations(text: str) -> list[str]:
@@ -212,8 +223,8 @@ def requirement_ids_at_commit(commit: str, errors: list[str]) -> set[str]:
                 f"cannot read accepted requirement definitions from {relative_path}"
             )
             continue
-        identifiers, malformed = requirement_headings(content)
-        requirement_ids.update(identifiers)
+        requirements, malformed = requirement_headings(content)
+        requirement_ids.update(identifier for identifier, _authority in requirements)
         if malformed:
             errors.append(
                 f"accepted record {relative_path} contains malformed requirement "
@@ -225,26 +236,61 @@ def requirement_ids_at_commit(commit: str, errors: list[str]) -> set[str]:
 def check_identifiers() -> list[str]:
     errors: list[str] = []
 
-    requirement_occurrences: list[tuple[str, str]] = []
+    requirement_occurrences: list[tuple[str, str, str | None]] = []
     for path in sorted((ROOT / "docs").rglob("*.md")):
         relative_path = path.relative_to(ROOT).as_posix()
-        identifiers, malformed = requirement_headings(path.read_text(encoding="utf-8"))
+        requirements, malformed = requirement_headings(path.read_text(encoding="utf-8"))
         for heading in malformed:
             errors.append(
                 f"malformed requirement heading in {relative_path}: {heading}"
             )
         requirement_occurrences.extend(
-            (identifier, relative_path)
-            for identifier in identifiers
+            (identifier, relative_path, authority)
+            for identifier, authority in requirements
         )
-    requirement_ids = [identifier for identifier, _path in requirement_occurrences]
+    requirement_ids = [
+        identifier for identifier, _path, _authority in requirement_occurrences
+    ]
+    requirement_id_set = set(requirement_ids)
     for identifier in duplicates(requirement_ids):
         errors.append(f"duplicate requirement identifier: {identifier}")
-    for identifier, relative_path in requirement_occurrences:
+    for identifier, relative_path, authority in requirement_occurrences:
         if not relative_path.startswith("docs/product/requirements/"):
             errors.append(
                 f"requirement identifier {identifier} is defined outside the canonical "
                 f"requirements family: {relative_path}"
+            )
+        if authority is None:
+            continue
+        if REQUIREMENT_ID_PATTERN.fullmatch(authority):
+            if authority == identifier:
+                errors.append(
+                    f"retired requirement {identifier} cannot name itself as current "
+                    "authority"
+                )
+            elif authority not in requirement_id_set:
+                errors.append(
+                    f"retired requirement {identifier} names unknown current authority "
+                    f"{authority}"
+                )
+            continue
+        path_text, separator, anchor = authority.partition("#")
+        authority_path = resolve_repository_file(
+            path_text,
+            f"retired requirement {identifier} current authority",
+            errors,
+        )
+        if authority_path is None:
+            continue
+        if authority_path.suffix.lower() != ".md":
+            errors.append(
+                f"retired requirement {identifier} current authority is not Markdown: "
+                f"{authority}"
+            )
+        elif separator and anchor not in markdown_heading_slugs(authority_path):
+            errors.append(
+                f"retired requirement {identifier} current-authority anchor does not "
+                f"exist or is not an ASCII GitHub heading anchor: {authority}"
             )
 
     accepted_base = resolve_accepted_base(errors)
@@ -312,7 +358,8 @@ def resolve_repository_file(
     if reason := repository_path_error(value):
         errors.append(f"{label} {reason}: {value}")
         return None
-    path = (ROOT / PurePosixPath(value)).resolve()
+    lexical_path = ROOT / PurePosixPath(value)
+    path = lexical_path.resolve()
     try:
         path.relative_to(ROOT_RESOLVED)
     except ValueError:
@@ -321,7 +368,34 @@ def resolve_repository_file(
     if not path.is_file():
         errors.append(f"{label} does not exist: {value}")
         return None
+    if path != ROOT_RESOLVED / PurePosixPath(value):
+        errors.append(f"{label} must not use a symbolic-link path: {value}")
+        return None
     return path
+
+
+def resolve_governed_record(
+    candidate: Path,
+    label: str,
+    errors: list[str],
+) -> Path | None:
+    try:
+        relative_path = candidate.relative_to(ROOT)
+    except ValueError:
+        errors.append(f"{label} is outside the repository: {candidate}")
+        return None
+    resolved = candidate.resolve()
+    try:
+        resolved.relative_to(ROOT_RESOLVED)
+    except ValueError:
+        errors.append(f"{label} resolves outside the repository: {relative_path}")
+        return None
+    if resolved != ROOT_RESOLVED / relative_path:
+        errors.append(f"{label} must not use a symbolic-link path: {relative_path}")
+        return None
+    if not resolved.is_file():
+        return None
+    return resolved
 
 
 def expand_family_paths(
@@ -336,18 +410,13 @@ def expand_family_paths(
     candidates = ROOT.glob(pattern) if contains_glob(pattern) else [ROOT / pattern]
     paths: set[Path] = set()
     for candidate in candidates:
-        if not candidate.is_file():
-            continue
-        resolved = candidate.resolve()
-        try:
-            resolved.relative_to(ROOT_RESOLVED)
-        except ValueError:
-            errors.append(
-                f"{family['id']} family path resolves outside the repository: "
-                f"{candidate}"
-            )
-            continue
-        paths.add(resolved)
+        resolved = resolve_governed_record(
+            candidate,
+            f"{family['id']} family record",
+            errors,
+        )
+        if resolved is not None:
+            paths.add(resolved)
     return paths
 
 
@@ -365,15 +434,9 @@ def discover_governed_record_paths(errors: list[str]) -> set[Path]:
 
     paths: set[Path] = set()
     for candidate in candidates:
-        if not candidate.is_file():
-            continue
-        resolved = candidate.resolve()
-        try:
-            resolved.relative_to(ROOT_RESOLVED)
-        except ValueError:
-            errors.append(f"governed record resolves outside the repository: {candidate}")
-            continue
-        paths.add(resolved)
+        resolved = resolve_governed_record(candidate, "governed record", errors)
+        if resolved is not None:
+            paths.add(resolved)
     return paths
 
 
@@ -425,9 +488,21 @@ def check_markdown_parser_contract() -> list[str]:
 
 [record]: reference.md
 """
-    identifiers, malformed = requirement_headings(markdown)
-    if identifiers != ["V2-REQ-060"] or malformed:
+    requirements, malformed = requirement_headings(markdown)
+    if requirements != [("V2-REQ-060", None)] or malformed:
         errors.append("CommonMark requirement-heading parser contract failed")
+    requirement_markdown = """\
+## V2-REQ-061: Active requirement
+## V2-REQ-062: Retired - current authority: V2-REQ-061
+## V2-REQ-063:
+## V2-REQ-064: Retired
+"""
+    requirements, malformed = requirement_headings(requirement_markdown)
+    if requirements != [
+        ("V2-REQ-061", None),
+        ("V2-REQ-062", "V2-REQ-061"),
+    ] or malformed != ["V2-REQ-063:", "V2-REQ-064: Retired"]:
+        errors.append("requirement active-and-retired syntax contract failed")
     if set(markdown_link_destinations(markdown)) != {"real.md", "reference.md"}:
         errors.append("CommonMark documentation-link parser contract failed")
 
@@ -451,65 +526,46 @@ def check_markdown_parser_contract() -> list[str]:
     return errors
 
 
-def parse_hk_step_mappings(errors: list[str]) -> dict[str, tuple[set[str], set[str]]]:
-    path = ROOT / "hk.pkl"
-    if not path.is_file():
-        errors.append("hk control configuration does not exist: hk.pkl")
-        return {}
-
-    lines = path.read_text(encoding="utf-8").splitlines()
-    mappings: dict[str, tuple[set[str], set[str]]] = {}
-    for index, line in enumerate(lines):
-        match = PKL_MAPPING_START_PATTERN.fullmatch(line)
-        if match is None:
-            continue
-        name = match.group(1)
-        steps: set[str] = set()
-        spreads: set[str] = set()
-        depth = 1
-        for nested_line in lines[index + 1 :]:
-            if depth == 1:
-                if step_match := PKL_STEP_PATTERN.match(nested_line):
-                    steps.add(step_match.group(1))
-                elif spread_match := PKL_SPREAD_PATTERN.match(nested_line):
-                    spreads.add(spread_match.group(1))
-            depth += nested_line.count("{") - nested_line.count("}")
-            if depth == 0:
-                break
-        if depth != 0:
-            errors.append(f"cannot parse unterminated hk step mapping: {name}")
-            continue
-        mappings[name] = (steps, spreads)
-    return mappings
-
-
-def resolve_hk_step_mapping(
-    name: str,
-    mappings: dict[str, tuple[set[str], set[str]]],
-    errors: list[str],
-    stack: tuple[str, ...] = (),
-) -> set[str]:
-    if name in stack:
-        errors.append(f"hk step mappings contain a cycle: {' -> '.join((*stack, name))}")
-        return set()
-    if name not in mappings:
-        errors.append(f"hk step mapping does not exist: {name}")
-        return set()
-    steps, spreads = mappings[name]
-    resolved = set(steps)
-    for spread in spreads:
-        resolved.update(
-            resolve_hk_step_mapping(spread, mappings, errors, (*stack, name))
-        )
-    return resolved
-
-
 def hk_steps_by_execution_point(errors: list[str]) -> dict[str, set[str]]:
-    mappings = parse_hk_step_mappings(errors)
-    return {
-        execution_point: resolve_hk_step_mapping(mapping, mappings, errors)
-        for execution_point, mapping in HK_EXECUTION_MAPPINGS.items()
-    }
+    steps_by_execution_point: dict[str, set[str]] = {}
+    for execution_point, arguments in HK_EXECUTION_PLANS.items():
+        result = subprocess.run(
+            ["hk", *arguments, "--all", "--plan", "--json"],
+            cwd=ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            errors.append(
+                f"cannot evaluate hk {execution_point} plan: "
+                f"{result.stderr.strip() or result.stdout.strip()}"
+            )
+            continue
+        try:
+            plan = json.loads(result.stdout)
+        except json.JSONDecodeError as error:
+            errors.append(f"cannot parse hk {execution_point} plan JSON: {error}")
+            continue
+        expected_hook = "pre-commit" if execution_point == "local-fast" else "check"
+        if plan.get("hook") != expected_hook:
+            errors.append(
+                f"hk {execution_point} plan reported unexpected hook: "
+                f"{plan.get('hook')}"
+            )
+            continue
+        plan_steps = plan.get("steps")
+        if not isinstance(plan_steps, list):
+            errors.append(f"hk {execution_point} plan does not contain a step list")
+            continue
+        steps_by_execution_point[execution_point] = {
+            step["name"]
+            for step in plan_steps
+            if isinstance(step, dict)
+            and isinstance(step.get("name"), str)
+            and step.get("status") == "included"
+        }
+    return steps_by_execution_point
 
 
 def check_control_references(catalog: dict[str, Any]) -> list[str]:
@@ -1730,6 +1786,19 @@ def run_schema_validation(schema: str, instances: list[Path]) -> int:
     return result.returncode
 
 
+def run_metaschema_validation(instances: list[Path]) -> int:
+    result = subprocess.run(
+        [
+            "check-jsonschema",
+            "--check-metaschema",
+            *(path.relative_to(ROOT_RESOLVED).as_posix() for path in instances),
+        ],
+        cwd=ROOT,
+        check=False,
+    )
+    return result.returncode
+
+
 def validate_structured_records() -> int:
     errors: list[str] = []
 
@@ -1751,13 +1820,17 @@ def validate_structured_records() -> int:
         return 1
 
     catalog = load_yaml("docs/governance/record-families.yaml")
+    bootstrap_bindings = set(BOOTSTRAP_SCHEMA_BINDINGS)
     families = [
         family
         for family in catalog["families"]
-        if family.get("schema") and family["id"] not in BOOTSTRAP_FAMILY_IDS
+        if (
+            family.get("schema")
+            and (family["schema"], family["path"]) not in bootstrap_bindings
+        )
+        or family["format"] == "json-schema"
     ]
     for family in families:
-        schema = family["schema"]
         instances = sorted(expand_family_paths(family, errors))
         if not instances:
             if family["state"] == "current":
@@ -1766,8 +1839,12 @@ def validate_structured_records() -> int:
                 )
             continue
 
-        if run_schema_validation(schema, instances) != 0:
-            return 1
+        if family["format"] == "json-schema":
+            if run_metaschema_validation(instances) != 0:
+                return 1
+        else:
+            if run_schema_validation(family["schema"], instances) != 0:
+                return 1
 
         if family["id"] == "public-build-experiment-bundles":
             for instance in instances:

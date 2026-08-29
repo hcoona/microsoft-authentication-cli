@@ -61,12 +61,6 @@ local fullSteps = new Mapping<String, Step> {
       argv = List("uv", "run", "tools/check_git_history_secrets.py")
     }
   }
-  ["schema-metaschema"] {
-    glob = List("schemas/**/*.schema.json")
-    check = new Command {
-      argv = List("check-jsonschema", "--check-metaschema", "{{files}}")
-    }
-  }
   ["actionlint"] = Builtins.actionlint
 }
 

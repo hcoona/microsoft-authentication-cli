@@ -96,10 +96,7 @@
             "markdown",
             "yaml",
             "json",
-            "json-schema",
-            "jsonl",
-            "csv",
-            "mixed-bundle"
+            "json-schema"
           ]
         },
         "schema": {
@@ -169,8 +166,7 @@
               "format": {
                 "enum": [
                   "yaml",
-                  "json",
-                  "jsonl"
+                  "json"
                 ]
               }
             },

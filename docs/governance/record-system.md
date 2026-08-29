@@ -135,10 +135,13 @@ a global overview and scoped views. Designs are created only for coherent implem
 boundaries that need independent review. Research is organized by question and baseline;
 experiments are organized by reproducible protocol.
 
-Requirement identifiers are permanent once merged into the accepted target branch. If a
-requirement is retired, replaced, or moved, retain its identifier exactly once as a
-nonnormative marker that names the replacement or current authority. Never assign an
-established identifier to a different requirement.
+Requirement identifiers are permanent once merged into the accepted target branch. An
+active requirement heading uses `V2-REQ-NNN: Nonempty title`. If a requirement is
+retired, replaced, or moved, retain its identifier exactly once as a nonnormative
+`V2-REQ-NNN: Retired - current authority: <requirement ID or repository path#anchor>`
+marker. Never assign an established identifier to a different requirement. Mechanical
+checks enforce the two representations and target existence; review determines whether
+the requirement's meaning was preserved.
 
 ## Enforcement
 
@@ -154,11 +157,12 @@ catalog. Its bounded record roots are the canonical root interfaces and the `doc
 `schemas/`, `contracts/`, and `designs/` namespaces. Adding another record-bearing root
 requires updating the checker and catalog in the same change. A catalog edit therefore
 cannot remove a retained record from family, schema, or portal validation merely by
-deleting its family entry.
+deleting its family entry. Governed records must use direct repository paths; symbolic
+links are rejected rather than treated as authority routing.
 
 Every current hk control maps each declared hk execution point to the concrete step names
-that implement it. The repository checker verifies those steps are reachable from the
-local-fast or CI step set as declared.
+that implement it. The repository checker evaluates HK's actual `pre-commit` and `check`
+plans and verifies those steps are reachable at the declared execution point.
 
 The full CI hk set must include every check in the local fast subset. Local hooks may omit
 slower checks but must not implement different semantics.
