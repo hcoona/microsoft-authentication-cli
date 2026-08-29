@@ -1,8 +1,5 @@
 # 0002: Rebuild the Authentication Core
 
-- **Status:** Accepted
-- **Date:** 2026-08-28
-
 ## Context
 
 The v1 flow model combines mechanism selection, fallback order, interaction permission,

@@ -1,8 +1,5 @@
 # 0001: Establish `main-v2` as an Orphan Line
 
-- **Status:** Accepted
-- **Date:** 2026-08-28
-
 ## Context
 
 AzureAuth v1 contains useful source and operational knowledge, but its existing file

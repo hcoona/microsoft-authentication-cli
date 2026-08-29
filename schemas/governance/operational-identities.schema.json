@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hcoona/microsoft-authentication-cli/schemas/governance/operational-identities.schema.json",
+  "title": "Operational Identity Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "reserved_upstream",
+    "selected_v2"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "reserved_upstream": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reserved"
+      }
+    },
+    "selected_v2": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/selection"
+      }
+    }
+  },
+  "$defs": {
+    "reserved": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "area",
+        "identifiers",
+        "rule"
+      ],
+      "properties": {
+        "area": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identifiers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "value",
+        "required_before"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "required_before": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,5 @@
 # 0004: Keep the Authentication Engine Separate From Consumers
 
-- **Status:** Accepted
-- **Date:** 2026-08-28
-
 ## Context
 
 Authentication tokens may be consumed by Git, NuGet, Python, npm, IDE, or other

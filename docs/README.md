@@ -39,7 +39,7 @@ navigation, not an independent authority.
 | How are repository records and controls organized? | [`governance/record-system.md`](governance/record-system.md) |
 | What project identity and public-record rules apply? | [`governance/project.md`](governance/project.md) |
 | What compatibility or migration is currently promised? | [`product/compatibility-and-migration.md`](product/compatibility-and-migration.md) |
-| Which operational identifiers must remain separate? | [`namespaces.md`](namespaces.md) until its structured replacement is merged |
+| Which operational identifiers must remain separate? | [`governance/operational-identities.yaml`](governance/operational-identities.yaml) |
 
 The root [`README.md`](../README.md) is the public landing page. The root
 [`AGENTS.md`](../AGENTS.md) is an AI-agent interface and is not human onboarding
