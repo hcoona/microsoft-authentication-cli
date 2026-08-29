@@ -224,6 +224,7 @@
         "nuget_version",
         "build_entry_point",
         "configuration",
+        "working_directory",
         "timeout_policy",
         "retry_policy"
       ],
@@ -254,7 +255,7 @@
         },
         "build_entry_point": {
           "type": "string",
-          "minLength": 1
+          "const": "AzureAuth.sln"
         },
         "configuration": {
           "type": "string",
@@ -263,6 +264,9 @@
         "timeout_policy": {
           "type": "string",
           "minLength": 1
+        },
+        "working_directory": {
+          "const": "detached-checkout-root"
         },
         "retry_policy": {
           "type": "string",
@@ -973,7 +977,7 @@
         },
         "version": {
           "type": "string",
-          "minLength": 1
+          "pattern": "^[0-9]+(?:\\.[0-9]+){1,3}(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
         },
         "declaration_ids": {
           "type": "array",

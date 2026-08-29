@@ -15,7 +15,9 @@ controls:
       - docs/governance/record-system.md#record-system-gate
     invariant: Pre-commit checks run only when the worktree matches the staged snapshot, and tracked text has no unresolved conflict markers or whitespace errors.
     runner: hk
-    implementation: hk.pkl
+    implementation:
+      kind: repository-path
+      value: hk.pkl
     execution_points:
       - local-fast
       - ci
@@ -34,7 +36,9 @@ controls:
       - docs/governance/record-system.md#deletion-and-replacement
     invariant: Internal Markdown links resolve to current repository paths and anchors.
     runner: hk
-    implementation: hk.pkl
+    implementation:
+      kind: repository-path
+      value: hk.pkl
     execution_points:
       - local-fast
       - ci
@@ -54,11 +58,39 @@ controls:
       - docs/governance/record-system.md#record-system-gate
     invariant: Every active YAML or JSON structured record validates against its declared schema.
     runner: hk
-    implementation: hk.pkl
+    implementation:
+      kind: repository-path
+      value: hk.pkl
     execution_points:
       - local-fast
       - ci
     failure_mode: A structured record becomes ambiguous or unreadable by its consumer.
+
+  - id: public-build-evidence-consistency
+    state: scheduled
+    class: mechanical
+    enforcement: blocking
+    producer: hk and the repository record checker
+    maintainer: Research maintainer
+    consumers:
+      - Issue #1 experiment owner before execution and after each recorded result
+      - Research reviewers when evaluating the public-build conclusion
+    governing_rules:
+      - docs/research/experiment-safety.md#phase-1-public-build-record
+    invariant: The issue #1 protocol, command results, restore configurations, dependency observations, and completion outcome remain mutually consistent.
+    runner: hk
+    implementation:
+      kind: repository-path
+      value: tools/check_repository_records.py
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: A schema-valid experiment bundle contradicts its reviewed command, isolation, dependency, or conclusion evidence.
+    activation:
+      trigger: The public-build-experiment-bundles family is activated before the first issue #1 experiment command.
+      evaluator: Research maintainer
+      action: Change this control to current in the same commit that activates and creates the first bundle.
+      fallback_review: Issue #1 closure and every phase transition while issue #1 remains open
 
   - id: requirement-id-uniqueness
     state: current
@@ -73,7 +105,9 @@ controls:
       - docs/governance/record-system.md#workflows
     invariant: Each established V2 requirement identifier remains defined exactly once.
     runner: hk
-    implementation: hk.pkl
+    implementation:
+      kind: repository-path
+      value: hk.pkl
     execution_points:
       - local-fast
       - ci
@@ -92,7 +126,9 @@ controls:
       - docs/governance/record-system.md#lifecycle-through-git-and-github
     invariant: Each decision record number and file prefix is unique.
     runner: hk
-    implementation: hk.pkl
+    implementation:
+      kind: repository-path
+      value: hk.pkl
     execution_points:
       - local-fast
       - ci
@@ -111,7 +147,9 @@ controls:
       - docs/governance/record-system.md#authority-by-concern
     invariant: Current record-family paths exist, governed records match one declared family, and the documentation portal routes to every retained current record.
     runner: hk
-    implementation: hk.pkl
+    implementation:
+      kind: repository-path
+      value: hk.pkl
     execution_points:
       - local-fast
       - ci
@@ -131,7 +169,9 @@ controls:
       - docs/research/experiment-safety.md
     invariant: Committed content does not match configured credential or secret patterns.
     runner: hk
-    implementation: hk.pkl
+    implementation:
+      kind: repository-path
+      value: hk.pkl
     execution_points:
       - local-fast
       - ci
@@ -149,7 +189,9 @@ controls:
       - docs/governance/governance-system.md#gov-005-controls-implement-policy
     invariant: GitHub Actions workflows satisfy their published syntax and expression contracts.
     runner: hk
-    implementation: hk.pkl
+    implementation:
+      kind: repository-path
+      value: hk.pkl
     execution_points:
       - ci
     failure_mode: The repository merges a workflow that cannot execute its declared checks.
@@ -167,7 +209,9 @@ controls:
       - docs/governance/record-system.md
     invariant: Changed record families retain one authority, real consumers, bounded lifecycle, and policy-aligned controls.
     runner: agent-skill
-    implementation: .github/skills/record-system-review/SKILL.md
+    implementation:
+      kind: repository-path
+      value: .github/skills/record-system-review/SKILL.md
     execution_points:
       - pull-request-review
       - phase-transition
@@ -186,7 +230,9 @@ controls:
       - docs/governance/record-system.md
     invariant: Research changes preserve source boundaries, evidence labels, reproducibility, and claim limits.
     runner: agent-skill
-    implementation: .github/skills/research-evidence-review/SKILL.md
+    implementation:
+      kind: repository-path
+      value: .github/skills/research-evidence-review/SKILL.md
     execution_points:
       - pull-request-review
       - recheck-trigger
@@ -206,7 +252,9 @@ controls:
       - docs/governance/governance-system.md#gov-011-separate-findings-from-disposition
     invariant: A reviewer does not solely validate or dismiss its own material findings.
     runner: agent-skill
-    implementation: Material-finding triage instructions in each active review Skill
+    implementation:
+      kind: review-procedure
+      value: Material-finding triage instructions in each active review Skill
     execution_points:
       - pull-request-review
       - recheck-trigger
@@ -227,7 +275,9 @@ controls:
       - docs/governance/governance-system.md#gov-010-gates-require-evidence
     invariant: A record-system or phase-transition change is accepted only after its required mechanical and contextual evidence is reviewable.
     runner: human-owner
-    implementation: Applicable pull request, check results, review records, and owner disposition
+    implementation:
+      kind: evidence-carrier
+      value: Applicable pull request, check results, review records, and owner disposition
     execution_points:
       - issue-closure
       - pull-request-merge

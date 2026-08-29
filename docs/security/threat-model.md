@@ -33,59 +33,34 @@ session, administrator, kernel, or authentication broker is fully compromised.
 - Build and release environment to distributed artifacts.
 - Fork source to Microsoft-owned application registrations and upstream code.
 
-## Credible Threats and Required Controls
+## Credible Threats and Governing Requirements
 
-| Threat | Required control |
+| Threat | Governing requirements or decision |
 | --- | --- |
-| A cached or operating-system default account silently overrides the requested account. | Resolve a stable account ID and validate the returned MSAL account and tenant. |
-| A nominally silent request opens WAM, a browser, or a device-code prompt. | Enforce interaction independently from mechanism and fail before creating UI. |
-| Ambiguous failure causes unsafe fallback to another identity or mechanism. | Use typed outcomes and explicit terminal versus retryable policy. |
-| A token or code leaks through arguments, logs, telemetry, crash output, or protocol noise. | Transport secrets only through protected process memory and schema-controlled output; redact all diagnostics. |
-| Another local user reads or modifies cache data. | Use platform secure storage, restrictive permissions, integrity checks, and atomic writes. |
-| Secure storage is unavailable and the implementation silently falls back to plaintext. | Fail closed unless an explicit, separately accepted policy permits a bounded fallback. |
-| Multiple processes create duplicate prompts or corrupt shared cache state. | Use request-appropriate cross-process coordination under the common deadline. |
-| Cancellation or timeout returns while v2-owned acquisition work remains active. | Propagate cancellation, stop owned tasks, listeners, locks, and controllable prompts, and invalidate any externally owned browser flow. |
-| A WSL-launched prompt is hidden, unowned, or attached to the wrong desktop. | Model WSL explicitly and require a validated host and parent-window strategy. |
-| A Microsoft-owned client ID is mistaken for an owned credential or support contract. | Treat it as public external configuration, record ownership, and permit explicit replacement. |
-| A caller directs discovery or authentication to an attacker-controlled authority. | Select authorities from supported Entra clouds or trusted profiles and retain MSAL authority validation. |
-| Dependency or upstream changes alter broker or cache behavior. | Pin versions, record provenance, test real platform/account states, and review imports. |
-| Unofficial artifacts overwrite or impersonate upstream AzureAuth. | Separate names, namespaces, signing, installation, telemetry, and update channels. |
+| A cached or operating-system default account silently overrides the requested account. | [`V2-REQ-012`](../product/requirements/request-identity-and-authority.md#v2-req-012-stable-account-constraint), [`V2-REQ-020`](../product/requirements/strategy-interaction-and-host.md#v2-req-020-selected-account-silent-first), and [`V2-REQ-022`](../product/requirements/strategy-interaction-and-host.md#v2-req-022-strict-identity-postcondition) |
+| A nominally silent request opens WAM, a browser, or a device-code prompt. | [`V2-REQ-014`](../product/requirements/strategy-interaction-and-host.md#v2-req-014-independent-interaction-policy), [`V2-REQ-021`](../product/requirements/strategy-interaction-and-host.md#v2-req-021-no-interaction-guarantee), and [`V2-REQ-025`](../product/requirements/strategy-interaction-and-host.md#v2-req-025-no-orphaned-work) |
+| Ambiguous failure causes unsafe fallback to another identity or mechanism. | [`V2-REQ-023`](../product/requirements/strategy-interaction-and-host.md#v2-req-023-classified-fallback), [`V2-REQ-024`](../product/requirements/strategy-interaction-and-host.md#v2-req-024-claims-challenge-preservation), and [`V2-REQ-032`](../product/requirements/result-and-process-protocol.md#v2-req-032-typed-failure-taxonomy) |
+| A token or code leaks through arguments, logs, telemetry, crash output, or protocol noise. | [`V2-REQ-033`](../product/requirements/result-and-process-protocol.md#v2-req-033-opaque-access-tokens), [`V2-REQ-034`](../product/requirements/result-and-process-protocol.md#v2-req-034-output-discipline), and [`V2-REQ-043`](../product/requirements/cache-security-and-operational-identity.md#v2-req-043-no-upstream-telemetry-reuse) |
+| Another local user reads or modifies cache data, or secure storage silently falls back to plaintext. | [`V2-REQ-040`](../product/requirements/cache-security-and-operational-identity.md#v2-req-040-secure-storage-by-default) and [`V2-REQ-041`](../product/requirements/cache-security-and-operational-identity.md#v2-req-041-versioned-cache-semantics) |
+| Multiple processes create duplicate prompts or outlive cancellation or timeout. | [`V2-REQ-015`](../product/requirements/strategy-interaction-and-host.md#v2-req-015-common-deadline) and [`V2-REQ-025`](../product/requirements/strategy-interaction-and-host.md#v2-req-025-no-orphaned-work) |
+| A WSL-launched prompt is hidden, unowned, or attached to the wrong desktop. | [`V2-REQ-016`](../product/requirements/strategy-interaction-and-host.md#v2-req-016-explicit-host-context) and [`V2-REQ-021`](../product/requirements/strategy-interaction-and-host.md#v2-req-021-no-interaction-guarantee) |
+| A Microsoft-owned client ID is mistaken for an owned credential or support contract. | [`V2-REQ-042`](../product/requirements/cache-security-and-operational-identity.md#v2-req-042-client-registration-as-configuration) and decision [`0003`](../decisions/0003-treat-client-registration-as-an-external-dependency.md) |
+| A caller directs discovery or authentication to an attacker-controlled authority. | [`V2-REQ-011A`](../product/requirements/request-identity-and-authority.md#v2-req-011a-trusted-authority) |
+| Dependency or upstream changes alter broker or cache behavior. | [`V2-REQ-051`](../product/requirements/quality-build-and-validation.md#v2-req-051-real-platform-validation) through [`V2-REQ-054`](../product/requirements/quality-build-and-validation.md#v2-req-054-isolated-experiments) |
+| Unofficial artifacts overwrite or impersonate upstream AzureAuth. | [`V2-REQ-003`](../product/requirements/product-boundary.md#v2-req-003-unofficial-product-identity), [`V2-REQ-044`](../product/requirements/cache-security-and-operational-identity.md#v2-req-044-independent-distribution-identity), and decision [`0005`](../decisions/0005-establish-independent-operational-identity.md) |
 
-## Cache Policy
+## Security Policy References
 
-The default cache policy must:
-
-- prefer broker-owned or platform secure storage;
-- partition state by relevant client, authority, tenant, and account dimensions;
-- use cross-process coordination and atomic updates;
-- detect and report corruption safely;
-- define logout and account-removal behavior;
-- version persisted state and document migration;
-- avoid plaintext fallback unless a later decision defines the operating envelope,
-  permissions, user notice, and acceptance criteria.
-
-Cache compatibility with v1 is not assumed.
-
-## Protocol and Diagnostic Policy
-
-- Tokens, authorization codes, and secrets must never appear in command arguments.
-- Machine stdout contains only the versioned result selected by the caller.
-- Human prompts and diagnostics use explicitly owned channels.
-- Error messages expose safe classifications, not raw broker, cache, tenant-policy, or
-  token content.
-- Test fixtures use synthetic values that cannot be mistaken for usable credentials.
-- Remote telemetry is absent unless a future decision defines and owns it.
+Cache and operational-identity behavior is normative only in
+[`cache-security-and-operational-identity.md`](../product/requirements/cache-security-and-operational-identity.md).
+Protocol and diagnostic behavior is normative only in
+[`result-and-process-protocol.md`](../product/requirements/result-and-process-protocol.md).
+This threat model records why those requirements are security-relevant; it does not
+restate them as an independent policy.
 
 ## Security Validation Priorities
 
-Before a supported release, validation must include:
-
-- strict-account mismatch and ambiguity;
-- no-interaction behavior under every enabled mechanism;
-- prompt cancellation, timeout, and concurrent callers;
-- cache permissions, corruption, and migration;
-- WSL host and UI ownership;
-- authority-host and cloud-profile validation;
-- stdout/stderr contamination and redaction;
-- dependency upgrades affecting MSAL and native broker behavior;
-- artifact provenance and installation isolation.
+The normative release evidence requirements are defined by
+[`validation/strategy.md`](../validation/strategy.md). Security review prioritizes its
+strict-account, interaction, cancellation, cache, WSL, authority, output, dependency, and
+artifact-isolation scenarios because they exercise the threats above.

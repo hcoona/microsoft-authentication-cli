@@ -46,25 +46,14 @@ supported.
 - Diagnostics and explicit login workflows that must report the selected identity.
 - Public-client applications that need a versioned command-line boundary around MSAL.
 
-Downstream credential providers remain separate products. V2 supplies authentication
-outcomes; it does not own their host protocols, configuration, or credential
-materialization.
-
 ## Non-Goals
 
-The v2 core will not, by default:
-
-- implement Git credential-helper semantics;
-- reproduce Azure CLI or Azure Identity credential chains;
-- select service principals, managed identities, or workload identities implicitly;
-- run as a long-lived token daemon;
-- provide a graphical interface;
-- implement OAuth, WAM, browser engines, or secure storage primitives from scratch;
-- promise compatibility with every v1 command or environment variable;
-- treat Azure DevOps PAT lifecycle as part of the generic authentication core;
-- promise that a Microsoft-owned public-client registration will remain available.
-
-Any expansion beyond these boundaries requires a separate accepted decision.
+Product-boundary requirements [`V2-REQ-001`](requirements/product-boundary.md#v2-req-001-delegated-public-client-scope)
+and [`V2-REQ-002`](requirements/product-boundary.md#v2-req-002-no-implicit-product-expansion)
+define the normative scope and expansion rule. Architecture decisions
+[`0003`](../decisions/0003-treat-client-registration-as-an-external-dependency.md)
+and [`0004`](../decisions/0004-keep-the-authentication-engine-separate-from-consumers.md)
+define the current client-registration and consumer boundaries.
 
 ## Release Direction
 

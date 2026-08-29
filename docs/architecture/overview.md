@@ -5,12 +5,12 @@ freeze command names, serialized contracts, platform support, or compatibility b
 
 ## System Boundary
 
-V2 is a command-line authentication engine for delegated Microsoft Entra public-client
-token acquisition.
-
-Downstream credential providers and host-tool protocols remain separate consumers. Git,
-NuGet, Python, npm, IDE, and other host adapters do not become part of the authentication
-core.
+The normative product boundary is defined by
+[`V2-REQ-001`](../product/requirements/product-boundary.md#v2-req-001-delegated-public-client-scope)
+and [`V2-REQ-002`](../product/requirements/product-boundary.md#v2-req-002-no-implicit-product-expansion).
+This architecture allocates that behavior to a command-line authentication engine and
+separate downstream consumers under decision
+[`0004`](../decisions/0004-keep-the-authentication-engine-separate-from-consumers.md).
 
 ## Governing Decisions
 
@@ -84,21 +84,19 @@ cross-process coordination under the request deadline.
 
 ## Architecture Invariants
 
-- Identity constraints are validated against provider result metadata before success.
-- Acquisition order and interaction permission remain independent policy inputs.
-- Mechanism adapters do not widen account, authority, interaction, or fallback policy.
-- Host capabilities and UI ownership are explicit.
-- Locking, cache work, mechanisms, and result validation share one deadline and
-  cancellation scope.
-- Persistent secrets use an approved secure store and do not silently fall back to
-  plaintext.
-- Protocol output and diagnostics remain separate, versioned, and secret-safe.
-- Authority hosts come from trusted Microsoft Entra cloud metadata or an accepted
-  profile.
+- The protocol boundary, authentication policy, account resolution, mechanism adapters,
+  host capabilities, and cache coordination remain separate ownership boundaries.
+- Mechanism adapters return typed mechanism outcomes; the authentication policy owns
+  global ordering and fallback.
+- Protocol serialization and diagnostics remain outside mechanism adapters.
+- Host-specific UI and storage integrations remain behind capability and platform
+  boundaries.
 
-The detailed behavioral obligations are in
-[`../product/requirements/`](../product/requirements/). Serialized contracts are
-scheduled for the Contract and Architecture stage.
+Behavioral obligations, including identity validation, interaction, deadlines, secure
+storage, output discipline, and trusted authority selection, are defined by the
+[`product requirements`](../product/requirements/product-boundary.md) and their sibling
+capability modules. Serialized contracts are scheduled for the Contract and Architecture
+stage.
 
 ## Scoped Architecture Views
 

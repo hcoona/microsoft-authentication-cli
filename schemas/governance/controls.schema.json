@@ -133,8 +133,25 @@
           ]
         },
         "implementation": {
-          "type": "string",
-          "minLength": 1
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "value"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "repository-path",
+                "review-procedure",
+                "evidence-carrier"
+              ]
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         },
         "execution_points": {
           "type": "array",

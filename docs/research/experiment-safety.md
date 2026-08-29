@@ -105,16 +105,20 @@ An inapplicable stage requires a reason and evidence reference; both mode result
 
 Each protocol command records a direct executable and canonical ordered argument list and
 is run without a shell wrapper. The list begins with the matching `dotnet` verb and the
-recorded build entry point. Restore commands have no command dependency and use exactly
-the configuration recorded for their source mode. Build, test, and package commands
-depend only on the restore for the same mode, pass `--no-restore`, and use the recorded
-build configuration.
+audited `AzureAuth.sln` entry point. All commands run with the detached checkout root as
+their working directory. Restore commands have no command dependency and use exactly the
+configuration recorded for their source mode. Build, test, and package commands depend
+only on the restore for the same mode, pass `--no-restore`, and use the recorded build
+configuration.
 
 The protocol records exactly two restore configurations. The source-faithful
 configuration identifies the audited checkout's unmodified `nuget.config`; the
 public-only configuration identifies the isolated generated file. Each record includes a
-content hash and the exact source identifiers it contains. Dependency observations cite
-only a source declared by the configuration used for their restore result.
+content hash and the exact source identifiers it contains. The source-faithful record is
+bound to the audited file hash and Office feed. For Issue #1, the public-only source is
+the canonical NuGet.org v3 endpoint and its configuration identity differs from the
+source-faithful record. Dependency observations cite only a source declared by the
+configuration used for their restore result.
 
 A `blocked` downstream command result identifies exactly the same-mode restore result that
 blocked it. When a restore does not pass, every applicable downstream stage for that

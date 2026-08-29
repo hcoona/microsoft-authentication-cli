@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import os
 import re
 import subprocess
@@ -13,21 +14,28 @@ import sys
 from collections import Counter
 from pathlib import Path, PurePosixPath
 from typing import Any
-from urllib.parse import urlsplit
 
 import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
-REQUIREMENT_PATTERN = re.compile(
-    r"^#{1,6} (V2-REQ-[0-9]{3}[A-Z]?):", re.MULTILINE
-)
+REQUIREMENT_ID_PATTERN = re.compile(r"^V2-REQ-[0-9]{3}[A-Z]?$")
+REQUIREMENT_PREFIX_PATTERN = re.compile(r"^V2-REQ-")
+ATX_HEADING_PATTERN = re.compile(r"^ {0,3}#{1,6}[ \t]+(.+?)[ \t]*#*[ \t]*$")
+SETEXT_HEADING_PATTERN = re.compile(r"^ {0,3}(=+|-+)[ \t]*$")
 DECISION_PATTERN = re.compile(r"^([0-9]{4})-.*\.md$")
-MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)\s]+)\)")
 GLOB_MARKERS = frozenset("*?[")
 ZERO_SHA = "0" * 40
 EXACT_VERSION_PATTERN = re.compile(
     r"^[0-9]+(?:\.[0-9]+){1,3}(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$"
+)
+INLINE_LINK_PATTERN = re.compile(
+    r"(?<!!)\[[^\]]+\]\(\s*(?:<([^>]+)>|([^)\s]+))(?:\s+['\"(][^)]*)?\)"
+)
+REFERENCE_LINK_PATTERN = re.compile(r"(?<!!)\[[^\]]+\]\[([^\]]+)\]")
+SHORT_REFERENCE_LINK_PATTERN = re.compile(r"(?<!!)\[([^\]]+)\](?![\[(])")
+REFERENCE_DEFINITION_PATTERN = re.compile(
+    r"^ {0,3}\[([^\]]+)\]:[ \t]*(?:<([^>]+)>|(\S+))"
 )
 
 
@@ -58,6 +66,137 @@ def git_output(*arguments: str) -> str | None:
     if result.returncode != 0:
         return None
     return result.stdout.strip()
+
+
+def rendered_markdown_lines(text: str) -> list[str]:
+    rendered: list[str] = []
+    in_fence: tuple[str, int] | None = None
+    in_comment = False
+    in_html_block = False
+    for raw_line in text.splitlines():
+        line = raw_line
+        if in_fence is not None:
+            fence_character, fence_length = in_fence
+            if re.match(
+                rf"^ {{0,3}}{re.escape(fence_character)}{{{fence_length},}}[ \t]*$",
+                line,
+            ):
+                in_fence = None
+            continue
+
+        fence_match = re.match(r"^ {0,3}(`{3,}|~{3,})", line)
+        if fence_match is not None:
+            marker = fence_match.group(1)
+            in_fence = (marker[0], len(marker))
+            continue
+
+        visible_parts: list[str] = []
+        position = 0
+        while position < len(line):
+            if in_comment:
+                comment_end = line.find("-->", position)
+                if comment_end == -1:
+                    position = len(line)
+                    break
+                in_comment = False
+                position = comment_end + 3
+                continue
+
+            comment_start = line.find("<!--", position)
+            if comment_start == -1:
+                visible_parts.append(line[position:])
+                break
+            visible_parts.append(line[position:comment_start])
+            in_comment = True
+            position = comment_start + 4
+
+        visible_line = "".join(visible_parts)
+        stripped = visible_line.lstrip()
+        if in_html_block:
+            if stripped.startswith("</"):
+                in_html_block = False
+            continue
+        if re.match(
+            r"^ {0,3}<(address|article|aside|base|blockquote|body|caption|center|col|"
+            r"colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|"
+            r"footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|"
+            r"li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|"
+            r"search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|"
+            r"ul)(?:[ \t]|>|/>)",
+            visible_line,
+            flags=re.IGNORECASE,
+        ):
+            in_html_block = not (stripped.endswith("/>") or stripped.startswith("<hr"))
+            continue
+        rendered.append(visible_line)
+    return rendered
+
+
+def strip_inline_code(text: str) -> str:
+    return re.sub(r"`+[^`]*`+", "", text)
+
+
+def requirement_headings(text: str) -> tuple[list[str], list[str]]:
+    identifiers: list[str] = []
+    malformed: list[str] = []
+    lines = rendered_markdown_lines(text)
+    for index, line in enumerate(lines):
+        heading_text: str | None = None
+        if (match := ATX_HEADING_PATTERN.fullmatch(line)) is not None:
+            heading_text = match.group(1)
+        elif (
+            index + 1 < len(lines)
+            and SETEXT_HEADING_PATTERN.fullmatch(lines[index + 1]) is not None
+            and SETEXT_HEADING_PATTERN.fullmatch(lines[index]) is None
+            and line.strip()
+        ):
+            heading_text = line.strip()
+        if heading_text is None:
+            continue
+        heading_text = strip_inline_code(heading_text).strip()
+        if not REQUIREMENT_PREFIX_PATTERN.match(heading_text):
+            continue
+        identifier, separator, _title = heading_text.partition(":")
+        if separator and REQUIREMENT_ID_PATTERN.fullmatch(identifier):
+            identifiers.append(identifier)
+        else:
+            malformed.append(heading_text)
+    return identifiers, malformed
+
+
+def markdown_link_destinations(text: str) -> list[str]:
+    rendered_lines = rendered_markdown_lines(text)
+    definitions: dict[str, str] = {}
+    for line in rendered_lines:
+        match = REFERENCE_DEFINITION_PATTERN.match(line)
+        if match is not None:
+            definitions[match.group(1).strip().casefold()] = (
+                match.group(2) or match.group(3)
+            )
+
+    destinations: list[str] = []
+    for line in rendered_lines:
+        if REFERENCE_DEFINITION_PATTERN.match(line) is not None:
+            continue
+        for match in INLINE_LINK_PATTERN.finditer(line):
+            destinations.append(match.group(1) or match.group(2))
+        line_without_code = strip_inline_code(line)
+        explicit_reference_spans: list[tuple[int, int]] = []
+        for match in REFERENCE_LINK_PATTERN.finditer(line_without_code):
+            explicit_reference_spans.append(match.span())
+            reference = match.group(1).strip().casefold()
+            if reference in definitions:
+                destinations.append(definitions[reference])
+        for match in SHORT_REFERENCE_LINK_PATTERN.finditer(line_without_code):
+            if any(
+                start <= match.start() < end
+                for start, end in explicit_reference_spans
+            ):
+                continue
+            reference = match.group(1).strip().casefold()
+            if reference in definitions:
+                destinations.append(definitions[reference])
+    return destinations
 
 
 def resolve_accepted_base(errors: list[str]) -> str | None:
@@ -101,7 +240,13 @@ def requirement_ids_at_commit(commit: str, errors: list[str]) -> set[str]:
                 f"cannot read accepted requirement definitions from {relative_path}"
             )
             continue
-        requirement_ids.update(REQUIREMENT_PATTERN.findall(content))
+        identifiers, malformed = requirement_headings(content)
+        requirement_ids.update(identifiers)
+        if malformed:
+            errors.append(
+                f"accepted record {relative_path} contains malformed requirement "
+                f"headings: {', '.join(malformed)}"
+            )
     return requirement_ids
 
 
@@ -111,11 +256,14 @@ def check_identifiers() -> list[str]:
     requirement_occurrences: list[tuple[str, str]] = []
     for path in sorted((ROOT / "docs").rglob("*.md")):
         relative_path = path.relative_to(ROOT).as_posix()
+        identifiers, malformed = requirement_headings(path.read_text(encoding="utf-8"))
+        for heading in malformed:
+            errors.append(
+                f"malformed requirement heading in {relative_path}: {heading}"
+            )
         requirement_occurrences.extend(
             (identifier, relative_path)
-            for identifier in REQUIREMENT_PATTERN.findall(
-                path.read_text(encoding="utf-8")
-            )
+            for identifier in identifiers
         )
     requirement_ids = [identifier for identifier, _path in requirement_occurrences]
     for identifier in duplicates(requirement_ids):
@@ -171,10 +319,79 @@ def matches(path: str, pattern: str) -> bool:
     return PurePosixPath(path).match(pattern)
 
 
+def github_heading_slug(heading: str) -> str:
+    normalized = html.unescape(strip_inline_code(heading)).strip().lower()
+    normalized = re.sub(r"<[^>]+>", "", normalized)
+    normalized = re.sub(r"[^\w\s-]", "", normalized)
+    normalized = re.sub(r"[\s-]+", "-", normalized)
+    return normalized.strip("-")
+
+
+def markdown_heading_slugs(path: Path) -> set[str]:
+    slugs: set[str] = set()
+    counts: Counter[str] = Counter()
+    lines = rendered_markdown_lines(path.read_text(encoding="utf-8"))
+    for index, line in enumerate(lines):
+        heading_text: str | None = None
+        if (match := ATX_HEADING_PATTERN.fullmatch(line)) is not None:
+            heading_text = match.group(1)
+        elif (
+            index + 1 < len(lines)
+            and SETEXT_HEADING_PATTERN.fullmatch(lines[index + 1]) is not None
+            and SETEXT_HEADING_PATTERN.fullmatch(lines[index]) is None
+            and line.strip()
+        ):
+            heading_text = line.strip()
+        if heading_text is None:
+            continue
+        base_slug = github_heading_slug(heading_text)
+        slug = base_slug if counts[base_slug] == 0 else f"{base_slug}-{counts[base_slug]}"
+        counts[base_slug] += 1
+        slugs.add(slug)
+    return slugs
+
+
+def check_control_references() -> list[str]:
+    errors: list[str] = []
+    controls = load_yaml("docs/governance/controls.yaml")["controls"]
+    for control in controls:
+        if control["state"] != "current":
+            continue
+        for reference in control["governing_rules"]:
+            path_text, separator, anchor = reference.partition("#")
+            path = ROOT / path_text
+            if not path.is_file():
+                errors.append(
+                    f"control {control['id']} governing rule does not exist: {path_text}"
+                )
+                continue
+            if separator:
+                if path.suffix.lower() != ".md":
+                    errors.append(
+                        f"control {control['id']} governing-rule anchor targets a "
+                        f"non-Markdown file: {reference}"
+                    )
+                elif anchor not in markdown_heading_slugs(path):
+                    errors.append(
+                        f"control {control['id']} governing-rule anchor does not exist: "
+                        f"{reference}"
+                    )
+
+        implementation = control["implementation"]
+        if implementation["kind"] == "repository-path":
+            path = ROOT / implementation["value"]
+            if not path.is_file():
+                errors.append(
+                    f"control {control['id']} implementation does not exist: "
+                    f"{implementation['value']}"
+                )
+    return errors
+
+
 def check_documentation_portal(catalog: dict[str, Any]) -> list[str]:
     portal = ROOT / "docs/README.md"
     linked_records: set[str] = set()
-    for target in MARKDOWN_LINK_PATTERN.findall(portal.read_text(encoding="utf-8")):
+    for target in markdown_link_destinations(portal.read_text(encoding="utf-8")):
         path_part = target.split("#", maxsplit=1)[0]
         if not path_part or "://" in path_part:
             continue
@@ -207,27 +424,37 @@ def check_catalog_paths() -> list[str]:
     errors: list[str] = []
     catalog = load_yaml("docs/governance/record-families.yaml")
     current = [family for family in catalog["families"] if family["state"] == "current"]
+    current_family_paths: dict[str, set[Path]] = {}
 
     for family in current:
         pattern = family["path"]
+        family_paths = {
+            path
+            for path in (
+                ROOT.glob(pattern) if contains_glob(pattern) else [ROOT / pattern]
+            )
+            if path.is_file()
+        }
+        current_family_paths[family["id"]] = family_paths
         if family["carrier"] == "repository-file":
             if contains_glob(pattern):
                 errors.append(f"{family['id']} uses a glob for a singleton path: {pattern}")
             elif not (ROOT / pattern).is_file():
                 errors.append(f"{family['id']} path does not exist: {pattern}")
-        elif not any(path.is_file() for path in ROOT.glob(pattern)):
+        elif not family_paths:
             errors.append(f"{family['id']} path matches no current files: {pattern}")
 
         schema = family.get("schema")
         if schema and not (ROOT / schema).is_file():
             errors.append(f"{family['id']} schema does not exist: {schema}")
 
-    governed_paths = [
-        *sorted(path for path in ROOT.glob("*.md") if path.is_file()),
-        ROOT / ".github/pull_request_template.md",
-        *sorted(path for path in (ROOT / "docs").rglob("*") if path.is_file()),
-        *sorted(path for path in (ROOT / "schemas").rglob("*") if path.is_file()),
-    ]
+    governed_paths = sorted(
+        {
+            path
+            for paths in current_family_paths.values()
+            for path in paths
+        }
+    )
     for path in governed_paths:
         relative_path = path.relative_to(ROOT).as_posix()
         matching_families = [
@@ -242,6 +469,7 @@ def check_catalog_paths() -> list[str]:
             )
 
     errors.extend(check_documentation_portal(catalog))
+    errors.extend(check_control_references())
     return errors
 
 
@@ -254,8 +482,6 @@ DOTNET_STAGE_ARGUMENT = {
 
 
 def exact_declared_version(version_constraint: str) -> str | None:
-    if EXACT_VERSION_PATTERN.fullmatch(version_constraint):
-        return version_constraint
     if (
         version_constraint.startswith("[")
         and version_constraint.endswith("]")
@@ -268,13 +494,7 @@ def exact_declared_version(version_constraint: str) -> str | None:
 
 
 def is_public_https_source(source: str) -> bool:
-    parsed = urlsplit(source)
-    return (
-        parsed.scheme == "https"
-        and parsed.hostname is not None
-        and parsed.username is None
-        and parsed.password is None
-    )
+    return source == "https://api.nuget.org/v3/index.json"
 
 
 def validate_dotnet_invocation(
@@ -385,6 +605,21 @@ def validate_public_build_bundle_value(
                     f"{relative_path}: source-faithful restore configuration must be "
                     "the audited checkout's nuget.config"
                 )
+            if (
+                configuration["sha256"]
+                != "be2776f78f5af30efb8836a32c4467ca0dcd9220c17d778ed8332b33dd309a6b"
+            ):
+                errors.append(
+                    f"{relative_path}: source-faithful restore configuration must use "
+                    "the audited nuget.config SHA-256"
+                )
+            if configuration["sources"] != [
+                "https://pkgs.dev.azure.com/office/_packaging/Office/nuget/v3/index.json"
+            ]:
+                errors.append(
+                    f"{relative_path}: source-faithful restore configuration must "
+                    "record the audited Office package source"
+                )
         else:
             for source in configuration["sources"]:
                 if not is_public_https_source(source):
@@ -398,6 +633,18 @@ def validate_public_build_bundle_value(
             f"{relative_path}: protocol must define exactly one restore configuration "
             "for each source mode"
         )
+    else:
+        source_faithful = restore_configurations_by_mode["source-faithful"]
+        public_only = restore_configurations_by_mode["public-only"]
+        if (
+            public_only["path"] == source_faithful["path"]
+            or public_only["sha256"] == source_faithful["sha256"]
+            or public_only["sources"] == source_faithful["sources"]
+        ):
+            errors.append(
+                f"{relative_path}: public-only restore configuration must differ from "
+                "the audited source-faithful configuration"
+            )
 
     commands = protocol["commands"]
     command_ids = [command["id"] for command in commands]
@@ -583,6 +830,14 @@ def validate_public_build_bundle_value(
     public_unresolved_observations: list[dict[str, Any]] = []
     for collection in ("resolved", "unresolved"):
         for dependency in inventory[collection]:
+            if (
+                collection == "resolved"
+                and not EXACT_VERSION_PATTERN.fullmatch(dependency["version"])
+            ):
+                errors.append(
+                    f"{relative_path}: resolved dependency {dependency['id']} must "
+                    "record an exact version"
+                )
             dependency_has_public_observation = False
             dependency_targets: set[str] = set()
             public_dependency_targets: set[str] = set()
