@@ -37,6 +37,8 @@ navigation, not an independent authority.
 | --- | --- |
 | How are project rules maintained? | [`governance/governance-system.md`](governance/governance-system.md) |
 | How are repository records and controls organized? | [`governance/record-system.md`](governance/record-system.md) |
+| Which record families are active or scheduled? | [`governance/record-families.yaml`](governance/record-families.yaml) |
+| Which controls implement the governing policies? | [`governance/controls.yaml`](governance/controls.yaml) |
 | What project identity and public-record rules apply? | [`governance/project.md`](governance/project.md) |
 | What compatibility or migration is currently promised? | [`product/compatibility-and-migration.md`](product/compatibility-and-migration.md) |
 | Which operational identifiers must remain separate? | [`governance/operational-identities.yaml`](governance/operational-identities.yaml) |

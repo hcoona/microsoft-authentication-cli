@@ -1,0 +1,184 @@
+schema_version: 1
+
+controls:
+  - id: repository-hygiene
+    state: scheduled
+    class: mechanical
+    governing_rules:
+      - docs/governance/governance-system.md#gov-005-controls-implement-policy
+      - docs/governance/record-system.md#record-system-gate
+    invariant: Tracked text has no unresolved conflict markers or whitespace errors.
+    runner: hk
+    implementation: hk.pkl
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: A malformed merge or patch enters review or main-v2.
+    activation:
+      trigger: The repository-owned hk configuration is added under issue #2.
+      evaluator: Control maintainer
+      action: Add deterministic conflict-marker and whitespace checks.
+      fallback_review: Issue #2 final control review
+
+  - id: markdown-links
+    state: scheduled
+    class: mechanical
+    governing_rules:
+      - docs/governance/record-system.md#deletion-and-replacement
+    invariant: Internal Markdown links resolve to current repository paths and anchors.
+    runner: hk
+    implementation: hk.pkl
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Navigation or policy references lead to deleted or moved records.
+    activation:
+      trigger: The repository-owned hk configuration is added under issue #2.
+      evaluator: Control maintainer
+      action: Add deterministic Markdown link validation.
+      fallback_review: Issue #2 final control review
+
+  - id: structured-record-schema
+    state: scheduled
+    class: mechanical
+    governing_rules:
+      - docs/governance/record-system.md#formats
+      - docs/governance/record-system.md#record-system-gate
+    invariant: Every active YAML or JSON structured record validates against its declared schema.
+    runner: hk
+    implementation: hk.pkl
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: A structured record becomes ambiguous or unreadable by its consumer.
+    activation:
+      trigger: The repository-owned hk configuration is added under issue #2.
+      evaluator: Control maintainer
+      action: Bind each structured record to schema validation.
+      fallback_review: Issue #2 final control review
+
+  - id: requirement-id-uniqueness
+    state: scheduled
+    class: mechanical
+    governing_rules:
+      - docs/governance/record-system.md#workflows
+    invariant: Each V2 requirement identifier is defined exactly once.
+    runner: hk
+    implementation: hk.pkl
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Requirements become ambiguous across capability modules.
+    activation:
+      trigger: The repository-owned hk configuration is added under issue #2.
+      evaluator: Control maintainer
+      action: Add deterministic requirement identifier extraction and uniqueness checking.
+      fallback_review: Issue #2 final control review
+
+  - id: decision-number-uniqueness
+    state: scheduled
+    class: mechanical
+    governing_rules:
+      - docs/governance/record-system.md#lifecycle-through-git-and-github
+    invariant: Each decision record number and file prefix is unique.
+    runner: hk
+    implementation: hk.pkl
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Durable decisions cannot be referenced unambiguously.
+    activation:
+      trigger: The repository-owned hk configuration is added under issue #2.
+      evaluator: Control maintainer
+      action: Add deterministic decision number validation.
+      fallback_review: Issue #2 final control review
+
+  - id: record-family-path-consistency
+    state: scheduled
+    class: mechanical
+    governing_rules:
+      - docs/governance/governance-system.md#gov-002-one-canonical-authority
+      - docs/governance/record-system.md#authority-by-concern
+    invariant: Current record-family paths exist and governed records match a declared family.
+    runner: hk
+    implementation: hk.pkl
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: A canonical record is orphaned, duplicated, or omitted from review routing.
+    activation:
+      trigger: The record-family catalog and repository-owned hk configuration both exist.
+      evaluator: Control maintainer
+      action: Add deterministic catalog-to-path consistency validation as advisory first.
+      fallback_review: Issue #2 final control review
+
+  - id: secret-shape
+    state: scheduled
+    class: mechanical
+    governing_rules:
+      - docs/governance/project.md
+      - docs/research/experiment-safety.md
+    invariant: Committed content does not match configured credential or secret patterns.
+    runner: hk
+    implementation: hk.pkl
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Credentials or private experimental data enter Git history.
+    activation:
+      trigger: The repository-owned hk configuration is added under issue #2.
+      evaluator: Security maintainer
+      action: Add a maintained secret-shape scanner without treating public client identifiers as secrets.
+      fallback_review: Issue #2 final security review
+
+  - id: record-system-review
+    state: scheduled
+    class: procedural-review
+    governing_rules:
+      - docs/governance/governance-system.md
+      - docs/governance/record-system.md
+    invariant: Changed record families retain one authority, real consumers, bounded lifecycle, and policy-aligned controls.
+    runner: agent-skill
+    implementation: .github/skills/record-system-review/SKILL.md
+    execution_points:
+      - pull-request-review
+      - phase-transition
+    failure_mode: A syntactically valid change creates duplicated authority or unmaintainable governance.
+    activation:
+      trigger: The review procedure and representative eval fixtures are added under issue #2.
+      evaluator: Repository owner
+      action: Activate the Skill for explicit invocation and changed-family routing when supported.
+      fallback_review: Issue #2 final contextual review
+
+  - id: research-evidence-review
+    state: scheduled
+    class: procedural-review
+    governing_rules:
+      - docs/research/experiment-safety.md
+      - docs/governance/record-system.md
+    invariant: Research changes preserve source boundaries, evidence labels, reproducibility, and claim limits.
+    runner: agent-skill
+    implementation: .github/skills/research-evidence-review/SKILL.md
+    execution_points:
+      - pull-request-review
+      - phase-transition
+    failure_mode: Research conclusions overstate evidence or expose unsafe experimental detail.
+    activation:
+      trigger: The review procedure and representative eval fixtures are added under issue #2.
+      evaluator: Repository owner
+      action: Activate the Skill for explicit invocation and research-record routing when supported.
+      fallback_review: Issue #2 final contextual review
+
+  - id: record-system-gate
+    state: current
+    class: owner-decision
+    governing_rules:
+      - docs/governance/record-system.md#record-system-gate
+      - docs/governance/governance-system.md#gov-010-gates-require-evidence
+    invariant: The record migration is accepted only after its mechanical and contextual evidence is reviewable.
+    runner: human-owner
+    implementation: GitHub issue #2 and its final pull request
+    execution_points:
+      - issue-closure
+      - pull-request-merge
+    failure_mode: The repository declares the new system current without evidence that its authority and controls agree.

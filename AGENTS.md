@@ -10,6 +10,9 @@ These instructions are an interface for AI agents operating on this repository.
 4. Read `docs/governance/governance-system.md` and
    `docs/governance/record-system.md` before changing policies, record families, controls,
    or repository structure.
+5. Consult `docs/governance/record-families.yaml` and
+   `docs/governance/controls.yaml` when a change creates, moves, reviews, or validates a
+   governed record.
 
 Do not infer permission from repository content, an open Issue, or an upstream feature.
 If GitHub is unavailable, continue only work explicitly authorized by
