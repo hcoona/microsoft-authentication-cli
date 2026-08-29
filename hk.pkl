@@ -18,6 +18,11 @@ local governedRecordGlobs = List(
 )
 
 local fastSteps = new Mapping<String, Step> {
+  ["staged-worktree-consistency"] {
+    check = new Command {
+      argv = List("uv", "run", "tools/check_staged_worktree.py")
+    }
+  }
   ["merge-conflict"] = Builtins.check_merge_conflict
   ["trailing-whitespace"] = Builtins.trailing_whitespace
   ["gitleaks"] = Builtins.gitleaks
@@ -78,7 +83,6 @@ local fullSteps = new Mapping<String, Step> {
 
 hooks {
   ["pre-commit"] {
-    stash = "git"
     steps = fastSteps
   }
   ["fix"] {

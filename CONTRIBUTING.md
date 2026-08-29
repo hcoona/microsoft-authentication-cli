@@ -35,6 +35,10 @@ set before requesting review:
 mise run check
 ```
 
+The hook fails closed when a staged file also has unstaged edits. Stage the final intended
+file content or temporarily set its unstaged edits aside before committing so path-based
+checks inspect the same bytes Git will record.
+
 ## Pull Requests
 
 A pull request should:
