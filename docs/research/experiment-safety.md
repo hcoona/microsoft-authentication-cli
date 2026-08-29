@@ -89,6 +89,20 @@ After that preflight, create the first `planned` bundle under
 command. The same bundle carries the approved protocol, command-result matrix, observed
 dependency inventory, conclusions, and limitations as the work progresses.
 
+Use the bundle states as follows:
+
+- `planned` contains the reviewed protocol and no command results;
+- `in-progress` begins immediately before the first experiment command and records each
+  bounded outcome without discarding failures;
+- `aborted` preserves any partial results and records the triggered stop condition,
+  cleanup outcome, reason, and sanitized evidence;
+- `completed` contains the two restore modes, every required stage outcome, dependency
+  inventory, conclusions, and explicit overall public-build outcome.
+
+A `blocked` command result identifies the prerequisite result that blocked it. When a
+restore does not pass, every downstream stage for that source mode is blocked by that
+restore. Executed build, test, and package commands use `--no-restore`.
+
 The contract is limited to the public restore, build, test, and non-publishing package
 work authorized by issue #1. It does not define a generic authentication-experiment
 format, release SBOM, or v2 product protocol. Its dependency inventory records

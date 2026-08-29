@@ -80,6 +80,12 @@
         "minLength": 1
       },
       "uniqueItems": true
+    },
+    "completion": {
+      "$ref": "#/$defs/completion"
+    },
+    "termination": {
+      "$ref": "#/$defs/termination"
     }
   },
   "allOf": [
@@ -95,12 +101,65 @@
         ]
       },
       "then": {
+        "required": [
+          "completion"
+        ],
         "properties": {
           "command_results": {
             "$ref": "#/$defs/completedCommandResults"
           },
           "conclusions": {
             "minItems": 1
+          }
+        }
+      },
+      "else": {
+        "not": {
+          "required": [
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "aborted"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "termination"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "termination"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "planned"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "command_results": {
+            "maxItems": 0
           }
         }
       }
@@ -382,6 +441,9 @@
           ]
         },
         "sanitized_evidence_references": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "blocked_by": {
           "$ref": "#/$defs/nonEmptyStringArray"
         },
         "reproduction_count": {
@@ -721,6 +783,62 @@
           "minLength": 1
         },
         "evidence_references": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        }
+      }
+    },
+    "completion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "sanitized_evidence_references",
+        "untested_environments"
+      ],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "publicly-reproducible",
+            "not-publicly-reproducible",
+            "inconclusive"
+          ]
+        },
+        "sanitized_evidence_references": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "untested_environments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "termination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reason",
+        "triggered_stop_condition",
+        "cleanup_outcome",
+        "sanitized_evidence_references"
+      ],
+      "properties": {
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "triggered_stop_condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cleanup_outcome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sanitized_evidence_references": {
           "$ref": "#/$defs/nonEmptyStringArray"
         }
       }
