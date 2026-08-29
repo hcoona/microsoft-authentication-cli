@@ -5,7 +5,7 @@ local fastSteps = new Mapping<String, Step> {
   ["merge-conflict"] = Builtins.check_merge_conflict
   ["trailing-whitespace"] = Builtins.trailing_whitespace
   ["gitleaks"] = Builtins.gitleaks
-  ["markdown-links"] = (Builtins.lychee) {
+  ["markdown-links"] {
     check = new Command {
       argv = List(
         "lychee",

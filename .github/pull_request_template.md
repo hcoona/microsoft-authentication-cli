@@ -27,6 +27,12 @@ and navigation routes. Do not copy their governing policy into this description.
 
 <!-- List the smallest checks that prove the claimed behavior. -->
 
+## Review and Disposition
+
+<!-- Link the applicable control results, independent reviews, fired recheck IDs and
+outcomes, independent finding triage, and required owner disposition. Use "Not
+applicable" where the governing controls do not require an item. -->
+
 ## Upstream Provenance
 
 <!-- Identify any copied or derived source and its exact upstream commit. -->

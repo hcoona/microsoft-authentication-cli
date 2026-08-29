@@ -6,10 +6,13 @@ current project boundary and work authorization.
 ## Before Starting
 
 1. Read the [project record index](docs/README.md).
-2. Read [`docs/project-state.md`](docs/project-state.md).
-3. Confirm that `docs/project-state.md` explicitly authorizes the work and, when it
-   designates an active downstream Issue, that the work remains within that Issue.
-4. Read the canonical product, architecture, research, security, and validation records
+2. Determine authorization from the target branch's accepted
+   [`docs/project-state.md`](docs/project-state.md), normally the copy on `main-v2`.
+3. Treat a working-branch change to that file as a proposal that cannot authorize
+   additional work before merge.
+4. Confirm that the accepted project state authorizes the work and, when it designates an
+   active downstream Issue, that the work remains within that Issue.
+5. Read the canonical product, architecture, research, security, and validation records
    relevant to the change.
 
 Do not add private company information, credentials, tokens, private account details, or
@@ -53,6 +56,21 @@ A pull request should:
 
 Not every change needs an Issue, decision record, design record, or documentation update.
 Use them only when their repository policies require them.
+
+## Review Routing
+
+Before merge:
+
+1. Consult [`docs/governance/controls.yaml`](docs/governance/controls.yaml) and run or
+   request every control required by the change and its execution point.
+2. Evaluate every fired entry in
+   [`docs/research/rechecks.yaml`](docs/research/rechecks.yaml), even when no research file
+   changed before the trigger.
+3. Send each material review finding to a reviewer independent of the originating review
+   for triage before remediation or dismissal.
+4. Obtain repository-owner disposition when an applicable control, unresolved finding,
+   or owner-decision finding requires it.
+5. Record the review, triage, recheck, and owner-disposition evidence in the pull request.
 
 ## Commits
 
