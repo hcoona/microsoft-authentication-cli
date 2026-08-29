@@ -1,57 +1,34 @@
 amends "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Builtins.pkl"
 
-local structuredRecordGlobs = List(
-  "**/*.json",
-  "**/*.yaml",
-  "**/*.yml",
-  "tools/check_repository_records.py",
-)
-
-local governedRecordGlobs = List(
-  "*.md",
-  ".github/pull_request_template.md",
-  "docs/**/*.md",
-  "docs/**/*.yaml",
-  "schemas/**/*.schema.json",
-  "tools/check_repository_records.py",
-)
-
 local fastSteps = new Mapping<String, Step> {
-  ["staged-worktree-consistency"] {
-    check = new Command {
-      argv = List("uv", "run", "tools/check_staged_worktree.py")
-    }
-  }
   ["merge-conflict"] = Builtins.check_merge_conflict
   ["trailing-whitespace"] = Builtins.trailing_whitespace
   ["gitleaks"] = Builtins.gitleaks
   ["markdown-links"] = (Builtins.lychee) {
-    glob = List("*.md", "docs/**/*.md", ".github/**/*.md")
     check = new Command {
       argv = List(
         "lychee",
         "--offline",
         "--no-progress",
         "--include-fragments=full",
-        "{{files}}",
+        "*.md",
+        "docs/**/*.md",
+        ".github/**/*.md",
       )
     }
   }
   ["structured-record-schema"] {
-    glob = structuredRecordGlobs
     check = new Command {
       argv = List("uv", "run", "tools/check_repository_records.py", "schemas")
     }
   }
   ["record-identifiers"] {
-    glob = governedRecordGlobs
     check = new Command {
       argv = List("uv", "run", "tools/check_repository_records.py", "identifiers")
     }
   }
   ["record-family-path-consistency"] {
-    glob = governedRecordGlobs
     check = new Command {
       argv = List(
         "uv",
@@ -63,6 +40,15 @@ local fastSteps = new Mapping<String, Step> {
     }
     output_summary = "stderr"
   }
+}
+
+local preCommitSteps = new Mapping<String, Step> {
+  ["staged-worktree-consistency"] {
+    check = new Command {
+      argv = List("uv", "run", "tools/check_staged_worktree.py")
+    }
+  }
+  ...fastSteps
 }
 
 local fullSteps = new Mapping<String, Step> {
@@ -83,7 +69,7 @@ local fullSteps = new Mapping<String, Step> {
 
 hooks {
   ["pre-commit"] {
-    steps = fastSteps
+    steps = preCommitSteps
   }
   ["fix"] {
     fix = true

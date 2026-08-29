@@ -13,13 +13,13 @@ controls:
     governing_rules:
       - docs/governance/governance-system.md#gov-005-controls-implement-policy
       - docs/governance/record-system.md#record-system-gate
-    invariant: Pre-commit checks see the intended staged bytes, and tracked text has no unresolved conflict markers or whitespace errors.
+    invariant: Pre-commit checks run only when the worktree matches the staged snapshot, and tracked text has no unresolved conflict markers or whitespace errors.
     runner: hk
     implementation: hk.pkl
     execution_points:
       - local-fast
       - ci
-    failure_mode: A partially staged file bypasses checks, or a malformed merge or patch enters review or main-v2.
+    failure_mode: Unstaged or untracked content changes repository-wide check results, or a malformed merge or patch enters review or main-v2.
 
   - id: markdown-links
     state: current

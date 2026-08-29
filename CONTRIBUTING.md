@@ -35,9 +35,9 @@ set before requesting review:
 mise run check
 ```
 
-The hook fails closed when a staged file also has unstaged edits. Stage the final intended
-file content or temporarily set its unstaged edits aside before committing so path-based
-checks inspect the same bytes Git will record.
+The hook fails closed while any unstaged or untracked path remains. Stage the final
+intended snapshot or temporarily set other work aside before committing so repository-wide
+path-based checks inspect the same tree Git will record.
 
 ## Pull Requests
 

@@ -23,22 +23,40 @@ def changed_paths(*args: str) -> set[str]:
     }
 
 
+def untracked_paths() -> set[str]:
+    result = subprocess.run(
+        ["git", "ls-files", "--others", "--exclude-standard", "-z"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    )
+    return {
+        os.fsdecode(path)
+        for path in result.stdout.split(b"\0")
+        if path
+    }
+
+
 def main() -> int:
-    staged = changed_paths("--cached")
     unstaged = changed_paths()
-    overlapping = sorted(staged & unstaged)
-    if not overlapping:
+    untracked = untracked_paths()
+    if not unstaged and not untracked:
         return 0
 
     print(
-        "ERROR: staged files also have unstaged edits; checks would not see the "
-        "exact commit snapshot:",
+        "ERROR: pre-commit checks require a worktree containing only staged changes.",
         file=sys.stderr,
     )
-    for path in overlapping:
-        print(f"  {path}", file=sys.stderr)
+    if unstaged:
+        print("Unstaged paths:", file=sys.stderr)
+        for path in sorted(unstaged):
+            print(f"  {path}", file=sys.stderr)
+    if untracked:
+        print("Untracked paths:", file=sys.stderr)
+        for path in sorted(untracked):
+            print(f"  {path}", file=sys.stderr)
     print(
-        "Stage the intended file content or set its unstaged edits aside, then retry.",
+        "Stage the intended content or set these paths aside, then retry.",
         file=sys.stderr,
     )
     return 1
