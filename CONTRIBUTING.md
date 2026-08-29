@@ -1,39 +1,46 @@
 # Contributing
 
-This branch is in a pre-implementation design phase. Contributions should improve the
-public evidence, requirements, decisions, or validation plan unless
-`docs/project-state.md` explicitly activates implementation work.
+This repository is an unofficial, pre-release fork. Contributions must remain within the
+current project boundary and work authorization.
 
-Before contributing:
+## Before Starting
 
-1. Read `AGENTS.md` and the required records it identifies.
-2. Confirm that the work is the current permitted task or is backed by an accepted
-   decision.
-3. Keep the change within delegated public-client authentication.
-4. Use public sources only; do not add private company information, credentials, tokens,
-   account details, or unpublished downstream evidence.
+1. Read the [project record index](docs/README.md).
+2. Read [`docs/project-state.md`](docs/project-state.md).
+3. Confirm that the work is authorized there or tracked by the linked downstream Issue.
+4. Read the canonical product, architecture, research, security, and validation records
+   relevant to the change.
+
+Do not add private company information, credentials, tokens, private account details, or
+unpublished downstream evidence.
 
 ## Pull Requests
 
 A pull request should:
 
-- explain the problem and the bounded change;
-- identify the governing project-state item or decision;
-- state material non-goals;
-- distinguish evidence from inference;
-- describe identity, interaction, cache, output, host, and security effects;
-- identify copied or derived upstream source and its exact commit;
-- include the smallest validation that proves the claimed behavior.
+- state the repository outcome if merged;
+- link the applicable Issue and governing records;
+- define its scope and material non-goals;
+- identify any record-system impact;
+- distinguish evidence from inference and decision;
+- provide the smallest validation that supports the claimed change;
+- describe material security or external effects.
 
-Do not claim official Microsoft status, upstream support, production readiness, v1
-compatibility, or ownership of a Microsoft application registration.
+Not every change needs an Issue, decision record, design record, or documentation update.
+Use them only when their repository policies require them.
 
 ## Commits
 
-Use Conventional Commits with a nonempty body and footer. Keep each commit focused on one
-reviewable semantic concern.
+Use Conventional Commits. Keep each commit focused on one human-reviewable semantic
+concern and include a nonempty body and final footer block.
+
+## Upstream Source
+
+Follow [`UPSTREAM.md`](UPSTREAM.md) when copying or substantially deriving upstream
+source. Preserve required copyright and license notices and record the exact source
+commit.
 
 ## License
 
 By contributing, you agree that your contribution is provided under the MIT License in
-`LICENSE.txt`. Preserve upstream notices in copied or substantially derived material.
+[`LICENSE.txt`](LICENSE.txt).
