@@ -20,42 +20,58 @@ def git(*args: str) -> subprocess.CompletedProcess[str]:
     )
 
 
-def resolve_base() -> str | None:
-    candidates = [
-        os.environ.get("HK_BASE_REF"),
-        "main-v2",
-        "origin/main-v2",
-        "HEAD^",
-    ]
+def all_reachable_history(reason: str) -> str:
+    print(f"{reason}; scanning all commits reachable from HEAD.", file=sys.stderr)
+    return "HEAD"
+
+
+def resolve_log_options() -> str:
     head = git("rev-parse", "HEAD").stdout.strip()
-    for candidate in candidates:
-        if not candidate or candidate == ZERO_SHA:
-            continue
+    explicit_base = os.environ.get("HK_BASE_REF")
+    if explicit_base is not None:
+        if not explicit_base or explicit_base == ZERO_SHA:
+            return all_reachable_history("HK_BASE_REF does not identify a prior commit")
+        if (
+            git("rev-parse", "--verify", "--quiet", f"{explicit_base}^{{commit}}").returncode
+            != 0
+        ):
+            return all_reachable_history(f"HK_BASE_REF {explicit_base!r} cannot be resolved")
+        merge_base = git("merge-base", "HEAD", explicit_base)
+        if merge_base.returncode != 0:
+            return all_reachable_history(
+                f"HK_BASE_REF {explicit_base!r} has no merge base with HEAD"
+            )
+        value = merge_base.stdout.strip()
+        if not value or value == head:
+            return all_reachable_history(
+                f"HK_BASE_REF {explicit_base!r} does not define a prior commit range"
+            )
+        return f"{value}..HEAD"
+
+    for candidate in ("main-v2", "origin/main-v2"):
         if git("rev-parse", "--verify", "--quiet", f"{candidate}^{{commit}}").returncode != 0:
             continue
         merge_base = git("merge-base", "HEAD", candidate)
         if merge_base.returncode == 0:
             value = merge_base.stdout.strip()
             if value and value != head:
-                return value
-        if candidate == "HEAD^":
-            return git("rev-parse", "HEAD^").stdout.strip()
-    return None
+                return f"{value}..HEAD"
+
+    if git("rev-parse", "--verify", "--quiet", "HEAD^").returncode == 0:
+        return "HEAD^..HEAD"
+
+    return all_reachable_history("No prior commit range is available")
 
 
 def main() -> int:
-    base = resolve_base()
-    if base is None:
-        print("No prior commit range is available; the current-tree secret scan remains active.")
-        return 0
-
+    log_options = resolve_log_options()
     return subprocess.run(
         [
             "gitleaks",
             "git",
             "--redact",
             "--no-banner",
-            f"--log-opts={base}..HEAD",
+            f"--log-opts={log_options}",
             str(ROOT),
         ],
         cwd=ROOT,
