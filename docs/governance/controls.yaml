@@ -16,8 +16,15 @@ controls:
     invariant: Pre-commit checks run only when the worktree matches the staged snapshot, and tracked text has no unresolved conflict markers or whitespace errors.
     runner: hk
     implementation:
-      kind: repository-path
-      value: hk.pkl
+      kind: hk-steps
+      steps:
+        local-fast:
+          - staged-worktree-consistency
+          - merge-conflict
+          - trailing-whitespace
+        ci:
+          - merge-conflict
+          - trailing-whitespace
     execution_points:
       - local-fast
       - ci
@@ -37,8 +44,12 @@ controls:
     invariant: Internal Markdown links resolve to current repository paths and anchors.
     runner: hk
     implementation:
-      kind: repository-path
-      value: hk.pkl
+      kind: hk-steps
+      steps:
+        local-fast:
+          - markdown-links
+        ci:
+          - markdown-links
     execution_points:
       - local-fast
       - ci
@@ -59,8 +70,12 @@ controls:
     invariant: Every active YAML or JSON structured record validates against its declared schema.
     runner: hk
     implementation:
-      kind: repository-path
-      value: hk.pkl
+      kind: hk-steps
+      steps:
+        local-fast:
+          - structured-record-schema
+        ci:
+          - structured-record-schema
     execution_points:
       - local-fast
       - ci
@@ -80,8 +95,12 @@ controls:
     invariant: The issue #1 protocol, command results, restore configurations, dependency observations, and completion outcome remain mutually consistent.
     runner: hk
     implementation:
-      kind: repository-path
-      value: tools/check_repository_records.py
+      kind: hk-steps
+      steps:
+        local-fast:
+          - structured-record-schema
+        ci:
+          - structured-record-schema
     execution_points:
       - local-fast
       - ci
@@ -106,8 +125,12 @@ controls:
     invariant: Each established V2 requirement identifier remains defined exactly once.
     runner: hk
     implementation:
-      kind: repository-path
-      value: hk.pkl
+      kind: hk-steps
+      steps:
+        local-fast:
+          - record-identifiers
+        ci:
+          - record-identifiers
     execution_points:
       - local-fast
       - ci
@@ -127,8 +150,12 @@ controls:
     invariant: Each decision record number and file prefix is unique.
     runner: hk
     implementation:
-      kind: repository-path
-      value: hk.pkl
+      kind: hk-steps
+      steps:
+        local-fast:
+          - record-identifiers
+        ci:
+          - record-identifiers
     execution_points:
       - local-fast
       - ci
@@ -148,8 +175,12 @@ controls:
     invariant: Current record-family paths exist, governed records match one declared family, and the documentation portal routes to every retained current record.
     runner: hk
     implementation:
-      kind: repository-path
-      value: hk.pkl
+      kind: hk-steps
+      steps:
+        local-fast:
+          - record-family-path-consistency
+        ci:
+          - record-family-path-consistency
     execution_points:
       - local-fast
       - ci
@@ -170,8 +201,13 @@ controls:
     invariant: Committed content does not match configured credential or secret patterns.
     runner: hk
     implementation:
-      kind: repository-path
-      value: hk.pkl
+      kind: hk-steps
+      steps:
+        local-fast:
+          - gitleaks
+        ci:
+          - gitleaks
+          - gitleaks-history
     execution_points:
       - local-fast
       - ci
@@ -190,8 +226,10 @@ controls:
     invariant: GitHub Actions workflows satisfy their published syntax and expression contracts.
     runner: hk
     implementation:
-      kind: repository-path
-      value: hk.pkl
+      kind: hk-steps
+      steps:
+        ci:
+          - actionlint
     execution_points:
       - ci
     failure_mode: The repository merges a workflow that cannot execute its declared checks.

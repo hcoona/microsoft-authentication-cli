@@ -152,7 +152,7 @@ families:
     producer: Control maintainer
     maintainer: Control maintainer
     consumers:
-      - hk when loading controls, reviewer agents when routing review, and the repository owner at gates
+      - The repository checker under hk when validating control wiring, reviewer agents when routing review, and the repository owner at gates
     creation_trigger: More than one control class must be routed consistently.
     failure_mode: Controls drift from policy or execute at the wrong gate.
     review_point: Pull requests that add, retire, or change a control

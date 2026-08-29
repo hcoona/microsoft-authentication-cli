@@ -149,6 +149,17 @@ Use:
 - Agent Skills for repeatable contextual review;
 - human review for product value, risk, scope, and release decisions.
 
+The repository checker discovers record candidates independently from the mutable family
+catalog. Its bounded record roots are the canonical root interfaces and the `docs/`,
+`schemas/`, `contracts/`, and `designs/` namespaces. Adding another record-bearing root
+requires updating the checker and catalog in the same change. A catalog edit therefore
+cannot remove a retained record from family, schema, or portal validation merely by
+deleting its family entry.
+
+Every current hk control maps each declared hk execution point to the concrete step names
+that implement it. The repository checker verifies those steps are reachable from the
+local-fast or CI step set as declared.
+
 The full CI hk set must include every check in the local fast subset. Local hooks may omit
 slower checks but must not implement different semantics.
 

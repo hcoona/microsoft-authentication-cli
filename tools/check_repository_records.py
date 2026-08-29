@@ -1,12 +1,11 @@
 # /// script
 # requires-python = ">=3.13,<3.14"
-# dependencies = ["PyYAML==6.0.3"]
+# dependencies = ["PyYAML==6.0.3", "markdown-it-py==4.2.0"]
 # ///
 
 from __future__ import annotations
 
 import argparse
-import html
 import os
 import re
 import subprocess
@@ -16,27 +15,58 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 import yaml
+from markdown_it import MarkdownIt
+from markdown_it.token import Token
 
 
 ROOT = Path(__file__).resolve().parents[1]
+ROOT_RESOLVED = ROOT.resolve()
+MARKDOWN = MarkdownIt("commonmark", {"html": True})
 REQUIREMENT_ID_PATTERN = re.compile(r"^V2-REQ-[0-9]{3}[A-Z]?$")
 REQUIREMENT_PREFIX_PATTERN = re.compile(r"^V2-REQ-")
-ATX_HEADING_PATTERN = re.compile(r"^ {0,3}#{1,6}[ \t]+(.+?)[ \t]*#*[ \t]*$")
-SETEXT_HEADING_PATTERN = re.compile(r"^ {0,3}(=+|-+)[ \t]*$")
 DECISION_PATTERN = re.compile(r"^([0-9]{4})-.*\.md$")
 GLOB_MARKERS = frozenset("*?[")
 ZERO_SHA = "0" * 40
 EXACT_VERSION_PATTERN = re.compile(
     r"^[0-9]+(?:\.[0-9]+){1,3}(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$"
 )
-INLINE_LINK_PATTERN = re.compile(
-    r"(?<!!)\[[^\]]+\]\(\s*(?:<([^>]+)>|([^)\s]+))(?:\s+['\"(][^)]*)?\)"
+PKL_MAPPING_START_PATTERN = re.compile(
+    r"^local ([A-Za-z][A-Za-z0-9]*) = new Mapping<String, Step> \{$"
 )
-REFERENCE_LINK_PATTERN = re.compile(r"(?<!!)\[[^\]]+\]\[([^\]]+)\]")
-SHORT_REFERENCE_LINK_PATTERN = re.compile(r"(?<!!)\[([^\]]+)\](?![\[(])")
-REFERENCE_DEFINITION_PATTERN = re.compile(
-    r"^ {0,3}\[([^\]]+)\]:[ \t]*(?:<([^>]+)>|(\S+))"
+PKL_STEP_PATTERN = re.compile(r'^\s*\["([^"]+)"\]\s*(?:=|\{)')
+PKL_SPREAD_PATTERN = re.compile(r"^\s*\.\.\.([A-Za-z][A-Za-z0-9]*)")
+
+ROOT_RECORD_PATHS = frozenset(
+    {
+        ".github/pull_request_template.md",
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        "README.md",
+        "SECURITY.md",
+        "UPSTREAM.md",
+    }
 )
+RECORD_ROOT_SUFFIXES = {
+    "docs": (".md", ".yaml", ".yml", ".json", ".jsonl", ".csv"),
+    "schemas": (".schema.json",),
+    "contracts": (".schema.json",),
+    "designs": (".md",),
+}
+BOOTSTRAP_SCHEMA_BINDINGS = (
+    (
+        "schemas/governance/record-families.schema.json",
+        "docs/governance/record-families.yaml",
+    ),
+    (
+        "schemas/governance/controls.schema.json",
+        "docs/governance/controls.yaml",
+    ),
+)
+BOOTSTRAP_FAMILY_IDS = frozenset({"record-family-catalog", "control-catalog"})
+HK_EXECUTION_MAPPINGS = {
+    "local-fast": "preCommitSteps",
+    "ci": "fullSteps",
+}
 
 
 def load_yaml_path(path: Path) -> dict[str, Any]:
@@ -68,92 +98,40 @@ def git_output(*arguments: str) -> str | None:
     return result.stdout.strip()
 
 
-def rendered_markdown_lines(text: str) -> list[str]:
-    rendered: list[str] = []
-    in_fence: tuple[str, int] | None = None
-    in_comment = False
-    in_html_block = False
-    for raw_line in text.splitlines():
-        line = raw_line
-        if in_fence is not None:
-            fence_character, fence_length = in_fence
-            if re.match(
-                rf"^ {{0,3}}{re.escape(fence_character)}{{{fence_length},}}[ \t]*$",
-                line,
-            ):
-                in_fence = None
-            continue
+def token_plain_text(token: Token) -> str:
+    if token.type in {"text", "code_inline", "image"}:
+        return token.content
+    if token.type in {"softbreak", "hardbreak"}:
+        return " "
+    return "".join(token_plain_text(child) for child in token.children or [])
 
-        fence_match = re.match(r"^ {0,3}(`{3,}|~{3,})", line)
-        if fence_match is not None:
-            marker = fence_match.group(1)
-            in_fence = (marker[0], len(marker))
-            continue
 
-        visible_parts: list[str] = []
-        position = 0
-        while position < len(line):
-            if in_comment:
-                comment_end = line.find("-->", position)
-                if comment_end == -1:
-                    position = len(line)
-                    break
-                in_comment = False
-                position = comment_end + 3
-                continue
-
-            comment_start = line.find("<!--", position)
-            if comment_start == -1:
-                visible_parts.append(line[position:])
-                break
-            visible_parts.append(line[position:comment_start])
-            in_comment = True
-            position = comment_start + 4
-
-        visible_line = "".join(visible_parts)
-        stripped = visible_line.lstrip()
-        if in_html_block:
-            if stripped.startswith("</"):
-                in_html_block = False
-            continue
-        if re.match(
-            r"^ {0,3}<(address|article|aside|base|blockquote|body|caption|center|col|"
-            r"colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|"
-            r"footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|"
-            r"li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|"
-            r"search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|"
-            r"ul)(?:[ \t]|>|/>)",
-            visible_line,
-            flags=re.IGNORECASE,
+def markdown_headings(text: str) -> list[str]:
+    tokens = MARKDOWN.parse(text)
+    headings: list[str] = []
+    for index, token in enumerate(tokens):
+        if (
+            token.type == "heading_open"
+            and index + 1 < len(tokens)
+            and tokens[index + 1].type == "inline"
         ):
-            in_html_block = not (stripped.endswith("/>") or stripped.startswith("<hr"))
-            continue
-        rendered.append(visible_line)
-    return rendered
+            headings.append(token_plain_text(tokens[index + 1]).strip())
+    return headings
 
 
-def strip_inline_code(text: str) -> str:
-    return re.sub(r"`+[^`]*`+", "", text)
+def walk_tokens(tokens: list[Token]) -> list[Token]:
+    walked: list[Token] = []
+    for token in tokens:
+        walked.append(token)
+        if token.children:
+            walked.extend(walk_tokens(token.children))
+    return walked
 
 
 def requirement_headings(text: str) -> tuple[list[str], list[str]]:
     identifiers: list[str] = []
     malformed: list[str] = []
-    lines = rendered_markdown_lines(text)
-    for index, line in enumerate(lines):
-        heading_text: str | None = None
-        if (match := ATX_HEADING_PATTERN.fullmatch(line)) is not None:
-            heading_text = match.group(1)
-        elif (
-            index + 1 < len(lines)
-            and SETEXT_HEADING_PATTERN.fullmatch(lines[index + 1]) is not None
-            and SETEXT_HEADING_PATTERN.fullmatch(lines[index]) is None
-            and line.strip()
-        ):
-            heading_text = line.strip()
-        if heading_text is None:
-            continue
-        heading_text = strip_inline_code(heading_text).strip()
+    for heading_text in markdown_headings(text):
         if not REQUIREMENT_PREFIX_PATTERN.match(heading_text):
             continue
         identifier, separator, _title = heading_text.partition(":")
@@ -165,38 +143,12 @@ def requirement_headings(text: str) -> tuple[list[str], list[str]]:
 
 
 def markdown_link_destinations(text: str) -> list[str]:
-    rendered_lines = rendered_markdown_lines(text)
-    definitions: dict[str, str] = {}
-    for line in rendered_lines:
-        match = REFERENCE_DEFINITION_PATTERN.match(line)
-        if match is not None:
-            definitions[match.group(1).strip().casefold()] = (
-                match.group(2) or match.group(3)
-            )
-
-    destinations: list[str] = []
-    for line in rendered_lines:
-        if REFERENCE_DEFINITION_PATTERN.match(line) is not None:
-            continue
-        for match in INLINE_LINK_PATTERN.finditer(line):
-            destinations.append(match.group(1) or match.group(2))
-        line_without_code = strip_inline_code(line)
-        explicit_reference_spans: list[tuple[int, int]] = []
-        for match in REFERENCE_LINK_PATTERN.finditer(line_without_code):
-            explicit_reference_spans.append(match.span())
-            reference = match.group(1).strip().casefold()
-            if reference in definitions:
-                destinations.append(definitions[reference])
-        for match in SHORT_REFERENCE_LINK_PATTERN.finditer(line_without_code):
-            if any(
-                start <= match.start() < end
-                for start, end in explicit_reference_spans
-            ):
-                continue
-            reference = match.group(1).strip().casefold()
-            if reference in definitions:
-                destinations.append(definitions[reference])
-    return destinations
+    return [
+        destination
+        for token in walk_tokens(MARKDOWN.parse(text))
+        if token.type == "link_open"
+        and (destination := token.attrGet("href")) is not None
+    ]
 
 
 def resolve_accepted_base(errors: list[str]) -> str | None:
@@ -319,77 +271,310 @@ def matches(path: str, pattern: str) -> bool:
     return PurePosixPath(path).match(pattern)
 
 
-def github_heading_slug(heading: str) -> str:
-    normalized = html.unescape(strip_inline_code(heading)).strip().lower()
-    normalized = re.sub(r"<[^>]+>", "", normalized)
-    normalized = re.sub(r"[^\w\s-]", "", normalized)
-    normalized = re.sub(r"[\s-]+", "-", normalized)
-    return normalized.strip("-")
+def repository_path_error(value: str, allow_glob: bool = False) -> str | None:
+    if "\\" in value:
+        return "must use repository-relative POSIX separators"
+    pure_path = PurePosixPath(value)
+    if pure_path.is_absolute():
+        return "must be repository-relative"
+    if ".." in pure_path.parts:
+        return "must not contain parent traversal"
+    if not allow_glob and contains_glob(value):
+        return "must identify one repository path"
+    return None
 
 
-def markdown_heading_slugs(path: Path) -> set[str]:
-    slugs: set[str] = set()
-    counts: Counter[str] = Counter()
-    lines = rendered_markdown_lines(path.read_text(encoding="utf-8"))
-    for index, line in enumerate(lines):
-        heading_text: str | None = None
-        if (match := ATX_HEADING_PATTERN.fullmatch(line)) is not None:
-            heading_text = match.group(1)
-        elif (
-            index + 1 < len(lines)
-            and SETEXT_HEADING_PATTERN.fullmatch(lines[index + 1]) is not None
-            and SETEXT_HEADING_PATTERN.fullmatch(lines[index]) is None
-            and line.strip()
-        ):
-            heading_text = line.strip()
-        if heading_text is None:
+def resolve_repository_file(
+    value: str,
+    label: str,
+    errors: list[str],
+) -> Path | None:
+    if reason := repository_path_error(value):
+        errors.append(f"{label} {reason}: {value}")
+        return None
+    path = (ROOT / PurePosixPath(value)).resolve()
+    try:
+        path.relative_to(ROOT_RESOLVED)
+    except ValueError:
+        errors.append(f"{label} resolves outside the repository: {value}")
+        return None
+    if not path.is_file():
+        errors.append(f"{label} does not exist: {value}")
+        return None
+    return path
+
+
+def expand_family_paths(
+    family: dict[str, Any],
+    errors: list[str],
+) -> set[Path]:
+    pattern = family["path"]
+    if reason := repository_path_error(pattern, allow_glob=True):
+        errors.append(f"{family['id']} family path {reason}: {pattern}")
+        return set()
+
+    candidates = ROOT.glob(pattern) if contains_glob(pattern) else [ROOT / pattern]
+    paths: set[Path] = set()
+    for candidate in candidates:
+        if not candidate.is_file():
             continue
-        base_slug = github_heading_slug(heading_text)
-        slug = base_slug if counts[base_slug] == 0 else f"{base_slug}-{counts[base_slug]}"
-        counts[base_slug] += 1
+        resolved = candidate.resolve()
+        try:
+            resolved.relative_to(ROOT_RESOLVED)
+        except ValueError:
+            errors.append(
+                f"{family['id']} family path resolves outside the repository: "
+                f"{candidate}"
+            )
+            continue
+        paths.add(resolved)
+    return paths
+
+
+def discover_governed_record_paths(errors: list[str]) -> set[Path]:
+    candidates = {ROOT / relative_path for relative_path in ROOT_RECORD_PATHS}
+    for root_name, suffixes in RECORD_ROOT_SUFFIXES.items():
+        root = ROOT / root_name
+        if not root.is_dir():
+            continue
+        candidates.update(
+            path
+            for path in root.rglob("*")
+            if path.is_file() and any(path.name.endswith(suffix) for suffix in suffixes)
+        )
+
+    paths: set[Path] = set()
+    for candidate in candidates:
+        if not candidate.is_file():
+            continue
+        resolved = candidate.resolve()
+        try:
+            resolved.relative_to(ROOT_RESOLVED)
+        except ValueError:
+            errors.append(f"governed record resolves outside the repository: {candidate}")
+            continue
+        paths.add(resolved)
+    return paths
+
+
+def github_ascii_slug(heading: str) -> str | None:
+    if not heading.isascii():
+        return None
+    return "".join(
+        character
+        for character in heading.lower()
+        if character.isalnum() or character in {" ", "-", "_"}
+    ).replace(" ", "-")
+
+
+def markdown_heading_slugs_from_text(text: str) -> set[str]:
+    slugs: set[str] = set()
+    occurrences: dict[str, int] = {}
+    for heading in markdown_headings(text):
+        base_slug = github_ascii_slug(heading)
+        if base_slug is None:
+            continue
+        slug = base_slug
+        count = occurrences.get(base_slug, 0)
+        while slug in occurrences:
+            count += 1
+            slug = f"{base_slug}-{count}"
+        occurrences[base_slug] = count
+        occurrences[slug] = 0
         slugs.add(slug)
     return slugs
 
 
-def check_control_references() -> list[str]:
+def markdown_heading_slugs(path: Path) -> set[str]:
+    return markdown_heading_slugs_from_text(path.read_text(encoding="utf-8"))
+
+
+def check_markdown_parser_contract() -> list[str]:
+    errors: list[str] = []
+    markdown = """\
+<script>
+## V2-REQ-998: Hidden
+[Hidden](hidden.md)
+</script>
+
+<div>Rendered HTML block</div>
+
+## V2-REQ-060: `Visible` *Heading*
+
+`[Code](code.md)` \\[Escaped](escaped.md) [Real](real.md) [Reference][record]
+
+[record]: reference.md
+"""
+    identifiers, malformed = requirement_headings(markdown)
+    if identifiers != ["V2-REQ-060"] or malformed:
+        errors.append("CommonMark requirement-heading parser contract failed")
+    if set(markdown_link_destinations(markdown)) != {"real.md", "reference.md"}:
+        errors.append("CommonMark documentation-link parser contract failed")
+
+    slug_markdown = """\
+## Use `dotnet` build
+## A--B
+## foo - bar
+## foo
+## foo-1
+## foo
+"""
+    if markdown_heading_slugs_from_text(slug_markdown) != {
+        "use-dotnet-build",
+        "a--b",
+        "foo---bar",
+        "foo",
+        "foo-1",
+        "foo-2",
+    }:
+        errors.append("GitHub ASCII heading-anchor parser contract failed")
+    return errors
+
+
+def parse_hk_step_mappings(errors: list[str]) -> dict[str, tuple[set[str], set[str]]]:
+    path = ROOT / "hk.pkl"
+    if not path.is_file():
+        errors.append("hk control configuration does not exist: hk.pkl")
+        return {}
+
+    lines = path.read_text(encoding="utf-8").splitlines()
+    mappings: dict[str, tuple[set[str], set[str]]] = {}
+    for index, line in enumerate(lines):
+        match = PKL_MAPPING_START_PATTERN.fullmatch(line)
+        if match is None:
+            continue
+        name = match.group(1)
+        steps: set[str] = set()
+        spreads: set[str] = set()
+        depth = 1
+        for nested_line in lines[index + 1 :]:
+            if depth == 1:
+                if step_match := PKL_STEP_PATTERN.match(nested_line):
+                    steps.add(step_match.group(1))
+                elif spread_match := PKL_SPREAD_PATTERN.match(nested_line):
+                    spreads.add(spread_match.group(1))
+            depth += nested_line.count("{") - nested_line.count("}")
+            if depth == 0:
+                break
+        if depth != 0:
+            errors.append(f"cannot parse unterminated hk step mapping: {name}")
+            continue
+        mappings[name] = (steps, spreads)
+    return mappings
+
+
+def resolve_hk_step_mapping(
+    name: str,
+    mappings: dict[str, tuple[set[str], set[str]]],
+    errors: list[str],
+    stack: tuple[str, ...] = (),
+) -> set[str]:
+    if name in stack:
+        errors.append(f"hk step mappings contain a cycle: {' -> '.join((*stack, name))}")
+        return set()
+    if name not in mappings:
+        errors.append(f"hk step mapping does not exist: {name}")
+        return set()
+    steps, spreads = mappings[name]
+    resolved = set(steps)
+    for spread in spreads:
+        resolved.update(
+            resolve_hk_step_mapping(spread, mappings, errors, (*stack, name))
+        )
+    return resolved
+
+
+def hk_steps_by_execution_point(errors: list[str]) -> dict[str, set[str]]:
+    mappings = parse_hk_step_mappings(errors)
+    return {
+        execution_point: resolve_hk_step_mapping(mapping, mappings, errors)
+        for execution_point, mapping in HK_EXECUTION_MAPPINGS.items()
+    }
+
+
+def check_control_references(catalog: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     controls = load_yaml("docs/governance/controls.yaml")["controls"]
+    current_families = [
+        family for family in catalog["families"] if family["state"] == "current"
+    ]
+    hk_execution_steps = hk_steps_by_execution_point(errors)
     for control in controls:
         if control["state"] != "current":
             continue
         for reference in control["governing_rules"]:
             path_text, separator, anchor = reference.partition("#")
-            path = ROOT / path_text
-            if not path.is_file():
+            path = resolve_repository_file(
+                path_text,
+                f"control {control['id']} governing rule",
+                errors,
+            )
+            if path is None:
+                continue
+            relative_path = path.relative_to(ROOT_RESOLVED).as_posix()
+            if path.suffix.lower() != ".md":
                 errors.append(
-                    f"control {control['id']} governing rule does not exist: {path_text}"
+                    f"control {control['id']} governing rule is not Markdown: {path_text}"
                 )
                 continue
-            if separator:
-                if path.suffix.lower() != ".md":
-                    errors.append(
-                        f"control {control['id']} governing-rule anchor targets a "
-                        f"non-Markdown file: {reference}"
-                    )
-                elif anchor not in markdown_heading_slugs(path):
-                    errors.append(
-                        f"control {control['id']} governing-rule anchor does not exist: "
-                        f"{reference}"
-                    )
+            if not any(
+                family["format"] == "markdown"
+                and matches(relative_path, family["path"])
+                for family in current_families
+            ):
+                errors.append(
+                    f"control {control['id']} governing rule is not a current governed "
+                    f"Markdown record: {path_text}"
+                )
+            if separator and anchor not in markdown_heading_slugs(path):
+                errors.append(
+                    f"control {control['id']} governing-rule anchor does not exist or "
+                    f"is not an ASCII GitHub heading anchor: {reference}"
+                )
 
         implementation = control["implementation"]
-        if implementation["kind"] == "repository-path":
-            path = ROOT / implementation["value"]
-            if not path.is_file():
+        if control["runner"] == "hk":
+            if implementation["kind"] != "hk-steps":
+                errors.append(f"control {control['id']} must identify its hk steps")
+                continue
+            declared_points = set(implementation["steps"])
+            execution_points = set(control["execution_points"])
+            if declared_points != execution_points:
                 errors.append(
-                    f"control {control['id']} implementation does not exist: "
-                    f"{implementation['value']}"
+                    f"control {control['id']} hk step mappings must match its execution "
+                    "points"
                 )
+            for execution_point, declared_steps in implementation["steps"].items():
+                actual_steps = hk_execution_steps.get(execution_point)
+                if actual_steps is None:
+                    errors.append(
+                        f"control {control['id']} uses unsupported hk execution point "
+                        f"{execution_point}"
+                    )
+                    continue
+                missing_steps = sorted(set(declared_steps) - actual_steps)
+                if missing_steps:
+                    errors.append(
+                        f"control {control['id']} is not wired at {execution_point}: "
+                        f"{', '.join(missing_steps)}"
+                    )
+        elif implementation["kind"] == "hk-steps":
+            errors.append(f"non-hk control {control['id']} must not declare hk steps")
+        elif implementation["kind"] == "repository-path":
+            resolve_repository_file(
+                implementation["value"],
+                f"control {control['id']} implementation",
+                errors,
+            )
     return errors
 
 
-def check_documentation_portal(catalog: dict[str, Any]) -> list[str]:
+def check_documentation_portal(
+    current_family_paths: dict[str, set[Path]],
+) -> list[str]:
     portal = ROOT / "docs/README.md"
+    if not portal.is_file():
+        return ["documentation portal does not exist: docs/README.md"]
     linked_records: set[str] = set()
     for target in markdown_link_destinations(portal.read_text(encoding="utf-8")):
         path_part = target.split("#", maxsplit=1)[0]
@@ -397,23 +582,18 @@ def check_documentation_portal(catalog: dict[str, Any]) -> list[str]:
             continue
         resolved = (portal.parent / path_part).resolve()
         try:
-            relative_path = resolved.relative_to(ROOT)
+            relative_path = resolved.relative_to(ROOT_RESOLVED)
         except ValueError:
             continue
         if resolved.is_file():
             linked_records.add(relative_path.as_posix())
 
-    retained_records: set[str] = set()
-    for family in catalog["families"]:
-        if family["state"] != "current":
-            continue
-        pattern = family["path"]
-        paths = ROOT.glob(pattern) if contains_glob(pattern) else [ROOT / pattern]
-        retained_records.update(
-            path.relative_to(ROOT).as_posix()
-            for path in paths
-            if path.is_file() and path != portal
-        )
+    retained_records = {
+        path.relative_to(ROOT_RESOLVED).as_posix()
+        for paths in current_family_paths.values()
+        for path in paths
+        if path.is_file() and path != portal
+    }
     return [
         f"documentation portal does not route to retained record: {relative_path}"
         for relative_path in sorted(retained_records - linked_records)
@@ -421,42 +601,48 @@ def check_documentation_portal(catalog: dict[str, Any]) -> list[str]:
 
 
 def check_catalog_paths() -> list[str]:
-    errors: list[str] = []
+    errors = check_markdown_parser_contract()
     catalog = load_yaml("docs/governance/record-families.yaml")
     current = [family for family in catalog["families"] if family["state"] == "current"]
     current_family_paths: dict[str, set[Path]] = {}
+    governed_paths = discover_governed_record_paths(errors)
 
-    for family in current:
+    for family in catalog["families"]:
         pattern = family["path"]
-        family_paths = {
-            path
-            for path in (
-                ROOT.glob(pattern) if contains_glob(pattern) else [ROOT / pattern]
+        family_paths = expand_family_paths(family, errors)
+        if family["state"] == "current":
+            current_family_paths[family["id"]] = family_paths
+            if family["carrier"] == "repository-file":
+                if contains_glob(pattern):
+                    errors.append(
+                        f"{family['id']} uses a glob for a singleton path: {pattern}"
+                    )
+                elif not family_paths:
+                    errors.append(f"{family['id']} path does not exist: {pattern}")
+            elif not family_paths:
+                errors.append(
+                    f"{family['id']} path matches no current files: {pattern}"
+                )
+            for path in sorted(family_paths - governed_paths):
+                errors.append(
+                    f"current family {family['id']} path is outside governed record "
+                    f"roots: {path.relative_to(ROOT_RESOLVED).as_posix()}"
+                )
+        elif family_paths:
+            errors.append(
+                f"{family['id']} has a record instance but remains scheduled; "
+                "activate the family in the same change"
             )
-            if path.is_file()
-        }
-        current_family_paths[family["id"]] = family_paths
-        if family["carrier"] == "repository-file":
-            if contains_glob(pattern):
-                errors.append(f"{family['id']} uses a glob for a singleton path: {pattern}")
-            elif not (ROOT / pattern).is_file():
-                errors.append(f"{family['id']} path does not exist: {pattern}")
-        elif not family_paths:
-            errors.append(f"{family['id']} path matches no current files: {pattern}")
 
-        schema = family.get("schema")
-        if schema and not (ROOT / schema).is_file():
-            errors.append(f"{family['id']} schema does not exist: {schema}")
+        if schema := family.get("schema"):
+            resolve_repository_file(
+                schema,
+                f"{family['id']} schema",
+                errors,
+            )
 
-    governed_paths = sorted(
-        {
-            path
-            for paths in current_family_paths.values()
-            for path in paths
-        }
-    )
-    for path in governed_paths:
-        relative_path = path.relative_to(ROOT).as_posix()
+    for path in sorted(governed_paths):
+        relative_path = path.relative_to(ROOT_RESOLVED).as_posix()
         matching_families = [
             family["id"] for family in current if matches(relative_path, family["path"])
         ]
@@ -468,8 +654,8 @@ def check_catalog_paths() -> list[str]:
                 f"({', '.join(matching_families)})"
             )
 
-    errors.extend(check_documentation_portal(catalog))
-    errors.extend(check_control_references())
+    errors.extend(check_documentation_portal(current_family_paths))
+    errors.extend(check_control_references(catalog))
     return errors
 
 
@@ -1035,14 +1221,49 @@ def validate_public_build_bundle(path: Path) -> list[str]:
     )
 
 
+def run_schema_validation(schema: str, instances: list[Path]) -> int:
+    result = subprocess.run(
+        [
+            "check-jsonschema",
+            "--schemafile",
+            schema,
+            *(path.relative_to(ROOT_RESOLVED).as_posix() for path in instances),
+        ],
+        cwd=ROOT,
+        check=False,
+    )
+    return result.returncode
+
+
 def validate_structured_records() -> int:
-    catalog = load_yaml("docs/governance/record-families.yaml")
-    families = [family for family in catalog["families"] if family.get("schema")]
     errors: list[str] = []
 
+    for schema, instance in BOOTSTRAP_SCHEMA_BINDINGS:
+        schema_path = ROOT / schema
+        instance_path = ROOT / instance
+        if not schema_path.is_file():
+            errors.append(f"bootstrap schema does not exist: {schema}")
+            continue
+        if not instance_path.is_file():
+            errors.append(f"bootstrap structured record does not exist: {instance}")
+            continue
+        if run_schema_validation(schema, [instance_path]) != 0:
+            return 1
+
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+
+    catalog = load_yaml("docs/governance/record-families.yaml")
+    families = [
+        family
+        for family in catalog["families"]
+        if family.get("schema") and family["id"] not in BOOTSTRAP_FAMILY_IDS
+    ]
     for family in families:
         schema = family["schema"]
-        instances = sorted(path for path in ROOT.glob(family["path"]) if path.is_file())
+        instances = sorted(expand_family_paths(family, errors))
         if not instances:
             if family["state"] == "current":
                 errors.append(
@@ -1050,18 +1271,8 @@ def validate_structured_records() -> int:
                 )
             continue
 
-        result = subprocess.run(
-            [
-                "check-jsonschema",
-                "--schemafile",
-                schema,
-                *(path.relative_to(ROOT).as_posix() for path in instances),
-            ],
-            cwd=ROOT,
-            check=False,
-        )
-        if result.returncode != 0:
-            return result.returncode
+        if run_schema_validation(schema, instances) != 0:
+            return 1
 
         if family["id"] == "public-build-experiment-bundles":
             for instance in instances:

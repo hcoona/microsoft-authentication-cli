@@ -49,6 +49,72 @@
         }
       }
     },
+    "hkStepList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "uniqueItems": true
+    },
+    "hkStepsImplementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "steps"
+      ],
+      "properties": {
+        "kind": {
+          "const": "hk-steps"
+        },
+        "steps": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "properties": {
+            "local-fast": {
+              "$ref": "#/$defs/hkStepList"
+            },
+            "ci": {
+              "$ref": "#/$defs/hkStepList"
+            }
+          }
+        }
+      }
+    },
+    "nonHkImplementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "repository-path",
+            "review-procedure",
+            "evidence-carrier"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "implementation": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/hkStepsImplementation"
+        },
+        {
+          "$ref": "#/$defs/nonHkImplementation"
+        }
+      ]
+    },
     "control": {
       "type": "object",
       "additionalProperties": false,
@@ -133,25 +199,7 @@
           ]
         },
         "implementation": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "kind",
-            "value"
-          ],
-          "properties": {
-            "kind": {
-              "enum": [
-                "repository-path",
-                "review-procedure",
-                "evidence-carrier"
-              ]
-            },
-            "value": {
-              "type": "string",
-              "minLength": 1
-            }
-          }
+          "$ref": "#/$defs/implementation"
         },
         "execution_points": {
           "type": "array",
@@ -200,6 +248,43 @@
               "required": [
                 "activation"
               ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "runner": {
+                "const": "hk"
+              }
+            },
+            "required": [
+              "runner"
+            ]
+          },
+          "then": {
+            "properties": {
+              "class": {
+                "const": "mechanical"
+              },
+              "implementation": {
+                "$ref": "#/$defs/hkStepsImplementation"
+              },
+              "execution_points": {
+                "items": {
+                  "enum": [
+                    "local-fast",
+                    "ci"
+                  ]
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "implementation": {
+                "$ref": "#/$defs/nonHkImplementation"
+              }
             }
           }
         }
