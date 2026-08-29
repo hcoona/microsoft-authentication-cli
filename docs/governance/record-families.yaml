@@ -381,7 +381,7 @@ families:
 
   - id: public-build-experiment-bundles
     state: scheduled
-    concern: Reproducible protocols, command results, dependency observations, and conclusions for the issue #1 public-build experiments
+    concern: Reproducible protocols, isolation evidence, command results, dependency graphs, Lasso analysis, and conclusions for the issue #1 public-build experiments
     carrier: repository-files
     path: docs/research/experiments/public-build-*.yaml
     format: yaml
@@ -389,9 +389,9 @@ families:
     producer: Experiment owner
     maintainer: Research maintainer
     consumers:
-      - Issue #1 implementers and research reviewers when reproducing commands or evaluating public-build conclusions
+      - Issue #1 implementers and research reviewers when reproducing commands or evaluating dependency and public-build conclusions
     creation_trigger: After the permitted read-only environment preflight and before the first issue #1 experiment command is executed.
-    failure_mode: Public-build commands, dependency observations, and conclusions cannot be reproduced or distinguished from interpretation.
+    failure_mode: Public-build commands, isolation evidence, dependency graphs, Lasso analysis, and conclusions cannot be reproduced or distinguished from interpretation.
     review_point: Before execution and when conclusions are recorded
     activation:
       trigger: The read-only environment preflight is complete and work is ready to execute the first restore, dependency-resolution, build, test, or package command.

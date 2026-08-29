@@ -92,7 +92,7 @@ controls:
       - Research reviewers when evaluating the public-build conclusion
     governing_rules:
       - docs/research/experiment-safety.md#phase-1-public-build-record
-    invariant: The issue #1 protocol, command results, restore configurations, dependency observations, and completion outcome remain mutually consistent.
+    invariant: The issue #1 protocol, isolation profile, restore configurations, source manifest, command results, dependency graphs, Lasso analysis, and completion outcome remain mutually consistent.
     runner: hk
     implementation:
       kind: hk-steps
@@ -104,7 +104,7 @@ controls:
     execution_points:
       - local-fast
       - ci
-    failure_mode: A schema-valid experiment bundle contradicts its reviewed command, isolation, dependency, or conclusion evidence.
+    failure_mode: A schema-valid experiment bundle contradicts its reviewed command, isolation, source, dependency-graph, Lasso, or conclusion evidence.
     activation:
       trigger: The public-build-experiment-bundles family is activated before the first issue #1 experiment command.
       evaluator: Research maintainer

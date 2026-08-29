@@ -91,7 +91,8 @@ dependency inventory, conclusions, and limitations as the work progresses.
 
 Use the bundle states as follows:
 
-- `planned` contains the reviewed protocol and no command results;
+- `planned` contains the reviewed protocol and audited source manifest, but no command
+  results, runtime-observation conclusions, or restore graphs;
 - `in-progress` begins immediately before the first experiment command and records each
   bounded outcome without discarding failures;
 - `aborted` preserves any partial results and records the triggered stop condition,
@@ -102,6 +103,15 @@ Use the bundle states as follows:
 The protocol declares build, test, and package applicability once for both source modes.
 An inapplicable stage requires a reason and evidence reference; both mode results then use
 `not-applicable`. An applicable stage cannot use that status.
+
+The bundle records one typed Issue #1 isolation profile. It names canonical absolute
+checkout, home, global-package, HTTP-cache, plugin-cache, and scratch roots; keeps every
+isolation root outside the detached checkout; disables inherited user and machine NuGet
+configuration, package-source credentials, credential providers, and credential-bearing
+environment variables; and starts every cache empty. Each restore result records whether
+those boundaries were verified. Detection of inherited configuration, credentials,
+credential-provider execution, or a populated or unknown initial cache invalidates the
+experiment and requires an `aborted` bundle rather than a completion conclusion.
 
 Each protocol command records a direct executable and canonical ordered argument list and
 is run without a shell wrapper. The list begins with the matching `dotnet` verb and the
@@ -114,11 +124,12 @@ configuration.
 The protocol records exactly two restore configurations. The source-faithful
 configuration identifies the audited checkout's unmodified `nuget.config`; the
 public-only configuration identifies the isolated generated file. Each record includes a
-content hash and the exact source identifiers it contains. The source-faithful record is
-bound to the audited file hash and Office feed. For Issue #1, the public-only source is
-the canonical NuGet.org v3 endpoint and its configuration identity differs from the
-source-faithful record. Dependency observations cite only a source declared by the
-configuration used for their restore result.
+verified canonical path, symlink status, content hash, and the exact source identifiers it
+contains. The source-faithful record is bound to the audited file hash and Office feed.
+The public-only file must be outside the checkout, inside the isolated scratch root, and
+byte-identical to the schema-defined configuration that clears inherited sources and
+selects only the canonical NuGet.org v3 endpoint. Dependency graph nodes cite only the
+source declared by the configuration used for their restore result.
 
 A `blocked` downstream command result identifies exactly the same-mode restore result that
 blocked it. When a restore does not pass, every applicable downstream stage for that
@@ -126,18 +137,37 @@ source mode is blocked by that restore. Use `not-applicable` only when the targe
 does not exist. Both statuses represent commands that were not executed and therefore
 record a null exit code and zero reproductions.
 
-Each resolved or unresolved dependency observation names the restore result, exact
-retrieval source, access mode, cache state, and attempted targets that produced it. Treat
-a dependency as publicly retrievable only when its public-only observation records
-anonymous access and an empty cache. Every source declaration has a stable bundle-local
-identifier; resolved and unresolved entries cite the declarations they cover and preserve
-the declared dependency kind, version constraint, and target coverage. A
-`publicly-reproducible` outcome requires passing or not-applicable public-only stage
-results, public-only resolved observations for every source-declared dependency target,
-and no unresolved edge in the public-only attempted graph. A
-`not-publicly-reproducible` outcome requires an observed failed public-only stage or
-unresolved public-only edge. An `inconclusive` outcome identifies the evidence limitation;
-the contract does not mechanically decide whether contextual evidence is sufficient.
+The protocol lists every solution project, target framework, SDK, and internal project
+edge in the attempted target manifest. The dependency inventory lists all 38 external
+package declarations at the audited commit, including the one environment-conditional
+declaration. The checker canonicalizes those records and requires their manifest hash to
+match the audited source.
+
+Each executed restore records one normalized dependency graph per attempted project and
+target framework. A graph binds the restore result and target to the source
+`project.assets.json` hash, a canonical normalized-graph hash, every observed package
+node, every resolved parent edge, every unresolved edge, and sanitized evidence. Root
+edges cite their source declarations. Transitive edges cite their parent nodes. Every
+node records its exact version, retrieval source, anonymous or credentialed access, and
+initial cache state. A passing restore requires a complete graph with no unresolved edge.
+The checker rejects missing target graphs, orphan nodes, incompatible direct versions,
+and direct declarations without a resolved or unresolved root edge in either restore
+mode.
+
+A `publicly-reproducible` outcome requires passing or not-applicable public-only stage
+results, a complete NuGet.org graph for every attempted target, anonymous empty-cache
+provenance for every graph node, resolved root edges for every applicable source
+declaration, and no unresolved public edge. A `not-publicly-reproducible` outcome requires
+an observed failed public-only stage or unresolved public-only edge. An `inconclusive`
+outcome identifies the evidence limitation; the contract does not mechanically decide
+whether contextual evidence is sufficient.
+
+A completed bundle also maps every audited public `Microsoft.Office.Lasso` source
+reference to an apparent responsibility and supporting public evidence. The union of
+those references must match the fixed audited reference-manifest hash. The analysis
+records evidence gaps and bounded removal or replacement candidates, or an explicit
+evidence-supported statement that no candidate is currently supported, without selecting
+or implementing an option.
 
 The contract is limited to the public restore, build, test, and non-publishing package
 work authorized by issue #1. It does not define a generic authentication-experiment
