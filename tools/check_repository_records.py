@@ -131,12 +131,34 @@ def validate_public_build_bundle_value(
     bundle: dict[str, Any], relative_path: str
 ) -> list[str]:
     errors: list[str] = []
+    stages = ("restore", "build", "test", "package")
+    source_modes = ("source-faithful", "public-only")
+    expected_slots = {
+        (source_mode, stage) for source_mode in source_modes for stage in stages
+    }
 
     commands = bundle["protocol"]["commands"]
     command_ids = [command["id"] for command in commands]
     for identifier in duplicates(command_ids):
         errors.append(f"{relative_path}: duplicate protocol command id: {identifier}")
     commands_by_id = {command["id"]: command for command in commands}
+    commands_by_slot: dict[tuple[str, str], dict[str, Any]] = {}
+    for command in commands:
+        slot = (command["source_mode"], command["stage"])
+        if slot in commands_by_slot:
+            errors.append(
+                f"{relative_path}: duplicate protocol slot: {slot[0]} {slot[1]}"
+            )
+        else:
+            commands_by_slot[slot] = command
+
+    missing_slots = sorted(expected_slots - set(commands_by_slot))
+    extra_command_count = len(commands) - len(commands_by_slot)
+    if missing_slots or extra_command_count:
+        errors.append(
+            f"{relative_path}: protocol must define exactly one command for every "
+            "source-mode and stage combination"
+        )
 
     isolation_controls = bundle["isolation_controls"]
     isolation_ids = [control["id"] for control in isolation_controls]
@@ -156,12 +178,39 @@ def validate_public_build_bundle_value(
                     f"unknown command {dependency}"
                 )
 
+        if command["stage"] != "restore":
+            restore = commands_by_slot.get((command["source_mode"], "restore"))
+            if restore is not None and restore["id"] not in command["depends_on"]:
+                errors.append(
+                    f"{relative_path}: protocol command {command['id']} must depend on "
+                    f"the {command['source_mode']} restore"
+                )
+            try:
+                command_arguments = shlex.split(command["command"])
+            except ValueError:
+                errors.append(
+                    f"{relative_path}: protocol command {command['id']} cannot be parsed"
+                )
+            else:
+                if "--no-restore" not in command_arguments:
+                    errors.append(
+                        f"{relative_path}: protocol command {command['id']} must include "
+                        "--no-restore"
+                    )
+
     results = bundle["command_results"]
     result_ids = [result["command_id"] for result in results]
     for identifier in duplicates(result_ids):
         errors.append(f"{relative_path}: duplicate command result id: {identifier}")
     result_id_set = set(result_ids)
     results_by_id = {result["command_id"]: result for result in results}
+    results_by_slot: dict[tuple[str, str], dict[str, Any]] = {}
+    for result in results:
+        slot = (result["source_mode"], result["stage"])
+        if slot in results_by_slot:
+            errors.append(f"{relative_path}: duplicate result slot: {slot[0]} {slot[1]}")
+        else:
+            results_by_slot[slot] = result
 
     source_commit = bundle["source"]["commit"]
     environment_fingerprint = bundle["environment"]["fingerprint"]
@@ -194,13 +243,64 @@ def validate_public_build_bundle_value(
                     f"{relative_path}: result {command_id} references unknown isolation "
                     f"control {isolation_id}"
                 )
-        for blocking_id in result.get("blocked_by", []):
+        blocking_ids = result.get("blocked_by", [])
+        if result["status"] == "blocked" and result["stage"] != "restore":
+            if not blocking_ids:
+                errors.append(
+                    f"{relative_path}: blocked result {command_id} must identify a "
+                    "blocking prerequisite"
+                )
+        elif blocking_ids:
+            errors.append(
+                f"{relative_path}: non-blocked or restore result {command_id} must not "
+                "declare blocked_by"
+            )
+
+        for blocking_id in blocking_ids:
             if blocking_id == command_id:
                 errors.append(f"{relative_path}: result {command_id} blocks itself")
             elif blocking_id not in result_id_set:
                 errors.append(
                     f"{relative_path}: result {command_id} is blocked by unknown result "
                     f"{blocking_id}"
+                )
+            else:
+                if command is not None and blocking_id not in command["depends_on"]:
+                    errors.append(
+                        f"{relative_path}: result {command_id} is blocked by "
+                        f"{blocking_id}, which is not a declared prerequisite"
+                    )
+                if results_by_id[blocking_id]["status"] == "passed":
+                    errors.append(
+                        f"{relative_path}: result {command_id} is blocked by passing "
+                        f"result {blocking_id}"
+                    )
+
+        if result["stage"] == "restore":
+            if result["status"] == "not-applicable":
+                errors.append(
+                    f"{relative_path}: {result['source_mode']} restore cannot be "
+                    "not-applicable"
+                )
+            continue
+
+        restore = results_by_slot.get((result["source_mode"], "restore"))
+        if restore is None:
+            errors.append(
+                f"{relative_path}: {result['source_mode']} {result['stage']} result "
+                "requires the corresponding restore result"
+            )
+        elif result["status"] in {"passed", "failed"}:
+            if restore["status"] != "passed":
+                errors.append(
+                    f"{relative_path}: executed {result['source_mode']} "
+                    f"{result['stage']} requires a passed restore result"
+                )
+        elif restore["status"] != "passed":
+            if restore["command_id"] not in blocking_ids:
+                errors.append(
+                    f"{relative_path}: {result['source_mode']} {result['stage']} must "
+                    "link its blocked status to the restore result"
                 )
 
     inventory = bundle["dependency_inventory"]
@@ -212,6 +312,11 @@ def validate_public_build_bundle_value(
                         f"{relative_path}: {collection} dependency {dependency['id']} "
                         f"references unknown result {command_id}"
                     )
+                elif results_by_id[command_id]["status"] not in {"passed", "failed"}:
+                    errors.append(
+                        f"{relative_path}: {collection} dependency {dependency['id']} "
+                        f"cites unexecuted result {command_id}"
+                    )
 
     if bundle["status"] != "completed":
         return errors
@@ -222,49 +327,31 @@ def validate_public_build_bundle_value(
             "reviewed protocol command"
         )
 
-    for source_mode in ("source-faithful", "public-only"):
-        mode_results = {
-            result["stage"]: result
-            for result in results
-            if result["source_mode"] == source_mode
-        }
-        restore = mode_results["restore"]
-        if restore["status"] == "not-applicable":
-            errors.append(
-                f"{relative_path}: {source_mode} restore cannot be not-applicable"
-            )
-
-        for stage in ("build", "test", "package"):
-            result = mode_results[stage]
-            if restore["status"] != "passed":
-                if result["status"] != "blocked":
-                    errors.append(
-                        f"{relative_path}: {source_mode} {stage} must be blocked when "
-                        "its restore does not pass"
-                    )
-                elif restore["command_id"] not in result.get("blocked_by", []):
-                    errors.append(
-                        f"{relative_path}: {source_mode} {stage} must link its blocked "
-                        "status to the restore result"
-                    )
-            elif result["status"] in {"passed", "failed"}:
-                try:
-                    command_arguments = shlex.split(result["command"])
-                except ValueError:
-                    errors.append(
-                        f"{relative_path}: {source_mode} {stage} command cannot be parsed"
-                    )
-                else:
-                    if "--no-restore" not in command_arguments:
-                        errors.append(
-                            f"{relative_path}: executed {source_mode} {stage} command "
-                            "must include --no-restore"
-                        )
-
     if not inventory["source_declared_direct"]:
         errors.append(
             f"{relative_path}: completed bundle must inventory source-declared dependencies"
         )
+
+    completion = bundle["completion"]
+    if completion["outcome"] == "publicly-reproducible":
+        public_results = [
+            results_by_slot[(source_mode, stage)]
+            for source_mode, stage in expected_slots
+            if source_mode == "public-only"
+        ]
+        if any(
+            result["status"] not in {"passed", "not-applicable"}
+            for result in public_results
+        ):
+            errors.append(
+                f"{relative_path}: publicly-reproducible outcome conflicts with "
+                "public-only command results"
+            )
+        if not inventory["resolved"]:
+            errors.append(
+                f"{relative_path}: publicly-reproducible outcome requires resolved "
+                "dependency observations"
+            )
 
     return errors
 

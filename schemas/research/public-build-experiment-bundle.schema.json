@@ -184,8 +184,7 @@
       ],
       "properties": {
         "issue": {
-          "type": "string",
-          "format": "uri"
+          "const": "https://github.com/hcoona/microsoft-authentication-cli/issues/1"
         },
         "scope": {
           "type": "string",
@@ -203,12 +202,10 @@
       ],
       "properties": {
         "repository": {
-          "type": "string",
-          "format": "uri"
+          "const": "https://github.com/AzureAD/microsoft-authentication-cli"
         },
         "commit": {
-          "type": "string",
-          "pattern": "^[0-9a-f]{40}$"
+          "const": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918"
         },
         "checkout": {
           "const": "detached"
