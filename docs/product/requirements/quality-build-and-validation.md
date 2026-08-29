@@ -1,5 +1,13 @@
 # Quality, Build, and Validation Requirements
 
+## V2-REQ-050: Public Evidence
+
+This identifier is reserved to preserve stable references established by issue #2 and
+must not be reused. Its former text combined repository evidence policy, now owned by
+[`project.md`](../../governance/project.md), with support-claim validation, now owned by
+[`strategy.md`](../../validation/strategy.md). It defines no independent product
+behavior.
+
 ## V2-REQ-051: Real Platform Validation
 
 Supported broker, browser, device-code, cache, and WSL behavior must be validated on the
