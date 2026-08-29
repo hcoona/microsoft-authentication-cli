@@ -7,8 +7,6 @@ is navigation, not an independent authority.
 
 - Current phase and permitted work: [`project-state.md`](project-state.md)
 - Durable stage model and exit gates: [`roadmap.md`](roadmap.md)
-- Active downstream tracking:
-  [Phase 1 — Empirical Baseline](https://github.com/hcoona/microsoft-authentication-cli/milestone/1)
 
 ## Product and Engineering
 

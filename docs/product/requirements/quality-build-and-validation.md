@@ -1,10 +1,5 @@
 # Quality, Build, and Validation Requirements
 
-## V2-REQ-050: Public Evidence
-
-Committed rationale and support claims must be based on public source, standards,
-documentation, issues, or reproducible experiments.
-
 ## V2-REQ-051: Real Platform Validation
 
 Supported broker, browser, device-code, cache, and WSL behavior must be validated on the
@@ -27,15 +22,3 @@ Build, authentication, cache, installer, and migration experiments must follow t
 experiment-safety policy. Public-build claims must be tested without inherited
 credentials or package caches, and authentication experiments must not mutate unrelated
 user or upstream state.
-
-## Unresolved Product Decisions
-
-- Which platforms are required for the first supported release?
-- Is WSL supported through the native Linux broker, a Windows helper, or both?
-- Is an existing Microsoft-owned compatibility profile enabled by default or only by
-  explicit selection?
-- Is any v1 cache or command compatibility required?
-- Which mechanism supplies the first end-to-end vertical slice?
-
-These questions do not authorize work. They must move to downstream Issues when their
-governing stage becomes active.
