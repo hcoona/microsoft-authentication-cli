@@ -158,7 +158,7 @@ controls:
     state: current
     class: procedural-review
     enforcement: review-required
-    producer: Reviewer agent
+    producer: Reviewer independent of the change author and implementation agent
     maintainer: Record-system maintainer
     consumers:
       - Change author and repository owner during pull-request and phase-transition review
@@ -177,10 +177,10 @@ controls:
     state: current
     class: procedural-review
     enforcement: review-required
-    producer: Reviewer agent
+    producer: Reviewer independent of the change author and implementation agent
     maintainer: Research maintainer
     consumers:
-      - Change author and repository owner during research and phase-transition review
+      - Change author and repository owner during research, phase-transition, and release review
     governing_rules:
       - docs/research/experiment-safety.md
       - docs/governance/record-system.md
@@ -190,6 +190,7 @@ controls:
     execution_points:
       - pull-request-review
       - phase-transition
+      - release
     failure_mode: Research conclusions overstate evidence or expose unsafe experimental detail.
 
   - id: independent-finding-triage
@@ -208,13 +209,14 @@ controls:
     execution_points:
       - pull-request-review
       - phase-transition
+      - release
     failure_mode: A self-confirming review creates false assurance or unnecessary changes.
 
   - id: record-system-gate
     state: current
     class: owner-decision
     enforcement: owner-disposition
-    producer: Applicable hk checks and independent reviewers
+    producer: Repository owner
     maintainer: Repository owner
     consumers:
       - Repository owner at the applicable issue closure or pull-request merge

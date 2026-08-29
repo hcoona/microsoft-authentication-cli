@@ -3,8 +3,8 @@
 ## Unofficial Status
 
 `main-v2` is an unofficial fork line. It is not an official Microsoft Authentication CLI
-release and has no upstream support, compatibility, service-level, release, or
-security-response commitment.
+release and has no upstream support, service-level, release, or security-response
+commitment.
 
 The MIT License permits modification and redistribution subject to its notice. It does
 not establish trademark rights, application-registration ownership, service entitlement,
@@ -23,13 +23,16 @@ Until those identities are selected:
   or update channels;
 - retain a prominent unofficial notice in public user-facing material.
 
-## Support and Compatibility
+## Support and Release
 
 The repository currently provides no published v2 release, production-readiness claim,
-compatibility commitment, or service-level objective.
+or service-level objective.
 
 A future support claim must identify the exact release, platform, account state, client
 application, mechanism, dependency set, and validation evidence to which it applies.
+
+Current compatibility and migration commitments are defined only in
+[`compatibility-and-migration.md`](../product/compatibility-and-migration.md).
 
 ## Public Record Boundary
 

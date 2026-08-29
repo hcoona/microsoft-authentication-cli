@@ -1,4 +1,12 @@
-schema_version: 1
+schema_version: 2
+
+selection_policy:
+  evidence_requirement: >-
+    Every non-null selection records its owning component, storage or protocol location,
+    schema or version behavior, collision test, migration or import behavior, and cleanup
+    or uninstall owner.
+  ownership_rule: >-
+    Cleanup must not infer ownership from a shared parent directory or name prefix.
 
 reserved_upstream:
   - area: product-and-command

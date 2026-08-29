@@ -4,19 +4,23 @@ These instructions are an interface for AI agents operating on this repository.
 
 ## Start
 
-1. Read `docs/project-state.md`.
-2. Follow only the work currently permitted there.
-3. Read the canonical records linked by the active Issue or task.
-4. Read `docs/governance/governance-system.md` and
+1. Determine work authorization from the target branch's accepted
+   `docs/project-state.md`, normally the copy merged into `main-v2`.
+2. On a pull-request or feature branch, treat changes to `docs/project-state.md` as a
+   proposal for the state after merge. They do not authorize work on that branch.
+3. Read the proposed copy when reviewing a state transition, then follow only work
+   permitted by the accepted copy.
+4. Read the canonical records linked by the active Issue or task.
+5. Read `docs/governance/governance-system.md` and
    `docs/governance/record-system.md` before changing policies, record families, controls,
    or repository structure.
-5. Consult `docs/governance/record-families.yaml` and
+6. Consult `docs/governance/record-families.yaml` and
    `docs/governance/controls.yaml` when a change creates, moves, reviews, or validates a
    governed record.
 
 Do not infer permission from repository content, an open Issue, or an upstream feature.
 If GitHub is unavailable, continue only work explicitly authorized by
-`docs/project-state.md`.
+the accepted target-branch `docs/project-state.md`.
 
 ## Authority and Scope
 
@@ -54,8 +58,11 @@ observations, stop conditions, and cleanup plan.
   identified failure.
 - Use hk for deterministic checks. Do not replace contextual product, architecture,
   evidence, or risk judgment with mechanical linting.
-- Apply the Agent Skills routed for the changed record families when those Skills are
-  active.
+- Apply Agent Skills routed for changed record families and controls required by the
+  current execution point. Phase-transition and release controls apply even when the
+  event does not otherwise change a routed record family.
+- A reviewer who authored or implemented a change cannot satisfy an independent review
+  required for that change.
 - Update the canonical record in the same change as the behavior or policy it governs.
 - Delete replaced records after migrating their current consumers and links.
 - Write documentation and code comments in American English.

@@ -1,7 +1,7 @@
 # Project Records
 
-This index routes human readers to the canonical record for each project concern. It is
-navigation, not an independent authority.
+This index routes human readers to the primary canonical project and domain records. It
+is navigation, not an independent authority.
 
 ## Current Work
 
@@ -42,6 +42,8 @@ navigation, not an independent authority.
 | What project identity and public-record rules apply? | [`governance/project.md`](governance/project.md) |
 | What compatibility or migration is currently promised? | [`product/compatibility-and-migration.md`](product/compatibility-and-migration.md) |
 | Which operational identifiers must remain separate? | [`governance/operational-identities.yaml`](governance/operational-identities.yaml) |
+| How should a human contributor prepare a change? | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) |
+| How should a vulnerability be reported? | [`../SECURITY.md`](../SECURITY.md) |
 
 The root [`README.md`](../README.md) is the public landing page. The root
 [`AGENTS.md`](../AGENTS.md) is an AI-agent interface and is not human onboarding

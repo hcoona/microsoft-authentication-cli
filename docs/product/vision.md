@@ -26,37 +26,17 @@ The v2 effort exists to make those properties explicit.
 Provide a small, deterministic command-line authentication engine for delegated
 Microsoft Entra public-client token acquisition.
 
-The engine should:
+The intended direction is an engine that lets machine callers state and verify identity,
+authority, interaction, acquisition order, deadline, host context, and structured
+outcomes while reusing maintained MSAL and platform-broker integrations.
 
-- preserve caller intent from request through MSAL execution and result validation;
-- identify accounts by stable provider identifiers rather than username suffixes;
-- separate acquisition mechanism from interaction policy;
-- execute an explicit, ordered strategy;
-- model Windows, WSL, Linux, and macOS host capabilities deliberately;
-- preserve MSAL account, tenant, scope, expiry, correlation, and mechanism metadata;
-- provide versioned machine output and typed failures;
-- remain safe to embed in credential providers and other command-line tools;
-- reuse maintained MSAL and broker integrations rather than implement OAuth or platform
-  brokers directly.
+## Behavioral Authority
 
-## Design Principles
-
-1. **Identity is a postcondition.** A successful request must prove that the returned
-   result satisfies its account, tenant, authority, and client constraints.
-2. **No interaction means no interaction.** Silent-only execution must not create WAM,
-   browser, device-code, terminal, or other user-facing prompts.
-3. **Policy is data.** Ordered stages and fallback rules must not be inferred from an
-   unordered flag set or global environment state.
-4. **Tokens are opaque.** Identity and authorization metadata must come from the
-   authentication result, not from depending on access-token claim layouts.
-5. **Host context is explicit.** Platform and process-host capabilities are inputs, not
-   accidental consequences of operating-system detection.
-6. **Failure is information.** Callers must receive a safe, typed reason that supports a
-   deliberate next action.
-7. **Mechanisms are replaceable.** MSAL, brokers, browser launchers, cache stores, and
-   product-specific adapters sit behind narrow contracts.
-8. **Security follows a bounded threat model.** Do not add unbounded hardening, but do
-   not silently weaken explicit identity, interaction, storage, or output guarantees.
+This vision does not define required product behavior. The capability records under
+[`requirements/`](requirements/) are authoritative for request, identity, interaction,
+result, process, cache, security, operational-identity, build, and validation behavior.
+Architecture and validation records determine how accepted requirements are realized and
+supported.
 
 ## Intended Uses
 
@@ -86,17 +66,8 @@ The v2 core will not, by default:
 
 Any expansion beyond these boundaries requires a separate accepted decision.
 
-## Success Criteria
+## Release Direction
 
-The first supported v2 release requires:
-
-- a reviewed and versioned request/result contract;
-- strict selected-account silent acquisition;
-- explicit no-interaction enforcement;
-- at least one interactive mechanism with validated result identity;
-- bounded cancellation and cross-process prompt coordination;
-- secure cache behavior with no silent plaintext fallback;
-- clean stdout/stderr separation and complete secret redaction;
-- release-gating tests for every supported platform and interaction mode;
-- an explicit client-application identity and ownership statement;
-- documented unsupported cases that fail closed.
+A future supported release must satisfy the accepted product requirements and the
+evidence obligations in [`../validation/strategy.md`](../validation/strategy.md). This
+vision does not define a separate release gate or compatibility commitment.

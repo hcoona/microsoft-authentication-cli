@@ -20,7 +20,8 @@ Authority is scoped rather than globally ranked.
 | Human contribution workflow | Root `CONTRIBUTING.md` |
 | Current phase and work authorization | `docs/project-state.md` |
 | Durable phase model and exit gates | `docs/roadmap.md` |
-| Product purpose and boundary | Product vision and requirements |
+| Product purpose and directional boundary | Product vision |
+| Required product behavior | Product requirements |
 | Current system structure and invariants | Architecture records |
 | Durable design choices and rationale | Accepted decision records |
 | Public source and empirical evidence | Research records |
@@ -87,6 +88,8 @@ defined validation point.
 
 - An Issue expresses a problem, question, or bounded work item.
 - A pull-request branch expresses a proposal.
+- A branch may propose a changed `docs/project-state.md`, but work authorization continues
+  to come from the target branch's accepted copy until merge.
 - Merge into `main-v2` accepts the changed records as current within their declared
   scopes.
 - A tag and GitHub Release identify published state.

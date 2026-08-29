@@ -1,5 +1,11 @@
 # Project State
 
+## Acceptance Semantics
+
+This record authorizes work only as accepted on the target branch, normally `main-v2`.
+On a pull-request or feature branch, changes to this file propose the state after merge;
+the target branch's accepted copy continues to govern work before merge.
+
 ## Current Stage
 
 **Empirical Baseline**
