@@ -78,6 +78,7 @@ local fullSteps = new Mapping<String, Step> {
 
 hooks {
   ["pre-commit"] {
+    stash = "git"
     steps = fastSteps
   }
   ["fix"] {

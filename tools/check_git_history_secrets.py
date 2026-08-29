@@ -57,10 +57,7 @@ def resolve_log_options() -> str:
             if value and value != head:
                 return f"{value}..HEAD"
 
-    if git("rev-parse", "--verify", "--quiet", "HEAD^").returncode == 0:
-        return "HEAD^..HEAD"
-
-    return all_reachable_history("No prior commit range is available")
+    return all_reachable_history("No trusted base ref is available")
 
 
 def main() -> int:
