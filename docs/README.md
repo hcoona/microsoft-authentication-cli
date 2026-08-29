@@ -28,7 +28,7 @@ navigation, not an independent authority.
 | --- | --- |
 | Why is the v1 core not the v2 foundation? | [`research/v1-architecture-audit.md`](research/v1-architecture-audit.md) |
 | How must experiments be isolated? | [`research/experiment-safety.md`](research/experiment-safety.md) |
-| Which mutable public facts require rechecking? | [`evidence-register.md`](evidence-register.md) until its structured replacement is merged |
+| Which mutable public facts require rechecking? | [`research/rechecks.yaml`](research/rechecks.yaml) |
 | What is the upstream baseline and import policy? | [`../UPSTREAM.md`](../UPSTREAM.md) |
 
 ## Governance

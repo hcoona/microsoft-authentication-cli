@@ -72,7 +72,7 @@ Every committed result must state:
 - observed UI and result;
 - cleanup performed;
 - reproduction count and known variability;
-- evidence classification: SOURCE-VERIFIED, HYPOTHESIS, or VALIDATE-RUNTIME.
+- whether the record is a source finding, runtime observation, inference, or hypothesis.
 
 ## Stop Conditions
 
