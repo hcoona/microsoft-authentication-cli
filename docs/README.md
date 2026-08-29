@@ -14,8 +14,8 @@ navigation, not an independent authority.
 
 | Question | Canonical record |
 | --- | --- |
-| Why does v2 exist and what is outside its boundary? | [`vision.md`](vision.md) |
-| What behavior must v2 provide? | [`requirements.md`](requirements.md) |
+| Why does v2 exist and what is outside its boundary? | [`product/vision.md`](product/vision.md) |
+| What behavior must v2 provide? | [`product/requirements/`](product/requirements/) |
 | What is the current architectural direction? | [`architecture.md`](architecture.md) |
 | What threats and trust boundaries apply? | [`threat-model.md`](threat-model.md) |
 | What evidence is required for a support claim? | [`validation-strategy.md`](validation-strategy.md) |
@@ -37,7 +37,7 @@ navigation, not an independent authority.
 | How are project rules maintained? | [`governance/governance-system.md`](governance/governance-system.md) |
 | How are repository records and controls organized? | [`governance/record-system.md`](governance/record-system.md) |
 | What project identity and public-record rules apply? | [`governance/project.md`](governance/project.md) |
-| What compatibility or migration is currently promised? | [`compatibility-and-migration.md`](compatibility-and-migration.md) |
+| What compatibility or migration is currently promised? | [`product/compatibility-and-migration.md`](product/compatibility-and-migration.md) |
 | Which operational identifiers must remain separate? | [`namespaces.md`](namespaces.md) until its structured replacement is merged |
 | How are public-client application registrations treated? | [`client-application-identity.md`](client-application-identity.md) |
 

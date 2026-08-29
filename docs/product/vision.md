@@ -1,9 +1,7 @@
 # Vision
 
-## Status
-
-This document defines the intended product boundary for the v2 effort. It is directional,
-not a frozen command-line or library contract.
+This record defines the intended product boundary for the v2 effort. It is directional,
+not a frozen command-line or library contract or a release commitment.
 
 ## Problem
 
