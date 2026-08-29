@@ -1,5 +1,12 @@
 schema_version: 1
 
+governance:
+  evaluator: Research maintainer
+  trigger_action: >-
+    Complete the entry's required outcome and update or explicitly disposition every
+    current record whose conclusion is materially affected.
+  fallback_review: Evaluate every entry at each phase transition.
+
 rechecks:
   - id: RECHECK-001
     subject: AzureAuth silent-only acquisition
@@ -31,6 +38,7 @@ rechecks:
     subject: WSL broker-backed acquisition
     sources:
       - https://github.com/AzureAD/microsoft-authentication-cli/issues/460
+      - https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl
     triggers:
       - kind: workstream
         value: wsl
@@ -58,6 +66,7 @@ rechecks:
     subject: Linux broker implementation
     sources:
       - https://github.com/AzureAD/microsoft-authentication-cli/pull/462
+      - https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl
     triggers:
       - kind: workstream
         value: linux-broker

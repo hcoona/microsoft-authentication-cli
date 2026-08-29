@@ -3,7 +3,7 @@ schema_version: 1
 families:
   - id: public-landing
     state: current
-    concern: Public project identity, purpose, and release posture
+    concern: Public navigation to canonical project records
     carrier: repository-file
     path: README.md
     format: markdown
@@ -12,8 +12,8 @@ families:
     consumers:
       - Public readers evaluating the project
     creation_trigger: The repository is presented as a distinct public project.
-    failure_mode: Readers mistake upstream behavior, support, or release status for this project.
-    review_point: Pull requests that change public identity or posture
+    failure_mode: Readers cannot locate current identity, purpose, scope, or release authorities.
+    review_point: Pull requests that change public navigation or required notices
 
   - id: human-record-portal
     state: current
@@ -56,6 +56,20 @@ families:
     creation_trigger: The repository accepts reviewable contributions.
     failure_mode: Contributions bypass required records, checks, or review.
     review_point: Pull requests that change contribution workflow
+
+  - id: pull-request-interface
+    state: current
+    concern: Non-authoritative pull-request prompts for scope, evidence, and record impact
+    carrier: repository-file
+    path: .github/pull_request_template.md
+    format: markdown
+    producer: Record-system maintainer
+    maintainer: Record-system maintainer
+    consumers:
+      - Contributors preparing a pull request
+    creation_trigger: Pull requests need consistent prompts for existing governance obligations.
+    failure_mode: Review begins without the scope, evidence, or record impact needed by current policies.
+    review_point: Pull requests that change contribution or review workflow
 
   - id: upstream-policy
     state: current
@@ -402,22 +416,3 @@ families:
       evaluator: Validation maintainer
       action: Create the case and bind its execution evidence to the applicable gate.
       fallback_review: Every transition into Incremental Implementation and Validation
-
-  - id: user-documentation
-    state: scheduled
-    concern: Supported user-facing behavior and operating procedures
-    carrier: repository-files
-    path: docs/user/**/*.md
-    format: markdown
-    producer: Feature owner
-    maintainer: Product maintainer
-    consumers:
-      - Users of released or release-candidate behavior
-    creation_trigger: A behavior is ready to be presented as supported user functionality.
-    failure_mode: Users rely on internal records or infer unsupported procedures.
-    review_point: Before release qualification of the documented behavior
-    activation:
-      trigger: A release-candidate behavior needs user guidance.
-      evaluator: Repository owner
-      action: Create user documentation and activate documentation review.
-      fallback_review: Every transition into Release Qualification

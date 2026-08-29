@@ -115,6 +115,16 @@ A claimed gate is effective only when its execution and result have a defined ca
 Examples include a GitHub review, a check result, a phase-transition pull request, a
 release manifest, or a tag.
 
+### GOV-011: Separate Findings From Disposition
+
+A reviewer must not solely adjudicate its own material findings. A reviewer independent
+of the originating review must classify each material finding as a true positive, false
+positive, or unresolved and record the evidence for that classification in the pull
+request or other governing review carrier.
+
+The repository owner decides the disposition of unresolved findings and any finding that
+requires a value, risk, scope, governance, or release decision.
+
 ## Rule Classification
 
 Rules fall into four enforcement classes:

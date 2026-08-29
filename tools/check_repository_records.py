@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
 import sys
 from collections import Counter
 from pathlib import Path, PurePosixPath
@@ -102,6 +103,7 @@ def check_catalog_paths() -> list[str]:
 
     governed_paths = [
         *sorted(path for path in ROOT.glob("*.md") if path.is_file()),
+        ROOT / ".github/pull_request_template.md",
         *sorted(path for path in (ROOT / "docs").rglob("*") if path.is_file()),
         *sorted(path for path in (ROOT / "schemas").rglob("*") if path.is_file()),
     ]
@@ -121,13 +123,48 @@ def check_catalog_paths() -> list[str]:
     return errors
 
 
+def validate_structured_records() -> int:
+    catalog = load_yaml("docs/governance/record-families.yaml")
+    families = [
+        family
+        for family in catalog["families"]
+        if family["state"] == "current" and family.get("schema")
+    ]
+    for family in families:
+        schema = family["schema"]
+        instances = sorted(path for path in ROOT.glob(family["path"]) if path.is_file())
+        if not instances:
+            print(
+                f"ERROR: {family['id']} has no structured record at {family['path']}",
+                file=sys.stderr,
+            )
+            return 1
+        result = subprocess.run(
+            [
+                "check-jsonschema",
+                "--schemafile",
+                schema,
+                *(path.relative_to(ROOT).as_posix() for path in instances),
+            ],
+            cwd=ROOT,
+            check=False,
+        )
+        if result.returncode != 0:
+            return result.returncode
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("identifiers")
+    subparsers.add_parser("schemas")
     catalog_parser = subparsers.add_parser("catalog-paths")
     catalog_parser.add_argument("--advisory", action="store_true")
     args = parser.parse_args()
+
+    if args.command == "schemas":
+        return validate_structured_records()
 
     errors = check_identifiers() if args.command == "identifiers" else check_catalog_paths()
     if not errors:

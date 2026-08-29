@@ -14,7 +14,8 @@ Authority is scoped rather than globally ranked.
 
 | Concern | Canonical carrier |
 | --- | --- |
-| Public project identity and release posture | Root `README.md` and project governance |
+| Public project identity and release posture | `docs/governance/project.md` |
+| Public navigation to canonical records | Root `README.md` |
 | AI-agent behavior | Root `AGENTS.md` |
 | Human contribution workflow | Root `CONTRIBUTING.md` |
 | Current phase and work authorization | `docs/project-state.md` |

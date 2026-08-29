@@ -2,15 +2,15 @@ amends "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Config.
 import "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Builtins.pkl"
 
 local structuredRecordGlobs = List(
-  "docs/governance/controls.yaml",
-  "docs/governance/operational-identities.yaml",
-  "docs/governance/record-families.yaml",
-  "docs/research/rechecks.yaml",
-  "schemas/**/*.schema.json",
+  "**/*.json",
+  "**/*.yaml",
+  "**/*.yml",
+  "tools/check_repository_records.py",
 )
 
 local governedRecordGlobs = List(
   "*.md",
+  ".github/pull_request_template.md",
   "docs/**/*.md",
   "docs/**/*.yaml",
   "schemas/**/*.schema.json",
@@ -35,12 +35,9 @@ local fastSteps = new Mapping<String, Step> {
   }
   ["structured-record-schema"] {
     glob = structuredRecordGlobs
-    check = """
-      check-jsonschema --schemafile schemas/governance/controls.schema.json docs/governance/controls.yaml &&
-      check-jsonschema --schemafile schemas/governance/operational-identities.schema.json docs/governance/operational-identities.yaml &&
-      check-jsonschema --schemafile schemas/governance/record-families.schema.json docs/governance/record-families.yaml &&
-      check-jsonschema --schemafile schemas/research/rechecks.schema.json docs/research/rechecks.yaml
-      """
+    check = new Command {
+      argv = List("uv", "run", "tools/check_repository_records.py", "schemas")
+    }
   }
   ["record-identifiers"] {
     glob = governedRecordGlobs
@@ -65,6 +62,11 @@ local fastSteps = new Mapping<String, Step> {
 
 local fullSteps = new Mapping<String, Step> {
   ...fastSteps
+  ["gitleaks-history"] {
+    check = new Command {
+      argv = List("uv", "run", "tools/check_git_history_secrets.py")
+    }
+  }
   ["schema-metaschema"] {
     glob = List("schemas/**/*.schema.json")
     check = new Command {

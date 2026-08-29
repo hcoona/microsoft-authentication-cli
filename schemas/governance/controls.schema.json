@@ -57,6 +57,9 @@
         "state",
         "class",
         "enforcement",
+        "producer",
+        "maintainer",
+        "consumers",
         "governing_rules",
         "invariant",
         "runner",
@@ -90,6 +93,23 @@
             "review-required",
             "owner-disposition"
           ]
+        },
+        "producer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "maintainer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consumers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
         },
         "governing_rules": {
           "type": "array",

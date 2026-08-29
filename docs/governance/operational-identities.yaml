@@ -100,6 +100,10 @@ selected_v2:
     value: null
     required_before: remote-telemetry
 
+  - id: diagnostic-identity
+    value: null
+    required_before: distribution
+
   - id: signing-identity
     value: null
     required_before: release

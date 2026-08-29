@@ -80,8 +80,9 @@ If there are no material findings, output exactly:
 No material findings.
 ```
 
-Material findings must be sent to an independent reviewer for true-positive or
-false-positive triage before they drive a change.
+Under GOV-011 and the `independent-finding-triage` control, material findings must be
+sent to an independent reviewer for true-positive or false-positive triage before they
+drive a change.
 
 ## Evaluation Fixtures
 

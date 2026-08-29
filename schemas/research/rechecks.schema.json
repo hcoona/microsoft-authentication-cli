@@ -6,11 +6,15 @@
   "additionalProperties": false,
   "required": [
     "schema_version",
+    "governance",
     "rechecks"
   ],
   "properties": {
     "schema_version": {
       "const": 1
+    },
+    "governance": {
+      "$ref": "#/$defs/governance"
     },
     "rechecks": {
       "type": "array",
@@ -20,6 +24,29 @@
     }
   },
   "$defs": {
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluator",
+        "trigger_action",
+        "fallback_review"
+      ],
+      "properties": {
+        "evaluator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trigger_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fallback_review": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
     "recheck": {
       "type": "object",
       "additionalProperties": false,

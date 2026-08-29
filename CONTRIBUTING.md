@@ -7,7 +7,8 @@ current project boundary and work authorization.
 
 1. Read the [project record index](docs/README.md).
 2. Read [`docs/project-state.md`](docs/project-state.md).
-3. Confirm that the work is authorized there or tracked by the linked downstream Issue.
+3. Confirm that `docs/project-state.md` explicitly authorizes the work and, when it
+   designates an active downstream Issue, that the work remains within that Issue.
 4. Read the canonical product, architecture, research, security, and validation records
    relevant to the change.
 
@@ -22,6 +23,10 @@ Install the pinned repository toolchain and hooks:
 mise install --locked
 mise run hooks:install
 ```
+
+The locked toolchain is supported on platforms represented for every required tool in
+`mise.lock`. The pinned hk release has no Intel macOS binary; use CI or another supported
+development host on Intel macOS.
 
 The pre-commit hook runs the local fast set through hk. Run the complete CI-equivalent
 set before requesting review:

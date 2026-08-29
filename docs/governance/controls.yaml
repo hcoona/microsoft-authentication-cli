@@ -5,6 +5,11 @@ controls:
     state: current
     class: mechanical
     enforcement: blocking
+    producer: hk
+    maintainer: Control maintainer
+    consumers:
+      - Contributors at local-fast before commit
+      - GitHub Actions and reviewers at CI before merge
     governing_rules:
       - docs/governance/governance-system.md#gov-005-controls-implement-policy
       - docs/governance/record-system.md#record-system-gate
@@ -20,6 +25,11 @@ controls:
     state: current
     class: mechanical
     enforcement: blocking
+    producer: hk
+    maintainer: Control maintainer
+    consumers:
+      - Contributors at local-fast before commit
+      - GitHub Actions and reviewers at CI before merge
     governing_rules:
       - docs/governance/record-system.md#deletion-and-replacement
     invariant: Internal Markdown links resolve to current repository paths and anchors.
@@ -34,6 +44,11 @@ controls:
     state: current
     class: mechanical
     enforcement: blocking
+    producer: hk and check-jsonschema
+    maintainer: Structured-record maintainer
+    consumers:
+      - Structured-record authors at local-fast
+      - GitHub Actions and reviewers at CI before merge
     governing_rules:
       - docs/governance/record-system.md#formats
       - docs/governance/record-system.md#record-system-gate
@@ -49,6 +64,11 @@ controls:
     state: current
     class: mechanical
     enforcement: blocking
+    producer: hk and the repository record checker
+    maintainer: Product-record maintainer
+    consumers:
+      - Requirement authors at local-fast
+      - GitHub Actions and reviewers at CI before merge
     governing_rules:
       - docs/governance/record-system.md#workflows
     invariant: Each V2 requirement identifier is defined exactly once.
@@ -63,6 +83,11 @@ controls:
     state: current
     class: mechanical
     enforcement: blocking
+    producer: hk and the repository record checker
+    maintainer: Decision-record maintainer
+    consumers:
+      - Decision authors at local-fast
+      - GitHub Actions and reviewers at CI before merge
     governing_rules:
       - docs/governance/record-system.md#lifecycle-through-git-and-github
     invariant: Each decision record number and file prefix is unique.
@@ -77,6 +102,10 @@ controls:
     state: current
     class: mechanical
     enforcement: advisory
+    producer: hk and the repository record checker
+    maintainer: Record-system maintainer
+    consumers:
+      - Record-system reviewers reading local-fast and CI advisory output
     governing_rules:
       - docs/governance/governance-system.md#gov-002-one-canonical-authority
       - docs/governance/record-system.md#authority-by-concern
@@ -92,6 +121,11 @@ controls:
     state: current
     class: mechanical
     enforcement: blocking
+    producer: hk and gitleaks
+    maintainer: Security maintainer
+    consumers:
+      - Contributors at local-fast before commit
+      - GitHub Actions and reviewers at CI before merge
     governing_rules:
       - docs/governance/project.md
       - docs/research/experiment-safety.md
@@ -107,6 +141,10 @@ controls:
     state: current
     class: mechanical
     enforcement: blocking
+    producer: hk and actionlint
+    maintainer: Control maintainer
+    consumers:
+      - GitHub Actions maintainers and reviewers at CI
     governing_rules:
       - docs/governance/governance-system.md#gov-005-controls-implement-policy
     invariant: GitHub Actions workflows satisfy their published syntax and expression contracts.
@@ -120,6 +158,10 @@ controls:
     state: current
     class: procedural-review
     enforcement: review-required
+    producer: Reviewer agent
+    maintainer: Record-system maintainer
+    consumers:
+      - Change author and repository owner during pull-request and phase-transition review
     governing_rules:
       - docs/governance/governance-system.md
       - docs/governance/record-system.md
@@ -135,6 +177,10 @@ controls:
     state: current
     class: procedural-review
     enforcement: review-required
+    producer: Reviewer agent
+    maintainer: Research maintainer
+    consumers:
+      - Change author and repository owner during research and phase-transition review
     governing_rules:
       - docs/research/experiment-safety.md
       - docs/governance/record-system.md
@@ -146,17 +192,40 @@ controls:
       - phase-transition
     failure_mode: Research conclusions overstate evidence or expose unsafe experimental detail.
 
+  - id: independent-finding-triage
+    state: current
+    class: procedural-review
+    enforcement: review-required
+    producer: Reviewer independent of the originating review
+    maintainer: Repository owner
+    consumers:
+      - Change author and repository owner before remediation or disposition
+    governing_rules:
+      - docs/governance/governance-system.md#gov-011-separate-findings-from-disposition
+    invariant: A reviewer does not solely validate or dismiss its own material findings.
+    runner: agent-skill
+    implementation: Material-finding triage instructions in each active review Skill
+    execution_points:
+      - pull-request-review
+      - phase-transition
+    failure_mode: A self-confirming review creates false assurance or unnecessary changes.
+
   - id: record-system-gate
     state: current
     class: owner-decision
     enforcement: owner-disposition
+    producer: Applicable hk checks and independent reviewers
+    maintainer: Repository owner
+    consumers:
+      - Repository owner at the applicable issue closure or pull-request merge
     governing_rules:
       - docs/governance/record-system.md#record-system-gate
       - docs/governance/governance-system.md#gov-010-gates-require-evidence
-    invariant: The record migration is accepted only after its mechanical and contextual evidence is reviewable.
+    invariant: A record-system or phase-transition change is accepted only after its required mechanical and contextual evidence is reviewable.
     runner: human-owner
-    implementation: GitHub issue #2 and its final pull request
+    implementation: Applicable pull request, check results, review records, and owner disposition
     execution_points:
       - issue-closure
       - pull-request-merge
-    failure_mode: The repository declares the new system current without evidence that its authority and controls agree.
+      - phase-transition
+    failure_mode: The repository accepts changed authority or phase state without evidence that its records and controls agree.
