@@ -14,6 +14,22 @@ current project boundary and work authorization.
 Do not add private company information, credentials, tokens, private account details, or
 unpublished downstream evidence.
 
+## Local Checks
+
+Install the pinned repository toolchain and hooks:
+
+```sh
+mise install --locked
+mise run hooks:install
+```
+
+The pre-commit hook runs the local fast set through hk. Run the complete CI-equivalent
+set before requesting review:
+
+```sh
+mise run check
+```
+
 ## Pull Requests
 
 A pull request should:

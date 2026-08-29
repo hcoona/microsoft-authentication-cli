@@ -56,6 +56,7 @@
         "id",
         "state",
         "class",
+        "enforcement",
         "governing_rules",
         "invariant",
         "runner",
@@ -80,6 +81,14 @@
             "procedural-review",
             "owner-decision",
             "hybrid"
+          ]
+        },
+        "enforcement": {
+          "enum": [
+            "advisory",
+            "blocking",
+            "review-required",
+            "owner-disposition"
           ]
         },
         "governing_rules": {

@@ -285,6 +285,20 @@ families:
     failure_mode: Security controls address the wrong assets or trust boundaries.
     review_point: Pull requests that change assets, trust boundaries, or security posture
 
+  - id: security-interface
+    state: current
+    concern: Public vulnerability-reporting boundary
+    carrier: repository-file
+    path: SECURITY.md
+    format: markdown
+    producer: Repository owner
+    maintainer: Repository owner
+    consumers:
+      - Security reporters choosing a public or private channel
+    creation_trigger: The public repository may receive vulnerability reports.
+    failure_mode: Sensitive reports are disclosed publicly or sent to the wrong project.
+    review_point: Pull requests that change reporting channels or support posture
+
   - id: validation-strategy
     state: current
     concern: Evidence required for behavior and support claims

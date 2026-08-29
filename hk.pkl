@@ -1,0 +1,88 @@
+amends "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Builtins.pkl"
+
+local structuredRecordGlobs = List(
+  "docs/governance/controls.yaml",
+  "docs/governance/operational-identities.yaml",
+  "docs/governance/record-families.yaml",
+  "docs/research/rechecks.yaml",
+  "schemas/**/*.schema.json",
+)
+
+local governedRecordGlobs = List(
+  "*.md",
+  "docs/**/*.md",
+  "docs/**/*.yaml",
+  "schemas/**/*.schema.json",
+  "tools/check_repository_records.py",
+)
+
+local fastSteps = new Mapping<String, Step> {
+  ["merge-conflict"] = Builtins.check_merge_conflict
+  ["trailing-whitespace"] = Builtins.trailing_whitespace
+  ["gitleaks"] = Builtins.gitleaks
+  ["markdown-links"] = (Builtins.lychee) {
+    glob = List("*.md", "docs/**/*.md", ".github/**/*.md")
+    check = new Command {
+      argv = List(
+        "lychee",
+        "--offline",
+        "--no-progress",
+        "--include-fragments=full",
+        "{{files}}",
+      )
+    }
+  }
+  ["structured-record-schema"] {
+    glob = structuredRecordGlobs
+    check = """
+      check-jsonschema --schemafile schemas/governance/controls.schema.json docs/governance/controls.yaml &&
+      check-jsonschema --schemafile schemas/governance/operational-identities.schema.json docs/governance/operational-identities.yaml &&
+      check-jsonschema --schemafile schemas/governance/record-families.schema.json docs/governance/record-families.yaml &&
+      check-jsonschema --schemafile schemas/research/rechecks.schema.json docs/research/rechecks.yaml
+      """
+  }
+  ["record-identifiers"] {
+    glob = governedRecordGlobs
+    check = new Command {
+      argv = List("uv", "run", "tools/check_repository_records.py", "identifiers")
+    }
+  }
+  ["record-family-path-consistency"] {
+    glob = governedRecordGlobs
+    check = new Command {
+      argv = List(
+        "uv",
+        "run",
+        "tools/check_repository_records.py",
+        "catalog-paths",
+        "--advisory",
+      )
+    }
+    output_summary = "stderr"
+  }
+}
+
+local fullSteps = new Mapping<String, Step> {
+  ...fastSteps
+  ["schema-metaschema"] {
+    glob = List("schemas/**/*.schema.json")
+    check = new Command {
+      argv = List("check-jsonschema", "--check-metaschema", "{{files}}")
+    }
+  }
+  ["actionlint"] = Builtins.actionlint
+}
+
+hooks {
+  ["pre-commit"] {
+    steps = fastSteps
+  }
+  ["fix"] {
+    fix = true
+    steps = fastSteps
+  }
+  ["check"] {
+    steps = fullSteps
+  }
+}
