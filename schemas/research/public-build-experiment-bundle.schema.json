@@ -82,6 +82,30 @@
       "uniqueItems": true
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "completed"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "command_results": {
+            "$ref": "#/$defs/completedCommandResults"
+          },
+          "conclusions": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "nonEmptyStringArray": {
       "type": "array",
@@ -372,7 +396,185 @@
           },
           "uniqueItems": true
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "passed"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "exit_code": {
+                "const": 0
+              },
+              "reproduction_count": {
+                "minimum": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "failed"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "reproduction_count": {
+                "minimum": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "completedCommandResults": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "stage": {
+                "const": "restore"
+              },
+              "source_mode": {
+                "const": "source-faithful"
+              }
+            },
+            "required": [
+              "stage",
+              "source_mode"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "stage": {
+                "const": "restore"
+              },
+              "source_mode": {
+                "const": "public-only"
+              }
+            },
+            "required": [
+              "stage",
+              "source_mode"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "stage": {
+                "const": "build"
+              },
+              "source_mode": {
+                "const": "source-faithful"
+              }
+            },
+            "required": [
+              "stage",
+              "source_mode"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "stage": {
+                "const": "build"
+              },
+              "source_mode": {
+                "const": "public-only"
+              }
+            },
+            "required": [
+              "stage",
+              "source_mode"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "stage": {
+                "const": "test"
+              },
+              "source_mode": {
+                "const": "source-faithful"
+              }
+            },
+            "required": [
+              "stage",
+              "source_mode"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "stage": {
+                "const": "test"
+              },
+              "source_mode": {
+                "const": "public-only"
+              }
+            },
+            "required": [
+              "stage",
+              "source_mode"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "stage": {
+                "const": "package"
+              },
+              "source_mode": {
+                "const": "source-faithful"
+              }
+            },
+            "required": [
+              "stage",
+              "source_mode"
+            ]
+          }
+        },
+        {
+          "contains": {
+            "properties": {
+              "stage": {
+                "const": "package"
+              },
+              "source_mode": {
+                "const": "public-only"
+              }
+            },
+            "required": [
+              "stage",
+              "source_mode"
+            ]
+          }
+        }
+      ]
     },
     "dependencyInventory": {
       "type": "object",

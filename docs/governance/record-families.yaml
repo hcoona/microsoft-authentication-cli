@@ -390,11 +390,11 @@ families:
     maintainer: Research maintainer
     consumers:
       - Issue #1 implementers and research reviewers when reproducing commands or evaluating public-build conclusions
-    creation_trigger: Before the first command authorized by issue #1 is executed.
+    creation_trigger: After the permitted read-only environment preflight and before the first issue #1 experiment command is executed.
     failure_mode: Public-build commands, dependency observations, and conclusions cannot be reproduced or distinguished from interpretation.
     review_point: Before execution and when conclusions are recorded
     activation:
-      trigger: Work is ready to execute the first issue #1 restore, build, test, or package command.
+      trigger: The read-only environment preflight is complete and work is ready to execute the first restore, dependency-resolution, build, test, or package command.
       evaluator: Research maintainer
       action: Create the initial planned bundle, change this family to current, and validate the protocol before execution.
       fallback_review: Issue #1 closure and every phase transition while issue #1 remains open

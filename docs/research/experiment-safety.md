@@ -56,9 +56,10 @@ evidence.
 - Do not create PATs as an incidental fallback.
 - Bound every operation with a documented timeout and cleanup procedure.
 
-## Required Experiment Record
+## Authentication Experiment Records
 
-Every committed result must state:
+Every committed authentication-experiment result must state the applicable fields below
+and explicitly mark nonapplicable context when omission could change interpretation:
 
 - source commit;
 - v2 commit, if applicable;
@@ -78,7 +79,13 @@ Every committed result must state:
 
 Issue #1 public-build experiments use the YAML contract in
 [`public-build-experiment-bundle.schema.json`](../../schemas/research/public-build-experiment-bundle.schema.json).
-Create the first `planned` bundle under `docs/research/experiments/` before running any
+A narrow read-only preflight may capture the operating system, architecture,
+`dotnet --info`, NuGet version, build entry point, and configuration before bundle
+activation. It must not restore or resolve dependencies, access configured feeds, build,
+test, package, or mutate source or user state.
+
+After that preflight, create the first `planned` bundle under
+`docs/research/experiments/` and validate its protocol before running any other issue #1
 command. The same bundle carries the approved protocol, command-result matrix, observed
 dependency inventory, conclusions, and limitations as the work progresses.
 
