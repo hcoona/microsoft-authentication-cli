@@ -52,3 +52,9 @@ After success, failure, cancellation, or timeout, no v2-owned acquisition task, 
 listener, lock, or controllable interactive surface may remain active. For an externally
 owned system-browser tab that the process cannot close, v2 must invalidate the pending
 flow and provide a safe terminal completion or error state.
+
+## V2-REQ-026: Cross-Process Interaction Coordination
+
+Equivalent concurrent requests must coordinate across processes so they do not
+independently create duplicate user interaction. Coordination waits must remain within
+the common deadline and cancellation scope defined by `V2-REQ-015`.

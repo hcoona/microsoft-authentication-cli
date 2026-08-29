@@ -28,3 +28,11 @@ be treated as opaque bearer material.
 Protocol stdout must contain only the selected versioned payload. Human prompts and
 diagnostics must use explicitly owned channels. Secrets must never reach logs or
 telemetry.
+
+## V2-REQ-035: Secret Channel Containment
+
+Authentication secrets may appear only in schema-authorized protocol fields and the
+provider or operating-system interfaces that require them. Tokens, authorization codes,
+device codes, and other authentication secrets must not appear in process arguments,
+diagnostics, exception or crash output, logs, telemetry, or unrelated protocol fields.
+Errors must expose safe classifications rather than raw secret-bearing content.

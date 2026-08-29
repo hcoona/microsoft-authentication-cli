@@ -23,7 +23,7 @@ is navigation, not an independent authority.
 | Product maintainers, implementers, and reviewers | Quality, build, packaging, and validation constraints | [`product/requirements/quality-build-and-validation.md`](product/requirements/quality-build-and-validation.md) |
 | Product owners and release planners | Compatibility promises, migration rules, and support gates | [`product/compatibility-and-migration.md`](product/compatibility-and-migration.md) |
 | Architects and implementers | Component boundaries, dependency direction, and target runtime views | [`architecture/overview.md`](architecture/overview.md) |
-| Architects and security reviewers | OAuth client-registration ownership, profiles, and activation gates | [`architecture/client-application-identity.md`](architecture/client-application-identity.md) |
+| Architects and security reviewers | OAuth client-registration ownership and profile structure | [`architecture/client-application-identity.md`](architecture/client-application-identity.md) |
 | Security reviewers and implementers | Threats, trust boundaries, and required mitigations | [`security/threat-model.md`](security/threat-model.md) |
 | Test and release maintainers | Evidence required for validation and support claims | [`validation/strategy.md`](validation/strategy.md) |
 | Architects, maintainers, and reviewers | Establishing `main-v2` as an orphan line | [`decisions/0001-establish-main-v2.md`](decisions/0001-establish-main-v2.md) |
