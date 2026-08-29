@@ -200,6 +200,26 @@
       "type": "string",
       "pattern": "^(?:/|[A-Za-z]:/).+"
     },
+    "canonicalRoot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_path",
+        "symlink_free",
+        "path_identity_evidence_references"
+      ],
+      "properties": {
+        "canonical_path": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "symlink_free": {
+          "const": true
+        },
+        "path_identity_evidence_references": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        }
+      }
+    },
     "authorization": {
       "type": "object",
       "additionalProperties": false,
@@ -243,17 +263,13 @@
       "required": [
         "fingerprint",
         "operating_system",
-        "operating_system_family",
-        "architecture",
+        "runtime_identifier",
         "host_type",
         "checkout_root",
         "dotnet_info_reference",
         "nuget_version",
         "build_entry_point",
-        "configuration",
-        "working_directory",
-        "timeout_policy",
-        "retry_policy"
+        "configuration"
       ],
       "properties": {
         "fingerprint": {
@@ -264,23 +280,18 @@
           "type": "string",
           "minLength": 1
         },
-        "operating_system_family": {
-          "enum": [
-            "linux",
-            "windows",
-            "macos"
-          ]
-        },
-        "architecture": {
+        "runtime_identifier": {
           "type": "string",
-          "minLength": 1
+          "pattern": "^(?:linux|win|osx)-(?:x64|arm64)$"
         },
         "host_type": {
-          "type": "string",
-          "minLength": 1
+          "enum": [
+            "native",
+            "wsl"
+          ]
         },
         "checkout_root": {
-          "$ref": "#/$defs/absolutePath"
+          "$ref": "#/$defs/canonicalRoot"
         },
         "dotnet_info_reference": {
           "type": "string",
@@ -295,17 +306,6 @@
           "const": "AzureAuth.sln"
         },
         "configuration": {
-          "type": "string",
-          "minLength": 1
-        },
-        "timeout_policy": {
-          "type": "string",
-          "minLength": 1
-        },
-        "working_directory": {
-          "const": "detached-checkout-root"
-        },
-        "retry_policy": {
           "type": "string",
           "minLength": 1
         }
@@ -334,19 +334,19 @@
           "const": "issue-1-clean-nuget"
         },
         "home_root": {
-          "$ref": "#/$defs/absolutePath"
+          "$ref": "#/$defs/canonicalRoot"
         },
         "global_packages_root": {
-          "$ref": "#/$defs/absolutePath"
+          "$ref": "#/$defs/canonicalRoot"
         },
         "http_cache_root": {
-          "$ref": "#/$defs/absolutePath"
+          "$ref": "#/$defs/canonicalRoot"
         },
         "plugin_cache_root": {
-          "$ref": "#/$defs/absolutePath"
+          "$ref": "#/$defs/canonicalRoot"
         },
         "scratch_root": {
-          "$ref": "#/$defs/absolutePath"
+          "$ref": "#/$defs/canonicalRoot"
         },
         "inherit_user_nuget_configuration": {
           "const": false
@@ -398,7 +398,6 @@
         "stop_conditions",
         "cleanup",
         "attempted_targets",
-        "stage_applicability",
         "restore_configurations",
         "commands"
       ],
@@ -414,7 +413,11 @@
           "$ref": "#/$defs/nonEmptyStringArray"
         },
         "stop_conditions": {
-          "$ref": "#/$defs/nonEmptyStringArray"
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/stopCondition"
+          }
         },
         "cleanup": {
           "$ref": "#/$defs/nonEmptyStringArray"
@@ -424,26 +427,6 @@
           "minItems": 1,
           "items": {
             "$ref": "#/$defs/attemptedTarget"
-          }
-        },
-        "stage_applicability": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "build",
-            "test",
-            "package"
-          ],
-          "properties": {
-            "build": {
-              "$ref": "#/$defs/stageApplicability"
-            },
-            "test": {
-              "$ref": "#/$defs/stageApplicability"
-            },
-            "package": {
-              "$ref": "#/$defs/stageApplicability"
-            }
           }
         },
         "restore_configurations": {
@@ -524,6 +507,24 @@
         }
       }
     },
+    "stopCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "condition"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^stop-[a-z0-9][a-z0-9-]*$"
+        },
+        "condition": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
     "protocolCommand": {
       "type": "object",
       "additionalProperties": false,
@@ -580,7 +581,12 @@
       "additionalProperties": false,
       "required": [
         "executable",
-        "arguments"
+        "arguments",
+        "working_directory",
+        "environment",
+        "unset_environment",
+        "timeout_seconds",
+        "max_attempts"
       ],
       "properties": {
         "executable": {
@@ -593,71 +599,67 @@
             "type": "string",
             "minLength": 1
           }
+        },
+        "working_directory": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "environment": {
+          "$ref": "#/$defs/commandEnvironment"
+        },
+        "unset_environment": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          },
+          "uniqueItems": true
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600
+        },
+        "max_attempts": {
+          "const": 1
         }
       }
     },
-    "stageApplicability": {
+    "commandEnvironment": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "applicable",
-        "reason",
-        "evidence_references"
+        "HOME",
+        "USERPROFILE",
+        "DOTNET_CLI_HOME",
+        "NUGET_PACKAGES",
+        "NUGET_HTTP_CACHE_PATH",
+        "NUGET_PLUGINS_CACHE_PATH",
+        "NUGET_SCRATCH"
       ],
       "properties": {
-        "applicable": {
-          "type": "boolean"
+        "HOME": {
+          "$ref": "#/$defs/absolutePath"
         },
-        "reason": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "USERPROFILE": {
+          "$ref": "#/$defs/absolutePath"
         },
-        "evidence_references": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "uniqueItems": true
+        "DOTNET_CLI_HOME": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "NUGET_PACKAGES": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "NUGET_HTTP_CACHE_PATH": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "NUGET_PLUGINS_CACHE_PATH": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "NUGET_SCRATCH": {
+          "$ref": "#/$defs/absolutePath"
         }
-      },
-      "allOf": [
-        {
-          "if": {
-            "properties": {
-              "applicable": {
-                "const": true
-              }
-            },
-            "required": [
-              "applicable"
-            ]
-          },
-          "then": {
-            "properties": {
-              "reason": {
-                "const": null
-              },
-              "evidence_references": {
-                "maxItems": 0
-              }
-            }
-          },
-          "else": {
-            "properties": {
-              "reason": {
-                "type": "string",
-                "minLength": 1
-              },
-              "evidence_references": {
-                "minItems": 1
-              }
-            }
-          }
-        }
-      ]
+      }
     },
     "restoreConfiguration": {
       "type": "object",
@@ -993,8 +995,7 @@
           "enum": [
             "passed",
             "failed",
-            "blocked",
-            "not-applicable"
+            "blocked"
           ]
         },
         "exit_code": {
@@ -1077,10 +1078,7 @@
           "if": {
             "properties": {
               "status": {
-                "enum": [
-                  "blocked",
-                  "not-applicable"
-                ]
+                "const": "blocked"
               }
             },
             "required": [
@@ -1805,7 +1803,8 @@
       "additionalProperties": false,
       "required": [
         "reason",
-        "triggered_stop_condition",
+        "triggered_stop_condition_id",
+        "triggering_command_id",
         "cleanup_outcome",
         "sanitized_evidence_references"
       ],
@@ -1814,9 +1813,13 @@
           "type": "string",
           "minLength": 1
         },
-        "triggered_stop_condition": {
+        "triggered_stop_condition_id": {
           "type": "string",
-          "minLength": 1
+          "pattern": "^stop-[a-z0-9][a-z0-9-]*$"
+        },
+        "triggering_command_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
         },
         "cleanup_outcome": {
           "type": "string",

@@ -35,6 +35,20 @@ ZERO_SHA = "0" * 40
 EXACT_VERSION_PATTERN = re.compile(
     r"^[0-9]+(?:\.[0-9]+){1,3}(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$"
 )
+RUNTIME_IDENTIFIER_PATTERN = re.compile(
+    r"^(?P<operating_system>linux|win|osx)-(?P<architecture>x64|arm64)$"
+)
+CREDENTIAL_ENVIRONMENT_VARIABLES = (
+    "ADO_TOKEN",
+    "ARTIFACTS_CREDENTIALPROVIDER_FEED_ENDPOINTS",
+    "AZURE_DEVOPS_EXT_PAT",
+    "NUGET_CREDENTIALPROVIDERS_PATH",
+    "NUGET_PLUGIN_PATHS",
+    "SYSTEM_ACCESSTOKEN",
+    "VSS_NUGET_ACCESSTOKEN",
+    "VSS_NUGET_EXTERNAL_FEED_ENDPOINTS",
+    "VSS_NUGET_URI_PREFIXES",
+)
 ROOT_RECORD_PATHS = frozenset(
     {
         ".github/pull_request_template.md",
@@ -753,6 +767,9 @@ def normalized_absolute_path(
 ) -> tuple[str, PurePosixPath | PureWindowsPath] | None:
     if "\\" in value:
         return None
+    raw_parts = value[3:].split("/") if re.match(r"^[A-Za-z]:/", value) else value.split("/")
+    if any(part in {".", ".."} for part in raw_parts):
+        return None
     if re.match(r"^[A-Za-z]:/", value):
         path: PurePosixPath | PureWindowsPath = PureWindowsPath(value)
         kind = "windows"
@@ -912,6 +929,7 @@ def dependency_graph_payload(graph: dict[str, Any]) -> dict[str, Any]:
 def validate_dotnet_invocation(
     command: dict[str, Any],
     environment: dict[str, Any],
+    isolation: dict[str, Any],
     restore_configurations: dict[str, dict[str, Any]],
     relative_path: str,
 ) -> list[str]:
@@ -965,6 +983,34 @@ def validate_dotnet_invocation(
             f"{relative_path}: protocol command {command['id']} must use the canonical "
             f"argument list {expected_arguments}"
         )
+
+    expected_environment = {
+        "HOME": isolation["home_root"]["canonical_path"],
+        "USERPROFILE": isolation["home_root"]["canonical_path"],
+        "DOTNET_CLI_HOME": isolation["home_root"]["canonical_path"],
+        "NUGET_PACKAGES": isolation["global_packages_root"]["canonical_path"],
+        "NUGET_HTTP_CACHE_PATH": isolation["http_cache_root"]["canonical_path"],
+        "NUGET_PLUGINS_CACHE_PATH": isolation["plugin_cache_root"]["canonical_path"],
+        "NUGET_SCRATCH": isolation["scratch_root"]["canonical_path"],
+    }
+    if invocation["environment"] != expected_environment:
+        errors.append(
+            f"{relative_path}: protocol command {command['id']} must bind the canonical "
+            "Issue #1 isolation environment"
+        )
+    if invocation["unset_environment"] != list(CREDENTIAL_ENVIRONMENT_VARIABLES):
+        errors.append(
+            f"{relative_path}: protocol command {command['id']} must unset the canonical "
+            "credential-bearing environment list"
+        )
+    if (
+        invocation["working_directory"]
+        != environment["checkout_root"]["canonical_path"]
+    ):
+        errors.append(
+            f"{relative_path}: protocol command {command['id']} must run from the "
+            "canonical detached checkout root"
+        )
     return errors
 
 
@@ -979,10 +1025,34 @@ def validate_public_build_bundle_value(
     }
 
     environment = bundle["environment"]
-    checkout_path = normalized_absolute_path(environment["checkout_root"])
+    runtime_identifier = RUNTIME_IDENTIFIER_PATTERN.fullmatch(
+        environment["runtime_identifier"]
+    )
+    if runtime_identifier is None:
+        errors.append(f"{relative_path}: unsupported runtime identifier")
+        operating_system_family = ""
+        expected_path_kind = ""
+    else:
+        operating_system_family = runtime_identifier.group("operating_system")
+        expected_path_kind = (
+            "windows" if operating_system_family == "win" else "posix"
+        )
+    if environment["host_type"] == "wsl" and operating_system_family != "linux":
+        errors.append(
+            f"{relative_path}: WSL host type requires a Linux runtime identifier"
+        )
+
+    checkout_path = normalized_absolute_path(
+        environment["checkout_root"]["canonical_path"]
+    )
     if checkout_path is None:
         errors.append(
             f"{relative_path}: checkout_root must be a normalized absolute path"
+        )
+    elif checkout_path[0] != expected_path_kind:
+        errors.append(
+            f"{relative_path}: checkout_root path flavor conflicts with the runtime "
+            "identifier"
         )
 
     isolation = bundle["isolation_profile"]
@@ -994,12 +1064,17 @@ def validate_public_build_bundle_value(
         "plugin_cache_root",
         "scratch_root",
     ):
-        path = normalized_absolute_path(isolation[field])
+        path = normalized_absolute_path(isolation[field]["canonical_path"])
         if path is None:
             errors.append(
                 f"{relative_path}: isolation {field} must be a normalized absolute path"
             )
             continue
+        if path[0] != expected_path_kind:
+            errors.append(
+                f"{relative_path}: isolation {field} path flavor conflicts with the "
+                "runtime identifier"
+            )
         isolation_paths[field] = path
         if checkout_path is not None and (
             recorded_path_is_within(path, checkout_path, allow_equal=True)
@@ -1017,6 +1092,11 @@ def validate_public_build_bundle_value(
         errors.append(f"{relative_path}: isolation roots must have distinct identities")
 
     protocol = bundle["protocol"]
+    stop_condition_ids = [
+        condition["id"] for condition in protocol["stop_conditions"]
+    ]
+    for identifier in duplicates(stop_condition_ids):
+        errors.append(f"{relative_path}: duplicate stop condition id: {identifier}")
     attempted_targets = protocol["attempted_targets"]
     target_ids = [target["id"] for target in attempted_targets]
     for identifier in duplicates(target_ids):
@@ -1062,6 +1142,11 @@ def validate_public_build_bundle_value(
             errors.append(
                 f"{relative_path}: {source_mode} canonical configuration path must be "
                 "a normalized absolute path"
+            )
+        elif canonical_configuration_path[0] != expected_path_kind:
+            errors.append(
+                f"{relative_path}: {source_mode} canonical configuration path flavor "
+                "conflicts with the runtime identifier"
             )
         if source_mode == "source-faithful":
             if configuration["path"] != "nuget.config":
@@ -1178,6 +1263,7 @@ def validate_public_build_bundle_value(
             validate_dotnet_invocation(
                 command,
                 bundle["environment"],
+                isolation,
                 restore_configurations,
                 relative_path,
             )
@@ -1238,22 +1324,7 @@ def validate_public_build_bundle_value(
             )
 
         status = result["status"]
-        if result["stage"] != "restore":
-            applicable = protocol["stage_applicability"][result["stage"]][
-                "applicable"
-            ]
-            if applicable and status == "not-applicable":
-                errors.append(
-                    f"{relative_path}: applicable {result['stage']} stage cannot be "
-                    "recorded as not-applicable"
-                )
-            elif not applicable and status != "not-applicable":
-                errors.append(
-                    f"{relative_path}: inapplicable {result['stage']} stage must be "
-                    "recorded as not-applicable in both source modes"
-                )
-
-        if status in {"blocked", "not-applicable"}:
+        if status == "blocked":
             if result["exit_code"] is not None or result["reproduction_count"] != 0:
                 errors.append(
                     f"{relative_path}: unexecuted result {command_id} must use a null "
@@ -1273,7 +1344,7 @@ def validate_public_build_bundle_value(
             )
 
         if result["stage"] == "restore":
-            if status in {"blocked", "not-applicable"}:
+            if status == "blocked":
                 errors.append(
                     f"{relative_path}: {result['source_mode']} restore must be executed"
                 )
@@ -1326,7 +1397,7 @@ def validate_public_build_bundle_value(
     for declaration in declarations:
         expected_applicable = (
             declaration["condition"] != "not-windows"
-            or environment["operating_system_family"] != "windows"
+            or operating_system_family != "win"
         )
         if declaration["applicable"] != expected_applicable:
             errors.append(
@@ -1644,11 +1715,58 @@ def validate_public_build_bundle_value(
                 "audited public source-reference manifest"
             )
 
+    contaminated_result_ids: set[str] = {
+        result["command_id"]
+        for result in results
+        if result["stage"] == "restore"
+        and result["execution_integrity"]["verification"] == "violated"
+    }
+    contaminated_result_ids.update(
+        graph["result_id"]
+        for graph in graphs
+        if any(
+            node["access"] != "anonymous"
+            or node["initial_cache_state"] != "empty"
+            for node in graph["nodes"]
+        )
+    )
     if contaminated_execution and bundle["status"] != "aborted":
         errors.append(
             f"{relative_path}: credential, provider, inherited-configuration, or "
             "populated-cache contamination requires an aborted bundle"
         )
+    if bundle["status"] == "aborted":
+        termination = bundle["termination"]
+        if termination["triggered_stop_condition_id"] not in set(stop_condition_ids):
+            errors.append(
+                f"{relative_path}: aborted bundle references an unknown stop condition"
+            )
+        executed_result_ids = [
+            result["command_id"]
+            for result in results
+            if result["status"] in {"passed", "failed"}
+        ]
+        if (
+            not executed_result_ids
+            or termination["triggering_command_id"] != executed_result_ids[-1]
+        ):
+            errors.append(
+                f"{relative_path}: aborted bundle must identify its last executed "
+                "command as the triggering result"
+            )
+        ordered_contaminated_ids = [
+            result["command_id"]
+            for result in results
+            if result["command_id"] in contaminated_result_ids
+        ]
+        if (
+            ordered_contaminated_ids
+            and termination["triggering_command_id"] != ordered_contaminated_ids[0]
+        ):
+            errors.append(
+                f"{relative_path}: execution continued after the first recorded "
+                "isolation violation"
+            )
     if bundle["status"] == "planned" and any(
         conclusion["kind"] == "runtime-observation"
         for conclusion in bundle["conclusions"]
@@ -1705,7 +1823,7 @@ def validate_public_build_bundle_value(
     completion = bundle["completion"]
     if completion["outcome"] == "publicly-reproducible":
         if len(public_results) != len(stages) or any(
-            result["status"] not in {"passed", "not-applicable"}
+            result["status"] != "passed"
             for result in public_results
         ):
             errors.append(

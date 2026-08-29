@@ -100,26 +100,31 @@ Use the bundle states as follows:
 - `completed` contains the two restore modes, every required stage outcome, dependency
   inventory, conclusions, and explicit overall public-build outcome.
 
-The protocol declares build, test, and package applicability once for both source modes.
-An inapplicable stage requires a reason and evidence reference; both mode results then use
-`not-applicable`. An applicable stage cannot use that status.
+The audited solution has build, test, and non-publishing package targets, so all four
+stages are applicable in both source modes. The Issue #1 contract does not permit
+`not-applicable`; a stage that cannot run because its same-mode restore failed is
+`blocked`.
 
-The bundle records one typed Issue #1 isolation profile. It names canonical absolute
-checkout, home, global-package, HTTP-cache, plugin-cache, and scratch roots; keeps every
-isolation root outside the detached checkout; disables inherited user and machine NuGet
-configuration, package-source credentials, credential providers, and credential-bearing
-environment variables; and starts every cache empty. Each restore result records whether
-those boundaries were verified. Detection of inherited configuration, credentials,
-credential-provider execution, or a populated or unknown initial cache invalidates the
+The bundle records one typed Issue #1 host identity and isolation profile. The runtime
+identifier determines operating-system family, architecture, and path flavor; WSL is
+recorded separately. Canonical absolute checkout, home, global-package, HTTP-cache,
+plugin-cache, and scratch roots each carry symlink-free identity evidence. Isolation
+roots are distinct and outside the detached checkout. Every command binds `HOME`,
+`USERPROFILE`, `DOTNET_CLI_HOME`, `NUGET_PACKAGES`, the NuGet HTTP and plugin caches, and
+`NUGET_SCRATCH` to those roots; unsets the reviewed credential-bearing environment list;
+uses a numeric timeout; and permits no automatic retry. Each restore result records
+whether inherited configuration, credentials, credential-provider execution, or a
+populated or unknown initial cache was detected. Such a detection invalidates the
 experiment and requires an `aborted` bundle rather than a completion conclusion.
 
-Each protocol command records a direct executable and canonical ordered argument list and
-is run without a shell wrapper. The list begins with the matching `dotnet` verb and the
-audited `AzureAuth.sln` entry point. All commands run with the detached checkout root as
-their working directory. Restore commands have no command dependency and use exactly the
-configuration recorded for their source mode. Build, test, and package commands depend
-only on the restore for the same mode, pass `--no-restore`, and use the recorded build
-configuration.
+Each protocol command records a direct executable, canonical ordered argument list,
+working directory, complete Issue #1 environment binding, credential-variable unset
+list, numeric timeout, and one maximum attempt. It runs without a shell wrapper. The
+argument list begins with the matching `dotnet` verb and the audited `AzureAuth.sln`
+entry point. All commands run with the canonical detached checkout root as their working
+directory. Restore commands have no command dependency and use exactly the configuration
+recorded for their source mode. Build, test, and package commands depend only on the
+restore for the same mode, pass `--no-restore`, and use the recorded build configuration.
 
 The protocol records exactly two restore configurations. The source-faithful
 configuration identifies the audited checkout's unmodified `nuget.config`; the
@@ -132,10 +137,14 @@ selects only the canonical NuGet.org v3 endpoint. Dependency graph nodes cite on
 source declared by the configuration used for their restore result.
 
 A `blocked` downstream command result identifies exactly the same-mode restore result that
-blocked it. When a restore does not pass, every applicable downstream stage for that
-source mode is blocked by that restore. Use `not-applicable` only when the target or stage
-does not exist. Both statuses represent commands that were not executed and therefore
-record a null exit code and zero reproductions.
+blocked it. When a restore does not pass, every downstream stage for that source mode is
+blocked by that restore. A blocked command was not executed and therefore records a null
+exit code and zero reproductions.
+
+Stop conditions have stable identifiers. Command results are recorded in execution order.
+An aborted bundle identifies the triggering condition and command result; that result is
+the last executed command. If a restore records an isolation violation, it is the
+triggering result and no later command may have executed.
 
 The protocol lists every solution project, target framework, SDK, and internal project
 edge in the attempted target manifest. The dependency inventory lists all 38 external
@@ -154,8 +163,8 @@ The checker rejects missing target graphs, orphan nodes, incompatible direct ver
 and direct declarations without a resolved or unresolved root edge in either restore
 mode.
 
-A `publicly-reproducible` outcome requires passing or not-applicable public-only stage
-results, a complete NuGet.org graph for every attempted target, anonymous empty-cache
+A `publicly-reproducible` outcome requires passing public-only stage results, a complete
+NuGet.org graph for every attempted target, anonymous empty-cache
 provenance for every graph node, resolved root edges for every applicable source
 declaration, and no unresolved public edge. A `not-publicly-reproducible` outcome requires
 an observed failed public-only stage or unresolved public-only edge. An `inconclusive`
