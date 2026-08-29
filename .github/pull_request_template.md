@@ -10,6 +10,11 @@
 
 <!-- State what this change intentionally does not address. -->
 
+## Record-System Impact
+
+<!-- State "None" or list the changed record families, authorities, schemas, controls,
+and navigation routes. Do not copy their governing policy into this description. -->
+
 ## Evidence and Reasoning
 
 <!-- Separate verified evidence from inference or hypotheses. -->

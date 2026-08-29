@@ -38,6 +38,18 @@ PAT import is not part of a general migration. If PAT support is accepted, migra
 requires a separate security decision and should prefer issuing a new minimally scoped
 credential.
 
+## Externally Owned Client Profile Gate
+
+A profile that uses a client application not owned by this repository may be accepted
+only when:
+
+- public evidence identifies the owner and the intended or unsupported reuse boundary;
+- the required account, resource, authority, host, redirect, and broker combinations have
+  bounded validation;
+- default selection, explicit user opt-in, and failure behavior are decided;
+- cache and configuration partitioning prevent silent identity collisions;
+- public documentation states ownership, support, and availability limits.
+
 ## Compatibility Adapter Gate
 
 A v1 compatibility adapter may be accepted only when:

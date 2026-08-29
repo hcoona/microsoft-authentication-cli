@@ -78,18 +78,19 @@ constant.
 7. No result may imply that this fork owns, represents, or is supported by the
    registration owner.
 
-## Pending Evidence and Decisions
+## Activation Boundaries
 
-- Whether the initial v2 proof uses only the existing Visual Studio compatibility client
-  or also an independently owned test registration.
-- Whether the Visual Studio compatibility client currently supports the required
-  account-type and Azure DevOps combinations in the intended hosts.
-- Whether public binary distribution requires explicit user opt-in before selecting a
-  Microsoft-owned compatibility profile.
-- Whether the relevant application owner recognizes this reuse as an intended supported
-  scenario.
-- How client-profile changes affect cache partitioning and migration.
+- Every experiment must be authorized by a downstream Issue and name the client profile
+  it uses under [`experiment-safety.md`](../research/experiment-safety.md).
+- Current Azure DevOps account-type guidance and reproducible behavior must be resolved
+  through [`RECHECK-007`](../research/rechecks.yaml) before selecting or enabling an
+  Azure DevOps compatibility profile.
+- No externally owned profile may become a default or public compatibility option until
+  it satisfies the gate in
+  [`compatibility-and-migration.md`](../product/compatibility-and-migration.md).
+- Cache and configuration identity must be selected in
+  [`operational-identities.yaml`](../governance/operational-identities.yaml) before a
+  client profile persists state.
 
-These items do not authorize implementation. Mutable external claims must be rechecked
-through the Phase 1 research workflow, and product choices require downstream Issues and
-repository-owner decisions.
+These boundaries do not authorize implementation. The applicable downstream Issue and
+repository-owner decision remain required.
