@@ -117,7 +117,7 @@ controls:
     failure_mode: The repository merges a workflow that cannot execute its declared checks.
 
   - id: record-system-review
-    state: scheduled
+    state: current
     class: procedural-review
     enforcement: review-required
     governing_rules:
@@ -130,14 +130,9 @@ controls:
       - pull-request-review
       - phase-transition
     failure_mode: A syntactically valid change creates duplicated authority or unmaintainable governance.
-    activation:
-      trigger: The review procedure and representative eval fixtures are added under issue #2.
-      evaluator: Repository owner
-      action: Activate the Skill for explicit invocation and changed-family routing when supported.
-      fallback_review: Issue #2 final contextual review
 
   - id: research-evidence-review
-    state: scheduled
+    state: current
     class: procedural-review
     enforcement: review-required
     governing_rules:
@@ -150,11 +145,6 @@ controls:
       - pull-request-review
       - phase-transition
     failure_mode: Research conclusions overstate evidence or expose unsafe experimental detail.
-    activation:
-      trigger: The review procedure and representative eval fixtures are added under issue #2.
-      evaluator: Repository owner
-      action: Activate the Skill for explicit invocation and research-record routing when supported.
-      fallback_review: Issue #2 final contextual review
 
   - id: record-system-gate
     state: current
