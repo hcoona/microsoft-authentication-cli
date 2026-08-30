@@ -1,8 +1,5 @@
 # 0003: Treat Client Registration as an External Dependency
 
-- **Status:** Accepted
-- **Date:** 2026-08-28
-
 ## Context
 
 OAuth native applications are public clients. Their client IDs are public identifiers,

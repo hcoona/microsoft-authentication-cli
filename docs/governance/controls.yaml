@@ -1,0 +1,349 @@
+schema_version: 1
+
+controls:
+  - id: repository-hygiene
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: hk
+    maintainer: Control maintainer
+    consumers:
+      - Contributors at local-fast before commit
+      - GitHub Actions and reviewers at CI before merge
+    governing_rules:
+      - docs/governance/governance-system.md#gov-005-controls-implement-policy
+      - docs/governance/record-system.md#record-system-gate
+    invariant: Pre-commit checks run only when the worktree matches the staged snapshot, and tracked text has no unresolved conflict markers or whitespace errors.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - staged-worktree-consistency
+          - merge-conflict
+          - trailing-whitespace
+        ci:
+          - merge-conflict
+          - trailing-whitespace
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Unstaged or untracked content changes repository-wide check results, or a malformed merge or patch enters review or main-v2.
+
+  - id: markdown-links
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: hk
+    maintainer: Control maintainer
+    consumers:
+      - Contributors at local-fast before commit
+      - GitHub Actions and reviewers at CI before merge
+    governing_rules:
+      - docs/governance/record-system.md#deletion-and-replacement
+    invariant: Internal Markdown links resolve to current repository paths and anchors.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - markdown-links
+        ci:
+          - markdown-links
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Navigation or policy references lead to deleted or moved records.
+
+  - id: structured-record-schema
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: hk and check-jsonschema
+    maintainer: Structured-record maintainer
+    consumers:
+      - Structured-record authors at local-fast
+      - GitHub Actions and reviewers at CI before merge
+    governing_rules:
+      - docs/governance/record-system.md#formats
+      - docs/governance/record-system.md#record-system-gate
+    invariant: Every active YAML or JSON record validates against its declared schema, and every active JSON Schema validates against its metaschema.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - structured-record-schema
+        ci:
+          - structured-record-schema
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: A structured record becomes ambiguous or unreadable by its consumer.
+
+  - id: public-build-source-audit-consistency
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: hk and the repository record checker
+    maintainer: Research maintainer
+    consumers:
+      - Issue #1 source auditors when maintaining the fixed source baseline and Lasso manifest
+      - Research reviewers when checking static source-audit integrity before runtime experiments
+    governing_rules:
+      - docs/research/experiment-safety.md#phase-1-public-build-record
+      - docs/governance/record-system.md#record-system-gate
+    invariant: The current public-build source baseline and Lasso manifest retain canonical source identity, hashes, identifiers, ordering, and cross-record consistency under duplicate-rejecting JSON parsing, and a small static fixture set verifies planned-bundle source binding, command topology, isolation principles, and exact extractor replay without activating runtime evidence.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - structured-record-schema
+        ci:
+          - structured-record-schema
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: A fixed-source authority, planned-bundle contract, or retained synthetic assets projection becomes internally inconsistent while still passing schema validation.
+
+  - id: public-build-evidence-consistency
+    state: scheduled
+    class: mechanical
+    enforcement: blocking
+    producer: hk and the repository record checker
+    maintainer: Research maintainer
+    consumers:
+      - Issue #1 experiment owner before execution and after each recorded result
+      - Research reviewers when evaluating the public-build conclusion
+    governing_rules:
+      - docs/research/experiment-safety.md#phase-1-public-build-record
+    invariant: After activation, runner-produced bundles bind the reviewed source authorities, isolated environment, bounded command topology, retained raw assets, extractor projection, provenance, limitations, and bounded conclusions without inheriting ambient authority.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - structured-record-schema
+        ci:
+          - structured-record-schema
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Activated runtime evidence inherits ambient authority, cannot prove process quiescence or ownership before cleanup, reuses an occupied root or dedicated toolchain, or contradicts its reviewed source, command, dependency, provenance, limitation, or conclusion evidence.
+    activation:
+      trigger: The Runtime Activation Prerequisites in docs/research/experiment-safety.md are recorded as satisfied and the reviewed protocol is ready to create the experiment selection root or run the first issue #1 command.
+      evaluator: Research maintainer
+      action: In one change, expand or replace the planned-only bundle schema with the runner-produced runtime contract, change its machine-readable marker to runtime, and bind each required runtime semantic to a distinct marked property under a required runtime-evidence root; pin the isolated toolchain; add the LF-normalized direct-spawn replacement-environment runner; require build, test, and package commands to use --no-restore after the corresponding restore succeeds; define independent resolved or unresolved evidence for applicable package-backed assemblies; add conformance fixtures covering environment replacement, no-shell execution, canonical termination, all-exit process-tree quiescence including a normally exiting parent with a surviving grandchild, and same-invocation ownership-conditioned cleanup; activate the bundle family and this control; and add the blocking public-build-runner-conformance HK step at local-fast and CI. If quiescence cannot be proved on normal exit, failure, cancellation, or timeout, the runner must abort without destructive cleanup or root release. Define one canonical termination cause with optional structured detail and the minimum receipt hash only after choosing the raw or embedded receipt carrier.
+      fallback_review: Issue #1 closure and every phase transition while issue #1 remains open
+
+  - id: requirement-id-uniqueness
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: hk and the repository record checker
+    maintainer: Product-record maintainer
+    consumers:
+      - Requirement authors at local-fast
+      - GitHub Actions and reviewers at CI before merge
+    governing_rules:
+      - docs/governance/record-system.md#workflows
+    invariant: Each established V2 requirement identifier remains defined exactly once as an active nonempty requirement or an explicit retirement marker naming its current authority.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - record-identifiers
+        ci:
+          - record-identifiers
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Requirements become ambiguous across capability modules, disappear, or remain as empty retirement placeholders.
+
+  - id: decision-number-uniqueness
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: hk and the repository record checker
+    maintainer: Decision-record maintainer
+    consumers:
+      - Decision authors at local-fast
+      - GitHub Actions and reviewers at CI before merge
+    governing_rules:
+      - docs/governance/record-system.md#lifecycle-through-git-and-github
+    invariant: Each decision record number and file prefix is unique.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - record-identifiers
+        ci:
+          - record-identifiers
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Durable decisions cannot be referenced unambiguously.
+
+  - id: record-family-path-consistency
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: hk and the repository record checker
+    maintainer: Record-system maintainer
+    consumers:
+      - Record authors and reviewers at local-fast and CI
+    governing_rules:
+      - docs/governance/governance-system.md#gov-002-one-canonical-authority
+      - docs/governance/record-system.md#authority-by-concern
+    invariant: Current record-family paths exist, governed records match one declared family, and the documentation portal routes to every retained current record.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - record-family-path-consistency
+        ci:
+          - record-family-path-consistency
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: A canonical record is orphaned, duplicated, or omitted from review routing.
+
+  - id: secret-shape
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: hk and gitleaks
+    maintainer: Security maintainer
+    consumers:
+      - Contributors at local-fast before commit
+      - GitHub Actions and reviewers at CI before merge
+    governing_rules:
+      - docs/governance/project.md
+      - docs/research/experiment-safety.md
+    invariant: Committed content does not match configured credential or secret patterns.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - gitleaks
+        ci:
+          - gitleaks
+          - gitleaks-history
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Credentials or private experimental data enter Git history.
+
+  - id: github-workflow-validation
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: hk and actionlint
+    maintainer: Control maintainer
+    consumers:
+      - GitHub Actions maintainers and reviewers at CI
+    governing_rules:
+      - docs/governance/governance-system.md#gov-005-controls-implement-policy
+    invariant: GitHub Actions workflows satisfy their published syntax and expression contracts.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        ci:
+          - actionlint
+    execution_points:
+      - ci
+    failure_mode: The repository merges a workflow that cannot execute its declared checks.
+
+  - id: record-system-review
+    state: current
+    class: procedural-review
+    enforcement: review-required
+    producer: Reviewer independent of the change author and implementation agent
+    maintainer: Record-system maintainer
+    consumers:
+      - Change author and repository owner during pull-request and phase-transition review
+    governing_rules:
+      - docs/governance/governance-system.md
+      - docs/governance/record-system.md
+    invariant: Changed record families retain one authority, real consumers, bounded lifecycle, and policy-aligned controls.
+    runner: agent-skill
+    implementation:
+      kind: repository-path
+      value: .github/skills/record-system-review/SKILL.md
+    execution_points:
+      - pull-request-review
+      - phase-transition
+    failure_mode: A syntactically valid change creates duplicated authority or unmaintainable governance.
+
+  - id: research-evidence-review
+    state: current
+    class: procedural-review
+    enforcement: review-required
+    producer: Reviewer independent of the change author and implementation agent
+    maintainer: Research maintainer
+    consumers:
+      - Change author and repository owner during research, recheck-trigger, phase-transition, and release review
+    governing_rules:
+      - docs/research/experiment-safety.md
+      - docs/governance/record-system.md
+    invariant: Research changes preserve source boundaries, evidence labels, reproducibility, and claim limits.
+    runner: agent-skill
+    implementation:
+      kind: repository-path
+      value: .github/skills/research-evidence-review/SKILL.md
+    execution_points:
+      - pull-request-review
+      - recheck-trigger
+      - phase-transition
+      - release
+    failure_mode: Research conclusions overstate evidence or expose unsafe experimental detail.
+
+  - id: independent-finding-triage
+    state: current
+    class: procedural-review
+    enforcement: review-required
+    producer: Reviewer independent of the originating review, change author, and implementation agent
+    maintainer: Repository owner
+    consumers:
+      - Change author and repository owner before remediation or disposition
+    governing_rules:
+      - docs/governance/governance-system.md#gov-011-separate-findings-from-disposition
+    invariant: A reviewer does not solely validate or dismiss its own material findings.
+    runner: agent-skill
+    implementation:
+      kind: review-procedure
+      value: Material-finding triage instructions in each active review Skill
+    execution_points:
+      - pull-request-review
+      - recheck-trigger
+      - phase-transition
+      - release
+    failure_mode: A self-confirming review creates false assurance or unnecessary changes.
+
+  - id: record-system-gate
+    state: current
+    class: owner-decision
+    enforcement: owner-disposition
+    producer: Repository owner
+    maintainer: Repository owner
+    consumers:
+      - Repository owner at the applicable issue closure or pull-request merge
+    governing_rules:
+      - docs/governance/record-system.md#record-system-gate
+      - docs/governance/governance-system.md#gov-010-gates-require-evidence
+    invariant: A record-system or phase-transition change is accepted only after its required mechanical and contextual evidence is reviewable.
+    runner: human-owner
+    implementation:
+      kind: evidence-carrier
+      value: Applicable pull request, check results, review records, and owner disposition
+    execution_points:
+      - issue-closure
+      - pull-request-merge
+      - phase-transition
+    failure_mode: The repository accepts changed authority or phase state without evidence that its records and controls agree.

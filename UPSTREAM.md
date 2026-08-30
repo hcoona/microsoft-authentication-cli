@@ -46,9 +46,11 @@ The fork does not promise continuous synchronization with upstream. Security and
 mechanism-level fixes should be evaluated promptly, but every import must remain
 intentional and reviewable.
 
-Recheck upstream issues, pull requests, releases, dependency changes, and security fixes
-before each implementation or release milestone. Record the review and its disposition
-in this file or a future append-only upstream review ledger.
+Mutable upstream facts are rechecked only through the typed triggers and outcomes in
+[`docs/research/rechecks.yaml`](docs/research/rechecks.yaml). Record the resulting
+conclusion or disposition in the affected current record and its pull request. This file
+remains the authority for upstream provenance, import policy, and imported-source
+inventory; it is not a parallel recheck ledger.
 
 Use the local `upstream` remote for source comparison:
 

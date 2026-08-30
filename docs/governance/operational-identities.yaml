@@ -1,0 +1,125 @@
+schema_version: 2
+
+selection_policy:
+  evidence_requirement: >-
+    Every non-null selection records its owning component, storage or protocol location,
+    schema or version behavior, collision test, migration or import behavior, and cleanup
+    or uninstall owner.
+  ownership_rule: >-
+    Cleanup must not infer ownership from a shared parent directory or name prefix.
+
+reserved_upstream:
+  - area: product-and-command
+    identifiers:
+      - AzureAuth
+      - azureauth
+      - microsoft.authentication.azureauth
+    rule: Select distinct product, command, and package identities before distribution.
+
+  - area: dotnet-namespaces
+    identifiers:
+      - Microsoft.Authentication.AzureAuth
+      - Microsoft.Authentication.MSALWrapper
+      - Microsoft.Authentication.AdoPat
+    rule: Do not publish fork-owned assemblies under a Microsoft publisher namespace.
+
+  - area: installation
+    identifiers:
+      - "%LOCALAPPDATA%\\Programs\\AzureAuth"
+      - "~/.azureauth"
+      - /usr/bin/azureauth
+      - /usr/lib/azureauth
+    rule: Install side by side under a fork-owned root.
+
+  - area: configuration
+    identifiers:
+      - AZUREAUTH_*
+      - OEAUTH_MSAL_DISABLE_CACHE
+      - "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\AzureAuth"
+    rule: Use an independent environment-variable prefix and vendor path.
+
+  - area: msal-cache
+    identifiers:
+      - "%LOCALAPPDATA%\\.IdentityService"
+      - Microsoft.Developer.IdentityService
+      - "category:azureauth"
+      - com.microsoft.identity.tokencache
+      - .azureauth
+    rule: Define explicit v2 cache ownership and do not mutate upstream serialized stores.
+
+  - area: pat-storage
+    identifiers:
+      - azureauth-ado-pat.lock
+      - azureauth-pat.cache
+      - Microsoft-labelled Keychain and keyring values
+    rule: Use distinct names if PAT support is later accepted.
+
+  - area: telemetry
+    identifiers:
+      - AZUREAUTH_APPLICATION_INSIGHTS_INGESTION_TOKEN
+      - upstream registry configuration
+      - "event namespace:azureauth"
+    rule: Do not consume or emit under upstream telemetry configuration.
+
+  - area: release
+    identifiers:
+      - upstream archive names
+      - upstream package names
+      - upstream installer identity
+      - upstream signing identity
+      - upstream update channels
+    rule: Define independently controlled artifact provenance and update channels.
+
+  - area: client-application
+    identifiers:
+      - "Visual Studio public client: 872cd9fa-d31f-45e0-9eab-6e460a02d1f1"
+    rule: Represent only as an explicitly named externally owned compatibility profile.
+
+selected_v2:
+  - id: product-name
+    value: null
+    required_before: distribution
+
+  - id: command-name
+    value: null
+    required_before: distribution
+
+  - id: package-name
+    value: null
+    required_before: distribution
+
+  - id: installation-root
+    value: null
+    required_before: distribution
+
+  - id: configuration-prefix
+    value: null
+    required_before: persistent-configuration
+
+  - id: cache-namespace
+    value: null
+    required_before: persistent-cache
+
+  - id: lock-namespace
+    value: null
+    required_before: cross-process-coordination
+
+  - id: telemetry-identity
+    value: null
+    required_before: remote-telemetry
+
+  - id: diagnostic-identity
+    value: null
+    required_before: distribution
+
+  - id: signing-identity
+    value: null
+    required_before: release
+
+  - id: update-channel
+    value: null
+    required_before: release
+
+  - id: user-agent
+    value: null
+    required_before: networked-implementation

@@ -1,0 +1,103 @@
+schema_version: 1
+
+governance:
+  evaluator: Research maintainer
+  trigger_action: >-
+    Complete the entry's required outcome and update or explicitly disposition every
+    current record whose conclusion is materially affected.
+  fallback_review: Evaluate every entry at each phase transition.
+
+rechecks:
+  - id: RECHECK-001
+    subject: AzureAuth silent-only acquisition
+    sources:
+      - https://github.com/AzureAD/microsoft-authentication-cli/issues/464
+    triggers:
+      - kind: stage-entry
+        value: contract-and-architecture
+      - kind: release
+        value: any
+    required_outcome: >-
+      Record whether upstream now exposes a documented no-interaction acquisition
+      contract and whether that changes the v2 interaction-policy requirements.
+
+  - id: RECHECK-002
+    subject: AzureAuth strict account selection
+    sources:
+      - https://github.com/AzureAD/microsoft-authentication-cli/issues/465
+    triggers:
+      - kind: stage-entry
+        value: contract-and-architecture
+      - kind: release
+        value: any
+    required_outcome: >-
+      Record whether upstream now provides strict account selection and result identity
+      validation that would change the v2 account contract or reuse decision.
+
+  - id: RECHECK-003
+    subject: WSL broker-backed acquisition
+    sources:
+      - https://github.com/AzureAD/microsoft-authentication-cli/issues/460
+      - https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl
+    triggers:
+      - kind: workstream
+        value: wsl
+      - kind: release
+        value: any
+    required_outcome: >-
+      Record the current upstream WSL model, prerequisites, host ownership, and supported
+      failure behavior before selecting a v2 WSL design.
+
+  - id: RECHECK-004
+    subject: Remote browser and callback behavior
+    sources:
+      - https://github.com/AzureAD/microsoft-authentication-cli/issues/459
+      - https://github.com/AzureAD/microsoft-authentication-cli/issues/461
+    triggers:
+      - kind: workstream
+        value: system-browser
+      - kind: release
+        value: any
+    required_outcome: >-
+      Record current upstream browser-launch, callback, cancellation, and remote-host
+      behavior before claiming support for a browser mechanism.
+
+  - id: RECHECK-005
+    subject: Linux broker implementation
+    sources:
+      - https://github.com/AzureAD/microsoft-authentication-cli/pull/462
+      - https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl
+    triggers:
+      - kind: workstream
+        value: linux-broker
+      - kind: workstream
+        value: wsl
+    required_outcome: >-
+      Record the merged or unmerged state, current implementation shape, prerequisites,
+      and public support statement before selecting a Linux broker path.
+
+  - id: RECHECK-006
+    subject: Secure-store availability
+    sources:
+      - https://github.com/AzureAD/microsoft-authentication-cli/issues/398
+    triggers:
+      - kind: decision
+        value: cache-design
+      - kind: release
+        value: any
+    required_outcome: >-
+      Record current secure-store behavior and unresolved platform limitations before
+      accepting cache fallback or declaring a platform supported.
+
+  - id: RECHECK-007
+    subject: Azure DevOps Microsoft-account application support
+    sources:
+      - https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth
+    triggers:
+      - kind: decision
+        value: client-profile
+      - kind: release
+        value: any
+    required_outcome: >-
+      Record current public guidance and reproducible account-type behavior before
+      selecting or enabling an Azure DevOps compatibility client profile.

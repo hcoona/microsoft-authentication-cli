@@ -1,147 +1,71 @@
 # V2 Roadmap
 
-## Planning Model
+The roadmap defines durable stages and exit conditions. GitHub Milestones and Issues
+carry current work state, and `project-state.md` identifies the active stage and permitted
+work.
 
-The roadmap uses evidence and exit criteria rather than target dates. A later phase must
-not become active until the preceding phase's required records are complete and
-`docs/project-state.md` is updated.
+A later stage becomes active only through an accepted project-state change after its
+entry conditions and the Record-System Gate are satisfied.
 
-## Phase 0: Foundation and Handoff
+## Stage 1: Empirical Baseline
 
-**Goal:** Establish an orphan v2 line with enough public context for independent work.
+Establish public, reproducible evidence before selecting implementation contracts.
 
-Required outputs:
+Required outcomes:
 
-- unofficial status, license, provenance, and governance boundaries;
-- vision, architecture direction, threat model, and draft requirements;
-- public v1 architecture audit;
-- validation strategy;
-- accepted initial decision records;
-- authoritative project state and agent instructions.
+- a public restore, build, test, and packaging baseline for the audited upstream source;
+- dependency and platform inventories;
+- approved experiment records and isolation;
+- reproducible v1 account, interaction, cancellation, cache, and host observations;
+- explicit separation of source facts, observations, inference, and unresolved questions.
 
-**Exit:** All records are internally consistent, public-safe, and reviewed. No product
-implementation is expected.
-
-## Phase 1: Empirical Baseline
-
-**Goal:** Convert source findings into reproducible behavior evidence.
-
-Required outputs:
-
-- reproducible upstream build and test instructions;
-- proof of whether the upstream baseline restores anonymously, including disposition of
-  the authenticated Office feed and `Microsoft.Office.Lasso`;
-- dependency and platform inventory;
-- safe test identities and data-handling protocol;
-- accepted execution isolation following `experiment-safety.md`;
-- v1 behavior matrix for account selection, no-interaction, cancellation, cache, and host
-  behavior;
-- explicit facts versus unresolved runtime hypotheses.
-
-**Exit:** The behavior that v2 must change or preserve is demonstrable without private
+Exit when the behavior v2 must change or preserve is demonstrable without private
 evidence, and no private build dependency has been accepted into the v2 implementation.
 
-## Phase 2: Contract Freeze
+## Stage 2: Contract and Architecture
 
-**Goal:** Define the smallest versioned contract that preserves v2 invariants.
+Define the smallest versioned contract and architecture supported by Stage 1 evidence.
 
-Required outputs:
+Required outcomes:
 
-- request and result schemas;
-- account selector and client-profile contracts;
-- ordered-stage and interaction-policy model;
-- failure taxonomy and process exit mapping;
-- deadline, host-context, cache, and protocol rules;
-- compatibility decision for v1 commands and state.
+- request, result, failure, deadline, host, cache, and versioning contracts;
+- accepted account-selection and interaction policy;
+- selected first implementation slice;
+- contract and policy validation cases;
+- explicit compatibility and unsupported-behavior decisions.
 
-**Exit:** Contract examples and negative cases are reviewable, and no implementation
-question is hidden inside unspecified behavior.
+Exit when implementation can proceed without relying on unspecified behavior.
 
-## Phase 3: Mechanism-Neutral Core
+## Stage 3: Incremental Implementation and Validation
 
-**Goal:** Implement policy, orchestration, typed results, protocol routing, and fake
-mechanisms without real credentials.
+Implement the mechanism-neutral core and add real platform slices incrementally.
 
-Required outputs:
+Each slice requires:
 
-- complete contract and policy tests;
-- deterministic fake account and mechanism adapters;
-- cancellation and concurrency model;
-- stdout, stderr, redaction, and secret-shape tests;
-- no platform-specific auth dependency in the core.
+- governing requirements, architecture, and contracts;
+- deterministic policy tests;
+- real-environment validation appropriate to the claimed host and mechanism;
+- bounded cancellation, output, cache, and identity behavior;
+- explicit unsupported cases.
 
-**Exit:** Every strategy and failure rule can be proven with fakes.
+Windows broker, browser, device code, WSL, compatibility, and product-specific features
+are workstreams activated by evidence and owner decisions, not mandatory sequential
+stages.
 
-## Phase 4: First Real Platform Slice
+Exit when the selected release scope is implemented and supported by its required
+evidence.
 
-**Goal:** Add one narrow MSAL mechanism path end to end.
+## Stage 4: Release Qualification
 
-The platform and mechanism are not yet selected. The slice must include:
+Prepare an independently identifiable and verifiable release.
 
-- explicit client application and authority;
-- strict stable-account binding;
-- selected-account silent acquisition;
-- complete result metadata;
-- secure cache;
-- real environment acceptance.
+Required outcomes:
 
-**Exit:** One supported host satisfies all applicable v2 invariants without compatibility
-fallback.
+- final product and operational identities;
+- public build, dependency, provenance, and signing records;
+- supported platform, account, client, and mechanism matrix;
+- installation, update, uninstall, and migration behavior;
+- user documentation and known limitations;
+- release artifacts whose claims match the recorded evidence.
 
-## Phase 5: Interactive Mechanisms
-
-**Goal:** Add explicitly ordered broker, browser, and device-code mechanisms as justified.
-
-Each mechanism requires:
-
-- independent interaction permission;
-- result identity validation;
-- cancellation and timeout proof;
-- typed unavailable, denied, and challenge outcomes;
-- real host validation.
-
-**Exit:** Supported interactive mechanisms can be composed without hidden fallback or
-duplicate prompts.
-
-## Phase 6: WSL Architecture
-
-**Goal:** Select and validate the supported WSL model.
-
-Candidate models:
-
-- native Linux broker;
-- versioned Windows helper;
-- two explicit modes with no implicit fallback between them.
-
-**Exit:** Host prerequisites, UI ownership, cache boundary, transport, cancellation,
-installation, and unsupported cases are explicit and tested.
-
-## Phase 7: Compatibility and Product-Specific Features
-
-**Goal:** Add only the compatibility surfaces justified by current demand.
-
-Potential work:
-
-- bounded v1 CLI adapter;
-- selected cache migration;
-- Azure DevOps compatibility profile;
-- separately approved ADO PAT lifecycle.
-
-**Exit:** Every retained surface maps deterministically to v2 and cannot weaken a v2
-invariant.
-
-## Phase 8: Distribution and Support Declaration
-
-**Goal:** Produce independently identifiable artifacts and declare their actual support
-envelope.
-
-Required outputs:
-
-- final product, executable, package, cache, signing, and update identities;
-- isolated installation and upgrade path;
-- supported platform/account/client matrix;
-- security reporting and dependency-update process;
-- signed artifacts and provenance;
-- release notes stating limitations and unofficial status.
-
-**Exit:** A release claim is supported by evidence rather than aspiration.
+Exit through an explicit repository-owner release decision and immutable tag.

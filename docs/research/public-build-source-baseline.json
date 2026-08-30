@@ -1,0 +1,694 @@
+{
+  "schema_version": 1,
+  "id": "issue-1-public-build-source-baseline",
+  "source": {
+    "repository": "https://github.com/AzureAD/microsoft-authentication-cli",
+    "commit": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918",
+    "build_entry_point": "AzureAuth.sln"
+  },
+  "stage_applicability": {
+    "build": {
+      "applicable": true,
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L6-L13",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L20-L26",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L38-L133",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:.azuredevops/BuildAndTest.yml#L75-L81",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:.azuredevops/release.yml#L140-L145",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:CONTRIBUTING.md#L42-L46"
+      ]
+    },
+    "test": {
+      "applicable": true,
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L8",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L12",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L24",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L14-L18",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L17-L23",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L15-L20",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:.azuredevops/BuildAndTest.yml#L82-L86",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:.azuredevops/release.yml#L146-L150",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:CONTRIBUTING.md#L48-L51"
+      ]
+    },
+    "package": {
+      "applicable": true,
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper/MSALWrapper.csproj#L3-L7",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L2-L6",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth/AzureAuth.csproj#L12-L20",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L4",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L7",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L4",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:.azuredevops/release.yml#L326-L346",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:.azuredevops/release.yml#L355-L480",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:.azuredevops/release.yml#L482-L531"
+      ]
+    }
+  },
+  "attempted_targets": [
+    {
+      "id": "target-adopat-net8-0",
+      "project_path": "src/AdoPat/AdoPat.csproj",
+      "target_framework": "net8.0",
+      "sdk": "Microsoft.NET.Sdk",
+      "project_references": [],
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L22",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L1",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L4"
+      ]
+    },
+    {
+      "id": "target-adopat-test-net8-0",
+      "project_path": "src/AdoPat.Test/AdoPat.Test.csproj",
+      "target_framework": "net8.0",
+      "sdk": "Microsoft.NET.Sdk",
+      "project_references": [
+        "target-testhelper-net8-0",
+        "target-adopat-net8-0"
+      ],
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L24",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L1",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L3",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L23",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L24"
+      ]
+    },
+    {
+      "id": "target-azureauth-net8-0",
+      "project_path": "src/AzureAuth/AzureAuth.csproj",
+      "target_framework": "net8.0",
+      "sdk": "Microsoft.NET.Sdk",
+      "project_references": [
+        "target-msalwrapper-net8-0",
+        "target-adopat-net8-0"
+      ],
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L10",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth/AzureAuth.csproj#L1",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth/AzureAuth.csproj#L13",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth/AzureAuth.csproj#L34",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth/AzureAuth.csproj#L35"
+      ]
+    },
+    {
+      "id": "target-azureauth-test-net8-0",
+      "project_path": "src/AzureAuth.Test/AzureAuth.Test.csproj",
+      "target_framework": "net8.0",
+      "sdk": "Microsoft.NET.Sdk",
+      "project_references": [
+        "target-azureauth-net8-0",
+        "target-testhelper-net8-0"
+      ],
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L12",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L1",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L6",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L26",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L27"
+      ]
+    },
+    {
+      "id": "target-msalwrapper-benchmark-net8-0",
+      "project_path": "src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj",
+      "target_framework": "net8.0",
+      "sdk": "Microsoft.NET.Sdk",
+      "project_references": [
+        "target-msalwrapper-net8-0"
+      ],
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L20",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L1",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L2-L3",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L7-L8",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L10-L11",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L24"
+      ]
+    },
+    {
+      "id": "target-msalwrapper-net8-0",
+      "project_path": "src/MSALWrapper/MSALWrapper.csproj",
+      "target_framework": "net8.0",
+      "sdk": "Microsoft.NET.Sdk",
+      "project_references": [],
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L6",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper/MSALWrapper.csproj#L1",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper/MSALWrapper.csproj#L5"
+      ]
+    },
+    {
+      "id": "target-msalwrapper-test-net8-0",
+      "project_path": "src/MSALWrapper.Test/MSALWrapper.Test.csproj",
+      "target_framework": "net8.0",
+      "sdk": "Microsoft.NET.Sdk",
+      "project_references": [
+        "target-testhelper-net8-0",
+        "target-msalwrapper-net8-0"
+      ],
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L8",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L1",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L3",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L24",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L25"
+      ]
+    },
+    {
+      "id": "target-testhelper-net8-0",
+      "project_path": "src/TestHelper/TestHelper.csproj",
+      "target_framework": "net8.0",
+      "sdk": "Microsoft.NET.Sdk",
+      "project_references": [],
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:AzureAuth.sln#L26",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/TestHelper/TestHelper.csproj#L1",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/TestHelper/TestHelper.csproj#L3"
+      ]
+    }
+  ],
+  "package_targets": [
+    {
+      "target_id": "target-adopat-net8-0",
+      "package_id": "Microsoft.Authentication.AdoPat",
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L2-L6"
+      ]
+    },
+    {
+      "target_id": "target-azureauth-net8-0",
+      "package_id": "microsoft.authentication.azureauth",
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth/AzureAuth.csproj#L12-L20"
+      ]
+    },
+    {
+      "target_id": "target-msalwrapper-benchmark-net8-0",
+      "package_id": "MSALWrapper.Benchmark",
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L1-L18"
+      ]
+    },
+    {
+      "target_id": "target-msalwrapper-net8-0",
+      "package_id": "Microsoft.Authentication.MSALWrapper",
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper/MSALWrapper.csproj#L3-L7"
+      ]
+    },
+    {
+      "target_id": "target-testhelper-net8-0",
+      "package_id": "TestHelper",
+      "source_references": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/TestHelper/TestHelper.csproj#L1-L5"
+      ]
+    }
+  ],
+  "source_declared_direct": [
+    {
+      "declaration_id": "decl-adopat-test-fluentassertions",
+      "id": "FluentAssertions",
+      "kind": "package",
+      "version_constraint": "6.1.0",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L15",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-adopat-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-test-microsoft-net-test-sdk",
+      "id": "Microsoft.NET.Test.Sdk",
+      "kind": "package",
+      "version_constraint": "17.3.3",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L16",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-adopat-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-test-nunit",
+      "id": "NUnit",
+      "kind": "package",
+      "version_constraint": "3.13.3",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L17",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-adopat-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-test-nunit3testadapter",
+      "id": "NUnit3TestAdapter",
+      "kind": "package",
+      "version_constraint": "4.2.1",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L18",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-adopat-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-test-coverlet-collector",
+      "id": "coverlet.collector",
+      "kind": "package",
+      "version_constraint": "3.1.2",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L19",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-adopat-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-test-moq",
+      "id": "Moq",
+      "kind": "package",
+      "version_constraint": "4.18.2",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat.Test/AdoPat.Test.csproj#L20",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-adopat-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-microsoft-extensions-logging-abstractions",
+      "id": "Microsoft.Extensions.Logging.Abstractions",
+      "kind": "package",
+      "version_constraint": "8.0.2",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L12",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-adopat-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-microsoft-identity-client-extensions-msal",
+      "id": "Microsoft.Identity.Client.Extensions.Msal",
+      "kind": "package",
+      "version_constraint": "4.83.1",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L13",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-adopat-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-microsoft-visualstudio-services-client",
+      "id": "Microsoft.VisualStudio.Services.Client",
+      "kind": "package",
+      "version_constraint": "19.239.0-preview",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L14",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-adopat-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-system-data-sqlclient",
+      "id": "System.Data.SqlClient",
+      "kind": "package",
+      "version_constraint": "4.8.6",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L15",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-adopat-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-system-formats-asn1",
+      "id": "System.Formats.Asn1",
+      "kind": "package",
+      "version_constraint": "10.0.7",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L17",
+      "auxiliary_locations": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L16"
+      ],
+      "targets": [
+        "target-adopat-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-adopat-system-security-cryptography-xml",
+      "id": "System.Security.Cryptography.Xml",
+      "kind": "package",
+      "version_constraint": "10.0.7",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L18",
+      "auxiliary_locations": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AdoPat/AdoPat.csproj#L16"
+      ],
+      "targets": [
+        "target-adopat-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-azureauth-test-fluentassertions",
+      "id": "FluentAssertions",
+      "kind": "package",
+      "version_constraint": "6.1.0",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L17",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-azureauth-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-azureauth-test-microsoft-net-test-sdk",
+      "id": "Microsoft.NET.Test.Sdk",
+      "kind": "package",
+      "version_constraint": "17.3.3",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L18",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-azureauth-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-azureauth-test-nunit",
+      "id": "NUnit",
+      "kind": "package",
+      "version_constraint": "3.13.1",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L19",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-azureauth-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-azureauth-test-nunit3testadapter",
+      "id": "NUnit3TestAdapter",
+      "kind": "package",
+      "version_constraint": "3.17.0",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L20",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-azureauth-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-azureauth-test-coverlet-collector",
+      "id": "coverlet.collector",
+      "kind": "package",
+      "version_constraint": "3.0.2",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L21",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-azureauth-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-azureauth-test-system-io-abstractions-testinghelpers",
+      "id": "System.IO.Abstractions.TestingHelpers",
+      "kind": "package",
+      "version_constraint": "7.0.7",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L22",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-azureauth-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-azureauth-test-moq",
+      "id": "Moq",
+      "kind": "package",
+      "version_constraint": "4.17.2",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth.Test/AzureAuth.Test.csproj#L23",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-azureauth-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-azureauth-microsoft-office-lasso",
+      "id": "Microsoft.Office.Lasso",
+      "kind": "package",
+      "version_constraint": "2024.10.23.1",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth/AzureAuth.csproj#L29",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-azureauth-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-azureauth-opentelemetry-api",
+      "id": "OpenTelemetry.Api",
+      "kind": "package",
+      "version_constraint": "1.15.3",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth/AzureAuth.csproj#L30",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-azureauth-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-azureauth-tomlyn",
+      "id": "Tomlyn",
+      "kind": "package",
+      "version_constraint": "0.11.0",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/AzureAuth/AzureAuth.csproj#L31",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-azureauth-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-benchmark-benchmarkdotnet",
+      "id": "BenchmarkDotNet",
+      "kind": "package",
+      "version_constraint": "0.13.2",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L20",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-benchmark-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-broker",
+      "id": "Microsoft.Identity.Client.Broker",
+      "kind": "package",
+      "version_constraint": "4.83.1",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L21",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-benchmark-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-windows",
+      "id": "Microsoft.Identity.Client",
+      "kind": "package-backed-assembly",
+      "version_constraint": null,
+      "path_property": "PkgPMicrosoft_Identity_Client",
+      "assembly_relative_path": "lib/net5.0-windows10.0.17763/Microsoft.Identity.Client.dll",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L29-L31",
+      "auxiliary_locations": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L26",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L27-L28",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L30"
+      ],
+      "targets": [
+        "target-msalwrapper-benchmark-net8-0"
+      ],
+      "condition": "windows"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-not-windows",
+      "id": "Microsoft.Identity.Client",
+      "kind": "package",
+      "version_constraint": "4.83.1",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L35",
+      "auxiliary_locations": [
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L33",
+        "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj#L34"
+      ],
+      "targets": [
+        "target-msalwrapper-benchmark-net8-0"
+      ],
+      "condition": "not-windows"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-test-fluentassertions",
+      "id": "FluentAssertions",
+      "kind": "package",
+      "version_constraint": "6.1.0",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L14",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-test-nunit",
+      "id": "nunit",
+      "kind": "package",
+      "version_constraint": "3.13.2",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L15",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-test-nunit3testadapter",
+      "id": "NUnit3TestAdapter",
+      "kind": "package",
+      "version_constraint": "3.17.0",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L16",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-test-microsoft-net-test-sdk",
+      "id": "Microsoft.NET.Test.Sdk",
+      "kind": "package",
+      "version_constraint": "17.3.3",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L17",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-test-moq",
+      "id": "Moq",
+      "kind": "package",
+      "version_constraint": "4.17.2",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper.Test/MSALWrapper.Test.csproj#L18",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-test-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-microsoft-extensions-logging-abstractions",
+      "id": "Microsoft.Extensions.Logging.Abstractions",
+      "kind": "package",
+      "version_constraint": "8.0.2",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper/MSALWrapper.csproj#L26",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-microsoft-identity-client-extensions-msal",
+      "id": "Microsoft.Identity.Client.Extensions.Msal",
+      "kind": "package",
+      "version_constraint": "4.83.1",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper/MSALWrapper.csproj#L27",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-microsoft-identitymodel-jsonwebtokens",
+      "id": "Microsoft.IdentityModel.JsonWebTokens",
+      "kind": "package",
+      "version_constraint": "7.5.0",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper/MSALWrapper.csproj#L28",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-microsoft-identity-client-broker",
+      "id": "Microsoft.Identity.Client.Broker",
+      "kind": "package",
+      "version_constraint": "4.83.1",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper/MSALWrapper.csproj#L29",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-microsoft-identity-client",
+      "id": "Microsoft.Identity.Client",
+      "kind": "package",
+      "version_constraint": "4.83.1",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper/MSALWrapper.csproj#L30",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-msalwrapper-microsoft-identity-client-nativeinterop",
+      "id": "Microsoft.Identity.Client.NativeInterop",
+      "kind": "package",
+      "version_constraint": "0.20.3",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/MSALWrapper/MSALWrapper.csproj#L31",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-msalwrapper-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-testhelper-microsoft-extensions-logging-abstractions",
+      "id": "Microsoft.Extensions.Logging.Abstractions",
+      "kind": "package",
+      "version_constraint": "8.0.2",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/TestHelper/TestHelper.csproj#L7",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-testhelper-net8-0"
+      ],
+      "condition": "always"
+    },
+    {
+      "declaration_id": "decl-testhelper-nlog-extensions-logging",
+      "id": "NLog.Extensions.Logging",
+      "kind": "package",
+      "version_constraint": "1.6.3",
+      "declaration_location": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918:src/TestHelper/TestHelper.csproj#L8",
+      "auxiliary_locations": [],
+      "targets": [
+        "target-testhelper-net8-0"
+      ],
+      "condition": "always"
+    }
+  ],
+  "source_manifest_sha256": "062082d59537076bbac800b912fc4eb94b9d8b3630545ed98704382033e49bc4"
+}

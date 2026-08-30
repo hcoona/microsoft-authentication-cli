@@ -1,0 +1,475 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hcoona/microsoft-authentication-cli/schemas/research/public-build-experiment-bundle.schema.json",
+  "title": "Phase 1 Planned Public-Build Experiment Bundle",
+  "description": "Pre-activation planning contract. Runtime results and lifecycle evidence are intentionally deferred until a real runner is activated.",
+  "x-public-build-contract": {
+    "mode": "planned-only",
+    "version": 1,
+    "runtime_property": null,
+    "runtime_root": null,
+    "runtime_semantics": {}
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "status",
+    "issue",
+    "authorities",
+    "environment",
+    "isolation",
+    "protocol",
+    "evidence_plan",
+    "limitations",
+    "policy_reference"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^public-build-[a-z0-9][a-z0-9-]*$"
+    },
+    "status": {
+      "const": "planned"
+    },
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "number",
+        "url"
+      ],
+      "properties": {
+        "number": {
+          "const": 1
+        },
+        "url": {
+          "const": "https://github.com/hcoona/microsoft-authentication-cli/issues/1"
+        }
+      }
+    },
+    "authorities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_baseline",
+        "lasso_manifest"
+      ],
+      "properties": {
+        "source_baseline": {
+          "$ref": "#/$defs/sourceAuthority"
+        },
+        "lasso_manifest": {
+          "$ref": "#/$defs/lassoAuthority"
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host_type",
+        "runtime_identifier",
+        "dotnet_sdk",
+        "runner"
+      ],
+      "properties": {
+        "host_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runtime_identifier": {
+          "enum": [
+            "linux-x64",
+            "linux-arm64",
+            "win-x64",
+            "win-arm64",
+            "osx-x64",
+            "osx-arm64"
+          ]
+        },
+        "dotnet_sdk": {
+          "$ref": "#/$defs/dotnetSdk"
+        },
+        "runner": {
+          "$ref": "#/$defs/runner"
+        }
+      }
+    },
+    "isolation": {
+      "$ref": "#/$defs/isolation"
+    },
+    "protocol": {
+      "$ref": "#/$defs/protocol"
+    },
+    "evidence_plan": {
+      "$ref": "#/$defs/evidencePlan"
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "policy_reference": {
+      "const": "docs/research/experiment-safety.md#phase-1-public-build-record"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "absolutePath": {
+      "type": "string",
+      "pattern": "^(?:/[^\u0000]*|[A-Za-z]:/[^\\u0000]*)$"
+    },
+    "sourceAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "payload_sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "docs/research/public-build-source-baseline.json"
+        },
+        "payload_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "lassoAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "payload_sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "docs/research/public-build-lasso-reference-manifest.json"
+        },
+        "payload_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "dotnetSdk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "manager_data_root",
+        "installation_root",
+        "host_path",
+        "host_sha256"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^8\\.0\\.[0-9]+$"
+        },
+        "manager_data_root": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "installation_root": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "host_path": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "host_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "runner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "tools/run_public_build_experiment.py"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selection_root",
+        "checkout_root",
+        "replacement_environment",
+        "exclusive_no_follow_root_creation",
+        "single_runner_invocation",
+        "later_process_may_resume_or_cleanup"
+      ],
+      "properties": {
+        "selection_root": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "checkout_root": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "replacement_environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "inherit_parent",
+            "allowlist_defined_by_activation_contract"
+          ],
+          "properties": {
+            "inherit_parent": {
+              "const": false
+            },
+            "allowlist_defined_by_activation_contract": {
+              "const": true
+            }
+          }
+        },
+        "exclusive_no_follow_root_creation": {
+          "const": true
+        },
+        "single_runner_invocation": {
+          "const": true
+        },
+        "later_process_may_resume_or_cleanup": {
+          "const": false
+        }
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_modes",
+        "commands"
+      ],
+      "properties": {
+        "source_modes": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/sourceMode"
+          }
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 16,
+          "maxItems": 16,
+          "items": {
+            "$ref": "#/$defs/command"
+          }
+        }
+      }
+    },
+    "sourceMode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "configuration",
+        "package_sources"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "source-faithful",
+            "public-only"
+          ]
+        },
+        "configuration": {
+          "enum": [
+            "audited-checkout",
+            "isolated-generated"
+          ]
+        },
+        "package_sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "format": "uri"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source_mode",
+        "stage",
+        "target",
+        "depends_on",
+        "max_attempts",
+        "timeout_seconds",
+        "test_filter"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(?:source-faithful|public-only)-(?:restore|build|test|package-adopat|package-azureauth|package-msalwrapper-benchmark|package-msalwrapper|package-testhelper)$"
+        },
+        "source_mode": {
+          "enum": [
+            "source-faithful",
+            "public-only"
+          ]
+        },
+        "stage": {
+          "enum": [
+            "restore",
+            "build",
+            "test",
+            "package"
+          ]
+        },
+        "target": {
+          "enum": [
+            "AzureAuth.sln",
+            "src/AdoPat/AdoPat.csproj",
+            "src/AzureAuth/AzureAuth.csproj",
+            "src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj",
+            "src/MSALWrapper/MSALWrapper.csproj",
+            "src/TestHelper/TestHelper.csproj"
+          ]
+        },
+        "depends_on": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "max_attempts": {
+          "const": 1
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 7200
+        },
+        "test_filter": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "evidencePlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "retain_raw_project_assets",
+        "strict_json_duplicate_rejection",
+        "extractor",
+        "exact_replay_required",
+        "provenance_separate_from_projection",
+        "cross_bindings"
+      ],
+      "properties": {
+        "retain_raw_project_assets": {
+          "const": true
+        },
+        "strict_json_duplicate_rejection": {
+          "const": true
+        },
+        "extractor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "entry_point",
+            "nuget_versions"
+          ],
+          "properties": {
+            "entry_point": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "properties": {
+                "path": {
+                  "const": "tools/extract_public_build_assets.py"
+                },
+                "sha256": {
+                  "$ref": "#/$defs/sha256"
+                }
+              }
+            },
+            "nuget_versions": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "properties": {
+                "path": {
+                  "const": "tools/nuget_versions.py"
+                },
+                "sha256": {
+                  "$ref": "#/$defs/sha256"
+                }
+              }
+            }
+          }
+        },
+        "exact_replay_required": {
+          "const": true
+        },
+        "provenance_separate_from_projection": {
+          "const": true
+        },
+        "cross_bindings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "raw_asset_to_command_result",
+            "projection_to_source_target",
+            "package_nodes_to_provenance",
+            "package_backed_assemblies_to_runtime_evidence",
+            "limitations_to_conclusions"
+          ],
+          "properties": {
+            "raw_asset_to_command_result": {
+              "const": true
+            },
+            "projection_to_source_target": {
+              "const": true
+            },
+            "package_nodes_to_provenance": {
+              "const": true
+            },
+            "package_backed_assemblies_to_runtime_evidence": {
+              "const": true
+            },
+            "limitations_to_conclusions": {
+              "const": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

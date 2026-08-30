@@ -1,0 +1,78 @@
+amends "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Builtins.pkl"
+
+env {
+  ["PYTHONDONTWRITEBYTECODE"] = "1"
+}
+
+local fastSteps = new Mapping<String, Step> {
+  ["merge-conflict"] = Builtins.check_merge_conflict
+  ["trailing-whitespace"] = Builtins.trailing_whitespace
+  ["gitleaks"] = Builtins.gitleaks
+  ["markdown-links"] {
+    check = new Command {
+      argv = List(
+        "lychee",
+        "--offline",
+        "--no-progress",
+        "--include-fragments=full",
+        "*.md",
+        "docs/**/*.md",
+        ".github/**/*.md",
+      )
+    }
+  }
+  ["structured-record-schema"] {
+    check = new Command {
+      argv = List("uv", "run", "tools/check_repository_records.py", "schemas")
+    }
+  }
+  ["record-identifiers"] {
+    check = new Command {
+      argv = List("uv", "run", "tools/check_repository_records.py", "identifiers")
+    }
+  }
+  ["record-family-path-consistency"] {
+    check = new Command {
+      argv = List(
+        "uv",
+        "run",
+        "tools/check_repository_records.py",
+        "catalog-paths",
+      )
+    }
+  }
+}
+
+local preCommitSteps = new Mapping<String, Step> {
+  ["staged-worktree-consistency"] {
+    exclusive = true
+    check = new Command {
+      argv = List("uv", "run", "tools/check_staged_worktree.py")
+    }
+  }
+  ...fastSteps
+}
+
+local fullSteps = new Mapping<String, Step> {
+  ...fastSteps
+  ["gitleaks-history"] {
+    check = new Command {
+      argv = List("uv", "run", "tools/check_git_history_secrets.py")
+    }
+  }
+  ["actionlint"] = Builtins.actionlint
+}
+
+hooks {
+  ["pre-commit"] {
+    steps = preCommitSteps
+  }
+  ["fix"] {
+    fix = true
+    steps = fastSteps
+  }
+  ["check"] {
+    steps = fullSteps
+  }
+}

@@ -1,8 +1,5 @@
 # 0005: Establish an Independent Operational Identity
 
-- **Status:** Accepted
-- **Date:** 2026-08-28
-
 ## Context
 
 The upstream product owns executable, package, installation, cache, configuration,
