@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hcoona/microsoft-authentication-cli/schemas/research/public-build-source-baseline.schema.json",
+  "title": "Phase 1 Public-Build Source Baseline",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "source",
+    "stage_applicability",
+    "attempted_targets",
+    "package_targets",
+    "source_declared_direct",
+    "source_manifest_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "const": "issue-1-public-build-source-baseline"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "stage_applicability": {
+      "$ref": "#/$defs/stageApplicability"
+    },
+    "attempted_targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/attemptedTarget"
+      }
+    },
+    "package_targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/packageTarget"
+      }
+    },
+    "source_declared_direct": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/directDependency"
+      }
+    },
+    "source_manifest_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nugetVersion": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[0-9]+(?:\\.[0-9]+){0,3}(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+    },
+    "sourceReferenceArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/sourceReference"
+      },
+      "uniqueItems": true
+    },
+    "sourceReference": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}:(?:AzureAuth\\.sln|CONTRIBUTING\\.md|\\.azuredevops/.+\\.yml|src/.+\\.csproj)#L[0-9]+(?:-L[0-9]+)?$"
+    },
+    "sourceLocation": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}:(?:AzureAuth\\.sln|src/.+\\.(?:cs|csproj))#L[0-9]+(?:-L[0-9]+)?$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "commit",
+        "build_entry_point"
+      ],
+      "properties": {
+        "repository": {
+          "const": "https://github.com/AzureAD/microsoft-authentication-cli"
+        },
+        "commit": {
+          "const": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918"
+        },
+        "build_entry_point": {
+          "const": "AzureAuth.sln"
+        }
+      }
+    },
+    "stageApplicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build",
+        "test",
+        "package"
+      ],
+      "properties": {
+        "build": {
+          "$ref": "#/$defs/applicableStage"
+        },
+        "test": {
+          "$ref": "#/$defs/applicableStage"
+        },
+        "package": {
+          "$ref": "#/$defs/applicableStage"
+        }
+      }
+    },
+    "applicableStage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicable",
+        "source_references"
+      ],
+      "properties": {
+        "applicable": {
+          "const": true
+        },
+        "source_references": {
+          "$ref": "#/$defs/sourceReferenceArray"
+        }
+      }
+    },
+    "attemptedTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "project_path",
+        "target_framework",
+        "sdk",
+        "project_references",
+        "source_references"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^target-[a-z0-9][a-z0-9-]*$"
+        },
+        "project_path": {
+          "type": "string",
+          "pattern": "^src/.+\\.csproj$"
+        },
+        "target_framework": {
+          "const": "net8.0"
+        },
+        "sdk": {
+          "const": "Microsoft.NET.Sdk"
+        },
+        "project_references": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^target-[a-z0-9][a-z0-9-]*$"
+          },
+          "uniqueItems": true
+        },
+        "source_references": {
+          "$ref": "#/$defs/sourceReferenceArray"
+        }
+      }
+    },
+    "packageTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_id",
+        "package_id",
+        "source_references"
+      ],
+      "properties": {
+        "target_id": {
+          "type": "string",
+          "pattern": "^target-[a-z0-9][a-z0-9-]*$"
+        },
+        "package_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_references": {
+          "$ref": "#/$defs/sourceReferenceArray"
+        }
+      }
+    },
+    "directDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "declaration_id",
+        "id",
+        "kind",
+        "version_constraint",
+        "declaration_location",
+        "auxiliary_locations",
+        "targets",
+        "condition"
+      ],
+      "properties": {
+        "declaration_id": {
+          "type": "string",
+          "pattern": "^decl-[a-z0-9][a-z0-9-]*$"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "package",
+            "package-backed-assembly"
+          ]
+        },
+        "version_constraint": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/nugetVersion"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "declaration_location": {
+          "$ref": "#/$defs/sourceLocation"
+        },
+        "auxiliary_locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceLocation"
+          },
+          "uniqueItems": true
+        },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^target-[a-z0-9][a-z0-9-]*$"
+          }
+        },
+        "condition": {
+          "enum": [
+            "always",
+            "windows",
+            "not-windows"
+          ]
+        },
+        "path_property": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.]*$"
+        },
+        "assembly_relative_path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "package"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "version_constraint": {
+                "type": "string"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "version_constraint": {
+                "const": null
+              },
+              "auxiliary_locations": {
+                "minItems": 1
+              },
+              "condition": {
+                "const": "windows"
+              }
+            },
+            "required": [
+              "path_property",
+              "assembly_relative_path"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

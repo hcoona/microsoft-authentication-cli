@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hcoona/microsoft-authentication-cli/schemas/research/public-build-lasso-reference-manifest.schema.json",
+  "title": "Phase 1 Public-Build Lasso Reference Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "source",
+    "references",
+    "lasso_reference_manifest_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "const": "issue-1-public-build-lasso-reference-manifest"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "references": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/lassoSourceReference"
+      }
+    },
+    "lasso_reference_manifest_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "commit",
+        "build_entry_point"
+      ],
+      "properties": {
+        "repository": {
+          "const": "https://github.com/AzureAD/microsoft-authentication-cli"
+        },
+        "commit": {
+          "const": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918"
+        },
+        "build_entry_point": {
+          "const": "AzureAuth.sln"
+        }
+      }
+    },
+    "lassoSourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "line",
+        "symbol",
+        "kind"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^lasso-ref-[0-9]{3}$"
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^src/.+\\.cs$"
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "symbol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "namespace-import",
+            "qualified-reference",
+            "unqualified-symbol",
+            "extension-usage",
+            "documentation-reference"
+          ]
+        }
+      }
+    }
+  }
+}

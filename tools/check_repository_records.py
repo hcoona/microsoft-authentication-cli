@@ -1,13 +1,12 @@
 # /// script
 # requires-python = ">=3.13,<3.14"
-# dependencies = ["PyYAML==6.0.3", "markdown-it-py==4.2.0"]
+# dependencies = ["PyYAML==6.0.3", "jsonschema==4.25.1", "markdown-it-py==4.2.0"]
 # ///
 
 from __future__ import annotations
 
 import argparse
-import base64
-import binascii
+import copy
 import hashlib
 import json
 import os
@@ -16,11 +15,25 @@ import subprocess
 import sys
 from collections import Counter
 from pathlib import Path, PurePosixPath, PureWindowsPath
-from typing import Any
+from typing import Any, Callable
 
 import yaml
+from extract_public_build_assets import (
+    ExtractionError,
+    extract_projection,
+    parse_json_object_bytes,
+)
+from jsonschema import Draft202012Validator
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
+from nuget_versions import (
+    nuget_constraint_is_valid,
+    nuget_version_satisfies_constraint,
+)
+from public_build_contract import (
+    PCACACHE_TEST_FILTER,
+    PCACACHE_TEST_LIMITATION,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,23 +45,6 @@ RETIRED_REQUIREMENT_PREFIX = "Retired - current authority: "
 DECISION_PATTERN = re.compile(r"^([0-9]{4})-.*\.md$")
 GLOB_MARKERS = frozenset("*?[")
 ZERO_SHA = "0" * 40
-EXACT_VERSION_PATTERN = re.compile(
-    r"^[0-9]+(?:\.[0-9]+){1,3}(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$"
-)
-RUNTIME_IDENTIFIER_PATTERN = re.compile(
-    r"^(?P<operating_system>linux|win|osx)-(?P<architecture>x64|arm64)$"
-)
-CREDENTIAL_ENVIRONMENT_VARIABLES = (
-    "ADO_TOKEN",
-    "ARTIFACTS_CREDENTIALPROVIDER_FEED_ENDPOINTS",
-    "AZURE_DEVOPS_EXT_PAT",
-    "NUGET_CREDENTIALPROVIDERS_PATH",
-    "NUGET_PLUGIN_PATHS",
-    "SYSTEM_ACCESSTOKEN",
-    "VSS_NUGET_ACCESSTOKEN",
-    "VSS_NUGET_EXTERNAL_FEED_ENDPOINTS",
-    "VSS_NUGET_URI_PREFIXES",
-)
 ROOT_RECORD_PATHS = frozenset(
     {
         ".github/pull_request_template.md",
@@ -79,22 +75,37 @@ HK_EXECUTION_PLANS = {
     "local-fast": ("run", "pre-commit"),
     "ci": ("check",),
 }
-SOURCE_FAITHFUL_CONFIG_SHA256 = (
-    "be2776f78f5af30efb8836a32c4467ca0dcd9220c17d778ed8332b33dd309a6b"
+PUBLIC_BUILD_SOURCE_BASELINE_PATH = (
+    "docs/research/public-build-source-baseline.json"
 )
-PUBLIC_CONFIG_SHA256 = (
-    "f545a7e2ea14ac53cdfb91217cae67b8ff14275313f6298f9a3331d205b6c948"
+PUBLIC_BUILD_LASSO_MANIFEST_PATH = (
+    "docs/research/public-build-lasso-reference-manifest.json"
 )
-SOURCE_MANIFEST_SHA256 = (
-    "932e144f784d573e0113b129394a0c214d9b0a197f8498b056d2aeb35ebcc40f"
+PUBLIC_BUILD_SCHEMA_PATH = (
+    "schemas/research/public-build-experiment-bundle.schema.json"
 )
-LASSO_REFERENCE_MANIFEST_SHA256 = (
-    "361bcf3af38cba4e74416aef212a141bf9a926bda844402f20a1ab805e204db8"
+PUBLIC_BUILD_EXTRACTOR_PATH = "tools/extract_public_build_assets.py"
+PUBLIC_BUILD_NUGET_VERSIONS_PATH = "tools/nuget_versions.py"
+PUBLIC_BUILD_RUNNER_PATH = "tools/run_public_build_experiment.py"
+PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS = frozenset(
+    {
+        "all_exit_quiescence",
+        "bounded_conclusions",
+        "canonical_termination",
+        "command_outcomes",
+        "ownership_conditioned_cleanup",
+        "receipt_binding",
+    }
 )
 SOURCE_FAITHFUL_PACKAGE_SOURCE = (
     "https://pkgs.dev.azure.com/office/_packaging/Office/nuget/v3/index.json"
 )
 PUBLIC_PACKAGE_SOURCE = "https://api.nuget.org/v3/index.json"
+EXTRACTOR_LIMITATION = (
+    "Exact extractor replay proves that the recorded projection matches the retained "
+    "project.assets.json bytes; it does not prove network access, cache emptiness, "
+    "credential-provider absence, or causal attribution."
+)
 
 
 def load_yaml_path(path: Path) -> dict[str, Any]:
@@ -107,6 +118,17 @@ def load_yaml_path(path: Path) -> dict[str, Any]:
 
 def load_yaml(relative_path: str) -> dict[str, Any]:
     return load_yaml_path(ROOT / relative_path)
+
+
+def load_strict_json_path(path: Path) -> dict[str, Any]:
+    try:
+        return parse_json_object_bytes(path.read_bytes(), str(path))
+    except OSError as error:
+        raise ExtractionError(f"cannot read JSON from {path}: {error}") from error
+
+
+def load_strict_json(relative_path: str) -> dict[str, Any]:
+    return load_strict_json_path(ROOT / relative_path)
 
 
 def duplicates(values: list[str]) -> list[str]:
@@ -249,7 +271,6 @@ def requirement_ids_at_commit(commit: str, errors: list[str]) -> set[str]:
 
 def check_identifiers() -> list[str]:
     errors: list[str] = []
-
     requirement_occurrences: list[tuple[str, str, str | None]] = []
     for path in sorted((ROOT / "docs").rglob("*.md")):
         relative_path = path.relative_to(ROOT).as_posix()
@@ -262,6 +283,7 @@ def check_identifiers() -> list[str]:
             (identifier, relative_path, authority)
             for identifier, authority in requirements
         )
+
     requirement_ids = [
         identifier for identifier, _path, _authority in requirement_occurrences
     ]
@@ -323,21 +345,27 @@ def check_identifiers() -> list[str]:
 
     registry_ids = {
         "record family": [
-            item["id"] for item in load_yaml("docs/governance/record-families.yaml")["families"]
+            item["id"]
+            for item in load_yaml("docs/governance/record-families.yaml")["families"]
         ],
         "control": [
-            item["id"] for item in load_yaml("docs/governance/controls.yaml")["controls"]
+            item["id"]
+            for item in load_yaml("docs/governance/controls.yaml")["controls"]
         ],
         "operational identity": [
             item["id"]
-            for item in load_yaml("docs/governance/operational-identities.yaml")["selected_v2"]
+            for item in load_yaml("docs/governance/operational-identities.yaml")[
+                "selected_v2"
+            ]
         ],
-        "recheck": [item["id"] for item in load_yaml("docs/research/rechecks.yaml")["rechecks"]],
+        "recheck": [
+            item["id"]
+            for item in load_yaml("docs/research/rechecks.yaml")["rechecks"]
+        ],
     }
     for label, values in registry_ids.items():
         for identifier in duplicates(values):
             errors.append(f"duplicate {label} identifier: {identifier}")
-
     return errors
 
 
@@ -420,7 +448,6 @@ def expand_family_paths(
     if reason := repository_path_error(pattern, allow_glob=True):
         errors.append(f"{family['id']} family path {reason}: {pattern}")
         return set()
-
     candidates = ROOT.glob(pattern) if contains_glob(pattern) else [ROOT / pattern]
     paths: set[Path] = set()
     for candidate in candidates:
@@ -582,9 +609,215 @@ def hk_steps_by_execution_point(errors: list[str]) -> dict[str, set[str]]:
     return steps_by_execution_point
 
 
+def check_public_build_activation_coupling(
+    catalog: dict[str, Any],
+    controls: list[dict[str, Any]],
+    schema: dict[str, Any] | None = None,
+    runner_path: Path | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    family = next(
+        (
+            item
+            for item in catalog["families"]
+            if item["id"] == "public-build-experiment-bundles"
+        ),
+        None,
+    )
+    control = next(
+        (
+            item
+            for item in controls
+            if item["id"] == "public-build-evidence-consistency"
+        ),
+        None,
+    )
+    if family is None or control is None:
+        return errors
+    if family["state"] != control["state"]:
+        errors.append(
+            "public-build-experiment-bundles and "
+            "public-build-evidence-consistency must activate in the same change"
+        )
+        return errors
+    if family["state"] != "current":
+        return errors
+
+    if schema is None:
+        try:
+            schema = load_strict_json(PUBLIC_BUILD_SCHEMA_PATH)
+        except ExtractionError as error:
+            errors.append(str(error))
+            return errors
+    marker = schema.get("x-public-build-contract")
+    runtime_semantics = (
+        marker.get("runtime_semantics") if isinstance(marker, dict) else None
+    )
+    runtime_property = (
+        marker.get("runtime_property") if isinstance(marker, dict) else None
+    )
+    runtime_root_pointer = (
+        marker.get("runtime_root") if isinstance(marker, dict) else None
+    )
+    if (
+        not isinstance(marker, dict)
+        or marker.get("mode") != "runtime"
+        or not isinstance(marker.get("version"), int)
+        or marker["version"] < 1
+        or not isinstance(runtime_semantics, dict)
+        or not isinstance(runtime_property, str)
+        or not runtime_property
+        or not isinstance(runtime_root_pointer, str)
+    ):
+        errors.append(
+            "current public-build experiment bundles require a versioned runtime "
+            "schema marker instead of the planned-only contract"
+        )
+    else:
+        runtime_root = resolve_schema_pointer(schema, runtime_root_pointer)
+        root_properties = schema.get("properties")
+        root_required = schema.get("required")
+        runtime_property_schema = (
+            root_properties.get(runtime_property)
+            if isinstance(root_properties, dict)
+            else None
+        )
+        runtime_property_ref = (
+            runtime_property_schema.get("$ref")
+            if isinstance(runtime_property_schema, dict)
+            else None
+        )
+        missing_anchors = sorted(
+            PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS - set(runtime_semantics)
+        )
+        unexpected_anchors = sorted(
+            set(runtime_semantics) - PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS
+        )
+        duplicate_pointers = duplicates(
+            [
+                pointer
+                for pointer in runtime_semantics.values()
+                if isinstance(pointer, str)
+            ]
+        )
+        invalid_anchors: list[str] = []
+        unconstrained_anchors: list[str] = []
+        runtime_required = (
+            runtime_root.get("required") if isinstance(runtime_root, dict) else None
+        )
+        runtime_properties = (
+            runtime_root.get("properties")
+            if isinstance(runtime_root, dict)
+            else None
+        )
+        for name, pointer in runtime_semantics.items():
+            target = resolve_schema_pointer(schema, pointer)
+            expected_prefix = f"{runtime_root_pointer}/properties/"
+            property_name = (
+                pointer.removeprefix(expected_prefix)
+                if isinstance(pointer, str) and pointer.startswith(expected_prefix)
+                else None
+            )
+            if (
+                name not in PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS
+                or not isinstance(target, dict)
+                or target.get("x-public-build-runtime-semantic") != name
+                or not isinstance(property_name, str)
+                or "/" in property_name
+                or not isinstance(runtime_required, list)
+                or property_name not in runtime_required
+                or not isinstance(runtime_properties, dict)
+                or runtime_properties.get(property_name) is not target
+            ):
+                invalid_anchors.append(name)
+            elif not schema_rejects_empty_values(schema, target):
+                unconstrained_anchors.append(name)
+        runtime_root_valid = (
+            isinstance(runtime_root, dict)
+            and runtime_root.get("type") == "object"
+            and isinstance(root_required, list)
+            and runtime_property in root_required
+            and runtime_property_ref == runtime_root_pointer
+        )
+        if (
+            not runtime_root_valid
+            or missing_anchors
+            or unexpected_anchors
+            or duplicate_pointers
+            or invalid_anchors
+            or unconstrained_anchors
+        ):
+            errors.append(
+                "current public-build runtime schema must bind every required runtime "
+                "semantic to a distinct marked property with an enforcing schema "
+                "assertion under a required runtime evidence root; "
+                f"root_valid={runtime_root_valid}, missing={missing_anchors}, "
+                f"unexpected={unexpected_anchors}, duplicate={duplicate_pointers}, "
+                f"invalid={sorted(invalid_anchors)}, "
+                f"unconstrained={sorted(unconstrained_anchors)}"
+            )
+
+    runner_path = runner_path or ROOT / PUBLIC_BUILD_RUNNER_PATH
+    if not runner_path.is_file() or runner_path.is_symlink():
+        errors.append(
+            "current public-build experiment bundles require the repository-owned "
+            f"runner at {PUBLIC_BUILD_RUNNER_PATH}"
+        )
+
+    implementation = control["implementation"]
+    required_step = "public-build-runner-conformance"
+    if (
+        control["runner"] != "hk"
+        or control["enforcement"] != "blocking"
+        or implementation["kind"] != "hk-steps"
+        or any(
+            required_step not in implementation["steps"].get(execution_point, [])
+            for execution_point in ("local-fast", "ci")
+        )
+        or not {"local-fast", "ci"}.issubset(control["execution_points"])
+    ):
+        errors.append(
+            "current public-build evidence control must be blocking at local-fast "
+            "and ci through the public-build-runner-conformance HK step"
+        )
+    return errors
+
+
+def resolve_schema_pointer(schema: dict[str, Any], pointer: Any) -> Any | None:
+    if not isinstance(pointer, str) or not pointer.startswith("#/"):
+        return None
+    value: Any = schema
+    for raw_part in pointer[2:].split("/"):
+        part = raw_part.replace("~1", "/").replace("~0", "~")
+        if not isinstance(value, dict) or part not in value:
+            return None
+        value = value[part]
+    return value
+
+
+def schema_rejects_empty_values(
+    schema: dict[str, Any],
+    node: dict[str, Any],
+) -> bool:
+    probe_schema = {
+        "$schema": schema.get(
+            "$schema",
+            "https://json-schema.org/draft/2020-12/schema",
+        ),
+        "$defs": schema.get("$defs", {}),
+        "allOf": [node],
+    }
+    validator = Draft202012Validator(probe_schema)
+    return all(
+        not validator.is_valid(value)
+        for value in ({}, [], "", None)
+    )
+
+
 def check_control_references(catalog: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     controls = load_yaml("docs/governance/controls.yaml")["controls"]
+    errors.extend(check_public_build_activation_coupling(catalog, controls))
     current_families = [
         family for family in catalog["families"] if family["state"] == "current"
     ]
@@ -749,14 +982,6 @@ def check_catalog_paths() -> list[str]:
     return errors
 
 
-DOTNET_STAGE_ARGUMENT = {
-    "restore": "restore",
-    "build": "build",
-    "test": "test",
-    "package": "pack",
-}
-
-
 def canonical_sha256(value: Any) -> str:
     encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(encoded).hexdigest()
@@ -767,11 +992,17 @@ def normalized_absolute_path(
 ) -> tuple[str, PurePosixPath | PureWindowsPath] | None:
     if "\\" in value:
         return None
-    raw_parts = value[3:].split("/") if re.match(r"^[A-Za-z]:/", value) else value.split("/")
+    is_windows = re.match(r"^[A-Za-z]:/", value) is not None
+    if not is_windows and value.startswith("//"):
+        return None
+    raw_parts = value[3:].split("/") if is_windows else value.split("/")
     if any(part in {".", ".."} for part in raw_parts):
         return None
-    if re.match(r"^[A-Za-z]:/", value):
-        path: PurePosixPath | PureWindowsPath = PureWindowsPath(value)
+    if is_windows and any(part.endswith((" ", ".")) for part in raw_parts):
+        return None
+    path: PurePosixPath | PureWindowsPath
+    if is_windows:
+        path = PureWindowsPath(value)
         kind = "windows"
     else:
         path = PurePosixPath(value)
@@ -790,11 +1021,12 @@ def recorded_path_is_within(
     parent_kind, parent_path = parent
     if child_kind != parent_kind:
         return False
-    child_parts = child_path.parts
-    parent_parts = parent_path.parts
     if child_kind == "windows":
-        child_parts = tuple(part.casefold() for part in child_parts)
-        parent_parts = tuple(part.casefold() for part in parent_parts)
+        child_parts = tuple(part.casefold() for part in child_path.parts)
+        parent_parts = tuple(part.casefold() for part in parent_path.parts)
+    else:
+        child_parts = child_path.parts
+        parent_parts = parent_path.parts
     if len(child_parts) < len(parent_parts):
         return False
     if not allow_equal and len(child_parts) == len(parent_parts):
@@ -802,71 +1034,29 @@ def recorded_path_is_within(
     return child_parts[: len(parent_parts)] == parent_parts
 
 
-def decoded_content_sha256(content_base64: str) -> str | None:
-    try:
-        content = base64.b64decode(content_base64, validate=True)
-    except (binascii.Error, ValueError):
-        return None
-    return hashlib.sha256(content).hexdigest()
-
-
-def parse_nuget_version(
-    value: str,
-) -> tuple[tuple[int, int, int, int], tuple[str, ...] | None] | None:
-    if EXACT_VERSION_PATTERN.fullmatch(value) is None:
-        return None
-    without_metadata = value.split("+", maxsplit=1)[0]
-    core_text, separator, prerelease_text = without_metadata.partition("-")
-    core = tuple(int(part) for part in core_text.split("."))
-    padded_core = (*core, *(0 for _ in range(4 - len(core))))
-    prerelease = (
-        tuple(part.casefold() for part in re.split(r"[.-]", prerelease_text))
-        if separator
-        else None
+def recorded_paths_overlap(
+    left: tuple[str, PurePosixPath | PureWindowsPath],
+    right: tuple[str, PurePosixPath | PureWindowsPath],
+) -> bool:
+    return recorded_path_is_within(left, right, allow_equal=True) or (
+        recorded_path_is_within(right, left, allow_equal=True)
     )
-    return padded_core, prerelease
-
-
-def compare_prerelease(
-    left: tuple[str, ...] | None,
-    right: tuple[str, ...] | None,
-) -> int:
-    if left is None:
-        return 0 if right is None else 1
-    if right is None:
-        return -1
-    for left_part, right_part in zip(left, right):
-        if left_part == right_part:
-            continue
-        left_numeric = left_part.isdigit()
-        right_numeric = right_part.isdigit()
-        if left_numeric and right_numeric:
-            return 1 if int(left_part) > int(right_part) else -1
-        if left_numeric != right_numeric:
-            return -1 if left_numeric else 1
-        return 1 if left_part > right_part else -1
-    if len(left) == len(right):
-        return 0
-    return 1 if len(left) > len(right) else -1
-
-
-def nuget_version_at_least(resolved: str, minimum: str) -> bool:
-    resolved_version = parse_nuget_version(resolved)
-    minimum_version = parse_nuget_version(minimum)
-    if resolved_version is None or minimum_version is None:
-        return False
-    resolved_core, resolved_prerelease = resolved_version
-    minimum_core, minimum_prerelease = minimum_version
-    if resolved_core != minimum_core:
-        return resolved_core > minimum_core
-    return compare_prerelease(resolved_prerelease, minimum_prerelease) >= 0
 
 
 def source_manifest_payload(
+    stage_applicability: dict[str, Any],
     targets: list[dict[str, Any]],
+    package_targets: list[dict[str, Any]],
     declarations: list[dict[str, Any]],
 ) -> dict[str, Any]:
     return {
+        "stage_applicability": {
+            stage: {
+                "applicable": value["applicable"],
+                "source_references": sorted(value["source_references"]),
+            }
+            for stage, value in sorted(stage_applicability.items())
+        },
         "attempted_targets": sorted(
             (
                 {
@@ -875,18 +1065,40 @@ def source_manifest_payload(
                     "target_framework": target["target_framework"],
                     "sdk": target["sdk"],
                     "project_references": sorted(target["project_references"]),
+                    "source_references": sorted(target["source_references"]),
                 }
                 for target in targets
             ),
             key=lambda target: target["id"],
         ),
-        "package_declarations": sorted(
+        "package_targets": sorted(
             (
                 {
+                    "target_id": package_target["target_id"],
+                    "package_id": package_target["package_id"],
+                    "source_references": sorted(
+                        package_target["source_references"]
+                    ),
+                }
+                for package_target in package_targets
+            ),
+            key=lambda package_target: package_target["target_id"],
+        ),
+        "source_declared_direct": sorted(
+            (
+                {
+                    "declaration_id": declaration["declaration_id"],
                     "id": declaration["id"],
                     "kind": declaration["kind"],
                     "version_constraint": declaration["version_constraint"],
+                    "path_property": declaration.get("path_property"),
+                    "assembly_relative_path": declaration.get(
+                        "assembly_relative_path"
+                    ),
                     "declaration_location": declaration["declaration_location"],
+                    "auxiliary_locations": sorted(
+                        declaration["auxiliary_locations"]
+                    ),
                     "targets": sorted(declaration["targets"]),
                     "condition": declaration["condition"],
                 }
@@ -897,997 +1109,1134 @@ def source_manifest_payload(
     }
 
 
-def dependency_graph_payload(graph: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "result_id": graph["result_id"],
-        "target_id": graph["target_id"],
-        "state": graph["state"],
-        "nodes": sorted(graph["nodes"], key=lambda node: node["node_id"]),
-        "edges": sorted(
-            (
-                {
-                    **edge,
-                    "declaration_ids": sorted(edge["declaration_ids"]),
-                }
-                for edge in graph["edges"]
-            ),
-            key=lambda edge: edge["edge_id"],
+def lasso_reference_manifest_payload(
+    references: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    return sorted(
+        (
+            {
+                "id": reference["id"],
+                "path": reference["path"],
+                "line": reference["line"],
+                "symbol": reference["symbol"],
+                "kind": reference["kind"],
+            }
+            for reference in references
         ),
-        "unresolved_edges": sorted(
-            (
-                {
-                    **edge,
-                    "declaration_ids": sorted(edge["declaration_ids"]),
-                }
-                for edge in graph["unresolved_edges"]
-            ),
-            key=lambda edge: edge["edge_id"],
-        ),
-    }
+        key=lambda reference: reference["id"],
+    )
 
 
-def validate_dotnet_invocation(
-    command: dict[str, Any],
-    environment: dict[str, Any],
-    isolation: dict[str, Any],
-    restore_configurations: dict[str, dict[str, Any]],
+def validate_public_build_source_baseline_value(
+    baseline: dict[str, Any],
     relative_path: str,
 ) -> list[str]:
     errors: list[str] = []
-    invocation = command["command"]
-    if invocation["executable"] != "dotnet":
-        errors.append(
-            f"{relative_path}: protocol command {command['id']} must invoke dotnet "
-            "directly without a shell wrapper"
-        )
-
-    arguments = invocation["arguments"]
-    expected_stage_argument = DOTNET_STAGE_ARGUMENT[command["stage"]]
-    if arguments[0].lower() != expected_stage_argument:
-        errors.append(
-            f"{relative_path}: protocol command {command['id']} must invoke "
-            f"'dotnet {expected_stage_argument}'"
-        )
-
-    restore_configuration = restore_configurations.get(
-        command["restore_configuration_id"]
-    )
-    if restore_configuration is None:
-        errors.append(
-            f"{relative_path}: protocol command {command['id']} references unknown "
-            f"restore configuration {command['restore_configuration_id']}"
-        )
-    elif restore_configuration["source_mode"] != command["source_mode"]:
-        errors.append(
-            f"{relative_path}: protocol command {command['id']} references a restore "
-            "configuration for a different source mode"
-        )
-
-    if command["stage"] == "restore" and restore_configuration is not None:
-        expected_arguments = [
-            expected_stage_argument,
-            environment["build_entry_point"],
-            "--configfile",
-            restore_configuration["path"],
-        ]
-    else:
-        expected_arguments = [
-            expected_stage_argument,
-            environment["build_entry_point"],
-            "--configuration",
-            environment["configuration"],
-            "--no-restore",
-        ]
-    if arguments != expected_arguments:
-        errors.append(
-            f"{relative_path}: protocol command {command['id']} must use the canonical "
-            f"argument list {expected_arguments}"
-        )
-
-    expected_environment = {
-        "HOME": isolation["home_root"]["canonical_path"],
-        "USERPROFILE": isolation["home_root"]["canonical_path"],
-        "DOTNET_CLI_HOME": isolation["home_root"]["canonical_path"],
-        "NUGET_PACKAGES": isolation["global_packages_root"]["canonical_path"],
-        "NUGET_HTTP_CACHE_PATH": isolation["http_cache_root"]["canonical_path"],
-        "NUGET_PLUGINS_CACHE_PATH": isolation["plugin_cache_root"]["canonical_path"],
-        "NUGET_SCRATCH": isolation["scratch_root"]["canonical_path"],
-    }
-    if invocation["environment"] != expected_environment:
-        errors.append(
-            f"{relative_path}: protocol command {command['id']} must bind the canonical "
-            "Issue #1 isolation environment"
-        )
-    if invocation["unset_environment"] != list(CREDENTIAL_ENVIRONMENT_VARIABLES):
-        errors.append(
-            f"{relative_path}: protocol command {command['id']} must unset the canonical "
-            "credential-bearing environment list"
-        )
-    if (
-        invocation["working_directory"]
-        != environment["checkout_root"]["canonical_path"]
-    ):
-        errors.append(
-            f"{relative_path}: protocol command {command['id']} must run from the "
-            "canonical detached checkout root"
-        )
-    return errors
-
-
-def validate_public_build_bundle_value(
-    bundle: dict[str, Any], relative_path: str
-) -> list[str]:
-    errors: list[str] = []
-    stages = ("restore", "build", "test", "package")
-    source_modes = ("source-faithful", "public-only")
-    expected_slots = {
-        (source_mode, stage) for source_mode in source_modes for stage in stages
-    }
-
-    environment = bundle["environment"]
-    runtime_identifier = RUNTIME_IDENTIFIER_PATTERN.fullmatch(
-        environment["runtime_identifier"]
-    )
-    if runtime_identifier is None:
-        errors.append(f"{relative_path}: unsupported runtime identifier")
-        operating_system_family = ""
-        expected_path_kind = ""
-    else:
-        operating_system_family = runtime_identifier.group("operating_system")
-        expected_path_kind = (
-            "windows" if operating_system_family == "win" else "posix"
-        )
-    if environment["host_type"] == "wsl" and operating_system_family != "linux":
-        errors.append(
-            f"{relative_path}: WSL host type requires a Linux runtime identifier"
-        )
-
-    checkout_path = normalized_absolute_path(
-        environment["checkout_root"]["canonical_path"]
-    )
-    if checkout_path is None:
-        errors.append(
-            f"{relative_path}: checkout_root must be a normalized absolute path"
-        )
-    elif checkout_path[0] != expected_path_kind:
-        errors.append(
-            f"{relative_path}: checkout_root path flavor conflicts with the runtime "
-            "identifier"
-        )
-
-    isolation = bundle["isolation_profile"]
-    isolation_paths: dict[str, tuple[str, PurePosixPath | PureWindowsPath]] = {}
-    for field in (
-        "home_root",
-        "global_packages_root",
-        "http_cache_root",
-        "plugin_cache_root",
-        "scratch_root",
-    ):
-        path = normalized_absolute_path(isolation[field]["canonical_path"])
-        if path is None:
-            errors.append(
-                f"{relative_path}: isolation {field} must be a normalized absolute path"
-            )
-            continue
-        if path[0] != expected_path_kind:
-            errors.append(
-                f"{relative_path}: isolation {field} path flavor conflicts with the "
-                "runtime identifier"
-            )
-        isolation_paths[field] = path
-        if checkout_path is not None and (
-            recorded_path_is_within(path, checkout_path, allow_equal=True)
-            or recorded_path_is_within(checkout_path, path, allow_equal=True)
-        ):
-            errors.append(
-                f"{relative_path}: isolation {field} must not overlap the detached "
-                "checkout root"
-            )
-    normalized_isolation_roots = [
-        (kind, tuple(part.casefold() if kind == "windows" else part for part in path.parts))
-        for kind, path in isolation_paths.values()
+    source_commit_prefix = f"{baseline['source']['commit']}:"
+    source_references = [
+        reference
+        for stage in baseline["stage_applicability"].values()
+        for reference in stage["source_references"]
     ]
-    if len(normalized_isolation_roots) != len(set(normalized_isolation_roots)):
-        errors.append(f"{relative_path}: isolation roots must have distinct identities")
-
-    protocol = bundle["protocol"]
-    stop_condition_ids = [
-        condition["id"] for condition in protocol["stop_conditions"]
-    ]
-    for identifier in duplicates(stop_condition_ids):
-        errors.append(f"{relative_path}: duplicate stop condition id: {identifier}")
-    attempted_targets = protocol["attempted_targets"]
-    target_ids = [target["id"] for target in attempted_targets]
+    targets = baseline["attempted_targets"]
+    source_references.extend(
+        reference
+        for target in targets
+        for reference in target["source_references"]
+    )
+    target_ids = [target["id"] for target in targets]
+    target_paths = [target["project_path"] for target in targets]
     for identifier in duplicates(target_ids):
         errors.append(f"{relative_path}: duplicate attempted target id: {identifier}")
-    targets_by_id = {target["id"]: target for target in attempted_targets}
+    for project_path in duplicates(target_paths):
+        errors.append(f"{relative_path}: duplicate attempted project path: {project_path}")
+    target_id_set = set(target_ids)
+    for target in targets:
+        unknown_references = sorted(
+            set(target["project_references"]) - target_id_set
+        )
+        if unknown_references:
+            errors.append(
+                f"{relative_path}: target {target['id']} references projects outside "
+                f"the fixed solution baseline: {unknown_references}"
+            )
 
-    restore_configuration_records = protocol["restore_configurations"]
-    restore_configuration_ids = [
-        configuration["id"] for configuration in restore_configuration_records
+    package_targets = baseline["package_targets"]
+    source_references.extend(
+        reference
+        for package_target in package_targets
+        for reference in package_target["source_references"]
+    )
+    package_target_ids = [
+        package_target["target_id"] for package_target in package_targets
     ]
-    for identifier in duplicates(restore_configuration_ids):
+    for target_id in duplicates(package_target_ids):
+        errors.append(f"{relative_path}: duplicate package target id: {target_id}")
+    unknown_package_targets = sorted(set(package_target_ids) - target_id_set)
+    if unknown_package_targets:
         errors.append(
-            f"{relative_path}: duplicate restore configuration id: {identifier}"
+            f"{relative_path}: package targets reference unknown attempted targets "
+            f"{unknown_package_targets}"
         )
-    restore_configurations = {
-        configuration["id"]: configuration
-        for configuration in restore_configuration_records
-    }
-    restore_configurations_by_mode: dict[str, dict[str, Any]] = {}
-    for configuration in restore_configuration_records:
-        source_mode = configuration["source_mode"]
-        if source_mode in restore_configurations_by_mode:
-            errors.append(
-                f"{relative_path}: duplicate restore configuration for {source_mode}"
-            )
-        else:
-            restore_configurations_by_mode[source_mode] = configuration
+    package_ids = [
+        package_target["package_id"].casefold()
+        for package_target in package_targets
+    ]
+    for package_id in duplicates(package_ids):
+        errors.append(f"{relative_path}: duplicate package identity: {package_id}")
 
-        expected_origin = (
-            "audited-upstream"
-            if source_mode == "source-faithful"
-            else "isolated-public"
-        )
-        if configuration["origin"] != expected_origin:
+    declarations = baseline["source_declared_direct"]
+    source_references.extend(
+        reference
+        for declaration in declarations
+        for reference in [
+            declaration["declaration_location"],
+            *declaration["auxiliary_locations"],
+        ]
+    )
+    for reference in source_references:
+        if not reference.startswith(source_commit_prefix):
             errors.append(
-                f"{relative_path}: {source_mode} restore configuration must use "
-                f"origin {expected_origin}"
+                f"{relative_path}: source reference does not use the canonical "
+                f"source commit: {reference}"
             )
-        canonical_configuration_path = normalized_absolute_path(
-            configuration["canonical_path"]
-        )
-        if canonical_configuration_path is None:
-            errors.append(
-                f"{relative_path}: {source_mode} canonical configuration path must be "
-                "a normalized absolute path"
-            )
-        elif canonical_configuration_path[0] != expected_path_kind:
-            errors.append(
-                f"{relative_path}: {source_mode} canonical configuration path flavor "
-                "conflicts with the runtime identifier"
-            )
-        if source_mode == "source-faithful":
-            if configuration["path"] != "nuget.config":
-                errors.append(
-                    f"{relative_path}: source-faithful restore configuration must be "
-                    "the audited checkout's nuget.config"
-                )
-            if (
-                configuration["sha256"] != SOURCE_FAITHFUL_CONFIG_SHA256
-            ):
-                errors.append(
-                    f"{relative_path}: source-faithful restore configuration must use "
-                    "the audited nuget.config SHA-256"
-                )
-            if configuration["content_base64"] is not None:
-                errors.append(
-                    f"{relative_path}: source-faithful configuration content is bound "
-                    "by the audited source hash and must not be copied into the bundle"
-                )
-            if configuration["sources"] != [SOURCE_FAITHFUL_PACKAGE_SOURCE]:
-                errors.append(
-                    f"{relative_path}: source-faithful restore configuration must "
-                    "record the audited Office package source"
-                )
-            if checkout_path is not None:
-                expected_canonical_path = (
-                    checkout_path[0],
-                    checkout_path[1].joinpath("nuget.config"),
-                )
-                if canonical_configuration_path != expected_canonical_path:
-                    errors.append(
-                        f"{relative_path}: source-faithful canonical configuration path "
-                        "must identify nuget.config under the detached checkout root"
-                    )
-        else:
-            public_path = normalized_absolute_path(configuration["path"])
-            scratch_path = isolation_paths.get("scratch_root")
-            if public_path is None:
-                errors.append(
-                    f"{relative_path}: public-only restore configuration path must be "
-                    "a normalized absolute path"
-                )
-            else:
-                if public_path != canonical_configuration_path:
-                    errors.append(
-                        f"{relative_path}: public-only configuration path must equal its "
-                        "verified canonical path"
-                    )
-                if scratch_path is None or not recorded_path_is_within(
-                    public_path, scratch_path
-                ):
-                    errors.append(
-                        f"{relative_path}: public-only restore configuration must be "
-                        "inside the isolated scratch root"
-                    )
-                if checkout_path is not None and recorded_path_is_within(
-                    public_path, checkout_path, allow_equal=True
-                ):
-                    errors.append(
-                        f"{relative_path}: public-only restore configuration must be "
-                        "outside the audited checkout"
-                    )
-            if configuration["sha256"] != PUBLIC_CONFIG_SHA256:
-                errors.append(
-                    f"{relative_path}: public-only restore configuration must use the "
-                    "canonical Issue #1 content hash"
-                )
-            content_base64 = configuration["content_base64"]
-            if (
-                not isinstance(content_base64, str)
-                or decoded_content_sha256(content_base64) != PUBLIC_CONFIG_SHA256
-            ):
-                errors.append(
-                    f"{relative_path}: public-only restore configuration content must "
-                    "decode to the canonical Issue #1 configuration"
-                )
-            if configuration["sources"] != [PUBLIC_PACKAGE_SOURCE]:
-                errors.append(
-                    f"{relative_path}: public-only restore configuration must contain "
-                    "only the canonical NuGet.org v3 source"
-                )
-
-    if set(restore_configurations_by_mode) != set(source_modes):
-        errors.append(
-            f"{relative_path}: protocol must define exactly one restore configuration "
-            "for each source mode"
-        )
-
-    commands = protocol["commands"]
-    command_ids = [command["id"] for command in commands]
-    for identifier in duplicates(command_ids):
-        errors.append(f"{relative_path}: duplicate protocol command id: {identifier}")
-    commands_by_id = {command["id"]: command for command in commands}
-    commands_by_slot: dict[tuple[str, str], dict[str, Any]] = {}
-    for command in commands:
-        slot = (command["source_mode"], command["stage"])
-        if slot in commands_by_slot:
-            errors.append(
-                f"{relative_path}: duplicate protocol slot: {slot[0]} {slot[1]}"
-            )
-        else:
-            commands_by_slot[slot] = command
-
-    missing_slots = sorted(expected_slots - set(commands_by_slot))
-    extra_command_count = len(commands) - len(commands_by_slot)
-    if missing_slots or extra_command_count:
-        errors.append(
-            f"{relative_path}: protocol must define exactly one command for every "
-            "source-mode and stage combination"
-        )
-
-    for command in commands:
-        errors.extend(
-            validate_dotnet_invocation(
-                command,
-                bundle["environment"],
-                isolation,
-                restore_configurations,
-                relative_path,
-            )
-        )
-        restore = commands_by_slot.get((command["source_mode"], "restore"))
-        expected_dependencies = [] if command["stage"] == "restore" else (
-            [restore["id"]] if restore is not None else []
-        )
-        if command["depends_on"] != expected_dependencies:
-            errors.append(
-                f"{relative_path}: protocol command {command['id']} must declare exactly "
-                f"the dependencies {expected_dependencies}"
-            )
-
-    results = bundle["command_results"]
-    result_ids = [result["command_id"] for result in results]
-    for identifier in duplicates(result_ids):
-        errors.append(f"{relative_path}: duplicate command result id: {identifier}")
-    result_id_set = set(result_ids)
-    results_by_id = {result["command_id"]: result for result in results}
-    results_by_slot: dict[tuple[str, str], dict[str, Any]] = {}
-    for result in results:
-        slot = (result["source_mode"], result["stage"])
-        if slot in results_by_slot:
-            errors.append(f"{relative_path}: duplicate result slot: {slot[0]} {slot[1]}")
-        else:
-            results_by_slot[slot] = result
-
-    source_commit = bundle["source"]["commit"]
-    environment_fingerprint = environment["fingerprint"]
-    contaminated_execution = False
-    for result in results:
-        command_id = result["command_id"]
-        command = commands_by_id.get(command_id)
-        if command is None:
-            errors.append(
-                f"{relative_path}: result {command_id} has no matching protocol command"
-            )
-        else:
-            for field in ("stage", "source_mode", "command"):
-                if result[field] != command[field]:
-                    errors.append(
-                        f"{relative_path}: result {command_id} {field} does not match "
-                        "the reviewed protocol"
-                    )
-
-        if result["source_commit"] != source_commit:
-            errors.append(
-                f"{relative_path}: result {command_id} uses a different source commit"
-            )
-        if result["environment_fingerprint"] != environment_fingerprint:
-            errors.append(
-                f"{relative_path}: result {command_id} uses a different environment fingerprint"
-            )
-        if result["isolation_profile_id"] != isolation["id"]:
-            errors.append(
-                f"{relative_path}: result {command_id} uses a different isolation profile"
-            )
-
-        status = result["status"]
-        if status == "blocked":
-            if result["exit_code"] is not None or result["reproduction_count"] != 0:
-                errors.append(
-                    f"{relative_path}: unexecuted result {command_id} must use a null "
-                    "exit code and zero reproductions"
-                )
-        elif result["reproduction_count"] < 1:
-            errors.append(
-                f"{relative_path}: executed result {command_id} must record at least "
-                "one reproduction"
-            )
-
-        blocking_ids = result.get("blocked_by", [])
-        if status != "blocked" and blocking_ids:
-            errors.append(
-                f"{relative_path}: non-blocked result {command_id} must not declare "
-                "blocked_by"
-            )
-
-        if result["stage"] == "restore":
-            if status == "blocked":
-                errors.append(
-                    f"{relative_path}: {result['source_mode']} restore must be executed"
-                )
-            integrity = result["execution_integrity"]
-            if integrity["verification"] == "violated":
-                contaminated_execution = True
-            continue
-
-        restore = results_by_slot.get((result["source_mode"], "restore"))
-        if restore is None:
-            errors.append(
-                f"{relative_path}: {result['source_mode']} {result['stage']} result "
-                "requires the corresponding restore result"
-            )
-            continue
-
-        restore_id = restore["command_id"]
-        if status == "blocked":
-            if blocking_ids != [restore_id]:
-                errors.append(
-                    f"{relative_path}: blocked result {command_id} must name exactly "
-                    f"the corresponding restore result {restore_id}"
-                )
-            if restore["status"] == "passed":
-                errors.append(
-                    f"{relative_path}: result {command_id} cannot be blocked by a "
-                    "passing restore"
-                )
-        elif status in {"passed", "failed"} and restore["status"] != "passed":
-            errors.append(
-                f"{relative_path}: executed {result['source_mode']} "
-                f"{result['stage']} requires a passed restore result"
-            )
-
-    inventory = bundle["dependency_inventory"]
-    declarations = inventory["source_declared_direct"]
-    declaration_ids = [dependency["declaration_id"] for dependency in declarations]
+    declaration_ids = [
+        declaration["declaration_id"] for declaration in declarations
+    ]
+    declaration_locations = [
+        declaration["declaration_location"] for declaration in declarations
+    ]
     for identifier in duplicates(declaration_ids):
         errors.append(f"{relative_path}: duplicate dependency declaration id: {identifier}")
-    declaration_locations = [
-        dependency["declaration_location"] for dependency in declarations
-    ]
     for location in duplicates(declaration_locations):
         errors.append(
             f"{relative_path}: duplicate dependency declaration location: {location}"
         )
-    declarations_by_id = {
-        dependency["declaration_id"]: dependency for dependency in declarations
-    }
     for declaration in declarations:
-        expected_applicable = (
-            declaration["condition"] != "not-windows"
-            or operating_system_family != "win"
-        )
-        if declaration["applicable"] != expected_applicable:
-            errors.append(
-                f"{relative_path}: dependency declaration "
-                f"{declaration['declaration_id']} applicability conflicts with the "
-                "recorded operating-system family"
-            )
-        unknown_targets = sorted(set(declaration["targets"]) - set(targets_by_id))
+        unknown_targets = sorted(set(declaration["targets"]) - target_id_set)
         if unknown_targets:
             errors.append(
-                f"{relative_path}: dependency declaration "
-                f"{declaration['declaration_id']} references unknown targets "
-                f"{unknown_targets}"
+                f"{relative_path}: declaration {declaration['declaration_id']} "
+                f"references unknown targets {unknown_targets}"
             )
-
-    actual_source_manifest_sha256 = canonical_sha256(
-        source_manifest_payload(attempted_targets, declarations)
-    )
-    if (
-        inventory["source_manifest_sha256"] != SOURCE_MANIFEST_SHA256
-        or actual_source_manifest_sha256 != SOURCE_MANIFEST_SHA256
-    ):
-        errors.append(
-            f"{relative_path}: attempted targets and direct dependency declarations "
-            "do not match the audited source manifest"
-        )
-
-    direct_coverage: dict[tuple[str, str], str] = {}
-    graphs = inventory["restore_graphs"]
-    graph_ids = [graph["id"] for graph in graphs]
-    for identifier in duplicates(graph_ids):
-        errors.append(f"{relative_path}: duplicate dependency graph id: {identifier}")
-    graphs_by_slot: dict[tuple[str, str], dict[str, Any]] = {}
-    public_graphs: list[dict[str, Any]] = []
-
-    def record_direct_coverage(
-        result_id: str,
-        target_id: str,
-        dependency_id: str,
-        version_constraint: str,
-        declaration_id: str,
-        coverage: str,
-        resolved_version: str | None = None,
-    ) -> None:
-        declaration = declarations_by_id.get(declaration_id)
-        if declaration is None:
-            errors.append(
-                f"{relative_path}: dependency edge references unknown declaration "
-                f"{declaration_id}"
+        if declaration["kind"] == "package":
+            unexpected_assembly_fields = sorted(
+                field
+                for field in ("path_property", "assembly_relative_path")
+                if field in declaration
             )
-            return
-        if not declaration["applicable"]:
-            errors.append(
-                f"{relative_path}: dependency edge references inapplicable declaration "
-                f"{declaration_id}"
-            )
-        if declaration["targets"] != [target_id]:
-            errors.append(
-                f"{relative_path}: dependency edge declaration {declaration_id} does "
-                f"not belong to target {target_id}"
-            )
-        if dependency_id.casefold() != declaration["id"].casefold():
-            errors.append(
-                f"{relative_path}: dependency edge identifier {dependency_id} does not "
-                f"match declaration {declaration_id}"
-            )
-        if version_constraint != declaration["version_constraint"]:
-            errors.append(
-                f"{relative_path}: dependency edge does not preserve declaration "
-                f"{declaration_id} version constraint"
-            )
-        if (
-            resolved_version is not None
-            and not nuget_version_at_least(
-                resolved_version, declaration["version_constraint"]
-            )
-        ):
-            errors.append(
-                f"{relative_path}: resolved version {resolved_version} does not satisfy "
-                f"declaration {declaration_id} minimum "
-                f"{declaration['version_constraint']}"
-            )
-        key = (result_id, declaration_id)
-        if key in direct_coverage:
-            errors.append(
-                f"{relative_path}: declaration {declaration_id} has multiple root "
-                f"dependency edges for result {result_id}"
-            )
-        else:
-            direct_coverage[key] = coverage
-
-    for graph in graphs:
-        result_id = graph["result_id"]
-        target_id = graph["target_id"]
-        slot = (result_id, target_id)
-        if slot in graphs_by_slot:
-            errors.append(
-                f"{relative_path}: duplicate dependency graph for result {result_id} "
-                f"and target {target_id}"
-            )
-        else:
-            graphs_by_slot[slot] = graph
-
-        result = results_by_id.get(result_id)
-        if result is None:
-            errors.append(
-                f"{relative_path}: dependency graph {graph['id']} references unknown "
-                f"result {result_id}"
-            )
-        elif result["stage"] != "restore":
-            errors.append(
-                f"{relative_path}: dependency graph {graph['id']} must reference a "
-                "restore result"
-            )
-        elif result["status"] not in {"passed", "failed"}:
-            errors.append(
-                f"{relative_path}: dependency graph {graph['id']} references an "
-                "unexecuted restore result"
-            )
-        elif result["source_mode"] == "public-only":
-            public_graphs.append(graph)
-
-        if target_id not in targets_by_id:
-            errors.append(
-                f"{relative_path}: dependency graph {graph['id']} references unknown "
-                f"target {target_id}"
-            )
-        if (
-            canonical_sha256(dependency_graph_payload(graph))
-            != graph["normalized_graph_sha256"]
-        ):
-            errors.append(
-                f"{relative_path}: dependency graph {graph['id']} normalized hash does "
-                "not match its nodes and edges"
-            )
-
-        node_ids = [node["node_id"] for node in graph["nodes"]]
-        for identifier in duplicates(node_ids):
-            errors.append(
-                f"{relative_path}: dependency graph {graph['id']} has duplicate node "
-                f"{identifier}"
-            )
-        nodes_by_id = {node["node_id"]: node for node in graph["nodes"]}
-        edge_ids = [
-            edge["edge_id"]
-            for edge in [*graph["edges"], *graph["unresolved_edges"]]
-        ]
-        for identifier in duplicates(edge_ids):
-            errors.append(
-                f"{relative_path}: dependency graph {graph['id']} has duplicate edge "
-                f"{identifier}"
-            )
-
-        restore_configuration: dict[str, Any] | None = None
-        if result is not None:
-            command = commands_by_id.get(result_id)
-            if command is not None:
-                restore_configuration = restore_configurations.get(
-                    command["restore_configuration_id"]
+            if unexpected_assembly_fields:
+                errors.append(
+                    f"{relative_path}: package declaration "
+                    f"{declaration['declaration_id']} contains package-backed "
+                    f"assembly fields {unexpected_assembly_fields}"
                 )
-        for node in graph["nodes"]:
+        else:
+            assembly_relative_path = PurePosixPath(
+                declaration["assembly_relative_path"]
+            )
             if (
-                restore_configuration is not None
-                and node["retrieval_source"] not in restore_configuration["sources"]
+                assembly_relative_path.is_absolute()
+                or ".." in assembly_relative_path.parts
+                or assembly_relative_path.as_posix()
+                != declaration["assembly_relative_path"]
             ):
                 errors.append(
-                    f"{relative_path}: dependency graph {graph['id']} node "
-                    f"{node['node_id']} uses a source outside the restore configuration"
-                )
-            if node["access"] != "anonymous" or node["initial_cache_state"] != "empty":
-                contaminated_execution = True
-
-        root_nodes: set[str] = set()
-        adjacency: dict[str, set[str]] = {}
-        for edge in graph["edges"]:
-            from_node_id = edge["from_node_id"]
-            to_node_id = edge["to_node_id"]
-            node = nodes_by_id.get(to_node_id)
-            if node is None:
-                errors.append(
-                    f"{relative_path}: dependency graph {graph['id']} edge "
-                    f"{edge['edge_id']} references unknown target node {to_node_id}"
-                )
-            if from_node_id is None:
-                root_nodes.add(to_node_id)
-                if not edge["declaration_ids"]:
-                    errors.append(
-                        f"{relative_path}: root dependency edge {edge['edge_id']} must "
-                        "reference a source declaration"
-                    )
-                for declaration_id in edge["declaration_ids"]:
-                    record_direct_coverage(
-                        result_id,
-                        target_id,
-                        node["id"] if node is not None else "",
-                        edge["version_constraint"],
-                        declaration_id,
-                        "resolved",
-                        node["version"] if node is not None else None,
-                    )
-            else:
-                if from_node_id not in nodes_by_id:
-                    errors.append(
-                        f"{relative_path}: dependency graph {graph['id']} edge "
-                        f"{edge['edge_id']} references unknown source node "
-                        f"{from_node_id}"
-                    )
-                adjacency.setdefault(from_node_id, set()).add(to_node_id)
-                if edge["declaration_ids"]:
-                    errors.append(
-                        f"{relative_path}: transitive dependency edge "
-                        f"{edge['edge_id']} must not reference source declarations"
-                    )
-
-        unresolved_from_nodes: list[str] = []
-        for edge in graph["unresolved_edges"]:
-            from_node_id = edge["from_node_id"]
-            if from_node_id is None:
-                if not edge["declaration_ids"]:
-                    errors.append(
-                        f"{relative_path}: unresolved root edge {edge['edge_id']} must "
-                        "reference a source declaration"
-                    )
-                for declaration_id in edge["declaration_ids"]:
-                    record_direct_coverage(
-                        result_id,
-                        target_id,
-                        edge["id"],
-                        edge["version_constraint"],
-                        declaration_id,
-                        "unresolved",
-                    )
-            else:
-                unresolved_from_nodes.append(from_node_id)
-                if from_node_id not in nodes_by_id:
-                    errors.append(
-                        f"{relative_path}: dependency graph {graph['id']} unresolved "
-                        f"edge {edge['edge_id']} references unknown source node "
-                        f"{from_node_id}"
-                    )
-                if edge["declaration_ids"]:
-                    errors.append(
-                        f"{relative_path}: unresolved transitive edge "
-                        f"{edge['edge_id']} must not reference source declarations"
-                    )
-
-        reachable = set(root_nodes)
-        pending = list(root_nodes)
-        while pending:
-            source_node = pending.pop()
-            for target_node in adjacency.get(source_node, set()):
-                if target_node not in reachable:
-                    reachable.add(target_node)
-                    pending.append(target_node)
-        unreachable_nodes = sorted(set(nodes_by_id) - reachable)
-        if unreachable_nodes:
-            errors.append(
-                f"{relative_path}: dependency graph {graph['id']} contains unreachable "
-                f"nodes {unreachable_nodes}"
-            )
-        unreachable_unresolved = sorted(
-            node_id for node_id in unresolved_from_nodes if node_id not in reachable
-        )
-        if unreachable_unresolved:
-            errors.append(
-                f"{relative_path}: dependency graph {graph['id']} contains unresolved "
-                f"edges from unreachable nodes {unreachable_unresolved}"
-            )
-        if result is not None and result["status"] == "passed":
-            if graph["state"] != "complete" or graph["unresolved_edges"]:
-                errors.append(
-                    f"{relative_path}: passing restore result {result_id} requires a "
-                    f"complete graph without unresolved edges for target {target_id}"
+                    f"{relative_path}: package-backed assembly declaration "
+                    f"{declaration['declaration_id']} must use a normalized relative "
+                    "assembly path"
                 )
 
-    lasso_analysis = bundle.get("lasso_analysis")
-    if lasso_analysis is not None:
-        lasso_declaration = declarations_by_id.get(
-            lasso_analysis["dependency_declaration_id"]
-        )
-        if (
-            lasso_declaration is None
-            or lasso_declaration["id"].casefold() != "microsoft.office.lasso"
-        ):
-            errors.append(
-                f"{relative_path}: Lasso analysis must reference the audited "
-                "Microsoft.Office.Lasso declaration"
-            )
-        mapping_ids = [
-            mapping["id"] for mapping in lasso_analysis["responsibility_mappings"]
-        ]
-        for identifier in duplicates(mapping_ids):
-            errors.append(
-                f"{relative_path}: duplicate Lasso responsibility mapping id: "
-                f"{identifier}"
-            )
-        source_references = [
-            reference
-            for mapping in lasso_analysis["responsibility_mappings"]
-            for reference in mapping["source_references"]
-        ]
-        for reference in duplicates(source_references):
-            errors.append(
-                f"{relative_path}: Lasso source reference is mapped more than once: "
-                f"{reference}"
-            )
-        if (
-            lasso_analysis["source_reference_manifest_sha256"]
-            != LASSO_REFERENCE_MANIFEST_SHA256
-            or canonical_sha256(sorted(source_references))
-            != LASSO_REFERENCE_MANIFEST_SHA256
-        ):
-            errors.append(
-                f"{relative_path}: Lasso responsibility mappings do not cover the "
-                "audited public source-reference manifest"
-            )
-
-    contaminated_result_ids: set[str] = {
-        result["command_id"]
-        for result in results
-        if result["stage"] == "restore"
-        and result["execution_integrity"]["verification"] == "violated"
-    }
-    contaminated_result_ids.update(
-        graph["result_id"]
-        for graph in graphs
-        if any(
-            node["access"] != "anonymous"
-            or node["initial_cache_state"] != "empty"
-            for node in graph["nodes"]
+    actual_source_manifest_sha256 = canonical_sha256(
+        source_manifest_payload(
+            baseline["stage_applicability"],
+            targets,
+            package_targets,
+            declarations,
         )
     )
-    if contaminated_execution and bundle["status"] != "aborted":
+    if baseline["source_manifest_sha256"] != actual_source_manifest_sha256:
         errors.append(
-            f"{relative_path}: credential, provider, inherited-configuration, or "
-            "populated-cache contamination requires an aborted bundle"
+            f"{relative_path}: source manifest SHA-256 does not match its canonical "
+            "stage applicability, targets, and declarations"
         )
-    if bundle["status"] == "aborted":
-        termination = bundle["termination"]
-        if termination["triggered_stop_condition_id"] not in set(stop_condition_ids):
-            errors.append(
-                f"{relative_path}: aborted bundle references an unknown stop condition"
-            )
-        executed_result_ids = [
-            result["command_id"]
-            for result in results
-            if result["status"] in {"passed", "failed"}
-        ]
-        if (
-            not executed_result_ids
-            or termination["triggering_command_id"] != executed_result_ids[-1]
-        ):
-            errors.append(
-                f"{relative_path}: aborted bundle must identify its last executed "
-                "command as the triggering result"
-            )
-        ordered_contaminated_ids = [
-            result["command_id"]
-            for result in results
-            if result["command_id"] in contaminated_result_ids
-        ]
-        if (
-            ordered_contaminated_ids
-            and termination["triggering_command_id"] != ordered_contaminated_ids[0]
-        ):
-            errors.append(
-                f"{relative_path}: execution continued after the first recorded "
-                "isolation violation"
-            )
-    if bundle["status"] == "planned" and any(
-        conclusion["kind"] == "runtime-observation"
-        for conclusion in bundle["conclusions"]
+    lasso_declarations = [
+        declaration
+        for declaration in declarations
+        if declaration["kind"] == "package"
+        and declaration["id"].casefold() == "microsoft.office.lasso"
+    ]
+    if len(lasso_declarations) != 1:
+        errors.append(
+            f"{relative_path}: source baseline must contain exactly one "
+            "Microsoft.Office.Lasso package declaration"
+        )
+    return errors
+
+
+def validate_public_build_source_baseline(path: Path) -> list[str]:
+    try:
+        baseline = load_strict_json_path(path)
+    except ExtractionError as error:
+        return [str(error)]
+    return validate_public_build_source_baseline_value(
+        baseline,
+        path.relative_to(ROOT).as_posix(),
+    )
+
+
+def validate_public_build_lasso_manifest_value(
+    manifest: dict[str, Any],
+    relative_path: str,
+    expected_source: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    if expected_source is not None and manifest["source"] != expected_source:
+        errors.append(
+            f"{relative_path}: Lasso manifest source differs from the canonical "
+            "public-build source baseline"
+        )
+    references = manifest["references"]
+    reference_ids = [reference["id"] for reference in references]
+    for identifier in duplicates(reference_ids):
+        errors.append(f"{relative_path}: duplicate Lasso reference id: {identifier}")
+    expected_ids = [
+        f"lasso-ref-{index:03d}" for index in range(1, len(references) + 1)
+    ]
+    if set(reference_ids) != set(expected_ids):
+        errors.append(
+            f"{relative_path}: Lasso reference IDs must form a contiguous set"
+        )
+    reference_locations = [
+        (
+            reference["path"],
+            reference["line"],
+            reference["kind"],
+            reference["symbol"],
+        )
+        for reference in references
+    ]
+    for reference in duplicates(
+        ["\0".join(map(str, location)) for location in reference_locations]
     ):
         errors.append(
-            f"{relative_path}: planned bundle cannot contain runtime observations"
+            f"{relative_path}: duplicate Lasso source-reference tuple: "
+            f"{reference.replace(chr(0), ':')}"
         )
-    if bundle["status"] != "completed":
-        return errors
-
-    if set(command_ids) != result_id_set or len(command_ids) != len(result_ids):
+    if reference_locations != sorted(reference_locations):
         errors.append(
-            f"{relative_path}: completed bundle must have exactly one result for every "
-            "reviewed protocol command"
+            f"{relative_path}: Lasso references must be sorted by path, line, kind, "
+            "and symbol"
+        )
+    actual_manifest_sha256 = canonical_sha256(
+        lasso_reference_manifest_payload(references)
+    )
+    if manifest["lasso_reference_manifest_sha256"] != actual_manifest_sha256:
+        errors.append(
+            f"{relative_path}: Lasso manifest SHA-256 does not match its canonical "
+            "source references"
+        )
+    return errors
+
+
+def validate_public_build_lasso_manifest(path: Path) -> list[str]:
+    try:
+        baseline = load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH)
+        manifest = load_strict_json_path(path)
+    except ExtractionError as error:
+        return [str(error)]
+    return validate_public_build_lasso_manifest_value(
+        manifest,
+        path.relative_to(ROOT).as_posix(),
+        baseline["source"],
+    )
+
+
+def planned_command_topology() -> list[dict[str, Any]]:
+    commands: list[dict[str, Any]] = []
+    for source_mode in ("source-faithful", "public-only"):
+        restore_id = f"{source_mode}-restore"
+        build_id = f"{source_mode}-build"
+        commands.extend(
+            [
+                {
+                    "id": restore_id,
+                    "source_mode": source_mode,
+                    "stage": "restore",
+                    "target": "AzureAuth.sln",
+                    "depends_on": None,
+                    "max_attempts": 1,
+                    "timeout_seconds": 900,
+                    "test_filter": None,
+                },
+                {
+                    "id": build_id,
+                    "source_mode": source_mode,
+                    "stage": "build",
+                    "target": "AzureAuth.sln",
+                    "depends_on": restore_id,
+                    "max_attempts": 1,
+                    "timeout_seconds": 900,
+                    "test_filter": None,
+                },
+                {
+                    "id": f"{source_mode}-test",
+                    "source_mode": source_mode,
+                    "stage": "test",
+                    "target": "AzureAuth.sln",
+                    "depends_on": restore_id,
+                    "max_attempts": 1,
+                    "timeout_seconds": 900,
+                    "test_filter": PCACACHE_TEST_FILTER,
+                },
+                {
+                    "id": f"{source_mode}-package-adopat",
+                    "source_mode": source_mode,
+                    "stage": "package",
+                    "target": "src/AdoPat/AdoPat.csproj",
+                    "depends_on": restore_id,
+                    "max_attempts": 1,
+                    "timeout_seconds": 900,
+                    "test_filter": None,
+                },
+                {
+                    "id": f"{source_mode}-package-azureauth",
+                    "source_mode": source_mode,
+                    "stage": "package",
+                    "target": "src/AzureAuth/AzureAuth.csproj",
+                    "depends_on": restore_id,
+                    "max_attempts": 1,
+                    "timeout_seconds": 900,
+                    "test_filter": None,
+                },
+                {
+                    "id": f"{source_mode}-package-msalwrapper-benchmark",
+                    "source_mode": source_mode,
+                    "stage": "package",
+                    "target": (
+                        "src/MSALWrapper.Benchmark/"
+                        "MSALWrapper.Benchmark.csproj"
+                    ),
+                    "depends_on": restore_id,
+                    "max_attempts": 1,
+                    "timeout_seconds": 900,
+                    "test_filter": None,
+                },
+                {
+                    "id": f"{source_mode}-package-msalwrapper",
+                    "source_mode": source_mode,
+                    "stage": "package",
+                    "target": "src/MSALWrapper/MSALWrapper.csproj",
+                    "depends_on": restore_id,
+                    "max_attempts": 1,
+                    "timeout_seconds": 900,
+                    "test_filter": None,
+                },
+                {
+                    "id": f"{source_mode}-package-testhelper",
+                    "source_mode": source_mode,
+                    "stage": "package",
+                    "target": "src/TestHelper/TestHelper.csproj",
+                    "depends_on": restore_id,
+                    "max_attempts": 1,
+                    "timeout_seconds": 900,
+                    "test_filter": None,
+                },
+            ]
+        )
+    return commands
+
+
+def normalized_planned_command(command: dict[str, Any]) -> dict[str, Any]:
+    normalized = copy.deepcopy(command)
+    normalized["timeout_seconds"] = 900
+    return normalized
+
+
+def validate_public_build_bundle_value(
+    bundle: dict[str, Any],
+    relative_path: str,
+    baseline: dict[str, Any] | None = None,
+    lasso_manifest: dict[str, Any] | None = None,
+    require_runtime_runner: bool = False,
+) -> list[str]:
+    errors: list[str] = []
+    baseline = baseline or load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH)
+    lasso_manifest = lasso_manifest or load_strict_json(
+        PUBLIC_BUILD_LASSO_MANIFEST_PATH
+    )
+
+    authorities = bundle["authorities"]
+    if (
+        authorities["source_baseline"]["payload_sha256"]
+        != baseline["source_manifest_sha256"]
+    ):
+        errors.append(
+            f"{relative_path}: source authority hash differs from the fixed baseline"
+        )
+    if (
+        authorities["lasso_manifest"]["payload_sha256"]
+        != lasso_manifest["lasso_reference_manifest_sha256"]
+    ):
+        errors.append(
+            f"{relative_path}: Lasso authority hash differs from the fixed manifest"
+        )
+    if baseline["source"] != lasso_manifest["source"]:
+        errors.append(
+            f"{relative_path}: fixed source and Lasso authorities identify "
+            "different source"
         )
 
-    restore_results = [
-        result
-        for (source_mode, stage), result in results_by_slot.items()
-        if stage == "restore" and source_mode in source_modes
+    source_modes = bundle["protocol"]["source_modes"]
+    expected_modes = [
+        {
+            "id": "source-faithful",
+            "configuration": "audited-checkout",
+            "package_sources": [SOURCE_FAITHFUL_PACKAGE_SOURCE],
+        },
+        {
+            "id": "public-only",
+            "configuration": "isolated-generated",
+            "package_sources": [PUBLIC_PACKAGE_SOURCE],
+        },
     ]
-    expected_graph_slots = {
-        (result["command_id"], target_id)
-        for result in restore_results
-        for target_id in target_ids
-    }
-    if set(graphs_by_slot) != expected_graph_slots:
+    if source_modes != expected_modes:
         errors.append(
-            f"{relative_path}: completed bundle must record one dependency graph for "
-            "every restore result and attempted target"
+            f"{relative_path}: source modes must be the canonical source-faithful "
+            "and public-only configurations"
         )
 
-    for result in restore_results:
-        for declaration_id, declaration in declarations_by_id.items():
-            if not declaration["applicable"]:
-                continue
-            if (result["command_id"], declaration_id) not in direct_coverage:
+    commands = bundle["protocol"]["commands"]
+    expected_commands = planned_command_topology()
+    if len(commands) == len(expected_commands):
+        normalized_commands = [
+            normalized_planned_command(command) for command in commands
+        ]
+        if normalized_commands != expected_commands:
+            errors.append(
+                f"{relative_path}: command topology differs from the canonical "
+                "two-mode restore/build/test/package plan"
+            )
+    else:
+        errors.append(
+            f"{relative_path}: command topology must contain exactly sixteen commands"
+        )
+    if any(
+        not isinstance(command["timeout_seconds"], int)
+        or command["timeout_seconds"] <= 0
+        for command in commands
+    ):
+        errors.append(f"{relative_path}: every command must have a finite timeout")
+
+    package_target_paths = {
+        target["project_path"]
+        for target in baseline["attempted_targets"]
+        if target["id"]
+        in {
+            package_target["target_id"]
+            for package_target in baseline["package_targets"]
+        }
+    }
+    planned_package_paths = {
+        command["target"]
+        for command in commands
+        if command["stage"] == "package"
+    }
+    if planned_package_paths != package_target_paths:
+        errors.append(
+            f"{relative_path}: package commands differ from the fixed package targets"
+        )
+
+    isolation = bundle["isolation"]
+    environment = bundle["environment"]
+    runtime_identifier = environment["runtime_identifier"]
+    expected_path_kind = (
+        "windows" if runtime_identifier.startswith("win-") else "posix"
+    )
+    path_values = {
+        "selection root": isolation["selection_root"],
+        "checkout root": isolation["checkout_root"],
+        "mise data root": environment["dotnet_sdk"]["manager_data_root"],
+        ".NET installation root": environment["dotnet_sdk"]["installation_root"],
+        ".NET host path": environment["dotnet_sdk"]["host_path"],
+    }
+    normalized_paths: dict[
+        str, tuple[str, PurePosixPath | PureWindowsPath]
+    ] = {}
+    for label, value in path_values.items():
+        normalized = normalized_absolute_path(value)
+        if normalized is None:
+            errors.append(f"{relative_path}: {label} must be a canonical absolute path")
+        else:
+            normalized_paths[label] = normalized
+            if normalized[0] != expected_path_kind:
                 errors.append(
-                    f"{relative_path}: declaration {declaration_id} lacks a resolved or "
-                    f"unresolved root edge for restore result {result['command_id']}"
+                    f"{relative_path}: {label} must use {expected_path_kind} paths "
+                    f"for runtime {runtime_identifier}"
                 )
 
-    if lasso_analysis is None:
+    selection = normalized_paths.get("selection root")
+    checkout = normalized_paths.get("checkout root")
+    manager = normalized_paths.get("mise data root")
+    installation = normalized_paths.get(".NET installation root")
+    host = normalized_paths.get(".NET host path")
+    if selection and checkout and not recorded_path_is_within(checkout, selection):
         errors.append(
-            f"{relative_path}: completed bundle must include the bounded "
-            "Microsoft.Office.Lasso analysis"
+            f"{relative_path}: checkout root must be inside the selection root"
+        )
+    if manager and installation and not recorded_path_is_within(
+        installation, manager
+    ):
+        errors.append(
+            f"{relative_path}: .NET installation root must be inside the mise data root"
+        )
+    if installation and host and not recorded_path_is_within(host, installation):
+        errors.append(
+            f"{relative_path}: .NET host path must be inside the installation root"
+        )
+    if selection and manager and recorded_paths_overlap(selection, manager):
+        errors.append(
+            f"{relative_path}: selection and toolchain roots must not overlap"
         )
 
-    public_results = [
-        result
-        for (source_mode, _stage), result in results_by_slot.items()
-        if source_mode == "public-only"
-    ]
-    completion = bundle["completion"]
-    if completion["outcome"] == "publicly-reproducible":
-        if len(public_results) != len(stages) or any(
-            result["status"] != "passed"
-            for result in public_results
-        ):
-            errors.append(
-                f"{relative_path}: publicly-reproducible outcome conflicts with "
-                "public-only command results"
-            )
-        if len(public_graphs) != len(target_ids) or any(
-            graph["state"] != "complete" or graph["unresolved_edges"]
-            for graph in public_graphs
-        ):
-            errors.append(
-                f"{relative_path}: publicly-reproducible outcome requires a complete "
-                "public-only graph without unresolved edges for every attempted target"
-            )
-        public_restore = results_by_slot.get(("public-only", "restore"))
-        if public_restore is not None:
-            for declaration_id, declaration in declarations_by_id.items():
-                if not declaration["applicable"]:
-                    continue
-                if (
-                    direct_coverage.get(
-                        (public_restore["command_id"], declaration_id)
-                    )
-                    != "resolved"
-                ):
-                    errors.append(
-                        f"{relative_path}: publicly-reproducible outcome lacks a "
-                        f"resolved public root edge for declaration {declaration_id}"
-                    )
-        if any(
-            node["access"] != "anonymous"
-            or node["initial_cache_state"] != "empty"
-            or node["retrieval_source"] != PUBLIC_PACKAGE_SOURCE
-            for graph in public_graphs
-            for node in graph["nodes"]
-        ):
-            errors.append(
-                f"{relative_path}: publicly-reproducible outcome requires anonymous "
-                "empty-cache NuGet.org provenance for every public graph node"
-            )
-    elif completion["outcome"] == "not-publicly-reproducible":
-        has_failed_public_stage = any(
-            result["status"] == "failed" for result in public_results
-        )
-        has_unresolved_public_edge = any(
-            graph["unresolved_edges"] for graph in public_graphs
-        )
-        if not has_failed_public_stage and not has_unresolved_public_edge:
-            errors.append(
-                f"{relative_path}: not-publicly-reproducible outcome lacks a failed "
-                "public-only stage or unresolved public-only dependency edge"
-            )
-    elif not bundle["limitations"]:
+    if PCACACHE_TEST_LIMITATION not in bundle["limitations"]:
         errors.append(
-            f"{relative_path}: inconclusive outcome must identify an evidence limitation"
+            f"{relative_path}: limitations must disclose the PCACache exclusion"
         )
-
+    evidence_plan = bundle["evidence_plan"]
+    extractor_components = evidence_plan["extractor"]
+    expected_extractor_components = {
+        "entry_point": PUBLIC_BUILD_EXTRACTOR_PATH,
+        "nuget_versions": PUBLIC_BUILD_NUGET_VERSIONS_PATH,
+    }
+    for component_name, expected_path in expected_extractor_components.items():
+        component = extractor_components[component_name]
+        component_path = ROOT / component["path"]
+        if component["path"] != expected_path:
+            errors.append(
+                f"{relative_path}: extractor component {component_name} uses an "
+                "unexpected repository path"
+            )
+        elif not component_path.is_file() or component_path.is_symlink():
+            errors.append(
+                f"{relative_path}: extractor component {component_name} does not "
+                "exist as a regular repository file"
+            )
+        elif (
+            hashlib.sha256(component_path.read_bytes()).hexdigest()
+            != component["sha256"]
+        ):
+            errors.append(
+                f"{relative_path}: extractor component {component_name} hash "
+                "differs from the reviewed file"
+            )
+    if require_runtime_runner:
+        runner = environment["runner"]
+        if runner["path"] != PUBLIC_BUILD_RUNNER_PATH:
+            errors.append(
+                f"{relative_path}: activated bundle must bind the canonical "
+                f"repository runner {PUBLIC_BUILD_RUNNER_PATH}"
+            )
+            runner_path = ROOT / PUBLIC_BUILD_RUNNER_PATH
+        else:
+            runner_path = ROOT / runner["path"]
+        if not runner_path.is_file() or runner_path.is_symlink():
+            errors.append(
+                f"{relative_path}: activated runner does not exist as a regular "
+                "repository file"
+            )
+        elif hashlib.sha256(runner_path.read_bytes()).hexdigest() != runner["sha256"]:
+            errors.append(
+                f"{relative_path}: activated runner hash differs from the reviewed file"
+            )
     return errors
 
 
 def validate_public_build_bundle(path: Path) -> list[str]:
-    return validate_public_build_bundle_value(
-        load_yaml_path(path), path.relative_to(ROOT).as_posix()
+    try:
+        bundle = load_yaml_path(path)
+        return validate_public_build_bundle_value(
+            bundle,
+            path.relative_to(ROOT).as_posix(),
+        )
+    except (ExtractionError, ValueError) as error:
+        return [str(error)]
+
+
+def planned_bundle_fixture() -> dict[str, Any]:
+    baseline = load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH)
+    lasso_manifest = load_strict_json(PUBLIC_BUILD_LASSO_MANIFEST_PATH)
+    extractor_hash = hashlib.sha256(
+        (ROOT / PUBLIC_BUILD_EXTRACTOR_PATH).read_bytes()
+    ).hexdigest()
+    nuget_versions_hash = hashlib.sha256(
+        (ROOT / PUBLIC_BUILD_NUGET_VERSIONS_PATH).read_bytes()
+    ).hexdigest()
+    return {
+        "schema_version": 1,
+        "id": "public-build-fixture-linux",
+        "status": "planned",
+        "issue": {
+            "number": 1,
+            "url": (
+                "https://github.com/hcoona/"
+                "microsoft-authentication-cli/issues/1"
+            ),
+        },
+        "authorities": {
+            "source_baseline": {
+                "path": PUBLIC_BUILD_SOURCE_BASELINE_PATH,
+                "payload_sha256": baseline["source_manifest_sha256"],
+            },
+            "lasso_manifest": {
+                "path": PUBLIC_BUILD_LASSO_MANIFEST_PATH,
+                "payload_sha256": lasso_manifest[
+                    "lasso_reference_manifest_sha256"
+                ],
+            },
+        },
+        "environment": {
+            "host_type": "synthetic-linux",
+            "runtime_identifier": "linux-x64",
+            "dotnet_sdk": {
+                "version": "8.0.100",
+                "manager_data_root": "/fixture/toolchain",
+                "installation_root": "/fixture/toolchain/installs/dotnet/8.0.100",
+                "host_path": "/fixture/toolchain/installs/dotnet/8.0.100/dotnet",
+                "host_sha256": "1" * 64,
+            },
+            "runner": {
+                "path": "tools/run_public_build_experiment.py",
+                "sha256": "2" * 64,
+            },
+        },
+        "isolation": {
+            "selection_root": "/fixture/run",
+            "checkout_root": "/fixture/run/checkout",
+            "replacement_environment": {
+                "inherit_parent": False,
+                "allowlist_defined_by_activation_contract": True,
+            },
+            "exclusive_no_follow_root_creation": True,
+            "single_runner_invocation": True,
+            "later_process_may_resume_or_cleanup": False,
+        },
+        "protocol": {
+            "source_modes": [
+                {
+                    "id": "source-faithful",
+                    "configuration": "audited-checkout",
+                    "package_sources": [SOURCE_FAITHFUL_PACKAGE_SOURCE],
+                },
+                {
+                    "id": "public-only",
+                    "configuration": "isolated-generated",
+                    "package_sources": [PUBLIC_PACKAGE_SOURCE],
+                },
+            ],
+            "commands": planned_command_topology(),
+        },
+        "evidence_plan": {
+            "retain_raw_project_assets": True,
+            "strict_json_duplicate_rejection": True,
+            "extractor": {
+                "entry_point": {
+                    "path": PUBLIC_BUILD_EXTRACTOR_PATH,
+                    "sha256": extractor_hash,
+                },
+                "nuget_versions": {
+                    "path": PUBLIC_BUILD_NUGET_VERSIONS_PATH,
+                    "sha256": nuget_versions_hash,
+                },
+            },
+            "exact_replay_required": True,
+            "provenance_separate_from_projection": True,
+            "cross_bindings": {
+                "raw_asset_to_command_result": True,
+                "projection_to_source_target": True,
+                "package_nodes_to_provenance": True,
+                "package_backed_assemblies_to_runtime_evidence": True,
+                "limitations_to_conclusions": True,
+            },
+        },
+        "limitations": [PCACACHE_TEST_LIMITATION],
+        "policy_reference": (
+            "docs/research/experiment-safety.md#phase-1-public-build-record"
+        ),
+    }
+
+
+def validate_extractor_fixture_binding(
+    actual: dict[str, Any],
+    expected: dict[str, Any],
+    source_mode: str,
+    result_assets_sha256: str,
+    provenance_node_ids: set[str],
+    limitations: list[str],
+    label: str,
+) -> list[str]:
+    errors: list[str] = []
+    if actual != expected:
+        errors.append(f"{label}: extractor replay differs from expected projection")
+        return errors
+    if result_assets_sha256 != actual["assets_file_sha256"]:
+        errors.append(f"{label}: result does not bind the retained raw-assets hash")
+    expected_source = (
+        SOURCE_FAITHFUL_PACKAGE_SOURCE
+        if source_mode == "source-faithful"
+        else PUBLIC_PACKAGE_SOURCE
     )
+    if actual["assets_projection"]["restore_metadata"]["sources"] != [expected_source]:
+        errors.append(f"{label}: projection source differs from the source mode")
+    package_node_ids = {
+        node["node_id"]
+        for node in actual["assets_projection"]["nodes"]
+        if node["kind"] == "package"
+    }
+    if provenance_node_ids != package_node_ids:
+        errors.append(f"{label}: package projection and provenance coverage differ")
+    for required_limitation in (EXTRACTOR_LIMITATION, PCACACHE_TEST_LIMITATION):
+        if required_limitation not in limitations:
+            errors.append(f"{label}: required evidence limitation is missing")
+    return errors
+
+
+def replay_extractor_fixture(
+    fixture_name: str,
+    target_id: str,
+    runtime_identifier: str,
+    checkout_root: str,
+) -> tuple[dict[str, Any], dict[str, Any], set[str]]:
+    fixture_root = ROOT / "tools/fixtures/public-build"
+    assets_path = fixture_root / f"{fixture_name}.project.assets.json"
+    expected_path = fixture_root / f"{fixture_name}.expected-projection.json"
+    assets_bytes = assets_path.read_bytes()
+    assets = parse_json_object_bytes(assets_bytes, str(assets_path))
+    expected = parse_json_object_bytes(expected_path.read_bytes(), str(expected_path))
+    actual = extract_projection(
+        assets,
+        assets_bytes,
+        load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH),
+        target_id,
+        runtime_identifier,
+        "net8.0",
+        checkout_root,
+    )
+    package_nodes = {
+        node["node_id"]
+        for node in actual["assets_projection"]["nodes"]
+        if node["kind"] == "package"
+    }
+    return actual, expected, package_nodes
+
+
+def check_public_build_static_fixtures() -> list[str]:
+    errors: list[str] = []
+    try:
+        schema = load_strict_json(PUBLIC_BUILD_SCHEMA_PATH)
+        baseline = load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH)
+        lasso_manifest = load_strict_json(PUBLIC_BUILD_LASSO_MANIFEST_PATH)
+    except ExtractionError as error:
+        return [str(error)]
+
+    validator = Draft202012Validator(schema)
+    planned = planned_bundle_fixture()
+    schema_errors = list(validator.iter_errors(planned))
+    if schema_errors:
+        errors.append(
+            "public-build planned positive fixture failed schema validation: "
+            f"{schema_errors[0].message}"
+        )
+    else:
+        errors.extend(
+            validate_public_build_bundle_value(
+                planned,
+                "fixture:planned",
+                baseline,
+                lasso_manifest,
+            )
+        )
+
+    planned_negative_cases: list[
+        tuple[str, Callable[[dict[str, Any]], None], str]
+    ] = [
+        (
+            "source-binding",
+            lambda value: value["authorities"]["source_baseline"].update(
+                {"payload_sha256": "0" * 64}
+            ),
+            "source authority hash",
+        ),
+        (
+            "command-topology",
+            lambda value: value["protocol"]["commands"][1].update(
+                {"depends_on": "public-only-restore"}
+            ),
+            "command topology differs",
+        ),
+        (
+            "isolation",
+            lambda value: value["environment"]["dotnet_sdk"].update(
+                {"manager_data_root": "/fixture/run/toolchain"}
+            ),
+            "selection and toolchain roots must not overlap",
+        ),
+        (
+            "runtime-path-flavor",
+            lambda value: (
+                value["isolation"].update(
+                    {
+                        "selection_root": "C:/fixture/run",
+                        "checkout_root": "C:/fixture/run/checkout",
+                    }
+                ),
+                value["environment"]["dotnet_sdk"].update(
+                    {
+                        "manager_data_root": "D:/fixture/toolchain",
+                        "installation_root": "D:/fixture/toolchain/dotnet",
+                        "host_path": "D:/fixture/toolchain/dotnet/dotnet.exe",
+                    }
+                ),
+            ),
+            "must use posix paths",
+        ),
+        (
+            "posix-path-case",
+            lambda value: value["isolation"].update(
+                {"checkout_root": "/Fixture/run/checkout"}
+            ),
+            "checkout root must be inside",
+        ),
+    ]
+    for name, mutate, expected_error in planned_negative_cases:
+        negative = copy.deepcopy(planned)
+        mutate(negative)
+        if list(validator.iter_errors(negative)):
+            errors.append(
+                f"public-build planned semantic fixture {name} must remain schema-valid"
+            )
+            continue
+        semantic_errors = validate_public_build_bundle_value(
+            negative,
+            f"fixture:{name}",
+            baseline,
+            lasso_manifest,
+        )
+        if not any(expected_error in error for error in semantic_errors):
+            errors.append(
+                f"public-build planned negative fixture {name} was not rejected"
+            )
+
+    stale_baseline = copy.deepcopy(baseline)
+    stale_baseline["source_manifest_sha256"] = "0" * 64
+    if not validate_public_build_source_baseline_value(
+        stale_baseline,
+        "fixture:source-hash",
+    ):
+        errors.append("public-build source hash negative fixture was not rejected")
+
+    cross_source_manifest = copy.deepcopy(lasso_manifest)
+    cross_source_manifest["source"]["commit"] = "0" * 40
+    if not validate_public_build_lasso_manifest_value(
+        cross_source_manifest,
+        "fixture:lasso-source",
+        baseline["source"],
+    ):
+        errors.append("public-build Lasso source negative fixture was not rejected")
+
+    invalid_json_cases = {
+        "duplicate-key": b'{"schema_version":1,"schema_version":2}',
+        "nan": b'{"value":NaN}',
+        "positive-infinity": b'{"value":Infinity}',
+        "negative-infinity": b'{"value":-Infinity}',
+        "positive-float-overflow": b'{"value":1e999}',
+        "negative-float-overflow": b'{"value":-1e999}',
+    }
+    for name, content in invalid_json_cases.items():
+        try:
+            parse_json_object_bytes(content, f"fixture:{name}")
+        except ExtractionError:
+            pass
+        else:
+            errors.append(f"unsupported JSON input fixture {name} was not rejected")
+
+    extractor_cases = (
+        (
+            "testhelper",
+            "target-testhelper-net8-0",
+            "linux-x64",
+            "/fixture/checkout",
+        ),
+        (
+            "benchmark-windows",
+            "target-msalwrapper-benchmark-net8-0",
+            "win-x64",
+            "C:/fixture/checkout",
+        ),
+    )
+    replayed: dict[
+        str, tuple[dict[str, Any], dict[str, Any], set[str]]
+    ] = {}
+    for fixture_name, target_id, runtime_identifier, checkout_root in extractor_cases:
+        try:
+            actual, expected, package_nodes = replay_extractor_fixture(
+                fixture_name,
+                target_id,
+                runtime_identifier,
+                checkout_root,
+            )
+        except (OSError, ExtractionError) as error:
+            errors.append(f"public-build extractor fixture {fixture_name} failed: {error}")
+            continue
+        replayed[fixture_name] = (actual, expected, package_nodes)
+        errors.extend(
+            validate_extractor_fixture_binding(
+                actual,
+                expected,
+                "source-faithful",
+                actual["assets_file_sha256"],
+                package_nodes,
+                [EXTRACTOR_LIMITATION, PCACACHE_TEST_LIMITATION],
+                f"fixture:{fixture_name}",
+            )
+        )
+
+    if "testhelper" in replayed:
+        actual, expected, package_nodes = replayed["testhelper"]
+        cross_binding_negatives = (
+            (
+                "result-hash",
+                "0" * 64,
+                package_nodes,
+                [EXTRACTOR_LIMITATION, PCACACHE_TEST_LIMITATION],
+                "result does not bind",
+            ),
+            (
+                "provenance",
+                actual["assets_file_sha256"],
+                set(),
+                [EXTRACTOR_LIMITATION, PCACACHE_TEST_LIMITATION],
+                "projection and provenance coverage differ",
+            ),
+            (
+                "limitation",
+                actual["assets_file_sha256"],
+                package_nodes,
+                [PCACACHE_TEST_LIMITATION],
+                "required evidence limitation is missing",
+            ),
+        )
+        for name, result_hash, provenance, limitations, expected_error in (
+            cross_binding_negatives
+        ):
+            binding_errors = validate_extractor_fixture_binding(
+                actual,
+                expected,
+                "source-faithful",
+                result_hash,
+                provenance,
+                limitations,
+                f"fixture:{name}",
+            )
+            if not any(expected_error in error for error in binding_errors):
+                errors.append(
+                    f"public-build extractor negative fixture {name} was not rejected"
+                )
+
+    fixture_assets_path = (
+        ROOT / "tools/fixtures/public-build/testhelper.project.assets.json"
+    )
+    orphan_assets = load_strict_json_path(fixture_assets_path)
+    orphan_key = "Unrelated.Package/9.9.9"
+    orphan_assets["targets"]["net8.0"][orphan_key] = {"type": "package"}
+    orphan_assets["libraries"][orphan_key] = {"type": "package"}
+    try:
+        extract_projection(
+            orphan_assets,
+            json.dumps(orphan_assets).encode(),
+            baseline,
+            "target-testhelper-net8-0",
+            "linux-x64",
+            "net8.0",
+            "/fixture/checkout",
+        )
+    except ExtractionError as error:
+        if "unreachable" not in str(error):
+            errors.append(
+                "public-build orphan-node fixture failed for an unrelated reason: "
+                f"{error}"
+            )
+    else:
+        errors.append(
+            "public-build extractor fixture accepted an unreachable package node"
+        )
+
+    version_cases = {
+        ("1", "[1]"): True,
+        ("2", "[1,3)"): True,
+        ("8.0.0", "(8.0.0, )"): False,
+        ("7.9.9", "8.0.0"): False,
+    }
+    for (resolved, constraint), expected in version_cases.items():
+        if nuget_version_satisfies_constraint(resolved, constraint) != expected:
+            errors.append(
+                f"bounded NuGet constraint fixture failed for {resolved} "
+                f"against {constraint}"
+            )
+    if nuget_constraint_is_valid("[1.0.0-alpha..1, )"):
+        errors.append("bounded NuGet grammar accepted an invalid constraint")
+
+    catalog = load_yaml("docs/governance/record-families.yaml")
+    controls = load_yaml("docs/governance/controls.yaml")["controls"]
+    mismatched_catalog = copy.deepcopy(catalog)
+    next(
+        family
+        for family in mismatched_catalog["families"]
+        if family["id"] == "public-build-experiment-bundles"
+    )["state"] = "current"
+    if not check_public_build_activation_coupling(mismatched_catalog, controls):
+        errors.append(
+            "public-build activation fixture did not reject a family/control mismatch"
+        )
+    current_catalog = copy.deepcopy(catalog)
+    next(
+        family
+        for family in current_catalog["families"]
+        if family["id"] == "public-build-experiment-bundles"
+    )["state"] = "current"
+    current_controls = copy.deepcopy(controls)
+    current_control = next(
+        control
+        for control in current_controls
+        if control["id"] == "public-build-evidence-consistency"
+    )
+    current_control["state"] = "current"
+    current_control["implementation"]["steps"] = {
+        "local-fast": [
+            "structured-record-schema",
+            "public-build-runner-conformance",
+        ],
+        "ci": [
+            "structured-record-schema",
+            "public-build-runner-conformance",
+        ],
+    }
+    activation_errors = check_public_build_activation_coupling(
+        current_catalog,
+        current_controls,
+    )
+    if not any("planned-only contract" in error for error in activation_errors):
+        errors.append(
+            "public-build activation fixture accepted the planned-only schema"
+        )
+    unrelated_runtime_schema = copy.deepcopy(schema)
+    unrelated_runtime_schema["x-public-build-contract"] = {
+        "mode": "runtime",
+        "version": 1,
+        "runtime_property": "runtime_evidence",
+        "runtime_root": "#/$defs/sha256",
+        "runtime_semantics": {
+            name: "#/$defs/sha256"
+            for name in PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS
+        },
+    }
+    unrelated_runtime_schema["required"].append("runtime_evidence")
+    unrelated_runtime_schema["properties"]["runtime_evidence"] = {
+        "$ref": "#/$defs/sha256"
+    }
+    unrelated_activation_errors = check_public_build_activation_coupling(
+        current_catalog,
+        current_controls,
+        schema=unrelated_runtime_schema,
+        runner_path=ROOT / "tools/check_repository_records.py",
+    )
+    if not any(
+        "distinct marked property" in error
+        for error in unrelated_activation_errors
+    ):
+        errors.append(
+            "public-build activation fixture accepted unrelated semantic aliases"
+        )
+    marker_only_runtime_schema = copy.deepcopy(schema)
+    runtime_properties = {
+        name: {
+            "type": "object",
+            "x-public-build-runtime-semantic": name,
+        }
+        for name in PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS
+    }
+    marker_only_runtime_schema["$defs"]["runtimeEvidence"] = {
+        "type": "object",
+        "additionalProperties": False,
+        "required": sorted(runtime_properties),
+        "properties": runtime_properties,
+    }
+    marker_only_runtime_schema["required"].append("runtime_evidence")
+    marker_only_runtime_schema["properties"]["runtime_evidence"] = {
+        "$ref": "#/$defs/runtimeEvidence"
+    }
+    marker_only_runtime_schema["x-public-build-contract"] = {
+        "mode": "runtime",
+        "version": 1,
+        "runtime_property": "runtime_evidence",
+        "runtime_root": "#/$defs/runtimeEvidence",
+        "runtime_semantics": {
+            name: f"#/$defs/runtimeEvidence/properties/{name}"
+            for name in PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS
+        },
+    }
+    marker_only_errors = check_public_build_activation_coupling(
+        current_catalog,
+        current_controls,
+        schema=marker_only_runtime_schema,
+        runner_path=ROOT / "tools/check_repository_records.py",
+    )
+    if not any("unconstrained=" in error for error in marker_only_errors):
+        errors.append(
+            "public-build activation fixture accepted marker-only runtime semantics"
+        )
+    constrained_runtime_schema = copy.deepcopy(marker_only_runtime_schema)
+    for property_schema in constrained_runtime_schema["$defs"][
+        "runtimeEvidence"
+    ]["properties"].values():
+        property_schema["additionalProperties"] = False
+        property_schema["required"] = ["recorded"]
+        property_schema["properties"] = {
+            "recorded": {
+                "const": True,
+            }
+        }
+    constrained_errors = check_public_build_activation_coupling(
+        current_catalog,
+        current_controls,
+        schema=constrained_runtime_schema,
+        runner_path=ROOT / "tools/check_repository_records.py",
+    )
+    if constrained_errors:
+        errors.append(
+            "public-build activation positive fixture rejected constrained runtime "
+            f"semantic anchors: {constrained_errors[0]}"
+        )
+    alternate_runner = copy.deepcopy(planned)
+    alternate_runner_path = "tools/check_repository_records.py"
+    alternate_runner["environment"]["runner"] = {
+        "path": alternate_runner_path,
+        "sha256": hashlib.sha256(
+            (ROOT / alternate_runner_path).read_bytes()
+        ).hexdigest(),
+    }
+    alternate_runner_errors = validate_public_build_bundle_value(
+        alternate_runner,
+        "fixture:alternate-runner",
+        baseline,
+        lasso_manifest,
+        require_runtime_runner=True,
+    )
+    if not any("canonical repository runner" in error for error in alternate_runner_errors):
+        errors.append(
+            "public-build runtime fixture accepted a noncanonical runner path"
+        )
+    return errors
 
 
 def run_schema_validation(schema: str, instances: list[Path]) -> int:
@@ -1919,7 +2268,6 @@ def run_metaschema_validation(instances: list[Path]) -> int:
 
 def validate_structured_records() -> int:
     errors: list[str] = []
-
     for schema, instance in BOOTSTRAP_SCHEMA_BINDINGS:
         schema_path = ROOT / schema
         instance_path = ROOT / instance
@@ -1960,13 +2308,28 @@ def validate_structured_records() -> int:
         if family["format"] == "json-schema":
             if run_metaschema_validation(instances) != 0:
                 return 1
-        else:
-            if run_schema_validation(family["schema"], instances) != 0:
-                return 1
+        elif run_schema_validation(family["schema"], instances) != 0:
+            return 1
 
         if family["id"] == "public-build-experiment-bundles":
+            bundle_records = [
+                (instance.relative_to(ROOT).as_posix(), load_yaml_path(instance))
+                for instance in instances
+            ]
+            for label, bundle in bundle_records:
+                errors.extend(
+                    validate_public_build_bundle_value(
+                        bundle,
+                        label,
+                        require_runtime_runner=family["state"] == "current",
+                    )
+                )
+        elif family["id"] == "public-build-source-baseline":
             for instance in instances:
-                errors.extend(validate_public_build_bundle(instance))
+                errors.extend(validate_public_build_source_baseline(instance))
+        elif family["id"] == "public-build-lasso-reference-manifest":
+            for instance in instances:
+                errors.extend(validate_public_build_lasso_manifest(instance))
 
         if family["state"] == "scheduled":
             errors.append(
@@ -1979,7 +2342,10 @@ def validate_structured_records() -> int:
     if errors:
         return 1
 
-    return 0
+    fixture_errors = check_public_build_static_fixtures()
+    for error in fixture_errors:
+        print(f"ERROR: {error}", file=sys.stderr)
+    return 1 if fixture_errors else 0
 
 
 def main() -> int:
@@ -1996,7 +2362,6 @@ def main() -> int:
     errors = check_identifiers() if args.command == "identifiers" else check_catalog_paths()
     if not errors:
         return 0
-
     for error in errors:
         print(f"ERROR: {error}", file=sys.stderr)
     return 1

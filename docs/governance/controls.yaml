@@ -81,18 +81,19 @@ controls:
       - ci
     failure_mode: A structured record becomes ambiguous or unreadable by its consumer.
 
-  - id: public-build-evidence-consistency
-    state: scheduled
+  - id: public-build-source-audit-consistency
+    state: current
     class: mechanical
     enforcement: blocking
     producer: hk and the repository record checker
     maintainer: Research maintainer
     consumers:
-      - Issue #1 experiment owner before execution and after each recorded result
-      - Research reviewers when evaluating the public-build conclusion
+      - Issue #1 source auditors when maintaining the fixed source baseline and Lasso manifest
+      - Research reviewers when checking static source-audit integrity before runtime experiments
     governing_rules:
       - docs/research/experiment-safety.md#phase-1-public-build-record
-    invariant: The issue #1 protocol, isolation profile, restore configurations, source manifest, command results, dependency graphs, Lasso analysis, and completion outcome remain mutually consistent.
+      - docs/governance/record-system.md#record-system-gate
+    invariant: The current public-build source baseline and Lasso manifest retain canonical source identity, hashes, identifiers, ordering, and cross-record consistency under duplicate-rejecting JSON parsing, and a small static fixture set verifies planned-bundle source binding, command topology, isolation principles, and exact extractor replay without activating runtime evidence.
     runner: hk
     implementation:
       kind: hk-steps
@@ -104,11 +105,36 @@ controls:
     execution_points:
       - local-fast
       - ci
-    failure_mode: A schema-valid experiment bundle contradicts its reviewed command, isolation, source, dependency-graph, Lasso, or conclusion evidence.
+    failure_mode: A fixed-source authority, planned-bundle contract, or retained synthetic assets projection becomes internally inconsistent while still passing schema validation.
+
+  - id: public-build-evidence-consistency
+    state: scheduled
+    class: mechanical
+    enforcement: blocking
+    producer: hk and the repository record checker
+    maintainer: Research maintainer
+    consumers:
+      - Issue #1 experiment owner before execution and after each recorded result
+      - Research reviewers when evaluating the public-build conclusion
+    governing_rules:
+      - docs/research/experiment-safety.md#phase-1-public-build-record
+    invariant: After activation, runner-produced bundles bind the reviewed source authorities, isolated environment, bounded command topology, retained raw assets, extractor projection, provenance, limitations, and bounded conclusions without inheriting ambient authority.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - structured-record-schema
+        ci:
+          - structured-record-schema
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: Activated runtime evidence inherits ambient authority, cannot prove process quiescence or ownership before cleanup, reuses an occupied root or dedicated toolchain, or contradicts its reviewed source, command, dependency, provenance, limitation, or conclusion evidence.
     activation:
-      trigger: The public-build-experiment-bundles family is activated before the first issue #1 experiment command.
+      trigger: The Runtime Activation Prerequisites in docs/research/experiment-safety.md are recorded as satisfied and the reviewed protocol is ready to create the experiment selection root or run the first issue #1 command.
       evaluator: Research maintainer
-      action: Change this control to current in the same commit that activates and creates the first bundle.
+      action: In one change, expand or replace the planned-only bundle schema with the runner-produced runtime contract, change its machine-readable marker to runtime, and bind each required runtime semantic to a distinct marked property under a required runtime-evidence root; pin the isolated toolchain; add the LF-normalized direct-spawn replacement-environment runner; require build, test, and package commands to use --no-restore after the corresponding restore succeeds; define independent resolved or unresolved evidence for applicable package-backed assemblies; add conformance fixtures covering environment replacement, no-shell execution, canonical termination, all-exit process-tree quiescence including a normally exiting parent with a surviving grandchild, and same-invocation ownership-conditioned cleanup; activate the bundle family and this control; and add the blocking public-build-runner-conformance HK step at local-fast and CI. If quiescence cannot be proved on normal exit, failure, cancellation, or timeout, the runner must abort without destructive cleanup or root release. Define one canonical termination cause with optional structured detail and the minimum receipt hash only after choosing the raw or embedded receipt carrier.
       fallback_review: Issue #1 closure and every phase transition while issue #1 remains open
 
   - id: requirement-id-uniqueness

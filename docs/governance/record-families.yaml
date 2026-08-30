@@ -379,9 +379,41 @@ families:
       action: Create the design record and activate design review routing.
       fallback_review: Every transition into Incremental Implementation and Validation
 
+  - id: public-build-source-baseline
+    state: current
+    concern: Fixed solution targets, source-declared direct dependencies, and stage applicability for the issue #1 audited upstream commit
+    carrier: repository-file
+    path: docs/research/public-build-source-baseline.json
+    format: json
+    schema: schemas/research/public-build-source-baseline.schema.json
+    producer: Public-source auditor
+    maintainer: Research maintainer
+    consumers:
+      - Issue #1 experiment authors and the repository checker when constructing or validating dependency evidence
+      - Research reviewers when comparing runtime records with the fixed upstream source
+    creation_trigger: The issue #2 owner disposition authorizes the immutable public-source audit for the issue #1 fixed commit before runtime experiment activation.
+    failure_mode: Experiment authors must reconstruct target and dependency identity from an opaque hash or omit a source-declared build input.
+    review_point: Changes that correct the fixed source audit or change the issue #1 audited commit
+
+  - id: public-build-lasso-reference-manifest
+    state: current
+    concern: Fixed source-level Microsoft.Office.Lasso usage locations for issue #1 responsibility analysis
+    carrier: repository-file
+    path: docs/research/public-build-lasso-reference-manifest.json
+    format: json
+    schema: schemas/research/public-build-lasso-reference-manifest.schema.json
+    producer: Public-source auditor
+    maintainer: Research maintainer
+    consumers:
+      - Issue #1 experiment authors mapping every Lasso source usage to an apparent responsibility
+      - The repository checker and research reviewers validating coverage
+    creation_trigger: The issue #2 owner disposition authorizes the immutable public-source audit, and text-only package-name search omitted unqualified symbols imported from Lasso namespaces.
+    failure_mode: Lasso responsibility analysis can omit operational call sites while still matching an incomplete hash.
+    review_point: Changes that correct source-reference attribution or change the issue #1 audited commit
+
   - id: public-build-experiment-bundles
     state: scheduled
-    concern: Reproducible protocols, isolation evidence, command results, dependency graphs, Lasso analysis, and conclusions for the issue #1 public-build experiments
+    concern: Reviewed planned protocols for issue #1 public-build experiments, followed by runner-produced evidence only after runtime activation
     carrier: repository-files
     path: docs/research/experiments/public-build-*.yaml
     format: yaml
@@ -389,14 +421,36 @@ families:
     producer: Experiment owner
     maintainer: Research maintainer
     consumers:
-      - Issue #1 implementers and research reviewers when reproducing commands or evaluating dependency and public-build conclusions
-    creation_trigger: After the permitted read-only environment preflight and before the first issue #1 experiment command is executed.
-    failure_mode: Public-build commands, isolation evidence, dependency graphs, Lasso analysis, and conclusions cannot be reproduced or distinguished from interpretation.
+      - Issue #1 experiment authors when preparing the activation review
+      - Issue #1 implementers and research reviewers after activation when reproducing commands or evaluating dependency and public-build conclusions
+    creation_trigger: After the Runtime Activation Prerequisites in docs/research/experiment-safety.md are recorded as satisfied and non-executing environment discovery is complete, before the experiment selection root is created or the first issue #1 experiment command is executed.
+    failure_mode: A runtime experiment begins without a reviewed source binding, exact toolchain and runner identity, bounded command topology, or isolation and evidence plan.
     review_point: Before execution and when conclusions are recorded
     activation:
-      trigger: The read-only environment preflight is complete and work is ready to execute the first restore, dependency-resolution, build, test, or package command.
+      trigger: The Runtime Activation Prerequisites in docs/research/experiment-safety.md are recorded as satisfied, non-executing environment discovery is complete, and the reviewed protocol is ready for activation.
+      evaluator: Research maintainer, using the repository owner's recorded Record-System Gate disposition and the target branch's accepted project state
+      action: Pin the reviewed exact .NET 8 SDK in mise.toml under an isolated mise data root; add the LF-normalized repository-owned direct-spawn runner and its synthetic conformance fixtures; expand or replace the planned-only schema with the runner-produced runtime contract, change its machine-readable marker to runtime, and bind each required runtime semantic to a distinct marked property under a required runtime-evidence root; require one canonical termination cause with optional structured detail and define the minimum receipt hash only after selecting the raw or embedded receipt carrier; require build, test, and package commands to use --no-restore after the corresponding restore succeeds; define independent resolved or unresolved evidence for applicable package-backed assemblies; prove process-tree quiescence on normal exit, failure, cancellation, and timeout, including the case where a parent exits normally while a grandchild remains alive; prohibit destructive cleanup or root release when quiescence is unproved; add the blocking public-build-runner-conformance HK step at local-fast and CI; create the initial planned bundle; change this family and its evidence control to current in the same change; and validate the protocol before creating the selection root or executing dotnet.
+      fallback_review: Issue #1 closure and every phase transition while issue #1 remains open
+
+  - id: public-build-assets-evidence
+    state: scheduled
+    concern: Sanitized project.assets.json inputs retained for reproducible issue #1 dependency projections
+    carrier: repository-files
+    path: docs/research/experiments/assets/*.project.assets.json
+    format: json
+    schema: schemas/research/public-build-assets-evidence.schema.json
+    producer: Experiment owner
+    maintainer: Research maintainer
+    consumers:
+      - The issue #1 assets extractor and repository checker when reproducing complete or partial dependency projections
+      - Research reviewers validating project, runtime, package, and source claims against retained restore evidence
+    creation_trigger: An issue #1 restore produces a project.assets.json used by a recorded complete or partial dependency projection.
+    failure_mode: A projection can remain internally consistent while omitting or misattributing topology from the restore artifact it claims to represent.
+    review_point: With each retained assets file and before its referencing experiment bundle is completed
+    activation:
+      trigger: The first sanitized project.assets.json evidence file is ready to commit.
       evaluator: Research maintainer
-      action: Create the initial planned bundle, change this family to current, and validate the protocol before execution.
+      action: Add the first evidence file and change this family to current in the same commit.
       fallback_review: Issue #1 closure and every phase transition while issue #1 remains open
 
   - id: validation-cases

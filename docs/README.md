@@ -38,6 +38,8 @@ is navigation, not an independent authority.
 | --- | --- | --- |
 | Architects and research reviewers | Evidence for not using the v1 core as the v2 foundation | [`research/v1-architecture-audit.md`](research/v1-architecture-audit.md) |
 | Experiment authors and reviewers | Experiment authorization, isolation, safety, and evidence rules | [`research/experiment-safety.md`](research/experiment-safety.md) |
+| Phase 1 experiment authors and reviewers | Fixed solution targets, source dependencies, and stage applicability | [`research/public-build-source-baseline.json`](research/public-build-source-baseline.json) |
+| Phase 1 experiment authors and reviewers | Fixed source-level Lasso usage manifest | [`research/public-build-lasso-reference-manifest.json`](research/public-build-lasso-reference-manifest.json) |
 | Research and release reviewers | Mutable public facts and their recheck triggers | [`research/rechecks.yaml`](research/rechecks.yaml) |
 | Maintainers and upstream-source consumers | Upstream baseline and import policy | [`../UPSTREAM.md`](../UPSTREAM.md) |
 
@@ -63,7 +65,10 @@ is navigation, not an independent authority.
 | Control automation | Control catalog schema | [`controls.schema.json`](../schemas/governance/controls.schema.json) |
 | Packaging and runtime automation | Operational-identity registry schema | [`operational-identities.schema.json`](../schemas/governance/operational-identities.schema.json) |
 | Research automation | Mutable-source recheck schema | [`rechecks.schema.json`](../schemas/research/rechecks.schema.json) |
-| Phase 1 experiment authors and automation | Public-build experiment-bundle schema | [`public-build-experiment-bundle.schema.json`](../schemas/research/public-build-experiment-bundle.schema.json) |
+| Phase 1 source-audit automation | Public-build source-baseline schema | [`public-build-source-baseline.schema.json`](../schemas/research/public-build-source-baseline.schema.json) |
+| Phase 1 source-audit automation | Public-build Lasso-reference schema | [`public-build-lasso-reference-manifest.schema.json`](../schemas/research/public-build-lasso-reference-manifest.schema.json) |
+| Phase 1 experiment automation | Retained `project.assets.json` evidence schema | [`public-build-assets-evidence.schema.json`](../schemas/research/public-build-assets-evidence.schema.json) |
+| Phase 1 experiment authors and activation reviewers | Planned public-build bundle schema; runtime evidence fields are added only with the runner activation change | [`public-build-experiment-bundle.schema.json`](../schemas/research/public-build-experiment-bundle.schema.json) |
 
 The root [`README.md`](../README.md) is the public landing page. The root
 [`AGENTS.md`](../AGENTS.md) is an AI-agent interface and is not human onboarding
