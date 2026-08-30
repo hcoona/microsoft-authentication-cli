@@ -1,0 +1,77 @@
+{
+  "assets_file_sha256": "1f6dbd06f3440bd07c0b0a1c25fd644d2d64779fe66021d3a9090c9eb9ec2a58",
+  "assets_projection": {
+    "assets_target": "net8.0",
+    "edges": [
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-microsoft-extensions-logging-abstractions-8-0-2-node-system-diagnostics-diagnosticsource-8-0-1",
+        "from_node_id": "node-microsoft-extensions-logging-abstractions-8-0-2",
+        "to_node_id": "node-system-diagnostics-diagnosticsource-8-0-1",
+        "version_constraint": "[8.0.0, )"
+      },
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-nlog-extensions-logging-1-6-3-node-microsoft-extensions-logging-abstractions-8-0-2",
+        "from_node_id": "node-nlog-extensions-logging-1-6-3",
+        "to_node_id": "node-microsoft-extensions-logging-abstractions-8-0-2",
+        "version_constraint": "1.1.2"
+      },
+      {
+        "declaration_ids": [
+          "decl-testhelper-microsoft-extensions-logging-abstractions"
+        ],
+        "edge_id": "edge-root-decl-testhelper-microsoft-extensions-logging-abstractions",
+        "from_node_id": null,
+        "to_node_id": "node-microsoft-extensions-logging-abstractions-8-0-2",
+        "version_constraint": "8.0.2"
+      },
+      {
+        "declaration_ids": [
+          "decl-testhelper-nlog-extensions-logging"
+        ],
+        "edge_id": "edge-root-decl-testhelper-nlog-extensions-logging",
+        "from_node_id": null,
+        "to_node_id": "node-nlog-extensions-logging-1-6-3",
+        "version_constraint": "1.6.3"
+      }
+    ],
+    "format_version": 1,
+    "nodes": [
+      {
+        "baseline_target_id": null,
+        "id": "Microsoft.Extensions.Logging.Abstractions",
+        "kind": "package",
+        "node_id": "node-microsoft-extensions-logging-abstractions-8-0-2",
+        "version": "8.0.2"
+      },
+      {
+        "baseline_target_id": null,
+        "id": "NLog.Extensions.Logging",
+        "kind": "package",
+        "node_id": "node-nlog-extensions-logging-1-6-3",
+        "version": "1.6.3"
+      },
+      {
+        "baseline_target_id": null,
+        "id": "System.Diagnostics.DiagnosticSource",
+        "kind": "package",
+        "node_id": "node-system-diagnostics-diagnosticsource-8-0-1",
+        "version": "8.0.1"
+      }
+    ],
+    "restore_metadata": {
+      "config_file_paths": [
+        "/fixture/checkout/nuget.config"
+      ],
+      "package_folders": [
+        "/fixture/packages/source-faithful"
+      ],
+      "packages_path": "/fixture/packages/source-faithful",
+      "sources": [
+        "https://pkgs.dev.azure.com/office/_packaging/Office/nuget/v3/index.json"
+      ]
+    }
+  },
+  "target_id": "target-testhelper-net8-0"
+}

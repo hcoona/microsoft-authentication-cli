@@ -1,0 +1,147 @@
+{
+  "assets_file_sha256": "07b3f4ac17fe8cda8a3f8b17a32acc958ef77022945a0900070889a5cdb546da",
+  "assets_projection": {
+    "assets_target": "net8.0",
+    "edges": [
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-microsoft-identity-client-broker-4-83-1-node-microsoft-identity-client-4-83-1",
+        "from_node_id": "node-microsoft-identity-client-broker-4-83-1",
+        "to_node_id": "node-microsoft-identity-client-4-83-1",
+        "version_constraint": "4.83.1"
+      },
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-project-target-msalwrapper-net8-0-node-microsoft-extensions-logging-abstractions-8-0-2",
+        "from_node_id": "node-project-target-msalwrapper-net8-0",
+        "to_node_id": "node-microsoft-extensions-logging-abstractions-8-0-2",
+        "version_constraint": "8.0.2"
+      },
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-project-target-msalwrapper-net8-0-node-microsoft-identity-client-4-83-1",
+        "from_node_id": "node-project-target-msalwrapper-net8-0",
+        "to_node_id": "node-microsoft-identity-client-4-83-1",
+        "version_constraint": "4.83.1"
+      },
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-project-target-msalwrapper-net8-0-node-microsoft-identity-client-broker-4-83-1",
+        "from_node_id": "node-project-target-msalwrapper-net8-0",
+        "to_node_id": "node-microsoft-identity-client-broker-4-83-1",
+        "version_constraint": "4.83.1"
+      },
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-project-target-msalwrapper-net8-0-node-microsoft-identity-client-extensions-msal-4-83-1",
+        "from_node_id": "node-project-target-msalwrapper-net8-0",
+        "to_node_id": "node-microsoft-identity-client-extensions-msal-4-83-1",
+        "version_constraint": "4.83.1"
+      },
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-project-target-msalwrapper-net8-0-node-microsoft-identity-client-nativeinterop-0-20-3",
+        "from_node_id": "node-project-target-msalwrapper-net8-0",
+        "to_node_id": "node-microsoft-identity-client-nativeinterop-0-20-3",
+        "version_constraint": "0.20.3"
+      },
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-project-target-msalwrapper-net8-0-node-microsoft-identitymodel-jsonwebtokens-7-5-0",
+        "from_node_id": "node-project-target-msalwrapper-net8-0",
+        "to_node_id": "node-microsoft-identitymodel-jsonwebtokens-7-5-0",
+        "version_constraint": "7.5.0"
+      },
+      {
+        "declaration_ids": [
+          "decl-msalwrapper-benchmark-benchmarkdotnet"
+        ],
+        "edge_id": "edge-root-decl-msalwrapper-benchmark-benchmarkdotnet",
+        "from_node_id": null,
+        "to_node_id": "node-benchmarkdotnet-0-13-2",
+        "version_constraint": "0.13.2"
+      },
+      {
+        "declaration_ids": [
+          "decl-msalwrapper-benchmark-microsoft-identity-client-broker"
+        ],
+        "edge_id": "edge-root-decl-msalwrapper-benchmark-microsoft-identity-client-broker",
+        "from_node_id": null,
+        "to_node_id": "node-microsoft-identity-client-broker-4-83-1",
+        "version_constraint": "4.83.1"
+      }
+    ],
+    "format_version": 1,
+    "nodes": [
+      {
+        "baseline_target_id": null,
+        "id": "BenchmarkDotNet",
+        "kind": "package",
+        "node_id": "node-benchmarkdotnet-0-13-2",
+        "version": "0.13.2"
+      },
+      {
+        "baseline_target_id": null,
+        "id": "Microsoft.Extensions.Logging.Abstractions",
+        "kind": "package",
+        "node_id": "node-microsoft-extensions-logging-abstractions-8-0-2",
+        "version": "8.0.2"
+      },
+      {
+        "baseline_target_id": null,
+        "id": "Microsoft.Identity.Client",
+        "kind": "package",
+        "node_id": "node-microsoft-identity-client-4-83-1",
+        "version": "4.83.1"
+      },
+      {
+        "baseline_target_id": null,
+        "id": "Microsoft.Identity.Client.Broker",
+        "kind": "package",
+        "node_id": "node-microsoft-identity-client-broker-4-83-1",
+        "version": "4.83.1"
+      },
+      {
+        "baseline_target_id": null,
+        "id": "Microsoft.Identity.Client.Extensions.Msal",
+        "kind": "package",
+        "node_id": "node-microsoft-identity-client-extensions-msal-4-83-1",
+        "version": "4.83.1"
+      },
+      {
+        "baseline_target_id": null,
+        "id": "Microsoft.Identity.Client.NativeInterop",
+        "kind": "package",
+        "node_id": "node-microsoft-identity-client-nativeinterop-0-20-3",
+        "version": "0.20.3"
+      },
+      {
+        "baseline_target_id": null,
+        "id": "Microsoft.IdentityModel.JsonWebTokens",
+        "kind": "package",
+        "node_id": "node-microsoft-identitymodel-jsonwebtokens-7-5-0",
+        "version": "7.5.0"
+      },
+      {
+        "baseline_target_id": "target-msalwrapper-net8-0",
+        "id": "MSALWrapper",
+        "kind": "project",
+        "node_id": "node-project-target-msalwrapper-net8-0",
+        "version": "1.0.0"
+      }
+    ],
+    "restore_metadata": {
+      "config_file_paths": [
+        "c:/fixture/checkout/nuget.config"
+      ],
+      "package_folders": [
+        "c:/fixture/packages/source-faithful"
+      ],
+      "packages_path": "c:/fixture/packages/source-faithful",
+      "sources": [
+        "https://pkgs.dev.azure.com/office/_packaging/Office/nuget/v3/index.json"
+      ]
+    }
+  },
+  "target_id": "target-msalwrapper-benchmark-net8-0"
+}
