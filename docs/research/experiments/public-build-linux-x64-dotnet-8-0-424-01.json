@@ -17,7 +17,7 @@
     }
   },
   "environment": {
-    "host_type": "native-linux",
+    "host_type": "wsl2-linux",
     "runtime_identifier": "linux-x64",
     "mise": {
       "version": "2026.8.10",
@@ -653,7 +653,8 @@
   },
   "limitations": [
     "PCACacheTest was excluded because it performs real platform-persistence validation; this result does not establish an unfiltered upstream test-suite pass or PCACache/keyring/Keychain/DPAPI behavior.",
-    "The activation-v1 runner supports only native Linux x64. Windows, macOS, Linux arm64, and WSL are outside this protocol.",
+    "The activation-v1 runner supports only WSL2 Linux x64. Native Linux, WSL1, Windows, macOS, and Linux arm64 are outside this protocol.",
+    "WSL interoperability remains a host capability, but child replacement environments omit WSL-specific variables and Windows PATH entries, and the fixed protocol selects only reviewed Linux executables. The result does not establish a Windows helper, broker, credential-provider, Windows-cache, or hostile-build-input isolation claim.",
     "Activation v1 retains every created experiment selection and toolchain root. It does not reclaim stale roots, transfer cleanup authority, or perform destructive cleanup.",
     "A failed restore, an absent or invalid project.assets.json, unproved child quiescence, source-integrity change, failed root identity, or a global sensitive-output or capture failure makes the affected dependency projection partial or unavailable and leaves its transitive scope unknown; no complete dependency conclusion may be inferred from that mode.",
     "The recorded reproduction count is one. A single execution does not evaluate run-to-run variability, transient service behavior, or frequency."
@@ -662,7 +663,7 @@
   "components": {
     "runner": {
       "path": "tools/run_public_build_experiment.py",
-      "sha256": "d6922a23ba7432da0f21a009639c97b9e66caccec128b64dca59d0eb20c1afc6"
+      "sha256": "8749fe2cf5376ddcea4f49abf032fd42ea6c59140355f9e3a6a9e89009d352d3"
     },
     "contract": {
       "path": "tools/public_build_contract.py",
@@ -670,7 +671,7 @@
     },
     "validator": {
       "path": "tools/public_build_validation.py",
-      "sha256": "516e90416cd82945f0a499e8220fd9d6bb57dea5619c7fe05e93d6429b000b51"
+      "sha256": "64d30611bb30a0a16fe7ff22d5e5f358e097a1ad5d13dbd56c2599668b8a558a"
     },
     "extractor": {
       "path": "tools/extract_public_build_assets.py",
@@ -682,7 +683,7 @@
     },
     "schema": {
       "path": "schemas/research/public-build-experiment-bundle.schema.json",
-      "sha256": "09977a73139d8f71f28b01935dbac540f1ec4c30cf5cc292d838134889d81587"
+      "sha256": "7406a2d80497caa85e3f7cf8bd6cd00b9ecdb74595f964d1da2868801e59063d"
     },
     "lockfile": {
       "path": "tools/public-build-mise.lock",

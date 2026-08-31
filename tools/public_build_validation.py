@@ -784,7 +784,7 @@ def validate_public_build_bundle_value(
         global_json = None
         errors.append(f"{relative_path}: reviewed global.json is invalid: {error}")
     if (
-        environment["host_type"] != "native-linux"
+        environment["host_type"] != "wsl2-linux"
         or environment["runtime_identifier"] != "linux-x64"
         or actual_dotnet_identity != expected_dotnet_identity
         or global_json
@@ -1195,9 +1195,14 @@ def validate_public_build_runtime_evidence(
     runtime = bundle["runtime_evidence"]
     context = runtime["runtime_context"]
     mise_mode = int(context["mise_executable_mode"], 8)
+    kernel_release = context["kernel_release"].casefold()
     if (
         context["operating_system"] != "linux"
         or context["architecture"] != "x86_64"
+        or context["host_type"] != "wsl2-linux"
+        or context["host_type"] != bundle["environment"]["host_type"]
+        or "microsoft" not in kernel_release
+        or "wsl2" not in kernel_release
         or context["reproduction_count"] != 1
         or context["mise_executable_owner_verified"] is not True
         or not mise_mode & stat.S_IXUSR

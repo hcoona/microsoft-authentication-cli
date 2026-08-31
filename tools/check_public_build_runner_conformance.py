@@ -44,7 +44,7 @@ from run_public_build_experiment import (
     load_strict_json,
     receipt_digest,
     resolve_mise_executable,
-    require_native_linux_x64,
+    require_wsl2_linux_x64,
     run_supervised,
     validate_bundle,
 )
@@ -988,33 +988,40 @@ def test_cancellation_initialization_fixed_point_and_between_subjects() -> None:
     )
 
 
-def test_unsupported_host_before_root() -> None:
+def test_wsl2_host_guard_before_root() -> None:
     base = WORK / "unsupported"
     base.mkdir(mode=0o700)
     root = base / "must-not-exist"
     try:
-        require_native_linux_x64(system="Darwin", machine="x86_64")
+        require_wsl2_linux_x64(
+            system="Darwin",
+            machine="x86_64",
+            kernel_release="6.18.0-microsoft-standard-WSL2",
+        )
         create_exclusive_root(root, base, {"kind": "must-not-create"})
     except CapabilityError:
         pass
     check(not root.exists(), "unsupported host created a root")
-    interop = WORK / "WSLInterop"
-    interop.write_text("enabled\n", encoding="ascii")
-    for kernel, interop_path in (
-        ("6.6.0", interop),
-        ("5.15.0-microsoft-standard-WSL2", WORK / "missing-interop"),
+    for machine, kernel in (
+        ("aarch64", "6.18.0-microsoft-standard-WSL2"),
+        ("x86_64", "6.6.0-generic"),
+        ("x86_64", "4.4.0-19041-Microsoft"),
     ):
         try:
-            require_native_linux_x64(
+            require_wsl2_linux_x64(
                 system="Linux",
-                machine="x86_64",
+                machine=machine,
                 kernel_release=kernel,
-                interop_path=interop_path,
             )
         except CapabilityError:
             pass
         else:
-            raise AssertionError("WSL host was accepted")
+            raise AssertionError("unsupported Linux host was accepted")
+    require_wsl2_linux_x64(
+        system="Linux",
+        machine="x86_64",
+        kernel_release="6.18.0-microsoft-standard-WSL2",
+    )
 
 
 def test_strict_json_and_receipt_tamper() -> None:
@@ -1704,6 +1711,7 @@ def synthetic_case(
     original_open_recording_identity = runner._open_recording_identity
     original_open_checkout_identity = runner._open_checkout_identity
     original_checkout_fingerprint = runner._checkout_fingerprint
+    original_platform_release = runner.platform.release
     retained_selection_descriptors: list[int] = []
     created_capture_identities: list[Any] = []
     created_asset_identities: list[Any] = []
@@ -1807,6 +1815,7 @@ def synthetic_case(
     runner._atomic_publish_asset = instrument_asset
     runner._open_recording_identity = instrument_recording
     runner._open_checkout_identity = instrument_checkout
+    runner.platform.release = lambda: "6.18.0-microsoft-standard-WSL2"
     if fail_integrity_baseline_mode is not None:
         integrity_baseline_failed = False
 
@@ -2446,6 +2455,7 @@ def synthetic_case(
         runner._open_recording_identity = original_open_recording_identity
         runner._open_checkout_identity = original_open_checkout_identity
         runner._checkout_fingerprint = original_checkout_fingerprint
+        runner.platform.release = original_platform_release
         runner._rename_exchange = original_rename_exchange
         os.close(mise_identity.descriptor)
     for descriptor in retained_selection_descriptors:
@@ -2602,6 +2612,23 @@ def test_production_orchestration_order_environment_and_atomic_recording() -> No
             )
         ),
         "unsafe or unverified mise runtime identity was accepted",
+    )
+    misclassified_host = copy.deepcopy(cli_recorded)
+    misclassified_host["runtime_evidence"]["runtime_context"].update(
+        {
+            "host_type": "native-linux",
+            "kernel_release": "6.6.0-generic",
+        }
+    )
+    check(
+        any(
+            "runtime context contradicts" in error
+            for error in runtime_errors(
+                misclassified_host,
+                "misclassified-runtime-host",
+            )
+        ),
+        "misclassified runtime host was accepted",
     )
 
     blocked = copy.deepcopy(cli_recorded)
@@ -4961,7 +4988,7 @@ def test_run_bundle_composition_and_descriptor_lifecycle() -> None:
             for name in (
                 "_open_canonical_bundle",
                 "validate_bundle",
-                "require_native_linux_x64",
+                "require_wsl2_linux_x64",
                 "_require_supervision_capabilities",
                 "enable_child_subreaper",
                 "resolve_mise_executable",
@@ -4994,7 +5021,7 @@ def test_run_bundle_composition_and_descriptor_lifecycle() -> None:
             if fail_at == "host":
                 raise CapabilityError("synthetic host failure")
 
-        runner.require_native_linux_x64 = host
+        runner.require_wsl2_linux_x64 = host
         runner._require_supervision_capabilities = lambda: calls.append(
             "supervision"
         )
@@ -5585,7 +5612,7 @@ def main() -> int:
             test_source_fingerprint_bounds_races_and_no_follow,
             test_spawn_and_post_spawn_fault_cleanup,
             test_cancellation_initialization_fixed_point_and_between_subjects,
-            test_unsupported_host_before_root,
+            test_wsl2_host_guard_before_root,
             test_strict_json_and_receipt_tamper,
             test_planned_and_recorded_component_hash_lifecycle,
             test_exact_two_mode_command_topology,

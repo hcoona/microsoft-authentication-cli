@@ -415,39 +415,22 @@ def validate_bundle(
     return baseline, mise_lock_bytes
 
 
-def detect_wsl(
-    kernel_release: str | None = None,
-    interop_path: Path = Path("/proc/sys/fs/binfmt_misc/WSLInterop"),
-) -> bool:
-    release = kernel_release if kernel_release is not None else platform.release()
-    if "microsoft" in release.casefold() or "wsl" in release.casefold():
-        return True
-    try:
-        first_line = interop_path.read_text(encoding="utf-8").splitlines()[0]
-    except FileNotFoundError:
-        return False
-    except (OSError, UnicodeError) as error:
-        raise CapabilityError(f"cannot inspect WSL interop state: {error}") from error
-    except IndexError:
-        return False
-    return first_line.strip().casefold() == "enabled"
-
-
-def require_native_linux_x64(
+def require_wsl2_linux_x64(
     *,
     system: str | None = None,
     machine: str | None = None,
     kernel_release: str | None = None,
-    interop_path: Path = Path("/proc/sys/fs/binfmt_misc/WSLInterop"),
 ) -> None:
     detected_system = system if system is not None else platform.system()
     detected_machine = machine if machine is not None else platform.machine()
     if detected_system != "Linux":
-        raise CapabilityError("activation v1 supports only native Linux")
+        raise CapabilityError("activation v1 supports only WSL2 Linux")
     if detected_machine not in {"x86_64", "AMD64"}:
-        raise CapabilityError("activation v1 supports only Linux x64")
-    if detect_wsl(kernel_release, interop_path):
-        raise CapabilityError("activation v1 does not support WSL")
+        raise CapabilityError("activation v1 supports only WSL2 Linux x64")
+    release = kernel_release if kernel_release is not None else platform.release()
+    normalized_release = release.casefold()
+    if "microsoft" not in normalized_release or "wsl2" not in normalized_release:
+        raise CapabilityError("activation v1 requires a WSL2 kernel identity")
 
 
 @dataclass(frozen=True)
@@ -4729,6 +4712,7 @@ def _execute_planned_bundle(
         "runtime_context": {
             "operating_system": "linux",
             "architecture": "x86_64",
+            "host_type": "wsl2-linux",
             "kernel_release": platform.release(),
             "reproduction_count": 1,
             "mise_executable_sha256": mise_identity.sha256,
@@ -4765,7 +4749,7 @@ def _execute_planned_bundle(
                     "id": "conclusion-recorded-command-outcomes",
                     "epistemic_level": "runtime-observation",
                     "statement": (
-                        "The runner recorded the bounded native-Linux-x64 command "
+                        "The runner recorded the bounded WSL2-Linux-x64 command "
                         "outcomes with source-faithful output suppressed, other output "
                         "retained only when capture identity was verified, unverifiable "
                         "captures contributing no output evidence, and only asset evidence "
@@ -5000,7 +4984,7 @@ def run_bundle(path: Path) -> dict[str, Any]:
                 bundle,
                 allow_recorded=False,
             )
-            require_native_linux_x64()
+            require_wsl2_linux_x64()
             _require_supervision_capabilities()
             subreaper_enabled = enable_child_subreaper()
             git = shutil.which("git", path="/usr/bin:/bin")
