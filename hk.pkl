@@ -42,6 +42,15 @@ local fastSteps = new Mapping<String, Step> {
       )
     }
   }
+  ["public-build-runner-conformance"] {
+    check = new Command {
+      argv = List(
+        "uv",
+        "run",
+        "tools/check_public_build_runner_conformance.py",
+      )
+    }
+  }
 }
 
 local preCommitSteps = new Mapping<String, Step> {

@@ -1,8 +1,15 @@
 {
-  "assets_file_sha256": "07b3f4ac17fe8cda8a3f8b17a32acc958ef77022945a0900070889a5cdb546da",
+  "assets_file_sha256": "34f341d1ddd2dc36809d61c0324ab3d042ad17d462d3cd4387ebf65b58bd06da",
   "assets_projection": {
-    "assets_target": "net8.0",
+    "assets_target": "net8.0/win-x64",
     "edges": [
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-benchmarkdotnet-0-13-2-node-synthetic-runtime-windows-1-0-0",
+        "from_node_id": "node-benchmarkdotnet-0-13-2",
+        "to_node_id": "node-synthetic-runtime-windows-1-0-0",
+        "version_constraint": "1.0.0"
+      },
       {
         "declaration_ids": [],
         "edge_id": "edge-node-microsoft-identity-client-broker-4-83-1-node-microsoft-identity-client-4-83-1",
@@ -127,6 +134,13 @@
         "id": "MSALWrapper",
         "kind": "project",
         "node_id": "node-project-target-msalwrapper-net8-0",
+        "version": "1.0.0"
+      },
+      {
+        "baseline_target_id": null,
+        "id": "Synthetic.Runtime.Windows",
+        "kind": "package",
+        "node_id": "node-synthetic-runtime-windows-1-0-0",
         "version": "1.0.0"
       }
     ],

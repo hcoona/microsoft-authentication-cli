@@ -1,3 +1,6 @@
+[settings]
+disable_tools = ["http:dotnet-sdk"]
+
 [tools]
 actionlint = "1.7.12"
 gitleaks = "8.30.1"
@@ -6,6 +9,12 @@ lychee = "0.24.2"
 "pipx:check-jsonschema" = "0.38.0"
 python = "3.13.15"
 uv = "0.12.7"
+
+[tools."http:dotnet-sdk"]
+version = "8.0.424"
+
+[tools."http:dotnet-sdk".platforms]
+linux-x64 = { url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.424/dotnet-sdk-8.0.424-linux-x64.tar.gz", checksum = "sha512:6503fd9f464d5e3a4f43a881d2b74afc6a2c46ceda74d027f1565b7239f4b3ec884857c03c0dcd49eb52f384d5ae1fa5aaf135f0a6aabc5518103aceed643c74" }
 
 [env]
 HK_MISE = "1"

@@ -1,7 +1,7 @@
 {
-  "assets_file_sha256": "1f6dbd06f3440bd07c0b0a1c25fd644d2d64779fe66021d3a9090c9eb9ec2a58",
+  "assets_file_sha256": "8c721e6db4fed255046d43dc75ef8a5438190aa468a44291077198accc91f047",
   "assets_projection": {
-    "assets_target": "net8.0",
+    "assets_target": "net8.0/linux-x64",
     "edges": [
       {
         "declaration_ids": [],
@@ -16,6 +16,13 @@
         "from_node_id": "node-nlog-extensions-logging-1-6-3",
         "to_node_id": "node-microsoft-extensions-logging-abstractions-8-0-2",
         "version_constraint": "1.1.2"
+      },
+      {
+        "declaration_ids": [],
+        "edge_id": "edge-node-system-diagnostics-diagnosticsource-8-0-1-node-synthetic-runtime-linux-1-0-0",
+        "from_node_id": "node-system-diagnostics-diagnosticsource-8-0-1",
+        "to_node_id": "node-synthetic-runtime-linux-1-0-0",
+        "version_constraint": "1.0.0"
       },
       {
         "declaration_ids": [
@@ -51,6 +58,13 @@
         "kind": "package",
         "node_id": "node-nlog-extensions-logging-1-6-3",
         "version": "1.6.3"
+      },
+      {
+        "baseline_target_id": null,
+        "id": "Synthetic.Runtime.Linux",
+        "kind": "package",
+        "node_id": "node-synthetic-runtime-linux-1-0-0",
+        "version": "1.0.0"
       },
       {
         "baseline_target_id": null,

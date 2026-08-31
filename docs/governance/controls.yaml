@@ -108,7 +108,7 @@ controls:
     failure_mode: A fixed-source authority, planned-bundle contract, or retained synthetic assets projection becomes internally inconsistent while still passing schema validation.
 
   - id: public-build-evidence-consistency
-    state: scheduled
+    state: current
     class: mechanical
     enforcement: blocking
     producer: hk and the repository record checker
@@ -118,24 +118,21 @@ controls:
       - Research reviewers when evaluating the public-build conclusion
     governing_rules:
       - docs/research/experiment-safety.md#phase-1-public-build-record
-    invariant: After activation, runner-produced bundles bind the reviewed source authorities, isolated environment, bounded command topology, retained raw assets, extractor projection, provenance, limitations, and bounded conclusions without inheriting ambient authority.
+    invariant: The exact singleton bundle remains strict, filename-bound, source- and component-bound, within authorized host and safety ceilings, internally consistent with the fixed two-mode non-publishing Issue #1 plan, and replayable through the shared reducer, current extractor, receipt, nested dependency evidence, limitations, and six runtime semantic carriers. Activation readiness preserves the owner-approved first-supported-production-run SDK installation timing, fail-closed isolation, bounded sanitized evidence, all-exit quiescence, source integrity, retain-always roots, and atomic recording.
     runner: hk
     implementation:
       kind: hk-steps
       steps:
         local-fast:
           - structured-record-schema
+          - public-build-runner-conformance
         ci:
           - structured-record-schema
+          - public-build-runner-conformance
     execution_points:
       - local-fast
       - ci
-    failure_mode: Activated runtime evidence inherits ambient authority, cannot prove process quiescence or ownership before cleanup, reuses an occupied root or dedicated toolchain, or contradicts its reviewed source, command, dependency, provenance, limitation, or conclusion evidence.
-    activation:
-      trigger: The Runtime Activation Prerequisites in docs/research/experiment-safety.md are recorded as satisfied and the reviewed protocol is ready to create the experiment selection root or run the first issue #1 command.
-      evaluator: Research maintainer
-      action: In one change, expand or replace the planned-only bundle schema with the runner-produced runtime contract, change its machine-readable marker to runtime, and bind each required runtime semantic to a distinct marked property under a required runtime-evidence root; pin the isolated toolchain; add the LF-normalized direct-spawn replacement-environment runner; require build, test, and package commands to use --no-restore after the corresponding restore succeeds; define independent resolved or unresolved evidence for applicable package-backed assemblies; add conformance fixtures covering environment replacement, no-shell execution, canonical termination, all-exit process-tree quiescence including a normally exiting parent with a surviving grandchild, and same-invocation ownership-conditioned cleanup; activate the bundle family and this control; and add the blocking public-build-runner-conformance HK step at local-fast and CI. If quiescence cannot be proved on normal exit, failure, cancellation, or timeout, the runner must abort without destructive cleanup or root release. Define one canonical termination cause with optional structured detail and the minimum receipt hash only after choosing the raw or embedded receipt carrier.
-      fallback_review: Issue #1 closure and every phase transition while issue #1 remains open
+    failure_mode: An unsupported or ambiently influenced run begins, the first production run bypasses its pinned installation, a second instance avoids atomic expansion, blockers or conclusions contradict primitive evidence, unsafe output or assets are retained, descendants or roots are not proved safe, source integrity changes, recording or rollback affects another actor, the live schema or another hash-bound component drifts without the required replay-or-migration decision, or repository validation accepts a plan or receipt that the runner would reject.
 
   - id: requirement-id-uniqueness
     state: current

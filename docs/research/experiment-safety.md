@@ -80,176 +80,210 @@ and explicitly mark nonapplicable context when omission could change interpretat
 
 ### Phase 1 Public-Build Record
 
-Issue #1 public-build work uses the fixed strict-JSON authorities
-[`public-build-source-baseline.json`](public-build-source-baseline.json) and
-[`public-build-lasso-reference-manifest.json`](public-build-lasso-reference-manifest.json).
-Their content hashes bind the audited payloads; their schemas and the repository checker
-bind source identity independently. The repository owner's
-[Issue #2 disposition](https://github.com/hcoona/microsoft-authentication-cli/issues/2#issuecomment-5463764986)
-authorizes preparing those immutable public-source audits, their schemas, deterministic
-checks, the planned-bundle contract, and synthetic fixtures during the governance
-migration. It does not activate runtime Issue #1 work.
+Issue #1 uses the fixed source baseline, Lasso reference manifest, and singleton strict-JSON
+bundle linked from the research catalog. The source records own the audited source facts.
+This policy owns outcome-level safety and evidence rules. The singleton bundle owns the
+exact instance inputs, including commands, source-mode paths and configuration, expected
+observations, selected bounds, SDK and mise configuration, component hashes, and
+limitations. The schema owns strict shape, lifecycle, types, authorized ceilings, and the
+six runtime semantic carriers; it does not define a second literal command protocol.
 
-#### Runtime Activation Prerequisites
+#### Activation and Lifecycle
 
-No Issue #1 restore, dependency-resolution, build, test, or package command may run until
-all three prerequisites are recorded:
+No restore, dependency-resolution, build, test, or package command may run until the
+Issue #2 governance change and Record-System Gate are accepted and the target branch's
+accepted project state authorizes Issue #1 execution. Non-executing review may inspect
+repository records and host metadata, but it must not invoke .NET or NuGet, resolve
+packages, access feeds, or mutate source or user state.
 
-1. the Issue #2 governance change has merged into `main-v2`;
-2. the repository owner has recorded that the Record-System Gate passed; and
-3. the target branch's accepted `docs/project-state.md` authorizes Issue #1 runtime
-   execution.
+Activation v1 has exactly one bundle at
+`docs/research/experiments/public-build-linux-x64-dotnet-8-0-424-01.json`, with a matching
+filename and ID. A planned bundle contains no runtime evidence. A recorded bundle contains
+runner-produced evidence with distinct `command_outcomes`, `canonical_termination`,
+`all_exit_quiescence`, `ownership_conditioned_cleanup`, `receipt_binding`, and
+`bounded_conclusions` carriers. The runner must atomically fail closed when recording the
+reviewed singleton; a partial or concurrently changed replacement must not become current.
+A future second instance requires one atomic expansion of the family path, schema ID and
+cardinality, runner roots and topology, checker, catalog, and controls.
 
-A narrow non-executing discovery step may inspect the operating system, architecture,
-available .NET host and SDK files, NuGet version metadata, build entry point, and
-configuration before activation. It must not invoke `dotnet` or NuGet, restore or resolve
-dependencies, access configured feeds, build, test, package, or mutate source or user
-state.
+The repository owner approved `defer_to_first_production_run`. Activation means the
+reviewed runner, contract, schema, controls, and planned bundle are ready; review and hk
+do not install the SDK. The first supported native-Linux production run must exclusively
+create its dedicated toolchain root and install the bundle's locked SDK archive through
+the reviewed mise descriptor before any .NET metadata or experiment command runs. The
+`http:dotnet-sdk` tool remains disabled for ordinary mise installation, automation, and hk.
+The disposition and rationale remain in the governing
+[Issue #1 carrier](https://github.com/hcoona/microsoft-authentication-cli/issues/1#issuecomment-5471951604).
 
-#### Planned Bundle
+#### Isolation and Execution Outcomes
 
-Before activation, the YAML schema
-[`public-build-experiment-bundle.schema.json`](../../schemas/research/public-build-experiment-bundle.schema.json)
-defines only a reviewed `planned` bundle. It records:
+The runner must fail closed before creating a root or spawning a child unless the host is
+native Linux x64 and not WSL. Every child receives a complete direct replacement
+environment and no shell interpretation. The two reviewed source modes use disjoint
+experiment-owned checkout, home, cache, temporary, output, selection, and toolchain paths.
+No ambient credentials, package configuration, caches, startup hooks, or toolchain
+selection may affect an outcome. Existing, linked, replaced, or identity-unverified roots
+are not reusable.
 
-- bundle identity;
-- Issue #1 plus the fixed source-baseline and Lasso-manifest hashes;
-- the planned host and runtime identifier;
-- one exact .NET 8 SDK identity and one exact repository runner identity;
-- intended selection, checkout, mise data, and .NET installation roots;
-- replacement-environment and exclusive, no-follow root-creation principles;
-- the two source modes and the bounded restore, build, filtered-test, and selected-library
-  package command topology;
-- one attempt and a finite timeout for every command;
-- retained raw-assets, strict parsing, extractor replay, provenance, and limitation
-  requirements;
-- exact identities for the extractor entry point and its repository-local NuGet-version
-  component;
-- the PCACache exclusion and its required limitation; and
-- this policy reference.
+The bundle records exactly the source-faithful and public-only modes and their sixteen
+restore, build, filtered-test, and non-publishing package commands. Each command has one
+attempt and a finite timeout. Downstream commands cannot restore implicitly and run only
+after their mode's recorded restore passes. PCACache remains excluded and the limitation
+must state that the evidence does not cover an unfiltered suite or platform persistence.
+The validator independently checks the fixed Issue, source authorities, host and toolchain
+identities, modes and endpoints, baseline stages and targets, one-attempt and dependency
+relationships, non-publishing behavior, trusted path structure, authorized ceilings, and
+internal consistency. The shared implementation contract owns the complete ordered
+command-ID sequence and deterministically reconstructs each command vector. The validator
+requires exact equality for both the full order-sensitive ID sequence and every command
+field and argument; stage coverage or dependency equivalence cannot make a reordered
+protocol acceptable.
 
-The planned schema does not define command results, guards, runtime observations,
-termination or stop-cause matrices, cleanup outcomes, receipts, dependency conclusions,
-or completion conclusions. Those fields require a real runner and evidence carrier.
+Preparation and command outcomes retain primitive attempts and failure origins. One
+implementation-only preparation topology supplies subject metadata and the required
+recorded order, which validator and conformance checks enforce. A shared narrow reducer
+determines global and mode blockers and the canonical cause. Unproved quiescence
+has strongest precedence, followed by late root-identity failure, the first global safety
+stop, ordinary global preparation failure, any command or mode failure, and completion.
+Ordinary mode-local failure must not stop the independent mode. Cancellation, sensitive
+output, failed capture, source-integrity change, unproved quiescence, and unsafe root state
+stop globally. A nonpassed restore blocks its own downstream commands with the restore
+relationship preserved.
 
-#### Runtime Activation Acceptance Criteria
+Every spawned subject must be bound to its process identity and brought to all-exit
+quiescence, including surviving descendants, before evidence is finalized or cleanup is
+considered. Cancellation must remain event-driven and cannot bypass descendant discovery,
+termination, reap, or evidence finalization. If all-exit quiescence cannot be proved, the
+runner must record that uncertainty, stop globally, retain created roots, and perform no
+unsafe cleanup, root release, or asset access.
 
-The activation change must:
+Created selection and toolchain roots are retain-always, including partial roots. No later
+process may resume the run, infer ownership from a name or absence, release a root, or
+delete it. The lifecycle carrier records only whether each root was created and whether
+its current identity was verified; retention and cleanup conclusions are derived from this
+policy and the primitive evidence. After command execution, successful selection-root
+verification retains that exact directory descriptor through dependency inspection and
+recording. Dependency asset traversal is descriptor-relative and no-follow; pathname
+existence or type probes are not authority. Immediately before every bundle commit
+attempt, the canonical selection-root pathname and marker must still bind that retained
+identity. A late mismatch rolls back only matching invocation assets and records
+root-identity-unverified with dependency inspection blocked.
 
-- pin one reviewed exact stable .NET 8 SDK in `mise.toml` and install it under a dedicated
-  mise data root that is not reused by another bundle;
-- add the repository-owned LF-normalized runner, use direct process creation without a
-  shell, replace rather than inherit the child environment, enforce one attempt and the
-  reviewed timeout, and keep occupied selection roots disjoint from every other occupied
-  selection or toolchain root;
-- expand or replace the planned-only schema with the runner-produced runtime evidence
-  contract, set its machine-readable contract marker to `runtime`, bind each required
-  runtime-semantic marker to a concrete schema location, and activate the bundle family
-  and evidence control in the same change;
-- require build, test, and package commands to use `--no-restore` after the corresponding
-  recorded restore succeeds;
-- define independent resolved or unresolved evidence for each applicable
-  `package-backed-assembly` declaration, binding its declaration ID, condition, resolved
-  package and version, evaluated property and `HintPath`, assembly-path existence, and
-  reference-resolution result;
-- select one canonical termination cause with optional structured detail instead of
-  parallel stop-condition fields, and define the minimum receipt hash only after choosing
-  whether the raw or embedded receipt is authoritative;
-- prove process-tree quiescence on every normal, failed, cancelled, and timed-out exit;
-  if quiescence cannot be proved, abort without destructive cleanup or releasing the
-  selection root; and
-- add blocking runner-conformance fixtures at local-fast and CI, including a case where
-  the parent process exits normally while a grandchild remains alive.
+#### Bounded Evidence and Source Integrity
 
-The activation review must also choose how the runner records command results,
-all-exit observations, cleanup evidence, and conclusions. The current planned contract
-does not pre-authorize or mechanically close those semantics.
+Source-faithful experiment-command output must be drained through bounded in-memory
+screening and recorded only as a fixed suppression disposition; no stdout or stderr
+content, excerpt, hash, path, or byte count may be persisted. Other child output must be
+streamed into bounded sanitized captures under the selection root. Only sanitized,
+identity-verified bytes and bounded excerpts may be recorded. Output beyond the bound
+terminates the command and blocks its mode. A later sensitive or capture failure supersedes
+that mode-local overflow and stops globally; replaced or unverifiable output also stops
+globally and cannot become evidence. A failed retained-capture identity check records only
+the fixed `capture-unverifiable` no-content disposition for both streams. That later
+verification failure preserves an already selected cancellation, unproved quiescence,
+sensitive-output, source-integrity, root-identity, or capture-failed global safety
+termination; otherwise the reducer selects the later capture-failed event over completion
+or a mode-local timeout or output-limit result.
+The runner retains capture identity handles through recording and verifies the canonical
+selection root, capture parent, leaf identity, type, size, and hash before and after the
+bundle exchange while the displaced plan remains recoverable. A safe mismatch invalidates
+the affected attempt symmetrically, and a failed selection-root identity invalidates every
+retained capture reference under that root.
 
-#### Bounded Command and Isolation Plan
+Before root creation, the runner recomputes both canonical authority payload hashes,
+retains the validated source-baseline snapshot for dependency extraction, and takes one
+bounded no-follow snapshot of the experiment lock after verifying its component hash and
+exact one-tool projection. The generated `mise.lock` must use and match those retained
+bytes rather than reopening the repository path. Runtime evidence records the reviewed
+mise digest, a safe normalized executable mode, and successful owner verification, plus
+the selected Git executable digest, but not ambient executable paths or the numeric
+operating-system user ID.
 
-The two source modes are:
+After each Git initialization, the runner must retain a no-follow descriptor and
+device/inode identity for that mode's checkout through all remaining preparation,
+experiment, inspection, and recording work. Checkout-related child working directories
+and checkout-contained runtime arguments are descriptor-bound while the reviewed bundle
+continues to retain the canonical command vectors. The canonical checkout pathname must
+still resolve to the retained identity at baseline and command boundaries. Fingerprints
+must traverse a duplicate of the retained descriptor rather than reopening that pathname.
+The source-faithful `nuget.config` runtime token is relative to the descriptor-bound
+working directory so NuGet records the canonical checkout path rather than a procfs
+descriptor spelling in replayed restore metadata.
+After checkout preparation and after each executed experiment command, the runner must
+compute one bounded, no-follow aggregate source fingerprint. It binds the detached audited
+HEAD, the Git index, and every worktree entry outside `.git`, including relative path,
+type, normalized executable mode, regular-file content, symbolic-link target, and
+directory presence. Path replacement, unsupported types, races, ceiling violations, or a
+mismatch stop globally and cannot leave the affected command acceptable. Exact HEAD
+verification remains independent. The bundle selects bounds within the schema and
+contract ceilings; policy does not duplicate their numeric values.
 
-- `source-faithful`, using the audited checkout's source configuration; and
-- `public-only`, using an isolated configuration that clears inherited sources and
-  selects only the canonical NuGet.org v3 endpoint.
+Dependency evidence is nested by source mode and target. Target containment supplies mode
+and target identity. A valid target retains the exact asset path, hash, full
+current-extractor projection, and target-level provenance bound to the corresponding
+restore outcome and initial-cache observation. Missing or invalid targets retain their reason and every applicable unresolved
+direct package declaration with failure references. Mode completeness is derived from the
+valid target set; unknown transitive scope follows from partial or unavailable evidence.
+The fixed Linux x64 applicable package-backed-assembly set must be empty. A future source
+baseline that makes such a declaration applicable requires an atomic runtime-contract
+expansion before execution.
 
-Each mode plans one solution restore, one solution build depending on that restore, one
-filtered solution test depending on that restore, and package commands for
-`src/AdoPat/AdoPat.csproj`, `src/AzureAuth/AzureAuth.csproj`, and
-`src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj`,
-`src/MSALWrapper/MSALWrapper.csproj`, and `src/TestHelper/TestHelper.csproj`, each
-depending on that restore. These are the five SDK projects in the fixed solution that do
-not disable packing. The AzureAuth package attempt records the fixed source's missing
-`AzureAuth.nuspec` as a failure if the file remains absent; it does not claim publish or
-archive parity. Every downstream command uses `--no-restore`, one attempt, and a bounded
-timeout. Tests exclude
-`Microsoft.Authentication.MSALWrapper.Test.PCACacheTest`; therefore the evidence cannot
-establish an unfiltered upstream test-suite pass or PCACache, keyring, Keychain, or DPAPI
-behavior.
+Raw `project.assets.json` evidence must be safety-screened, bounded, exact-byte retained,
+hash-bound, and replay exactly through the live reviewed extractor. Asset access and
+publication require proved all-exit quiescence, verified root identity, unchanged source,
+and no global preparation or safety stop. Pre-commit failure may remove only an
+invocation-owned asset whose identity still matches; committed or replaced assets must not
+be unlinked. Cleanup of runner-owned published-asset leaves, asset staging names, and
+bundle candidate or displaced names must use one directory-descriptor-relative Linux
+quarantine operation. A no-replace atomic move to a cryptographically unpredictable name
+is the ownership linearization point. The moved object must match the captured device,
+inode, and hash when available before deletion. An unexpected object is never unlinked:
+it is restored with no-replace semantics when safe, otherwise preserved in quarantine and
+reported as indeterminate. The final bundle compare-and-swap owns the complete
+published-asset identity set. It verifies every asset before exchange and again while the
+displaced planned bundle is retained. A post-exchange asset or root mismatch permits
+reversal only while both bundle leaf identities remain exact; reversal must restore and
+durably verify the original plan before matching invocation assets are rolled back. Once
+the displaced plan is deleted, asset rollback is forbidden. A post-exchange displaced
+leaf that is not the exact original plan is observationally ambiguous and must preserve
+the canonical candidate, unexpected displaced state, and published assets as a committed
+or indeterminate recording error. Indeterminate cleanup,
+reversal, restoration, or durability is a committed or indeterminate recording error,
+never a claimed safe rollback. This quarantine rule is limited to runner-owned named
+leaves and does not establish broader same-user or filesystem hardening. Provenance
+references establish reviewable carrier relationships, not causal sufficiency.
+Immediately after each restore reaches proved quiescence, the runner takes a bounded,
+no-follow in-memory presence and SHA-256 snapshot of every expected target asset. Final
+inspection and publication require the current bytes to match that restore-time snapshot;
+changed, deleted, or newly appearing bytes remain invalid and unresolved.
 
-The replacement environment must not inherit ambient package credentials, caches,
-proxies, startup hooks, MSBuild imports, or toolchain selection. The selection root is
-created with exclusive, no-follow operations and contains the detached checkout and
-isolated mutable state. The dedicated mise data and .NET installation roots remain
-outside the selection root. Their final exact environment allowlist and command arguments
-belong to the activation change and real runner contract.
+Planned and recorded validation require every hash-bound runner, validator, contract,
+schema, extractor, NuGet helper, and experiment-lock component to match the live
+repository file, and recorded
+projection replay uses the current extractor. After a recorded bundle exists, the first
+proposed change to any of those hash-bound components must atomically choose and implement
+either historical replay or record migration, with independent research-evidence review.
+Until that trigger fires, history-wide component search and recovered historical Python
+execution are prohibited.
 
-One execution is one uninterrupted runner invocation. A later process must not resume
-commands, delete the selection root, or release its reservation. The same invocation may
-release the root only when it can prove either that the root was never successfully
-created, or that its process tree is quiescent on the applicable exit path and current
-ownership has been verified. Path absence observed by a later process is not transferable
-cleanup authority.
+The embedded receipt binds the complete recorded strict-JSON bundle except its own digest.
+The runner, CLI validator, and repository checker share shape and semantic validation;
+repository checks delegate rather than maintain a second positive plan. Mechanical checks
+establish consistency, not evidence sufficiency or public causality.
 
-#### Raw Assets, Extraction, and Provenance
+#### Conclusions and Boundaries
 
-A runtime restore conclusion that uses `project.assets.json` must retain the sanitized
-file as exact bytes under `docs/research/experiments/assets/`. JSON parsing rejects
-duplicate object keys. The retained file must pass its schema, match its recorded
-SHA-256, and replay exactly through
-`tools/extract_public_build_assets.py`.
+Conclusions must remain bounded to the recorded host, audited commit, source mode,
+commands, reproduction count, retained evidence, and limitations. Complete, partial, and
+unavailable dependency states are observations, not support promises. A shared failure
+does not by itself prove a public-dependency cause, and one run does not establish
+variability or service reliability. The Lasso manifest remains the source-usage authority;
+Issue #1 may map responsibilities and bounded candidates but cannot select or implement a
+replacement.
 
-The extractor is the sole authority for the resolved projection. The checker compares
-the replayed output as a whole; it does not reimplement projection node identifiers,
-edge identifiers, ordering, or constraint construction. The extractor continues to
-validate the selected source project, target framework, applicable direct
-`PackageReference` declarations, project references, resolved dependency topology, and
-the bounded NuGet version and range grammar needed by the synthetic fixtures. Its
-content identity includes both the extractor entry point and its repository-local
-NuGet-version component, with LF-normalized checkout bytes.
-
-Runtime provenance remains distinct from topology. Activation must bind each retained
-raw asset to its command result and source mode, and bind each projected package to
-sanitized retrieval-source, access, and initial-cache evidence. Exact extractor replay
-does not prove network access, cache emptiness, credential-provider absence, or causal
-attribution. It also does not prove that an MSBuild property and `HintPath` selected a
-package-backed assembly. That declaration requires the separate activation-time evidence
-defined above; `project.assets.json` may support its package and file observations but is
-not the sole authority for reference resolution. The first real unsupported NuGet
-constraint, or the first conclusion that
-requires broader range evaluation, requires the Research maintainer and an independent
-evidence reviewer to choose official NuGet semantics or an explicit bounded grammar. The
-fallback is a partial limitation and no causal conclusion.
-
-#### Conclusions and Lasso Analysis
-
-Any eventual conclusion is bounded to the recorded host, source commit, toolchain,
-source mode, commands, attempts, and sanitized evidence. A failure shared by both source
-modes does not establish that public dependency resolution caused it. A transient or
-unsupported condition remains inconclusive unless independent evidence supports a
-stronger statement.
-
-The fixed symbol-aware Lasso manifest remains the source-usage authority. Runtime work
-must map its references to apparent responsibilities and public evidence before proposing
-removal or replacement. That analysis may identify candidates but does not select or
-implement one.
-
-#### Non-Goals
-
-This protocol does not define AzureAuth publish/archive release parity, a generic
-authentication-experiment format, a release SBOM, a public product contract, or support
-and compatibility commitments. Narrative research may synthesize future structured
-evidence but must not maintain a second copy of command results or dependency inventory.
+This protocol does not define publish parity, a generic experiment framework, product or
+support contracts, release readiness, or a second narrative copy of command and dependency
+results.
 
 ## Stop Conditions
 
@@ -260,5 +294,7 @@ Stop the experiment if:
 - the process accesses an unplanned cache, keychain, keyring, registry path, or
   installation;
 - a restore succeeds only because inherited credentials or package caches are present;
-- ownership or process-tree quiescence cannot be proved before cleanup;
+- ownership, root identity, or all-exit quiescence cannot be proved before cleanup or
+  asset access;
+- the aggregate source-integrity fingerprint changes during command execution;
 - continuing would mutate an unrelated remote resource.
