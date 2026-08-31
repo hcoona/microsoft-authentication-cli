@@ -108,22 +108,32 @@ cardinality, runner roots and topology, checker, catalog, and controls.
 
 The repository owner approved `defer_to_first_production_run`. Activation means the
 reviewed runner, contract, schema, controls, and planned bundle are ready; review and hk
-do not install the SDK. The first supported native-Linux production run must exclusively
+do not install the SDK. The first supported WSL2 Linux x64 production run must exclusively
 create its dedicated toolchain root and install the bundle's locked SDK archive through
 the reviewed mise descriptor before any .NET metadata or experiment command runs. The
 `http:dotnet-sdk` tool remains disabled for ordinary mise installation, automation, and hk.
-The disposition and rationale remain in the governing
-[Issue #1 carrier](https://github.com/hcoona/microsoft-authentication-cli/issues/1#issuecomment-5471951604).
+The acquisition timing and WSL2 host dispositions remain in the governing Issue #1
+carrier:
+[SDK acquisition](https://github.com/hcoona/microsoft-authentication-cli/issues/1#issuecomment-5471951604)
+and
+[WSL2 host](https://github.com/hcoona/microsoft-authentication-cli/issues/1#issuecomment-5483552767).
 
 #### Isolation and Execution Outcomes
 
 The runner must fail closed before creating a root or spawning a child unless the host is
-native Linux x64 and not WSL. Every child receives a complete direct replacement
-environment and no shell interpretation. The two reviewed source modes use disjoint
-experiment-owned checkout, home, cache, temporary, output, selection, and toolchain paths.
-No ambient credentials, package configuration, caches, startup hooks, or toolchain
-selection may affect an outcome. Existing, linked, replaced, or identity-unverified roots
-are not reusable.
+WSL2 Linux x64. Every child receives a complete direct replacement environment and no
+shell interpretation. The child environments omit WSL-specific variables and Windows
+PATH entries, and the fixed mise, Git, and .NET executable selections are Linux paths and
+identities. The protocol does not invoke a Windows executable, helper, broker, credential
+provider, account state, or cache through WSL interoperability. An observed Windows-side
+interaction is a stop condition. This boundary constrains the reviewed execution; it is
+not a hostile-build-input sandbox or a claim that WSL interoperability is disabled for
+unrelated processes.
+
+The two reviewed source modes use disjoint experiment-owned checkout, home, cache,
+temporary, output, selection, and toolchain paths. No ambient credentials, package
+configuration, caches, startup hooks, or toolchain selection may affect an outcome.
+Existing, linked, replaced, or identity-unverified roots are not reusable.
 
 The bundle records exactly the source-faithful and public-only modes and their sixteen
 restore, build, filtered-test, and non-publishing package commands. Each command has one
@@ -294,6 +304,8 @@ Stop the experiment if:
 - the process accesses an unplanned cache, keychain, keyring, registry path, or
   installation;
 - a restore succeeds only because inherited credentials or package caches are present;
+- a Windows executable, helper, broker, credential provider, account state, or cache is
+  invoked or accessed through WSL interoperability;
 - ownership, root identity, or all-exit quiescence cannot be proved before cleanup or
   asset access;
 - the aggregate source-integrity fingerprint changes during command execution;

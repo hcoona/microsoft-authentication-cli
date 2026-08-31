@@ -40,7 +40,7 @@ is navigation, not an independent authority.
 | Experiment authors and reviewers | Experiment authorization, isolation, safety, and evidence rules | [`research/experiment-safety.md`](research/experiment-safety.md) |
 | Phase 1 experiment authors and reviewers | Fixed solution targets, source dependencies, and stage applicability | [`research/public-build-source-baseline.json`](research/public-build-source-baseline.json) |
 | Phase 1 experiment authors and reviewers | Fixed source-level Lasso usage manifest | [`research/public-build-lasso-reference-manifest.json`](research/public-build-lasso-reference-manifest.json) |
-| Phase 1 experiment authors and reviewers | Native-Linux-x64 public-build activation-v1 protocol and eventual embedded runtime evidence | [`research/experiments/public-build-linux-x64-dotnet-8-0-424-01.json`](research/experiments/public-build-linux-x64-dotnet-8-0-424-01.json) |
+| Phase 1 experiment authors and reviewers | WSL2-Linux-x64 public-build activation-v1 protocol and eventual embedded runtime evidence | [`research/experiments/public-build-linux-x64-dotnet-8-0-424-01.json`](research/experiments/public-build-linux-x64-dotnet-8-0-424-01.json) |
 | Research and release reviewers | Mutable public facts and their recheck triggers | [`research/rechecks.yaml`](research/rechecks.yaml) |
 | Maintainers and upstream-source consumers | Upstream baseline and import policy | [`../UPSTREAM.md`](../UPSTREAM.md) |
 

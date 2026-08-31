@@ -244,7 +244,7 @@
       ],
       "properties": {
         "host_type": {
-          "const": "native-linux"
+          "const": "wsl2-linux"
         },
         "runtime_identifier": {
           "const": "linux-x64"
@@ -1278,6 +1278,7 @@
       "required": [
         "operating_system",
         "architecture",
+        "host_type",
         "kernel_release",
         "mise_executable_sha256",
         "mise_executable_owner_verified",
@@ -1292,6 +1293,9 @@
         },
         "architecture": {
           "const": "x86_64"
+        },
+        "host_type": {
+          "const": "wsl2-linux"
         },
         "kernel_release": {
           "$ref": "#/$defs/nonemptyString"
