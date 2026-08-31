@@ -2,4 +2,9 @@ docs/research/experiments/assets/*.project.assets.json -text
 tools/fixtures/public-build/*.project.assets.json -text
 tools/extract_public_build_assets.py text eol=lf
 tools/nuget_versions.py text eol=lf
+tools/public_build_contract.py text eol=lf
+tools/public-build-mise.lock text eol=lf
+tools/public_build_validation.py text eol=lf
 tools/run_public_build_experiment.py text eol=lf
+tools/check_public_build_runner_conformance.py text eol=lf
+tools/fixtures/public-build/runner/*.py text eol=lf

@@ -412,25 +412,20 @@ families:
     review_point: Changes that correct source-reference attribution or change the issue #1 audited commit
 
   - id: public-build-experiment-bundles
-    state: scheduled
-    concern: Reviewed planned protocols for issue #1 public-build experiments, followed by runner-produced evidence only after runtime activation
+    state: current
+    concern: Reviewed strict-JSON protocols and runner-produced runtime evidence for issue #1 public-build experiments
     carrier: repository-files
-    path: docs/research/experiments/public-build-*.yaml
-    format: yaml
+    path: docs/research/experiments/public-build-linux-x64-dotnet-8-0-424-01.json
+    format: json
     schema: schemas/research/public-build-experiment-bundle.schema.json
-    producer: Experiment owner
+    producer: Experiment owner for planned form and the repository runner for recorded form
     maintainer: Research maintainer
     consumers:
-      - Issue #1 experiment authors when preparing the activation review
-      - Issue #1 implementers and research reviewers after activation when reproducing commands or evaluating dependency and public-build conclusions
-    creation_trigger: After the Runtime Activation Prerequisites in docs/research/experiment-safety.md are recorded as satisfied and non-executing environment discovery is complete, before the experiment selection root is created or the first issue #1 experiment command is executed.
-    failure_mode: A runtime experiment begins without a reviewed source binding, exact toolchain and runner identity, bounded command topology, or isolation and evidence plan.
-    review_point: Before execution and when conclusions are recorded
-    activation:
-      trigger: The Runtime Activation Prerequisites in docs/research/experiment-safety.md are recorded as satisfied, non-executing environment discovery is complete, and the reviewed protocol is ready for activation.
-      evaluator: Research maintainer, using the repository owner's recorded Record-System Gate disposition and the target branch's accepted project state
-      action: Pin the reviewed exact .NET 8 SDK in mise.toml under an isolated mise data root; add the LF-normalized repository-owned direct-spawn runner and its synthetic conformance fixtures; expand or replace the planned-only schema with the runner-produced runtime contract, change its machine-readable marker to runtime, and bind each required runtime semantic to a distinct marked property under a required runtime-evidence root; require one canonical termination cause with optional structured detail and define the minimum receipt hash only after selecting the raw or embedded receipt carrier; require build, test, and package commands to use --no-restore after the corresponding restore succeeds; define independent resolved or unresolved evidence for applicable package-backed assemblies; prove process-tree quiescence on normal exit, failure, cancellation, and timeout, including the case where a parent exits normally while a grandchild remains alive; prohibit destructive cleanup or root release when quiescence is unproved; add the blocking public-build-runner-conformance HK step at local-fast and CI; create the initial planned bundle; change this family and its evidence control to current in the same change; and validate the protocol before creating the selection root or executing dotnet.
-      fallback_review: Issue #1 closure and every phase transition while issue #1 remains open
+      - Issue #1 experiment authors before execution and the fixed runner when validating the selected plan
+      - Issue #1 implementers and research reviewers when reproducing commands or evaluating dependency and public-build conclusions
+    creation_trigger: The issue #1 runtime activation change is reviewed for runner and contract readiness under the owner-approved defer_to_first_production_run amendment, before the first production experiment selection or toolchain root is created or any child process is executed.
+    failure_mode: A runtime experiment begins without a reviewed source binding, exact toolchain and runner identity, bounded command topology, fail-closed host guard, lifecycle evidence, or isolated state, or the first supported production run bypasses the dedicated pinned-SDK installation.
+    review_point: At activation readiness, before the first production execution and SDK installation, when conclusions are recorded, before any second instance atomically expands the exact family path, schema ID authority, runner roots and topology, checker, catalog, and controls, after a recorded bundle exists at the first proposed hash-bound runner, validator, contract, schema, extractor, NuGet-helper, or experiment-lock change, which must atomically choose a historical replay or record migration strategy with independent research-evidence review, and at every phase transition, when research-evidence review reassesses the second-instance expansion and recorded-component-drift deferrals
 
   - id: public-build-assets-evidence
     state: scheduled

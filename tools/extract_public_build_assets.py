@@ -150,7 +150,6 @@ def extract_projection(
     baseline: dict[str, Any],
     target_id: str,
     runtime_identifier: str,
-    assets_target: str,
     checkout_root: str,
 ) -> dict[str, Any]:
     if RUNTIME_IDENTIFIER_PATTERN.fullmatch(runtime_identifier) is None:
@@ -163,6 +162,7 @@ def extract_projection(
     if target is None:
         raise ExtractionError(f"unknown source-baseline target: {target_id}")
     target_framework = target["target_framework"]
+    assets_target = f"{target_framework}/{runtime_identifier}"
     expected_project_target_ids: set[str] = set()
     pending_project_target_ids = list(target["project_references"])
     while pending_project_target_ids:
@@ -176,12 +176,6 @@ def extract_projection(
             )
         expected_project_target_ids.add(project_target_id)
         pending_project_target_ids.extend(project_target["project_references"])
-    if assets_target != target_framework:
-        raise ExtractionError(
-            f"assets target {assets_target} does not match source-baseline target "
-            f"framework {target_framework} selected by the canonical command"
-        )
-
     project = assets.get("project")
     restore = project.get("restore") if isinstance(project, dict) else None
     project_path = restore.get("projectPath") if isinstance(restore, dict) else None
@@ -317,13 +311,13 @@ def extract_projection(
     target_graphs = assets.get("targets")
     if (
         not isinstance(target_graphs, dict)
-        or set(target_graphs) != {assets_target}
+        or set(target_graphs) != {target_framework, assets_target}
     ):
         raise ExtractionError(
             "project.assets.json target framework set differs from the source "
             f"baseline; observed="
             f"{sorted(target_graphs) if isinstance(target_graphs, dict) else None}, "
-            f"expected={[assets_target]}"
+            f"expected={sorted([target_framework, assets_target])}"
         )
     if not isinstance(target_graphs.get(assets_target), dict):
         raise ExtractionError(
@@ -816,7 +810,6 @@ def main() -> int:
     parser.add_argument("--assets", required=True, type=Path)
     parser.add_argument("--target-id", required=True)
     parser.add_argument("--runtime-identifier", required=True)
-    parser.add_argument("--assets-target", required=True)
     parser.add_argument("--checkout-root", required=True)
     args = parser.parse_args()
 
@@ -829,7 +822,6 @@ def main() -> int:
             load_json(BASELINE_PATH),
             args.target_id,
             args.runtime_identifier,
-            args.assets_target,
             args.checkout_root,
         )
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, ExtractionError) as error:

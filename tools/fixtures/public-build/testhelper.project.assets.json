@@ -17,6 +17,29 @@
       "System.Diagnostics.DiagnosticSource/8.0.1": {
         "type": "package"
       }
+    },
+    "net8.0/linux-x64": {
+      "Microsoft.Extensions.Logging.Abstractions/8.0.2": {
+        "type": "package",
+        "dependencies": {
+          "System.Diagnostics.DiagnosticSource": "[8.0.0, )"
+        }
+      },
+      "NLog.Extensions.Logging/1.6.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "1.1.2"
+        }
+      },
+      "System.Diagnostics.DiagnosticSource/8.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Synthetic.Runtime.Linux": "1.0.0"
+        }
+      },
+      "Synthetic.Runtime.Linux/1.0.0": {
+        "type": "package"
+      }
     }
   },
   "libraries": {
@@ -27,6 +50,9 @@
       "type": "package"
     },
     "System.Diagnostics.DiagnosticSource/8.0.1": {
+      "type": "package"
+    },
+    "Synthetic.Runtime.Linux/1.0.0": {
       "type": "package"
     }
   },

@@ -7,15 +7,15 @@ from __future__ import annotations
 
 import argparse
 import copy
-import hashlib
 import json
 import os
 import re
 import subprocess
 import sys
+import tomllib
 from collections import Counter
-from pathlib import Path, PurePosixPath, PureWindowsPath
-from typing import Any, Callable
+from pathlib import Path, PurePosixPath
+from typing import Any
 
 import yaml
 from extract_public_build_assets import (
@@ -31,9 +31,19 @@ from nuget_versions import (
     nuget_version_satisfies_constraint,
 )
 from public_build_contract import (
-    PCACACHE_TEST_FILTER,
-    PCACACHE_TEST_LIMITATION,
+    DOTNET_SDK_ARCHIVE_SHA512,
+    DOTNET_SDK_ARCHIVE_URL,
+    DOTNET_SDK_VERSION,
+    MISE_TOOL_NAME,
 )
+from public_build_validation import (
+    canonical_sha256,
+    lasso_reference_manifest_payload,
+    source_manifest_payload,
+    validate_public_build_bundle_instance,
+    validate_public_build_bundle_value,
+)
+from run_public_build_experiment import run_bundle
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -87,6 +97,7 @@ PUBLIC_BUILD_SCHEMA_PATH = (
 PUBLIC_BUILD_EXTRACTOR_PATH = "tools/extract_public_build_assets.py"
 PUBLIC_BUILD_NUGET_VERSIONS_PATH = "tools/nuget_versions.py"
 PUBLIC_BUILD_RUNNER_PATH = "tools/run_public_build_experiment.py"
+PUBLIC_BUILD_VALIDATION_PATH = "tools/public_build_validation.py"
 PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS = frozenset(
     {
         "all_exit_quiescence",
@@ -96,15 +107,6 @@ PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS = frozenset(
         "ownership_conditioned_cleanup",
         "receipt_binding",
     }
-)
-SOURCE_FAITHFUL_PACKAGE_SOURCE = (
-    "https://pkgs.dev.azure.com/office/_packaging/Office/nuget/v3/index.json"
-)
-PUBLIC_PACKAGE_SOURCE = "https://api.nuget.org/v3/index.json"
-EXTRACTOR_LIMITATION = (
-    "Exact extractor replay proves that the recorded projection matches the retained "
-    "project.assets.json bytes; it does not prove network access, cache emptiness, "
-    "credential-provider absence, or causal attribution."
 )
 
 
@@ -642,6 +644,34 @@ def check_public_build_activation_coupling(
         return errors
     if family["state"] != "current":
         return errors
+    expected_bundle_path = (
+        "docs/research/experiments/"
+        "public-build-linux-x64-dotnet-8-0-424-01.json"
+    )
+    if family["path"] != expected_bundle_path or family["format"] != "json":
+        errors.append(
+            "current public-build experiment singleton must use its exact JSON path"
+        )
+    bundle_paths = sorted(
+        path.relative_to(ROOT).as_posix()
+        for path in (ROOT / "docs/research/experiments").glob("public-build-*.json")
+        if path.is_file()
+    )
+    if bundle_paths != [expected_bundle_path]:
+        errors.append(
+            "current public-build experiment singleton must have cardinality one"
+        )
+    else:
+        try:
+            singleton = load_strict_json(expected_bundle_path)
+        except ExtractionError as error:
+            errors.append(str(error))
+        else:
+            expected_id = Path(expected_bundle_path).stem
+            if singleton.get("id") != expected_id:
+                errors.append(
+                    "public-build singleton filename must equal its fixed bundle ID"
+                )
 
     if schema is None:
         try:
@@ -662,8 +692,7 @@ def check_public_build_activation_coupling(
     if (
         not isinstance(marker, dict)
         or marker.get("mode") != "runtime"
-        or not isinstance(marker.get("version"), int)
-        or marker["version"] < 1
+        or marker.get("version") != 2
         or not isinstance(runtime_semantics, dict)
         or not isinstance(runtime_property, str)
         or not runtime_property
@@ -676,7 +705,6 @@ def check_public_build_activation_coupling(
     else:
         runtime_root = resolve_schema_pointer(schema, runtime_root_pointer)
         root_properties = schema.get("properties")
-        root_required = schema.get("required")
         runtime_property_schema = (
             root_properties.get(runtime_property)
             if isinstance(root_properties, dict)
@@ -732,11 +760,18 @@ def check_public_build_activation_coupling(
                 invalid_anchors.append(name)
             elif not schema_rejects_empty_values(schema, target):
                 unconstrained_anchors.append(name)
+        runtime_required_by_discriminator = any(
+            isinstance(clause, dict)
+            and clause.get("if", {}).get("properties", {}).get("status", {}).get("const")
+            == "planned"
+            and runtime_property
+            in clause.get("else", {}).get("required", [])
+            for clause in schema.get("allOf", [])
+        )
         runtime_root_valid = (
             isinstance(runtime_root, dict)
             and runtime_root.get("type") == "object"
-            and isinstance(root_required, list)
-            and runtime_property in root_required
+            and runtime_required_by_discriminator
             and runtime_property_ref == runtime_root_pointer
         )
         if (
@@ -763,6 +798,50 @@ def check_public_build_activation_coupling(
             "current public-build experiment bundles require the repository-owned "
             f"runner at {PUBLIC_BUILD_RUNNER_PATH}"
         )
+    elif not callable(run_bundle):
+        errors.append(
+            "current public-build experiment bundles require the fixed production "
+            "run <planned-bundle> entry point"
+        )
+
+    try:
+        mise_config = tomllib.loads((ROOT / "mise.toml").read_text(encoding="utf-8"))
+        mise_lock = tomllib.loads((ROOT / "mise.lock").read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, tomllib.TOMLDecodeError) as error:
+        errors.append(f"cannot validate public-build mise configuration: {error}")
+    else:
+        sdk_config = mise_config.get("tools", {}).get(MISE_TOOL_NAME)
+        sdk_lock_entries = mise_lock.get("tools", {}).get(MISE_TOOL_NAME)
+        sdk_lock = (
+            sdk_lock_entries[0]
+            if isinstance(sdk_lock_entries, list) and len(sdk_lock_entries) == 1
+            else None
+        )
+        expected_platform = {
+            "url": DOTNET_SDK_ARCHIVE_URL,
+            "checksum": f"sha512:{DOTNET_SDK_ARCHIVE_SHA512}",
+        }
+        if (
+            MISE_TOOL_NAME
+            not in mise_config.get("settings", {}).get("disable_tools", [])
+            or not isinstance(sdk_config, dict)
+            or sdk_config.get("version") != DOTNET_SDK_VERSION
+            or sdk_config.get("platforms") != {"linux-x64": expected_platform}
+            or "postinstall" in sdk_config
+            or not isinstance(sdk_lock, dict)
+            or sdk_lock.get("version") != DOTNET_SDK_VERSION
+            or sdk_lock.get("backend") != MISE_TOOL_NAME
+            or {
+                key: value
+                for key, value in sdk_lock.items()
+                if key.startswith("platforms.")
+            }
+            != {"platforms.linux-x64": expected_platform}
+        ):
+            errors.append(
+                "public-build SDK must remain a disabled-by-default, postinstall-free, "
+                "Linux-x64-only locked HTTP tool"
+            )
 
     implementation = control["implementation"]
     required_step = "public-build-runner-conformance"
@@ -980,151 +1059,6 @@ def check_catalog_paths() -> list[str]:
     errors.extend(check_documentation_portal(current_family_paths))
     errors.extend(check_control_references(catalog))
     return errors
-
-
-def canonical_sha256(value: Any) -> str:
-    encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
-    return hashlib.sha256(encoded).hexdigest()
-
-
-def normalized_absolute_path(
-    value: str,
-) -> tuple[str, PurePosixPath | PureWindowsPath] | None:
-    if "\\" in value:
-        return None
-    is_windows = re.match(r"^[A-Za-z]:/", value) is not None
-    if not is_windows and value.startswith("//"):
-        return None
-    raw_parts = value[3:].split("/") if is_windows else value.split("/")
-    if any(part in {".", ".."} for part in raw_parts):
-        return None
-    if is_windows and any(part.endswith((" ", ".")) for part in raw_parts):
-        return None
-    path: PurePosixPath | PureWindowsPath
-    if is_windows:
-        path = PureWindowsPath(value)
-        kind = "windows"
-    else:
-        path = PurePosixPath(value)
-        kind = "posix"
-    if not path.is_absolute() or path.as_posix() != value:
-        return None
-    return kind, path
-
-
-def recorded_path_is_within(
-    child: tuple[str, PurePosixPath | PureWindowsPath],
-    parent: tuple[str, PurePosixPath | PureWindowsPath],
-    allow_equal: bool = False,
-) -> bool:
-    child_kind, child_path = child
-    parent_kind, parent_path = parent
-    if child_kind != parent_kind:
-        return False
-    if child_kind == "windows":
-        child_parts = tuple(part.casefold() for part in child_path.parts)
-        parent_parts = tuple(part.casefold() for part in parent_path.parts)
-    else:
-        child_parts = child_path.parts
-        parent_parts = parent_path.parts
-    if len(child_parts) < len(parent_parts):
-        return False
-    if not allow_equal and len(child_parts) == len(parent_parts):
-        return False
-    return child_parts[: len(parent_parts)] == parent_parts
-
-
-def recorded_paths_overlap(
-    left: tuple[str, PurePosixPath | PureWindowsPath],
-    right: tuple[str, PurePosixPath | PureWindowsPath],
-) -> bool:
-    return recorded_path_is_within(left, right, allow_equal=True) or (
-        recorded_path_is_within(right, left, allow_equal=True)
-    )
-
-
-def source_manifest_payload(
-    stage_applicability: dict[str, Any],
-    targets: list[dict[str, Any]],
-    package_targets: list[dict[str, Any]],
-    declarations: list[dict[str, Any]],
-) -> dict[str, Any]:
-    return {
-        "stage_applicability": {
-            stage: {
-                "applicable": value["applicable"],
-                "source_references": sorted(value["source_references"]),
-            }
-            for stage, value in sorted(stage_applicability.items())
-        },
-        "attempted_targets": sorted(
-            (
-                {
-                    "id": target["id"],
-                    "project_path": target["project_path"],
-                    "target_framework": target["target_framework"],
-                    "sdk": target["sdk"],
-                    "project_references": sorted(target["project_references"]),
-                    "source_references": sorted(target["source_references"]),
-                }
-                for target in targets
-            ),
-            key=lambda target: target["id"],
-        ),
-        "package_targets": sorted(
-            (
-                {
-                    "target_id": package_target["target_id"],
-                    "package_id": package_target["package_id"],
-                    "source_references": sorted(
-                        package_target["source_references"]
-                    ),
-                }
-                for package_target in package_targets
-            ),
-            key=lambda package_target: package_target["target_id"],
-        ),
-        "source_declared_direct": sorted(
-            (
-                {
-                    "declaration_id": declaration["declaration_id"],
-                    "id": declaration["id"],
-                    "kind": declaration["kind"],
-                    "version_constraint": declaration["version_constraint"],
-                    "path_property": declaration.get("path_property"),
-                    "assembly_relative_path": declaration.get(
-                        "assembly_relative_path"
-                    ),
-                    "declaration_location": declaration["declaration_location"],
-                    "auxiliary_locations": sorted(
-                        declaration["auxiliary_locations"]
-                    ),
-                    "targets": sorted(declaration["targets"]),
-                    "condition": declaration["condition"],
-                }
-                for declaration in declarations
-            ),
-            key=lambda declaration: declaration["declaration_location"],
-        ),
-    }
-
-
-def lasso_reference_manifest_payload(
-    references: list[dict[str, Any]],
-) -> list[dict[str, Any]]:
-    return sorted(
-        (
-            {
-                "id": reference["id"],
-                "path": reference["path"],
-                "line": reference["line"],
-                "symbol": reference["symbol"],
-                "kind": reference["kind"],
-            }
-            for reference in references
-        ),
-        key=lambda reference: reference["id"],
-    )
 
 
 def validate_public_build_source_baseline_value(
@@ -1350,609 +1284,42 @@ def validate_public_build_lasso_manifest(path: Path) -> list[str]:
         path.relative_to(ROOT).as_posix(),
         baseline["source"],
     )
-
-
-def planned_command_topology() -> list[dict[str, Any]]:
-    commands: list[dict[str, Any]] = []
-    for source_mode in ("source-faithful", "public-only"):
-        restore_id = f"{source_mode}-restore"
-        build_id = f"{source_mode}-build"
-        commands.extend(
-            [
-                {
-                    "id": restore_id,
-                    "source_mode": source_mode,
-                    "stage": "restore",
-                    "target": "AzureAuth.sln",
-                    "depends_on": None,
-                    "max_attempts": 1,
-                    "timeout_seconds": 900,
-                    "test_filter": None,
-                },
-                {
-                    "id": build_id,
-                    "source_mode": source_mode,
-                    "stage": "build",
-                    "target": "AzureAuth.sln",
-                    "depends_on": restore_id,
-                    "max_attempts": 1,
-                    "timeout_seconds": 900,
-                    "test_filter": None,
-                },
-                {
-                    "id": f"{source_mode}-test",
-                    "source_mode": source_mode,
-                    "stage": "test",
-                    "target": "AzureAuth.sln",
-                    "depends_on": restore_id,
-                    "max_attempts": 1,
-                    "timeout_seconds": 900,
-                    "test_filter": PCACACHE_TEST_FILTER,
-                },
-                {
-                    "id": f"{source_mode}-package-adopat",
-                    "source_mode": source_mode,
-                    "stage": "package",
-                    "target": "src/AdoPat/AdoPat.csproj",
-                    "depends_on": restore_id,
-                    "max_attempts": 1,
-                    "timeout_seconds": 900,
-                    "test_filter": None,
-                },
-                {
-                    "id": f"{source_mode}-package-azureauth",
-                    "source_mode": source_mode,
-                    "stage": "package",
-                    "target": "src/AzureAuth/AzureAuth.csproj",
-                    "depends_on": restore_id,
-                    "max_attempts": 1,
-                    "timeout_seconds": 900,
-                    "test_filter": None,
-                },
-                {
-                    "id": f"{source_mode}-package-msalwrapper-benchmark",
-                    "source_mode": source_mode,
-                    "stage": "package",
-                    "target": (
-                        "src/MSALWrapper.Benchmark/"
-                        "MSALWrapper.Benchmark.csproj"
-                    ),
-                    "depends_on": restore_id,
-                    "max_attempts": 1,
-                    "timeout_seconds": 900,
-                    "test_filter": None,
-                },
-                {
-                    "id": f"{source_mode}-package-msalwrapper",
-                    "source_mode": source_mode,
-                    "stage": "package",
-                    "target": "src/MSALWrapper/MSALWrapper.csproj",
-                    "depends_on": restore_id,
-                    "max_attempts": 1,
-                    "timeout_seconds": 900,
-                    "test_filter": None,
-                },
-                {
-                    "id": f"{source_mode}-package-testhelper",
-                    "source_mode": source_mode,
-                    "stage": "package",
-                    "target": "src/TestHelper/TestHelper.csproj",
-                    "depends_on": restore_id,
-                    "max_attempts": 1,
-                    "timeout_seconds": 900,
-                    "test_filter": None,
-                },
-            ]
-        )
-    return commands
-
-
-def normalized_planned_command(command: dict[str, Any]) -> dict[str, Any]:
-    normalized = copy.deepcopy(command)
-    normalized["timeout_seconds"] = 900
-    return normalized
-
-
-def validate_public_build_bundle_value(
-    bundle: dict[str, Any],
-    relative_path: str,
-    baseline: dict[str, Any] | None = None,
-    lasso_manifest: dict[str, Any] | None = None,
-    require_runtime_runner: bool = False,
-) -> list[str]:
-    errors: list[str] = []
-    baseline = baseline or load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH)
-    lasso_manifest = lasso_manifest or load_strict_json(
-        PUBLIC_BUILD_LASSO_MANIFEST_PATH
-    )
-
-    authorities = bundle["authorities"]
-    if (
-        authorities["source_baseline"]["payload_sha256"]
-        != baseline["source_manifest_sha256"]
-    ):
-        errors.append(
-            f"{relative_path}: source authority hash differs from the fixed baseline"
-        )
-    if (
-        authorities["lasso_manifest"]["payload_sha256"]
-        != lasso_manifest["lasso_reference_manifest_sha256"]
-    ):
-        errors.append(
-            f"{relative_path}: Lasso authority hash differs from the fixed manifest"
-        )
-    if baseline["source"] != lasso_manifest["source"]:
-        errors.append(
-            f"{relative_path}: fixed source and Lasso authorities identify "
-            "different source"
-        )
-
-    source_modes = bundle["protocol"]["source_modes"]
-    expected_modes = [
-        {
-            "id": "source-faithful",
-            "configuration": "audited-checkout",
-            "package_sources": [SOURCE_FAITHFUL_PACKAGE_SOURCE],
-        },
-        {
-            "id": "public-only",
-            "configuration": "isolated-generated",
-            "package_sources": [PUBLIC_PACKAGE_SOURCE],
-        },
-    ]
-    if source_modes != expected_modes:
-        errors.append(
-            f"{relative_path}: source modes must be the canonical source-faithful "
-            "and public-only configurations"
-        )
-
-    commands = bundle["protocol"]["commands"]
-    expected_commands = planned_command_topology()
-    if len(commands) == len(expected_commands):
-        normalized_commands = [
-            normalized_planned_command(command) for command in commands
-        ]
-        if normalized_commands != expected_commands:
-            errors.append(
-                f"{relative_path}: command topology differs from the canonical "
-                "two-mode restore/build/test/package plan"
-            )
-    else:
-        errors.append(
-            f"{relative_path}: command topology must contain exactly sixteen commands"
-        )
-    if any(
-        not isinstance(command["timeout_seconds"], int)
-        or command["timeout_seconds"] <= 0
-        for command in commands
-    ):
-        errors.append(f"{relative_path}: every command must have a finite timeout")
-
-    package_target_paths = {
-        target["project_path"]
-        for target in baseline["attempted_targets"]
-        if target["id"]
-        in {
-            package_target["target_id"]
-            for package_target in baseline["package_targets"]
-        }
-    }
-    planned_package_paths = {
-        command["target"]
-        for command in commands
-        if command["stage"] == "package"
-    }
-    if planned_package_paths != package_target_paths:
-        errors.append(
-            f"{relative_path}: package commands differ from the fixed package targets"
-        )
-
-    isolation = bundle["isolation"]
-    environment = bundle["environment"]
-    runtime_identifier = environment["runtime_identifier"]
-    expected_path_kind = (
-        "windows" if runtime_identifier.startswith("win-") else "posix"
-    )
-    path_values = {
-        "selection root": isolation["selection_root"],
-        "checkout root": isolation["checkout_root"],
-        "mise data root": environment["dotnet_sdk"]["manager_data_root"],
-        ".NET installation root": environment["dotnet_sdk"]["installation_root"],
-        ".NET host path": environment["dotnet_sdk"]["host_path"],
-    }
-    normalized_paths: dict[
-        str, tuple[str, PurePosixPath | PureWindowsPath]
-    ] = {}
-    for label, value in path_values.items():
-        normalized = normalized_absolute_path(value)
-        if normalized is None:
-            errors.append(f"{relative_path}: {label} must be a canonical absolute path")
-        else:
-            normalized_paths[label] = normalized
-            if normalized[0] != expected_path_kind:
-                errors.append(
-                    f"{relative_path}: {label} must use {expected_path_kind} paths "
-                    f"for runtime {runtime_identifier}"
-                )
-
-    selection = normalized_paths.get("selection root")
-    checkout = normalized_paths.get("checkout root")
-    manager = normalized_paths.get("mise data root")
-    installation = normalized_paths.get(".NET installation root")
-    host = normalized_paths.get(".NET host path")
-    if selection and checkout and not recorded_path_is_within(checkout, selection):
-        errors.append(
-            f"{relative_path}: checkout root must be inside the selection root"
-        )
-    if manager and installation and not recorded_path_is_within(
-        installation, manager
-    ):
-        errors.append(
-            f"{relative_path}: .NET installation root must be inside the mise data root"
-        )
-    if installation and host and not recorded_path_is_within(host, installation):
-        errors.append(
-            f"{relative_path}: .NET host path must be inside the installation root"
-        )
-    if selection and manager and recorded_paths_overlap(selection, manager):
-        errors.append(
-            f"{relative_path}: selection and toolchain roots must not overlap"
-        )
-
-    if PCACACHE_TEST_LIMITATION not in bundle["limitations"]:
-        errors.append(
-            f"{relative_path}: limitations must disclose the PCACache exclusion"
-        )
-    evidence_plan = bundle["evidence_plan"]
-    extractor_components = evidence_plan["extractor"]
-    expected_extractor_components = {
-        "entry_point": PUBLIC_BUILD_EXTRACTOR_PATH,
-        "nuget_versions": PUBLIC_BUILD_NUGET_VERSIONS_PATH,
-    }
-    for component_name, expected_path in expected_extractor_components.items():
-        component = extractor_components[component_name]
-        component_path = ROOT / component["path"]
-        if component["path"] != expected_path:
-            errors.append(
-                f"{relative_path}: extractor component {component_name} uses an "
-                "unexpected repository path"
-            )
-        elif not component_path.is_file() or component_path.is_symlink():
-            errors.append(
-                f"{relative_path}: extractor component {component_name} does not "
-                "exist as a regular repository file"
-            )
-        elif (
-            hashlib.sha256(component_path.read_bytes()).hexdigest()
-            != component["sha256"]
-        ):
-            errors.append(
-                f"{relative_path}: extractor component {component_name} hash "
-                "differs from the reviewed file"
-            )
-    if require_runtime_runner:
-        runner = environment["runner"]
-        if runner["path"] != PUBLIC_BUILD_RUNNER_PATH:
-            errors.append(
-                f"{relative_path}: activated bundle must bind the canonical "
-                f"repository runner {PUBLIC_BUILD_RUNNER_PATH}"
-            )
-            runner_path = ROOT / PUBLIC_BUILD_RUNNER_PATH
-        else:
-            runner_path = ROOT / runner["path"]
-        if not runner_path.is_file() or runner_path.is_symlink():
-            errors.append(
-                f"{relative_path}: activated runner does not exist as a regular "
-                "repository file"
-            )
-        elif hashlib.sha256(runner_path.read_bytes()).hexdigest() != runner["sha256"]:
-            errors.append(
-                f"{relative_path}: activated runner hash differs from the reviewed file"
-            )
-    return errors
-
-
-def validate_public_build_bundle(path: Path) -> list[str]:
-    try:
-        bundle = load_yaml_path(path)
-        return validate_public_build_bundle_value(
-            bundle,
-            path.relative_to(ROOT).as_posix(),
-        )
-    except (ExtractionError, ValueError) as error:
-        return [str(error)]
-
-
-def planned_bundle_fixture() -> dict[str, Any]:
-    baseline = load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH)
-    lasso_manifest = load_strict_json(PUBLIC_BUILD_LASSO_MANIFEST_PATH)
-    extractor_hash = hashlib.sha256(
-        (ROOT / PUBLIC_BUILD_EXTRACTOR_PATH).read_bytes()
-    ).hexdigest()
-    nuget_versions_hash = hashlib.sha256(
-        (ROOT / PUBLIC_BUILD_NUGET_VERSIONS_PATH).read_bytes()
-    ).hexdigest()
-    return {
-        "schema_version": 1,
-        "id": "public-build-fixture-linux",
-        "status": "planned",
-        "issue": {
-            "number": 1,
-            "url": (
-                "https://github.com/hcoona/"
-                "microsoft-authentication-cli/issues/1"
-            ),
-        },
-        "authorities": {
-            "source_baseline": {
-                "path": PUBLIC_BUILD_SOURCE_BASELINE_PATH,
-                "payload_sha256": baseline["source_manifest_sha256"],
-            },
-            "lasso_manifest": {
-                "path": PUBLIC_BUILD_LASSO_MANIFEST_PATH,
-                "payload_sha256": lasso_manifest[
-                    "lasso_reference_manifest_sha256"
-                ],
-            },
-        },
-        "environment": {
-            "host_type": "synthetic-linux",
-            "runtime_identifier": "linux-x64",
-            "dotnet_sdk": {
-                "version": "8.0.100",
-                "manager_data_root": "/fixture/toolchain",
-                "installation_root": "/fixture/toolchain/installs/dotnet/8.0.100",
-                "host_path": "/fixture/toolchain/installs/dotnet/8.0.100/dotnet",
-                "host_sha256": "1" * 64,
-            },
-            "runner": {
-                "path": "tools/run_public_build_experiment.py",
-                "sha256": "2" * 64,
-            },
-        },
-        "isolation": {
-            "selection_root": "/fixture/run",
-            "checkout_root": "/fixture/run/checkout",
-            "replacement_environment": {
-                "inherit_parent": False,
-                "allowlist_defined_by_activation_contract": True,
-            },
-            "exclusive_no_follow_root_creation": True,
-            "single_runner_invocation": True,
-            "later_process_may_resume_or_cleanup": False,
-        },
-        "protocol": {
-            "source_modes": [
-                {
-                    "id": "source-faithful",
-                    "configuration": "audited-checkout",
-                    "package_sources": [SOURCE_FAITHFUL_PACKAGE_SOURCE],
-                },
-                {
-                    "id": "public-only",
-                    "configuration": "isolated-generated",
-                    "package_sources": [PUBLIC_PACKAGE_SOURCE],
-                },
-            ],
-            "commands": planned_command_topology(),
-        },
-        "evidence_plan": {
-            "retain_raw_project_assets": True,
-            "strict_json_duplicate_rejection": True,
-            "extractor": {
-                "entry_point": {
-                    "path": PUBLIC_BUILD_EXTRACTOR_PATH,
-                    "sha256": extractor_hash,
-                },
-                "nuget_versions": {
-                    "path": PUBLIC_BUILD_NUGET_VERSIONS_PATH,
-                    "sha256": nuget_versions_hash,
-                },
-            },
-            "exact_replay_required": True,
-            "provenance_separate_from_projection": True,
-            "cross_bindings": {
-                "raw_asset_to_command_result": True,
-                "projection_to_source_target": True,
-                "package_nodes_to_provenance": True,
-                "package_backed_assemblies_to_runtime_evidence": True,
-                "limitations_to_conclusions": True,
-            },
-        },
-        "limitations": [PCACACHE_TEST_LIMITATION],
-        "policy_reference": (
-            "docs/research/experiment-safety.md#phase-1-public-build-record"
-        ),
-    }
-
-
-def validate_extractor_fixture_binding(
-    actual: dict[str, Any],
-    expected: dict[str, Any],
-    source_mode: str,
-    result_assets_sha256: str,
-    provenance_node_ids: set[str],
-    limitations: list[str],
-    label: str,
-) -> list[str]:
-    errors: list[str] = []
-    if actual != expected:
-        errors.append(f"{label}: extractor replay differs from expected projection")
-        return errors
-    if result_assets_sha256 != actual["assets_file_sha256"]:
-        errors.append(f"{label}: result does not bind the retained raw-assets hash")
-    expected_source = (
-        SOURCE_FAITHFUL_PACKAGE_SOURCE
-        if source_mode == "source-faithful"
-        else PUBLIC_PACKAGE_SOURCE
-    )
-    if actual["assets_projection"]["restore_metadata"]["sources"] != [expected_source]:
-        errors.append(f"{label}: projection source differs from the source mode")
-    package_node_ids = {
-        node["node_id"]
-        for node in actual["assets_projection"]["nodes"]
-        if node["kind"] == "package"
-    }
-    if provenance_node_ids != package_node_ids:
-        errors.append(f"{label}: package projection and provenance coverage differ")
-    for required_limitation in (EXTRACTOR_LIMITATION, PCACACHE_TEST_LIMITATION):
-        if required_limitation not in limitations:
-            errors.append(f"{label}: required evidence limitation is missing")
-    return errors
-
-
-def replay_extractor_fixture(
-    fixture_name: str,
-    target_id: str,
-    runtime_identifier: str,
-    checkout_root: str,
-) -> tuple[dict[str, Any], dict[str, Any], set[str]]:
-    fixture_root = ROOT / "tools/fixtures/public-build"
-    assets_path = fixture_root / f"{fixture_name}.project.assets.json"
-    expected_path = fixture_root / f"{fixture_name}.expected-projection.json"
-    assets_bytes = assets_path.read_bytes()
-    assets = parse_json_object_bytes(assets_bytes, str(assets_path))
-    expected = parse_json_object_bytes(expected_path.read_bytes(), str(expected_path))
-    actual = extract_projection(
-        assets,
-        assets_bytes,
-        load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH),
-        target_id,
-        runtime_identifier,
-        "net8.0",
-        checkout_root,
-    )
-    package_nodes = {
-        node["node_id"]
-        for node in actual["assets_projection"]["nodes"]
-        if node["kind"] == "package"
-    }
-    return actual, expected, package_nodes
-
-
 def check_public_build_static_fixtures() -> list[str]:
     errors: list[str] = []
     try:
         schema = load_strict_json(PUBLIC_BUILD_SCHEMA_PATH)
         baseline = load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH)
         lasso_manifest = load_strict_json(PUBLIC_BUILD_LASSO_MANIFEST_PATH)
+        bundle = load_strict_json(
+            "docs/research/experiments/"
+            "public-build-linux-x64-dotnet-8-0-424-01.json"
+        )
     except ExtractionError as error:
         return [str(error)]
 
-    validator = Draft202012Validator(schema)
-    planned = planned_bundle_fixture()
-    schema_errors = list(validator.iter_errors(planned))
+    schema_errors = list(Draft202012Validator(schema).iter_errors(bundle))
     if schema_errors:
         errors.append(
-            "public-build planned positive fixture failed schema validation: "
+            "public-build singleton failed schema validation: "
             f"{schema_errors[0].message}"
         )
     else:
         errors.extend(
             validate_public_build_bundle_value(
-                planned,
-                "fixture:planned",
+                bundle,
+                "fixture:actual-singleton",
                 baseline,
                 lasso_manifest,
             )
         )
 
-    planned_negative_cases: list[
-        tuple[str, Callable[[dict[str, Any]], None], str]
-    ] = [
-        (
-            "source-binding",
-            lambda value: value["authorities"]["source_baseline"].update(
-                {"payload_sha256": "0" * 64}
-            ),
-            "source authority hash",
-        ),
-        (
-            "command-topology",
-            lambda value: value["protocol"]["commands"][1].update(
-                {"depends_on": "public-only-restore"}
-            ),
-            "command topology differs",
-        ),
-        (
-            "isolation",
-            lambda value: value["environment"]["dotnet_sdk"].update(
-                {"manager_data_root": "/fixture/run/toolchain"}
-            ),
-            "selection and toolchain roots must not overlap",
-        ),
-        (
-            "runtime-path-flavor",
-            lambda value: (
-                value["isolation"].update(
-                    {
-                        "selection_root": "C:/fixture/run",
-                        "checkout_root": "C:/fixture/run/checkout",
-                    }
-                ),
-                value["environment"]["dotnet_sdk"].update(
-                    {
-                        "manager_data_root": "D:/fixture/toolchain",
-                        "installation_root": "D:/fixture/toolchain/dotnet",
-                        "host_path": "D:/fixture/toolchain/dotnet/dotnet.exe",
-                    }
-                ),
-            ),
-            "must use posix paths",
-        ),
-        (
-            "posix-path-case",
-            lambda value: value["isolation"].update(
-                {"checkout_root": "/Fixture/run/checkout"}
-            ),
-            "checkout root must be inside",
-        ),
-    ]
-    for name, mutate, expected_error in planned_negative_cases:
-        negative = copy.deepcopy(planned)
-        mutate(negative)
-        if list(validator.iter_errors(negative)):
-            errors.append(
-                f"public-build planned semantic fixture {name} must remain schema-valid"
-            )
-            continue
-        semantic_errors = validate_public_build_bundle_value(
-            negative,
-            f"fixture:{name}",
-            baseline,
-            lasso_manifest,
-        )
-        if not any(expected_error in error for error in semantic_errors):
-            errors.append(
-                f"public-build planned negative fixture {name} was not rejected"
-            )
-
-    stale_baseline = copy.deepcopy(baseline)
-    stale_baseline["source_manifest_sha256"] = "0" * 64
-    if not validate_public_build_source_baseline_value(
-        stale_baseline,
-        "fixture:source-hash",
-    ):
-        errors.append("public-build source hash negative fixture was not rejected")
-
-    cross_source_manifest = copy.deepcopy(lasso_manifest)
-    cross_source_manifest["source"]["commit"] = "0" * 40
-    if not validate_public_build_lasso_manifest_value(
-        cross_source_manifest,
-        "fixture:lasso-source",
-        baseline["source"],
-    ):
-        errors.append("public-build Lasso source negative fixture was not rejected")
-
-    invalid_json_cases = {
-        "duplicate-key": b'{"schema_version":1,"schema_version":2}',
+    invalid_json = {
+        "duplicate-key": b'{"value":1,"value":2}',
         "nan": b'{"value":NaN}',
         "positive-infinity": b'{"value":Infinity}',
         "negative-infinity": b'{"value":-Infinity}',
-        "positive-float-overflow": b'{"value":1e999}',
-        "negative-float-overflow": b'{"value":-1e999}',
     }
-    for name, content in invalid_json_cases.items():
+    for name, content in invalid_json.items():
         try:
             parse_json_object_bytes(content, f"fixture:{name}")
         except ExtractionError:
@@ -1960,95 +1327,45 @@ def check_public_build_static_fixtures() -> list[str]:
         else:
             errors.append(f"unsupported JSON input fixture {name} was not rejected")
 
-    extractor_cases = (
-        (
-            "testhelper",
-            "target-testhelper-net8-0",
-            "linux-x64",
-            "/fixture/checkout",
-        ),
+    for fixture_name, target_id, runtime_identifier, checkout_root in (
+        ("testhelper", "target-testhelper-net8-0", "linux-x64", "/fixture/checkout"),
         (
             "benchmark-windows",
             "target-msalwrapper-benchmark-net8-0",
             "win-x64",
             "C:/fixture/checkout",
         ),
-    )
-    replayed: dict[
-        str, tuple[dict[str, Any], dict[str, Any], set[str]]
-    ] = {}
-    for fixture_name, target_id, runtime_identifier, checkout_root in extractor_cases:
+    ):
+        root = ROOT / "tools/fixtures/public-build"
+        assets_path = root / f"{fixture_name}.project.assets.json"
+        expected_path = root / f"{fixture_name}.expected-projection.json"
         try:
-            actual, expected, package_nodes = replay_extractor_fixture(
-                fixture_name,
+            assets_bytes = assets_path.read_bytes()
+            actual = extract_projection(
+                parse_json_object_bytes(assets_bytes, str(assets_path)),
+                assets_bytes,
+                baseline,
                 target_id,
                 runtime_identifier,
                 checkout_root,
             )
+            expected = parse_json_object_bytes(
+                expected_path.read_bytes(), str(expected_path)
+            )
         except (OSError, ExtractionError) as error:
             errors.append(f"public-build extractor fixture {fixture_name} failed: {error}")
-            continue
-        replayed[fixture_name] = (actual, expected, package_nodes)
-        errors.extend(
-            validate_extractor_fixture_binding(
-                actual,
-                expected,
-                "source-faithful",
-                actual["assets_file_sha256"],
-                package_nodes,
-                [EXTRACTOR_LIMITATION, PCACACHE_TEST_LIMITATION],
-                f"fixture:{fixture_name}",
-            )
-        )
-
-    if "testhelper" in replayed:
-        actual, expected, package_nodes = replayed["testhelper"]
-        cross_binding_negatives = (
-            (
-                "result-hash",
-                "0" * 64,
-                package_nodes,
-                [EXTRACTOR_LIMITATION, PCACACHE_TEST_LIMITATION],
-                "result does not bind",
-            ),
-            (
-                "provenance",
-                actual["assets_file_sha256"],
-                set(),
-                [EXTRACTOR_LIMITATION, PCACACHE_TEST_LIMITATION],
-                "projection and provenance coverage differ",
-            ),
-            (
-                "limitation",
-                actual["assets_file_sha256"],
-                package_nodes,
-                [PCACACHE_TEST_LIMITATION],
-                "required evidence limitation is missing",
-            ),
-        )
-        for name, result_hash, provenance, limitations, expected_error in (
-            cross_binding_negatives
-        ):
-            binding_errors = validate_extractor_fixture_binding(
-                actual,
-                expected,
-                "source-faithful",
-                result_hash,
-                provenance,
-                limitations,
-                f"fixture:{name}",
-            )
-            if not any(expected_error in error for error in binding_errors):
+        else:
+            if actual != expected:
                 errors.append(
-                    f"public-build extractor negative fixture {name} was not rejected"
+                    f"public-build extractor fixture {fixture_name} did not exactly replay"
                 )
 
-    fixture_assets_path = (
-        ROOT / "tools/fixtures/public-build/testhelper.project.assets.json"
-    )
+    fixture_assets_path = ROOT / "tools/fixtures/public-build/testhelper.project.assets.json"
     orphan_assets = load_strict_json_path(fixture_assets_path)
     orphan_key = "Unrelated.Package/9.9.9"
-    orphan_assets["targets"]["net8.0"][orphan_key] = {"type": "package"}
+    orphan_assets["targets"]["net8.0/linux-x64"][orphan_key] = {
+        "type": "package"
+    }
     orphan_assets["libraries"][orphan_key] = {"type": "package"}
     try:
         extract_projection(
@@ -2057,185 +1374,65 @@ def check_public_build_static_fixtures() -> list[str]:
             baseline,
             "target-testhelper-net8-0",
             "linux-x64",
-            "net8.0",
             "/fixture/checkout",
         )
     except ExtractionError as error:
         if "unreachable" not in str(error):
-            errors.append(
-                "public-build orphan-node fixture failed for an unrelated reason: "
-                f"{error}"
-            )
+            errors.append(f"public-build orphan fixture failed unclearly: {error}")
     else:
-        errors.append(
-            "public-build extractor fixture accepted an unreachable package node"
-        )
+        errors.append("public-build extractor accepted an unreachable package node")
 
-    version_cases = {
+    for (resolved, constraint), expected in {
         ("1", "[1]"): True,
         ("2", "[1,3)"): True,
         ("8.0.0", "(8.0.0, )"): False,
         ("7.9.9", "8.0.0"): False,
-    }
-    for (resolved, constraint), expected in version_cases.items():
+    }.items():
         if nuget_version_satisfies_constraint(resolved, constraint) != expected:
             errors.append(
-                f"bounded NuGet constraint fixture failed for {resolved} "
-                f"against {constraint}"
+                f"bounded NuGet constraint fixture failed for {resolved} against {constraint}"
             )
     if nuget_constraint_is_valid("[1.0.0-alpha..1, )"):
         errors.append("bounded NuGet grammar accepted an invalid constraint")
 
+    for component_name in ("validator", "schema", "lockfile"):
+        drift = copy.deepcopy(bundle)
+        drift["components"][component_name]["sha256"] = "0" * 64
+        drift_errors = validate_public_build_bundle_value(
+            drift,
+            f"fixture:live-{component_name}-drift",
+            baseline,
+            lasso_manifest,
+        )
+        if not any("live component drift" in error for error in drift_errors):
+            errors.append(
+                f"public-build {component_name} drift fixture was not rejected"
+            )
+
+    applicable = copy.deepcopy(baseline)
+    declaration = next(
+        item
+        for item in applicable["source_declared_direct"]
+        if item["kind"] == "package-backed-assembly"
+    )
+    declaration["condition"] = "always"
+    applicable_errors = validate_public_build_bundle_value(
+        bundle, "fixture:applicable-assembly", applicable, lasso_manifest
+    )
+    if not any("atomic runtime-contract expansion" in error for error in applicable_errors):
+        errors.append("applicable package-backed declaration fixture was not rejected")
+
     catalog = load_yaml("docs/governance/record-families.yaml")
     controls = load_yaml("docs/governance/controls.yaml")["controls"]
-    mismatched_catalog = copy.deepcopy(catalog)
+    mismatched = copy.deepcopy(catalog)
     next(
         family
-        for family in mismatched_catalog["families"]
+        for family in mismatched["families"]
         if family["id"] == "public-build-experiment-bundles"
-    )["state"] = "current"
-    if not check_public_build_activation_coupling(mismatched_catalog, controls):
-        errors.append(
-            "public-build activation fixture did not reject a family/control mismatch"
-        )
-    current_catalog = copy.deepcopy(catalog)
-    next(
-        family
-        for family in current_catalog["families"]
-        if family["id"] == "public-build-experiment-bundles"
-    )["state"] = "current"
-    current_controls = copy.deepcopy(controls)
-    current_control = next(
-        control
-        for control in current_controls
-        if control["id"] == "public-build-evidence-consistency"
-    )
-    current_control["state"] = "current"
-    current_control["implementation"]["steps"] = {
-        "local-fast": [
-            "structured-record-schema",
-            "public-build-runner-conformance",
-        ],
-        "ci": [
-            "structured-record-schema",
-            "public-build-runner-conformance",
-        ],
-    }
-    activation_errors = check_public_build_activation_coupling(
-        current_catalog,
-        current_controls,
-    )
-    if not any("planned-only contract" in error for error in activation_errors):
-        errors.append(
-            "public-build activation fixture accepted the planned-only schema"
-        )
-    unrelated_runtime_schema = copy.deepcopy(schema)
-    unrelated_runtime_schema["x-public-build-contract"] = {
-        "mode": "runtime",
-        "version": 1,
-        "runtime_property": "runtime_evidence",
-        "runtime_root": "#/$defs/sha256",
-        "runtime_semantics": {
-            name: "#/$defs/sha256"
-            for name in PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS
-        },
-    }
-    unrelated_runtime_schema["required"].append("runtime_evidence")
-    unrelated_runtime_schema["properties"]["runtime_evidence"] = {
-        "$ref": "#/$defs/sha256"
-    }
-    unrelated_activation_errors = check_public_build_activation_coupling(
-        current_catalog,
-        current_controls,
-        schema=unrelated_runtime_schema,
-        runner_path=ROOT / "tools/check_repository_records.py",
-    )
-    if not any(
-        "distinct marked property" in error
-        for error in unrelated_activation_errors
-    ):
-        errors.append(
-            "public-build activation fixture accepted unrelated semantic aliases"
-        )
-    marker_only_runtime_schema = copy.deepcopy(schema)
-    runtime_properties = {
-        name: {
-            "type": "object",
-            "x-public-build-runtime-semantic": name,
-        }
-        for name in PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS
-    }
-    marker_only_runtime_schema["$defs"]["runtimeEvidence"] = {
-        "type": "object",
-        "additionalProperties": False,
-        "required": sorted(runtime_properties),
-        "properties": runtime_properties,
-    }
-    marker_only_runtime_schema["required"].append("runtime_evidence")
-    marker_only_runtime_schema["properties"]["runtime_evidence"] = {
-        "$ref": "#/$defs/runtimeEvidence"
-    }
-    marker_only_runtime_schema["x-public-build-contract"] = {
-        "mode": "runtime",
-        "version": 1,
-        "runtime_property": "runtime_evidence",
-        "runtime_root": "#/$defs/runtimeEvidence",
-        "runtime_semantics": {
-            name: f"#/$defs/runtimeEvidence/properties/{name}"
-            for name in PUBLIC_BUILD_RUNTIME_SCHEMA_ANCHORS
-        },
-    }
-    marker_only_errors = check_public_build_activation_coupling(
-        current_catalog,
-        current_controls,
-        schema=marker_only_runtime_schema,
-        runner_path=ROOT / "tools/check_repository_records.py",
-    )
-    if not any("unconstrained=" in error for error in marker_only_errors):
-        errors.append(
-            "public-build activation fixture accepted marker-only runtime semantics"
-        )
-    constrained_runtime_schema = copy.deepcopy(marker_only_runtime_schema)
-    for property_schema in constrained_runtime_schema["$defs"][
-        "runtimeEvidence"
-    ]["properties"].values():
-        property_schema["additionalProperties"] = False
-        property_schema["required"] = ["recorded"]
-        property_schema["properties"] = {
-            "recorded": {
-                "const": True,
-            }
-        }
-    constrained_errors = check_public_build_activation_coupling(
-        current_catalog,
-        current_controls,
-        schema=constrained_runtime_schema,
-        runner_path=ROOT / "tools/check_repository_records.py",
-    )
-    if constrained_errors:
-        errors.append(
-            "public-build activation positive fixture rejected constrained runtime "
-            f"semantic anchors: {constrained_errors[0]}"
-        )
-    alternate_runner = copy.deepcopy(planned)
-    alternate_runner_path = "tools/check_repository_records.py"
-    alternate_runner["environment"]["runner"] = {
-        "path": alternate_runner_path,
-        "sha256": hashlib.sha256(
-            (ROOT / alternate_runner_path).read_bytes()
-        ).hexdigest(),
-    }
-    alternate_runner_errors = validate_public_build_bundle_value(
-        alternate_runner,
-        "fixture:alternate-runner",
-        baseline,
-        lasso_manifest,
-        require_runtime_runner=True,
-    )
-    if not any("canonical repository runner" in error for error in alternate_runner_errors):
-        errors.append(
-            "public-build runtime fixture accepted a noncanonical runner path"
-        )
+    )["state"] = "scheduled"
+    if not check_public_build_activation_coupling(mismatched, controls):
+        errors.append("public-build family/control mismatch was not rejected")
+    errors.extend(check_public_build_activation_coupling(catalog, controls, schema=schema))
     return errors
 
 
@@ -2313,15 +1510,17 @@ def validate_structured_records() -> int:
 
         if family["id"] == "public-build-experiment-bundles":
             bundle_records = [
-                (instance.relative_to(ROOT).as_posix(), load_yaml_path(instance))
+                (
+                    instance.relative_to(ROOT).as_posix(),
+                    load_strict_json_path(instance),
+                )
                 for instance in instances
             ]
             for label, bundle in bundle_records:
                 errors.extend(
-                    validate_public_build_bundle_value(
+                    validate_public_build_bundle_instance(
                         bundle,
                         label,
-                        require_runtime_runner=family["state"] == "current",
                     )
                 )
         elif family["id"] == "public-build-source-baseline":

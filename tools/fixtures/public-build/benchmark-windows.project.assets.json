@@ -37,6 +37,49 @@
           "Microsoft.IdentityModel.JsonWebTokens": "7.5.0"
         }
       }
+    },
+    "net8.0/win-x64": {
+      "BenchmarkDotNet/0.13.2": {
+        "type": "package",
+        "dependencies": {
+          "Synthetic.Runtime.Windows": "1.0.0"
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/8.0.2": {
+        "type": "package"
+      },
+      "Microsoft.Identity.Client.Extensions.Msal/4.83.1": {
+        "type": "package"
+      },
+      "Microsoft.Identity.Client/4.83.1": {
+        "type": "package"
+      },
+      "Microsoft.Identity.Client.Broker/4.83.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Identity.Client": "4.83.1"
+        }
+      },
+      "Microsoft.Identity.Client.NativeInterop/0.20.3": {
+        "type": "package"
+      },
+      "Microsoft.IdentityModel.JsonWebTokens/7.5.0": {
+        "type": "package"
+      },
+      "MSALWrapper/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.2",
+          "Microsoft.Identity.Client.Extensions.Msal": "4.83.1",
+          "Microsoft.Identity.Client": "4.83.1",
+          "Microsoft.Identity.Client.Broker": "4.83.1",
+          "Microsoft.Identity.Client.NativeInterop": "0.20.3",
+          "Microsoft.IdentityModel.JsonWebTokens": "7.5.0"
+        }
+      },
+      "Synthetic.Runtime.Windows/1.0.0": {
+        "type": "package"
+      }
     }
   },
   "libraries": {
@@ -64,6 +107,9 @@
     "MSALWrapper/1.0.0": {
       "type": "project",
       "msbuildProject": "../MSALWrapper/MSALWrapper.csproj"
+    },
+    "Synthetic.Runtime.Windows/1.0.0": {
+      "type": "package"
     }
   },
   "packageFolders": {

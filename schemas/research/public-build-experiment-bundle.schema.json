@@ -1,14 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/hcoona/microsoft-authentication-cli/schemas/research/public-build-experiment-bundle.schema.json",
-  "title": "Phase 1 Planned Public-Build Experiment Bundle",
-  "description": "Pre-activation planning contract. Runtime results and lifecycle evidence are intentionally deferred until a real runner is activated.",
+  "title": "Phase 1 Public-Build Experiment Bundle",
+  "description": "Strict Issue #1 singleton plan and runner-produced evidence contract.",
   "x-public-build-contract": {
-    "mode": "planned-only",
-    "version": 1,
-    "runtime_property": null,
-    "runtime_root": null,
-    "runtime_semantics": {}
+    "mode": "runtime",
+    "version": 2,
+    "runtime_property": "runtime_evidence",
+    "runtime_root": "#/$defs/runtimeEvidence",
+    "runtime_semantics": {
+      "command_outcomes": "#/$defs/runtimeEvidence/properties/command_outcomes",
+      "canonical_termination": "#/$defs/runtimeEvidence/properties/canonical_termination",
+      "all_exit_quiescence": "#/$defs/runtimeEvidence/properties/all_exit_quiescence",
+      "ownership_conditioned_cleanup": "#/$defs/runtimeEvidence/properties/ownership_conditioned_cleanup",
+      "receipt_binding": "#/$defs/runtimeEvidence/properties/receipt_binding",
+      "bounded_conclusions": "#/$defs/runtimeEvidence/properties/bounded_conclusions"
+    }
   },
   "type": "object",
   "additionalProperties": false,
@@ -18,23 +25,25 @@
     "status",
     "issue",
     "authorities",
+    "components",
     "environment",
     "isolation",
     "protocol",
-    "evidence_plan",
     "limitations",
     "policy_reference"
   ],
   "properties": {
     "schema_version": {
-      "const": 1
+      "const": 2
     },
     "id": {
-      "type": "string",
-      "pattern": "^public-build-[a-z0-9][a-z0-9-]*$"
+      "const": "public-build-linux-x64-dotnet-8-0-424-01"
     },
     "status": {
-      "const": "planned"
+      "enum": [
+        "planned",
+        "recorded"
+      ]
     },
     "issue": {
       "type": "object",
@@ -68,37 +77,44 @@
         }
       }
     },
-    "environment": {
+    "components": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "host_type",
-        "runtime_identifier",
-        "dotnet_sdk",
-        "runner"
+        "runner",
+        "contract",
+        "validator",
+        "extractor",
+        "nuget_versions",
+        "schema",
+        "lockfile"
       ],
       "properties": {
-        "host_type": {
-          "type": "string",
-          "minLength": 1
-        },
-        "runtime_identifier": {
-          "enum": [
-            "linux-x64",
-            "linux-arm64",
-            "win-x64",
-            "win-arm64",
-            "osx-x64",
-            "osx-arm64"
-          ]
-        },
-        "dotnet_sdk": {
-          "$ref": "#/$defs/dotnetSdk"
-        },
         "runner": {
-          "$ref": "#/$defs/runner"
+          "$ref": "#/$defs/repositoryComponent"
+        },
+        "contract": {
+          "$ref": "#/$defs/repositoryComponent"
+        },
+        "validator": {
+          "$ref": "#/$defs/repositoryComponent"
+        },
+        "extractor": {
+          "$ref": "#/$defs/repositoryComponent"
+        },
+        "nuget_versions": {
+          "$ref": "#/$defs/repositoryComponent"
+        },
+        "schema": {
+          "$ref": "#/$defs/repositoryComponent"
+        },
+        "lockfile": {
+          "$ref": "#/$defs/repositoryComponent"
         }
       }
+    },
+    "environment": {
+      "$ref": "#/$defs/environment"
     },
     "isolation": {
       "$ref": "#/$defs/isolation"
@@ -106,30 +122,67 @@
     "protocol": {
       "$ref": "#/$defs/protocol"
     },
-    "evidence_plan": {
-      "$ref": "#/$defs/evidencePlan"
-    },
     "limitations": {
       "type": "array",
-      "minItems": 1,
       "items": {
-        "type": "string",
-        "minLength": 1
+        "$ref": "#/$defs/nonemptyString"
       },
+      "minItems": 3,
       "uniqueItems": true
     },
     "policy_reference": {
       "const": "docs/research/experiment-safety.md#phase-1-public-build-record"
+    },
+    "runtime_evidence": {
+      "$ref": "#/$defs/runtimeEvidence"
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "planned"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "not": {
+          "required": [
+            "runtime_evidence"
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "runtime_evidence"
+        ]
+      }
+    }
+  ],
   "$defs": {
+    "nonemptyString": {
+      "type": "string",
+      "minLength": 1
+    },
     "sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
     },
-    "absolutePath": {
+    "sha512": {
       "type": "string",
-      "pattern": "^(?:/[^\u0000]*|[A-Za-z]:/[^\\u0000]*)$"
+      "pattern": "^[0-9a-f]{128}$"
+    },
+    "absolutePosixPath": {
+      "type": "string",
+      "pattern": "^/(?:[^\\u0000/]*/)*[^\\u0000/]*$"
+    },
+    "reference": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(?:/[a-z][a-z0-9-]*)?$"
     },
     "sourceAuthority": {
       "type": "object",
@@ -163,36 +216,7 @@
         }
       }
     },
-    "dotnetSdk": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "version",
-        "manager_data_root",
-        "installation_root",
-        "host_path",
-        "host_sha256"
-      ],
-      "properties": {
-        "version": {
-          "type": "string",
-          "pattern": "^8\\.0\\.[0-9]+$"
-        },
-        "manager_data_root": {
-          "$ref": "#/$defs/absolutePath"
-        },
-        "installation_root": {
-          "$ref": "#/$defs/absolutePath"
-        },
-        "host_path": {
-          "$ref": "#/$defs/absolutePath"
-        },
-        "host_sha256": {
-          "$ref": "#/$defs/sha256"
-        }
-      }
-    },
-    "runner": {
+    "repositoryComponent": {
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -201,91 +225,119 @@
       ],
       "properties": {
         "path": {
-          "const": "tools/run_public_build_experiment.py"
+          "type": "string",
+          "pattern": "^(?:tools/[^\\u0000]+|schemas/research/[^\\u0000]+)$"
         },
         "sha256": {
           "$ref": "#/$defs/sha256"
         }
       }
     },
-    "isolation": {
+    "environment": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "selection_root",
-        "checkout_root",
-        "replacement_environment",
-        "exclusive_no_follow_root_creation",
-        "single_runner_invocation",
-        "later_process_may_resume_or_cleanup"
+        "host_type",
+        "runtime_identifier",
+        "mise",
+        "dotnet_sdk"
       ],
       "properties": {
-        "selection_root": {
-          "$ref": "#/$defs/absolutePath"
+        "host_type": {
+          "const": "native-linux"
         },
-        "checkout_root": {
-          "$ref": "#/$defs/absolutePath"
+        "runtime_identifier": {
+          "const": "linux-x64"
         },
-        "replacement_environment": {
+        "mise": {
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "inherit_parent",
-            "allowlist_defined_by_activation_contract"
+            "version",
+            "tool_name",
+            "executable_sha256",
+            "executable_source",
+            "config_content"
           ],
           "properties": {
-            "inherit_parent": {
-              "const": false
+            "version": {
+              "const": "2026.8.10"
             },
-            "allowlist_defined_by_activation_contract": {
-              "const": true
+            "tool_name": {
+              "const": "http:dotnet-sdk"
+            },
+            "executable_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "executable_source": {
+              "$ref": "#/$defs/nonemptyString"
+            },
+            "config_content": {
+              "$ref": "#/$defs/nonemptyString"
             }
           }
         },
-        "exclusive_no_follow_root_creation": {
-          "const": true
-        },
-        "single_runner_invocation": {
-          "const": true
-        },
-        "later_process_may_resume_or_cleanup": {
-          "const": false
+        "dotnet_sdk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "archive_url",
+            "archive_sha512",
+            "manager_data_root",
+            "installation_root",
+            "host_path",
+            "global_json_path",
+            "global_json_content"
+          ],
+          "properties": {
+            "version": {
+              "const": "8.0.424"
+            },
+            "archive_url": {
+              "const": "https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.424/dotnet-sdk-8.0.424-linux-x64.tar.gz"
+            },
+            "archive_sha512": {
+              "$ref": "#/$defs/sha512"
+            },
+            "manager_data_root": {
+              "$ref": "#/$defs/absolutePosixPath"
+            },
+            "installation_root": {
+              "$ref": "#/$defs/absolutePosixPath"
+            },
+            "host_path": {
+              "$ref": "#/$defs/absolutePosixPath"
+            },
+            "global_json_path": {
+              "$ref": "#/$defs/absolutePosixPath"
+            },
+            "global_json_content": {
+              "$ref": "#/$defs/nonemptyString"
+            }
+          }
         }
       }
     },
-    "protocol": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "source_modes",
-        "commands"
-      ],
-      "properties": {
-        "source_modes": {
-          "type": "array",
-          "minItems": 2,
-          "maxItems": 2,
-          "items": {
-            "$ref": "#/$defs/sourceMode"
-          }
-        },
-        "commands": {
-          "type": "array",
-          "minItems": 16,
-          "maxItems": 16,
-          "items": {
-            "$ref": "#/$defs/command"
-          }
-        }
-      }
-    },
-    "sourceMode": {
+    "sourceModeIsolation": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "id",
         "configuration",
-        "package_sources"
+        "package_sources",
+        "checkout_root",
+        "home_root",
+        "nuget_packages_root",
+        "nuget_http_cache_root",
+        "nuget_plugins_cache_root",
+        "nuget_scratch_root",
+        "temporary_root",
+        "obj_root",
+        "bin_root",
+        "package_output_root",
+        "generated_nuget_config",
+        "generated_directory_packages_props"
       ],
       "properties": {
         "id": {
@@ -302,12 +354,99 @@
         },
         "package_sources": {
           "type": "array",
-          "minItems": 1,
           "items": {
             "type": "string",
             "format": "uri"
           },
+          "minItems": 1,
           "uniqueItems": true
+        },
+        "checkout_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "home_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "nuget_packages_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "nuget_http_cache_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "nuget_plugins_cache_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "nuget_scratch_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "temporary_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "obj_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "bin_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "package_output_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "generated_directory_packages_props": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "generated_nuget_config": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/absolutePosixPath"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "toolchain_root",
+        "selection_root",
+        "source_modes",
+        "replacement_environment"
+      ],
+      "properties": {
+        "toolchain_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "selection_root": {
+          "$ref": "#/$defs/absolutePosixPath"
+        },
+        "source_modes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceModeIsolation"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "replacement_environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "allowlist"
+          ],
+          "properties": {
+            "allowlist": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]*$"
+              },
+              "minItems": 16,
+              "uniqueItems": true
+            }
+          }
         }
       }
     },
@@ -320,6 +459,8 @@
         "stage",
         "target",
         "depends_on",
+        "argv",
+        "cwd",
         "max_attempts",
         "timeout_seconds",
         "test_filter"
@@ -354,10 +495,24 @@
           ]
         },
         "depends_on": {
-          "type": [
-            "string",
-            "null"
+          "oneOf": [
+            {
+              "$ref": "#/$defs/reference"
+            },
+            {
+              "type": "null"
+            }
           ]
+        },
+        "argv": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonemptyString"
+          },
+          "minItems": 3
+        },
+        "cwd": {
+          "$ref": "#/$defs/absolutePosixPath"
         },
         "max_attempts": {
           "const": 1
@@ -365,107 +520,1082 @@
         "timeout_seconds": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 7200
+          "maximum": 900
         },
         "test_filter": {
-          "type": [
-            "string",
-            "null"
+          "oneOf": [
+            {
+              "$ref": "#/$defs/nonemptyString"
+            },
+            {
+              "type": "null"
+            }
           ]
         }
       }
     },
-    "evidencePlan": {
+    "protocol": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "retain_raw_project_assets",
-        "strict_json_duplicate_rejection",
-        "extractor",
-        "exact_replay_required",
-        "provenance_separate_from_projection",
-        "cross_bindings"
+        "commands",
+        "supervision_bounds",
+        "expected_observations"
       ],
       "properties": {
-        "retain_raw_project_assets": {
-          "const": true
+        "commands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/command"
+          },
+          "minItems": 16,
+          "maxItems": 16
         },
-        "strict_json_duplicate_rejection": {
-          "const": true
-        },
-        "extractor": {
+        "supervision_bounds": {
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "entry_point",
-            "nuget_versions"
+            "descendant_discovery_pass_seconds",
+            "max_discovered_processes",
+            "fixed_point_seconds",
+            "capture_reader_grace_seconds",
+            "capture_reader_shutdown_seconds",
+            "source_max_entries",
+            "source_per_file_bytes",
+            "source_aggregate_bytes",
+            "source_elapsed_seconds"
           ],
           "properties": {
-            "entry_point": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "path",
-                "sha256"
-              ],
-              "properties": {
-                "path": {
-                  "const": "tools/extract_public_build_assets.py"
+            "descendant_discovery_pass_seconds": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 0.25
+            },
+            "max_discovered_processes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2048
+            },
+            "fixed_point_seconds": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 2.0
+            },
+            "capture_reader_grace_seconds": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 0.5
+            },
+            "capture_reader_shutdown_seconds": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 2.0
+            },
+            "source_max_entries": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 32768
+            },
+            "source_per_file_bytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 16777216
+            },
+            "source_aggregate_bytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 268435456
+            },
+            "source_elapsed_seconds": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 30.0
+            }
+          }
+        },
+        "expected_observations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "source_mode",
+              "stage",
+              "expectation"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/reference"
+              },
+              "source_mode": {
+                "enum": [
+                  "source-faithful",
+                  "public-only",
+                  "both"
+                ]
+              },
+              "stage": {
+                "enum": [
+                  "restore",
+                  "package"
+                ]
+              },
+              "expectation": {
+                "$ref": "#/$defs/nonemptyString"
+              }
+            }
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "outputEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "disposition",
+        "path",
+        "sha256",
+        "sanitized_bytes",
+        "excerpt",
+        "truncated"
+      ],
+      "properties": {
+        "disposition": {
+          "enum": [
+            "retained-sanitized",
+            "suppressed-source-faithful",
+            "capture-unverifiable"
+          ]
+        },
+        "path": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/absolutePosixPath"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sanitized_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048576
+        },
+        "excerpt": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "truncated": {
+          "type": "boolean"
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "disposition": {
+              "const": "retained-sanitized"
+            },
+            "path": {
+              "$ref": "#/$defs/absolutePosixPath"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        {
+          "properties": {
+            "disposition": {
+              "const": "suppressed-source-faithful"
+            },
+            "path": {
+              "const": null
+            },
+            "sha256": {
+              "const": null
+            },
+            "sanitized_bytes": {
+              "const": 0
+            },
+            "excerpt": {
+              "const": ""
+            },
+            "truncated": {
+              "const": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "disposition": {
+              "const": "capture-unverifiable"
+            },
+            "path": {
+              "const": null
+            },
+            "sha256": {
+              "const": null
+            },
+            "sanitized_bytes": {
+              "const": 0
+            },
+            "excerpt": {
+              "const": ""
+            },
+            "truncated": {
+              "const": false
+            }
+          }
+        }
+      ]
+    },
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt",
+        "exit_code",
+        "termination",
+        "stdout",
+        "stderr",
+        "failure_reason"
+      ],
+      "properties": {
+        "attempt": {
+          "const": 1
+        },
+        "exit_code": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "termination": {
+          "enum": [
+            "completed",
+            "cancelled",
+            "timed-out",
+            "quiescence-unproved",
+            "sensitive-output",
+            "output-limit-exceeded",
+            "capture-failed"
+          ]
+        },
+        "stdout": {
+          "$ref": "#/$defs/outputEvidence"
+        },
+        "stderr": {
+          "$ref": "#/$defs/outputEvidence"
+        },
+        "failure_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1024
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "stdout": {
+                "properties": {
+                  "disposition": {
+                    "const": "capture-unverifiable"
+                  }
                 },
-                "sha256": {
-                  "$ref": "#/$defs/sha256"
-                }
+                "required": [
+                  "disposition"
+                ]
               }
             },
-            "nuget_versions": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "path",
-                "sha256"
-              ],
-              "properties": {
-                "path": {
-                  "const": "tools/nuget_versions.py"
+            "required": [
+              "stdout"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stdout": {
+                "properties": {
+                  "disposition": {
+                    "const": "capture-unverifiable"
+                  }
                 },
-                "sha256": {
-                  "$ref": "#/$defs/sha256"
-                }
+                "required": [
+                  "disposition"
+                ]
+              },
+              "stderr": {
+                "properties": {
+                  "disposition": {
+                    "const": "capture-unverifiable"
+                  }
+                },
+                "required": [
+                  "disposition"
+                ]
               }
             }
           }
         },
-        "exact_replay_required": {
-          "const": true
+        {
+          "if": {
+            "properties": {
+              "stderr": {
+                "properties": {
+                  "disposition": {
+                    "const": "capture-unverifiable"
+                  }
+                },
+                "required": [
+                  "disposition"
+                ]
+              }
+            },
+            "required": [
+              "stderr"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stdout": {
+                "properties": {
+                  "disposition": {
+                    "const": "capture-unverifiable"
+                  }
+                },
+                "required": [
+                  "disposition"
+                ]
+              },
+              "stderr": {
+                "properties": {
+                  "disposition": {
+                    "const": "capture-unverifiable"
+                  }
+                },
+                "required": [
+                  "disposition"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "commandOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command_id",
+        "status",
+        "attempts",
+        "unspawned_termination",
+        "source_integrity_failure",
+        "blocked_by"
+      ],
+      "properties": {
+        "command_id": {
+          "$ref": "#/$defs/reference"
         },
-        "provenance_separate_from_projection": {
-          "const": true
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "blocked"
+          ]
         },
-        "cross_bindings": {
+        "attempts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/attempt"
+          },
+          "maxItems": 1
+        },
+        "unspawned_termination": {
+          "enum": [
+            "spawn-failed",
+            "capture-failed",
+            null
+          ]
+        },
+        "source_integrity_failure": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "blocked_by": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/reference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "preparationOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "attempts",
+        "failure_reason"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/reference"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "blocked"
+          ]
+        },
+        "attempts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/attempt"
+          },
+          "maxItems": 1
+        },
+        "failure_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1024
+        }
+      }
+    },
+    "quiescenceObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject_kind",
+        "subject_id",
+        "proved",
+        "descendant_fixed_point",
+        "final_live_descendants",
+        "reaped_processes"
+      ],
+      "properties": {
+        "subject_kind": {
+          "enum": [
+            "preparation",
+            "command"
+          ]
+        },
+        "subject_id": {
+          "$ref": "#/$defs/reference"
+        },
+        "proved": {
+          "type": "boolean"
+        },
+        "descendant_fixed_point": {
+          "type": "boolean"
+        },
+        "final_live_descendants": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reaped_processes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "cacheObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source_mode",
+        "kind",
+        "preparation_refs",
+        "effective_paths",
+        "initial_empty"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/reference"
+        },
+        "source_mode": {
+          "enum": [
+            "source-faithful",
+            "public-only"
+          ]
+        },
+        "kind": {
+          "const": "nuget-cache-initial-state"
+        },
+        "preparation_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "effective_paths": {
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "raw_asset_to_command_result",
-            "projection_to_source_target",
-            "package_nodes_to_provenance",
-            "package_backed_assemblies_to_runtime_evidence",
-            "limitations_to_conclusions"
+            "http-cache",
+            "global-packages",
+            "temp",
+            "plugins-cache"
           ],
           "properties": {
-            "raw_asset_to_command_result": {
+            "http-cache": {
+              "$ref": "#/$defs/absolutePosixPath"
+            },
+            "global-packages": {
+              "$ref": "#/$defs/absolutePosixPath"
+            },
+            "temp": {
+              "$ref": "#/$defs/absolutePosixPath"
+            },
+            "plugins-cache": {
+              "$ref": "#/$defs/absolutePosixPath"
+            }
+          }
+        },
+        "initial_empty": {
+          "const": true
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "retrieval_source_evidence",
+        "access_evidence",
+        "initial_cache_evidence"
+      ],
+      "properties": {
+        "retrieval_source_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "access_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "initial_cache_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "dependencyAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "projection",
+        "provenance"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^docs/research/experiments/assets/[^/\\\\\\u0000]+\\.project\\.assets\\.json$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "projection": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      }
+    },
+    "unresolvedDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "declaration_id",
+        "failure_evidence_refs"
+      ],
+      "properties": {
+        "declaration_id": {
+          "$ref": "#/$defs/reference"
+        },
+        "failure_evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "dependencyTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_id",
+        "status",
+        "reason",
+        "unresolved_declarations"
+      ],
+      "properties": {
+        "target_id": {
+          "$ref": "#/$defs/reference"
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "missing",
+            "invalid"
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1024
+        },
+        "asset": {
+          "$ref": "#/$defs/dependencyAsset"
+        },
+        "unresolved_declarations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unresolvedDeclaration"
+          },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "valid"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "asset"
+            ],
+            "properties": {
+              "reason": {
+                "type": "null"
+              },
+              "unresolved_declarations": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "reason": {
+                "$ref": "#/$defs/nonemptyString"
+              }
+            },
+            "not": {
+              "required": [
+                "asset"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "dependencyMode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_mode",
+        "targets"
+      ],
+      "properties": {
+        "source_mode": {
+          "enum": [
+            "source-faithful",
+            "public-only"
+          ]
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dependencyTarget"
+          },
+          "minItems": 8,
+          "maxItems": 8
+        }
+      }
+    },
+    "runtimeContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operating_system",
+        "architecture",
+        "kernel_release",
+        "mise_executable_sha256",
+        "mise_executable_owner_verified",
+        "mise_executable_mode",
+        "git_executable_sha256",
+        "reproduction_count",
+        "nuget_client_version_probe"
+      ],
+      "properties": {
+        "operating_system": {
+          "const": "linux"
+        },
+        "architecture": {
+          "const": "x86_64"
+        },
+        "kernel_release": {
+          "$ref": "#/$defs/nonemptyString"
+        },
+        "mise_executable_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "mise_executable_owner_verified": {
+          "const": true
+        },
+        "mise_executable_mode": {
+          "type": "string",
+          "pattern": "^[0-7]{4}$"
+        },
+        "git_executable_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "reproduction_count": {
+          "const": 1
+        },
+        "nuget_client_version_probe": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "preparation_id",
+                "source",
+                "path",
+                "sha256",
+                "package",
+                "version"
+              ],
+              "properties": {
+                "preparation_id": {
+                  "const": "inspect-nuget-client-version"
+                },
+                "source": {
+                  "const": "NuGet.CommandLine.XPlat.deps.json"
+                },
+                "path": {
+                  "$ref": "#/$defs/absolutePosixPath"
+                },
+                "sha256": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "package": {
+                  "const": "NuGet.CommandLine.XPlat"
+                },
+                "version": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(?:\\.[0-9A-Za-z-]+)+$"
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "runtimeEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtime_context",
+        "preparation_outcomes",
+        "cache_observations",
+        "dependency_evidence",
+        "command_outcomes",
+        "canonical_termination",
+        "all_exit_quiescence",
+        "ownership_conditioned_cleanup",
+        "receipt_binding",
+        "bounded_conclusions"
+      ],
+      "properties": {
+        "runtime_context": {
+          "$ref": "#/$defs/runtimeContext"
+        },
+        "preparation_outcomes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/preparationOutcome"
+          },
+          "minItems": 29,
+          "maxItems": 29
+        },
+        "cache_observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cacheObservation"
+          },
+          "maxItems": 2
+        },
+        "dependency_evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "modes"
+          ],
+          "properties": {
+            "modes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/dependencyMode"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "command_outcomes": {
+          "x-public-build-runtime-semantic": "command_outcomes",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/commandOutcome"
+          },
+          "minItems": 16,
+          "maxItems": 16
+        },
+        "canonical_termination": {
+          "x-public-build-runtime-semantic": "canonical_termination",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "cause",
+            "detail"
+          ],
+          "properties": {
+            "cause": {
+              "enum": [
+                "completed",
+                "completed-with-command-failures",
+                "cancelled",
+                "timed-out",
+                "preparation-failed",
+                "quiescence-unproved",
+                "sensitive-output",
+                "output-limit-exceeded",
+                "capture-failed",
+                "source-integrity-changed",
+                "root-identity-unverified",
+                "spawn-failed"
+              ]
+            },
+            "detail": {
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          }
+        },
+        "all_exit_quiescence": {
+          "x-public-build-runtime-semantic": "all_exit_quiescence",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "subreaper_enabled",
+            "identity_mechanisms",
+            "observations"
+          ],
+          "properties": {
+            "subreaper_enabled": {
               "const": true
             },
-            "projection_to_source_target": {
-              "const": true
+            "identity_mechanisms": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "const": "pidfd"
+                },
+                {
+                  "const": "proc-starttime"
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
             },
-            "package_nodes_to_provenance": {
-              "const": true
+            "observations": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/quiescenceObservation"
+              }
+            }
+          }
+        },
+        "ownership_conditioned_cleanup": {
+          "x-public-build-runtime-semantic": "ownership_conditioned_cleanup",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "roots"
+          ],
+          "properties": {
+            "roots": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "created",
+                  "identity_verified"
+                ],
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "toolchain",
+                      "selection"
+                    ]
+                  },
+                  "created": {
+                    "type": "boolean"
+                  },
+                  "identity_verified": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "receipt_binding": {
+          "x-public-build-runtime-semantic": "receipt_binding",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "algorithm",
+            "canonicalization",
+            "scope",
+            "digest"
+          ],
+          "properties": {
+            "algorithm": {
+              "const": "sha256"
             },
-            "package_backed_assemblies_to_runtime_evidence": {
-              "const": true
+            "canonicalization": {
+              "const": "canonical-json-v1"
             },
-            "limitations_to_conclusions": {
-              "const": true
+            "scope": {
+              "const": "recorded-bundle-excluding-receipt-digest"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "bounded_conclusions": {
+          "x-public-build-runtime-semantic": "bounded_conclusions",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "conclusions"
+          ],
+          "properties": {
+            "conclusions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "epistemic_level",
+                  "statement",
+                  "evidence_refs",
+                  "limitation_refs"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/reference"
+                  },
+                  "epistemic_level": {
+                    "enum": [
+                      "runtime-observation",
+                      "inference"
+                    ]
+                  },
+                  "statement": {
+                    "$ref": "#/$defs/nonemptyString"
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/reference"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  },
+                  "limitation_refs": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/reference"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  }
+                }
+              },
+              "minItems": 1
             }
           }
         }
