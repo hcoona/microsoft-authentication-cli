@@ -63,8 +63,17 @@ WORK: Path
 SUBREAPER_ENABLED = False
 
 
+def planned_bundle_projection() -> dict[str, Any]:
+    bundle = load_strict_json(PLANNED_BUNDLE)
+    if bundle["status"] == "recorded":
+        bundle = copy.deepcopy(bundle)
+        bundle["status"] = "planned"
+        del bundle["runtime_evidence"]
+    return bundle
+
+
 def command_topology() -> list[dict[str, Any]]:
-    return load_strict_json(PLANNED_BUNDLE)["protocol"]["commands"]
+    return planned_bundle_projection()["protocol"]["commands"]
 
 
 def preparation_topology() -> list[dict[str, Any]]:
@@ -80,11 +89,11 @@ def preparation_topology() -> list[dict[str, Any]]:
 
 
 def source_mode_plan() -> list[dict[str, Any]]:
-    return load_strict_json(PLANNED_BUNDLE)["isolation"]["source_modes"]
+    return planned_bundle_projection()["isolation"]["source_modes"]
 
 
 def supervision_bounds() -> dict[str, Any]:
-    return load_strict_json(PLANNED_BUNDLE)["protocol"]["supervision_bounds"]
+    return planned_bundle_projection()["protocol"]["supervision_bounds"]
 
 
 def check(condition: bool, message: str) -> None:
@@ -1041,7 +1050,7 @@ def test_strict_json_and_receipt_tamper() -> None:
         pass
     else:
         raise AssertionError("non-finite JSON was accepted")
-    planned = load_strict_json(PLANNED_BUNDLE)
+    planned = planned_bundle_projection()
     malformed_cases = (
         ("unexpected nested property", lambda value: value["environment"]["dotnet_sdk"].__setitem__("unexpected", True)),
         ("wrong limitation type", lambda value: value["limitations"].__setitem__(0, 7)),
@@ -1097,7 +1106,7 @@ def test_strict_json_and_receipt_tamper() -> None:
 
 
 def test_planned_and_recorded_component_hash_lifecycle() -> None:
-    planned = load_strict_json(PLANNED_BUNDLE)
+    planned = planned_bundle_projection()
     drifted = copy.deepcopy(planned)
     drifted["components"]["contract"]["sha256"] = "0" * 64
     planned_errors = validation.validate_public_build_bundle_value(
@@ -1143,7 +1152,7 @@ def test_planned_and_recorded_component_hash_lifecycle() -> None:
 
 
 def test_exact_two_mode_command_topology() -> None:
-    planned = load_strict_json(PLANNED_BUNDLE)
+    planned = planned_bundle_projection()
     commands = planned["protocol"]["commands"]
     check(len(commands) == 16, "command topology is not exactly sixteen commands")
     check(
@@ -1625,7 +1634,7 @@ def synthetic_case(
     if precreate_selection_root:
         selection_root.mkdir(mode=0o700)
     planned = rebase_value(
-        load_strict_json(PLANNED_BUNDLE),
+        planned_bundle_projection(),
         toolchain_root,
         selection_root,
     )
@@ -4973,7 +4982,7 @@ def test_pre_root_mise_and_zero_child_lifecycle() -> None:
 
 
 def test_run_bundle_composition_and_descriptor_lifecycle() -> None:
-    planned = load_strict_json(PLANNED_BUNDLE)
+    planned = planned_bundle_projection()
     carrier = WORK / "composition-carrier"
     carrier.write_bytes(b"carrier")
 

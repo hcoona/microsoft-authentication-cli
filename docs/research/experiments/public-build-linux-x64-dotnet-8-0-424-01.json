@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "id": "public-build-linux-x64-dotnet-8-0-424-01",
-  "status": "planned",
+  "status": "recorded",
   "issue": {
     "number": 1,
     "url": "https://github.com/hcoona/microsoft-authentication-cli/issues/1"
@@ -688,6 +688,979 @@
     "lockfile": {
       "path": "tools/public-build-mise.lock",
       "sha256": "e24a24598c52cece3da7d3c6cdcf4b6673001386d264ba7ef6f6101b579f2c05"
+    }
+  },
+  "runtime_evidence": {
+    "runtime_context": {
+      "operating_system": "linux",
+      "architecture": "x86_64",
+      "host_type": "wsl2-linux",
+      "kernel_release": "6.18.33.1-microsoft-standard-WSL2",
+      "reproduction_count": 1,
+      "mise_executable_sha256": "1f5e8795d24073904ef20ba70c1250ad6389d8c5672226d152e0ed24909ba72f",
+      "mise_executable_owner_verified": true,
+      "mise_executable_mode": "0755",
+      "nuget_client_version_probe": null,
+      "git_executable_sha256": "5516c9f362c29376ab9a499a33082f9f611941d8c75930c880e30ad109e39c9a"
+    },
+    "preparation_outcomes": [
+      {
+        "id": "prepare-toolchain-root",
+        "status": "failed",
+        "attempts": [],
+        "failure_reason": "RootCreationError: unexpected mode for /var/tmp/microsoft-authentication-cli"
+      },
+      {
+        "id": "prepare-selection-root",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "prepare-selection-directories",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "prepare-dotnet-sdk-selection",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "prepare-toolchain-directories",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "prepare-reviewed-mise-config",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "mise-version",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "mise-install-dotnet-sdk",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "verify-dotnet-installation",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "inspect-nuget-client-version",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "git-source-faithful-init",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "git-source-faithful-fetch",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "git-source-faithful-checkout",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "git-source-faithful-verify-head",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "source-faithful-integrity-baseline",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "generate-source-faithful-directory-packages-props",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "verify-source-faithful-nuget-roots-empty",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "dotnet-source-faithful-info",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "dotnet-source-faithful-nuget-cache-locations",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "git-public-only-init",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "git-public-only-fetch",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "git-public-only-checkout",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "git-public-only-verify-head",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "public-only-integrity-baseline",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "generate-public-only-nuget-config",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "generate-public-only-directory-packages-props",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "verify-public-only-nuget-roots-empty",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "dotnet-public-only-info",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      },
+      {
+        "id": "dotnet-public-only-nuget-cache-locations",
+        "status": "blocked",
+        "attempts": [],
+        "failure_reason": "blocked-by:prepare-toolchain-root"
+      }
+    ],
+    "cache_observations": [],
+    "dependency_evidence": {
+      "modes": [
+        {
+          "source_mode": "source-faithful",
+          "targets": [
+            {
+              "target_id": "target-adopat-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-adopat-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-microsoft-identity-client-extensions-msal",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-microsoft-visualstudio-services-client",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-data-sqlclient",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-formats-asn1",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-security-cryptography-xml",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-adopat-test-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-adopat-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-nunit",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-coverlet-collector",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-moq",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-azureauth-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-azureauth-microsoft-office-lasso",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-opentelemetry-api",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-tomlyn",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-azureauth-test-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-azureauth-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-nunit",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-coverlet-collector",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-system-io-abstractions-testinghelpers",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-moq",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-benchmark-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-benchmarkdotnet",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-benchmark-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-broker",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-benchmark-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-not-windows",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-benchmark-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-extensions-msal",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identitymodel-jsonwebtokens",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-broker",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-nativeinterop",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-test-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-nunit",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-moq",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-test-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-testhelper-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-testhelper-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-testhelper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-testhelper-nlog-extensions-logging",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-testhelper-net8-0"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "source_mode": "public-only",
+          "targets": [
+            {
+              "target_id": "target-adopat-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-adopat-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-microsoft-identity-client-extensions-msal",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-microsoft-visualstudio-services-client",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-data-sqlclient",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-formats-asn1",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-security-cryptography-xml",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-adopat-test-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-adopat-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-nunit",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-coverlet-collector",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-moq",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-azureauth-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-azureauth-microsoft-office-lasso",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-opentelemetry-api",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-tomlyn",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-azureauth-test-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-azureauth-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-nunit",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-coverlet-collector",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-system-io-abstractions-testinghelpers",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-moq",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-benchmark-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-benchmarkdotnet",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-benchmark-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-broker",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-benchmark-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-not-windows",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-benchmark-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-extensions-msal",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identitymodel-jsonwebtokens",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-broker",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-nativeinterop",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-test-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-nunit",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-test-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-moq",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-test-net8-0"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-testhelper-net8-0",
+              "status": "invalid",
+              "reason": "asset-inspection-blocked-by-root-identity-unverified",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-testhelper-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "public-only/target-testhelper-net8-0"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-testhelper-nlog-extensions-logging",
+                  "failure_evidence_refs": [
+                    "public-only/target-testhelper-net8-0"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "command_outcomes": [
+      {
+        "command_id": "source-faithful-restore",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "source-faithful-build",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "source-faithful-test",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "source-faithful-package-adopat",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "source-faithful-package-azureauth",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "source-faithful-package-msalwrapper-benchmark",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "source-faithful-package-msalwrapper",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "source-faithful-package-testhelper",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "public-only-restore",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "public-only-build",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "public-only-test",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "public-only-package-adopat",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "public-only-package-azureauth",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "public-only-package-msalwrapper-benchmark",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "public-only-package-msalwrapper",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      },
+      {
+        "command_id": "public-only-package-testhelper",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "prepare-toolchain-root"
+      }
+    ],
+    "canonical_termination": {
+      "cause": "preparation-failed",
+      "detail": {
+        "subject_kind": "preparation",
+        "subject_id": "prepare-toolchain-root"
+      }
+    },
+    "all_exit_quiescence": {
+      "subreaper_enabled": true,
+      "identity_mechanisms": [
+        "pidfd",
+        "proc-starttime"
+      ],
+      "observations": []
+    },
+    "ownership_conditioned_cleanup": {
+      "roots": [
+        {
+          "kind": "toolchain",
+          "created": false,
+          "identity_verified": false
+        },
+        {
+          "kind": "selection",
+          "created": false,
+          "identity_verified": false
+        }
+      ]
+    },
+    "receipt_binding": {
+      "algorithm": "sha256",
+      "canonicalization": "canonical-json-v1",
+      "scope": "recorded-bundle-excluding-receipt-digest",
+      "digest": "e7570f8df6224bb63640f0527c040aa894562f45a79647db84161d54727dd621"
+    },
+    "bounded_conclusions": {
+      "conclusions": [
+        {
+          "id": "conclusion-recorded-command-outcomes",
+          "epistemic_level": "runtime-observation",
+          "statement": "The runner recorded the bounded WSL2-Linux-x64 command outcomes with source-faithful output suppressed, other output retained only when capture identity was verified, unverifiable captures contributing no output evidence, and only asset evidence admitted by the publication safety gates; public causality and evidence sufficiency remain review judgments.",
+          "evidence_refs": [
+            "source-faithful-restore",
+            "source-faithful-build",
+            "source-faithful-test",
+            "source-faithful-package-adopat",
+            "source-faithful-package-azureauth",
+            "source-faithful-package-msalwrapper-benchmark",
+            "source-faithful-package-msalwrapper",
+            "source-faithful-package-testhelper",
+            "public-only-restore",
+            "public-only-build",
+            "public-only-test",
+            "public-only-package-adopat",
+            "public-only-package-azureauth",
+            "public-only-package-msalwrapper-benchmark",
+            "public-only-package-msalwrapper",
+            "public-only-package-testhelper"
+          ],
+          "limitation_refs": [
+            "limitation-1",
+            "limitation-2",
+            "limitation-3",
+            "limitation-4",
+            "limitation-5",
+            "limitation-6"
+          ]
+        }
+      ]
     }
   }
 }
