@@ -43,11 +43,11 @@ MISE_EXECUTABLE_SHA256 = (
 DIRECTORY_PACKAGES_PROPS_CONTENT = "<Project />\n"
 TOOLCHAIN_ROOT = PurePosixPath(
     "/var/tmp/microsoft-authentication-cli/issue-1-toolchains/"
-    "public-build-linux-x64-dotnet-8-0-424-01"
+    "public-build-wsl2-linux-x64-dotnet-8-0-424"
 )
 SELECTION_ROOT = PurePosixPath(
     "/var/tmp/microsoft-authentication-cli/issue-1-selections/"
-    "public-build-linux-x64-dotnet-8-0-424-01"
+    "public-build-wsl2-linux-x64-dotnet-8-0-424"
 )
 DEPENDENCY_ASSET_DIRECTORY = PurePosixPath(
     "docs/research/experiments/assets"

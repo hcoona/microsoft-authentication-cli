@@ -96,15 +96,26 @@ accepted project state authorizes Issue #1 execution. Non-executing review may i
 repository records and host metadata, but it must not invoke .NET or NuGet, resolve
 packages, access feeds, or mutate source or user state.
 
-Activation v1 has exactly one bundle at
-`docs/research/experiments/public-build-linux-x64-dotnet-8-0-424-01.json`, with a matching
-filename and ID. A planned bundle contains no runtime evidence. A recorded bundle contains
-runner-produced evidence with distinct `command_outcomes`, `canonical_termination`,
+The current tree has exactly one semantic bundle at
+`docs/research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`, with a
+matching filename and ID. Git history, PR #6, and Issue #1 retain the retired numbered
+preflight receipt; it is not a current executable protocol or runtime-evidence carrier. A
+planned bundle contains no runtime evidence. A recorded bundle contains runner-produced
+evidence with distinct `command_outcomes`, `canonical_termination`,
 `all_exit_quiescence`, `ownership_conditioned_cleanup`, `receipt_binding`, and
-`bounded_conclusions` carriers. The runner must atomically fail closed when recording the
-reviewed singleton; a partial or concurrently changed replacement must not become current.
-A future second instance requires one atomic expansion of the family path, schema ID and
-cardinality, runner roots and topology, checker, catalog, and controls.
+`bounded_conclusions` carriers.
+
+Trusted-base inspection, existing experiment-root rejection, and the other checks that
+precede experiment-owned state are preflight. A preflight rejection exits nonzero and
+preserves the canonical planned bundle's bytes, inode, and status without creating a
+recording candidate or publishing assets. Preflight may create missing trusted-base
+components as mode `0700` operational host infrastructure and retain them after rejection;
+those directories are not experiment-owned runtime state. The fixed topology creates its
+roots before any child process, so canonical runtime recording begins when the runner
+creates the first experiment root. A failure after that boundary, including root-marker
+initialization failure, remains durable evidence. The runner must atomically fail closed
+when recording the reviewed singleton; a partial or concurrently changed replacement
+must not become current.
 
 The repository owner approved `defer_to_first_production_run`. Activation means the
 reviewed runner, contract, schema, controls, and planned bundle are ready; review and hk
@@ -117,6 +128,8 @@ carrier:
 [SDK acquisition](https://github.com/hcoona/microsoft-authentication-cli/issues/1#issuecomment-5471951604)
 and
 [WSL2 host](https://github.com/hcoona/microsoft-authentication-cli/issues/1#issuecomment-5483552767).
+The trusted-base provisioning boundary remains in its
+[owner disposition](https://github.com/hcoona/microsoft-authentication-cli/issues/1#issuecomment-5486463259).
 
 #### Isolation and Execution Outcomes
 
@@ -134,6 +147,12 @@ The two reviewed source modes use disjoint experiment-owned checkout, home, cach
 temporary, output, selection, and toolchain paths. No ambient credentials, package
 configuration, caches, startup hooks, or toolchain selection may affect an outcome.
 Existing, linked, replaced, or identity-unverified roots are not reusable.
+`/var/tmp` must remain root-owned mode `1777`. Each existing trusted production-base
+component below it must be opened without following links, owned by the current Linux
+user, grant owner read/write/search permission, and grant no group or other write
+permission. This protects identity and mutation integrity, not ancestor-name
+confidentiality. Experiment roots remain exact mode `0700`, and their markers remain
+exact mode `0600`.
 
 The bundle records exactly the source-faithful and public-only modes and their sixteen
 restore, build, filtered-test, and non-publishing package commands. Each command has one
@@ -269,12 +288,11 @@ changed, deleted, or newly appearing bytes remain invalid and unresolved.
 
 Planned and recorded validation require every hash-bound runner, validator, contract,
 schema, extractor, NuGet helper, and experiment-lock component to match the live
-repository file, and recorded
-projection replay uses the current extractor. After a recorded bundle exists, the first
-proposed change to any of those hash-bound components must atomically choose and implement
-either historical replay or record migration, with independent research-evidence review.
-Until that trigger fires, history-wide component search and recovered historical Python
-execution are prohibited.
+repository file, and recorded projection replay uses the current extractor. After a
+recorded bundle exists, the first proposed change to any of those hash-bound components
+must atomically choose and implement either historical replay or record migration, with
+independent research-evidence review. Until that trigger fires, history-wide component
+search and recovered historical Python execution are prohibited.
 
 The embedded receipt binds the complete recorded strict-JSON bundle except its own digest.
 The runner, CLI validator, and repository checker share shape and semantic validation;
