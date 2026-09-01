@@ -1449,6 +1449,10 @@ def validate_public_build_runtime_evidence(
     roots = runtime["ownership_conditioned_cleanup"]["roots"]
     if [root["kind"] for root in roots] != ["toolchain", "selection"]:
         errors.append(f"{relative_path}: root lifecycle must cover toolchain then selection")
+    if not any(root["created"] for root in roots):
+        errors.append(
+            f"{relative_path}: recorded evidence must follow experiment-owned root creation"
+        )
     preparation_by_id = {item["id"]: item for item in preparations}
     for root, preparation_id in zip(
         roots, ("prepare-toolchain-root", "prepare-selection-root")

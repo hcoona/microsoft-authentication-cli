@@ -414,8 +414,8 @@ families:
   - id: public-build-experiment-bundles
     state: current
     concern: Reviewed strict-JSON protocols and runner-produced runtime evidence for issue #1 public-build experiments
-    carrier: repository-files
-    path: docs/research/experiments/public-build-linux-x64-dotnet-8-0-424-01.json
+    carrier: repository-file
+    path: docs/research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json
     format: json
     schema: schemas/research/public-build-experiment-bundle.schema.json
     producer: Experiment owner for planned form and the repository runner for recorded form
@@ -424,8 +424,8 @@ families:
       - Issue #1 experiment authors before execution and the fixed runner when validating the selected plan
       - Issue #1 implementers and research reviewers when reproducing commands or evaluating dependency and public-build conclusions
     creation_trigger: The issue #1 runtime activation change is reviewed for runner and contract readiness under the owner-approved first-run SDK acquisition and WSL2 host dispositions, before the first production experiment selection or toolchain root is created or any child process is executed.
-    failure_mode: A runtime experiment begins without a reviewed source binding, exact toolchain and runner identity, bounded command topology, fail-closed WSL2 host guard, lifecycle evidence, or isolated state, misclassifies the execution host, or bypasses the dedicated pinned-SDK installation.
-    review_point: At activation readiness, before the first production execution and SDK installation, when conclusions are recorded, before any second instance atomically expands the exact family path, schema ID authority, runner roots and topology, checker, catalog, and controls, after a recorded bundle exists at the first proposed hash-bound runner, validator, contract, schema, extractor, NuGet-helper, or experiment-lock change, which must atomically choose a historical replay or record migration strategy with independent research-evidence review, and at every phase transition, when research-evidence review reassesses the second-instance expansion and recorded-component-drift deferrals
+    failure_mode: A runtime experiment begins without a reviewed source binding, exact toolchain and runner identity, bounded command topology, fail-closed WSL2 host guard, isolated state, or dedicated pinned-SDK installation; a pre-experiment-root failure consumes the plan; or a post-side-effect failure is not retained as lifecycle evidence.
+    review_point: At activation readiness, before the first production execution and SDK installation, when conclusions are recorded, after a recorded bundle exists at the first proposed hash-bound runner, validator, contract, schema, extractor, NuGet-helper, or experiment-lock change, which must atomically choose a historical replay or record migration strategy with independent research-evidence review, and at every phase transition when research-evidence review reassesses recorded-component drift
 
   - id: public-build-assets-evidence
     state: scheduled

@@ -118,7 +118,7 @@ controls:
       - Research reviewers when evaluating the public-build conclusion
     governing_rules:
       - docs/research/experiment-safety.md#phase-1-public-build-record
-    invariant: The exact singleton bundle remains strict, filename-bound, source- and component-bound, within authorized host and safety ceilings, internally consistent with the fixed two-mode non-publishing Issue #1 plan, and replayable through the shared reducer, current extractor, receipt, nested dependency evidence, limitations, and six runtime semantic carriers. Activation readiness preserves the owner-approved first-supported-production-run SDK installation timing, fail-closed isolation, bounded sanitized evidence, all-exit quiescence, source integrity, retain-always roots, and atomic recording.
+    invariant: The exact semantic singleton remains strict, filename-bound, source- and component-bound, within authorized host and safety ceilings, and internally consistent with the fixed two-mode non-publishing Issue #1 plan. Preflight rejection before experiment-root creation preserves the planned carrier, while root creation begins the retain-always lifecycle whose command evidence, shared-reducer result, bounded sanitized output, all-exit quiescence, source integrity, current extraction, receipt, and atomic recording remain fail closed.
     runner: hk
     implementation:
       kind: hk-steps
@@ -132,7 +132,7 @@ controls:
     execution_points:
       - local-fast
       - ci
-    failure_mode: An unsupported or ambiently influenced run begins, the first production run bypasses its pinned installation, a second instance avoids atomic expansion, blockers or conclusions contradict primitive evidence, unsafe output or assets are retained, descendants or roots are not proved safe, source integrity changes, recording or rollback affects another actor, the live schema or another hash-bound component drifts without the required replay-or-migration decision, or repository validation accepts a plan or receipt that the runner would reject.
+    failure_mode: An unsupported or ambiently influenced run begins, the first production run bypasses its pinned installation, a preflight failure replaces the planned carrier, a failure after experiment-root creation is lost, blockers or conclusions contradict primitive evidence, unsafe output or assets are retained, descendants or roots are not proved safe, source integrity changes, recording or rollback affects another actor, the live schema or another hash-bound component drifts without the required replay-or-migration decision, or repository validation accepts a plan or receipt that the runner would reject.
 
   - id: requirement-id-uniqueness
     state: current

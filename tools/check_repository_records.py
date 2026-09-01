@@ -646,7 +646,7 @@ def check_public_build_activation_coupling(
         return errors
     expected_bundle_path = (
         "docs/research/experiments/"
-        "public-build-linux-x64-dotnet-8-0-424-01.json"
+        "public-build-wsl2-linux-x64-dotnet-8-0-424.json"
     )
     if family["path"] != expected_bundle_path or family["format"] != "json":
         errors.append(
@@ -692,7 +692,7 @@ def check_public_build_activation_coupling(
     if (
         not isinstance(marker, dict)
         or marker.get("mode") != "runtime"
-        or marker.get("version") != 2
+        or marker.get("version") != 3
         or not isinstance(runtime_semantics, dict)
         or not isinstance(runtime_property, str)
         or not runtime_property
@@ -1292,7 +1292,7 @@ def check_public_build_static_fixtures() -> list[str]:
         lasso_manifest = load_strict_json(PUBLIC_BUILD_LASSO_MANIFEST_PATH)
         bundle = load_strict_json(
             "docs/research/experiments/"
-            "public-build-linux-x64-dotnet-8-0-424-01.json"
+            "public-build-wsl2-linux-x64-dotnet-8-0-424.json"
         )
     except ExtractionError as error:
         return [str(error)]

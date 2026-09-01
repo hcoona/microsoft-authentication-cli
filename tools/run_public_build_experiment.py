@@ -94,7 +94,7 @@ STABLE_SCAN_DELAY = 0.02
 ASSETS_DIRECTORY = ROOT / "docs/research/experiments/assets"
 CANONICAL_BUNDLE_PATH = (
     ROOT
-    / "docs/research/experiments/public-build-linux-x64-dotnet-8-0-424-01.json"
+    / "docs/research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json"
 )
 SENSITIVE_OUTPUT = (
     re.compile(r"(?i)(authorization\s*:\s*)(?:bearer|basic)\s+\S+"),
@@ -114,6 +114,10 @@ class ValidationError(ValueError):
 
 
 class CapabilityError(RuntimeError):
+    pass
+
+
+class PreflightRejection(RuntimeError):
     pass
 
 
@@ -424,13 +428,13 @@ def require_wsl2_linux_x64(
     detected_system = system if system is not None else platform.system()
     detected_machine = machine if machine is not None else platform.machine()
     if detected_system != "Linux":
-        raise CapabilityError("activation v1 supports only WSL2 Linux")
+        raise CapabilityError("public-build runner supports only WSL2 Linux")
     if detected_machine not in {"x86_64", "AMD64"}:
-        raise CapabilityError("activation v1 supports only WSL2 Linux x64")
+        raise CapabilityError("public-build runner supports only WSL2 Linux x64")
     release = kernel_release if kernel_release is not None else platform.release()
     normalized_release = release.casefold()
     if "microsoft" not in normalized_release or "wsl2" not in normalized_release:
-        raise CapabilityError("activation v1 requires a WSL2 kernel identity")
+        raise CapabilityError("public-build runner requires a WSL2 kernel identity")
 
 
 @dataclass(frozen=True)
@@ -591,6 +595,21 @@ def _verify_directory_fd(
     return metadata
 
 
+def _verify_trusted_production_base_fd(
+    descriptor: int,
+    label: Path,
+) -> os.stat_result:
+    metadata = _verify_directory_fd(
+        descriptor,
+        label,
+        owner=os.getuid(),
+    )
+    mode = stat.S_IMODE(metadata.st_mode)
+    if (mode & 0o700) != 0o700 or (mode & 0o022) != 0:
+        raise RootCreationError(f"unsafe trusted-base mode for {label}")
+    return metadata
+
+
 def _open_child_directory(parent: int, name: str, label: Path) -> int:
     try:
         return os.open(name, _directory_flags(), dir_fd=parent)
@@ -697,18 +716,19 @@ def create_exclusive_root(
                 ):
                     raise RootCreationError("/var/tmp must be root-owned mode 1777")
             elif production_base:
-                _verify_directory_fd(
+                _verify_trusted_production_base_fd(
                     current_fd,
                     current_path,
-                    owner=os.getuid(),
-                    mode=0o700,
                 )
-        _verify_directory_fd(
-            current_fd,
-            trusted_base,
-            owner=os.getuid(),
-            mode=0o700,
-        )
+        if production_base:
+            _verify_trusted_production_base_fd(current_fd, trusted_base)
+        else:
+            _verify_directory_fd(
+                current_fd,
+                trusted_base,
+                owner=os.getuid(),
+                mode=0o700,
+            )
         leaf = root.name
         try:
             os.mkdir(leaf, 0o700, dir_fd=current_fd)
@@ -3777,8 +3797,9 @@ def _execute_planned_bundle(
     mise_lock_bytes: bytes,
     mise_identity: ExecutableIdentity,
     git_executable: Path,
+    git_executable_sha256: str,
     subreaper_enabled: bool,
-    planned_identity: CanonicalBundleIdentity | None = None,
+    recording_identity: CanonicalBundleIdentity,
     cancel_event: threading.Event | None = None,
     checkout_identities: dict[str, CheckoutIdentity],
 ) -> dict[str, Any]:
@@ -3787,8 +3808,6 @@ def _execute_planned_bundle(
             "planned execution requires the verified child subreaper state"
         )
     cancel_event = cancel_event or threading.Event()
-    recording_identity = planned_identity or _open_recording_identity(bundle_path)
-    owns_recording_identity = planned_identity is None
     toolchain_root = Path(bundle["isolation"]["toolchain_root"])
     selection_root = Path(bundle["isolation"]["selection_root"])
     toolchain_base = toolchain_root.parent
@@ -3800,6 +3819,7 @@ def _execute_planned_bundle(
     toolchain_identity: RootIdentity | None = None
     selection_identity: RootIdentity | None = None
     selection_root_descriptor: int | None = None
+    experiment_started = False
     orchestration_stop: dict[str, Any] | None = None
     published_assets: list[PublishedAssetIdentity] = []
     retained_capture_groups: list[RetainedCaptureGroup] = []
@@ -3899,10 +3919,15 @@ def _execute_planned_bundle(
         return result
 
     def root_preparation(identifier: str, operation: Any) -> RootIdentity | None:
+        nonlocal experiment_started
         spec = topology_by_id[identifier]
         observe_cancellation("preparation", identifier)
         blocker = blocked_by(spec)
         if blocker is not None:
+            if not experiment_started:
+                raise PreflightRejection(
+                    f"preflight rejected before {identifier}: blocked-by:{blocker}"
+                )
             preparations.append(
                 preparation_record(
                     identifier,
@@ -3915,6 +3940,17 @@ def _execute_planned_bundle(
         try:
             result = operation()
         except RootCreationError as error:
+            partial_identity = (
+                error.partial_identity
+                if isinstance(error.partial_identity, RootIdentity)
+                else None
+            )
+            if partial_identity is None and not experiment_started:
+                raise PreflightRejection(
+                    f"preflight rejected at {identifier}: "
+                    f"{_sanitize_failure_reason(error)}"
+                ) from error
+            experiment_started = experiment_started or partial_identity is not None
             preparations.append(
                 preparation_record(
                     identifier,
@@ -3923,11 +3959,8 @@ def _execute_planned_bundle(
                     failure_reason=_sanitize_failure_reason(error),
                 )
             )
-            return (
-                error.partial_identity
-                if isinstance(error.partial_identity, RootIdentity)
-                else None
-            )
+            return partial_identity
+        experiment_started = True
         preparations.append(
             preparation_record(
                 identifier,
@@ -4719,7 +4752,7 @@ def _execute_planned_bundle(
             "mise_executable_owner_verified": True,
             "mise_executable_mode": f"{mise_identity.mode:04o}",
             "nuget_client_version_probe": nuget_client_probe,
-            "git_executable_sha256": _path_sha256(git_executable),
+            "git_executable_sha256": git_executable_sha256,
         },
         "preparation_outcomes": preparations,
         "cache_observations": cache_observations,
@@ -4881,9 +4914,6 @@ def _execute_planned_bundle(
             identity.close()
         if selection_root_descriptor is not None:
             os.close(selection_root_descriptor)
-        if owns_recording_identity:
-            os.close(recording_identity.descriptor)
-            os.close(recording_identity.parent_descriptor)
 
 
 def execute_planned_bundle(
@@ -4898,7 +4928,16 @@ def execute_planned_bundle(
     planned_identity: CanonicalBundleIdentity | None = None,
     cancel_event: threading.Event | None = None,
 ) -> dict[str, Any]:
+    try:
+        git_executable_sha256 = _path_sha256(git_executable)
+    except OSError as error:
+        raise PreflightRejection(
+            "preflight rejected while hashing the Git executable: "
+            f"{_sanitize_failure_reason(error)}"
+        ) from error
     checkout_identities: dict[str, CheckoutIdentity] = {}
+    owns_recording_identity = planned_identity is None
+    execution_identity = planned_identity or _open_recording_identity(bundle_path)
     try:
         return _execute_planned_bundle(
             bundle_path,
@@ -4907,14 +4946,18 @@ def execute_planned_bundle(
             mise_lock_bytes=mise_lock_bytes,
             mise_identity=mise_identity,
             git_executable=git_executable,
+            git_executable_sha256=git_executable_sha256,
             subreaper_enabled=subreaper_enabled,
-            planned_identity=planned_identity,
+            recording_identity=execution_identity,
             cancel_event=cancel_event,
             checkout_identities=checkout_identities,
         )
     finally:
         for identity in checkout_identities.values():
             identity.close()
+        if owns_recording_identity:
+            os.close(execution_identity.descriptor)
+            os.close(execution_identity.parent_descriptor)
 
 
 @contextmanager
@@ -5038,6 +5081,7 @@ def main() -> int:
     except (
         ValidationError,
         CapabilityError,
+        PreflightRejection,
         RootCreationError,
         RecordingError,
         OSError,

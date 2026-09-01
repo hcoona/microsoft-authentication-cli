@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import shutil
+import stat
 import sys
 import tempfile
 import threading
@@ -37,7 +38,6 @@ from run_public_build_experiment import (
     RootCreationError,
     ValidationError,
     _atomic_publish_asset,
-    child_subreaper_enabled,
     create_exclusive_root,
     enable_child_subreaper,
     execute_planned_bundle,
@@ -55,7 +55,7 @@ HELPER = ROOT / "tools/fixtures/public-build/runner/helper.py"
 PLANNED_BUNDLE = (
     ROOT
     / "docs/research/experiments/"
-    "public-build-linux-x64-dotnet-8-0-424-01.json"
+    "public-build-wsl2-linux-x64-dotnet-8-0-424.json"
 )
 SOURCE_BASELINE = ROOT / "docs/research/public-build-source-baseline.json"
 LASSO_MANIFEST = ROOT / "docs/research/public-build-lasso-reference-manifest.json"
@@ -319,6 +319,91 @@ def test_capture_identity_alteration_and_replacement() -> None:
 
 
 def test_root_creation_guards_and_race() -> None:
+    for mode in (0o700, 0o711, 0o750, 0o755):
+        candidate = WORK / f"trusted-mode-{mode:o}"
+        candidate.mkdir(mode=0o700)
+        descriptor = os.open(candidate, runner._directory_flags())
+        try:
+            candidate.chmod(mode)
+            runner._verify_trusted_production_base_fd(descriptor, candidate)
+        finally:
+            os.close(descriptor)
+    for mode in (0o600, 0o702, 0o770):
+        candidate = WORK / f"rejected-trusted-mode-{mode:o}"
+        candidate.mkdir(mode=0o700)
+        descriptor = os.open(candidate, runner._directory_flags())
+        try:
+            candidate.chmod(mode)
+            try:
+                runner._verify_trusted_production_base_fd(descriptor, candidate)
+            except RootCreationError:
+                pass
+            else:
+                raise AssertionError(
+                    f"unsafe trusted production-base mode {mode:o} was accepted"
+                )
+        finally:
+            os.close(descriptor)
+
+    infrastructure_root = Path(
+        tempfile.mkdtemp(prefix="public-build-base-", dir="/var/tmp")
+    )
+    try:
+        qualifying_base = infrastructure_root / "existing-0755-base"
+        qualifying_base.mkdir(mode=0o700)
+        qualifying_base.chmod(0o755)
+        qualifying_root = qualifying_base / "experiment-root"
+        qualifying_identity = create_exclusive_root(
+            qualifying_root,
+            qualifying_base,
+            {"kind": "qualifying-0755"},
+        )
+        check(
+            qualifying_identity.initialized
+            and stat.S_IMODE(qualifying_root.stat().st_mode) == 0o700
+            and stat.S_IMODE(
+                qualifying_root.joinpath(ROOT_MARKER).stat().st_mode
+            )
+            == 0o600,
+            "qualifying 0755 production base did not create an exact protected root",
+        )
+
+        infrastructure_base = infrastructure_root / "created-during-preflight"
+        infrastructure_leaf = infrastructure_base / "experiment-root"
+        original_mkdir = runner.os.mkdir
+
+        def fail_experiment_leaf(
+            path: Any,
+            mode: int = 0o777,
+            *,
+            dir_fd: int | None = None,
+        ) -> None:
+            if path == infrastructure_leaf.name:
+                raise PermissionError("synthetic experiment-root rejection")
+            original_mkdir(path, mode, dir_fd=dir_fd)
+
+        runner.os.mkdir = fail_experiment_leaf
+        try:
+            try:
+                create_exclusive_root(
+                    infrastructure_leaf,
+                    infrastructure_base,
+                    {"kind": "synthetic"},
+                )
+            except RootCreationError as error:
+                check(
+                    error.partial_identity is None
+                    and infrastructure_base.is_dir()
+                    and not infrastructure_leaf.exists(),
+                    "trusted-base infrastructure was misclassified as an experiment root",
+                )
+            else:
+                raise AssertionError("injected experiment-root rejection was accepted")
+        finally:
+            runner.os.mkdir = original_mkdir
+    finally:
+        shutil.rmtree(infrastructure_root)
+
     base = WORK / "trusted"
     base.mkdir(mode=0o700)
     existing = base / "existing"
@@ -377,6 +462,31 @@ def test_root_creation_guards_and_race() -> None:
 
 
 def test_partial_root_marker_and_stale_selection_states() -> None:
+    toolchain_partial, logs, _, _ = synthetic_case(
+        "toolchain-post-mkdir-failure",
+        fail_root_marker_kind="toolchain",
+        use_real_candidate_validator=True,
+    )
+    toolchain_runtime = toolchain_partial["runtime_evidence"]
+    toolchain_roots = {
+        root["kind"]: root
+        for root in toolchain_runtime["ownership_conditioned_cleanup"]["roots"]
+    }
+    check(
+        toolchain_partial["status"] == "recorded"
+        and toolchain_roots["toolchain"]
+        == {
+            "kind": "toolchain",
+            "created": True,
+            "identity_verified": False,
+        }
+        and not toolchain_roots["selection"]["created"]
+        and toolchain_runtime["canonical_termination"]["cause"]
+        == "root-identity-unverified"
+        and not logs,
+        "first-root marker failure did not cross the durable recording boundary",
+    )
+
     partial, _, _, _ = synthetic_case(
         "selection-post-mkdir-failure",
         fail_root_marker_kind="selection",
@@ -1599,6 +1709,7 @@ def synthetic_case(
     symlink_asset_modes: list[str] | None = None,
     precreate_toolchain_root: bool = False,
     precreate_selection_root: bool = False,
+    expect_preflight_rejection: bool = False,
     replace_mise_after_verification: bool = False,
     capture_failure_label: str | None = None,
     spawn_failure_label: str | None = None,
@@ -1617,7 +1728,7 @@ def synthetic_case(
     capture_recording_fault: str | None = None,
     capture_recording_label: str | None = None,
     mutate_asset_after_restore_mode: str | None = None,
-    fail_runtime_context_git_digest: bool = False,
+    fail_git_digest_preflight: bool = False,
     cancel_during_recording_exchange: bool = False,
     replace_selection_root_during_recording_exchange: bool = False,
 ) -> tuple[dict[str, Any], list[dict[str, Any]], int, int]:
@@ -1682,6 +1793,7 @@ def synthetic_case(
     )
     bundle_path = case / "bundle.json"
     bundle_path.write_text(json.dumps(planned, indent=2) + "\n", encoding="utf-8")
+    old_bytes = bundle_path.read_bytes()
     old_inode = bundle_path.stat().st_ino
     fake_bin = case / "bin"
     fake_bin.mkdir(mode=0o700)
@@ -1843,7 +1955,7 @@ def synthetic_case(
             return original_checkout_fingerprint(identity, **keywords)
 
         runner._checkout_fingerprint = fail_selected_integrity_baseline
-    if fail_runtime_context_git_digest:
+    if fail_git_digest_preflight:
         def fail_git_digest(path: Path) -> str:
             if path == git:
                 raise OSError("synthetic Git digest failure")
@@ -2438,11 +2550,16 @@ def synthetic_case(
                 subreaper_enabled=SUBREAPER_ENABLED,
                 cancel_event=cancellation_event,
             )
+        except runner.PreflightRejection as error:
+            if not expect_preflight_rejection and not fail_git_digest_preflight:
+                raise
+            execution_error = error
+            recorded = load_strict_json(bundle_path)
         except (OSError, ValidationError, runner.RecordingError) as error:
             if (
                 candidate_validation_error is None
                 and recording_fault is None
-                and not fail_runtime_context_git_digest
+                and not fail_git_digest_preflight
             ):
                 raise
             execution_error = error
@@ -2492,6 +2609,18 @@ def synthetic_case(
         if identity.descriptor >= 0:
             raise AssertionError("checkout identity descriptor leaked")
     new_inode = bundle_path.stat().st_ino
+    if expect_preflight_rejection:
+        check(
+            isinstance(execution_error, runner.PreflightRejection)
+            and old_inode == new_inode
+            and bundle_path.read_bytes() == old_bytes
+            and recorded["status"] == "planned"
+            and "runtime_evidence" not in recorded
+            and not list(case.glob(".bundle.json.recorded-*"))
+            and not list((case / "retained-assets").glob("*.json")),
+            "preflight rejection consumed or replaced the planned bundle",
+        )
+        return recorded, [], old_inode, new_inode
     if candidate_validation_error is not None:
         check(
             execution_error is not None
@@ -2501,13 +2630,18 @@ def synthetic_case(
             "invalid recorded candidate replaced the plan or retained published assets",
         )
         return recorded, [], old_inode, new_inode
-    if fail_runtime_context_git_digest:
+    if fail_git_digest_preflight:
         check(
-            execution_error is not None
+            isinstance(execution_error, runner.PreflightRejection)
             and old_inode == new_inode
+            and bundle_path.read_bytes() == old_bytes
             and load_strict_json(bundle_path)["status"] == "planned"
+            and not toolchain_root.exists()
+            and not selection_root.exists()
+            and not list(case.rglob("fake-*.jsonl"))
+            and not list(case.glob(".bundle.json.recorded-*"))
             and not list((case / "retained-assets").glob("*.json")),
-            "post-publication runtime-context failure committed or leaked an asset",
+            "Git digest preflight failure consumed the plan or created runtime state",
         )
         return recorded, [], old_inode, new_inode
     if recording_fault is not None:
@@ -2576,7 +2710,7 @@ def test_production_orchestration_order_environment_and_atomic_recording() -> No
         Path(synthetic_toolchain),
         Path(synthetic_selection),
     )
-    cli_recorded["id"] = "public-build-linux-x64-dotnet-8-0-424-01"
+    cli_recorded["id"] = "public-build-wsl2-linux-x64-dotnet-8-0-424"
     cli_recorded["runtime_evidence"]["runtime_context"][
         "mise_executable_sha256"
     ] = cli_recorded["environment"]["mise"]["executable_sha256"]
@@ -2604,6 +2738,23 @@ def test_production_orchestration_order_environment_and_atomic_recording() -> No
             label,
             baseline,
         )
+
+    preflight_receipt = copy.deepcopy(cli_recorded)
+    for root in preflight_receipt["runtime_evidence"][
+        "ownership_conditioned_cleanup"
+    ]["roots"]:
+        root["created"] = False
+        root["identity_verified"] = False
+    check(
+        any(
+            "must follow experiment-owned root creation" in error
+            for error in runtime_errors(
+                preflight_receipt,
+                "pre-experiment-root-receipt",
+            )
+        ),
+        "recorded evidence without an experiment-owned root was accepted",
+    )
 
     unsafe_mise_identity = copy.deepcopy(cli_recorded)
     unsafe_mise_identity["runtime_evidence"]["runtime_context"].update(
@@ -4577,9 +4728,8 @@ def test_recording_phases_and_asset_identity_rollback() -> None:
     )
 
     synthetic_case(
-        "runtime-context-git-digest-failure",
-        asset_modes=["source-faithful"],
-        fail_runtime_context_git_digest=True,
+        "git-digest-preflight-failure",
+        fail_git_digest_preflight=True,
     )
 
     committed, _, old_inode, new_inode = synthetic_case(
@@ -4960,24 +5110,16 @@ def test_pre_root_mise_and_zero_child_lifecycle() -> None:
         and preparation_status["mise-install-dotnet-sdk"] == "passed",
         "mise launch followed a replaced path instead of the reviewed descriptor",
     )
-    recorded, _, _, _ = synthetic_case(
+    planned, logs, _, _ = synthetic_case(
         "zero-child-global-preparation-failure",
         precreate_toolchain_root=True,
+        expect_preflight_rejection=True,
     )
-    quiescence = recorded["runtime_evidence"]["all_exit_quiescence"]
     check(
-        quiescence["subreaper_enabled"] is child_subreaper_enabled()
-        and not quiescence["observations"]
-        and all(item["proved"] for item in quiescence["observations"]),
-        "zero-child lifecycle did not record the actual subreaper and proof state",
-    )
-    roots = {
-        item["kind"]: item
-        for item in recorded["runtime_evidence"]["ownership_conditioned_cleanup"]["roots"]
-    }
-    check(
-        not roots["toolchain"]["created"] and not roots["selection"]["created"],
-        "zero-child root lifecycle claimed uncreated roots",
+        planned["status"] == "planned"
+        and "runtime_evidence" not in planned
+        and not logs,
+        "zero-side-effect preflight rejection became runtime evidence",
     )
 
 
