@@ -2704,6 +2704,25 @@ def test_production_orchestration_order_environment_and_atomic_recording() -> No
         == recorded["environment"]["dotnet_sdk"]["global_json_content"],
         "controlled global.json was not created under the selection root",
     )
+    public_nuget_config = Path(
+        synthetic_selection,
+        "public-only/generated/only-nuget.org.config",
+    ).read_bytes()
+    check(
+        public_nuget_config
+        == (
+            b'<?xml version="1.0" encoding="utf-8"?>\n'
+            b"<configuration>\n"
+            b"  <packageSources>\n"
+            b"    <clear />\n"
+            b'    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" '
+            b'protocolVersion="3" />\n'
+            b"  </packageSources>\n"
+            b"  <disabledPackageSources><clear /></disabledPackageSources>\n"
+            b"</configuration>\n"
+        ),
+        "generated public-only NuGet configuration differs",
+    )
 
     cli_recorded = restore_fixed_paths_for_validation(
         recorded,

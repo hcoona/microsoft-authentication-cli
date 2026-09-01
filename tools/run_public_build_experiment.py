@@ -2383,7 +2383,6 @@ def _write_public_nuget_config(path: Path) -> None:
         b'protocolVersion="3" />\n'
         b"  </packageSources>\n"
         b"  <disabledPackageSources><clear /></disabledPackageSources>\n"
-        b"  <packageSourceCredentials><clear /></packageSourceCredentials>\n"
         b"</configuration>\n"
     )
     _write_exclusive(path, content)
