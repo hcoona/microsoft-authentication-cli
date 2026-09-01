@@ -41,6 +41,7 @@ is navigation, not an independent authority.
 | Phase 1 experiment authors and reviewers | Fixed solution targets, source dependencies, and stage applicability | [`research/public-build-source-baseline.json`](research/public-build-source-baseline.json) |
 | Phase 1 experiment authors and reviewers | Fixed source-level Lasso usage manifest | [`research/public-build-lasso-reference-manifest.json`](research/public-build-lasso-reference-manifest.json) |
 | Phase 1 experiment authors and reviewers | WSL2-Linux-x64 public-build singleton protocol and eventual embedded runtime evidence | [`research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`](research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json) |
+| Phase 1 experiment authors and reviewers | Retained public-only dependency inputs admitted by the current singleton receipt | [`AdoPat`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-adopat-net8-0.project.assets.json), [`MSALWrapper`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-msalwrapper-net8-0.project.assets.json), and [`TestHelper`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-testhelper-net8-0.project.assets.json) |
 | Research and release reviewers | Mutable public facts and their recheck triggers | [`research/rechecks.yaml`](research/rechecks.yaml) |
 | Maintainers and upstream-source consumers | Upstream baseline and import policy | [`../UPSTREAM.md`](../UPSTREAM.md) |
 

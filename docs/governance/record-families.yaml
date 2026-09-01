@@ -428,7 +428,7 @@ families:
     review_point: At activation readiness, before the first production execution and SDK installation, when conclusions are recorded, after a recorded bundle exists at the first proposed hash-bound runner, validator, contract, schema, extractor, NuGet-helper, or experiment-lock change, which must atomically choose a historical replay or record migration strategy with independent research-evidence review, and at every phase transition when research-evidence review reassesses recorded-component drift
 
   - id: public-build-assets-evidence
-    state: scheduled
+    state: current
     concern: Sanitized project.assets.json inputs retained for reproducible issue #1 dependency projections
     carrier: repository-files
     path: docs/research/experiments/assets/*.project.assets.json
@@ -442,11 +442,6 @@ families:
     creation_trigger: An issue #1 restore produces a project.assets.json used by a recorded complete or partial dependency projection.
     failure_mode: A projection can remain internally consistent while omitting or misattributing topology from the restore artifact it claims to represent.
     review_point: With each retained assets file and before its referencing experiment bundle is completed
-    activation:
-      trigger: The first sanitized project.assets.json evidence file is ready to commit.
-      evaluator: Research maintainer
-      action: Add the first evidence file and change this family to current in the same commit.
-      fallback_review: Issue #1 closure and every phase transition while issue #1 remains open
 
   - id: validation-cases
     state: scheduled
