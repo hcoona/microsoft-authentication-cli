@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "public-build-wsl2-linux-x64-dotnet-8-0-424",
-  "status": "planned",
+  "status": "recorded",
   "issue": {
     "number": 1,
     "url": "https://github.com/hcoona/microsoft-authentication-cli/issues/1"
@@ -688,6 +688,1589 @@
     "lockfile": {
       "path": "tools/public-build-mise.lock",
       "sha256": "e24a24598c52cece3da7d3c6cdcf4b6673001386d264ba7ef6f6101b579f2c05"
+    }
+  },
+  "runtime_evidence": {
+    "runtime_context": {
+      "operating_system": "linux",
+      "architecture": "x86_64",
+      "host_type": "wsl2-linux",
+      "kernel_release": "6.18.33.1-microsoft-standard-WSL2",
+      "reproduction_count": 1,
+      "mise_executable_sha256": "1f5e8795d24073904ef20ba70c1250ad6389d8c5672226d152e0ed24909ba72f",
+      "mise_executable_owner_verified": true,
+      "mise_executable_mode": "0755",
+      "nuget_client_version_probe": {
+        "preparation_id": "inspect-nuget-client-version",
+        "source": "NuGet.CommandLine.XPlat.deps.json",
+        "path": "/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/installs/http-dotnet-sdk/8.0.424/sdk/8.0.424/NuGet.CommandLine.XPlat.deps.json",
+        "sha256": "6194f203a520825d8943080e226e3a08003d13594deabbf33f3904926aa50557",
+        "package": "NuGet.CommandLine.XPlat",
+        "version": "6.11.2-rc.1"
+      },
+      "git_executable_sha256": "5516c9f362c29376ab9a499a33082f9f611941d8c75930c880e30ad109e39c9a"
+    },
+    "preparation_outcomes": [
+      {
+        "id": "prepare-toolchain-root",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "prepare-selection-root",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "prepare-selection-directories",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "prepare-dotnet-sdk-selection",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "prepare-toolchain-directories",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "prepare-reviewed-mise-config",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "mise-version",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/mise-version-stdout-1021590-985650668433610.log",
+              "sha256": "1c94acd1b3e778b4883d8e68fafb947229f5b2df9c4ab56ea3e15e0051bde3e6",
+              "sanitized_bytes": 33,
+              "excerpt": "2026.8.10 linux-x64 (2026-08-20)\n",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/mise-version-stderr-1021590-985650668695214.log",
+              "sha256": "8593f45b81a0979139a3bd7f10bcda48fcd262768bcf3320034a57ae267bdb7d",
+              "sanitized_bytes": 87,
+              "excerpt": "mise WARN  mise version 2026.8.16 available\nmise WARN  To update, run mise self-update\n",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "mise-install-dotnet-sdk",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/mise-install-dotnet-sdk-stdout-1021590-985651171493017.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/mise-install-dotnet-sdk-stderr-1021590-985651171759121.log",
+              "sha256": "d1bb141145299c761148334d1f9bd5d0cf01ea781d7f697f6a61d6ec26daa51b",
+              "sanitized_bytes": 380,
+              "excerpt": "mise http:dotnet-sdk@8.0.424 [1/4] install\nmise http:dotnet-sdk@8.0.424 [1/4] download dotnet-sdk-8.0.424-linux-x64.tar.gz\nmise http:dotnet-sdk@8.0.424 [3/4] extracting to cache\nmise http:dotnet-sdk@8.0.424 [3/4] extract dotnet-sdk-8.0.424-linux-x64.tar.gz\nmise http:dotnet-sdk@8.0.424 [4/4] checksum dotnet-sdk-8.0.424-linux-x64.tar.gz\nmise http:dotnet-sdk@8.0.424 ✓ installed\n",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "verify-dotnet-installation",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "inspect-nuget-client-version",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "git-source-faithful-init",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-source-faithful-init-stdout-1021590-985664036385791.log",
+              "sha256": "7160fd440276b8a952bd47a868c5ce627a3cfd6d8c536557456e68b38647debe",
+              "sanitized_bytes": 167,
+              "excerpt": "Initialized empty Git repository in /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/source-faithful/checkout/.git/\n",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-source-faithful-init-stderr-1021590-985664036692695.log",
+              "sha256": "3e70934f1909b0f5a846d62237fcc1509d733b9fb0321187024723dfc67176d3",
+              "sanitized_bytes": 586,
+              "excerpt": "hint: Using 'master' as the name for the initial branch. This default branch name\nhint: will change to \"main\" in Git 3.0. To configure the initial branch name\nhint: to use in all of your new repositories, which will suppress this warning,\nhint: call:\nhint:\nhint: \tgit config --global init.defaultBranch <name>\nhint:\nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint:\nhint: \tgit branch -m <name>\nhint:\nhint: Disable this message with \"git config set advice.defaultBranchName false\"\n",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "git-source-faithful-fetch",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-source-faithful-fetch-stdout-1021590-985664186945390.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-source-faithful-fetch-stderr-1021590-985664187156093.log",
+              "sha256": "ddef52aa63200868172c731ffc5433a56548a8d7cb742cb99b5a916c2295c68a",
+              "sanitized_bytes": 137,
+              "excerpt": "From https://github.com/AzureAD/microsoft-authentication-cli\n * branch            de20930c34b3b86c8a0ed7bbdeeca3f662dae918 -> FETCH_HEAD\n",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "git-source-faithful-checkout",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-source-faithful-checkout-stdout-1021590-985664772711158.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-source-faithful-checkout-stderr-1021590-985664773109663.log",
+              "sha256": "36381019afa8634da4d45b864491bd0d30ab28bc2a7e1f6a78612a78f32ac328",
+              "sanitized_bytes": 98,
+              "excerpt": "HEAD is now at de20930 Merge pull request #458 from AzureAD/users/pushpakpatil/vulnerabilityFixes\n",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "git-source-faithful-verify-head",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-source-faithful-verify-head-stdout-1021590-985664968779191.log",
+              "sha256": "f12a847a9a17ebcbc5fbad99308ac9d5664042132082c782b1734f95146ba456",
+              "sanitized_bytes": 41,
+              "excerpt": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918\n",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-source-faithful-verify-head-stderr-1021590-985664969076495.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "source-faithful-integrity-baseline",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "generate-source-faithful-directory-packages-props",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "verify-source-faithful-nuget-roots-empty",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "dotnet-source-faithful-info",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/dotnet-source-faithful-info-stdout-1021590-985665121697923.log",
+              "sha256": "6dfaaa9353f34cc9716ab7a3c21a46bbae8433a6b4eae8011d617ba4afc8b957",
+              "sanitized_bytes": 1851,
+              "excerpt": ".NET SDK:\n Version:           8.0.424\n Commit:            5cbde90d8f\n Workload version:  8.0.400-manifests.d7d8d4b1\n MSBuild version:   17.11.48+02bf66295\n\nRuntime Environment:\n OS Name:     ubuntu\n OS Version:  26.04\n OS Platform: Linux\n RID:         linux-x64\n Base Path:   /var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/\n\n.NET workloads installed:\nConfigured to use loose manifests when installing new manifests.\nThere are no installed workloads to display.\n\nHost:\n  Version:      8.0.30\n  Architecture: x64\n  Commit:       a83db3e0eb\n\n.NET SDKs installed:\n  8.0.424 [/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk]\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 8.0.30 [/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/shared/Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 8.0.30 [/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/shared/Microsoft.NETCore.App]\n\nOther architectures found:\n  None\n\nEnvironment variables:\n  DOTNET_ROOT       [/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/installs/http-dotnet-sdk/8.0.424]\n\nglobal.json file:\n  /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/global.json\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download\n",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/dotnet-source-faithful-info-stderr-1021590-985665121935127.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "dotnet-source-faithful-nuget-cache-locations",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/dotnet-source-faithful-nuget-cache-locations-stdout-1021590-985665768982648.log",
+              "sha256": "c72099dd7d3a094bb688b410fd5d2a0f855b45cf1c97ef97566d22793d8276a1",
+              "sanitized_bytes": 580,
+              "excerpt": "http-cache: /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/source-faithful/nuget/http-cache\nglobal-packages: /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/source-faithful/nuget/packages\ntemp: /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/source-faithful/nuget/scratch\nplugins-cache: /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/source-faithful/nuget/plugins-cache\n",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/dotnet-source-faithful-nuget-cache-locations-stderr-1021590-985665769326153.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "git-public-only-init",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-public-only-init-stdout-1021590-985666432276794.log",
+              "sha256": "4aeaed7611593b2ab6698e4ef80be0fa6df761ed7907a40397b0bd18e29518ba",
+              "sanitized_bytes": 163,
+              "excerpt": "Initialized empty Git repository in /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/.git/\n",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-public-only-init-stderr-1021590-985666432477797.log",
+              "sha256": "3e70934f1909b0f5a846d62237fcc1509d733b9fb0321187024723dfc67176d3",
+              "sanitized_bytes": 586,
+              "excerpt": "hint: Using 'master' as the name for the initial branch. This default branch name\nhint: will change to \"main\" in Git 3.0. To configure the initial branch name\nhint: to use in all of your new repositories, which will suppress this warning,\nhint: call:\nhint:\nhint: \tgit config --global init.defaultBranch <name>\nhint:\nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint:\nhint: \tgit branch -m <name>\nhint:\nhint: Disable this message with \"git config set advice.defaultBranchName false\"\n",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "git-public-only-fetch",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-public-only-fetch-stdout-1021590-985666581729178.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-public-only-fetch-stderr-1021590-985666581950381.log",
+              "sha256": "ddef52aa63200868172c731ffc5433a56548a8d7cb742cb99b5a916c2295c68a",
+              "sanitized_bytes": 137,
+              "excerpt": "From https://github.com/AzureAD/microsoft-authentication-cli\n * branch            de20930c34b3b86c8a0ed7bbdeeca3f662dae918 -> FETCH_HEAD\n",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "git-public-only-checkout",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-public-only-checkout-stdout-1021590-985667047555071.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-public-only-checkout-stderr-1021590-985667047868976.log",
+              "sha256": "36381019afa8634da4d45b864491bd0d30ab28bc2a7e1f6a78612a78f32ac328",
+              "sanitized_bytes": 98,
+              "excerpt": "HEAD is now at de20930 Merge pull request #458 from AzureAD/users/pushpakpatil/vulnerabilityFixes\n",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "git-public-only-verify-head",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-public-only-verify-head-stdout-1021590-985667230201618.log",
+              "sha256": "f12a847a9a17ebcbc5fbad99308ac9d5664042132082c782b1734f95146ba456",
+              "sanitized_bytes": 41,
+              "excerpt": "de20930c34b3b86c8a0ed7bbdeeca3f662dae918\n",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/git-public-only-verify-head-stderr-1021590-985667230643824.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "public-only-integrity-baseline",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "generate-public-only-nuget-config",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "generate-public-only-directory-packages-props",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "verify-public-only-nuget-roots-empty",
+        "status": "passed",
+        "attempts": [],
+        "failure_reason": null
+      },
+      {
+        "id": "dotnet-public-only-info",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/dotnet-public-only-info-stdout-1021590-985667387291607.log",
+              "sha256": "6dfaaa9353f34cc9716ab7a3c21a46bbae8433a6b4eae8011d617ba4afc8b957",
+              "sanitized_bytes": 1851,
+              "excerpt": ".NET SDK:\n Version:           8.0.424\n Commit:            5cbde90d8f\n Workload version:  8.0.400-manifests.d7d8d4b1\n MSBuild version:   17.11.48+02bf66295\n\nRuntime Environment:\n OS Name:     ubuntu\n OS Version:  26.04\n OS Platform: Linux\n RID:         linux-x64\n Base Path:   /var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/\n\n.NET workloads installed:\nConfigured to use loose manifests when installing new manifests.\nThere are no installed workloads to display.\n\nHost:\n  Version:      8.0.30\n  Architecture: x64\n  Commit:       a83db3e0eb\n\n.NET SDKs installed:\n  8.0.424 [/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk]\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 8.0.30 [/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/shared/Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 8.0.30 [/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/shared/Microsoft.NETCore.App]\n\nOther architectures found:\n  None\n\nEnvironment variables:\n  DOTNET_ROOT       [/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/installs/http-dotnet-sdk/8.0.424]\n\nglobal.json file:\n  /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/global.json\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download\n",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/dotnet-public-only-info-stderr-1021590-985667387636512.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      },
+      {
+        "id": "dotnet-public-only-nuget-cache-locations",
+        "status": "passed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 0,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/dotnet-public-only-nuget-cache-locations-stdout-1021590-985667822416473.log",
+              "sha256": "d126badc12e3a34f5988ef07cf00193ae36462e2632ef5da937dfd5f3a47a48d",
+              "sanitized_bytes": 564,
+              "excerpt": "http-cache: /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/nuget/http-cache\nglobal-packages: /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/nuget/packages\ntemp: /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/nuget/scratch\nplugins-cache: /var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/nuget/plugins-cache\n",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/dotnet-public-only-nuget-cache-locations-stderr-1021590-985667823029582.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "failure_reason": null
+      }
+    ],
+    "cache_observations": [
+      {
+        "id": "source-faithful-initial-nuget-cache",
+        "source_mode": "source-faithful",
+        "kind": "nuget-cache-initial-state",
+        "preparation_refs": [
+          "verify-source-faithful-nuget-roots-empty",
+          "dotnet-source-faithful-nuget-cache-locations"
+        ],
+        "effective_paths": {
+          "http-cache": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/source-faithful/nuget/http-cache",
+          "global-packages": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/source-faithful/nuget/packages",
+          "temp": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/source-faithful/nuget/scratch",
+          "plugins-cache": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/source-faithful/nuget/plugins-cache"
+        },
+        "initial_empty": true
+      },
+      {
+        "id": "public-only-initial-nuget-cache",
+        "source_mode": "public-only",
+        "kind": "nuget-cache-initial-state",
+        "preparation_refs": [
+          "verify-public-only-nuget-roots-empty",
+          "dotnet-public-only-nuget-cache-locations"
+        ],
+        "effective_paths": {
+          "http-cache": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/nuget/http-cache",
+          "global-packages": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/nuget/packages",
+          "temp": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/nuget/scratch",
+          "plugins-cache": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/nuget/plugins-cache"
+        },
+        "initial_empty": true
+      }
+    ],
+    "dependency_evidence": {
+      "modes": [
+        {
+          "source_mode": "source-faithful",
+          "targets": [
+            {
+              "target_id": "target-adopat-net8-0",
+              "status": "invalid",
+              "reason": "ExtractionError: project.assets.json does not resolve direct package Microsoft.Extensions.Logging.Abstractions",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-adopat-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-microsoft-identity-client-extensions-msal",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-microsoft-visualstudio-services-client",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-data-sqlclient",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-formats-asn1",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-security-cryptography-xml",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-net8-0",
+                    "source-faithful-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-adopat-test-net8-0",
+              "status": "invalid",
+              "reason": "ExtractionError: project.assets.json project-node closure differs from the source baseline; observed=[], expected=['target-adopat-net8-0', 'target-testhelper-net8-0']",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-adopat-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-nunit",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-coverlet-collector",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-moq",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-adopat-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-azureauth-net8-0",
+              "status": "invalid",
+              "reason": "ExtractionError: project.assets.json project-node closure differs from the source baseline; observed=[], expected=['target-adopat-net8-0', 'target-msalwrapper-net8-0']",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-azureauth-microsoft-office-lasso",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-opentelemetry-api",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-tomlyn",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-net8-0",
+                    "source-faithful-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-azureauth-test-net8-0",
+              "status": "invalid",
+              "reason": "ExtractionError: project.assets.json project-node closure differs from the source baseline; observed=[], expected=['target-adopat-net8-0', 'target-azureauth-net8-0', 'target-msalwrapper-net8-0', 'target-testhelper-net8-0']",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-azureauth-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-nunit",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-coverlet-collector",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-system-io-abstractions-testinghelpers",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-moq",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-azureauth-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-benchmark-net8-0",
+              "status": "invalid",
+              "reason": "ExtractionError: project.assets.json project-node closure differs from the source baseline; observed=[], expected=['target-msalwrapper-net8-0']",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-benchmarkdotnet",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-benchmark-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-broker",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-benchmark-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-not-windows",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-benchmark-net8-0",
+                    "source-faithful-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-net8-0",
+              "status": "invalid",
+              "reason": "ExtractionError: project.assets.json does not resolve direct package Microsoft.Extensions.Logging.Abstractions",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-extensions-msal",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identitymodel-jsonwebtokens",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-broker",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-nativeinterop",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-net8-0",
+                    "source-faithful-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-test-net8-0",
+              "status": "invalid",
+              "reason": "ExtractionError: project.assets.json project-node closure differs from the source baseline; observed=[], expected=['target-msalwrapper-net8-0', 'target-testhelper-net8-0']",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-nunit",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-moq",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-msalwrapper-test-net8-0",
+                    "source-faithful-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-testhelper-net8-0",
+              "status": "invalid",
+              "reason": "ExtractionError: project.assets.json does not resolve direct package Microsoft.Extensions.Logging.Abstractions",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-testhelper-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-testhelper-net8-0",
+                    "source-faithful-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-testhelper-nlog-extensions-logging",
+                  "failure_evidence_refs": [
+                    "source-faithful/target-testhelper-net8-0",
+                    "source-faithful-restore"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "source_mode": "public-only",
+          "targets": [
+            {
+              "target_id": "target-adopat-net8-0",
+              "status": "missing",
+              "reason": "project-assets-missing",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-adopat-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-microsoft-identity-client-extensions-msal",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-microsoft-visualstudio-services-client",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-data-sqlclient",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-formats-asn1",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-system-security-cryptography-xml",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-net8-0",
+                    "public-only-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-adopat-test-net8-0",
+              "status": "missing",
+              "reason": "project-assets-missing",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-adopat-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-nunit",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-coverlet-collector",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-adopat-test-moq",
+                  "failure_evidence_refs": [
+                    "public-only/target-adopat-test-net8-0",
+                    "public-only-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-azureauth-net8-0",
+              "status": "missing",
+              "reason": "project-assets-missing",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-azureauth-microsoft-office-lasso",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-opentelemetry-api",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-tomlyn",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-net8-0",
+                    "public-only-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-azureauth-test-net8-0",
+              "status": "missing",
+              "reason": "project-assets-missing",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-azureauth-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-nunit",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-coverlet-collector",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-system-io-abstractions-testinghelpers",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-azureauth-test-moq",
+                  "failure_evidence_refs": [
+                    "public-only/target-azureauth-test-net8-0",
+                    "public-only-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-benchmark-net8-0",
+              "status": "missing",
+              "reason": "project-assets-missing",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-benchmarkdotnet",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-benchmark-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-broker",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-benchmark-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-benchmark-microsoft-identity-client-not-windows",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-benchmark-net8-0",
+                    "public-only-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-net8-0",
+              "status": "missing",
+              "reason": "project-assets-missing",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-extensions-msal",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identitymodel-jsonwebtokens",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-broker",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-microsoft-identity-client-nativeinterop",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-net8-0",
+                    "public-only-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-msalwrapper-test-net8-0",
+              "status": "missing",
+              "reason": "project-assets-missing",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-msalwrapper-test-fluentassertions",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-nunit",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-nunit3testadapter",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-microsoft-net-test-sdk",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-test-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-msalwrapper-test-moq",
+                  "failure_evidence_refs": [
+                    "public-only/target-msalwrapper-test-net8-0",
+                    "public-only-restore"
+                  ]
+                }
+              ]
+            },
+            {
+              "target_id": "target-testhelper-net8-0",
+              "status": "missing",
+              "reason": "project-assets-missing",
+              "unresolved_declarations": [
+                {
+                  "declaration_id": "decl-testhelper-microsoft-extensions-logging-abstractions",
+                  "failure_evidence_refs": [
+                    "public-only/target-testhelper-net8-0",
+                    "public-only-restore"
+                  ]
+                },
+                {
+                  "declaration_id": "decl-testhelper-nlog-extensions-logging",
+                  "failure_evidence_refs": [
+                    "public-only/target-testhelper-net8-0",
+                    "public-only-restore"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "command_outcomes": [
+      {
+        "command_id": "source-faithful-restore",
+        "status": "failed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 1,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "suppressed-source-faithful",
+              "path": null,
+              "sha256": null,
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "stderr": {
+              "disposition": "suppressed-source-faithful",
+              "path": null,
+              "sha256": null,
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": null
+      },
+      {
+        "command_id": "source-faithful-build",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "source-faithful-restore"
+      },
+      {
+        "command_id": "source-faithful-test",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "source-faithful-restore"
+      },
+      {
+        "command_id": "source-faithful-package-adopat",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "source-faithful-restore"
+      },
+      {
+        "command_id": "source-faithful-package-azureauth",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "source-faithful-restore"
+      },
+      {
+        "command_id": "source-faithful-package-msalwrapper-benchmark",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "source-faithful-restore"
+      },
+      {
+        "command_id": "source-faithful-package-msalwrapper",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "source-faithful-restore"
+      },
+      {
+        "command_id": "source-faithful-package-testhelper",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "source-faithful-restore"
+      },
+      {
+        "command_id": "public-only-restore",
+        "status": "failed",
+        "attempts": [
+          {
+            "attempt": 1,
+            "exit_code": 1,
+            "termination": "completed",
+            "stdout": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/public-only-restore-stdout-1021590-985700302945264.log",
+              "sha256": "5b11ceaa2771a6c7808a005f6c0266844213e74f687ec07c1edaf2055b0c9e19",
+              "sanitized_bytes": 18999,
+              "excerpt": "Build started 09/01/2026 01:30:37.\n     1>Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" on node 1 (Restore target(s)).\n     1>ValidateSolutionConfiguration:\n         Building solution configuration \"Debug|Any CPU\".\n       _GetAllRestoreProjectPathItems:\n         Determining projects to restore...\n     1>Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (1) is building \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AdoPat.Test/AdoPat.Test.csproj\" (6:4) on node 7 (_GenerateRestoreGraphProjectEntry target(s)).\n     6>/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AdoPat.Test/AdoPat.Test.csproj]\n     1>Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (1) is building \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper/MSALWrapper.csproj\" (2:7) on node 1 (_GenerateRestoreGraphProjectEntry target(s)).\n     2>/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper/MSALWrapper.csproj]\n     1>Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (1) is building \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AzureAuth.Test/AzureAuth.Test.csproj\" (8:4) on node 2 (_GenerateRestoreGraphProjectEntry target(s)).\n     8>/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AzureAuth.Test/AzureAuth.Test.csproj]\n     6>Done Building Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AdoPat.Test/AdoPat.Test.csproj\" (_GenerateRestoreGraphProjectEntry target(s)) -- FAILED.\n     2>Done Building Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper/MSALWrapper.csproj\" (_GenerateRestoreGraphProjectEntry target(s)) -- FAILED.\n     8>Done Building Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AzureAuth.Test/AzureAuth.Test.csproj\" (_GenerateRestoreGraphProjectEntry target(s)) -- FAILED.\n     1>Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (1) is building \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AzureAuth/AzureAuth.csproj\" (4:5) on node 6 (_GenerateRestoreGraphProjectEntry target(s)).\n     4>/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AzureAuth/AzureAuth.csproj]\n     4>Done Building Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AzureAuth/AzureAuth.csproj\" (_GenerateRestoreGraphProjectEntry target(s)) -- FAILED.\n     1>Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (1) is building \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/TestHelper/TestHelper.csproj\" (7:7) on node 5 (_GenerateRestoreGraphProjectEntry target(s)).\n     7>/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/TestHelper/TestHelper.csproj]\n     1>Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (1) is building \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj\" (9:4) on node 4 (_GenerateRestoreGraphProjectEntry target(s)).\n     9>/var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj]\n     7>Done Building Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/TestHelper/TestHelper.csproj\" (_GenerateRestoreGraphProjectEntry target(s)) -- FAILED.\n     1>Project \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (1) is building \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper.Test/MSALWrapper.Test.csproj\" (5:4) on node 8 (_GenerateRestoreGraphProjectEntry target(s)).\n     5>/var/tmp/microsoft-authentication-cli/i\n...[bounded excerpt]...\npublic-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (Restore target) (1) ->\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AdoPat.Test/AdoPat.Test.csproj\" (_GenerateRestoreGraphProjectEntry target) (6:4) ->\n       (_GetRestoreSettings target) -> \n         /var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AdoPat.Test/AdoPat.Test.csproj]\n\n\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (Restore target) (1) ->\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper/MSALWrapper.csproj\" (_GenerateRestoreGraphProjectEntry target) (2:7) ->\n         /var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper/MSALWrapper.csproj]\n\n\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (Restore target) (1) ->\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AzureAuth.Test/AzureAuth.Test.csproj\" (_GenerateRestoreGraphProjectEntry target) (8:4) ->\n         /var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AzureAuth.Test/AzureAuth.Test.csproj]\n\n\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (Restore target) (1) ->\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AzureAuth/AzureAuth.csproj\" (_GenerateRestoreGraphProjectEntry target) (4:5) ->\n         /var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AzureAuth/AzureAuth.csproj]\n\n\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (Restore target) (1) ->\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/TestHelper/TestHelper.csproj\" (_GenerateRestoreGraphProjectEntry target) (7:7) ->\n         /var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/TestHelper/TestHelper.csproj]\n\n\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (Restore target) (1) ->\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj\" (_GenerateRestoreGraphProjectEntry target) (9:4) ->\n         /var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper.Benchmark/MSALWrapper.Benchmark.csproj]\n\n\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (Restore target) (1) ->\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper.Test/MSALWrapper.Test.csproj\" (_GenerateRestoreGraphProjectEntry target) (5:4) ->\n         /var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/MSALWrapper.Test/MSALWrapper.Test.csproj]\n\n\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/AzureAuth.sln\" (Restore target) (1) ->\n       \"/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AdoPat/AdoPat.csproj\" (_GenerateRestoreGraphProjectEntry target) (3:7) ->\n         /var/tmp/microsoft-authentication-cli/issue-1-toolchains/public-build-wsl2-linux-x64-dotnet-8-0-424/http-tarballs/aa3f3aaac7fe5823daea51dd99380d4d47ae875024d410b2fd166d6351868d6a/sdk/8.0.424/NuGet.targets(745,5): error : Unable to parse config file because: Credentials item must have username and password. Path: '/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/generated/only-nuget.org.config'. [/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/public-only/checkout/src/AdoPat/AdoPat.csproj]\n\n    0 Warning(s)\n    8 Error(s)\n\nTime Elapsed 00:00:02.18\n",
+              "truncated": true
+            },
+            "stderr": {
+              "disposition": "retained-sanitized",
+              "path": "/var/tmp/microsoft-authentication-cli/issue-1-selections/public-build-wsl2-linux-x64-dotnet-8-0-424/captures/public-only-restore-stderr-1021590-985700303369970.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "sanitized_bytes": 0,
+              "excerpt": "",
+              "truncated": false
+            },
+            "failure_reason": null
+          }
+        ],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": null
+      },
+      {
+        "command_id": "public-only-build",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "public-only-restore"
+      },
+      {
+        "command_id": "public-only-test",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "public-only-restore"
+      },
+      {
+        "command_id": "public-only-package-adopat",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "public-only-restore"
+      },
+      {
+        "command_id": "public-only-package-azureauth",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "public-only-restore"
+      },
+      {
+        "command_id": "public-only-package-msalwrapper-benchmark",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "public-only-restore"
+      },
+      {
+        "command_id": "public-only-package-msalwrapper",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "public-only-restore"
+      },
+      {
+        "command_id": "public-only-package-testhelper",
+        "status": "blocked",
+        "attempts": [],
+        "unspawned_termination": null,
+        "source_integrity_failure": null,
+        "blocked_by": "public-only-restore"
+      }
+    ],
+    "canonical_termination": {
+      "cause": "completed-with-command-failures",
+      "detail": null
+    },
+    "all_exit_quiescence": {
+      "subreaper_enabled": true,
+      "identity_mechanisms": [
+        "pidfd",
+        "proc-starttime"
+      ],
+      "observations": [
+        {
+          "subject_kind": "preparation",
+          "subject_id": "mise-version",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "mise-install-dotnet-sdk",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "git-source-faithful-init",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "git-source-faithful-fetch",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 1
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "git-source-faithful-checkout",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "git-source-faithful-verify-head",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "dotnet-source-faithful-info",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "dotnet-source-faithful-nuget-cache-locations",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "git-public-only-init",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "git-public-only-fetch",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 1
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "git-public-only-checkout",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "git-public-only-verify-head",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "dotnet-public-only-info",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "preparation",
+          "subject_id": "dotnet-public-only-nuget-cache-locations",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 0
+        },
+        {
+          "subject_kind": "command",
+          "subject_id": "source-faithful-restore",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 7
+        },
+        {
+          "subject_kind": "command",
+          "subject_id": "public-only-restore",
+          "proved": true,
+          "descendant_fixed_point": true,
+          "final_live_descendants": 0,
+          "reaped_processes": 7
+        }
+      ]
+    },
+    "ownership_conditioned_cleanup": {
+      "roots": [
+        {
+          "kind": "toolchain",
+          "created": true,
+          "identity_verified": true
+        },
+        {
+          "kind": "selection",
+          "created": true,
+          "identity_verified": true
+        }
+      ]
+    },
+    "receipt_binding": {
+      "algorithm": "sha256",
+      "canonicalization": "canonical-json-v1",
+      "scope": "recorded-bundle-excluding-receipt-digest",
+      "digest": "e51a8264c8fa05b1fdd04bb048701e5a565e3c18a2c0fb07af8bfc3a40ba253e"
+    },
+    "bounded_conclusions": {
+      "conclusions": [
+        {
+          "id": "conclusion-recorded-command-outcomes",
+          "epistemic_level": "runtime-observation",
+          "statement": "The runner recorded the bounded WSL2-Linux-x64 command outcomes with source-faithful output suppressed, other output retained only when capture identity was verified, unverifiable captures contributing no output evidence, and only asset evidence admitted by the publication safety gates; public causality and evidence sufficiency remain review judgments.",
+          "evidence_refs": [
+            "source-faithful-restore",
+            "source-faithful-build",
+            "source-faithful-test",
+            "source-faithful-package-adopat",
+            "source-faithful-package-azureauth",
+            "source-faithful-package-msalwrapper-benchmark",
+            "source-faithful-package-msalwrapper",
+            "source-faithful-package-testhelper",
+            "public-only-restore",
+            "public-only-build",
+            "public-only-test",
+            "public-only-package-adopat",
+            "public-only-package-azureauth",
+            "public-only-package-msalwrapper-benchmark",
+            "public-only-package-msalwrapper",
+            "public-only-package-testhelper"
+          ],
+          "limitation_refs": [
+            "limitation-1",
+            "limitation-2",
+            "limitation-3",
+            "limitation-4",
+            "limitation-5",
+            "limitation-6"
+          ]
+        }
+      ]
     }
   }
 }
