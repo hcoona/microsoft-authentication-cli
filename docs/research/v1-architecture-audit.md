@@ -182,10 +182,83 @@ clears package sources and selects an authenticated Office Azure Artifacts feed.
 [`AzureAuth.csproj`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/AzureAuth.csproj)
 references `Microsoft.Office.Lasso`.
 
-SOURCE-VERIFIED: the source declares a private-feed build dependency. VALIDATE-RUNTIME:
-a clean anonymous public restore must establish exactly which packages are unavailable
-and which responsibilities must be replaced. V2 implementation must not depend on
-private Microsoft build infrastructure.
+**Source finding - build input.** The source declares `Microsoft.Office.Lasso`
+`2024.10.23.1` and selects a credentialed Office package feed. The accepted
+[Lasso reference manifest](public-build-lasso-reference-manifest.json) inventories all
+261 references at the audited commit: 133 references in 13 production files and 128
+references in seven test files.
+
+**Runtime observation.** In the accepted
+[WSL2 Linux x64 experiment](experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json),
+the isolated public-only restore used NuGet.org and exited `1` with `NU1101` for
+`Microsoft.Office.Lasso` in `AzureAuth.csproj` and `AzureAuth.Test.csproj`. Its seven
+dependent build, filtered-test, and non-publishing package commands were blocked. The
+AdoPat, MSALWrapper, and TestHelper dependency assets were valid, while the other five
+target projections remain invalid with unknown transitive scope. The source-faithful
+restore also exited `1`, but its output was suppressed, so no cause is assigned.
+
+**Bounded inference.** The recorded NuGet.org-only attempt did not establish an entirely
+public restore, build, test, or package path for the audited solution in the recorded
+WSL2 Linux x64 environment. Restore failed, so its dependent commands were blocked rather
+than executed. Other anonymous public package sources were not tested, so this does not
+establish that no public source could supply Lasso or that the downstream commands would
+fail after a successful restore. It also does not establish permanent NuGet.org
+availability, service reliability, or behavior on native Linux, WSL1, Windows, macOS, or
+Linux arm64.
+
+### Apparent Lasso Responsibilities
+
+The 83 executable production references in the manifest divide without overlap into the
+following source-observable responsibilities. The remaining 50 production entries are
+23 namespace imports and 27 documentation references that route to the same surfaces.
+For complete manifest coverage, executable entries map by the symbol-family column below.
+Documentation entries map by the symbol or limitation they name. In
+`AuthFlowResultExtensions`, class-level `lasso-ref-134` maps to both the telemetry event
+model and telemetry delivery, method-level `lasso-ref-137` maps to the event model, and
+method-level `lasso-ref-150` maps to delivery. For inventory routing, a namespace import
+maps only to same-file symbols in the families assigned to that exact namespace:
+`Microsoft.Office.Lasso` routes `LassoMcMaster*` and `LassoOptions*`, `.Extensions`
+routes `ILogger.LogSuccess`, `.Interfaces` routes `IEnv*` and `ITelemetryService*`, and
+`.Telemetry` routes `EventData*`, `CommandExecuteEventData*`, `TelemetryOutput*`,
+`TelemetryConfig*`, and `TelemetryDeviceID*`. When a specific import maps to none of
+those symbols, that import is namespace-only residue, even if the file uses another
+Lasso namespace. This routing describes the public-source inventory, not Lasso's
+unpublished API contract. Test entries use the same mapping as corroboration rather than
+as a separate runtime responsibility.
+
+| Apparent responsibility | References | Manifest symbol family | Source-established surface | Bounded candidate, not a decision |
+| --- | ---: | --- | --- | --- |
+| CLI hosting and execution | 3 | `LassoMcMaster*` | [`LassoMcMaster`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Program.cs#L117-L137) wraps an already-created McMaster application and standard service collection. | Retain the McMaster command model behind direct public or fork-owned host glue; validate activation, binding, exit, disposal, and output behavior before claiming equivalence. |
+| Environment access | 18 | `IEnv*` | `IEnv.Get` supplies nullable strings; callers own pipeline detection, interaction policy, parsing, and precedence in [`IEnvExtensions`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/IEnvExtensions.cs#L19-L70) and [`PublicClientAuth`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/PublicClientAuth.cs#L22-L52). | Use a minimal fork-owned lookup seam, or direct process-environment access where no test seam is needed; remove ADO-specific reads if that downstream concern remains outside the authentication engine. |
+| Telemetry event model | 33 | `EventData*`; `CommandExecuteEventData*` | `EventData` and `CommandExecuteEventData` carry mutable properties, measures, and exceptions across command and authentication paths; [`AuthFlowResultExtensions`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/AuthFlowResultExtensions.cs#L23-L64) performs the visible conversion. | Remove the event chain with telemetry, or use a bounded fork-owned diagnostic record without coupling it to the authentication result boundary. |
+| Telemetry delivery | 8 | `ITelemetryService*` | `ITelemetryService.SendEvent` is the visible delivery operation in [`AuthFlowResultExtensions`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/AuthFlowResultExtensions.cs#L67-L86); some injected service references are unused by their command. | Delete unused injections and remove the sink if telemetry is omitted; otherwise define a narrow optional sink with explicit failure and lifecycle behavior. |
+| Telemetry and host configuration | 17 | `TelemetryOutput*`; `TelemetryConfig*`; `LassoOptions*` | [`Program`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Program.cs#L62-L121) selects the backend, ingestion token, privacy flags, command events, asynchronous behavior, collected environment names, and stderr threshold. Upstream documents telemetry as [off by default](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/README.md#L96-L109). | Remove the opt-in remote-telemetry configuration, or consider a public instrumentation API only after a separate product decision; the existing [`OpenTelemetry.Api` declaration](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/AzureAuth.csproj#L28-L31) does not establish backend or behavioral equivalence. |
+| Telemetry device identity | 2 | `TelemetryDeviceID*` | `TelemetryDeviceID.GetAsync` and `Delete` expose an identifier and reset command in [`CommandInfo`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Commands/CommandInfo.cs#L17-L41) and [`CommandInfoResetDeviceID`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Commands/Info/CommandInfoResetDeviceID.cs#L15-L30). | Remove both with telemetry, or define a fork-owned lifecycle and storage policy if an identifier is later justified. |
+| Logging extension | 2 | `ILogger.LogSuccess` | `ILogger.LogSuccess` reports token and device-reset success in [`CommandAad`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Commands/CommandAad.cs#L402-L415) and [`CommandInfoResetDeviceID`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Commands/Info/CommandInfoResetDeviceID.cs#L25-L30). | Use ordinary `ILogger` behavior or a one-line fork-owned extension if distinct success formatting remains necessary. |
+
+Three namespace imports have no associated behavioral symbol and are direct removal
+candidates: both Lasso imports in
+[`CommandAzureAuth`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Commands/CommandAzureAuth.cs#L6-L10)
+and the Lasso extensions import in
+[`CommandInfo`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Commands/CommandInfo.cs#L7-L12).
+The test references corroborate the visible environment, event-property, measure, and
+delivery call shapes in
+[`IEnvExtensionsTest`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth.Test/IEnvExtensionsTest.cs#L30-L112),
+[`AuthFlowResultExtensionsTest`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth.Test/AuthFlowResultExtensionsTest.cs#L34-L140),
+and
+[`PublicClientAuthTest`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth.Test/PublicClientAuthTest.cs#L75-L141);
+they do not establish Lasso's private implementation semantics.
+
+The current public evidence does not establish Lasso's service activation, event
+serialization, transport, flushing, persistence, privacy enforcement, or logging
+semantics. Removing the optional telemetry chain and device identity is one bounded
+contraction candidate. A direct McMaster host plus narrow environment, diagnostic, and
+logging adapters is a hypothesis only: it has not been implemented or validated and is
+not an architecture selection.
+
+V2 implementation must not depend on private Microsoft build infrastructure. Before any
+AzureAuth implementation is reused, a separately authorized decision must remove,
+replace, or isolate the Lasso dependency behind an entirely public build path.
 
 ## Structural Debt Versus Isolated Defects
 
