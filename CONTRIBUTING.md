@@ -1,7 +1,7 @@
-# Contributing
+# Contributing to AzureAuth Unofficial V2
 
-This repository is an unofficial, pre-release fork. Contributions must remain within the
-current project boundary and work authorization.
+**AzureAuth Unofficial V2** is an unofficial, pre-release fork. Contributions must remain
+within the current project boundary and work authorization.
 
 ## Before Starting
 

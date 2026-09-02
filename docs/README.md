@@ -1,4 +1,4 @@
-# Project Records
+# AzureAuth Unofficial V2 Project Records
 
 This index routes human readers to the primary canonical project and domain records. It
 is navigation, not an independent authority.

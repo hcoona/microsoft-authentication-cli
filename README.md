@@ -1,10 +1,11 @@
-# Authentication CLI v2
+# AzureAuth Unofficial V2
 
 > [!IMPORTANT]
-> This is an unofficial, pre-release fork of
+> **AzureAuth Unofficial V2** is an independent, unofficial, pre-release fork of
 > [Microsoft Authentication CLI](https://github.com/AzureAD/microsoft-authentication-cli).
-> See [Project Governance](docs/governance/project.md) for the canonical identity,
-> support, and release posture.
+> It is not a Microsoft release and receives no Microsoft support or sponsorship. See
+> [Project Governance](docs/governance/project.md) for the canonical identity, support,
+> and release posture.
 
 ## Documentation
 

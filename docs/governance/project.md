@@ -1,10 +1,24 @@
-# Project Governance
+# AzureAuth Unofficial V2 Project Governance
+
+## Public Project Identity
+
+**AzureAuth Unofficial V2** is the canonical public display name for this repository
+project and its `main-v2` line. `Unofficial` is part of the name and must be retained when
+an audience-facing entry point names the project.
+
+The GitHub repository remains `hcoona/microsoft-authentication-cli` because its slug is
+inherited from the fork relationship. That owner-qualified path identifies the source
+repository; it is not the project display name.
+
+The public display name does not select a future distributed product or any operational
+identity. Those selections remain governed by
+[`operational-identities.yaml`](operational-identities.yaml).
 
 ## Unofficial Status
 
-`main-v2` is an unofficial fork line. It is not an official Microsoft Authentication CLI
-release and has no upstream support, service-level, release, or security-response
-commitment.
+**AzureAuth Unofficial V2** is an unofficial fork project. Its `main-v2` line is not an
+official Microsoft Authentication CLI release and has no upstream support, service-level,
+release, or security-response commitment.
 
 The MIT License permits modification and redistribution subject to its notice. It does
 not establish trademark rights, application-registration ownership, service entitlement,
@@ -12,9 +26,10 @@ or Microsoft sponsorship.
 
 ## Naming and Branding
 
-The GitHub repository name is inherited from the fork relationship. A distributed v2
-product must use an independently selected executable, package, installation, cache,
-configuration, diagnostic, signing, and update identity.
+The public display name does not authorize `AzureAuth`, `azureauth`, or a Microsoft
+publisher namespace as an operational identifier. A distributed v2 product must use an
+independently selected executable, package, installation, cache, configuration,
+diagnostic, signing, and update identity.
 
 Until those identities are selected:
 
