@@ -1,7 +1,7 @@
-# Security Policy
+# AzureAuth Unofficial V2 Security Policy
 
-This is an unofficial, pre-release fork with no production-support or response-time
-commitment.
+**AzureAuth Unofficial V2** is an unofficial, pre-release fork with no production-support
+or response-time commitment.
 
 Do not report a suspected vulnerability that contains sensitive details through a public
 issue. Use GitHub private vulnerability reporting from this repository's **Security**
