@@ -18,31 +18,47 @@ No v2 production implementation or release exists.
 
 ## Current Objective
 
-No work item is currently authorized.
+Reconcile and baseline the existing v2 product requirements under
+[Issue #14](https://github.com/hcoona/microsoft-authentication-cli/issues/14) before
+selecting contracts, architecture, or implementation.
 
 ## Permitted Work
 
-- Preparing and reviewing an explicitly repository-owner-approved pull request whose sole
-  substantive purpose is a project-state transition.
+- Execute only the source reconciliation and requirement-gap analysis bounded by
+  Issue #14.
+- Update the existing capability-scoped requirement records and validation strategy only
+  when an accepted requirement disposition requires the change.
+- Create a separately bounded future research Issue only when a named unresolved fact
+  prevents disposition of a specific candidate requirement. Creating that Issue does not
+  authorize its execution.
 
 ## Blocked Work
 
-- All product, research, experiment, implementation, validation, maintenance,
-  compatibility, migration, packaging, release, and work-item activity other than the
-  permitted project-state transition preparation and review.
-- Work on any issue before it is named by an accepted project-state change.
+- Architecture or design selection, public-contract freezing, implementation,
+  compatibility commitments, migration, packaging, release, or work on Issue #12.
+- Authentication, broker, cache, installer, migration, build, or other platform
+  experiments.
+- Execution of any Issue other than Issue #14 before it is named by a later accepted
+  project-state change.
+- Publishing or citing private downstream evidence, or expanding the delegated
+  public-client authentication engine into Git, credential-provider, Azure DevOps PAT,
+  or other downstream product behavior.
 
 ## Active Tracking
 
 - Milestone:
   [Phase 1 — Empirical Baseline](https://github.com/hcoona/microsoft-authentication-cli/milestone/1)
-- Current work: None.
+- Current work:
+  [Issue #14 — Reconcile and Baseline the V2 Product Requirements](https://github.com/hcoona/microsoft-authentication-cli/issues/14)
 
 ## Transition Condition
 
-The repository owner must identify the next bounded work item and explicitly approve a
-sole-purpose project-state proposal that names it. Work on that item may begin only after
-the proposal merges. A later stage also requires the entry conditions and Record-System
-Gate defined by the [roadmap](roadmap.md).
+Issue #14 completes only when its completion criteria are satisfied, the existing
+requirement and validation authorities contain every accepted change, applicable checks
+and contextual reviews pass, and the repository owner records the final disposition.
 
-If GitHub is unavailable, stop. No work item is authorized.
+Completion does not enter Contract and Architecture or authorize a follow-up Issue. Any
+next work requires a separately accepted project-state transition and, for a later stage,
+the entry conditions and Record-System Gate defined by the [roadmap](roadmap.md).
+
+If GitHub is unavailable, stop because the bounded scope in Issue #14 cannot be verified.
