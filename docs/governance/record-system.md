@@ -18,8 +18,8 @@ Authority is scoped rather than globally ranked.
 | Public navigation to canonical records | Root `README.md` |
 | AI-agent behavior | Root `AGENTS.md` |
 | Human contribution workflow | Root `CONTRIBUTING.md` |
-| Current phase and work authorization | `docs/project-state.md` |
-| Durable phase model and exit gates | `docs/roadmap.md` |
+| Current roadmap stage and work-authorization envelope | `docs/project-state.md` |
+| Durable stage model, slice lifecycle order, and minimum entry and exit gates | `docs/roadmap.md` |
 | Product purpose and directional boundary | Product vision |
 | Required product behavior | Product requirements |
 | Current system structure and invariants | Architecture records |
@@ -28,8 +28,8 @@ Authority is scoped rather than globally ranked.
 | Security assumptions and trust boundaries | Security records |
 | Validation needed for a claim | Validation records |
 | Upstream relationship and imports | Root `UPSTREAM.md` and import records |
-| Work ownership, discussion, and progress | GitHub Issues and Milestones |
-| Proposed repository state | Pull requests |
+| Issue-backed work scope, ownership, discussion, dependencies, and progress | GitHub Issues and Milestones |
+| Direct single-PR work scope and proposed repository state | Pull requests |
 | Current accepted repository state | `main-v2` |
 | Published state | Git tags and GitHub Releases |
 | Authorship, changes, and deleted records | Git history |
@@ -84,10 +84,65 @@ structured evidence when it adds a distinct conclusion, limitation, or decision 
 Structured records require a real consumer, a schema or equivalent typed contract, and a
 defined validation point.
 
+## Work Authorization and Concurrency
+
+The target branch's accepted `docs/project-state.md` defines the current roadmap stage
+and work-authorization envelope. The stage is a global ceiling. The envelope identifies
+permitted product or research boundaries, activity classes, required accepted
+prerequisites, and constraints.
+
+A work item is executable only when:
+
+- its activity class and boundary are inside the accepted envelope;
+- its requirement, architecture, evidence, or other declared prerequisites are already
+  accepted;
+- any policy-required repository-owner disposition is recorded in the applicable
+  carrier; and
+- it does not depend on an unaccepted result.
+
+Relied-on prerequisites and shared canonical authorities must remain current through
+acceptance. If the target branch supersedes or materially changes one, dependent work
+must pause until its scope and gate evidence are reevaluated and its validation and
+review are refreshed against the current authority.
+
+An Issue, Milestone, branch, or pull request cannot expand that envelope. A proposed
+change to `project-state.md` cannot authorize work on its own branch. Change project
+state only when the roadmap stage or authorization envelope changes; do not mirror the
+list or lifecycle of active Issues and pull requests there.
+
+An Issue is the work carrier when advance owner disposition is required, the work spans
+multiple pull requests or contributors, dependencies need coordination, an experiment
+or another policy requires a pre-execution carrier, or the result contributes to a stage
+gate. A bounded, low-risk change that fits the accepted envelope and needs no separate
+planning or advance disposition may use its pull request as the work carrier.
+
+Opening or refining a proposed Issue or Milestone is planning, not authorization to
+execute the described work or change a canonical record. Closing an Issue records
+progress; it does not change project state.
+
+The latest explicit repository-owner disposition in a work carrier controls. Rejection,
+cancellation, or withdrawal ends authority for unfinished work and requires renewed
+approval before resumption. Closing a carrier after authorized work completes records
+that completion and does not retroactively invalidate it.
+
+Independent work items inside the same envelope may proceed concurrently. Work remains
+ordered when it has an unresolved dependency, modifies the same canonical authority
+under conflicting assumptions, or requires an earlier owner decision. Concurrency is a
+permission, not a reason to duplicate records or weaken review independence.
+
+The roadmap is the authority for an implementation slice's lifecycle order and minimum
+entry and exit gates. Applicable domain records remain authoritative for the content and
+activation of additional preconditions. Different slices may occupy different lifecycle
+activities concurrently when the accepted envelope permits those activities.
+Implementation of one accepted slice may overlap requirements or architecture work for
+a later slice, but a slice cannot begin implementation until it satisfies both the
+roadmap gate and every applicable domain precondition.
+
 ## Lifecycle Through Git and GitHub
 
-- An Issue expresses a problem, question, or bounded work item.
-- A pull-request branch expresses a proposal.
+- An Issue expresses a problem, question, proposed work item, or bounded work carrier.
+- A pull-request branch expresses a repository proposal and may be the direct work
+  carrier when this policy permits.
 - A branch may propose a changed `docs/project-state.md`, but work authorization continues
   to come from the target branch's accepted copy until merge.
 - Merge into `main-v2` accepts the changed records as current within their declared
@@ -129,6 +184,9 @@ Conditional mechanisms remain in this policy or another relevant policy until ac
 
 Long-term information is organized by stable concern. Chronology and execution waves are
 represented by Issues, Milestones, pull requests, commits, and releases.
+
+Issues and Milestones may show planned, active, blocked, and completed work without
+copying those states into `project-state.md`.
 
 Requirements are organized by capability rather than by phase or wave. Architecture uses
 a global overview and scoped views. Designs are created only for coherent implementation

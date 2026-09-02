@@ -16,51 +16,48 @@ that proposal may begin only after the transition merges.
 
 No v2 production implementation or release exists.
 
-## Current Objective
+## Authorization Envelope
 
-Amend the repository work-authorization model under
-[Issue #21](https://github.com/hcoona/microsoft-authentication-cli/issues/21) so bounded
-independent work can proceed concurrently without using `project-state.md` as an
-active-Issue ledger.
+The current envelope permits:
 
-## Permitted Work
+- non-executing planning through proposed Issues and Milestones;
+- preparing and reviewing an explicitly repository-owner-approved pull request whose
+  sole substantive purpose is to change the roadmap stage or this authorization
+  envelope.
 
-- Execute only the governance analysis and amendment bounded by Issue #21 after this
-  project-state proposal merges.
-- Update the directly affected governance policies, current project state, roadmap,
-  catalogs, controls, contributor and Agent interfaces, review Skills, evaluation
-  fixtures, and experiment-authorization policy as one coherent migration.
-- Review and validate those changes under the accepted governance rules, including
-  independent record-system and research-evidence review and independent triage of any
-  material finding.
+Planning a work item does not authorize its execution or a change to a canonical record.
+Independent work inside an accepted envelope may proceed concurrently, but this envelope
+currently authorizes no product, research, experiment, architecture, implementation, or
+release work.
 
 ## Blocked Work
 
-- Product-requirement, architecture, design, implementation, compatibility, migration,
-  packaging, release, support-commitment, or operational-identity changes.
-- Authentication, broker, cache, installer, migration, build, or other platform
-  experiments and new empirical claims.
-- Selecting or freezing the first v2 slice, changing the Empirical Baseline stage, or
-  authorizing product delivery as part of the governance amendment.
-- Execution of any Issue other than Issue #21 before later accepted records authorize
-  it.
-- Applying the proposed authorization-envelope rules before the Issue #21 governance
-  amendment merges.
+- Product, research, experiment, architecture, design, implementation, validation,
+  compatibility, migration, packaging, release, maintenance, support-commitment, or
+  operational-identity work outside the permitted planning and envelope-change classes.
+- Treating an Issue, Milestone, branch, or pull request as authority to expand this
+  envelope.
+- Selecting or freezing the first v2 slice before a later accepted envelope permits that
+  activity.
 
 ## Active Tracking
 
 - Milestone:
   [Phase 1 — Empirical Baseline](https://github.com/hcoona/microsoft-authentication-cli/milestone/1)
-- Current work:
-  [Issue #21 — Simplify work authorization and enable bounded slice concurrency](https://github.com/hcoona/microsoft-authentication-cli/issues/21)
+- Issues and pull requests carry proposed and current work and are intentionally not
+  enumerated in this record.
 
 ## Transition Condition
 
-Issue #21 must preserve one canonical authority for stage and work authorization,
-distinguish authorization from work tracking, retain explicit high-risk and owner
-decision gates, and pass the applicable hk checks, independent reviews, finding triage,
-and Record-System Gate.
+The repository owner may change the authorization envelope through a reviewable
+project-state pull request. Entering a later roadmap stage also requires that stage's
+entry conditions and the Record-System Gate.
 
-This proposal authorizes no Issue #21 amendment work before it merges. If GitHub becomes
-unavailable after acceptance, continue only already-bounded Issue #21 work recoverable
-from the accepted records, or stop.
+Opening, starting, completing, or closing an in-envelope Issue does not require a
+project-state change.
+
+If GitHub is unavailable, continue only non-owner-gated work whose accepted envelope,
+prerequisites, and bounded carrier are already recoverable. Unfinished work that depends
+on a repository-owner disposition must pause when the carrier's current disposition
+cannot be checked. Follow the accepted domain protocol when safe interruption requires
+additional action. Do not begin work that requires a new repository-owner disposition.

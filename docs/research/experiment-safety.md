@@ -9,6 +9,31 @@ Phase 1 experiments may observe real platform behavior, but they must not contam
 personal production state, rely silently on private credentials, or publish sensitive
 evidence.
 
+## Experiment Authorization
+
+A work-authorization envelope that permits research or an experiment class does not
+authorize a particular execution. Before any experiment covered by this protocol runs:
+
+- the target branch's accepted project state must permit the exact activity class and
+  boundary;
+- a specific work carrier must contain a currently effective repository-owner approval
+  of the
+  decision-relevant question, environment, external effects, and risk boundary;
+- the experiment protocol, isolation, expected observations, stop conditions, and
+  cleanup plan must be accepted before execution; and
+- every applicable contextual review and mechanical precondition must be satisfied.
+
+The latest explicit repository-owner disposition controls. Rejection, cancellation, or
+withdrawal stops unfinished execution and requires renewed approval before resumption.
+Closing a carrier after authorized execution completes records completion and does not
+invalidate the retained observation.
+
+An open Issue or a protocol and project-state change proposed on the execution branch
+cannot authorize that branch. Non-executing planning and review may proceed when the
+accepted envelope permits them, but they must not invoke the binary or tool under study,
+resolve dependencies, access a credential or account store, or create another planned
+side effect.
+
 ## Required Isolation
 
 ### Source and Build
@@ -91,10 +116,11 @@ six runtime semantic carriers; it does not define a second literal command proto
 #### Activation and Lifecycle
 
 No restore, dependency-resolution, build, test, or package command may run until the
-Issue #2 governance change and Record-System Gate are accepted and the target branch's
-accepted project state authorizes Issue #1 execution. Non-executing review may inspect
-repository records and host metadata, but it must not invoke .NET or NuGet, resolve
-packages, access feeds, or mutate source or user state.
+Issue #2 governance change and Record-System Gate are accepted, the target branch's
+accepted envelope permits the exact public-build experiment class and boundary, and
+Issue #1 carries the specific owner approval and accepted protocol. Non-executing review
+may inspect repository records and host metadata, but it must not invoke .NET or NuGet,
+resolve packages, access feeds, or mutate source or user state.
 
 The current tree has exactly one semantic bundle at
 `docs/research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`, with a
