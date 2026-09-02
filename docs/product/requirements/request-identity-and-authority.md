@@ -21,3 +21,12 @@ accepted decision defines the trust model.
 
 A strict account constraint must use a provider-native stable identifier where available.
 Username and domain may be used only as discovery or display hints.
+
+## V2-REQ-017: Caller-Intent Precedence
+
+Explicit request fields must take precedence over selected-profile defaults, and
+selected-profile defaults must take precedence over permitted ambient defaults. An
+explicit field that conflicts with an enforced profile or trust constraint must fail as
+an invalid request rather than override that constraint. Host detection may report
+capabilities or unavailability but must not change caller intent for identity, authority,
+scope, acquisition, interaction, deadline, host, or cache behavior.

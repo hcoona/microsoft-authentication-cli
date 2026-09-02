@@ -3,7 +3,11 @@
 ## V2-REQ-040: Secure Storage by Default
 
 Persistent cache material must use broker-owned or platform secure storage by default.
-The implementation must not silently downgrade to plaintext.
+Cache persistence and fallback must follow an explicit request or selected-profile policy
+composed only of separately accepted cache modes. A request or profile cannot authorize
+an otherwise unaccepted mode. When secure storage is unavailable, v2 must return a typed
+outcome consistent with the accepted policy and must not silently select plaintext,
+nonpersistent operation, or another storage mode.
 
 ## V2-REQ-041: Versioned Cache Semantics
 
@@ -25,3 +29,11 @@ identity or use upstream ingestion configuration.
 
 Any distributed v2 artifact must use independently defined package, executable,
 installation, cache, signing, diagnostic, and update identities.
+
+## V2-REQ-045: Headless-Linux Reusable-State Support
+
+A headless Linux combination may claim support for repeated noninteractive acquisition
+only when an accepted authentication-state mechanism can be reused across invocations
+without requiring interactive unlock on every call. If no such mechanism satisfies the
+accepted cache-security policy, that capability for the combination must be declared
+unsupported rather than silently weakening storage.

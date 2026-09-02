@@ -17,8 +17,10 @@ cache access, every authentication stage, and result validation.
 
 ## V2-REQ-016: Explicit Host Context
 
-A request requiring interactive work must provide or select a validated host context,
-including parent-window ownership where the broker requires it.
+A request requiring interactive work must provide or select a validated host context for
+the chosen mechanism. The context must identify ownership of the interactive surface and
+its completion channel, including a broker parent window, system-browser callback, or
+owned terminal where applicable.
 
 ## V2-REQ-020: Selected-Account Silent First
 
@@ -37,9 +39,10 @@ before returning success. Ambiguous or mismatched identity must fail closed.
 
 ## V2-REQ-023: Classified Fallback
 
-Fallback must be driven by typed policy outcomes. Cancellation, denial, integrity
-failure, and strict identity mismatch must be terminal unless an explicit strategy says
-otherwise.
+Fallback must be driven by typed policy outcomes. Caller cancellation, user denial,
+strict identity mismatch, and failure to validate a result reported as successful are
+terminal. Cache corruption remains governed by `V2-REQ-041`. Only an outcome explicitly
+classified as retryable may advance to a later requested stage.
 
 ## V2-REQ-024: Claims-Challenge Preservation
 

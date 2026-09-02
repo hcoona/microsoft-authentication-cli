@@ -3,7 +3,8 @@
 ## V2-REQ-030: Versioned Result
 
 Every machine result must declare a protocol version and one typed success or failure
-status.
+status. Process exit status for a normally emitted result must map deterministically to
+that status and must not contradict the payload.
 
 ## V2-REQ-031: Complete Success Metadata
 
