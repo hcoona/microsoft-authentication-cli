@@ -18,47 +18,57 @@ No v2 production implementation or release exists.
 
 ## Current Objective
 
-Reconcile and baseline the existing v2 product requirements under
-[Issue #14](https://github.com/hcoona/microsoft-authentication-cli/issues/14) before
-selecting contracts, architecture, or implementation.
+Establish **AzureAuth Unofficial V2** as the canonical public repository display name
+under [Issue #17](https://github.com/hcoona/microsoft-authentication-cli/issues/17)
+without selecting a distributed product or runtime identity.
 
 ## Permitted Work
 
-- Execute only the source reconciliation and requirement-gap analysis bounded by
-  Issue #14.
-- Update the existing capability-scoped requirement records and validation strategy only
-  when an accepted requirement disposition requires the change.
-- Create a separately bounded future research Issue only when a named unresolved fact
-  prevents disposition of a specific candidate requirement. Creating that Issue does not
-  authorize its execution.
+- Execute only the public project naming unification bounded by Issue #17.
+- Update the canonical project-identity record, public repository landing page,
+  documentation portal, and directly affected audience entry points to use the selected
+  display name.
+- Update the GitHub repository description after the accepted repository records use the
+  selected display name.
+- Review existing public-facing self-identification only to preserve clear unofficial
+  status and distinguish fork identity from upstream provenance.
 
 ## Blocked Work
 
-- Architecture or design selection, public-contract freezing, implementation,
-  compatibility commitments, migration, packaging, release, or work on Issue #12.
+- Selecting or implementing any distributed product, executable, command, package,
+  namespace, installation, cache, lock, configuration, telemetry, diagnostic, signing,
+  update, or user-agent identity.
+- Renaming the GitHub repository slug or changing its upstream fork relationship.
+- Product-requirement, architecture, design, public-contract, implementation,
+  compatibility, migration, packaging, release, or support-commitment changes.
 - Authentication, broker, cache, installer, migration, build, or other platform
   experiments.
-- Execution of any Issue other than Issue #14 before it is named by a later accepted
+- Execution of any Issue other than Issue #17 before it is named by a later accepted
   project-state change.
-- Publishing or citing private downstream evidence, or expanding the delegated
-  public-client authentication engine into Git, credential-provider, Azure DevOps PAT,
-  or other downstream product behavior.
+- Modifying upstream provenance, license notices, historical or research references, or
+  immutable evidence merely to replace an official upstream name.
+- Publishing or citing private downstream evidence, activating Issue #12, or expanding
+  the delegated public-client authentication engine into Git, credential-provider,
+  Azure DevOps PAT, or other downstream product behavior.
 
 ## Active Tracking
 
 - Milestone:
   [Phase 1 — Empirical Baseline](https://github.com/hcoona/microsoft-authentication-cli/milestone/1)
 - Current work:
-  [Issue #14 — Reconcile and Baseline the V2 Product Requirements](https://github.com/hcoona/microsoft-authentication-cli/issues/14)
+  [Issue #17 — Establish the AzureAuth Unofficial V2 Public Project Name](https://github.com/hcoona/microsoft-authentication-cli/issues/17)
 
 ## Transition Condition
 
-Issue #14 completes only when its completion criteria are satisfied, the existing
-requirement and validation authorities contain every accepted change, applicable checks
-and contextual reviews pass, and the repository owner records the final disposition.
+Issue #17 completes only when the canonical project record, public repository entry
+points, and GitHub description consistently use **AzureAuth Unofficial V2**; the inherited
+repository slug and upstream provenance remain intact; distributed and runtime identities
+remain unselected; applicable checks and contextual reviews pass; and the repository
+owner records the final disposition.
 
-Completion does not enter Contract and Architecture or authorize a follow-up Issue. Any
-next work requires a separately accepted project-state transition and, for a later stage,
-the entry conditions and Record-System Gate defined by the [roadmap](roadmap.md).
+Completion does not change the Empirical Baseline stage or authorize a follow-up Issue.
+Any next work requires a separately accepted project-state transition and, for a later
+stage, the entry conditions and Record-System Gate defined by the
+[roadmap](roadmap.md).
 
-If GitHub is unavailable, stop because the bounded scope in Issue #14 cannot be verified.
+If GitHub is unavailable, stop because the bounded scope in Issue #17 cannot be verified.
