@@ -18,8 +18,7 @@ Authority is scoped rather than globally ranked.
 | Public navigation to canonical records | Root `README.md` |
 | AI-agent behavior | Root `AGENTS.md` |
 | Human contribution workflow | Root `CONTRIBUTING.md` |
-| Current roadmap stage and work-authorization envelope | `docs/project-state.md` |
-| Durable stage model, slice lifecycle order, and minimum entry and exit gates | `docs/roadmap.md` |
+| Current positive work authorization | `docs/delivery-wave.md` |
 | Product purpose and directional boundary | Product vision |
 | Required product behavior | Product requirements |
 | Current system structure and invariants | Architecture records |
@@ -86,18 +85,17 @@ defined validation point.
 
 ## Work Authorization and Concurrency
 
-The target branch's accepted `docs/project-state.md` defines the current roadmap stage
-and work-authorization envelope. The stage is a global ceiling. The envelope identifies
-permitted product or research boundaries, activity classes, required accepted
-prerequisites, and constraints.
+The target branch's accepted `docs/delivery-wave.md` is the sole positive
+work-authorization authority. Each entry identifies accepted inputs, one bounded
+advancement and outcome, material exclusions, and any permitted external effects.
 
 A work item is executable only when:
 
-- its activity class and boundary are inside the accepted envelope;
+- an accepted Delivery Wave entry grants that work and remains present;
+- the work stays inside the entry's advancement, outcome, exclusions, and effects;
 - its requirement, architecture, evidence, or other declared prerequisites are already
   accepted;
-- any policy-required repository-owner disposition is recorded in the applicable
-  carrier; and
+- any policy-required repository-owner risk disposition is recorded in the entry; and
 - it does not depend on an unaccepted result.
 
 Relied-on prerequisites and shared canonical authorities must remain current through
@@ -105,46 +103,54 @@ acceptance. If the target branch supersedes or materially changes one, dependent
 must pause until its scope and gate evidence are reevaluated and its validation and
 review are refreshed against the current authority.
 
-An Issue, Milestone, branch, or pull request cannot expand that envelope. A proposed
-change to `project-state.md` cannot authorize work on its own branch. Change project
-state only when the roadmap stage or authorization envelope changes; do not mirror the
-list or lifecycle of active Issues and pull requests there.
+An Issue, Milestone, branch, pull request, comment, label, or unmerged Wave edit cannot
+grant or enlarge work authorization. Adding or changing a Wave entry grants or changes
+authorization only when merged into `main-v2`. Deleting an entry through merge ends its
+authorization. Git and the proposing pull request retain the reason and history; the
+current Wave does not retain progress or historical status.
 
-An Issue is the work carrier when advance owner disposition is required, the work spans
-multiple pull requests or contributors, dependencies need coordination, an experiment
-or another policy requires a pre-execution carrier, or the result contributes to a stage
-gate. A bounded, low-risk change that fits the accepted envelope and needs no separate
-planning or advance disposition may use its pull request as the work carrier.
+Preparing and reviewing an explicitly repository-owner-approved pull request whose sole
+substantive purpose is to add, change, delete, or replace Delivery Wave entries is a
+permitted control-plane operation and does not require an existing entry. It cannot
+perform newly proposed substantive work. New or enlarged authorization begins only after
+the Wave change merges.
 
-Opening or refining a proposed Issue or Milestone is planning, not authorization to
-execute the described work or change a canonical record. Closing an Issue records
-progress; it does not change project state.
+Use an Issue when work spans multiple pull requests or contributors, needs dependency or
+progress coordination, or benefits from separate proposal discussion. A bounded change
+may use its pull request as the work carrier when the accepted Wave entry already
+contains sufficient scope. Work carriers do not become authorization authorities.
 
-The latest explicit repository-owner disposition in a work carrier controls. Rejection,
-cancellation, or withdrawal ends authority for unfinished work and requires renewed
-approval before resumption. Closing a carrier after authorized work completes records
-that completion and does not retroactively invalidate it.
+Independent entries may proceed concurrently. Work remains ordered when it has an
+unresolved dependency, modifies the same canonical authority under conflicting
+assumptions, or requires an earlier owner decision. A material change to a shared
+prerequisite pauses only the entries that rely on it.
 
-Independent work items inside the same envelope may proceed concurrently. Work remains
-ordered when it has an unresolved dependency, modifies the same canonical authority
-under conflicting assumptions, or requires an earlier owner decision. Concurrency is a
-permission, not a reason to duplicate records or weaken review independence.
+There is no global delivery phase. Each Slice follows its own accepted dependencies.
+Implementation requires accepted Slice requirements, applicable architecture and
+contracts, a validation basis, explicit unsupported cases, and any additional
+preimplementation condition owned by an applicable domain record. Implementation of one
+Slice may overlap requirements or architecture work for another Slice whose own
+advancement is authorized.
 
-The roadmap is the authority for an implementation slice's lifecycle order and minimum
-entry and exit gates. Applicable domain records remain authoritative for the content and
-activation of additional preconditions. Different slices may occupy different lifecycle
-activities concurrently when the accepted envelope permits those activities.
-Implementation of one accepted slice may overlap requirements or architecture work for
-a later slice, but a slice cannot begin implementation until it satisfies both the
-roadmap gate and every applicable domain precondition.
+One or more pull requests may contribute to a bounded outcome. When that outcome is
+accepted, or the repository owner decides not to continue it, an accepted Wave change
+deletes the entry. That deletion ends only the current grant; later defects, changed
+requirements, or further advancement require a new or amended entry.
+
+A Delivery Wave has no fixed duration. A replacement Wave selects a new finite set.
+Unfinished work continues only when the new accepted file contains an entry authorizing
+its next bounded outcome. Omission ends the old grant; it is not automatic carry-over.
+
+Every merged change to `docs/delivery-wave.md` evaluates the current mutable-source
+recheck registry, even when no research file changes.
 
 ## Lifecycle Through Git and GitHub
 
 - An Issue expresses a problem, question, proposed work item, or bounded work carrier.
 - A pull-request branch expresses a repository proposal and may be the direct work
   carrier when this policy permits.
-- A branch may propose a changed `docs/project-state.md`, but work authorization continues
-  to come from the target branch's accepted copy until merge.
+- A branch may propose a changed `docs/delivery-wave.md`, but work authorization
+  continues to come from the target branch's accepted copy until merge.
 - Merge into `main-v2` accepts the changed records as current within their declared
   scopes.
 - A tag and GitHub Release identify published state.
@@ -171,27 +177,28 @@ current consumers require them.
 ## Current, Scheduled, Conditional, and Discarded Mechanisms
 
 - **Current:** has an active producer and consumer.
-- **Scheduled:** is expected within the current or next major stage and has a phase or
-  event trigger, evaluator, activation action, and fallback review.
+- **Scheduled:** has an observable event trigger, evaluator, activation action, and named
+  fallback review.
 - **Conditional:** may be needed if an observable condition occurs.
 - **Discarded:** lacks sufficient value, consumer, or trigger.
 
 Current and scheduled record families and controls may be represented in structured
-catalogs when those catalogs are consumed by hk, Agent routing, or phase gates.
+catalogs when those catalogs are consumed by hk or Agent routing.
 Conditional mechanisms remain in this policy or another relevant policy until activated.
 
 ## Workflows
 
-Long-term information is organized by stable concern. Chronology and execution waves are
-represented by Issues, Milestones, pull requests, commits, and releases.
+Long-term information is organized by stable concern. Current positive work authorization
+is represented by `docs/delivery-wave.md`; chronology and progress are represented by
+Issues, Milestones, pull requests, commits, and releases.
 
-Issues and Milestones may show planned, active, blocked, and completed work without
-copying those states into `project-state.md`.
+Issues and Milestones may show proposed, active, blocked, and completed work without
+granting or changing authorization.
 
-Requirements are organized by capability rather than by phase or wave. Architecture uses
-a global overview and scoped views. Designs are created only for coherent implementation
-boundaries that need independent review. Research is organized by question and baseline;
-experiments are organized by reproducible protocol.
+Requirements are organized by capability rather than by delivery sequence or Wave.
+Architecture uses a global overview and scoped views. Designs are created only for
+coherent implementation boundaries that need independent review. Research is organized
+by question and baseline; experiments are organized by reproducible protocol.
 
 Requirement identifiers are permanent once merged into the accepted target branch. An
 active requirement heading uses `V2-REQ-NNN: Nonempty title`. If a requirement is
@@ -237,7 +244,7 @@ A record-system change is complete only when:
 - current and scheduled mechanisms identify their producer, maintainer, consumer, failure
   mode, and review or execution point;
 - scheduled mechanisms identify their trigger, evaluator, activation action, and
-  phase-transition fallback review;
+  named fallback review;
 - audience interfaces and controls agree with their governing policies;
 - replaced records and broken references have been removed;
 - mechanical checks and required contextual reviews have recorded results.

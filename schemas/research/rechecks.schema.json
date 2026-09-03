@@ -101,7 +101,6 @@
           "enum": [
             "decision",
             "release",
-            "stage-entry",
             "workstream"
           ]
         },

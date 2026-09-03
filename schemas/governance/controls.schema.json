@@ -210,7 +210,6 @@
               "ci",
               "pull-request-review",
               "recheck-trigger",
-              "phase-transition",
               "issue-closure",
               "pull-request-merge",
               "release"

@@ -88,12 +88,12 @@ controls:
     producer: hk and the repository record checker
     maintainer: Research maintainer
     consumers:
-      - Issue #1 source auditors when maintaining the fixed source baseline and Lasso manifest
-      - Research reviewers when checking static source-audit integrity before runtime experiments
+      - Repository checker and research maintainers when preserving the fixed source baseline and Lasso manifest
+      - Research reviewers when validating recorded public-build conclusions or a proposed correction, replay, or migration
     governing_rules:
       - docs/research/experiment-safety.md#phase-1-public-build-record
       - docs/governance/record-system.md#record-system-gate
-    invariant: The current public-build source baseline and Lasso manifest retain canonical source identity, hashes, identifiers, ordering, and cross-record consistency under duplicate-rejecting JSON parsing, and a small static fixture set verifies planned-bundle source binding, command topology, isolation principles, and exact extractor replay without activating runtime evidence.
+    invariant: The current public-build source baseline and Lasso manifest retain canonical source identity, hashes, identifiers, ordering, and cross-record consistency under duplicate-rejecting JSON parsing, and a small static fixture set verifies recorded-bundle source binding, command topology, isolation principles, and exact extractor replay without executing the subject.
     runner: hk
     implementation:
       kind: hk-steps
@@ -114,11 +114,11 @@ controls:
     producer: hk and the repository record checker
     maintainer: Research maintainer
     consumers:
-      - Issue #1 experiment owner before execution and after each recorded result
+      - Repository checker and research reviewers when validating the recorded result
       - Research reviewers when evaluating the public-build conclusion
     governing_rules:
       - docs/research/experiment-safety.md#phase-1-public-build-record
-    invariant: The exact semantic singleton remains strict, filename-bound, source- and component-bound, within authorized host and safety ceilings, and internally consistent with the fixed two-mode non-publishing Issue #1 plan. Preflight rejection before experiment-root creation preserves the planned carrier, while root creation begins the retain-always lifecycle whose command evidence, shared-reducer result, bounded sanitized output, all-exit quiescence, source integrity, current extraction, receipt, and atomic recording remain fail closed.
+    invariant: The recorded singleton remains strict, filename-bound, source- and component-bound, within its historical host and safety ceilings, and internally consistent with the fixed two-mode non-publishing Issue #1 execution. Its retained command evidence, shared-reducer result, bounded sanitized output, all-exit quiescence, source integrity, dependency extraction, receipt, and recording lifecycle remain reproducible without granting authority for another run.
     runner: hk
     implementation:
       kind: hk-steps
@@ -132,7 +132,7 @@ controls:
     execution_points:
       - local-fast
       - ci
-    failure_mode: An unsupported or ambiently influenced run begins, the first production run bypasses its pinned installation, a preflight failure replaces the planned carrier, a failure after experiment-root creation is lost, blockers or conclusions contradict primitive evidence, unsafe output or assets are retained, descendants or roots are not proved safe, source integrity changes, recording or rollback affects another actor, the live schema or another hash-bound component drifts without the required replay-or-migration decision, or repository validation accepts a plan or receipt that the runner would reject.
+    failure_mode: The recorded result becomes inconsistent or unreproducible, blockers or conclusions contradict primitive evidence, retained output or assets violate their safety boundary, lifecycle evidence loses its source or component binding, a hash-bound component drifts without the required replay-or-migration decision, or repository validation accepts evidence that the retained validator rejects.
 
   - id: requirement-id-uniqueness
     state: current
@@ -264,18 +264,17 @@ controls:
     producer: Reviewer independent of the change author and implementation agent
     maintainer: Record-system maintainer
     consumers:
-      - Change author and repository owner during pull-request, authorization-envelope, and phase-transition review
+      - Change author and repository owner during pull-request and Delivery Wave review
     governing_rules:
       - docs/governance/governance-system.md
       - docs/governance/record-system.md
-    invariant: Changed record families and work-authorization envelopes retain one authority, real consumers, bounded lifecycle, and policy-aligned controls.
+    invariant: Changed record families and current work authorization retain one authority, real consumers, bounded lifecycle, and policy-aligned controls.
     runner: agent-skill
     implementation:
       kind: repository-path
       value: .github/skills/record-system-review/SKILL.md
     execution_points:
       - pull-request-review
-      - phase-transition
     failure_mode: A syntactically valid change creates duplicated authority or unmaintainable governance.
 
   - id: research-evidence-review
@@ -285,11 +284,11 @@ controls:
     producer: Reviewer independent of the change author and implementation agent
     maintainer: Research maintainer
     consumers:
-      - Change author and repository owner during research, research-authorizing envelope changes, recheck-trigger, phase-transition, and release review
+      - Change author and repository owner during research, every Delivery Wave change, recheck-trigger, and release review
     governing_rules:
       - docs/research/experiment-safety.md
       - docs/governance/record-system.md
-    invariant: Research changes and research-authorizing envelope changes preserve source boundaries, specific experiment authorization, evidence labels, reproducibility, and claim limits.
+    invariant: Research changes preserve source boundaries, bounded effects, accepted protocols, evidence labels, reproducibility, and claim limits; every merged Delivery Wave change and fired trigger evaluates the current recheck registry.
     runner: agent-skill
     implementation:
       kind: repository-path
@@ -297,7 +296,6 @@ controls:
     execution_points:
       - pull-request-review
       - recheck-trigger
-      - phase-transition
       - release
     failure_mode: Research conclusions overstate evidence or expose unsafe experimental detail.
 
@@ -319,7 +317,6 @@ controls:
     execution_points:
       - pull-request-review
       - recheck-trigger
-      - phase-transition
       - release
     failure_mode: A self-confirming review creates false assurance or unnecessary changes.
 
@@ -330,16 +327,15 @@ controls:
     producer: Repository owner
     maintainer: Repository owner
     consumers:
-      - Repository owner at the applicable pull-request merge or phase transition
+      - Repository owner at the applicable pull-request merge
     governing_rules:
       - docs/governance/record-system.md#record-system-gate
       - docs/governance/governance-system.md#gov-010-gates-require-evidence
-    invariant: A record-system, authorization-envelope, or phase-transition change is accepted only after its required mechanical and contextual evidence is reviewable.
+    invariant: A record-system or work-authorization change is accepted only after its required mechanical and contextual evidence is reviewable.
     runner: human-owner
     implementation:
       kind: evidence-carrier
       value: Applicable pull request, check results, review records, and owner disposition
     execution_points:
       - pull-request-merge
-      - phase-transition
-    failure_mode: The repository accepts changed authority, work authorization, or phase state without evidence that its records and controls agree.
+    failure_mode: The repository accepts changed authority or work authorization without evidence that its records and controls agree.

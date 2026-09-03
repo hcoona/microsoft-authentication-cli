@@ -5,34 +5,42 @@
 This protocol applies before running an upstream or v2 authentication binary, restore,
 build, cache, installer, or migration experiment.
 
-Phase 1 experiments may observe real platform behavior, but they must not contaminate
-personal production state, rely silently on private credentials, or publish sensitive
-evidence.
+Experiments may observe real platform behavior, but they must not contaminate personal
+production state, rely silently on private credentials, or publish sensitive evidence.
 
 ## Experiment Authorization
 
-A work-authorization envelope that permits research or an experiment class does not
-authorize a particular execution. Before any experiment covered by this protocol runs:
+Before any experiment covered by this protocol runs:
 
-- the target branch's accepted project state must permit the exact activity class and
-  boundary;
-- a specific work carrier must contain a currently effective repository-owner approval
-  of the
-  decision-relevant question, environment, external effects, and risk boundary;
-- the experiment protocol, isolation, expected observations, stop conditions, and
-  cleanup plan must be accepted before execution; and
+- the target branch's accepted Delivery Wave entry must authorize the
+  decision-relevant question, environment, maximum external effects, and bounded
+  outcome;
+- a Git-tracked protocol defining the exact subject and environment, isolation, expected
+  observations, evidence limits, repetition or cumulative-effect bounds, stop
+  conditions, and cleanup must be independently reviewed and accepted on `main-v2`;
+- execution and preflight must bind the exact accepted protocol revision; and
 - every applicable contextual review and mechanical precondition must be satisfied.
 
-The latest explicit repository-owner disposition controls. Rejection, cancellation, or
-withdrawal stops unfinished execution and requires renewed approval before resumption.
-Closing a carrier after authorized execution completes records completion and does not
-invalidate the retained observation.
+The Delivery Wave entry must include an explicit repository-owner risk decision before
+first crossing or expanding a boundary involving non-disposable identities or tenants,
+credential-bearing state, persistent host, account, cache, or installation state,
+remote mutation, or another material external effect. No separate owner approval is
+required for each execution that remains within the accepted entry and protocol.
 
-An open Issue or a protocol and project-state change proposed on the execution branch
-cannot authorize that branch. Non-executing planning and review may proceed when the
-accepted envelope permits them, but they must not invoke the binary or tool under study,
-resolve dependencies, access a credential or account store, or create another planned
-side effect.
+An accepted protocol may permit repeated executions only within its finite bounds. A
+protocol that permits material cumulative external effects or persistent state must
+define measurable units, count every started attempt including failures, prohibit
+concurrent execution unless it defines a safe reservation mechanism, recover prior
+consumption from retained execution evidence, and fail closed when remaining capacity
+cannot be established.
+
+Deleting or narrowing the Delivery Wave entry ends or narrows authority for subsequent
+execution.
+
+An Issue, Milestone, branch, pull request, comment, protocol, or unmerged Delivery Wave
+change cannot grant experiment authority. Non-executing planning and review must not
+invoke the binary or tool under study, resolve dependencies, access a credential or
+account store, or create another planned side effect.
 
 ## Required Isolation
 
@@ -105,6 +113,9 @@ and explicitly mark nonapplicable context when omission could change interpretat
 
 ### Phase 1 Public-Build Record
 
+This historical heading is retained because the recorded singleton and its schema bind
+this exact policy anchor. It does not define a current project phase.
+
 Issue #1 uses the fixed source baseline, Lasso reference manifest, and singleton strict-JSON
 bundle linked from the research catalog. The source records own the audited source facts.
 This policy owns outcome-level safety and evidence rules. The singleton bundle owns the
@@ -113,14 +124,15 @@ observations, selected bounds, SDK and mise configuration, component hashes, and
 limitations. The schema owns strict shape, lifecycle, types, authorized ceilings, and the
 six runtime semantic carriers; it does not define a second literal command protocol.
 
-#### Activation and Lifecycle
+#### Authorization History and Lifecycle
 
-No restore, dependency-resolution, build, test, or package command may run until the
-Issue #2 governance change and Record-System Gate are accepted, the target branch's
-accepted envelope permits the exact public-build experiment class and boundary, and
-Issue #1 carries the specific owner approval and accepted protocol. Non-executing review
-may inspect repository records and host metadata, but it must not invoke .NET or NuGet,
-resolve packages, access feeds, or mutate source or user state.
+The recorded run was executed under the former work-authorization model and the Issue #1
+owner decisions retained in GitHub history. Those historical decisions do not authorize
+another run. The recorded singleton is evidence rather than an executable protocol. A
+future public-build execution requires a current accepted Wave entry and a new accepted
+planned protocol. Non-executing review may inspect repository records and host metadata,
+but it must not invoke .NET or NuGet, resolve packages, access feeds, or mutate source or
+user state.
 
 The current tree has exactly one semantic bundle at
 `docs/research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`, with a
@@ -143,18 +155,17 @@ initialization failure, remains durable evidence. The runner must atomically fai
 when recording the reviewed singleton; a partial or concurrently changed replacement
 must not become current.
 
-The repository owner approved `defer_to_first_production_run`. Activation means the
-reviewed runner, contract, schema, controls, and planned bundle are ready; review and hk
-do not install the SDK. The first supported WSL2 Linux x64 production run must exclusively
-create its dedicated toolchain root and install the bundle's locked SDK archive through
-the reviewed mise descriptor before any .NET metadata or experiment command runs. The
-`http:dotnet-sdk` tool remains disabled for ordinary mise installation, automation, and hk.
-The acquisition timing and WSL2 host dispositions remain in the governing Issue #1
-carrier:
+For the recorded run, the repository owner approved
+`defer_to_first_production_run`. That decision meant review and hk did not install the
+SDK; the first WSL2 Linux x64 production run exclusively created its dedicated toolchain
+root and installed the bundle's locked SDK archive through the reviewed mise descriptor
+before any .NET metadata or experiment command ran. The `http:dotnet-sdk` tool remains
+disabled for ordinary mise installation, automation, and hk. The acquisition timing and
+WSL2 host decisions for that recorded run remain in Issue #1:
 [SDK acquisition](https://github.com/hcoona/microsoft-authentication-cli/issues/1#issuecomment-5471951604)
 and
 [WSL2 host](https://github.com/hcoona/microsoft-authentication-cli/issues/1#issuecomment-5483552767).
-The trusted-base provisioning boundary remains in its
+The recorded run's trusted-base provisioning boundary remains in its
 [owner disposition](https://github.com/hcoona/microsoft-authentication-cli/issues/1#issuecomment-5486463259).
 
 #### Isolation and Execution Outcomes

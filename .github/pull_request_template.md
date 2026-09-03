@@ -4,9 +4,9 @@
 
 ## Authorization and Governing Records
 
-<!-- Link the accepted project-state envelope and relevant decision, requirement, or
-research finding. Link an Issue when one is the work carrier; do not create one solely
-to populate this section. -->
+<!-- Link the accepted Delivery Wave entry and relevant decision, requirement, or
+research finding. Link a separate work carrier when one is used; do not create one
+solely to populate this section. -->
 
 ## Scope and Non-Goals
 

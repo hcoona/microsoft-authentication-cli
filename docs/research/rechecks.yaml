@@ -5,7 +5,7 @@ governance:
   trigger_action: >-
     Complete the entry's required outcome and update or explicitly disposition every
     current record whose conclusion is materially affected.
-  fallback_review: Evaluate every entry at each phase transition.
+  fallback_review: Evaluate every entry when a merged change modifies docs/delivery-wave.md.
 
 rechecks:
   - id: RECHECK-001
@@ -13,8 +13,8 @@ rechecks:
     sources:
       - https://github.com/AzureAD/microsoft-authentication-cli/issues/464
     triggers:
-      - kind: stage-entry
-        value: contract-and-architecture
+      - kind: decision
+        value: interaction-policy
       - kind: release
         value: any
     required_outcome: >-
@@ -26,8 +26,8 @@ rechecks:
     sources:
       - https://github.com/AzureAD/microsoft-authentication-cli/issues/465
     triggers:
-      - kind: stage-entry
-        value: contract-and-architecture
+      - kind: decision
+        value: account-contract
       - kind: release
         value: any
     required_outcome: >-

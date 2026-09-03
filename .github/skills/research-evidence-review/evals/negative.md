@@ -12,5 +12,6 @@ host version, isolation procedure, expected observations, stop conditions, or cl
    WSL support; narrow the statement to the recorded environment and evidence type.
 2. A blocking safety finding: remove the private account identifier and replace the
    evidence with a sanitized observation.
-3. A blocking reproducibility finding: add an authorized protocol and the required
-   environment, isolation, stop, and cleanup information before relying on the result.
+3. A blocking reproducibility finding: require an accepted Delivery Wave entry and
+   protocol with the environment, isolation, finite bounds, stop, and cleanup information
+   before relying on the result.
