@@ -85,7 +85,7 @@ Temporary dual authorities are not an acceptable migration strategy.
 ### GOV-007: Trigger-Bound Deferral
 
 A scheduled mechanism must identify an observable activation trigger, an evaluator, the
-action to take when triggered, and a phase-transition fallback review.
+action to take when triggered, and a named fallback review event.
 
 A conditional mechanism must identify an observable trigger and fallback review. A
 speculative idea without a decision-relevant trigger is discarded rather than placed in
@@ -112,8 +112,8 @@ conclusion.
 ### GOV-010: Gates Require Evidence
 
 A claimed gate is effective only when its execution and result have a defined carrier.
-Examples include a GitHub review, a check result, a phase-transition pull request, a
-release manifest, or a tag.
+Examples include a GitHub review, a check result, a Delivery Wave change, a release
+manifest, or a tag.
 
 ### GOV-011: Separate Findings From Disposition
 
@@ -175,11 +175,12 @@ Review this governance system when:
 - a policy has no current consumer or enforcement point;
 - a control begins to expand policy;
 - a new contributor cannot recover the work model from the repository;
-- a phase transition exposes missing or duplicated authority;
+- a merged Delivery Wave change exposes missing or duplicated authority;
 - maintaining the governance system costs more than the failures it prevents.
 
-Every phase transition is a fallback opportunity to identify such conditions. A review
-that finds no required change does not create a separate report.
+Every merge that changes `docs/delivery-wave.md` is a fallback opportunity to identify
+such conditions. A review that finds no required change does not create a separate
+report.
 
 ## Conflict Resolution
 

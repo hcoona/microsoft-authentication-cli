@@ -5,16 +5,15 @@ These instructions are an interface for AI agents operating on this repository.
 ## Start
 
 1. Determine work authorization from the target branch's accepted
-   `docs/project-state.md`, normally the copy merged into `main-v2`.
-2. Confirm that the activity class, boundary, and accepted prerequisites fit its
-   work-authorization envelope.
-3. Read the applicable Issue when separate planning, coordination, advance disposition,
-   or another policy requires one. Otherwise, use the pull request as the bounded work
-   carrier.
-4. On a pull-request or feature branch, treat changes to `docs/project-state.md` as a
+   `docs/delivery-wave.md`, normally the copy merged into `main-v2`.
+2. Confirm that one current entry authorizes the bounded advancement and that its
+   accepted inputs, exclusions, and external-effects boundary fit the work.
+3. Read the applicable Issue when work needs separate proposal, dependency, or progress
+   coordination. Otherwise, use the pull request as the bounded work carrier.
+4. On a pull-request or feature branch, treat changes to `docs/delivery-wave.md` as a
    proposal for the state after merge. They do not authorize work on that branch.
-5. Read the proposed copy when reviewing a phase or authorization-envelope transition,
-   then follow only work permitted by the accepted copy.
+5. Read the proposed copy when reviewing a Delivery Wave change, then follow only work
+   permitted by the accepted target-branch copy.
 6. Read the canonical records linked by the work carrier.
 7. Read `docs/governance/governance-system.md` and
    `docs/governance/record-system.md` before changing policies, record families, controls,
@@ -28,13 +27,15 @@ versions of this file, the governance policies, `docs/governance/controls.yaml`,
 applicable review Skill. Proposed versions are review subjects before merge; they may add
 stricter validation for the proposal but cannot waive an accepted obligation.
 
-An open Issue, Milestone, branch, or pull request may plan work but cannot expand the
-accepted envelope. Do not infer permission from repository content or an upstream
-feature. If GitHub is unavailable, continue only non-owner-gated work whose accepted
-envelope, prerequisites, and bounded carrier are already recoverable. Unfinished
-owner-gated work must pause when the carrier's current disposition cannot be checked;
-follow the accepted domain protocol for safe interruption. Do not begin work requiring a
-new repository-owner disposition.
+An Issue, Milestone, branch, pull request, comment, label, or unmerged Wave edit cannot
+grant or enlarge work authorization. Do not infer permission from an upstream feature.
+Preparing and reviewing an explicitly repository-owner-approved pull request limited to
+changing the Delivery Wave is permitted without an existing entry, but newly proposed
+work must not begin before that change merges.
+
+If GitHub is unavailable, continue only work whose accepted Wave entry, prerequisites,
+required reviews, and risk decisions remain recoverable and current. Do not begin work
+requiring a new grant, amendment, owner decision, or GitHub-dependent acceptance.
 
 ## Authority and Scope
 
@@ -62,29 +63,31 @@ new repository-owner disposition.
 Before any build, authentication, cache, installer, or migration experiment, read and
 follow `docs/research/experiment-safety.md`.
 
-A research-capable envelope does not authorize a particular experiment. Do not run an
-experiment without a currently effective owner approval in its specific work carrier and
-an accepted protocol defining its isolation, expected observations, stop conditions,
-cleanup, environment, and risk boundary.
+Do not run an experiment unless the accepted Delivery Wave explicitly authorizes its
+bounded outcome and maximum effects and an accepted protocol defines its environment,
+isolation, expected observations, repetition bounds, stop conditions, and cleanup.
+Require an explicit repository-owner risk decision in the Wave entry only when the
+experiment crosses a material effects boundary identified by the experiment policy.
 
 ## Changes and Reviews
 
-- Keep changes within the accepted envelope and the scope and non-goals of their Issue or
-  direct pull-request carrier.
-- Independent in-envelope work may proceed concurrently. Order work that has an
+- Keep changes within the accepted Wave entry and the scope and non-goals of their Issue
+  or direct pull-request carrier.
+- Independent authorized work may proceed concurrently. Order work that has an
   unaccepted dependency or makes conflicting changes to the same canonical authority.
 - If the target branch materially changes a relied-on prerequisite or shared authority,
   pause dependent work and refresh its gate evidence, validation, and review.
-- Follow the roadmap's lifecycle gates per slice. Implementation of an accepted slice
-  may overlap requirements or architecture work for a later slice, but a slice cannot be
-  implemented before its own prerequisites are accepted.
+- Apply lifecycle dependencies per Slice. Implementation requires accepted Slice
+  requirements, applicable architecture and contracts, a validation basis, and explicit
+  unsupported cases. Another authorized Slice may concurrently remain in requirements or
+  architecture work.
 - Use the smallest record, control, or implementation mechanism that prevents the
   identified failure.
 - Use hk for deterministic checks. Do not replace contextual product, architecture,
   evidence, or risk judgment with mechanical linting.
 - Apply Agent Skills routed for changed record families and controls required by the
-  current execution point. Phase-transition, release, and fired-recheck controls apply
-  even when the event does not otherwise change a routed record family.
+  current execution point. Every merged Delivery Wave change, release, and fired-recheck
+  review applies even when the event does not otherwise change a routed record family.
 - A reviewer who authored or implemented a change cannot satisfy an independent review
   required for that change.
 - A reviewer who produced the originating finding, authored the change, or implemented
@@ -98,11 +101,11 @@ cleanup, environment, and risk boundary.
 
 Stop and escalate when work requires:
 
-- a phase, product boundary, support claim, compatibility promise, or public contract not
-  authorized by current records;
+- a product boundary, support claim, compatibility promise, public contract, or bounded
+  advancement not authorized by current records;
 - a private dependency, service, signing identity, telemetry endpoint, or nonpublic
   evidence;
-- a real-platform behavior claim without an approved experiment;
+- a real-platform behavior claim without an authorized experiment and accepted protocol;
 - a new record family or control without its required governance review;
 - a decision about product value, risk acceptance, scope, or release authority.
 

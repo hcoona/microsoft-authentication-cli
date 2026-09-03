@@ -7,8 +7,7 @@ is navigation, not an independent authority.
 
 | Audience | Authoritative subject | Canonical record |
 | --- | --- | --- |
-| Contributors, agents, and repository owner | Current phase, permitted work, and next decision | [`project-state.md`](project-state.md) |
-| Maintainers and contributors | Durable delivery stages and exit gates | [`roadmap.md`](roadmap.md) |
+| Contributors, agents, and repository owner | Current bounded work authorization | [`delivery-wave.md`](delivery-wave.md) |
 
 ## Product and Engineering
 
@@ -38,10 +37,10 @@ is navigation, not an independent authority.
 | --- | --- | --- |
 | Architects and research reviewers | Evidence for not using the v1 core as the v2 foundation | [`research/v1-architecture-audit.md`](research/v1-architecture-audit.md) |
 | Experiment authors and reviewers | Experiment authorization, isolation, safety, and evidence rules | [`research/experiment-safety.md`](research/experiment-safety.md) |
-| Phase 1 experiment authors and reviewers | Fixed solution targets, source dependencies, and stage applicability | [`research/public-build-source-baseline.json`](research/public-build-source-baseline.json) |
-| Phase 1 experiment authors and reviewers | Fixed source-level Lasso usage manifest | [`research/public-build-lasso-reference-manifest.json`](research/public-build-lasso-reference-manifest.json) |
-| Phase 1 experiment authors and reviewers | WSL2-Linux-x64 public-build singleton protocol and eventual embedded runtime evidence | [`research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`](research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json) |
-| Phase 1 experiment authors and reviewers | Retained public-only dependency inputs admitted by the current singleton receipt | [`AdoPat`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-adopat-net8-0.project.assets.json), [`MSALWrapper`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-msalwrapper-net8-0.project.assets.json), and [`TestHelper`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-testhelper-net8-0.project.assets.json) |
+| Public-build evidence maintainers and reviewers | Fixed solution targets, source dependencies, and build-stage applicability | [`research/public-build-source-baseline.json`](research/public-build-source-baseline.json) |
+| Public-build evidence maintainers and reviewers | Fixed source-level Lasso usage manifest | [`research/public-build-lasso-reference-manifest.json`](research/public-build-lasso-reference-manifest.json) |
+| Public-build evidence consumers and reviewers | Recorded WSL2-Linux-x64 public-build runtime evidence and its reproducibility contract | [`research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`](research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json) |
+| Public-build evidence maintainers and reviewers | Retained public-only dependency inputs admitted by the current singleton receipt | [`AdoPat`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-adopat-net8-0.project.assets.json), [`MSALWrapper`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-msalwrapper-net8-0.project.assets.json), and [`TestHelper`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-testhelper-net8-0.project.assets.json) |
 | Research and release reviewers | Mutable public facts and their recheck triggers | [`research/rechecks.yaml`](research/rechecks.yaml) |
 | Maintainers and upstream-source consumers | Upstream baseline and import policy | [`../UPSTREAM.md`](../UPSTREAM.md) |
 
@@ -67,10 +66,10 @@ is navigation, not an independent authority.
 | Control automation | Control catalog schema | [`controls.schema.json`](../schemas/governance/controls.schema.json) |
 | Packaging and runtime automation | Operational-identity registry schema | [`operational-identities.schema.json`](../schemas/governance/operational-identities.schema.json) |
 | Research automation | Mutable-source recheck schema | [`rechecks.schema.json`](../schemas/research/rechecks.schema.json) |
-| Phase 1 source-audit automation | Public-build source-baseline schema | [`public-build-source-baseline.schema.json`](../schemas/research/public-build-source-baseline.schema.json) |
-| Phase 1 source-audit automation | Public-build Lasso-reference schema | [`public-build-lasso-reference-manifest.schema.json`](../schemas/research/public-build-lasso-reference-manifest.schema.json) |
-| Phase 1 experiment automation | Retained `project.assets.json` evidence schema | [`public-build-assets-evidence.schema.json`](../schemas/research/public-build-assets-evidence.schema.json) |
-| Phase 1 experiment authors, runner, and reviewers | Strict-JSON planned/recorded public-build bundle lifecycle and runtime evidence contract | [`public-build-experiment-bundle.schema.json`](../schemas/research/public-build-experiment-bundle.schema.json) |
+| Public-build source-audit automation | Public-build source-baseline schema | [`public-build-source-baseline.schema.json`](../schemas/research/public-build-source-baseline.schema.json) |
+| Public-build source-audit automation | Public-build Lasso-reference schema | [`public-build-lasso-reference-manifest.schema.json`](../schemas/research/public-build-lasso-reference-manifest.schema.json) |
+| Public-build evidence automation | Retained `project.assets.json` evidence schema | [`public-build-assets-evidence.schema.json`](../schemas/research/public-build-assets-evidence.schema.json) |
+| Public-build evidence automation and reviewers | Strict-JSON recorded public-build evidence and historical lifecycle contract | [`public-build-experiment-bundle.schema.json`](../schemas/research/public-build-experiment-bundle.schema.json) |
 
 The root [`README.md`](../README.md) is the public landing page. The root
 [`AGENTS.md`](../AGENTS.md) is an AI-agent interface and is not human onboarding

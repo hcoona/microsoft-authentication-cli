@@ -85,34 +85,20 @@ families:
     failure_mode: Upstream provenance or compatibility is misrepresented.
     review_point: Pull requests that import or reinterpret upstream material
 
-  - id: project-state
+  - id: delivery-wave
     state: current
-    concern: Current roadmap stage and work-authorization envelope
+    concern: Current positive work authorization for a finite set of bounded advancements
     carrier: repository-file
-    path: docs/project-state.md
+    path: docs/delivery-wave.md
     format: markdown
     producer: Repository owner
     maintainer: Repository owner
     consumers:
       - Contributors and agents before executing work or accepting a prerequisite-dependent change
-    creation_trigger: Work must remain inside an explicitly authorized stage, activity class, boundary, and prerequisite set.
-    failure_mode: Work begins outside the accepted stage or envelope, or active Issue state becomes a second authorization ledger.
-    review_point: Every phase transition and material authorization-envelope change
-
-  - id: roadmap
-    state: current
-    concern: Durable stage model, slice lifecycle order, and minimum entry and exit gates
-    carrier: repository-file
-    path: docs/roadmap.md
-    format: markdown
-    producer: Repository owner
-    maintainer: Repository owner
-    consumers:
-      - Maintainers planning stage transitions
-      - Slice owners, implementers, and reviewers at preimplementation and completion gates
-    creation_trigger: The project requires more than one bounded delivery stage and incrementally gated slice.
-    failure_mode: Stage order, slice eligibility, or exit criteria are inferred from transient issue state or an incomplete gate.
-    review_point: Pull requests that change the stage model, slice lifecycle, or minimum entry and exit gates
+      - Repository owner and reviewers when adding, changing, deleting, or replacing authorized advancements
+    creation_trigger: Current work must be explicitly selected without allowing an Issue, Milestone, branch, or pull request to authorize itself.
+    failure_mode: Work begins without a current bounded grant, or progress and historical status become a second authorization ledger.
+    review_point: Every pull request that adds, changes, deletes, or replaces a Delivery Wave entry
 
   - id: governance-policy
     state: current
@@ -281,10 +267,10 @@ families:
     producer: Researcher
     maintainer: Research maintainer
     consumers:
-      - Research reviewers at every phase transition and when a recorded trigger fires
+      - Research reviewers when a recorded trigger fires and whenever a merged change modifies the current Delivery Wave
     creation_trigger: A mutable public source could materially change a current conclusion.
     failure_mode: A decision continues to rely on stale public behavior or guidance.
-    review_point: Recorded trigger events and every phase transition
+    review_point: Recorded trigger events and every merged Delivery Wave change
 
   - id: threat-model
     state: current
@@ -352,14 +338,14 @@ families:
     maintainer: Contract maintainer
     consumers:
       - Implementation owners, protocol-adapter maintainers, and validation reviewers when consuming a public contract
-    creation_trigger: Contract and Architecture work is authorized for a bounded interface.
+    creation_trigger: A bounded interface requires a versioned public contract before implementation.
     failure_mode: Consumers depend on undocumented or unstable wire behavior.
     review_point: Contract freeze and every compatible or breaking contract change
     activation:
-      trigger: A Phase 2 issue authorizes a public contract boundary.
+      trigger: An accepted Delivery Wave entry authorizes creating or freezing a bounded public contract.
       evaluator: Repository owner
       action: Create the versioned contract, schema checks, and applicable review procedure.
-      fallback_review: Every transition into or out of Contract and Architecture
+      fallback_review: Every merged Delivery Wave change
 
   - id: design-records
     state: scheduled
@@ -375,10 +361,10 @@ families:
     failure_mode: Material implementation choices remain implicit or fragmented across pull requests.
     review_point: Before implementation of the bounded design
     activation:
-      trigger: An authorized implementation issue meets the design creation trigger.
+      trigger: An accepted Delivery Wave entry authorizes implementation whose boundary meets the design creation trigger.
       evaluator: Architecture maintainer
       action: Create the design record and activate design review routing.
-      fallback_review: Every transition into Incremental Implementation and Validation
+      fallback_review: Every merged Delivery Wave change
 
   - id: public-build-source-baseline
     state: current
@@ -390,10 +376,10 @@ families:
     producer: Public-source auditor
     maintainer: Research maintainer
     consumers:
-      - Issue #1 experiment authors and the repository checker when constructing or validating dependency evidence
+      - Repository checker and research reviewers when reconstructing or validating the recorded dependency evidence
       - Research reviewers when comparing runtime records with the fixed upstream source
-    creation_trigger: The issue #2 owner disposition authorizes the immutable public-source audit for the issue #1 fixed commit before runtime experiment activation.
-    failure_mode: Experiment authors must reconstruct target and dependency identity from an opaque hash or omit a source-declared build input.
+    creation_trigger: The accepted issue #2 governance change authorized the immutable public-source audit used by the completed issue #1 experiment.
+    failure_mode: Current evidence consumers must reconstruct target and dependency identity from an opaque hash or may omit a source-declared build input.
     review_point: Changes that correct the fixed source audit or change the issue #1 audited commit
 
   - id: public-build-lasso-reference-manifest
@@ -406,43 +392,43 @@ families:
     producer: Public-source auditor
     maintainer: Research maintainer
     consumers:
-      - Issue #1 experiment authors mapping every Lasso source usage to an apparent responsibility
+      - Architecture and research reviewers mapping every Lasso source usage to an apparent responsibility
       - The repository checker and research reviewers validating coverage
-    creation_trigger: The issue #2 owner disposition authorizes the immutable public-source audit, and text-only package-name search omitted unqualified symbols imported from Lasso namespaces.
+    creation_trigger: The accepted issue #2 governance change authorized the immutable public-source audit, and text-only package-name search omitted unqualified symbols imported from Lasso namespaces.
     failure_mode: Lasso responsibility analysis can omit operational call sites while still matching an incomplete hash.
     review_point: Changes that correct source-reference attribution or change the issue #1 audited commit
 
   - id: public-build-experiment-bundles
     state: current
-    concern: Reviewed strict-JSON protocols and runner-produced runtime evidence for issue #1 public-build experiments
+    concern: Retained strict-JSON runtime evidence and reproducibility contract for the recorded issue #1 public-build experiment
     carrier: repository-file
     path: docs/research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json
     format: json
     schema: schemas/research/public-build-experiment-bundle.schema.json
-    producer: Experiment owner for planned form and the repository runner for recorded form
+    producer: Issue #1 experiment runner
     maintainer: Research maintainer
     consumers:
-      - Issue #1 experiment authors before execution and the fixed runner when validating the selected plan
-      - Issue #1 implementers and research reviewers when reproducing commands or evaluating dependency and public-build conclusions
-    creation_trigger: The issue #1 runtime activation change is reviewed for runner and contract readiness under the owner-approved first-run SDK acquisition and WSL2 host dispositions, before the first production experiment selection or toolchain root is created or any child process is executed.
-    failure_mode: A runtime experiment begins without a reviewed source binding, exact toolchain and runner identity, bounded command topology, fail-closed WSL2 host guard, isolated state, or dedicated pinned-SDK installation; a pre-experiment-root failure consumes the plan; or a post-side-effect failure is not retained as lifecycle evidence.
-    review_point: At activation readiness, before the first production execution and SDK installation, when conclusions are recorded, after a recorded bundle exists at the first proposed hash-bound runner, validator, contract, schema, extractor, NuGet-helper, or experiment-lock change, which must atomically choose a historical replay or record migration strategy with independent research-evidence review, and at every phase transition when research-evidence review reassesses recorded-component drift
+      - Repository checker and research reviewers reproducing the recorded command, dependency, and public-build conclusions
+      - Architecture and requirements reviewers relying on the bounded recorded evidence
+    creation_trigger: The completed issue #1 experiment produced runtime evidence cited by current research and architecture conclusions.
+    failure_mode: Current conclusions rely on runtime evidence whose source binding, command topology, isolation, component identity, or retained observations can no longer be reproduced.
+    review_point: When a current conclusion or reference changes, whenever a Delivery Wave entry proposes reliance on the bundle, and at the first proposed change to a hash-bound runner, validator, contract, schema, extractor, NuGet-helper, or experiment-lock component, which must atomically choose historical replay or record migration with independent research-evidence review
 
   - id: public-build-assets-evidence
     state: current
-    concern: Sanitized project.assets.json inputs retained for reproducible issue #1 dependency projections
+    concern: Sanitized project.assets.json inputs retained from issue #1 for reproducible dependency projections
     carrier: repository-files
     path: docs/research/experiments/assets/*.project.assets.json
     format: json
     schema: schemas/research/public-build-assets-evidence.schema.json
-    producer: Experiment owner
+    producer: Issue #1 experiment runner
     maintainer: Research maintainer
     consumers:
-      - The issue #1 assets extractor and repository checker when reproducing complete or partial dependency projections
+      - The retained assets extractor and repository checker when reproducing complete or partial dependency projections
       - Research reviewers validating project, runtime, package, and source claims against retained restore evidence
-    creation_trigger: An issue #1 restore produces a project.assets.json used by a recorded complete or partial dependency projection.
+    creation_trigger: The completed issue #1 restore produced project.assets.json inputs used by recorded dependency projections.
     failure_mode: A projection can remain internally consistent while omitting or misattributing topology from the restore artifact it claims to represent.
-    review_point: With each retained assets file and before its referencing experiment bundle is completed
+    review_point: When retained assets or their referencing recorded evidence are corrected, replayed, or migrated
 
   - id: validation-cases
     state: scheduled
@@ -461,4 +447,4 @@ families:
       trigger: A requirement or contract has a reusable scenario not covered by an existing record.
       evaluator: Validation maintainer
       action: Create the case and bind its execution evidence to the applicable gate.
-      fallback_review: Every transition into Incremental Implementation and Validation
+      fallback_review: Every merged Delivery Wave change

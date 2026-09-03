@@ -95,8 +95,8 @@ cross-process coordination under the request deadline.
 Behavioral obligations, including identity validation, interaction, deadlines, secure
 storage, output discipline, and trusted authority selection, are defined by the
 [`product requirements`](../product/requirements/product-boundary.md) and their sibling
-capability modules. Serialized contracts are scheduled for the Contract and Architecture
-stage.
+capability modules. Serialized contracts are created only when a future Delivery Wave
+entry authorizes a bounded public-contract outcome.
 
 ## Scoped Architecture Views
 

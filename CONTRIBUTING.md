@@ -7,14 +7,13 @@ within the current project boundary and work authorization.
 
 1. Read the [project record index](docs/README.md).
 2. Determine authorization from the target branch's accepted
-   [`docs/project-state.md`](docs/project-state.md), normally the copy on `main-v2`.
-3. Confirm that the change's activity class, boundary, and accepted prerequisites fit the
-   work-authorization envelope.
+   [`docs/delivery-wave.md`](docs/delivery-wave.md), normally the copy on `main-v2`.
+3. Confirm that one current entry authorizes the bounded advancement and that its
+   accepted inputs, exclusions, and external-effects boundary fit the work.
 4. Treat a working-branch change to that file as a proposal that cannot authorize
    additional work before merge.
-5. Read the applicable Issue when one carries advance owner disposition, coordination,
-   dependencies, an experiment, or stage-gate evidence. Otherwise, use the pull request
-   as the bounded work carrier.
+5. Read the applicable Issue when work needs separate proposal, dependency, or progress
+   coordination. Otherwise, use the pull request as the bounded work carrier.
 6. Read the canonical product, architecture, research, security, and validation records
    relevant to the change.
 
@@ -23,22 +22,32 @@ unpublished downstream evidence.
 
 ## Work Carriers and Concurrency
 
-Use a separate Issue when work requires advance owner disposition, spans multiple pull
-requests or contributors, coordinates dependencies, executes an experiment, or
-contributes evidence to a stage gate. A bounded, low-risk, single-PR change inside the
-accepted envelope may use the pull request itself as its work carrier.
+Use a separate Issue when work spans multiple pull requests or contributors, coordinates
+dependencies or progress, or benefits from separate proposal discussion. A bounded
+single-PR change may use the pull request itself as its work carrier when its accepted
+Wave entry already contains sufficient scope.
 
-An Issue or Milestone may plan future work but does not authorize execution outside the
-accepted envelope. Starting or completing an ordinary in-envelope Issue does not require
-a project-state update.
+An Issue, Milestone, branch, pull request, comment, label, or unmerged Wave edit does not
+grant or enlarge work authorization.
 
-Independent in-envelope work may proceed concurrently. Work remains ordered when it
+An explicitly repository-owner-approved pull request limited to adding, changing,
+deleting, or replacing Delivery Wave entries may be prepared and reviewed without an
+existing entry. Newly proposed work begins only after that change merges.
+
+Independent authorized work may proceed concurrently. Work remains ordered when it
 depends on an unaccepted result or changes the same canonical authority under conflicting
-assumptions. Under the [roadmap](docs/roadmap.md), implementation of an accepted slice
-may overlap requirements or architecture work for a later slice, but each slice must
-pass its own lifecycle gates in order. If the target branch materially changes a
-relied-on prerequisite or shared canonical authority, pause dependent work and refresh
-its gate evidence, validation, and review before merge.
+assumptions. Implementation requires accepted Slice requirements, applicable
+architecture and contracts, a validation basis, explicit unsupported cases, and every
+applicable domain precondition. Another authorized Slice may concurrently remain in
+requirements or architecture work. If the target branch materially changes a relied-on
+prerequisite or shared canonical authority, pause dependent work and refresh its gate
+evidence, validation, and review before merge.
+
+Before an experiment runs, its accepted Wave entry must bound the outcome and maximum
+effects and its accepted protocol must define environment, isolation, observations,
+repetition bounds, stop conditions, and cleanup. Repeated executions inside those bounds
+do not require another owner approval. A material effects boundary requires the owner
+risk decision defined by the experiment policy.
 
 ## Local Checks
 
@@ -69,7 +78,7 @@ path-based checks inspect the same tree Git will record.
 A pull request should:
 
 - state the repository outcome if merged;
-- link the accepted project-state envelope, any applicable Issue, and governing records;
+- link the accepted Delivery Wave entry, any applicable Issue, and governing records;
 - define its scope and material non-goals;
 - identify any record-system impact;
 - distinguish evidence from inference and decision;
