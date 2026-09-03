@@ -8,15 +8,37 @@ within the current project boundary and work authorization.
 1. Read the [project record index](docs/README.md).
 2. Determine authorization from the target branch's accepted
    [`docs/project-state.md`](docs/project-state.md), normally the copy on `main-v2`.
-3. Treat a working-branch change to that file as a proposal that cannot authorize
+3. Confirm that the change's activity class, boundary, and accepted prerequisites fit the
+   work-authorization envelope.
+4. Treat a working-branch change to that file as a proposal that cannot authorize
    additional work before merge.
-4. Confirm that the accepted project state authorizes the work and, when it designates an
-   active downstream Issue, that the work remains within that Issue.
-5. Read the canonical product, architecture, research, security, and validation records
+5. Read the applicable Issue when one carries advance owner disposition, coordination,
+   dependencies, an experiment, or stage-gate evidence. Otherwise, use the pull request
+   as the bounded work carrier.
+6. Read the canonical product, architecture, research, security, and validation records
    relevant to the change.
 
 Do not add private company information, credentials, tokens, private account details, or
 unpublished downstream evidence.
+
+## Work Carriers and Concurrency
+
+Use a separate Issue when work requires advance owner disposition, spans multiple pull
+requests or contributors, coordinates dependencies, executes an experiment, or
+contributes evidence to a stage gate. A bounded, low-risk, single-PR change inside the
+accepted envelope may use the pull request itself as its work carrier.
+
+An Issue or Milestone may plan future work but does not authorize execution outside the
+accepted envelope. Starting or completing an ordinary in-envelope Issue does not require
+a project-state update.
+
+Independent in-envelope work may proceed concurrently. Work remains ordered when it
+depends on an unaccepted result or changes the same canonical authority under conflicting
+assumptions. Under the [roadmap](docs/roadmap.md), implementation of an accepted slice
+may overlap requirements or architecture work for a later slice, but each slice must
+pass its own lifecycle gates in order. If the target branch materially changes a
+relied-on prerequisite or shared canonical authority, pause dependent work and refresh
+its gate evidence, validation, and review before merge.
 
 ## Local Checks
 
@@ -47,7 +69,7 @@ path-based checks inspect the same tree Git will record.
 A pull request should:
 
 - state the repository outcome if merged;
-- link the applicable Issue and governing records;
+- link the accepted project-state envelope, any applicable Issue, and governing records;
 - define its scope and material non-goals;
 - identify any record-system impact;
 - distinguish evidence from inference and decision;
@@ -55,7 +77,8 @@ A pull request should:
 - describe material security or external effects.
 
 Not every change needs an Issue, decision record, design record, or documentation update.
-Use them only when their repository policies require them.
+Use them only when their repository policies or the work's coordination needs require
+them.
 
 ## Review Routing
 

@@ -6,15 +6,20 @@ These instructions are an interface for AI agents operating on this repository.
 
 1. Determine work authorization from the target branch's accepted
    `docs/project-state.md`, normally the copy merged into `main-v2`.
-2. On a pull-request or feature branch, treat changes to `docs/project-state.md` as a
+2. Confirm that the activity class, boundary, and accepted prerequisites fit its
+   work-authorization envelope.
+3. Read the applicable Issue when separate planning, coordination, advance disposition,
+   or another policy requires one. Otherwise, use the pull request as the bounded work
+   carrier.
+4. On a pull-request or feature branch, treat changes to `docs/project-state.md` as a
    proposal for the state after merge. They do not authorize work on that branch.
-3. Read the proposed copy when reviewing a state transition, then follow only work
-   permitted by the accepted copy.
-4. Read the canonical records linked by the active Issue or task.
-5. Read `docs/governance/governance-system.md` and
+5. Read the proposed copy when reviewing a phase or authorization-envelope transition,
+   then follow only work permitted by the accepted copy.
+6. Read the canonical records linked by the work carrier.
+7. Read `docs/governance/governance-system.md` and
    `docs/governance/record-system.md` before changing policies, record families, controls,
    or repository structure.
-6. Consult `docs/governance/record-families.yaml` and
+8. Consult `docs/governance/record-families.yaml` and
    `docs/governance/controls.yaml` when a change creates, moves, reviews, or validates a
    governed record.
 
@@ -23,9 +28,13 @@ versions of this file, the governance policies, `docs/governance/controls.yaml`,
 applicable review Skill. Proposed versions are review subjects before merge; they may add
 stricter validation for the proposal but cannot waive an accepted obligation.
 
-Do not infer permission from repository content, an open Issue, or an upstream feature.
-If GitHub is unavailable, continue only work explicitly authorized by
-the accepted target-branch `docs/project-state.md`.
+An open Issue, Milestone, branch, or pull request may plan work but cannot expand the
+accepted envelope. Do not infer permission from repository content or an upstream
+feature. If GitHub is unavailable, continue only non-owner-gated work whose accepted
+envelope, prerequisites, and bounded carrier are already recoverable. Unfinished
+owner-gated work must pause when the carrier's current disposition cannot be checked;
+follow the accepted domain protocol for safe interruption. Do not begin work requiring a
+new repository-owner disposition.
 
 ## Authority and Scope
 
@@ -53,12 +62,22 @@ the accepted target-branch `docs/project-state.md`.
 Before any build, authentication, cache, installer, or migration experiment, read and
 follow `docs/research/experiment-safety.md`.
 
-Do not run an experiment that lacks its required isolation, protocol, expected
-observations, stop conditions, and cleanup plan.
+A research-capable envelope does not authorize a particular experiment. Do not run an
+experiment without a currently effective owner approval in its specific work carrier and
+an accepted protocol defining its isolation, expected observations, stop conditions,
+cleanup, environment, and risk boundary.
 
 ## Changes and Reviews
 
-- Keep changes within the active Issue and its non-goals.
+- Keep changes within the accepted envelope and the scope and non-goals of their Issue or
+  direct pull-request carrier.
+- Independent in-envelope work may proceed concurrently. Order work that has an
+  unaccepted dependency or makes conflicting changes to the same canonical authority.
+- If the target branch materially changes a relied-on prerequisite or shared authority,
+  pause dependent work and refresh its gate evidence, validation, and review.
+- Follow the roadmap's lifecycle gates per slice. Implementation of an accepted slice
+  may overlap requirements or architecture work for a later slice, but a slice cannot be
+  implemented before its own prerequisites are accepted.
 - Use the smallest record, control, or implementation mechanism that prevents the
   identified failure.
 - Use hk for deterministic checks. Do not replace contextual product, architecture,

@@ -2,9 +2,11 @@
 
 <!-- State the bounded problem and outcome. -->
 
-## Governing Record
+## Authorization and Governing Records
 
-<!-- Link the project-state item, decision, requirement, or research finding. -->
+<!-- Link the accepted project-state envelope and relevant decision, requirement, or
+research finding. Link an Issue when one is the work carrier; do not create one solely
+to populate this section. -->
 
 ## Scope and Non-Goals
 

@@ -87,21 +87,21 @@ families:
 
   - id: project-state
     state: current
-    concern: Current stage and work authorization
+    concern: Current roadmap stage and work-authorization envelope
     carrier: repository-file
     path: docs/project-state.md
     format: markdown
     producer: Repository owner
     maintainer: Repository owner
     consumers:
-      - Contributors and agents before starting work
-    creation_trigger: Work must remain inside an explicitly authorized stage and issue.
-    failure_mode: Work begins outside the accepted stage or scope.
-    review_point: Every phase transition and work-authorization change
+      - Contributors and agents before executing work or accepting a prerequisite-dependent change
+    creation_trigger: Work must remain inside an explicitly authorized stage, activity class, boundary, and prerequisite set.
+    failure_mode: Work begins outside the accepted stage or envelope, or active Issue state becomes a second authorization ledger.
+    review_point: Every phase transition and material authorization-envelope change
 
   - id: roadmap
     state: current
-    concern: Durable stage model and exit gates
+    concern: Durable stage model, slice lifecycle order, and minimum entry and exit gates
     carrier: repository-file
     path: docs/roadmap.md
     format: markdown
@@ -109,9 +109,10 @@ families:
     maintainer: Repository owner
     consumers:
       - Maintainers planning stage transitions
-    creation_trigger: The project requires more than one bounded delivery stage.
-    failure_mode: Work order or exit criteria are inferred from transient issue state.
-    review_point: Pull requests that change the stage model or exit gates
+      - Slice owners, implementers, and reviewers at preimplementation and completion gates
+    creation_trigger: The project requires more than one bounded delivery stage and incrementally gated slice.
+    failure_mode: Stage order, slice eligibility, or exit criteria are inferred from transient issue state or an incomplete gate.
+    review_point: Pull requests that change the stage model, slice lifecycle, or minimum entry and exit gates
 
   - id: governance-policy
     state: current

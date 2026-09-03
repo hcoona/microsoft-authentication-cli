@@ -264,11 +264,11 @@ controls:
     producer: Reviewer independent of the change author and implementation agent
     maintainer: Record-system maintainer
     consumers:
-      - Change author and repository owner during pull-request and phase-transition review
+      - Change author and repository owner during pull-request, authorization-envelope, and phase-transition review
     governing_rules:
       - docs/governance/governance-system.md
       - docs/governance/record-system.md
-    invariant: Changed record families retain one authority, real consumers, bounded lifecycle, and policy-aligned controls.
+    invariant: Changed record families and work-authorization envelopes retain one authority, real consumers, bounded lifecycle, and policy-aligned controls.
     runner: agent-skill
     implementation:
       kind: repository-path
@@ -285,11 +285,11 @@ controls:
     producer: Reviewer independent of the change author and implementation agent
     maintainer: Research maintainer
     consumers:
-      - Change author and repository owner during research, recheck-trigger, phase-transition, and release review
+      - Change author and repository owner during research, research-authorizing envelope changes, recheck-trigger, phase-transition, and release review
     governing_rules:
       - docs/research/experiment-safety.md
       - docs/governance/record-system.md
-    invariant: Research changes preserve source boundaries, evidence labels, reproducibility, and claim limits.
+    invariant: Research changes and research-authorizing envelope changes preserve source boundaries, specific experiment authorization, evidence labels, reproducibility, and claim limits.
     runner: agent-skill
     implementation:
       kind: repository-path
@@ -330,17 +330,16 @@ controls:
     producer: Repository owner
     maintainer: Repository owner
     consumers:
-      - Repository owner at the applicable issue closure or pull-request merge
+      - Repository owner at the applicable pull-request merge or phase transition
     governing_rules:
       - docs/governance/record-system.md#record-system-gate
       - docs/governance/governance-system.md#gov-010-gates-require-evidence
-    invariant: A record-system or phase-transition change is accepted only after its required mechanical and contextual evidence is reviewable.
+    invariant: A record-system, authorization-envelope, or phase-transition change is accepted only after its required mechanical and contextual evidence is reviewable.
     runner: human-owner
     implementation:
       kind: evidence-carrier
       value: Applicable pull request, check results, review records, and owner disposition
     execution_points:
-      - issue-closure
       - pull-request-merge
       - phase-transition
-    failure_mode: The repository accepts changed authority or phase state without evidence that its records and controls agree.
+    failure_mode: The repository accepts changed authority, work authorization, or phase state without evidence that its records and controls agree.
