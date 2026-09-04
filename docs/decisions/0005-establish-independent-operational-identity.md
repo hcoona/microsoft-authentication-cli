@@ -22,4 +22,5 @@ retention policy, and user control.
 - Final names do not block mechanism-neutral design or empirical research.
 - Packaging and persistence remain blocked until the namespace registry is resolved.
 - Install, logout, cleanup, and uninstall must leave upstream state untouched.
-- A compatibility shim or importer is explicit and optional.
+- A compatibility shim remains explicit and optional. V2 provides no upstream-state
+  importer under the current compatibility policy.

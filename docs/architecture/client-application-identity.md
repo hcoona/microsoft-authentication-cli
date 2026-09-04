@@ -69,7 +69,9 @@ constant.
 
 1. The authentication core accepts explicit client-application configuration.
 2. The core does not embed a client secret for a native public-client flow.
-3. Product or compatibility profiles are separate from the mechanism core.
+3. Built-in and caller-defined product or compatibility profiles use the same profile
+   structure and remain separate from the mechanism core. Selection follows
+   [`V2-REQ-018`](../product/requirements/request-identity-and-authority.md#v2-req-018-deterministic-profile-selection).
 4. A profile records the client ID, authority policy, expected account types, scopes,
    ownership statement, known limitations, per-platform redirect URIs, broker
    registration requirements, and any signing or bundle identity constraints.

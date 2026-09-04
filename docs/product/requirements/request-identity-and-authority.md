@@ -30,3 +30,12 @@ explicit field that conflicts with an enforced profile or trust constraint must 
 an invalid request rather than override that constraint. Host detection may report
 capabilities or unavailability but must not change caller intent for identity, authority,
 scope, acquisition, interaction, deadline, host, or cache behavior.
+
+## V2-REQ-018: Deterministic Profile Selection
+
+When a request uses a profile, an explicit request selection must take precedence over a
+configured default. If neither selects a profile, v2 must automatically select the sole
+available profile; zero or multiple candidates must fail as an invalid or ambiguous
+request. Built-in and caller-defined profiles must follow the same selection and
+constraint model. After selection, `V2-REQ-017` governs profile fields and caller
+overrides.
