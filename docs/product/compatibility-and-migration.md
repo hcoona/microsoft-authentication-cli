@@ -19,24 +19,10 @@ Any future v2 artifact must:
 
 ## Migration Rules
 
-No automatic token-cache takeover is permitted.
-
-A future importer, if accepted, must:
-
-- run only through an explicit command;
-- support a dry run;
-- identify every source record it proposes to read;
-- leave source data unchanged;
-- import nonsecret configuration separately from credentials;
-- translate account aliases to stable v2 account records only after verification;
-- refuse a client-ID or authority mismatch unless a specific migration rule exists;
-- be repeatable and interruptible;
-- support rollback without overwriting upstream state;
-- never import upstream telemetry configuration or device identifiers.
-
-PAT import is not part of a general migration. If PAT support is accepted, migration
-requires a separate security decision and should prefer issuing a new minimally scoped
-credential.
+V2 provides no importer for v1 configuration, aliases, account records, token caches,
+credentials, PATs, telemetry configuration, or device identifiers. The product must not
+read, modify, delete, or take over upstream state as migration. Users must configure v2
+independently and reauthenticate.
 
 ## Externally Owned Client Profile Gate
 

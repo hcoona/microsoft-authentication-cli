@@ -243,6 +243,20 @@ families:
     failure_mode: v2 reuses unsafe or unsuitable v1 structure without evidence.
     review_point: Pull requests that rely on or materially revise the v1 audit
 
+  - id: v1-public-contract-baseline
+    state: current
+    concern: Caller-visible AzureAuth v1 public-contract evidence used by v2 requirements authors
+    carrier: repository-file
+    path: docs/research/v1-public-contract-baseline.md
+    format: markdown
+    producer: Researcher
+    maintainer: Research maintainer
+    consumers:
+      - Requirements, compatibility, architecture, and validation maintainers
+    creation_trigger: V2 requirements analysis needs a fixed caller-visible v1 evidence baseline.
+    failure_mode: V1 behavior is omitted, misclassified, or elevated into a v2 product or compatibility commitment.
+    review_point: Pull requests that rely on or materially revise the v1 public-contract baseline
+
   - id: experiment-safety
     state: current
     concern: Isolation, evidence classification, and stop conditions for experiments

@@ -7,7 +7,8 @@ freeze command names, serialized contracts, platform support, or compatibility b
 
 The normative product boundary is defined by
 [`V2-REQ-001`](../product/requirements/product-boundary.md#v2-req-001-delegated-public-client-scope)
-and [`V2-REQ-002`](../product/requirements/product-boundary.md#v2-req-002-no-implicit-product-expansion).
+through
+[`V2-REQ-004`](../product/requirements/product-boundary.md#v2-req-004-one-authentication-request-per-process).
 This architecture allocates that behavior to a command-line authentication engine and
 separate downstream consumers under decision
 [`0004`](../decisions/0004-keep-the-authentication-engine-separate-from-consumers.md).
@@ -35,9 +36,9 @@ separate downstream consumers under decision
 | Token-only `TokenResult` | Replace with a versioned result preserving provider metadata. |
 | Exit `1` for most failures | Replace with a typed failure taxonomy and stable process mapping. |
 | Global environment interaction policy | Replace with per-request interaction policy. |
-| Implicit console-window discovery | Replace with explicit host capability and UI ownership. |
+| Implicit console-window discovery | Replace with v2-owned host capability and UI ownership; require a separate typed contract for an external-owner integration. |
 | MSAL, broker, browser, and device-code calls | Reuse or adapt behind mechanism interfaces. |
-| Platform secure-cache integration | Reuse selectively after threat-model and migration review. |
+| Platform secure-cache integration | Reuse selectively after threat-model and cache-lifecycle review. |
 | Packaging and release knowledge | Reuse as evidence; create independent v2 identities and channels. |
 | ADO PAT implementation | Defer behind a separate product-specific decision. |
 
@@ -74,13 +75,13 @@ global fallback strategy.
 
 ### Host Capabilities
 
-Describe broker, browser, terminal, parent-window, keyring, and process-host
+Describe broker, browser, terminal, v2-owned interaction, keyring, and process-host
 capabilities. WSL is explicit rather than inferred as generic Linux or Windows.
 
 ### Cache and Coordination
 
-Own cache namespace, secure storage, corruption behavior, logout, migration, and
-cross-process coordination under the request deadline.
+Own cache namespace, secure storage, corruption behavior, logout, v2 cache-version
+migration, and cross-process shared-state coordination under the request deadline.
 
 ## Architecture Invariants
 

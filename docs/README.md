@@ -36,6 +36,7 @@ is navigation, not an independent authority.
 | Audience | Authoritative subject | Canonical record |
 | --- | --- | --- |
 | Architects and research reviewers | Evidence for not using the v1 core as the v2 foundation | [`research/v1-architecture-audit.md`](research/v1-architecture-audit.md) |
+| Requirements, compatibility, architecture, and validation maintainers | Caller-visible AzureAuth v1 public-contract evidence | [`research/v1-public-contract-baseline.md`](research/v1-public-contract-baseline.md) |
 | Experiment authors and reviewers | Experiment authorization, isolation, safety, and evidence rules | [`research/experiment-safety.md`](research/experiment-safety.md) |
 | Public-build evidence maintainers and reviewers | Fixed solution targets, source dependencies, and build-stage applicability | [`research/public-build-source-baseline.json`](research/public-build-source-baseline.json) |
 | Public-build evidence maintainers and reviewers | Fixed source-level Lasso usage manifest | [`research/public-build-lasso-reference-manifest.json`](research/public-build-lasso-reference-manifest.json) |

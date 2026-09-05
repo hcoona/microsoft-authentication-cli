@@ -17,10 +17,15 @@ cache access, every authentication stage, and result validation.
 
 ## V2-REQ-016: Explicit Host Context
 
-A request requiring interactive work must provide or select a validated host context for
-the chosen mechanism. The context must identify ownership of the interactive surface and
-its completion channel, including a broker parent window, system-browser callback, or
-owned terminal where applicable.
+Before interactive work begins, v2 must establish a validated host context for the chosen
+mechanism from process-owned capabilities or the selected profile. The context must
+identify ownership of the interactive surface and its completion channel, including a
+system-browser callback or owned terminal where applicable.
+
+The native CLI request must not require the caller to supply an external UI owner or raw
+platform window handle. A mechanism and host combination that cannot establish safe
+ownership without such an integration remains unsupported until a separately accepted
+typed host contract defines that boundary.
 
 ## V2-REQ-020: Selected-Account Silent First
 
@@ -56,8 +61,7 @@ listener, lock, or controllable interactive surface may remain active. For an ex
 owned system-browser tab that the process cannot close, v2 must invalidate the pending
 flow and provide a safe terminal completion or error state.
 
-## V2-REQ-026: Cross-Process Interaction Coordination
+## V2-REQ-026: Retired - current authority: V2-REQ-041
 
-Equivalent concurrent requests must coordinate across processes so they do not
-independently create duplicate user interaction. Coordination waits must remain within
-the common deadline and cancellation scope defined by `V2-REQ-015`.
+Shared-state concurrency remains governed by `V2-REQ-041`. Suppressing duplicate
+interaction across separate CLI processes is not a product commitment.

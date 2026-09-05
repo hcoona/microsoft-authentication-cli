@@ -1,22 +1,18 @@
 # Quality, Build, and Validation Requirements
 
-## V2-REQ-050: Public Evidence
+## V2-REQ-050: Retired - current authority: docs/governance/project.md#public-record-boundary
 
-This identifier is reserved to preserve stable references established by issue #2 and
-must not be reused. Its former text combined repository evidence policy, now owned by
-[`project.md`](../../governance/project.md), with support-claim validation, now owned by
-[`strategy.md`](../../validation/strategy.md). It defines no independent product
-behavior.
+Public-source evidence policy is governed by the project record. Evidence required for a
+support claim is governed by the validation strategy.
 
-## V2-REQ-051: Real Platform Validation
+## V2-REQ-051: Retired - current authority: docs/validation/strategy.md#real-environment-tests
 
-Supported broker, browser, device-code, cache, and WSL behavior must be validated on the
-real operating-system and account-state combinations declared as supported.
+Real-platform support evidence is a validation obligation rather than product behavior.
 
-## V2-REQ-052: Dependency Upgrade Isolation
+## V2-REQ-052: Retired - current authority: docs/validation/strategy.md#dependency-upgrade-matrix
 
-MSAL, native broker, cache, and platform dependency upgrades must be independently
-testable, pinnable, and reversible.
+Dependency-upgrade isolation is an engineering and validation practice rather than
+product behavior.
 
 ## V2-REQ-053: Public Build Chain
 
@@ -24,9 +20,7 @@ V2 implementation and release builds must restore, build, test, and package from
 retrievable dependencies and fork-owned infrastructure. They must not require Microsoft
 private feeds, private service connections, or upstream signing systems.
 
-## V2-REQ-054: Isolated Experiments
+## V2-REQ-054: Retired - current authority: docs/research/experiment-safety.md#experiment-authorization
 
-Build, authentication, cache, installer, and migration experiments must follow the
-experiment-safety policy. Public-build claims must be tested without inherited
-credentials or package caches, and authentication experiments must not mutate unrelated
-user or upstream state.
+Experiment authorization and isolation are governed by the experiment-safety policy.
+The validation strategy governs the evidence needed for support claims.

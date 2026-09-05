@@ -11,8 +11,12 @@ establish broker, browser, secure-store, or WSL behavior.
 ### Contract Tests
 
 - Request and result schema versioning.
+- One request and one terminal outcome per native authentication process.
 - Stable serialization and stdout discipline.
 - Required fields, invalid combinations, and unknown-enum behavior.
+- Explicit profile selection overriding a configured default, configured defaults
+  overriding sole-candidate selection, and zero or multiple unresolved candidates
+  failing safely.
 - Explicit request fields overriding selected-profile and ambient defaults.
 - Selected-profile defaults overriding ambient defaults.
 - Enforced-profile and trust conflicts rejected as invalid requests.
@@ -29,6 +33,11 @@ establish broker, browser, secure-store, or WSL behavior.
   validation failure remaining terminal.
 - Claims retry preserving identity and deadline constraints.
 - Identity mismatch and ambiguity failing closed.
+- Host combinations that require an external UI owner or raw platform handle remaining
+  unsupported by the native CLI contract.
+- Network telemetry remaining disabled until explicitly configured, and export or flush
+  failure leaving the authentication result and process status unchanged within a finite
+  shutdown bound.
 
 ### Mechanism Tests
 
@@ -37,7 +46,8 @@ establish broker, browser, secure-store, or WSL behavior.
 - Broker interactive acquisition.
 - System-browser acquisition.
 - Device-code acquisition.
-- Cache read, write, logout, corruption, and migration behavior.
+- Cache read, write, logout, corruption, and v2 cache-version migration behavior.
+- Concurrent access to shared cache state preserving locking and update integrity.
 
 ### Real Environment Tests
 
@@ -73,8 +83,6 @@ For every supported mechanism:
 - prompt timeout;
 - parent-window unavailable;
 - interactive-surface owner or completion channel unavailable;
-- concurrent equivalent requests;
-- concurrent requests for different strict accounts.
 
 No-interaction tests must detect any broker, browser, device-code, or terminal surface,
 not merely an absent token.
@@ -83,7 +91,7 @@ not merely an absent token.
 
 | Platform or host | Required decision and evidence |
 | --- | --- |
-| Windows native | WAM availability, selected account, parent HWND, cancellation, cache, and multi-account behavior. |
+| Windows native | WAM availability, selected account, v2-owned interaction context, cancellation, cache, and multi-account behavior. |
 | WSL with native Linux broker | WSL version, broker package, native dependencies, keyring state, account UI, and failure modes. |
 | WSL invoking a Windows helper | Executable trust, protocol version, Windows configuration, UI ownership, timeout, and token transport. |
 | Linux headful | System browser, callback, secure store, and cancellation. |
@@ -110,18 +118,24 @@ combinations must be explicit and fail safely.
 
 ## Dependency Upgrade Matrix
 
-MSAL and native broker upgrades must be tested independently from unrelated product
-changes.
+Each MSAL, native broker, cache, and platform dependency upgrade, including native
+interop, must be independently testable, pinnable, and reversible. An evaluation must
+isolate the target upgrade and any directly required adaptation from unrelated product
+or dependency changes.
 
 At minimum:
 
-1. establish a known baseline source and dependency set;
-2. upgrade MSAL without other source changes;
-3. upgrade native interop without other source changes;
-4. exercise Windows, WSL, multiple-account, claims, cancellation, and cache states;
-5. record whether the failure belongs to v2 policy, MSAL, the native broker, or host
+1. establish a known baseline source and explicitly pinned dependency set;
+2. change one target dependency category per evaluation;
+3. verify that both the baseline and proposed versions can be selected through explicit
+   pins and tested independently;
+4. exercise the applicable Windows, WSL, multiple-account, claims, cancellation, cache,
+   secure-storage, and host states;
+5. record whether a failure belongs to v2 policy, MSAL, the native broker, cache, platform
+   integration, or host
    configuration;
-6. retain a documented rollback path.
+6. restore the prior pin, rerun the applicable matrix, and retain the verified rollback
+   path.
 
 The 0.9.5 to 0.9.6 public dependency change is an initial case study, not a presumed
 root cause.
@@ -135,7 +149,7 @@ A platform or mechanism is supported only when:
 - cancellation leaves no v2-owned task, listener, lock, or controllable prompt running;
   externally owned browser sessions can no longer complete the pending request;
 - output and diagnostics contain no secrets;
-- cache security and migration behavior are documented;
+- cache security and v2 cache-version migration behavior are documented;
 - a claimed headless-Linux repeated-noninteractive capability demonstrates compliant
   cross-invocation authentication-state reuse;
 - the exact client application and dependency versions are recorded;

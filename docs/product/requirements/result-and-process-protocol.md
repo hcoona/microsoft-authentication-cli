@@ -19,6 +19,9 @@ interaction required or blocked, consent or claims challenge, mechanism unavaila
 identity mismatch, cancellation, denial, network or service failure, timeout, cache
 failure, integrity failure, and internal failure.
 
+Public failure statuses must be defined by the action available to the caller and must
+not expose provider or platform exception types as the protocol taxonomy.
+
 ## V2-REQ-033: Opaque Access Tokens
 
 Identity correctness must not depend on parsing access-token claims. Access tokens must
