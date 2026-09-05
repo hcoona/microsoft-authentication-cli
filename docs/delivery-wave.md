@@ -15,65 +15,68 @@ proposal does not authorize any work it would add before merge.
 
 ## Authorized Advancements
 
-### Analyze and reconcile the AzureAuth V2 requirements baseline
+### Ground V2 requirements in the primary Git credential user story
 
-- **Work carrier:** [Issue #25](https://github.com/hcoona/microsoft-authentication-cli/issues/25)
+- **Work carrier:** [Issue #29](https://github.com/hcoona/microsoft-authentication-cli/issues/29)
+- **Prerequisite:** The requirements baseline proposed by
+  [PR #28](https://github.com/hcoona/microsoft-authentication-cli/pull/28) is accepted on
+  `main-v2`. If that prerequisite or another relied-on authority changes materially,
+  pause this advancement and refresh its scope and review.
+- **Accepted primary user story:** As a developer working with a personal Azure DevOps
+  Git repository while my Windows WAM default account is a corporate work account, I
+  want the Git credential adapter to request an Azure DevOps access token from the
+  AzureAuth Unofficial V2 authentication engine for the personal Microsoft account email
+  selected for that repository, so that Git operations do not silently authenticate as
+  the corporate account and can reuse valid authentication state without prompting when
+  it is available.
 - **Accepted inputs:** The product vision, requirements, compatibility policy,
   architecture, validation strategy, upstream policy, and public research records
-  accepted on `main-v2`; upstream commit
-  `de20930c34b3b86c8a0ed7bbdeeca3f662dae918`; upstream tags `0.9.5` and `0.9.6`; and
-  the current public sources named by `RECHECK-001`, `RECHECK-002`, and `RECHECK-007`,
-  solely for those fired rechecks.
-- **Accepted product dispositions:** Preserve the delegated public-client,
-  one-request-per-process boundary; strict caller constraints and result validation;
-  independent interaction permission; ordered acquisition and typed fallback;
-  end-to-end deadline and cancellation; a versioned typed machine protocol; secret
-  containment; secure explicit state policy; a public build chain; independent
-  operational identity; and no native V1 compatibility, importer, downstream
-  credential-provider behavior, or nondelegated identity flow. Retire cross-process
-  duplicate-interaction suppression as a requirement; clarify that supported
-  interactions do not require a caller-supplied external UI owner; and route dependency
-  upgrade and experiment procedure out of product requirements while retaining
-  established requirement identifiers.
-- **Conditional dispositions:** Define generic built-in and caller-defined profile
-  selection, configured-default, sole-candidate, and ambiguity behavior. Treat selection
-  or distribution of a Microsoft-owned Azure DevOps profile as unresolved until
-  `RECHECK-007` records current public guidance and recoverable, reproducible public
-  account-type behavior evidence; if public evidence is insufficient, retain an
-  empirical question for a separate Wave rather than selecting the profile. Retain
-  optional telemetry behavior with explicit network-export configuration, bounded
-  best-effort failure semantics, secret containment, and no upstream telemetry identity;
-  route OpenTelemetry itself to later architecture work.
-- **Authorized advancement:** Analyze the V2 requirements from the core caller outcome
-  through product, security, state, operability, compatibility, and support boundaries.
-  Inspect the fixed public V1 source scope where it supplies decision-relevant evidence,
-  evaluate the fired `RECHECK-001`, `RECHECK-002`, and `RECHECK-007` through public desk
-  evidence, preserve evidence type and confidence, and apply the accepted dispositions
-  above to the canonical requirement authorities. Later Issue edits, comments, or owner
-  dispositions cannot enlarge these inputs or outcomes without an accepted Delivery Wave
-  amendment.
-- **Bounded outcome:** One recoverable public authority for the material caller-visible
-  V1 contract evidence and one coherent V2 requirements baseline. The baseline may
-  amend canonical product requirements, product compatibility policy, validation
-  obligations, and directly affected existing consumer records only as needed to:
-  preserve accepted behavior; clarify or add required behavior; retire a nonrequirement;
-  record an explicit `drop` or `unsupported` disposition; or route an architecture,
-  implementation, consumer, or separately proposed empirical question to its proper
-  authority without deciding it. A Microsoft-owned client-profile selection remains
-  unresolved unless the desk-evidence outcome required by `RECHECK-007` is sufficient.
-  The interaction-policy and account-contract requirements cannot be finalized until
-  the outcomes required by `RECHECK-001` and `RECHECK-002` are recorded.
-- **Acceptance condition:** The research authority, material evidence-to-disposition
-  mappings, canonical requirement changes, and directly affected record updates are
-  accepted on `main-v2`. Every retained requirement states product behavior rather than
-  research, validation, architecture, or engineering procedure, and the applicable
+  accepted on `main-v2`; Microsoft Learn public documentation for single-tenant and
+  multitenant applications and tenant-scoped identity-platform endpoints; and public
+  MSAL.NET documentation and source solely to evaluate whether a strict-email account can
+  be resolved before silent acquisition. Later Issue edits, comments, or owner
+  dispositions cannot enlarge this entry. Mutable public sources must be recorded with
+  recoverable provenance and must not be presented as runtime evidence.
+- **Accepted product dispositions:** Treat the accepted primary user story as a
+  first-release blocking scenario while keeping the Git credential adapter outside the
+  authentication engine. Require a strict request email, pre-resolved account selection
+  before silent acquisition, and terminal validation of the provider-observed email; do
+  not expose a stable account identifier or Account Kind selector, infer a hidden account
+  binding, or use an identity-opaque operating-system default. Define Client Profiles
+  around stable public-client application and platform integration rather than a
+  resource preset; keep scopes in each request; bind each profile to one authority cloud;
+  and minimize exact tenant-GUID input by using fixed tenant policy for single-tenant
+  clients and `common` by default for eligible multitenant clients. Retain explicit
+  per-request interaction policy, one finite product deadline, selected-account
+  silent-first behavior, strict terminal identity failures, one access token per result,
+  secure product-owned state policy, and no first-version Logout, Cache Clear, Force
+  Refresh, Resource/CAE claims round trip, or Account List.
+- **Authorized advancement:** Establish a concise Product User Stories authority for the
+  primary journey and continue bounded repository-owner requirements elicitation for
+  that journey from core identity and token outcomes through interaction, state,
+  process-result, privacy, compatibility, and support behavior. Reconcile the accepted
+  decisions into capability-scoped product requirements and their directly affected
+  validation, compatibility, security, architecture-consumer, record-family, and
+  navigation records. Preserve the distinction among user context, normative behavior,
+  architecture choices, public-source findings, and runtime evidence.
+- **Bounded outcome:** One canonical Product User Stories record whose first entry
+  captures the primary launch journey without duplicating normative requirements; one
+  coherent requirements baseline derived from that journey; and atomic updates to the
+  existing records that directly consume those requirements. Existing requirement
+  identifiers remain unique and are amended or retired under the record-system policy.
+  Architecture candidates may be routed to later work but not selected here.
+- **Acceptance condition:** The user story, requirements, validation obligations,
+  evidence limits, record-family routing, and direct consumer updates are accepted on
+  `main-v2`. Every retained requirement states observable product behavior, every
+  support-blocking empirical question remains explicitly gated, and the applicable
   independent research-evidence, record-system, requirements, consistency, and
   minimality reviews have no unresolved material findings.
 - **Excluded:** Executing AzureAuth, MSAL, broker, cache, installer, migration, restore,
-  build, test, or packaging experiments; freezing a public request, result, process, or
-  wire contract; selecting an implementation Slice or support matrix; architecture or
-  implementation selection; production code or upstream imports; compatibility adapters,
-  migration tooling, packaging, release, or current support claims; private evidence;
-  and downstream credential-provider or host behavior.
-- **External effects:** None. This advancement is limited to public-source inspection and
-  repository records.
+  build, test, packaging, or authentication experiments; selecting or implementing a
+  Client Profile, Profile file format or storage lifecycle, public wire schema,
+  implementation Slice, platform support matrix, Git credential adapter, compatibility
+  adapter, migration tool, package, release, or current support claim; production code
+  or upstream imports; private evidence; and downstream Git protocol behavior.
+- **External effects:** Public-source retrieval and normal GitHub Issue, pull-request,
+  review, and repository-record operations only. No authentication, account, tenant,
+  cache, build, installation, or resource effects are permitted.
