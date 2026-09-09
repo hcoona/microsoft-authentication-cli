@@ -27,10 +27,20 @@ state. Reuse remains subject to unique real-account pre-resolution and final val
 under `V2-REQ-020` and `V2-REQ-022`, interaction permission, and the original deadline.
 An OS sign-in alone does not establish that these conditions can be satisfied.
 
-When V2 acquires and validates an access token but cannot safely persist reusable state,
-it must return success with a machine-readable persistence warning rather than fail the
-authentication result. A later invocation with usable state remains subject to
-selected-account silent-first acquisition under `V2-REQ-013` and `V2-REQ-020`.
+Once acquisition and all required success validation complete within the original
+deadline, V2 must not wait for reusable-state persistence before delivering the result.
+When safe persistence has failed or is not confirmed complete at result delivery, V2
+must return success with a machine-readable persistence warning rather than wait or fail
+solely because of persistence. The incidental
+deadline-expiry latitude in `V2-REQ-015` still applies; persistence status must not
+override cancellation, denial, or validation failure.
+
+Unfinished V2-controlled persistence work must end with the request under `V2-REQ-025`;
+it must not continue in the background for an ended request. This does not select an
+asynchronous mechanism or a storage lifecycle.
+
+A later invocation with usable state remains subject to selected-account silent-first
+acquisition under `V2-REQ-013` and `V2-REQ-020`.
 
 Concurrent processes sharing authentication state must preserve locking and atomic-update
 integrity and observe consistent state. This does not promise cross-process interaction

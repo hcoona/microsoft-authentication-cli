@@ -25,9 +25,19 @@ It must not expose a caller-selected prompt-type whitelist.
 
 Every authentication request must have a finite overall deadline, specified by the caller
 or supplied by a documented product default. The same deadline must cover account
-resolution, state access, lock waiting, authentication, retries, fallback, and result
-validation. No stage may restart or extend that deadline. If the deadline expires before
-completion, V2 must stop acquisition and return a timeout outcome.
+resolution, state access, lock waiting, authentication, retries, fallback, result
+validation, and persistence. No stage may restart or extend that deadline.
+If acquisition and all required success validation have not completed when the deadline
+expires, V2 must stop acquisition and return a timeout outcome.
+
+If acquisition and all required success validation completed before expiry, but an
+incidental deadline expiry occurs before result delivery, V2 may return either the
+validated success or a timeout outcome. The first version does not require a fixed
+precedence between those outcomes. Result content and exit status must remain consistent
+under `V2-REQ-030` and `V2-REQ-035`, including the persistence warning under `V2-REQ-041`
+when applicable. This latitude does not permit waiting for persistence, extending the
+deadline, or overriding cancellation, denial, or validation failure under `V2-REQ-022`
+and `V2-REQ-023`.
 
 Caller overrides must remain within documented product limits. The first version must
 not expose an unbounded mode or a Client Profile deadline default.

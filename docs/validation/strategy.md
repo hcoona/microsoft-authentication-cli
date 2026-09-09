@@ -92,7 +92,8 @@ This strategy records proof obligations, not an executable experiment protocol.
   association without literal returned-scope matching or access-token parsing; rejection
   of mixed dynamic permissions and `/.default`.
 - One finite total deadline across resolution, locks, state, authentication, retries,
-  fallback, and validation; bounded caller override, no profile default or timer reset.
+  fallback, validation, and persistence; bounded caller override, no profile default or
+  timer reset.
 - Host combinations that require an external UI owner or raw platform handle remaining
   unavailable under the native CLI contract.
 - Unusable state treated as a miss and never consumed; recovery preserving request
@@ -101,8 +102,9 @@ This strategy records proof obligations, not an executable experiment protocol.
   or V2-created cache; strict pre-resolution and terminal validation still required.
 - A change of consumer, package ecosystem, or working repository alone not causing
   another sign-in when valid, safe state can satisfy the otherwise compatible request.
-- Validated access-token success plus a machine-readable warning when safe persistence
-  fails; no plaintext fallback or caller/profile cache modes.
+- Validated result delivery not waiting for persistence; success carries a
+  machine-readable warning when safe persistence fails or is not confirmed complete.
+  No plaintext fallback or caller/profile cache modes.
 - Network telemetry remaining disabled until explicitly configured, and export or flush
   failure leaving the authentication result and process status unchanged within a finite
   shutdown bound.
@@ -257,7 +259,21 @@ journey gate. Unsupported combinations must be explicit and fail safely.
 - Locked, missing, corrupt, undecryptable, incompatible, or permission-invalid state.
 - Secure storage unavailable under the product state policy, without plaintext fallback;
   validated token plus persistence failure, safe recovery, and retained deadline.
-- Process cancellation during lock wait and each mechanism.
+- Acquisition and all required success validation complete with persistence still
+  pending and no deadline expiry: return success, the validated token, a persistence
+  warning, and zero exit status without waiting for persistence or the deadline.
+- Incidental deadline expiry after acquisition and all required success validation
+  completed within budget but before result delivery: accept either validated success
+  or timeout under `V2-REQ-015`, without requiring a particular completion ordering.
+  Success carries the token, zero exit status, and a persistence warning if safe
+  persistence failed or is unconfirmed; timeout carries no token and the common nonzero
+  exit status. Neither outcome extends the deadline or leaves V2-controlled persistence
+  work running after the request ends.
+- Acquisition or required success validation incomplete at deadline expiry: return
+  timeout without a token and with the common nonzero exit status; late results cannot
+  resume the ended request.
+- Process cancellation during lock wait and each mechanism, including while persistence
+  is pending after validation; persistence status cannot override cancellation.
 - Dependency exception not recognized by the policy layer.
 - Process output overflow, malformed output, or diagnostic contamination.
 
