@@ -3,8 +3,39 @@
 This record defines the evidence required before v2 can claim support. No implementation
 or release currently satisfies these gates.
 
-Unit tests are necessary for policy and serialization, but simulated tests alone cannot
-establish broker, browser, secure-store, or WSL behavior.
+Scenario tests provide the main coverage of business behavior. Focused unit and contract
+tests protect core rules and public behavior, while targeted real-environment tests cover
+properties that simulation cannot establish.
+
+## Test Design and Evidence Selection
+
+Organize most business-behavior coverage around the user journeys and the account,
+interaction, reuse, and failure scenarios below. Exercise the application boundary with
+controlled dependency substitutes where practical, and assert caller-visible outcomes
+and required side effects. Scenario tests need not contact a service, open real UI, or
+run the entire deployed system.
+
+Use focused unit tests for core algorithms and functions whose correctness warrants
+precise protection, such as strict account matching, scope satisfaction, terminal versus
+retryable classification, and deadline transitions. Protect serialized public behavior
+with contract tests. Avoid locking ordinary orchestration code to private method calls,
+mock call counts, class layouts, or incidental internal ordering. Required ordering, such
+as selected-account silent acquisition before interaction, remains observable behavior to
+test. A behavior-preserving refactor should not require rewriting business expectations.
+
+The layers and matrices below describe coverage responsibilities, not a requirement to
+repeat every case at every test level. Choose the least costly level that establishes
+the property. Rely on documented dependency contracts for behavior delegated to that
+dependency; test the engine's use of the contract and the integration assumptions that
+could change an architectural choice. Do not attempt to re-prove an operating system or
+provider through an exhaustive mock suite.
+
+Use public desk evidence when it answers a decision-relevant question. Real broker,
+browser, secure-store, and WSL behavior still require the applicable bounded observations
+before support is claimed; simulated success cannot supply that evidence. This strategy
+does not waive the primary-journey gate, required rechecks, experiment authorization, or
+accepted protocols. Evidence depth should reflect the decision, credible failure, and
+cost, rather than an arbitrary unit-test count or coverage target.
 
 ## Primary Journey Gate
 

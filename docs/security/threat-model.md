@@ -12,6 +12,32 @@ threat model.
 The project does not claim to protect secrets after the current operating-system user
 session, administrator, kernel, or authentication broker is fully compromised.
 
+## Security Design Tradeoffs
+
+Evaluate a mitigation against a concrete scenario, protected asset, credible attacker or
+failure, and the trust boundary it crosses. Compare the risk reduction with implementation
+complexity, ongoing maintenance, and operational cost. Prefer the smallest mechanism that
+satisfies the accepted security requirements; speculative attack chains outside this
+workstation threat model do not justify unlimited application hardening.
+
+Within the stated threat model, rely on the documented protections of the operating
+system, maintained authentication libraries, broker, and platform-secure storage. Review
+the application's configuration and use of those contracts rather than building a second
+implementation of their security guarantees. Missing or contradictory capability
+evidence remains an integration question, not a reason to assume a stronger guarantee.
+
+If the required trust or safety conditions cannot be established, fail closed at the
+affected boundary using the existing result taxonomy. Bound recovery and cleanup to
+state the engine owns and the effects it is authorized to perform. Do not broaden access,
+repair unrelated account state, or invent additional services to handle an extreme case.
+This preserves the requirements' permitted cache-miss recovery and validated success
+with a persistence warning; those outcomes do not expose an unvalidated token.
+
+Cost is not permission to weaken an accepted requirement. If a required journey cannot
+be realized under these assumptions at reasonable cost, present the limitation and
+tradeoff for repository-owner disposition. A broader threat model, reduced security
+guarantee, or expanded product boundary needs an explicit accepted decision.
+
 ## Protected Assets
 
 - Access tokens, refresh-token cache material, authorization codes, and device codes.

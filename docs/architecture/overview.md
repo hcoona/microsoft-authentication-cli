@@ -24,6 +24,62 @@ separate downstream consumers under decision
 - [`0005`](../decisions/0005-establish-independent-operational-identity.md) requires
   independent runtime and distribution identities.
 
+## Design Principles
+
+### Explicit Assumptions and Dependency Responsibilities
+
+Base each design on the accepted requirements, concrete user scenarios, and the documented
+contracts of its dependencies. Identify the assumptions that could invalidate a choice
+and the boundary responsible for satisfying them. Rely on supported operating-system,
+MSAL, broker, and secure-store abstractions within their declared contracts; the engine
+does not need to independently reimplement or mechanically prove those abstractions.
+
+The engine remains responsible for its request constraints and required result checks.
+Trust in a dependency does not establish an undocumented capability or prove that a
+particular profile and host combination satisfies those constraints. When a required
+capability is absent, keep that path unavailable. When the limitation blocks a required
+journey, report the feasibility gap for owner disposition rather than silently weakening
+the requirement or compensating through an expanded application boundary.
+
+### Scenario-Driven Abstractions
+
+Introduce a component, interface, or extension point only when a current scenario,
+responsibility boundary, or independently changing dependency justifies it. Evaluate the
+abstraction against the primary journey and another applicable scenario or failure path;
+do not invent future consumers to justify generality. A conceptual responsibility does
+not automatically require a separate service, package, interface, or class.
+
+Keep design and implementation inside the accepted product boundary. Additional consumer
+protocols, platform services, or compatibility behavior require an explicit owner scope
+decision and the applicable accepted work authorization before work begins.
+
+### Bounded Failure and Proportionate Assurance
+
+When an edge case prevents establishing a required safety condition, use the existing
+terminal outcome or mark the path unavailable. Do not add unbounded retries, fallback
+chains, or speculative repair mechanisms to make every environment succeed. Apply the
+accepted recovery and persistence semantics where the requirements already permit a safe
+outcome; fail-closed behavior does not turn every recoverable condition into failure.
+
+The [threat model](../security/threat-model.md#security-design-tradeoffs) owns security
+assumptions and mitigation tradeoffs. The
+[validation strategy](../validation/strategy.md#test-design-and-evidence-selection)
+owns the balance of scenario, unit, contract, and real-environment evidence. Neither
+mechanical checks nor exhaustive testing substitutes for contextual design judgment.
+
+### Architecture Views
+
+Use standard C4 system-context and container views, with component views where they
+clarify responsibilities inside a container. A C4 container denotes an application or
+data store, not necessarily a deployment container. Use UML sequence and state-machine
+views for interactions and lifecycles whose ordering or termination matters. Keep each
+diagram at one stated level and consistent with the surrounding authoritative text.
+
+Choose diagrams for a concrete reader question; a complete diagram catalog is not a
+deliverable. The existing user stories, capability requirements, and validation scenarios
+provide the requirements basis. Add a use-case diagram only if it resolves an actual
+ambiguity about actors, goals, or the system boundary.
+
 ## Replace and Reuse
 
 | V1 area | V2 direction |
