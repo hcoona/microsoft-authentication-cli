@@ -51,6 +51,10 @@ guarantee, or expanded product boundary needs an explicit accepted decision.
 
 ## Trust Boundaries
 
+The [request lifecycle view](../architecture/request-lifecycle.md#request-context-and-trust)
+allocates application and dependency responsibilities across these boundaries. This
+threat model owns their security assumptions and mitigation tradeoffs.
+
 - Calling process to CLI protocol boundary.
 - CLI process to MSAL and native broker.
 - Process to browser, device-code terminal, or other interactive surface.

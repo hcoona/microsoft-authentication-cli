@@ -1087,6 +1087,39 @@ The actual #31 merged-Wave fallback evaluated all seven entries in the independe
 review linked above. This proposal does not change the Wave. Any later merged-Wave,
 release, or newly fired source-relevant trigger still requires its applicable review.
 
+### Architecture Boundary Recheck Assessment
+
+The high-level architecture allocation under Issue #35 continues the interaction,
+account, and cache decision concerns. A desk refresh on **2026-09-09 UTC** inspected the
+named public sources for RECHECK-001, RECHECK-002, and RECHECK-006:
+
+| Entry and source | Retrieved public state | Bounded decision impact |
+| --- | --- | --- |
+| RECHECK-001: [Issue #464](https://github.com/AzureAD/microsoft-authentication-cli/issues/464) | Open, zero comments; `updated_at = 2026-08-17T21:12:04Z`. The Issue API and first comments page were read; the comments page was empty. | The named source remains an unanswered interaction-policy request, not a documented upstream no-interaction contract. Preserve separate engine policy and provider operations. |
+| RECHECK-002: [Issue #465](https://github.com/AzureAD/microsoft-authentication-cli/issues/465) | Open, zero comments; the public page's embedded issue metadata reports `updatedAt = 2026-08-27T22:02:13Z`. | No new resolution in this carrier changes the fixed-source strict-selection findings. Preserve real-account resolution and final authoritative result validation. |
+| RECHECK-006: [Issue #398](https://github.com/AzureAD/microsoft-authentication-cli/issues/398) | Open, zero comments; the public page's embedded issue metadata reports `updatedAt = 2024-08-13T16:18:59Z`. | The accepted bounded report remains unresolved. It does not demonstrate current dependency behavior or select a store, plaintext fallback, or supported platform. |
+
+Authenticated upstream API retrieval was unavailable because of organization SAML
+enforcement. Anonymous Issue #464 API retrieval succeeded; subsequent anonymous API
+retrieval hit a rate limit, so the refresh used the public HTML pages for #465 and #398.
+The latter snapshots establish the Issue state and comment count, not a new runtime
+observation or a fresh audit of upstream implementations. Raw #398 diagnostics were not
+retained. The earlier source findings and their limitations remain authoritative for
+their recorded versions.
+
+For this architecture boundary allocation, the three desk outcomes preserve the accepted
+requirements and source-reuse dispositions. They do not establish that a particular
+provider exposes the needed account metadata, persistence separation, or no-UI behavior.
+Those decision-critical premises remain open in the
+[architecture](../architecture/overview.md#decision-critical-open-questions).
+
+RECHECK-003, RECHECK-004, and RECHECK-005 do not fire: no WSL, system-browser, or
+Linux-broker workstream is selected by the mechanism-neutral views. RECHECK-007's
+account-type prerequisite remains unresolved; no profile is selected or enabled, and
+its dated public-guidance finding below is not refreshed by these Issue snapshots. There
+is no release or Wave change. Later selections and fired triggers still require their
+applicable outcomes and independent evidence review.
+
 ### `RECHECK-007`: Azure DevOps Microsoft-account behavior
 
 **Required outcome:** Record current public guidance and reproducible account-type

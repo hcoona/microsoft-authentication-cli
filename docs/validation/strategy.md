@@ -68,6 +68,11 @@ This strategy records proof obligations, not an executable experiment protocol.
 
 ## Validation Layers
 
+The [architecture allocation](../architecture/overview.md#user-goal-allocation) and
+[request lifecycle views](../architecture/request-lifecycle.md) identify the application
+boundaries and paths exercised by these scenarios. Their diagrams are design views, not
+evidence that a mechanism or platform passes the corresponding tests.
+
 ### Contract Tests
 
 - Explicit command-line request versioning; unsupported majors and invalid arguments
