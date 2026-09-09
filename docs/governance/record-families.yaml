@@ -173,6 +173,21 @@ families:
     failure_mode: Requirements or implementation expand without a product basis.
     review_point: Pull requests that change product purpose or scope
 
+  - id: product-user-stories
+    state: current
+    concern: User context and motivation for product requirements
+    carrier: repository-file
+    path: docs/product/user-stories.md
+    format: markdown
+    producer: Repository owner with consumer input
+    maintainer: Repository owner
+    consumers:
+      - Requirement authors and reviewers when deriving behavior from user goals and scenario context
+      - Validation and release reviewers when identifying the scenario whose evidence blocks release
+    creation_trigger: The accepted Delivery Wave requires user goals and a primary journey that the capability requirements do not preserve.
+    failure_mode: SDK mechanisms or implementation candidates displace the real consumer need, or stories become duplicate normative requirements.
+    review_point: Pull requests that change user journeys or their relationship to requirements and validation
+
   - id: compatibility-policy
     state: current
     concern: Current compatibility and migration commitments

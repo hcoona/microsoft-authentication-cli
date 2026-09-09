@@ -12,6 +12,7 @@
 Start with:
 
 - [Product purpose and boundary](docs/product/vision.md)
+- [User goals and primary journey](docs/product/user-stories.md)
 - [Current authorized work](docs/delivery-wave.md)
 - [Project record index](docs/README.md)
 - [Human contribution workflow](CONTRIBUTING.md)

@@ -46,35 +46,44 @@ This fork does not own or control that registration. V2 may provide an explicitl
 compatibility profile that uses it. Product identity, support, strict-result, and fallback
 behavior are governed by
 [`V2-REQ-003`](../product/requirements/product-boundary.md#v2-req-003-unofficial-product-identity),
-[`V2-REQ-022`](../product/requirements/strategy-interaction-and-host.md#v2-req-022-strict-identity-postcondition),
+[`V2-REQ-022`](../product/requirements/strategy-interaction-and-host.md#v2-req-022-strict-result-identity),
 [`V2-REQ-023`](../product/requirements/strategy-interaction-and-host.md#v2-req-023-classified-fallback),
 and decision
 [`0003`](../decisions/0003-treat-client-registration-as-an-external-dependency.md).
 
 ## Azure DevOps and Microsoft Accounts
 
-Current Azure DevOps guidance states that Microsoft Entra applications do not natively
-support Microsoft account users for the Azure DevOps resource. The upstream source proves
-that AzureAuth uses a Microsoft-owned Visual Studio client; it does not by itself prove
-the current MSA behavior, intended reuse, or support status of that registration for this
-fork. Those properties require rechecking and runtime validation.
-
-See
-[Build Azure DevOps integrations with Microsoft Entra OAuth apps](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth).
+The [2026-09-04 RECHECK-007 desk finding](../research/v1-public-contract-baseline.md#recheck-007-azure-devops-microsoft-account-behavior)
+records Azure DevOps guidance and its limits. The upstream source proves that AzureAuth
+uses a Microsoft-owned Visual Studio client; it does not prove current MSA behavior,
+intended reuse, or support status for this fork. The unresolved account-type/profile
+gate applies even though the [primary journey](../product/user-stories.md)
+is a first-release blocker.
 
 This makes client-application identity a functional input, not a replaceable cosmetic
 constant.
 
 ## Architecture Model
 
-1. The authentication core accepts explicit client-application configuration.
+1. The authentication core receives client-application configuration through the explicitly
+   selected Client Profile, not inline caller configuration.
 2. The core does not embed a client secret for a native public-client flow.
-3. Built-in and caller-defined product or compatibility profiles use the same profile
-   structure and remain separate from the mechanism core. Selection follows
-   [`V2-REQ-018`](../product/requirements/request-identity-and-authority.md#v2-req-018-deterministic-profile-selection).
-4. A profile records the client ID, authority policy, expected account types, scopes,
-   ownership statement, known limitations, per-platform redirect URIs, broker
-   registration requirements, and any signing or bundle identity constraints.
+3. Pre-distributed and user-provided profiles have the same interpretation and validation
+   and remain separate from the mechanism core. Selection follows
+   [`V2-REQ-018`](../product/requirements/request-identity-and-authority.md#v2-req-018-explicit-client-profile-selection).
+4. A Client Profile represents stable public-client application, one authority cloud,
+   application tenant eligibility, ownership, and platform-integration configuration.
+   Redirect, broker-registration, signing, and bundle-identity constraints are integration
+   concerns, not a selected file schema. The Visual Studio compatibility candidate is
+   Public Cloud only; it remains unselected and unavailable.
+5. Resource/scopes, strict email, and interaction permission belong to each request.
+   Profiles do not own resource presets, scope catalogs, acquisition order, deadline
+   defaults, or cache modes. Effective tenant resolution follows
+   [`V2-REQ-019`](../product/requirements/request-identity-and-authority.md#v2-req-019-tenant-selection).
+
+In the primary journey, the adapter supplies the Azure DevOps scope shown above as
+consumer knowledge; it is not embedded as a profile resource default. Profile discovery,
+file layout, schema versioning, and storage lifecycle remain unselected later work.
 
 Required configurability and visible ownership are defined by
 [`V2-REQ-042`](../product/requirements/cache-security-and-operational-identity.md#v2-req-042-client-registration-as-configuration).

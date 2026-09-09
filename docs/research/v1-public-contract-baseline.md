@@ -8,12 +8,19 @@ It preserves material promises, source behavior, defects, inferences, and unreso
 limits without converting V1 behavior into a V2 compatibility, support, architecture, or
 release commitment.
 
-The governing target-branch authority is `main-v2` commit
+The original research was authorized by `main-v2` commit
 [`d09d357c3fee953740d4a7470f57c57da56bbf5d`](https://github.com/hcoona/microsoft-authentication-cli/commit/d09d357c3fee953740d4a7470f57c57da56bbf5d).
 Its accepted
 [Delivery Wave](https://github.com/hcoona/microsoft-authentication-cli/blob/d09d357c3fee953740d4a7470f57c57da56bbf5d/docs/delivery-wave.md#L18-L79)
-authorizes fixed-scope V1 research, the three fired public-source rechecks, and
+authorized fixed-scope V1 research, the three fired public-source rechecks, and
 reconciliation of the canonical V2 requirements.
+
+The initial [Issue #29](https://github.com/hcoona/microsoft-authentication-cli/issues/29)
+consumer reconciliation and `RECHECK-006` incorporation used the accepted
+[story-grounded Wave at `1a02498`](https://github.com/hcoona/microsoft-authentication-cli/blob/1a02498589769c38bc16eefc2efc5f9eca6e6994/docs/delivery-wave.md).
+Subsequent story and reuse refinement uses the accepted
+[product-bounded Wave at `c281406`](https://github.com/hcoona/microsoft-authentication-cli/blob/c281406feb4141b2b0f75d43c3a0ca26d449c37b/docs/delivery-wave.md).
+These changes amend current requirement dispositions, not the pinned V1 source findings.
 
 This record is evidence rather than product policy:
 
@@ -67,6 +74,12 @@ The recheck evaluation occurred on **2026-09-04 UTC**. At retrieval:
 
 These mutable facts are bounded to that evaluation time.
 
+The later `RECHECK-006` retrieved only
+[upstream issue #398](https://github.com/AzureAD/microsoft-authentication-cli/issues/398)
+and its public comments on **2026-09-09 UTC**. Its
+[dated outcome](#recheck-006-secure-store-availability) is a separate evaluation of that
+source, not a refresh of the three sources above.
+
 ### Exclusions
 
 There are no new runtime observations in this record. It makes no claim based on
@@ -98,6 +111,8 @@ Material statements are classified as:
   source path that does not enforce its stated intent.
 - **Unresolved empirical question:** behavior that authorized desk evidence cannot
   establish.
+- **Publicly reported observation:** a public reporter's account, not an independently
+  reproduced runtime result.
 
 Confidence is high for direct fixed-source findings and documented public text.
 Confidence in real provider, broker, host, secure-store, installer, or network effects is
@@ -136,7 +151,7 @@ not define the deterministic machine contract required by V2:
 - upstream telemetry, build dependencies, installation identities, and Azure DevOps PAT
   behavior cannot be inherited by the unofficial V2 product.
 
-`RECHECK-001` and `RECHECK-002` confirm that current upstream public evidence does not
+`RECHECK-001` and `RECHECK-002` confirm that the 2026-09-04 upstream public evidence does not
 weaken the accepted V2 interaction or account requirements. `RECHECK-007` records current
 guidance but does not satisfy the prerequisite for selecting or distributing the
 Microsoft-owned Azure DevOps profile.
@@ -286,9 +301,10 @@ Explicit command values override non-null alias values. Explicit command modes o
 [alias merge](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Alias.cs#L43-L63),
 [environment parsing](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/IEnvExtensions.cs#L42-L71).
 
-**Disposition:** Retain the concepts under `V2-REQ-010`, `V2-REQ-011`, and
-`V2-REQ-017`. V1 option names, TOML structure, and ambient-variable names remain
-compatibility-only.
+**Disposition:** `V2-REQ-010`, `V2-REQ-011`, `V2-REQ-017`, and `V2-REQ-018` own the
+explicit versioned CLI request, request scopes, intent precedence, and mandatory Client
+Profile selection. V1 aliases, ambient defaults, option names, and TOML structure are not
+native V2 request semantics.
 
 ### Resource and scope contradiction
 
@@ -301,9 +317,9 @@ to `<resource>/.default`; explicit scopes supersede resource with a warning.
 [usage](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/docs/usage.md#L64-L70),
 [source](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Commands/CommandAad.cs#L293-L304).
 
-**Disposition:** `V2-REQ-011` owns required application and resource/scope identity.
-Resource shorthand, explicit-scope precedence, and invalid combinations require an
-explicit native request-contract disposition rather than inheritance from V1.
+**Disposition:** `V2-REQ-011` excludes a separate resource input and profile scope
+presets. `V2-REQ-027` owns dynamic permission coverage and the distinct `/.default`
+request/result association. V1 resource shorthand and precedence are not inherited.
 
 ### Client, tenant, and authority validation
 
@@ -317,9 +333,9 @@ host.
 [request object](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/AuthParameters.cs#L12-L47),
 [authority construction](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/AuthFlow/Web.cs#L97-L112).
 
-**Disposition:** Retain `V2-REQ-011`, `V2-REQ-011A`, and typed invalid-request behavior
-under `V2-REQ-032`. Native V2 must define trusted-cloud, tenant-policy, and
-malformed-input handling explicitly.
+**Disposition:** `V2-REQ-011`, `V2-REQ-011A`, and `V2-REQ-019` own one-cloud profiles,
+trusted authority validation, and fixed/common/exact token-tenant policy. Invalid inputs
+follow `V2-REQ-032`; the V1 string-concatenation behavior does not define that policy.
 
 ### Built-in Azure DevOps profile
 
@@ -341,8 +357,9 @@ The V1 Azure DevOps path embeds:
 **Disposition:** The identifiers are nonsecret configuration and recoverable V1
 compatibility evidence. They map to `V2-REQ-042` and the externally owned client-profile
 gate. They do not establish current owner-approved reuse, account-type support, or
-availability. `V2-REQ-018` defines generic deterministic profile selection but does not
-make this candidate an available profile.
+availability. `V2-REQ-018` requires explicit profile selection but does not make this
+candidate an available profile. The V1 resource-specific bundle is not the V2 Client
+Profile model.
 
 ## Account and interaction findings
 
@@ -365,16 +382,16 @@ OS-account acquisition.
 Device-code and IWA paths do not enforce a returned-identity match against the preferred
 domain.
 
-**Disposition:** Retain without weakening:
+**Disposition:** Replace advisory account selection under the reconciled requirements:
 
-- `V2-REQ-012`, requiring stable provider identifiers and limiting username/domain to
-  hints;
+- `V2-REQ-012`, requiring a strict full email rather than stable-ID or Account Kind input;
 - `V2-REQ-017`, preserving caller intent;
-- `V2-REQ-020`, exact selected-account silent acquisition;
-- `V2-REQ-022`, strict account, tenant, authority, and client postconditions;
+- `V2-REQ-020`, unique real-account resolution before silent acquisition;
+- `V2-REQ-013`, mandatory selected-account silent-first ordering;
+- `V2-REQ-022`, terminal email, tenant, profile, and scope postconditions;
 - `V2-REQ-023`, terminal mismatch or unvalidated success; and
-- `V2-REQ-031` and `V2-REQ-032`, authoritative identity metadata and typed absence,
-  ambiguity, and mismatch.
+- `V2-REQ-031` and `V2-REQ-032`, provider-observed email metadata and typed
+  interaction-required, ambiguity, and identity-validation failure.
 
 The V1 nullable selector, domain-suffix matching, and OS-account widening must not be
 reused as V2 policy.
@@ -390,9 +407,10 @@ may inject cache even when the caller selected a different mechanism.
 [mode combination](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/AuthMode.cs#L124-L133),
 [factory](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/AuthFlow/AuthFlowFactory.cs#L38-L87).
 
-**Disposition:** Replace under `V2-REQ-013` and `V2-REQ-017`. Cache-first behavior may be
-represented by an explicit requested stage or accepted profile default, but must not be
-injected invisibly.
+**Disposition:** `V2-REQ-013` owns documented product acquisition order, compatible
+mechanism filtering, and mandatory silent-first behavior after unique account resolution.
+V1's discarded order is a source fact, not a reason to expose caller ordering or profile
+order defaults in V2.
 
 ### Broker combines silent and interactive policy
 
@@ -436,10 +454,10 @@ guaranteeing no UI.
 **Disposition:** `RECHECK-001` is completed with no weakening. Retain:
 
 - `V2-REQ-014`, independent interaction permission;
-- `V2-REQ-020`, exact-account silent-first behavior;
+- `V2-REQ-013` and `V2-REQ-020`, silent-first order and its account precondition;
 - `V2-REQ-021`, an absolute no-user-interface guarantee;
 - `V2-REQ-023`, typed retryable and terminal fallback; and
-- interaction-required or blocked categories in `V2-REQ-032`.
+- the interaction-required category in `V2-REQ-032`.
 
 Do not reuse the global environment filter or combined broker orchestration as the V2
 interaction contract.
@@ -471,9 +489,9 @@ with scopes and claims but does not preserve the selected account.
 [web retry](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/AuthFlow/Web.cs#L55-L78),
 [claims overload](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/PCAWrapper.cs#L86-L135).
 
-**Disposition:** Retain `V2-REQ-015`, `V2-REQ-022`, and `V2-REQ-024`. Claims retry must
-require a real claims challenge and preserve account, tenant, authority, interaction, and
-deadline constraints.
+**Disposition:** `V2-REQ-015`, `V2-REQ-022`, and `V2-REQ-024` own request-local provider
+claims handling and preservation of every original constraint. This does not authorize
+a public resource/CAE continuation protocol or `cp1` advertisement.
 
 ### Deadline, cancellation, and locking are separate lifecycles
 
@@ -525,10 +543,9 @@ No distinct WSL host model appears in the fixed source.
 Support claims remain governed by the
 [Real Environment Tests](../validation/strategy.md#real-environment-tests).
 
-`V2-REQ-016` now requires V2 to establish validated host context from process-owned
-capabilities or the selected profile. The native request does not require an external UI
-owner or raw platform handle; combinations that cannot establish safe ownership without
-such integration remain unsupported.
+`V2-REQ-016` owns self-contained interactive surfaces and completion channels without
+caller-provided UI ownership or raw handles. Unavailable paths cannot initiate unmanaged
+interaction. This selects no concrete host implementation.
 
 ## Result and process findings
 
@@ -547,8 +564,9 @@ expiry from token claims.
 [token result](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/TokenResult.cs#L12-L77).
 
 **Disposition:** Retain `V2-REQ-022`, `V2-REQ-030`, `V2-REQ-031`, and `V2-REQ-033`.
-Provider identity and acquisition metadata must be preserved before access-token
-handling, and access tokens must remain opaque.
+Provider-authoritative metadata is needed for validation, but `V2-REQ-031` limits public
+account identity to the observed email. Stable provider IDs are not public success
+metadata. Access tokens remain opaque; expiration is not a minimum-validity promise.
 
 ### `RECHECK-002`: strict account and result validation
 
@@ -571,7 +589,8 @@ widening, token-only success, and absence of an authoritative result postconditi
 - `V2-REQ-012` and `V2-REQ-017`;
 - `V2-REQ-020`, `V2-REQ-022`, and `V2-REQ-023`;
 - complete identity metadata under `V2-REQ-031`; and
-- typed absence, ambiguity, and mismatch outcomes under `V2-REQ-032`.
+- typed interaction-required, ambiguity, and identity-validation outcomes under
+  `V2-REQ-032`.
 
 Do not reuse V1 account resolution, OS-account fallback, token-derived identity, or
 "nonempty token equals success" as V2 contract behavior. Mechanism-level MSAL calls may
@@ -593,9 +612,9 @@ The human status output always says the token cache is warm, even when source fl
 selection does not establish a cache hit.
 [status](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/TokenResult.cs#L79-L86).
 
-**Disposition:** Retain `V2-REQ-030`, `V2-REQ-031`, and `V2-REQ-034`. Native V2 must use
-schema-backed serialization and accurate acquisition metadata. V1 JSON and status text
-remain compatibility-only; the inaccurate cache-warm status is a drop candidate.
+**Disposition:** `V2-REQ-030`, `V2-REQ-031`, and `V2-REQ-034` own the single structured
+success/failure result and authoritative metadata. V1 raw, JSON, and status modes are
+not alternative native V2 outputs. Wire-schema selection remains later contract work.
 
 ### Failure and process status are collapsed
 
@@ -617,7 +636,8 @@ parse failures, enum conversion, unknown options, or unhandled exceptions.
 
 **Disposition:** Retain `V2-REQ-004`, `V2-REQ-030`, and `V2-REQ-032`. V1 numeric exits
 and framework behavior are compatibility-only. Native V2 requires one terminal result
-and deterministic typed-result-to-exit mapping.
+and binary success/failure exit semantics, with specific failure detail in the payload.
+The concrete shared nonzero value is not inherited from V1.
 
 ### Output, diagnostics, and secret channels
 
@@ -638,9 +658,10 @@ serialized raw exception messages without an application-owned redaction guarant
 The source does not prove that a secret was emitted, but it does not provide the V2
 containment guarantee.
 
-**Disposition:** Retain `V2-REQ-034` and `V2-REQ-035`. Human interaction and ordinary
-diagnostics require explicitly owned channels. Secret-bearing content must not pass
-through logs, telemetry, crash output, process arguments, or unrelated result fields.
+**Disposition:** `V2-REQ-034`, `V2-REQ-035`, and `V2-REQ-036` distinguish structured
+results, necessary authentication/UI channels, and diagnostics. Authentication secrets,
+raw emails, and stable email-derived identifiers are not diagnostic or telemetry content.
+Email in the explicit request and validated success is a deliberate contract boundary.
 
 ## Cache, state, and coordination findings
 
@@ -672,9 +693,9 @@ failure produces warnings but does not prevent use.
 [fallback](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/PCACache.cs#L85-L155),
 [permissions](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/LinuxHelper.cs#L40-L85).
 
-**Disposition:** This directly supports `V2-REQ-040` and `V2-REQ-045`. Drop V1's
-implicit plaintext fallback. Any plaintext mode would require separately accepted policy
-and must never be selected silently.
+**Disposition:** This motivates the no-plaintext product choice in `V2-REQ-040`; it does
+not prove a V2 implementation. `V2-REQ-045` still gates headless repeated-reuse claims.
+There is no first-version selectable plaintext or fallback mode.
 
 ### Cache-disabled and persistence-failure behavior is untyped
 
@@ -687,9 +708,11 @@ without selecting another persistent mode. The bounded inference is that acquisi
 continue with only process-local MSAL state, while callers receive no storage-mode result.
 [cache setup](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/PCACache.cs#L59-L105).
 
-**Disposition:** Retain `V2-REQ-040` and cache failure in `V2-REQ-032`. Native policy
-must distinguish an accepted nonpersistent mode, secure-store unavailability, policy
-rejection, and cache failure.
+**Disposition:** `V2-REQ-040` owns the single secure-state product policy.
+`V2-REQ-041` owns unusable-state-as-miss recovery and validated-token success with a
+machine-readable persistence warning. `V2-REQ-032` has no standalone cache/integrity
+status. The source does not demonstrate that acquisition and persistence failures can
+be separated on any current V2 platform; see the [dated recheck](#recheck-006-secure-store-availability).
 
 ### Namespace and lifecycle semantics are incomplete
 
@@ -724,8 +747,8 @@ delete the containing store and does not run under the acquisition mutex.
 V1 uninstall removes installation and PATH state but does not promise authentication-state
 cleanup.
 
-**Disposition:** Retain logout, namespace, and lifecycle semantics under `V2-REQ-041`.
-V1 clearing syntax is compatibility-only. The
+**Disposition:** `V2-REQ-041` excludes first-version Logout, Cache Clear, Force Refresh,
+and Account List. V1 clearing syntax and lifecycle are not native V2 capabilities. The
 [compatibility policy](../product/compatibility-and-migration.md#migration-rules)
 provides no V1 importer: V2 must not read, modify, delete, migrate, take over, or own V1
 configuration, aliases, account records, token caches, credentials, PATs, telemetry
@@ -757,7 +780,9 @@ completion.
 unless explicitly configured, and prevents export or bounded-flush failure from changing
 the authentication result, process status, retry, fallback, interaction, or finite
 termination. `V2-REQ-035`, `V2-REQ-043`, and `V2-REQ-044` continue to govern secret
-containment and independent identity. OpenTelemetry remains a later architecture choice.
+containment and independent identity. `V2-REQ-036` adds the email privacy boundary.
+The existing OpenTelemetry direction remains an input to later architecture work; this
+reconciliation does not select its implementation or backend.
 
 ### Collected telemetry and diagnostic fields
 
@@ -771,9 +796,9 @@ usernames and provider exception messages.
 [command telemetry](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/Commands/CommandAad.cs#L314-L331),
 [flow telemetry](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/AzureAuth/AuthFlowResultExtensions.cs#L39-L64).
 
-**Disposition:** Retain `V2-REQ-034`, `V2-REQ-035`, `V2-REQ-043`, and `V2-REQ-046`. V2
-diagnostics and telemetry require fork-owned schemas, redaction, identity, and lifecycle
-behavior.
+**Disposition:** `V2-REQ-034`, `V2-REQ-035`, `V2-REQ-036`, `V2-REQ-043`, and
+`V2-REQ-046` govern diagnostic separation, secret/email containment, independent identity,
+and bounded optional telemetry. No diagnostic schema or backend is selected here.
 
 ### Upstream telemetry device identity
 
@@ -973,9 +998,9 @@ guaranteeing no UI. This does not claim that every mutable upstream file outside
 authorized source set was searched.
 
 **Outcome:** Completed with no requirements weakening. Retain `V2-REQ-014`,
-`V2-REQ-020`, `V2-REQ-021`, `V2-REQ-023`, and interaction-required or blocked outcomes
-under `V2-REQ-032`. Replace V1 global interaction filtering and combined broker
-orchestration.
+`V2-REQ-013`, `V2-REQ-020`, `V2-REQ-021`, `V2-REQ-023`, and the interaction-required
+outcome under `V2-REQ-032`. Replace V1 global interaction filtering and combined broker
+orchestration. This remains the 2026-09-04 source outcome, not a fresh source-status claim.
 
 ### `RECHECK-002`: strict account selection
 
@@ -997,6 +1022,70 @@ independently reproduced.
 `V2-REQ-017`, `V2-REQ-020`, `V2-REQ-022`, `V2-REQ-023`, `V2-REQ-031`, and the
 applicable `V2-REQ-032` failure categories. Do not reuse V1 account resolution or result
 handling as V2 policy.
+
+### `RECHECK-006`: secure-store availability
+
+**Required outcome:** Record current secure-store behavior and unresolved platform
+limitations before accepting cache fallback or declaring a platform supported.
+
+**Provenance:** Desk retrieval on **2026-09-09 UTC**, under accepted Wave
+`1a02498589769c38bc16eefc2efc5f9eca6e6994`, was limited to
+[issue #398](https://github.com/AzureAD/microsoft-authentication-cli/issues/398), its
+[public Issue API](https://api.github.com/repos/AzureAD/microsoft-authentication-cli/issues/398),
+and its
+[public comments API](https://api.github.com/repos/AzureAD/microsoft-authentication-cli/issues/398/comments).
+At retrieval, the Issue was open, had zero comments, and reported
+`updated_at = 2024-08-13T16:18:59Z`; the first comments page was empty.
+The [desk outcome](https://github.com/hcoona/microsoft-authentication-cli/issues/29#issuecomment-5595449718)
+and [independent review](https://github.com/hcoona/microsoft-authentication-cli/issues/29#issuecomment-5595466517)
+retain the prerequisite disposition and actual merged-Wave evaluation.
+
+**Evidence type:** Publicly reported observation, not an independently reproduced runtime
+result. The reporter describes AzureAuth **0.8.6.0**, installed from a Debian package on
+a headless Ubuntu VM, failing during an Azure DevOps PAT invocation. The report describes
+persistence-verification failures followed by a keyring-read failure associated with an
+unavailable `org.freedesktop.secrets` service. Device-code interaction appears in the
+report but does not establish successful token acquisition or reusable-state persistence.
+The Issue/comments contain no maintainer resolution or documented supported nonpersistent
+path. Raw diagnostics, authentication instructions, codes, and account or organization
+details are not reproduced here.
+
+**Bounded conclusion:** The desk prerequisite is satisfied, not a platform-support gate.
+This report does not establish current-release behavior, all-headless-Linux behavior,
+Windows/WAM or macOS behavior, or V2's ability to separate acquisition from persistence
+failure. The pinned [plaintext fallback](#headless-linux-silently-falls-back-to-plaintext)
+and [process-local continuation](#cache-disabled-and-persistence-failure-behavior-is-untyped)
+findings remain source findings for their audited commit. The
+[architecture audit's #398 reference](v1-architecture-audit.md#finding-6-cache-policy-contains-an-implicit-security-decision)
+remains only a reported example, not a current fix or support guarantee.
+
+**Disposition:** The no-plaintext choice (`V2-REQ-040`), unusable-state recovery and
+success-with-persistence-warning behavior (`V2-REQ-041`) are product decisions, not facts
+demonstrated by #398. Secure-store availability, error separation, concurrent state
+integrity, and cross-invocation reuse require later implementation and platform evidence
+under the [validation strategy](../validation/strategy.md). No experiment is authorized
+by this result.
+
+### Issue #29 reconciliation trigger evaluation
+
+The requirements reconciliation continues the `interaction-policy`, `account-contract`,
+and `cache-design` decision concerns. Their recheck controls therefore apply even though
+this change performs no experiment or release:
+
+- `RECHECK-001` and `RECHECK-002`: the accepted 2026-09-04 outcomes and fixed-source reuse
+  conclusions remain unchanged. The primary-story wording does not rely on a new
+  upstream feature or refresh those mutable status claims. Their current requirement
+  dispositions are updated above.
+- `RECHECK-006`: the 2026-09-09 source-only outcome and independent disposition satisfy
+  the desk prerequisite for this reconciliation, with implementation/support still gated.
+- `RECHECK-003`, `RECHECK-004`, and `RECHECK-005`: no WSL, system-browser, or Linux-broker
+  workstream is selected; these triggers are not activated by this change.
+- `RECHECK-007`: no profile is selected or enabled. The existing empirical prerequisite
+  remains outstanding; the first-release journey does not satisfy it.
+
+The actual #31 merged-Wave fallback evaluated all seven entries in the independent
+review linked above. This proposal does not change the Wave. Any later merged-Wave,
+release, or newly fired source-relevant trigger still requires its applicable review.
 
 ### `RECHECK-007`: Azure DevOps Microsoft-account behavior
 
