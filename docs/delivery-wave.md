@@ -15,13 +15,25 @@ proposal does not authorize any work it would add before merge.
 
 ## Authorized Advancements
 
-### Ground V2 requirements in Git and Azure Artifacts user stories
+### Complete user-story and requirements analysis within the V2 product boundary
 
 - **Work carrier:** [Issue #29](https://github.com/hcoona/microsoft-authentication-cli/issues/29)
 - **Prerequisite:** The requirements baseline proposed by
   [PR #28](https://github.com/hcoona/microsoft-authentication-cli/pull/28) is accepted on
   `main-v2`. If that prerequisite or another relied-on authority changes materially,
   pause this advancement and refresh its scope and review.
+- **Analysis boundary:** Complete user-story elicitation, requirements analysis, and
+  cross-requirement consistency review for the delegated public-client authentication
+  engine within the accepted
+  [V2 product boundary](product/requirements/product-boundary.md).
+  Cover caller-visible identity and token outcomes, interaction, authentication-state
+  reuse, process results, privacy, compatibility, and support requirements. Git and Azure
+  Artifacts are known consumer scenarios, not an exhaustive authorization list.
+  Additional scenarios may be analyzed without another Wave amendment when they remain
+  inside this product boundary, bounded advancement, accepted inputs, exclusions, and
+  effects. A scenario does not authorize a new product capability outside that boundary,
+  an additional source, or a new external effect. V1 `aad` and `ado` behavior is research
+  input, not a blanket grant to inherit V1 features or compatibility.
 - **Accepted primary user story:** As a developer working with a personal Azure DevOps
   Git repository while my Windows WAM default account is a corporate work account, I
   want the Git credential adapter to request an Azure DevOps access token from the
@@ -29,7 +41,7 @@ proposal does not authorize any work it would add before merge.
   selected for that repository, so that Git operations do not silently authenticate as
   the corporate account and can reuse valid authentication state without prompting when
   it is available.
-- **Additional requirements-analysis scenarios:** Consider all four combinations of
+- **Known scenarios, not an exhaustive list:** Consider all four combinations of
   company-account and non-company-account computer contexts with a requested company or
   personal account accessing its Azure DevOps Git repositories. Distinguish the default
   account, existing target-account sign-in state, and device-management state rather than
@@ -39,9 +51,8 @@ proposal does not authorize any work it would add before merge.
   avoid repeated authentication for the same feed when the account and authorization
   context permit reuse. Clarify sequential and concurrent calls, token reuse versus
   ecosystem-specific credential translation, and the boundary between engine and adapter.
-  These scenarios authorize elicitation and consistency analysis, not an assumption of
-  identical token bytes, cross-process interaction single-flight, or additional
-  first-release support commitments.
+  Including a scenario does not preaccept identical token bytes, cross-process
+  interaction single-flight, or additional first-release support commitments.
 - **Accepted inputs:** The product vision, requirements, compatibility policy,
   architecture, validation strategy, upstream policy, and public research records
   accepted on `main-v2`; the public sources and public comments named by `RECHECK-001`,
@@ -89,12 +100,11 @@ proposal does not authorize any work it would add before merge.
   secure product-owned state policy, and no first-version Logout, Cache Clear, Force
   Refresh, Resource/CAE claims round trip, or Account List.
 - **Authorized advancement:** Establish and refine a concise Product User Stories
-  authority for the primary journey and the additional scenarios above. Split stories
-  by distinct user goals, not mechanically by matrix cell, acquisition stage, or error
-  case. Continue bounded repository-owner requirements elicitation from identity and
-  token outcomes through interaction, state reuse, process-result, privacy,
-  compatibility, and support behavior. Analyze the permitted public sources and private
-  context within their separate boundaries. Reconcile accepted decisions into
+  authority within the analysis boundary above, retaining the primary journey. Split
+  stories by distinct user goals, not mechanically by matrix cell, acquisition stage, or
+  error case. Continue bounded repository-owner requirements elicitation and analyze the
+  permitted public sources and private context within their separate boundaries.
+  Reconcile accepted decisions into
   capability-scoped product requirements and their directly affected validation,
   compatibility, security, architecture-consumer, record-family, navigation, and
   existing research records. Check the combined scenarios for contradictory
@@ -105,8 +115,8 @@ proposal does not authorize any work it would add before merge.
   public-source findings, and runtime evidence.
 - **Bounded outcome:** One canonical Product User Stories record whose first entry
   captures the primary launch journey without duplicating normative requirements; one
-  coherent requirements baseline covering the authorized user goals; and atomic updates
-  to the existing records that directly consume those requirements. Existing requirement
+  coherent requirements baseline for this bounded analysis; and atomic updates to the
+  existing records that directly consume those requirements. Existing requirement
   identifiers remain unique and are amended or retired under the record-system policy.
   Architecture candidates may be routed to later work but not selected here.
 - **Acceptance condition:** The user story, requirements, validation obligations,
