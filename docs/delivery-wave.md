@@ -32,8 +32,9 @@ proposal does not authorize any work it would add before merge.
   Additional scenarios may be analyzed without another Wave amendment when they remain
   inside this product boundary, bounded advancement, accepted inputs, exclusions, and
   effects. A scenario does not authorize a new product capability outside that boundary,
-  an additional source, or a new external effect. V1 `aad` and `ado` behavior is research
-  input, not a blanket grant to inherit V1 features or compatibility.
+  a source outside the input categories below, or a new external effect. V1 `aad` and
+  `ado` behavior is research input, not a blanket grant to inherit V1 features or
+  compatibility.
 - **Accepted primary user story:** As a developer working with a personal Azure DevOps
   Git repository while my Windows WAM default account is a corporate work account, I
   want the Git credential adapter to request an Azure DevOps access token from the
@@ -55,22 +56,25 @@ proposal does not authorize any work it would add before merge.
   interaction single-flight, or additional first-release support commitments.
 - **Accepted inputs:** The product vision, requirements, compatibility policy,
   architecture, validation strategy, upstream policy, and public research records
-  accepted on `main-v2`; the public sources and public comments named by `RECHECK-001`,
-  `RECHECK-002`, `RECHECK-006`, and `RECHECK-007` in
-  [the registry at `1a024985`](https://github.com/hcoona/microsoft-authentication-cli/blob/1a02498589769c38bc16eefc2efc5f9eca6e6994/docs/research/rechecks.yaml),
-  limited to the interaction,
-  account-selection, secure-state, and account-type questions relevant to this entry;
-  Microsoft Learn public documentation for application tenancy, identity-platform
-  endpoints, Windows sign-in and SSO, WAM, IWA, and Azure DevOps and Azure Artifacts
-  authentication; and public MSAL.NET documentation and source for strict-account
-  pre-resolution, interaction, and authentication-state reuse. The public
-  [`azureauth-credprovider` project in hcoona/three](https://github.com/hcoona/three/tree/2360c205dea8c789280448c2cae8252f33cc9583/src/private/app/azureauth-credprovider),
-  pinned to `2360c205dea8c789280448c2cae8252f33cc9583`,
-  and its directly referenced public contracts may be inspected solely to understand
-  consumer credential requirements and the engine/adapter boundary. Public findings
-  require recoverable source locations and revisions; mutable-source retrieval must be
-  dated and must not be presented as runtime evidence. Later Issue edits, comments,
-  source additions, or owner dispositions cannot enlarge this entry.
+  accepted on `main-v2`; public standards and official service and protocol
+  documentation; and any public software repository's source, documentation, Issues,
+  pull requests, and release material that can answer a question relevant to this
+  bounded requirements analysis. This includes public dependency implementations, not
+  only adapter contracts. Selecting another relevant public repository or revision
+  within these categories does not require a separate Wave amendment.
+  Prioritize official service and protocol guidance and official credential-provider
+  implementations when investigating service behavior. Existing downstream adapters
+  and AzureAuth implementations are implementation and compatibility references, not
+  authorities that define desired product requirements. Implementation choices do not
+  by themselves establish mandatory protocol behavior or runtime support.
+  Source findings must identify recoverable locations and immutable revisions where
+  available; mutable-source retrieval must be dated. Record that provenance with the
+  findings rather than maintaining a per-repository or per-revision authorization list
+  here. Public availability does not waive the
+  [public record boundary](governance/project.md#public-record-boundary), required
+  rechecks, or evidence review. These input categories do not enlarge the analysis
+  topic, private-context access, or permitted effects. Later Issue edits, comments, or
+  owner dispositions cannot enlarge those boundaries.
 - **Private contextual access:** The repository owner permits local, read-only
   inspection of the single private downstream workspace already designated for this
   amendment, limited to package-ecosystem authentication call sites and package-source
