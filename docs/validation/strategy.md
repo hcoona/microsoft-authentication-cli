@@ -97,6 +97,10 @@ This strategy records proof obligations, not an executable experiment protocol.
   unavailable under the native CLI contract.
 - Unusable state treated as a miss and never consumed; recovery preserving request
   constraints, interaction permission, and the original deadline.
+- Compatible OS sign-in state considered on first engine use without a prior V2 sign-in
+  or V2-created cache; strict pre-resolution and terminal validation still required.
+- A change of consumer, package ecosystem, or working repository alone not causing
+  another sign-in when valid, safe state can satisfy the otherwise compatible request.
 - Validated access-token success plus a machine-readable warning when safe persistence
   fails; no plaintext fallback or caller/profile cache modes.
 - Network telemetry remaining disabled until explicitly configured, and export or flush
@@ -132,6 +136,8 @@ isolation alone does not isolate OS accounts.
 | State | Required observations |
 | --- | --- |
 | Empty application cache | Resolve visible real provider accounts before any silent attempt; absence cannot trigger ambient silent acquisition. |
+| First V2 use with compatible OS sign-in state and no V2-created cache | Consider the OS state without requiring prior V2 sign-in; resolve the unique requested real account before silent acquisition and validate every success postcondition. |
+| First V2 use with only opaque or incompatible OS state | Do not substitute the OS default or assume resource authorization; preserve account resolution, typed outcomes, and interaction permission. |
 | One exact visible account with usable state | Selected account is attempted silently first and success reports provider-observed email, not a stable ID. |
 | Multiple visible accounts with one full-email match | Only the unique matching account is eligible for silent acquisition. |
 | No matching account | No silent fallback to another account; interaction-required handling follows request permission. |
@@ -141,6 +147,69 @@ isolation alone does not isolate OS accounts.
 | Guest and home-tenant representations | Exact selector checks the token/resource tenant, not the account home tenant. |
 | Microsoft account and work account | Behavior is recorded per client application/resource, without an independent public Account Kind postcondition. |
 | Usable state on a subsequent invocation | Strict pre-resolution and silent-first behavior recur without silently relaxing identity or storage policy. |
+
+### Account-Context Variants
+
+The following are variants of the [requested-account goal](../product/user-stories.md#account-context-variants),
+not separate stories or an automatic supported-platform or first-release matrix:
+
+| Computer account context | Requested account | Evidence focus |
+| --- | --- | --- |
+| Company account | Company account | Select the requested email, not an assumed company default. |
+| Company account | Personal account | Preserve the primary wrong-default scenario and its first-release gate. |
+| Non-company account | Company account | Do not substitute the computer's non-company default. |
+| Non-company account | Personal account | Do not assume that the selected email is the computer's default personal identity. |
+
+For any combination selected for support, record default-account relation, target-account
+state, and device-management, join, and compliance context independently. Exercise first
+engine use with OS state separately from later engine-state reuse. Account labels alone
+are not evidence of device state or service eligibility.
+
+## Cross-Consumer Reuse Scenarios
+
+These scenarios validate
+[`V2-REQ-041`](../product/requirements/cache-security-and-operational-identity.md#v2-req-041-safe-reusable-state-recovery-and-concurrency)
+for [package consumers](../product/user-stories.md#reuse-authentication-across-package-ecosystems-and-repositories)
+and other compatible callers. They do not select a cache architecture or credential
+translation path.
+
+| Scenario | Required evidence |
+| --- | --- |
+| Sequential compatible calls from different package ecosystems or working repositories with valid, safe reusable state | Changing only the consumer context does not cause another user sign-in. Each result independently satisfies strict account, tenant, profile, resource, and scope constraints. |
+| Concurrent compatible calls with reusable state already available | State remains consistent and updates retain integrity; consumer differences alone do not cause another sign-in. Lock waiting and acquisition stay within each request's original deadline. |
+| Concurrent calls when usable state is absent or insufficient | Each call obeys its interaction permission, classified fallback, and deadline. Do not require a cross-process single prompt or identical token bytes. |
+| Changed account, tenant, profile/cloud, resource/scopes, or security context | Prior success in another context is not sufficient for reuse or result validity. Verify the current request's constraints rather than widening them to consume state. |
+| Missing, locked, corrupt, incompatible, or unpersisted state | Unsafe state is not consumed, no plaintext fallback occurs, and recovery preserves interaction permission and deadline; validated success with a persistence warning does not promise state will be reusable later. |
+
+Observe engine requests, validated results, user-facing interaction, and safe state
+outcomes rather than treating equal token bytes as proof of reuse. Package-ecosystem
+credential materialization, session-credential exchange, and derived-credential lifecycle
+are downstream concerns, not engine acceptance criteria. Public implementation examples
+do not establish cross-consumer interoperability.
+
+## Generic Caller Scenarios
+
+The [direct-service](../product/user-stories.md#direct-protected-service-access) and
+[integrated-tool](../product/user-stories.md#authentication-integrated-into-a-remote-tool-workflow)
+goals consume the existing delegated public-client and process boundary, not new engine
+protocols. Planned contract and policy fixtures cover:
+
+- a direct caller supplying an explicit profile, selected email, intended resource
+  scopes, interaction permission, and protocol version, receiving only a validated
+  structured access-token result and authoritative metadata;
+- an external tool integration making that same engine request and handling the typed
+  result without an engine-owned service connection or consumer-protocol implementation;
+- wrong or missing identity, incompatible target/profile, insufficient authoritative
+  scope metadata, and prohibited interaction producing the existing constrained failure
+  behavior rather than an unvalidated token or broader fallback;
+- repeated compatible requests exercising the reuse scenarios above, with token
+  application and any consumer-specific credential translation left downstream.
+
+Mocks can validate this engine boundary without contacting a protected service or
+implementing an adapter. Actual profile/resource/account eligibility and real-platform
+reuse require separately authorized bounded evidence before support is claimed. These
+goals do not imply service authorization for every user identity, personal-account
+support for every resource, an MCP engine protocol, or a new first-release support matrix.
 
 ## Interaction Matrix
 

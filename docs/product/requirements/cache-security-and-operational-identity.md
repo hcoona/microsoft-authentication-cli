@@ -14,6 +14,19 @@ cache miss and must not consume it. Recovery must preserve the account email, ef
 tenant policy, Client Profile, scopes, interaction permission, and original overall
 deadline.
 
+V2 must reuse valid, safe authentication state when it can satisfy the request without
+another user sign-in. A change of downstream consumer, package ecosystem, or working
+repository alone must not require another sign-in for an otherwise compatible request.
+Reuse must preserve the requested account, effective tenant policy, Client Profile,
+resource and scopes, and applicable security context rather than treating different
+contexts as interchangeable.
+
+Eligible state includes compatible operating-system sign-in state available on first V2
+use. V2 must not require a prior V2 sign-in or V2-created cache before considering that
+state. Reuse remains subject to unique real-account pre-resolution and final validation
+under `V2-REQ-020` and `V2-REQ-022`, interaction permission, and the original deadline.
+An OS sign-in alone does not establish that these conditions can be satisfied.
+
 When V2 acquires and validates an access token but cannot safely persist reusable state,
 it must return success with a machine-readable persistence warning rather than fail the
 authentication result. A later invocation with usable state remains subject to
@@ -23,6 +36,9 @@ Concurrent processes sharing authentication state must preserve locking and atom
 integrity and observe consistent state. This does not promise cross-process interaction
 single-flight. File names, locking mechanisms, serialization, and storage lifecycle are
 not selected here.
+
+Reuse does not require byte-identical access tokens. Ecosystem-specific credential
+materialization and its lifecycle remain outside the authentication engine.
 
 The first version must not expose Logout, Cache Clear, caller-visible Force Refresh, or
 Account List operations.

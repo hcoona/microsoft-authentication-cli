@@ -14,7 +14,7 @@ is navigation, not an independent authority.
 | Audience | Authoritative subject | Canonical record |
 | --- | --- | --- |
 | Product owner, maintainers, and contributors | Product purpose and directional boundary | [`product/vision.md`](product/vision.md) |
-| Requirement authors and validation reviewers | User context and primary journey motivation | [`product/user-stories.md`](product/user-stories.md) |
+| Requirement authors and validation reviewers | User goals, context, and primary journey motivation | [`product/user-stories.md`](product/user-stories.md) |
 | Product maintainers, implementers, and reviewers | Product scope, supported scenarios, and exclusions | [`product/requirements/product-boundary.md`](product/requirements/product-boundary.md) |
 | Product maintainers, implementers, and reviewers | Request identity, authority selection, and account constraints | [`product/requirements/request-identity-and-authority.md`](product/requirements/request-identity-and-authority.md) |
 | Product maintainers, implementers, and reviewers | Strategy ordering, interaction policy, and host integration | [`product/requirements/strategy-interaction-and-host.md`](product/requirements/strategy-interaction-and-host.md) |

@@ -15,10 +15,12 @@ Its accepted
 authorized fixed-scope V1 research, the three fired public-source rechecks, and
 reconciliation of the canonical V2 requirements.
 
-The [Issue #29](https://github.com/hcoona/microsoft-authentication-cli/issues/29)
-consumer reconciliation and `RECHECK-006` incorporation use the accepted
+The initial [Issue #29](https://github.com/hcoona/microsoft-authentication-cli/issues/29)
+consumer reconciliation and `RECHECK-006` incorporation used the accepted
 [story-grounded Wave at `1a02498`](https://github.com/hcoona/microsoft-authentication-cli/blob/1a02498589769c38bc16eefc2efc5f9eca6e6994/docs/delivery-wave.md).
-They amend current requirement dispositions, not the pinned V1 source findings.
+Subsequent story and reuse refinement uses the accepted
+[product-bounded Wave at `c281406`](https://github.com/hcoona/microsoft-authentication-cli/blob/c281406feb4141b2b0f75d43c3a0ca26d449c37b/docs/delivery-wave.md).
+These changes amend current requirement dispositions, not the pinned V1 source findings.
 
 This record is evidence rather than product policy:
 

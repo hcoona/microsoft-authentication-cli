@@ -182,9 +182,9 @@ families:
     producer: Repository owner with consumer input
     maintainer: Repository owner
     consumers:
-      - Requirement authors and reviewers when deriving behavior from the primary user journey
+      - Requirement authors and reviewers when deriving behavior from user goals and scenario context
       - Validation and release reviewers when identifying the scenario whose evidence blocks release
-    creation_trigger: The accepted Delivery Wave requires a primary journey that the capability requirements do not preserve.
+    creation_trigger: The accepted Delivery Wave requires user goals and a primary journey that the capability requirements do not preserve.
     failure_mode: SDK mechanisms or implementation candidates displace the real consumer need, or stories become duplicate normative requirements.
     review_point: Pull requests that change user journeys or their relationship to requirements and validation
 

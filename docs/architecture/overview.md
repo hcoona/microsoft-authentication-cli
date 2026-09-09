@@ -97,6 +97,11 @@ Concrete stores, formats, namespace values, locking mechanisms, and storage life
 remain later design work. Local state-management commands and cross-process interaction
 single-flight are not first-version capabilities.
 
+The same requirement owns first-use OS-state eligibility and reuse across compatible
+consumers. Engine-created state is not a prerequisite for considering OS sign-in state;
+consumer-specific credential translation remains outside this layer. This allocation
+does not choose a shared-cache design or establish provider-state availability.
+
 ## Architecture Invariants
 
 - The protocol boundary, authentication policy, account resolution, mechanism adapters,

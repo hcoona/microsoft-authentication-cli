@@ -30,7 +30,11 @@ Any future v2 artifact must:
 V2 provides no importer for v1 configuration, aliases, account records, token caches,
 credentials, PATs, telemetry configuration, or device identifiers. The product must not
 read, modify, delete, or take over upstream state as migration. Users must configure v2
-independently and reauthenticate.
+independently. This does not require a fresh sign-in when compatible broker-owned
+operating-system state can be reused under
+[`V2-REQ-041`](requirements/cache-security-and-operational-identity.md#v2-req-041-safe-reusable-state-recovery-and-concurrency).
+Such reuse is not an import of upstream application state and does not relax account,
+authorization, interaction, or deadline constraints.
 
 ## Externally Owned Client Profile Gate
 
