@@ -31,7 +31,11 @@ proposal does not authorize any work it would add before merge.
   it is available.
 - **Accepted inputs:** The product vision, requirements, compatibility policy,
   architecture, validation strategy, upstream policy, and public research records
-  accepted on `main-v2`; Microsoft Learn public documentation for single-tenant and
+  accepted on `main-v2`;
+  [AzureAD/microsoft-authentication-cli#398](https://github.com/AzureAD/microsoft-authentication-cli/issues/398)
+  and its public comments, solely for a desk-only `RECHECK-006` before accepting cache
+  fallback and for recording or dispositioning materially affected findings and
+  consumers; Microsoft Learn public documentation for single-tenant and
   multitenant applications and tenant-scoped identity-platform endpoints; and public
   MSAL.NET documentation and source solely to evaluate whether a strict-email account can
   be resolved before silent acquisition. Later Issue edits, comments, or owner
