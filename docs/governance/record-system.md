@@ -20,6 +20,7 @@ Authority is scoped rather than globally ranked.
 | Human contribution workflow | Root `CONTRIBUTING.md` |
 | Current positive work authorization | `docs/delivery-wave.md` |
 | Product purpose and directional boundary | Product vision |
+| User context and motivation for required behavior | Product user stories |
 | Required product behavior | Product requirements |
 | Current system structure and invariants | Architecture records |
 | Durable design choices and rationale | Accepted decision records |

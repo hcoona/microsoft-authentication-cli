@@ -27,14 +27,16 @@ Provide a small, deterministic command-line authentication engine for delegated
 Microsoft Entra public-client token acquisition.
 
 The intended direction is an engine that lets machine callers state and verify identity,
-authority, interaction, acquisition order, deadline, host context, and structured
-outcomes while reusing maintained MSAL and platform-broker integrations.
+authority, interaction, deadline, and structured outcomes, with deterministic acquisition
+order and self-contained interaction, while reusing maintained MSAL and platform-broker
+integrations.
 
 ## Behavioral Authority
 
 This vision does not define required product behavior. The capability records under
 [`requirements/`](requirements/) are authoritative for request, identity, interaction,
 result, process, cache, security, operational-identity, build, and validation behavior.
+[`user-stories.md`](user-stories.md) owns the concrete user context and motivation.
 Architecture and validation records determine how accepted requirements are realized and
 supported.
 

@@ -5,7 +5,15 @@
 V2 has no current promise of compatibility with v1 commands, output, environment
 variables, configuration, cache data, installation paths, or fallback behavior.
 
-Compatibility is a bounded adapter concern, not a constraint on the v2 core.
+Compatibility with official AzureAuth is a bounded adapter concern, not a constraint on
+the V2 core.
+
+For updates of AzureAuth Unofficial V2 itself,
+[`V2-REQ-037`](requirements/result-and-process-protocol.md#v2-req-037-supported-protocol-compatibility)
+owns preservation of each still-supported protocol major's calling contract. An unchanged
+adapter can rely on that published contract, not on indefinite support for older majors.
+Protocol version and the V2 product-generation name are distinct. No public wire schema
+or supported protocol-major set is selected by this policy.
 
 ## Side-by-Side First
 
@@ -14,7 +22,7 @@ Any future v2 artifact must:
 - use a distinct executable and installation root;
 - use independent configuration, cache, lock, telemetry, and update namespaces;
 - avoid placing an `azureauth` compatibility shim by default;
-- leave upstream installation and state untouched during install, login, logout, upgrade,
+- leave upstream installation and state untouched during install, authentication, upgrade,
   downgrade, uninstall, and cleanup.
 
 ## Migration Rules
@@ -32,9 +40,16 @@ only when:
 - public evidence identifies the owner and the intended or unsupported reuse boundary;
 - the required account, resource, authority, host, redirect, and broker combinations have
   bounded validation;
-- default selection, explicit user opt-in, and failure behavior are decided;
+- availability, explicit user opt-in, and failure behavior are decided consistently with
+  [`V2-REQ-018`](requirements/request-identity-and-authority.md#v2-req-018-explicit-client-profile-selection),
+  which excludes implicit or default profile selection;
 - cache and configuration partitioning prevent silent identity collisions;
 - public documentation states ownership, support, and availability limits.
+
+The [primary user journey](user-stories.md#primary-journey-personal-azure-devops-git-access)
+does not satisfy this gate or select the Visual Studio compatibility candidate. Its
+MSA behavior, strict-email feasibility, and reusable-state behavior remain evidence
+obligations under the [validation strategy](../validation/strategy.md#primary-journey-gate).
 
 ## Compatibility Adapter Gate
 

@@ -1,24 +1,39 @@
 # Cache, Security, and Operational-Identity Requirements
 
-## V2-REQ-040: Secure Storage by Default
+## V2-REQ-040: Secure Authentication State
 
-Persistent cache material must use broker-owned or platform secure storage by default.
-Cache persistence and fallback must follow an explicit request or selected-profile policy
-composed only of separately accepted cache modes. A request or profile cannot authorize
-an otherwise unaccepted mode. When secure storage is unavailable, v2 must return a typed
-outcome consistent with the accepted policy and must not silently select plaintext,
-nonpersistent operation, or another storage mode.
+V2 must persist reusable authentication material only in broker-owned or platform-secure
+storage. It must not fall back to plaintext persistence. The first version must apply a
+product-defined state policy rather than expose caller-selected or Client-Profile-selected
+cache modes.
 
-## V2-REQ-041: Versioned Cache Semantics
+## V2-REQ-041: Safe Reusable-State Recovery and Concurrency
 
-Cache state must define namespace, locking, atomic update, corruption, logout, migration,
-and incompatible-version behavior for v2-owned state.
+V2 must treat unreadable, undecryptable, corrupt, or incompatible reusable state as a
+cache miss and must not consume it. Recovery must preserve the account email, effective
+tenant policy, Client Profile, scopes, interaction permission, and original overall
+deadline.
+
+When V2 acquires and validates an access token but cannot safely persist reusable state,
+it must return success with a machine-readable persistence warning rather than fail the
+authentication result. A later invocation with usable state remains subject to
+selected-account silent-first acquisition under `V2-REQ-013` and `V2-REQ-020`.
+
+Concurrent processes sharing authentication state must preserve locking and atomic-update
+integrity and observe consistent state. This does not promise cross-process interaction
+single-flight. File names, locking mechanisms, serialization, and storage lifecycle are
+not selected here.
+
+The first version must not expose Logout, Cache Clear, caller-visible Force Refresh, or
+Account List operations.
 
 ## V2-REQ-042: Client Registration as Configuration
 
-Public-client IDs must be treated as nonsecret application configuration. Microsoft-owned
-registrations must be visibly identified as externally owned dependencies and must be
-replaceable by configuration or profile.
+Public-client application IDs must be treated as nonsecret configuration and supplied
+through Client Profiles rather than hard-coded into the authentication core. A profile
+using an externally owned registration must make its ownership and external-dependency
+status explicit. V2 must not imply ownership of that registration or its owner's
+endorsement or support for the project.
 
 ## V2-REQ-043: No Upstream Telemetry Reuse
 
@@ -45,5 +60,6 @@ configured. Export or bounded-flush failure must not change the authentication r
 its process status, trigger authentication retry, fallback, or interaction, or prevent
 process termination beyond a finite bound.
 
-Telemetry remains subject to the secret containment in `V2-REQ-035` and the independent
-identity requirements in `V2-REQ-043` and `V2-REQ-044`.
+Telemetry remains subject to the authentication-material and email containment in
+`V2-REQ-035` and `V2-REQ-036` and the independent identity requirements in `V2-REQ-043`
+and `V2-REQ-044`.

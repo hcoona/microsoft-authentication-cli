@@ -28,15 +28,15 @@ separate downstream consumers under decision
 
 | V1 area | V2 direction |
 | --- | --- |
-| `AuthMode` flag composition | Replace with an ordered acquisition strategy. |
-| Fixed `AuthFlowFactory` ordering | Replace with request-defined, validated stages. |
+| `AuthMode` flag composition | Replace with documented deterministic product acquisition policy. |
+| Fixed `AuthFlowFactory` ordering | Separate product order, profile compatibility filtering, and typed fallback. |
 | `Broker` combining silent and interactive work | Split into policy-distinct operations. |
 | Nullable cached-account resolution | Replace with typed account-resolution outcomes. |
-| Domain-suffix account preference | Replace with stable account selectors and explicit preferences. |
+| Domain-suffix account preference | Replace with strict full-email resolution and terminal result validation. |
 | Token-only `TokenResult` | Replace with a versioned result preserving provider metadata. |
 | Exit `1` for most failures | Replace with a typed failure taxonomy and stable process mapping. |
 | Global environment interaction policy | Replace with per-request interaction policy. |
-| Implicit console-window discovery | Replace with v2-owned host capability and UI ownership; require a separate typed contract for an external-owner integration. |
+| Implicit console-window discovery | Replace with self-contained interactive-surface and completion-channel ownership. |
 | MSAL, broker, browser, and device-code calls | Reuse or adapt behind mechanism interfaces. |
 | Platform secure-cache integration | Reuse selectively after threat-model and cache-lifecycle review. |
 | Packaging and release knowledge | Reuse as evidence; create independent v2 identities and channels. |
@@ -46,32 +46,41 @@ separate downstream consumers under decision
 
 ### Protocol Boundary
 
-Parses a versioned request, validates its shape, invokes the application service, and
-writes one versioned result. Protocol stdout contains only the selected machine payload;
-diagnostics use stderr.
+Parses the explicitly versioned command-line request, validates its shape, invokes the
+application service, and writes one structured success or failure result. The boundary
+separates protocol stdout from designated prompt and diagnostic channels. It owns the
+binary success/failure process mapping under
+[`V2-REQ-030`](../product/requirements/result-and-process-protocol.md#v2-req-030-versioned-result-and-exit-status).
+Serialization and flag spellings remain later contract work.
 
 ### Authentication Policy
 
-Validates whether the requested strategy is coherent and permitted. It selects the next
-stage from typed outcomes rather than arbitrary exception fallthrough.
+Applies versioned product acquisition order after filtering for profile and host
+compatibility. It selects the next legal mechanism from typed retryable outcomes rather
+than arbitrary exception fallthrough, preserving normalized request constraints and the
+original deadline.
 
 ### Account Resolution
 
-Resolves strict account constraints to provider-native account metadata. Username and
-domain may assist discovery but are not stable identity keys.
+Resolves the required full email to a unique real provider account before silent
+acquisition. The provider account is an internal acquisition input, not a stable-ID
+caller contract or persistent first-account binding. Identity-opaque operating-system
+defaults are excluded. A provider-observed email remains necessary for final validation.
+The feasibility of enumeration and authoritative email metadata for any particular
+provider/profile remains a [validation obligation](../validation/strategy.md#primary-journey-gate).
 
 ### Mechanism Adapters
 
 Expose narrow operations such as:
 
 - selected-account silent acquisition;
-- explicitly permitted operating-system-account silent acquisition;
 - broker interactive acquisition;
 - system-browser interactive acquisition;
 - device-code acquisition.
 
-A mechanism returns a complete provider result or typed failure. It does not own the
-global fallback strategy.
+A mechanism returns provider-authoritative result metadata for validation or a typed
+failure. It does not own global fallback policy or public result serialization. These
+operation boundaries do not select mechanisms or assert platform support.
 
 ### Host Capabilities
 
@@ -80,8 +89,13 @@ capabilities. WSL is explicit rather than inferred as generic Linux or Windows.
 
 ### Cache and Coordination
 
-Own cache namespace, secure storage, corruption behavior, logout, v2 cache-version
-migration, and cross-process shared-state coordination under the request deadline.
+Own product-policy state access, safe persistence, unusable-state recovery, and
+cross-process shared-state integrity under the request deadline. Authentication success
+validation and persistence status remain separable under
+[`V2-REQ-041`](../product/requirements/cache-security-and-operational-identity.md#v2-req-041-safe-reusable-state-recovery-and-concurrency).
+Concrete stores, formats, namespace values, locking mechanisms, and storage lifecycle
+remain later design work. Local state-management commands and cross-process interaction
+single-flight are not first-version capabilities.
 
 ## Architecture Invariants
 

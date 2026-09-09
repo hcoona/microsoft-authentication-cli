@@ -150,7 +150,12 @@ and
 [`LinuxHelper`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/LinuxHelper.cs#L40-L85).
 
 Issue [#398](https://github.com/AzureAD/microsoft-authentication-cli/issues/398)
-records secure-store availability problems. V2 must make fallback policy explicit.
+records reported secure-store availability problems, not an independently reproduced
+result. Its [2026-09-09 desk outcome](v1-public-contract-baseline.md#recheck-006-secure-store-availability)
+owns the dated source status and limits. The current V2 policy is governed by
+[`V2-REQ-040`](../product/requirements/cache-security-and-operational-identity.md#v2-req-040-secure-authentication-state)
+and [`V2-REQ-041`](../product/requirements/cache-security-and-operational-identity.md#v2-req-041-safe-reusable-state-recovery-and-concurrency),
+not by V1 fallback behavior.
 
 ## Finding 7: Real Broker and Dependency Regressions Need Release Canaries
 
