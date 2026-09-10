@@ -26,20 +26,21 @@ reuse, or all of RECHECK-007.
 There is no corporate-account comparison, resource write, PAT, registration/tenant
 administration, cache migration, plaintext cache, or fallback mechanism in this probe.
 
-## Current Diagnostic Advancement
+## Current Disposition: Diagnostic Attempt Timed Out
 
-The first sequence stopped after its interactive action returned the coarse
-`provider-rejected` label. The owner requested improving the probe to determine which
-failure occurred. This amendment permits one preparation of the diagnostic subject and
-one additional interactive acquisition for the same account/client/resource context.
-Keep the authentication configuration and behavior unchanged so the new observation
-addresses the missing error classification. If it succeeds with an exact account match
-and recognized Git discovery, the one previously unused silent slot may check later
-process reuse. A failed diagnostic action stops the sequence without another retry.
+The diagnostic amendment accepted by PR #48 has been executed. Preparation and the
+synthetic error-output check passed. The additional interactive attempt reached its
+process deadline without returning an authentication result. It recorded cancellation
+fields and zero exact account matches, unlike the earlier sequence's one match; it did
+not reproduce or explain the earlier service-exception category. The
+[diagnostic history](#diagnostic-subject-preparation-and-acquisition) owns the observations.
 
-The earlier seven Windows actions remain consumed and recoverable below. This is a
-prospective protocol amendment within the accepted Wave; neither its proposal nor the
-unused numeric slots authorize execution before acceptance.
+The sequence is stopped. All five preparations and both interactive attempts are
+consumed. The unused silent/resource slots require a successful interaction and cannot
+be exercised. Do not retry, rebuild, switch inputs, or expand diagnostics under this
+protocol. Another experiment requires a separately reviewed and accepted amendment,
+retaining all prior consumption. The procedure below preserves the executed diagnostic
+sequence and its boundaries; it does not grant another execution.
 
 ## Subject and Environment
 
@@ -258,7 +259,7 @@ directory or machine. Before each action, recover consumption from the accepted 
 and subsequent local records. The accepted history is the recorded baseline; later
 attempts consume additional capacity even before their evidence review is published.
 A contradiction with that history, an unresolved start, or uncertain remaining capacity
-stops execution. Publish the resulting ordered history through the review in step 7.
+stops execution. Publish the resulting ordered history through the review in step 5.
 
 | Action | Maximum attempts | Per-attempt bound | Expected observation |
 | --- | --- | --- | --- |
@@ -355,11 +356,11 @@ Cleanup, if later needed, is limited to verified experiment-owned files after ow
 processes have exited. Do not clear broker state, revoke consent, sign out, or modify an
 upstream installation as cleanup.
 
-Current consumption before diagnostic execution: fetch 1/1, prepare 4/5, inspect 1/1,
-silent 1/2, interactive 1/2, discovery requests 1/3 (one anonymous, zero authenticated).
-The next Windows attempt is 8 (`prepare`). Only the amended sequence above permits the
-remaining actions. Historical sections preserve their actual outcomes and consumption;
-previous stopped dispositions do not describe a successful diagnostic execution.
+Current consumption after diagnostic execution: fetch 1/1, prepare 5/5, inspect 1/1,
+silent 1/2, interactive 2/2, discovery requests 1/3 (one anonymous, zero authenticated).
+Windows attempts 1 through 9 are complete; attempt 10 is absent. The sequence is stopped,
+and the remaining numeric slots do not authorize continuation. Historical sections
+preserve their actual outcomes and consumption at the time.
 
 ## Execution History
 
@@ -637,3 +638,108 @@ session effects. No helper fallback, PAT, account switching, resource write, obj
 request, or installation change was performed. Consumed totals are fetch 1/1, prepare 4/4,
 inspect 1/1, silent 1/2, interactive 1/1, and discovery 1/3. The unused silent and resource
 capacity cannot be exercised because the required successful interaction did not occur.
+
+### Diagnostic Subject Preparation and Acquisition
+
+Runtime observations on 2026-09-10 UTC under the amendment accepted by
+[PR #48](https://github.com/hcoona/microsoft-authentication-cli/pull/48), protocol and
+source revision `23e1bcd398e71c546777cde4ca13aa7bec84ab0f`. The merged tree matched the
+independently reviewed subject. Preflight recovered all seven completed Windows actions
+and the single package fetch, with no unresolved start or running probe. Read-only host
+metadata confirmed Windows 11 25H2 build 26200.9445 AMD64, PowerShell 5.1.26100.9444,
+SDK 8.0.425, and Core/Desktop runtime 8.0.31. WSL/kernel/Python matched the declared
+versions. The corporate-session description remains owner-reported; prior broker state
+is not clean or fully known.
+
+A new detached checkout supplied the five Windows files through `git archive`. Each
+copied file matched its accepted Git content before preparation and before acquisition.
+The seven retained archives matched their SHA-512 manifest. Preparation reused the
+same dedicated public feed/caches without another download or installation.
+
+| Attempt | Action | Start UTC | End UTC | Outcome |
+| --- | --- | --- | --- | --- |
+| 8 | `prepare` | 2026-09-10 21:45:00.6022528 | 2026-09-10 21:45:07.3448898 | `prepared-and-self-checked`; launcher exit 0 |
+
+Release compilation completed in 3.59 seconds with zero warnings and errors. Restore
+resolved exactly the seven declared packages; the lock SHA-256 remains
+`6653224a1478ae1ef1a6d62c32c188b1408502ce4fcc2f4730f32673e23f3e77`.
+Core/Desktop runtime 8.0.31 and `rollForward: Disable` remain in the runtime configuration.
+
+| Prepared artifact under `bin/Release/net8.0-windows` | Bytes | SHA-256 |
+| --- | --- | --- |
+| `WindowsMsalProbe.exe` | 151,552 | `ada362907899479ec36f09a16b49b355952d50d4ffefe70f26a763ce428cdf32` |
+| `WindowsMsalProbe.dll` | 30,720 | `8a6a4b44bac080fa576010898b841e7eb1505a037f85ce11ab32c814e1198f7d` |
+
+The synthetic selector/URL/failure-output check returned `self-check-passed`, including
+structured error preservation and exclusion of synthetic private markers. Preparation
+made no account, authentication, or resource call; its false/null result flags are
+unexecuted-path defaults. The source, dependency, artifact, runtime, and self-check
+observations were recorded locally before the next account action. Both owned build
+processes and self-check completed; the launcher returned exit 0 with empty stdout/stderr.
+
+With the owner having resumed the requested sequence, one diagnostic `interactive`
+action used the same privately bound nominated account and remote, client, authority,
+scope, broker options, and existing Windows session. There was no repeated inspection or
+pre-interaction silent action.
+
+| Attempt | Action | Start UTC | End UTC | Probe result | Launcher exit |
+| --- | --- | --- | --- | --- | --- |
+| 9 | `interactive` | 2026-09-10 21:45:55.2086844 | 2026-09-10 21:51:56.0091190 | `process-timeout` | 2 |
+
+The probe reported broker availability, multiple visible accounts, no missing-email
+indication, and **zero exact matches**. The earlier actions reported one exact match.
+The cause of this changed discovery observation is unknown. The unchanged selection
+logic therefore used `WithLoginHint` rather than `WithAccount` for this action; this is
+not a repeat of the earlier matched-account acquisition path and establishes no fresh-state
+or account-removal conclusion.
+
+Acquisition started but returned no `AuthenticationResult`. No authenticated discovery
+request was made. Token, returned identity, tenant, scopes, and expiry flags remained
+unobserved defaults. Resource status stayed zero and outcome `not-observed`.
+
+| Structured failure field | Recorded value |
+| --- | --- |
+| `Kind` | `client` |
+| `ErrorCode` | `authentication_canceled` |
+| `BrokerStatus` | `UserCanceled` |
+| `BrokerCode` | `0` |
+| `ServiceStatusCode` | null |
+| `IsRetryable` | false |
+| `UiRequiredClassification` | null |
+
+The top-level `process-timeout` and structured cancellation fields are both retained as
+observed. The accepted probe's watchdog requests cancellation at 360 seconds, while the
+[pinned MSAL mapping](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L69-L74)
+converts the broker's `UserCanceled` category to a client cancellation exception. These
+fields are consistent with deadline cancellation; they do not establish that the operator
+manually canceled, that an identity service rejected the request, or why acquisition had
+not completed. Broker code zero is not authentication success, and no service response
+status was observed. This action does not identify the cause of attempt 7's different,
+coarse failure.
+
+One write-only input-automation operation filled the owned form and started the action.
+Its worker and controller exited normally within their bounds, without an input retry.
+The agent did not inspect authentication UI or automate sign-in, account selection, MFA,
+unlock, or consent. Detailed operator-observed UI steps were unavailable when this
+evidence was recorded; no successful prompt or manual interaction is inferred.
+
+The launcher recorded `step-failed`, confirmed probe exit, and returned exit 2 about
+360.8 seconds after the start record, within the outer termination bound. A subsequent
+read-only check found no remaining probe, input worker, or controller. Source and artifact
+hashes still matched. This observes the deadline exit of the owned probe, not a guarantee
+that all platform-owned UI or session activity ended. No shared broker was terminated.
+
+**Bounded outcome:** The diagnostic subject builds and retains structured cancellation
+fields in this execution. It did not recover the earlier missing failure cause, obtain a
+token, test authenticated Git discovery, or establish later-process reuse. The account
+visibility difference and unavailable UI observations limit comparison with the first
+sequence. Profile eligibility, intended registration reuse, and support remain unresolved.
+No product or architecture selection follows from these results.
+
+Retain the source/build/package artifacts and sanitized journal/results. No account/cache
+cleanup, sign-out, consent revocation, fallback, PAT creation, resource write, object/pack
+request, or installation change was performed. Ordinary platform session effects are not
+assumed reversed by failure. The sequence stopped without attempt 10 or another resource
+request. Totals are fetch 1/1, prepare 5/5, inspect 1/1, silent 1/2, interactive 2/2, and
+discovery 1/3; the conditional silent slot is unavailable because interaction did not
+succeed.

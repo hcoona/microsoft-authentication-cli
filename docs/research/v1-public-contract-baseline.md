@@ -1246,20 +1246,22 @@ unavailable until the gate is satisfied.
 The [bounded Windows protocol](experiments/windows-msal-account-metadata.md) governs
 account discovery, selected-account acquisition, result metadata, conditional broker reuse,
 and discovery at the single owner-designated Azure DevOps Git repository. It uses V1's
-managed/native dependency versions in a small research probe. The first sequence stopped without
-a token; the diagnostic amendment will preserve structured MSAL failure fields while
-keeping authentication inputs and behavior unchanged. Neither procedure establishes
+managed/native dependency versions in a small research probe. The first sequence stopped
+without a token; the diagnostic sequence later timed out with structured cancellation
+fields, also without a token. Authentication configuration and selection logic were
+unchanged, but the observed exact-match count changed. Neither sequence establishes
 resource authorization, registration eligibility, or a Profile/support commitment, and
 no corporate-account comparison is performed.
 
 The protocol's [execution history](experiments/windows-msal-account-metadata.md#execution-history)
 records the initial public-index and launcher failures, followed by successful Windows
 compilation and synthetic self-check of the metadata-only subject and the amended
-Git-discovery subject. Both preparations are recorded with their distinct source and
-artifact identities. Preparation used public packages transferred through WSL to a
-Windows local feed and did not change the native Windows account or token boundary.
+Git-discovery subject, then the diagnostic subject with its error-output self-check.
+The preparations retain their distinct source and artifact identities. Preparation used
+public packages transferred through WSL to a Windows local feed and did not change the
+native Windows account or token boundary.
 
-The subsequent recorded sequence found one exact match for the designated account among
+The first account sequence found one exact match for the designated account among
 multiple visible accounts and an anonymous HTTP 302 response with an authentication
 challenge header. Silent acquisition required interaction; the permitted interactive
 action returned the probe's `provider-rejected` category without an authentication result.
@@ -1268,6 +1270,15 @@ category does not identify the cause or establish categorical MSA incompatibilit
 Successful result metadata, token acceptance, fresh-state behavior, and later reuse
 remain unobserved; the [protocol history](experiments/windows-msal-account-metadata.md#account-visibility-and-unresolved-acquisition-failure)
 owns the exact observations and limitations.
+
+The later [diagnostic action](experiments/windows-msal-account-metadata.md#diagnostic-subject-preparation-and-acquisition)
+reported zero exact matches and used the existing login-hint branch, rather than the
+previous matched-account branch. It reached the process deadline with
+`authentication_canceled` / `UserCanceled`, no authentication result, and no authenticated
+resource request. The cancellation category does not establish manual cancellation or
+explain the previous service-exception category. The cause of the changed account
+visibility and detailed operator UI steps remain unknown. The sequence is stopped; no
+reuse follow-up ran, and the evidence does not select a Profile or establish support.
 
 **Source interpretation, retrieved 2026-09-10 UTC:** The pinned MSAL
 [`WamAdapters` exception mapping](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L58-L120)
@@ -1321,7 +1332,7 @@ boundary; it selects no V2 WSL or Linux-broker implementation and transports no 
 | RECHECK-003: [Issue #460](https://github.com/AzureAD/microsoft-authentication-cli/issues/460) | Open; `updated_at = 2026-05-13T17:25:51Z`. Its body proposes a Windows helper, trust/version/transport boundaries, and missing-helper/fallback handling. It is a proposal, not evidence of an upstream implemented bridge. This probe uses an exact local Windows executable and returns only flags. |
 | RECHECK-003/005: [current WSL guidance](https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl) | Documents native Linux broker packages, dependencies, and an unlocked keychain. It does not supply the Windows-helper protocol proposed by #460. This experiment uses native Windows WAM; it does not install or invoke that Linux broker. |
 | RECHECK-005: [PR #462](https://github.com/AzureAD/microsoft-authentication-cli/pull/462) | Open and unmerged; `updated_at = 2026-08-14T10:00:41Z`. The inspected diff adds Linux broker routing, a Linux redirect, and OS-account listing, while retaining an OS-default sentinel fallback. Its reported Ubuntu test is public author-reported experience, not a V2 support result or this experiment's implementation. |
-| RECHECK-007: [Azure DevOps guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth?view=azure-devops) | Still states that ordinary Entra applications do not natively support MSA users for the Azure DevOps resource. The recorded Windows probe found the requested account, then silent acquisition required interaction and the interactive action returned a provider-rejection category without a token result. This does not identify the cause or establish categorical MSA incompatibility. Successful token/resource behavior and intended reuse remain unresolved; no Profile is selected. |
+| RECHECK-007: [Azure DevOps guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth?view=azure-devops) | Still states that ordinary Entra applications do not natively support MSA users for the Azure DevOps resource. The first Windows sequence found the requested account, required interaction, and ended in a coarse acquisition-failure category. The diagnostic sequence later observed zero exact matches and timed out with cancellation fields. Neither returned a token, and these observations do not identify the earlier failure cause; neither establishes categorical MSA incompatibility. Successful token/resource behavior and intended reuse remain unresolved; no Profile is selected. |
 
 RECHECK-001, RECHECK-002, and RECHECK-006 retain their bounded desk dispositions; this
 protocol does not amend product interaction, account, or cache requirements. RECHECK-004
