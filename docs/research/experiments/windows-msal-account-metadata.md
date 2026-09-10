@@ -24,9 +24,14 @@ administration, cache migration, plaintext cache, or fallback mechanism in this 
 
 ## Subject and Environment
 
-Use only the six source/configuration files in
-[`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs) from the exact
-accepted protocol revision. The project builds a Windows Forms research executable with
+The prepared subject uses the six source/configuration files in
+[`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs) at accepted
+revision `3658a64b7ecba7feeb698821bd0aede6ce18f8a6`. Remaining broker actions use that
+retained source copy and the artifact identities recorded in the execution history.
+Read the current accepted Wave and protocol before every action; a retained source
+revision does not preserve authority that later records remove. Record the current
+protocol revision separately when it differs from the launcher's source `Revision`.
+The project builds a Windows Forms research executable with
 one operator-started operation per process. The launcher is a narrow sequential helper
 for this protocol, not a generic experiment runner or an authorization checker. The
 Python helper fetches the seven pinned public packages from WSL before Windows restores
@@ -154,15 +159,11 @@ or automatic silent-to-interactive transition is permitted.
    consumption, and source/dependency findings. Reconcile any failed launcher start that
    occurred before it could write its journal, adding its consumed action and outcome
    before continuing. Unknown capacity stops execution.
-2. The one `fetch` has completed. Verify the retained seven-file manifest and archives,
-   then run the remaining `prepare` using the command below.
-   Review only sanitized build results, the exact package inventory/lock hash, and
-   `self-check-passed`. All seven package pins and the
-   expected target/runtime must match before a broker action. Attempts 1 and 2 are
-   already consumed. This amendment raises the cumulative preparation maximum from two
-   to three for one attempt with the accepted process-handle correction. Reuse the
-   verified local feed; do not fetch again. It neither resets prior consumption nor
-   permits another source/configuration fix or retry under this revision.
+2. Fetch and preparation are complete. Verify the retained source, seven-package
+   inventory/lock hash, prepared artifact hashes, runtime configuration, and
+   `self-check-passed` evidence below. No fetch or preparation capacity remains. Do not
+   rebuild the subject or replay the self-check; a changed subject or missing artifact
+   stops execution and requires a reviewed protocol amendment before replacement work.
 3. When the operator confirms availability of the designated account and is ready at the
    Windows desktop, run `inspect`. Enter the email locally. This can report absence; it
    does not prove that an account is absent from every OS or service store.
@@ -179,19 +180,19 @@ or automatic silent-to-interactive transition is permitted.
    review. Include failed starts, termination/retention, existing-state limitations, and
    remaining limits. A normal research exit is not a V2 success-contract result.
 
-The fetch command retained in Git and its bound helper has already consumed its one
-attempt; do not replay it. From a Windows PowerShell 5.1 session in the newly verified
-five-file source-copy directory:
+The fetch and preparation commands retained in Git have consumed their limits; do not
+replay them. When the operator/account prerequisites above are met, use Windows
+PowerShell 5.1 in the verified prepared source-copy directory:
 
 ```powershell
-.\Invoke-Probe.ps1 -Action prepare -AcceptedRevision <accepted-40-character-commit>
+.\Invoke-Probe.ps1 -Action inspect -AcceptedRevision 3658a64b7ecba7feeb698821bd0aede6ce18f8a6
 ```
 
-Replace `prepare` with one authorized `inspect`, `silent`, or `interactive` action only
-when its prerequisites above are satisfied. The source-copy directory must be
-`%LOCALAPPDATA%\AzureAuthResearch\windows-msal\source-<accepted-commit>`. Do not include an
-email in the command. An agent may launch this Windows script from WSL after performing
-the same checks; user sign-in and consent remain local operator actions.
+Use each `inspect`, `silent`, or `interactive` action only in the sequence and conditions
+above. The source-copy directory is
+`%LOCALAPPDATA%\AzureAuthResearch\windows-msal\source-3658a64b7ecba7feeb698821bd0aede6ce18f8a6`.
+Do not include an email in the command. An agent may launch this Windows script from WSL
+after performing the same checks; user sign-in and consent remain local operator actions.
 
 ## Outcomes, Stops, and Retention
 
@@ -331,6 +332,52 @@ restore outputs, lock, and sanitized start/end records. No cleanup, account-stat
 TLS bypass, global network modification, or extra download was performed. Both Windows
 preparation attempts remain consumed; accepting the correction does not erase them.
 
-Consumed capacity after the explicit preparation-limit amendment: fetch 1/1;
-prepare 2/3; inspect 0/1; silent 0/2; interactive 0/1. The next Windows attempt number
-is 3. No third preparation or corrected-launcher execution has occurred in this proposal.
+### Completed Windows Preparation
+
+Runtime observation on 2026-09-10 UTC under the correction accepted by
+[PR #42](https://github.com/hcoona/microsoft-authentication-cli/pull/42), protocol and
+source revision `3658a64b7ecba7feeb698821bd0aede6ce18f8a6`. Preflight confirmed the
+same declared Windows build 26200.9445, x64 architecture, SDK 8.0.425, Core/Desktop
+runtime 8.0.31, WSL/kernel, and Python 3.13.15. Both earlier preparation attempts and
+the one completed fetch were recovered before starting. The seven retained archives
+still matched their recorded byte lengths and SHA-512 values; no package was fetched
+again. A new detached checkout and five-file Windows copy matched the accepted revision.
+
+| Attempt | Action | Start UTC | End UTC | Outcome |
+| --- | --- | --- | --- | --- |
+| 3 | `prepare` | 2026-09-10 18:29:10.6148856 | 2026-09-10 18:29:18.5918142 | `prepared-and-self-checked`; launcher exit 0 |
+
+Restore reported success after 215 milliseconds. The resolved inventory is exactly the
+seven package name/version pairs recorded above, and the lock SHA-256 remains
+`6653224a1478ae1ef1a6d62c32c188b1408502ce4fcc2f4730f32673e23f3e77`.
+Windows Release compilation succeeded in 4.83 seconds with zero warnings and zero
+errors. The generated runtime configuration selects Microsoft.NETCore.App and
+Microsoft.WindowsDesktop.App 8.0.31 with `rollForward: Disable`.
+
+| Prepared artifact under `bin/Release/net8.0-windows` | Bytes | SHA-256 |
+| --- | --- | --- |
+| `WindowsMsalProbe.exe` | 151,552 | `ada362907899479ec36f09a16b49b355952d50d4ffefe70f26a763ce428cdf32` |
+| `WindowsMsalProbe.dll` | 19,968 | `7f7b1f2422f2fb6b4df0a4fbd36ccf10526d36901b0c9b413dc4945172642c54` |
+
+The research process returned `Mode = self-check` and `Status = self-check-passed`.
+Visible-account and exact-match fields remain `not-observed`; acquisition/result flags
+are false because this synthetic selector/output check invokes no account or token API.
+Those default fields are not an observation that WAM is unavailable or that no account
+exists. The launcher confirmed process completion and recorded the normal end; its
+stdout/stderr were empty, and build/restore stderr files were empty. All five source
+files still matched the accepted revision after execution.
+
+This establishes successful preparation and the synthetic self-check on the declared
+host. It does not establish account visibility, token acquisition, interactive prompt
+behavior, cancellation effectiveness during authentication, or broker reuse. No account
+was selected, login UI shown, or protected resource accessed. RECHECK-007 eligibility
+and the other recorded platform/Profile limitations remain unresolved.
+
+Retain the verified prepared directory, dependency caches/feed, and local sanitized
+records. No account-state cleanup, sign-out, consent change, or installation change was
+performed. Remaining broker actions use the prepared identity above after checking the
+current accepted protocol and operator readiness. An evidence-only update does not
+require rebuilding an unchanged retained subject.
+
+Consumed capacity: fetch 1/1; prepare 3/3; inspect 0/1; silent 0/2; interactive 0/1.
+The next Windows attempt number is 4. No broker action has been executed.
