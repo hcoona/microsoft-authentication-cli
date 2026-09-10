@@ -26,6 +26,7 @@ is navigation, not an independent authority.
 | Architecture, security, and validation reviewers | End-to-end request, interaction, token, and reusable-state lifecycles | [`architecture/request-lifecycle.md`](architecture/request-lifecycle.md) |
 | Architects and security reviewers | OAuth client-registration ownership and profile structure | [`architecture/client-application-identity.md`](architecture/client-application-identity.md) |
 | Security reviewers and implementers | Threats, trust boundaries, and required mitigations | [`security/threat-model.md`](security/threat-model.md) |
+| TMT and security reviewers | Native data-flow model and generated-threat dispositions | [`security/authentication-engine.tm7`](security/authentication-engine.tm7) |
 | Test and release maintainers | Evidence required for validation and support claims | [`validation/strategy.md`](validation/strategy.md) |
 | Architects, maintainers, and reviewers | Establishing `main-v2` as an orphan line | [`decisions/0001-establish-main-v2.md`](decisions/0001-establish-main-v2.md) |
 | Architects, maintainers, and reviewers | Rebuilding the authentication core | [`decisions/0002-rebuild-the-authentication-core.md`](decisions/0002-rebuild-the-authentication-core.md) |

@@ -315,6 +315,20 @@ families:
     failure_mode: Security controls address the wrong assets or trust boundaries.
     review_point: Pull requests that change assets, trust boundaries, or security posture
 
+  - id: threat-model-native
+    state: current
+    concern: Executable data-flow model and tool-specific threat dispositions supporting the security rationale
+    carrier: repository-file
+    path: docs/security/authentication-engine.tm7
+    format: xml
+    producer: Security and architecture maintainers using Microsoft Threat Modeling Tool
+    maintainer: Security and architecture maintainers
+    consumers:
+      - Microsoft Threat Modeling Tool 7 and security reviewers opening the model and regenerating candidate threats during architecture review
+    creation_trigger: Security architecture uses TMT analysis of the authentication request and reusable-state boundaries.
+    failure_mode: Reviewers cannot reproduce the analyzer input or relate generated threats to the actual data flows.
+    review_point: Pull requests changing the model validate its native TMT 7 format by opening and analyzing it in TMT, and review dispositions against docs/security/threat-model.md.
+
   - id: security-interface
     state: current
     concern: Public vulnerability-reporting boundary

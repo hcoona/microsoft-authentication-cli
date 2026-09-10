@@ -303,17 +303,24 @@ to the first-release commitment.
 
 ## Decision-Critical Open Questions
 
-These are unresolved premises, not selected mechanisms or support promises. The
-[runtime view](request-lifecycle.md) can allocate responsibility while these choices
-remain open.
+Use V1's existing integrations and the
+[pinned dependency delta assessment](../research/v1-public-contract-baseline.md#architecture-reuse-and-remaining-deltas)
+as the engineering baseline. Account enumeration, account-scoped acquisition, provider
+result metadata, and platform-cache integration already have concrete APIs and source
+examples. Preserve MSAL's full result at the mechanism boundary and replace the V1 policy
+that discards or weakens it. These responsibility choices do not need a new experiment.
 
-| Question | Why it changes the architecture | Evidence route and disposition |
+The remaining questions concern specific differences or host/profile choices. They do
+not put every existing authentication path back into doubt, and they do not block
+accepting the [runtime view](request-lifecycle.md) as a high-level allocation.
+
+| Remaining question | Existing basis and decision impact | Smallest evidence route and disposition |
 | --- | --- | --- |
-| Which external registration can serve the requested personal account and Azure DevOps resource? | An otherwise sound acquisition path cannot complete the primary journey without eligible registration. | [Client-identity gate](client-application-identity.md#governing-evidence-and-gates), RECHECK-007, and bounded account-type evidence; no profile selected. |
-| Can an eligible provider enumerate the real requested account and return authoritative email and tenant metadata? | Determines which silent paths and first-use OS-state reuse can satisfy the strict contract. | [Primary-journey gate](../validation/strategy.md#primary-journey-gate); no opaque-default substitution or hidden account binding. |
-| Can the provider separate token acquisition/validation from unconfirmed persistence? | Determines whether the adapter can meet non-waiting result delivery and request-end cleanup. | Documented dependency behavior first, then a bounded probe only if needed; no invented background persistence service. |
-| Which host integrations obey no-interaction, owned completion, cancellation, and deadline constraints? | Determines legal mechanisms and their per-platform ordering. | Relevant rechecks and [interaction/platform evidence](../validation/strategy.md#interaction-matrix); no platform path selected. |
-| Which secure-state facilities provide compatible reuse and integrity across invocations? | Determines the need for engine-owned state and the limits of repeated noninteractive operation. | RECHECK-006 and [reuse evidence](../validation/strategy.md#cross-consumer-reuse-scenarios); no store, namespace, or fallback selected. |
+| Does the external registration serve the requested personal account and Azure DevOps resource? | V1 already uses the Visual Studio registration and resource scope. The specific MSA combination, rather than generic token acquisition, determines primary-journey eligibility. | [Client-identity gate](client-application-identity.md#governing-evidence-and-gates) and RECHECK-007 account-type evidence; no profile selected. |
+| Does the chosen profile expose the required full email, including on first use of OS state? | MSAL exposes accounts and result metadata, but documents a nullable UPN-format username. Visibility and email meaning determine which strict silent paths are eligible. | Inspect the chosen provider/profile contract and applicable public experience; use a bounded primary-journey observation only for remaining uncertainty. No opaque-default substitution or alias inference. |
+| How will safe persistence completion or failure be reported for the chosen integration? | The pinned managed MSAL path awaits cache callbacks; MSAL Extensions catches storage-write errors. Provider task completion alone is not a durable-storage receipt. | Inspect the cache integration's completion/status boundary before choosing it; a probe is needed only if source and contracts leave the decision unresolved. No background persistence service. |
+| Which host integrations meet owned completion and finite termination? | Existing silent and interactive mechanisms can be reused behind separate policy stages. Host UI ownership, late callbacks, and cancellation need a concrete host assessment. | Applicable rechecks and [interaction evidence](../validation/strategy.md#interaction-matrix); no automatic all-platform experiment matrix or selected platform path. |
+| Which state integration permits compatible reuse across V2 callers? | Existing platform stores and MSAL caches are the starting point. V2 removes plaintext fallback and upstream namespaces and preserves compatible request contexts. | Assess the chosen store's documented isolation and update contract, then targeted [reuse scenarios](../validation/strategy.md#cross-consumer-reuse-scenarios). Do not rebuild OS storage guarantees. |
 
 The [architecture recheck assessment](../research/v1-public-contract-baseline.md#architecture-boundary-recheck-assessment)
 records the current desk inputs and their limits. Experiments still require the separately

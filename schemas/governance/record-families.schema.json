@@ -94,6 +94,7 @@
         "format": {
           "enum": [
             "markdown",
+            "xml",
             "yaml",
             "json",
             "json-schema"

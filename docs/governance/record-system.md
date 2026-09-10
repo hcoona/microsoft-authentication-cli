@@ -77,6 +77,7 @@ Choose the canonical format by the primary operation:
 | Flat analytical data | CSV when nested structure is unnecessary |
 | Dependencies and supply-chain data | An established format such as CycloneDX or SPDX |
 | Test and scanner output | The tool's standard format, such as JUnit or SARIF |
+| Executable threat-model input | The modeling tool's native format, with native open/analysis validation recorded in the pull request |
 
 Do not maintain a Markdown copy of a structured record. A narrative report may summarize
 structured evidence when it adds a distinct conclusion, limitation, or decision impact.
