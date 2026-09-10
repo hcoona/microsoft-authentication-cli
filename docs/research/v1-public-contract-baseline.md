@@ -118,6 +118,14 @@ Confidence is high for direct fixed-source findings and documented public text.
 Confidence in real provider, broker, host, secure-store, installer, or network effects is
 not inferred from those materials.
 
+V1 is an existing engineering baseline, not a hypothetical implementation. Its released
+integrations, documented dependency contracts, and applicable public experience can
+support architecture decisions without a new local reproduction. A public runtime report
+retains its actual scenario and provenance; it need not be relabeled as our experiment
+to be useful. Neither adoption alone nor an unspecified successful login establishes a
+different account, resource, host, or V2 postcondition. Investigate the material difference
+from an established path rather than reopening the feasibility of its entire mechanism.
+
 ## Executive conclusion
 
 AzureAuth V1 publicly presents a cross-platform command-line wrapper around MSAL for
@@ -155,6 +163,79 @@ not define the deterministic machine contract required by V2:
 weaken the accepted V2 interaction or account requirements. `RECHECK-007` records current
 guidance but does not satisfy the prerequisite for selecting or distributing the
 Microsoft-owned Azure DevOps profile.
+
+## Architecture Reuse and Remaining Deltas
+
+This desk assessment uses the fixed V1 source above and MSAL.NET **4.83.1**, commit
+[`d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/tree/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f),
+retrieved on **2026-09-10 UTC**. That is the managed MSAL and MSAL Extensions version
+referenced by AzureAuth
+[`0.9.6`](https://github.com/AzureAD/microsoft-authentication-cli/blob/8ef1b8b00782bf20a51de078289819a79c3cba70/src/MSALWrapper/MSALWrapper.csproj#L29-L35).
+It is a comparison baseline, not a selected V2 dependency pin. No authentication,
+cache, build, or platform experiment was performed for this assessment.
+
+### Existing Mechanism and Result Contracts
+
+**Source findings:** V1's
+[`PCAWrapper`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/PCAWrapper.cs#L81-L180)
+already calls MSAL account enumeration, selected-account silent acquisition, interactive
+acquisition, and device-code acquisition. The dependency's
+[`IClientApplicationBase`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/IClientApplicationBase.cs#L37-L74)
+defines application-cache account enumeration and account-scoped silent acquisition,
+including `MsalUiRequiredException` when interaction is needed. These operations do not
+need to be invented or experimentally rediscovered to allocate V2 responsibilities.
+
+MSAL's
+[`AuthenticationResult`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/AuthenticationResult.cs#L257-L331)
+exposes the access token, expiry, account, token tenant, and granted scopes. V1's
+[`TokenResultOrNull`](https://github.com/AzureAD/microsoft-authentication-cli/blob/de20930c34b3b86c8a0ed7bbdeeca3f662dae918/src/MSALWrapper/PCAWrapper.cs#L209-L216)
+reduces that result to a parsed access token and correlation ID. Preserving the provider
+result at the V2 adapter boundary therefore remedies an application-layer information
+loss; absence of a metadata API is not an open feasibility question.
+
+The narrower limit is meaningful:
+[`IAccount.Username`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/IAccount.cs#L17-L22)
+is documented as a displayable UPN-format value that can be null. `AuthenticationResult`
+also documents missing account elements and tenant information. Those contracts alone do
+not guarantee that every profile returns the requested full email, exposes every OS
+account on first use, or represents aliases identically. Keep exact matching and missing
+metadata handling in V2; do not infer aliases or parse the access token to fill gaps.
+
+### Persistence Completion and Observability
+
+**Source findings:** In the pinned managed request path,
+[`RequestBase`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Internal/Requests/RequestBase.cs#L322-L362)
+awaits cache processing before constructing the authentication result. The
+[`token cache`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/TokenCache.ITokenCacheInternal.cs#L250-L282)
+awaits the after-access callback. MSAL Extensions
+[`registers`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Extensions.Msal/MsalCacheHelper.cs#L306-L318)
+its persistence callback, whose
+[`write path`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Extensions.Msal/MsalCacheHelper.cs#L443-L488)
+catches and logs a storage-write exception, then releases its lock.
+
+**Architecture inference:** Treating every provider task as returning before persistence,
+or equating successful task completion with confirmed durable storage, would both be
+incorrect assumptions about this path. V2 can retain the existing secure-store
+integration knowledge, but needs an explicit persistence-status boundary. The remaining
+question is which supported integration reports completion or failure while respecting
+the request lifetime and `V2-REQ-041`. This finding does not generalize the managed path
+to broker-owned storage or justify an added background persistence service.
+
+### Decision Impact
+
+| Concern | Existing basis to reuse | V2 difference and smallest remaining investigation |
+| --- | --- | --- |
+| Account discovery and silent acquisition | Real `IAccount` enumeration and account-scoped MSAL calls already exist. | Check first-use OS-account visibility and whether the selected profile supplies the exact email needed by the primary journey; ordinary cached-account matching is application logic. |
+| Result identity | MSAL exposes account, token tenant, scopes, and expiry. | Preserve those fields and enforce the accepted postconditions; inspect profile-specific missing or alias metadata only where it affects the journey. |
+| Interaction | V1 integrates broker, browser, and device code; MSAL separates silent and interactive APIs. | Replace V1's combined fallback policy. Host-owned completion and cancellation need evidence for the concrete host choice, not a new proof that OAuth interaction exists. |
+| Secure reuse | V1 configures MSAL Extensions and platform stores. | Remove plaintext fallback and upstream namespaces; determine completion/status reporting and compatible V2 reuse. Rely on platform protection contracts within the workstation threat model. |
+| Personal-account Azure DevOps access | V1 supplies the Visual Studio client ID and Azure DevOps scope through existing acquisition paths. | Obtain evidence for the specific MSA/resource/registration combination under RECHECK-007; general V1 adoption does not identify that combination. |
+
+Use this delta assessment when accepting high-level responsibilities. It does not require
+every integration or future release scenario to be demonstrated before the architecture
+can be useful. Only an unresolved difference that could invalidate a particular choice
+keeps that choice open. The [validation strategy](../validation/strategy.md) separately
+governs evidence before implementation behavior or platform support is claimed.
 
 ## Caller-visible V1 surface
 
@@ -1086,6 +1167,39 @@ this change performs no experiment or release:
 The actual #31 merged-Wave fallback evaluated all seven entries in the independent
 review linked above. This proposal does not change the Wave. Any later merged-Wave,
 release, or newly fired source-relevant trigger still requires its applicable review.
+
+### Architecture Boundary Recheck Assessment
+
+The high-level architecture allocation under Issue #35 continues the interaction,
+account, and cache decision concerns. A desk refresh on **2026-09-09 UTC** inspected the
+named public sources for RECHECK-001, RECHECK-002, and RECHECK-006:
+
+| Entry and source | Retrieved public state | Bounded decision impact |
+| --- | --- | --- |
+| RECHECK-001: [Issue #464](https://github.com/AzureAD/microsoft-authentication-cli/issues/464) | Open, zero comments; `updated_at = 2026-08-17T21:12:04Z`. The Issue API and first comments page were read; the comments page was empty. | The named source remains an unanswered interaction-policy request, not a documented upstream no-interaction contract. Preserve separate engine policy and provider operations. |
+| RECHECK-002: [Issue #465](https://github.com/AzureAD/microsoft-authentication-cli/issues/465) | Open, zero comments; the public page's embedded issue metadata reports `updatedAt = 2026-08-27T22:02:13Z`. | No new resolution in this carrier changes the fixed-source strict-selection findings. Preserve real-account resolution and final authoritative result validation. |
+| RECHECK-006: [Issue #398](https://github.com/AzureAD/microsoft-authentication-cli/issues/398) | Open, zero comments; the public page's embedded issue metadata reports `updatedAt = 2024-08-13T16:18:59Z`. | The accepted bounded report remains unresolved. It does not demonstrate current dependency behavior or select a store, plaintext fallback, or supported platform. |
+
+Authenticated upstream API retrieval was unavailable because of organization SAML
+enforcement. Anonymous Issue #464 API retrieval succeeded; subsequent anonymous API
+retrieval hit a rate limit, so the refresh used the public HTML pages for #465 and #398.
+The latter snapshots establish the Issue state and comment count, not a new runtime
+observation or a fresh audit of upstream implementations. Raw #398 diagnostics were not
+retained. The earlier source findings and their limitations remain authoritative for
+their recorded versions.
+
+For this architecture boundary allocation, the three desk outcomes preserve the accepted
+requirements and source-reuse dispositions. They do not establish that a particular
+provider exposes the needed account metadata, persistence separation, or no-UI behavior.
+Those decision-critical premises remain open in the
+[architecture](../architecture/overview.md#decision-critical-open-questions).
+
+RECHECK-003, RECHECK-004, and RECHECK-005 do not fire: no WSL, system-browser, or
+Linux-broker workstream is selected by the mechanism-neutral views. RECHECK-007's
+account-type prerequisite remains unresolved; no profile is selected or enabled, and
+its dated public-guidance finding below is not refreshed by these Issue snapshots. There
+is no release or Wave change. Later selections and fired triggers still require their
+applicable outcomes and independent evidence review.
 
 ### `RECHECK-007`: Azure DevOps Microsoft-account behavior
 

@@ -40,6 +40,15 @@ Every copied or substantially derived file must retain the notices required by t
 License. Imported code remains subject to independent review; upstream origin is not
 evidence that it satisfies v2 invariants.
 
+### Security Modeling Template
+
+[`docs/security/authentication-engine.tm7`](docs/security/authentication-engine.tm7)
+embeds the public `default.tb7` template from
+[`microsoft/threat-modeling-templates` at `0ece9c71b6f3710b10d497bd1ef63e57805e7c3e`](https://github.com/microsoft/threat-modeling-templates/blob/0ece9c71b6f3710b10d497bd1ef63e57805e7c3e/default.tb7).
+Its Microsoft copyright and MIT permission notice are retained in the model's XML
+comment. The project-specific diagram and dispositions are architecture records, not
+imported production implementation.
+
 ## Update Policy
 
 The fork does not promise continuous synchronization with upstream. Security and

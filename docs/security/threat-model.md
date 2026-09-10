@@ -51,6 +51,10 @@ guarantee, or expanded product boundary needs an explicit accepted decision.
 
 ## Trust Boundaries
 
+The [request lifecycle view](../architecture/request-lifecycle.md#request-context-and-trust)
+allocates application and dependency responsibilities across these boundaries. This
+threat model owns their security assumptions and mitigation tradeoffs.
+
 - Calling process to CLI protocol boundary.
 - CLI process to MSAL and native broker.
 - Process to browser, device-code terminal, or other interactive surface.
@@ -102,3 +106,90 @@ The normative release evidence requirements are defined by
 [`validation/strategy.md`](../validation/strategy.md). Security review prioritizes its
 strict-account, interaction, cancellation, cache, WSL, authority, output, dependency, and
 artifact-isolation scenarios because they exercise the threats above.
+
+## TMT Analysis and Disposition
+
+The checked-in [native model](authentication-engine.tm7) is the executable data-flow
+input and candidate-disposition record for
+[Microsoft Threat Modeling Tool](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool).
+This Markdown record owns the security assumptions, interpretation, and requirement
+routing. The native model does not create a second product policy.
+
+The model covers one CLI process containing the engine and MSAL, its caller, OS broker,
+user-interaction facility, platform-secure reusable state, identity service, local
+diagnostic sink, and optional telemetry endpoint. It has two boundary containers and
+16 directed flows. MSAL is an in-process dependency; a broker is an external OS facility.
+The workstation boundary and CLI process/API boundary distinguish network trust from
+local process and dependency responsibilities. They do not assert that every local
+same-user process is a separately protected OS security principal. The secure-state role
+does not select a V2 cache format or imply access to a broker's private store.
+
+The browser/device-code interaction role combines alternative mechanisms to expose their
+common trust boundary; it is not a single proposed host component. Resource access,
+Git/package protocols, and credential translation remain with the caller. Build/release
+threats remain in the narrative model above because they have a separate lifecycle from
+this runtime diagram. No real account, tenant, token, or authentication observation is
+stored in the model.
+
+### Tool and Reproduction
+
+On **2026-09-10 UTC**, the native model was opened and analyzed in the Windows desktop
+TMT **7.3.51110.1** using **SDL TM Knowledge Base (Core) 4.1.0.11**. The embedded knowledge
+base comes from Microsoft's
+[public default template at `0ece9c7`](https://github.com/microsoft/threat-modeling-templates/blob/0ece9c71b6f3710b10d497bd1ef63e57805e7c3e/default.tb7).
+The tool generated **87 candidates**. Analysis is a design review aid, not an
+authentication experiment, implementation test, or proof of platform security.
+
+To reproduce, open `authentication-engine.tm7` with that TMT version, inspect the design
+view, and switch to Analysis View. The file embeds its template; importing an Azure
+template or regenerating from Markdown is unnecessary. Review candidate justification
+and status in the native file alongside the requirements linked above. Record the exact
+model revision, tool/template versions, and resulting counts in the pull request when
+the model changes. Template upgrades may change the candidate set and require review;
+zero findings is not an acceptance target. A Windows installation or analyzer job is
+not required for every unrelated CI change.
+
+### Candidate Dispositions
+
+All 87 candidates have a scenario-specific or threat-family justification in the native
+file. **70 are `NeedsInvestigation` and 17 are `NotApplicable`; none is marked `Mitigated`.**
+`NeedsInvestigation` records planned application controls, dependency configuration, or
+verification obligations. It does not mean that 70 new architectural feasibility
+questions or observed vulnerabilities were found. Product implementation has not begun.
+
+| Candidate group | Design disposition and verification focus |
+| --- | --- |
+| Spoofing and input tampering | Preserve explicit intent, select a real account, validate provider identity/tenant/scopes, use trusted authority and broker APIs, and bind completion to the request. Test wrong-default and unverifiable-success scenarios. |
+| Token/state disclosure and store corruption | Use OS process boundaries, maintained OAuth/TLS integration, and platform-secure storage; preserve secret-free diagnostics, V2 state identity, and safe corruption recovery. No second OS-security subsystem or plaintext fallback. |
+| Interrupted flows, process failure, and inaccessible storage | Bound work by the original deadline, classify failures, reject late results, and distinguish validated success from unconfirmed persistence. Optional telemetry failure cannot change the authentication result. |
+| Execution-flow and privilege threats | Keep request parsing and policy explicit, use maintained dependency parsers, and introduce no privileged helper or impersonation service. Full compromise of the OS session/kernel/broker remains outside the declared threat model. |
+| OAuth response CSRF candidates | Preserve the maintained OAuth implementation's state, PKCE, and redirect validation where applicable, plus V2-owned completion and final result validation. Do not implement a parallel OAuth verifier. |
+| Generic nonrepudiation candidates (`R6`/`R7`, 15 items) | Not applicable: the engine promises typed results and sanitized diagnostics, not signed delivery receipts or an identity-rich audit ledger. Persistence-status accuracy remains applicable under the separate storage candidate. |
+| CSRF on a CLI request or broker API result (IDs 11 and 28) | Not applicable to these non-browser-cookie endpoints. Their input-validation and spoofing concerns remain applicable under other candidates. |
+
+Generic template attribute defaults are question prompts, not observations that a
+platform lacks TLS, memory protection, or secure storage. Dispositions evaluate the
+actual flow and the declared dependency trust rather than mechanically adopting each
+suggested control.
+
+### Scenario Review Beyond STRIDE Generation
+
+The template does not fully express strict full-email selection, no-interaction
+permission, or validated-success/persistence-warning semantics. Review those directly
+against the primary journey and the
+[UML lifecycle](../architecture/request-lifecycle.md), including:
+
+- a corporate OS default differing from the requested personal account;
+- a silent request encountering authentication or secure-store unlock UI;
+- a provider result with missing or mismatched identity metadata;
+- a valid result with unconfirmed persistence, without waiting indefinitely or leaving
+  V2-controlled work running;
+- a late completion after cancellation or timeout;
+- consumer changes that preserve authentication context and should reuse eligible state.
+
+The [V1-to-V2 delta assessment](../research/v1-public-contract-baseline.md#architecture-reuse-and-remaining-deltas)
+provides the dependency baseline for these checks. TMT cannot establish the specific
+personal-account/Azure DevOps registration eligibility, first-use account visibility, or
+real host cancellation behavior. Those focused integration questions retain their
+existing evidence routes; the model does not enlarge them into a general hardening or
+experiment program.

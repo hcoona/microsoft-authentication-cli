@@ -66,7 +66,7 @@ ROOT_RECORD_PATHS = frozenset(
     }
 )
 RECORD_ROOT_SUFFIXES = {
-    "docs": (".md", ".yaml", ".yml", ".json", ".jsonl", ".csv"),
+    "docs": (".md", ".yaml", ".yml", ".json", ".jsonl", ".csv", ".tm7"),
     "schemas": (".schema.json",),
     "contracts": (".schema.json",),
     "designs": (".md",),

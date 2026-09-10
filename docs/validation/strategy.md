@@ -37,6 +37,14 @@ does not waive the primary-journey gate, required rechecks, experiment authoriza
 accepted protocols. Evidence depth should reflect the decision, credible failure, and
 cost, rather than an arbitrary unit-test count or coverage target.
 
+For architecture work, start from V1's existing integrations and the
+[V1-to-V2 delta assessment](../research/v1-public-contract-baseline.md#architecture-reuse-and-remaining-deltas).
+Use relevant public runtime experience with its reported scope, alongside source and
+dependency contracts; local repetition is not a prerequisite for learning from an
+existing product. Focus new observations on a changed assumption that can alter the
+decision. This avoids repeating established mechanism checks while preserving the
+V2-specific primary-journey and release evidence below.
+
 ## Primary Journey Gate
 
 The [personal Azure DevOps Git journey](../product/user-stories.md#primary-journey-personal-azure-devops-git-access)
@@ -67,6 +75,11 @@ and a protocol under [experiment safety](../research/experiment-safety.md).
 This strategy records proof obligations, not an executable experiment protocol.
 
 ## Validation Layers
+
+The [architecture allocation](../architecture/overview.md#user-goal-allocation) and
+[request lifecycle views](../architecture/request-lifecycle.md) identify the application
+boundaries and paths exercised by these scenarios. Their diagrams are design views, not
+evidence that a mechanism or platform passes the corresponding tests.
 
 ### Contract Tests
 

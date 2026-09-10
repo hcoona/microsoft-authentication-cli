@@ -98,6 +98,109 @@ ambiguity about actors, goals, or the system boundary.
 | Packaging and release knowledge | Reuse as evidence; create independent v2 identities and channels. |
 | ADO PAT implementation | Defer behind a separate product-specific decision. |
 
+## C4 Structural Views
+
+These views use the [C4 model](https://c4model.com/diagrams), from the engine's system
+context to its single CLI application and conceptual components. Mermaid renders the
+explicitly labeled C4 element kinds and boundaries; blue elements belong to the engine,
+and gray elements are external. A relationship describes
+an intended responsibility, not evidence that a host or Client Profile supplies it.
+Platform services are external dependencies; MSAL is an in-process library integration.
+Exact runtime, platform integrations, state-store topology, and distributed profiles
+remain unselected.
+
+### Level 1: System Context
+
+This view answers who requests authentication, who authenticates the user, and who uses
+the resulting token. The engine does not connect to the consumer's protected resource.
+
+```mermaid
+flowchart LR
+    user(["Developer<br/>[Person]<br/>Selects an account and interaction permission"])
+    caller["Calling tool or adapter<br/>[External software system]<br/>Owns the consumer integration"]
+    engine["AzureAuth Unofficial V2<br/>[Software system]<br/>Acquires one validated delegated token"]
+    identity["Microsoft identity platform<br/>[External software system]<br/>Owns authentication, consent, and issuance"]
+    platform["Operating-system services<br/>[External software system]<br/>Account, UI, and secure-state capabilities"]
+    resource["Protected service<br/>[External software system]<br/>Azure DevOps, Artifacts, or another resource"]
+    user -->|Selects account and operation| caller
+    caller <-->|Authentication request and result<br/>Versioned CLI protocol| engine
+    engine -->|Acquires token through MSAL<br/>OAuth 2.0| identity
+    engine -->|Uses eligible capabilities<br/>Platform APIs| platform
+    user -->|Completes permitted interaction| engine
+    caller -->|Applies token<br/>Consumer service protocol| resource
+    classDef owned fill:#1168bd,color:#fff,stroke:#0b4884
+    classDef external fill:#e5e7eb,color:#111827,stroke:#6b7280
+    class engine owned
+    class user,caller,identity,platform,resource external
+```
+
+### Level 2: Containers
+
+There is one native CLI application per authentication invocation. Coordination across
+invocations uses eligible secure state, not a resident engine service. The two state
+responsibilities below distinguish ownership; they do not require two stores or select a
+shared-cache format. Broker-owned state may satisfy reuse without an engine-owned store.
+
+```mermaid
+flowchart LR
+    caller["Calling tool or adapter<br/>[External software system]"]
+    subgraph v2["AzureAuth Unofficial V2 [Software system]"]
+        cli["Authentication CLI<br/>[Container: native process]<br/>Runtime unselected<br/>Request, acquisition, validation, and result"]
+        state[("Engine-owned reusable state, if needed<br/>[Container: secure data store]<br/>Realization unselected<br/>Owned state and integrity coordination")]
+    end
+    platform["Operating-system authentication services<br/>[External software system]<br/>Own broker state, secure storage, and platform UI"]
+    identity["Microsoft identity platform<br/>[External software system]<br/>Owns token issuance and registration policy"]
+    caller <-->|CLI arguments<br/>Structured stdout| cli
+    cli -->|Acquires token<br/>MSAL / OAuth 2.0| identity
+    cli -->|Uses eligible accounts and UI<br/>MSAL / platform APIs| platform
+    cli -->|Optional persistence and reuse<br/>Secure-state boundary| state
+    state -->|Relies on secure storage<br/>Platform storage contract| platform
+    classDef owned fill:#1168bd,color:#fff,stroke:#0b4884
+    classDef external fill:#e5e7eb,color:#111827,stroke:#6b7280
+    class cli,state owned
+    class caller,platform,identity external
+```
+
+Client Profile configuration enters through explicit selection under the
+[client-identity view](client-application-identity.md); its representation and storage are
+later contract work. Persistent identities must be resolved through the
+[operational-identity registry](../governance/operational-identities.yaml) before their
+implementation. This view does not authorize reading upstream application state.
+
+### Level 3: CLI Components
+
+The component view shows responsibility and dependency direction inside the CLI.
+Components need not map one-to-one to classes, assemblies, or interfaces. Arrows mean
+"uses the boundary of"; return values travel back to the caller. Concrete platform
+implementations sit behind these boundaries and do not call back into global policy.
+
+```mermaid
+flowchart TB
+    subgraph cli["Authentication CLI [Container]"]
+        direction TB
+        protocol["Protocol boundary<br/>[Component: CLI boundary]<br/>Request shape and terminal result"]
+        policy["Authentication policy<br/>[Component: application orchestration]<br/>Intent, ordering, lifetime, and validation"]
+        accounts["Account resolution<br/>[Component: selection rule]<br/>Unique real account for requested email"]
+        mechanisms["Mechanism adapters<br/>[Component: MSAL integration]<br/>Provider operations and authoritative metadata"]
+        state["Cache and coordination<br/>[Component: state boundary]<br/>Reuse, persistence, and integrity"]
+        host["Host capabilities<br/>[Component: platform integration]<br/>Capabilities and owned interaction resources"]
+        observation["Diagnostics and optional telemetry<br/>[Component: output boundary]<br/>Sanitized events only"]
+        protocol -->|Submits parsed request| policy
+        policy -->|Resolves account| accounts
+        accounts -->|Enumerates real accounts| mechanisms
+        policy -->|Runs legal acquisition| mechanisms
+        policy -->|Applies state policy| state
+        policy -->|Checks capabilities and lifetime| host
+        mechanisms -->|Uses eligible state| state
+        mechanisms -->|Uses platform context| host
+        state -->|Uses secure-store capabilities| host
+        protocol -->|Routes sanitized diagnostics| observation
+        policy -->|Emits sanitized outcome events| observation
+    end
+    classDef owned fill:#438dd5,color:#fff,stroke:#1168bd
+    class protocol,policy,accounts,mechanisms,state,host,observation owned
+```
+
 ## Conceptual Layers
 
 ### Protocol Boundary
@@ -111,10 +214,18 @@ Serialization and flag spellings remain later contract work.
 
 ### Authentication Policy
 
-Applies versioned product acquisition order after filtering for profile and host
-compatibility. It selects the next legal mechanism from typed retryable outcomes rather
+Resolves the explicitly selected Client Profile and normalizes request intent against its
+cloud, client, and tenant constraints before provider work. Owns the original request
+deadline and cancellation scope. Applies versioned product acquisition order after
+filtering for profile and host compatibility. It selects the next legal mechanism from typed retryable outcomes rather
 than arbitrary exception fallthrough, preserving normalized request constraints and the
 original deadline.
+
+Owns final success validation against the same normalized request, using provider metadata
+supplied by the adapters. An adapter's reported success is a candidate until validation
+completes. Only the validated result reaches protocol serialization; access-token contents
+are not a second identity source. Per-platform mechanism ordering remains unselected until
+the corresponding capability and evidence prerequisites are satisfied.
 
 ### Account Resolution
 
@@ -143,6 +254,11 @@ operation boundaries do not select mechanisms or assert platform support.
 Describe broker, browser, terminal, v2-owned interaction, keyring, and process-host
 capabilities. WSL is explicit rather than inferred as generic Linux or Windows.
 
+Own creation and termination of engine-controlled interaction surfaces and completion
+channels. Capability reporting does not supply account, profile, scopes, or interaction
+permission. A host integration that cannot respect the request lifetime or establish its
+required interaction context remains unavailable.
+
 ### Cache and Coordination
 
 Own product-policy state access, safe persistence, unusable-state recovery, and
@@ -157,6 +273,60 @@ The same requirement owns first-use OS-state eligibility and reuse across compat
 consumers. Engine-created state is not a prerequisite for considering OS sign-in state;
 consumer-specific credential translation remains outside this layer. This allocation
 does not choose a shared-cache design or establish provider-state availability.
+
+### Diagnostics and Optional Telemetry
+
+Receives sanitized diagnostic and outcome information through a separate output boundary.
+It does not receive token material, raw emails, or stable email-derived identifiers and
+cannot trigger acquisition, fallback, or interaction. The protocol boundary alone owns
+authentication stdout. Optional export remains disabled without explicit configuration
+and cannot change the result or exceed its finite termination budget under
+[`V2-REQ-046`](../product/requirements/cache-security-and-operational-identity.md#v2-req-046-optional-telemetry-semantics).
+Exporter technology, destinations, event schema, and Lasso replacement work are not
+selected by this allocation.
+
+## User-Goal Allocation
+
+The [user stories](../product/user-stories.md) own these goals and their requirement and
+validation routes. This table identifies architectural ownership without adding scenarios
+to the first-release commitment.
+
+| User goal | Primary architectural allocation | Boundary or unresolved premise |
+| --- | --- | --- |
+| Personal Azure DevOps Git access with a different corporate OS default | Protocol boundary preserves explicit intent; account resolution and final validation enforce identity; adapters obtain the token. | The caller owns Git and the Azure DevOps scope. Registration eligibility and provider identity metadata remain unresolved. |
+| Reuse OS sign-in on first use | Account resolution considers eligible provider accounts through mechanism adapters; cache coordination does not require prior engine-created state. | OS sign-in alone is not account enumeration or resource authorization. |
+| Reuse across package ecosystems and repositories | Cache coordination and policy preserve compatible account, tenant, profile, resource, scope, and security contexts. | Consumer identity is not a new authentication partition by itself; storage topology remains open. |
+| Background requests without UI | Policy carries interaction permission through account/state access and all provider operations; host integration excludes UI-requiring paths. | Includes secure-state unlock; unavailable silent capability does not permit interaction. |
+| Direct protected-service access | The same protocol boundary accepts explicit target intent and returns a validated token. | The caller owns service access; no general personal-account/resource eligibility is assumed. |
+| Authentication inside a remote-tool workflow | External integrations use the same request/result boundary. | MCP and other host protocols remain outside the engine. |
+| Upgrade without changing a compatible adapter | Protocol boundary owns supported-major dispatch, serialization, and process semantics. | Internal provider changes do not redefine a supported public protocol; its schema is later work. |
+
+## Decision-Critical Open Questions
+
+Use V1's existing integrations and the
+[pinned dependency delta assessment](../research/v1-public-contract-baseline.md#architecture-reuse-and-remaining-deltas)
+as the engineering baseline. Account enumeration, account-scoped acquisition, provider
+result metadata, and platform-cache integration already have concrete APIs and source
+examples. Preserve MSAL's full result at the mechanism boundary and replace the V1 policy
+that discards or weakens it. These responsibility choices do not need a new experiment.
+
+The remaining questions concern specific differences or host/profile choices. They do
+not put every existing authentication path back into doubt, and they do not block
+accepting the [runtime view](request-lifecycle.md) as a high-level allocation.
+
+| Remaining question | Existing basis and decision impact | Smallest evidence route and disposition |
+| --- | --- | --- |
+| Does the external registration serve the requested personal account and Azure DevOps resource? | V1 already uses the Visual Studio registration and resource scope. The specific MSA combination, rather than generic token acquisition, determines primary-journey eligibility. | [Client-identity gate](client-application-identity.md#governing-evidence-and-gates) and RECHECK-007 account-type evidence; no profile selected. |
+| Does the chosen profile expose the required full email, including on first use of OS state? | MSAL exposes accounts and result metadata, but documents a nullable UPN-format username. Visibility and email meaning determine which strict silent paths are eligible. | Inspect the chosen provider/profile contract and applicable public experience; use a bounded primary-journey observation only for remaining uncertainty. No opaque-default substitution or alias inference. |
+| How will safe persistence completion or failure be reported for the chosen integration? | The pinned managed MSAL path awaits cache callbacks; MSAL Extensions catches storage-write errors. Provider task completion alone is not a durable-storage receipt. | Inspect the cache integration's completion/status boundary before choosing it; a probe is needed only if source and contracts leave the decision unresolved. No background persistence service. |
+| Which host integrations meet owned completion and finite termination? | Existing silent and interactive mechanisms can be reused behind separate policy stages. Host UI ownership, late callbacks, and cancellation need a concrete host assessment. | Applicable rechecks and [interaction evidence](../validation/strategy.md#interaction-matrix); no automatic all-platform experiment matrix or selected platform path. |
+| Which state integration permits compatible reuse across V2 callers? | Existing platform stores and MSAL caches are the starting point. V2 removes plaintext fallback and upstream namespaces and preserves compatible request contexts. | Assess the chosen store's documented isolation and update contract, then targeted [reuse scenarios](../validation/strategy.md#cross-consumer-reuse-scenarios). Do not rebuild OS storage guarantees. |
+
+The [architecture recheck assessment](../research/v1-public-contract-baseline.md#architecture-boundary-recheck-assessment)
+records the current desk inputs and their limits. Experiments still require the separately
+accepted policy alignment and exact protocols in the current Wave. A missing required
+capability keeps the affected choice unselected; a blocked primary journey cannot be
+declared complete by relabeling it unsupported.
 
 ## Architecture Invariants
 
@@ -178,6 +348,9 @@ entry authorizes a bounded public-contract outcome.
 
 [`client-application-identity.md`](client-application-identity.md) defines how client
 application registrations and compatibility profiles relate to the core.
+
+[`request-lifecycle.md`](request-lifecycle.md) allocates request, interaction, token, and
+reusable-state lifecycles for architecture, security, and scenario-validation consumers.
 
 Additional views are added only when a subsystem or cross-cutting concern has an
 independent consumer and lifecycle.
