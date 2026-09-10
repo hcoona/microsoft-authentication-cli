@@ -77,8 +77,9 @@ adversary sandbox.
 
 Before creating a source copy, establish that this root has either no prior history or
 the recoverable history recorded below. Establish a detached checkout of the accepted
-commit in the initiating WSL environment. Run `Fetch-Packages.py` from that checkout.
-From the same checkout, obtain the other five files with `git archive HEAD` and compare
+commit in the initiating WSL environment. The fetch helper remains bound to its recorded
+accepted source; its one attempt is consumed. From the new checkout, obtain the five
+Windows files with `git archive HEAD` and compare
 each copied file's SHA-256 with that Git version. A full repository checkout on Windows
 is unnecessary. Copying public source is not an authentication attempt. Source changes
 require another accepted revision; do not patch the live copy to make a failed build or
@@ -139,7 +140,7 @@ stops execution. Publish the resulting ordered history through the review in ste
 | Action | Maximum attempts | Per-attempt bound | Expected observation |
 | --- | --- | --- | --- |
 | `fetch` | 1 | 120 seconds for the WSL process; no retries; at most seven archives, 100 MiB each and 200 MiB total; confirm exit before proceeding | The seven pinned public packages and their SHA-512 manifest are available to Windows; no package execution or account-store access |
-| `prepare` | 2 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and selector/output self-check passes, with no authentication or account-store access |
+| `prepare` | 3 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and selector/output self-check passes, with no authentication or account-store access |
 | `inspect` | 1 | Process 120 seconds; launcher 135 seconds plus at most 10 seconds for termination | WAM available or unavailable; zero/one/multiple visible accounts and exact matches; missing-email flag; no acquisition |
 | `silent` | 2 | Same bound as inspect | First attempt before interaction; second only after an email-matched interactive result; each resolves a real account afresh |
 | `interactive` | 1 | Process 360 seconds; launcher 375 seconds plus at most 10 seconds for termination | Operator-controlled WAM interaction and provider metadata, or a bounded failure |
@@ -153,14 +154,15 @@ or automatic silent-to-interactive transition is permitted.
    consumption, and source/dependency findings. Reconcile any failed launcher start that
    occurred before it could write its journal, adding its consumed action and outcome
    before continuing. Unknown capacity stops execution.
-2. Run the one `fetch` from the accepted detached checkout, verify its successful exit
-   and seven-file manifest, then run the remaining `prepare` using the commands below.
+2. The one `fetch` has completed. Verify the retained seven-file manifest and archives,
+   then run the remaining `prepare` using the command below.
    Review only sanitized build results, the exact package inventory/lock hash, and
    `self-check-passed`. All seven package pins and the
-   expected target/runtime must match before a broker action. Attempt 1 is already
-   consumed. This amendment permits one second preparation using the accepted local-feed
-   configuration after the recorded direct-network failure. It neither resets the total
-   nor permits an additional source/configuration fix or retry under this revision.
+   expected target/runtime must match before a broker action. Attempts 1 and 2 are
+   already consumed. This amendment raises the cumulative preparation maximum from two
+   to three for one attempt with the accepted process-handle correction. Reuse the
+   verified local feed; do not fetch again. It neither resets prior consumption nor
+   permits another source/configuration fix or retry under this revision.
 3. When the operator confirms availability of the designated account and is ready at the
    Windows desktop, run `inspect`. Enter the email locally. This can report absence; it
    does not prove that an account is absent from every OS or service store.
@@ -177,14 +179,9 @@ or automatic silent-to-interactive transition is permitted.
    review. Include failed starts, termination/retention, existing-state limitations, and
    remaining limits. A normal research exit is not a V2 success-contract result.
 
-From WSL, in the accepted detached checkout, after mapping the protocol's Windows root
-to its existing WSL mount path:
-
-```sh
-python3 tools/probes/windows-msal/Fetch-Packages.py <mounted-research-root> <accepted-40-character-commit>
-```
-
-Then, from a Windows PowerShell 5.1 session in the verified five-file source-copy directory:
+The fetch command retained in Git and its bound helper has already consumed its one
+attempt; do not replay it. From a Windows PowerShell 5.1 session in the newly verified
+five-file source-copy directory:
 
 ```powershell
 .\Invoke-Probe.ps1 -Action prepare -AcceptedRevision <accepted-40-character-commit>
@@ -275,6 +272,65 @@ source files still matched revision `ed9d51e`. A new accepted detached checkout 
 required for further preparation. The bound environment above reflects the newly
 observed patch level; the original attempt's environment remains recorded here.
 
-Consumed capacity: fetch 0/1; prepare 1/2; inspect 0/1; silent 0/2; interactive 0/1.
-The next Windows attempt number is 2. No fetch or second preparation has occurred in
-this amendment proposal. All prior consumption remains charged after acceptance.
+### Public Package Fetch and Second Preparation
+
+Runtime observations on 2026-09-10 UTC under the amendment accepted by
+[PR #41](https://github.com/hcoona/microsoft-authentication-cli/pull/41), revision
+`4b7ec2e9928d3259f5e1475a89b54546452e2565`. Preflight confirmed Windows 11 25H2 x64
+build 26200.9445, PowerShell 5.1, Windows SDK 8.0.425 and Core/Desktop runtime 8.0.31,
+with the declared WSL/kernel and Python 3.13.15. A new detached checkout and five-file
+Windows copy were verified against that accepted revision. The first preparation's
+start/end records were recovered; no fetch record or local feed existed before fetch.
+The Windows action lock was available, and the actions ran sequentially.
+
+| Action | Start UTC | End UTC | Outcome |
+| --- | --- | --- | --- |
+| `fetch` 1 | 2026-09-10 18:07:42.010712 | 2026-09-10 18:07:43.648896 | `packages-fetched`, exit 0; seven archives, 25,337,689 bytes |
+| Windows attempt 2, `prepare` | 2026-09-10 18:08:14.6809236 | 2026-09-10 18:08:22.7272071 | `step-failed`; restore reported success, then the launcher stopped before build |
+
+The fetch emitted no stdout/stderr. All archive names, versions, byte lengths, and
+SHA-512 values matched the fetch manifest before preparation and remained unchanged
+when reviewed afterward:
+
+| Package | Version | Bytes | Archive SHA-512 |
+| --- | --- | --- | --- |
+| `microsoft.identity.client` | 4.83.1 | 4,391,519 | `692ae5e6b961a2ef71b747a9877f7a7f0460a03f9fb2edc0fa7e4d457a5419a0f564afae53c6296b7e75e0ab2b1c61b3f621a9d56e99945bb047b02dcfe9a2bd` |
+| `microsoft.identity.client.broker` | 4.83.1 | 90,323 | `9923928bde2049ed3ec125f871eb37f125a2bb28d20e0d5ebdf59d1a7cb1f37858f4c7d818dd25fd72f1fa7ae96a01a1320d1a21bb3ba3a1379d3fe37463f2ec` |
+| `microsoft.identity.client.nativeinterop` | 0.20.3 | 20,066,978 | `e8d30c22acc6c14d91f09c9e8204278357f2500a11e1e7befb1443f0e806a9dd5522938d37733bfe3de11a1c4e30ccea4755f80fcd1f9de6d8c87a88910ae5cd` |
+| `microsoft.identitymodel.abstractions` | 8.14.0 | 115,275 | `175ef8bf78b63f3c327e680d5cf7721d74f29e96460e686b22b4e67c264fb036a7a9bea1473f4a5b487337ab7a560c861b51ed1aa744777f303362262b01a8b4` |
+| `system.diagnostics.diagnosticsource` | 6.0.1 | 384,347 | `80a0f9bf3a7afdb28d9f00e1f301feeacb39c34fe4ac8f55a392377e2e018fb546fc3fc56e2fe4336dea222b7ab3f4bab58a0b8d86eb18c71951ef2e1c752789` |
+| `system.runtime.compilerservices.unsafe` | 6.0.0 | 84,343 | `d4057301be4ec4936f24b9ce003b5ec4d99681ab6d9b65d5393dd38d04cdec37784aaa12c1a8b50ac3767ed878dae425749490773fec01e734f93cf1045822b3` |
+| `system.valuetuple` | 4.5.0 | 204,904 | `fa00ebb5045d12c51274f64411c551981beceb1266a8606a4731063109b95ea1f15939197bf3d2ba899db61e593dc39bfce876908bba34286823525093ae3d8e` |
+
+Windows restore reported success after 2.8 seconds. The resolved-library inventory
+contains exactly those seven name/version pairs. `packages.lock.json` has SHA-256
+`6653224a1478ae1ef1a6d62c32c188b1408502ce4fcc2f4730f32673e23f3e77`.
+Archive hashes identify fetched bytes; the lock-file hash identifies NuGet's separate
+resolution record. Neither is a platform-support or authentication result.
+
+Only restore stdout/stderr files exist for this attempt. There is no build log,
+compiled probe, or self-check result. The launcher confirmed the owned restore process's
+exit and recorded an end, then returned failure to the caller. Its exact post-restore
+exception and numeric child exit code were not retained. Thus successful restore output
+and resolution are observed; successful launcher completion or compilation is not.
+No MSAL/WAM call, account selection, authentication UI, token acquisition, or protected
+resource request occurred.
+
+**Source finding and correction basis, retrieved 2026-09-10 UTC:**
+[PowerShell issue #5421](https://github.com/PowerShell/PowerShell/issues/5421) describes
+Windows PowerShell 5.1 process objects returned by `Start-Process` with stream redirection
+reporting a null `ExitCode` after a separate wait. Its published workaround obtains the
+process handle before waiting. The launcher used that affected API pattern and treated
+any value other than zero as failure. This is a plausible explanation for the observed
+stop, not a retrospectively measured null exit code. The narrow correction caches the
+owned handle before the bounded wait and explicitly stops if an exit code is unavailable.
+It preserves bounded termination and does not infer success from missing process data.
+
+Retain the accepted source copies, seven public archives and manifest, dedicated caches,
+restore outputs, lock, and sanitized start/end records. No cleanup, account-state change,
+TLS bypass, global network modification, or extra download was performed. Both Windows
+preparation attempts remain consumed; accepting the correction does not erase them.
+
+Consumed capacity after the explicit preparation-limit amendment: fetch 1/1;
+prepare 2/3; inspect 0/1; silent 0/2; interactive 0/1. The next Windows attempt number
+is 3. No third preparation or corrected-launcher execution has occurred in this proposal.
