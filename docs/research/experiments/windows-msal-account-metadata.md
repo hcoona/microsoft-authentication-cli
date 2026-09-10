@@ -48,10 +48,12 @@ for this protocol, not a generic experiment runner or an authorization checker.
 
 The host/toolchain versions above came from read-only host metadata during planning on
 2026-09-10 UTC, not an authentication observation. Before execution, confirm they still
-match, the operator is present, and the selected account is available to the operator.
-An unknown existing-state history is permitted but limits conclusions. Another machine,
-account role, version set, or effects boundary requires a reviewed protocol amendment;
-previous consumption remains charged.
+match. Preparation has no authentication or account-store access and may proceed without
+operator/account readiness when its other prerequisites are met. Before each `inspect`,
+`silent`, or `interactive` action, additionally confirm that the operator is present and
+the selected account is available to the operator. An unknown existing-state history is
+permitted but limits conclusions. Another machine, account role, version set, or effects
+boundary requires a reviewed protocol amendment; previous consumption remains charged.
 
 The public package pages document the declared dependencies for these versions:
 [MSAL](https://www.nuget.org/packages/Microsoft.Identity.Client/4.83.1),
@@ -70,10 +72,12 @@ root or overwrite a result file. This is ordinary owner-controlled local storage
 same-user adversary sandbox.
 
 Before creating a source copy, establish that this root has either no prior history or
-the recoverable history recorded below. Obtain the files with `git archive` from the
-accepted commit and compare each copied file's SHA-256 with that Git version. Copying
-public source is not an authentication attempt. Source changes require another accepted
-revision; do not patch the live copy to make a failed build or acquisition pass.
+the recoverable history recorded below. Establish a detached checkout of the accepted
+commit in the initiating WSL environment. From that checkout, obtain the five files with
+`git archive HEAD` and compare each copied file's SHA-256 with that Git version. A full
+repository checkout on Windows is unnecessary. Copying public source is not an
+authentication attempt. Source changes require another accepted revision; do not patch
+the live copy to make a failed build or acquisition pass.
 
 Preparation downloads only the exact public NuGet packages through `api.nuget.org` and
 its normal package CDN endpoints, using the supplied cleared source configuration.

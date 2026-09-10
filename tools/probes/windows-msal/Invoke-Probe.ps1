@@ -59,19 +59,29 @@ try {
                 $options.RedirectStandardOutput = Join-Path $directory ('build-' + $arguments[0] + '.stdout')
                 $options.RedirectStandardError = Join-Path $directory ('build-' + $arguments[0] + '.stderr')
             }
-            $process = Start-Process @options
-            if (!$process.WaitForExit($seconds * 1000)) {
-                $script:terminationUncertain = $true
-                if ($build) { & "$env:SystemRoot\System32\taskkill.exe" /PID $process.Id /T /F | Out-Null }
-                else { $process.Kill() }
-                if (!$process.WaitForExit(10000)) {
-                    throw 'Process termination is unconfirmed; stop.'
+            $process = $null
+            $script:terminationUncertain = $true
+            try {
+                $process = Start-Process @options
+                if (!$process.WaitForExit($seconds * 1000)) {
+                    throw 'Process exceeded the protocol limit; stop.'
                 }
                 $script:terminationUncertain = $false
-                throw 'Process exceeded the protocol limit; stop.'
+                $process.Refresh()
+                if ($process.ExitCode -ne 0) { throw 'Step returned failure; inspect only the permitted evidence.' }
+            } finally {
+                if ($script:terminationUncertain -and $null -ne $process) {
+                    try {
+                        if (!$process.HasExited) {
+                            if ($build) { & "$env:SystemRoot\System32\taskkill.exe" /PID $process.Id /T /F | Out-Null }
+                            else { $process.Kill() }
+                        }
+                        if ($process.WaitForExit(10000)) { $script:terminationUncertain = $false }
+                    } catch {
+                        # Keep the started entry unresolved when owned-process exit is unconfirmed.
+                    }
+                }
             }
-            $process.Refresh()
-            if ($process.ExitCode -ne 0) { throw 'Step returned failure; inspect only the permitted evidence.' }
         }
         if ($Action -eq 'prepare') {
             Run-Bounded $dotnet @('restore', 'WindowsMsalProbe.csproj', '--configfile', 'nuget.config', '--force-evaluate', '--disable-parallel', '--nologo') 120 $true
