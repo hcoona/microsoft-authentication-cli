@@ -8,6 +8,7 @@ env {
 local textRecordSelectors = List(
   new FileSelector { types = List("text") },
   new FileSelector { glob = "docs/**/*.tm7" },
+  new FileSelector { glob = "**/nuget.config" },
 )
 
 local fastSteps = new Mapping<String, Step> {
