@@ -24,16 +24,18 @@ administration, cache migration, plaintext cache, or fallback mechanism in this 
 
 ## Subject and Environment
 
-Use only the five source/configuration files in
+Use only the six source/configuration files in
 [`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs) from the exact
 accepted protocol revision. The project builds a Windows Forms research executable with
 one operator-started operation per process. The launcher is a narrow sequential helper
-for this protocol, not a generic experiment runner or an authorization checker.
+for this protocol, not a generic experiment runner or an authorization checker. The
+Python helper fetches the seven pinned public packages from WSL before Windows restores
+them from a local feed. It performs no authentication or account-store access.
 
 | Input | Bound value |
 | --- | --- |
-| Windows host | Current owner-designated Windows 11 25H2 x64 host, build 26200.9168, interactive desktop session |
-| Initiating environment | Current WSL 2 Ubuntu 26.04 x64 environment, kernel `6.18.33.1-microsoft-standard-WSL2`; source transfer and process launch only |
+| Windows host | Current owner-designated Windows 11 25H2 x64 host, build 26200.9445, interactive desktop session |
+| Initiating environment | Current WSL 2 Ubuntu 26.04 x64 environment, kernel `6.18.33.1-microsoft-standard-WSL2`, existing Python 3.13.15; public package retrieval, source transfer, and process launch |
 | Toolchain | Existing Windows .NET SDK 8.0.425; Windows Desktop runtime 8.0.31; PowerShell 5.1 |
 | Target | `net8.0-windows`, x64, Release; no installation or PATH change |
 | MSAL and broker package | `Microsoft.Identity.Client` and `.Broker` 4.83.1 |
@@ -48,8 +50,8 @@ for this protocol, not a generic experiment runner or an authorization checker.
 
 The host/toolchain versions above came from read-only host metadata during planning on
 2026-09-10 UTC, not an authentication observation. Before execution, confirm they still
-match. Preparation has no authentication or account-store access and may proceed without
-operator/account readiness when its other prerequisites are met. Before each `inspect`,
+match. Fetch and preparation have no authentication or account-store access and may
+proceed without operator/account readiness when their other prerequisites are met. Before each `inspect`,
 `silent`, or `interactive` action, additionally confirm that the operator is present and
 the selected account is available to the operator. An unknown existing-state history is
 permitted but limits conclusions. Another machine, account role, version set, or effects
@@ -67,25 +69,38 @@ package/version or an unavailable pin stops preparation; do not silently upgrade
 Use `%LOCALAPPDATA%\AzureAuthResearch\windows-msal` on the designated Windows host. Keep
 `source-<accepted-commit>` for the exact five-file source copy, `packages`, `http-cache`,
 `cli-home`, `attempts.jsonl`, `active.lock`, and numbered `attempt-<n>` directories below
-that root. Build output stays under the source copy. Do not reuse an unrelated existing
-root or overwrite a result file. This is ordinary owner-controlled local storage, not a
-same-user adversary sandbox.
+that root. The one fetch uses `fetch-1` for its start/result records and `public-feed` for
+the downloaded packages, accessed through the existing WSL mount of this Windows path.
+Build output stays under the source copy. Do not reuse an unrelated existing root or
+overwrite a result file. This is ordinary owner-controlled local storage, not a same-user
+adversary sandbox.
 
 Before creating a source copy, establish that this root has either no prior history or
 the recoverable history recorded below. Establish a detached checkout of the accepted
-commit in the initiating WSL environment. From that checkout, obtain the five files with
-`git archive HEAD` and compare each copied file's SHA-256 with that Git version. A full
-repository checkout on Windows is unnecessary. Copying public source is not an
-authentication attempt. Source changes require another accepted revision; do not patch
-the live copy to make a failed build or acquisition pass.
+commit in the initiating WSL environment. Run `Fetch-Packages.py` from that checkout.
+From the same checkout, obtain the other five files with `git archive HEAD` and compare
+each copied file's SHA-256 with that Git version. A full repository checkout on Windows
+is unnecessary. Copying public source is not an authentication attempt. Source changes
+require another accepted revision; do not patch the live copy to make a failed build or
+acquisition pass.
 
-Preparation downloads only the exact public NuGet packages through `api.nuget.org` and
-its normal package CDN endpoints, using the supplied cleared source configuration.
-Use dedicated package/CLI caches; do not access a private feed or copy existing package
-credentials. The launcher disables .NET CLI telemetry, development-certificate creation,
-global-tool PATH registration, workload notifications, and build-server reuse. Record
-any preparation failure without treating this small probe build as a new V1 public-build
-experiment or replaying Issue #1.
+Fetch downloads only the seven exact public NuGet package archives from the HTTPS
+`api.nuget.org/v3-flatcontainer` paths for the project pins; normal NuGet CDN delivery is
+permitted. Python uses its default verified TLS context. Do not disable certificate
+verification, alter Windows TLS/proxy settings, add a mirror, or supply credentials.
+Record each archive's public package name/version, byte length, and SHA-512; these hashes
+identify the transferred bytes and do not constitute a separate publisher attestation.
+After a successful fetch, compare the seven files against that local manifest before
+Windows preparation. Preserve incomplete artifacts on failure and stop; fetch has no
+retry. No downloaded package is executed in WSL.
+
+Windows restore uses only `..\public-feed` through the supplied cleared source
+configuration. Use the dedicated package/CLI caches; do not access a private feed or
+copy existing package credentials. The launcher disables .NET CLI telemetry,
+development-certificate creation, global-tool PATH registration, workload notifications,
+and build-server reuse. This transfer prepares a research subject; it does not select a
+V2 package-delivery or authentication architecture. Record any preparation failure without
+treating this small probe build as a new V1 public-build experiment or replaying Issue #1.
 
 The probe uses documented MSAL/WAM APIs. In-memory enumeration may see other accounts;
 only a unique exact email match is passed to silent acquisition. No OS-default sentinel,
@@ -101,21 +116,26 @@ other protected-resource call is made. MSAL logging is discarded with PII and de
 platform logging disabled; the probe has no telemetry exporter. Existing OS/broker
 telemetry and session lifecycle remain platform-owned.
 
-All authentication happens on Windows. WSL receives only source/build metadata, process
-completion, the sanitized journal, and outcome flags. Do not inspect the email control,
+All authentication happens on Windows. WSL handles the declared public source/packages,
+build metadata, process completion, the sanitized journal, and outcome flags. Do not
+inspect the email control,
 screenshot authentication UI, capture tokens/codes, export broker diagnostics, or transport
 a token back to WSL. Browser fallback is declined by the custom-web-UI callback; no
 browser launcher, callback listener, or device-code flow is provided.
 
 ## Finite Attempts and Procedure
 
-All actions are sequential under the launcher's local exclusive lock. The limits below
-are cumulative across revisions, retries, failed starts, and manual operation. No script
-or operator may reset them by deleting state or using another directory or machine.
-The accepted protocol history and local journal must agree before another attempt.
+All actions are sequential; do not fetch while a Windows action is active. Windows
+actions use the launcher's local exclusive lock. Fetch has one non-overwriting start
+record under `fetch-1`; an existing or unresolved fetch record prohibits another fetch.
+The limits below are cumulative across revisions, retries, failed starts, and manual
+operation. No script or operator may reset them by deleting state or using another
+directory or machine. The accepted protocol history and local records must agree before
+another attempt.
 
 | Action | Maximum attempts | Per-attempt bound | Expected observation |
 | --- | --- | --- | --- |
+| `fetch` | 1 | 120 seconds for the WSL process; no retries; at most seven archives, 100 MiB each and 200 MiB total; confirm exit before proceeding | The seven pinned public packages and their SHA-512 manifest are available to Windows; no package execution or account-store access |
 | `prepare` | 2 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and selector/output self-check passes, with no authentication or account-store access |
 | `inspect` | 1 | Process 120 seconds; launcher 135 seconds plus at most 10 seconds for termination | WAM available or unavailable; zero/one/multiple visible accounts and exact matches; missing-email flag; no acquisition |
 | `silent` | 2 | Same bound as inspect | First attempt before interaction; second only after an email-matched interactive result; each resolves a real account afresh |
@@ -130,10 +150,14 @@ or automatic silent-to-interactive transition is permitted.
    consumption, and source/dependency findings. Reconcile any failed launcher start that
    occurred before it could write its journal, adding its consumed action and outcome
    before continuing. Unknown capacity stops execution.
-2. Run `prepare` using the command below. Review only sanitized build results, the exact
-   package inventory/lock hash, and `self-check-passed`. All seven package pins and the
-   expected target/runtime must match before a broker action. A second preparation
-   attempt is allowed only for an understood transient failure, with unchanged source.
+2. Run the one `fetch` from the accepted detached checkout, verify its successful exit
+   and seven-file manifest, then run the remaining `prepare` using the commands below.
+   Review only sanitized build results, the exact package inventory/lock hash, and
+   `self-check-passed`. All seven package pins and the
+   expected target/runtime must match before a broker action. Attempt 1 is already
+   consumed. This amendment permits one second preparation using the accepted local-feed
+   configuration after the recorded direct-network failure. It neither resets the total
+   nor permits an additional source/configuration fix or retry under this revision.
 3. When the operator confirms availability of the designated account and is ready at the
    Windows desktop, run `inspect`. Enter the email locally. This can report absence; it
    does not prove that an account is absent from every OS or service store.
@@ -150,7 +174,14 @@ or automatic silent-to-interactive transition is permitted.
    review. Include failed starts, termination/retention, existing-state limitations, and
    remaining limits. A normal research exit is not a V2 success-contract result.
 
-From a Windows PowerShell 5.1 session, in the verified source-copy directory:
+From WSL, in the accepted detached checkout, after mapping the protocol's Windows root
+to its existing WSL mount path:
+
+```sh
+python3 tools/probes/windows-msal/Fetch-Packages.py <mounted-research-root> <accepted-40-character-commit>
+```
+
+Then, from a Windows PowerShell 5.1 session in the verified five-file source-copy directory:
 
 ```powershell
 .\Invoke-Probe.ps1 -Action prepare -AcceptedRevision <accepted-40-character-commit>
@@ -179,7 +210,10 @@ contain local paths: inspect them only during preparation, sanitize any retained
 and do not commit raw logs, assets files, caches, or binaries. No authentication stdout,
 stderr, screenshots, or UI dumps are evidence carriers.
 
-On closing the probe window, timeout, cancellation, or failure, stop the current attempt.
+On fetch timeout the Python watchdog exits the fetch process; on operator cancellation,
+interrupt that owned Python process and confirm exit. It launches no child process. A
+missing fetch result remains unresolved; do not retry or use its incomplete feed. On
+closing the probe window, timeout, cancellation, or failure, stop the current attempt.
 The probe requests cancellation and exits; the launcher bounds the owned process's
 lifetime. Confirm process exit and let the operator close any remaining WAM prompt.
 Do not kill a shared OS broker or claim reversal of a completed provider session. An
@@ -195,8 +229,49 @@ upstream installation as cleanup.
 
 ## Execution History
 
-No subject execution has occurred in this initial protocol proposal. Consumed capacity:
-prepare 0/2; inspect 0/1; silent 0/2; interactive 0/1. The next attempt number is 1.
-A later execution record replaces this initial statement with the actual accepted
-revision, environment/dependency identities, ordered attempts, observations, termination,
-retention, limitations, and remaining capacity; it does not reset the limits.
+### First Preparation: Public Index Unavailable
+
+Runtime observation on 2026-09-10 UTC, under the protocol accepted by
+[PR #40](https://github.com/hcoona/microsoft-authentication-cli/pull/40), revision
+`ed9d51e134db51c5e75e393db10894854e944e43`. The original host was Windows 11 25H2 x64,
+build 26200.9168; initiating WSL/kernel and Windows SDK/runtime matched that revision.
+The .NET welcome output independently reported SDK 8.0.425. The accepted source was in a
+detached WSL checkout, and all five Windows files matched its SHA-256 values. The dedicated
+Windows research root had no prior history before this attempt.
+
+| Attempt | Action | Start UTC | End UTC | Outcome |
+| --- | --- | --- | --- | --- |
+| 1 | `prepare` | 2026-09-10 08:06:57.0755476 | 2026-09-10 08:07:06.8044423 | `step-failed`; restore returned `NU1301` for the public NuGet service index |
+
+Restore reported failure after 6.53 seconds, within its 120-second bound. The launcher
+confirmed process exit and recorded the end before returning failure. Build and
+synthetic self-check did not run; there is no probe binary or `result.json`. No account
+was selected, MSAL/WAM invoked, authentication UI shown, or resource request made.
+Account-state and broker-version observations are therefore not applicable. This failure
+does not test the MSAL API design or establish package unavailability.
+
+The failed restore produced an empty resolved-library inventory. Its partial
+`packages.lock.json` has SHA-256
+`add2d0ea7db517668ed65a2fe6be37b50cdde8e7f97eda130b50f5c93272c7e8`;
+it is failure evidence, not an accepted seven-package lock. Source/configuration, CLI
+state, partial restore artifacts, the sanitized journal, and local build logs remain in
+the dedicated Windows root. No deletion, installation change, or account cleanup was
+performed by this experiment.
+
+Read-only follow-up on 2026-09-10 UTC found that WSL could retrieve the public NuGet index
+with HTTP 200, while Windows .NET Framework and curl reported TLS handshake failures
+(`SecureChannelFailure` and `SEC_E_ILLEGAL_MESSAGE`). No proxy environment variable or
+system proxy was used for that endpoint. Restricting the public curl request to TLS 1.2
+did not resolve it. These later observations do not establish the exact cause of the
+earlier restore failure. No certificate or system network setting was changed.
+
+The same follow-up found Windows build 26200.9445 and the original SDK/runtime still
+installed; the WSL/kernel version was unchanged. The temporary WSL checkout no longer
+existed, while the Windows source and attempt records remained recoverable and the five
+source files still matched revision `ed9d51e`. A new accepted detached checkout is
+required for further preparation. The bound environment above reflects the newly
+observed patch level; the original attempt's environment remains recorded here.
+
+Consumed capacity: fetch 0/1; prepare 1/2; inspect 0/1; silent 0/2; interactive 0/1.
+The next Windows attempt number is 2. No fetch or second preparation has occurred in
+this amendment proposal. All prior consumption remains charged after acceptance.

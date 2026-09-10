@@ -1249,6 +1249,11 @@ metadata, and subsequent broker reuse. It uses V1's managed/native dependency ve
 in a small research probe rather than V1's token-printing CLI. It does not execute the
 previously proposed two-account resource comparison or establish resource authorization.
 
+The protocol's [execution history](experiments/windows-msal-account-metadata.md#execution-history)
+records the first preparation's public-index failure. No MSAL runtime observation
+resulted. The amended preparation transfers pinned public packages through WSL to a
+Windows local feed; it does not change the native Windows account or token boundary.
+
 **Pinned source findings, reviewed on 2026-09-10 UTC:** MSAL 4.83.1's
 [`BrokerOptions`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/BrokerOptions.cs#L81-L87)
 exposes `ListOperatingSystemAccounts`. The
