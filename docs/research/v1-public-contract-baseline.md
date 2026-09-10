@@ -1264,8 +1264,18 @@ action returned the probe's `provider-rejected` category without an authenticati
 The sequence stopped without an authenticated Git request or reuse follow-up. The error
 category does not identify the cause or establish categorical MSA incompatibility.
 Successful result metadata, token acceptance, fresh-state behavior, and later reuse
-remain unobserved; the [protocol history](experiments/windows-msal-account-metadata.md#account-visibility-interaction-required-and-provider-rejection)
+remain unobserved; the [protocol history](experiments/windows-msal-account-metadata.md#account-visibility-and-unresolved-acquisition-failure)
 owns the exact observations and limitations.
+
+**Source interpretation, retrieved 2026-09-10 UTC:** The pinned MSAL
+[`WamAdapters` exception mapping](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L58-L120)
+uses `MsalServiceException` for configuration/API-contract failures, network or temporary
+server failures, and unknown broker failures. Its
+[runtime-response wrapper](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L379-L385)
+also wraps other response-processing exceptions in that type. The probe's literal
+`provider-rejected` label therefore denotes an acquisition-failure category, not proof
+that a remote identity service rejected the account. No finer error code/status was
+retained; these source possibilities do not identify which failure occurred in this run.
 
 **Pinned source findings, reviewed on 2026-09-10 UTC:** MSAL 4.83.1's
 [`BrokerOptions`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/BrokerOptions.cs#L81-L87)

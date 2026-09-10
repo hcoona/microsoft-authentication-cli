@@ -530,7 +530,7 @@ consumption is fetch 1/1, prepare 4/4, inspect 0/1, silent 0/2, interactive 0/1,
 requests 0/3. The next Windows attempt is 5. Use the prepared subject only under the current
 accepted protocol and operator readiness; do not rebuild it for this evidence update.
 
-### Account Visibility, Interaction Required, and Provider Rejection
+### Account Visibility and Unresolved Acquisition Failure
 
 Runtime observations on 2026-09-10 UTC under current protocol revision
 `57ae16d878f109b3568110e80bdf1f7ee2b632fb` accepted by
@@ -573,7 +573,10 @@ Consequently neither sent an authenticated resource request; token/identity/tena
 expiry result flags remained unobserved defaults. The fixed category alone does not
 identify the underlying service error, configuration issue, account eligibility, or
 operator action. Raw exception text, service codes, diagnostics, and tokens were not
-captured. Do not infer categorical MSA rejection or a registration-support conclusion.
+captured. The label does not establish remote identity-service rejection; the
+[baseline source interpretation](../v1-public-contract-baseline.md#windows-msal-probe-basis)
+explains the broader exception mapping. Do not infer categorical MSA rejection or a
+registration-support conclusion.
 
 Each action used one write-only UI Automation operation against the owned probe's two
 input controls and start button. Each worker and its controller completed normally within
