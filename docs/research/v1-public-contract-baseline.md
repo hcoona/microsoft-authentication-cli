@@ -1246,9 +1246,11 @@ unavailable until the gate is satisfied.
 The [bounded Windows protocol](experiments/windows-msal-account-metadata.md) governs
 account discovery, selected-account acquisition, result metadata, conditional broker reuse,
 and discovery at the single owner-designated Azure DevOps Git repository. It uses V1's
-managed/native dependency versions in a small research probe. Its stopped sequence does
-not establish authenticated resource authorization, registration eligibility, or a
-Profile/support commitment, and performed no corporate-account comparison.
+managed/native dependency versions in a small research probe. The first sequence stopped without
+a token; the diagnostic amendment will preserve structured MSAL failure fields while
+keeping authentication inputs and behavior unchanged. Neither procedure establishes
+resource authorization, registration eligibility, or a Profile/support commitment, and
+no corporate-account comparison is performed.
 
 The protocol's [execution history](experiments/windows-msal-account-metadata.md#execution-history)
 records the initial public-index and launcher failures, followed by successful Windows
@@ -1276,6 +1278,18 @@ also wraps other response-processing exceptions in that type. The probe's litera
 `provider-rejected` label therefore denotes an acquisition-failure category, not proof
 that a remote identity service rejected the account. No finer error code/status was
 retained; these source possibilities do not identify which failure occurred in this run.
+
+The same pinned API documents [`ErrorCode`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/MsalException.cs#L129-L154)
+as a protocol code for exception handling, [`IsRetryable` and broker keys](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/MsalException.cs#L30-L61),
+service [`StatusCode`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/MsalServiceException.cs#L149-L163),
+and [`UiRequiredExceptionClassification`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/MsalUiRequiredException.cs#L66-L89).
+The [`broker decorator`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L214-L225)
+populates separate status-name and numeric-code entries alongside private context and
+telemetry. The diagnostic subject selects only the protocol/enum/numeric fields. These
+contracts justify retaining useful error classification without raw exception/property-bag
+export. A retry hint does not authorize another attempt, and a reported status remains
+bounded evidence rather than proof of every underlying failure cause. The earlier run's
+missing fields cannot be reconstructed from this source finding.
 
 **Pinned source findings, reviewed on 2026-09-10 UTC:** MSAL 4.83.1's
 [`BrokerOptions`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/BrokerOptions.cs#L81-L87)
