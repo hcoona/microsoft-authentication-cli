@@ -107,6 +107,12 @@ The normative release evidence requirements are defined by
 strict-account, interaction, cancellation, cache, WSL, authority, output, dependency, and
 artifact-isolation scenarios because they exercise the threats above.
 
+Research using existing account or broker state follows the
+[experiment policy](../research/experiment-safety.md#environment-and-effects). Its accepted
+protocol bounds observations, ordinary authentication updates, operator interaction, and
+safe retention or cleanup. Using an existing environment neither changes the product
+threat model nor authorizes access to unrelated state.
+
 ## TMT Analysis and Disposition
 
 The checked-in [native model](authentication-engine.tm7) is the executable data-flow

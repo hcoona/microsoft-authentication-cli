@@ -274,7 +274,7 @@ families:
 
   - id: experiment-safety
     state: current
-    concern: Isolation, evidence classification, and stop conditions for experiments
+    concern: Experiment environment and effects boundaries, evidence classification, and stop conditions
     carrier: repository-file
     path: docs/research/experiment-safety.md
     format: markdown
