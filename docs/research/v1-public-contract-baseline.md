@@ -1241,24 +1241,50 @@ Retain `V2-REQ-003`, `V2-REQ-011`, `V2-REQ-018`, `V2-REQ-022`, `V2-REQ-023`,
 Generic profile-selection semantics apply independently, but this candidate remains
 unavailable until the gate is satisfied.
 
-## Separately proposed empirical question
+## Windows MSAL Probe Basis
 
-> On an owner-designated Windows 11 WAM environment with explicitly described existing
-> broker and AzureAuth/MSAL application state, using released AzureAuth `0.9.6`
-> (`8ef1b8b00782bf20a51de078289819a79c3cba70`), client
-> `872cd9fa-d31f-45e0-9eab-6e460a02d1f1`, tenant authority `common`, and scope
-> `499b84ac-1321-427f-aa17-267ca6975798/.default`, what acquisition and read-only Azure
-> DevOps authorization outcomes--and what sanitized returned account/tenant metadata or
-> provider error--occur once with an authorized MSA-only Azure DevOps identity and once
-> with an authorized Microsoft Entra work-or-school Azure DevOps identity?
+The [bounded Windows protocol](experiments/windows-msal-account-metadata.md) narrows the
+next empirical step to account discovery, selected-account acquisition, authoritative
+metadata, and subsequent broker reuse. It uses V1's managed/native dependency versions
+in a small research probe rather than V1's token-printing CLI. It does not execute the
+previously proposed two-account resource comparison or establish resource authorization.
 
-This is a proposed question, not an executable protocol. The accepted Delivery Wave may
-cover its bounded subject, but execution still requires a separately accepted protocol
-with designated account-state and host boundaries, bounded read-only resource access,
-finite attempts, stop conditions, cleanup or retention, and sanitized evidence under the
-[experiment-safety policy](experiment-safety.md#experiment-authorization). Record prior
-use and unknown state; do not clear existing broker state or infer clean first-use
-behavior from this comparison.
+**Pinned source findings, reviewed on 2026-09-10 UTC:** MSAL 4.83.1's
+[`BrokerOptions`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/BrokerOptions.cs#L81-L87)
+exposes `ListOperatingSystemAccounts`. The
+[`runtime broker`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/RuntimeBroker.cs#L571-L632)
+returns an empty list when this option is off and otherwise calls discovery, filters the
+cloud environment, and converts the returned accounts. V1 0.9.6's
+[`Windows broker configuration`](https://github.com/AzureAD/microsoft-authentication-cli/blob/8ef1b8b00782bf20a51de078289819a79c3cba70/src/MSALWrapper/AuthFlow/Broker.cs#L232-L242)
+does not enable that option. This is an available dependency capability, not evidence
+that a particular existing personal account will be visible or have an exact email.
+
+MSAL's
+[`broker availability query`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/PublicClientApplication.cs#L80-L98)
+and
+[`custom web UI callback`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Extensibility/ICustomWebUI.cs#L30-L52)
+let the probe require WAM and decline browser fallback. The callback implements no OAuth
+exchange. The hidden first-party `MsaPassthrough` option remains off, as in V1's Windows
+configuration. No MSAL dependency is upgraded by this experiment input.
+
+### Host and Registration Recheck for the Probe
+
+The 2026-09-10 UTC desk refresh inspected the public sources below before proposing
+native Windows execution initiated from WSL. This evaluates the applicable research
+boundary; it selects no V2 WSL or Linux-broker implementation and transports no token.
+
+| Concern and source | Retrieved state and bounded outcome |
+| --- | --- |
+| Windows [WAM guidance](https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/wam) | The page identifies supported Windows versions, a required parent window, account picking for mixed authority audiences, and possible browser fallback. The probe owns a Windows Forms parent, requires broker availability, and declines browser fallback. These are preparation choices, not observed host behavior. |
+| RECHECK-003: [Issue #460](https://github.com/AzureAD/microsoft-authentication-cli/issues/460) | Open; `updated_at = 2026-05-13T17:25:51Z`. Its body proposes a Windows helper, trust/version/transport boundaries, and missing-helper/fallback handling. It is a proposal, not evidence of an upstream implemented bridge. This probe uses an exact local Windows executable and returns only flags. |
+| RECHECK-003/005: [current WSL guidance](https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl) | Documents native Linux broker packages, dependencies, and an unlocked keychain. It does not supply the Windows-helper protocol proposed by #460. This experiment uses native Windows WAM; it does not install or invoke that Linux broker. |
+| RECHECK-005: [PR #462](https://github.com/AzureAD/microsoft-authentication-cli/pull/462) | Open and unmerged; `updated_at = 2026-08-14T10:00:41Z`. The inspected diff adds Linux broker routing, a Linux redirect, and OS-account listing, while retaining an OS-default sentinel fallback. Its reported Ubuntu test is public author-reported experience, not a V2 support result or this experiment's implementation. |
+| RECHECK-007: [Azure DevOps guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth?view=azure-devops) | Still states that ordinary Entra applications do not natively support MSA users for the Azure DevOps resource. The specific Microsoft-owned registration's behavior and intended reuse remain unresolved; this protocol observes acquisition/metadata only. |
+
+RECHECK-001, RECHECK-002, and RECHECK-006 retain their bounded desk dispositions; this
+protocol does not amend product interaction, account, or cache requirements. RECHECK-004
+is not activated as a browser workstream: the probe declines that mechanism. Later
+platform/Profile choices and fired triggers retain their full recorded outcomes.
 
 ## Contradictions and unsupported conclusions
 
