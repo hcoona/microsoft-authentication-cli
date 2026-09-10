@@ -16,7 +16,7 @@ try {
     $starts = @($events | Where-Object Event -eq 'start')
     $ends = @($events | Where-Object Event -eq 'end')
     if ($starts.Count -ne $ends.Count) { throw 'Prior attempt is unresolved; reconcile its outcome before continuing.' }
-    $limit = @{ prepare = 2; inspect = 1; silent = 2; interactive = 1 }
+    $limit = @{ prepare = 3; inspect = 1; silent = 2; interactive = 1 }
     if (@($starts | Where-Object Action -eq $Action).Count -ge $limit[$Action]) { throw 'Attempt limit exhausted.' }
     $attempt = $starts.Count + 1
     $directory = Join-Path $root ('attempt-' + $attempt)
@@ -63,11 +63,14 @@ try {
             $script:terminationUncertain = $true
             try {
                 $process = Start-Process @options
+                # Cache the handle before waiting so Windows PowerShell retains the exit code.
+                $ownedHandle = $process.Handle
                 if (!$process.WaitForExit($seconds * 1000)) {
                     throw 'Process exceeded the protocol limit; stop.'
                 }
                 $script:terminationUncertain = $false
                 $process.Refresh()
+                if ($null -eq $process.ExitCode) { throw 'Process exited, but its exit code is unavailable; stop.' }
                 if ($process.ExitCode -ne 0) { throw 'Step returned failure; inspect only the permitted evidence.' }
             } finally {
                 if ($script:terminationUncertain -and $null -ne $process) {
