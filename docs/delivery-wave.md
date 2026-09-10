@@ -37,6 +37,11 @@ proposal does not authorize any work it would add before merge.
   behavior. Pin recoverable source locations and revisions where available, date mutable
   retrieval, and preserve source findings, hypotheses, and observations as distinct
   evidence. Sources within these categories need no per-repository Wave amendment.
+  For the owner's designated Azure DevOps Git access scenario, also permit read-only
+  inspection of that local checkout's remote and credential-routing configuration to
+  identify the single target and requested account. Do not inspect project contents,
+  passwords, tokens, stored credential material, or unrelated private work as research
+  inputs.
 - **Research and experiment subjects:** Resolve questions that could change a high-level
   decision: external client-registration eligibility for the primary journey, strict
   account enumeration and authoritative identity metadata, first-use OS-state and
@@ -66,11 +71,21 @@ proposal does not authorize any work it would add before merge.
   operator-controlled. Existing state is not assumed clean, and provider-side changes
   are not assumed reversible. Native or cross-host paths must be explicitly covered by
   the accepted protocol and applicable rechecks before use.
+  The owner also accepts using the designated personal Microsoft account to test
+  read-only access to one owner-designated Azure DevOps Git repository, including a
+  private repository, from the existing corporate-account Windows context. Local
+  identifiers remain private. This accepts ordinary selected-account authentication
+  and service-side access auditing; it does not authorize corporate-account fallback,
+  PAT creation, changes to device management, or repository mutation.
 - **Maximum effects:** Outside record operations and public-source retrieval, permit only
   protocol-declared execution on the designated machine, the necessary public
   development dependencies and local probe artifacts, selected-account authentication
-  and its declared state effects, and read-only public test-resource probes. Bound
-  artifact and dependency locations, retained authentication state, network endpoints,
+  and its declared state effects, read-only public test-resource probes, and bounded
+  Git discovery requests against the single designated Azure DevOps repository. That
+  exception may inspect an authentication challenge and the minimal response needed
+  to recognize successful Git discovery; it does not permit object/pack downloads,
+  checkout changes, browsing other repositories, or retaining refs or private content.
+  Bound artifact and dependency locations, retained authentication state, network endpoints,
   repetitions, and cleanup in the protocol; do not reinstall or reprovision machines,
   remove existing installations, or clear unrelated account/cache state. No experiment
   may exceed this effects envelope through a protocol or a change of machine.
@@ -91,8 +106,12 @@ proposal does not authorize any work it would add before merge.
 - **Excluded:** Product implementation or upstream production-code imports; medium- or
   low-level implementation design; frozen public wire or Profile-file schemas;
   distributed Client Profile activation; platform support selection; downstream adapter,
-  packaging, installer, migration, or release work. No private repository, feed,
-  unpublished service, or private-evidence access; no credentials, private identities,
-  raw broker diagnostics, or private observations in retained research artifacts.
+  packaging, installer, migration, or release work. Except for the designated local
+  configuration and Git discovery boundary above, no private repository, feed,
+  unpublished service, or private-evidence access is authorized. Retained research may
+  contain only the protocol's sanitized direct observations, such as status and
+  response-kind flags, with the private target and account represented by roles. Never
+  retain credentials, private identities or addresses, raw broker diagnostics, private
+  repository data, or unpublished downstream anecdotes in committed artifacts.
   No PAT creation, administrator consent, application or tenant administration, resource
   writes, or remote mutation beyond the declared authentication/session effects.
