@@ -26,24 +26,30 @@ reuse, or all of RECHECK-007.
 There is no corporate-account comparison, resource write, PAT, registration/tenant
 administration, cache migration, plaintext cache, or fallback mechanism in this probe.
 
-## Current Execution Disposition
+## Current Diagnostic Advancement
 
-The recorded sequence stopped after the interactive action returned `provider-rejected`.
-No further broker or resource action is executable under this sequence. The second
-silent slot required a successful matched interactive result and recognized Git discovery;
-that prerequisite was not met. Unused numeric capacity is not retry authorization.
-Preserve the subject and evidence for review. Another attempt requires an independently
-reviewed, accepted protocol amendment that retains all consumption below.
+The first sequence stopped after its interactive action returned the coarse
+`provider-rejected` label. The owner requested improving the probe to determine which
+failure occurred. This amendment permits one preparation of the diagnostic subject and
+one additional interactive acquisition for the same account/client/resource context.
+Keep the authentication configuration and behavior unchanged so the new observation
+addresses the missing error classification. If it succeeds with an exact account match
+and recognized Git discovery, the one previously unused silent slot may check later
+process reuse. A failed diagnostic action stops the sequence without another retry.
+
+The earlier seven Windows actions remain consumed and recoverable below. This is a
+prospective protocol amendment within the accepted Wave; neither its proposal nor the
+unused numeric slots authorize execution before acceptance.
 
 ## Subject and Environment
 
-The prepared subject uses the six source/configuration files in
-[`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs) at accepted
-revision `4470996a944fc15e2d0edbff76bc396a24a2979f`. The execution history records its
-verified source, dependency inventory, and artifact identities. The recorded actions used
-that retained Git-discovery subject; retain it for evidence review. The older metadata-only artifact at
-`3658a64b7ecba7feeb698821bd0aede6ce18f8a6` remains historical evidence; do not use it for
-the resource scenario.
+The diagnostic subject uses the six source/configuration files in
+[`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs). Prepare it
+once from the accepted `main-v2` commit that contains this amendment, recording that exact
+source revision, five Windows source hashes, dependency inventory, and new artifact
+identities before authentication. The earlier prepared source at
+`4470996a944fc15e2d0edbff76bc396a24a2979f` remains evidence for the first sequence; do not
+patch or reuse its metadata-only error reporting as the diagnostic subject.
 Read the current accepted Wave and protocol before every action; a retained source
 revision does not preserve authority that later records remove. Record the current
 protocol revision separately when it differs from the launcher's source `Revision`.
@@ -213,6 +219,34 @@ from the ordinary anonymous baseline responses listed in step 3, unrecognized re
 and network failures retain that limitation and stop the sequence; do not inspect private
 error bodies or expand the probe.
 
+## Structured Failure Observations
+
+The new nullable `Failure` object records only these MSAL fields: fixed exception kind,
+`ErrorCode`, `IsRetryable`, service `StatusCode` when applicable, UI-required
+`Classification` when applicable, and the two named additional-data values
+`BrokerErrorStatus` and `BrokerErrorCode`. Parse the broker code as a signed 64-bit integer;
+missing or unparseable values remain null. A missing failure object means no MSAL
+exception was captured, not proof of successful authentication. Preserve zero service
+status as reported; it is not an observed HTTP response. The service field can also
+represent a browser navigation status, so do not universally interpret it as HTTP.
+
+The [pinned MSAL field contracts and mapping](../v1-public-contract-baseline.md#windows-msal-probe-basis)
+define these as protocol error codes and enum/numeric status values. Rely on those
+standard library contracts rather than discarding the error information behind a generic
+label. This is a selected structured observation, not raw diagnostic export. Do not
+serialize an exception or property bag, or read/retain its message, stack, inner
+exception, response body, headers, claims, correlation ID, broker context/tag, or telemetry.
+The synthetic self-check exercises preservation of the useful fields while excluding
+private marker values placed in message/context/telemetry/correlation fields.
+
+`MsalServiceException` now produces `acquisition-failed`, with the structured fields,
+rather than the misleading `provider-rejected` label. Existing historical results retain
+their actual label. UI-required and client failures also include the named fields; all
+other failures retain fixed categories. `IsRetryable` is an observation from MSAL, not
+permission to retry. Interpret reported codes using public source/documentation, preserve
+uncertainty when they are absent or insufficient, and do not promote a library category
+to proof of a root cause or registration-support decision.
+
 ## Finite Attempts and Procedure
 
 All actions are sequential; do not fetch while a Windows action is active. Windows
@@ -229,64 +263,60 @@ stops execution. Publish the resulting ordered history through the review in ste
 | Action | Maximum attempts | Per-attempt bound | Expected observation |
 | --- | --- | --- | --- |
 | `fetch` | 1 | 120 seconds for the WSL process; no retries; at most seven archives, 100 MiB each and 200 MiB total; confirm exit before proceeding | The seven pinned public packages and their SHA-512 manifest are available to Windows; no package execution or account-store access |
-| `prepare` | 4 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and synthetic selector/URL/output self-check passes, with no authentication or account-store access |
-| `inspect` | 1 | Process 120 seconds; launcher 135 seconds plus at most 10 seconds for termination | WAM available or unavailable; zero/one/multiple visible accounts and exact matches; missing-email flag and one anonymous Git discovery baseline; no acquisition |
-| `silent` | 2 | Same bound as inspect | First attempt before interaction; second only after an email-matched interactive result; each resolves a real account afresh |
-| `interactive` | 1 | Process 360 seconds; launcher 375 seconds plus at most 10 seconds for termination | Operator-controlled WAM interaction and provider metadata, or a bounded failure |
+| `prepare` | 5 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and synthetic selector/URL/failure-output self-check passes, with no authentication or account-store access |
+| `inspect` | 1 (consumed) | Process 120 seconds; launcher 135 seconds plus at most 10 seconds for termination | Retain the recorded account/anonymous baseline; do not repeat it |
+| `silent` | 2 | Same bound as inspect | First attempt consumed; second only after successful exact-account diagnostic interaction and recognized discovery; resolve the real account afresh |
+| `interactive` | 2 | Process 360 seconds; launcher 375 seconds plus at most 10 seconds for termination | One earlier attempt consumed; one diagnostic interaction may return verified metadata/discovery or structured failure |
 
-Maximum acquisition calls are three: two silent and one interactive. Each broker action
-has at most one enumeration and one acquisition call. Preparation has no broker or resource call. Git discovery has at most three requests
-across the sequence: one anonymous and at most two authenticated requests. If the first
-silent action succeeds, stop without interaction; otherwise only a successful interaction
-and its follow-up silent action can each send one authenticated request. Count a request
-as consumed when attempted, including timeout/failure. Derive consumption from the ordered
-action/results below; unknown request consumption stops further execution.
-The process bounds include time spent waiting for local email and remote entry. No automatic retry
-or automatic silent-to-interactive transition is permitted.
+Maximum acquisition calls are four across the entire history: two silent and two
+interactive. Each broker action has at most one enumeration and one acquisition call.
+Preparation has no broker or resource call. Git discovery remains limited to three
+requests overall: the consumed anonymous baseline and at most two authenticated requests
+from successful diagnostic interaction and its conditional silent follow-up. Do not
+repeat the anonymous baseline. Count timeout/failure as consumption; unknown consumption
+stops execution. The process bounds include local input time. No automatic retry or
+automatic silent-to-interactive transition is permitted.
 
-1. Verify the accepted Wave, protocol commit, exact source copy, environment, prior
-   consumption, and source/dependency findings. Reconcile any failed launcher start that
-   occurred before it could write its journal, adding its consumed action and outcome
-   before continuing. Unknown capacity stops execution.
-2. Fetch and all four preparation attempts below are consumed. Verify the retained
-   amended source, seven-package inventory/lock hash, prepared artifact hashes, runtime
-   configuration, and `self-check-passed` result. No fetch or preparation capacity
-   remains. Do not rebuild the subject or replay the self-check; missing or changed
-   artifacts stop execution and require an accepted amendment before replacement work.
-3. With the operator ready at the Windows desktop, run `inspect` with the bound account
-   and remote. It records account visibility and the anonymous discovery baseline. Absence
-   does not prove absence from every OS/service store. Ordinary anonymous HTTP 401, 403,
-   404, or a declined redirect is a baseline observation; recognized anonymous discovery
-   limits what later token acceptance can establish. A network failure or another
-   unrecognized response stops further attempts.
-4. Run the first `silent` attempt with the same account and remote. A missing or ambiguous
-   account produces a bounded outcome without acquisition. If it returns a strictly
-   matched result, record its discovery outcome and stop the initial sequence; do not
-   sign in again solely to consume a slot.
-5. Only after an ordinary account-not-visible or interaction-required outcome, and with
-   the operator ready to choose the selected account, run `interactive`. Do not proceed
-   on ambiguity, unexpected UI, unavailable broker, uncertain termination, or unknown
-   failure. These require interpretation or protocol amendment, not broader fallback.
-6. If interaction returns an exact requested-email match, a nonempty unexpired token, and
-   recognized Git discovery, run the second `silent` attempt in a fresh process. Otherwise
-   stop and retain the limitation. This tests later process reuse of existing OS state;
-   it does not prove fresh-state behavior or a separate consumer's behavior.
-7. Record every attempt and sanitized outcome below through independent evidence review,
-   including failed starts, request consumption, termination/retention, operator actions,
-   existing-state limitations, and remaining limits. A normal research exit is not a V2
-   success-contract result.
+1. Verify the current accepted Wave/protocol, source revision, environment, prior
+   consumption, and source/dependency findings. Recover the complete seven-action journal
+   and first sequence's results, including normal termination. Unknown capacity or an
+   unresolved start stops execution.
+2. Use the one additional preparation (Windows attempt 8) for the accepted diagnostic
+   source. Verify the retained seven archives against their manifest; use the same
+   dedicated local feed/caches, pins, and toolchain. No package fetch, upgrade, or install
+   is permitted. Record source/dependency/artifact hashes, runtime configuration, and
+   successful synthetic self-check before account actions. A failed preparation stops;
+   do not replace it or rerun self-check after consuming the fifth preparation.
+3. With the operator present, run the one additional `interactive` action for the same
+   nominated account and remote. The earlier silent action already established the
+   UI-required category; do not repeat `inspect` or a pre-interaction silent call. Resolve
+   accounts afresh and retain exact selection/result checks. The owner operates any WAM
+   account choice, sign-in, unlock, MFA, or consent. Record the structured failure if
+   acquisition fails; do not change client, authority, scope, account, cache, or network
+   configuration to rescue this diagnostic attempt.
+4. Only if diagnostic interaction returns the exact requested email, a nonempty unexpired
+   token, and recognized Git discovery, use the one remaining `silent` action in a fresh
+   process. Otherwise stop. A follow-up failure also stops without retry. This tests
+   later process reuse of existing OS state, not fresh state or a separate consumer.
+5. Record every attempted action, resource count, structured result, manual observation,
+   termination, retention, and remaining capacity below through independent evidence
+   review. If error fields remain absent or insufficient, retain that limit rather than
+   expanding diagnostics or retrying. Another experiment requires a new accepted amendment.
 
-The recorded actions used Windows PowerShell 5.1 in
-`%LOCALAPPDATA%\AzureAuthResearch\windows-msal\source-4470996a944fc15e2d0edbff76bc396a24a2979f`:
+Substitute the diagnostic subject's verified accepted 40-character commit for
+`<accepted-source-commit>` and use its source directory below
+`%LOCALAPPDATA%\AzureAuthResearch\windows-msal` in Windows PowerShell 5.1:
 
 ```powershell
-.\Invoke-Probe.ps1 -Action inspect -AcceptedRevision 4470996a944fc15e2d0edbff76bc396a24a2979f
+.\Invoke-Probe.ps1 -Action prepare -AcceptedRevision <accepted-source-commit>
 ```
 
-The command above records the invocation form; do not replay the stopped sequence. Its
-`inspect`, `silent`, and `interactive` actions were governed by the conditions above.
-Emails and resource URLs never belong in commands. Local input used the owned-form
-procedure; authentication interaction remained under operator control.
+After successful preparation verification, use `interactive` and only its conditional
+`silent` follow-up as specified above. Do not supply an email or resource URL as probe or
+input-automation command arguments; use the existing bounded owned-form procedure. The
+read-only Git configuration query binds the previously nominated local inputs and does
+not invoke a credential helper. All input automation and operator-attendance limits above
+remain in effect.
 
 ## Outcomes, Stops, and Retention
 
@@ -295,7 +325,8 @@ broker availability, bucketed visible/matching counts, missing-email indication,
 acquisition/result presence, token-presence flag, exact-returned-email flag, tenant
 presence and equality to the public MSA tenant constant, scope-metadata presence,
 requested-`.default` membership, expiry validity, and the fixed resource fields described
-above. Unobserved booleans are false and the unobserved HTTP status is zero;
+above, plus the nullable structured `Failure` object. Unobserved booleans are false and
+the unobserved resource HTTP status is zero;
 interpret them only with status and acquisition/result-presence fields. It contains no
 account identifier, resource URL, token bytes, provider exception text, raw headers/body,
 or raw scopes. `.default`
@@ -324,10 +355,11 @@ Cleanup, if later needed, is limited to verified experiment-owned files after ow
 processes have exited. Do not clear broker state, revoke consent, sign out, or modify an
 upstream installation as cleanup.
 
-Current consumption: fetch 1/1, prepare 4/4, inspect 1/1, silent 1/2, interactive 1/1,
-discovery requests 1/3 (one anonymous, zero authenticated). No further action is permitted
-under this sequence. The sections below preserve consumption and conclusions at their
-respective historical revisions; they do not grant extra runs.
+Current consumption before diagnostic execution: fetch 1/1, prepare 4/5, inspect 1/1,
+silent 1/2, interactive 1/2, discovery requests 1/3 (one anonymous, zero authenticated).
+The next Windows attempt is 8 (`prepare`). Only the amended sequence above permits the
+remaining actions. Historical sections preserve their actual outcomes and consumption;
+previous stopped dispositions do not describe a successful diagnostic execution.
 
 ## Execution History
 

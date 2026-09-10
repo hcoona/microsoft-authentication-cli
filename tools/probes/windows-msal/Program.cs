@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -132,9 +133,10 @@ internal static class Program
             Finish(observation.ExactReturnedEmail ? "result-email-matched" : "result-email-unverifiable", 0);
         }
         catch (OperationCanceledException) { Finish("cancelled", 2); }
-        catch (MsalUiRequiredException) { Finish("interaction-required", 2); }
-        catch (MsalServiceException) { Finish("provider-rejected", 2); }
-        catch (MsalClientException) { Finish("client-or-broker-failure", 2); }
+        catch (MsalUiRequiredException error) { FinishMsal(error, "interaction-required"); }
+        catch (MsalServiceException error) { FinishMsal(error, "acquisition-failed"); }
+        catch (MsalClientException error) { FinishMsal(error, "client-or-broker-failure"); }
+        catch (MsalException error) { FinishMsal(error, "msal-failure"); }
         catch (BrowserBlockedException) { Finish("browser-fallback-blocked", 2); }
         catch { Finish("unexpected-failure", 2); }
     }
@@ -142,6 +144,33 @@ internal static class Program
     private static bool ExactMatch(string? observed, string requested) =>
         !string.IsNullOrEmpty(observed) && string.Equals(observed, requested, StringComparison.OrdinalIgnoreCase);
     private static string Bucket(int count) => count == 0 ? "zero" : count == 1 ? "one" : "multiple";
+
+    private static FailureDetails DescribeFailure(MsalException error)
+    {
+        // These named fields are MSAL protocol codes and enum/numeric status contracts.
+        // Never serialize the exception or its property bag: they can contain private data.
+        error.AdditionalExceptionData.TryGetValue(MsalException.BrokerErrorStatus, out var brokerStatus);
+        error.AdditionalExceptionData.TryGetValue(MsalException.BrokerErrorCode, out var brokerCode);
+        return new FailureDetails
+        {
+            Kind = error is MsalUiRequiredException ? "ui-required" :
+                error is MsalServiceException ? "service-or-broker" :
+                error is MsalClientException ? "client" : "msal",
+            ErrorCode = error.ErrorCode,
+            BrokerStatus = brokerStatus,
+            BrokerCode = long.TryParse(brokerCode, NumberStyles.Integer, CultureInfo.InvariantCulture,
+                out var number) ? number : null,
+            ServiceStatusCode = (error as MsalServiceException)?.StatusCode,
+            IsRetryable = error.IsRetryable,
+            UiRequiredClassification = (error as MsalUiRequiredException)?.Classification.ToString()
+        };
+    }
+
+    private static void FinishMsal(MsalException error, string status)
+    {
+        observation.Failure = DescribeFailure(error);
+        Finish(status, 2);
+    }
 
     private static Uri? DiscoveryUri(string remote)
     {
@@ -225,6 +254,25 @@ internal static class Program
             DiscoveryUri("https://example.invalid/example/project/_git/repo") is null && GitPrefix.Length == 34;
         string json = JsonSerializer.Serialize(observation);
         passed &= !json.Contains("@") && !json.Contains("AccessToken") && !json.Contains("Username");
+        const string privateMarker = "synthetic-private-value@example.invalid";
+        var synthetic = new MsalServiceException("temporarily_unavailable", privateMarker, 503)
+        {
+            CorrelationId = privateMarker,
+            AdditionalExceptionData = new Dictionary<string, string>
+            {
+                [MsalException.BrokerErrorStatus] = "NetworkTemporarilyUnavailable",
+                [MsalException.BrokerErrorCode] = "-2147024809",
+                [MsalException.BrokerErrorContext] = privateMarker,
+                [MsalException.BrokerTelemetry] = privateMarker
+            }
+        };
+        var details = DescribeFailure(synthetic);
+        passed &= details.Kind == "service-or-broker" && details.ErrorCode == "temporarily_unavailable" &&
+            details.BrokerStatus == "NetworkTemporarilyUnavailable" && details.BrokerCode == -2147024809 &&
+            details.ServiceStatusCode == 503 && details.IsRetryable &&
+            !JsonSerializer.Serialize(details).Contains(privateMarker) &&
+            DescribeFailure(new MsalUiRequiredException("invalid_grant", privateMarker)).Kind == "ui-required" &&
+            DescribeFailure(new MsalClientException("unknown_broker_error", privateMarker)).BrokerCode is null;
         Finish(passed ? "self-check-passed" : "self-check-failed", passed ? 0 : 2);
     }
 
@@ -235,10 +283,22 @@ internal static class Program
     }
     private sealed class BrowserBlockedException : Exception { }
 
+    private sealed class FailureDetails
+    {
+        public string Kind { get; init; } = "";
+        public string ErrorCode { get; init; } = "";
+        public string? BrokerStatus { get; init; }
+        public long? BrokerCode { get; init; }
+        public int? ServiceStatusCode { get; init; }
+        public bool IsRetryable { get; init; }
+        public string? UiRequiredClassification { get; init; }
+    }
+
     private sealed class Observation
     {
         public string Mode { get; set; } = "";
         public string Status { get; set; } = "";
+        public FailureDetails? Failure { get; set; }
         public bool BrokerAvailable { get; set; }
         public string VisibleAccounts { get; set; } = "not-observed";
         public string ExactMatches { get; set; } = "not-observed";
