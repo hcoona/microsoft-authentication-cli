@@ -443,7 +443,7 @@ families:
 
   - id: windows-msal-account-metadata-protocol
     state: current
-    concern: Exact procedure and sanitized execution history for the bounded Windows MSAL account/metadata investigation
+    concern: Exact procedure and sanitized execution history for the bounded Windows MSAL account, metadata, and designated Git discovery investigation
     carrier: repository-file
     path: docs/research/experiments/windows-msal-account-metadata.md
     format: markdown
@@ -451,7 +451,7 @@ families:
     maintainer: Research maintainer
     consumers:
       - Experiment operator before each bounded attempt
-      - Architecture and evidence reviewers evaluating account visibility, result metadata, and reuse limitations
+      - Architecture and evidence reviewers evaluating account visibility, result metadata, designated Git discovery, and reuse limitations
     creation_trigger: Issue #35 needs bounded Windows MSAL observations that public source alone cannot establish.
     failure_mode: Authentication runs without an accepted procedure or their state effects, consumed limits, and evidence scope cannot be recovered.
     review_point: Independent record-system and research-evidence review before protocol acceptance, amendment, execution-evidence acceptance, or reliance on its conclusions
