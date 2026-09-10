@@ -28,13 +28,13 @@ administration, cache migration, plaintext cache, or fallback mechanism in this 
 
 ## Subject and Environment
 
-The subject uses the six source/configuration files in
-[`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs). Prepare the
-Git-discovery amendment once from its accepted `main-v2` commit and record that exact
-source revision, source hashes, dependency inventory, and new artifact identities before
-any broker action. The metadata-only artifact at
+The prepared subject uses the six source/configuration files in
+[`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs) at accepted
+revision `4470996a944fc15e2d0edbff76bc396a24a2979f`. The execution history records its
+verified source, dependency inventory, and artifact identities. Subsequent actions use
+that retained Git-discovery subject. The older metadata-only artifact at
 `3658a64b7ecba7feeb698821bd0aede6ce18f8a6` remains historical evidence; do not use it for
-the new resource scenario. Subsequent actions use the verified amended source/artifacts.
+the resource scenario.
 Read the current accepted Wave and protocol before every action; a retained source
 revision does not preserve authority that later records remove. Record the current
 protocol revision separately when it differs from the launcher's source `Revision`.
@@ -239,13 +239,11 @@ or automatic silent-to-interactive transition is permitted.
    consumption, and source/dependency findings. Reconcile any failed launcher start that
    occurred before it could write its journal, adding its consumed action and outcome
    before continuing. Unknown capacity stops execution.
-2. The one fetch and three preparation attempts below remain consumed. Verify the retained
-   seven-package feed against its existing manifest, then use the one additional
-   preparation attempt for the accepted Git-discovery subject. No new dependency fetch,
-   package upgrade, or installation is permitted. Record the new source/dependency and
-   artifact hashes, runtime configuration, and `self-check-passed` result before any
-   account operation. Missing or changed artifacts stop execution; no capacity remains
-   for an unreviewed replacement build after this fourth preparation.
+2. Fetch and all four preparation attempts below are consumed. Verify the retained
+   amended source, seven-package inventory/lock hash, prepared artifact hashes, runtime
+   configuration, and `self-check-passed` result. No fetch or preparation capacity
+   remains. Do not rebuild the subject or replay the self-check; missing or changed
+   artifacts stop execution and require an accepted amendment before replacement work.
 3. With the operator ready at the Windows desktop, run `inspect` with the bound account
    and remote. It records account visibility and the anonymous discovery baseline. Absence
    does not prove absence from every OS/service store. Ordinary anonymous HTTP 401, 403,
@@ -269,12 +267,11 @@ or automatic silent-to-interactive transition is permitted.
    existing-state limitations, and remaining limits. A normal research exit is not a V2
    success-contract result.
 
-For the amended subject, substitute its verified accepted 40-character source commit
-for `<accepted-source-commit>`, use the corresponding source-copy directory under
-`%LOCALAPPDATA%\AzureAuthResearch\windows-msal`, and invoke Windows PowerShell 5.1:
+When operator/account prerequisites are met, use Windows PowerShell 5.1 in
+`%LOCALAPPDATA%\AzureAuthResearch\windows-msal\source-4470996a944fc15e2d0edbff76bc396a24a2979f`:
 
 ```powershell
-.\Invoke-Probe.ps1 -Action prepare -AcceptedRevision <accepted-source-commit>
+.\Invoke-Probe.ps1 -Action inspect -AcceptedRevision 4470996a944fc15e2d0edbff76bc396a24a2979f
 ```
 
 After preparation verification, use each `inspect`, `silent`, or `interactive` action
@@ -318,9 +315,8 @@ Cleanup, if later needed, is limited to verified experiment-owned files after ow
 processes have exited. Do not clear broker state, revoke consent, sign out, or modify an
 upstream installation as cleanup.
 
-Current cumulative baseline before the Git-discovery amendment executes: fetch 1/1,
-prepare 3/4, inspect 0/1, silent 0/2, interactive 0/1, discovery requests 0/3. The next
-Windows attempt is 4 (`prepare`). The sections below preserve consumption and conclusions
+Current cumulative baseline: fetch 1/1, prepare 4/4, inspect 0/1, silent 0/2,
+interactive 0/1, discovery requests 0/3. The next Windows attempt is 5 (`inspect`). The sections below preserve consumption and conclusions
 at their respective historical revisions; they do not grant extra runs.
 
 ## Execution History
@@ -476,3 +472,50 @@ require rebuilding an unchanged retained subject.
 
 Consumed capacity: fetch 1/1; prepare 3/3; inspect 0/1; silent 0/2; interactive 0/1.
 The next Windows attempt number is 4. No broker action has been executed.
+
+### Prepared Designated Git Discovery Subject
+
+Runtime observation on 2026-09-10 UTC under the amendment accepted by
+[PR #45](https://github.com/hcoona/microsoft-authentication-cli/pull/45), protocol and
+source revision `4470996a944fc15e2d0edbff76bc396a24a2979f`. Preflight recovered all three
+prior preparations and the one fetch, confirmed no unresolved start or running probe,
+and verified the seven retained package archives against their manifest. The same
+Windows build 26200.9445, x64 architecture, PowerShell 5.1.26100.9444, SDK 8.0.425, and
+Core/Desktop runtime 8.0.31 were present. The initiating WSL environment was unchanged.
+No account or resource call formed part of preflight or preparation.
+
+A detached checkout of the accepted revision supplied the five Windows files through
+`git archive`. Their SHA-256 values matched Git before and after execution. The launcher
+used the dedicated existing feed/caches and performed no additional download or install.
+
+| Attempt | Action | Start UTC | End UTC | Outcome |
+| --- | --- | --- | --- | --- |
+| 4 | `prepare` | 2026-09-10 20:13:26.9755147 | 2026-09-10 20:13:33.0776592 | `prepared-and-self-checked`; launcher exit 0 |
+
+Restore reported success and resolved exactly the same seven pinned packages. The lock
+SHA-256 remains `6653224a1478ae1ef1a6d62c32c188b1408502ce4fcc2f4730f32673e23f3e77`.
+Release compilation completed in 3.25 seconds with zero warnings and errors. The runtime
+configuration retains Core/Desktop 8.0.31 with `rollForward: Disable`.
+
+| Prepared artifact under `bin/Release/net8.0-windows` | Bytes | SHA-256 |
+| --- | --- | --- |
+| `WindowsMsalProbe.exe` | 151,552 | `ada362907899479ec36f09a16b49b355952d50d4ffefe70f26a763ce428cdf32` |
+| `WindowsMsalProbe.dll` | 27,648 | `31377864bdba9a60f7a443050601fa77160e1333a98afb559827fc607e035904` |
+
+The synthetic selector/URL/output check returned `self-check-passed`. Account counts
+remain `not-observed`; acquisition and resource-attempt flags are false, resource status
+is zero, and resource outcome is `not-observed`. These are unexecuted-path defaults, not
+observations about broker availability, account visibility, or service behavior. The
+launcher confirmed normal process completion, recorded the end, and returned exit 0 with
+empty stdout/stderr. Input automation and Windows authentication UI were not invoked.
+
+This establishes preparation only. Personal-account visibility, token acquisition, Git
+discovery, and broker reuse remain unobserved, and registration eligibility remains
+unresolved. The owner's corporate-session description is planning context, not a measured
+join/compliance result. No private account, repository, or resource data is retained here.
+
+Retain the verified source/build, dependency artifacts, and sanitized operational records.
+No sign-out, broker cleanup, consent change, or installation change was performed. Current
+consumption is fetch 1/1, prepare 4/4, inspect 0/1, silent 0/2, interactive 0/1, and discovery
+requests 0/3. The next Windows attempt is 5. Use the prepared subject only under the current
+accepted protocol and operator readiness; do not rebuild it for this evidence update.

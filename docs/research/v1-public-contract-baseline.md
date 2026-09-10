@@ -1253,9 +1253,10 @@ resource authorization, registration eligibility, or a Profile/support commitmen
 
 The protocol's [execution history](experiments/windows-msal-account-metadata.md#execution-history)
 records the initial public-index and launcher failures, followed by successful Windows
-compilation and synthetic self-check of the metadata-only subject. The Git-discovery
-amendment requires its separately bounded preparation; MSAL/WAM authentication and
-resource behavior remain unobserved. Preparation used public
+compilation and synthetic self-check of the metadata-only subject and the amended
+Git-discovery subject. Both preparations are recorded with their distinct source and
+artifact identities; MSAL/WAM authentication and resource behavior remain unobserved.
+Preparation used public
 packages transferred through WSL to a Windows local feed and did not change the native
 Windows account or token boundary.
 
