@@ -5,10 +5,24 @@ env {
   ["PYTHONDONTWRITEBYTECODE"] = "1"
 }
 
+local textRecordSelectors = List(
+  new FileSelector { types = List("text") },
+  new FileSelector { glob = "docs/**/*.tm7" },
+)
+
 local fastSteps = new Mapping<String, Step> {
-  ["merge-conflict"] = Builtins.check_merge_conflict
-  ["trailing-whitespace"] = Builtins.trailing_whitespace
-  ["gitleaks"] = Builtins.gitleaks
+  ["merge-conflict"] = (Builtins.check_merge_conflict) {
+    types = null
+    match_any = textRecordSelectors
+  }
+  ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
+    types = null
+    match_any = textRecordSelectors
+  }
+  ["gitleaks"] = (Builtins.gitleaks) {
+    types = null
+    match_any = textRecordSelectors
+  }
   ["markdown-links"] {
     check = new Command {
       argv = List(
