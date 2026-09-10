@@ -1,4 +1,4 @@
-# Windows MSAL Account and Token Metadata Protocol
+# Windows MSAL Account, Token, and Git Discovery Protocol
 
 ## Question and Authority
 
@@ -7,7 +7,9 @@ whether the designated personal Microsoft account is visible through MSAL's expl
 Windows account-discovery option, whether a unique exact email match permits silent
 acquisition for the Azure DevOps scope, and which authoritative result fields are
 available after a permitted WAM interaction. A later silent invocation checks reuse of
-existing broker state without an application cache file.
+existing broker state without an application cache file. For the owner-designated Git
+scenario, also test whether the resulting token is accepted by that single Azure DevOps
+repository's read-only discovery endpoint on the corporate-account Windows host.
 
 The accepted [Delivery Wave](../../delivery-wave.md) and
 [experiment policy](../experiment-safety.md) govern execution. This file owns the bounded
@@ -17,17 +19,22 @@ or an unmerged edit does not authorize a run. The
 owns public-source findings. This protocol is neither a V2 implementation nor a selected
 Client Profile, host architecture, or support promise.
 
-No protected-resource request is made. Acquiring a token does not establish Azure DevOps
-resource authorization, intended third-party registration reuse, or all of RECHECK-007.
+Only the designated repository's initial Git discovery GET is permitted. Acquiring a
+token alone does not establish resource acceptance; recognizing a discovery response
+still does not establish a complete Git operation, intended third-party registration
+reuse, or all of RECHECK-007.
 There is no corporate-account comparison, resource write, PAT, registration/tenant
 administration, cache migration, plaintext cache, or fallback mechanism in this probe.
 
 ## Subject and Environment
 
-The prepared subject uses the six source/configuration files in
-[`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs) at accepted
-revision `3658a64b7ecba7feeb698821bd0aede6ce18f8a6`. Remaining broker actions use that
-retained source copy and the artifact identities recorded in the execution history.
+The subject uses the six source/configuration files in
+[`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs). Prepare the
+Git-discovery amendment once from its accepted `main-v2` commit and record that exact
+source revision, source hashes, dependency inventory, and new artifact identities before
+any broker action. The metadata-only artifact at
+`3658a64b7ecba7feeb698821bd0aede6ce18f8a6` remains historical evidence; do not use it for
+the new resource scenario. Subsequent actions use the verified amended source/artifacts.
 Read the current accepted Wave and protocol before every action; a retained source
 revision does not preserve authority that later records remove. Record the current
 protocol revision separately when it differs from the launcher's source `Revision`.
@@ -49,7 +56,9 @@ them from a local feed. It performs no authentication or account-store access.
 | Client | Microsoft-owned Visual Studio client `872cd9fa-d31f-45e0-9eab-6e460a02d1f1`, an experiment input only |
 | Authority and scope | `https://login.microsoftonline.com/common`; `499b84ac-1321-427f-aa17-267ca6975798/.default` |
 | Broker options | Windows WAM; `ListOperatingSystemAccounts = true`; no MSA passthrough option; real owned parent window |
-| Selected account | One owner-authorized personal Microsoft account; exact email entered locally by the operator, never in command arguments or records |
+| Selected account | One owner-designated personal Microsoft account; privately supplied exact email in the owned local form, never in command arguments or records |
+| Resource | The one owner-designated checkout's existing `https://dev.azure.com` Git remote; exact URL remains private |
+| Windows account context | Corporate/domain-account session as reported by the owner; exact join/compliance state is not measured; no corporate-account acquisition |
 | Application state | New in-memory MSAL cache for every invocation; no MSAL Extensions or application cache file |
 | Existing OS state | Authorized current broker/session state; prior use and visibility are recorded as known or unknown, never assumed clean |
 
@@ -58,7 +67,8 @@ The host/toolchain versions above came from read-only host metadata during plann
 match. Fetch and preparation have no authentication or account-store access and may
 proceed without operator/account readiness when their other prerequisites are met. Before each `inspect`,
 `silent`, or `interactive` action, additionally confirm that the operator is present and
-the selected account is available to the operator. An unknown existing-state history is
+the selected account is available to the operator. Readiness may cover a continuous
+operator-attended sequence; renew it after an interruption. An unknown existing-state history is
 permitted but limits conclusions. Another machine, account role, version set, or effects
 boundary requires a reviewed protocol amendment; previous consumption remains charged.
 
@@ -117,17 +127,70 @@ a session. A login hint is not a guarantee of account identity; the result is ch
 
 Authentication may reach the declared Microsoft identity authority and Microsoft's
 normal WAM authentication endpoints, including personal-account sign-in surfaces.
-Ordinary selected-account broker/session updates are permitted. No Azure DevOps API or
-other protected-resource call is made. MSAL logging is discarded with PII and default
+Ordinary selected-account broker/session updates are permitted. Resource access is limited
+to the discovery procedure below, with normal service-side access auditing. No Azure
+DevOps administration API is called. MSAL logging is discarded with PII and default
 platform logging disabled; the probe has no telemetry exporter. Existing OS/broker
 telemetry and session lifecycle remain platform-owned.
 
-All authentication happens on Windows. WSL handles the declared public source/packages,
-build metadata, process completion, the sanitized journal, and outcome flags. Do not
-inspect the email control,
-screenshot authentication UI, capture tokens/codes, export broker diagnostics, or transport
-a token back to WSL. Browser fallback is declined by the custom-web-UI callback; no
+All authentication and resource requests happen on Windows. WSL handles the declared
+public source/packages, build metadata, process completion, sanitized journal, and outcome
+flags. The designated checkout's remote and matching credential-routing configuration
+may be read only to bind the single resource and requested account. Do not read project
+contents or stored credentials, or invoke Git/GCM/AzureAuth credential helpers.
+
+The operator may fill the two owned form controls, or the agent may prefill the
+privately supplied email and designated remote using write-only UI Automation. Limit
+automation to the verified owned probe process/window and controls `RequestedEmail`,
+`DesignatedRemote`, and `StartProbe`; do not read their values or other account UI. The
+agent may start the already requested attempt after these checks. Private input transport
+from WSL to the local automation process may use an anonymous stdin pipe in memory, never
+command arguments, source files, logs, or a clipboard. Input-control automation is not
+authorization to operate WAM sign-in, account choice, MFA, unlock, or consent: those remain
+operator actions. Do not screenshot authentication UI, capture tokens/codes, export broker
+diagnostics, or transport a token back to WSL. Browser fallback is declined by the custom-web-UI callback; no
 browser launcher, callback listener, or device-code flow is provided.
+
+## Designated Git Discovery
+
+**Public-source basis, retrieved 2026-09-10 UTC:** Microsoft's
+[Azure Repos authentication guidance](https://learn.microsoft.com/en-us/azure/devops/repos/git/auth-overview?view=azure-devops)
+shows an Azure DevOps resource token in Git's Bearer Authorization header. This supports
+the request form, not this account/client combination's eligibility. Git's
+[v2.51.0 HTTP protocol, Smart Clients and Smart Server Response](https://github.com/git/git/blob/v2.51.0/Documentation/gitprotocol-http.adoc)
+defines `GET <remote>/info/refs?service=git-upload-pack`, the advertisement content type,
+and initial service announcement. No Git client or credential-helper invocation is needed
+to observe this protocol boundary.
+
+Bind both local inputs to the owner's nominated account and existing remote before each
+action. The probe accepts only HTTPS `dev.azure.com` URLs with the Git repository path,
+no userinfo, nondefault port, query, or fragment. It appends only the discovery suffix.
+The URL validator does not identify the owner's repository; that is the operator/agent's
+local binding check. Never substitute another target to rescue a failed request.
+
+`inspect` makes one anonymous discovery GET after account enumeration, without credentials
+or cookies. Each permitted token-acquisition action makes at most one Bearer discovery
+GET, only after an exact returned-email match and a nonempty, unexpired token. No token is
+sent when identity verification fails. A challenge does not trigger automatic credentials,
+account fallback, PAT creation, retries, or redirects.
+
+Each request has a 15-second deadline inside the action's existing process limit. The
+Windows HTTP handler retains standard verified TLS, disables redirects/cookies/default
+server and proxy credentials, bounds response headers to 16 KiB, and disables response
+body draining. Read at most 34 response-body bytes, and only for HTTP 200 with content type
+`application/x-git-upload-pack-advertisement`. Compare them in memory to the fixed
+`001e# service=git-upload-pack\n0000` announcement; retain only a Boolean. Do not request
+protocol v2, parse refs, read the remaining body, log headers/bodies, or request a pack.
+The HTTP/OS implementation may buffer network data; this limit concerns application
+inspection and retention, not proof of lower-layer buffer contents.
+
+Retain HTTP status, challenge-presence, content-type/prefix match, authentication-used,
+and fixed outcome categories. If the anonymous request already recognizes Git discovery,
+the authenticated result cannot establish that the token was necessary. Recognized
+Bearer discovery after an anonymous challenge is bounded evidence of token acceptance
+for that target, not a full clone/fetch/push test or wider service authorization. Unrecognized
+responses and network failures retain that limitation and stop the sequence; do not
+inspect private error bodies or expand the probe.
 
 ## Finite Attempts and Procedure
 
@@ -145,54 +208,67 @@ stops execution. Publish the resulting ordered history through the review in ste
 | Action | Maximum attempts | Per-attempt bound | Expected observation |
 | --- | --- | --- | --- |
 | `fetch` | 1 | 120 seconds for the WSL process; no retries; at most seven archives, 100 MiB each and 200 MiB total; confirm exit before proceeding | The seven pinned public packages and their SHA-512 manifest are available to Windows; no package execution or account-store access |
-| `prepare` | 3 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and selector/output self-check passes, with no authentication or account-store access |
-| `inspect` | 1 | Process 120 seconds; launcher 135 seconds plus at most 10 seconds for termination | WAM available or unavailable; zero/one/multiple visible accounts and exact matches; missing-email flag; no acquisition |
+| `prepare` | 4 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and synthetic selector/URL/output self-check passes, with no authentication or account-store access |
+| `inspect` | 1 | Process 120 seconds; launcher 135 seconds plus at most 10 seconds for termination | WAM available or unavailable; zero/one/multiple visible accounts and exact matches; missing-email flag and one anonymous Git discovery baseline; no acquisition |
 | `silent` | 2 | Same bound as inspect | First attempt before interaction; second only after an email-matched interactive result; each resolves a real account afresh |
 | `interactive` | 1 | Process 360 seconds; launcher 375 seconds plus at most 10 seconds for termination | Operator-controlled WAM interaction and provider metadata, or a bounded failure |
 
 Maximum acquisition calls are three: two silent and one interactive. Each broker action
-has at most one enumeration and one acquisition call. Preparation has no broker call.
-The process bounds include time spent waiting for local email entry. No automatic retry
+has at most one enumeration and one acquisition call. Preparation has no broker or resource call. Git discovery has at most three requests
+across the sequence: one anonymous and at most two authenticated requests. If the first
+silent action succeeds, stop without interaction; otherwise only a successful interaction
+and its follow-up silent action can each send one authenticated request. Count a request
+as consumed when attempted, including timeout/failure. Derive consumption from the ordered
+action/results below; unknown request consumption stops further execution.
+The process bounds include time spent waiting for local email and remote entry. No automatic retry
 or automatic silent-to-interactive transition is permitted.
 
 1. Verify the accepted Wave, protocol commit, exact source copy, environment, prior
    consumption, and source/dependency findings. Reconcile any failed launcher start that
    occurred before it could write its journal, adding its consumed action and outcome
    before continuing. Unknown capacity stops execution.
-2. Fetch and preparation are complete. Verify the retained source, seven-package
-   inventory/lock hash, prepared artifact hashes, runtime configuration, and
-   `self-check-passed` evidence below. No fetch or preparation capacity remains. Do not
-   rebuild the subject or replay the self-check; a changed subject or missing artifact
-   stops execution and requires a reviewed protocol amendment before replacement work.
-3. When the operator confirms availability of the designated account and is ready at the
-   Windows desktop, run `inspect`. Enter the email locally. This can report absence; it
-   does not prove that an account is absent from every OS or service store.
-4. Run the first `silent` attempt with the same account. A missing or ambiguous account
-   produces a bounded outcome without acquisition. If a strictly matched result is
-   returned, stop this initial sequence; do not sign in again solely to consume a slot.
+2. The one fetch and three preparation attempts below remain consumed. Verify the retained
+   seven-package feed against its existing manifest, then use the one additional
+   preparation attempt for the accepted Git-discovery subject. No new dependency fetch,
+   package upgrade, or installation is permitted. Record the new source/dependency and
+   artifact hashes, runtime configuration, and `self-check-passed` result before any
+   account operation. Missing or changed artifacts stop execution; no capacity remains
+   for an unreviewed replacement build after this fourth preparation.
+3. With the operator ready at the Windows desktop, run `inspect` with the bound account
+   and remote. It records account visibility and the anonymous discovery baseline. Absence
+   does not prove absence from every OS/service store. Ordinary anonymous HTTP 401, 403,
+   404, or a declined redirect is a baseline observation; recognized anonymous discovery
+   limits what later token acceptance can establish. A network failure or another
+   unrecognized response stops further attempts.
+4. Run the first `silent` attempt with the same account and remote. A missing or ambiguous
+   account produces a bounded outcome without acquisition. If it returns a strictly
+   matched result, record its discovery outcome and stop the initial sequence; do not
+   sign in again solely to consume a slot.
 5. Only after an ordinary account-not-visible or interaction-required outcome, and with
    the operator ready to choose the selected account, run `interactive`. Do not proceed
    on ambiguity, unexpected UI, unavailable broker, uncertain termination, or unknown
    failure. These require interpretation or protocol amendment, not broader fallback.
-6. If interaction returns a result with the exact requested email, run the second
-   `silent` attempt in a fresh process. Otherwise stop and retain the limitation.
-7. Record every attempt and its sanitized outcome below through independent evidence
-   review. Include failed starts, termination/retention, existing-state limitations, and
-   remaining limits. A normal research exit is not a V2 success-contract result.
+6. If interaction returns an exact requested-email match, a nonempty unexpired token, and
+   recognized Git discovery, run the second `silent` attempt in a fresh process. Otherwise
+   stop and retain the limitation. This tests later process reuse of existing OS state;
+   it does not prove fresh-state behavior or a separate consumer's behavior.
+7. Record every attempt and sanitized outcome below through independent evidence review,
+   including failed starts, request consumption, termination/retention, operator actions,
+   existing-state limitations, and remaining limits. A normal research exit is not a V2
+   success-contract result.
 
-The fetch and preparation commands retained in Git have consumed their limits; do not
-replay them. When the operator/account prerequisites above are met, use Windows
-PowerShell 5.1 in the verified prepared source-copy directory:
+For the amended subject, substitute its verified accepted 40-character source commit
+for `<accepted-source-commit>`, use the corresponding source-copy directory under
+`%LOCALAPPDATA%\AzureAuthResearch\windows-msal`, and invoke Windows PowerShell 5.1:
 
 ```powershell
-.\Invoke-Probe.ps1 -Action inspect -AcceptedRevision 3658a64b7ecba7feeb698821bd0aede6ce18f8a6
+.\Invoke-Probe.ps1 -Action prepare -AcceptedRevision <accepted-source-commit>
 ```
 
-Use each `inspect`, `silent`, or `interactive` action only in the sequence and conditions
-above. The source-copy directory is
-`%LOCALAPPDATA%\AzureAuthResearch\windows-msal\source-3658a64b7ecba7feeb698821bd0aede6ce18f8a6`.
-Do not include an email in the command. An agent may launch this Windows script from WSL
-after performing the same checks; user sign-in and consent remain local operator actions.
+After preparation verification, use each `inspect`, `silent`, or `interactive` action
+only in the sequence and conditions above. Do not include an email or resource URL in
+commands. An agent may launch this Windows script from WSL after the same checks; local
+input may use the owned-form procedure above and user authentication remains manual.
 
 ## Outcomes, Stops, and Retention
 
@@ -200,9 +276,11 @@ after performing the same checks; user sign-in and consent remain local operator
 broker availability, bucketed visible/matching counts, missing-email indication,
 acquisition/result presence, token-presence flag, exact-returned-email flag, tenant
 presence and equality to the public MSA tenant constant, scope-metadata presence,
-requested-`.default` membership, and expiry validity. Unobserved booleans are false;
+requested-`.default` membership, expiry validity, and the fixed resource fields described
+above. Unobserved booleans are false and the unobserved HTTP status is zero;
 interpret them only with status and acquisition/result-presence fields. It contains no
-account identifier, token bytes, provider exception text, or raw scopes. `.default`
+account identifier, resource URL, token bytes, provider exception text, raw headers/body,
+or raw scopes. `.default`
 membership and a nonempty scope list are observations, not proof of resource acceptance.
 
 The JSON and journal are local operational evidence with fields fixed by the source;
@@ -227,6 +305,11 @@ do not automatically delete them. Preserve ordinary authorized OS authentication
 Cleanup, if later needed, is limited to verified experiment-owned files after owned
 processes have exited. Do not clear broker state, revoke consent, sign out, or modify an
 upstream installation as cleanup.
+
+Current cumulative baseline before the Git-discovery amendment executes: fetch 1/1,
+prepare 3/4, inspect 0/1, silent 0/2, interactive 0/1, discovery requests 0/3. The next
+Windows attempt is 4 (`prepare`). The sections below preserve consumption and conclusions
+at their respective historical revisions; they do not grant extra runs.
 
 ## Execution History
 
