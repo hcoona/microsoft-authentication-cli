@@ -26,13 +26,22 @@ reuse, or all of RECHECK-007.
 There is no corporate-account comparison, resource write, PAT, registration/tenant
 administration, cache migration, plaintext cache, or fallback mechanism in this probe.
 
+## Current Execution Disposition
+
+The recorded sequence stopped after the interactive action returned `provider-rejected`.
+No further broker or resource action is executable under this sequence. The second
+silent slot required a successful matched interactive result and recognized Git discovery;
+that prerequisite was not met. Unused numeric capacity is not retry authorization.
+Preserve the subject and evidence for review. Another attempt requires an independently
+reviewed, accepted protocol amendment that retains all consumption below.
+
 ## Subject and Environment
 
 The prepared subject uses the six source/configuration files in
 [`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs) at accepted
 revision `4470996a944fc15e2d0edbff76bc396a24a2979f`. The execution history records its
-verified source, dependency inventory, and artifact identities. Subsequent actions use
-that retained Git-discovery subject. The older metadata-only artifact at
+verified source, dependency inventory, and artifact identities. The recorded actions used
+that retained Git-discovery subject; retain it for evidence review. The older metadata-only artifact at
 `3658a64b7ecba7feeb698821bd0aede6ce18f8a6` remains historical evidence; do not use it for
 the resource scenario.
 Read the current accepted Wave and protocol before every action; a retained source
@@ -267,17 +276,17 @@ or automatic silent-to-interactive transition is permitted.
    existing-state limitations, and remaining limits. A normal research exit is not a V2
    success-contract result.
 
-When operator/account prerequisites are met, use Windows PowerShell 5.1 in
+The recorded actions used Windows PowerShell 5.1 in
 `%LOCALAPPDATA%\AzureAuthResearch\windows-msal\source-4470996a944fc15e2d0edbff76bc396a24a2979f`:
 
 ```powershell
 .\Invoke-Probe.ps1 -Action inspect -AcceptedRevision 4470996a944fc15e2d0edbff76bc396a24a2979f
 ```
 
-After preparation verification, use each `inspect`, `silent`, or `interactive` action
-only in the sequence and conditions above. Do not include an email or resource URL in
-commands. An agent may launch this Windows script from WSL after the same checks; local
-input may use the owned-form procedure above and user authentication remains manual.
+The command above records the invocation form; do not replay the stopped sequence. Its
+`inspect`, `silent`, and `interactive` actions were governed by the conditions above.
+Emails and resource URLs never belong in commands. Local input used the owned-form
+procedure; authentication interaction remained under operator control.
 
 ## Outcomes, Stops, and Retention
 
@@ -315,9 +324,10 @@ Cleanup, if later needed, is limited to verified experiment-owned files after ow
 processes have exited. Do not clear broker state, revoke consent, sign out, or modify an
 upstream installation as cleanup.
 
-Current cumulative baseline: fetch 1/1, prepare 4/4, inspect 0/1, silent 0/2,
-interactive 0/1, discovery requests 0/3. The next Windows attempt is 5 (`inspect`). The sections below preserve consumption and conclusions
-at their respective historical revisions; they do not grant extra runs.
+Current consumption: fetch 1/1, prepare 4/4, inspect 1/1, silent 1/2, interactive 1/1,
+discovery requests 1/3 (one anonymous, zero authenticated). No further action is permitted
+under this sequence. The sections below preserve consumption and conclusions at their
+respective historical revisions; they do not grant extra runs.
 
 ## Execution History
 
@@ -519,3 +529,76 @@ No sign-out, broker cleanup, consent change, or installation change was performe
 consumption is fetch 1/1, prepare 4/4, inspect 0/1, silent 0/2, interactive 0/1, and discovery
 requests 0/3. The next Windows attempt is 5. Use the prepared subject only under the current
 accepted protocol and operator readiness; do not rebuild it for this evidence update.
+
+### Account Visibility, Interaction Required, and Provider Rejection
+
+Runtime observations on 2026-09-10 UTC under current protocol revision
+`57ae16d878f109b3568110e80bdf1f7ee2b632fb` accepted by
+[PR #46](https://github.com/hcoona/microsoft-authentication-cli/pull/46), using the prepared
+source and artifact identities at `4470996a944fc15e2d0edbff76bc396a24a2979f` above.
+Preflight confirmed the current accepted Wave/protocol, unchanged Windows build 26200.9445,
+x64 architecture, PowerShell 5.1.26100.9444, SDK/runtime presence, WSL/kernel/Python,
+prepared source/artifact and lock hashes, four completed preparations, and no unresolved
+start or running probe. The operator resumed the requested desktop sequence. The actual
+account and remote were bound locally to the previously nominated personal-account Git
+scenario; no private identity or endpoint is recorded here.
+
+The corporate-account Windows session is owner-reported context. Relevant prior personal
+account/broker use is unknown and no clean-state claim is made. Each action used a fresh
+process with no application cache file, the existing broker state, and the same declared
+Microsoft-owned client, common authority, Azure DevOps scope, and broker options.
+
+| Attempt | Action | Start UTC | End UTC | Probe result | Launcher exit |
+| --- | --- | --- | --- | --- | --- |
+| 5 | `inspect` | 2026-09-10 20:33:17.3654386 | 2026-09-10 20:33:29.6713619 | `inspected` | 0 |
+| 6 | `silent` | 2026-09-10 20:34:08.8422426 | 2026-09-10 20:34:17.7038755 | `interaction-required` | 2 |
+| 7 | `interactive` | 2026-09-10 20:34:33.4573608 | 2026-09-10 20:34:47.4724390 | `provider-rejected` | 2 |
+
+All three actions reported broker availability, multiple visible accounts, exactly one
+email match for the designated account, and no missing-email indication among the
+visible accounts. These are bucketed observations for this existing host state; they do
+not establish account visibility on a fresh host or for other accounts/registrations.
+
+`inspect` made the one permitted anonymous Git discovery request. It observed HTTP 302
+and a `WWW-Authenticate` header, with no recognized Git advertisement content type or
+prefix. The redirect was not followed; its destination and header values were not
+inspected or retained. This is an anonymous response observation, not proof of token
+acceptance, the repository's contents, or a complete Git operation.
+
+The first silent action started account-scoped acquisition and returned the fixed
+`interaction-required` category. The permitted interactive action then started acquisition
+for the same uniquely matched account and returned `provider-rejected`, the probe's
+mapping for `MsalServiceException`. Neither acquisition returned an `AuthenticationResult`.
+Consequently neither sent an authenticated resource request; token/identity/tenant/scope/
+expiry result flags remained unobserved defaults. The fixed category alone does not
+identify the underlying service error, configuration issue, account eligibility, or
+operator action. Raw exception text, service codes, diagnostics, and tokens were not
+captured. Do not infer categorical MSA rejection or a registration-support conclusion.
+
+Each action used one write-only UI Automation operation against the owned probe's two
+input controls and start button. Each worker and its controller completed normally within
+the declared bounds; no input retry occurred. Only fixed completion/process metadata was
+returned. The agent did not inspect authentication windows or automate account choice,
+passwords, MFA, unlock, or consent. Detailed operator-observed Windows UI steps were not
+available when this evidence was recorded; no successful prompt, consent, or manual
+sign-in is inferred from the interactive API call.
+
+The launcher recorded a normal end for every action and confirmed process exit. A later
+read-only process check found no remaining probe, input worker, or input controller.
+There was no timeout, uncertain termination, or cancellation-path test. All five source
+files still matched the prepared revision. The stopped sequence did not execute a second
+silent call or another resource request; attempt 8 is absent.
+
+**Bounded outcome:** Exact account discovery worked in this existing Windows state.
+Silent acquisition required interaction, and the allowed interactive attempt ended in a
+provider-rejection category without returning a token. Successful result metadata,
+authenticated Git discovery, and later broker reuse remain unobserved. Registration
+eligibility and intended external reuse remain unresolved; this result selects no Profile,
+product architecture, or supported platform.
+
+Retain the source/build/package artifacts and sanitized journal/results. Do not clear the
+broker, sign out, revoke consent, or claim that a failed return prevented all provider-side
+session effects. No helper fallback, PAT, account switching, resource write, object/pack
+request, or installation change was performed. Consumed totals are fetch 1/1, prepare 4/4,
+inspect 1/1, silent 1/2, interactive 1/1, and discovery 1/3. The unused silent and resource
+capacity cannot be exercised because the required successful interaction did not occur.
