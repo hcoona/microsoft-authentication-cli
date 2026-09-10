@@ -1250,10 +1250,11 @@ in a small research probe rather than V1's token-printing CLI. It does not execu
 previously proposed two-account resource comparison or establish resource authorization.
 
 The protocol's [execution history](experiments/windows-msal-account-metadata.md#execution-history)
-records the first preparation's public-index failure and the later successful local-feed
-restore that stopped in the launcher before compilation. No MSAL runtime observation
-resulted. Preparation uses pinned public packages transferred through WSL to a Windows
-local feed; it does not change the native Windows account or token boundary.
+records the initial public-index and launcher failures, followed by successful Windows
+compilation and synthetic self-check. This verifies preparation of the pinned probe;
+MSAL/WAM account and authentication behavior remain unobserved. Preparation used public
+packages transferred through WSL to a Windows local feed and did not change the native
+Windows account or token boundary.
 
 **Pinned source findings, reviewed on 2026-09-10 UTC:** MSAL 4.83.1's
 [`BrokerOptions`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/BrokerOptions.cs#L81-L87)
