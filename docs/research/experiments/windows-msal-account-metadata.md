@@ -130,8 +130,11 @@ actions use the launcher's local exclusive lock. Fetch has one non-overwriting s
 record under `fetch-1`; an existing or unresolved fetch record prohibits another fetch.
 The limits below are cumulative across revisions, retries, failed starts, and manual
 operation. No script or operator may reset them by deleting state or using another
-directory or machine. The accepted protocol history and local records must agree before
-another attempt.
+directory or machine. Before each action, recover consumption from the accepted history
+and subsequent local records. The accepted history is the recorded baseline; later
+attempts consume additional capacity even before their evidence review is published.
+A contradiction with that history, an unresolved start, or uncertain remaining capacity
+stops execution. Publish the resulting ordered history through the review in step 7.
 
 | Action | Maximum attempts | Per-attempt bound | Expected observation |
 | --- | --- | --- | --- |
