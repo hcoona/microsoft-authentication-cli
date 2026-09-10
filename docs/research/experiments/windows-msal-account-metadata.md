@@ -151,6 +151,17 @@ operator actions. Do not screenshot authentication UI, capture tokens/codes, exp
 diagnostics, or transport a token back to WSL. Browser fallback is declined by the custom-web-UI callback; no
 browser launcher, callback listener, or device-code flow is provided.
 
+Permit at most one input-automation operation per broker action, without retry. Its
+20-second wall-clock limit includes private input transport, owned-window discovery,
+prefill, and start. A local controller must supervise that owned automation process;
+on timeout, failure, or cancellation, terminate only that process and confirm its exit
+within five more seconds. Confirm its normal exit before proceeding as well. Bound the
+controller itself to 30 seconds. An automation failure also ends the probe attempt using
+the existing cancellation/termination procedure; do not retry input manually to bypass
+the limit. If start completion or process termination is uncertain, preserve the action's
+consumption and stop. Standard process supervision suffices; do not inspect or terminate
+unrelated applications or shared brokers.
+
 ## Designated Git Discovery
 
 **Public-source basis, retrieved 2026-09-10 UTC:** Microsoft's
@@ -188,9 +199,10 @@ Retain HTTP status, challenge-presence, content-type/prefix match, authenticatio
 and fixed outcome categories. If the anonymous request already recognizes Git discovery,
 the authenticated result cannot establish that the token was necessary. Recognized
 Bearer discovery after an anonymous challenge is bounded evidence of token acceptance
-for that target, not a full clone/fetch/push test or wider service authorization. Unrecognized
-responses and network failures retain that limitation and stop the sequence; do not
-inspect private error bodies or expand the probe.
+for that target, not a full clone/fetch/push test or wider service authorization. Apart
+from the ordinary anonymous baseline responses listed in step 3, unrecognized responses
+and network failures retain that limitation and stop the sequence; do not inspect private
+error bodies or expand the probe.
 
 ## Finite Attempts and Procedure
 
