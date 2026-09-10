@@ -15,38 +15,6 @@ proposal does not authorize any work it would add before merge.
 
 ## Authorized Advancements
 
-### Align experiment policy with owner-operated existing environments
-
-- **Work carrier:** [Issue #35](https://github.com/hcoona/microsoft-authentication-cli/issues/35)
-- **Accepted inputs:** The current governance, experiment-safety, security, validation,
-  and record-family authorities on `main-v2`, and the environment and effects boundary
-  of the architecture advancement below.
-- **Authorized advancement:** Amend the general
-  [experiment policy](research/experiment-safety.md) to permit bounded experiments on
-  repository-owner-designated existing machines and authorized account state, including
-  owner-operated interactive steps and manual machine switching. Do not require
-  disposable accounts, OS users, VMs, or a fresh-state environment. Replace those
-  prerequisites with explicit subject, environment, intended-effect, observation,
-  sensitive-output, and safe-retention or cleanup boundaries.
-  Update directly affected agent instructions, review Skills, security and validation
-  consumers, and navigation atomically where necessary. Admit only the minimum
-  protocol/evidence record families and routing needed by the architecture experiments,
-  under the existing record-admission and independent-review rules.
-- **Preserved obligations:** Keep prior protocol acceptance, exact revision binding,
-  finite execution and cumulative-effect bounds, meaningful attempt accounting,
-  operator control of interaction, public and sanitized evidence, stop conditions, and
-  protection of unrelated state. Do not require automatic rollback of existing account
-  state or imply that deleting local artifacts reverses provider-side changes. Preserve
-  the historical Issue #1 protocol, its isolation boundary, recorded evidence, and
-  hash-bound components; do not turn its specialized runner into a generic framework.
-- **Bounded outcome and acceptance:** The existing-environment policy and necessary
-  direct consumers are coherent and accepted on `main-v2`, with independent
-  record-system and research-evidence reviews and explicit owner disposition. No
-  parallel policy, standing waiver, or general experiment framework is introduced.
-- **External effects and exclusions:** Repository-record and normal GitHub operations
-  only. This entry does not execute experiments. Its proposed policy cannot waive the
-  accepted policy while under review.
-
 ### Develop the high-level architecture and resolve decision-critical feasibility risks
 
 - **Work carrier:** [Issue #35](https://github.com/hcoona/microsoft-authentication-cli/issues/35)
@@ -78,7 +46,8 @@ proposal does not authorize any work it would add before merge.
   restore, build, or test steps needed to run them. Probe code and results are research
   artifacts, not a production implementation or an implementation Slice.
 - **Execution prerequisites:** No experiment under this entry may execute until the
-  policy alignment above is accepted and a Git-tracked protocol for its exact subject,
+  accepted [experiment policy](research/experiment-safety.md) covers its environment
+  and effects, and a Git-tracked protocol for its exact subject,
   environment, versions, expected observations, effects, finite attempt/time/cumulative
   limits, sensitive-output handling, stop conditions, and cleanup or retention is
   independently reviewed and accepted on `main-v2`. Bind execution to that revision.

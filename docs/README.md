@@ -40,7 +40,7 @@ is navigation, not an independent authority.
 | --- | --- | --- |
 | Architects and research reviewers | Evidence for not using the v1 core as the v2 foundation | [`research/v1-architecture-audit.md`](research/v1-architecture-audit.md) |
 | Requirements, compatibility, architecture, and validation maintainers | Caller-visible AzureAuth v1 public-contract evidence | [`research/v1-public-contract-baseline.md`](research/v1-public-contract-baseline.md) |
-| Experiment authors and reviewers | Experiment authorization, isolation, safety, and evidence rules | [`research/experiment-safety.md`](research/experiment-safety.md) |
+| Experiment authors and reviewers | Experiment authorization, environment/effects boundaries, safety, and evidence rules | [`research/experiment-safety.md`](research/experiment-safety.md) |
 | Public-build evidence maintainers and reviewers | Fixed solution targets, source dependencies, and build-stage applicability | [`research/public-build-source-baseline.json`](research/public-build-source-baseline.json) |
 | Public-build evidence maintainers and reviewers | Fixed source-level Lasso usage manifest | [`research/public-build-lasso-reference-manifest.json`](research/public-build-lasso-reference-manifest.json) |
 | Public-build evidence consumers and reviewers | Recorded WSL2-Linux-x64 public-build runtime evidence and its reproducibility contract | [`research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`](research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json) |

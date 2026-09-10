@@ -2,22 +2,30 @@
 
 ## Scope
 
-This protocol applies before running an upstream or v2 authentication binary, restore,
+This policy applies before running an upstream or v2 authentication binary, restore,
 build, cache, installer, or migration experiment.
 
-Experiments may observe real platform behavior, but they must not contaminate personal
-production state, rely silently on private credentials, or publish sensitive evidence.
+Experiments may use repository-owner-designated existing machines and authorized account
+state. They must keep effects within the accepted experiment boundary, protect unrelated
+state, and publish only sanitized evidence. Disposable accounts, operating-system users,
+VMs, and a fresh-state environment are not general prerequisites.
+
+The historical [Issue #1 public-build record](#phase-1-public-build-record) retains its
+specific isolation, execution, and evidence rules. The general policy below does not
+relax those rules or authorize replay of that experiment.
 
 ## Experiment Authorization
 
-Before any experiment covered by this protocol runs:
+Before any experiment covered by this policy runs:
 
 - the target branch's accepted Delivery Wave entry must authorize the
   decision-relevant question, environment, maximum external effects, and bounded
   outcome;
-- a Git-tracked protocol defining the exact subject and environment, isolation, expected
-  observations, evidence limits, repetition or cumulative-effect bounds, stop
-  conditions, and cleanup must be independently reviewed and accepted on `main-v2`;
+- a Git-tracked protocol defining the exact subject, source and dependency versions,
+  environment and account-state boundaries, expected observations and interaction,
+  evidence limits, finite attempt/time/cumulative-effect bounds, stop conditions, and
+  cleanup or intentional retention must be independently reviewed and accepted on
+  `main-v2`;
 - execution and preflight must bind the exact accepted protocol revision; and
 - every applicable contextual review and mechanical precondition must be satisfied.
 
@@ -27,49 +35,67 @@ credential-bearing state, persistent host, account, cache, or installation state
 remote mutation, or another material external effect. No separate owner approval is
 required for each execution that remains within the accepted entry and protocol.
 
-An accepted protocol may permit repeated executions only within its finite bounds. A
-protocol that permits material cumulative external effects or persistent state must
-define measurable units, count every started attempt including failures, prohibit
-concurrent execution unless it defines a safe reservation mechanism, recover prior
-consumption from retained execution evidence, and fail closed when remaining capacity
-cannot be established.
+An accepted protocol may permit repeated executions only within its finite bounds. Count
+manual and automated attempts, including failed starts and interrupted runs. Before each
+attempt, recover prior consumption from retained sanitized execution evidence and record
+that the attempt has started before invoking the subject. A protocol involving persistent
+state or cumulative external effects must define measurable units and prohibit concurrent
+execution unless it defines safe capacity reservation. A simple sequential attempt record
+is sufficient; a general runner or reservation service is not required.
 
-Deleting or narrowing the Delivery Wave entry ends or narrows authority for subsequent
-execution.
+Protocol revisions and machine switches do not reset consumed capacity. Record prior
+attempts and remaining limits, and fail closed when remaining capacity cannot be
+established. Deleting or narrowing the Delivery Wave entry ends or narrows authority for
+subsequent execution.
 
 An Issue, Milestone, branch, pull request, comment, protocol, or unmerged Delivery Wave
 change cannot grant experiment authority. Non-executing planning and review must not
 invoke the binary or tool under study, resolve dependencies, access a credential or
 account store, or create another planned side effect.
 
-## Required Isolation
+## Environment and Effects
 
 ### Source and Build
 
-- Use a detached checkout pinned to the recorded upstream commit or tag.
-- Record the exact source commit and dependency versions.
-- Test public restore with an empty package cache and no inherited package-source
-  credentials.
-- Do not use a cached private package to claim that a public build works.
-- Keep build output and package caches outside upstream or v2 production install paths.
-- Record every nonpublic feed, package, service connection, or signing dependency found.
+- Pin source-built subjects to a recorded commit in a detached checkout; record the
+  dependency versions and any probe changes. For a released binary, record its public
+  provenance, version, and artifact identity.
+- A claim that public restore works requires an empty package cache and no inherited
+  package-source credentials. Do not use a cached private package to support that claim.
+- For other experiment preparation, declare public dependency sources, existing cache
+  use, toolchain and artifact locations, and their evidence limits in the protocol.
+  Do not silently use ambient credentials or infer a clean restore from a warm cache.
+- Keep build output and experiment package caches outside production install paths.
+- Record publicly reviewable nonpublic-dependency blockers without accessing private
+  feeds, packages, service connections, or signing identities.
 
 ### User and Credential State
 
-- Use dedicated, authorized test identities and tenants.
-- Do not embed personal account names, tenant details, screenshots, tokens, or policy
-  output in committed evidence.
-- For WAM, OS-account, Windows-helper, or other broker experiments, use a disposable
-  operating-system user or VM whose broker contains only the dedicated test identities.
-  If that environment is unavailable, do not run the broker experiment.
-- An isolated home, cache, or configuration root is sufficient only for a non-broker
-  experiment that cannot enumerate or use operating-system account state.
-- WSL invocation of a Windows helper inherits the Windows-side broker boundary and
-  therefore requires the same disposable Windows user or VM.
-- Never point an experiment at an upstream production cache, keychain, keyring, registry
-  value, PAT store, or installation path unless the experiment explicitly studies that
-  store and has a read-only plan.
-- Never copy refresh-token caches into the repository or session artifacts.
+- The protocol identifies the owner-designated machine, host/session, selected account
+  roles, relevant existing state, and permitted observations and updates. Public records
+  use sanitized roles and state descriptions, not account, tenant, or machine identifiers.
+  The operator supplies actual account selectors locally without putting them in logs or
+  committed records.
+- Existing OS accounts, broker sessions, and secure caches may be used when the accepted
+  Wave and protocol cover that state and its ordinary authentication updates. Describe
+  relevant initial state and what is unknown; do not assume an existing environment is
+  clean or clear unrelated state to simulate first use.
+- Use documented account and authentication APIs. A protocol may permit in-memory
+  account enumeration needed for selection, while prohibiting acquisition as an
+  unrelated account. Do not dump broker contents or copy refresh-token caches into the
+  repository, agent traces, or session artifacts.
+- Application-owned experiment files should have dedicated locations. That separation
+  does not isolate an OS broker or change its account scope. Declare any intentional
+  access to an existing application cache, keychain, keyring, registry value, or
+  installation, including whether access is read-only or allows normal authentication
+  updates. Never modify an unrelated store or installation.
+- Native and cross-host execution must identify both the initiating environment and the
+  host that owns the account state and interaction. WSL invocation of a Windows helper
+  requires explicit protocol coverage of the Windows-side broker, storage, transport,
+  UI, and termination boundaries and the applicable rechecks.
+- The owner may operate steps or switch among protocol-covered machines. A machine,
+  account-state context, or effects boundary outside that coverage requires protocol
+  amendment and, if it expands the Wave's effects, a new accepted owner decision.
 
 ### Interaction and Telemetry
 
@@ -79,37 +105,70 @@ account store, or create another planned side effect.
   registration, and workload-advertising downloads for Issue #1 commands.
 - When the behavior of a telemetry switch is under test, isolate network access and
   record only sanitized endpoint and field observations.
-- Record the expected interactive surface before execution.
-- Ensure the operator can identify and close WAM, browser, device-code, or terminal
-  prompts created by the test.
-- Do not run interactive experiments in CI or unattended sessions.
+- Record the expected interactive surface before execution. Keep sign-in, account
+  choice, user consent, and any state-unlock interaction under operator control.
+- Ensure the operator can identify and close prompts created by the test. Authentication
+  secrets and device codes may appear only on the intended operator surface, not in
+  captured output, agent traces, screenshots, or committed evidence.
+- Do not run interactive experiments in CI or unattended sessions. Manual assistance
+  must use the accepted procedure and counts toward the same attempt limits.
 
 ### Network and Resource Effects
 
-- Prefer token acquisition and read-only resource probes.
+- Declare identity endpoints, client registration, authority class, scopes, and any
+  read-only resource probe. Bound required public dependency downloads separately.
+- Prefer token acquisition and read-only resource probes. Ordinary authentication may
+  update the selected account's sessions and secure reusable state when authorized.
 - Do not create, delete, push, publish, revoke, or mutate remote resources unless that
-  side effect is the explicit experiment subject.
-- Do not create PATs as an incidental fallback.
-- Bound every operation with a documented timeout and cleanup procedure.
+  side effect is the explicit subject and lies within the accepted Wave and protocol.
+- Do not create PATs as an incidental fallback or automate administrator consent.
+- Bound every operation with a documented timeout and termination procedure.
+
+### Termination and Retention
+
+The protocol identifies experiment-controlled processes, listeners, prompts, and files,
+and how to stop or retain them. Rely on documented process, broker, and storage contracts
+within the workstation threat model. Do not require proof of all internal OS or provider
+activity, terminate a shared broker, or repair unrelated account state.
+
+On timeout or cancellation, end the attempt and terminate experiment-controlled work
+using the declared bounded procedure. Further attempts require that the protocol's stop
+conditions permit continuation and its remaining capacity is known. An unexpected effect
+stops further attempts. Record any uncertainty; if safe termination or file ownership
+cannot be established, preserve the affected state and do not perform speculative cleanup
+or continue the experiment.
+
+Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
+selected-account session or secure-cache updates when the protocol declares that outcome.
+Deleting local files does not reverse provider-side authentication, consent, or session
+changes. Do not sign out, revoke consent, erase caches, or promise automatic rollback of
+existing account state as incidental cleanup.
 
 ## Authentication Experiment Records
 
 Every committed authentication-experiment result must state the applicable fields below
 and explicitly mark nonapplicable context when omission could change interpretation:
 
-- source commit;
+- accepted protocol revision and actual subject/source or artifact identity;
 - v2 commit, if applicable;
 - MSAL and native-broker versions;
-- operating system, architecture, WSL version, and host type;
-- sanitized account-state shape;
+- operating system, architecture, WSL version, and initiating/interaction host types;
+- sanitized account-state shape and relevant prior-use or unknown-state limitations;
 - client profile, authority class, scopes, and requested policy;
-- cache and configuration isolation;
-- telemetry and network controls;
+- application-file separation and declared existing account/cache/configuration access;
+- telemetry, network, and sensitive-output controls;
 - expected UI and typed result;
-- observed UI and result;
-- cleanup performed;
-- reproduction count and known variability;
+- observed UI, result, and state effects, including operator-assisted observations;
+- manual steps, failed starts, interruption, and termination outcomes;
+- cleanup performed or state intentionally retained, without claiming remote rollback;
+- attempt history, prior consumption, remaining capacity, and known variability;
 - whether the record is a source finding, runtime observation, inference, or hypothesis.
+
+Record decision-relevant sanitized outcomes such as account-match status and metadata
+availability rather than identities, token contents, or raw broker diagnostics. Manual
+observations have the same protocol, provenance, and review requirements as automated
+ones. Existing-state success cannot establish fresh-state behavior, another host's
+behavior, or broader platform/Profile support.
 
 ### Phase 1 Public-Build Record
 
@@ -354,14 +413,21 @@ results.
 
 Stop the experiment if:
 
-- a real token, code, credential, or private account detail would be recorded;
-- a prompt appears in an unexpected session or cannot be identified;
-- the process accesses an unplanned cache, keychain, keyring, registry path, or
-  installation;
-- a restore succeeds only because inherited credentials or package caches are present;
-- a Windows executable, helper, broker, credential provider, account state, or cache is
-  invoked or accessed through WSL interoperability;
-- ownership, root identity, or all-exit quiescence cannot be proved before cleanup or
-  asset access;
-- the aggregate source-integrity fingerprint changes during command execution;
-- continuing would mutate an unrelated remote resource.
+- a real token, code, credential, or private account detail would enter captured or
+  retained evidence;
+- a prompt appears outside the declared interaction policy or in an unexpected session,
+  or cannot be identified by the operator;
+- account acquisition, cache/store access, host execution, or network effects exceed
+  the accepted protocol;
+- a public-restore claim would depend on inherited credentials or cached private
+  packages;
+- native or cross-host execution accesses an environment not covered by the protocol;
+- remaining authorized attempts or cumulative capacity cannot be established;
+- experiment-controlled work cannot be stopped within the declared bounds, or safe
+  ownership cannot be established for cleanup;
+- the subject's source or artifact identity no longer matches the accepted protocol; or
+- continuing would mutate an unrelated account, installation, or remote resource.
+
+The historical Issue #1 rules additionally retain their unconditional WSL-to-Windows
+prohibition, source-integrity checks, and proved all-exit quiescence before cleanup or
+asset access. Those specialized rules are not a general experiment framework.

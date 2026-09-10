@@ -65,7 +65,9 @@ follow `docs/research/experiment-safety.md`.
 
 Do not run an experiment unless the accepted Delivery Wave explicitly authorizes its
 bounded outcome and maximum effects and an accepted protocol defines its environment,
-isolation, expected observations, repetition bounds, stop conditions, and cleanup.
+account-state and effects boundaries, expected observations, finite attempt/time limits,
+stop conditions, and cleanup or intentional retention. Owner-operated steps and machine
+switches must remain within that protocol and its cumulative limits.
 Require an explicit repository-owner risk decision in the Wave entry only when the
 experiment crosses a material effects boundary identified by the experiment policy.
 

@@ -1243,19 +1243,22 @@ unavailable until the gate is satisfied.
 
 ## Separately proposed empirical question
 
-> On a disposable Windows 11 WAM user or VM with an empty AzureAuth/MSAL application
-> cache, using released AzureAuth `0.9.6`
+> On an owner-designated Windows 11 WAM environment with explicitly described existing
+> broker and AzureAuth/MSAL application state, using released AzureAuth `0.9.6`
 > (`8ef1b8b00782bf20a51de078289819a79c3cba70`), client
 > `872cd9fa-d31f-45e0-9eab-6e460a02d1f1`, tenant authority `common`, and scope
 > `499b84ac-1321-427f-aa17-267ca6975798/.default`, what acquisition and read-only Azure
 > DevOps authorization outcomes--and what sanitized returned account/tenant metadata or
-> provider error--occur once with a dedicated MSA-only Azure DevOps identity and once
-> with a dedicated Microsoft Entra work-or-school Azure DevOps identity?
+> provider error--occur once with an authorized MSA-only Azure DevOps identity and once
+> with an authorized Microsoft Entra work-or-school Azure DevOps identity?
 
-Execution requires a separate accepted Delivery Wave entry and accepted protocol,
-dedicated identities, disposable broker state, bounded read-only resource access, finite
-repetition, stop conditions, cleanup, and sanitized evidence under the
-[experiment-safety policy](experiment-safety.md#experiment-authorization).
+This is a proposed question, not an executable protocol. The accepted Delivery Wave may
+cover its bounded subject, but execution still requires a separately accepted protocol
+with designated account-state and host boundaries, bounded read-only resource access,
+finite attempts, stop conditions, cleanup or retention, and sanitized evidence under the
+[experiment-safety policy](experiment-safety.md#experiment-authorization). Record prior
+use and unknown state; do not clear existing broker state or infer clean first-use
+behavior from this comparison.
 
 ## Contradictions and unsupported conclusions
 

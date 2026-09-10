@@ -45,6 +45,12 @@ existing product. Focus new observations on a changed assumption that can alter 
 decision. This avoids repeating established mechanism checks while preserving the
 V2-specific primary-journey and release evidence below.
 
+Owner-operated observations on existing machines are valid evidence when collected
+under an accepted [experiment protocol](../research/experiment-safety.md#experiment-authorization).
+Record relevant prior state, manual steps, actual host, attempt history, and retention
+limits. An existing-state result must not be described as a clean first-use result;
+manual assistance cannot substitute for a capability the product itself must provide.
+
 ## Primary Journey Gate
 
 The [personal Azure DevOps Git journey](../product/user-stories.md#primary-journey-personal-azure-devops-git-access)
@@ -173,9 +179,10 @@ Cross-process interaction single-flight is not an acceptance condition.
 
 Real broker and host behavior must be exercised on supported systems. Mocked MSAL builders
 cannot prove UI ownership, account picker behavior, keyring integration, or cancellation.
-Broker tests must use the dedicated operating-system user or VM required by
+Broker tests must stay within the environment and account-state boundaries of the
+accepted Wave and experiment protocol under
 [`../research/experiment-safety.md`](../research/experiment-safety.md); cache-directory
-isolation alone does not isolate OS accounts.
+separation alone does not isolate OS accounts.
 
 ## Account-State Matrix
 

@@ -44,8 +44,10 @@ prerequisite or shared canonical authority, pause dependent work and refresh its
 evidence, validation, and review before merge.
 
 Before an experiment runs, its accepted Wave entry must bound the outcome and maximum
-effects and its accepted protocol must define environment, isolation, observations,
-repetition bounds, stop conditions, and cleanup. Repeated executions inside those bounds
+effects and its accepted protocol must define environment, account-state and effects
+boundaries, observations, finite attempt/time limits, stop conditions, and cleanup or
+intentional retention. Owner-operated steps and machine switches use the same protocol
+and cumulative limits. Repeated executions inside those bounds
 do not require another owner approval. A material effects boundary requires the owner
 risk decision defined by the experiment policy.
 
