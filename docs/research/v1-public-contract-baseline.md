@@ -1392,7 +1392,9 @@ under [decision 0004](../decisions/0004-keep-the-authentication-engine-separate-
 This conclusion includes Artifacts token acquisition in the same authentication scope;
 it does not claim that the CLI implements NuGet credential exchange or that a token alone
 grants repository/feed access. The [architecture boundary](../architecture/overview.md#system-boundary)
-owns the selected direct-access-token design and PAT exclusion. NuGet presentation and
+owns the selected direct-access-token design;
+[V2-REQ-005](../product/requirements/product-boundary.md#v2-req-005-no-personal-access-tokens)
+owns the PAT prohibition. NuGet presentation and
 feed behavior remain explicitly scoped [validation obligations](../validation/strategy.md#platform-matrix).
 
 **Refinement recheck assessment:** All seven registry entries were evaluated. This

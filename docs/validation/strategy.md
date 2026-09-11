@@ -59,8 +59,11 @@ external adapter can request the selected personal Microsoft account's Azure Dev
 access token without silently receiving the corporate default account, and that usable
 state enables strict selected-account silent reuse across invocations.
 
-The proof concerns the engine's authentication boundary, not Git protocol, repository
-remote parsing, or PAT lifecycle. The adapter supplies a Client Profile, full email,
+The proof concerns the engine's authentication boundary under
+[V2-REQ-005](../product/requirements/product-boundary.md#v2-req-005-no-personal-access-tokens),
+including independence from PAT prerequisites or fallback. Git protocol and repository
+remote parsing remain outside this boundary. The adapter supplies a Client Profile, full
+email,
 Azure DevOps scope, interaction permission, and protocol version. It is not evidence
 that WAM must implement this path or that any profile or platform is already supported.
 
@@ -124,6 +127,15 @@ evidence that a mechanism or platform passes the corresponding tests.
 
 ### Policy Tests
 
+- [V2-REQ-005](../product/requirements/product-boundary.md#v2-req-005-no-personal-access-tokens)
+  applied to personal- and work-account scenarios: successful delegated acquisition
+  needs no PAT input or bootstrap and produces no PAT credential or PAT persistence.
+- After permitted delegated paths are exhausted or a terminal failure occurs, return the
+  applicable existing outcome without a PAT prompt, exchange, or fallback. Cover silent-only
+  exhaustion, denial, unavailable mechanisms, and invalid configuration. Request/Profile
+  settings and inherited provider defaults, including a Compact-token default, cannot
+  enable PAT behavior. Verify provider-operation semantics and observable effects;
+  do not classify credential types by parsing or scanning opaque token contents.
 - Versioned product order, profile compatibility filtering without reordering, and
   mandatory silent-first acquisition after unique real-account pre-resolution.
 - Host capability discovery never changing caller intent.
@@ -333,8 +345,9 @@ selected derived-credential path; NuGet does not universally require an exchange
 For the selected direct-token design, a claim of NuGet/Artifacts support needs the actual
 account, Profile, feed, and credential-presentation path, including Basic authentication
 where used. The accepted personal-account Git discovery result does not satisfy that
-downstream obligation. PAT acquisition and fallback are excluded; a failed direct request
-does not authorize the upstream default exchange or a new engine mechanism.
+downstream obligation. [V2-REQ-005](../product/requirements/product-boundary.md#v2-req-005-no-personal-access-tokens)
+applies throughout; a failed direct request does not authorize the upstream default
+exchange or a new engine mechanism.
 Feed permissions and package-manager protocols remain downstream integration evidence;
 token acquisition alone does not demonstrate a successful restore or package operation.
 

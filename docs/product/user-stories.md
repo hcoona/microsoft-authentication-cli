@@ -21,8 +21,10 @@ success and unnecessary prompts particularly disruptive.
 
 The external adapter identifies Azure DevOps, selects a Client Profile, and supplies the
 account email and Azure DevOps scope as consumer knowledge. Repository bindings, remote
-parsing, Git credential protocol, and any PAT lifecycle remain outside the authentication
+parsing, and Git credential protocol remain outside the authentication
 engine under [decision 0004](../decisions/0004-keep-the-authentication-engine-separate-from-consumers.md).
+The engine's PAT prohibition is governed by
+[V2-REQ-005](requirements/product-boundary.md#v2-req-005-no-personal-access-tokens).
 
 This is the primary first-release blocking journey. Its acceptance evidence belongs to
 the [primary-journey validation gate](../validation/strategy.md#primary-journey-gate).
