@@ -1249,9 +1249,10 @@ and discovery at the single owner-designated Azure DevOps Git repository. It use
 managed/native dependency versions in a small research probe. The first sequence stopped
 without a token; the diagnostic sequence later timed out with structured cancellation
 fields, also without a token. Authentication configuration and selection logic were
-unchanged, but the observed exact-match count changed. Neither sequence establishes
-resource authorization, registration eligibility, or a Profile/support commitment, and
-no corporate-account comparison is performed.
+unchanged, but the observed exact-match count changed. A subsequent explicitly attended
+action returned an unexpected broker failure, also without a token. These observations
+do not establish resource authorization, registration eligibility, or a Profile/support
+commitment, and no corporate-account comparison is performed.
 
 The protocol's [execution history](experiments/windows-msal-account-metadata.md#execution-history)
 records the initial public-index and launcher failures, followed by successful Windows
@@ -1280,11 +1281,24 @@ explain the previous service-exception category. The cause of the changed accoun
 visibility and detailed operator UI steps remain unknown. The sequence is stopped; no
 reuse follow-up ran, and the evidence does not select a Profile or establish support.
 
-The subsequent [attended protocol amendment](experiments/windows-msal-account-metadata.md#operator-readiness-handoff)
-requires preparation to finish before a readiness announcement and an explicit operator
-response before any probe window opens. It prospectively permits one further interaction
-with unchanged authentication code and inputs. The handoff is an execution prerequisite,
-not evidence of a completed interaction or an explanation of either earlier outcome.
+The subsequent [attended sequence](experiments/windows-msal-account-metadata.md#attended-preparation-and-structured-broker-failure)
+completed preparation and the explicit readiness handoff, then again found one exact
+match and used the matched-account branch. It returned `unknown_broker_error`, broker
+status `Unexpected`, and code `2147786073` (`0x80049D59`) about 20.6 seconds after launch,
+with no authentication result or resource request. The owner reported the input form,
+apparent automatic fill/submission, and a brief possible WAM surface before the windows
+closed. The brief surface was not conclusively identified and no detailed sign-in/MFA/
+consent steps were reported. This adds structured failure and UI observations, not an
+explanation of the code, proof of the earlier failure's cause, or Profile eligibility.
+The sequence is stopped.
+
+**Source interpretation, checked 2026-09-11 UTC:** The same pinned
+[`WamAdapters` default branch](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L116-L120)
+returns a service exception with `UnknownBrokerError` for statuses outside its explicit
+cases. This supports the reported generic category for `Unexpected`, not a specific
+cause or identity-service rejection. Reported service status zero is not an observed
+HTTP response. The two failed matched-account actions need not share a cause; the first
+one lacks the finer fields needed to compare them.
 
 **Source interpretation, retrieved 2026-09-10 UTC:** The pinned MSAL
 [`WamAdapters` exception mapping](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L58-L120)
@@ -1338,7 +1352,7 @@ boundary; it selects no V2 WSL or Linux-broker implementation and transports no 
 | RECHECK-003: [Issue #460](https://github.com/AzureAD/microsoft-authentication-cli/issues/460) | Open; `updated_at = 2026-05-13T17:25:51Z`. Its body proposes a Windows helper, trust/version/transport boundaries, and missing-helper/fallback handling. It is a proposal, not evidence of an upstream implemented bridge. This probe uses an exact local Windows executable and returns only flags. |
 | RECHECK-003/005: [current WSL guidance](https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl) | Documents native Linux broker packages, dependencies, and an unlocked keychain. It does not supply the Windows-helper protocol proposed by #460. This experiment uses native Windows WAM; it does not install or invoke that Linux broker. |
 | RECHECK-005: [PR #462](https://github.com/AzureAD/microsoft-authentication-cli/pull/462) | Open and unmerged; `updated_at = 2026-08-14T10:00:41Z`. The inspected diff adds Linux broker routing, a Linux redirect, and OS-account listing, while retaining an OS-default sentinel fallback. Its reported Ubuntu test is public author-reported experience, not a V2 support result or this experiment's implementation. |
-| RECHECK-007: [Azure DevOps guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth?view=azure-devops) | Still states that ordinary Entra applications do not natively support MSA users for the Azure DevOps resource. The first Windows sequence found the requested account, required interaction, and ended in a coarse acquisition-failure category. The diagnostic sequence later observed zero exact matches and timed out with cancellation fields. Neither returned a token, and these observations do not identify the earlier failure cause; neither establishes categorical MSA incompatibility. Successful token/resource behavior and intended reuse remain unresolved; no Profile is selected. |
+| RECHECK-007: [Azure DevOps guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth?view=azure-devops) | Still states that ordinary Entra applications do not natively support MSA users for the Azure DevOps resource. The first Windows sequence found the requested account, required interaction, and ended in a coarse acquisition-failure category. The diagnostic sequence later observed zero exact matches and timed out with cancellation fields. The later attended action found one exact match but returned an unexpected broker failure. No action returned a token, and these observations do not identify the earlier failure cause or establish categorical MSA incompatibility. Successful token/resource behavior and intended reuse remain unresolved; no Profile is selected. |
 
 RECHECK-001, RECHECK-002, and RECHECK-006 retain their bounded desk dispositions; this
 protocol does not amend product interaction, account, or cache requirements. RECHECK-004

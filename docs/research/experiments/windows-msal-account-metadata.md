@@ -26,26 +26,22 @@ reuse, or all of RECHECK-007.
 There is no corporate-account comparison, resource write, PAT, registration/tenant
 administration, cache migration, plaintext cache, or fallback mechanism in this probe.
 
-## Current Advancement: Prepare, Then Wait for Operator Readiness
+## Current Disposition: Attended Broker Failure
 
-The diagnostic sequence accepted by PR #48 and recorded by PR #49 stopped at the
-interactive process deadline, without an authentication result. The
-[diagnostic history](#diagnostic-subject-preparation-and-acquisition) retains its
-cancellation fields, changed account-match count, and missing detailed UI observations.
-That result does not identify the previous acquisition failure's cause.
+The preparation and attended interaction accepted by PR #50 have been executed. After
+preparation, the agent announced readiness and waited for the owner's explicit desktop
+readiness response before opening the probe. The interactive action found one exact
+account match but returned `unknown_broker_error`, broker status `Unexpected`, and code
+`2147786073` (`0x80049D59`) without an authentication result. The
+[attended history](#attended-preparation-and-structured-broker-failure) owns the exact
+observations, including the operator's brief possible-WAM UI observation.
 
-This amendment permits one preparation and one additional interactive attempt with the
-same nominated account/resource and unchanged authentication code and configuration.
-Its purpose is to observe that path with an explicitly ready operator. Finish all
-preparation before announcing readiness, then wait for the operator's explicit readiness
-response before launching any probe window. A general instruction to continue work is
-not desktop readiness. Preparation must not launch an account action to test readiness.
-
-The earlier nine Windows actions remain consumed. Only after this amendment is accepted
-may the additional preparation run. Its successful verification does not authorize an
-unattended interactive attempt. If interaction succeeds with the exact account and
-recognized Git discovery, the one previously unused silent slot may check later-process
-reuse during the same attended sequence. Any failure stops without another retry.
+The sequence is stopped. All six preparations and three interactive attempts are
+consumed. The unused silent/resource slots require successful interaction and cannot be
+exercised. Do not retry, rebuild, change inputs, or expand diagnostics under this
+protocol. A new experiment requires another reviewed and accepted amendment, preserving
+prior consumption and the explicit readiness handoff. The procedure below preserves the
+executed sequence and its boundaries; it does not grant another execution.
 
 ## Subject and Environment
 
@@ -396,11 +392,11 @@ Cleanup, if later needed, is limited to verified experiment-owned files after ow
 processes have exited. Do not clear broker state, revoke consent, sign out, or modify an
 upstream installation as cleanup.
 
-Current consumption before the attended preparation: fetch 1/1, prepare 5/6, inspect 1/1,
-silent 1/2, interactive 2/3, discovery requests 1/3 (one anonymous, zero authenticated).
-Windows attempts 1 through 9 are complete. The next attempt is 10 (`prepare`); account
-actions remain blocked on the explicit readiness handoff after preparation. Historical
-sections preserve their actual outcomes and consumption at the time.
+Current consumption after the attended sequence: fetch 1/1, prepare 6/6, inspect 1/1,
+silent 1/2, interactive 3/3, discovery requests 1/3 (one anonymous, zero authenticated).
+Windows attempts 1 through 11 are complete; attempt 12 is absent. The sequence is stopped,
+and the remaining numeric slots do not authorize continuation. Historical sections
+preserve their actual outcomes and consumption at the time.
 
 ## Execution History
 
@@ -783,3 +779,113 @@ assumed reversed by failure. The sequence stopped without attempt 10 or another 
 request. Totals are fetch 1/1, prepare 5/5, inspect 1/1, silent 1/2, interactive 2/2, and
 discovery 1/3; the conditional silent slot is unavailable because interaction did not
 succeed.
+
+### Attended Preparation and Structured Broker Failure
+
+Runtime observations on 2026-09-11 UTC under
+[PR #50](https://github.com/hcoona/microsoft-authentication-cli/pull/50), accepted protocol
+and source `facfec1aa86b88601a9a9e7835bf2d8b6fd7b727`. The merged tree matched the
+independently reviewed subject. Preflight recovered the nine completed Windows actions
+and the single fetch. Windows 11 25H2 build 26200.9445 AMD64, PowerShell 5.1.26100.9444,
+SDK 8.0.425, Core/Desktop runtime 8.0.31, and the declared WSL/kernel/Python versions
+still matched. The corporate-account session is owner-reported context, not a measured
+join/compliance result. Prior broker state remains incompletely known; it was not cleared.
+
+A new detached checkout supplied the five Windows files through `git archive`. Each
+copied file matched its accepted Git content, and the seven retained package archives
+matched their manifest. Only the launcher's cumulative limits differed from the previous
+subject; authentication, discovery, diagnostics, and self-check code were unchanged.
+Preparation reused the dedicated local feed/caches without another download or install.
+
+| Attempt | Action | Start UTC | End UTC | Outcome |
+| --- | --- | --- | --- | --- |
+| 10 | `prepare` | 2026-09-11 01:27:42.1974095 | 2026-09-11 01:27:48.2338358 | `prepared-and-self-checked`; launcher exit 0 |
+
+Release build completed in 3.32 seconds with zero warnings and errors. Restore resolved
+exactly the seven declared packages. The lock SHA-256 remains
+`6653224a1478ae1ef1a6d62c32c188b1408502ce4fcc2f4730f32673e23f3e77`;
+Core/Desktop runtime 8.0.31 and `rollForward: Disable` remain in the runtime configuration.
+The synthetic selector/URL/failure-output check returned `self-check-passed`.
+Preparation made no account, authentication, or resource call; its false/null result
+fields are unexecuted-path defaults. The launcher confirmed process completion and
+returned exit 0 with empty stdout/stderr. Build and restore stderr were also empty.
+
+| Prepared artifact under `bin/Release/net8.0-windows` | Bytes | SHA-256 |
+| --- | --- | --- |
+| `WindowsMsalProbe.exe` | 151,552 | `ada362907899479ec36f09a16b49b355952d50d4ffefe70f26a763ce428cdf32` |
+| `WindowsMsalProbe.dll` | 30,720 | `ca24373cbf19ef3642ec5e31ceccb11effb8a7f446e209b47de876fff01341d4` |
+
+Source, dependency, artifact, runtime, self-check, journal, and local launch-setup evidence
+was recorded and independently checked before the readiness announcement. No timing-test
+popup or account action ran during preparation. The agent then stopped before launch and
+waited for the owner's explicit readiness response. That response preceded this action;
+short preflight rechecked current authority, host, artifact/lock hashes, local input
+binding, and completed history. No rebuild, repeated self-check, account inspection, or
+pre-interaction silent action was performed.
+
+The same nominated personal account and single Git remote were bound locally without
+retaining either value. Client, authority, scope, broker options, and the existing Windows
+session were unchanged. The action used a fresh process with no application cache file.
+
+| Attempt | Action | Start UTC | End UTC | Probe result | Launcher exit |
+| --- | --- | --- | --- | --- | --- |
+| 11 | `interactive` | 2026-09-11 01:43:12.7868381 | 2026-09-11 01:43:33.3991836 | `acquisition-failed` | 2 |
+
+The probe reported broker availability, multiple visible accounts, exactly one email
+match, and no missing-email indication. This action used the real matched account through
+`WithAccount`, as in the first sequence. Attempt 9 had instead observed zero exact matches;
+the reason for the changing visibility is unknown. Neither observation establishes fresh
+state, account removal, or reliable discovery across hosts and registrations.
+
+Acquisition started but returned no `AuthenticationResult`. No authenticated resource
+request was made. Token, returned identity, tenant, scope, and expiry fields remained
+unobserved defaults; resource status was zero and resource outcome `not-observed`.
+
+| Structured failure field | Recorded value |
+| --- | --- |
+| `Kind` | `service-or-broker` |
+| `ErrorCode` | `unknown_broker_error` |
+| `BrokerStatus` | `Unexpected` |
+| `BrokerCode` | `2147786073` (`0x80049D59`) |
+| `ServiceStatusCode` | `0` |
+| `IsRetryable` | false |
+| `UiRequiredClassification` | null |
+
+Service status zero is the reported default, not an observed HTTP response. The
+[pinned MSAL default mapping](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L116-L120)
+accounts for this generic service-exception category. It does not identify the underlying
+cause of this broker code or establish remote identity-service rejection. No authoritative
+cause is established here. Matching the earlier exception category does not prove that
+attempt 7 had the same code or cause, since its finer fields were not retained.
+
+**Operator observation:** The owner saw the probe's email/HTTPS-address form, apparent
+automatic filling and submission, then a briefly visible surface that appeared to be WAM,
+after which the windows closed. The owner was uncertain about that brief surface's exact
+identity. No detailed sign-in, MFA, or consent steps were reported. The observation does
+not establish successful account choice, consent, sign-in, or a particular internal
+failure stage. The agent did not inspect authentication UI or capture a screenshot.
+
+One write-only input-automation operation filled the owned controls and started the
+action. Its worker and controller completed normally within their bounds, without retry;
+no WAM account choice, sign-in, unlock, MFA, or consent was automated. The launcher
+recorded `step-failed` and confirmed probe exit about 20.6 seconds after its start record,
+well before the process deadline. This action was not recorded as a timeout or
+cancellation. A later read-only check found no remaining probe, input worker, or
+controller. Source/artifact hashes still matched, and attempt 12 was absent. No shared
+broker was terminated; process completion does not prove reversal of platform session
+effects.
+
+**Bounded outcome:** The explicit readiness handoff was followed, exact account discovery
+worked in this existing state, and the probe retained a structured unexpected broker
+failure with the operator's UI observation. Token/result metadata, authenticated Git
+discovery, and later-process reuse remain unobserved. The underlying failure cause,
+registration eligibility, and intended external reuse remain unresolved; this result
+selects no Profile, product architecture, or supported platform.
+
+Retain the dedicated source/build/package and sanitized operational artifacts. No helper
+fallback, PAT, account switching, account/cache cleanup, sign-out, consent revocation,
+resource write, object/pack request, or installation change was performed. All six
+preparations and all three interactive attempts are consumed. Totals are fetch 1/1,
+prepare 6/6, inspect 1/1, silent 1/2, interactive 3/3, and discovery 1/3. The sequence
+stopped without a reuse follow-up or another resource request; unused conditional slots
+cannot be exercised.
