@@ -152,7 +152,7 @@ flowchart LR
     identity["Microsoft identity platform<br/>[External software system]<br/>Owns token issuance and registration policy"]
     caller <-->|CLI arguments<br/>Structured stdout| cli
     cli -->|Acquires token<br/>MSAL / OAuth 2.0| identity
-    cli -->|Uses eligible accounts and UI<br/>MSAL / platform APIs| platform
+    cli -->|Uses eligible accounts, broker state, and UI<br/>MSAL / platform APIs| platform
     cli -->|Optional persistence and reuse<br/>Secure-state boundary| state
     state -->|Relies on secure storage<br/>Platform storage contract| platform
     classDef owned fill:#1168bd,color:#fff,stroke:#0b4884
@@ -265,6 +265,12 @@ Own product-policy state access, safe persistence, unusable-state recovery, and
 cross-process shared-state integrity under the request deadline. Authentication success
 validation and persistence status remain separable under
 [`V2-REQ-041`](../product/requirements/cache-security-and-operational-identity.md#v2-req-041-safe-reusable-state-recovery-and-concurrency).
+Broker-owned state stays behind the broker API; this component does not proxy its storage
+internals or require an engine-owned copy. The
+[runtime view](request-lifecycle.md#state-ownership-and-persistence-observation) defines
+how already available completion evidence becomes a result warning without additional
+I/O or waiting after validation. An absent confirmation signal is a warning condition,
+not by itself a reason to reject an otherwise eligible integration.
 Concrete stores, formats, namespace values, locking mechanisms, and storage lifecycle
 remain later design work. Local state-management commands and cross-process interaction
 single-flight are not first-version capabilities.
@@ -316,9 +322,9 @@ accepting the [runtime view](request-lifecycle.md) as a high-level allocation.
 
 | Remaining question | Existing basis and decision impact | Smallest evidence route and disposition |
 | --- | --- | --- |
-| Can the demonstrated external registration be selected for the product? | The [Windows observation](../research/v1-public-contract-baseline.md#observed-msa-token-git-discovery-and-silent-reuse) demonstrates the requested MSA token/resource path and silent reuse with one GCM-informed configuration. | Resolve intended external reuse under the [client-identity gate](client-application-identity.md#governing-evidence-and-gates) and RECHECK-007; no profile selected. This scenario no longer needs a generic mechanism-feasibility test. |
+| Can the demonstrated external registration be selected for the product? | The [Windows observation](../research/v1-public-contract-baseline.md#observed-msa-token-git-discovery-and-silent-reuse) demonstrates the requested MSA token/resource path and silent reuse with one GCM-informed configuration. | Resolve intended external reuse under the [client-identity gate](client-application-identity.md#governing-evidence-and-gates) and preserve the accepted [tenant policy](client-application-identity.md#experiment-configuration-and-tenant-policy); RECHECK-007 applies and no profile is selected. This scenario no longer needs a generic mechanism-feasibility test. |
 | Does the chosen profile expose the required full email, including on first use of OS state? | MSAL exposes accounts and result metadata, but documents a nullable UPN-format username. The Windows probe observed exact email and unique selection in existing state; first-use, alias, and same-email cases remain distinct. | Inspect the chosen provider/profile contract and applicable public experience; use a bounded primary-journey observation only for remaining uncertainty. No opaque-default substitution or alias inference. |
-| How will safe persistence completion or failure be reported for the chosen integration? | The pinned managed MSAL path awaits cache callbacks; MSAL Extensions catches storage-write errors. Provider task completion alone is not a durable-storage receipt. | Inspect the cache integration's completion/status boundary before choosing it; a probe is needed only if source and contracts leave the decision unresolved. No background persistence service. |
+| Does the chosen state integration satisfy recovery, integrity, and request lifetime? | The [result boundary](request-lifecycle.md#state-ownership-and-persistence-observation) uses already available completion evidence and warns when persistence failed or is unconfirmed. The pinned managed path awaits callbacks but can hide a write failure. | Assess the selected integration's documented state and cancellation contracts. Missing confirmation alone is handled by a warning; secure-only storage, safe recovery, and bounded owned work still require a compatible integration. Use a probe only for a decision left unresolved by source and contracts. |
 | Which host integrations meet owned completion and finite termination? | Existing silent and interactive mechanisms can be reused behind separate policy stages. Host UI ownership, late callbacks, and cancellation need a concrete host assessment. | Applicable rechecks and [interaction evidence](../validation/strategy.md#interaction-matrix); no automatic all-platform experiment matrix or selected platform path. |
 | Which state integration permits compatible reuse across V2 callers? | Existing platform stores and MSAL caches are the starting point. V2 removes plaintext fallback and upstream namespaces and preserves compatible request contexts. | Assess the chosen store's documented isolation and update contract, then targeted [reuse scenarios](../validation/strategy.md#cross-consumer-reuse-scenarios). Do not rebuild OS storage guarantees. |
 

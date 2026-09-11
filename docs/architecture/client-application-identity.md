@@ -94,6 +94,28 @@ Required configurability and visible ownership are defined by
 Strict request and fallback behavior are defined by `V2-REQ-022` and `V2-REQ-023`
 above.
 
+## Experiment Configuration and Tenant Policy
+
+The successful [Windows probe](../research/experiments/windows-msal-account-metadata.md#gcm-informed-msa-acquisition-and-silent-reuse)
+used an `organizations` authority with MSA passthrough enabled and, for silent reuse of
+the selected MSA account, the public MSA transfer tenant. Those are experimental provider
+settings. The probe changed authority and passthrough together; its result neither proves
+that `common` is unsupported nor verifies a `common` configuration with passthrough.
+
+Product normalization remains governed by `V2-REQ-019`: an eligible multitenant Profile
+with no caller tenant resolves to `common`, and caller tenant selectors are `common` or
+an exact tenant GUID. An exact selector constrains the token/resource tenant, not the
+account's home tenant. The engine must not silently turn omitted or `common` intent into
+`organizations`, or replace an explicit resource tenant based on account home metadata.
+
+Before selecting an integration, establish that its authority and transfer behavior
+preserves this accepted tenant policy as well as strict account and result validation.
+Provider-specific translation may be considered only with that evidence; the probe is
+not itself a product mapping rule. A translation that requires different public tenant
+semantics needs a repository-owner decision and a requirements change. This is a bounded
+integration question alongside registration eligibility, not a reason to repeat generic
+WAM/MSA feasibility testing or to select a Profile now.
+
 ## Governing Evidence and Gates
 
 Experiments, mutable Azure DevOps account guidance, compatibility activation, and

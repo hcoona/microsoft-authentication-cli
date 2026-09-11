@@ -314,6 +314,13 @@ journey gate. Unsupported combinations must be explicit and fail safely.
 - Locked, missing, corrupt, undecryptable, incompatible, or permission-invalid state.
 - Secure storage unavailable under the product state policy, without plaintext fallback;
   validated token plus persistence failure, safe recovery, and retained deadline.
+- For a timely validated candidate, compare confirmed safe persistence, known failure,
+  and unavailable confirmation: only the first omits the persistence warning. Classify
+  evidence already available from the provider/state integration without additional
+  I/O, acquisition, or a watcher wait at delivery. Provider success or cache timing alone
+  must not fabricate confirmation. Broker reuse does not require an engine-owned copy.
+- Provider failure before a candidate result is returned: classify the acquisition
+  outcome without emitting a partial token or relabeling it as success with a warning.
 - Acquisition and all required success validation complete with persistence still
   pending and no deadline expiry: return success, the validated token, a persistence
   warning, and zero exit status without waiting for persistence or the deadline.
