@@ -275,7 +275,7 @@ sequenceDiagram
     participant MSAL as Request-local MSAL application
     participant WAM as Windows broker and state
     Caller->>CLI: authenticate + explicit protocol/Profile/account/scopes/permission
-    CLI->>CLI: Validate admission; establish original deadline
+    CLI->>CLI: Validate admission#59; establish original deadline
     CLI->>MSAL: GetAccountsAsync(original cancellation token)
     MSAL->>WAM: Discover eligible real accounts
     WAM-->>MSAL: Provider accounts
@@ -287,9 +287,9 @@ sequenceDiagram
         WAM-->>MSAL: Candidate or classified failure
         MSAL-->>CLI: Candidate or interaction-required
     else Ambiguous
-        CLI-->>Caller: account_ambiguous; exit 1
+        CLI-->>Caller: account_ambiguous#59; exit 1
     end
-    opt No match or silent interaction requirement; permission allows interaction
+    opt No match or silent interaction requirement#59; permission allows interaction
         CLI->>UI: Create owned parent and completion context
         CLI->>MSAL: One interactive call with account/hint and same intent
         MSAL->>WAM: Interactive operation with owned HWND and cancellation
@@ -298,9 +298,9 @@ sequenceDiagram
     end
     CLI->>CLI: Validate identity, tenant, client/context, scopes, and metadata
     CLI->>CLI: Classify already available persistence observation
-    CLI->>UI: Close owned UI; invalidate acquisition completion
-    CLI-->>Caller: One JSON result; success 0 or failure 1
-    Note over Caller,WAM: Cancellation/deadline can terminate any pending path; external session changes are not rolled back
+    CLI->>UI: Close owned UI#59; invalidate acquisition completion
+    CLI-->>Caller: One JSON result#59; success 0 or failure 1
+    Note over Caller,WAM: Cancellation/deadline can terminate any pending path#59; external session changes are not rolled back
 ```
 
 The diagram's success tail applies only to a candidate that passed validation. Ambiguity,
