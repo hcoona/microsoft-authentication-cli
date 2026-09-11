@@ -252,7 +252,7 @@ callback behavior does not generalize to broker-owned storage.
 | Result identity | MSAL exposes account, token tenant, scopes, and expiry. | Preserve those fields and enforce the accepted postconditions; inspect profile-specific missing or alias metadata only where it affects the journey. |
 | Interaction | V1 integrates broker, browser, and device code; MSAL separates silent and interactive APIs. | Replace V1's combined fallback policy. Host-owned completion and cancellation need evidence for the concrete host choice, not a new proof that OAuth interaction exists. |
 | Secure reuse | V1 configures MSAL Extensions and platform stores. | Remove plaintext fallback and upstream namespaces; use the defined state-observation boundary and assess compatible reuse, recovery, integrity, and lifetime for the selected integration. Rely on platform protection contracts within the workstation threat model. |
-| Personal-account Azure DevOps access | V1 supplies the Visual Studio client ID and Azure DevOps scope. The subsequent [Windows observation](experiments/windows-msal-account-metadata.md#gcm-informed-msa-acquisition-and-silent-reuse) demonstrates exact-account token/discovery success and fresh-process silent reuse with the GCM-informed configuration. | Use that bounded result for this mechanism; intended registration reuse and Profile/support selection remain separate under RECHECK-007. |
+| Personal-account Azure DevOps access | V1 supplies the Visual Studio client ID and Azure DevOps scope. The subsequent [Windows observation](experiments/windows-msal-account-metadata.md#gcm-informed-msa-acquisition-and-silent-reuse) demonstrates exact-account token/discovery success and fresh-process silent reuse with the GCM-informed configuration. | The [client-profile assessment](#client-profile-and-tenant-mapping-assessment) records tenant-mapping evidence and the external-dependency boundary. Concrete Profile/support acceptance remains separate under RECHECK-007. |
 
 Use this delta assessment when accepting high-level responsibilities. It does not require
 every integration or future release scenario to be demonstrated before the architecture
@@ -1273,8 +1273,10 @@ adds reproducible evidence of exact personal-account token acquisition, authenti
 Git discovery, and fresh-process silent reuse for the declared existing host, state,
 client, authority, options, and target. The earlier absence of account-type observations
 no longer applies to that configuration. Intended external registration reuse, other
-configurations, and the product's Profile/support decision are not established by it;
-the selection gate remains open.
+configurations, and the product's Profile/support decision are not established by that
+experiment. The subsequent [client-profile assessment](#client-profile-and-tenant-mapping-assessment)
+records the available public reuse evidence, first-party capability limit, and absence
+of a fork support commitment. The concrete Profile selection gate remains open.
 
 Do not:
 
@@ -1425,6 +1427,96 @@ cause of `0x80049D59`. The existing
 owns execution limits, readiness, and actual results. No GCM helper, cache, credential,
 organization API, or extra discovery request was used. No Profile or platform is selected.
 
+### Client Profile and Tenant Mapping Assessment
+
+**Scope and provenance:** Public desk inspection on **2026-09-11 UTC** addresses the
+tenant-mapping and external-registration questions from the high-level architecture.
+The MSAL sources remain pinned to **4.83.1** at
+`d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f`; the GCM comparison remains **v2.9.1** at
+`6760f0ef069c994aa2bb1d703fb374986ee82a3e`. No dependency was built or executed, and no
+account, cache, authentication, or resource request was part of this assessment.
+
+**Source findings:**
+
+- Microsoft's [authority configuration guidance](https://learn.microsoft.com/en-us/entra/identity-platform/msal-client-application-configuration#authority)
+  describes `common` as admitting work/school and personal accounts, and ordinary
+  `organizations` as admitting work/school accounts. The effective audience is constrained
+  by both the code configuration and the application registration. The same retrieval
+  of [Azure DevOps guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth?view=azure-devops#tips-for-building-and-migrating)
+  still states that ordinary Entra applications do not natively support MSA users for
+  the Azure DevOps resource. Neither statement is a new observation of the legacy client.
+- MSAL's [`BrokerOptions.MsaPassthrough`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/BrokerOptions.cs#L74-L79)
+  and its [public API documentation](https://learn.microsoft.com/en-us/dotnet/api/microsoft.identity.client.brokeroptions.msapassthrough?view=msal-dotnet-latest)
+  describe a legacy option available only to Microsoft first-party applications and
+  recommend avoiding it where possible. The WAM adapter forwards the option to the
+  runtime, as recorded above. This is a specific registration capability, not a way to
+  add MSA support to an arbitrary application registration.
+- MSAL's [`AuthorityInfo` request resolution](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/AppConfig/AuthorityInfo.cs#L505-L583)
+  can resolve a tenantless authority using the selected account's home tenant. Its
+  request-override branch preserves an explicit non-tenantless authority and has a
+  separate `organizations`/MSA-passthrough case.
+  [`WithTenantId`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/AbstractAcquireTokenParameterBuilder.cs#L248-L276)
+  overrides the request tenant while preserving the authority host and validation
+  setting. These contracts distinguish configured authority, request override, and
+  resolved authority; they do not make every `common` request use a literal `/common`
+  endpoint throughout acquisition.
+- GCM's [Azure DevOps authority discovery](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/src/shared/Microsoft.AzureRepos/AzureDevOpsRestApi.cs#L36-L88)
+  explicitly uses `organizations` for its MSA-passthrough service path. Its
+  [silent acquisition workaround](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/src/shared/Core/Authentication/MicrosoftAuthentication.cs#L533-L554)
+  selects public transfer tenant `f8cdef31-a31e-4b4a-93e4-5f571e91255a` when passthrough
+  is enabled and the selected account has MSA home tenant
+  `9188040d-6c67-4c5b-b112-36a304b66dad`. That branch has no separate guard for V2's
+  explicit caller resource-tenant constraint. Copying it indiscriminately could replace
+  the exact tenant the V2 caller requested.
+- GCM links the workaround to public [MSAL Issue #3077](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/issues/3077).
+  At retrieval, the Issue was closed with `state_reason = not_planned`, five comments,
+  and `updated_at = 2025-06-09T10:50:04Z`. The report concerns MSAL 4.37.0 on macOS
+  and a first-party application; it identifies the transfer-tenant workaround as Public
+  Cloud only. A [maintainer comment](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/issues/3077#issuecomment-1507353678)
+  confirms the workaround's then-current necessity. Issue closure is not evidence that
+  the behavior was fixed in the pinned Windows dependency. Private work-item links were
+  not followed, and account details and raw diagnostics are not reproduced here.
+
+**External reuse evidence and limits:** AzureAuth's [public README](https://github.com/AzureAD/microsoft-authentication-cli/blob/8ef1b8b00782bf20a51de078289819a79c3cba70/README.md#L10-L12)
+describes a CLI returning tokens for public-client applications and acting as an Azure
+DevOps credential provider. Its Visual Studio identifier and GCM's use of the same
+identifier are pinned above. These establish published tool use of the Microsoft-owned
+registration. They do not identify a Microsoft support or continued-availability
+commitment for this fork, grant ownership of the registration, or show that independently
+registered clients have the same legacy capability. The API's first-party limitation
+also does not, by itself, establish a blanket prohibition on all third-party tool use
+of that public identifier.
+
+**Architecture inference:** Under `V2-REQ-019`, normalized `common` leaves the result
+tenant unconstrained within the selected Profile's eligible audience; an explicit or
+fixed tenant remains an exact constraint. A separately reviewed legacy provider mapping
+can therefore retain `common` intent while using the demonstrated `organizations` and
+MSA-transfer routes. It must not run the transfer substitution for an explicit or fixed
+resource tenant, and final result metadata remains authoritative. This is the allocation
+in the [client-identity view](../architecture/client-application-identity.md#provider-mapping),
+not a new runtime result or a generic equivalence between `common` and `organizations`.
+
+Decision `0003` already defines the unofficial external-compatibility posture. The
+[external dependency boundary](../architecture/client-application-identity.md#external-dependency-boundary)
+now records the actual public reuse evidence and support limits instead of treating a
+support guarantee as something established by token success. Profile distribution and
+acceptance still require the existing host, authority, redirect/broker, consent, audit,
+branding, state-partitioning, explicit-selection, and failure evidence. The successful
+probe did not retain the actual result-tenant value and does not validate V2's exact-tenant
+branch or prove that the result tenant equals a routing constant.
+
+**Recheck disposition:** RECHECK-007's `client-profile` trigger fires for this assessment.
+Its named Azure DevOps source was refreshed above; the accepted Windows observation
+remains the bounded account-type evidence. The architecture maps tenant intent and states
+the legacy external-dependency boundary without enabling or distributing a Profile.
+All seven registry entries were evaluated. RECHECK-001 and RECHECK-002 retain their
+accepted dispositions: interaction permission and strict account/result constraints are
+unchanged. RECHECK-003, RECHECK-004, and RECHECK-005 do not fire because no new WSL,
+system-browser, or Linux-broker path is selected. RECHECK-006's accepted state-ownership
+disposition is unchanged. There is no Wave change, release, or new experiment. Mutable
+Issue status is dated context for the pinned source finding, not an ongoing claim of a
+fix or a separate prerequisite to applying the selected dependency's contract.
+
 ### Observed MSA Token, Git Discovery, and Silent Reuse
 
 **Runtime observation, 2026-09-11 UTC:** Under the
@@ -1444,8 +1536,10 @@ GCM-informed configuration. The mechanism's feasibility for that scenario need n
 an unobserved premise. Existing state, a single host/target, and the paired configuration
 limit attribution and generalization. No clean first-use, alias coverage, cross-consumer
 interoperability, actual returned-tenant identity, full Git operation, or broader support
-is inferred. RECHECK-007 now has bounded token/resource behavior evidence; intended
-external registration reuse and the Profile-selection gate remain separate and open.
+is inferred. RECHECK-007 now has bounded token/resource behavior evidence. The
+[client-profile assessment](#client-profile-and-tenant-mapping-assessment) records the
+separate public reuse and support boundary; the concrete Profile-selection gate remains
+open.
 
 ### Host and Registration Recheck for the Probe
 
@@ -1522,5 +1616,7 @@ support.
 `RECHECK-001` and `RECHECK-002` are complete and support no weakening of the interaction
 or account contracts. `RECHECK-007` has completed its desk evaluation, but the
 Microsoft-owned Azure DevOps profile remains unselected. The accepted Windows observation
-now supplies bounded exact-account token/resource and later-process reuse evidence;
-intended external registration reuse and the product selection gate remain open.
+now supplies bounded exact-account token/resource and later-process reuse evidence. The
+[client-profile assessment](#client-profile-and-tenant-mapping-assessment) records the
+public reuse evidence, first-party capability limitation, and absence of a fork support
+commitment; the concrete product selection gate remains open.

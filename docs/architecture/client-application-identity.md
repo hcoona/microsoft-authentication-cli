@@ -60,8 +60,9 @@ intended reuse, or support status for this fork. The subsequent
 [bounded Windows observation](../research/v1-public-contract-baseline.md#observed-msa-token-git-discovery-and-silent-reuse)
 demonstrates exact personal-account acquisition, authenticated Git discovery, and
 fresh-process silent reuse for one existing configuration. This supplies concrete
-mechanism evidence; intended external registration reuse and the Profile-selection gate
-remain open. The [primary journey](../product/user-stories.md) remains a first-release
+mechanism evidence. The [external dependency boundary](#external-dependency-boundary)
+below records the public reuse evidence and its support limits; the Profile-selection
+gate remains open. The [primary journey](../product/user-stories.md) remains a first-release
 blocker until its product validation obligations are met.
 
 This makes client-application identity a functional input, not a replaceable cosmetic
@@ -105,16 +106,77 @@ that `common` is unsupported nor verifies a `common` configuration with passthro
 Product normalization remains governed by `V2-REQ-019`: an eligible multitenant Profile
 with no caller tenant resolves to `common`, and caller tenant selectors are `common` or
 an exact tenant GUID. An exact selector constrains the token/resource tenant, not the
-account's home tenant. The engine must not silently turn omitted or `common` intent into
-`organizations`, or replace an explicit resource tenant based on account home metadata.
+account's home tenant. `common` imposes no particular result tenant; it does not require
+every provider operation to address a literal `/common` endpoint. The
+[public source assessment](../research/v1-public-contract-baseline.md#client-profile-and-tenant-mapping-assessment)
+shows that MSAL itself resolves tenantless authorities during acquisition.
 
-Before selecting an integration, establish that its authority and transfer behavior
-preserves this accepted tenant policy as well as strict account and result validation.
-Provider-specific translation may be considered only with that evidence; the probe is
-not itself a product mapping rule. A translation that requires different public tenant
-semantics needs a repository-owner decision and a requirements change. This is a bounded
-integration question alongside registration eligibility, not a reason to repeat generic
-WAM/MSA feasibility testing or to select a Profile now.
+Policy retains the normalized tenant constraint separately from the mechanism's provider
+authority. This is an allocation within the existing policy and mechanism components,
+not another public request field. The provider may resolve an unconstrained tenant only
+within the selected Profile's eligible account types, cloud, and integration contract.
+Changing the endpoint never relaxes strict email, client, scope, or result validation.
+
+### Provider Mapping
+
+The following rules define the high-level mapping if the corresponding Profile and
+integration pass their existing acceptance gates. They do not enable a Profile, select a
+supported platform, or freeze its configuration representation.
+
+| Normalized tenant policy and eligible integration | Provider authority behavior | Required result behavior |
+| --- | --- | --- |
+| `common`, ordinary multitenant integration | Start with the cloud's `common` authority and use documented provider tenant resolution. Do not enable MSA passthrough for an arbitrary registration. | Retain the provider's actual tenant and authority; enforce all request and Profile constraints. |
+| `common`, Public Cloud Visual Studio legacy passthrough compatibility integration | Use `organizations` with MSA passthrough for the initial authority. For silent acquisition of a uniquely resolved MSA home account, use the public MSA transfer tenant. For other accounts, use documented provider tenant resolution. | Preserve `common` as the caller's unconstrained tenant policy. The observed result tenant is authoritative; the routing tenant is not a fabricated result value. |
+| Explicit compatible tenant GUID, including with the legacy integration | Use that exact resource tenant for silent and interactive acquisition. Do not replace it with the MSA home or transfer tenant. | Require the provider-reported token/resource tenant to equal the requested GUID. A mismatch is terminal validation failure. |
+| Fixed single-tenant Profile | Use the Profile's fixed tenant and reject conflicting caller input before acquisition. | Require the fixed tenant; no MSA-based tenant substitution. |
+
+The legacy row adapts the already observed Windows configuration and pinned GCM/MSAL
+behavior. `organizations` together with the legacy passthrough capability admits the MSA
+path; bare `organizations` is not a general substitute for `common`. The mapping is
+specific to this externally owned Public Cloud compatibility candidate and is not inferred
+from an email domain, requested resource, or arbitrary client ID. MSA home-account metadata
+is used only after strict real-account resolution to choose the documented silent route;
+it is not another caller selector or a replacement identity check.
+
+The [GCM workaround](../research/v1-public-contract-baseline.md#client-profile-and-tenant-mapping-assessment)
+does not guard against an explicit caller resource-tenant constraint. V2's exact-tenant
+branch therefore takes precedence over that workaround. If the requested tenant cannot
+satisfy the request, apply the existing failure classification without trying a different
+tenant. Any permitted mechanism fallback keeps the same exact constraint.
+
+Azure DevOps organization discovery and service-header interpretation remain downstream
+consumer knowledge. The engine receives the resulting caller intent; it does not add
+repository URLs, Git discovery, organization lookup, or a resource catalog to implement
+this mapping. A `common` request accepts provider tenant resolution; a caller needing a
+particular resource tenant must supply its exact GUID.
+
+The architecture resolves how tenant intent and provider routing coexist. The existing
+experiment validates only the declared legacy configuration, not all rows above. The
+[validation strategy](../validation/strategy.md#policy-tests) carries the remaining
+mapping and exact-tenant scenarios before an implementation or support claim is accepted.
+
+### External Dependency Boundary
+
+Decision `0003` already permits an explicitly named compatibility Profile for the
+Microsoft-owned registration. The [public evidence](../research/v1-public-contract-baseline.md#client-profile-and-tenant-mapping-assessment)
+establishes the following boundary:
+
+- Microsoft owns the Visual Studio registration. AzureAuth and GCM publicly use it for
+  Azure DevOps authentication; their published source supplies a concrete reuse baseline.
+- Microsoft documents MSA passthrough as a legacy first-party-application capability to
+  avoid where possible. An independently registered application cannot be assumed to
+  have it. Using the identifier does not make this fork a Microsoft first-party product.
+- The reviewed sources provide no support or continued-availability guarantee for this
+  fork. The candidate is an unofficial compatibility dependency; its documentation must
+  identify Microsoft ownership and the lack of an upstream support commitment. No owner
+  endorsement or blanket prohibition on third-party reuse is inferred from these sources.
+
+This records the known reuse and the limits of support evidence without claiming
+Microsoft approval of the fork. It does not waive the external-client-profile gate:
+actual host/redirect/broker combinations, consent and audit behavior, branding, state
+partitioning, explicit user selection, and failure behavior still need their applicable
+validation and acceptance before distribution. No Microsoft support contract is asserted
+or required to treat an identifier as public configuration under decision `0003`.
 
 ## Governing Evidence and Gates
 
