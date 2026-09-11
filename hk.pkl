@@ -33,7 +33,6 @@ local fastSteps = new Mapping<String, Step> {
         "--include-fragments=full",
         "*.md",
         "docs/**/*.md",
-        "designs/*.md",
         ".github/**/*.md",
       )
     }

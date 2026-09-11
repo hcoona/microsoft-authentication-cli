@@ -3,7 +3,7 @@
 This record owns the concrete Windows request implementation design and the protocol 1
 command-line/process semantics. The linked JSON Schemas own serialized field shapes.
 Requirements remain authoritative for required behavior; the
-[architecture](../docs/architecture/overview.md) owns system-wide boundaries. This is a
+[architecture](../architecture/overview.md) owns system-wide boundaries. This is a
 design for implementation, not an activated Client Profile, executable, or support claim.
 
 ## Selected Boundary and Dependencies
@@ -12,7 +12,7 @@ A WSL caller explicitly launches one Windows executable for one authentication r
 The same request design covers a selected personal Microsoft account and a selected work
 account. Git and Azure Artifacts use the caller-supplied Azure DevOps scope; repository,
 organization, feed, and package operations stay with the caller. The engine returns the
-original delegated access token. The [PAT prohibition](../docs/product/requirements/product-boundary.md#v2-req-005-no-personal-access-tokens)
+original delegated access token. The [PAT prohibition](../product/requirements/product-boundary.md#v2-req-005-no-personal-access-tokens)
 applies to every operation, configuration, and failure path.
 
 | Choice | Concrete design and reason |
@@ -22,9 +22,9 @@ applies to every operation, configuration, and failure path.
 | Provider | Windows WAM only. One real-account discovery, at most one selected-account silent call, and at most one permitted interactive call. No application-level network retry or second provider. |
 | State | Broker-owned reusable state; a fresh in-memory MSAL application per invocation. No MSAL Extensions cache helper, serialized MSAL cache, shadow refresh-token store, engine account binding, or cross-process lock. |
 | Host | Windows 11 x64 in an active interactive user session, with WAM available. WSL 2 callers use normal Windows executable interoperability. Service, impersonated, disconnected desktop, and native Linux hosts are outside this Slice. |
-| Distribution | Executable basename, installer, signing, and update channel remain release identities under the [registry](../docs/governance/operational-identities.yaml). `<windows-cli>` below denotes the caller-selected executable, not a new installed command. |
+| Distribution | Executable basename, installer, signing, and update channel remain release identities under the [registry](../governance/operational-identities.yaml). `<windows-cli>` below denotes the caller-selected executable, not a new installed command. |
 
-The [dependency assessment](../docs/research/v1-public-contract-baseline.md#windows-slice-dependency-and-host-contracts)
+The [dependency assessment](../research/v1-public-contract-baseline.md#windows-slice-dependency-and-host-contracts)
 binds these choices to public source. .NET 10 compatibility is a design inference from
 published framework contracts, not an observation from the .NET 8 probe. Future upgrades
 must use the existing dependency review/validation matrix. No restore, build, or new
@@ -83,7 +83,7 @@ the resulting argument vector without invoking another shell.
 | `--cancel-on-stdin-close` | Optional valueless lifetime flag. Use a dedicated caller-owned pipe whose writer remains open until completion or cancellation. EOF or pipe failure cancels the request. Stdin is never an authentication request or credential channel. |
 | `--telemetry off\|stderr` | Optional, default `off`. Enables only the bounded local event stream described below; it does not configure network export. |
 
-The [request schema](../contracts/v1/request.schema.json) describes the parsed argument
+The [request schema](../../contracts/v1/request.schema.json) describes the parsed argument
 projection for validators and synthetic cases; it is not a stdin-JSON API. Defaults are
 applied only after syntax validation. Duplicate scopes are rejected rather than silently
 rewritten. Unknown options, absent required options, malformed values, unsupported
@@ -121,7 +121,7 @@ access tokens or infer service authorization.
 
 ## Profile Contract and Ownership
 
-The [Profile schema](../contracts/v1/client-profile.schema.json) owns configuration
+The [Profile schema](../../contracts/v1/client-profile.schema.json) owns configuration
 fields. A Profile has its own `schemaVersion`, name, client ID, Public Cloud selection,
 tenant policy, integration kind, and explicit registration ownership/support metadata.
 Protocol major and Profile schema version are separate version spaces. The current
@@ -150,7 +150,7 @@ acquisition order:
 - `windows-wam`: ordinary public-client WAM integration, with no MSA passthrough.
 - `visual-studio-legacy-wam`: Public Cloud only, client ID exactly
   `872cd9fa-d31f-45e0-9eab-6e460a02d1f1`, multitenant policy, and the legacy mapping
-  already defined by the [client-identity architecture](../docs/architecture/client-application-identity.md#provider-mapping).
+  already defined by the [client-identity architecture](../architecture/client-application-identity.md#provider-mapping).
   Only this integration enables the provider's legacy MSA passthrough option.
 
 Both derive the broker redirect URI as `ms-appx-web://microsoft.aad.brokerplugin/<client-id>`.
@@ -181,7 +181,7 @@ to collide with those products. Changing Profile names alone neither changes the
 client identity nor creates a new broker cache partition.
 
 Before activation/distribution, the existing
-[external Profile gate](../docs/product/compatibility-and-migration.md#externally-owned-client-profile-gate)
+[external Profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate)
 still needs bounded personal/work-account, host/redirect, consent/audit/branding, strict
 result, and reuse evidence. Registration rejection returns the existing failure outcome;
 there is no alternate registration, PAT, or SelfDescribing fallback. Those acceptance
@@ -409,7 +409,7 @@ stateDiagram-v2
 
 ## Result, Diagnostics, and Compatibility
 
-The [result schema](../contracts/v1/result.schema.json) defines one UTF-8 JSON object
+The [result schema](../../contracts/v1/result.schema.json) defines one UTF-8 JSON object
 followed by LF, with no BOM. Exit `0` means a complete `success` object; exit `1` is
 shared by every complete typed failure. Failure objects contain no token or account
 metadata. A success with `persistence_unconfirmed` still exits zero. Invalid/partial
@@ -441,7 +441,7 @@ implied, and no protocol is published as supported merely by merging this design
 
 ## Validation and Explicit Unsupported Cases
 
-The [Slice scenario basis](../docs/validation/strategy.md#windows-slice-design-acceptance)
+The [Slice scenario basis](../validation/strategy.md#windows-slice-design-acceptance)
 owns cases and required evidence. Contract examples are synthetic and demonstrate schema
 shape only. Core normalization/selection/outcome rules receive unit tests; ordinary
 orchestration is validated by scenario outcomes, provider calls, observed UI/lifetime,

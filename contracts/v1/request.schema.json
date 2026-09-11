@@ -76,7 +76,7 @@
     }
   },
   "title": "Protocol 1 Parsed Command-Line Request",
-  "description": "Projection of authenticate arguments, not an accepted JSON input. designs/windows-ado-authentication.md owns command-line and process semantics. Optional defaults are reader behavior; JSON Schema does not apply them.",
+  "description": "Projection of authenticate arguments, not an accepted JSON input. docs/designs/windows-ado-authentication.md owns command-line and process semantics. Optional defaults are reader behavior; JSON Schema does not apply them.",
   "examples": [
     {
       "protocol": 1,

@@ -3,7 +3,7 @@
 This record defines the current target architecture before implementation. It does not
 freeze command names, serialized contracts, platform support, or compatibility behavior.
 
-The [Windows Slice design](../../designs/windows-ado-authentication.md) owns the selected
+The [Windows Slice design](../designs/windows-ado-authentication.md) owns the selected
 Windows runtime, WAM integration, protocol 1 command-line/process semantics, and Profile
 contract. This overview retains the broader conceptual architecture; mechanisms outside
 that Slice remain unselected and are not supported by its acceptance.

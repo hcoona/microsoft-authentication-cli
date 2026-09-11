@@ -389,7 +389,7 @@ families:
     state: current
     concern: Implementation-boundary design requiring independent review
     carrier: repository-files
-    path: designs/*.md
+    path: docs/designs/*.md
     format: markdown
     producer: Implementation owner
     maintainer: Implementation owner

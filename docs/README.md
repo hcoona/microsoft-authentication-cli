@@ -25,7 +25,7 @@ is navigation, not an independent authority.
 | Architects and implementers | Component boundaries, dependency direction, and target runtime views | [`architecture/overview.md`](architecture/overview.md) |
 | Architecture, security, and validation reviewers | End-to-end request, interaction, token, and reusable-state lifecycles | [`architecture/request-lifecycle.md`](architecture/request-lifecycle.md) |
 | Architects and security reviewers | OAuth client-registration ownership and profile structure | [`architecture/client-application-identity.md`](architecture/client-application-identity.md) |
-| Implementers, adapter authors, and design reviewers | Concrete Windows Slice, protocol 1 command-line/process semantics, and candidate Profile integration | [`windows-ado-authentication.md`](../designs/windows-ado-authentication.md) |
+| Implementers, adapter authors, and design reviewers | Concrete Windows Slice, protocol 1 command-line/process semantics, and candidate Profile integration | [`windows-ado-authentication.md`](designs/windows-ado-authentication.md) |
 | Security reviewers and implementers | Threats, trust boundaries, and required mitigations | [`security/threat-model.md`](security/threat-model.md) |
 | TMT and security reviewers | Native data-flow model and generated-threat dispositions | [`security/authentication-engine.tm7`](security/authentication-engine.tm7) |
 | Test and release maintainers | Evidence required for validation and support claims | [`validation/strategy.md`](validation/strategy.md) |
