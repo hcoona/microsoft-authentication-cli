@@ -304,8 +304,8 @@ ended request, and do not claim reversal of independently completed provider ses
 | Platform or host | Required decision and evidence |
 | --- | --- |
 | Windows native | WAM availability, selected account, v2-owned interaction context, cancellation, cache, and multi-account behavior. |
-| WSL with native Linux broker | WSL version, broker package, native dependencies, keyring state, account UI, and failure modes. |
-| WSL invoking a Windows helper | Executable trust, protocol version, Windows configuration, UI ownership, timeout, and token transport. |
+| WSL directly invoking the Windows CLI | Caller-selected executable, interoperability availability, unchanged CLI contract, Windows configuration and path interpretation, account selection, UI ownership, cancellation/disconnect, timeout, and confidential result transport. |
+| WSL with native Linux broker, outside the selected deployment | A separate selection would require WSL version, broker package, native dependencies, keyring state, account UI, and failure-mode evidence. |
 | Linux headful | System browser, callback, secure store, and cancellation. |
 | Linux headless | Device code, no-browser behavior, secure-store absence, product-owned secure-state policy, and cross-invocation reuse for any claimed repeated-noninteractive capability. |
 | macOS | System browser, Keychain, and broker behavior if declared supported. |
@@ -313,6 +313,23 @@ ended request, and do not claim reversal of independently completed provider ses
 This is an evidence-planning matrix, not a selection of supported platforms or mechanisms.
 The first supported release may choose a smaller matrix while satisfying the primary
 journey gate. Unsupported combinations must be explicit and fail safely.
+
+The [selected WSL deployment](../architecture/overview.md#deployment-wsl-caller-and-windows-cli)
+requires scenario coverage for both a requested personal account accessing a personal
+Azure DevOps repository and a requested work account accessing a company repository.
+Exercise a different available/default account, exact resource-tenant constraints,
+silent reuse, interaction forbidden/allowed, and wrong-account or wrong-tenant rejection.
+Verify ordinary CLI output reaches the WSL caller without prompt or diagnostic mixing.
+Missing executables and disabled interoperability remain launch failures; there is no
+automatic Linux fallback. Cancellation and caller disconnection must be assessed at the
+Windows process boundary, including the CLI's own finite request deadline.
+
+Azure Artifacts consumes the same Azure DevOps token-acquisition capability under the
+[public source assessment](../research/v1-public-contract-baseline.md#wsl-direct-invocation-and-azure-artifacts).
+Cross-consumer scenarios cover reuse with compatible account, Profile, tenant, and scopes,
+and separation when any relevant context differs. Package-specific session-token exchange,
+feed permissions, and package-manager protocols remain downstream integration evidence;
+token acquisition alone does not demonstrate a successful restore or package operation.
 
 ## Failure and Resilience Matrix
 

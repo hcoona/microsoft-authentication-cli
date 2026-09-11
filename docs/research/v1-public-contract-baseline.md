@@ -1291,6 +1291,59 @@ Retain `V2-REQ-003`, `V2-REQ-011`, `V2-REQ-018`, `V2-REQ-022`, `V2-REQ-023`,
 Generic profile-selection semantics apply independently, but this candidate remains
 unavailable until the gate is satisfied.
 
+## WSL Direct Invocation and Azure Artifacts
+
+**Public source findings, retrieved 2026-09-11 UTC:** Microsoft's
+[WSL interoperability documentation](https://learn.microsoft.com/en-us/windows/wsl/filesystems#run-windows-tools-from-linux)
+documents direct execution of Windows `.exe` files from WSL, running as the active Windows
+user, with pipes and redirection. Arguments reach the Windows binary unmodified; file
+arguments therefore need Windows-understood paths. Interoperability can be disabled.
+These documented abstractions support using the ordinary Windows CLI as the selected
+WSL caller's authentication engine. They do not establish application cancellation,
+result encoding, Profile eligibility, or UI behavior for a future implementation.
+
+The WSL decision fires RECHECK-003 and RECHECK-005. The registry evaluation also records
+the retained outcomes for the other entries:
+
+| Recheck | Source state and decision impact |
+| --- | --- |
+| RECHECK-003 | [Issue #460](https://github.com/AzureAD/microsoft-authentication-cli/issues/460) remains open with no comments, updated `2026-05-13T17:25:51Z`. It proposes Linux-side detection and a Windows helper, including trust, version, transport, and missing-helper failures; it does not supply an implemented bridge or require V2 to adopt one. Direct executable invocation keeps Windows-side authentication ownership without introducing that proposed forwarding layer. |
+| RECHECK-003/005 | [MSAL.NET WSL guidance](https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl) describes Linux `BrokerOptions`, .NET 8, native libraries, and an unlocked `libsecret` keyring; it identifies WSL 2.4.13 or later for the WAM account-control dialog. Those are prerequisites of its Linux application path, not a new Linux dependency of the selected Windows executable. |
+| RECHECK-005 | [PR #462](https://github.com/AzureAD/microsoft-authentication-cli/pull/462) remains open and unmerged in the retrieved public page. Its patch ends at `dea657fda153a45ffe782755f952a2890e42db13`, adding Linux broker availability/routing, a native-client redirect, OS-account listing, and an OS-default sentinel fallback. It supplies no Windows CLI forwarding protocol or V2 strict-account guarantee. Its Linux path remains outside this deployment. |
+| RECHECK-001/002 | Issues [#464](https://github.com/AzureAD/microsoft-authentication-cli/issues/464) and [#465](https://github.com/AzureAD/microsoft-authentication-cli/issues/465) remain open with no comments, updated `2026-08-17T21:12:04Z` and `2026-08-27T22:02:13Z`. No new documented silent-only or strict-account contract changes the accepted V2 requirements. |
+| RECHECK-004 | Issues [#459](https://github.com/AzureAD/microsoft-authentication-cli/issues/459) and [#461](https://github.com/AzureAD/microsoft-authentication-cli/issues/461) remain open, updated `2026-05-14T00:13:01Z` and `2026-05-14T00:12:30Z`. Browser/callback support is not selected by direct invocation; the existing bounded disposition remains applicable. |
+| RECHECK-006 | [Issue #398](https://github.com/AzureAD/microsoft-authentication-cli/issues/398) remains open with no comments, updated `2024-08-13T16:18:59Z`. No cache fallback or secure-store support claim changes. |
+| RECHECK-007 | The same-day [Client Profile and tenant assessment](#client-profile-and-tenant-mapping-assessment) remains applicable. Neither direct invocation nor another Azure DevOps consumer enables a Profile or enlarges the observed account/host coverage. |
+
+**Immutable source finding:** Azure Artifacts Credential Provider at
+[`bca6c32fdb9611aea25819147ef4508f730aa5fb`](https://github.com/microsoft/artifacts-credprovider/tree/bca6c32fdb9611aea25819147ef4508f730aa5fb)
+defines the Azure DevOps MSAL scope as
+`499b84ac-1321-427f-aa17-267ca6975798/.default` in
+[`MsalConstants.cs`](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/src/Authentication/MsalConstants.cs#L9-L10).
+This is the same resource/scope used by
+[GCM v2.9.1](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/src/shared/Microsoft.AzureRepos/AzureDevOpsConstants.cs).
+Its NuGet integration subsequently passes the bearer token to
+[`VstsSessionTokenFromBearerTokenProvider`](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/CredentialProvider.Microsoft/CredentialProviders/Vsts/VstsSessionTokenFromBearerTokenProvider.cs#L59-L61).
+[`VstsSessionTokenClient`](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/CredentialProvider.Microsoft/CredentialProviders/Vsts/VstsSessionTokenClient.cs)
+uses bearer authorization to request an Azure DevOps session token with packaging/drop
+scopes. Those session-token scopes are downstream credential semantics, not an additional
+MSAL resource or an engine operation.
+
+**Architectural inference:** Azure DevOps Git and Azure Artifacts can use the same engine
+capability for explicitly requested personal or work accounts. Artifacts authentication
+does not need a separate deferred engine mechanism. Compatible account, Profile, tenant,
+resource, and scope contexts can reuse eligible state; identical resource IDs alone do
+not make different account or tenant requests interchangeable. Git and package adapters
+retain service authorization, protocol handling, and any derived-credential lifecycle
+under [decision 0004](../decisions/0004-keep-the-authentication-engine-separate-from-consumers.md).
+This conclusion includes Artifacts token acquisition in the same authentication scope;
+it does not claim that the CLI implements NuGet credential exchange or that a token alone
+grants repository/feed access.
+
+This assessment executed no application, authentication, cache access, or resource request.
+It adds no corporate-account or feed observation and does not extend the completed
+personal-account probe's capacity or evidence.
+
 ## Windows MSAL Probe Basis
 
 The [bounded Windows protocol](experiments/windows-msal-account-metadata.md) governs
