@@ -445,6 +445,42 @@ activation/distribution, service protocols, derived-credential exchange, and net
 telemetry export. Requirements outside this bounded design retain their existing gates;
 no complete-product or platform-support acceptance follows from this Slice alone.
 
+## Native AOT Publishing
+
+For [V2-REQ-055](../product/requirements/quality-build-and-validation.md#v2-req-055-native-aot-publishing),
+the design records a disposition for every in-scope executable and accepted runtime
+identifier: a supported candidate Native AOT path with its exact prerequisites, an
+evidence-backed exception with a specified alternative publishing mode and reassessment
+condition, or an unresolved choice that cannot be called implementation-ready. Review
+public toolchain/dependency contracts and supported alternatives before accepting an
+exception. Requirement acceptance does not establish compatibility of the current
+Windows Forms/MSAL host; the concrete disposition belongs to its design revision.
+
+Before claiming a publishing mode is supported, retain evidence for the exact source,
+SDK, runtime identifier, native compiler, dependency versions, and publish configuration.
+Verify that the artifact uses the selected mode, includes every required native/runtime
+asset, and starts on its declared host without undeclared development-machine packages.
+Inspect AOT/trimming diagnostics and justify each remaining suppression against a real
+reachable-path obligation. A successful publish or absence of warnings alone does not
+prove runtime compatibility.
+
+Exercise the applicable existing contract and scenario basis on the published artifact,
+including serialization, native broker loading, strict account/result validation,
+silent and permitted interactive paths, owned UI, cancellation, deadline, and process
+termination. Select the least costly evidence level that establishes each property;
+real WAM/UI behavior still needs bounded Windows evidence. Apply these obligations to
+an accepted non-AOT exception as well. Do not add redundant copies of the scenario matrix
+or weaken the primary-journey, Profile, security, and release gates.
+
+Before a performance comparison runs, define a representative workload, host and
+account-state assumptions, the selected non-AOT baseline, sample/attempt limits, and
+decision-relevant acceptance criteria. Compare process startup separately from network
+or user-interaction time, memory, total deployed size including native assets, and
+build/diagnostic costs using equivalent functionality and configuration. Record the
+measurement method and variability; claim only observed benefits. A desired benefit or
+an AOT setting alone is not a measured improvement. This validation basis is not an
+execution protocol; experiments require their own accepted authorization and protocol.
+
 ## Dependency Upgrade Matrix
 
 Each MSAL, native broker, cache, and platform dependency upgrade, including native
@@ -484,4 +520,6 @@ A platform or mechanism is supported only when:
 - a claimed headless-Linux repeated-noninteractive capability demonstrates compliant
   cross-invocation authentication-state reuse;
 - the exact client application and dependency versions are recorded;
+- the selected publishing mode meets the [Native AOT validation basis](#native-aot-publishing),
+  including any accepted target-specific exception;
 - installation and update behavior cannot collide with upstream AzureAuth.
