@@ -402,9 +402,9 @@ families:
       - Implementers and reviewers of the bounded subsystem
     creation_trigger: A coherent implementation boundary needs review beyond current architecture.
     failure_mode: Material implementation choices remain implicit or fragmented across pull requests.
-    review_point: Before implementation of the bounded design
+    review_point: Independent architecture, consistency, minimality, and security review at design acceptance and before implementation of the bounded design
     activation:
-      trigger: An accepted Delivery Wave entry authorizes implementation whose boundary meets the design creation trigger.
+      trigger: An accepted Delivery Wave entry authorizes detailed design or implementation whose boundary meets the design creation trigger.
       evaluator: Architecture maintainer
       action: Create the design record and activate design review routing.
       fallback_review: Every merged Delivery Wave change
