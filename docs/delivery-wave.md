@@ -93,3 +93,96 @@ other MCP services, LSP registration, model changes, automatic hooks or skill-sc
 execution; unrelated skill collections or the reference repository's monorepo framework.
 Installed skills cannot grant work authorization, broaden the product, or override the
 accepted repository policies and experiment limits.
+
+### Native AOT Requirements
+
+**Accepted inputs:** The current
+[product requirements](product/requirements/quality-build-and-validation.md),
+[primary user journey](product/user-stories.md#primary-journey-personal-azure-devops-git-access),
+[architecture](architecture/overview.md),
+[Windows Slice design](designs/windows-ado-authentication.md), and
+[validation strategy](validation/strategy.md). The repository owner requested a Native
+AOT requirement wherever feasible; [Issue #67](https://github.com/hcoona/microsoft-authentication-cli/issues/67)
+carries that proposal and its scope, not an already accepted requirement.
+
+**Bounded advancement and outcome:** Amend the existing quality/build requirements to
+make Native AOT the preferred production publishing mode for eligible .NET 10 targets.
+Define what qualifies a target, the obligation to investigate remediable blockers,
+evidence-backed exceptions and reassessment conditions, and the behavior that optimization
+must preserve. Distinguish executable publishing from library compatibility and Native
+AOT from trimming, ReadyToRun, or self-contained deployment alone. Update the requirement's
+validation basis and directly affected requirements or navigation atomically; retain
+established requirement identifiers and avoid a parallel specification.
+
+Use public desk evidence to assess requirement feasibility and identify implications for
+Windows Forms, MSAL/Broker/NativeInterop, native dependencies, and the public build chain.
+The requirement must not promise measured performance or select an unverified compatible
+implementation. Keep concrete target disposition and UI/dependency selection in the
+separate design advancement below. Completion requires an accepted, testable requirement
+and validation basis, explicit exceptions, and the applicable independent reviews.
+
+**Permitted external effects:** Public documentation, source, and package-metadata reads;
+repository documentation edits and normal record/diagram validation. No subject execution
+or dependency installation is granted by this entry.
+
+**Exclusions:** Product or probe implementation; restore, build, publish, performance,
+authentication, or cache experiments; changes to the delegated public-client boundary,
+supported platforms, first-release journeys, or required security behavior; Profile
+activation, packaging, release, and renewed historical probe capacity. Existing concrete
+design choices remain current until an authorized design amendment is accepted.
+
+### Primary Windows Scenario Design Revision
+
+**Accepted inputs:** The current
+[primary journey and work-account variant](product/user-stories.md#primary-journey-personal-azure-devops-git-access),
+capability requirements, [architecture](architecture/overview.md),
+[Windows Slice design and protocol](designs/windows-ado-authentication.md),
+[public dependency evidence](research/v1-public-contract-baseline.md),
+[security model](security/threat-model.md), and
+[Slice validation basis](validation/strategy.md#windows-slice-design-acceptance).
+[Issue #67](https://github.com/hcoona/microsoft-authentication-cli/issues/67) also carries
+the related Native AOT design work. Any design work that depends on the proposed Native
+AOT requirement must wait until that requirement and its validation basis merge into
+`main-v2`; an unmerged requirement cannot serve as a design premise. Refresh dependent
+work whenever its accepted prerequisites materially change.
+
+**Bounded advancement and outcome:** Revise the existing first-scenario design for a WSL
+caller explicitly invoking the Windows .NET 10 CLI for an Azure DevOps access token for
+the requested account. Preserve the accepted personal-account journey, company-account
+variant, and Azure Artifacts access-token/reuse scope. Apply the accepted Native AOT
+requirement to this Slice and assess the exact toolchain, RID, MSAL/Broker/NativeInterop,
+UI host, serialization, native loading, and deployment constraints using public sources.
+Investigate compatible alternatives before selecting an evidence-backed non-AOT
+exception. A necessary UI or dependency design change may be proposed within the existing
+engine boundary while preserving required HWND ownership, interaction, cancellation,
+security, and process semantics; unresolved essential premises keep the choice unselected.
+
+Update the canonical design, affected architecture/contracts, security rationale, public
+evidence, and validation obligations together where their meaning changes. Preserve one
+authority per concern and use a decision record only for a qualifying durable choice.
+Apply the existing [architecture-view standard](architecture/overview.md#architecture-views):
+use C4 structural/deployment views and UML sequence/state-machine views to explain
+responsibility boundaries, request/provider/UI interactions, cancellation, and terminal
+states. Use other UML views only when they answer a concrete design question. Maintain
+renderable diagram sources, validate their rendering, and review their consistency with
+the normative text and contracts; a diagram inventory alone is not design acceptance.
+
+Completion requires a coherent reviewed design, explicit target compatibility or
+exception decisions, unresolved/unsupported cases stated without a support claim, and a
+validation plan for both behavioral preservation and the relevant AOT tradeoffs. Do not
+declare implementation readiness while a required premise remains unresolved. Applicable
+independent record/evidence reviews and contextual design/contract/security/validation
+review must pass. Changes to the native threat model also require its existing native
+open/analysis validation before acceptance.
+
+**Permitted external effects:** Public documentation, source, and package-metadata reads;
+repository design, contract, and evidence edits; normal record/diagram checks; and local
+native threat-model open/analysis validation when required by a model change. This entry
+does not permit execution of the authentication subject or installation of new tools.
+
+**Exclusions:** Product code, probe code or execution, restore/build/publish or performance
+experiments, real-account authentication or credential-store access, private evidence,
+Profile activation/distribution, downstream Git/feed operations or host-protocol
+implementation, additional platforms/providers, packaging, and release. Historical
+experiment inputs and consumed limits remain unchanged. A later experiment or
+implementation requires its own accepted bounded authorization and prerequisites.
