@@ -3,7 +3,7 @@
 ## Scope
 
 This threat model applies to the delegated public-client authentication architecture and
-the [concrete Windows Slice design](../../designs/windows-ado-authentication.md). Its
+the [concrete Windows Slice design](../designs/windows-ado-authentication.md). Its
 application controls remain planned until implementation and validation; design review
 does not mark them effective on a real platform.
 

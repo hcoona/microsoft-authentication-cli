@@ -396,7 +396,7 @@ is not evidence that the V2 failure/recovery matrix passes.
 
 ## Windows Slice Design Acceptance
 
-The [concrete Windows design](../../designs/windows-ado-authentication.md) and
+The [concrete Windows design](../designs/windows-ado-authentication.md) and
 [protocol/Profile schemas](../../contracts/v1/request.schema.json) select the bounded
 design for the two Azure DevOps account journeys. This section owns its scenario evidence
 basis. A schema-valid example is not an executed CLI request, a passing authentication

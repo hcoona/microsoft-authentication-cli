@@ -1458,7 +1458,7 @@ MSAL calls, an owned parent window, an optional caller-lifetime pipe, and a fini
 shutdown boundary without introducing a bridge or repairing OS internals. Broker-managed
 reuse avoids an additional app-owned store and its namespace/locking obligations. The
 absence of a public durable-write receipt still requires the accepted persistence warning.
-Concrete semantics are owned by the [Windows design](../../designs/windows-ado-authentication.md),
+Concrete semantics are owned by the [Windows design](../designs/windows-ado-authentication.md),
 not by these source findings. Synthetic and real-platform validation remain separate.
 
 ### Slice Design Recheck Assessment

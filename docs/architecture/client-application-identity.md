@@ -4,7 +4,7 @@ This architecture view defines how v2 treats OAuth public-client application
 registrations. It does not claim ownership of any Microsoft registration or freeze a
 client-profile contract.
 
-The [Windows Slice design](../../designs/windows-ado-authentication.md#profile-contract-and-ownership)
+The [Windows Slice design](../designs/windows-ado-authentication.md#profile-contract-and-ownership)
 and its linked schema now own the concrete Windows Profile representation and candidate
 definition. This view continues to own registration semantics and tenant mapping;
 candidate definition does not activate or distribute that Profile.

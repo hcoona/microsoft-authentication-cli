@@ -1,6 +1,6 @@
 # Request and Reusable-State Lifecycles
 
-The [Windows Slice design](../../designs/windows-ado-authentication.md) specializes this
+The [Windows Slice design](../designs/windows-ado-authentication.md) specializes this
 conceptual lifecycle with WAM-only ordering, broker-owned state, a versioned process
 contract, owned Windows UI, and bounded cancellation/delivery. The alternative mechanisms
 in this view are architectural possibilities, not additional paths enabled by that Slice.

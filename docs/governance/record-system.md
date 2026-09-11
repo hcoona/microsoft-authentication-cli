@@ -221,7 +221,7 @@ Use:
 
 The repository checker discovers record candidates independently from the mutable family
 catalog. Its bounded record roots are the canonical root interfaces and the `docs/`,
-`schemas/`, `contracts/`, and `designs/` namespaces. Adding another record-bearing root
+`schemas/`, and `contracts/` namespaces. Adding another record-bearing root
 requires updating the checker and catalog in the same change. A catalog edit therefore
 cannot remove a retained record from family, schema, or portal validation merely by
 deleting its family entry. Governed records must use direct repository paths; symbolic

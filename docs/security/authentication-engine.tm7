@@ -8572,12 +8572,12 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>StateInformation</a:Key>
-            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. This flow contains deliberately public client/cloud/ownership configuration, not authentication material or account email. Disclosure of that configuration is not a protected asset. Executable selection and a spoofed authentication process remain covered by the existing caller/CLI spoofing threats; no mutual-authentication mechanism is added to a local public-file read.</a:Value>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. This flow contains deliberately public client/cloud/ownership configuration, not authentication material or account email. Disclosure of that configuration is not a protected asset. Executable selection and a spoofed authentication process remain covered by the existing caller/CLI spoofing threats; no mutual-authentication mechanism is added to a local public-file read.</a:Value>
           </a:KeyValueOfstringstring>
         </b:Properties>
         <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
         <b:State>NotApplicable</b:State>
-        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. This flow contains deliberately public client/cloud/ownership configuration, not authentication material or account email. Disclosure of that configuration is not a protected asset. Executable selection and a spoofed authentication process remain covered by the existing caller/CLI spoofing threats; no mutual-authentication mechanism is added to a local public-file read.</b:StateInformation>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. This flow contains deliberately public client/cloud/ownership configuration, not authentication material or account email. Disclosure of that configuration is not a protected asset. Executable selection and a spoofed authentication process remain covered by the existing caller/CLI spoofing threats; no mutual-authentication mechanism is added to a local public-file read.</b:StateInformation>
         <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
         <b:Title i:nil="true"/>
         <b:TypeId>S2</b:TypeId>
@@ -8626,12 +8626,12 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>StateInformation</a:Key>
-            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. The caller explicitly selects one local Windows Profile file. Validate one bounded immutable snapshot, trusted cloud, client/integration compatibility and tenant policy before provider work. Rely on normal Windows file permissions within the same-user threat model. No URL/configuration discovery, inherited defaults, executable configuration or upstream import. Validate configuration tampering and wrong-client scenarios.</a:Value>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. The caller explicitly selects one local Windows Profile file. Validate one bounded immutable snapshot, trusted cloud, client/integration compatibility and tenant policy before provider work. Rely on normal Windows file permissions within the same-user threat model. No URL/configuration discovery, inherited defaults, executable configuration or upstream import. Validate configuration tampering and wrong-client scenarios.</a:Value>
           </a:KeyValueOfstringstring>
         </b:Properties>
         <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
         <b:State>NeedsInvestigation</b:State>
-        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. The caller explicitly selects one local Windows Profile file. Validate one bounded immutable snapshot, trusted cloud, client/integration compatibility and tenant policy before provider work. Rely on normal Windows file permissions within the same-user threat model. No URL/configuration discovery, inherited defaults, executable configuration or upstream import. Validate configuration tampering and wrong-client scenarios.</b:StateInformation>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. The caller explicitly selects one local Windows Profile file. Validate one bounded immutable snapshot, trusted cloud, client/integration compatibility and tenant policy before provider work. Rely on normal Windows file permissions within the same-user threat model. No URL/configuration discovery, inherited defaults, executable configuration or upstream import. Validate configuration tampering and wrong-client scenarios.</b:StateInformation>
         <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
         <b:Title i:nil="true"/>
         <b:TypeId>S7</b:TypeId>
@@ -8680,12 +8680,12 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>StateInformation</a:Key>
-            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. The engine does not provide nonrepudiation, signed configuration-read receipts or an identity-rich audit ledger. Explicit caller selection, typed outcomes and sanitized diagnostics satisfy the accepted contract. Adding persistent identity-rich auditing would expand scope and conflict with email/secret containment.</a:Value>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. The engine does not provide nonrepudiation, signed configuration-read receipts or an identity-rich audit ledger. Explicit caller selection, typed outcomes and sanitized diagnostics satisfy the accepted contract. Adding persistent identity-rich auditing would expand scope and conflict with email/secret containment.</a:Value>
           </a:KeyValueOfstringstring>
         </b:Properties>
         <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
         <b:State>NotApplicable</b:State>
-        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. The engine does not provide nonrepudiation, signed configuration-read receipts or an identity-rich audit ledger. Explicit caller selection, typed outcomes and sanitized diagnostics satisfy the accepted contract. Adding persistent identity-rich auditing would expand scope and conflict with email/secret containment.</b:StateInformation>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. The engine does not provide nonrepudiation, signed configuration-read receipts or an identity-rich audit ledger. Explicit caller selection, typed outcomes and sanitized diagnostics satisfy the accepted contract. Adding persistent identity-rich auditing would expand scope and conflict with email/secret containment.</b:StateInformation>
         <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
         <b:Title i:nil="true"/>
         <b:TypeId>R6</b:TypeId>
@@ -8734,12 +8734,12 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>StateInformation</a:Key>
-            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Profile fields are public identifiers and nonsecret integration/ownership metadata; no token, password or account email belongs in this file. Confidentiality of that public configuration is not a goal. Integrity and malicious replacement remain applicable under the source-spoofing and execution-flow candidates; public configuration does not require encryption.</a:Value>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. Profile fields are public identifiers and nonsecret integration/ownership metadata; no token, password or account email belongs in this file. Confidentiality of that public configuration is not a goal. Integrity and malicious replacement remain applicable under the source-spoofing and execution-flow candidates; public configuration does not require encryption.</a:Value>
           </a:KeyValueOfstringstring>
         </b:Properties>
         <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
         <b:State>NotApplicable</b:State>
-        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Profile fields are public identifiers and nonsecret integration/ownership metadata; no token, password or account email belongs in this file. Confidentiality of that public configuration is not a goal. Integrity and malicious replacement remain applicable under the source-spoofing and execution-flow candidates; public configuration does not require encryption.</b:StateInformation>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. Profile fields are public identifiers and nonsecret integration/ownership metadata; no token, password or account email belongs in this file. Confidentiality of that public configuration is not a goal. Integrity and malicious replacement remain applicable under the source-spoofing and execution-flow candidates; public configuration does not require encryption.</b:StateInformation>
         <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
         <b:Title i:nil="true"/>
         <b:TypeId>I23</b:TypeId>
@@ -8788,12 +8788,12 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>StateInformation</a:Key>
-            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Use a bounded 64 KiB strict JSON read and maintained parser, reject malformed/unsupported input before authentication, preserve the original monotonic deadline, and end the single process when bounded local shutdown cannot complete. Do not promise availability under a compromised OS or repair unrelated filesystem state.</a:Value>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. Use a bounded 64 KiB strict JSON read and maintained parser, reject malformed/unsupported input before authentication, preserve the original monotonic deadline, and end the single process when bounded local shutdown cannot complete. Do not promise availability under a compromised OS or repair unrelated filesystem state.</a:Value>
           </a:KeyValueOfstringstring>
         </b:Properties>
         <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
         <b:State>NeedsInvestigation</b:State>
-        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Use a bounded 64 KiB strict JSON read and maintained parser, reject malformed/unsupported input before authentication, preserve the original monotonic deadline, and end the single process when bounded local shutdown cannot complete. Do not promise availability under a compromised OS or repair unrelated filesystem state.</b:StateInformation>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. Use a bounded 64 KiB strict JSON read and maintained parser, reject malformed/unsupported input before authentication, preserve the original monotonic deadline, and end the single process when bounded local shutdown cannot complete. Do not promise availability under a compromised OS or repair unrelated filesystem state.</b:StateInformation>
         <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
         <b:Title i:nil="true"/>
         <b:TypeId>D3</b:TypeId>
@@ -8842,12 +8842,12 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>StateInformation</a:Key>
-            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. An interrupted Profile read produces the existing invalid_request/configuration reason or timeout under the original deadline. Never use a partial/default Profile, restart the deadline, or fall back to another registration. The caller can correct the file and start a new request.</a:Value>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. An interrupted Profile read produces the existing invalid_request/configuration reason or timeout under the original deadline. Never use a partial/default Profile, restart the deadline, or fall back to another registration. The caller can correct the file and start a new request.</a:Value>
           </a:KeyValueOfstringstring>
         </b:Properties>
         <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
         <b:State>NeedsInvestigation</b:State>
-        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. An interrupted Profile read produces the existing invalid_request/configuration reason or timeout under the original deadline. Never use a partial/default Profile, restart the deadline, or fall back to another registration. The caller can correct the file and start a new request.</b:StateInformation>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. An interrupted Profile read produces the existing invalid_request/configuration reason or timeout under the original deadline. Never use a partial/default Profile, restart the deadline, or fall back to another registration. The caller can correct the file and start a new request.</b:StateInformation>
         <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
         <b:Title i:nil="true"/>
         <b:TypeId>D4</b:TypeId>
@@ -8896,12 +8896,12 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>StateInformation</a:Key>
-            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Unreadable or unavailable caller-managed configuration fails admission with a safe reason; timeout and cancellation remain terminal. Do not bypass access control, fetch another configuration, create a shadow copy, or repair another user/application store. Verify inaccessible-file and deadline scenarios.</a:Value>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. Unreadable or unavailable caller-managed configuration fails admission with a safe reason; timeout and cancellation remain terminal. Do not bypass access control, fetch another configuration, create a shadow copy, or repair another user/application store. Verify inaccessible-file and deadline scenarios.</a:Value>
           </a:KeyValueOfstringstring>
         </b:Properties>
         <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
         <b:State>NeedsInvestigation</b:State>
-        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Unreadable or unavailable caller-managed configuration fails admission with a safe reason; timeout and cancellation remain terminal. Do not bypass access control, fetch another configuration, create a shadow copy, or repair another user/application store. Verify inaccessible-file and deadline scenarios.</b:StateInformation>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. Unreadable or unavailable caller-managed configuration fails admission with a safe reason; timeout and cancellation remain terminal. Do not bypass access control, fetch another configuration, create a shadow copy, or repair another user/application store. Verify inaccessible-file and deadline scenarios.</b:StateInformation>
         <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
         <b:Title i:nil="true"/>
         <b:TypeId>D5</b:TypeId>
@@ -8950,12 +8950,12 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>StateInformation</a:Key>
-            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Treat Profile JSON as bounded data using a maintained parser and a closed field schema. No scripts, expressions, dynamic assemblies, arbitrary callback URLs, plugin loading or shell execution are configured by the document. Render name/ownership as bounded plain text. Validate unexpected fields and malformed input without token or raw-file diagnostics.</a:Value>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. Treat Profile JSON as bounded data using a maintained parser and a closed field schema. No scripts, expressions, dynamic assemblies, arbitrary callback URLs, plugin loading or shell execution are configured by the document. Render name/ownership as bounded plain text. Validate unexpected fields and malformed input without token or raw-file diagnostics.</a:Value>
           </a:KeyValueOfstringstring>
         </b:Properties>
         <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
         <b:State>NeedsInvestigation</b:State>
-        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Treat Profile JSON as bounded data using a maintained parser and a closed field schema. No scripts, expressions, dynamic assemblies, arbitrary callback URLs, plugin loading or shell execution are configured by the document. Render name/ownership as bounded plain text. Validate unexpected fields and malformed input without token or raw-file diagnostics.</b:StateInformation>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. Treat Profile JSON as bounded data using a maintained parser and a closed field schema. No scripts, expressions, dynamic assemblies, arbitrary callback URLs, plugin loading or shell execution are configured by the document. Render name/ownership as bounded plain text. Validate unexpected fields and malformed input without token or raw-file diagnostics.</b:StateInformation>
         <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
         <b:Title i:nil="true"/>
         <b:TypeId>E6</b:TypeId>
@@ -9004,12 +9004,12 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>StateInformation</a:Key>
-            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Normalize one immutable explicit request and enforce fixed Profile/trust constraints before provider work. Profile fields cannot select scopes, account, interaction permission, ordering, cache mode, deadline defaults or PAT behavior. Only the eligible legacy client/integration admits MSA passthrough; exact resource tenant and final result checks remain binding.</a:Value>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. Normalize one immutable explicit request and enforce fixed Profile/trust constraints before provider work. Profile fields cannot select scopes, account, interaction permission, ordering, cache mode, deadline defaults or PAT behavior. Only the eligible legacy client/integration admits MSA passthrough; exact resource tenant and final result checks remain binding.</a:Value>
           </a:KeyValueOfstringstring>
         </b:Properties>
         <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
         <b:State>NeedsInvestigation</b:State>
-        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Normalize one immutable explicit request and enforce fixed Profile/trust constraints before provider work. Profile fields cannot select scopes, account, interaction permission, ordering, cache mode, deadline defaults or PAT behavior. Only the eligible legacy client/integration admits MSA passthrough; exact resource tenant and final result checks remain binding.</b:StateInformation>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and docs/designs/windows-ado-authentication.md#profile-contract-and-ownership. Normalize one immutable explicit request and enforce fixed Profile/trust constraints before provider work. Profile fields cannot select scopes, account, interaction permission, ordering, cache mode, deadline defaults or PAT behavior. Only the eligible legacy client/integration admits MSA passthrough; exact resource tenant and final result checks remain binding.</b:StateInformation>
         <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
         <b:Title i:nil="true"/>
         <b:TypeId>E7</b:TypeId>
