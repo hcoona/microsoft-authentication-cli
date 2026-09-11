@@ -213,13 +213,36 @@ its persistence callback, whose
 [`write path`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Extensions.Msal/MsalCacheHelper.cs#L443-L488)
 catches and logs a storage-write exception, then releases its lock.
 
+Further inspection of the same pinned sources on **2026-09-11 UTC** distinguishes
+available API signals from confirmation of a particular safe-state update:
+
+- [`AuthenticationResultMetadata`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/AuthenticationResultMetadata.cs#L24-L55)
+  describes the token's source and time spent in cache callbacks; neither is a durable
+  write result.
+- [`CacheChanged`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Extensions.Msal/MsalCacheHelper.cs#L73-L94)
+  listens for disk-originated updates. Its
+  [watcher](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Extensions.Msal/MsalCacheHelper.cs#L167-L217)
+  compares account sets; it is not a request-local write receipt.
+- [`VerifyPersistence`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Extensions.Msal/MsalCacheHelper.cs#L494-L505)
+  tests the underlying mechanism with a write/read/clear operation without overwriting
+  the token cache. It does not confirm that an acquisition's cache write completed.
+- [`TokenCacheNotificationArgs.CancellationToken`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/TokenCacheNotificationArgs.cs#L210-L214)
+  carries the acquisition cancellation token to custom cache implementations. The
+  synchronous helper callbacks cited above do not establish that all underlying I/O or
+  lock waits honor that token.
+
 **Architecture inference:** Treating every provider task as returning before persistence,
 or equating successful task completion with confirmed durable storage, would both be
 incorrect assumptions about this path. V2 can retain the existing secure-store
-integration knowledge, but needs an explicit persistence-status boundary. The remaining
-question is which supported integration reports completion or failure while respecting
-the request lifetime and `V2-REQ-041`. This finding does not generalize the managed path
-to broker-owned storage or justify an added background persistence service.
+integration knowledge. Its [state-observation boundary](../architecture/request-lifecycle.md#state-ownership-and-persistence-observation)
+can classify the evidence already available after acquisition and validation, with the
+`V2-REQ-041` warning when safe persistence failed or is unconfirmed. This requires no
+extra write/readback test, watcher, or background persistence service and does not require
+an early result from inside MSAL's acquisition operation. Lack of a completion receipt
+alone is not a provider-selection blocker. The selected integration still has to satisfy
+secure-only state, recovery, integrity, and request lifetime. These are source findings
+and an architectural allocation, not runtime validation of a chosen store. The managed
+callback behavior does not generalize to broker-owned storage.
 
 ### Decision Impact
 
@@ -228,7 +251,7 @@ to broker-owned storage or justify an added background persistence service.
 | Account discovery and silent acquisition | Real `IAccount` enumeration and account-scoped MSAL calls already exist. | Check first-use OS-account visibility and whether the selected profile supplies the exact email needed by the primary journey; ordinary cached-account matching is application logic. |
 | Result identity | MSAL exposes account, token tenant, scopes, and expiry. | Preserve those fields and enforce the accepted postconditions; inspect profile-specific missing or alias metadata only where it affects the journey. |
 | Interaction | V1 integrates broker, browser, and device code; MSAL separates silent and interactive APIs. | Replace V1's combined fallback policy. Host-owned completion and cancellation need evidence for the concrete host choice, not a new proof that OAuth interaction exists. |
-| Secure reuse | V1 configures MSAL Extensions and platform stores. | Remove plaintext fallback and upstream namespaces; determine completion/status reporting and compatible V2 reuse. Rely on platform protection contracts within the workstation threat model. |
+| Secure reuse | V1 configures MSAL Extensions and platform stores. | Remove plaintext fallback and upstream namespaces; use the defined state-observation boundary and assess compatible reuse, recovery, integrity, and lifetime for the selected integration. Rely on platform protection contracts within the workstation threat model. |
 | Personal-account Azure DevOps access | V1 supplies the Visual Studio client ID and Azure DevOps scope. The subsequent [Windows observation](experiments/windows-msal-account-metadata.md#gcm-informed-msa-acquisition-and-silent-reuse) demonstrates exact-account token/discovery success and fresh-process silent reuse with the GCM-informed configuration. | Use that bounded result for this mechanism; intended registration reuse and Profile/support selection remain separate under RECHECK-007. |
 
 Use this delta assessment when accepting high-level responsibilities. It does not require
@@ -1200,6 +1223,25 @@ account-type prerequisite remains unresolved; no profile is selected or enabled,
 its dated public-guidance finding below is not refreshed by these Issue snapshots. There
 is no release or Wave change. Later selections and fired triggers still require their
 applicable outcomes and independent evidence review.
+
+#### State-Ownership Refinement Recheck
+
+The **2026-09-11 UTC** state-ownership and result-delivery refinement fires RECHECK-006's
+`cache-design` trigger. Anonymous retrieval of the public Issue #398 API and its first
+comments page found the Issue still open, with zero comments and
+`updated_at = 2024-08-13T16:18:59Z`; the comments response was empty. The
+[bounded secure-store conclusion](#recheck-006-secure-store-availability) remains
+unchanged. The pinned callback findings above refine the architecture's observation
+boundary without claiming a current Linux fix or a validated storage integration.
+
+All seven entries were evaluated for this refinement. RECHECK-001 and RECHECK-002 retain
+their accepted interaction-policy and account-contract dispositions; neither contract
+changes here. RECHECK-003, RECHECK-004, and RECHECK-005 do not fire because no WSL,
+system-browser, or Linux-broker integration is selected. RECHECK-007's existing
+[account-type evidence](#observed-msa-token-git-discovery-and-silent-reuse) and Profile gate
+remain unchanged: the tenant-policy clarification preserves accepted intent without
+selecting a client configuration. No Profile, platform, release, Wave change, or new
+experiment is part of this refinement.
 
 ### `RECHECK-007`: Azure DevOps Microsoft-account behavior
 

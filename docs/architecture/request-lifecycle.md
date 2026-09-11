@@ -48,6 +48,7 @@ sequenceDiagram
     participant Accounts as Account resolution
     participant Provider as Mechanism adapter / provider
     participant State as Cache and coordination
+    participant Broker as OS authentication broker
     User->>Caller: Select personal account for the intended operation
     Caller->>Boundary: Explicit profile, email, scopes, interaction, protocol
     Boundary->>Policy: Parsed request
@@ -57,11 +58,16 @@ sequenceDiagram
     Provider-->>Accounts: Provider accounts and observed email metadata
     Accounts-->>Policy: Exactly one matching real account
     Policy->>Provider: Acquire silently for that account and normalized request
-    Provider->>State: Use compatible secure state within request constraints
-    State-->>Provider: Usable state or safe miss
-    Provider-->>Policy: Candidate token and authoritative result metadata
+    alt Broker-owned state
+        Provider->>Broker: Use selected account and compatible state through broker API
+        Broker-->>Provider: Provider result and available metadata
+    else Eligible engine-owned state integration
+        Provider->>State: Access and update compatible secure state during acquisition
+        State-->>Provider: State outcome and available persistence observation
+    end
+    Provider-->>Policy: Candidate token, authoritative metadata, and available state observation
     Policy->>Policy: Validate email, tenant, client, and scope semantics
-    Policy->>State: Observe safe persistence completion without waiting
+    Policy->>State: Classify already available persistence evidence, without I/O or waiting
     State-->>Policy: Confirmed complete, failed, or unconfirmed
     Policy-->>Boundary: Validated success with warning if persistence unconfirmed or failed
     Boundary-->>Caller: One structured success and zero exit status
@@ -77,11 +83,11 @@ A missing provider capability is unavailability, not proof that interaction will
 A reported success lacking a required identity or scope postcondition is terminal
 validation failure and does not reach the caller or another mechanism.
 
-The state call in the sequence represents provider-state integration, not a mandatory
-separate cache read or persistence attempt after acquisition. Providers may perform secure
-state updates during acquisition. The engine's non-waiting result boundary must be
-compatible with the chosen provider; whether that boundary can be implemented remains an
-[open question](overview.md#decision-critical-open-questions).
+The alternatives show state ownership, not a selected platform order. Policy establishes
+state eligibility before provider work. The final state call classifies information
+already available from that work; it does not access the store again. The
+[state-observation boundary](#state-ownership-and-persistence-observation) below applies
+to both silent and interactive results.
 
 ## Interaction After a Silent Miss
 
@@ -175,6 +181,48 @@ latitude in
 [`V2-REQ-015`](../product/requirements/strategy-interaction-and-host.md#v2-req-015-common-deadline)
 still applies. Failure emits no access token. The diagrams do not choose a background
 writer or relax the requirement that engine-controlled persistence ends with the request.
+
+## State Ownership and Persistence Observation
+
+Broker-owned state remains behind the broker API. The engine uses the documented account,
+acquisition, and state-maintenance abstractions without inspecting broker files or
+creating a shadow refresh-token cache. An engine-owned secure-state integration is needed
+only for a provider path that requires it. Its responsibilities are compatible state
+access, safe updates, and available completion or failure observations under the original
+request lifetime. These are the existing cache-and-coordination responsibilities, not
+another service.
+
+The [pinned MSAL source assessment](../research/v1-public-contract-baseline.md#persistence-completion-and-observability)
+shows why provider completion and persistence confirmation must be distinguished. Managed
+MSAL can await cache callbacks before returning its result, while a cache helper can
+catch a write failure internally. Acquisition includes such provider work under the
+original deadline. The engine does not require MSAL to expose a token before its public
+acquisition operation completes.
+
+Once that operation has returned and success validation has completed within the deadline,
+the result boundary classifies only the persistence evidence already available:
+
+| Available evidence under the selected integration's contract | Delivery after successful validation |
+| --- | --- |
+| Safe persistence is confirmed complete. | Success without a persistence warning. |
+| Safe persistence failed. | Success with the required persistence warning. |
+| Safe persistence is pending or cannot be confirmed. | Success with the required persistence warning, without waiting for confirmation. |
+
+Confirmation relies on the selected dependency or platform contract and its exposed
+outcome; it does not require independently proving the storage implementation. A missing
+confirmation signal alone does not make an otherwise eligible provider unavailable.
+Conversely, acquisition success, token-source metadata, elapsed cache time, or a later
+account-change event cannot be invented into a persistence receipt. The engine does not
+read logs, perform a write/readback test, replay acquisition, or wait for a watcher at
+result delivery. No background persistence service is introduced.
+
+A provider failure before it supplies a candidate result remains an acquisition outcome
+for policy classification; there is no partial token to salvage. Cancellation, deadline,
+and success validation retain their normal priority. Any engine-controlled persistence
+still pending must end with the request. The concrete integration must satisfy secure-only
+state, recovery, integrity, and lifetime requirements; callback wiring, locking, and store
+selection remain later design work. Source inspection of a cancellation parameter alone
+does not establish that every storage operation honors it.
 
 ## Reuse Across Invocations and Consumers
 
