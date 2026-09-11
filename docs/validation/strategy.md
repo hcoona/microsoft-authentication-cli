@@ -75,8 +75,12 @@ The unresolved obligations include:
 - secure persistence, safe recovery, and accurate persistence warnings for the exact
   supported combination.
 
-Existing desk evidence does not establish these properties. No experiment is required
-merely to state desired behavior; execution requires separately accepted authorization
+The [bounded Windows probe](../research/v1-public-contract-baseline.md#observed-msa-token-git-discovery-and-silent-reuse)
+now demonstrates unique exact-account resolution, matching token-result metadata,
+authenticated Git discovery, and one fresh-process silent reuse in existing state.
+This is mechanism evidence for that configuration, not completion of the engine/adapter
+release gate, first-use/alias coverage, cross-consumer reuse, or persistence-failure tests.
+No experiment is required merely to state desired behavior; execution requires separately accepted authorization
 and a protocol under [experiment safety](../research/experiment-safety.md).
 This strategy records proof obligations, not an executable experiment protocol.
 

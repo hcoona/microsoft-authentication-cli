@@ -56,9 +56,13 @@ and decision
 The [2026-09-04 RECHECK-007 desk finding](../research/v1-public-contract-baseline.md#recheck-007-azure-devops-microsoft-account-behavior)
 records Azure DevOps guidance and its limits. The upstream source proves that AzureAuth
 uses a Microsoft-owned Visual Studio client; it does not prove current MSA behavior,
-intended reuse, or support status for this fork. The unresolved account-type/profile
-gate applies even though the [primary journey](../product/user-stories.md)
-is a first-release blocker.
+intended reuse, or support status for this fork. The subsequent
+[bounded Windows observation](../research/v1-public-contract-baseline.md#observed-msa-token-git-discovery-and-silent-reuse)
+demonstrates exact personal-account acquisition, authenticated Git discovery, and
+fresh-process silent reuse for one existing configuration. This supplies concrete
+mechanism evidence; intended external registration reuse and the Profile-selection gate
+remain open. The [primary journey](../product/user-stories.md) remains a first-release
+blocker until its product validation obligations are met.
 
 This makes client-application identity a functional input, not a replaceable cosmetic
 constant.
