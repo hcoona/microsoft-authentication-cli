@@ -13,6 +13,15 @@ This architecture allocates that behavior to a command-line authentication engin
 separate downstream consumers under decision
 [`0004`](../decisions/0004-keep-the-authentication-engine-separate-from-consumers.md).
 
+For the selected personal- and work-account Azure DevOps Slice, the engine returns the
+provider access token for direct consumer use. PAT acquisition, exchange, and fallback
+are excluded. The official NuGet provider's optional SelfDescribing exchange does not
+become an engine operation or an automatic personal-account fallback. The
+[token-path assessment](../research/v1-public-contract-baseline.md#azure-artifacts-token-forms-and-nuget-paths)
+supports the shared acquisition boundary while preserving the distinction between
+observed Git access and unobserved NuGet/feed behavior. Consumer-specific presentation
+and service authorization remain with adapters.
+
 ## Governing Decisions
 
 - [`0002`](../decisions/0002-rebuild-the-authentication-core.md) resets the v1 policy and
@@ -96,7 +105,7 @@ ambiguity about actors, goals, or the system boundary.
 | MSAL, broker, browser, and device-code calls | Reuse or adapt behind mechanism interfaces. |
 | Platform secure-cache integration | Reuse selectively after threat-model and cache-lifecycle review. |
 | Packaging and release knowledge | Reuse as evidence; create independent v2 identities and channels. |
-| ADO PAT implementation | Defer behind a separate product-specific decision. |
+| ADO PAT implementation | Excluded from the authentication engine and selected Slice; no PAT acquisition or fallback. |
 
 ## C4 Structural Views
 

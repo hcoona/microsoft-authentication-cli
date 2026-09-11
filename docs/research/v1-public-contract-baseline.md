@@ -1315,19 +1315,72 @@ the retained outcomes for the other entries:
 | RECHECK-006 | [Issue #398](https://github.com/AzureAD/microsoft-authentication-cli/issues/398) remains open with no comments, updated `2024-08-13T16:18:59Z`. No cache fallback or secure-store support claim changes. |
 | RECHECK-007 | The same-day [Client Profile and tenant assessment](#client-profile-and-tenant-mapping-assessment) remains applicable. Neither direct invocation nor another Azure DevOps consumer enables a Profile or enlarges the observed account/host coverage. |
 
-**Immutable source finding:** Azure Artifacts Credential Provider at
+### Azure Artifacts Token Forms and NuGet Paths
+
+**Immutable source findings, retrieved 2026-09-11 UTC:** Azure Artifacts Credential Provider at
 [`bca6c32fdb9611aea25819147ef4508f730aa5fb`](https://github.com/microsoft/artifacts-credprovider/tree/bca6c32fdb9611aea25819147ef4508f730aa5fb)
 defines the Azure DevOps MSAL scope as
 `499b84ac-1321-427f-aa17-267ca6975798/.default` in
 [`MsalConstants.cs`](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/src/Authentication/MsalConstants.cs#L9-L10).
 This is the same resource/scope used by
 [GCM v2.9.1](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/src/shared/Microsoft.AzureRepos/AzureDevOpsConstants.cs).
-Its NuGet integration subsequently passes the bearer token to
-[`VstsSessionTokenFromBearerTokenProvider`](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/CredentialProvider.Microsoft/CredentialProviders/Vsts/VstsSessionTokenFromBearerTokenProvider.cs#L59-L61).
-[`VstsSessionTokenClient`](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/CredentialProvider.Microsoft/CredentialProviders/Vsts/VstsSessionTokenClient.cs)
-uses bearer authorization to request an Azure DevOps session token with packaging/drop
-scopes. Those session-token scopes are downstream credential semantics, not an additional
-MSAL resource or an engine operation.
+
+Its NuGet integration has both direct-token and exchange paths. The exchange is the
+default, not a requirement of the NuGet plugin protocol. The
+[`VstsCredentialProvider` branch](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/CredentialProvider.Microsoft/CredentialProviders/Vsts/VstsCredentialProvider.cs#L164-L188)
+returns the acquired access token directly when
+`ARTIFACTS_CREDENTIALPROVIDER_RETURN_ENTRA_TOKENS=true`.
+[`EnvUtil`](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/CredentialProvider.Microsoft/Util/EnvUtil.cs#L171-L174)
+defaults that option to false. The same branch and option exist in released v2.0.4 at
+[`14855bba1b20482623697fe9497cc5398d5077cd`](https://github.com/microsoft/artifacts-credprovider/blob/14855bba1b20482623697fe9497cc5398d5077cd/CredentialProvider.Microsoft/CredentialProviders/Vsts/VstsCredentialProvider.cs#L164-L188).
+This is source evidence for an available path, not a new execution result.
+
+| Path or token form | Source-defined behavior | Lifetime and state distinction |
+| --- | --- | --- |
+| Direct access token, called an Entra token by the plugin | Return MSAL's access token as `Password`, username `EntraToken`, and authentication type `Basic`; skip the session-token endpoint. | Identity-platform expiry applies. The handler disables its session-token cache for this mode; MSAL caching remains available. |
+| Exchanged `SelfDescribing` token | Use the access token to request an Azure DevOps-issued JWT session token, then return it to NuGet as a Basic credential. | The provider normally requests four hours and caps its requested duration at 24 hours. Actual validity comes from the service; a rejected requested expiry can be retried with service-defined validity. The provider has a separate session-token cache. |
+| Exchanged `Compact` token | Use the access token to request an Azure DevOps PAT. | The provider normally requests 90 days, subject to service policy. PATs are outside the selected V2 Slice. |
+
+The cache distinction is explicit in
+[`GetAuthenticationCredentialsRequestHandler`](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/CredentialProvider.Microsoft/RequestHandlers/GetAuthenticationCredentialsRequestHandler.cs#L126-L142).
+The exchange provider
+[selects `Compact` by default after interactive acquisition and `SelfDescribing` otherwise](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/CredentialProvider.Microsoft/CredentialProviders/Vsts/VstsSessionTokenFromBearerTokenProvider.cs#L33-L61),
+unless its token-type option overrides that choice. Thus, leaving direct-token mode off
+does not establish a PAT-free path. These are upstream defaults, not V2 behavior.
+
+[`VstsSessionTokenClient`](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/CredentialProvider.Microsoft/CredentialProviders/Vsts/VstsSessionTokenClient.cs#L60-L149)
+uses bearer authorization to call `/_apis/Token/SessionTokens`, requesting
+`vso.packaging_write vso.drop_write`. Those are downstream service-credential scopes,
+not an additional MSAL resource or an engine operation. A session token has its own
+issuance and validity; it is not the MSAL refresh token. The name `SelfDescribing`
+identifies the ADO JWT form, not a general distinction between JWT and OAuth tokens.
+Source descriptions of scope and duration alone do not establish that one path is
+universally safer. Existing token-opacity and secure-state requirements remain in force;
+none of these upstream caches or fallback behaviors is imported into V2.
+
+### Personal Accounts and Evidence Limits
+
+**Source finding:** The pinned provider's
+[`AzureArtifacts` builder](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/src/Authentication/AzureArtifacts.cs#L18-L70)
+enables broker MSA passthrough, and
+[`MsalExtensions`](https://github.com/microsoft/artifacts-credprovider/blob/bca6c32fdb9611aea25819147ef4508f730aa5fb/src/Authentication/MsalExtensions.cs#L32-L53)
+handles MSA accounts and the transfer-tenant workaround. The subsequent direct-token
+branch tests the configuration option, not the account type. The plugin's `EntraToken`
+label is not an organizational-account selector. Its production application registration
+also differs from the Visual Studio registration used in the accepted Windows probe;
+the source does not enable that newer registration as a V2 Profile.
+
+**Inference:** Personal-account selection does not by itself require a SelfDescribing
+exchange. Both branches first need a usable MSAL access token. This conclusion depends
+on an eligible client/authority path, including the documented legacy MSA compatibility
+boundary; it does not establish personal-account support for arbitrary Entra applications.
+
+| Question | Current evidence and limit |
+| --- | --- |
+| Can the selected personal-account compatibility path acquire an access token and use it directly for ADO Git? | The [accepted Windows observation](#observed-msa-token-git-discovery-and-silent-reuse) records exact-account token acquisition, successful authenticated Git discovery, and later-process silent reuse without PAT or session-token exchange. It is bounded to that existing host/account-state/target scenario. |
+| Does the official NuGet provider expose direct access-token presentation? | Yes, in the pinned source and released-source revision above. It passes the token through a Basic credential response and does not branch on personal versus work account. |
+| Has this project's personal-account token been used through NuGet Basic authentication against an Artifacts feed? | No such observation exists. Git bearer-token success and the shared resource/scope do not themselves demonstrate this downstream path or a package operation. |
+| Has SelfDescribing exchange been shown necessary for personal accounts? | No. Neither the inspected branch nor the accepted observation establishes that requirement. Absence of a NuGet/feed observation must not be converted into either a forced-exchange rule or a claim of validated direct-feed access. |
 
 **Architectural inference:** Azure DevOps Git and Azure Artifacts can use the same engine
 capability for explicitly requested personal or work accounts. Artifacts authentication
@@ -1338,7 +1391,18 @@ retain service authorization, protocol handling, and any derived-credential life
 under [decision 0004](../decisions/0004-keep-the-authentication-engine-separate-from-consumers.md).
 This conclusion includes Artifacts token acquisition in the same authentication scope;
 it does not claim that the CLI implements NuGet credential exchange or that a token alone
-grants repository/feed access.
+grants repository/feed access. The [architecture boundary](../architecture/overview.md#system-boundary)
+owns the selected direct-access-token design and PAT exclusion. NuGet presentation and
+feed behavior remain explicitly scoped [validation obligations](../validation/strategy.md#platform-matrix).
+
+**Refinement recheck assessment:** All seven registry entries were evaluated. This
+correction selects no new Profile, account contract, interaction policy, cache design,
+or host path, and changes neither the Wave nor a release; no new trigger fires.
+RECHECK-001/002/006 retain their accepted interaction/account/state dispositions;
+RECHECK-003/004/005 retain the accepted WSL and unselected Linux/browser boundaries;
+RECHECK-007 retains the current client/tenant assessment and bounded MSA evidence.
+The immutable source findings above do not claim a fresh mutable-source status or a
+new platform-support result.
 
 This assessment executed no application, authentication, cache access, or resource request.
 It adds no corporate-account or feed observation and does not extend the completed
