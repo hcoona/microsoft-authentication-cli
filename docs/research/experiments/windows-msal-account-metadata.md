@@ -26,35 +26,43 @@ reuse, or all of RECHECK-007.
 There is no corporate-account comparison, resource write, PAT, registration/tenant
 administration, cache migration, plaintext cache, or fallback mechanism in this probe.
 
-## Current Disposition: Attended Broker Failure
+## Current Advancement: GCM-Informed MSA Configuration
 
-The preparation and attended interaction accepted by PR #50 have been executed. After
-preparation, the agent announced readiness and waited for the owner's explicit desktop
-readiness response before opening the probe. The interactive action found one exact
-account match but returned `unknown_broker_error`, broker status `Unexpected`, and code
-`2147786073` (`0x80049D59`) without an authentication result. The
-[attended history](#attended-preparation-and-structured-broker-failure) owns the exact
-observations, including the operator's brief possible-WAM UI observation.
+The previous attended interaction found one exact account match but returned
+`unknown_broker_error`, broker status `Unexpected`, and code `2147786073` (`0x80049D59`)
+without an authentication result. Its [history](#attended-preparation-and-structured-broker-failure)
+remains evidence for that subject, not proof that WAM cannot authenticate an MSA.
 
-The sequence is stopped. All six preparations and three interactive attempts are
-consumed. The unused silent/resource slots require successful interaction and cannot be
-exercised. Do not retry, rebuild, change inputs, or expand diagnostics under this
-protocol. A new experiment requires another reviewed and accepted amendment, preserving
-prior consumption and the explicit readiness handoff. The procedure below preserves the
-executed sequence and its boundaries; it does not grant another execution.
+The [pinned GCM comparison](../v1-public-contract-baseline.md#gcm-msa-configuration-comparison)
+identifies an available MSA passthrough configuration absent from the earlier probe.
+This amendment permits one additional preparation and, after the explicit readiness
+handoff, one interaction with that configuration. Only exact-account success and
+recognized authenticated Git discovery permit the one remaining silent follow-up.
+All eleven completed Windows actions remain charged: six preparations, one inspection,
+one silent call, and three interactive calls. No new action is recorded by this amendment.
+
+This is a paired-configuration experiment, not an isolated test of one option or a
+reproduction of GCM. Use the fixed `organizations` authority as the source-informed MSA
+candidate. The designated repository's backing directory and GCM's actual runtime
+authority have not been established. Do not infer them from the account role or read GCM
+state to fill that gap. A failure stops the sequence; success cannot identify which
+configuration difference mattered or prove that the previous broker error had this cause.
 
 ## Subject and Environment
 
-The attended subject uses the six source/configuration files in
+The GCM-informed subject uses the six source/configuration files in
 [`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs). Prepare it
 once from the accepted `main-v2` commit that contains this amendment, recording that exact
 source revision, five Windows source hashes, dependency inventory, and new artifact
 identities before authentication. The earlier subjects at
 `4470996a944fc15e2d0edbff76bc396a24a2979f` and
 `23e1bcd398e71c546777cde4ca13aa7bec84ab0f` remain evidence for their recorded sequences.
-Only the launcher's cumulative preparation/interaction limits change for this amendment;
-the probe authentication, discovery, diagnostics, and self-check code remain unchanged.
-Do not patch an earlier live source copy or reset its journal.
+The earlier attended subject at `facfec1aa86b88601a9a9e7835bf2d8b6fd7b727` also remains
+historical evidence. This amendment changes the authority, MSA passthrough option,
+conditional silent transfer-tenant selection, its Boolean observation, and cumulative
+preparation/interaction limits. Account matching, discovery, diagnostics, dependencies,
+and synthetic self-check remain unchanged. Do not patch an earlier live source copy
+or reset its journal.
 Read the current accepted Wave and protocol before every action; a retained source
 revision does not preserve authority that later records remove. Record the current
 protocol revision separately when it differs from the launcher's source `Revision`.
@@ -74,13 +82,23 @@ them from a local feed. It performs no authentication or account-store access.
 | Native interop | `Microsoft.Identity.Client.NativeInterop` 0.20.3, matching the V1 0.9.6 direct pin |
 | Managed package pins | `Microsoft.IdentityModel.Abstractions` 8.14.0; `System.Diagnostics.DiagnosticSource` 6.0.1; `System.Runtime.CompilerServices.Unsafe` 6.0.0; `System.ValueTuple` 4.5.0 |
 | Client | Microsoft-owned Visual Studio client `872cd9fa-d31f-45e0-9eab-6e460a02d1f1`, an experiment input only |
-| Authority and scope | `https://login.microsoftonline.com/common`; `499b84ac-1321-427f-aa17-267ca6975798/.default` |
-| Broker options | Windows WAM; `ListOperatingSystemAccounts = true`; no MSA passthrough option; real owned parent window |
+| Authority and scope | `https://login.microsoftonline.com/organizations`; `499b84ac-1321-427f-aa17-267ca6975798/.default` |
+| Broker options | Windows WAM; `ListOperatingSystemAccounts = true`; `MsaPassthrough = true`; real owned parent window |
 | Selected account | One owner-designated personal Microsoft account; privately supplied exact email in the owned local form, never in command arguments or records |
 | Resource | The one owner-designated checkout's existing `https://dev.azure.com` Git remote; exact URL remains private |
 | Windows account context | Corporate/domain-account session as reported by the owner; exact join/compliance state is not measured; no corporate-account acquisition |
 | Application state | New in-memory MSAL cache for every invocation; no MSAL Extensions or application cache file |
 | Existing OS state | Authorized current broker/session state; prior use and visibility are recorded as known or unknown, never assumed clean |
+
+For the conditional silent action, inspect only the uniquely matched real account's
+`HomeAccountId.TenantId` in memory. When it equals the public MSA home tenant
+`9188040d-6c67-4c5b-b112-36a304b66dad`, use MSAL's `WithTenantId` with the public Microsoft
+MSA transfer tenant `f8cdef31-a31e-4b4a-93e4-5f571e91255a`. Otherwise retain the configured
+authority. Record only `MsaTransferApplied`, never the account's tenant identifier.
+This does not select a different account or permit corporate-account fallback. The
+returned-token `MsaTenant` equality flag is descriptive, not a success condition; a
+transfer-tenant result need not equal the MSA home tenant. Exact returned email,
+nonempty unexpired token, and recognized discovery remain the continuation conditions.
 
 The host/toolchain versions above came from read-only host metadata during planning on
 2026-09-10 UTC and were reconfirmed on 2026-09-11 UTC, not from authentication observations.
@@ -296,12 +314,12 @@ stops execution. Publish the resulting ordered history through the review in ste
 | Action | Maximum attempts | Per-attempt bound | Expected observation |
 | --- | --- | --- | --- |
 | `fetch` | 1 | 120 seconds for the WSL process; no retries; at most seven archives, 100 MiB each and 200 MiB total; confirm exit before proceeding | The seven pinned public packages and their SHA-512 manifest are available to Windows; no package execution or account-store access |
-| `prepare` | 6 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and synthetic selector/URL/failure-output self-check passes, with no authentication or account-store access |
+| `prepare` | 7 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and synthetic selector/URL/failure-output self-check passes, with no authentication or account-store access |
 | `inspect` | 1 (consumed) | Process 120 seconds; launcher 135 seconds plus at most 10 seconds for termination | Retain the recorded account/anonymous baseline; do not repeat it |
 | `silent` | 2 | Same bound as inspect | First attempt consumed; second only after successful exact-account attended interaction and recognized discovery; resolve the real account afresh |
-| `interactive` | 3 | Process 360 seconds; launcher 375 seconds plus at most 10 seconds for termination | Two earlier attempts consumed; one explicitly attended interaction may return verified metadata/discovery or structured failure |
+| `interactive` | 4 | Process 360 seconds; launcher 375 seconds plus at most 10 seconds for termination | Three earlier attempts consumed; one explicitly attended interaction may return verified metadata/discovery or structured failure |
 
-Maximum acquisition calls are five across the entire history: two silent and three
+Maximum acquisition calls are six across the entire history: two silent and four
 interactive. Each broker action has at most one enumeration and one acquisition call.
 Preparation has no broker or resource call. Git discovery remains limited to three
 requests overall: the consumed anonymous baseline and at most two authenticated requests
@@ -311,27 +329,28 @@ stops execution. The process bounds include local input time. No automatic retry
 automatic silent-to-interactive transition is permitted.
 
 1. Verify the current accepted Wave/protocol, source revision, environment, prior
-   consumption, and source/dependency findings. Recover all nine completed Windows
+   consumption, and source/dependency findings. Recover all eleven completed Windows
    actions and their results. Unknown capacity or an unresolved start stops execution.
-2. Use the one additional preparation (Windows attempt 10) for the accepted source.
+2. Use the one additional preparation (Windows attempt 12) for the accepted source.
    Verify the retained seven archives against their manifest; use the same dedicated
    local feed/caches, pins, and toolchain. No package fetch, upgrade, or install is
    permitted. Record source/dependency/artifact hashes, runtime configuration, and
    successful synthetic self-check before account actions. A failed preparation stops;
-   do not replace it or rerun self-check after consuming the sixth preparation.
+   do not replace it or rerun self-check after consuming the seventh preparation.
 3. Complete the [readiness handoff](#operator-readiness-handoff): finish the non-account
    preflight and launch preparation, announce readiness, then stop before opening the
    probe and wait for an explicit operator readiness response. No authentication timer
    or account action may run during that wait.
 4. After the readiness response and short recheck, run the one additional `interactive`
-   action (Windows attempt 11) for the same nominated account and remote. Do not repeat
+   action (Windows attempt 13) for the same nominated account and remote. Do not repeat
    `inspect` or a pre-interaction silent call. Resolve accounts afresh and retain exact
    selection/result checks; the earlier changed match count has no assumed explanation.
    The owner operates WAM interaction. Do not change client, authority, scope, account,
    cache, diagnostics, or network configuration to rescue a failure.
 5. Only if the attended interaction returns the exact requested email, a nonempty
    unexpired token, and recognized Git discovery, use the one remaining `silent` action
-   in a fresh process while the operator is still present. Otherwise stop. A follow-up
+   in a fresh process (Windows attempt 14) while the operator is still present. Apply the
+   declared MSA transfer-tenant rule to the newly resolved account. Otherwise stop. A follow-up
    failure stops without retry. This tests later-process reuse of existing OS state,
    not fresh state or a separate consumer.
 6. Record every attempted action, resource count, structured result, manual observation,
@@ -340,7 +359,7 @@ automatic silent-to-interactive transition is permitted.
    UI details or insufficient error fields as limits; another experiment requires a new
    accepted amendment.
 
-Substitute the attended subject's verified accepted 40-character commit for
+Substitute the GCM-informed subject's verified accepted 40-character commit for
 `<accepted-source-commit>` and use its source directory below
 `%LOCALAPPDATA%\AzureAuthResearch\windows-msal` in Windows PowerShell 5.1:
 
@@ -359,7 +378,8 @@ remain in effect.
 
 `result.json` contains a fixed observation object defined in `Program.cs`: mode/status,
 broker availability, bucketed visible/matching counts, missing-email indication,
-acquisition/result presence, token-presence flag, exact-returned-email flag, tenant
+acquisition/result presence, silent MSA-transfer-applied flag, token-presence flag,
+exact-returned-email flag, tenant
 presence and equality to the public MSA tenant constant, scope-metadata presence,
 requested-`.default` membership, expiry validity, and the fixed resource fields described
 above, plus the nullable structured `Failure` object. Unobserved booleans are false and
@@ -392,11 +412,12 @@ Cleanup, if later needed, is limited to verified experiment-owned files after ow
 processes have exited. Do not clear broker state, revoke consent, sign out, or modify an
 upstream installation as cleanup.
 
-Current consumption after the attended sequence: fetch 1/1, prepare 6/6, inspect 1/1,
-silent 1/2, interactive 3/3, discovery requests 1/3 (one anonymous, zero authenticated).
-Windows attempts 1 through 11 are complete; attempt 12 is absent. The sequence is stopped,
-and the remaining numeric slots do not authorize continuation. Historical sections
-preserve their actual outcomes and consumption at the time.
+Current consumption against the amended limits: fetch 1/1, prepare 6/7, inspect 1/1,
+silent 1/2, interactive 3/4, discovery requests 1/3 (one anonymous, zero authenticated).
+Windows attempts 1 through 11 are complete; attempt 12 is the prospective preparation
+after amendment acceptance and preparation preflight. Account actions additionally
+require the fresh readiness handoff and the conditional follow-up gates above. Historical
+sections preserve their actual stopped outcomes and consumption at the time.
 
 ## Execution History
 

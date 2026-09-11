@@ -16,7 +16,7 @@ try {
     $starts = @($events | Where-Object Event -eq 'start')
     $ends = @($events | Where-Object Event -eq 'end')
     if ($starts.Count -ne $ends.Count) { throw 'Prior attempt is unresolved; reconcile its outcome before continuing.' }
-    $limit = @{ prepare = 6; inspect = 1; silent = 2; interactive = 3 }
+    $limit = @{ prepare = 7; inspect = 1; silent = 2; interactive = 4 }
     if (@($starts | Where-Object Action -eq $Action).Count -ge $limit[$Action]) { throw 'Attempt limit exhausted.' }
     $attempt = $starts.Count + 1
     $directory = Join-Path $root ('attempt-' + $attempt)

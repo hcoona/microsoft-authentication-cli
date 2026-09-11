@@ -12,6 +12,8 @@ internal static class Program
 {
     internal const string ClientId = "872cd9fa-d31f-45e0-9eab-6e460a02d1f1";
     internal const string Scope = "499b84ac-1321-427f-aa17-267ca6975798/.default";
+    private const string MsaHomeTenant = "9188040d-6c67-4c5b-b112-36a304b66dad";
+    private const string MsaTransferTenant = "f8cdef31-a31e-4b4a-93e4-5f571e91255a";
     private static readonly byte[] GitPrefix = Encoding.ASCII.GetBytes("001e# service=git-upload-pack\n0000");
     private static string output = "";
     private static int completed;
@@ -77,12 +79,13 @@ internal static class Program
         try
         {
             var app = PublicClientApplicationBuilder.Create(ClientId)
-                .WithAuthority("https://login.microsoftonline.com/common")
+                .WithAuthority("https://login.microsoftonline.com/organizations")
                 .WithRedirectUri("http://localhost")
                 .WithBroker(new BrokerOptions(BrokerOptions.OperatingSystems.Windows)
                 {
                     Title = "AzureAuth research",
-                    ListOperatingSystemAccounts = true
+                    ListOperatingSystemAccounts = true,
+                    MsaPassthrough = true
                 })
                 .WithParentActivityOrWindow(() => window)
                 .WithLogging((_, _, _) => { }, LogLevel.Error, false, false)
@@ -110,8 +113,14 @@ internal static class Program
             AuthenticationResult result;
             observation.AcquisitionStarted = true;
             if (mode == "silent")
-                result = await app.AcquireTokenSilent(new[] { Scope }, matching[0])
-                    .ExecuteAsync(cancellation.Token);
+            {
+                var request = app.AcquireTokenSilent(new[] { Scope }, matching[0]);
+                // GCM's MSA passthrough path uses this public transfer tenant for silent reuse.
+                observation.MsaTransferApplied = Guid.TryParse(matching[0].HomeAccountId?.TenantId, out var homeTenant) &&
+                    homeTenant == Guid.Parse(MsaHomeTenant);
+                if (observation.MsaTransferApplied) request = request.WithTenantId(MsaTransferTenant);
+                result = await request.ExecuteAsync(cancellation.Token);
+            }
             else
             {
                 var request = app.AcquireTokenInteractive(new[] { Scope })
@@ -124,7 +133,7 @@ internal static class Program
             observation.EmailPresent = !string.IsNullOrEmpty(result.Account?.Username);
             observation.ExactReturnedEmail = ExactMatch(result.Account?.Username, email);
             observation.TenantPresent = !string.IsNullOrEmpty(result.TenantId);
-            observation.MsaTenant = result.TenantId == "9188040d-6c67-4c5b-b112-36a304b66dad";
+            observation.MsaTenant = result.TenantId == MsaHomeTenant;
             observation.ScopeMetadataPresent = result.Scopes?.Any() == true;
             observation.RequestedDefaultScopeReported = result.Scopes?.Contains(Scope, StringComparer.OrdinalIgnoreCase) == true;
             observation.Unexpired = result.ExpiresOn > DateTimeOffset.UtcNow;
@@ -304,6 +313,7 @@ internal static class Program
         public string ExactMatches { get; set; } = "not-observed";
         public bool VisibleAccountMissingEmail { get; set; }
         public bool AcquisitionStarted { get; set; }
+        public bool MsaTransferApplied { get; set; }
         public bool ProviderReturnedResult { get; set; }
         public bool TokenPresent { get; set; }
         public bool EmailPresent { get; set; }
