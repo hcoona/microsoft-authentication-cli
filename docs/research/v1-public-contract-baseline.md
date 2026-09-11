@@ -229,7 +229,7 @@ to broker-owned storage or justify an added background persistence service.
 | Result identity | MSAL exposes account, token tenant, scopes, and expiry. | Preserve those fields and enforce the accepted postconditions; inspect profile-specific missing or alias metadata only where it affects the journey. |
 | Interaction | V1 integrates broker, browser, and device code; MSAL separates silent and interactive APIs. | Replace V1's combined fallback policy. Host-owned completion and cancellation need evidence for the concrete host choice, not a new proof that OAuth interaction exists. |
 | Secure reuse | V1 configures MSAL Extensions and platform stores. | Remove plaintext fallback and upstream namespaces; determine completion/status reporting and compatible V2 reuse. Rely on platform protection contracts within the workstation threat model. |
-| Personal-account Azure DevOps access | V1 supplies the Visual Studio client ID and Azure DevOps scope through existing acquisition paths. | Obtain evidence for the specific MSA/resource/registration combination under RECHECK-007; general V1 adoption does not identify that combination. |
+| Personal-account Azure DevOps access | V1 supplies the Visual Studio client ID and Azure DevOps scope. The subsequent [Windows observation](experiments/windows-msal-account-metadata.md#gcm-informed-msa-acquisition-and-silent-reuse) demonstrates exact-account token/discovery success and fresh-process silent reuse with the GCM-informed configuration. | Use that bounded result for this mechanism; intended registration reuse and Profile/support selection remain separate under RECHECK-007. |
 
 Use this delta assessment when accepting high-level responsibilities. It does not require
 every integration or future release scenario to be demonstrated before the architecture
@@ -1225,8 +1225,14 @@ does not establish the behavior or intended reuse boundary of this particular
 Microsoft-owned registration. Conversely, the ability to submit the client ID is not
 evidence of MSA support or intended reuse.
 
-**Outcome:** Desk evaluation completed, but the substantive selection prerequisite
-remains unresolved because reproducible account-type behavior evidence is absent.
+**Outcome:** Desk evaluation completed. The subsequent
+[2026-09-11 Windows sequence](experiments/windows-msal-account-metadata.md#gcm-informed-msa-acquisition-and-silent-reuse)
+adds reproducible evidence of exact personal-account token acquisition, authenticated
+Git discovery, and fresh-process silent reuse for the declared existing host, state,
+client, authority, options, and target. The earlier absence of account-type observations
+no longer applies to that configuration. Intended external registration reuse, other
+configurations, and the product's Profile/support decision are not established by it;
+the selection gate remains open.
 
 Do not:
 
@@ -1252,7 +1258,10 @@ fields, also without a token. Authentication configuration and selection logic w
 unchanged, but the observed exact-match count changed. A subsequent explicitly attended
 action returned an unexpected broker failure, also without a token. These observations
 do not establish resource authorization, registration eligibility, or a Profile/support
-commitment, and no corporate-account comparison is performed.
+commitment, and no corporate-account comparison is performed. A subsequent GCM-informed
+sequence succeeded in both interactive acquisition and fresh-process silent reuse, with
+exact returned email and recognized authenticated Git discovery. Its bounded current
+conclusion is recorded below; earlier failures retain their original evidence limits.
 
 The protocol's [execution history](experiments/windows-msal-account-metadata.md#execution-history)
 records the initial public-index and launcher failures, followed by successful Windows
@@ -1268,8 +1277,8 @@ challenge header. Silent acquisition required interaction; the permitted interac
 action returned the probe's `provider-rejected` category without an authentication result.
 The sequence stopped without an authenticated Git request or reuse follow-up. The error
 category does not identify the cause or establish categorical MSA incompatibility.
-Successful result metadata, token acceptance, fresh-state behavior, and later reuse
-remain unobserved; the [protocol history](experiments/windows-msal-account-metadata.md#account-visibility-and-unresolved-acquisition-failure)
+That first sequence left successful result metadata, token acceptance, fresh-state
+behavior, and later reuse unobserved; the [protocol history](experiments/windows-msal-account-metadata.md#account-visibility-and-unresolved-acquisition-failure)
 owns the exact observations and limitations.
 
 The later [diagnostic action](experiments/windows-msal-account-metadata.md#diagnostic-subject-preparation-and-acquisition)
@@ -1290,7 +1299,7 @@ apparent automatic fill/submission, and a brief possible WAM surface before the 
 closed. The brief surface was not conclusively identified and no detailed sign-in/MFA/
 consent steps were reported. This adds structured failure and UI observations, not an
 explanation of the code, proof of the earlier failure's cause, or Profile eligibility.
-That sequence stopped. The next bounded configuration candidate is described below.
+That sequence stopped. The later successful configuration and its limits are described below.
 
 **Source interpretation, checked 2026-09-11 UTC:** The same pinned
 [`WamAdapters` default branch](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L116-L120)
@@ -1367,13 +1376,34 @@ MSAL 4.84.2. The probe keeps 4.83.1, its owned parent, exact account checks, and
 application cache or browser fallback. It does not reproduce GCM's full runtime or policy.
 
 **Hypothesis and consequence:** The configuration difference could explain why the earlier
-probe did not reach a usable MSA path. One paired-configuration interaction and conditional
-silent reuse can test that candidate; neither success nor failure isolates one option's
-causal effect or proves the cause of `0x80049D59`. The existing
-[protocol](experiments/windows-msal-account-metadata.md#current-advancement-gcm-informed-msa-configuration)
+probe did not reach a usable MSA path. The completed comparison below demonstrates a
+successful configuration; it does not isolate one option's causal effect or prove the
+cause of `0x80049D59`. The existing
+[protocol](experiments/windows-msal-account-metadata.md#current-disposition-msa-acquisition-and-reuse-observed)
 owns execution limits, readiness, and actual results. No GCM helper, cache, credential,
-organization API, or additional discovery request is used. No Profile or platform is
-selected, and RECHECK-007's token/resource and intended-reuse questions remain open.
+organization API, or extra discovery request was used. No Profile or platform is selected.
+
+### Observed MSA Token, Git Discovery, and Silent Reuse
+
+**Runtime observation, 2026-09-11 UTC:** Under the
+[accepted PR #52 protocol](experiments/windows-msal-account-metadata.md#gcm-informed-msa-acquisition-and-silent-reuse),
+preparation attempt 12 passed, followed by attended interactive attempt 13 and conditional
+fresh-process silent attempt 14. Both account actions found one exact match among multiple
+visible accounts and returned the exact requested email, a nonempty unexpired token,
+and recognized HTTP 200 authenticated Git discovery for the single designated target.
+The interactive operator identified WAM and manually changed the apparent Security Key
+selection to Windows Hello PIN. The silent action applied the public MSA transfer-tenant
+rule to the newly resolved real account, without an application cache file. Both owned
+probe and input-automation processes exited; the sequence is complete and stopped.
+
+**Bounded conclusion:** Requested-personal-account metadata, usable token acquisition,
+and later-process silent reuse work in this declared existing Windows scenario with the
+GCM-informed configuration. The mechanism's feasibility for that scenario need not remain
+an unobserved premise. Existing state, a single host/target, and the paired configuration
+limit attribution and generalization. No clean first-use, alias coverage, cross-consumer
+interoperability, actual returned-tenant identity, full Git operation, or broader support
+is inferred. RECHECK-007 now has bounded token/resource behavior evidence; intended
+external registration reuse and the Profile-selection gate remain separate and open.
 
 ### Host and Registration Recheck for the Probe
 
@@ -1387,7 +1417,7 @@ boundary; it selects no V2 WSL or Linux-broker implementation and transports no 
 | RECHECK-003: [Issue #460](https://github.com/AzureAD/microsoft-authentication-cli/issues/460) | Open; `updated_at = 2026-05-13T17:25:51Z`. Its body proposes a Windows helper, trust/version/transport boundaries, and missing-helper/fallback handling. It is a proposal, not evidence of an upstream implemented bridge. This probe uses an exact local Windows executable and returns only flags. |
 | RECHECK-003/005: [current WSL guidance](https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl) | Documents native Linux broker packages, dependencies, and an unlocked keychain. It does not supply the Windows-helper protocol proposed by #460. This experiment uses native Windows WAM; it does not install or invoke that Linux broker. |
 | RECHECK-005: [PR #462](https://github.com/AzureAD/microsoft-authentication-cli/pull/462) | Open and unmerged; `updated_at = 2026-08-14T10:00:41Z`. The inspected diff adds Linux broker routing, a Linux redirect, and OS-account listing, while retaining an OS-default sentinel fallback. Its reported Ubuntu test is public author-reported experience, not a V2 support result or this experiment's implementation. |
-| RECHECK-007: [Azure DevOps guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth?view=azure-devops) | Still states that ordinary Entra applications do not natively support MSA users for the Azure DevOps resource. The first Windows sequence found the requested account, required interaction, and ended in a coarse acquisition-failure category. The diagnostic sequence later observed zero exact matches and timed out with cancellation fields. The later attended action found one exact match but returned an unexpected broker failure. No action returned a token, and these observations do not identify the earlier failure cause or establish categorical MSA incompatibility. Successful token/resource behavior and intended reuse remain unresolved; no Profile is selected. |
+| RECHECK-007: [Azure DevOps guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth?view=azure-devops) | The dated guidance concerns ordinary Entra applications. Earlier account sequences returned no token; the subsequent [GCM-informed sequence](experiments/windows-msal-account-metadata.md#gcm-informed-msa-acquisition-and-silent-reuse) returned exact-account tokens and recognized authenticated discovery through both attended interaction and fresh-process silent reuse. This resolves the token/resource feasibility question for the declared existing Windows configuration. It does not identify the earlier failure cause or establish intended external registration reuse; no Profile is selected. |
 
 RECHECK-001, RECHECK-002, and RECHECK-006 retain their bounded desk dispositions; this
 protocol does not amend product interaction, account, or cache requirements. RECHECK-004
@@ -1449,5 +1479,6 @@ support.
 
 `RECHECK-001` and `RECHECK-002` are complete and support no weakening of the interaction
 or account contracts. `RECHECK-007` has completed its desk evaluation, but the
-Microsoft-owned Azure DevOps profile remains unresolved and unselected pending separately
-authorized evidence for the single retained empirical question.
+Microsoft-owned Azure DevOps profile remains unselected. The accepted Windows observation
+now supplies bounded exact-account token/resource and later-process reuse evidence;
+intended external registration reuse and the product selection gate remain open.

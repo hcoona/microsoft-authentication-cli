@@ -26,43 +26,42 @@ reuse, or all of RECHECK-007.
 There is no corporate-account comparison, resource write, PAT, registration/tenant
 administration, cache migration, plaintext cache, or fallback mechanism in this probe.
 
-## Current Advancement: GCM-Informed MSA Configuration
+## Current Disposition: MSA Acquisition and Reuse Observed
 
-The previous attended interaction found one exact account match but returned
-`unknown_broker_error`, broker status `Unexpected`, and code `2147786073` (`0x80049D59`)
-without an authentication result. Its [history](#attended-preparation-and-structured-broker-failure)
-remains evidence for that subject, not proof that WAM cannot authenticate an MSA.
+The GCM-informed configuration accepted by PR #52 completed preparation, attended
+interactive acquisition, and its conditional fresh-process silent follow-up. Both account
+actions returned the exact requested email and a nonempty, unexpired token; both
+authenticated Git discovery requests returned HTTP 200 with the expected content type
+and fixed service prefix. The operator identified WAM and manually switched the apparent
+Security Key selection to Windows Hello PIN during interaction. The
+[completed history](#gcm-informed-msa-acquisition-and-silent-reuse) owns the observations.
 
-The [pinned GCM comparison](../v1-public-contract-baseline.md#gcm-msa-configuration-comparison)
-identifies an available MSA passthrough configuration absent from the earlier probe.
-This amendment permits one additional preparation and, after the explicit readiness
-handoff, one interaction with that configuration. Only exact-account success and
-recognized authenticated Git discovery permit the one remaining silent follow-up.
-All eleven completed Windows actions remain charged: six preparations, one inspection,
-one silent call, and three interactive calls. No new action is recorded by this amendment.
+This establishes the bounded requested-personal-account path on the designated existing
+Windows host and Git target with this exact configuration. It does not isolate the cause
+of the earlier broker error, establish fresh-state or cross-consumer behavior, select a
+Client Profile, or establish intended external registration reuse or broader support.
 
-This is a paired-configuration experiment, not an isolated test of one option or a
-reproduction of GCM. Use the fixed `organizations` authority as the source-informed MSA
-candidate. The designated repository's backing directory and GCM's actual runtime
-authority have not been established. Do not infer them from the account role or read GCM
-state to fill that gap. A failure stops the sequence; success cannot identify which
-configuration difference mattered or prove that the previous broker error had this cause.
+The sequence is complete and stopped. All seven preparations, four interactive calls,
+two silent calls, and three discovery requests are consumed. Do not rebuild, rerun
+self-check, inspect accounts, acquire again, or issue another resource request under
+this protocol. The procedure below preserves the executed sequence and its boundaries;
+it does not grant another run. Another experiment requires a reviewed accepted amendment
+and preserves all prior consumption.
 
 ## Subject and Environment
 
-The GCM-informed subject uses the six source/configuration files in
-[`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs). Prepare it
-once from the accepted `main-v2` commit that contains this amendment, recording that exact
-source revision, five Windows source hashes, dependency inventory, and new artifact
-identities before authentication. The earlier subjects at
-`4470996a944fc15e2d0edbff76bc396a24a2979f` and
-`23e1bcd398e71c546777cde4ca13aa7bec84ab0f` remain evidence for their recorded sequences.
-The earlier attended subject at `facfec1aa86b88601a9a9e7835bf2d8b6fd7b727` also remains
-historical evidence. This amendment changes the authority, MSA passthrough option,
-conditional silent transfer-tenant selection, its Boolean observation, and cumulative
-preparation/interaction limits. Account matching, discovery, diagnostics, dependencies,
-and synthetic self-check remain unchanged. Do not patch an earlier live source copy
-or reset its journal.
+The completed GCM-informed subject used the six source/configuration files in
+[`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs) at accepted
+source/protocol revision `e76a8b064156c1ffcc0016ebe2f68f8b33c3dabd` (PR #52). Its exact
+five Windows source files, dependency inventory, and artifacts were verified before
+authentication. This evidence update does not change or rebuild that subject.
+Earlier subjects at `4470996a944fc15e2d0edbff76bc396a24a2979f`,
+`23e1bcd398e71c546777cde4ca13aa7bec84ab0f`, and
+`facfec1aa86b88601a9a9e7835bf2d8b6fd7b727` remain evidence for their recorded sequences.
+The PR #52 subject changed authority, MSA passthrough, conditional silent transfer-tenant
+selection and its Boolean observation, and cumulative preparation/interaction limits.
+Account matching, discovery, diagnostics, dependencies, and self-check stayed unchanged.
+Do not patch an earlier live source copy or reset its journal.
 Read the current accepted Wave and protocol before every action; a retained source
 revision does not preserve authority that later records remove. Record the current
 protocol revision separately when it differs from the launcher's source `Revision`.
@@ -412,12 +411,11 @@ Cleanup, if later needed, is limited to verified experiment-owned files after ow
 processes have exited. Do not clear broker state, revoke consent, sign out, or modify an
 upstream installation as cleanup.
 
-Current consumption against the amended limits: fetch 1/1, prepare 6/7, inspect 1/1,
-silent 1/2, interactive 3/4, discovery requests 1/3 (one anonymous, zero authenticated).
-Windows attempts 1 through 11 are complete; attempt 12 is the prospective preparation
-after amendment acceptance and preparation preflight. Account actions additionally
-require the fresh readiness handoff and the conditional follow-up gates above. Historical
-sections preserve their actual stopped outcomes and consumption at the time.
+Current consumption after the completed GCM-informed sequence: fetch 1/1, prepare 7/7,
+inspect 1/1, silent 2/2, interactive 4/4, discovery requests 3/3 (one anonymous, two
+authenticated). Windows attempts 1 through 14 are complete; attempt 15 is absent.
+No execution capacity remains. Historical sections preserve their outcomes and
+consumption at the time.
 
 ## Execution History
 
@@ -910,3 +908,113 @@ preparations and all three interactive attempts are consumed. Totals are fetch 1
 prepare 6/6, inspect 1/1, silent 1/2, interactive 3/3, and discovery 1/3. The sequence
 stopped without a reuse follow-up or another resource request; unused conditional slots
 cannot be exercised.
+
+
+### GCM-Informed MSA Acquisition and Silent Reuse
+
+Runtime observations on 2026-09-11 UTC under
+[PR #52](https://github.com/hcoona/microsoft-authentication-cli/pull/52), accepted source
+and protocol revision `e76a8b064156c1ffcc0016ebe2f68f8b33c3dabd`. The merged tree
+`b1947fc8579dbc7117ee1bbaaed87195bb3e3017` matched the independently reviewed subject.
+Preflight recovered all eleven previous Windows actions and the one package fetch.
+No unresolved start or running probe remained. Read-only host metadata confirmed Windows
+11 25H2 build 26200.9445 AMD64, PowerShell 5.1.26100.9444, SDK 8.0.425, and Core/Desktop
+runtime 8.0.31. WSL 2 Ubuntu 26.04, kernel
+`6.18.33.1-microsoft-standard-WSL2`, and Python 3.13.15 matched the protocol.
+The corporate-session context remains owner-reported; existing broker state was neither
+cleared nor assumed clean.
+
+A detached accepted checkout supplied the five Windows files through `git archive`; all
+copied hashes matched Git before preparation and acquisition. The seven retained public
+archives matched their SHA-512 manifest. Preparation reused the dedicated feed/caches
+with unchanged pins, without another fetch, upgrade, or installation.
+
+| Attempt | Action | Start UTC | End UTC | Outcome |
+| --- | --- | --- | --- | --- |
+| 12 | `prepare` | 2026-09-11 02:33:14.2814180 | 2026-09-11 02:33:21.1739959 | `prepared-and-self-checked`; launcher exit 0 |
+
+Release compilation completed in 3.64 seconds with zero warnings/errors. Restore resolved
+exactly the seven declared packages. Lock SHA-256 remained
+`6653224a1478ae1ef1a6d62c32c188b1408502ce4fcc2f4730f32673e23f3e77`;
+the runtime configuration retained Core/Desktop 8.0.31 with `rollForward: Disable`.
+The existing synthetic selector/URL/failure-output self-check passed. Preparation made
+no account, authentication, or resource call, and both owned build processes and the
+self-check exited. Input helpers were prepared and parsed without execution.
+
+| Prepared artifact under `bin/Release/net8.0-windows` | Bytes | SHA-256 |
+| --- | --- | --- |
+| `WindowsMsalProbe.exe` | 151,552 | `ada362907899479ec36f09a16b49b355952d50d4ffefe70f26a763ce428cdf32` |
+| `WindowsMsalProbe.dll` | 31,744 | `f4cc869d13b5b35050e93434599440c84c7abc4d8d365b76b921f633f3e314da` |
+
+After all review, CI, preparation, and launch checks were complete, the agent announced
+readiness and stopped. The owner then explicitly confirmed desktop readiness. A short
+recheck verified current authority, host/subject, capacity, process exit, and the same
+privately bound nominated account and remote before opening the interactive probe.
+No repeated inspection or pre-interaction silent call occurred.
+
+The interactive action used `organizations` and `MsaPassthrough = true`, retaining the
+same client, scope, exact account checks, owned parent, and rejection of browser fallback.
+The matched-account branch passed the unique real account to MSAL. After strict result
+and authenticated-discovery success, the conditional silent action ran in a fresh process
+with a new in-memory application cache. It resolved the unique account afresh and applied
+the declared public MSA transfer-tenant rule; it did not use an OS-default sentinel.
+
+| Attempt | Action | Start UTC | End UTC | Outcome |
+| --- | --- | --- | --- | --- |
+| 13 | `interactive` | 2026-09-11 02:40:33.2166572 | 2026-09-11 02:41:21.7296287 | `result-email-matched`; launcher `completed`, exit 0 |
+| 14 | `silent` | 2026-09-11 02:41:44.2775298 | 2026-09-11 02:42:13.4994943 | `result-email-matched`; launcher `completed`, exit 0 |
+
+| Observation | Interactive 13 | Silent 14 |
+| --- | --- | --- |
+| Broker available; visible accounts; exact matches | true; multiple; one | true; multiple; one |
+| Visible account missing email | false | false |
+| Acquisition started; provider result returned | true; true | true; true |
+| Token present; unexpired | true; true | true; true |
+| Email present; exact returned email | true; true | true; true |
+| Tenant present; equals public MSA home tenant | true; false | true; false |
+| Silent MSA transfer rule applied | false (interactive) | true |
+| Scope metadata present; requested `.default` reported | true; true | true; true |
+| Structured failure | null | null |
+| Resource attempted; authenticated | true; true | true; true |
+| Resource HTTP status; challenge present | 200; false | 200; false |
+| Discovery content type and fixed prefix matched | true; true | true; true |
+| Resource outcome | `git-discovery-recognized` | `git-discovery-recognized` |
+
+The tenant equality flag does not reveal the actual token tenant or require it to equal
+the MSA home tenant. Silent transfer selection is an in-memory account-metadata branch,
+not a claim that the observed token tenant was separately identified. No token bytes,
+private account/tenant values, remote URL, raw scopes, refs, or raw response bodies were
+retained. The two authenticated requests read only the fixed discovery prefix. The
+historical anonymous challenge was not repeated.
+
+**Operator observation:** The owner identified WAM during interaction, reported that
+Security Key appeared initially selected, and manually chose Windows Hello PIN, followed
+by apparent success. The program's result independently confirms the exact-account token
+and discovery postconditions. No factor value was collected. Operator-specific UI
+observations for the silent action were unavailable; its evidence is the recorded silent
+API path and result, not an independently observed universal no-UI guarantee.
+
+Each account action used one bounded write-only operation on the owned input form.
+Both input workers/controllers exited normally, without retries; no WAM sign-in,
+account choice, MFA, unlock, or consent was automated. The interactive and silent
+processes completed about 48.5 and 29.2 seconds after their respective start records,
+within the protocol bounds; these durations include local input and resource work.
+A subsequent read-only check found no remaining probe or recorded input process.
+All fourteen journal actions resolved, attempt 15 was absent, and source/artifact/lock
+hashes still matched. No shared broker was terminated.
+
+**Bounded outcome:** This exact existing-state Windows configuration returned the
+requested personal account's token and recognized authenticated Git discovery, then
+repeated those postconditions through fresh-process silent acquisition without an
+application cache file. The successful configuration is concrete evidence for this
+primary-journey mechanism and later-process reuse. It does not isolate a single option's
+causal effect, explain the earlier `0x80049D59`, establish a clean first-use path or
+cross-consumer interoperability, or complete a Git operation. Intended external reuse
+of the Microsoft-owned registration and Profile/platform selection remain separate.
+
+Retain dedicated source/build/package and sanitized operational artifacts and ordinary
+selected-account broker/session state. No cache clearing, sign-out, consent revocation,
+PAT, account fallback, resource write, object/pack download, or installation change
+occurred. Process exit does not reverse provider-side authentication/session updates.
+The sequence completed and stopped: fetch 1/1, prepare 7/7, inspect 1/1, silent 2/2,
+interactive 4/4, discovery 3/3. No further action is permitted by its exhausted limits.
