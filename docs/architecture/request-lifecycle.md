@@ -1,5 +1,10 @@
 # Request and Reusable-State Lifecycles
 
+The [Windows Slice design](../../designs/windows-ado-authentication.md) specializes this
+conceptual lifecycle with WAM-only ordering, broker-owned state, a versioned process
+contract, owned Windows UI, and bounded cancellation/delivery. The alternative mechanisms
+in this view are architectural possibilities, not additional paths enabled by that Slice.
+
 This scoped architecture view connects the responsibilities in the
 [overview](overview.md#level-3-cli-components) into complete request paths. Architecture
 and security reviewers use it to assess lifetime and trust ownership; validation authors

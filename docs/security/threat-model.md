@@ -1,9 +1,11 @@
-# Preliminary Threat Model
+# Authentication Engine Threat Model
 
 ## Scope
 
-This threat model applies to the planned delegated public-client authentication engine.
-It is preliminary and must be revised before implementation contracts are frozen.
+This threat model applies to the delegated public-client authentication architecture and
+the [concrete Windows Slice design](../../designs/windows-ado-authentication.md). Its
+application controls remain planned until implementation and validation; design review
+does not mark them effective on a real platform.
 
 The goal is to protect authentication intent, token material, account metadata, cache
 state, machine protocols, and user interaction within a normal developer workstation
@@ -56,6 +58,7 @@ allocates application and dependency responsibilities across these boundaries. T
 threat model owns their security assumptions and mitigation tradeoffs.
 
 - Calling process to CLI protocol boundary.
+- Explicit caller-managed local Profile file to the immutable request configuration.
 - CLI process to MSAL and native broker.
 - Process to browser, device-code terminal, or other interactive surface.
 - WSL calling process to the explicitly selected Windows CLI through interoperability.
@@ -102,6 +105,44 @@ is reported evidence, not proof that V2 recovery works on a platform.
 
 ## Security Validation Priorities
 
+### Concrete Windows Slice
+
+The selected design adds a nonsecret Profile-file input and specializes the existing
+caller/CLI boundary with optional stdin-lifetime cancellation. The caller deliberately
+selects the executable and local Windows Profile path. The engine reads one bounded
+snapshot, validates the trusted cloud/client/tenant/integration constraints, and does not
+search for configuration, follow a configuration URL, or import upstream state. Ordinary
+Windows file permissions protect configuration within the stated same-user trust model;
+signing or encrypting a public Profile file would not protect against the excluded
+compromised current user and is not required.
+
+WAM supplies reusable-state protection and integrity through its API. The Slice has no
+app-owned token file, cache callback, cross-process lock, account binding, or repair
+operation. Missing durable-write confirmation is represented accurately as a success
+warning. No new persistence service or independent proof of broker internals is needed.
+
+The owned Windows parent exists only for permitted interaction. WAM controls its own
+credential/MFA/consent UI; the engine supplies an HWND and login hint, validates the final
+result, forwards cancellation, and invalidates late completion. Provider prompt choice
+is not an application security control. Unknown or terminal failures cannot activate a
+PAT, alternate registration, browser, or account fallback.
+
+The optional lifetime pipe gives a cooperating caller a concrete cancellation signal.
+Its contract depends on ordinary writer-handle closure, not Linux-to-Windows signal
+translation. Without that channel, the original deadline bounds a lost caller. A blocked
+output pipe or uncooperative dependency may require process termination and incomplete
+output. The caller must recognize that as transport failure. A one-second local shutdown
+allowance cannot resume authentication or extend its deadline. This is the bounded
+fail-closed response to the actual transport limitation, without an additional daemon.
+
+Only the validated result contains a token. Fixed stderr indications and optional local
+telemetry use an allowlist, have bounded buffering, and carry no email or authentication
+material. Network telemetry is not selected. Externally owned Visual Studio registration
+branding, consent, audit attribution, and availability remain explicit dependency limits
+under the candidate Profile gate. The Slice scenario matrix tests these application
+boundaries; actual company-account, .NET 10, first-use, WSL cancellation, and feed behavior
+are not established by the existing personal-account probe.
+
 The normative release evidence requirements are defined by
 [`validation/strategy.md`](../validation/strategy.md). Security review prioritizes its
 strict-account, interaction, cancellation, cache, WSL, authority, output, dependency, and
@@ -121,10 +162,11 @@ input and candidate-disposition record for
 This Markdown record owns the security assumptions, interpretation, and requirement
 routing. The native model does not create a second product policy.
 
-The model covers one CLI process containing the engine and MSAL, its caller, OS broker,
-user-interaction facility, platform-secure reusable state, identity service, local
-diagnostic sink, and optional telemetry endpoint. It has two boundary containers and
-16 directed flows. MSAL is an in-process dependency; a broker is an external OS facility.
+The model covers one CLI process containing the engine and MSAL, its caller, explicit
+caller-managed Profile file, OS broker, user-interaction facility, platform-secure
+reusable state, identity service, local diagnostic sink, and optional telemetry endpoint.
+It has two boundary containers and 17 directed flows. MSAL is an in-process dependency;
+a broker is an external OS facility.
 The workstation boundary and CLI process/API boundary distinguish network trust from
 local process and dependency responsibilities. They do not assert that every local
 same-user process is a separately protected OS security principal. The secure-state role
@@ -132,15 +174,18 @@ does not select a V2 cache format or imply access to a broker's private store.
 
 In the [selected WSL deployment](../architecture/overview.md#deployment-wsl-caller-and-windows-cli),
 the existing caller is in WSL and the CLI process, broker, and eligible state are on
-Windows. The caller/CLI flows already model the request and token crossing that boundary;
-the model needs no additional forwarding process or data flow. WSL interoperability is
+Windows. The caller/CLI flows model the request, optional lifetime pipe, and token
+crossing that boundary; the Profile-to-engine flow supplies the selected configuration
+snapshot. No forwarding process is introduced. WSL interoperability is
 an operating-system dependency inside the workstation trust base. Executable selection,
 output confidentiality, Windows UI ownership, and bounded process completion remain
-relevant threats. This deployment refinement leaves the native model and its analysis
-input unchanged; it does not establish that an implemented cross-host path is secure.
+relevant threats. The model records the design boundaries; it does not establish that an
+implemented cross-host path is secure.
 
-The browser/device-code interaction role combines alternative mechanisms to expose their
-common trust boundary; it is not a single proposed host component. Resource access,
+The generic interaction, state, and telemetry roles retain the wider architecture's
+trust boundaries. In the concrete Windows Slice they specialize to WAM-owned interaction
+and state, and local stderr telemetry; browser/device-code and network telemetry remain
+unselected. They do not add components to the selected deployment. Resource access,
 Git/package protocols, and credential translation remain with the caller. Build/release
 threats remain in the narrative model above because they have a separate lifecycle from
 this runtime diagram. No real account, tenant, token, or authentication observation is
@@ -148,28 +193,38 @@ stored in the model.
 
 ### Tool and Reproduction
 
-On **2026-09-10 UTC**, the native model was opened and analyzed in the Windows desktop
-TMT **7.3.51110.1** using **SDL TM Knowledge Base (Core) 4.1.0.11**. The embedded knowledge
+On **2026-09-11 UTC**, the native model was opened and analyzed with installed Windows
+TMT **7.3.51110.1** using **SDL TM Knowledge Base (Core) 4.1.0.11**. Both desktop Analysis
+View and the tool's native model API generated the same candidate count. The embedded knowledge
 base comes from Microsoft's
 [public default template at `0ece9c7`](https://github.com/microsoft/threat-modeling-templates/blob/0ece9c71b6f3710b10d497bd1ef63e57805e7c3e/default.tb7).
-The tool generated **87 candidates**. Analysis is a design review aid, not an
+The tool generated **96 candidates**. Analysis is a design review aid, not an
 authentication experiment, implementation test, or proof of platform security.
 
-To reproduce, open `authentication-engine.tm7` with that TMT version, inspect the design
-view, and switch to Analysis View. The file embeds its template; importing an Azure
-template or regenerating from Markdown is unnecessary. Review candidate justification
-and status in the native file alongside the requirements linked above. Record the exact
-model revision, tool/template versions, and resulting counts in the pull request when
-the model changes. Template upgrades may change the candidate set and require review;
-zero findings is not an acceptance target. A Windows installation or analyzer job is
-not required for every unrelated CI change.
+Prefer a supported command-line analyzer when available. The official getting-started
+and feature documentation consulted for this version did not identify one. This review
+therefore used 32-bit Windows PowerShell in STA mode to load the installed TMT model,
+view-model, and local-storage assemblies, initialize WPF, and open a separate model copy
+with `ObjectModel(LocalFile, false)`. `ModelLoadHasIssues` was false;
+`GenerateThreats()` and `ProcessModelImmediately(FullModel)` produced and reconciled all
+96 candidates, followed by native `SaveAs` to a separate output. This is a version-specific
+native API workflow, not a supported public CLI contract. The pull request records the
+reproduction commands, input hash, tool/template versions, and observed counts.
+
+Desktop reproduction remains possible by opening `authentication-engine.tm7` and switching
+to Analysis View. The file embeds its template; importing an Azure template or regenerating
+from Markdown is unnecessary. Review candidate justification and status in the native file
+alongside the requirements linked above. Keep machine-specific author metadata out of
+committed dispositions. Template upgrades may change the candidate set and require review;
+zero findings is not an acceptance target. A Windows installation or analyzer job is not
+required for every unrelated CI change.
 
 ### Candidate Dispositions
 
-All 87 candidates have a scenario-specific or threat-family justification in the native
-file. **70 are `NeedsInvestigation` and 17 are `NotApplicable`; none is marked `Mitigated`.**
+All 96 candidates have a scenario-specific or threat-family justification in the native
+file. **76 are `NeedsInvestigation` and 20 are `NotApplicable`; none is marked `Mitigated`.**
 `NeedsInvestigation` records planned application controls, dependency configuration, or
-verification obligations. It does not mean that 70 new architectural feasibility
+verification obligations. It does not mean that 76 new architectural feasibility
 questions or observed vulnerabilities were found. Product implementation has not begun.
 
 | Candidate group | Design disposition and verification focus |
@@ -179,8 +234,10 @@ questions or observed vulnerabilities were found. Product implementation has not
 | Interrupted flows, process failure, and inaccessible storage | Bound work by the original deadline, classify failures, reject late results, and distinguish validated success from unconfirmed persistence. Optional telemetry failure cannot change the authentication result. |
 | Execution-flow and privilege threats | Keep request parsing and policy explicit, use maintained dependency parsers, and introduce no privileged helper or impersonation service. Full compromise of the OS session/kernel/broker remains outside the declared threat model. |
 | OAuth response CSRF candidates | Preserve the maintained OAuth implementation's state, PKCE, and redirect validation where applicable, plus V2-owned completion and final result validation. Do not implement a parallel OAuth verifier. |
-| Generic nonrepudiation candidates (`R6`/`R7`, 15 items) | Not applicable: the engine promises typed results and sanitized diagnostics, not signed delivery receipts or an identity-rich audit ledger. Persistence-status accuracy remains applicable under the separate storage candidate. |
+| Generic nonrepudiation candidates (`R6`/`R7`, 16 items) | Not applicable: the engine promises typed results and sanitized diagnostics, not signed delivery receipts or an identity-rich audit ledger. Persistence-status accuracy remains applicable under the separate storage candidate. |
 | CSRF on a CLI request or broker API result (IDs 11 and 28) | Not applicable to these non-browser-cookie endpoints. Their input-validation and spoofing concerns remain applicable under other candidates. |
+| Profile disclosure through a spoofed receiver or weak store ACL (IDs 88 and 91) | Not applicable to confidentiality of deliberately nonsecret registration metadata. Profile integrity, executable selection, and authenticated output remain covered by applicable spoofing and tampering candidates. |
+| Profile source substitution, parsing, interruption, and execution-flow threats (IDs 89 and 92–96) | Validate one bounded immutable local-file snapshot using a closed data-only schema; rely on Windows permissions within the stated trust model. Reject invalid or unavailable configuration without ambient search, partial defaults, executable extensions, account fallback, or state repair. Preserve request-owned account, scopes, interaction permission, and deadline. |
 
 Generic template attribute defaults are question prompts, not observations that a
 platform lacks TLS, memory protection, or secure storage. Dispositions evaluate the

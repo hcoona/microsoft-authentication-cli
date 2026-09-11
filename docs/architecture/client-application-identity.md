@@ -4,6 +4,11 @@ This architecture view defines how v2 treats OAuth public-client application
 registrations. It does not claim ownership of any Microsoft registration or freeze a
 client-profile contract.
 
+The [Windows Slice design](../../designs/windows-ado-authentication.md#profile-contract-and-ownership)
+and its linked schema now own the concrete Windows Profile representation and candidate
+definition. This view continues to own registration semantics and tenant mapping;
+candidate definition does not activate or distribute that Profile.
+
 ## Public Does Not Mean Ownerless
 
 Native desktop applications are OAuth public clients. A distributed application cannot
@@ -80,15 +85,17 @@ constant.
    application tenant eligibility, ownership, and platform-integration configuration.
    Redirect, broker-registration, signing, and bundle-identity constraints are integration
    concerns, not a selected file schema. The Visual Studio compatibility candidate is
-   Public Cloud only; it remains unselected and unavailable.
+   Public Cloud only; its concrete candidate is defined by the Windows design and remains
+   unavailable until the external Profile gate passes.
 5. Resource/scopes, strict email, and interaction permission belong to each request.
    Profiles do not own resource presets, scope catalogs, acquisition order, deadline
    defaults, or cache modes. Effective tenant resolution follows
    [`V2-REQ-019`](../product/requirements/request-identity-and-authority.md#v2-req-019-tenant-selection).
 
 In the primary journey, the adapter supplies the Azure DevOps scope shown above as
-consumer knowledge; it is not embedded as a profile resource default. Profile discovery,
-file layout, schema versioning, and storage lifecycle remain unselected later work.
+consumer knowledge; it is not embedded as a profile resource default. The Windows design
+selects an explicit caller-managed local Profile file and versioned strict reader, without
+automatic discovery or an engine-owned configuration store.
 
 Required configurability and visible ownership are defined by
 [`V2-REQ-042`](../product/requirements/cache-security-and-operational-identity.md#v2-req-042-client-registration-as-configuration).

@@ -3,6 +3,11 @@
 This record defines the current target architecture before implementation. It does not
 freeze command names, serialized contracts, platform support, or compatibility behavior.
 
+The [Windows Slice design](../../designs/windows-ado-authentication.md) owns the selected
+Windows runtime, WAM integration, protocol 1 command-line/process semantics, and Profile
+contract. This overview retains the broader conceptual architecture; mechanisms outside
+that Slice remain unselected and are not supported by its acceptance.
+
 ## System Boundary
 
 The normative product boundary is defined by
@@ -117,9 +122,9 @@ explicitly labeled C4 element kinds and boundaries; blue elements belong to the 
 and gray elements are external. A relationship describes
 an intended responsibility, not evidence that a host or Client Profile supplies it.
 Platform services are external dependencies; MSAL is an in-process library integration.
-The WSL deployment below selects direct invocation of the Windows CLI. Exact runtime,
-provider integrations, state-store topology, and distributed profiles remain later
-design choices; deployment selection alone does not establish platform support.
+The WSL deployment below selects direct invocation of the Windows CLI. The concrete
+Windows runtime, broker-owned state, and provider integration are defined in the Windows
+Slice design. Distributed Profile activation and platform support remain separate gates.
 
 ### Level 1: System Context
 
@@ -157,7 +162,7 @@ shared-cache format. Broker-owned state may satisfy reuse without an engine-owne
 flowchart LR
     caller["Calling tool or adapter<br/>[External software system]"]
     subgraph v2["AzureAuth Unofficial V2 [Software system]"]
-        cli["Authentication CLI<br/>[Container: native process]<br/>Runtime unselected<br/>Request, acquisition, validation, and result"]
+        cli["Authentication CLI<br/>[Container: native process]<br/>.NET 10 for the Windows Slice<br/>Request, acquisition, validation, and result"]
         state[("Engine-owned reusable state, if needed<br/>[Container: secure data store]<br/>Realization unselected<br/>Owned state and integrity coordination")]
     end
     platform["Operating-system authentication services<br/>[External software system]<br/>Own broker state, secure storage, and platform UI"]
@@ -174,8 +179,9 @@ flowchart LR
 ```
 
 Client Profile configuration enters through explicit selection under the
-[client-identity view](client-application-identity.md); its representation and storage are
-later contract work. Persistent identities must be resolved through the
+[client-identity view](client-application-identity.md); the Windows design selects one
+caller-managed local Profile file and no engine-owned persistent cache. Persistent
+identities must be resolved through the
 [operational-identity registry](../governance/operational-identities.yaml) before their
 implementation. This view does not authorize reading upstream application state.
 
@@ -217,15 +223,15 @@ and protocol version. The Windows CLI owns Profile interpretation, Windows confi
 and eligible state, account selection, interaction resources, the request deadline, and
 result validation. A WSL working directory or environment does not select an account,
 change a Profile, or make a Linux configuration authoritative. Any file input uses a path
-understood by the Windows process; exact configuration syntax belongs to contract design.
+understood by the Windows process; the Windows design owns its explicit file-path syntax.
 
 The result crosses to the authorized WSL caller through the ordinary CLI output boundary.
 No temporary token file, local network listener, or resident bridge is required. A missing
 executable or disabled interoperability is a caller-observed launch failure. After a
 successful launch, the Windows CLI owns its normal typed outcomes and finite lifetime.
-Neither side silently switches to a Linux authentication mechanism. Detailed design must
-specify cancellation delivery and caller-disconnect handling against the existing
-no-orphaned-work requirement without assuming Linux signals terminate Windows work.
+Neither side silently switches to a Linux authentication mechanism. The Windows design
+specifies the optional caller-lifetime pipe, Windows cancellation, original deadline,
+and bounded shutdown without assuming Linux signals terminate Windows work.
 
 The [public source assessment](../research/v1-public-contract-baseline.md#wsl-direct-invocation-and-azure-artifacts)
 supports this allocation. Windows runtime/Profile eligibility and the
@@ -275,7 +281,7 @@ application service, and writes one structured success or failure result. The bo
 separates protocol stdout from designated prompt and diagnostic channels. It owns the
 binary success/failure process mapping under
 [`V2-REQ-030`](../product/requirements/result-and-process-protocol.md#v2-req-030-versioned-result-and-exit-status).
-Serialization and flag spellings remain later contract work.
+The Windows Slice design and linked schemas own protocol 1 serialization and flag spellings.
 
 ### Authentication Policy
 
@@ -337,8 +343,9 @@ internals or require an engine-owned copy. The
 how already available completion evidence becomes a result warning without additional
 I/O or waiting after validation. An absent confirmation signal is a warning condition,
 not by itself a reason to reject an otherwise eligible integration.
-Concrete stores, formats, namespace values, locking mechanisms, and storage lifecycle
-remain later design work. Local state-management commands and cross-process interaction
+The Windows Slice selects broker-owned state with no serialized application store or
+engine lock. Other stores, formats, and storage lifecycles remain unselected.
+Local state-management commands and cross-process interaction
 single-flight are not first-version capabilities.
 
 The same requirement owns first-use OS-state eligibility and reuse across compatible
@@ -367,11 +374,11 @@ to the first-release commitment.
 | --- | --- | --- |
 | Personal Azure DevOps Git access with a different corporate OS default | Protocol boundary preserves explicit intent; account resolution and final validation enforce identity; adapters obtain the token. | The caller owns Git and the Azure DevOps scope. The [Windows probe](../research/v1-public-contract-baseline.md#observed-msa-token-git-discovery-and-silent-reuse) demonstrates exact-account token/discovery success and later-process reuse in existing state. The [client-identity view](client-application-identity.md#provider-mapping) defines tenant mapping and external-dependency limits; Profile acceptance and first-use/alias coverage remain open. |
 | Reuse OS sign-in on first use | Account resolution considers eligible provider accounts through mechanism adapters; cache coordination does not require prior engine-created state. | OS sign-in alone is not account enumeration or resource authorization. |
-| Reuse across package ecosystems and repositories | Cache coordination and policy preserve compatible account, tenant, profile, resource, scope, and security contexts. | Consumer identity is not a new authentication partition by itself; storage topology remains open. |
+| Reuse across package ecosystems and repositories | Cache coordination and policy preserve compatible account, tenant, profile, resource, scope, and security contexts. | Consumer identity is not a new authentication partition by itself; the Windows Slice uses broker-owned state. |
 | Background requests without UI | Policy carries interaction permission through account/state access and all provider operations; host integration excludes UI-requiring paths. | Includes secure-state unlock; unavailable silent capability does not permit interaction. |
 | Direct protected-service access | The same protocol boundary accepts explicit target intent and returns a validated token. | The caller owns service access; no general personal-account/resource eligibility is assumed. |
 | Authentication inside a remote-tool workflow | External integrations use the same request/result boundary. | MCP and other host protocols remain outside the engine. |
-| Upgrade without changing a compatible adapter | Protocol boundary owns supported-major dispatch, serialization, and process semantics. | Internal provider changes do not redefine a supported public protocol; its schema is later work. |
+| Upgrade without changing a compatible adapter | Protocol boundary owns supported-major dispatch, serialization, and process semantics. | Internal provider changes do not redefine a supported public protocol; the Windows design and schemas define protocol 1 before implementation. |
 
 ## Decision-Critical Open Questions
 
