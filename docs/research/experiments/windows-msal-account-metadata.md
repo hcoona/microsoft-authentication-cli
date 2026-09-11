@@ -26,31 +26,39 @@ reuse, or all of RECHECK-007.
 There is no corporate-account comparison, resource write, PAT, registration/tenant
 administration, cache migration, plaintext cache, or fallback mechanism in this probe.
 
-## Current Disposition: Diagnostic Attempt Timed Out
+## Current Advancement: Prepare, Then Wait for Operator Readiness
 
-The diagnostic amendment accepted by PR #48 has been executed. Preparation and the
-synthetic error-output check passed. The additional interactive attempt reached its
-process deadline without returning an authentication result. It recorded cancellation
-fields and zero exact account matches, unlike the earlier sequence's one match; it did
-not reproduce or explain the earlier service-exception category. The
-[diagnostic history](#diagnostic-subject-preparation-and-acquisition) owns the observations.
+The diagnostic sequence accepted by PR #48 and recorded by PR #49 stopped at the
+interactive process deadline, without an authentication result. The
+[diagnostic history](#diagnostic-subject-preparation-and-acquisition) retains its
+cancellation fields, changed account-match count, and missing detailed UI observations.
+That result does not identify the previous acquisition failure's cause.
 
-The sequence is stopped. All five preparations and both interactive attempts are
-consumed. The unused silent/resource slots require a successful interaction and cannot
-be exercised. Do not retry, rebuild, switch inputs, or expand diagnostics under this
-protocol. Another experiment requires a separately reviewed and accepted amendment,
-retaining all prior consumption. The procedure below preserves the executed diagnostic
-sequence and its boundaries; it does not grant another execution.
+This amendment permits one preparation and one additional interactive attempt with the
+same nominated account/resource and unchanged authentication code and configuration.
+Its purpose is to observe that path with an explicitly ready operator. Finish all
+preparation before announcing readiness, then wait for the operator's explicit readiness
+response before launching any probe window. A general instruction to continue work is
+not desktop readiness. Preparation must not launch an account action to test readiness.
+
+The earlier nine Windows actions remain consumed. Only after this amendment is accepted
+may the additional preparation run. Its successful verification does not authorize an
+unattended interactive attempt. If interaction succeeds with the exact account and
+recognized Git discovery, the one previously unused silent slot may check later-process
+reuse during the same attended sequence. Any failure stops without another retry.
 
 ## Subject and Environment
 
-The diagnostic subject uses the six source/configuration files in
+The attended subject uses the six source/configuration files in
 [`tools/probes/windows-msal`](../../../tools/probes/windows-msal/Program.cs). Prepare it
 once from the accepted `main-v2` commit that contains this amendment, recording that exact
 source revision, five Windows source hashes, dependency inventory, and new artifact
-identities before authentication. The earlier prepared source at
-`4470996a944fc15e2d0edbff76bc396a24a2979f` remains evidence for the first sequence; do not
-patch or reuse its metadata-only error reporting as the diagnostic subject.
+identities before authentication. The earlier subjects at
+`4470996a944fc15e2d0edbff76bc396a24a2979f` and
+`23e1bcd398e71c546777cde4ca13aa7bec84ab0f` remain evidence for their recorded sequences.
+Only the launcher's cumulative preparation/interaction limits change for this amendment;
+the probe authentication, discovery, diagnostics, and self-check code remain unchanged.
+Do not patch an earlier live source copy or reset its journal.
 Read the current accepted Wave and protocol before every action; a retained source
 revision does not preserve authority that later records remove. Record the current
 protocol revision separately when it differs from the launcher's source `Revision`.
@@ -79,14 +87,42 @@ them from a local feed. It performs no authentication or account-store access.
 | Existing OS state | Authorized current broker/session state; prior use and visibility are recorded as known or unknown, never assumed clean |
 
 The host/toolchain versions above came from read-only host metadata during planning on
-2026-09-10 UTC, not an authentication observation. Before execution, confirm they still
-match. Fetch and preparation have no authentication or account-store access and may
-proceed without operator/account readiness when their other prerequisites are met. Before each `inspect`,
-`silent`, or `interactive` action, additionally confirm that the operator is present and
-the selected account is available to the operator. Readiness may cover a continuous
-operator-attended sequence; renew it after an interruption. An unknown existing-state history is
-permitted but limits conclusions. Another machine, account role, version set, or effects
-boundary requires a reviewed protocol amendment; previous consumption remains charged.
+2026-09-10 UTC and were reconfirmed on 2026-09-11 UTC, not from authentication observations.
+Before execution, confirm they still match. Preparation has no authentication or
+account-store access and may proceed without operator readiness when its other
+prerequisites are met. An unknown existing-state history is permitted but limits
+conclusions. Another machine, account role, version set, or effects boundary requires
+a reviewed protocol amendment; previous consumption remains charged.
+
+### Operator Readiness Handoff
+
+Before announcing readiness, complete acceptance/review/CI, the permitted preparation,
+and verification of source, dependencies, artifacts, runtime, prior consumption, owned
+process exit, designated local input binding, and the local launch/input helpers. These
+checks must not enumerate accounts, acquire a token, open a probe/authentication window,
+or make a resource request. Retain the verified launch information locally so no build,
+download, review, or lengthy setup remains after the operator responds.
+
+Then tell the operator preparation is complete and that the owned probe window is
+expected to open within one minute after an explicit readiness response. Stop and wait
+without launching it or starting its timer. This is an operational readiness estimate,
+not a guarantee that WAM will display UI or that identity-service work completes within
+one minute. No timing-test launch is permitted.
+
+A new explicit statement after this handoff that the operator is at the desktop and
+the selected account is available starts the attended sequence. Earlier continuation, silence, elapsed time, or readiness before lengthy
+preparation is not sufficient. Immediately before launch, confirm current authority,
+unchanged host/subject, bound inputs, remaining capacity, and no unresolved action; keep
+these checks short. If preparation has become stale or launch cannot reasonably follow
+within one minute, complete the needed work without opening the probe, announce readiness
+again, and wait for a fresh response. Do not queue an unexpected later window.
+
+The readiness response may cover the declared interactive action and its conditional
+silent follow-up while the operator remains present. Renew the handoff after an
+interruption. The operator controls all sign-in, account choice, MFA, unlock, and consent.
+Collect only sanitized UI-step observations under this protocol. The six-minute action
+limit begins when the interactive probe process starts, after readiness; it does not run
+while waiting for the operator to become available.
 
 The public package pages document the declared dependencies for these versions:
 [MSAL](https://www.nuget.org/packages/Microsoft.Identity.Client/4.83.1),
@@ -259,52 +295,56 @@ directory or machine. Before each action, recover consumption from the accepted 
 and subsequent local records. The accepted history is the recorded baseline; later
 attempts consume additional capacity even before their evidence review is published.
 A contradiction with that history, an unresolved start, or uncertain remaining capacity
-stops execution. Publish the resulting ordered history through the review in step 5.
+stops execution. Publish the resulting ordered history through the review in step 6.
 
 | Action | Maximum attempts | Per-attempt bound | Expected observation |
 | --- | --- | --- | --- |
 | `fetch` | 1 | 120 seconds for the WSL process; no retries; at most seven archives, 100 MiB each and 200 MiB total; confirm exit before proceeding | The seven pinned public packages and their SHA-512 manifest are available to Windows; no package execution or account-store access |
-| `prepare` | 5 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and synthetic selector/URL/failure-output self-check passes, with no authentication or account-store access |
+| `prepare` | 6 | Restore 120 seconds, build 120 seconds, synthetic self-check 15 seconds; up to 10 seconds to stop each owned process | Public restore/build succeeds and synthetic selector/URL/failure-output self-check passes, with no authentication or account-store access |
 | `inspect` | 1 (consumed) | Process 120 seconds; launcher 135 seconds plus at most 10 seconds for termination | Retain the recorded account/anonymous baseline; do not repeat it |
-| `silent` | 2 | Same bound as inspect | First attempt consumed; second only after successful exact-account diagnostic interaction and recognized discovery; resolve the real account afresh |
-| `interactive` | 2 | Process 360 seconds; launcher 375 seconds plus at most 10 seconds for termination | One earlier attempt consumed; one diagnostic interaction may return verified metadata/discovery or structured failure |
+| `silent` | 2 | Same bound as inspect | First attempt consumed; second only after successful exact-account attended interaction and recognized discovery; resolve the real account afresh |
+| `interactive` | 3 | Process 360 seconds; launcher 375 seconds plus at most 10 seconds for termination | Two earlier attempts consumed; one explicitly attended interaction may return verified metadata/discovery or structured failure |
 
-Maximum acquisition calls are four across the entire history: two silent and two
+Maximum acquisition calls are five across the entire history: two silent and three
 interactive. Each broker action has at most one enumeration and one acquisition call.
 Preparation has no broker or resource call. Git discovery remains limited to three
 requests overall: the consumed anonymous baseline and at most two authenticated requests
-from successful diagnostic interaction and its conditional silent follow-up. Do not
+from successful attended interaction and its conditional silent follow-up. Do not
 repeat the anonymous baseline. Count timeout/failure as consumption; unknown consumption
 stops execution. The process bounds include local input time. No automatic retry or
 automatic silent-to-interactive transition is permitted.
 
 1. Verify the current accepted Wave/protocol, source revision, environment, prior
-   consumption, and source/dependency findings. Recover the complete seven-action journal
-   and first sequence's results, including normal termination. Unknown capacity or an
-   unresolved start stops execution.
-2. Use the one additional preparation (Windows attempt 8) for the accepted diagnostic
-   source. Verify the retained seven archives against their manifest; use the same
-   dedicated local feed/caches, pins, and toolchain. No package fetch, upgrade, or install
-   is permitted. Record source/dependency/artifact hashes, runtime configuration, and
+   consumption, and source/dependency findings. Recover all nine completed Windows
+   actions and their results. Unknown capacity or an unresolved start stops execution.
+2. Use the one additional preparation (Windows attempt 10) for the accepted source.
+   Verify the retained seven archives against their manifest; use the same dedicated
+   local feed/caches, pins, and toolchain. No package fetch, upgrade, or install is
+   permitted. Record source/dependency/artifact hashes, runtime configuration, and
    successful synthetic self-check before account actions. A failed preparation stops;
-   do not replace it or rerun self-check after consuming the fifth preparation.
-3. With the operator present, run the one additional `interactive` action for the same
-   nominated account and remote. The earlier silent action already established the
-   UI-required category; do not repeat `inspect` or a pre-interaction silent call. Resolve
-   accounts afresh and retain exact selection/result checks. The owner operates any WAM
-   account choice, sign-in, unlock, MFA, or consent. Record the structured failure if
-   acquisition fails; do not change client, authority, scope, account, cache, or network
-   configuration to rescue this diagnostic attempt.
-4. Only if diagnostic interaction returns the exact requested email, a nonempty unexpired
-   token, and recognized Git discovery, use the one remaining `silent` action in a fresh
-   process. Otherwise stop. A follow-up failure also stops without retry. This tests
-   later process reuse of existing OS state, not fresh state or a separate consumer.
-5. Record every attempted action, resource count, structured result, manual observation,
-   termination, retention, and remaining capacity below through independent evidence
-   review. If error fields remain absent or insufficient, retain that limit rather than
-   expanding diagnostics or retrying. Another experiment requires a new accepted amendment.
+   do not replace it or rerun self-check after consuming the sixth preparation.
+3. Complete the [readiness handoff](#operator-readiness-handoff): finish the non-account
+   preflight and launch preparation, announce readiness, then stop before opening the
+   probe and wait for an explicit operator readiness response. No authentication timer
+   or account action may run during that wait.
+4. After the readiness response and short recheck, run the one additional `interactive`
+   action (Windows attempt 11) for the same nominated account and remote. Do not repeat
+   `inspect` or a pre-interaction silent call. Resolve accounts afresh and retain exact
+   selection/result checks; the earlier changed match count has no assumed explanation.
+   The owner operates WAM interaction. Do not change client, authority, scope, account,
+   cache, diagnostics, or network configuration to rescue a failure.
+5. Only if the attended interaction returns the exact requested email, a nonempty
+   unexpired token, and recognized Git discovery, use the one remaining `silent` action
+   in a fresh process while the operator is still present. Otherwise stop. A follow-up
+   failure stops without retry. This tests later-process reuse of existing OS state,
+   not fresh state or a separate consumer.
+6. Record every attempted action, resource count, structured result, manual observation,
+   termination, retention, and remaining capacity through independent evidence review.
+   A readiness announcement is not an authentication observation. Preserve unavailable
+   UI details or insufficient error fields as limits; another experiment requires a new
+   accepted amendment.
 
-Substitute the diagnostic subject's verified accepted 40-character commit for
+Substitute the attended subject's verified accepted 40-character commit for
 `<accepted-source-commit>` and use its source directory below
 `%LOCALAPPDATA%\AzureAuthResearch\windows-msal` in Windows PowerShell 5.1:
 
@@ -312,8 +352,8 @@ Substitute the diagnostic subject's verified accepted 40-character commit for
 .\Invoke-Probe.ps1 -Action prepare -AcceptedRevision <accepted-source-commit>
 ```
 
-After successful preparation verification, use `interactive` and only its conditional
-`silent` follow-up as specified above. Do not supply an email or resource URL as probe or
+After successful preparation verification and the explicit readiness handoff, use
+`interactive` and only its conditional `silent` follow-up as specified above. Do not supply an email or resource URL as probe or
 input-automation command arguments; use the existing bounded owned-form procedure. The
 read-only Git configuration query binds the previously nominated local inputs and does
 not invoke a credential helper. All input automation and operator-attendance limits above
@@ -356,11 +396,11 @@ Cleanup, if later needed, is limited to verified experiment-owned files after ow
 processes have exited. Do not clear broker state, revoke consent, sign out, or modify an
 upstream installation as cleanup.
 
-Current consumption after diagnostic execution: fetch 1/1, prepare 5/5, inspect 1/1,
-silent 1/2, interactive 2/2, discovery requests 1/3 (one anonymous, zero authenticated).
-Windows attempts 1 through 9 are complete; attempt 10 is absent. The sequence is stopped,
-and the remaining numeric slots do not authorize continuation. Historical sections
-preserve their actual outcomes and consumption at the time.
+Current consumption before the attended preparation: fetch 1/1, prepare 5/6, inspect 1/1,
+silent 1/2, interactive 2/3, discovery requests 1/3 (one anonymous, zero authenticated).
+Windows attempts 1 through 9 are complete. The next attempt is 10 (`prepare`); account
+actions remain blocked on the explicit readiness handoff after preparation. Historical
+sections preserve their actual outcomes and consumption at the time.
 
 ## Execution History
 
