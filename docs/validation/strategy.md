@@ -327,8 +327,15 @@ Windows process boundary, including the CLI's own finite request deadline.
 Azure Artifacts consumes the same Azure DevOps token-acquisition capability under the
 [public source assessment](../research/v1-public-contract-baseline.md#wsl-direct-invocation-and-azure-artifacts).
 Cross-consumer scenarios cover reuse with compatible account, Profile, tenant, and scopes,
-and separation when any relevant context differs. Package-specific session-token exchange,
-feed permissions, and package-manager protocols remain downstream integration evidence;
+and separation when any relevant context differs. Downstream integration evidence must
+identify whether the adapter presents the access token directly or uses a separately
+selected derived-credential path; NuGet does not universally require an exchange.
+For the selected direct-token design, a claim of NuGet/Artifacts support needs the actual
+account, Profile, feed, and credential-presentation path, including Basic authentication
+where used. The accepted personal-account Git discovery result does not satisfy that
+downstream obligation. PAT acquisition and fallback are excluded; a failed direct request
+does not authorize the upstream default exchange or a new engine mechanism.
+Feed permissions and package-manager protocols remain downstream integration evidence;
 token acquisition alone does not demonstrate a successful restore or package operation.
 
 ## Failure and Resilience Matrix
