@@ -1280,6 +1280,12 @@ explain the previous service-exception category. The cause of the changed accoun
 visibility and detailed operator UI steps remain unknown. The sequence is stopped; no
 reuse follow-up ran, and the evidence does not select a Profile or establish support.
 
+The subsequent [attended protocol amendment](experiments/windows-msal-account-metadata.md#operator-readiness-handoff)
+requires preparation to finish before a readiness announcement and an explicit operator
+response before any probe window opens. It prospectively permits one further interaction
+with unchanged authentication code and inputs. The handoff is an execution prerequisite,
+not evidence of a completed interaction or an explanation of either earlier outcome.
+
 **Source interpretation, retrieved 2026-09-10 UTC:** The pinned MSAL
 [`WamAdapters` exception mapping](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L58-L120)
 uses `MsalServiceException` for configuration/API-contract failures, network or temporary
