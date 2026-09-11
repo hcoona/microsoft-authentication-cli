@@ -58,7 +58,7 @@ threat model owns their security assumptions and mitigation tradeoffs.
 - Calling process to CLI protocol boundary.
 - CLI process to MSAL and native broker.
 - Process to browser, device-code terminal, or other interactive surface.
-- WSL process to Linux broker or Windows helper.
+- WSL calling process to the explicitly selected Windows CLI through interoperability.
 - Process to platform secure storage.
 - Process to network identity and resource endpoints.
 - Build and release environment to distributed artifacts.
@@ -129,6 +129,15 @@ The workstation boundary and CLI process/API boundary distinguish network trust 
 local process and dependency responsibilities. They do not assert that every local
 same-user process is a separately protected OS security principal. The secure-state role
 does not select a V2 cache format or imply access to a broker's private store.
+
+In the [selected WSL deployment](../architecture/overview.md#deployment-wsl-caller-and-windows-cli),
+the existing caller is in WSL and the CLI process, broker, and eligible state are on
+Windows. The caller/CLI flows already model the request and token crossing that boundary;
+the model needs no additional forwarding process or data flow. WSL interoperability is
+an operating-system dependency inside the workstation trust base. Executable selection,
+output confidentiality, Windows UI ownership, and bounded process completion remain
+relevant threats. This deployment refinement leaves the native model and its analysis
+input unchanged; it does not establish that an implemented cross-host path is secure.
 
 The browser/device-code interaction role combines alternative mechanisms to expose their
 common trust boundary; it is not a single proposed host component. Resource access,

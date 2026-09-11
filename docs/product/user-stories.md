@@ -38,6 +38,13 @@ first-release commitments. The computer's default account, existing target-accou
 sign-in, and device management, join, or compliance are separate context; account labels
 do not establish device state.
 
+The concrete work-account variant is cloning a company Azure DevOps Git repository from
+WSL using the company account selected for that repository. The same developer can use a
+personal account for a different repository. Each request must preserve that repository's
+selected identity even when another account is available in the Windows session. The
+caller-to-engine deployment is defined by the
+[WSL architecture](../architecture/overview.md#deployment-wsl-caller-and-windows-cli).
+
 ## Reuse Existing Operating-System Sign-In on First Use
 
 > As a developer already signed in to my selected account through the operating system,

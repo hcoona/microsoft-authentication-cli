@@ -106,8 +106,9 @@ explicitly labeled C4 element kinds and boundaries; blue elements belong to the 
 and gray elements are external. A relationship describes
 an intended responsibility, not evidence that a host or Client Profile supplies it.
 Platform services are external dependencies; MSAL is an in-process library integration.
-Exact runtime, platform integrations, state-store topology, and distributed profiles
-remain unselected.
+The WSL deployment below selects direct invocation of the Windows CLI. Exact runtime,
+provider integrations, state-store topology, and distributed profiles remain later
+design choices; deployment selection alone does not establish platform support.
 
 ### Level 1: System Context
 
@@ -166,6 +167,59 @@ Client Profile configuration enters through explicit selection under the
 later contract work. Persistent identities must be resolved through the
 [operational-identity registry](../governance/operational-identities.yaml) before their
 implementation. This view does not authorize reading upstream application state.
+
+### Deployment: WSL Caller and Windows CLI
+
+For the selected WSL journey, the calling tool explicitly invokes the Windows CLI through
+WSL interoperability. The Windows executable is the complete authentication engine for
+that request. There is no Linux engine that detects WSL, discovers a second engine, or
+forwards an authentication request. This preserves caller control over the executable and
+avoids a second configuration authority and an internal forwarding protocol.
+
+This C4 deployment view places the existing caller and CLI container on their execution
+hosts. It introduces no additional application container.
+
+```mermaid
+flowchart LR
+    subgraph workstation["Developer workstation [Deployment node]"]
+        subgraph wsl["WSL distribution [Execution environment]"]
+            caller["Calling tool or adapter<br/>[External system instance]"]
+        end
+        subgraph windows["Windows host and user session [Execution environment]"]
+            cli["Windows authentication CLI<br/>[Container instance]<br/>One request and one result"]
+            platform["Windows authentication services<br/>[External system instance]<br/>Broker, UI, and secure state"]
+        end
+    end
+    identity["Microsoft identity platform<br/>[External software system]"]
+    caller <-->|Direct executable invocation via WSL interop<br/>CLI request, stdout result, stderr, exit status| cli
+    cli -->|MSAL and Windows APIs| platform
+    cli -->|Token acquisition| identity
+    classDef owned fill:#1168bd,color:#fff,stroke:#0b4884
+    classDef external fill:#e5e7eb,color:#111827,stroke:#6b7280
+    class cli owned
+    class caller,platform,identity external
+```
+
+The caller selects a trusted executable and supplies the normal explicit request:
+Client Profile, full account email, scopes, tenant constraint, interaction permission,
+and protocol version. The Windows CLI owns Profile interpretation, Windows configuration
+and eligible state, account selection, interaction resources, the request deadline, and
+result validation. A WSL working directory or environment does not select an account,
+change a Profile, or make a Linux configuration authoritative. Any file input uses a path
+understood by the Windows process; exact configuration syntax belongs to contract design.
+
+The result crosses to the authorized WSL caller through the ordinary CLI output boundary.
+No temporary token file, local network listener, or resident bridge is required. A missing
+executable or disabled interoperability is a caller-observed launch failure. After a
+successful launch, the Windows CLI owns its normal typed outcomes and finite lifetime.
+Neither side silently switches to a Linux authentication mechanism. Detailed design must
+specify cancellation delivery and caller-disconnect handling against the existing
+no-orphaned-work requirement without assuming Linux signals terminate Windows work.
+
+The [public source assessment](../research/v1-public-contract-baseline.md#wsl-direct-invocation-and-azure-artifacts)
+supports this allocation. Windows runtime/Profile eligibility and the
+[WSL validation obligations](../validation/strategy.md#platform-matrix) still govern a
+later support claim. Native Linux broker integration is outside this selected path.
 
 ### Level 3: CLI Components
 
@@ -252,7 +306,8 @@ operation boundaries do not select mechanisms or assert platform support.
 ### Host Capabilities
 
 Describe broker, browser, terminal, v2-owned interaction, keyring, and process-host
-capabilities. WSL is explicit rather than inferred as generic Linux or Windows.
+capabilities. The selected WSL deployment executes the Windows CLI against Windows
+capabilities; it does not require a Linux engine or automatic host forwarding.
 
 Own creation and termination of engine-controlled interaction surfaces and completion
 channels. Capability reporting does not supply account, profile, scopes, or interaction
