@@ -412,11 +412,12 @@ Cleanup, if later needed, is limited to verified experiment-owned files after ow
 processes have exited. Do not clear broker state, revoke consent, sign out, or modify an
 upstream installation as cleanup.
 
-Current consumption after the attended sequence: fetch 1/1, prepare 6/6, inspect 1/1,
-silent 1/2, interactive 3/3, discovery requests 1/3 (one anonymous, zero authenticated).
-Windows attempts 1 through 11 are complete; attempt 12 is absent. The sequence is stopped,
-and the remaining numeric slots do not authorize continuation. Historical sections
-preserve their actual outcomes and consumption at the time.
+Current consumption against the amended limits: fetch 1/1, prepare 6/7, inspect 1/1,
+silent 1/2, interactive 3/4, discovery requests 1/3 (one anonymous, zero authenticated).
+Windows attempts 1 through 11 are complete; attempt 12 is the prospective preparation
+after amendment acceptance and preparation preflight. Account actions additionally
+require the fresh readiness handoff and the conditional follow-up gates above. Historical
+sections preserve their actual stopped outcomes and consumption at the time.
 
 ## Execution History
 
