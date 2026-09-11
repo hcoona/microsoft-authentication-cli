@@ -142,6 +142,13 @@ evidence that a mechanism or platform passes the corresponding tests.
 - Fixed single-tenant policy, eligible multitenant/MSA `common` default, compatible exact
   token/resource-tenant GUID, B2B home/resource-tenant distinction, and no exact-to-common
   fallback or email-domain inference.
+- The [provider mapping](../architecture/client-application-identity.md#provider-mapping)
+  preserving normalized intent: ordinary `common` requests do not gain legacy passthrough;
+  the eligible legacy compatibility path can use its documented routing while preserving
+  `common` and strict identity checks. For an MSA account with an explicit resource tenant,
+  both silent and interactive operations retain that exact tenant, including across
+  permitted fallback. Wrong-tenant results fail validation; routing metadata never
+  substitutes for actual result metadata. Fixed-tenant conflicts fail before acquisition.
 - Dynamic permission coverage with provider extras allowed; `/.default` resource/result
   association without literal returned-scope matching or access-token parsing; rejection
   of mixed dynamic permissions and `/.default`.
@@ -166,6 +173,11 @@ evidence that a mechanism or platform passes the corresponding tests.
 ### Mechanism Tests
 
 - Selected-account silent acquisition.
+- The exact accepted Profile/host's ordinary, legacy-passthrough, and explicit-tenant
+  paths where applicable. Existing legacy `organizations`/transfer observations do not
+  establish direct `/common` passthrough, exact-tenant MSA behavior, or arbitrary client
+  registration eligibility. Use dependency contracts first and bounded observations only
+  for remaining integration uncertainty; no all-platform cross-product matrix is implied.
 - Rejection of identity-opaque operating-system-account silent acquisition.
 - Broker interactive acquisition.
 - System-browser acquisition.
