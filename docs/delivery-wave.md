@@ -15,103 +15,75 @@ proposal does not authorize any work it would add before merge.
 
 ## Authorized Advancements
 
-### Develop the high-level architecture and resolve decision-critical feasibility risks
+### Complete the WSL-to-Windows Azure DevOps Slice design and contracts
 
-- **Work carrier:** [Issue #35](https://github.com/hcoona/microsoft-authentication-cli/issues/35)
-- **Prerequisite:** The requirements baseline in
-  [PR #32](https://github.com/hcoona/microsoft-authentication-cli/pull/32) is accepted on
-  `main-v2`. A material change to a relied-on requirement, policy, or evidence authority
-  pauses dependent work until its scope and review are refreshed.
-- **Architecture boundary:** Refine the existing [architecture overview](architecture/overview.md)
-  and scoped views into a high-level allocation of component responsibilities,
-  dependency direction, trust boundaries, and end-to-end request, token, interaction,
-  and reusable-state lifecycles. Trace all seven [user goals](product/user-stories.md),
-  prioritizing the primary requested-personal-account Azure DevOps journey. Requirements
-  remain authoritative; an implementation limitation cannot silently weaken them.
-  Record significant choices in existing architecture or decision families rather than
-  creating a parallel specification.
-- **Accepted research inputs:** Accepted product, architecture, security, compatibility,
-  validation, and research records; relevant public standards, official documentation,
-  public software repositories and dependency implementations, Issues, pull requests,
-  and release material. Prefer official service and protocol guidance for service
-  behavior. Pin recoverable source locations and revisions where available, date mutable
-  retrieval, and preserve source findings, hypotheses, and observations as distinct
-  evidence. Sources within these categories need no per-repository Wave amendment.
-  For the owner's designated Azure DevOps Git access scenario, also permit read-only
-  inspection of that local checkout's remote and credential-routing configuration to
-  identify the single target and requested account. Do not inspect project contents,
-  passwords, tokens, stored credential material, or unrelated private work as research
-  inputs.
-- **Research and experiment subjects:** Resolve questions that could change a high-level
-  decision: external client-registration eligibility for the primary journey, strict
-  account enumeration and authoritative identity metadata, first-use OS-state and
-  subsequent cross-consumer reuse, and the interaction, deadline, result, and secure-state
-  boundaries that integrate these capabilities. Use public desk evidence when sufficient.
-  Necessary empirical work may use minimal non-product probes and the public dependency
-  restore, build, or test steps needed to run them. Probe code and results are research
-  artifacts, not a production implementation or an implementation Slice.
-- **Execution prerequisites:** No experiment under this entry may execute until the
-  accepted [experiment policy](research/experiment-safety.md) covers its environment
-  and effects, and a Git-tracked protocol for its exact subject,
-  environment, versions, expected observations, effects, finite attempt/time/cumulative
-  limits, sensitive-output handling, stop conditions, and cleanup or retention is
-  independently reviewed and accepted on `main-v2`. Bind execution to that revision.
-  Count manual as well as automated attempts, including failed starts, and retain prior
-  consumption when revising a protocol. Do not run when remaining authorized capacity
-  cannot be established. Repetition within those accepted bounds needs no new per-run
-  owner approval. Desk architecture and research may proceed independently of this
-  execution prerequisite.
-- **Environment and owner risk decision:** The owner accepts using existing,
-  non-disposable owner-designated Windows, Linux, or macOS machines and their authorized
-  account, broker, and secure-cache state for these bounded experiments. The owner may
-  switch machines and operate interactive steps manually; VM or disposable-user setup
-  is not a prerequisite. This accepts the protocol-declared token acquisition and
-  ordinary authentication/session and secure-state updates for the selected account
-  and scopes, not arbitrary account or machine changes. User-consent interaction remains
-  operator-controlled. Existing state is not assumed clean, and provider-side changes
-  are not assumed reversible. Native or cross-host paths must be explicitly covered by
-  the accepted protocol and applicable rechecks before use.
-  The owner also accepts using the designated personal Microsoft account to test
-  read-only access to one owner-designated Azure DevOps Git repository, including a
-  private repository, from the existing corporate-account Windows context. Local
-  identifiers remain private. This accepts ordinary selected-account authentication
-  and service-side access auditing; it does not authorize corporate-account fallback,
-  PAT creation, changes to device management, or repository mutation.
-- **Maximum effects:** Outside record operations and public-source retrieval, permit only
-  protocol-declared execution on the designated machine, the necessary public
-  development dependencies and local probe artifacts, selected-account authentication
-  and its declared state effects, read-only public test-resource probes, and bounded
-  Git discovery requests against the single designated Azure DevOps repository. That
-  exception may inspect an authentication challenge and the minimal response needed
-  to recognize successful Git discovery; it does not permit object/pack downloads,
-  checkout changes, browsing other repositories, or retaining refs or private content.
-  Bound artifact and dependency locations, retained authentication state, network endpoints,
-  repetitions, and cleanup in the protocol; do not reinstall or reprovision machines,
-  remove existing installations, or clear unrelated account/cache state. No experiment
-  may exceed this effects envelope through a protocol or a change of machine.
-- **Evidence and consumers:** Record public, sanitized, reproducible outcomes with their
-  actual environment, existing-state limitations, manual steps, and finite execution
-  history. Operator-assisted observations require the same accepted protocol and
-  evidence review as automated runs; private anecdotes are not a substitute. Use the
-  minimum admitted research/protocol carriers and update directly affected architecture,
-  security, validation, and evidence consumers. Evaluate
-  [rechecks](research/rechecks.yaml) at this Wave's merge and each fired trigger, and
-  complete the applicable outcomes before accepting the decisions they govern.
-- **Bounded outcome and acceptance:** A coherent high-level architecture and its
-  decision-critical evidence are accepted on `main-v2`. Every user goal has an
-  architectural allocation; an unresolved premise that could invalidate a choice keeps
-  that choice unselected. Applicable independent architecture, consistency, minimality,
-  record-system, and research-evidence reviews have no unresolved material findings.
-  Research observations do not themselves enable a Client Profile or establish support.
-- **Excluded:** Product implementation or upstream production-code imports; medium- or
-  low-level implementation design; frozen public wire or Profile-file schemas;
-  distributed Client Profile activation; platform support selection; downstream adapter,
-  packaging, installer, migration, or release work. Except for the designated local
-  configuration and Git discovery boundary above, no private repository, feed,
-  unpublished service, or private-evidence access is authorized. Retained research may
-  contain only the protocol's sanitized direct observations, such as status and
-  response-kind flags, with the private target and account represented by roles. Never
-  retain credentials, private identities or addresses, raw broker diagnostics, private
-  repository data, or unpublished downstream anecdotes in committed artifacts.
-  No PAT creation, administrator consent, application or tenant administration, resource
-  writes, or remote mutation beyond the declared authentication/session effects.
+- **Work carrier:** [Issue #56](https://github.com/hcoona/microsoft-authentication-cli/issues/56)
+- **Prerequisites:** The requirements accepted in
+  [PR #32](https://github.com/hcoona/microsoft-authentication-cli/pull/32), current
+  [high-level architecture](architecture/overview.md),
+  [client and tenant mapping](architecture/client-application-identity.md#provider-mapping),
+  and [public evidence](research/v1-public-contract-baseline.md) are the accepted basis.
+  A material prerequisite change pauses dependent work until its scope, evidence, and
+  review are refreshed.
+- **Selected Slice:** A WSL caller explicitly invokes the Windows CLI to obtain an Azure
+  DevOps token for a specified personal Microsoft account or work account. Cover the
+  personal-repository journey and cloning a company Azure DevOps repository with its
+  selected company account. Include Azure Artifacts token acquisition and compatible
+  authentication-state reuse in the same Slice: the
+  [public source assessment](research/v1-public-contract-baseline.md#wsl-direct-invocation-and-azure-artifacts)
+  establishes the shared Azure DevOps resource/scope. Artifacts inclusion is settled;
+  Git/package protocols, service access, feed permissions, and derived-credential
+  lifecycle remain downstream under
+  [decision 0004](decisions/0004-keep-the-authentication-engine-separate-from-consumers.md).
+  Select no Linux CLI detection/forwarding or native Linux broker path.
+- **Bounded advancement:** Complete the detailed design and contracts needed before
+  implementation of this Slice. Select the concrete Windows runtime, dependency and
+  broker integration; specify strict account resolution, silent reuse and permitted
+  interaction, authoritative result validation, tenant mapping, original deadline,
+  cancellation/disconnect handling, owned UI/completion, and secure-state observations.
+  Preserve the accepted requirements; implementation convenience cannot weaken them.
+  Define the versioned CLI request/result/process contract and the minimum Client Profile
+  configuration contract, including explicit selection, Windows configuration/path
+  ownership, validation, typed failures, and compatibility boundaries. Define a concrete
+  candidate Profile with the external-dependency, consent/audit/branding, partitioning,
+  and failure obligations required by its gate; defining it does not enable or distribute
+  it. Refine scenario requirements only inside the selected personal/work-account
+  journeys and existing product boundary.
+- **Design and validation records:** Use existing canonical architecture, requirements,
+  security, validation, design, and contract families at the minimum useful granularity.
+  Permit the reviewed catalog/routing changes needed to activate the existing scheduled
+  design and contract families for design before implementation, plus schema checks and
+  synthetic contract examples. Apply the accepted governance amendment reviews to those
+  changes; this grant does not waive the accepted activation rules. Use C4 deployment and
+  UML sequence/state views where they answer concrete design questions. Update the native
+  TMT model when flows or boundaries change and record native open/analysis validation
+  for a changed model. Define scenario and contract validation for both account journeys,
+  Git/Artifacts reuse, host/process failures, and explicit unsupported combinations.
+  Use unit tests for core algorithms; ordinary business orchestration is covered through
+  scenario outcomes rather than private implementation structure.
+- **Accepted inputs and effects:** Accepted repository authorities and public standards,
+  official documentation, public source/dependency implementations, Issues, pull requests,
+  and release material. Pin recoverable source revisions and date mutable retrievals.
+  Permit record operations, public-source retrieval, deterministic repository/contract
+  checks, and native TMT authoring/analysis with the existing tool installation. No
+  authentication, account/cache access, resource access, installation, dependency restore
+  or build experiment is authorized. Existing probe consumption and evidence limitations
+  remain intact. Private account, tenant, repository, and feed identifiers or contents
+  must not enter public records. Evaluate every recheck at this Wave's merge and each
+  fired trigger, updating materially affected consumers.
+- **Acceptance:** The Slice has accepted requirements, concrete design and contracts,
+  a scenario validation basis, and explicit unsupported cases. Required independent
+  architecture, consistency, minimality, security, record-system, and research-evidence
+  reviews have no unresolved material findings. Any missing premise that can invalidate
+  a concrete choice keeps that choice unselected and prevents claiming its design ready
+  for implementation. Separate design acceptance from future runtime evidence, Profile
+  activation, and support acceptance. Completion ends at the design gate; product
+  implementation requires a later accepted Wave grant.
+- **Excluded:** Product implementation or upstream production-code imports; new executable
+  probes or repetition of completed experiments; live Git clone, repository/feed access,
+  package operations, or corporate-account authentication; Linux forwarding, native Linux
+  or macOS integration, and browser/device-code support expansion; downstream adapters,
+  service credentials, service/organization discovery, confidential or workload identities;
+  Profile activation/distribution, general platform-support promises, packaging,
+  installation, migration, and release. A necessary experiment or product-boundary change
+  requires its own accepted authorization and applicable protocol or owner disposition.
