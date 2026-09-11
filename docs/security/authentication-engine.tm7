@@ -795,6 +795,135 @@ MIT License
             <Width xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">190</Width>
           </a:Value>
         </a:KeyValueOfguidanyType>
+        <a:KeyValueOfguidanyType>
+          <a:Key>d75e124f-6da6-49a0-8b8c-79a7431817dd</a:Key>
+          <a:Value z:Id="i30" i:type="StencilParallelLines">
+            <GenericTypeId xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">GE.DS</GenericTypeId>
+            <Guid xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">d75e124f-6da6-49a0-8b8c-79a7431817dd</Guid>
+            <Properties xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:HeaderDisplayAttribute">
+                <b:DisplayName>Generic Data Store</b:DisplayName>
+                <b:Name/>
+                <b:Value i:nil="true"/>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:StringDisplayAttribute">
+                <b:DisplayName>Name</b:DisplayName>
+                <b:Name/>
+                <b:Value xmlns:c="http://www.w3.org/2001/XMLSchema" i:type="c:string">Explicit caller-managed Profile file</b:Value>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:BooleanDisplayAttribute">
+                <b:DisplayName>Out Of Scope</b:DisplayName>
+                <b:Name>71f3d9aa-b8ef-4e54-8126-607a1d903103</b:Name>
+                <b:Value xmlns:c="http://www.w3.org/2001/XMLSchema" i:type="c:boolean">false</b:Value>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:StringDisplayAttribute">
+                <b:DisplayName>Reason For Out Of Scope</b:DisplayName>
+                <b:Name>752473b6-52d4-4776-9a24-202153f7d579</b:Name>
+                <b:Value xmlns:c="http://www.w3.org/2001/XMLSchema" i:type="c:string"/>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:HeaderDisplayAttribute">
+                <b:DisplayName>Configurable Attributes</b:DisplayName>
+                <b:Name/>
+                <b:Value i:nil="true"/>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Stores Credentials</b:DisplayName>
+                <b:Name>storesCredentials</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Stores Log Data</b:DisplayName>
+                <b:Name>storesLogData</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Encrypted</b:DisplayName>
+                <b:Name>Encrypted</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Signed</b:DisplayName>
+                <b:Name>Signed</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Write Access</b:DisplayName>
+                <b:Name>AccessType</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Removable Storage</b:DisplayName>
+                <b:Name>RemoveableStorage</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Backup</b:DisplayName>
+                <b:Name>Backup</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Shared</b:DisplayName>
+                <b:Name>shared</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Store Type</b:DisplayName>
+                <b:Name>storeType</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>SQL Relational Database</a:string>
+                  <a:string>Non Relational Database</a:string>
+                  <a:string>File System</a:string>
+                  <a:string>Registry</a:string>
+                  <a:string>Configuration</a:string>
+                  <a:string>Cache</a:string>
+                  <a:string>HTML5 Storage</a:string>
+                  <a:string>Cookie</a:string>
+                  <a:string>Device</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+            </Properties>
+            <TypeId xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">GE.DS</TypeId>
+            <Height xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">85</Height>
+            <Left xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">70</Left>
+            <StrokeDashArray xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts" i:nil="true"/>
+            <StrokeThickness xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">1</StrokeThickness>
+            <Top xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">55</Top>
+            <Width xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">200</Width>
+          </a:Value>
+        </a:KeyValueOfguidanyType>
       </Borders>
       <Header>Authentication and reusable-state boundaries</Header>
       <Lines xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
@@ -812,7 +941,7 @@ MIT License
               <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:StringDisplayAttribute">
                 <b:DisplayName>Name</b:DisplayName>
                 <b:Name/>
-                <b:Value xmlns:c="http://www.w3.org/2001/XMLSchema" i:type="c:string">Explicit authentication request</b:Value>
+                <b:Value xmlns:c="http://www.w3.org/2001/XMLSchema" i:type="c:string">Explicit request and optional lifetime pipe</b:Value>
               </a:anyType>
               <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:StringDisplayAttribute">
                 <b:DisplayName>Dataflow Order</b:DisplayName>
@@ -3502,6 +3631,175 @@ MIT License
             <TargetY xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">672</TargetY>
           </a:Value>
         </a:KeyValueOfguidanyType>
+        <a:KeyValueOfguidanyType>
+          <a:Key>411f0631-f389-414a-a8ca-1f6c930ce685</a:Key>
+          <a:Value z:Id="i31" i:type="Connector">
+            <GenericTypeId xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">GE.DF</GenericTypeId>
+            <Guid xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">411f0631-f389-414a-a8ca-1f6c930ce685</Guid>
+            <Properties xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:HeaderDisplayAttribute">
+                <b:DisplayName>Generic Data Flow</b:DisplayName>
+                <b:Name/>
+                <b:Value i:nil="true"/>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:StringDisplayAttribute">
+                <b:DisplayName>Name</b:DisplayName>
+                <b:Name/>
+                <b:Value xmlns:c="http://www.w3.org/2001/XMLSchema" i:type="c:string">Selected nonsecret Profile snapshot</b:Value>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:StringDisplayAttribute">
+                <b:DisplayName>Dataflow Order</b:DisplayName>
+                <b:Name>15ccd509-98eb-49ad-b9c2-b4a2926d1780</b:Name>
+                <b:Value xmlns:c="http://www.w3.org/2001/XMLSchema" i:type="c:string">0</b:Value>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:BooleanDisplayAttribute">
+                <b:DisplayName>Out Of Scope</b:DisplayName>
+                <b:Name>71f3d9aa-b8ef-4e54-8126-607a1d903103</b:Name>
+                <b:Value xmlns:c="http://www.w3.org/2001/XMLSchema" i:type="c:boolean">false</b:Value>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:StringDisplayAttribute">
+                <b:DisplayName>Reason For Out Of Scope</b:DisplayName>
+                <b:Name>752473b6-52d4-4776-9a24-202153f7d579</b:Name>
+                <b:Value xmlns:c="http://www.w3.org/2001/XMLSchema" i:type="c:string"/>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:HeaderDisplayAttribute">
+                <b:DisplayName>Configurable Attributes</b:DisplayName>
+                <b:Name/>
+                <b:Value i:nil="true"/>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Physical Network</b:DisplayName>
+                <b:Name>channel</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>Not Selected</a:string>
+                  <a:string>Wire</a:string>
+                  <a:string>Wi-Fi</a:string>
+                  <a:string>Bluetooth</a:string>
+                  <a:string>2G-4G</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Source Authenticated</b:DisplayName>
+                <b:Name>authenticatesSource</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>Not Selected</a:string>
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Destination Authenticated</b:DisplayName>
+                <b:Name>authenticatesDestination</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Provides Confidentiality</b:DisplayName>
+                <b:Name>providesConfidentiality</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Provides Integrity</b:DisplayName>
+                <b:Name>providesIntegrity</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Transmits XML</b:DisplayName>
+                <b:Name>XMLenc</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Contains Cookies</b:DisplayName>
+                <b:Name>Cookies</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>Yes</a:string>
+                  <a:string>No</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>SOAP Payload</b:DisplayName>
+                <b:Name>SOAP</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>REST Payload</b:DisplayName>
+                <b:Name>REST</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>RSS Payload</b:DisplayName>
+                <b:Name>RSS</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>JSON Payload</b:DisplayName>
+                <b:Name>JSON</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>No</a:string>
+                  <a:string>Yes</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+              <a:anyType xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase" i:type="b:ListDisplayAttribute">
+                <b:DisplayName>Forgery Protection</b:DisplayName>
+                <b:Name>54851a3b-65da-4902-b4e0-94ef015be735</b:Name>
+                <b:Value i:type="a:ArrayOfstring">
+                  <a:string>Not Selected</a:string>
+                  <a:string>ValidateAntiForgeryTokenAttribute</a:string>
+                  <a:string>ViewStateUserKey</a:string>
+                  <a:string>Nonce</a:string>
+                  <a:string>Other dynamic canary</a:string>
+                  <a:string>Static header not available to the browser</a:string>
+                  <a:string>Other</a:string>
+                  <a:string>None</a:string>
+                  <a:string>Not applicable because the request does not change data</a:string>
+                </b:Value>
+                <b:SelectedIndex>0</b:SelectedIndex>
+              </a:anyType>
+            </Properties>
+            <TypeId xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">GE.DF</TypeId>
+            <HandleX xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">260</HandleX>
+            <HandleY xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">210</HandleY>
+            <PortSource xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">East</PortSource>
+            <PortTarget xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">West</PortTarget>
+            <SourceGuid xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">d75e124f-6da6-49a0-8b8c-79a7431817dd</SourceGuid>
+            <SourceX xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">270</SourceX>
+            <SourceY xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">98</SourceY>
+            <TargetGuid xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</TargetGuid>
+            <TargetX xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">410</TargetX>
+            <TargetY xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts">240</TargetY>
+          </a:Value>
+        </a:KeyValueOfguidanyType>
       </Lines>
       <Zoom>1</Zoom>
     </DrawingSurfaceModel>
@@ -3568,7 +3866,7 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -3622,7 +3920,7 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -3672,11 +3970,11 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>UserThreatDescription</a:Key>
-            <a:Value>Data flowing across Explicit authentication request may be tampered with by an attacker. This may lead to a denial of service attack against Authentication engine + MSAL or an elevation of privilege attack against Authentication engine + MSAL or an information disclosure by Authentication engine + MSAL. Failure to verify that input is as expected is a root cause of a very large number of exploitable issues. Consider all paths and the way they handle data. Verify that all input is verified for correctness using an approved list input validation approach.</a:Value>
+            <a:Value>Data flowing across Explicit request and optional lifetime pipe may be tampered with by an attacker. This may lead to a denial of service attack against Authentication engine + MSAL or an elevation of privilege attack against Authentication engine + MSAL or an information disclosure by Authentication engine + MSAL. Failure to verify that input is as expected is a root cause of a very large number of exploitable issues. Consider all paths and the way they handle data. Verify that all input is verified for correctness using an approved list input validation approach.</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -3730,7 +4028,7 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -3780,11 +4078,11 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>UserThreatDescription</a:Key>
-            <a:Value>Data flowing across Explicit authentication request may be sniffed by an attacker. Depending on what type of data an attacker can read, it may be used to attack other parts of the system or simply be a disclosure of information leading to compliance violations. Consider encrypting the data flow.</a:Value>
+            <a:Value>Data flowing across Explicit request and optional lifetime pipe may be sniffed by an attacker. Depending on what type of data an attacker can read, it may be used to attack other parts of the system or simply be a disclosure of information leading to compliance violations. Consider encrypting the data flow.</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -3838,7 +4136,7 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -3876,7 +4174,7 @@ MIT License
         <b:Properties>
           <a:KeyValueOfstringstring>
             <a:Key>Title</a:Key>
-            <a:Value>Data Flow Explicit authentication request Is Potentially Interrupted</a:Value>
+            <a:Value>Data Flow Explicit request and optional lifetime pipe Is Potentially Interrupted</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>UserThreatCategory</a:Key>
@@ -3892,7 +4190,7 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -3946,7 +4244,7 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -4000,7 +4298,7 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -4054,7 +4352,7 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -4108,7 +4406,7 @@ MIT License
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>InteractionString</a:Key>
-            <a:Value>Explicit authentication request</a:Value>
+            <a:Value>Explicit request and optional lifetime pipe</a:Value>
           </a:KeyValueOfstringstring>
           <a:KeyValueOfstringstring>
             <a:Key>Priority</a:Key>
@@ -8229,6 +8527,492 @@ MIT License
         <b:TargetGuid>4813a143-9fb0-454e-bcad-cae2809cba9f</b:TargetGuid>
         <b:Title i:nil="true"/>
         <b:TypeId>D4</b:TypeId>
+        <b:Upgraded>false</b:Upgraded>
+        <b:UserThreatCategory i:nil="true"/>
+        <b:UserThreatDescription i:nil="true"/>
+        <b:UserThreatShortDescription i:nil="true"/>
+        <b:Wide>false</b:Wide>
+      </a:Value>
+    </a:KeyValueOfstringThreatpc_P0_PhOB>
+    <a:KeyValueOfstringThreatpc_P0_PhOB>
+      <a:Key>S2d75e124f-6da6-49a0-8b8c-79a7431817dd411f0631-f389-414a-a8ca-1f6c930ce6859ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</a:Key>
+      <a:Value xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase">
+        <b:ChangedBy>Architecture review</b:ChangedBy>
+        <b:DrawingSurfaceGuid>878daffd-a529-4789-883c-f6f01fdf0cd6</b:DrawingSurfaceGuid>
+        <b:FlowGuid>411f0631-f389-414a-a8ca-1f6c930ce685</b:FlowGuid>
+        <b:Id>88</b:Id>
+        <b:InteractionKey>d75e124f-6da6-49a0-8b8c-79a7431817dd:411f0631-f389-414a-a8ca-1f6c930ce685:9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:InteractionKey>
+        <b:InteractionString i:nil="true"/>
+        <b:ModifiedAt>2026-09-11T18:22:14Z</b:ModifiedAt>
+        <b:Priority>High</b:Priority>
+        <b:Properties>
+          <a:KeyValueOfstringstring>
+            <a:Key>Title</a:Key>
+            <a:Value>Spoofing the Authentication engine + MSAL Process</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatCategory</a:Key>
+            <a:Value>Spoofing</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatShortDescription</a:Key>
+            <a:Value>Spoofing is when a process or entity is something other than its claimed identity. Examples include substituting a process, a file, website or a network address.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatDescription</a:Key>
+            <a:Value>Authentication engine + MSAL may be spoofed by an attacker and this may lead to information disclosure by Explicit caller-managed Profile file. Consider using a standard authentication mechanism to identify the destination process.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>InteractionString</a:Key>
+            <a:Value>Selected nonsecret Profile snapshot</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>Priority</a:Key>
+            <a:Value>High</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>StateInformation</a:Key>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. This flow contains deliberately public client/cloud/ownership configuration, not authentication material or account email. Disclosure of that configuration is not a protected asset. Executable selection and a spoofed authentication process remain covered by the existing caller/CLI spoofing threats; no mutual-authentication mechanism is added to a local public-file read.</a:Value>
+          </a:KeyValueOfstringstring>
+        </b:Properties>
+        <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
+        <b:State>NotApplicable</b:State>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. This flow contains deliberately public client/cloud/ownership configuration, not authentication material or account email. Disclosure of that configuration is not a protected asset. Executable selection and a spoofed authentication process remain covered by the existing caller/CLI spoofing threats; no mutual-authentication mechanism is added to a local public-file read.</b:StateInformation>
+        <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
+        <b:Title i:nil="true"/>
+        <b:TypeId>S2</b:TypeId>
+        <b:Upgraded>false</b:Upgraded>
+        <b:UserThreatCategory i:nil="true"/>
+        <b:UserThreatDescription i:nil="true"/>
+        <b:UserThreatShortDescription i:nil="true"/>
+        <b:Wide>false</b:Wide>
+      </a:Value>
+    </a:KeyValueOfstringThreatpc_P0_PhOB>
+    <a:KeyValueOfstringThreatpc_P0_PhOB>
+      <a:Key>S7d75e124f-6da6-49a0-8b8c-79a7431817dd411f0631-f389-414a-a8ca-1f6c930ce6859ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</a:Key>
+      <a:Value xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase">
+        <b:ChangedBy>Architecture review</b:ChangedBy>
+        <b:DrawingSurfaceGuid>878daffd-a529-4789-883c-f6f01fdf0cd6</b:DrawingSurfaceGuid>
+        <b:FlowGuid>411f0631-f389-414a-a8ca-1f6c930ce685</b:FlowGuid>
+        <b:Id>89</b:Id>
+        <b:InteractionKey>d75e124f-6da6-49a0-8b8c-79a7431817dd:411f0631-f389-414a-a8ca-1f6c930ce685:9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:InteractionKey>
+        <b:InteractionString i:nil="true"/>
+        <b:ModifiedAt>2026-09-11T18:22:14Z</b:ModifiedAt>
+        <b:Priority>High</b:Priority>
+        <b:Properties>
+          <a:KeyValueOfstringstring>
+            <a:Key>Title</a:Key>
+            <a:Value>Spoofing of Source Data Store Explicit caller-managed Profile file</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatCategory</a:Key>
+            <a:Value>Spoofing</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatShortDescription</a:Key>
+            <a:Value>Spoofing is when a process or entity is something other than its claimed identity. Examples include substituting a process, a file, website or a network address.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatDescription</a:Key>
+            <a:Value>Explicit caller-managed Profile file may be spoofed by an attacker and this may lead to incorrect data delivered to Authentication engine + MSAL. Consider using a standard authentication mechanism to identify the source data store.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>InteractionString</a:Key>
+            <a:Value>Selected nonsecret Profile snapshot</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>Priority</a:Key>
+            <a:Value>High</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>StateInformation</a:Key>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. The caller explicitly selects one local Windows Profile file. Validate one bounded immutable snapshot, trusted cloud, client/integration compatibility and tenant policy before provider work. Rely on normal Windows file permissions within the same-user threat model. No URL/configuration discovery, inherited defaults, executable configuration or upstream import. Validate configuration tampering and wrong-client scenarios.</a:Value>
+          </a:KeyValueOfstringstring>
+        </b:Properties>
+        <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
+        <b:State>NeedsInvestigation</b:State>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. The caller explicitly selects one local Windows Profile file. Validate one bounded immutable snapshot, trusted cloud, client/integration compatibility and tenant policy before provider work. Rely on normal Windows file permissions within the same-user threat model. No URL/configuration discovery, inherited defaults, executable configuration or upstream import. Validate configuration tampering and wrong-client scenarios.</b:StateInformation>
+        <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
+        <b:Title i:nil="true"/>
+        <b:TypeId>S7</b:TypeId>
+        <b:Upgraded>false</b:Upgraded>
+        <b:UserThreatCategory i:nil="true"/>
+        <b:UserThreatDescription i:nil="true"/>
+        <b:UserThreatShortDescription i:nil="true"/>
+        <b:Wide>false</b:Wide>
+      </a:Value>
+    </a:KeyValueOfstringThreatpc_P0_PhOB>
+    <a:KeyValueOfstringThreatpc_P0_PhOB>
+      <a:Key>R6d75e124f-6da6-49a0-8b8c-79a7431817dd411f0631-f389-414a-a8ca-1f6c930ce6859ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</a:Key>
+      <a:Value xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase">
+        <b:ChangedBy>Architecture review</b:ChangedBy>
+        <b:DrawingSurfaceGuid>878daffd-a529-4789-883c-f6f01fdf0cd6</b:DrawingSurfaceGuid>
+        <b:FlowGuid>411f0631-f389-414a-a8ca-1f6c930ce685</b:FlowGuid>
+        <b:Id>90</b:Id>
+        <b:InteractionKey>d75e124f-6da6-49a0-8b8c-79a7431817dd:411f0631-f389-414a-a8ca-1f6c930ce685:9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:InteractionKey>
+        <b:InteractionString i:nil="true"/>
+        <b:ModifiedAt>2026-09-11T18:22:14Z</b:ModifiedAt>
+        <b:Priority>High</b:Priority>
+        <b:Properties>
+          <a:KeyValueOfstringstring>
+            <a:Key>Title</a:Key>
+            <a:Value>Potential Data Repudiation by Authentication engine + MSAL</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatCategory</a:Key>
+            <a:Value>Repudiation</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatShortDescription</a:Key>
+            <a:Value>Repudiation threats involve an adversary denying that something happened.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatDescription</a:Key>
+            <a:Value>Authentication engine + MSAL claims that it did not receive data from a source outside the trust boundary. Consider using logging or auditing to record the source, time, and summary of the received data.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>InteractionString</a:Key>
+            <a:Value>Selected nonsecret Profile snapshot</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>Priority</a:Key>
+            <a:Value>High</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>StateInformation</a:Key>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. The engine does not provide nonrepudiation, signed configuration-read receipts or an identity-rich audit ledger. Explicit caller selection, typed outcomes and sanitized diagnostics satisfy the accepted contract. Adding persistent identity-rich auditing would expand scope and conflict with email/secret containment.</a:Value>
+          </a:KeyValueOfstringstring>
+        </b:Properties>
+        <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
+        <b:State>NotApplicable</b:State>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. The engine does not provide nonrepudiation, signed configuration-read receipts or an identity-rich audit ledger. Explicit caller selection, typed outcomes and sanitized diagnostics satisfy the accepted contract. Adding persistent identity-rich auditing would expand scope and conflict with email/secret containment.</b:StateInformation>
+        <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
+        <b:Title i:nil="true"/>
+        <b:TypeId>R6</b:TypeId>
+        <b:Upgraded>false</b:Upgraded>
+        <b:UserThreatCategory i:nil="true"/>
+        <b:UserThreatDescription i:nil="true"/>
+        <b:UserThreatShortDescription i:nil="true"/>
+        <b:Wide>false</b:Wide>
+      </a:Value>
+    </a:KeyValueOfstringThreatpc_P0_PhOB>
+    <a:KeyValueOfstringThreatpc_P0_PhOB>
+      <a:Key>I23d75e124f-6da6-49a0-8b8c-79a7431817dd411f0631-f389-414a-a8ca-1f6c930ce6859ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</a:Key>
+      <a:Value xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase">
+        <b:ChangedBy>Architecture review</b:ChangedBy>
+        <b:DrawingSurfaceGuid>878daffd-a529-4789-883c-f6f01fdf0cd6</b:DrawingSurfaceGuid>
+        <b:FlowGuid>411f0631-f389-414a-a8ca-1f6c930ce685</b:FlowGuid>
+        <b:Id>91</b:Id>
+        <b:InteractionKey>d75e124f-6da6-49a0-8b8c-79a7431817dd:411f0631-f389-414a-a8ca-1f6c930ce685:9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:InteractionKey>
+        <b:InteractionString i:nil="true"/>
+        <b:ModifiedAt>2026-09-11T18:22:14Z</b:ModifiedAt>
+        <b:Priority>High</b:Priority>
+        <b:Properties>
+          <a:KeyValueOfstringstring>
+            <a:Key>Title</a:Key>
+            <a:Value>Weak Access Control for a Resource</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatCategory</a:Key>
+            <a:Value>Information Disclosure</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatShortDescription</a:Key>
+            <a:Value>Information disclosure happens when the information can be read by an unauthorized party.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatDescription</a:Key>
+            <a:Value>Improper data protection of Explicit caller-managed Profile file can allow an attacker to read information not intended for disclosure. Review authorization settings.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>InteractionString</a:Key>
+            <a:Value>Selected nonsecret Profile snapshot</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>Priority</a:Key>
+            <a:Value>High</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>StateInformation</a:Key>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Profile fields are public identifiers and nonsecret integration/ownership metadata; no token, password or account email belongs in this file. Confidentiality of that public configuration is not a goal. Integrity and malicious replacement remain applicable under the source-spoofing and execution-flow candidates; public configuration does not require encryption.</a:Value>
+          </a:KeyValueOfstringstring>
+        </b:Properties>
+        <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
+        <b:State>NotApplicable</b:State>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Profile fields are public identifiers and nonsecret integration/ownership metadata; no token, password or account email belongs in this file. Confidentiality of that public configuration is not a goal. Integrity and malicious replacement remain applicable under the source-spoofing and execution-flow candidates; public configuration does not require encryption.</b:StateInformation>
+        <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
+        <b:Title i:nil="true"/>
+        <b:TypeId>I23</b:TypeId>
+        <b:Upgraded>false</b:Upgraded>
+        <b:UserThreatCategory i:nil="true"/>
+        <b:UserThreatDescription i:nil="true"/>
+        <b:UserThreatShortDescription i:nil="true"/>
+        <b:Wide>false</b:Wide>
+      </a:Value>
+    </a:KeyValueOfstringThreatpc_P0_PhOB>
+    <a:KeyValueOfstringThreatpc_P0_PhOB>
+      <a:Key>D3d75e124f-6da6-49a0-8b8c-79a7431817dd411f0631-f389-414a-a8ca-1f6c930ce6859ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</a:Key>
+      <a:Value xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase">
+        <b:ChangedBy>Architecture review</b:ChangedBy>
+        <b:DrawingSurfaceGuid>878daffd-a529-4789-883c-f6f01fdf0cd6</b:DrawingSurfaceGuid>
+        <b:FlowGuid>411f0631-f389-414a-a8ca-1f6c930ce685</b:FlowGuid>
+        <b:Id>92</b:Id>
+        <b:InteractionKey>d75e124f-6da6-49a0-8b8c-79a7431817dd:411f0631-f389-414a-a8ca-1f6c930ce685:9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:InteractionKey>
+        <b:InteractionString i:nil="true"/>
+        <b:ModifiedAt>2026-09-11T18:22:14Z</b:ModifiedAt>
+        <b:Priority>High</b:Priority>
+        <b:Properties>
+          <a:KeyValueOfstringstring>
+            <a:Key>Title</a:Key>
+            <a:Value>Potential Process Crash or Stop for Authentication engine + MSAL</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatCategory</a:Key>
+            <a:Value>Denial Of Service</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatShortDescription</a:Key>
+            <a:Value>Denial of Service happens when the process or a datastore is not able to service incoming requests or perform up to spec.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatDescription</a:Key>
+            <a:Value>Authentication engine + MSAL crashes, halts, stops or runs slowly; in all cases violating an availability metric.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>InteractionString</a:Key>
+            <a:Value>Selected nonsecret Profile snapshot</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>Priority</a:Key>
+            <a:Value>High</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>StateInformation</a:Key>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Use a bounded 64 KiB strict JSON read and maintained parser, reject malformed/unsupported input before authentication, preserve the original monotonic deadline, and end the single process when bounded local shutdown cannot complete. Do not promise availability under a compromised OS or repair unrelated filesystem state.</a:Value>
+          </a:KeyValueOfstringstring>
+        </b:Properties>
+        <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
+        <b:State>NeedsInvestigation</b:State>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Use a bounded 64 KiB strict JSON read and maintained parser, reject malformed/unsupported input before authentication, preserve the original monotonic deadline, and end the single process when bounded local shutdown cannot complete. Do not promise availability under a compromised OS or repair unrelated filesystem state.</b:StateInformation>
+        <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
+        <b:Title i:nil="true"/>
+        <b:TypeId>D3</b:TypeId>
+        <b:Upgraded>false</b:Upgraded>
+        <b:UserThreatCategory i:nil="true"/>
+        <b:UserThreatDescription i:nil="true"/>
+        <b:UserThreatShortDescription i:nil="true"/>
+        <b:Wide>false</b:Wide>
+      </a:Value>
+    </a:KeyValueOfstringThreatpc_P0_PhOB>
+    <a:KeyValueOfstringThreatpc_P0_PhOB>
+      <a:Key>D4d75e124f-6da6-49a0-8b8c-79a7431817dd411f0631-f389-414a-a8ca-1f6c930ce6859ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</a:Key>
+      <a:Value xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase">
+        <b:ChangedBy>Architecture review</b:ChangedBy>
+        <b:DrawingSurfaceGuid>878daffd-a529-4789-883c-f6f01fdf0cd6</b:DrawingSurfaceGuid>
+        <b:FlowGuid>411f0631-f389-414a-a8ca-1f6c930ce685</b:FlowGuid>
+        <b:Id>93</b:Id>
+        <b:InteractionKey>d75e124f-6da6-49a0-8b8c-79a7431817dd:411f0631-f389-414a-a8ca-1f6c930ce685:9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:InteractionKey>
+        <b:InteractionString i:nil="true"/>
+        <b:ModifiedAt>2026-09-11T18:22:14Z</b:ModifiedAt>
+        <b:Priority>High</b:Priority>
+        <b:Properties>
+          <a:KeyValueOfstringstring>
+            <a:Key>Title</a:Key>
+            <a:Value>Data Flow Selected nonsecret Profile snapshot Is Potentially Interrupted</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatCategory</a:Key>
+            <a:Value>Denial Of Service</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatShortDescription</a:Key>
+            <a:Value>Denial of Service happens when the process or a datastore is not able to service incoming requests or perform up to spec.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatDescription</a:Key>
+            <a:Value>An external agent interrupts data flowing across a trust boundary in either direction.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>InteractionString</a:Key>
+            <a:Value>Selected nonsecret Profile snapshot</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>Priority</a:Key>
+            <a:Value>High</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>StateInformation</a:Key>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. An interrupted Profile read produces the existing invalid_request/configuration reason or timeout under the original deadline. Never use a partial/default Profile, restart the deadline, or fall back to another registration. The caller can correct the file and start a new request.</a:Value>
+          </a:KeyValueOfstringstring>
+        </b:Properties>
+        <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
+        <b:State>NeedsInvestigation</b:State>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. An interrupted Profile read produces the existing invalid_request/configuration reason or timeout under the original deadline. Never use a partial/default Profile, restart the deadline, or fall back to another registration. The caller can correct the file and start a new request.</b:StateInformation>
+        <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
+        <b:Title i:nil="true"/>
+        <b:TypeId>D4</b:TypeId>
+        <b:Upgraded>false</b:Upgraded>
+        <b:UserThreatCategory i:nil="true"/>
+        <b:UserThreatDescription i:nil="true"/>
+        <b:UserThreatShortDescription i:nil="true"/>
+        <b:Wide>false</b:Wide>
+      </a:Value>
+    </a:KeyValueOfstringThreatpc_P0_PhOB>
+    <a:KeyValueOfstringThreatpc_P0_PhOB>
+      <a:Key>D5d75e124f-6da6-49a0-8b8c-79a7431817dd411f0631-f389-414a-a8ca-1f6c930ce6859ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</a:Key>
+      <a:Value xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase">
+        <b:ChangedBy>Architecture review</b:ChangedBy>
+        <b:DrawingSurfaceGuid>878daffd-a529-4789-883c-f6f01fdf0cd6</b:DrawingSurfaceGuid>
+        <b:FlowGuid>411f0631-f389-414a-a8ca-1f6c930ce685</b:FlowGuid>
+        <b:Id>94</b:Id>
+        <b:InteractionKey>d75e124f-6da6-49a0-8b8c-79a7431817dd:411f0631-f389-414a-a8ca-1f6c930ce685:9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:InteractionKey>
+        <b:InteractionString i:nil="true"/>
+        <b:ModifiedAt>2026-09-11T18:22:14Z</b:ModifiedAt>
+        <b:Priority>High</b:Priority>
+        <b:Properties>
+          <a:KeyValueOfstringstring>
+            <a:Key>Title</a:Key>
+            <a:Value>Data Store Inaccessible</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatCategory</a:Key>
+            <a:Value>Denial Of Service</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatShortDescription</a:Key>
+            <a:Value>Denial of Service happens when the process or a datastore is not able to service incoming requests or perform up to spec.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatDescription</a:Key>
+            <a:Value>An external agent prevents access to a data store on the other side of the trust boundary.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>InteractionString</a:Key>
+            <a:Value>Selected nonsecret Profile snapshot</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>Priority</a:Key>
+            <a:Value>High</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>StateInformation</a:Key>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Unreadable or unavailable caller-managed configuration fails admission with a safe reason; timeout and cancellation remain terminal. Do not bypass access control, fetch another configuration, create a shadow copy, or repair another user/application store. Verify inaccessible-file and deadline scenarios.</a:Value>
+          </a:KeyValueOfstringstring>
+        </b:Properties>
+        <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
+        <b:State>NeedsInvestigation</b:State>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Unreadable or unavailable caller-managed configuration fails admission with a safe reason; timeout and cancellation remain terminal. Do not bypass access control, fetch another configuration, create a shadow copy, or repair another user/application store. Verify inaccessible-file and deadline scenarios.</b:StateInformation>
+        <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
+        <b:Title i:nil="true"/>
+        <b:TypeId>D5</b:TypeId>
+        <b:Upgraded>false</b:Upgraded>
+        <b:UserThreatCategory i:nil="true"/>
+        <b:UserThreatDescription i:nil="true"/>
+        <b:UserThreatShortDescription i:nil="true"/>
+        <b:Wide>false</b:Wide>
+      </a:Value>
+    </a:KeyValueOfstringThreatpc_P0_PhOB>
+    <a:KeyValueOfstringThreatpc_P0_PhOB>
+      <a:Key>E6d75e124f-6da6-49a0-8b8c-79a7431817dd411f0631-f389-414a-a8ca-1f6c930ce6859ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</a:Key>
+      <a:Value xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase">
+        <b:ChangedBy>Architecture review</b:ChangedBy>
+        <b:DrawingSurfaceGuid>878daffd-a529-4789-883c-f6f01fdf0cd6</b:DrawingSurfaceGuid>
+        <b:FlowGuid>411f0631-f389-414a-a8ca-1f6c930ce685</b:FlowGuid>
+        <b:Id>95</b:Id>
+        <b:InteractionKey>d75e124f-6da6-49a0-8b8c-79a7431817dd:411f0631-f389-414a-a8ca-1f6c930ce685:9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:InteractionKey>
+        <b:InteractionString i:nil="true"/>
+        <b:ModifiedAt>2026-09-11T18:22:14Z</b:ModifiedAt>
+        <b:Priority>High</b:Priority>
+        <b:Properties>
+          <a:KeyValueOfstringstring>
+            <a:Key>Title</a:Key>
+            <a:Value>Authentication engine + MSAL May be Subject to Elevation of Privilege Using Remote Code Execution</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatCategory</a:Key>
+            <a:Value>Elevation Of Privilege</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatShortDescription</a:Key>
+            <a:Value>A user subject gains increased capability or privilege by taking advantage of an implementation bug.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatDescription</a:Key>
+            <a:Value>Explicit caller-managed Profile file may be able to remotely execute code for Authentication engine + MSAL.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>InteractionString</a:Key>
+            <a:Value>Selected nonsecret Profile snapshot</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>Priority</a:Key>
+            <a:Value>High</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>StateInformation</a:Key>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Treat Profile JSON as bounded data using a maintained parser and a closed field schema. No scripts, expressions, dynamic assemblies, arbitrary callback URLs, plugin loading or shell execution are configured by the document. Render name/ownership as bounded plain text. Validate unexpected fields and malformed input without token or raw-file diagnostics.</a:Value>
+          </a:KeyValueOfstringstring>
+        </b:Properties>
+        <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
+        <b:State>NeedsInvestigation</b:State>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Treat Profile JSON as bounded data using a maintained parser and a closed field schema. No scripts, expressions, dynamic assemblies, arbitrary callback URLs, plugin loading or shell execution are configured by the document. Render name/ownership as bounded plain text. Validate unexpected fields and malformed input without token or raw-file diagnostics.</b:StateInformation>
+        <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
+        <b:Title i:nil="true"/>
+        <b:TypeId>E6</b:TypeId>
+        <b:Upgraded>false</b:Upgraded>
+        <b:UserThreatCategory i:nil="true"/>
+        <b:UserThreatDescription i:nil="true"/>
+        <b:UserThreatShortDescription i:nil="true"/>
+        <b:Wide>false</b:Wide>
+      </a:Value>
+    </a:KeyValueOfstringThreatpc_P0_PhOB>
+    <a:KeyValueOfstringThreatpc_P0_PhOB>
+      <a:Key>E7d75e124f-6da6-49a0-8b8c-79a7431817dd411f0631-f389-414a-a8ca-1f6c930ce6859ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</a:Key>
+      <a:Value xmlns:b="http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase">
+        <b:ChangedBy>Architecture review</b:ChangedBy>
+        <b:DrawingSurfaceGuid>878daffd-a529-4789-883c-f6f01fdf0cd6</b:DrawingSurfaceGuid>
+        <b:FlowGuid>411f0631-f389-414a-a8ca-1f6c930ce685</b:FlowGuid>
+        <b:Id>96</b:Id>
+        <b:InteractionKey>d75e124f-6da6-49a0-8b8c-79a7431817dd:411f0631-f389-414a-a8ca-1f6c930ce685:9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:InteractionKey>
+        <b:InteractionString i:nil="true"/>
+        <b:ModifiedAt>2026-09-11T18:22:14Z</b:ModifiedAt>
+        <b:Priority>High</b:Priority>
+        <b:Properties>
+          <a:KeyValueOfstringstring>
+            <a:Key>Title</a:Key>
+            <a:Value>Elevation by Changing the Execution Flow in Authentication engine + MSAL</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatCategory</a:Key>
+            <a:Value>Elevation Of Privilege</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatShortDescription</a:Key>
+            <a:Value>A user subject gains increased capability or privilege by taking advantage of an implementation bug.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>UserThreatDescription</a:Key>
+            <a:Value>An attacker may pass data into Authentication engine + MSAL in order to change the flow of program execution within Authentication engine + MSAL to the attacker's choosing.</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>InteractionString</a:Key>
+            <a:Value>Selected nonsecret Profile snapshot</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>Priority</a:Key>
+            <a:Value>High</a:Value>
+          </a:KeyValueOfstringstring>
+          <a:KeyValueOfstringstring>
+            <a:Key>StateInformation</a:Key>
+            <a:Value>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Normalize one immutable explicit request and enforce fixed Profile/trust constraints before provider work. Profile fields cannot select scopes, account, interaction permission, ordering, cache mode, deadline defaults or PAT behavior. Only the eligible legacy client/integration admits MSA passthrough; exact resource tenant and final result checks remain binding.</a:Value>
+          </a:KeyValueOfstringstring>
+        </b:Properties>
+        <b:SourceGuid>d75e124f-6da6-49a0-8b8c-79a7431817dd</b:SourceGuid>
+        <b:State>NeedsInvestigation</b:State>
+        <b:StateInformation>Design review only; no runtime mitigation is claimed. See docs/security/threat-model.md#concrete-windows-slice and designs/windows-ado-authentication.md#profile-contract-and-ownership. Normalize one immutable explicit request and enforce fixed Profile/trust constraints before provider work. Profile fields cannot select scopes, account, interaction permission, ordering, cache mode, deadline defaults or PAT behavior. Only the eligible legacy client/integration admits MSA passthrough; exact resource tenant and final result checks remain binding.</b:StateInformation>
+        <b:TargetGuid>9ad86cf2-fcc4-43dc-9c0d-ad1adda9cad3</b:TargetGuid>
+        <b:Title i:nil="true"/>
+        <b:TypeId>E7</b:TypeId>
         <b:Upgraded>false</b:Upgraded>
         <b:UserThreatCategory i:nil="true"/>
         <b:UserThreatDescription i:nil="true"/>

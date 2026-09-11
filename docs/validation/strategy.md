@@ -394,6 +394,57 @@ complete result. The
 [2026-09-09 secure-store desk outcome](../research/v1-public-contract-baseline.md#recheck-006-secure-store-availability)
 is not evidence that the V2 failure/recovery matrix passes.
 
+## Windows Slice Design Acceptance
+
+The [concrete Windows design](../../designs/windows-ado-authentication.md) and
+[protocol/Profile schemas](../../contracts/v1/request.schema.json) select the bounded
+design for the two Azure DevOps account journeys. This section owns its scenario evidence
+basis. A schema-valid example is not an executed CLI request, a passing authentication
+scenario, or Profile/support acceptance.
+
+Before design acceptance, validate every schema against its metaschema, validate embedded
+synthetic examples with JSON Schema 2020-12 and format checking, and exercise negative
+shape cases: missing explicit intent, unsupported versions/enums, duplicate scopes,
+deadline limits, conflicting legacy Profile identity/tenant policy, and credentials in a
+failure result. Check additive result-field tolerance separately from strict input
+readers. Review the semantic cases below alongside those checks; JSON Schema does not
+prove resource equivalence, tenant precedence, provider behavior, or lifecycle correctness.
+
+| Scenario | Required observable outcome | Evidence before the corresponding claim |
+| --- | --- | --- |
+| Personal request with a different corporate OS default | Unique matching real account is used silently first; permitted interactive completion must still return the exact requested email. No PAT bootstrap or default-account request. | Orchestration scenario plus bounded Windows personal-account integration before Profile/support acceptance. Existing .NET 8 evidence is limited to its recorded setup. |
+| Work request for company Azure DevOps | Requested work email and, when supplied, exact resource tenant are retained through silent/interactive acquisition and final validation. | Orchestration scenario; bounded work-account integration before claiming that combination. Company repository access is a separate downstream test. |
+| First use and later invocation | Discovery considers eligible broker accounts without a prior V2 cache. Later compatible invocation attempts selected-account silent reuse. | Scenario doubles for ordering; real first-use/existing-state Windows evidence for availability and UI behavior. |
+| Git followed by Artifacts acquisition | Changing the downstream consumer alone does not force another sign-in. Different account/client/tenant/resource contexts are not substituted. | Two-process broker integration; actual Git and feed/package operations remain downstream evidence. |
+| No match, duplicate match, and alias-only visibility | No match follows permission policy; duplicate exact matches stop as ambiguity; an alias or missing email does not pass identity validation. | Scenario tests of calls and outcomes; unit tests only for the pure matching rule. |
+| Tenant and scope normalization | Fixed or explicit tenant wins over legacy MSA routing. `common` uses the selected integration's mapping. Mixed resources/default-plus-dynamic scopes fail admission; dynamic coverage uses provider metadata. | Table-driven core tests plus scenario tests that preserve constraints through both calls. |
+| Wrong/missing provider metadata | No token reaches stdout after wrong email, exact-tenant mismatch, missing actual tenant, insufficient scope coverage, or a mismatched operation/client context. | Candidate-validation scenarios and core validation tests; real result metadata coverage before activation. |
+| Noninteractive request in locked or expired state | No owned UI, broker interaction, browser, device-code instruction, or unlock prompt is initiated. Return the applicable interaction/unavailability outcome. | Scenario call assertions and attended real-platform no-UI observation; do not infer this solely from API names. |
+| Broker unavailable or disappears between checks | Return `mechanism_unavailable`; rejecting custom web UI prevents automatic browser fallback. | Provider/host scenario, then bounded Windows failure test before support. |
+| User cancellation, denial, or another claims challenge | Stop within the same request; no alternate account, tenant, registration, mechanism, PAT, or repeated interaction. Only current silent-challenge data may reach the permitted interactive call. | Scenario outcomes and provider-call trace; bounded UI cancellation/denial evidence. |
+| Lifetime pipe closes before discovery or during WAM | Cancel without late success, end owned UI and process, and expose no token. Reject console/file stdin when the pipe flag is selected. | Deterministic lifecycle scenario and actual WSL-to-Windows pipe integration, including writer-handle inheritance. |
+| Linux caller dies without the optional lifetime pipe | Do not assert Linux signal delivery to Windows. Windows work ends through detected transport failure or the original finite deadline. | Bounded WSL process-lifetime test; no immediate-disconnect support claim for this combination. |
+| Deadline during Profile reading, discovery, silent, interaction, or validation | Original deadline is never restarted. Incomplete validation yields timeout; late candidates cannot resume. | Clock-driven scenarios and bounded real host tests for dependency cancellation and process exit. |
+| Blocked stdout/stderr or uncooperative completion | The shutdown watchdog ends the one process within the defined local shutdown allowance. Incomplete output is a transport failure, never a complete typed result. | Controlled process/pipe scenario before shipping; no tests using real credentials are needed for this transport condition. |
+| Validated token with no broker persistence receipt | Return success with `persistence_unconfirmed`, no readback, extra acquisition, write, or persistence wait. Next invocation may still reuse usable state. | Scenario and real reuse evidence; do not infer durable-write confirmation from provider success. |
+| Concurrent invocations | Broker integrity is preserved through supported APIs; no app-owned cache or locking is introduced. Duplicate prompts are not suppressed by contract. | Concurrent Windows integration before that support claim; trust broker internals within their documented boundary. |
+| Explicit Profile file and compatibility candidate | Same parser for user-provided and eventually provisioned files; no implicit selection, hot reread, external URL, inherited configuration, or upstream cache import. Show external ownership without claiming Microsoft endorsement. | Admission scenarios, contract examples, and later bounded consent/audit/branding validation under the external Profile gate. |
+| Output and optional local telemetry | One complete result with matching 0/1 status, or recognizable transport failure. Only validated success exposes a token; stderr has no token/email/identifier/provider text. Local telemetry opt-in, overflow, or sink failure cannot alter authentication. | Contract and orchestration scenarios with synthetic secret markers; no production credential fixture. |
+
+The design's public dependency premises and security/TMT update receive independent
+architecture, consistency, minimality, security, record-system, and research-evidence
+review. Record schema checks, native TMT open/analysis, review identities, findings and
+dispositions, and exact reviewed tree in the PR. Design acceptance does not require
+pretending that these future runtime cases already pass, nor does it authorize running
+them. A newly found premise that invalidates a selected implementation path must be
+resolved before calling that path design-ready.
+
+The Slice explicitly excludes browser/device code, Linux forwarding/native brokers,
+non-Public Cloud, service/impersonated/disconnected Windows sessions, ARM64, Profile
+activation/distribution, service protocols, derived-credential exchange, and network
+telemetry export. Requirements outside this bounded design retain their existing gates;
+no complete-product or platform-support acceptance follows from this Slice alone.
+
 ## Dependency Upgrade Matrix
 
 Each MSAL, native broker, cache, and platform dependency upgrade, including native

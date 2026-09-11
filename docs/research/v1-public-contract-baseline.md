@@ -1410,6 +1410,77 @@ This assessment executed no application, authentication, cache access, or resour
 It adds no corporate-account or feed observation and does not extend the completed
 personal-account probe's capacity or evidence.
 
+## Windows Slice Dependency and Host Contracts
+
+**Public-source findings, retrieved 2026-09-11 UTC:** These inputs supplement the
+existing MSAL/probe baseline for the concrete Windows Slice. They do not report a new
+build, authentication attempt, account observation, or support result.
+
+- The pinned [.NET 10 release metadata](https://github.com/dotnet/core/blob/3b2b11b56f0dfa0f4c273fed44efbc32342ea475/release-notes/10.0/releases.json)
+  records the September 8 release, SDK 10.0.401, runtime/Windows Desktop 10.0.12, public
+  Windows x64 artifacts, and the November 14, 2028 lifecycle end. The
+  [Windows Forms overview](https://github.com/dotnet/docs-desktop/blob/7cf14527a627b58f7c0e7ec01464d417495fd8b4/dotnet-desktop-guide/winforms/overview/index.md)
+  describes the maintained Windows UI framework. These published contracts support a
+  .NET 10 Windows host design; the existing .NET 8 experiment did not execute that host.
+- MSAL 4.83.1's [Broker project](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/Microsoft.Identity.Client.Broker.csproj)
+  targets .NET Standard 2.0 and references the MSAL client and NativeInterop. This supports
+  consuming the existing authentication dependency baseline from a newer compatible
+  managed runtime; it is not an end-to-end compatibility test.
+- The concrete [ClientApplicationBase](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ClientApplicationBase.cs#L48-L64)
+  exposes `GetAccountsAsync(CancellationToken)`. Its interface's older overload does not
+  express that parameter. The pinned [RuntimeBroker discovery path](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/RuntimeBroker.cs#L571-L632)
+  passes the request cancellation token to native discovery; the selected-account silent
+  and interactive paths in the same file also pass it to native token operations. This
+  supports correctly wiring cancellation, not an assertion that all external work is
+  synchronously rolled back when it is requested.
+- The pinned [WAM guide](https://github.com/MicrosoftDocs/microsoft-authentication-library-dotnet/blob/1cb0d817cf6e13e59667137a7765c70a7b1f6fb8/msal-dotnet-articles/acquiring-tokens/desktop-mobile/wam.md)
+  describes WAM-managed token maintenance, parent HWND requirements, the broker redirect
+  URI, automatic browser fallback, and the requirement for an active interactive Windows
+  user session. Windows services and impersonation are not eligible substitutes. The
+  [existing probe basis](#windows-msal-probe-basis) identifies the availability API and
+  rejecting custom-web-UI seam used to prevent a browser fallback. The availability API
+  is obsolete but remains present in the pinned version; it is not a new public contract
+  that V2 owns.
+- The pinned [AuthenticationResult](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/AuthenticationResult.cs#L257-L337)
+  exposes account, actual token tenant, expiry, token type, scopes, and correlation ID,
+  but no literal final authority endpoint URI. A canonical result authority must be
+  described as a representation of the validated single-cloud context and actual tenant,
+  not misreported as a captured endpoint or filled from the initial routing alias.
+- Windows [anonymous-pipe operations](https://github.com/MicrosoftDocs/win32/blob/b46b3638e4691f4f451590e1f861db27649849bf/desktop-src/ipc/anonymous-pipe-operations.md)
+  document EOF/error when all writers close, blocking writes when the buffer fills, no
+  overlapped anonymous-pipe operations, and handle release at process termination. The
+  [WSL interoperation guidance](https://github.com/MicrosoftDocs/WSL/blob/7b28cc1ee9b8ff672ada5e1c6c326d3573d703e5/WSL/filesystems.md)
+  describes Windows executable invocation and pipeline interoperation. Neither is a
+  guarantee that a Linux signal or parent death directly cancels Windows authentication.
+
+**Design inference:** A single .NET Windows process can use explicit cancellation-aware
+MSAL calls, an owned parent window, an optional caller-lifetime pipe, and a finite process
+shutdown boundary without introducing a bridge or repairing OS internals. Broker-managed
+reuse avoids an additional app-owned store and its namespace/locking obligations. The
+absence of a public durable-write receipt still requires the accepted persistence warning.
+Concrete semantics are owned by the [Windows design](../../designs/windows-ado-authentication.md),
+not by these source findings. Synthetic and real-platform validation remain separate.
+
+### Slice Design Recheck Assessment
+
+All seven registry entries were evaluated on **2026-09-11 UTC** for the concrete host,
+account, interaction, state, and candidate-Profile design. Public Issues/pages were
+retrieved; issue descriptions are reports or proposals, not observed platform facts.
+
+| Entry | Current outcome and design impact |
+| --- | --- |
+| RECHECK-001 | Issue 464 remains open with no comments or documented upstream no-interaction contract. The selected design retains distinct discovery/silent APIs and explicit interaction permission. |
+| RECHECK-002 | Issue 465 remains open with no comments or new strict-selection/result guarantee. Preserve whole-email resolution and authoritative final validation. |
+| RECHECK-003 | Issue 460 remains an open Windows-helper proposal with no comments. Current WSL documentation describes a Linux broker/keyring setup, not transparent Windows CLI cancellation. Keep explicit direct Windows invocation and specify its lifetime boundary. |
+| RECHECK-004 | Issues 459 and 461 remain open; their two-comment discussions retain the Azure CLI workaround rather than a changed native browser/callback contract. Browser/device-code support is not selected. |
+| RECHECK-005 | PR 462 remains open and unmerged. Its proposed Linux broker integration and current Linux/WSL prerequisites do not change the selected Windows process design. No Linux broker support claim follows. |
+| RECHECK-006 | Issue 398 remains open with no comments or new secure-store behavior. The Windows Slice uses WAM-owned state; Linux libsecret limitations do not justify plaintext fallback or an app-owned repair mechanism. |
+| RECHECK-007 | Current Azure DevOps guidance still says Entra apps do not natively support MSA users for this resource. The already recorded legacy-client/passthrough observation remains bounded positive evidence; candidate definition neither enables that Profile nor generalizes to arbitrary registrations or feeds. |
+
+These outcomes preserve the existing source/observation distinctions. The runtime release
+and source commits above are immutable design baselines, not promises that they remain the
+latest versions. Upgrade and release review must refresh the applicable dependency facts.
+
 ## Windows MSAL Probe Basis
 
 The [bounded Windows protocol](experiments/windows-msal-account-metadata.md) governs

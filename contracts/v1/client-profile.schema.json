@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hcoona/microsoft-authentication-cli/contracts/v1/client-profile.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "name",
+    "clientId",
+    "cloud",
+    "tenantPolicy",
+    "integration",
+    "registration"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+    },
+    "clientId": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "cloud": {
+      "const": "public"
+    },
+    "tenantPolicy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "multitenant"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "tenantId"
+          ],
+          "properties": {
+            "kind": {
+              "const": "single-tenant"
+            },
+            "tenantId": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+            }
+          }
+        }
+      ]
+    },
+    "integration": {
+      "enum": [
+        "windows-wam",
+        "visual-studio-legacy-wam"
+      ]
+    },
+    "registration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner",
+        "externalDependency",
+        "supportNotice"
+      ],
+      "properties": {
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "externalDependency": {
+          "const": true
+        },
+        "supportNotice": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        }
+      }
+    }
+  },
+  "title": "Client Profile Configuration Version 1",
+  "description": "Nonsecret public-client configuration selected by one explicit Windows file path. The caller owns the file. This schema and its examples neither activate nor distribute a Profile.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "integration": {
+            "const": "visual-studio-legacy-wam"
+          }
+        },
+        "required": [
+          "integration"
+        ]
+      },
+      "then": {
+        "properties": {
+          "clientId": {
+            "const": "872cd9fa-d31f-45e0-9eab-6e460a02d1f1"
+          },
+          "tenantPolicy": {
+            "properties": {
+              "kind": {
+                "const": "multitenant"
+              }
+            }
+          },
+          "registration": {
+            "properties": {
+              "owner": {
+                "const": "Microsoft"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "examples": [
+    {
+      "schemaVersion": 1,
+      "name": "visual-studio-legacy-compatibility-candidate",
+      "clientId": "872cd9fa-d31f-45e0-9eab-6e460a02d1f1",
+      "cloud": "public",
+      "tenantPolicy": {
+        "kind": "multitenant"
+      },
+      "integration": "visual-studio-legacy-wam",
+      "registration": {
+        "owner": "Microsoft",
+        "externalDependency": true,
+        "supportNotice": "Microsoft owns this Visual Studio registration. This unofficial fork has no upstream endorsement, support commitment, or control over its availability. Sign-in, consent, and audit may identify Visual Studio."
+      }
+    }
+  ]
+}

@@ -25,6 +25,7 @@ is navigation, not an independent authority.
 | Architects and implementers | Component boundaries, dependency direction, and target runtime views | [`architecture/overview.md`](architecture/overview.md) |
 | Architecture, security, and validation reviewers | End-to-end request, interaction, token, and reusable-state lifecycles | [`architecture/request-lifecycle.md`](architecture/request-lifecycle.md) |
 | Architects and security reviewers | OAuth client-registration ownership and profile structure | [`architecture/client-application-identity.md`](architecture/client-application-identity.md) |
+| Implementers, adapter authors, and design reviewers | Concrete Windows Slice, protocol 1 command-line/process semantics, and candidate Profile integration | [`windows-ado-authentication.md`](../designs/windows-ado-authentication.md) |
 | Security reviewers and implementers | Threats, trust boundaries, and required mitigations | [`security/threat-model.md`](security/threat-model.md) |
 | TMT and security reviewers | Native data-flow model and generated-threat dispositions | [`security/authentication-engine.tm7`](security/authentication-engine.tm7) |
 | Test and release maintainers | Evidence required for validation and support claims | [`validation/strategy.md`](validation/strategy.md) |
@@ -68,6 +69,9 @@ is navigation, not an independent authority.
 | --- | --- | --- |
 | Change authors and reviewers | Pull-request evidence and disposition prompts | [Pull-request template](../.github/pull_request_template.md) |
 | Record-system automation | Record-family catalog schema | [`record-families.schema.json`](../schemas/governance/record-families.schema.json) |
+| CLI implementers and contract validators | Protocol 1 parsed command-line request shape | [`request.schema.json`](../contracts/v1/request.schema.json) |
+| Adapter authors and result validators | Protocol 1 terminal result shape | [`result.schema.json`](../contracts/v1/result.schema.json) |
+| Profile authors and configuration readers | Client Profile version 1 schema and concrete compatibility candidate | [`client-profile.schema.json`](../contracts/v1/client-profile.schema.json) |
 | Control automation | Control catalog schema | [`controls.schema.json`](../schemas/governance/controls.schema.json) |
 | Packaging and runtime automation | Operational-identity registry schema | [`operational-identities.schema.json`](../schemas/governance/operational-identities.schema.json) |
 | Research automation | Mutable-source recheck schema | [`rechecks.schema.json`](../schemas/research/rechecks.schema.json) |
