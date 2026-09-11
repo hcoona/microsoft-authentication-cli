@@ -1278,7 +1278,7 @@ previous matched-account branch. It reached the process deadline with
 `authentication_canceled` / `UserCanceled`, no authentication result, and no authenticated
 resource request. The cancellation category does not establish manual cancellation or
 explain the previous service-exception category. The cause of the changed account
-visibility and detailed operator UI steps remain unknown. The sequence is stopped; no
+visibility and detailed operator UI steps remain unknown. That sequence stopped; no
 reuse follow-up ran, and the evidence does not select a Profile or establish support.
 
 The subsequent [attended sequence](experiments/windows-msal-account-metadata.md#attended-preparation-and-structured-broker-failure)
@@ -1290,7 +1290,7 @@ apparent automatic fill/submission, and a brief possible WAM surface before the 
 closed. The brief surface was not conclusively identified and no detailed sign-in/MFA/
 consent steps were reported. This adds structured failure and UI observations, not an
 explanation of the code, proof of the earlier failure's cause, or Profile eligibility.
-The sequence is stopped.
+That sequence stopped. The next bounded configuration candidate is described below.
 
 **Source interpretation, checked 2026-09-11 UTC:** The same pinned
 [`WamAdapters` default branch](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L116-L120)
@@ -1337,8 +1337,43 @@ MSAL's
 and
 [`custom web UI callback`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Extensibility/ICustomWebUI.cs#L30-L52)
 let the probe require WAM and decline browser fallback. The callback implements no OAuth
-exchange. The hidden first-party `MsaPassthrough` option remains off, as in V1's Windows
-configuration. No MSAL dependency is upgraded by this experiment input.
+exchange. The earlier probe left the hidden first-party `MsaPassthrough` option off,
+as in V1's Windows configuration. The following comparison changes that experiment
+input without upgrading MSAL.
+
+### GCM MSA Configuration Comparison
+
+**Public source findings, retrieved 2026-09-11 UTC:** GCM **v2.9.1**, commit
+[`6760f0ef069c994aa2bb1d703fb374986ee82a3e`](https://github.com/git-ecosystem/git-credential-manager/tree/6760f0ef069c994aa2bb1d703fb374986ee82a3e),
+provides a concrete Azure Repos MSA configuration reference. This is a pinned source
+comparison, not a claim about the installed GCM version or its execution on this host.
+
+| Concern | GCM source finding | Probe comparison |
+| --- | --- | --- |
+| Client and scope | [Azure DevOps constants](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/src/shared/Microsoft.AzureRepos/AzureDevOpsConstants.cs#L11-L16) specify the Visual Studio client and Azure DevOps `.default` scope. | The earlier and amended probe use these same public values. The client remains Microsoft-owned. |
+| MSA passthrough | [Azure Repos token acquisition](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/src/shared/Microsoft.AzureRepos/AzureReposHostProvider.cs#L347-L353) passes `msaPt: true`; the [Windows broker builder](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/src/shared/Core/Authentication/MicrosoftAuthentication.cs#L633-L643) forwards it to `BrokerOptions.MsaPassthrough`. | The earlier probe used the default false; the amended subject enables it. |
+| Authority | [Authority discovery](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/src/shared/Microsoft.AzureRepos/AzureDevOpsRestApi.cs#L30-L88) prefers the service's Bearer authority, then its resource-tenant header. An empty resource-tenant GUID selects `organizations` for an MSA-backed organization; absent information falls back to `common`. | The earlier probe fixed `common`. The amended subject fixes `organizations` as an MSA candidate, without claiming that this private target has an empty resource tenant or reproducing GCM's discovery. |
+| Silent transfer tenant | [Selected-account silent acquisition](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/src/shared/Core/Authentication/MicrosoftAuthentication.cs#L533-L554) applies `WithTenantId` for an MSA home account; the [public constants](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/src/shared/Core/Constants.cs#L21-L32) identify the home and Microsoft transfer tenants. | The conditional silent follow-up applies the same tenant rule to its unique exact account and records only whether it applied. |
+
+The probe's pinned MSAL 4.83.1 already exposes
+[`MsaPassthrough`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/BrokerOptions.cs#L74-L79),
+documented in public source as a legacy first-party option. Its
+[`WAM adapter`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L153-L164)
+passes the consumer-passthrough request property to the native runtime. This source
+contract supports a bounded experiment with the already declared Microsoft client; it
+does not establish eligibility for arbitrary registrations or intended external reuse.
+GCM v2.9.1 [pins](https://github.com/git-ecosystem/git-credential-manager/blob/6760f0ef069c994aa2bb1d703fb374986ee82a3e/Directory.Packages.props)
+MSAL 4.84.2. The probe keeps 4.83.1, its owned parent, exact account checks, and lack of an
+application cache or browser fallback. It does not reproduce GCM's full runtime or policy.
+
+**Hypothesis and consequence:** The configuration difference could explain why the earlier
+probe did not reach a usable MSA path. One paired-configuration interaction and conditional
+silent reuse can test that candidate; neither success nor failure isolates one option's
+causal effect or proves the cause of `0x80049D59`. The existing
+[protocol](experiments/windows-msal-account-metadata.md#current-advancement-gcm-informed-msa-configuration)
+owns execution limits, readiness, and actual results. No GCM helper, cache, credential,
+organization API, or additional discovery request is used. No Profile or platform is
+selected, and RECHECK-007's token/resource and intended-reuse questions remain open.
 
 ### Host and Registration Recheck for the Probe
 
