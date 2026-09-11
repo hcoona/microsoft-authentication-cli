@@ -8,15 +8,17 @@ freeze command names, serialized contracts, platform support, or compatibility b
 The normative product boundary is defined by
 [`V2-REQ-001`](../product/requirements/product-boundary.md#v2-req-001-delegated-public-client-scope)
 through
-[`V2-REQ-004`](../product/requirements/product-boundary.md#v2-req-004-one-authentication-request-per-process).
+[`V2-REQ-005`](../product/requirements/product-boundary.md#v2-req-005-no-personal-access-tokens).
 This architecture allocates that behavior to a command-line authentication engine and
 separate downstream consumers under decision
 [`0004`](../decisions/0004-keep-the-authentication-engine-separate-from-consumers.md).
 
 For the selected personal- and work-account Azure DevOps Slice, the engine returns the
-provider access token for direct consumer use. PAT acquisition, exchange, and fallback
-are excluded. The official NuGet provider's optional SelfDescribing exchange does not
-become an engine operation or an automatic personal-account fallback. The
+provider access token for direct consumer use. The
+[PAT prohibition](../product/requirements/product-boundary.md#v2-req-005-no-personal-access-tokens)
+governs acquisition, state, result, and failure paths. The official NuGet provider's
+optional SelfDescribing exchange does not become an engine operation or an automatic
+personal-account fallback. The
 [token-path assessment](../research/v1-public-contract-baseline.md#azure-artifacts-token-forms-and-nuget-paths)
 supports the shared acquisition boundary while preserving the distinction between
 observed Git access and unobserved NuGet/feed behavior. Consumer-specific presentation
@@ -105,7 +107,7 @@ ambiguity about actors, goals, or the system boundary.
 | MSAL, broker, browser, and device-code calls | Reuse or adapt behind mechanism interfaces. |
 | Platform secure-cache integration | Reuse selectively after threat-model and cache-lifecycle review. |
 | Packaging and release knowledge | Reuse as evidence; create independent v2 identities and channels. |
-| ADO PAT implementation | Excluded from the authentication engine and selected Slice; no PAT acquisition or fallback. |
+| ADO PAT implementation | Excluded by [V2-REQ-005](../product/requirements/product-boundary.md#v2-req-005-no-personal-access-tokens). |
 
 ## C4 Structural Views
 
