@@ -1567,6 +1567,21 @@ Public linker documentation and the retained `/DEBUG` response support a PDB-hel
 hypothesis only. Under the recovery procedure, any surviving Job member causes a stop;
 its identity remains unknown rather than being inferred or newly inspected.
 
+**Recovery observation, September 12, 2026:** The
+[recovery results](experiments/windows-native-aot.md#recovery-results) retain a successful
+local-feed restore and complete screened output from a symbol-free Native AOT publish
+with the same rooted provider surface. No AOT/trim/compiler/link warning or diagnostic
+code appeared. The publish subject exited zero, but one Job member remained after the
+bounded normal drain, causing another stop with successful owned termination and final
+quiescence. Survivor identity remains unknown, even with debug-symbol output disabled.
+Data inspection confirms a native x64 EXE and the pinned native DLL; their static Windows
+and API-set imports do not establish dynamic dependency closure. No runtime case followed.
+This adds bounded diagnostic evidence without repairing earlier missing output or proving
+normal publish completion, cleanup, wrong-architecture rejection, or product symbol
+behavior. There is no observed package/network/compiler failure in this recovery.
+Restore/publish capacity is exhausted and the stop bars further execution; the preferred
+Native AOT route and unresolved publishing disposition remain unchanged.
+
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by
 RECHECK-008. The concrete choice and preservation semantics belong to the Windows design;

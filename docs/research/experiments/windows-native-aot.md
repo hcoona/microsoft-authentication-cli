@@ -28,8 +28,9 @@ production publishing, or support.
 This PR #94 procedure stopped at attempt 15 and cannot execute again. Its source and
 procedure remain bound to `34e513c0b0d8282e92ff743ecc836c6320d0faa5`; the following
 supplemental subject, procedure, and results preserve that evidence. The
-[recovery amendment](#readiness-recovery) defines the only prospective execution path,
-subject to its separately accepted Wave and exact source. Sections from
+[recovery amendment](#readiness-recovery) also stopped, at attempt 17; its
+[results](#recovery-results) preserve the additional evidence without authorizing replay.
+Sections from
 [Question and Exact Subject](#question-and-exact-subject) onward retain the original
 thirteen attempts and exhausted procedure. Neither stopped procedure authorizes replay.
 Issue #92 coordinates review; it does not grant execution.
@@ -490,8 +491,8 @@ preparation preflight and then one preflight per remaining sequential action, at
 six corrected checks total, each within the existing 60-second limit. Count failed
 checks; no incidental retry is allowed. Any corrected preflight rejection ends further
 execution pending a reviewed disposition and does not reset this cumulative count.
-The earlier rejected check remains recorded separately. No recovery root exists to
-resume or clean. Restore, publish, runtime and guard capacity remains exactly as listed
+The earlier rejected check remains recorded separately. At correction acceptance, no
+recovery root existed to resume or clean. Restore, publish, runtime and guard capacity remained as listed
 above, and the wrapper still reserves each action before starting its controller.
 
 The corrected wrapper emits only fixed failure classes (`reparse-point`,
@@ -501,6 +502,103 @@ an unsuccessful exit or stderr is also a rejection, not success. No arbitrary pa
 exception message, environment value, or raw stream becomes retained evidence. Preserve
 each rejected result in the work carrier before considering any later amendment; new
 diagnostics cannot reconstruct the discarded original result.
+
+### Recovery Results
+
+Attempts 16 and 17 bind accepted PR #96 commit
+`0bb071ba843358846e05de5518d94099cc14cd70`, tree
+`a0ebb3dc627ec544bcd251b4920608c15bbb596c`, and its exact protocol SHA-256
+`33f51f6abc1f0b8922b1ea040595134e09a8f81be9c19edd4100ba9f0d67d828`.
+The accepted PR #95 Wave remained unchanged. Current-target and independent prerequisite
+reviews preceded the sequential actions from the clean detached checkout. The two
+corrected preflights passed; together they consumed two of the six-check maximum,
+separately from the earlier rejected preflight. All earlier evidence remains historical.
+
+Execution used the designated existing Windows 11 x64 host through WSL 2, SDK
+10.0.401/runtime 10.0.12, MSAL/Broker 4.83.1, NativeInterop 0.20.3, and the unchanged
+pinned native toolchain. Preparation copied sixteen hash-verified public archives to
+the dedicated recovery root. No tool/package acquisition, authentication, account,
+credential-store, broker-session, resource, or UI operation was part of this sequence.
+
+| Action | September 12, 2026 UTC interval | Observed outcome |
+| --- | --- | --- |
+| 16: local-feed restore | 08:59:06.124140–08:59:17.6239857 | Guard and subject exit 0; controller-recorded subject/capture/drain duration 9.750 seconds. Normal/final Job counts zero, no termination request, complete screened diagnostics, and explicit successful completion. |
+| 17: Native AOT publish | 09:03:41.554307–09:04:05.2512349 | Guard and subject exit 0; controller-recorded subject/capture/drain duration 21.762 seconds. One Job member remained after capture and after a 2.018-second normal drain. The controller stopped at `normal-quiescence`, line 230, successfully terminated the owned Job, confirmed final quiescence, and retained `safetyStop=true`. |
+
+Restore 16 selected the same ten-library graph, including net8.0 Client, netstandard2.0
+Broker, net9.0 NativeInterop and the x64 native DLL. All 187 library payloads and 1,058
+download-pack payloads matched the retained public archives and were reverified before
+publish. The hash-bound restore evidence retains assets, lock, generated imports,
+selected assets and payload identities. Complete restore stdout reported success with
+192 captured characters, empty stderr and no diagnostic codes. This establishes a
+local-feed restore using reused public archives, not a clean public-network restore.
+
+Unlike attempt 15, the stopped publish retained both screened streams after owned
+termination and handle disposal. Capture and diagnostics were complete; stdout had 311
+captured characters, stderr was empty, neither stream was truncated or suppressed,
+and sensitive-output checks were false. The complete sanitized stdout was:
+
+```text
+  NativeAotReadinessProbe -> <experiment-root>\source\0bb071ba843358846e05de5518d94099cc14cd70\bin\Release\net10.0-windows\win-x64\NativeAotReadinessProbe.dll
+  Generating native code
+  NativeAotReadinessProbe -> <experiment-root>\attempts\17\out\
+```
+
+No compiler, AOT, trimming, or linker diagnostic code or warning text appeared in these
+retained streams. This is an observation for the exact symbol-free synthetic subject
+with its selected provider surface rooted for compilation, not warning evidence for
+either earlier publish or a complete application. It supplies the previously missing
+diagnostic observation while preserving the failed lifecycle outcome.
+
+The wrapper exited 1 and wrote the durable stop; it did not write `completion.json` or
+`artifacts.json`. Attempt 18 is absent, and no cleanup or wrong-architecture runtime ran.
+The survivor's identity and purpose remain unknown. `DebugType=none` did not eliminate
+the observed remaining Job member; neither a PDB helper nor another tool is identified
+by this result. No process investigation or shared-server termination followed.
+
+After confirmed quiescence, read-only data inspection with an already available PE parser
+found exactly the native EXE and pinned DLL below, with no PDB. Both have AMD64 machine
+`0x8664` and an empty CLR directory. Neither image was loaded or executed. This is
+post-stop artifact observation, not a reconstructed successful publish receipt.
+
+| Retained artifact | Bytes | SHA-256 |
+| --- | --- | --- |
+| `NativeAotReadinessProbe.exe` | 8,643,584 | `b8738953678a1026fb08b25d99738c949d884025f9cc21d0cba3f1e0edab5a2c` |
+| `msalruntime.dll` | 2,949,656 | `9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79` |
+
+Direct import names comprise Windows system libraries and `api-ms-win-*` contracts;
+neither image has a delay-import table. The EXE includes UCRT API-set imports. The native
+DLL includes WinINet, SSPI, RPC, shell, graphics and COM-related imports. These static
+tables do not enumerate dynamically loaded WAM dependencies or prove OS resolution,
+runtime native-dependency closure, or absence of native COM.
+Nonempty PE debug-directory metadata does not contradict absence of a generated PDB;
+product symbols and debugger/crash-dump usability remain unvalidated.
+
+| Retained evidence | SHA-256 |
+| --- | --- |
+| Attempt 16 reservation | `8f86391a4493d57c674046c47dd9e2111d2ec9e8fade485106bc340ebcdaed0a` |
+| Attempt 16 result | `bec2405f38c9482f4b5a65e942898e95cfea9b6a9a06e347d98d4facb93b0108` |
+| Attempt 16 completion | `c712fe0ce2de63dd8e67657b5710101e0931d94a7507d8131ccd71d88bfc657a` |
+| Attempt 16 restore evidence | `e4eb9c7d834fbed8c2b1cafea3d82d7bcbe48cc6f97dcc78e49d1d55f89d6330` |
+| Attempt 17 reservation | `4c45dc1872378c7a3f7576e7d896f3302910cc98f740fb8aae121bcb19ea0c1d` |
+| Attempt 17 result | `5a04981e3e2e19308fdd643f12dc8e6c4644d73844a10bcc6fb5a127191a94f8` |
+| Recovery stop marker | `b49288b7c3b2bddd535e8c10b639d89d67db268c74c6359f998ec9814e7c4d1d` |
+| Post-stop PE data inspection | `0d2a3619bc158e55c01d749f42e13e6d01ff9035118b4af6c488a0f468a05cae` |
+
+**Disposition and retention:** The recovery has ended. Supplemental cumulative usage is
+restore 2/2, publish 2/2, cleanup 0/2, wrong-architecture 0/2, and guard 4/8; unused
+runtime, guard and preflight capacity cannot override the stop or authorize a retry.
+Retain all three roots and their evidence intentionally without replay or cleanup.
+The original thirteen attempts and their unknowns remain unchanged.
+
+The remaining blocker is experiment process completion and missing runtime/dependency
+evidence, not an observed package rejection, network failure, or Native AOT compiler
+error in this sequence. Native cleanup and genuine wrong-architecture rejection remain
+unobserved. The publishing choice remains unresolved; no non-AOT exception, product
+symbol policy, implementation-readiness or support claim follows. Further execution
+requires owner disposition and a separately accepted Wave/protocol amendment carrying
+forward all consumption. Recording these results does not grant that execution or close
+Issue #92's incomplete design outcome.
 
 ## Question and Exact Subject
 

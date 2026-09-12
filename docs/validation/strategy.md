@@ -494,8 +494,19 @@ surface rooted for compilation. Its publish controller stopped on a remaining Jo
 and confirmed termination/quiescence before diagnostic screening. No publish-completion
 receipt or warning evidence, cleanup result, or wrong-architecture result follows. A
 recovery requires its own accepted Wave/protocol within carried-forward limits; subject
-exit zero and data inspection cannot substitute for the missing evidence. The publishing
-choice and preimplementation gap remain unresolved.
+exit zero and data inspection cannot substitute for the missing evidence.
+
+The [recovery result](../research/experiments/windows-native-aot.md#recovery-results)
+provides complete screened diagnostic evidence for the exact rooted symbol-free probe,
+with no observed AOT/trim/compiler/link warning. Its publish again stopped on a surviving
+Job member after the bounded normal drain; owned termination succeeded and final
+quiescence was confirmed. No publish-completion receipt or runtime result follows.
+Static x64 PE/import observations do not settle dynamic native dependencies. Preserve
+the remaining normal-completion, cleanup, wrong-architecture, dependency and product-symbol
+obligations and all historical diagnostic unknowns. The stopped recovery cannot resume
+or use its unused runtime capacity; restore/publish limits are exhausted. Further
+execution needs owner disposition and a new accepted Wave/protocol amendment. The
+publishing choice and preimplementation gap remain unresolved.
 
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later candidate tests must cover HWND
