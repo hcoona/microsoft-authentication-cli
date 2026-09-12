@@ -1582,6 +1582,13 @@ behavior. There is no observed package/network/compiler failure in this recovery
 Restore/publish capacity is exhausted and the stop bars further execution; the preferred
 Native AOT route and unresolved publishing disposition remain unchanged.
 
+The [first buffered diagnostic round](experiments/windows-native-aot.md#diagnostic-round-01-results)
+also retained complete publish diagnostics without observed warnings, but stopped on
+normal Job quiescence. Its bounded snapshot verified a Job member whose tool-path class
+was unknown. Successful owned termination and final quiescence support a fresh reviewed
+diagnostic within the accepted buffer; they do not identify a tool or settle normal
+publication, cleanup or x86 rejection. The publishing premise remains unresolved.
+
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by
 RECHECK-008. The concrete choice and preservation semantics belong to the Windows design;

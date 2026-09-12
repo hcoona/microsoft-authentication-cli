@@ -23,7 +23,112 @@ missing publish warnings remain unchanged. These synthetic results establish the
 allocation/loading/search path, not WAM authentication, complete native cleanup,
 production publishing, or support.
 
+## Diagnostic Round 02
+
+Round 01's [reviewed stop](#diagnostic-round-01-results) left a verified Job member in
+an expected `unknown` image class. Its complete diagnostics and successful owned
+termination permit a decision-relevant fresh diagnostic under the existing buffered
+Wave. Round 01 and the three older roots remain stopped and read-only. This amendment
+must merge before its preflight, root preparation, guard, SDK or runtime execution.
+
+### Exact Allocation and Historical Binding
+
+Apply Round 01's subject, environment, evidence, termination and sequential-success
+rules with only the exact replacements below. Bind the clean detached accepted checkout,
+current source/protocol and unchanged Wave SHA-256
+`5e45488af78a27de73702dbbb6a0112ca6294acd7961a1e811295fe310f75327`.
+The synthetic program, symbol-free project, package versions, build arguments, native
+search policy and pinned tools do not change. Only the fresh paths, cumulative history
+and in-memory classification change; there is no product implementation or installation.
+
+Use only `C:\Temp\azureauth-native-aot-diagnostics\round-02` for new host files.
+The parent may contain only the stopped round-01 and new round-02 roots. Preflight
+bookkeeping stays in `/tmp/azureauth-wave-work`, using ordinals 05–08. There is one
+sequential action of each kind, with no same-round retries:
+
+| Unit | This exact round | Cumulative supplemental/diagnostic count after success |
+| --- | --- | --- |
+| Local-feed restore | Attempt 20, 180 seconds | Four of ten restores |
+| Native AOT publish | Attempt 21, 600 seconds | Four of ten publishes |
+| Synthetic cleanup | Attempt 22, 30 seconds | One of four cleanup cases |
+| Genuine x86 rejection | Attempt 23, 30 seconds | One of four wrong-architecture cases |
+| Standalone guard | Ordinals 07–10, 30 seconds each | Ten of twenty-eight |
+| Corrected preflight | Ordinals 05–08, 60 seconds each | Eight of fifty; original rejected check separate |
+
+Round 01 consumed only actions 18–19, guards 05–06 and corrected preflights 03–04.
+Its unstarted runtime allocations did not consume reservations and cannot resume there.
+Round 02 therefore starts at action 20, guard 07 and preflight 05. Preserve the original
+thirteen-attempt counts separately. Reserve all starts and failures before execution;
+this exact revision does not allocate any later root or remaining buffer.
+
+Bind the stopped round-01's 32 named `DIAGNOSTIC_FILES` with the existing ordered
+name/NUL/binary-SHA-256 aggregate:
+`79353af8cfe14823692e83407fcb636390dd74cdf35dd4d78197a416a109fa5f`.
+Its attempt inventory must remain exactly 18–19, and publish 19 must not acquire a
+completion or artifact manifest. The four preflight 03–04 receipts are individually
+hash-bound by `DIAGNOSTIC_PREFLIGHT_HISTORY`. Require their exact inventory before
+reserving preflight 05. Later current-round preflights must additionally bind their
+own accepted revision and successful prior results. All four historical root aggregates
+and eight historical preflight receipts are checked before and after each action.
+The preflight checks only named predecessor inputs and their ancestors, never their
+unused cache/home trees. It recursively rejects reparse points in the active root.
+
+Fresh-root preflight precedes writes. Every existing-round prior source, successful
+completion, reservation, graph and artifact check precedes its next preflight. Preserve
+finding N's exit-zero build rule and durable failure stop, including rejection of missing
+source rather than recopying it. Each dependent action still requires independent evidence
+review. A stopped artifact cannot become a runtime input. Use the same four commands in
+[Sequential Actions and Outcome](#sequential-actions-and-outcome) with this amendment's
+merged revision; the runner fixes the new root and ordinals.
+
+### Finite Lexical Diagnostic
+
+Preserve the one snapshot, retained Job/process handles, incarnation and membership
+checks, worker lifetime, 32-member/193-call/32-close limits, fixed image buffer, two-second
+drain and nonblocking stop. No extra OS query or file access is introduced. The same
+verified in-memory image string is additionally classified before being discarded:
+
+- `ImageClass` retains exact-path classification and adds `msvc-vctip` only for that
+  executable at the existing pinned Hostx64/x64 path. Existing labels are unchanged.
+- `BasenameClass` is one of `link`, `cl`, `mspdbsrv`, `mspdbcmf`, `c1`, `c1xx`, `c2`,
+  `vctip`, `dotnet`, `conhost`, `csc`, `ilc`, or `unknown`. Match only a complete known
+  `.exe` leaf, case-insensitively, after the last backslash. Never emit an unmatched leaf.
+- `LocationClass` is `msvc-bin-text`, `dotnet-installation-text`, `system32-text`,
+  `framework-text`, `round-root-text`, or `unknown`. These denote exact, case-insensitive,
+  separator-terminated textual prefixes for the pinned MSVC bin tree, dotnet installation,
+  System32, Framework64 compiler directory or active round. They are not canonical-path
+  or installation-membership attestations. Aliases and other forms may remain unknown.
+
+All three classes are `unknown`, with null PID/creation fields, unless the existing
+membership/incarnation checks succeed. The Python shape gate allowlists every field and
+value before emitting a result. Maximum metadata remains below 32 KiB. There is no path
+text/hash, arbitrary filename, command line, environment, token or memory output.
+
+Microsoft's [QueryFullProcessImageNameW contract](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-queryfullprocessimagenamew)
+promises Win32 path format for flag zero, not a canonical or long-name identity check.
+Separating known-leaf and textual-location classes from exact-path matches can therefore
+produce a more useful next observation without treating a basename as provenance.
+Microsoft's [Visual Studio 2022 17.0.9 release notes](https://learn.microsoft.com/en-us/visualstudio/releases/2022/release-notes-v17.0)
+name `vctip.exe` in a fixed regression. That establishes a public tool-name basis for the
+additional label only; it does not identify round 01's member or imply a current defect.
+
+Neither lexical match nor exact-path match attests executable bytes, causation, exclusive
+service use, network activity, or the final survivor's identity. The snapshot remains
+non-atomic with final Job counts. Do not infer a specific alias or missing classifier
+entry caused round 01's unknown value. A new unknown is still a valid diagnostic outcome,
+not successful publication or permission to repeat the action.
+
+All Round 01 round-stop and global-stop rules continue unchanged. Successful owned
+termination plus complete screened diagnostics may support another independently reviewed,
+accepted exact amendment within the remaining Wave. Failed termination, unproved
+quiescence, sensitive/incomplete/suppressed diagnostics or unexpected external effects
+end execution and require owner disposition. No tool class permits a shared-server
+exception, weakened completion rule or unrelated termination.
+
 ## Diagnostic Round 01
+
+**Stopped historical round:** Only actions 18–19 ran. Its unstarted allocations are no
+longer executable; see [results](#diagnostic-round-01-results) and the current round above.
 
 The accepted buffered Wave permits this separately reviewed diagnostic round after
 PR #98's [actual merged-Wave review](https://github.com/hcoona/microsoft-authentication-cli/pull/98#issuecomment-5645213555).
@@ -210,6 +315,69 @@ case. Full application, WAM/UI, dynamic dependencies, product symbols, performan
 release and support remain separate obligations. Do not select Native AOT from artifact
 presence alone. Complete the bounded publishing-design disposition and stop before
 implementing the minimal Windows CLI.
+
+### Diagnostic Round 01 Results
+
+Executed accepted protocol/source `2fea4a9c5d056e031d8d026a365093ab3e38ba3b` (PR #99),
+tree `16e56b71e21798fea3fcf3bcf89f5c5afef17917`, from its clean detached checkout on
+the designated Windows host through WSL. Exact source, Wave, toolchain and history
+bindings passed. Independent protocol acceptance, mandatory hk, exact-head CI, current
+prerequisite verification and restore evidence review preceded their dependent actions.
+No account, WAM, cache, UI or resource operation was invoked.
+
+| Action | September 12, 2026 UTC | Observation |
+| --- | --- | --- |
+| 18: local-feed restore | 10:28:00.507248–10:28:12.1409204 | Guard and subject exit 0; normal completion, 9.867 seconds including a 0.008-second drain; all Job counts zero; no termination request or safety stop. |
+| 19: Native AOT publish | 10:33:35.208326–10:33:58.3087624 | Guard and subject exit 0; complete capture, 21.311 seconds including a 2.010-second drain; one Job member after capture and at normal exit. Stopped at `normal-quiescence`; owned termination succeeded and final quiescence was confirmed. |
+
+Restore retained the same ten libraries and selected client net8, Broker netstandard2.0,
+NativeInterop net9 and x64 native assets. The runner verified all 187 package and 1,058
+download-pack payloads. This reused the verified public local feed; it was not a clean
+network restore. Restore's complete screened output had 194 characters, zero stderr and
+no diagnostic codes. Its completion manifest binds graph, lock and generated imports.
+
+Publish retained all 315 original stdout characters through path sanitization, zero
+stderr, no suppressed/truncated/sensitive lines, and no AOT/trim/compiler/link diagnostic
+codes. Its three lines reported the managed output, native-code generation and publish
+output directory. These are bounded diagnostic observations for this rooted symbol-free
+probe, not reconstructed historical warnings or a product symbol policy.
+
+The one metadata snapshot completed with one `verified-member`: retained-handle Job
+membership and creation checks passed, but its exact-path `ImageClass` was `unknown`.
+The finite receipt retains its permitted numeric identity; it contains no image path.
+This does not identify a particular tool, prove an alias, attest executable bytes,
+establish exclusive service use, or atomically identify the final surviving process.
+Round 02's lexical classification is a new diagnostic, not a reinterpretation of this
+observation.
+
+The controller retained `safetyStop=true` and the wrapper exited 1 with a durable stop.
+Publish 19 has no `completion.json` or `artifacts.json`; no cleanup or x86 runtime ran.
+The root is stopped and retained read-only, including ineligible native artifacts.
+Independent review verified complete screened diagnostics, successful owned termination,
+final quiescence and unchanged predecessor evidence. No new implementation finding or
+observed global-stop effect followed; an expected unknown does not itself require triage.
+The reviewed remaining buffer may be used only through a fresh accepted exact amendment.
+
+Cumulative supplemental/diagnostic consumption is restore 3, publish 3, cleanup 0,
+x86 rejection 0, guard 6 and corrected preflight 4, plus the original separately rejected
+preflight. Remaining buffered capacity is restore 7, publish 7, cleanup 4, x86 rejection 4,
+guard 22, corrected preflight 46 and seven fresh roots. Original thirteen-attempt limits
+and all prior unknowns remain unchanged.
+
+| Retained evidence | SHA-256 |
+| --- | --- |
+| Restore 18 reservation | `c13e752ad714bc0ab071cbb8904685dcc8d2e417be232415e10ff79321478ca9` |
+| Restore 18 result | `f41b9d642b085e31932ea4f2f89e97d3b8cbc902d137af2ec27959747c923a12` |
+| Restore 18 graph/payload manifest | `dfc97ce324fbf7ec92b1aadd33786d5ae01c3e3c7867ff568810ea7130368354` |
+| Restore 18 completion | `788ac0fc5a41ab7751b6cb82ac4a22154a164070102b748a59cd04ee1304fce5` |
+| Publish 19 reservation | `305f19f2e61fb9545732c59bd4878b00b2fa938183ae6fa5b639a8099d03c2a6` |
+| Publish 19 result | `7ca5dd03c98a2d062f8d750bfdcaacfdcf94cc7fe9208c721572c3a3d35095c8` |
+| Durable round stop | `9c5c91aee6a04635b293b73e55c5216e811db4acb0f8e552c414c68d42a5cb2e` |
+| Frozen 32-file aggregate | `79353af8cfe14823692e83407fcb636390dd74cdf35dd4d78197a416a109fa5f` |
+
+Normal publish completion, synthetic cleanup and wrong-architecture evidence remain
+outstanding. No Native AOT publishing selection, full application/WAM validation,
+dynamic native closure, performance or support conclusion follows from this round.
 
 ## Readiness Supplement
 
