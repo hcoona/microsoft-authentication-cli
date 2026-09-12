@@ -4,7 +4,8 @@ This record owns the concrete Windows request implementation design and the prot
 command-line/process semantics. The linked JSON Schemas own serialized field shapes.
 Requirements remain authoritative for required behavior; the
 [architecture](../architecture/overview.md) owns system-wide boundaries. This is a
-design for implementation, not an activated Client Profile, executable, or support claim.
+design record, not an activated Client Profile, executable, or support claim. The Native
+AOT publishing disposition below retains an explicit preimplementation compatibility gap.
 
 ## Selected Boundary and Dependencies
 
@@ -17,7 +18,7 @@ applies to every operation, configuration, and failure path.
 
 | Choice | Concrete design and reason |
 | --- | --- |
-| Runtime | C# on .NET 10 LTS, `net10.0-windows`, `win-x64`, Windows Forms for the owned WAM parent window. Design baseline: SDK 10.0.401 and Windows Desktop/runtime 10.0.12. Use the maintained Windows runtime rather than a Linux-to-Windows bridge. |
+| Runtime and UI candidate | C# on .NET 10 LTS, `net10.0-windows`, `win-x64`; SDK 10.0.401 and runtime 10.0.12. A small in-process Win32 window replaces the Windows Forms host in the candidate design below. It requires no Windows Desktop managed framework. |
 | Authentication dependencies | `Microsoft.Identity.Client` and `Microsoft.Identity.Client.Broker` 4.83.1, with `Microsoft.Identity.Client.NativeInterop` 0.20.3. Preserve the existing probe's authentication dependency baseline while changing the managed host. |
 | Provider | Windows WAM only. One real-account discovery, at most one selected-account silent call, and at most one permitted interactive call. No application-level network retry or second provider. |
 | State | Broker-owned reusable state; a fresh in-memory MSAL application per invocation. No MSAL Extensions cache helper, serialized MSAL cache, shadow refresh-token store, engine account binding, or cross-process lock. |
@@ -29,6 +30,74 @@ binds these choices to public source. .NET 10 compatibility is a design inferenc
 published framework contracts, not an observation from the .NET 8 probe. Future upgrades
 must use the existing dependency review/validation matrix. No restore, build, or new
 authentication experiment is part of accepting this design.
+
+### Native AOT Target Disposition
+
+The one executable and RID in this Slice have an **unresolved publishing choice** under
+[V2-REQ-055](../product/requirements/quality-build-and-validation.md#v2-req-055-native-aot-publishing).
+The preferred candidate is Native AOT with the Win32 host described here. No non-AOT
+exception is accepted. Public contracts establish a plausible route, but do not yet
+establish the complete pinned Broker/NativeInterop loading path under Native AOT. Keep
+production publishing unselected and do not call the Slice implementation-ready until
+that essential premise has a reviewed disposition. This is a concrete design and next
+validation obligation, not permission to implement or publish it in the current Wave.
+
+The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
+distinguishes the following alternatives:
+
+| Alternative | Disposition and reason |
+| --- | --- |
+| Existing Windows Forms host | Cannot be selected as a supported Native AOT route: Native AOT requires trimming, and Microsoft disables supported Windows Forms trimming because of built-in COM dependencies. Keeping this host would require a justified non-AOT exception; it is not necessary merely to own an HWND. |
+| WPF replacement | Its documented trimming limitation does not resolve the blocker. |
+| Small Win32 host with static interop | Preferred candidate: the required parent, public branding, completion and cancellation controls need only Win32 window APIs, an owned message loop, and statically known callbacks. This removes the managed desktop-framework blocker without another process or provider. |
+| Larger UI framework or direct broker rewrite | No present UI requirement justifies another framework's dependency surface or replacing the supported MSAL integration with direct broker internals. Neither is needed to assess the smaller candidate. |
+| Same Win32 host with ordinary self-contained JIT publishing | Future comparison baseline, not an accepted fallback or exception. Consider it only if the exact remaining AOT blocker cannot reasonably be remediated, with the requirement's evidence and reassessment obligations. |
+
+The candidate project would enable `PublishAot` in its own project, retaining AOT/trim
+analysis during development. It would not apply that property to the historical probe,
+use blanket warning suppression, add dynamic plugins, or equate ReadyToRun/trimming with
+Native AOT. Use source-generated P/Invoke for the finite owned Win32 API surface and
+static `UnmanagedCallersOnly` callbacks with explicit ABI/layout. Built-in COM, runtime
+code generation, reflection-based activation, and C++/CLI are not part of this host.
+
+Read Profile JSON with a bounded `Utf8JsonReader`/explicit field reader, retaining the
+existing duplicate-key, unknown-field, version, depth, and semantic validation. Write
+result/event JSON from the existing field allowlists with `Utf8JsonWriter`; never serialize
+arbitrary provider objects. These choices do not change the schemas or loosen input
+validation. MSAL's own .NET 8 asset uses its generated JSON context; the separate Broker
+asset targets .NET Standard 2.0 and does not inherit that AOT annotation automatically.
+
+The public NativeInterop 0.20.3 package supplies a .NET 9 managed asset and `win-x64`
+`msalruntime.dll`. The future resolved dependency graph must confirm the selected assets,
+their public provenance, and all native transitive requirements. Do not assume the older
+.NET Standard loader issue applies to the newer asset, or that package metadata proves
+the newer loader works. Retain the three authentication pins while assessing this route.
+
+Native assets belong in the application deployment directory with their notices. Before
+provider initialization, constrain process DLL search to the application directory and
+System32 with supported Windows loader controls; reject user-configured native paths.
+Do not rely on the working directory, ambient `PATH`, development installations, runtime
+extraction, or `Assembly.Location`. Do not enable direct P/Invoke for the broker library:
+Native AOT's default binding and OS direct binding have different search semantics. The
+exact upstream loader, its dependencies, and the process search restriction must be
+validated together; an incompatible loader keeps the candidate unavailable rather than
+silently weakening search rules or copying private runtime internals.
+
+A future authorized publish protocol must pin the Windows x64 public native build chain
+(Visual Studio C++ tools, Windows SDK, and `link.exe`), SDK/runtime inputs, resolved
+NuGet graph, and publish properties before execution. Microsoft's documented Windows
+prerequisite is Visual Studio 2022 with Desktop development with C++ and its default
+components; this record does not select a floating installed compiler. No compiler is
+installed by this design revision. Artifact closure must include the native broker and
+OS prerequisites; an AOT executable does not imply one-file deployment or no OS dependency.
+Debug symbols have a separate diagnostic/release treatment and are included when
+comparing total development and distribution costs.
+
+Resolve the remaining premise through the least costly separately authorized public
+source or bounded synthetic publish/loading evidence. If that fails, investigate precise
+supported dependency or host changes before proposing a scoped exception. Actual WAM,
+account, UI and cancellation behavior still require the existing later Windows scenario
+evidence even after a successful publish. The historical .NET 8 probe is unchanged.
 
 ### C4 Deployment View
 
@@ -42,9 +111,9 @@ flowchart LR
             caller["Git or package adapter<br/>[External system instance]"]
         end
         subgraph windows["Windows interactive user session [Execution environment]"]
-            cli["Windows CLI + MSAL<br/>[Container instance: .NET 10 process]"]
+            cli["Windows CLI + MSAL<br/>[Container instance: .NET 10 process]<br/>Native AOT candidate; compatibility unresolved"]
             profile[("Explicitly selected Profile file<br/>[External data store: caller-managed JSON]")]
-            ui["Owned parent and completion UI<br/>[Component in the CLI process]"]
+            ui["Win32 parent and completion UI<br/>[Component in the CLI process]"]
             wam["WAM and protected reusable state<br/>[External OS system]"]
         end
     end
@@ -338,12 +407,58 @@ future reuse, or require a readback. Do no post-validation persistence I/O or wa
 
 ## Windows UI and Request Lifetime
 
-Use a small Windows Forms window on an owned STA thread with a message loop only when
+The candidate uses a small Win32 window on an owned STA thread with a message loop only when
 interaction is both needed and permitted. It supplies a stable nonzero HWND and explicit
 cancel/close behavior. It does not ask for account email, passwords, URLs, or credentials;
 those belong to the caller's request and provider UI. Parent WAM with that HWND, use the
 specified login hint, and let WAM choose sign-in/MFA/consent methods. Failure to create the
 owned parent makes the path unavailable before the interactive call.
+
+The UI thread registers the window class and creates/destroys its HWND. Use standard
+Windows text/button controls, keyboard navigation, accessible names and system visual
+settings; show the bounded public branding/ownership text required above and an explicit
+Cancel action. No custom credential form, embedded browser, COM automation or rich-text
+rendering is needed. Accessibility and DPI/focus behavior remain host-validation cases.
+Keep the window-procedure callback and request context alive through window destruction;
+unmanaged callbacks must not unwind managed exceptions across the ABI boundary.
+
+The coordinator awaits a ready HWND or a typed creation failure under the original
+deadline before the one interactive call. Its asynchronous MSAL work must not block the
+UI message pump with `.Result`, synchronous waits, or synchronous cross-thread window
+messages. UI cancel/close signals the request cancellation latch. Terminal completion
+invalidates the request context and posts owned-window closure to the creating thread;
+that thread destroys its windows and quits its loop. A queued completion cannot recreate
+UI or authorize success after cancellation. If creation, dispatch or destruction stalls,
+the existing one-process shutdown watchdog remains the final bound.
+
+### UML UI Ownership and Cancellation Sequence
+
+```mermaid
+sequenceDiagram
+    participant C as Request coordinator
+    participant U as Owned STA and Win32 message loop
+    participant P as MSAL and WAM
+    participant W as Process shutdown watchdog
+    C->>U: Start only when interaction is needed and permitted
+    U-->>C: Ready HWND or creation failure
+    opt Ready before original deadline and request still active
+        C->>P: One asynchronous interactive call with HWND and request token
+        Note over U: Continue dispatching messages while provider work is pending
+        alt Cancel, close, lifetime-pipe failure, or deadline
+            U-->>C: Cancel/close notification when originating in UI
+            C->>C: Latch cancellation/timeout and reject late success
+            C->>P: Request cancellation
+            C->>W: Enforce existing shutdown allowance
+        else Candidate or failure completes
+            P-->>C: Request-bound provider observation
+            C->>C: Validate candidate and select terminal outcome
+        end
+        C->>U: Post closure with invalidated request context
+        U->>U: Destroy HWND on creating thread and quit loop
+        U-->>C: Closed
+        Note over C,W: A stalled provider, UI, or output cannot extend process lifetime
+    end
+```
 
 No visible window or prompt is created for a prohibited-interaction request. Broker
 discovery and silent APIs are the eligible no-interaction operations; no opaque default
