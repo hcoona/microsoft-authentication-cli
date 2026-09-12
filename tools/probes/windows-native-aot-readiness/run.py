@@ -186,21 +186,39 @@ def windows_paths():
     script = r'''
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
+$failure = 'path-query-failed'
 try {
     $queue = New-Object 'Collections.Generic.Queue[string]'
     foreach ($path in @('C:\', 'C:\Temp', 'C:\Temp\azureauth-native-aot-76',
-                       'C:\Temp\azureauth-native-aot-76\feed')) {
+                       'C:\Temp\azureauth-native-aot-76\feed',
+                       'C:\Temp\azureauth-native-aot-readiness')) {
         if ((Get-Item -LiteralPath $path -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+            $failure = 'reparse-point'
             throw 'Linked prerequisite'
         }
     }
-    foreach ($root in @('C:\Temp\azureauth-native-aot-readiness',
-                         'C:\Temp\azureauth-native-aot-readiness-recovery')) {
-        if (Test-Path -LiteralPath $root) { $queue.Enqueue($root) }
+    # Predecessors supply only these immutable inputs, never their scratch home/cache.
+    $seen = @{}
+    foreach ($inputPath in @(__PREDECESSOR_PATHS__)) {
+        $path = 'C:\Temp'
+        foreach ($part in $inputPath.Substring(8).Split('\')) {
+            $path += '\' + $part
+            if ($seen.ContainsKey($path)) { continue }
+            if ((Get-Item -LiteralPath $path -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+                $failure = 'reparse-point'
+                throw 'Linked predecessor input'
+            }
+            $seen[$path] = $true
+        }
     }
+    $root = 'C:\Temp\azureauth-native-aot-readiness-recovery'
+    if (Test-Path -LiteralPath $root) { $queue.Enqueue($root) }
     while ($queue.Count -gt 0) {
         $item = Get-Item -LiteralPath $queue.Dequeue() -Force
-        if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Linked input' }
+        if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
+            $failure = 'reparse-point'
+            throw 'Linked input'
+        }
         if ($item.PSIsContainer) {
             foreach ($child in Get-ChildItem -LiteralPath $item.FullName -Force) {
                 $queue.Enqueue($child.FullName)
@@ -208,14 +226,26 @@ try {
         }
     }
     [Console]::Out.Write('direct-paths')
-} catch { exit 1 }
+} catch { [Console]::Out.Write($failure); exit 1 }
 '''
-    result = subprocess.run([
-        '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe', '-NoLogo', '-NoProfile',
-        '-NonInteractive', '-EncodedCommand', base64.b64encode(script.encode('utf-16-le')).decode()],
-        capture_output=True, timeout=60)
+    inputs = [('azureauth-native-aot-76', HISTORY_FILES + ['feed/' + name for name in FEED]),
+              ('azureauth-native-aot-readiness', PRIOR_FILES)]
+    script = script.replace('__PREDECESSOR_PATHS__', ', '.join(
+        "'C:\\Temp\\" + root + '\\' + name.replace('/', '\\').replace("'", "''") + "'"
+        for root, names in inputs for name in names))
+    try:
+        result = subprocess.run([
+            '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe', '-NoLogo', '-NoProfile',
+            '-NonInteractive', '-EncodedCommand', base64.b64encode(script.encode('utf-16-le')).decode()],
+            capture_output=True, timeout=60)
+    except subprocess.TimeoutExpired:
+        raise SystemExit('Windows path ownership preflight failed: timeout.') from None
     if result.returncode != 0 or result.stdout != b'direct-paths' or result.stderr:
-        raise SystemExit('Windows path ownership preflight failed.')
+        classification = (result.stdout.decode('ascii') if result.stdout in (
+            b'direct-paths', b'reparse-point', b'path-query-failed') else 'unexpected-output')
+        raise SystemExit('Windows path ownership preflight failed: ' + json.dumps({
+            'classification': classification, 'exitCode': result.returncode,
+            'stderrPresent': bool(result.stderr)}))
 
 
 def restore_evidence(source):
