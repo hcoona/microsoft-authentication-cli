@@ -5,7 +5,8 @@ param(
     [ValidatePattern('^[0-9a-f]{40}$')][string] $Accepted
 )
 $ErrorActionPreference = 'Stop'
-$root = 'C:\Temp\azureauth-native-aot-readiness'
+$ProgressPreference = 'SilentlyContinue'
+$root = 'C:\Temp\azureauth-native-aot-readiness-recovery'
 $attempt = Join-Path "$root\attempts" $AttemptName
 $vc = 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231'
 $sdk = 'C:\Program Files (x86)\Windows Kits\10'
@@ -14,6 +15,7 @@ $dotnet = 'C:\Program Files\dotnet\dotnet.exe'
 $result = [ordered]@{ exitCode = -1; quiescent = $false; safetyStop = $true }
 $guard = $null
 $compiler = $null
+$texts = $null
 $stage = 'controller-start'
 $result.compilerTerminationRequested = $false
 $framework = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319'
@@ -215,24 +217,19 @@ try {
     $result.captureCompleted = $true
     $texts = @([string]$capture.stdout, [string]$capture.stderr)
     $result.exitCode = $child.ExitCode
-    $result.seconds = [Math]::Round($watch.Elapsed.TotalSeconds, 3)
     $stage = 'normal-quiescence'
+    $result.activeProcessesAfterCapture = $guard.ActiveProcesses
+    $drain = [Diagnostics.Stopwatch]::StartNew()
+    $drainLimit = [Math]::Min(2000, [Math]::Max(0, $timeout * 1000 - $watch.ElapsedMilliseconds))
+    while ($guard.ActiveProcesses -ne 0 -and $drain.ElapsedMilliseconds -lt $drainLimit) {
+        Start-Sleep -Milliseconds 25
+    }
+    $result.normalDrainSeconds = [Math]::Round($drain.Elapsed.TotalSeconds, 3)
+    $result.seconds = [Math]::Round($watch.Elapsed.TotalSeconds, 3)
     $result.activeProcessesAtNormalExit = $guard.ActiveProcesses
-    if ($result.activeProcessesAtNormalExit -ne 0) { throw 'Owned descendant survived normal exit' }
-    $result.quiescent = $true
+    if ($result.activeProcessesAtNormalExit -ne 0) { throw 'Owned descendants survived normal exit' }
     $stage = 'observation-validation'
-    if ($Action -in @('restore', 'publish')) {
-        $all = [string]$texts[0] + [string]$texts[1]
-        $result.stdoutCharacters = $texts[0].Length
-        $result.stderrCharacters = $texts[1].Length
-        $result.stdoutDiagnostic = Convert-BuildDiagnostic $texts[0]
-        $result.stderrDiagnostic = Convert-BuildDiagnostic $texts[1]
-        if ($result.stdoutDiagnostic.sensitiveOutput -or $result.stderrDiagnostic.sensitiveOutput) {
-            throw 'Sensitive build output suppressed'
-        }
-        $result.diagnosticCodes = @([regex]::Matches($all, '\b(?:IL|CS|NU|NETSDK|MSB|LNK)[0-9]{4,5}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique)
-        $result.diagnosticsComplete = -not ($result.stdoutDiagnostic.truncated -or $result.stderrDiagnostic.truncated -or $result.stdoutDiagnostic.suppressedLines -or $result.stderrDiagnostic.suppressedLines)
-    } else {
+    if ($Action -notin @('restore', 'publish')) {
         if ($texts[1].Length -ne 0) { throw 'Unexpected subject stderr; contents suppressed' }
         $exception = '(|System\.(DllNotFoundException|BadImageFormatException|TypeInitializationException|EntryPointNotFoundException|InvalidOperationException)|Microsoft\.Identity\.Client\.(MsalClientException|NativeInterop\.MsalRuntimeException))'
         $pattern = '\A\{"nativeAot":(true|false),"restrictedSearch":(true|false),"unexpectedPreload":(true|false),"firstChanceSelfCheck":(true|false),"builderCreated":(true|false),"allocated":(true|false),"cleanupExportsPresent":(true|false),"disposeReturned":(true|false),"secondDisposeReturned":(true|false),"cleanupFirstChanceExceptions":(-1|0|[1-9][0-9]{0,8}),"exceptionType":"' + $exception + '","innerExceptionType":"' + $exception + '","nativeModuleLoaded":(true|false),"moduleInApplicationDirectory":(true|false)\}\z'
@@ -263,7 +260,9 @@ try {
             $compilerStopped = $compiler.WaitForExit(10000)
         }
         $subjectStopped = $true
-        if ($guard) { $subjectStopped = $guard.Stop() }
+        if ($guard) {
+            $subjectStopped = $guard.Stop()
+        }
         $result.quiescent = $compilerStopped -and $subjectStopped
     } catch {
         $result.quiescent = $false; $result.safetyStop = $true
@@ -278,6 +277,29 @@ try {
     $result.stage = $stage
     if ($guard) { $guard.Dispose() }
     if ($compiler) { $compiler.Dispose() }
+    # Terminate and dispose owned work before any diagnostic screening, including failure.
+    if ($Action -in @('restore', 'publish') -and $result.captureCompleted -and $null -ne $texts) {
+        try {
+            $result.stdoutCharacters = $texts[0].Length
+            $result.stderrCharacters = $texts[1].Length
+            $result.stdoutDiagnostic = Convert-BuildDiagnostic $texts[0]
+            $result.stderrDiagnostic = Convert-BuildDiagnostic $texts[1]
+            $safeText = $result.stdoutDiagnostic.text + $result.stderrDiagnostic.text
+            $result.diagnosticCodes = @([regex]::Matches($safeText, '\b(?:IL|CS|NU|NETSDK|MSB|LNK)[0-9]{4,5}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique)
+            $result.diagnosticsComplete = -not ($result.stdoutDiagnostic.sensitiveOutput -or $result.stderrDiagnostic.sensitiveOutput -or
+                $result.stdoutDiagnostic.truncated -or $result.stderrDiagnostic.truncated -or
+                $result.stdoutDiagnostic.suppressedLines -or $result.stderrDiagnostic.suppressedLines)
+            if (-not $result.diagnosticsComplete) {
+                $result.safetyStop = $true
+                if (-not $result.Contains('failureStage')) { $result.failureStage = 'diagnostic-screening' }
+            }
+        } catch {
+            $result.safetyStop = $true
+            $result.diagnosticsComplete = $false
+            $result.diagnosticFailureType = $_.Exception.GetType().FullName
+            if (-not $result.Contains('failureStage')) { $result.failureStage = 'diagnostic-screening' }
+        }
+    }
     $result.ended = (Get-Date).ToUniversalTime().ToString('o')
     Save-Json "$attempt\result.json" $result
 }

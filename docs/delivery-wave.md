@@ -21,7 +21,8 @@ proposal does not authorize any work it would add before merge.
 the [Windows Slice design](designs/windows-ado-authentication.md), its
 [protocol schemas](../contracts/v1/request.schema.json), the
 [public dependency assessment](research/v1-public-contract-baseline.md#windows-native-aot-assessment),
-the [accepted synthetic observations](research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results),
+the [accepted original observations](research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
+and [stopped readiness supplement](research/experiments/windows-native-aot.md#readiness-results),
 the [validation basis](validation/strategy.md#native-aot-publishing), and
 [experiment safety](research/experiment-safety.md). The repository owner directed
 completion of the remaining AOT evidence and publishing design, stopping before
@@ -39,18 +40,29 @@ limits, artifacts, and attempt 10's unknown stop origin and missing historical w
 New evidence must not retrospectively change that history or claim a clean public restore
 from reused packages.
 
-The amendment may add, cumulatively, at most two local-feed restore attempts, two Native
-AOT publish attempts, four synthetic runtime attempts, and eight standalone guard
-compilations. Reserve every attempted action before starting it, including failed starts.
-Use a separate dedicated experiment directory; do not reset or mutate the original root.
-Each restore is limited to 180 seconds, each publish to 600 seconds, each synthetic
-runtime to 30 seconds, and each guard compilation to 30 seconds. The exact accepted
-protocol must additionally bound controller termination, diagnostic capture, total
-effects, artifact provenance, and sequential continuation. A safety stop or unproved
-quiescence ends execution; an unused limit is not authority to retry that stop.
-Reuse only hash-verified public archives from the accepted experiment, copied into the
-new dedicated feed. No new package, SDK, compiler, debugger, or tool installation is
-authorized. Ordinary source/documentation reads are not package acquisition.
+Authorize the distinct [readiness recovery](research/experiments/windows-native-aot.md#readiness-recovery)
+using a new dedicated root; neither earlier sequence may resume. Preserve all prior
+attempts, the supplemental stop, missing diagnostics, artifact identities and consumed
+capacity. The recovery may use at most one local-feed restore (180 seconds), one Native
+AOT publish (600 seconds), four synthetic runtimes (30 seconds each), and six standalone
+guard compilations (30 seconds each). Together with the accepted stopped supplement,
+maxima remain two restores, two publishes, four runtimes and eight guards. Reserve every
+attempt before starting it, including failed starts. No protocol revision resets totals.
+
+The independently accepted exact recovery may charge a two-second normal Job drain
+window to the existing action limit, with at most 100 milliseconds of scheduling tolerance.
+It may disable debug-symbol generation for the synthetic probe while preserving its
+rooted provider surface, AOT/trim diagnostics, and strict zero-process normal completion.
+It may not accept or terminate a surviving helper as expected successful completion.
+Failed termination, incomplete/suppressed output, unexpected effects or a new safety
+stop end recovery. This prospective rule does not reclassify either historical stop or
+permit unreviewed retries. Retain screened diagnostics after owned termination on
+completed-capture failure paths, preserving failure and stop evidence.
+
+Reuse only hash-verified public archives from the original experiment. No new package,
+SDK, compiler, debugger or tool installation is authorized. The exact protocol bounds
+source/artifact provenance, replacement environments, diagnostic capture, process identity,
+controller/emergency termination, cumulative effects and sequential continuation.
 
 Accept the resulting observations and reviewed dependency/diagnostic conclusions in the
 existing research authority, then update the existing Windows design and validation
@@ -71,11 +83,13 @@ covers public documentation/source reads, read-only inspection of the designated
 Linux x64 and existing Windows 11 x64 host and retained public experiment artifacts,
 and use of the already pinned Windows SDK/native compiler and PowerShell process guard.
 Permit dedicated source/feed/cache/build/case files and sanitized receipts under
-`C:\Temp\azureauth-native-aot-readiness`, and bounded configuration allocation/release
+`C:\Temp\azureauth-native-aot-readiness-recovery`; both prior roots remain read-only. Permit bounded configuration allocation/release
 and native-loader tests in owned Windows child processes through WSL. This intentionally
 retains experiment-owned files on the existing host; no authentication or credential
 state is used. Preserve replacement child environments, telemetry controls, process
-ownership, bounded termination, and evidence screening. Executions within this accepted
+ownership, bounded termination, and evidence screening. No host-wide process discovery,
+command-line/environment/token inspection, or termination of shared servers is permitted.
+Executions within this accepted
 entry and its exact accepted protocol require no repeated owner approval.
 
 **Exclusions:** Product CLI or library implementation, product MSBuild scaffolding,

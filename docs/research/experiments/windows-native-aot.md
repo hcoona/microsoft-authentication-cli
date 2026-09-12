@@ -25,11 +25,14 @@ production publishing, or support.
 
 ## Readiness Supplement
 
-This is the only executable procedure in the current record. Sections from
+This PR #94 procedure stopped at attempt 15 and cannot execute again. Its source and
+procedure remain bound to `34e513c0b0d8282e92ff743ecc836c6320d0faa5`; the following
+supplemental subject, procedure, and results preserve that evidence. The
+[recovery amendment](#readiness-recovery) defines the only prospective execution path,
+subject to its separately accepted Wave and exact source. Sections from
 [Question and Exact Subject](#question-and-exact-subject) onward retain the original
-experiment and its exhausted procedure, limits, and observations. Their commands do not
-authorize replay. The accepted Wave's **Windows Native AOT Implementation Readiness**
-entry supplies this supplement's boundary; Issue #92 coordinates its review.
+thirteen attempts and exhausted procedure. Neither stopped procedure authorizes replay.
+Issue #92 coordinates review; it does not grant execution.
 
 ### Exact Subject and Public Basis
 
@@ -235,6 +238,211 @@ Retain all owned files and sanitized evidence intentionally on this host. No acc
 cleanup, old-root cleanup, installation, release, or product source/scaffolding is
 authorized. Close the Wave after the bounded design outcome is accepted and stop before
 implementing the minimal Windows CLI.
+
+### Readiness Results
+
+The supplemental execution binds accepted PR #94 commit
+`34e513c0b0d8282e92ff743ecc836c6320d0faa5`, tree
+`9aa82f488f70bef9f34fb57bca99531394ad629b`, under the unchanged PR #93 Wave. The clean
+detached checkout, current target, source copies, sixteen archive identities and original
+history aggregate were checked before execution. The existing Windows x64 host and
+pinned toolchain were used through WSL 2; no package or tool was downloaded or installed.
+Account, broker-session, credential-store, authentication, resource, and UI operations
+are outside these synthetic observations.
+
+Attempt 14 restored the local-feed graph successfully on September 12, 2026 UTC,
+07:58:34.467445–07:58:46.3596007; subject duration was 10.190 seconds. Complete screened
+stdout reported successful restore, stderr was empty, and no diagnostic code was emitted.
+The guard compiler and subject exited zero; normal/final Job counts were zero, with no
+termination request, safety stop, or unresolved owned process.
+
+The actual ten-library graph selects the net8.0 Client, netstandard2.0 Broker, net9.0
+NativeInterop and package x64 native DLL. All 187 restored library payloads and 1,058
+download-pack payloads matched the verified public archives, including the native-link
+static libraries. Assets, lock, generated NuGet imports, selected assets and payload
+identities are retained in attempt 14's hash-bound restore evidence. This is a successful
+local-feed restore from reused public archives, not a clean public-network restore.
+
+| Restore evidence | SHA-256 |
+| --- | --- |
+| `project.assets.json` | `ff33fc862de0a1a510e1ec2d38077d6b655608401fd775b9b7e898e9f44d0d0d` |
+| `packages.lock.json` | `606af5113f23548d1bc87c55657f1c1f7e4ffa017557e8cb9c7f342690cb84a3` |
+| Generated NuGet props | `02aed7809bc44b8f147cc93e7b10e8815911b655eababa2642e5c7d2aa62a390` |
+| Generated NuGet targets | `f11d95c461cb6b6956a80281b016949a0c280cd3ed6b3a5cd7138c126866c017` |
+| Attempt 14 `restore.json` | `ad404d2b26108fe6eae13b080904f9230dca925c8bbded7f5ba51c945333ffb0` |
+
+Attempt 15 published on September 12, 2026 UTC, 08:02:39.234596–08:03:03.2707372.
+The subject exited zero after 22.252 seconds and complete in-memory capture, but the
+immediate Job accounting query reported one active member. The controller stopped at
+`normal-quiescence`, line 221, requested Job termination, recorded successful termination
+and final quiescence, and retained `safetyStop=true`. Its root stop marker prevents all
+further execution under that supplement. No cleanup or wrong-architecture runtime ran.
+
+The stop occurred before diagnostic screening. No stream text, diagnostic codes,
+completeness flag, `completion.json`, or `artifacts.json` was retained. Warning and
+sensitive-output status remain unknown; neither subject exit zero nor a binary on disk
+repairs that evidence. The survivor's identity and lifetime were not recorded. This
+stop has an identified branch and termination outcome; historical attempt 10's origin
+and missing diagnostics remain unknown.
+
+Read-only inspection after termination found these retained outputs:
+
+| Artifact | Bytes | SHA-256 |
+| --- | --- | --- |
+| Native x64 EXE | 8,643,584 | `650b3c4bf79c82dd8663771fc7745e8f54b19c1bdc0b4ac802be52b1f789adb5` |
+| Native PDB | 35,876,864 | `851f5c8a3ad5701e9de1264283d42002572bba99f477dbdaee5cbdea66ad9c86` |
+| Pinned x64 `msalruntime.dll` | 2,949,656 | `9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79` |
+
+The EXE and DLL have PE machine `0x8664` and no CLR header. Their static imports are
+Windows system modules and OS API-set contracts; neither has a delay-import table.
+The EXE includes Universal CRT API-set imports. An
+[API-set contract](https://learn.microsoft.com/en-us/windows/win32/apiindex/api-set-loader-operation)
+is resolved by the OS loader and need not name a physical file. This inspection does
+not establish dynamic WAM dependencies, runtime compatibility, complete symbol integrity,
+or a releasable artifact closure. The new EXE was not executed.
+
+The retained link response contains `/DEBUG`; its byte SHA-256 is
+`a26d9a7b638087c040065fd6f7cdf29e870f540127479274c44201208da20d92`.
+Microsoft's [LNK1318 reference](https://learn.microsoft.com/en-us/cpp/error-messages/tool-errors/linker-tools-error-lnk1318)
+describes `link` starting `mspdbsrv.exe` and that server being used by another linker
+instance. This supports a possible helper-lifetime explanation, not identification of
+the observed survivor or an observed LNK1318 error. No broad process scan, event-log
+query, additional subject, debugger, or installation was used to investigate the stop.
+
+Supplemental consumption is one restore, one publish, zero runtimes and two guard
+compilations. Remaining nominal capacity cannot resume the stopped supplement. Preserve
+all dedicated files, stop/completion receipts and prior thirteen attempts. The original
+and supplemental outputs remain intentionally retained; no account or host cleanup
+follows. Publishing selection, warning disposition, cleanup and wrong-architecture
+results remain unresolved.
+
+| Stop evidence | SHA-256 |
+| --- | --- |
+| Attempt 15 reservation | `8acb50305b387004388b801001328534ad2ebf4179dc71c45036e5fe745c1375` |
+| Attempt 15 result | `ebb01130397525d78272148d2a635dd3fcb9cd8e28914b38e3ca21bc02e34a82` |
+| Supplemental root stop marker | `6404ba55ed34fce55ed96578ef7a60f4dfea065e224a337a9f7c4c162f92e1d8` |
+
+## Readiness Recovery
+
+This is a distinct prospective execution grant for the same synthetic question, subject
+to acceptance of the amended Wave and this exact source/protocol. It never resumes the
+stopped PR #94 sequence or changes its receipts. Its purpose is to retain complete
+screened publish diagnostics and complete the previously defined synthetic cleanup and genuine x86 rejection cases.
+Product implementation, WAM, accounts, UI, credentials, resources, tool/package acquisition,
+performance measurements, and a non-AOT exception remain excluded.
+
+### Source, Prerequisites, and Remaining Limits
+
+Bind the complete current
+[`windows-native-aot-readiness`](../../../tools/probes/windows-native-aot-readiness)
+directory, the unchanged original `WindowsJob.cs`, and this protocol to one accepted
+commit in a clean detached checkout. `Program.cs` and .NET selection remain byte-identical
+to PR #94. The sole project change adds `DebugType=none`; the only NuGet configuration
+change is the dedicated local-feed path under the new recovery root. The wrapper binds the accepted Wave's exact SHA-256,
+current target/source, original thirteen-attempt aggregate, and the stopped supplement's
+33-file evidence aggregate:
+`a27bb4f06e493f7c6b7a7d95d28b725e3e53de16f164e3c8526d22cd4ce84ab9`.
+The exact ordered names are in `PRIOR_FILES`; use the same name/NUL/binary-digest method
+as the original aggregate. This includes source, attempt 14's completed preparation,
+attempt 15's stopped result and retained output, and the durable stop. A changed or
+additional predecessor attempt, receipt, source or bound artifact stops recovery.
+
+Use only `C:\Temp\azureauth-native-aot-readiness-recovery` for new files. Both earlier
+roots remain read-only. The same Windows x64 host, WSL 2 initiator, sixteen verified
+public archives, .NET 10.0.401/10.0.12, MSAL/Broker 4.83.1, NativeInterop 0.20.3, native
+compiler/SDK/linker pins, replacement child environments, telemetry controls, synthetic
+inputs, and selected assets apply. The new root is not created before acceptance.
+Reject linked/unrecognized/partial roots, preserve preparation reservation, copy only
+verified public inputs, and retain all output intentionally. There is no installation,
+account-state access or cleanup of either earlier root.
+
+At most **one restore (180 seconds), one publish (600 seconds), four synthetic runtimes
+(30 seconds each; at most two cleanup and two wrong-architecture actions), and six guard
+compilations (30 seconds each)** remain. Number reservations from 16 and include failed
+starts. Together with attempts 14–15, maxima stay two restores, two publishes, four
+runtimes and eight guards. An action may not repeat under the same accepted revision;
+any proposed correction carries forward all consumption. There is no remaining restore
+or publish retry after its one recovery attempt. A new safety stop, incomplete/suppressed
+capture, unexpected effect, a surviving Job member or unproved quiescence ends recovery.
+
+The original eight-Mi-character capture ceiling, per-stream 8,192-line/1,048,576-character
+screened limits, 32-process Job limit, 700-second controller wait, ten-second owned
+compiler/Job termination budgets, and ten-second emergency ceiling remain. The controller
+may wait at most two seconds for normal Job accounting to drain, charged to the action's
+existing time limit; its 25-millisecond polling permits at most 100 milliseconds of
+scheduling tolerance in the retained duration. It records initial/final counts and
+drain duration. This finite wait
+is a new prospective rule, not a reinterpretation of attempt 15.
+
+### Symbol Generation and Diagnostic Completion
+
+Only this synthetic probe disables debug-symbol generation. The pinned public
+[Native targets](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets)
+set `NativeDebugSymbols` only when `DebugType` is nonempty and not `none`; they add the
+compiler's `-g` only for that flag. The
+[Windows targets](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Windows.targets)
+likewise add `/DEBUG` only for that flag. The installed target bytes match the verified
+public ILCompiler 10.0.12 archive. Microsoft's
+[DebugType reference](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/code-generation#debugtype)
+documents `none` as omitting PDB output. The rooted provider surface, package pins,
+Native AOT mode, optimization and warning controls remain unchanged.
+
+Microsoft's [LNK1318 guidance](https://learn.microsoft.com/en-us/cpp/error-messages/tool-errors/linker-tools-error-lnk1318)
+states that a PDB server started by one linker can be used by another. The independently
+triaged AOT-READINESS-H finding therefore rejects treating a sole Job-owned server's
+identity as proof of exclusive use. The recovery introduces no helper exception or
+new process-identification APIs. Suppressing this probe's symbol output avoids deliberately
+requesting that service, but does not identify attempt 15's survivor or guarantee that
+no helper will appear. Any nonzero Job count after the bounded drain remains a safety
+stop with the existing bounded termination and diagnostic retention. No host-wide process
+list, parent-PID inference, command-line/environment/token query, private diagnostics,
+or shared broker/server termination is permitted.
+
+The exact new publish inventory is `NativeAotReadinessProbe.exe` and the pinned x64
+`msalruntime.dll`, with no PDB. This limits evidence to the symbol-free synthetic build;
+it neither chooses the product's debug-symbol policy nor validates product PDBs.
+Product symbol generation and debugger/crash-dump usability remain later publishing
+obligations. Retain complete screened diagnostics, exact artifact hashes and subsequent
+runtime observations separately; output presence alone is not completion.
+
+On all build paths with completed in-memory capture, attempt owned termination and dispose
+owned process/pipe handles **before** screening and retaining output. Retain the original
+failure stage, safety-stop and termination fields even if diagnostic screening succeeds.
+Screening failure, sensitive output, truncation or suppression stops recovery; never save
+raw output or infer clean diagnostics from missing fields. Capture interrupted before EOF
+remains incomplete. This fixes diagnostic loss without delaying termination or promoting
+a stopped action to completion.
+
+The Python completion predicates require exact types and normal drain bounds, and either
+ordinary zero-process completion with no termination request. Surviving or forcibly
+terminated descendants cannot satisfy successful completion.
+Successful restores bind `restore.json`; successful publishes bind `artifacts.json`;
+other completions bind an explicitly empty map. Source, graph, generated imports, all
+library/download payloads and copied artifact identities are verified as before. No
+stopped predecessor artifact becomes eligible for execution.
+
+### Sequential Actions and Outcome
+
+After merged-Wave/recheck review and each current-target prerequisite refresh, run the
+following sequentially from the accepted detached checkout and inspect each completed
+receipt before proceeding:
+
+```text
+python3 tools/probes/windows-native-aot-readiness/run.py restore --accepted ACCEPTED_COMMIT
+python3 tools/probes/windows-native-aot-readiness/run.py publish --accepted ACCEPTED_COMMIT
+python3 tools/probes/windows-native-aot-readiness/run.py cleanup --accepted ACCEPTED_COMMIT
+python3 tools/probes/windows-native-aot-readiness/run.py wrong-architecture --accepted ACCEPTED_COMMIT
+```
+
+Every runtime requires the recovery revision's own successful publish and completed
+provenance, using fresh cases and the unchanged positive and genuine x86 fixed observations.
+The self-tested first-chance observer supplies only no-observed-managed/wrapper-reported
+cleanup failure, not proof of opaque native deallocation or a returned shutdown status.
+Review complete AOT/trim/compiler/link diagnostics and native dependencies in the existing
+assessment. Only sufficient reviewed evidence can select Native AOT in the Windows design
+and update validation consumers. Render affected standard diagrams, retain later full
+application/WAM/UI/Profile/performance/release gates, close the Wave after accepting the
+bounded outcome, and stop before minimal Windows CLI implementation.
 
 ## Question and Exact Subject
 

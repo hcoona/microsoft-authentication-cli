@@ -488,6 +488,15 @@ wrong-architecture, WAM/UI/authentication and complete-application evidence obli
 Preserve historical artifacts, receipts, consumption and trust-processing uncertainty.
 No non-AOT exception or disabled platform check is justified by these results.
 
+The [supplemental result](../research/experiments/windows-native-aot.md#readiness-results)
+adds a completed local-feed restore and native artifact production with the provider
+surface rooted for compilation. Its publish controller stopped on a remaining Job member
+and confirmed termination/quiescence before diagnostic screening. No publish-completion
+receipt or warning evidence, cleanup result, or wrong-architecture result follows. A
+recovery requires its own accepted Wave/protocol within carried-forward limits; subject
+exit zero and data inspection cannot substitute for the missing evidence. The publishing
+choice and preimplementation gap remain unresolved.
+
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later candidate tests must cover HWND
 readiness, creation failure, callback lifetime/ABI, creating-thread destruction, stalled
