@@ -10,7 +10,12 @@ and [validation strategy](../../validation/strategy.md#native-aot-publishing) co
 the bounded conclusion. The historical Windows MSAL and tooling protocols retain their
 exhausted capacities; none of their helpers or subjects may execute here.
 
-The retained .NET 10 Native AOT EXE has now executed on the Windows host through WSL.
+The [latest completed round](#diagnostic-round-05-results) supplies warning-free rooted
+publish, observable cleanup and genuine wrong-architecture rejection evidence for the
+preimplementation Native AOT design. Its bounded conclusion preserves the historical
+results and later full-application validation obligations.
+
+The original retained .NET 10 Native AOT EXE executed on the Windows host through WSL.
 The positive case created MSAL configuration and entered the upstream NativeInterop
 configuration-allocation path with the native DLL loaded from the application directory.
 Both missing-library and working-directory/PATH-decoy cases returned
@@ -19,7 +24,7 @@ normally with quiescence and no safety stop or termination request.
 
 All original experiment capacity is consumed. The original procedure and artifacts are
 historical evidence, not a new execution grant. Attempt 10's controller stop, unknown origin and
-missing publish warnings remain unchanged. These synthetic results establish the tested
+missing publish warnings remain unchanged. Those original synthetic results establish the tested
 allocation/loading/search path, not WAM authentication, complete native cleanup,
 production publishing, or support.
 
@@ -131,6 +136,121 @@ the dependent action; runtime requires this round's own reviewed publish and bou
 artifacts. Failed preflight or action stops this round, with no historical replay;
 global-stop conditions remain unchanged. Retain all new files intentionally, accept
 observations and affected consumers together, and stop before product implementation.
+
+### Diagnostic Round 05 Results
+
+PR #105 accepted protocol/source `953b5ad9ea0fb470a54dc556955ec622211e6d6d`,
+tree `c7228cd83ec410ecaa255464c0faff13b578eac7`, under the unchanged PR #103 Wave.
+The clean detached checkout ran on the same existing Windows 11 x64 host through WSL 2,
+with .NET SDK 10.0.401/runtime 10.0.12, MSVC 14.51.36231, Windows SDK 10.0.26100.0,
+MSAL/Broker 4.83.1 and NativeInterop 0.20.3. Every action used its own dedicated
+scratch home/temp/HTTP-cache environment. No account or authentication operation,
+tool/package acquisition, installation or old-root modification was performed.
+
+**Restore 24:** Subject and guard exited zero; normal completion took 10.014 seconds,
+including a 0.010-second drain. All retained Job counts were zero, without termination
+or safety stop. Complete screened diagnostics contained 194 stdout characters, zero
+stderr, no warning text or diagnostic code, and no truncation/suppression. The runner
+verified the ten-library graph, all 187 package payloads and 1,058 download-pack payloads
+against the reused public archives. The selected assets remain net8.0 Client,
+netstandard2.0 Broker, net9.0 NativeInterop and the package x64 DLL. This is a successful
+local-feed restore, not a clean public-network restore.
+
+**Publish 25:** Subject and guard exited zero in 22.851 seconds, including a
+2.009-second normal drain. Complete screened diagnostics contained 315 stdout
+characters, zero stderr, zero diagnostic codes and no warning text, truncation or
+suppression. The selected provider API surface remained rooted for compilation and
+uninvoked at runtime. No AOT, trim, managed-compiler or linker warning requires a
+suppression or dependency exception for this exact synthetic graph.
+
+One verified VCTIP member remained after the normal drain. The accepted current
+identity/accounting predicate passed with lifetime totals 13/13/13; requested owned-Job
+termination succeeded and the final active count was zero. The action completed as
+`vctip-cleanup`, with `safetyStop=false`, not as a normal zero-process drain. This
+applies only the prospectively accepted publish criterion. It neither reconstructs
+historical survivor identities nor proves absence of telemetry or opaque helper effects.
+
+| Published artifact | Bytes | SHA-256 |
+| --- | --- | --- |
+| `NativeAotReadinessProbe.exe` | 8,643,584 | `31fc25f4b5704bb6837e1078d60a51c3ee4e225728bdcdd6650104e7b7a5577e` |
+| `msalruntime.dll` | 2,949,656 | `9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79` |
+
+Independent data inspection found AMD64 `0x8664`, PE32+ `0x20b` and zero CLR-directory
+RVA/size in both files. The EXE has 16 direct imports and the DLL has 50, all Windows
+library/API-set names; neither has delay imports. The complete lists match round 04.
+The output contains no PDB; nonempty PE debug directories do not select product symbol
+policy. These static tables and later synthetic calls do not enumerate dependencies
+loaded only by actual WAM/authentication paths or prove deployment on a host without
+development tools. Native broker distribution and OS requirements remain explicit.
+
+**Cleanup 26:** The published EXE ran with its bound x64 DLL in a fresh case directory.
+The subject and guard exited zero; normal completion took 0.915 seconds with a
+0.007-second drain. Every active Job count was zero, without termination or safety stop.
+The native-AOT flag, restricted search, first-chance self-check, MSAL builder creation,
+configuration allocation, cleanup-export checks, first and second disposal, and
+application-directory module checks all passed. Unexpected preload was false; both
+exception type fields were empty; cleanup observed zero first-chance exceptions.
+Together with the pinned public IL call boundary, this supports allocation and
+observable release/shutdown without a managed or wrapper-reported failure. It does not
+inspect opaque native deallocation internals or invent a shutdown return status.
+
+**Wrong architecture 27:** The same published EXE ran with the genuine public x86
+NativeInterop DLL, SHA-256
+`ed45298d791cc6509ca5cdc3ed497b77ddfe6b5c1475c7fe9470b5c0e0f41c28`,
+substituted as the case's `msalruntime.dll`. It returned the expected exit 1 with
+`System.BadImageFormatException` and an empty inner-exception type. Native AOT,
+restricted search, the first-chance self-check and MSAL builder creation passed;
+allocation and module loading were false. Cleanup did not run and retained its `-1`
+exception-count sentinel. The guard exited zero; strict normal completion took
+0.892 seconds including a 0.007-second drain, with all Job counts zero and no termination
+or safety stop. The expected negative subject exit is a passed rejection case.
+
+| Action | September 12, 2026 UTC, reservation through controller result | Completion |
+| --- | --- | --- |
+| Restore 24 | 21:34:36.403389–21:34:48.4464187 | Normal |
+| Publish 25 | 21:39:19.041532–21:39:45.1158914 | Approved VCTIP cleanup |
+| Cleanup 26 | 21:43:19.308480–21:43:24.5503831 | Normal |
+| Wrong architecture 27 | 21:47:36.453644–21:47:42.3636493 | Normal expected rejection |
+
+All runner invocations exited zero with empty runner-error files. Completion receipts
+followed the final source/artifact/history checks; the intervals above are not the
+entire WSL hashing/preparation wall time. Corrected preflights 11–14 and guard
+compilations 11–14 succeeded. Each dependent action followed independent acceptance
+of its predecessor, and both runtimes bound this round's reviewed publish artifacts.
+Every source/result/completion chain and all six fixed historical inventories remained
+unchanged. Inactive earlier scratch contents were not traversed or reused as inputs.
+
+Final supplemental/diagnostic consumption is six of ten restores, six of ten publishes,
+one of four cleanup cases, one of four wrong-architecture cases, fourteen of twenty-eight
+guards and fourteen of fifty corrected preflights. The original thirteen attempts and
+original rejected preflight remain separate. Attempts 24–27 exhaust this exact round's
+allocation; remaining Wave buffer does not allocate another action. Retain all dedicated
+files intentionally and preserve stopped roots read-only; no replay or historical cleanup
+follows from this outcome.
+
+The bounded evidence supports the preimplementation Native AOT premise for the exact
+Windows x64 design: public asset resolution, warning-free rooted compilation, accepted
+publish completion, restricted native loading/allocation, observable cleanup and genuine
+wrong-architecture rejection. The earlier missing/decoy observations retain their own
+artifact identity. Full application and WAM/UI/authentication behavior, dynamic native
+dependency closure, product symbols, performance, release and support remain later
+validation obligations. No product CLI or library implementation was performed.
+
+| Retained binding | SHA-256 |
+| --- | --- |
+| Executed protocol | `ec3685813312d8aad2aa7f17d5248a00432f50df335561ea76db543e9180e8a1` |
+| Restore 24 reservation | `fe6509e16727af1d6cfc6c222a20e95e817bbdd4ffc74f690d23d87ab8cf2c20` |
+| Restore 24 result | `ce32999844e58b0ae5a43881204d0d0f282f5623ad78095c8292e850da71f007` |
+| Restore 24 completion | `e2929ec5bb0ddb7242646383614c8e0766e0928cd4bd1a9e8d0832ab232edb02` |
+| Publish 25 reservation | `44a8607ab345cbd9f00746d5060a4b1f03c324bd8382372134abcd004917bbbd` |
+| Publish 25 result | `2b80de281d217a375e234221b37690a8393ac84e0ac33c241840ff886c53ac9f` |
+| Publish 25 completion | `592a4baf24599ec5e24b70ca8461972e0398a4d91560dc974b76221d4eebc2d7` |
+| Cleanup 26 reservation | `b17e4e1467921b599e6001b8bccf1e0794a56705fd15dbe8fdf21c809939b2e7` |
+| Cleanup 26 result | `07b2ad44b15013efa7e4f5c3af32cfaaa2c0dbeebb79381fd97abae245a56d6c` |
+| Cleanup 26 completion | `1308e3fbd0db3df7b0c38f734cf65a68e1a333b941f6a9a0b16d472bf5013f9f` |
+| Wrong architecture 27 reservation | `997466bebfbb2b1dd0f429d6063270323298a00e0cfe59bc3dd2179053e4769b` |
+| Wrong architecture 27 result | `2d56498111f03e2eff45029a48b08de2cbed99279a5ac1d75194d9bbe733e7e8` |
+| Wrong architecture 27 completion | `87629dbd35d8461f84d3775bfd555f7c4b542dad404366c9659046226cc0ebb1` |
 
 ## Diagnostic Round 04
 

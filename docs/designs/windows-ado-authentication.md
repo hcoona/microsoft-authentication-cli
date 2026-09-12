@@ -5,7 +5,8 @@ command-line/process semantics. The linked JSON Schemas own serialized field sha
 Requirements remain authoritative for required behavior; the
 [architecture](../architecture/overview.md) owns system-wide boundaries. This is a
 design record, not an activated Client Profile, executable, or support claim. The Native
-AOT publishing disposition below retains an explicit preimplementation compatibility gap.
+AOT publishing disposition below selects the preimplementation path; product validation
+remains outstanding.
 
 ## Selected Boundary and Dependencies
 
@@ -18,7 +19,7 @@ applies to every operation, configuration, and failure path.
 
 | Choice | Concrete design and reason |
 | --- | --- |
-| Runtime and UI candidate | C# on .NET 10 LTS, `net10.0-windows`, `win-x64`; SDK 10.0.401 and runtime 10.0.12. A small in-process Win32 window replaces the Windows Forms host in the candidate design below. It requires no Windows Desktop managed framework. |
+| Runtime and UI | C# on .NET 10 LTS, `net10.0-windows`, `win-x64`; SDK 10.0.401 and runtime 10.0.12. A small in-process Win32 window replaces the Windows Forms host in the design below. It requires no Windows Desktop managed framework. |
 | Authentication dependencies | `Microsoft.Identity.Client` and `Microsoft.Identity.Client.Broker` 4.83.1, with `Microsoft.Identity.Client.NativeInterop` 0.20.3. Preserve the existing probe's authentication dependency baseline while changing the managed host. |
 | Provider | Windows WAM only. One real-account discovery, at most one selected-account silent call, and at most one permitted interactive call. No application-level network retry or second provider. |
 | State | Broker-owned reusable state; a fresh in-memory MSAL application per invocation. No MSAL Extensions cache helper, serialized MSAL cache, shadow refresh-token store, engine account binding, or cross-process lock. |
@@ -26,76 +27,41 @@ applies to every operation, configuration, and failure path.
 | Distribution | Executable basename, installer, signing, and update channel remain release identities under the [registry](../governance/operational-identities.yaml). `<windows-cli>` below denotes the caller-selected executable, not a new installed command. |
 
 The [dependency assessment](../research/v1-public-contract-baseline.md#windows-slice-dependency-and-host-contracts)
-binds these choices to public source. .NET 10 compatibility is a design inference from
-published framework contracts, not an observation from the .NET 8 probe. Future upgrades
-must use the existing dependency review/validation matrix. No restore, build, or new
+binds these choices to public source. The .NET 10 synthetic evidence below supplements
+the public framework contracts; the earlier .NET 8 authentication probe remains distinct.
+Future upgrades must use the existing dependency review/validation matrix. No restore, build, or new
 authentication experiment is part of accepting this design.
 
 ### Native AOT Target Disposition
 
-The one executable and RID in this Slice have an **unresolved publishing choice** under
+Select **Native AOT** for the one .NET 10 `net10.0-windows` / `win-x64` executable
+with the small in-process Win32 host, under
 [V2-REQ-055](../product/requirements/quality-build-and-validation.md#v2-req-055-native-aot-publishing).
-The preferred candidate is Native AOT with the Win32 host described here. No non-AOT
-exception is accepted. Public contracts establish a plausible route, but do not yet
-establish the complete pinned Broker/NativeInterop loading path under Native AOT. Keep
-production publishing unselected and do not call the Slice implementation-ready until
-that essential premise has a reviewed disposition. This is a concrete design and next
-validation obligation, not permission to implement or publish it in the current Wave.
+Retain SDK 10.0.401/runtime 10.0.12, MSAL/Broker 4.83.1 and NativeInterop 0.20.3.
+The reviewed evidence resolves the preimplementation publishing premise for this
+design. No non-AOT exception is needed. Implementation still requires a new accepted
+Wave; this selection is not complete-application compatibility, release or support
+acceptance.
 
-The [bounded synthetic investigation](../research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
-restored the exact .NET 10 graph, produced an x64 native EXE, and subsequently executed
-that retained artifact on the Windows host through WSL. The positive case created MSAL
-configuration and entered the upstream NativeInterop configuration-allocation path with
-its module in the application directory. Missing-library and working-directory/PATH-decoy
-cases both failed to load the module as expected. All three controllers completed normally.
-The tested synthetic allocation/import and restricted-search premise is now supported
-by runtime evidence for this artifact and host.
+The [latest synthetic results](../research/experiments/windows-native-aot.md#diagnostic-round-05-results)
+establish a resolved public dependency graph, complete warning-free native compilation
+with the selected provider surface rooted, and accepted publish completion. The native
+EXE actually ran on the existing Windows host through WSL: it created MSAL configuration,
+allocated native parameters, found the cleanup exports, returned from first and repeated
+disposal without observed cleanup exceptions, and rejected the genuine x86 DLL. The
+[earlier missing/decoy cases](../research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
+separately establish rejection under restricted search for their recorded artifact.
+Public toolchain/Win32 contracts and these bounded observations support selecting the
+path without changing authentication dependencies or relaxing DLL search.
 
-The historical publish-controller stop and unavailable AOT/trim warnings remain unresolved;
-the runtime cases do not recover that evidence. Full provider/WAM/UI behavior, complete
-native cleanup, wrong-architecture rejection and the actual application remain unvalidated.
-The preferred host, production-publishing disposition and absence of a non-AOT exception
-remain unchanged; these synthetic results do not make the whole design implementation-ready.
-
-The [readiness supplement](../research/experiments/windows-native-aot.md#readiness-results)
-subsequently restored the exact graph and produced another native x64 EXE with the
-selected provider surface rooted for compilation. Its publish subject exited zero, but
-one owned Job member remained and was terminated; final quiescence was confirmed. The
-controller stopped before saving publish diagnostics. Its survivor identity and warning
-status remain unknown, and no new runtime case ran. This is an experiment-lifecycle and
-evidence blocker, not an observed compiler error or a publishing selection.
-
-The [recovery](../research/experiments/windows-native-aot.md#recovery-results) now adds
-complete screened publish output without AOT/trim/compiler/link warnings for the rooted
-symbol-free synthetic subject. It also stopped on one remaining Job member after the
-bounded drain, followed by successful owned termination and final quiescence. Neither
-the earlier missing output nor survivor identity is reconstructed. Static artifact
-inspection confirms native x64 images and their direct import tables, but no recovery
-runtime ran. Normal publish completion, native cleanup, wrong-architecture rejection,
-dynamic dependency closure and product symbols retain their outstanding obligations.
-The recovery remains stopped with its own restore/publish capacity exhausted. The later
-[diagnostic round](../research/experiments/windows-native-aot.md#diagnostic-round-01-results)
-again captured complete warning-free output and confirmed owned termination after the
-normal-completion stop. Its sampled Job member had an unknown image class; no new runtime
-ran. The accepted buffered Wave permits a fresh exact diagnostic amendment, preserving
-all stopped roots. Native AOT remains the preferred candidate, with the publishing choice
-and implementation-readiness gap unchanged.
-
-The [third diagnostic result](../research/experiments/windows-native-aot.md#diagnostic-round-03-results)
-now identifies the sampled image string as the fixed MSVC `vctip.exe` path and again
-retains complete warning-free output. The controller still stopped on nonzero Job
-membership and confirmed owned termination; no new runtime evidence follows. This
-narrows the experiment-lifecycle investigation without selecting production publishing
-or establishing the sampled process's external effects. Preserve the existing gap and
-later application/WAM/UI validation gates.
-
-The [fourth diagnostic result](../research/experiments/windows-native-aot.md#diagnostic-round-04-results)
-adds independently accepted, warning-free publish completion through the prospectively
-approved VCTIP cleanup criterion. Final owned-Job quiescence and native artifact identities
-were verified. The following path preflight stopped the round before either runtime;
-native cleanup and wrong-architecture evidence remain outstanding. This advances the
-synthetic publishing premise without selecting the product publishing mode. A fresh
-per-action environment correction does not change this host design or its UML/C4 views.
+This inference preserves the observation limits. The provider APIs were rooted for
+compilation, not used for authentication. Disposal evidence does not inspect opaque
+native deallocation; static imports and synthetic calls do not close dependencies used
+only by actual WAM operations. The historical stops and unavailable diagnostics remain
+in the experiment authority. Publish-only VCTIP cleanup does not relax product lifetime
+requirements. The [validation basis](../validation/strategy.md#native-aot-publishing)
+retains complete-application, WAM/UI, account/Profile, dynamic-dependency, symbol,
+performance, release and support obligations.
 
 The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
 distinguishes the following alternatives:
@@ -104,12 +70,13 @@ distinguishes the following alternatives:
 | --- | --- |
 | Existing Windows Forms host | Cannot be selected as a supported Native AOT route: Native AOT requires trimming, and Microsoft disables supported Windows Forms trimming because of built-in COM dependencies. Keeping this host would require a justified non-AOT exception; it is not necessary merely to own an HWND. |
 | WPF replacement | Its documented trimming limitation does not resolve the blocker. |
-| Small Win32 host with static interop | Preferred candidate: the required parent, public branding, completion and cancellation controls need only Win32 window APIs, an owned message loop, and statically known callbacks. This removes the managed desktop-framework blocker without another process or provider. |
-| Larger UI framework or direct broker rewrite | No present UI requirement justifies another framework's dependency surface or replacing the supported MSAL integration with direct broker internals. Neither is needed to assess the smaller candidate. |
-| Same Win32 host with ordinary self-contained JIT publishing | Future comparison baseline, not an accepted fallback or exception. Consider it only if the exact remaining AOT blocker cannot reasonably be remediated, with the requirement's evidence and reassessment obligations. |
+| Small Win32 host with static interop | Selected Native AOT path: the required parent, public branding, completion and cancellation controls need only Win32 window APIs, an owned message loop, and statically known callbacks. This removes the managed desktop-framework blocker without another process or provider. |
+| Larger UI framework or direct broker rewrite | No present UI requirement justifies another framework's dependency surface or replacing the supported MSAL integration with direct broker internals. Neither is needed for the selected smaller host. |
+| Same Win32 host with ordinary self-contained JIT publishing | Future comparison baseline, not an accepted fallback or exception. Consider an exception only if later application validation identifies an AOT blocker that cannot reasonably be remediated, with the requirement's evidence and reassessment obligations. |
 
-The candidate project would enable `PublishAot` in its own project, retaining AOT/trim
-analysis during development. It would not apply that property to the historical probe,
+On implementation, enable `PublishAot` in the executable project, retaining AOT/trim
+analysis during development. Owned libraries participate in compatibility analysis
+without executable publishing settings. Do not apply this property to historical probes,
 use blanket warning suppression, add dynamic plugins, or equate ReadyToRun/trimming with
 Native AOT. Use source-generated P/Invoke for the finite owned Win32 API surface and
 static `UnmanagedCallersOnly` callbacks with explicit ABI/layout. Built-in COM, runtime
@@ -122,11 +89,12 @@ arbitrary provider objects. These choices do not change the schemas or loosen in
 validation. MSAL's own .NET 8 asset uses its generated JSON context; the separate Broker
 asset targets .NET Standard 2.0 and does not inherit that AOT annotation automatically.
 
-The public NativeInterop 0.20.3 package supplies a .NET 9 managed asset and `win-x64`
-`msalruntime.dll`. The future resolved dependency graph must confirm the selected assets,
-their public provenance, and all native transitive requirements. Do not assume the older
-.NET Standard loader issue applies to the newer asset, or that package metadata proves
-the newer loader works. Retain the three authentication pins while assessing this route.
+The accepted synthetic graph selects the public net8.0 Client, netstandard2.0 Broker,
+net9.0 NativeInterop and `win-x64/msalruntime.dll` assets. Its loader/allocation evidence
+applies to those exact assets; the older .NET Standard loader report and package metadata
+do not replace that observation. The actual application's resolved graph must retain
+reviewed public provenance and account for every native transitive requirement. Retain
+the three authentication pins; changes require the existing dependency review.
 
 Native assets belong in the application deployment directory with their notices. Before
 provider initialization, constrain process DLL search to the application directory and
@@ -135,10 +103,10 @@ Do not rely on the working directory, ambient `PATH`, development installations,
 extraction, or `Assembly.Location`. Do not enable direct P/Invoke for the broker library:
 Native AOT's default binding and OS direct binding have different search semantics. The
 exact upstream loader, its dependencies, and the process search restriction must be
-validated together; an incompatible loader keeps the candidate unavailable rather than
-silently weakening search rules or copying private runtime internals.
+validated together on the actual application; an incompatible loader makes the target
+unavailable rather than silently weakening search rules or copying private runtime internals.
 
-A future authorized publish protocol must pin the Windows x64 public native build chain
+A separately authorized product publish must pin the Windows x64 public native build chain
 (Visual Studio C++ tools, Windows SDK, and `link.exe`), SDK/runtime inputs, resolved
 NuGet graph, and publish properties before execution. Microsoft's documented Windows
 prerequisite is Visual Studio 2022 or later with Desktop development with C++ and its default
@@ -148,11 +116,11 @@ OS prerequisites; an AOT executable does not imply one-file deployment or no OS 
 Debug symbols have a separate diagnostic/release treatment and are included when
 comparing total development and distribution costs.
 
-Resolve the remaining premise through the least costly separately authorized public
-source or bounded synthetic publish/loading evidence. If that fails, investigate precise
-supported dependency or host changes before proposing a scoped exception. Actual WAM,
-account, UI and cancellation behavior still require the existing later Windows scenario
-evidence even after a successful publish. The historical .NET 8 probe is unchanged.
+The remaining work verifies the implemented application against the existing Windows
+scenario and release gates. Actual WAM, account, UI and cancellation behavior still need
+their appropriate evidence; synthetic success does not satisfy those gates. Investigate
+precise supported dependency or host corrections if application validation finds a
+blocker, before proposing a scoped exception. The historical .NET 8 probe is unchanged.
 
 ### C4 Deployment View
 
@@ -166,7 +134,7 @@ flowchart LR
             caller["Git or package adapter<br/>[External system instance]"]
         end
         subgraph windows["Windows interactive user session [Execution environment]"]
-            cli["Windows CLI + MSAL<br/>[Container instance: .NET 10 process]<br/>Native AOT candidate; compatibility unresolved"]
+            cli["Windows CLI + MSAL<br/>[Container instance: .NET 10 process]<br/>Native AOT selected; preimplementation design"]
             profile[("Explicitly selected Profile file<br/>[External data store: caller-managed JSON]")]
             ui["Win32 parent and completion UI<br/>[Component in the CLI process]"]
             wam["WAM and protected reusable state<br/>[External OS system]"]
@@ -568,12 +536,10 @@ stateDiagram-v2
     Admission --> Ending: Invalid request or cancellation
     Active --> Validated: Candidate passes all postconditions before deadline
     Active --> Ending: Failure, denial, cancellation, or timeout
-    Validated --> Ending: Success with available persistence warning
-    Validated --> Ending: Cancellation or permitted incidental timeout
+    Validated --> Ending: Success with available warning, cancellation, or permitted incidental timeout
     Ending --> Delivering: Latch outcome, invalidate callbacks, close owned UI
-    Delivering --> Exited: Complete JSON and matching exit status
+    Delivering --> Exited: Complete JSON and matching exit, or transport failure/termination
     Ending --> Exited: Shutdown watchdog or process termination
-    Delivering --> Exited: Broken/blocked pipe or forced termination
     Exited --> [*]
 ```
 

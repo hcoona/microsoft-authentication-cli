@@ -457,7 +457,7 @@ families:
     maintainer: Research maintainer
     consumers:
       - Experiment operator before each bounded download, build, or synthetic execution
-      - Architecture and validation reviewers evaluating the unresolved Windows Native AOT premise
+      - Architecture and validation reviewers evaluating Windows Native AOT compatibility evidence
     creation_trigger: Issue #76 needs bounded synthetic evidence that public source alone cannot supply.
     failure_mode: Native AOT compatibility is asserted without a reproducible safe subject or recoverable cumulative limits.
     review_point: Independent record-system and research-evidence review before protocol acceptance, amendment, or reliance on observations

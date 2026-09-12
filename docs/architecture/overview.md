@@ -9,9 +9,10 @@ contract. This overview retains the broader conceptual architecture; mechanisms 
 that Slice remain unselected and are not supported by its acceptance.
 
 The Slice's [Native AOT disposition](../designs/windows-ado-authentication.md#native-aot-target-disposition)
-defines a Win32 host candidate and an unresolved publishing compatibility premise. It
-does not claim implementation readiness. Changing managed UI technology within that
-single process adds no broker, consumer protocol, or cross-process bridge.
+selects the Win32 host and Native AOT path on reviewed preimplementation evidence.
+Complete-application and real-platform validation remain necessary before support;
+implementation requires separate Wave authorization. The single-process host adds no
+broker, consumer protocol or cross-process bridge.
 
 ## System Boundary
 
