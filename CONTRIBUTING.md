@@ -75,27 +75,81 @@ The hook fails closed while any unstaged or untracked path remains. Stage the fi
 intended snapshot or temporarily set other work aside before committing so repository-wide
 path-based checks inspect the same tree Git will record.
 
-## .NET and Agent Tooling Bootstrap
+## .NET and Agent Tooling
 
 The optional `mise.development.toml` environment selects .NET SDK 10.0.401, APM v0.29.0,
-and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward; public
-NuGet configuration and C# conventions apply to future product code. The historical
-.NET 8 probe retains its own SDK and package inputs. Shared MSBuild/package files wait
-for a concrete product consumer.
+and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. The
+historical .NET 8 probe retains its own SDK and package inputs. Shared MSBuild/package
+files wait for a concrete product consumer.
 
-`apm.yml` selects three MSBuild Skills and Microsoft's two official Learn Skills for
-exactly GitHub Copilot CLI and Codex CLI. APM is their installation owner and owns the
-repository MCP projections. The Learn CLI direct version is in
-`tools/learn-cli/package.json`. Preserve official Skill behavior; the repository does
-not define another tool preference or invocation order. Never run `apm compile` over the
-hand-maintained `AGENTS.md`, or use another installer to duplicate these Skills.
+The locked development toolchain has Linux x64 and Windows x64 entries. Acceptance
+observations cover the declared WSL Linux host and client versions in the
+[developer-tooling protocol](docs/research/experiments/developer-tooling.md); Windows
+runtime discovery is not established. Installation and experiments remain subject to
+current work authorization and the applicable protocol.
 
-This bootstrap still requires resolved locks and actual acceptance evidence under the
-[developer-tooling protocol](docs/research/experiments/developer-tooling.md). Its bounded
-operator procedure applies after merge; general installation/replay commands will be
-published with the accepted locks and observations. Keep ordinary repository checks on
-the existing default mise environment during bootstrap. Do not infer installer authority
-from an unmerged configuration or from this contributor interface.
+Apply the protocol's public-only preflight first: empty process-local GH/npm configuration,
+disabled Git credential helpers/prompts, omitted token variables, and a checked empty
+`NETRC` file. Keep APM's built-in checks enabled. An inherited registry, policy, credential,
+or hook configuration is a stop condition. From the repository root, these command
+forms work in PowerShell and a POSIX shell:
+
+```text
+mise -E development install --locked http:dotnet-development github:microsoft/apm node
+mise -E development exec -- npm ci --prefix tools/learn-cli --ignore-scripts --no-audit --no-fund
+mise -E development exec -- apm install --frozen --target copilot,codex --no-trust-bin --https
+mise -E development exec -- dotnet --version
+```
+
+Use public package sources and preserve existing instruction/configuration entries.
+Do not invoke an authentication fallback or override a conflicting installation. The
+accepted protocol details the credential-free acceptance environment and APM manager
+preflight. Ordinary repository checks continue to use the default mise environment.
+
+`apm.yml` selects exactly `directory-build-organization`, `property-patterns`,
+`msbuild-antipatterns`, `microsoft-docs`, and `microsoft-code-reference`. APM owns their
+shared `.agents/skills/` deployment and the named `microsoft-learn` entries in
+`.github/mcp.json` and `.codex/config.toml`. Both clients consume that shared Skill
+location. The two hand-maintained review Skills remain in `.github/skills/`.
+
+Commit `apm.lock.yaml`, `mise.development.lock`, and `tools/learn-cli/package-lock.json`.
+Generated dependency directories and client projections remain ignored. Preserve
+`AGENTS.md`, review Skills, and the ignored private `AGENTS.local.md`. Never run
+`apm compile` over the hand-maintained instructions, duplicate the selected Skills with a
+global installer, or use `mslearn setup` to create another installation owner.
+
+Microsoft's official Skill content owns its usage guidance. The repository adds no tool
+preference or invocation order. Upstream examples may use floating `npx` references;
+those examples are not this repository's locked installation. The locked official CLI
+is available as:
+
+```text
+mise -E development exec -- node tools/learn-cli/node_modules/@microsoft/learn-cli/dist/index.js --help
+```
+
+[UPSTREAM.md](UPSTREAM.md) identifies sources and license notices.
+
+### Explicit Updates and Removal
+
+An update is a reviewed change to the direct version/ref declarations and their generated
+locks under current work authorization. Regenerate only the development mise lock for
+`http:dotnet-development`, `github:microsoft/apm`, and `node`, on `linux-x64,windows-x64`;
+do not regenerate the historical toolchain. Resolve the Learn package lock with
+`--package-lock-only --ignore-scripts --no-audit --no-fund`, review its graph, then use
+`npm ci` with the same restrictions. Resolve APM with the same explicit targets,
+`--no-trust-bin`, and `--https`, then verify a frozen replay and content preservation.
+Review provenance, licenses, Skill support files, generated targets, and any new effects
+before accepting a changed lock.
+
+To remove this setup, first inventory its owned paths and compare their content with the
+accepted lock/source. Remove only its five Skill directories, its APM dependency data,
+and the Learn `node_modules` directory; remove only the `microsoft-learn` entry from each
+client configuration. Preserve unrelated servers, settings, Skills, and instructions.
+Remove an empty generated config only if this setup originally created it and no other
+content remains. Do not use `apm uninstall --dry-run`: upstream documents that it can run
+pre-uninstall scripts. mise-managed tools and public caches are intentionally retained
+and may be shared by other projects; repository removal does not authorize deleting
+them. Removing the committed manifests/locks is a separate reviewed repository change.
 
 ## Pull Requests
 
