@@ -1463,6 +1463,33 @@ not by these source findings. Synthetic and real-platform validation remain sepa
 
 ### Windows Native AOT Assessment
 
+**RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92:** Current Microsoft Learn
+[Native AOT guidance](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/)
+continues to list Windows x64 as supported and now explicitly specifies Visual Studio
+2022 **or later** with Desktop development with C++ and default components. The existing
+Visual Studio 18 toolchain therefore does not require an older installation merely to
+match that prerequisite. Exact compiler/SDK identities remain experimental inputs.
+The current [trimming limitations](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/incompatibilities)
+still exclude supported Windows Forms/WPF trimming and built-in COM. Retain the small
+Win32/source-generated-interop design and explicit JSON readers/writers.
+
+Both registered upstream issues and their four comments each were retrieved anonymously
+from the public GitHub API. Issue 5226 remains closed as completed, last updated August
+11, 2025, and concerns NativeInterop 0.18.1/MSAL 4.70.1 on .NET 9; its comments supply no
+exact-version validation for this target. Issue 5248 remains closed as completed, last
+updated September 11, 2025; its July 1 comment specifically recommends an AOT-published
+test application for the netstandard dependency. Neither closure establishes the
+complete Broker path. Current guidance also explains that AOT assembly metadata was
+introduced in .NET 10: absence of that new metadata on older-targeted dependencies is
+not by itself proof of incompatibility.
+
+The refreshed sources preserve the preferred Native AOT route and the need for exact
+resolved-graph publishing diagnostics. They do not select the mode or remove runtime
+obligations. The [bounded readiness amendment](experiments/windows-native-aot.md) owns
+the next evidence; the existing design remains unresolved until that evidence receives
+its reviewed disposition. No interaction, account, cache, Profile, Linux-broker, browser,
+or support decision follows from this refresh.
+
 **Public desk findings, retrieved 2026-09-12 UTC:** This assessment applies to the
 Windows Slice's SDK 10.0.401/runtime 10.0.12, `net10.0-windows`/`win-x64`, MSAL and
 Broker 4.83.1, and NativeInterop 0.20.3. No package was restored, loaded, built, published,
