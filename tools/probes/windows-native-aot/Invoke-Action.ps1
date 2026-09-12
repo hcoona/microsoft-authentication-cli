@@ -11,44 +11,42 @@ $sdk = 'C:\Program Files (x86)\Windows Kits\10'
 $sdkVersion = '10.0.26100.0'
 $dotnet = 'C:\Program Files\dotnet\dotnet.exe'
 $result = [ordered]@{ exitCode = -1; quiescent = $false; safetyStop = $true }
-$owned = @{}
-$child = $null
+$guard = $null
+$compiler = $null
+$framework = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319'
 
 function Save-Json($Path, $Value) {
     $Value | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $Path -Encoding UTF8
 }
 
-function Record-Children {
-    # PID, creation time, and parent links only; never retain names or command lines.
-    $snapshot = @(Get-CimInstance Win32_Process -Property ProcessId, ParentProcessId, CreationDate)
-    do {
-        $added = $false
-        foreach ($item in $snapshot) {
-            $key = [string]$item.ProcessId
-            if ($owned.ContainsKey([string]$item.ParentProcessId) -and -not $owned.ContainsKey($key)) {
-                $process = Get-Process -Id $key -ErrorAction SilentlyContinue
-                if ($process) {
-                    $owned[$key] = $process.StartTime.ToUniversalTime().ToString('o')
-                    $added = $true
+function Read-Output($Process, $Streams, $Seconds) {
+    $watch = [Diagnostics.Stopwatch]::StartNew()
+    $buffers = @((New-Object char[] 4096), (New-Object char[] 4096))
+    $tasks = @($Streams[0].ReadAsync($buffers[0], 0, 4096), $Streams[1].ReadAsync($buffers[1], 0, 4096))
+    $texts = @((New-Object Text.StringBuilder), (New-Object Text.StringBuilder))
+    $done = @($false, $false)
+    while (-not ($Process.HasExited -and $done[0] -and $done[1])) {
+        if ($watch.Elapsed.TotalSeconds -gt $Seconds) { throw 'Attempt timeout' }
+        for ($index = 0; $index -lt 2; $index++) {
+            if (-not $done[$index] -and $tasks[$index].IsCompleted) {
+                $count = $tasks[$index].GetAwaiter().GetResult()
+                if ($count -eq 0) { $done[$index] = $true } else {
+                    if (($texts[0].Length + $texts[1].Length + $count) -gt 8388608) { throw 'Output bound' }
+                    [void]$texts[$index].Append($buffers[$index], 0, $count)
+                    $tasks[$index] = $Streams[$index].ReadAsync($buffers[$index], 0, 4096)
                 }
             }
         }
-    } while ($added)
-    Save-Json "$attempt\owned-processes.json" $owned
-}
-
-function Live-Owned {
-    foreach ($key in @($owned.Keys)) {
-        $process = Get-Process -Id $key -ErrorAction SilentlyContinue
-        if ($process -and $process.StartTime.ToUniversalTime().ToString('o') -eq $owned[$key]) {
-            $process
-        }
+        Start-Sleep -Milliseconds 50
     }
+    $Process.WaitForExit()
+    return @($texts[0].ToString(), $texts[1].ToString())
 }
 
 try {
-    Save-Json "$attempt\controller.json" @{ pid = $PID; started = (Get-Date).ToUniversalTime().ToString('o') }
+    Save-Json "$attempt\controller.json" @{ pid = $PID; started = (Get-Process -Id $PID).StartTime.ToUniversalTime().ToString('o') }
     $identities = @{
+        "$framework\csc.exe" = '46809206887326d2d24db1eff1f3064de972c3451abe766b49111450a5e08e00'
         $dotnet = '21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6'
         "$vc\bin\Hostx64\x64\link.exe" = '610aae3d74a66fa5ef54cac5df8ea8bcbb1fdd2a3db9087eb92088bd395eaf34'
         "$vc\bin\Hostx64\x64\cl.exe" = '315a654ea116864516a1674858e587e535e3bc3045ff32ed2f2739a2c1ec5640'
@@ -104,49 +102,36 @@ try {
         $exe = "$case\NativeAotProbe.exe"
         $arguments = ''
     }
-    $startInfo = New-Object System.Diagnostics.ProcessStartInfo
-    $startInfo.FileName = $exe
-    $startInfo.Arguments = $arguments
-    $startInfo.WorkingDirectory = $working
-    $startInfo.UseShellExecute = $false
-    $startInfo.CreateNoWindow = $true
-    $startInfo.RedirectStandardOutput = $true
-    $startInfo.RedirectStandardError = $true
-    $startInfo.EnvironmentVariables.Clear()
-    foreach ($key in $environment.Keys) { $startInfo.EnvironmentVariables[$key] = $environment[$key] }
-    $child = New-Object System.Diagnostics.Process
-    $child.StartInfo = $startInfo
-    if (-not $child.Start()) { throw 'Child failed to start' }
-    $owned[[string]$child.Id] = $child.StartTime.ToUniversalTime().ToString('o')
-    Save-Json "$attempt\owned-processes.json" $owned
+    # The pinned standalone compiler has no shared-compilation/build-server mode here.
+    # Its process handle owns this one bootstrap process before the Job guard exists.
+    $compileInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $compileInfo.FileName = "$framework\csc.exe"
+    $compileInfo.Arguments = '/noconfig /nologo /target:library /out:"' + $attempt + '\WindowsJob.dll" /reference:"' + $framework + '\System.dll" /reference:"' + $framework + '\System.Core.dll" "' + $source + '\WindowsJob.cs"'
+    $compileInfo.WorkingDirectory = $source
+    $compileInfo.UseShellExecute = $false
+    $compileInfo.CreateNoWindow = $true
+    $compileInfo.RedirectStandardOutput = $true
+    $compileInfo.RedirectStandardError = $true
+    $compileInfo.EnvironmentVariables.Clear()
+    foreach ($key in $environment.Keys) { $compileInfo.EnvironmentVariables[$key] = $environment[$key] }
+    $compiler = New-Object System.Diagnostics.Process
+    $compiler.StartInfo = $compileInfo
+    if (-not $compiler.Start()) { throw 'Guard compiler failed to start' }
+    Save-Json "$attempt\compiler.json" @{ pid = $compiler.Id; started = $compiler.StartTime.ToUniversalTime().ToString('o') }
+    $compileOutput = @(Read-Output $compiler @($compiler.StandardOutput, $compiler.StandardError) 60)
+    $result.guardCompilerExitCode = $compiler.ExitCode
+    if ($compiler.ExitCode -ne 0) { throw 'Guard compilation failed' }
+    Add-Type -Path "$attempt\WindowsJob.dll" -ErrorAction Stop -WarningAction Stop
+    $guard = New-Object NativeAotJob
+    $guard.Start($exe, $arguments, $working, $environment)
+    $child = $guard.Child
+    Save-Json "$attempt\subject.json" @{ pid = $child.Id; started = $child.StartTime.ToUniversalTime().ToString('o') }
     $watch = [Diagnostics.Stopwatch]::StartNew()
-    $buffers = @((New-Object char[] 4096), (New-Object char[] 4096))
-    $streams = @($child.StandardOutput, $child.StandardError)
-    $tasks = @($streams[0].ReadAsync($buffers[0], 0, 4096), $streams[1].ReadAsync($buffers[1], 0, 4096))
-    $texts = @((New-Object Text.StringBuilder), (New-Object Text.StringBuilder))
-    $done = @($false, $false)
-    while (-not ($child.HasExited -and $done[0] -and $done[1])) {
-        if ($watch.Elapsed.TotalSeconds -gt $timeout) { throw 'Attempt timeout' }
-        for ($index = 0; $index -lt 2; $index++) {
-            if (-not $done[$index] -and $tasks[$index].IsCompleted) {
-                $count = $tasks[$index].GetAwaiter().GetResult()
-                if ($count -eq 0) { $done[$index] = $true } else {
-                    if (($texts[0].Length + $texts[1].Length + $count) -gt 8388608) { throw 'Output bound' }
-                    [void]$texts[$index].Append($buffers[$index], 0, $count)
-                    $tasks[$index] = $streams[$index].ReadAsync($buffers[$index], 0, 4096)
-                }
-            }
-        }
-        Record-Children
-        if ($owned.Count -gt 32) { throw 'Owned process bound' }
-        Start-Sleep -Milliseconds 200
-    }
-    $child.WaitForExit()
-    Record-Children
+    $texts = @(Read-Output $child @($guard.Output, $guard.Error) $timeout)
     $result.exitCode = $child.ExitCode
     $result.seconds = [Math]::Round($watch.Elapsed.TotalSeconds, 3)
     $result.safetyStop = $false
-    if (@(Live-Owned).Count -ne 0) { throw 'Owned descendant survived normal exit' }
+    if ($guard.ActiveProcesses -ne 0) { throw 'Owned descendant survived normal exit' }
     $result.quiescent = $true
     if ($Action -in @('restore', 'publish')) {
         # Keep diagnostic codes only; public source/tool inspection explains them later.
@@ -154,14 +139,27 @@ try {
         $result.diagnosticCodes = @([regex]::Matches($all, '\b(?:IL|CS|NU|NETSDK|MSB|LNK)[0-9]{4,5}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique)
     } else {
         if ($texts[1].Length -ne 0) { throw 'Unexpected subject stderr; contents suppressed' }
-        $data = $texts[0].ToString() | ConvertFrom-Json
-        $allowed = @('nativeAot', 'restrictedSearch', 'unexpectedPreload', 'builderCreated', 'operation', 'exceptionType', 'nativeStatus', 'nativeModuleLoaded', 'moduleInApplicationDirectory')
-        if (@($data.PSObject.Properties.Name | Where-Object { $_ -notin $allowed }).Count -ne 0) { throw 'Unexpected subject field' }
-        $result.observation = $data
+        # Exact emitter order also rejects duplicate fields before JSON parsing.
+        $pattern = '\A\{"nativeAot":(true|false),"restrictedSearch":(true|false),"unexpectedPreload":(true|false),"builderCreated":(true|false),"operation":"(not_started|configuration_created|exception)","exceptionType":"(|System\.(DllNotFoundException|BadImageFormatException|TypeInitializationException|EntryPointNotFoundException|InvalidOperationException|ComponentModel\.Win32Exception)|Microsoft\.Identity\.Client\.(MsalClientException|NativeInterop\.MsalRuntimeException))"(,"nativeStatus":-?(0|[1-9][0-9]{0,9}))?,"nativeModuleLoaded":(true|false),"moduleInApplicationDirectory":(true|false)\}\z'
+        if ($texts[0].Length -gt 2048 -or $texts[0] -cnotmatch $pattern) { throw 'Unexpected subject shape' }
+        $data = $texts[0] | ConvertFrom-Json
+        if ($data.PSObject.Properties.Name -contains 'nativeStatus') {
+            [void][int]$data.nativeStatus
+            if ($data.operation -ne 'exception') { throw 'Unexpected native status' }
+        }
+        if (($data.operation -eq 'exception') -ne ($data.exceptionType -ne '')) { throw 'Inconsistent exception' }
+        if ($data.operation -eq 'configuration_created' -and -not $data.builderCreated) { throw 'Inconsistent construction' }
+        if ($data.moduleInApplicationDirectory -and -not $data.nativeModuleLoaded) { throw 'Inconsistent module state' }
+        $success = $data.nativeAot -and $data.restrictedSearch -and -not $data.unexpectedPreload -and $data.builderCreated -and $data.operation -eq 'configuration_created' -and $data.moduleInApplicationDirectory
+        $expectedExit = 1
+        if ($success) { $expectedExit = 0 }
+        if ($result.exitCode -ne $expectedExit) { throw 'Inconsistent subject exit' }
         if ($data.unexpectedPreload -or -not $data.restrictedSearch -or
             ($Action -ne 'positive' -and $data.nativeModuleLoaded)) {
             throw 'Unexpected native search result'
         }
+        $result.observation = $data
+
     }
 } catch {
     $result.safetyStop = $true
@@ -169,14 +167,17 @@ try {
     # Never emit exception messages, raw native output, or provider diagnostics.
 } finally {
     try {
-        Record-Children
-        foreach ($process in @(Live-Owned)) {
-            # Identity is checked above. Only this experiment's still-live process tree.
-            $killer = Start-Process -FilePath 'C:\Windows\System32\taskkill.exe' -ArgumentList @('/PID', $process.Id, '/T', '/F') -NoNewWindow -PassThru -RedirectStandardOutput "$attempt\termination.out" -RedirectStandardError "$attempt\termination.err"
-            if (-not $killer.WaitForExit(10000)) { $killer.Kill(); throw 'Termination timeout' }
+        $compilerStopped = $true
+        if ($compiler -and -not $compiler.HasExited) {
+            $compiler.Kill()
+            $compilerStopped = $compiler.WaitForExit(10000)
         }
-        $result.quiescent = (@(Live-Owned).Count -eq 0)
+        $subjectStopped = $true
+        if ($guard) { $subjectStopped = $guard.Stop() }
+        $result.quiescent = $compilerStopped -and $subjectStopped
     } catch { $result.quiescent = $false; $result.safetyStop = $true }
+    if ($guard) { $guard.Dispose() }
+    if ($compiler) { $compiler.Dispose() }
     $result.ended = (Get-Date).ToUniversalTime().ToString('o')
     Save-Json "$attempt\result.json" $result
 }

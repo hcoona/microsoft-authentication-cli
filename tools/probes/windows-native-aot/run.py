@@ -13,7 +13,7 @@ import urllib.request
 ROOT = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-76')
 REL = 'tools/probes/windows-native-aot/'
 PROTOCOL = 'docs/research/experiments/windows-native-aot.md'
-FILES = ['run.py', 'Invoke-Action.ps1', 'Program.cs', 'NativeAotProbe.csproj',
+FILES = ['run.py', 'Invoke-Action.ps1', 'WindowsJob.cs', 'Program.cs', 'NativeAotProbe.csproj',
          'global.json', 'nuget.config']
 PACKAGES = {
     'Microsoft.Identity.Client': '4.83.1',
@@ -43,6 +43,11 @@ def write(path, value):
 
 def now():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *args, **kwargs):
+        raise RuntimeError('Redirect rejected before another request')
 
 
 def main():
@@ -118,7 +123,7 @@ def main():
           'sourceSha256': {path: hashlib.sha256(data).hexdigest()
                            for path, data in sources.items()}})
     if args.action == 'fetch':
-        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
         downloaded = []
         start = time.monotonic()
         total = 0

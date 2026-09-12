@@ -20,7 +20,8 @@ startup, a loader workaround, warning suppression, or a non-AOT fallback to make
 The subject is the complete accepted directory
 [`tools/probes/windows-native-aot`](../../../tools/probes/windows-native-aot), including
 the project, `Program.cs`, `global.json`, `nuget.config`, `run.py`, and
-`Invoke-Action.ps1`. Execution binds their exact bytes and this protocol to the same
+`Invoke-Action.ps1` and its `WindowsJob.cs` process guard. The guard is excluded from the
+Native AOT project. Execution binds their exact bytes and this protocol to the same
 merged commit, from a detached checkout. That commit is recorded before every attempt;
 this record does not need a self-referential commit hash. No product source is built.
 
@@ -34,6 +35,7 @@ this record does not need a self-referential commit hash. No product source is b
 | VC tools | Existing Visual Studio 18 Enterprise, `VC/Tools/MSVC/14.51.36231`, Hostx64/x64; actual `link.exe` file version 14.51.36257.0 and `cl.exe` 19.51.36257.0 |
 | Windows SDK | Existing 10.0.26100.0 x64 UM and UCRT libraries and tools, with the selected VC x64 libraries; no floating discovery through `vcvarsall` |
 | Tool selection | `IlcUseEnvironmentalTools=true`, explicit `CppLinker`, and exact child `PATH`, `LIB`, and `INCLUDE`; the helper checks recorded SHA-256 identities for dotnet, link, cl, kernel32.lib, and ucrt.lib before a child starts |
+| Controller bootstrap | Existing 64-bit Windows PowerShell and its Framework64/v4.0.30319 standalone `csc.exe`, SHA-256 `46809206887326d2d24db1eff1f3064de972c3451abe766b49111450a5e08e00`; compile only the accepted Job Object guard, then load its dedicated DLL into the controller |
 
 Public package versions and archive identities are retained in the fetch result. The
 three authentication archives must match the SHA-512 identities in the linked
@@ -112,9 +114,9 @@ sets documented .NET telemetry, certificate-generation, global-tool-PATH, and wo
 notification controls, disables build servers/node reuse and diagnostics, and omits
 inherited feed credentials, NuGet plugins, startup hooks, proxies, and agent settings.
 PowerShell uses `-NoProfile -NonInteractive`; it passes no ambient environment to the
-subject. No MSAL or native logging/telemetry callback is installed. Process inventory
-collects only PID, parent relationships, and creation times for ownership; no process
-command lines or unrelated identifiers are retained.
+subject. No MSAL or native logging/telemetry callback is installed. Controller/bootstrap
+receipts contain only the corresponding PID and creation time; no unrelated process
+inventory or command lines are retained.
 
 ## Execution and Finite Capacity
 
@@ -145,8 +147,9 @@ wrapper deliberately rejects adopting a root under another subject revision.
 | Restore | Two Windows actions, at most 600 seconds each |
 | Native AOT publish | Two Windows actions, at most 900 seconds each, after successful restore and exact resolved closure inspection |
 | Synthetic cases | One positive, one missing-library, and one combined working-directory/PATH-decoy action; 30 seconds each; no repeat |
+| Guard bootstrap | One standalone compiler action per Windows action, at most seven cumulatively; 60 seconds plus 10 seconds termination each, with no shared compiler/server mode, installation, or authentication subject execution |
 | Windows controller | One per Windows action, 1,300-second WSL wait ceiling; child output at most 8 Mi characters in memory, never raw provider output on disk |
-| Termination | At most 32 observed owned processes per action; at most 10 seconds for each owned-tree taskkill, 320 seconds cumulative termination allowance |
+| Subject process/termination bounds | Kernel Job Object limit of 32 simultaneously active processes per action; at most 10 seconds for job termination and active-process quiescence |
 
 The sequential attempt directory is created and `started.json` written before invoking
 the subject. An incomplete or unreadable receipt, exhausted capacity, safety stop, or
@@ -167,13 +170,31 @@ native module loaded. An unexpected successful decoy load stops subsequent actio
 There is no wrong-architecture execution: this public package includes only the x64
 Windows native DLL; fabricating another executable subject is unnecessary here.
 
-The controller records the root child PID and creation time, follows owned descendants,
-disables persistent build servers, and checks for survivors after exit. On timeout or
-failure it uses Windows `taskkill /PID <owned-live-pid> /T /F` only after identity checks;
-never kill a shared broker or all dotnet processes. Retain uncertain state and stop if
-ownership or termination cannot be established. WSL cancellation does not prove Windows
-termination: use the retained Windows controller/owned-process receipts to recover the
-same identities and apply only this bounded termination procedure. No further attempt
+The controller first compiles its guard with the pinned standalone Framework compiler,
+using explicit source/output/references and a complete replacement environment. This
+bootstrap has one owned compiler process, bounded output/time, and handle-based kill and
+wait on failure. The accepted source is not an MSBuild project or a shared-server
+invocation. PowerShell loads only the compiled guard DLL; it does not compile the subject.
+Guard source/output/temp files are retained inside the dedicated experiment root.
+
+The guard creates an anonymous Windows Job Object with `KILL_ON_JOB_CLOSE`, no breakaway
+permission, and a 32-active-process limit. It creates the subject suspended, assigns it
+to the job before resuming, and gives it only the explicit output/error pipe handles.
+Assignment failure terminates the still-suspended root by its process handle; failure
+to confirm termination remains an unresolved stop. Normal exit requires zero active
+job processes. On timeout/failure, `TerminateJobObject` and a bounded active-process check
+own the whole descendant scope without inferring it from reused PIDs. The controller
+keeps the noninherited job handle alive through execution and closes it during cleanup;
+Windows also closes it if the controller terminates unexpectedly. Never kill a shared
+broker or all dotnet processes.
+
+WSL cancellation alone is not a termination receipt. Recover the identity-bound local
+controller/compiler receipts. During bootstrap only, if those exact processes still
+exist, an emergency Windows `taskkill /PID <controller-pid> /T /F` may terminate the live
+controller tree; a remaining compiler may be stopped only after its own creation-time
+match. Once the guard is active, ending that same controller closes its job handle. Bound
+emergency termination to 10 seconds and retain uncertainty if the identity is gone or
+unverifiable; do not infer ownership from PID ancestry after exit. No further attempt
 may start until the record is resolved; an actual safety stop remains a stop.
 
 ## Evidence and Completion
@@ -190,7 +211,7 @@ subject attempts.
 
 At completion retain only identified experiment-owned source, public dependencies,
 build/output artifacts and sanitized receipts for reproducibility. Local PID receipts
-and taskkill output are operational evidence, not public observations. No account/session
+are operational evidence, not public observations. No account/session
 cleanup is required or authorized. Do not delete unrelated files or promise remote
 rollback. Record quiescence and any retention uncertainty in the result.
 
