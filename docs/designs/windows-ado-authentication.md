@@ -63,8 +63,19 @@ selected provider surface rooted for compilation. Its publish subject exited zer
 one owned Job member remained and was terminated; final quiescence was confirmed. The
 controller stopped before saving publish diagnostics. Its survivor identity and warning
 status remain unknown, and no new runtime case ran. This is an experiment-lifecycle and
-evidence blocker, not an observed compiler error or a publishing selection. The separately
-bounded recovery must resolve those missing observations before the disposition changes.
+evidence blocker, not an observed compiler error or a publishing selection.
+
+The [recovery](../research/experiments/windows-native-aot.md#recovery-results) now adds
+complete screened publish output without AOT/trim/compiler/link warnings for the rooted
+symbol-free synthetic subject. It also stopped on one remaining Job member after the
+bounded drain, followed by successful owned termination and final quiescence. Neither
+the earlier missing output nor survivor identity is reconstructed. Static artifact
+inspection confirms native x64 images and their direct import tables, but no recovery
+runtime ran. Normal publish completion, native cleanup, wrong-architecture rejection,
+dynamic dependency closure and product symbols retain their outstanding obligations.
+The recovery is stopped and restore/publish capacity exhausted; another execution needs
+owner disposition and a new accepted Wave/protocol amendment. Native AOT remains the
+preferred candidate, with the publishing choice and implementation-readiness gap unchanged.
 
 The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
 distinguishes the following alternatives:
