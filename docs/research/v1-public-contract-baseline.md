@@ -1553,6 +1553,20 @@ WAM/UI/authentication, wrong-architecture rejection or full application compatib
 All experiment capacity is consumed. No non-AOT exception or production-publishing
 selection follows, and historical trust-processing uncertainty remains explicit.
 
+**Supplemental observation, September 12, 2026:** The
+[readiness results](experiments/windows-native-aot.md#readiness-results) add a completed
+local-feed restore with ten resolved libraries and verified package/native-link payloads.
+A second synthetic subject rooted the selected provider API surface for compilation and
+published a native x64 EXE, PDB and the pinned native DLL; its process exited zero. One
+owned Job member remained, causing a recorded stop and successful bounded termination
+with final quiescence before diagnostics were retained. Warning/sensitive-output status
+and survivor identity remain unknown. No new runtime case executed. The new stop's exact
+branch does not identify historical attempt 10's cause. This supports native artifact
+production, not diagnostic acceptance, complete compatibility or publishing selection.
+Public linker documentation and the retained `/DEBUG` response support a PDB-helper
+hypothesis only. Under the recovery procedure, any surviving Job member causes a stop;
+its identity remains unknown rather than being inferred or newly inspected.
+
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by
 RECHECK-008. The concrete choice and preservation semantics belong to the Windows design;

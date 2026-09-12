@@ -12,9 +12,12 @@ import re
 import base64
 from urllib.parse import unquote
 
-ROOT = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness')
+ROOT = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness-recovery')
 OLD = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-76')
-WAVE = '968b0cf0a09f33ffc85648ecacc330feb9e7dda1'
+WAVE_PARENT = '34e513c0b0d8282e92ff743ecc836c6320d0faa5'
+WAVE_SHA256 = '5cb960f88b04db808783df069373228592081da962b4afcd02e6eef3ae08a9f8'
+PRIOR = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness')
+PRIOR_COUNTS = {'restore': 1, 'publish': 1, 'cleanup': 0, 'wrong-architecture': 0}
 REL = 'tools/probes/windows-native-aot-readiness/'
 PROTOCOL = 'docs/research/experiments/windows-native-aot.md'
 SOURCES = {name: REL + name for name in (
@@ -62,6 +65,41 @@ HISTORY_FILES = ['identity.json',
  'attempts/13/started.json',
  'attempts/13/result.json']
 HISTORY_SHA256 = 'ecda3b3331289a54b0e0b3eb96883a14d9f305990d4656e678bfd60fbebd7b9e'
+PRIOR_FILES = ['attempts/14/NativeAotReadinessProbe.csproj.nuget.g.props',
+ 'attempts/14/NativeAotReadinessProbe.csproj.nuget.g.targets',
+ 'attempts/14/WindowsJob.dll',
+ 'attempts/14/compiler.json',
+ 'attempts/14/completion.json',
+ 'attempts/14/controller.json',
+ 'attempts/14/packages.lock.json',
+ 'attempts/14/project.assets.json',
+ 'attempts/14/restore.json',
+ 'attempts/14/result.json',
+ 'attempts/14/started.json',
+ 'attempts/14/subject.json',
+ 'attempts/15/WindowsJob.dll',
+ 'attempts/15/compiler.json',
+ 'attempts/15/controller.json',
+ 'attempts/15/out/NativeAotReadinessProbe.exe',
+ 'attempts/15/out/NativeAotReadinessProbe.pdb',
+ 'attempts/15/out/msalruntime.dll',
+ 'attempts/15/result.json',
+ 'attempts/15/started.json',
+ 'attempts/15/subject.json',
+ 'identity.json',
+ 'preparation-started.json',
+ 'source/34e513c0b0d8282e92ff743ecc836c6320d0faa5/Invoke-Action.ps1',
+ 'source/34e513c0b0d8282e92ff743ecc836c6320d0faa5/NativeAotReadinessProbe.csproj',
+ 'source/34e513c0b0d8282e92ff743ecc836c6320d0faa5/Program.cs',
+ 'source/34e513c0b0d8282e92ff743ecc836c6320d0faa5/Stop-Controller.ps1',
+ 'source/34e513c0b0d8282e92ff743ecc836c6320d0faa5/WindowsJob.cs',
+ 'source/34e513c0b0d8282e92ff743ecc836c6320d0faa5/global.json',
+ 'source/34e513c0b0d8282e92ff743ecc836c6320d0faa5/nuget.config',
+ 'source/34e513c0b0d8282e92ff743ecc836c6320d0faa5/protocol.md',
+ 'source/34e513c0b0d8282e92ff743ecc836c6320d0faa5/run.py',
+ 'stopped.json']
+PRIOR_SHA256 = 'a27bb4f06e493f7c6b7a7d95d28b725e3e53de16f164e3c8526d22cd4ce84ab9'
+
 FEED = {'microsoft.aspnetcore.app.runtime.win-x64.10.0.12.nupkg': '9fca92913dca9245d2a6ef5453be3cc3311bac3c0b3890a4386c58d03fedbd63b051751b4b6a9193989c606d92ba447bfa2d5e3bc605e2c3a5fa2bdba218513c',
  'microsoft.dotnet.ilcompiler.10.0.12.nupkg': 'a9e3932bd0d16d6c78fde79b5c6d6fe74ca4104983f54be9f09d62085aa7cf7d1683cb3cbdf3dddad3e9a9a7b4c0c9d262676f28299308483afd96b34acba562',
  'microsoft.identity.client.4.83.1.nupkg': '692ae5e6b961a2ef71b747a9877f7a7f0460a03f9fb2edc0fa7e4d457a5419a0f564afae53c6296b7e75e0ab2b1c61b3f621a9d56e99945bb047b02dcfe9a2bd',
@@ -156,8 +194,10 @@ try {
             throw 'Linked prerequisite'
         }
     }
-    $root = 'C:\Temp\azureauth-native-aot-readiness'
-    if (Test-Path -LiteralPath $root) { $queue.Enqueue($root) }
+    foreach ($root in @('C:\Temp\azureauth-native-aot-readiness',
+                         'C:\Temp\azureauth-native-aot-readiness-recovery')) {
+        if (Test-Path -LiteralPath $root) { $queue.Enqueue($root) }
+    }
     while ($queue.Count -gt 0) {
         $item = Get-Item -LiteralPath $queue.Dequeue() -Force
         if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Linked input' }
@@ -254,9 +294,9 @@ def restore_evidence(source):
         for name, entry in framework.items():
             if name + '/' + entry['resolved'] not in libraries:
                 raise SystemExit('Unexpected locked package.')
-    if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-readiness\\packages'}:
+    if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-readiness-recovery\\packages'}:
         # NuGet normalizes its package root with a trailing directory separator.
-        if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-readiness\\packages\\'}:
+        if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-readiness-recovery\\packages\\'}:
             raise SystemExit('Unexpected package folder.')
     framework = assets['project']['frameworks']['net10.0-windows']
     downloads = framework['downloadDependencies']
@@ -320,6 +360,13 @@ def history():
         raise SystemExit('Historical evidence changed; no continuation.')
     if [p.name for p in sorted((OLD / 'attempts').iterdir())] != [f'{i:02}' for i in range(1, 14)]:
         raise SystemExit('Historical consumption changed.')
+    if {p.name for p in (PRIOR / 'attempts').iterdir()} != {'14', '15'}:
+        raise SystemExit('Stopped supplement attempt inventory changed.')
+    prior = hashlib.sha256()
+    for name in PRIOR_FILES:
+        prior.update(name.encode() + b'\0' + bytes.fromhex(digest(PRIOR / name)))
+    if prior.hexdigest() != PRIOR_SHA256:
+        raise SystemExit('Stopped supplement evidence changed; no recovery.')
     for name, expected in FEED.items():
         if digest(OLD / 'feed' / name, 'sha512') != expected:
             raise SystemExit('Historical public archive changed.')
@@ -329,8 +376,7 @@ def completed(result, action):
     if not isinstance(result, dict):
         return False
     for key, expected in {'safetyStop': False, 'quiescent': True,
-                          'captureCompleted': True, 'compilerTerminationRequested': False,
-                          'jobTerminationRequested': False, 'jobTerminationSucceeded': False}.items():
+                          'captureCompleted': True, 'compilerTerminationRequested': False}.items():
         if result.get(key) is not expected:
             return False
     if result.get('stage') != 'completed':
@@ -339,11 +385,21 @@ def completed(result, action):
         return False
     if not 0 <= result['seconds'] <= {'restore': 181, 'publish': 601, 'cleanup': 31, 'wrong-architecture': 31}[action]:
         return False
-    for key in ('guardCompilerExitCode', 'activeProcessesAtNormalExit', 'jobActiveBeforeStop'):
+    for key in ('guardCompilerExitCode',):
         if type(result.get(key)) is not int or result[key] != 0:
             return False
     if type(result.get('exitCode')) is not int:
         return False
+    if type(result.get('activeProcessesAfterCapture')) is not int or not 0 <= result['activeProcessesAfterCapture'] <= 32:
+        return False
+    if type(result.get('normalDrainSeconds')) not in (int, float) or not 0 <= result['normalDrainSeconds'] <= 2.1:
+        return False
+    for key in ('activeProcessesAtNormalExit', 'jobActiveBeforeStop'):
+        if type(result.get(key)) is not int or result[key] != 0:
+            return False
+    for key in ('jobTerminationRequested', 'jobTerminationSucceeded'):
+        if result.get(key) is not False:
+            return False
     if action in ('restore', 'publish'):
         if result.get('diagnosticsComplete') is not True:
             return False
@@ -386,9 +442,9 @@ def main():
         raise SystemExit('Only the designated WSL x64 environment is covered.')
     accepted = git('rev-parse', args.accepted).decode().strip()
     target = git('rev-parse', 'origin/main-v2').decode().strip()
-    git('merge-base', '--is-ancestor', WAVE, accepted)
+    git('merge-base', '--is-ancestor', WAVE_PARENT, accepted)
     git('merge-base', '--is-ancestor', accepted, target)
-    if git('show', target + ':docs/delivery-wave.md') != git('show', WAVE + ':docs/delivery-wave.md'):
+    if hashlib.sha256(git('show', target + ':docs/delivery-wave.md')).hexdigest() != WAVE_SHA256:
         raise SystemExit('Wave changed; refresh authorization.')
     if git('rev-parse', 'HEAD').decode().strip() != accepted or subprocess.run(
             ['git', 'symbolic-ref', '-q', 'HEAD'], capture_output=True).returncode == 0:
@@ -408,7 +464,8 @@ def main():
             raise SystemExit('Start with the reserved restore/preparation.')
         ROOT.mkdir()
         write_new(ROOT / 'preparation-started.json', {'accepted': accepted, 'started': now(),
-                  'historicalSha256': HISTORY_SHA256, 'priorConsumption': OLD_COUNTS})
+                  'historicalSha256': HISTORY_SHA256, 'stoppedSupplementSha256': PRIOR_SHA256,
+                  'priorConsumption': OLD_COUNTS, 'supplementConsumption': PRIOR_COUNTS})
         for directory in ('attempts', 'source', 'feed', 'negative', 'home', 'temp', 'packages', 'http',
                           'empty-program-files', 'home/AppData/Roaming', 'home/AppData/Local'):
             (ROOT / directory).mkdir(parents=True, exist_ok=True)
@@ -423,11 +480,13 @@ def main():
             raise SystemExit('Wrong-architecture input identity changed.')
         (ROOT / 'negative' / 'msalruntime.dll').write_bytes(data)
         write_new(ROOT / 'identity.json', {'accepted': accepted, 'prepared': now(),
-                  'historicalSha256': HISTORY_SHA256, 'priorConsumption': OLD_COUNTS})
+                  'historicalSha256': HISTORY_SHA256, 'stoppedSupplementSha256': PRIOR_SHA256,
+                  'priorConsumption': OLD_COUNTS, 'supplementConsumption': PRIOR_COUNTS})
     identity = read(ROOT / 'identity.json')
     if (ROOT / 'stopped.json').exists():
         raise SystemExit('A prior interruption or safety stop ends this sequence.')
-    if identity.get('historicalSha256') != HISTORY_SHA256 or identity.get('priorConsumption') != OLD_COUNTS:
+    if (identity.get('historicalSha256') != HISTORY_SHA256 or identity.get('priorConsumption') != OLD_COUNTS or
+            identity.get('stoppedSupplementSha256') != PRIOR_SHA256 or identity.get('supplementConsumption') != PRIOR_COUNTS):
         raise SystemExit('Root identity or consumption changed.')
     for name, expected in FEED.items():
         if digest(ROOT / 'feed' / name, 'sha512') != expected:
@@ -442,9 +501,9 @@ def main():
     source_inventory(source, source_hashes)
     direct(ROOT / 'attempts')
     attempts = sorted((ROOT / 'attempts').iterdir())
-    if len(attempts) > 8 or [p.name for p in attempts] != [f'{i:02}' for i in range(14, 14 + len(attempts))]:
+    if len(attempts) > 6 or [p.name for p in attempts] != [f'{i:02}' for i in range(16, 16 + len(attempts))]:
         raise SystemExit('New attempt sequence changed.')
-    counts = dict.fromkeys(LIMITS, 0)
+    counts = PRIOR_COUNTS.copy()
     previous = []
     for attempt in attempts:
         if attempt.is_symlink():
@@ -479,11 +538,11 @@ def main():
         action = start['action']
         if action not in counts or not completed(result, action) or start['priorConsumption'] != counts:
             raise SystemExit('Prior action incomplete, stopped, or inconsistent.')
-        if start['historicalSha256'] != HISTORY_SHA256:
+        if start['historicalSha256'] != HISTORY_SHA256 or start.get('stoppedSupplementSha256') != PRIOR_SHA256:
             raise SystemExit('Prior historical binding changed.')
         counts[action] += 1
         previous.append((attempt, start, result))
-    if any(counts[key] > LIMITS[key] for key in counts) or counts[args.action] >= LIMITS[args.action] or len(attempts) >= 8:
+    if any(counts[key] > LIMITS[key] for key in counts) or counts[args.action] >= LIMITS[args.action] or len(attempts) >= 6:
         raise SystemExit('Cumulative capacity exhausted.')
     if counts[args.action] and any(s['action'] == args.action and s['accepted'] == accepted for _, s, _ in previous):
         raise SystemExit('Repeating an action requires a new reviewed protocol amendment, never an incidental retry.')
@@ -509,14 +568,15 @@ def main():
                 if digest(ROOT / 'negative/msalruntime.dll') != WRONG_HASH:
                     raise SystemExit('Negative input changed.')
                 case_inputs['msalruntime.dll'] = {'path': 'negative/msalruntime.dll', 'sha256': WRONG_HASH}
-    attempt = ROOT / 'attempts' / f'{14 + len(attempts):02}'
+    attempt = ROOT / 'attempts' / f'{16 + len(attempts):02}'
     attempt.mkdir()
     write_new(attempt / 'started.json', {'action': args.action, 'accepted': accepted, 'target': target,
               'started': now(), 'priorConsumption': counts, 'historicalSha256': HISTORY_SHA256,
+              'stoppedSupplementSha256': PRIOR_SHA256,
               'sourceSha256': source_hashes, 'caseInputs': case_inputs})
     powershell = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
     command = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-               'C:\\Temp\\azureauth-native-aot-readiness\\source\\' + accepted + '\\Invoke-Action.ps1',
+               'C:\\Temp\\azureauth-native-aot-readiness-recovery\\source\\' + accepted + '\\Invoke-Action.ps1',
                '-Action', args.action, '-AttemptName', attempt.name, '-Accepted', accepted]
     try:
         subprocess.run(command, check=False, timeout=700, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -524,7 +584,7 @@ def main():
         write_new(ROOT / 'stopped.json', {'attempt': attempt.name, 'ended': now(),
                   'reason': 'controller-wait-interrupted', 'quiescenceConfirmed': False})
         emergency = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-                     'C:\\Temp\\azureauth-native-aot-readiness\\source\\' + accepted + '\\Stop-Controller.ps1',
+                     'C:\\Temp\\azureauth-native-aot-readiness-recovery\\source\\' + accepted + '\\Stop-Controller.ps1',
                      '-AttemptName', attempt.name]
         try:
             subprocess.run(emergency, check=False, timeout=10, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -550,7 +610,7 @@ def main():
         evidence['restore.json'] = digest(attempt / 'restore.json')
     if args.action == 'publish' and result['exitCode'] == 0:
         files = sorted((attempt / 'out').iterdir())
-        if {p.name for p in files} != {'NativeAotReadinessProbe.exe', 'NativeAotReadinessProbe.pdb', 'msalruntime.dll'}:
+        if {p.name for p in files} != {'NativeAotReadinessProbe.exe', 'msalruntime.dll'}:
             raise SystemExit('Unexpected publish inventory; retain and stop.')
         if digest(attempt / 'out/msalruntime.dll') != '9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79':
             raise SystemExit('Published native library differs from selected public x64 input.')

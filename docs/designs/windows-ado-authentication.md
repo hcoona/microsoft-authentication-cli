@@ -57,6 +57,15 @@ native cleanup, wrong-architecture rejection and the actual application remain u
 The preferred host, production-publishing disposition and absence of a non-AOT exception
 remain unchanged; these synthetic results do not make the whole design implementation-ready.
 
+The [readiness supplement](../research/experiments/windows-native-aot.md#readiness-results)
+subsequently restored the exact graph and produced another native x64 EXE with the
+selected provider surface rooted for compilation. Its publish subject exited zero, but
+one owned Job member remained and was terminated; final quiescence was confirmed. The
+controller stopped before saving publish diagnostics. Its survivor identity and warning
+status remain unknown, and no new runtime case ran. This is an experiment-lifecycle and
+evidence blocker, not an observed compiler error or a publishing selection. The separately
+bounded recovery must resolve those missing observations before the disposition changes.
+
 The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
 distinguishes the following alternatives:
 
