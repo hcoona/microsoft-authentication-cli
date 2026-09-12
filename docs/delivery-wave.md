@@ -21,8 +21,9 @@ proposal does not authorize any work it would add before merge.
 the [Windows Slice design](designs/windows-ado-authentication.md), its
 [protocol schemas](../contracts/v1/request.schema.json), the
 [public dependency assessment](research/v1-public-contract-baseline.md#windows-native-aot-assessment),
-the [accepted original observations](research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
-and [stopped readiness supplement](research/experiments/windows-native-aot.md#readiness-results),
+the [accepted original observations](research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results),
+the [stopped readiness supplement](research/experiments/windows-native-aot.md#readiness-results)
+and [recovery results](research/experiments/windows-native-aot.md#recovery-results),
 the [validation basis](validation/strategy.md#native-aot-publishing), and
 [experiment safety](research/experiment-safety.md). The repository owner directed
 completion of the remaining AOT evidence and publishing design, stopping before
@@ -40,24 +41,63 @@ limits, artifacts, and attempt 10's unknown stop origin and missing historical w
 New evidence must not retrospectively change that history or claim a clean public restore
 from reused packages.
 
-Authorize the distinct [readiness recovery](research/experiments/windows-native-aot.md#readiness-recovery)
-using a new dedicated root; neither earlier sequence may resume. Preserve all prior
-attempts, the supplemental stop, missing diagnostics, artifact identities and consumed
-capacity. The recovery may use at most one local-feed restore (180 seconds), one Native
-AOT publish (600 seconds), four synthetic runtimes (30 seconds each), and six standalone
-guard compilations (30 seconds each). Together with the accepted stopped supplement,
-maxima remain two restores, two publishes, four runtimes and eight guards. Reserve every
-attempt before starting it, including failed starts. No protocol revision resets totals.
+Authorize a distinct diagnostic and correction sequence to identify a surviving
+experiment-owned Job member, investigate a supported correction, and complete the
+remaining synthetic cases. None of the three historical sequences may resume. Preserve
+their attempts, stops, missing diagnostics, artifact identities and consumed capacity.
+The owner explicitly authorizes a buffer for diagnosis, correction and verification,
+not merely one or two additional build attempts.
 
-The independently accepted exact recovery may charge a two-second normal Job drain
-window to the existing action limit, with at most 100 milliseconds of scheduling tolerance.
-It may disable debug-symbol generation for the synthetic probe while preserving its
-rooted provider surface, AOT/trim diagnostics, and strict zero-process normal completion.
-It may not accept or terminate a surviving helper as expected successful completion.
-Failed termination, incomplete/suppressed output, unexpected effects or a new safety
-stop end recovery. This prospective rule does not reclassify either historical stop or
-permit unreviewed retries. Retain screened diagnostics after owned termination on
-completed-capture failure paths, preserving failure and stop evidence.
+| Unit | Additional allowance in this grant | Cumulative supplemental/diagnostic maximum |
+| --- | --- | --- |
+| Local-feed restore | Eight actions, 180 seconds each | Ten, including two already consumed |
+| Native AOT publish | Eight actions, 600 seconds each | Ten, including two already consumed |
+| Synthetic cleanup | Four actions, 30 seconds each | Four |
+| Genuine wrong-architecture rejection | Four actions, 30 seconds each | Four; eight synthetic runtimes combined |
+| Standalone guard compilation | Twenty-four actions, one per attempted controller, 30 seconds each | Twenty-eight, including four already consumed |
+| Corrected Windows metadata preflight | Forty-eight checks, 60 seconds each, including rejected checks | Fifty, including two already consumed; the original rejected preflight remains separate |
+
+The original thirteen-attempt consumption remains separate and unchanged. Reserve every
+new unit before starting it, including failed starts and manual invocations. Protocol
+revisions, round changes and failed preparation do not reset totals. Number action
+reservations from 18 and use at most eight fresh round roots. Each exact accepted
+protocol must allocate a bounded subset of the remaining allowance to its decision-
+relevant actions; unused capacity is not permission for incidental or identical retries.
+
+Permit at most two bounded process-metadata snapshots per publish, limited to the
+existing 32-process experiment Job. Use its retained non-null Job handle, minimal-rights
+process handles, membership checks and incarnation identity to classify only fixed
+tool identities or safe unknown/error categories. No host-wide enumeration, parent-PID
+ownership inference, arbitrary path output, command line, environment, account, token
+or process-memory inspection is authorized. Exact APIs, labels, buffer/call/output
+limits, race handling and timing require independent protocol acceptance. Metadata work
+must fit the action ceiling and may not delay the normal stop decision or emergency
+termination beyond their accepted bounds.
+
+Preserve the two-second normal Job drain, charged to the action limit with at most
+100 milliseconds of scheduling tolerance, and strict zero-process normal completion.
+The synthetic probe may omit debug symbols without selecting product symbol policy;
+preserve the rooted provider surface and complete AOT/trim diagnostics. Job membership
+or a tool label does not establish exclusive use of a potentially shared service.
+Neither a surviving helper nor its forced termination counts as successful completion.
+Retain screened diagnostics after owned termination on completed-capture failure paths.
+
+A failure or safety stop ends the affected round and preserves its root read-only.
+No subsequent action in that round may run. The owner authorizes use of the remaining
+buffer in a fresh round only after independent evidence review and applicable finding
+triage establish bounded effects and final quiescence, identify a decision-relevant
+diagnostic or correction, and independently accept its exact protocol/source amendment.
+This includes a nonzero-Job completion stop whose owned termination succeeded with
+complete screened diagnostics; it does not reclassify that stop as success or relax
+the historical stop rules. Do not repeat the same action without an accepted reason.
+
+Failed termination, unresolved owned processes, unproved quiescence, sensitive or
+incomplete/suppressed diagnostics, unexpected external effects, or a needed effect
+outside this grant ends all new execution and requires owner disposition. No remaining
+buffer overrides that boundary. Otherwise, reviewed corrections and executions within
+this grant require no repeated owner approval or Wave amendment merely to use the
+remaining allowance. Every runtime still requires its own round's normally completed,
+independently reviewed publish and fully bound artifacts.
 
 Reuse only hash-verified public archives from the original experiment. No new package,
 SDK, compiler, debugger or tool installation is authorized. The exact protocol bounds
@@ -83,7 +123,11 @@ covers public documentation/source reads, read-only inspection of the designated
 Linux x64 and existing Windows 11 x64 host and retained public experiment artifacts,
 and use of the already pinned Windows SDK/native compiler and PowerShell process guard.
 Permit dedicated source/feed/cache/build/case files and sanitized receipts under
-`C:\Temp\azureauth-native-aot-readiness-recovery`; both prior roots remain read-only. Permit bounded configuration allocation/release
+`C:\Temp\azureauth-native-aot-diagnostics`, limited to `round-01` through `round-08`
+and the exact protocol's shared reservation/evidence files. All three historical roots
+remain read-only. The owner accepts the additional bounded persistent experiment files,
+build/process activity and narrow Job-metadata observations on this existing host.
+Permit bounded configuration allocation/release
 and native-loader tests in owned Windows child processes through WSL. This intentionally
 retains experiment-owned files on the existing host; no authentication or credential
 state is used. Preserve replacement child environments, telemetry controls, process
