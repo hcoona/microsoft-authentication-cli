@@ -16,6 +16,9 @@ public sealed class NativeAotJob : IDisposable
     private AnonymousPipeServerStream output;
     private AnonymousPipeServerStream error;
     private bool unassignedPending;
+    public uint? ActiveBeforeStop { get; private set; }
+    public bool TerminationRequested { get; private set; }
+    public bool TerminationSucceeded { get; private set; }
     public Process Child { get; private set; }
     public StreamReader Output { get; private set; }
     public StreamReader Error { get; private set; }
@@ -112,8 +115,11 @@ public sealed class NativeAotJob : IDisposable
     public bool Stop()
     {
         if (unassignedPending) return false;
-        if (ActiveProcesses == 0) return true;
-        if (!TerminateJobObject(job, 1)) throw new Win32Exception();
+        ActiveBeforeStop = ActiveProcesses;
+        if (ActiveBeforeStop == 0) return true;
+        TerminationRequested = true;
+        TerminationSucceeded = TerminateJobObject(job, 1);
+        if (!TerminationSucceeded) throw new Win32Exception();
         var watch = Stopwatch.StartNew();
         while (ActiveProcesses != 0 && watch.ElapsedMilliseconds < 10000) System.Threading.Thread.Sleep(50);
         return ActiveProcesses == 0;

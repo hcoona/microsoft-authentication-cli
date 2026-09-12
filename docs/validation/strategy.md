@@ -476,10 +476,14 @@ The corrected Windows environment and complete local feed preserve the exact dep
 graph. The final publish returned exit 0, followed by a controller safety stop with final
 quiescence but no retained publish diagnostics or uniquely identified stop origin. Do
 not count absent warning fields as zero warnings or artifact presence as a loading test.
-All three loading cases remain unrun, and restore/publish capacity is exhausted. Any
-future authorized continuation must disposition the stop, retain adequate stage and
-sanitized publish evidence, and establish normal controller completion before loading
-cases. Preserve the prior artifacts and consumption. Upstream allocation/import,
+All three loading cases remain unrun, and restore/publish capacity is exhausted. The
+[retained-artifact amendment](../research/experiments/windows-native-aot.md#retained-artifact-stop-disposition)
+permits the three synthetic cases only after independent acceptance of the exact
+historical-stop disposition and unchanged provenance. New results must retain adequate
+stage/capture/termination evidence and normal controller completion. This does not
+recover or satisfy the missing publish-warning review; that obligation remains open
+before production-publishing or implementation-readiness acceptance. Preserve the prior
+artifacts and consumption. Upstream allocation/import,
 restricted search, wrong-architecture rejection, WAM behavior, and full native cleanup
 remain outstanding. No non-AOT exception or disabled platform check is justified.
 

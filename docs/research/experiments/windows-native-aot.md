@@ -10,12 +10,12 @@ the bounded conclusion. The historical Windows MSAL and tooling protocols retain
 exhausted capacities; none of their helpers or subjects may execute here.
 
 The final corrected restore succeeded, and the last publish returned exit 0 and produced
-an x64 native executable. The controller then recorded a safety stop before retaining
-publish diagnostics; its exact originating stage is not recoverable. Final owned-process
-quiescence is recorded, but no loading case ran. Restore and publish capacities are
-exhausted, and the stop prohibits further execution. The retained procedure and artifacts
-are evidence, not a new execution grant. The bounded result below resolves the observed
-restore causes while preserving the remaining controller, loading, and support limits.
+an x64 native executable. Its controller recorded a safety stop before retaining publish
+diagnostics; the exact originating stage and warnings remain unavailable. Final owned
+quiescence is recorded. The current amendment dispositions only use of that retained
+artifact for the three previously unrun synthetic cases under the accepted Wave. It
+preserves the stop, all exhausted build/download capacity, and every prior receipt.
+No case result is claimed before execution.
 
 ## Question and Exact Subject
 
@@ -25,13 +25,17 @@ restricted to the application directory and System32? A failed publish, unavaila
 safe entry point, or failed allocation is a valid observed blocker. Do not add broker
 startup, a loader workaround, warning suppression, or a non-AOT fallback to make it pass.
 
-The subject is the complete accepted directory
+The controller source is the complete accepted directory
 [`tools/probes/windows-native-aot`](../../../tools/probes/windows-native-aot), including
 the project, `Program.cs`, `global.json`, `nuget.config`, `run.py`, and
 `Invoke-Action.ps1` and its `WindowsJob.cs` process guard. The guard is excluded from the
-Native AOT project. Execution binds their exact bytes and this protocol to the same
-merged commit, from a detached checkout. That commit is recorded before every attempt;
-this record does not need a self-referential commit hash. No product source is built.
+Native AOT project. New execution binds their exact bytes and this protocol to the same
+merged amendment commit, from a detached checkout. The executable subject remains the
+hash-pinned output of PR #86 (`9055a9b473ab574a27469c96e31e1416ec69b14f`); its
+`Program.cs`, project, global SDK selection, and NuGet configuration must remain
+byte-identical to that producing revision. The amendment changes only controller code
+and the explicit retained-artifact prerequisite, not the program or dependencies. The amendment commit is recorded before every attempt; this record does
+not need a self-referential commit hash. No product source is built.
 
 | Input | Pin and selection |
 | --- | --- |
@@ -42,7 +46,7 @@ this record does not need a self-referential commit hash. No product source is b
 | SDK package candidates | Seven original 10.0.12 candidates plus the two evidenced supplemental runtime packs below; unused candidates are not claimed as resolved application dependencies |
 | VC tools | Existing Visual Studio 18 Enterprise, `VC/Tools/MSVC/14.51.36231`, Hostx64/x64; actual `link.exe` file version 14.51.36257.0 and `cl.exe` 19.51.36257.0 |
 | Windows SDK | Existing 10.0.26100.0 x64 UM and UCRT libraries and tools, with the selected VC x64 libraries; no floating discovery through `vcvarsall` |
-| Tool selection | `IlcUseEnvironmentalTools=true`, explicit `CppLinker`, and exact child `PATH`, `LIB`, and `INCLUDE`; the helper checks recorded SHA-256 identities for dotnet, link, cl, kernel32.lib, and ucrt.lib before a child starts |
+| Historical build-tool selection | Producing PR #86 used `IlcUseEnvironmentalTools=true`, explicit `CppLinker`, exact child `PATH`/`LIB`/`INCLUDE`, and dotnet/link/cl/kernel32.lib/ucrt.lib identity checks. Current runtime-only checks cover the controller compiler and retained/copied artifacts as defined below; those build tools do not run. |
 | Controller bootstrap | Existing 64-bit Windows PowerShell and its Framework64/v4.0.30319 standalone `csc.exe`, SHA-256 `46809206887326d2d24db1eff1f3064de972c3451abe766b49111450a5e08e00`; compile only the accepted Job Object guard, then load its dedicated DLL into the controller |
 
 Public package versions and archive identities are retained in the fetch result. The
@@ -148,86 +152,105 @@ other child environment entries, commands, toolchain paths and package pins are 
 
 ## Execution and Finite Capacity
 
-Before **each** action, the operator refreshes `origin/main-v2`, confirms the accepted
-Wave and exact protocol remain current, recovers the required independent review and
-CI/commit-check receipts, and checks prior attempt results. Material prerequisite drift
-requires refreshed review. The wrapper checks ancestry, current Wave bytes, checkout
-and Windows-copy source bytes, prior consumption, feed identities, and prerequisites.
-The host-OS amendment uses its own merged commit as `ACCEPTED_COMMIT` in a detached
-checkout. It adds only `OS=Windows_NT` to the Windows environment. AOT-AUTHOR-015 was
-independently triaged as a blocking true positive: the first publish's exact guard,
-accepted replacement environment, and fixed MSBuild source establish this host-identity
-omission. Its correction remains a runtime validation obligation, not a promised publish.
+### Retained-Artifact Stop Disposition
 
-Both public-fetch batches are consumed. PR #85's exact supplemental downloader and
-manifest remain recoverable in Git; the current wrapper exposes no fetch action. Its
-two extra archives were WindowsDesktop and ASP.NET x64 runtime packs at 10.0.12, fetched
-once from fixed public NuGet flat-container URLs without redirects, retries, proxies or
-credentials, within the 256 MiB and 600-second/30-second bounds. Their observed identities
-are retained below. Every later action verifies all sixteen owned archive identities.
+AOT-AUTHOR-018 remains a true positive for attempt 10's historical controller stop and
+missing diagnostics. Its hash-bound subject exit 0, final owned-process quiescence, and
+published identities establish a reviewable retained artifact, not ordinary controller
+success. The exact source supports a failure after subject exit and before diagnostic
+assignment; the record cannot identify its exact cause, residual process count, or
+termination branch. No absent publish transcript or warning disposition can be recovered
+by this amendment. No sensitive-output finding is recorded, and no claim of absent
+sensitive output is inferred from that missing field.
+
+The reviewed continuation accepts that uncertainty for **three synthetic runtime cases
+only**. They require neither further compiler operation on the subject nor use of a
+surviving process or credential-bearing state. Each case starts the unchanged, hashed
+artifact in a fresh owned process/directory and uses the previously reviewed synthetic
+configuration call boundary. Quiescence and unchanged provenance supply the continuation
+basis; the exact old stop receipt remains true and immutable. This does not establish
+warning-free compilation, a clean prior controller completion, production suitability,
+or full native behavior. A new stop or uncertain termination prohibits another case.
+
+This narrow disposition does not bypass an unresolved active effect: attempt 10's final
+quiescence is recorded. It does not diagnose or erase the earlier trust-processing
+uncertainty. Any changed artifact, missing receipt, new effect, or contradictory
+provenance defeats the disposition and stops before execution. Independent acceptance
+of this exact protocol/controller and current consumer obligations is required first.
+
+### Current Actions and Migration
+
+Before **each** action, refresh `origin/main-v2`, confirm the accepted Wave and exact
+protocol remain current, recover independent review and CI/commit-check receipts, and
+inspect prior results. Material prerequisite drift requires refreshed review. The wrapper
+checks the exact accepted Wave bytes from PR #89, current protocol bytes, accepted
+ancestry, detached checkout, Windows source copies, prior receipt/marker hashes,
+sequential consumption, all sixteen feed archives, retained earlier evidence, and the
+three published file identities from the final-publish observation below.
+
+Only these commands remain available, in this order, once each:
 
 ```text
-python3 tools/probes/windows-native-aot/run.py restore --accepted ACCEPTED_COMMIT
-python3 tools/probes/windows-native-aot/run.py publish --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py positive --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py missing --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py decoy --accepted ACCEPTED_COMMIT
 ```
 
-Invoke one action at a time and inspect each result. This final restore refreshes the
-successful graph under the corrected environment. The latest prerequisite action must
-have succeeded. Publish requires that latest restore to name this exact accepted source,
-and each case requires its latest publish to name that source. An older successful
-restore cannot mask failure or nonexecution of the corrected one, including interruption
-after migration but before attempt reservation. AOT-REVIEW-016 was independently triaged
-as a blocking true positive and is resolved by this prerequisite-source binding. Restore
-intentionally accepts the historical successful supplemental-fetch source.
-Inspect its actual closure before the final publish. No extra restore/publish capacity
-is granted if either remaining action fails.
+`ACCEPTED_COMMIT` is this amendment's merged commit, not the producing PR #86 commit.
+The pinned attempt-10 result is the artifact prerequisite; the wrapper does not demand
+an impossible new publish from the amended controller revision. Only that exact
+hash-verified historical stop is dispositioned. Every new receipt must bind this
+amendment's exact source/protocol hashes and the declared action sequence. Both the
+immediate return and later recovery require explicit typed completion: false safety stop,
+true quiescence/capture, completed stage, guard exit 0, consistent subject exit and fixed
+observation, zero job counts, and no termination request. Missing or ill-typed fields
+fail closed (AOT-AUTHOR-019). The shared check also rejects unexpected preload,
+unrestricted search, or a loaded native module in either negative case; the exact old receipts remain hash-bound and unchanged. Inspect each
+new observation before continuing. A normal observed positive-case failure may be
+followed by the negative cases within the same boundary, but cannot establish positive
+loading compatibility. Unexpected search success, invalid output, or any controller
+safety stop ends the sequence without retry.
 
-Before its only migration, the wrapper requires the original PR #78 root, exact PR #85
-source copies, sixteen pinned receipt hashes for attempts 01–08, all four existing
-revision-marker hashes, and unchanged retained attempt-05 assets/lock copies. It requires
-the owned program-files directory to remain empty and not a link. The new
-`host-os-revision.json` and six retained-copy paths must be absent. Verify and copy the
-successful active `project.assets.json` and `packages.lock.json` into attempt 07, and the
-four probe-owned `NativeAotProbe.dll`, `.pdb`, `.deps.json`, and `.runtimeconfig.json`
-files from `bin/Release/net10.0-windows/win-x64` into attempt 08. Use their observed
-hashes pinned in `run.py`; never overwrite prior evidence. Perform these exclusive copies
-before source replacement or another restore/publish. Every later action verifies these
-six retained files and both attempt-05 copies against their original hashes.
+The one-time migration requires the original root identity, exact PR #86 source copies,
+all twenty receipt hashes for attempts 01–10, all five existing revision-marker hashes,
+the earlier retained assets/lock and managed artifacts, the empty owned program-files
+root, and the unchanged native output inventory. `runtime-revision.json` must be absent.
+Replace only the seven owned source copies, then exclusively create that marker with
+old/new revisions, prior consumption, the historical stop digest, and artifact hashes.
+The four probe/project/SDK/NuGet files must stay byte-identical. Preserve the existing
+root, outputs, caches, feed, five earlier markers, and every receipt; partial migration
+fails closed. This migration does not clear a receipt or reset capacity.
 
-Replace only the seven owned source copies, then write `host-os-revision.json` with the
-old/new accepted revisions and prior counts. Preserve the root identity, earlier markers,
-all receipts, public feed, caches, and original active output files. Partial migration
-fails closed. Later actions require this amendment's same accepted revision; no migration
-resets capacity or clears a stop. Reserve the next sequential attempt and write its
-start receipt before invoking a Windows subject. The Windows process guard, diagnostic
-sanitizer, probe program, project, and commands retain their accepted behavior.
+The Windows helper verifies the retained EXE/DLL identities again and checks copied
+case files before launch. It verifies the existing standalone compiler identity, then
+compiles the controller guard only. .NET SDK, linker, and product project commands are
+not executed. The replacement environment and DLL-search setup retain their accepted
+values. A named two-stream capture object keeps empty stdout/stderr explicit. New results
+retain fixed controller stage, failure stage and source line, capture-completed flag,
+normal-exit job process count, and the actual final stop branch's active count and
+termination-request/success flags. These contain no command lines, provider messages,
+private paths, or unrelated process inventory. They describe new attempts only.
 
-Before the host-OS continuation, consumption was original fetch 1/1, supplemental fetch 1/1, restore 5/6,
-publish 1/2, each case 0/1, and guard bootstrap 6/11. One restore plus one publish leaves
-three guard actions for the unchanged loading cases if prerequisites succeed.
+Before this continuation, consumption is original fetch **1/1**, supplemental fetch
+**1/1**, restore **6/6**, publish **2/2**, each case **0/1**, and guard bootstrap
+**8/11**. All ten prior attempts have complete receipts. No new fetch/restore/publish
+capacity exists, and the current wrapper and helper expose no such actions.
 
 | Unit | Cumulative maximum, including failed starts and manual execution |
 | --- | --- |
-| Public package fetch | One batch, 14 package requests, no retries or redirects; 300 MiB per archive and 1.5 GiB total; a WSL process timer interrupts pending reads at a 600-second batch deadline, in addition to 30-second socket inactivity limits |
-| Supplemental public fetch | One consumed batch, exactly the two PR #85 requests, at most 256 MiB total, no retry or redirect; 600-second batch deadline and 30-second socket inactivity limit |
-| Restore | Six cumulative Windows actions, including the two historical actions; at most 600 seconds each |
-| Native AOT publish | Two Windows actions, at most 900 seconds each, after successful restore and exact resolved closure inspection |
-| Synthetic cases | One positive, one missing-library, and one combined working-directory/PATH-decoy action; 30 seconds each; no repeat |
-| Guard bootstrap | One standalone compiler action per Windows action, at most eleven cumulatively including the two historical compilations; 60 seconds plus 10 seconds termination each, with no shared compiler/server mode, installation, or authentication subject execution |
-| Windows controller | One per Windows action, 1,300-second WSL wait ceiling; child output at most 8 Mi characters in memory, never raw provider output on disk |
-| Subject process/termination bounds | Kernel Job Object limit of 32 simultaneously active processes per action; at most 10 seconds for job termination and active-process quiescence |
+| Public fetch batches | Original fourteen-package batch and two-package supplement both consumed; no further request |
+| Restore and Native AOT publish | Six restores and two publishes consumed; no further action |
+| Synthetic cases | One positive, one missing-library, one combined working-directory/PATH-decoy action; 30 seconds each; no repeat |
+| Guard bootstrap | Eleven total; eight consumed, one remaining standalone compiler action per case; 60 seconds plus 10 seconds termination each; no shared compiler/server mode or installation |
+| Windows controller | One per case, 1,300-second WSL wait ceiling; combined child output at most 8 Mi characters in memory |
+| Subject processes and termination | At most 32 simultaneously active processes in the owned Job Object; at most 10 seconds for job termination and active-process quiescence |
 
-The sequential attempt directory is created and `started.json` written before invoking
-the subject. An incomplete or unreadable receipt, exhausted capacity, safety stop, or
-uncertain termination prevents continuation. Attempts and effects do not reset on a
-protocol amendment, failed preparation, checkout, operator change, or machine switch.
-There is no second machine authorized by this exact protocol. Spare restore/publish
-capacity permits only an explained retry of the current accepted source when no
-unresolved safety stop exists. Changed source requires an accepted amendment; neither
-an amendment nor source replacement resets capacity or clears an unresolved effect.
+The next sequential attempt directory and `started.json` reserve capacity before a
+Windows controller starts. Incomplete/unreadable evidence, exceeded capacity, a new
+safety stop, or uncertain termination prevents continuation. Source changes, operator
+changes, interruption, and protocol revisions do not reset limits. No other machine
+or manual replay is authorized. Controller/subject processes terminate under the same
+ownership rules below; retain all sources, case files, outputs, and sanitized receipts.
 
 Each case uses a fresh process and isolated application directory. Positive contains the
 published executable and its published x64 `msalruntime.dll`; missing contains only the
@@ -273,6 +296,13 @@ unverifiable; do not infer ownership from PID ancestry after exit. No further at
 may start until the record is resolved; an actual safety stop remains a stop.
 
 ## Evidence and Completion
+
+For the current runtime-only continuation, retain each case's accepted amendment,
+producing revision and artifact identities, fixed observation, stage/capture/termination
+fields, receipt hashes, and cumulative limits. Publish diagnostics remain unavailable;
+new controller diagnostics cannot fill that historical gap. No SDK output is generated
+or sanitized by the current helper. The following build-diagnostic rules describe the
+accepted historical restore/publish evidence and do not grant another build action.
 
 Retain start/end times, accepted commit/tree and source hashes, capacity, tool versions,
 public package and output identities, resolved asset selection, warning/error codes,
@@ -775,22 +805,23 @@ public packages or Native AOT incompatibility in MSAL/Broker/NativeInterop.
 The remaining experiment blocker is a recorded controller safety stop after successful
 subject exit, with insufficient retained stage/diagnostic detail to identify its exact
 origin. Positive, missing-library, and working-directory/PATH-decoy cases remain unrun;
-there is no upstream allocation/import or restricted-search runtime result. A later
-continuation would need a newly accepted bounded grant/protocol that dispositions this
-stop and retains its origin and sanitized publish diagnostics. It cannot clear the stop,
-reuse a case slot, or reset capacity merely by changing a source marker. This record
-proposes no executable remedy or new attempt.
+there is no upstream allocation/import or restricted-search runtime result. At that point, later
+execution required a newly accepted bounded grant/protocol disposition; changing a
+source marker alone could not clear the stop, reuse a case slot, or reset capacity.
+The current retained-artifact amendment above explicitly preserves the unrecoverable
+origin and diagnostics instead of claiming they can be reconstructed. This historical
+observation does not itself authorize that continuation.
 
 Final consumption is original fetch **1/1**, supplemental fetch **1/1**, restore **6/6**,
 publish **2/2**, each loading case **0/1**, and guard bootstrap **8/11**. Attempts 01–10
-all have complete receipts, with no manual replay or interrupted reservation. The safety
-stop blocks all remaining cases despite unused case/guard capacity. Owned sources, feed,
+all have complete receipts, with no manual replay or interrupted reservation. At that execution revision, the safety
+stop blocked all remaining cases despite unused case/guard capacity. Owned sources, feed,
 caches, prior retained evidence, native artifacts, and sanitized receipts are
 intentionally retained. No account, authentication, broker-session, UI, or resource action
 was executed, and no account/session cleanup occurred. Historical Windows trust-path
 uncertainty remains unchanged. Production publishing, full native cleanup, WAM behavior,
 wrong-architecture rejection, and support remain unvalidated; no non-AOT exception or
-alternative host is selected. Close this bounded Wave only after accepting this evidence.
+alternative host is selected. PR #88 closed that bounded diagnosis Wave after accepting this evidence.
 
 ### Fetched Public Archive Identities
 
