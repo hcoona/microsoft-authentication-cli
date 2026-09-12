@@ -101,7 +101,7 @@ silently weakening search rules or copying private runtime internals.
 A future authorized publish protocol must pin the Windows x64 public native build chain
 (Visual Studio C++ tools, Windows SDK, and `link.exe`), SDK/runtime inputs, resolved
 NuGet graph, and publish properties before execution. Microsoft's documented Windows
-prerequisite is Visual Studio 2022 with Desktop development with C++ and its default
+prerequisite is Visual Studio 2022 or later with Desktop development with C++ and its default
 components; this record does not select a floating installed compiler. No compiler is
 installed by this design revision. Artifact closure must include the native broker and
 OS prerequisites; an AOT executable does not imply one-file deployment or no OS dependency.

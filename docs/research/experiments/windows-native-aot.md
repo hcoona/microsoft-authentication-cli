@@ -1,6 +1,7 @@
 # Windows Native AOT Synthetic Experiment
 
-This record owns the exact Issue #76 procedure and its cumulative observations. The
+This record owns the exact Issue #76 procedure, the Issue #92 readiness supplement,
+and their cumulative observations. The
 [accepted Wave](../../delivery-wave.md)
 owns authorization; [experiment safety](../experiment-safety.md) owns general policy.
 The [assessment](../v1-public-contract-baseline.md#windows-native-aot-assessment),
@@ -16,11 +17,224 @@ Both missing-library and working-directory/PATH-decoy cases returned
 `System.DllNotFoundException` without loading that module. All three controllers completed
 normally with quiescence and no safety stop or termination request.
 
-All experiment capacity is consumed. The retained procedure and artifacts are evidence,
-not a new execution grant. Attempt 10's historical controller stop, unknown origin and
+All original experiment capacity is consumed. The original procedure and artifacts are
+historical evidence, not a new execution grant. Attempt 10's controller stop, unknown origin and
 missing publish warnings remain unchanged. These synthetic results establish the tested
 allocation/loading/search path, not WAM authentication, complete native cleanup,
 production publishing, or support.
+
+## Readiness Supplement
+
+This is the only executable procedure in the current record. Sections from
+[Question and Exact Subject](#question-and-exact-subject) onward retain the original
+experiment and its exhausted procedure, limits, and observations. Their commands do not
+authorize replay. The accepted Wave's **Windows Native AOT Implementation Readiness**
+entry supplies this supplement's boundary; Issue #92 coordinates its review.
+
+### Exact Subject and Public Basis
+
+The supplement asks whether a new synthetic native artifact can provide complete
+publish diagnostics for the selected provider surface, observable upstream cleanup,
+and rejection of a genuine wrong-architecture native library. It preserves .NET SDK
+10.0.401/runtime 10.0.12, Windows x64, MSAL/Broker 4.83.1, NativeInterop 0.20.3,
+the seven exact managed constraints, and the existing native toolchain below.
+The refreshed [assessment](../v1-public-contract-baseline.md#windows-native-aot-assessment)
+records the current public prerequisite of Visual Studio 2022 or later, the unchanged
+WinForms/WPF/built-in COM restrictions, and the limits of package compatibility metadata
+and closed upstream issues. No package annotation alone establishes compatibility.
+
+The complete source is
+[`tools/probes/windows-native-aot-readiness`](../../../tools/probes/windows-native-aot-readiness),
+plus the unchanged
+[`WindowsJob.cs`](../../../tools/probes/windows-native-aot/WindowsJob.cs).
+Bind all those files and this protocol to the same exact accepted merged commit.
+Use a clean detached checkout; copy them under `source/<accepted-commit>` in the new
+root. A later accepted correction gets a separate source directory and preserves every
+prior source, receipt, artifact, and consumed attempt. No product project is created.
+
+`Program.Main` restricts DLL search to application directory and System32 and rejects
+an unexpected preload before touching NativeInterop. It builds the same all-zero-client
+MSAL configuration and allocates one public `AuthParameters` with
+`https://example.invalid/`. It neither starts the broker factory nor calls an account,
+token, resource, cache, or native `Core.Startup` operation. There is no expected UI.
+
+The public NativeInterop 0.20.3 `lib/net9.0` IL supplies the cleanup basis:
+
+- `AuthParameters.Dispose` disposes its `_params` SafeHandle and sets it to null;
+  the second call is an idempotence check.
+- `MSALRUNTIME_AUTH_PARAMETERS_HANDLE.Release` calls `API.ReleaseAuthParameters`.
+  The x64 implementation calls `MSALRUNTIME_ReleaseAuthParameters(IntPtr)`, returning
+  `MSALRUNTIME_ERROR_HANDLE`, and passes it to `API.ThrowIfFailed`.
+- `Handle.ReleaseHandle` catches specifically `MsalRuntimeException` and returns
+  false. Ordinary `Dispose` return alone therefore does not prove absence of a
+  wrapper-reported native release failure.
+- `Handle.Dispose` calls base disposal, then once removes its module reference.
+  `Module.RemoveRef` calls `API.Shutdown` at count zero. The x64 native
+  `MSALRUNTIME_Shutdown()` import returns void; it reports no native success status.
+
+The probe verifies that both cleanup exports exist in the already loaded module and
+counts first-chance managed exceptions only around synchronous disposal. The handler
+only increments a thread-safe integer; it captures no exception message or provider
+data. Before allocation, a caught synthetic exception must increment the same counter
+exactly once in the actual native binary. This mechanism is supported by the public
+[FirstChanceException contract](https://learn.microsoft.com/en-us/dotnet/api/system.appdomain.firstchanceexception)
+and the pinned .NET 10 runtime's
+[Native AOT exception dispatcher](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/coreclr/nativeaot/Runtime.Base/src/System/Runtime/ExceptionHandling.cs)
+(`OnFirstChanceExceptionViaClassLib`, before handler search).
+Zero observed cleanup exceptions with a passing self-check supplies evidence of no
+observed managed or wrapper-reported release failure. It does not prove opaque native
+deallocation correctness or invent a returned shutdown status.
+
+For compile analysis, `DynamicDependency` preserves only the named, never-invoked
+`CompileOnlyProviderSurface` method. Its body references the selected broker-availability,
+account enumeration, silent, interactive, cancellation, tenant, claims, parent-window,
+and rejecting-custom-browser APIs. It has no runtime caller, reflection invocation,
+delegate creation, command-line switch, callback registration, or eager initializer.
+Preservation roots their compilation graph without executing them. The obsolete
+`IsBrokerAvailable` API, if diagnosed, requires explicit disposition against the existing
+design; it is not suppressed. The probe remains synthetic evidence, not a minimal CLI
+implementation or an authentication experiment.
+
+### Preparation, Actions, and Capacity
+
+Use the same designated WSL 2 Linux x64 initiator and existing Windows 11 x64 host.
+Existing account/broker state remains unused and unobserved. Only
+`C:\Temp\azureauth-native-aot-readiness` may receive new experiment files, including
+source, local feed, home/temp/caches, guard/build/case outputs, and sanitized receipts.
+The old `C:\Temp\azureauth-native-aot-76` root is read-only; do not migrate or clean it.
+Reject an unrecognized, linked, partially prepared, or inconsistent new root. A
+read-only Windows path/reparse-point check, bounded to 60 seconds, precedes root writes;
+the controller repeats that check before compiling or starting its subject. Keep an
+exclusive preparation-started receipt before copying retained inputs; a failed partial
+preparation is retained and requires a reviewed disposition, not automatic repair.
+
+Verify the exact historical evidence aggregate embedded in `run.py`: ordered original
+identity, six revision markers, and started/result receipts for attempts 01–13, using
+UTF-8 relative name plus NUL plus binary SHA-256 digest for each entry. Its SHA-256 is
+`ecda3b3331289a54b0e0b3eb96883a14d9f305990d4656e678bfd60fbebd7b9e`.
+Verify all sixteen original public archive SHA-512 values before and after copying into
+the dedicated feed. No request, installation, tool acquisition, cache substitution, or
+new package is allowed. A local-feed restore from these reused public archives does not
+establish a clean public-network restore.
+
+Before each action, refresh the target branch, recover its current accepted Wave and
+exact protocol/source, independent reviews, mandatory checks, and prior completion
+receipts. Confirm source, feed, resolved graph, and artifact provenance appropriate to
+the action. Retain and compare restore assets/lock identities, generated NuGet props/targets,
+and selected package assets before publishing. Reject unexpected generated import files;
+the project compiles only the explicit `Program.cs`, without default source globs.
+Compare restored library payload files, including build/compiler payloads and the
+download-only runtime-pack payloads, with their verified public archives. This includes
+the Native AOT runtime's static libraries used by the native linker, not only managed
+application assets. A material prerequisite change requires refreshed review.
+Reserve the next attempt directory and `started.json` before starting the controller;
+number new attempts from 14 without resetting the original thirteen.
+
+| New unit | Cumulative maximum and timeout |
+| --- | --- |
+| Local-feed restore | Two actions, 180 seconds each |
+| Native AOT publish | Two actions, 600 seconds each |
+| Synthetic cleanup | Two actions, 30 seconds each |
+| Wrong-architecture rejection | Two actions, 30 seconds each; four synthetic actions combined |
+| Standalone guard compilation | Eight actions, one per attempted controller, 30 seconds each |
+| Owned subject processes | At most 32 simultaneously active processes in the existing Job Object |
+| Controller and termination | 700-second WSL wait ceiling; at most 10 seconds each for owned compiler and Job termination; emergency Windows termination at most 10 seconds |
+
+The original totals remain fetch 1/1, supplemental fetch 1/1, restore 6/6, publish 2/2,
+positive 1/1, missing 1/1, decoy 1/1, guard 11/11. The new eight-action ceiling includes
+failed starts, interruptions, and manual attempts; unused capacity is not retry authority.
+An action cannot repeat under the same accepted source/protocol revision. A normal
+build or expected-observation failure requires an evidenced correction or diagnostic
+reason and another independently accepted exact amendment before repeating that action.
+A safety stop, incomplete capture, unexpected effects, or unproved quiescence ends all
+execution under this supplement regardless of remaining capacity.
+
+Run these actions sequentially, inspecting each result before continuing:
+
+```text
+python3 tools/probes/windows-native-aot-readiness/run.py restore --accepted ACCEPTED_COMMIT
+python3 tools/probes/windows-native-aot-readiness/run.py publish --accepted ACCEPTED_COMMIT
+python3 tools/probes/windows-native-aot-readiness/run.py cleanup --accepted ACCEPTED_COMMIT
+python3 tools/probes/windows-native-aot-readiness/run.py wrong-architecture --accepted ACCEPTED_COMMIT
+```
+
+Publish requires a successful restore of the same accepted source and a verified
+resolved graph. Runtime requires that source's successful publish and verified artifact
+identities. The output inventory is the native EXE, its PDB, and x64 `msalruntime.dll`;
+retain and stop on an unexpected inventory. Each runtime case gets fresh app and working
+directories and hash-verified copies. Cleanup uses the published x64 DLL. The negative
+case substitutes the genuine package entry
+`runtimes/win-x86/native/msalruntime_x86.dll`, renamed to `msalruntime.dll` in its app
+directory; SHA-256
+`ed45298d791cc6509ca5cdc3ed497b77ddfe6b5c1475c7fe9470b5c0e0f41c28`.
+Do not manufacture or patch a native DLL. Negative success requires rejection before
+allocation with no module loaded and only `BadImageFormatException` or
+`DllNotFoundException`, directly or under `TypeInitializationException`, with the same
+AOT/search/self-check/configuration preconditions. It does not prove ARM64 behavior.
+
+The controller retains the original replacement environments, exact existing
+dotnet/compiler/linker/SDK identities, standalone guard compilation, assign-before-resume
+Job ownership, and bounded capture/termination. Update all dedicated paths to the new
+root. Build commands disable automatic response files, ancestor build/package imports,
+shared compilation/build servers, auditing, and online revocation; SDK roll-forward is
+disabled. No inherited credentials, plugins, proxy, startup hooks, account selectors,
+provider logging, telemetry, registry, or firewall changes are allowed. Existing Windows
+account-state access remains excluded even though this is an existing-user process.
+
+WSL interruption is never evidence of Windows termination. On cancellation/timeout,
+retain a stop marker and recover the controller/compiler PID and creation-time receipts.
+Only an exact still-live identity may be terminated by the source-bound
+`Stop-Controller.ps1`: acquire and retain its process handle, match the receipt's
+creation time, terminate the controller and standalone compiler separately, and wait
+within a combined nine-second budget and ten-second launcher ceiling. Closing the
+controller closes its noninherited kill-on-close Job.
+Never kill shared brokers, unrelated processes, or all dotnet processes. Preserve missing
+or unverifiable identity/quiescence as uncertainty and end the sequence. Subsequent
+invocations reject a stop marker or any missing/incomplete attempt record.
+
+### Evidence and Completion Boundary
+
+Build stdout/stderr remain separate named streams, including empty streams. Screen raw
+and control-normalized text for the historical sensitive-output patterns before
+redaction/truncation. Preserve ordinary public compiler/MSBuild/NuGet text only, with
+the same known-path, URL, email, identifier, unknown-path, and environment-assignment
+rules as the historical sanitizer. The supplemental per-stream limit is 8,192 lines and
+1,048,576 characters; combined transient capture remains at most 8 Mi characters.
+No raw log, binary log, environment dump, native trace, or verbose/diagnostic build is
+permitted. Truncation, suppression, or sensitive output prevents a complete-diagnostics
+claim and stops continuation. Review sanitized text before public retention.
+
+Runtime retains only its strict fixed JSON booleans, cleanup exception count, and
+allowlisted exception types, with no stderr. Retain exact source/accepted revision,
+tool/package/selected-asset identities, start/end times, attempt consumption, command
+class, artifact hashes, compiler diagnostic codes and complete sanitized text, stage,
+capture, exit, normal job count, termination request/outcome, and quiescence. Immediate
+and recovered receipts must enforce the same typed completion predicates. Missing,
+ill-typed, altered, or inconsistent evidence cannot authorize the next action.
+The completion receipt requires an exact evidence-hash map: a successful restore binds
+`restore.json`, a successful publish binds `artifacts.json`, and other completed actions
+bind an explicitly empty map. Verify those hashes before using their retained graph,
+generated imports, or artifact identities.
+
+Review all AOT/trim/compiler/native-link diagnostics against the selected reachable
+surface and public dependency evidence. No blanket suppression or non-AOT fallback is
+permitted. Verify the published EXE's native x64 PE identity, native DLL identity and
+import closure as data; do not execute a debugger or another diagnostic program.
+Use retained public dependency/package bytes and already available parsers only.
+
+Accept observations in this record and amend the assessment, Windows publishing design,
+and validation consumers together when their premises change. Render/review affected
+standard UML/C4 views. Sufficient source, diagnostics, and synthetic observations may
+support selection of Native AOT for the designed .NET 10 Windows x64 target. They cannot
+establish complete application behavior, WAM/UI/account/cache behavior, client Profile,
+fresh-state compatibility, performance, release readiness, or a support promise.
+Preserve attempt 10's unknown stop origin and missing diagnostics; new publishing
+evidence does not retroactively repair that historical record.
+
+Retain all owned files and sanitized evidence intentionally on this host. No account
+cleanup, old-root cleanup, installation, release, or product source/scaffolding is
+authorized. Close the Wave after the bounded design outcome is accepted and stop before
+implementing the minimal Windows CLI.
 
 ## Question and Exact Subject
 
