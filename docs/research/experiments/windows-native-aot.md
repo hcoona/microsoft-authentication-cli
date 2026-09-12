@@ -1,7 +1,7 @@
 # Windows Native AOT Synthetic Experiment
 
 This record owns the exact Issue #76 procedure, the Issue #92 readiness supplement,
-and their cumulative observations. The
+the diagnostic rounds, and their cumulative observations. The
 [accepted Wave](../../delivery-wave.md)
 owns authorization; [experiment safety](../experiment-safety.md) owns general policy.
 The [assessment](../v1-public-contract-baseline.md#windows-native-aot-assessment),
@@ -22,6 +22,194 @@ historical evidence, not a new execution grant. Attempt 10's controller stop, un
 missing publish warnings remain unchanged. These synthetic results establish the tested
 allocation/loading/search path, not WAM authentication, complete native cleanup,
 production publishing, or support.
+
+## Diagnostic Round 01
+
+The accepted buffered Wave permits this separately reviewed diagnostic round after
+PR #98's [actual merged-Wave review](https://github.com/hcoona/microsoft-authentication-cli/pull/98#issuecomment-5645213555).
+The exact amendment must itself merge before any new host preflight, root preparation,
+guard compilation, SDK command, or synthetic runtime. The three older sequences remain
+stopped and read-only. Their historical instructions below are not current execution
+permissions. Issue #92 coordinates the evidence and subsequent design disposition.
+
+### Exact Subject and Allocation
+
+Use one clean detached checkout of the accepted revision. Bind this record and the complete
+[`windows-native-aot-readiness`](../../../tools/probes/windows-native-aot-readiness)
+source directory to that revision, the current target, and accepted Wave SHA-256
+`5e45488af78a27de73702dbbb6a0112ca6294acd7961a1e811295fe310f75327`.
+The source now includes its own diagnostic `WindowsJob.cs`; the original Issue #76 guard
+is unchanged and remains historical evidence. `Program.cs`, the symbol-free project,
+.NET 10.0.401/10.0.12, MSAL/Broker 4.83.1, NativeInterop 0.20.3, and every package/toolchain
+pin are unchanged from the recovery. Only the dedicated feed path, reservation/provenance
+handling, and controller metadata collection change. No product source or MSBuild
+scaffolding is included.
+
+Use only `C:\Temp\azureauth-native-aot-diagnostics\round-01` for new Windows source,
+feed, home/cache/temp, builds, cases, and sanitized receipts. Reject additional round
+roots under its parent. Use the existing WSL scratch directory
+`/tmp/azureauth-wave-work` for the eight exact preflight reservation/result files described
+below; these bookkeeping files precede Windows path verification and contain no host
+paths, private identities, or arbitrary diagnostics. No host directory is created before
+its accepted path check. The operator must run this procedure sequentially; simultaneous
+manual or automated invocations are prohibited.
+
+| Unit | This exact round | Cumulative count after full successful round |
+| --- | --- | --- |
+| Local-feed restore | Attempt 18, once, 180 seconds | Three of ten supplemental/diagnostic restores |
+| Native AOT publish | Attempt 19, once, 600 seconds | Three of ten supplemental/diagnostic publishes |
+| Synthetic cleanup | Attempt 20, once, 30 seconds | One of four cleanup cases |
+| Genuine x86 rejection | Attempt 21, once, 30 seconds | One of four wrong-architecture cases |
+| Standalone guard compilation | One per reserved action, at most four, 30 seconds each | Eight of twenty-eight, including four previously consumed |
+| Corrected Windows metadata preflight | Ordinals 03–06, one per action, 60 seconds each | Six of fifty, including two previously consumed; original rejected check remains separate |
+
+Reserve every unit before starting it, including failures and manual invocations. Each
+`started.json` reserves its action and guard ordinal together before the controller can
+start. Guards 05–08 follow the four previously consumed guards. A failed start consumes
+the reservation even if no subject is launched. Action ordering is fixed; no action
+may repeat in this round. Original thirteen-attempt counts remain separately exhausted.
+The Wave's other seven roots and unused units are not allocated by this revision.
+
+Preflight reservations are `aot-diagnostic-preflight-03-started.json` through
+`aot-diagnostic-preflight-06-started.json`, with corresponding `-completed.json` results
+in the stated WSL scratch directory. Reserve with exclusive file creation before starting
+PowerShell. Require the exact earlier reservation/result inventory, accepted revision,
+result hash binding, and successful checks. Failed or incomplete checks consume their
+ordinal and end this round; no identical check retry is permitted. Retain only the fixed
+classes `direct-paths`, `reparse-point`, `path-query-failed`, `unexpected-output`, `timeout`,
+or `preflight-incomplete`, plus exit code when available and stderr-presence Boolean.
+Unsuccessful exit or stderr rejects even a `direct-paths` response. Never retain raw
+PowerShell streams or exception messages. All current/source/Wave, history and known
+prior completion checks precede another host preflight.
+
+Preserve the original and stopped supplement aggregates. Additionally bind the recovery's
+32 exact source/receipt/artifact inputs in `RECOVERY_FILES`, using the existing ordered
+name/NUL/binary-SHA-256 aggregation:
+`2bd066c64302012b65b9e76bd13c350ac9cacbb042a3385b5c47509869d78ee0`.
+Its action inventory must remain exactly 16–17, with no completion or artifact receipt
+invented for 17. The pinned four WSL corrected-preflight receipts in `PREFLIGHT_HISTORY`
+retain the two consumed checks and their actual outcomes. Verify these historical hashes
+before and after each action; none of these old sources or artifacts may execute.
+The predecessor Windows path check examines only those exact inputs and their lexical
+ancestors, never unused historical home/cache trees. The active round retains recursive
+reparse rejection. A missing, linked, partial, changed, or unrecognized input/root stops
+rather than allowing replacement or cleanup.
+
+Copy only the sixteen hash-verified public archives from the original feed and the
+accepted source; do not install or download anything. This is a reused public-feed
+restore, not evidence of a clean network restore. Preserve the dedicated replacement
+environment, telemetry controls, compiler/SDK hashes, empty synthetic program-files root,
+explicit imports, and complete resolved graph/payload verification. The fresh round
+retains all its files intentionally, including failed preparation and stopped output.
+No authentication, account/cache/WAM state, UI, credential store, resource operation,
+shared server termination, or historical-root cleanup is permitted.
+
+### Bounded Owned-Job Metadata
+
+The exact new observation is one snapshot requested immediately after completed publish
+capture, inside the existing two-second normal Job drain. Restore and runtime actions
+request no metadata. This does not change publish arguments, expected output, or stop
+semantics. Its purpose is to distinguish a specific tool-path class from an unidentified
+survivor before choosing a correction. A snapshot is not atomic with the final Job count;
+only its stated members and times are observed. Do not infer that a sampled process is
+the final survivor when counts, identity, or timing do not support that association.
+
+The diagnostic guard prepares one background thread before subject start and retains
+an explicit reference to its non-null Job handle for the thread's entire lifetime.
+The thread waits for a single request, at most 650 seconds, and never enumerates another
+Job or the host. It uses these documented APIs:
+
+- [QueryInformationJobObject](https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-queryinformationjobobject),
+  class 3, with a single `8 + 32 * pointer-size` buffer for the
+  [Job process list](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_process_id_list).
+  No resize or retry; reject inconsistent counts, overflow, invalid or duplicate PIDs.
+- [OpenProcess](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-openprocess)
+  with only `PROCESS_QUERY_LIMITED_INFORMATION` and noninheritable retained handles.
+  Open only PIDs returned by this Job query. A PID alone never grants inspection authority.
+- [IsProcessInJob](https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob)
+  against that same retained non-null Job, before image access and after it.
+- [GetProcessTimes](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes)
+  on that same process handle before/after image access. Require equal positive creation
+  values no later than the time immediately before the list query; record uncertainty
+  for an unverified incarnation. CPU/exit timing values are discarded.
+- [QueryFullProcessImageNameW](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-queryfullprocessimagenamew)
+  with flag zero and one fixed 32,768-character buffer. Compare its in-memory result to
+  exact known tool locations; never retain arbitrary path text, path hashes, command
+  lines, environment, process memory, accounts, or tokens.
+
+At most one list query and six metadata calls per returned slot are permitted, plus
+one close per opened handle: at most 193 query/open calls and 32 closes. The known
+image classes are `msvc-link`, `msvc-cl`, `msvc-mspdbsrv`, `msvc-mspdbcmf`, `msvc-c1`,
+`msvc-c1xx`, `msvc-c2`, `dotnet-host`, `windows-console-host`, `framework-csc`,
+`native-aot-ilc`, and `unknown`. These labels classify an exact pathname from the pinned
+installation or this round's verified package directory; they do not independently
+attest executable bytes, causation, exclusive service use, or compatibility.
+
+Each of at most 32 slots contains only its numeric ordinal, a fixed state, and its
+fixed image class. A PID and creation `FILETIME` appear only when both membership and
+incarnation checks succeeded. Otherwise both fields are null and the image is `unknown`.
+Per-slot states are `verified-member`, `open-failed`, `budget-ended`,
+`membership-unverified`, `incarnation-unverified`, or `image-unavailable`.
+Snapshot states are `complete`, `budget-ended`, `query-failed`, `invalid-list`,
+`worker-failed`, or `unavailable-at-stop`. This finite shape is below 32 KiB of JSON.
+Known query failures, races, and an unfinished snapshot are explicitly retained unknown
+observations; they do not establish identity and cannot replace missing build diagnostics.
+
+The worker checks cancellation and the same monotonic drain deadline before each query
+and publication. The main controller neither joins the worker nor takes its locks.
+A slow metadata call cannot postpone the normal stop decision, Job termination, or
+emergency controller termination. The two-second drain is charged to the existing action
+clock with at most 100 milliseconds scheduling tolerance. At stop the controller cancels
+sampling and freezes the currently available result without waiting; later worker output
+cannot change that receipt. Thread-owned process handles, buffer and retained Job
+reference are released in `finally`; the worker owns its request event. If a native
+query remains blocked, the bounded controller lifetime closes process-held handles on
+exit. That condition cannot be reported as a completed metadata observation.
+
+Preserve strict normal zero-process completion. Stop the owned Job before screening or
+serializing build diagnostics. The 32-process ceiling, complete capture limits, ten-second
+owned termination budgets, 700-second controller limit, and ten-second emergency ceiling
+remain unchanged. Missing/suppressed/sensitive build diagnostics or unproved termination
+cannot be turned into a permitted metadata-unknown case. Neither a tool label nor Job
+membership authorizes a shared-server exception, unrelated process termination, or
+acceptance of a forcibly terminated helper as successful publication.
+
+### Execution and Continuation
+
+After independent exact-protocol/source acceptance and current prerequisite/recheck
+verification, use the four sequential commands in
+[Sequential Actions and Outcome](#sequential-actions-and-outcome), now bound to this
+accepted diagnostic revision and round. Independently review each action's source,
+reservation, diagnostics, termination, and applicable graph/artifact evidence before
+its dependent action. Restore and publish require exit zero in both immediate and
+recovered completion checks. An otherwise normally completed build with nonzero exit
+creates a durable `build-failed` round stop without relabeling it as a safety failure.
+The genuine wrong-architecture case retains its expected exit one. Before reserving
+another preflight, verify all previous reservations, results, source, required evidence
+maps, graph and artifact identities. Bind an existing root to this exact revision;
+missing source cannot be recopied to repair it. These gates implement independently
+triaged finding N and prevent a failed or changed predecessor from causing another host
+check. Every runtime requires this round's normally completed reviewed
+publish, exact EXE/x64-DLL provenance, and the unchanged genuine x86 negative input.
+Stopped artifacts from any round remain ineligible.
+
+A failure, rejected preflight, safety stop, missing receipt, or source/evidence discrepancy
+ends this round; retain its root read-only. A future round needs independent evidence
+review and applicable finding triage, a decision-relevant correction or diagnostic,
+and independent acceptance of its exact source/protocol amendment. Carry all consumed
+counts, receipts, and stopped roots forward. The accepted Wave permits that use of its
+remaining buffer without repeated owner approval within its effects boundary.
+Failed termination, unresolved processes/quiescence, sensitive or incomplete/suppressed
+build diagnostics, unexpected external effects, or a needed effect outside the grant
+ends all new execution and requires owner disposition.
+
+Accept observations and any changed assessment/design/validation conclusions atomically.
+Native cleanup still establishes only no observed managed/wrapper-reported failure,
+not proof of opaque native deallocation. Genuine x86 rejection proves only this loader
+case. Full application, WAM/UI, dynamic dependencies, product symbols, performance,
+release and support remain separate obligations. Do not select Native AOT from artifact
+presence alone. Complete the bounded publishing-design disposition and stop before
+implementing the minimal Windows CLI.
 
 ## Readiness Supplement
 

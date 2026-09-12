@@ -6,7 +6,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
-$root = 'C:\Temp\azureauth-native-aot-readiness-recovery'
+$root = 'C:\Temp\azureauth-native-aot-diagnostics\round-01'
 $attempt = Join-Path "$root\attempts" $AttemptName
 $vc = 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231'
 $sdk = 'C:\Program Files (x86)\Windows Kits\10'
@@ -98,7 +98,7 @@ function Convert-BuildDiagnostic([string] $Text) {
 
 try {
     # Windows reparse points include junctions that WSL leaf-symlink checks may miss.
-    foreach ($base in @('C:\Temp', $root, "$root\source", "$root\attempts", "$root\feed")) {
+    foreach ($base in @('C:\Temp', 'C:\Temp\azureauth-native-aot-diagnostics', $root, "$root\source", "$root\attempts", "$root\feed")) {
         if ((Get-Item -LiteralPath $base -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
             throw 'Linked input directory'
         }
@@ -207,6 +207,7 @@ try {
     $stage = 'guard-load'
     Add-Type -Path "$attempt\WindowsJob.dll" -ErrorAction Stop -WarningAction Stop
     $guard = New-Object NativeAotJob
+    if ($Action -eq 'publish') { $guard.PrepareMetadata() }
     $stage = 'subject-start'
     $guard.Start($exe, $arguments, $working, $environment)
     $child = $guard.Child
@@ -221,6 +222,7 @@ try {
     $result.activeProcessesAfterCapture = $guard.ActiveProcesses
     $drain = [Diagnostics.Stopwatch]::StartNew()
     $drainLimit = [Math]::Min(2000, [Math]::Max(0, $timeout * 1000 - $watch.ElapsedMilliseconds))
+    if ($Action -eq 'publish') { $guard.RequestMetadata($drain, $drainLimit) }
     while ($guard.ActiveProcesses -ne 0 -and $drain.ElapsedMilliseconds -lt $drainLimit) {
         Start-Sleep -Milliseconds 25
     }
@@ -269,6 +271,7 @@ try {
         $result.terminationFailureType = $_.Exception.GetType().FullName
     }
     if ($guard) {
+        if ($Action -eq 'publish') { $result.jobMetadata = $guard.FinishMetadata() }
         $result.jobActiveBeforeStop = $guard.ActiveBeforeStop
         $result.jobTerminationRequested = $guard.TerminationRequested
         $result.jobTerminationSucceeded = $guard.TerminationSucceeded
