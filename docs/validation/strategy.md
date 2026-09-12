@@ -470,22 +470,23 @@ Record the exact Windows C++ compiler/SDK/linker as well as .NET inputs in its p
 Missing, wrong-architecture or unavailable native assets must fail without probing an
 arbitrary working directory or using a developer-machine dependency.
 
-The diagnostic continuation
-[completed restore and produced a native artifact](../research/experiments/windows-native-aot.md#final-restore-native-artifact-and-controller-stop).
-The corrected Windows environment and complete local feed preserve the exact dependency
-graph. The final publish returned exit 0, followed by a controller safety stop with final
-quiescence but no retained publish diagnostics or uniquely identified stop origin. Do
-not count absent warning fields as zero warnings or artifact presence as a loading test.
-All three loading cases remain unrun, and restore/publish capacity is exhausted. The
-[retained-artifact amendment](../research/experiments/windows-native-aot.md#retained-artifact-stop-disposition)
-permits the three synthetic cases only after independent acceptance of the exact
-historical-stop disposition and unchanged provenance. New results must retain adequate
-stage/capture/termination evidence and normal controller completion. This does not
-recover or satisfy the missing publish-warning review; that obligation remains open
-before production-publishing or implementation-readiness acceptance. Preserve the prior
-artifacts and consumption. Upstream allocation/import,
-restricted search, wrong-architecture rejection, WAM behavior, and full native cleanup
-remain outstanding. No non-AOT exception or disabled platform check is justified.
+The [recorded synthetic results](../research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
+now cover native artifact production and actual Windows-host execution of the exact
+retained EXE. The positive case created MSAL configuration and entered the upstream
+NativeInterop configuration-allocation import with the module loaded from the application
+directory. Missing-library and working-directory/PATH-decoy cases both returned
+`DllNotFoundException` without loading the module. All three had explicit normal controller
+completion, zero job-process counts, and no termination request. These observations
+satisfy those three synthetic cases only; all experiment capacity is consumed.
+
+The producing publish's historical controller stop still has no uniquely identified
+origin or retained AOT/trim diagnostics. The accepted retained-artifact disposition
+preserves that uncertainty; new runtime success does not satisfy publish-warning review
+or prove every native release/shutdown operation. Before implementation readiness or
+production publishing, retain the outstanding warning/dependency, full native cleanup,
+wrong-architecture, WAM/UI/authentication and complete-application evidence obligations.
+Preserve historical artifacts, receipts, consumption and trust-processing uncertainty.
+No non-AOT exception or disabled platform check is justified by these results.
 
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later candidate tests must cover HWND

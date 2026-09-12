@@ -9,13 +9,18 @@ and [validation strategy](../../validation/strategy.md#native-aot-publishing) co
 the bounded conclusion. The historical Windows MSAL and tooling protocols retain their
 exhausted capacities; none of their helpers or subjects may execute here.
 
-The final corrected restore succeeded, and the last publish returned exit 0 and produced
-an x64 native executable. Its controller recorded a safety stop before retaining publish
-diagnostics; the exact originating stage and warnings remain unavailable. Final owned
-quiescence is recorded. The current amendment dispositions only use of that retained
-artifact for the three previously unrun synthetic cases under the accepted Wave. It
-preserves the stop, all exhausted build/download capacity, and every prior receipt.
-No case result is claimed before execution.
+The retained .NET 10 Native AOT EXE has now executed on the Windows host through WSL.
+The positive case created MSAL configuration and entered the upstream NativeInterop
+configuration-allocation path with the native DLL loaded from the application directory.
+Both missing-library and working-directory/PATH-decoy cases returned
+`System.DllNotFoundException` without loading that module. All three controllers completed
+normally with quiescence and no safety stop or termination request.
+
+All experiment capacity is consumed. The retained procedure and artifacts are evidence,
+not a new execution grant. Attempt 10's historical controller stop, unknown origin and
+missing publish warnings remain unchanged. These synthetic results establish the tested
+allocation/loading/search path, not WAM authentication, complete native cleanup,
+production publishing, or support.
 
 ## Question and Exact Subject
 
@@ -188,7 +193,8 @@ ancestry, detached checkout, Windows source copies, prior receipt/marker hashes,
 sequential consumption, all sixteen feed archives, retained earlier evidence, and the
 three published file identities from the final-publish observation below.
 
-Only these commands remain available, in this order, once each:
+The accepted runtime continuation used these commands in order, once each. Their
+capacity is now consumed; they are retained for provenance, not replay:
 
 ```text
 python3 tools/probes/windows-native-aot/run.py positive --accepted ACCEPTED_COMMIT
@@ -822,6 +828,94 @@ was executed, and no account/session cleanup occurred. Historical Windows trust-
 uncertainty remains unchanged. Production publishing, full native cleanup, WAM behavior,
 wrong-architecture rejection, and support remain unvalidated; no non-AOT exception or
 alternative host is selected. PR #88 closed that bounded diagnosis Wave after accepting this evidence.
+
+### Retained Native Artifact Runtime Results
+
+Attempts 11–13 ran under accepted PR #90 commit
+`8c090c5c6706ff777c422ed0b8eb7282e4964d92`, tree
+`7a2185ae4a5679ff8faac3ffad72879a54fcd74b`, after PR #89's accepted grant and actual
+postmerge fallback, independent source/protocol/consumer review, independent finding
+triage, sixteen isolated prerequisite/completion checks, four in-memory Windows
+PowerShell capture fixtures, mandatory commit checks, full hk, and
+[CI](https://github.com/hcoona/microsoft-authentication-cli/actions/runs/34678174013).
+Each action refreshed the accepted target and used the detached PR #90 checkout. The
+subject remained the exact PR #86 EXE and native DLL, with no new restore, publish,
+download, probe API, project, SDK-selection, or dependency change.
+
+The accepted one-time migration preserved the old root, twenty attempt receipts, five
+revision markers, native outputs, earlier retained build evidence and public archives.
+Only the three controller sources changed; the four probe/configuration source copies
+stayed byte-identical. The new marker records this explicit case-only stop disposition
+and prior consumption. Each new start receipt binds all seven source files and the exact
+executed PR #90 protocol. The wrapper and Windows helper verified artifact identities;
+post-run inspection confirmed each case's exact file inventory and matching hashes.
+
+| Attempt | UTC interval on September 12, 2026 | Actual observation |
+| --- | --- | --- |
+| 11: positive | 06:32:37.371433–06:32:39.4964068 | Subject exit 0; configuration created; native module loaded from the application directory. |
+| 12: missing | 06:32:49.088133–06:32:51.0627661 | Subject exit 1; `System.DllNotFoundException`; native module not loaded. |
+| 13: decoy | 06:32:58.478174–06:33:00.4672643 | Subject exit 1; `System.DllNotFoundException`; native module not loaded. |
+
+**Runtime observations:** All three subjects reported `nativeAot=true`,
+`restrictedSearch=true`, `unexpectedPreload=false`, and `builderCreated=true`. Positive
+reported `operation=configuration_created`, empty exception type, and both native-module
+Booleans true. Missing and decoy reported `operation=exception`, the fixed exception above,
+and both native-module Booleans false; neither emitted a native status. The decoy case
+contained the genuine DLL only in the working directory, which was also first in PATH.
+All three application directories contained the same 2,419,200-byte EXE; only positive
+also contained the 2,949,656-byte DLL. Their hashes are the final-publish identities above.
+
+**Controller observations:** Every guard compilation exited 0. Every result has
+`captureCompleted=true`, `stage=completed`, `safetyStop=false`, and `quiescent=true`.
+Both the normal-exit and final-stop job counts were zero. No compiler or job termination
+was requested; the job termination-success flag is false because that API was not called.
+The recorded capture intervals were 0.254, 0.257, and 0.284 seconds, respectively. These
+are controller observations from single runs, not a startup or performance benchmark.
+The negative subject exits are expected observations, not failed controller executions.
+
+**Bounded inference:** This exact Windows x64 .NET 10/MSAL 4.83.1/Broker 4.83.1/
+NativeInterop 0.20.3 synthetic executable can run as Native AOT, build its in-memory MSAL
+configuration, and enter the actual upstream configuration-allocation import under the
+application-directory/System32 search restriction. The two negative cases demonstrate
+missing-library failure and rejection of this working-directory/PATH placement. No
+loader workaround, dynamic loading fallback, guard suppression, or non-AOT mode was used.
+The source's managed disposal path returned, but upstream cleanup catches exceptions;
+this observation does not prove every native release/shutdown operation succeeded.
+
+| Retained runtime evidence | SHA-256 |
+| --- | --- |
+| Attempt 11 started.json | `45efcd1ff681867619a9b395cfb5f4d30deb99fcca3715bc707e46f3747ed70b` |
+| Attempt 11 result.json | `707d9bfb3cbc14f653a2095428e2c7fe38b4228bf08382c02ae00ea0bc577c31` |
+| Attempt 12 started.json | `4999179185701ed22ab87e7747d1828cba68181c3611df2db383340bf2001c5a` |
+| Attempt 12 result.json | `2db27e1b262528e41a89222a2c0974d2c2b56b2776681c8019aea22712d50001` |
+| Attempt 13 started.json | `16abde0120a100299833a39ba32cc75e377a37903dd38ce63c950e5396bfdd44` |
+| Attempt 13 result.json | `cefdc2b0a294db54c6f172eeaf4b34dd0f601c4d65762dcf28d7044d3da4f63e` |
+| Runtime revision marker | `dbf1fca23e052d3195b64dc98a2a6ab366d6bf319b16b0d6a73b33a37803f99f` |
+| Executed PR #90 protocol | `8475886b8f195fa7fa048a1c515b144e089b20931a3bae6266ae84e0859c4d04` |
+| Executed run.py | `30f8df44b3ed94d1955e4735aa8b33496dd4f6b86a88277942b3a1b3d3da76e2` |
+| Executed Invoke-Action.ps1 | `ff4bcce993b754a911c3b11cd85e922f96f54eea2326807c540e54c6208d8586` |
+| Executed WindowsJob.cs | `0dc397cb92acb3645b71e4e2a8995e00e0327d7324e389a7c3b5e55ad2b2e07a` |
+
+**Final disposition and retention:** All thirteen sequential attempts have complete
+receipts, with no manual replay or interrupted reservation. Cumulative consumption is
+original fetch **1/1**, supplemental fetch **1/1**, restore **6/6**, publish **2/2**,
+positive/missing/decoy **1/1 each**, and guard bootstrap **11/11**. All three runtime
+cases completed within their limits, without an unresolved owned subject. Sources, feed,
+caches, native/managed outputs, case files, guard artifacts and sanitized receipts remain
+intentionally retained. No account/cache/session cleanup or unrelated-host change was
+performed. The declared call boundary includes no account enumeration, token acquisition,
+broker startup/session, UI, or resource operation; runtime success does not provide
+observations of those uninvoked paths.
+
+The synthetic runtime question is resolved for this one retained artifact and host.
+Attempt 10 remains a historical controller stop with an unknown origin and unavailable
+publish diagnostics; successful cases neither diagnose that old stop nor imply zero
+AOT/trim warnings. Earlier Windows trust-processing uncertainty and the opaque native
+initializer's evidence limits remain. Wrong-architecture handling, full native cleanup,
+WAM/UI/authentication, complete application behavior, publish-warning review and production
+support remain separate validation obligations. The assessment, Windows design and
+validation strategy consume these narrower results without selecting a production mode
+or a non-AOT exception. No further execution is authorized by this recorded procedure.
 
 ### Fetched Public Archive Identities
 

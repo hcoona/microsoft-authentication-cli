@@ -1507,19 +1507,24 @@ artifact closure must be evaluated on the resolved graph before selecting that m
 No startup, memory, size, authentication, or cancellation benefit was measured.
 
 **Synthetic runtime outcome, September 12, 2026:** The
-[Windows Native AOT experiment](experiments/windows-native-aot.md#final-restore-native-artifact-and-controller-stop)
+[Windows Native AOT experiment](experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
 resolved the observed restore failures: omitted program-files inputs broke NuGet
-configuration initialization, and two SDK runtime packs were missing from the local feed.
-Both were publicly downloadable, and the final restore retained the expected exact graph.
-The first publish's cross-OS guard was explained by the missing Windows `OS` input.
-After that correction, the last publish returned exit 0 and produced an x64 native EXE
-and the archive-matching native DLL. A controller safety stop then prevented diagnostic
-retention and all loading cases; final owned-process quiescence is recorded, but the
-precise stop origin and publish warnings are unavailable. All restore/publish capacity
-is consumed. This establishes native artifact production for the synthetic subject,
-not upstream allocation/loading success or a warning-free publish. No package
-incompatibility, non-AOT exception, or production-publishing selection follows. The
-remaining runtime premise and historical trust-processing uncertainty stay explicit.
+configuration initialization, and two publicly downloadable SDK runtime packs were
+missing from the local feed. Correcting the actual Windows OS input then allowed native
+artifact production. Its controller stopped before retaining publish diagnostics; that
+historical stop's precise origin and warnings remain unknown.
+
+Under a separately accepted retained-artifact protocol, the native EXE actually ran on
+the Windows host through WSL. Positive reported Native AOT, successful MSAL configuration
+construction and upstream NativeInterop configuration allocation, with the native module
+loaded from the application directory. Missing and working-directory/PATH-decoy cases
+both returned `DllNotFoundException` without loading the module. All three controllers
+completed normally with zero job-process counts and no termination request. This resolves
+the tested synthetic allocation/loading/search premise for the exact pinned artifact.
+It does not establish warning-free compilation, every native cleanup operation, actual
+WAM/UI/authentication, wrong-architecture rejection or full application compatibility.
+All experiment capacity is consumed. No non-AOT exception or production-publishing
+selection follows, and historical trust-processing uncertainty remains explicit.
 
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by
