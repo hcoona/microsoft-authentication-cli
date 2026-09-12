@@ -147,6 +147,7 @@ def windows_paths():
     # Read-only host preflight precedes all dedicated-root writes, including initial copy.
     script = r'''
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 try {
     $queue = New-Object 'Collections.Generic.Queue[string]'
     foreach ($path in @('C:\', 'C:\Temp', 'C:\Temp\azureauth-native-aot-76',
