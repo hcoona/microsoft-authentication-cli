@@ -1,17 +1,21 @@
-"""Issue #76 only: accepted-source gate, bounded public fetch, Windows handoff."""
+"""Issue #76 only: preserve accepted attempts and hand off remaining Windows actions."""
 
 import argparse
 import datetime
 import hashlib
 import json
 import pathlib
-import signal
 import subprocess
-import time
-import urllib.request
 
 
 ROOT = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-76')
+INITIAL = '3f21223c0d83aa8d2bb872499c40a4b08de1dcfe'
+INITIAL_RECEIPTS = {
+    '01/started.json': '979db8fdf83c0435a32c74c7458b4f6686dc8dd31e8f6fc10179fd335832c820',
+    '01/result.json': '8d5e5176aaa1c157338c1988c253b539a84f9fd48437b979e61eea723bfb47a5',
+    '02/started.json': 'f10a9936a7c417a89f9194823879fd0d83ff31bcf9655b933296013493fba97e',
+    '02/result.json': 'aa3358a4bc992d6fec9d36687d759a5eb0f4ff2dbfab03c58492936d97c62606',
+}
 REL = 'tools/probes/windows-native-aot/'
 PROTOCOL = 'docs/research/experiments/windows-native-aot.md'
 FILES = ['run.py', 'Invoke-Action.ps1', 'WindowsJob.cs', 'Program.cs', 'NativeAotProbe.csproj',
@@ -46,22 +50,14 @@ def now():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
 
 
-class NoRedirect(urllib.request.HTTPRedirectHandler):
-    def redirect_request(self, *args, **kwargs):
-        raise RuntimeError('Redirect rejected before another request')
-
-
-def fetch_deadline(signum, frame):
-    raise TimeoutError('Public fetch deadline reached')
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=LIMITS)
+    parser.add_argument('action', choices=[key for key in LIMITS if key != 'fetch'])
     parser.add_argument('--accepted', required=True, help='Merged protocol commit')
     args = parser.parse_args()
     accepted = git('rev-parse', args.accepted).decode().strip()
     target = git('rev-parse', 'origin/main-v2').decode().strip()
+    git('merge-base', '--is-ancestor', INITIAL, accepted)
     git('merge-base', '--is-ancestor', accepted, target)
     expected_wave = git('show', '5e1d0055e3ca933a23b3082283ab9cd28f4d88dc:docs/delivery-wave.md')
     if git('show', target + ':docs/delivery-wave.md') != expected_wave:
@@ -78,17 +74,18 @@ def main():
             raise SystemExit('Accepted source mismatch.')
     if ROOT.is_symlink():
         raise SystemExit('Experiment root must not be a link.')
-    if args.action == 'fetch':
-        ROOT.mkdir()  # An existing root cannot be silently adopted or replayed.
-        write(ROOT / 'identity.json', {'accepted': accepted, 'created': now()})
-        for name in ('feed', 'src', 'attempts', 'home', 'temp', 'packages', 'http', 'out'):
-            (ROOT / name).mkdir()
-        for name in FILES:
-            (ROOT / 'src' / name).write_bytes(sources[REL + name])
-    if json.loads((ROOT / 'identity.json').read_text())['accepted'] != accepted:
-        raise SystemExit('Root belongs to another subject; amendment must preserve capacity.')
+    if json.loads((ROOT / 'identity.json').read_text())['accepted'] != INITIAL:
+        raise SystemExit('The original experiment root is required.')
+    for path, digest in INITIAL_RECEIPTS.items():
+        if hashlib.sha256((ROOT / 'attempts' / path).read_bytes()).hexdigest() != digest:
+            raise SystemExit('Original attempt evidence changed.')
+    revision_file = ROOT / 'source-revision.json'
+    prior_revision = json.loads(revision_file.read_text())['accepted'] if revision_file.exists() else INITIAL
+    if prior_revision not in (INITIAL, accepted):
+        raise SystemExit('Another amendment needs explicit acceptance.')
     for name in FILES:
-        if (ROOT / 'src' / name).read_bytes() != sources[REL + name]:
+        copied = ROOT / 'src' / name
+        if copied.is_symlink() or copied.read_bytes() != git('show', prior_revision + ':' + REL + name):
             raise SystemExit('Windows source copy mismatch.')
     attempts = sorted((ROOT / 'attempts').iterdir())
     counts = {key: 0 for key in LIMITS}
@@ -96,7 +93,7 @@ def main():
     for attempt in attempts:
         started = json.loads((attempt / 'started.json').read_text())
         counts[started['action']] += 1
-        result = json.loads((attempt / 'result.json').read_text())
+        result = json.loads((attempt / 'result.json').read_text(encoding='utf-8-sig'))
         if result.get('safetyStop') or not result.get('quiescent'):
             raise SystemExit('Previous safety stop or uncertain termination; no continuation.')
         completed.append((started['action'], result))
@@ -104,22 +101,29 @@ def main():
         raise SystemExit('Cumulative attempt capacity exhausted.')
     prerequisite = 'fetch' if args.action == 'restore' else (
         'restore' if args.action == 'publish' else 'publish')
-    if args.action != 'fetch' and not any(
+    if not any(
             action == prerequisite and result['exitCode'] == 0
             for action, result in completed):
         raise SystemExit('Prerequisite has no successful recorded outcome.')
-    if args.action != 'fetch':
-        fetched = next(result for action, result in completed if action == 'fetch')
-        for package in fetched['packages']:
-            name = f"{package['id'].lower()}.{package['version']}.nupkg"
-            if hashlib.sha512((ROOT / 'feed' / name).read_bytes()).hexdigest() != package['sha512']:
-                raise SystemExit('Public feed artifact changed.')
+    fetched = next(result for action, result in completed if action == 'fetch')
+    for package in fetched['packages']:
+        name = f"{package['id'].lower()}.{package['version']}.nupkg"
+        if hashlib.sha512((ROOT / 'feed' / name).read_bytes()).hexdigest() != package['sha512']:
+            raise SystemExit('Public feed artifact changed.')
     if args.action == 'publish':
         assets = json.loads((ROOT / 'src' / 'obj' / 'project.assets.json').read_text())
         for name_version, library in assets['libraries'].items():
             name, version = name_version.rsplit('/', 1)
             if library['type'] != 'package' or PACKAGES.get(name) != version:
                 raise SystemExit('Resolved dependency outside accepted closure.')
+    if prior_revision == INITIAL:
+        if args.action != 'restore' or [path.name for path in attempts] != ['01', '02']:
+            raise SystemExit('Only the recorded first-restore amendment is supported.')
+        # Preserve original identity and receipts. A partial copy fails closed next time.
+        for name in FILES:
+            (ROOT / 'src' / name).write_bytes(sources[REL + name])
+        write(revision_file, {'initial': INITIAL, 'accepted': accepted,
+                             'changed': now(), 'priorConsumption': counts})
     # mkdir is the sequential reservation. Missing results block all later invocations.
     attempt = ROOT / 'attempts' / f'{len(attempts) + 1:02d}'
     attempt.mkdir()
@@ -127,49 +131,13 @@ def main():
           'target': target, 'started': now(), 'priorConsumption': counts,
           'sourceSha256': {path: hashlib.sha256(data).hexdigest()
                            for path, data in sources.items()}})
-    if args.action == 'fetch':
-        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
-        downloaded = []
-        start = time.monotonic()
-        total = 0
-        previous_handler = signal.signal(signal.SIGALRM, fetch_deadline)
-        signal.setitimer(signal.ITIMER_REAL, 600)
-        try:
-            for name, version in PACKAGES.items():
-                filename = f'{name.lower()}.{version}.nupkg'
-                url = f'https://api.nuget.org/v3-flatcontainer/{name.lower()}/{version}/{filename}'
-                size = 0
-                digest = hashlib.sha512()
-                with opener.open(url, timeout=30) as response, (ROOT / 'feed' / filename).open('xb') as output:
-                    if response.url != url:
-                        raise RuntimeError('Unexpected redirect')
-                    while chunk := response.read(1024 * 1024):
-                        size += len(chunk)
-                        total += len(chunk)
-                        if size > 300 * 1024**2 or total > 1536 * 1024**2 or time.monotonic() - start > 600:
-                            raise RuntimeError('Download bound')
-                        digest.update(chunk)
-                        output.write(chunk)
-                downloaded.append({'id': name, 'version': version, 'bytes': size,
-                                   'sha512': digest.hexdigest()})
-            result = {'exitCode': 0, 'quiescent': True, 'safetyStop': False,
-                      'packages': downloaded, 'ended': now()}
-        except BaseException as error:
-            result = {'exitCode': 1, 'quiescent': True, 'safetyStop': True,
-                      'errorType': type(error).__name__, 'packages': downloaded, 'ended': now()}
-        finally:
-            signal.setitimer(signal.ITIMER_REAL, 0)
-            signal.signal(signal.SIGALRM, previous_handler)
-        write(attempt / 'result.json', result)
-    else:
-        powershell = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
-        cmd = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-               r'C:\Temp\azureauth-native-aot-76\src\Invoke-Action.ps1',
-               '-Action', args.action, '-AttemptName', attempt.name]
-        # PowerShell owns Windows process termination. Interrupting this wait is a stop,
-        # not proof that the Windows child was killed. Recover its local PID receipt.
-        subprocess.run(cmd, check=False, timeout=1300)
-        result = json.loads((attempt / 'result.json').read_text(encoding='utf-8-sig'))
+    powershell = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
+    cmd = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
+           r'C:\Temp\azureauth-native-aot-76\src\Invoke-Action.ps1',
+           '-Action', args.action, '-AttemptName', attempt.name]
+    # Windows owns termination; a WSL interruption is not a termination receipt.
+    subprocess.run(cmd, check=False, timeout=1300)
+    result = json.loads((attempt / 'result.json').read_text(encoding='utf-8-sig'))
     print(json.dumps(result, indent=2))
 
 
