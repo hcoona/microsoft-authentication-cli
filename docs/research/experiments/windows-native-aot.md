@@ -25,6 +25,9 @@ production publishing, or support.
 
 ## Diagnostic Round 03
 
+**Stopped historical round:** Only restore 20 and publish 21 ran; see
+[results](#diagnostic-round-03-results). Its unstarted cases are not executable.
+
 Round 02 ended at its [rejected metadata preflight](#diagnostic-round-02-preflight-result),
 before host-root preparation, guard compilation or restore. Independent triage confirmed
 a command-length defect. This fresh exact amendment reduces only preflight transport
@@ -91,6 +94,83 @@ state, installation or remote effect is introduced. The finite snapshot and all 
 round-stop/global-stop, retention and per-action independent review obligations remain
 those of Round 02. Another fresh round still requires reviewed evidence and an accepted
 exact amendment within the remaining Wave; no invalid command may be retried incidentally.
+
+### Diagnostic Round 03 Results
+
+PR #101 accepted protocol/source `d50a9caebf28e57fea0354c8a7c45a1e113fa6e8`,
+tree `19117f9a34cb26c98f296982ffefbe7cab7a9eb1`. The clean detached runner executed
+only restore 20 and publish 21 on September 12, 2026 UTC, using the same .NET SDK
+10.0.401, runtime 10.0.12, Windows x64 host, native toolchain and provider pins as
+Round 02. The compact preflight command preserved all 146 predecessor paths and their
+ancestor-query order in 23,254 UTF-16 units including NUL. Corrected preflights 06
+and 07 both passed. This demonstrates this representation worked for these checks;
+it does not reconstruct rejected preflight 05's discarded error.
+
+**Restore 20:** The subject and guard exited zero. The subject took 9.186 seconds,
+including a 0.007-second normal drain; every retained Job count was zero. No termination
+or safety stop occurred. Complete screened output contained 194 stdout characters,
+zero stderr characters and no diagnostic code. The runner verified the ten-library
+resolved graph, 187 package payloads and 1,058 download-pack payloads and retained bound
+restore/completion records. Independent review accepted the result before publish 21.
+This reused the verified public archive feed; it is not a clean network restore.
+
+**Publish 21:** The subject and guard exited zero after generating native code, but the
+controller stopped at `normal-quiescence`. The subject took 22.212 seconds with a
+2.021-second drain, within the existing scheduling tolerance. One Job process remained
+at capture completion and normal-exit checking. Owned Job termination was requested and
+succeeded; final quiescence was true and `safetyStop` was true. Complete screened output
+contained 315 stdout characters, zero stderr characters, no suppressed/truncated or
+sensitive lines, and no AOT, trimming, compiler or linker diagnostic code. The runner
+exited one and retained `stopped.json`; no publish `completion.json` or `artifacts.json`
+was issued. Cleanup 22 and wrong-architecture case 23 never ran.
+
+The one bounded metadata snapshot was `complete` and contained one `verified-member`
+with valid same-handle incarnation/membership checks. Its finite classes were
+`ImageClass=msvc-vctip`, `BasenameClass=vctip` and `LocationClass=msvc-bin-text`.
+The first class means the sampled image string matched the fixed expected MSVC
+`vctip.exe` path; the other two are lexical classifications. They do not attest binary
+bytes or canonical path identity, exclusive service use, launch cause, network or
+persistent-state effects, or the identity of an atomically sampled final survivor.
+Do not assign this identity to any earlier unknown process observation.
+
+| Retained evidence | SHA-256 |
+| --- | --- |
+| Restore 20 reservation | `f342219aec7dc4cb0f62876c973900a18ee7221f9b737904cc93af59d521518a` |
+| Restore 20 result | `3ff7c1f9c44fa7cf4dd47fc8d57bf0d681d82e2d55ad7c58adc06b635fdc7243` |
+| Restore 20 graph/payload receipt | `80f0db8850a1d338e1d11fc84a7af80cee1ad061ff50c4c922f403b890c82d52` |
+| Restore 20 completion | `540a19a3c66db8777e7537f675f627a32d3d34ef512ba7db3d4bc745d5f92ee8` |
+| Publish 21 reservation | `ea21ed571a5d34b5a684858846717a3ff05b217bbdedd00bc21ea34543d59021` |
+| Publish 21 result | `f3ccf6e794d347f0f35d5a0e3bdf03d796952a6e1b3ff98143815ba058c81dd9` |
+| Round 03 stop | `2a5dbaf802214ec0dd28e0641ecc31ef7362d956e65f78e44037291eb5312e60` |
+| Independently frozen 32-file round inventory | `0f2263722a0b1f8a6080304326ae97d678a4b919b2d813d0e3d6fb54bd7cd9ac` |
+| Preflight 06 reservation/result | `a911546f997268f2fdcbb4d7392f5afae89483a2959895db265dc50eea160a4f` / `1f7b6d02f0ad0fa655343d4921d09caa5c6eb147a2affd58dbe3fb8b014f8d4c` |
+| Preflight 07 reservation/result | `a51e283e44db8fbffc4cb2dd41aad4806891bf61541cb955b5eb954fbef11eaa` / `65256a1db9fc39e001719e44e95c7387bdb775649368714a95e156d85e429e93` |
+
+The round is stopped and its root is retained read-only. Cumulative supplemental and
+diagnostic consumption is restore four, publish four, guard eight, corrected preflight
+seven and synthetic runtimes zero. Remaining buffer is six restores, six publishes,
+four cleanup cases, four x86 cases, twenty guards and forty-three corrected preflights.
+The original thirteen attempts and original rejected preflight remain separate. No
+remaining capacity authorizes an identical retry, stopped-root runtime, or a changed
+completion rule.
+
+#### Public VCTIP Lifecycle Evidence
+
+Public source research after the observation found the following bounded facts:
+
+| Public source | Finding and limit |
+| --- | --- |
+| [BuildXL MSVC definition](https://github.com/microsoft/BuildXL/blob/280e155410f72498fbf908913e7027a99c0892e1/Public/Sdk/Experimental/Msvc/VisualCpp/visualCpp.dsc) | Microsoft identifies `VCTIP.EXE` as the VC++ Technology Improvement Program telemetry uploader and lists it among surviving compiler children. This describes that tool's role, not observed uploads or state access in this experiment. |
+| [BuildXL MSBuild process construction](https://github.com/microsoft/BuildXL/blob/280e155410f72498fbf908913e7027a99c0892e1/Public/Src/FrontEnd/MsBuild/PipConstructor.cs) and [process-breakaway documentation](https://github.com/microsoft/BuildXL/blob/280e155410f72498fbf908913e7027a99c0892e1/Documentation/Wiki/Advanced-Features/Process-breakaway.md) | Microsoft has explicit surviving-child termination and sandbox-breakaway mechanisms. The latter makes escaped behavior unknown to BuildXL. Neither mechanism grants an exception to this experiment's strict zero-process normal completion and bounded-effects rules. |
+| [Visual Studio Customer Experience Improvement Program](https://learn.microsoft.com/en-us/visualstudio/ide/visual-studio-experience-improvement-program) | The documented opt-out changes IDE privacy settings or registry state, covers optional diagnostic collection, and does not promise that VCTIP never starts. The searched public guidance did not establish a process-local suppression control for the pinned compiler. This is a search limit, not proof that no control exists. |
+
+The retained output supports the exact synthetic compilation/diagnostic premise. Normal
+publish acceptance, native cleanup, x86 rejection and dynamic dependency closure remain
+open. Native AOT stays the preferred candidate with an unresolved publishing choice;
+this lifecycle stop is not evidence of an MSAL/Broker/NativeInterop compilation failure.
+Further execution needs a supported correction inside the accepted Wave or an explicit
+owner disposition for any changed completion/effects boundary, followed by acceptance
+of an exact protocol. Public examples cannot relax this repository's accepted boundary.
 
 ## Diagnostic Round 02
 
