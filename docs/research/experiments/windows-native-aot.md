@@ -9,13 +9,12 @@ and [validation strategy](../../validation/strategy.md#native-aot-publishing) co
 the bounded conclusion. The historical Windows MSAL and tooling protocols retain their
 exhausted capacities; none of their helpers or subjects may execute here.
 
-The diagnostic restore identified a NuGet configuration-initialization failure caused
-by missing program-files environment variables. Three restores have failed; no resolved
-assets, Native AOT publish, or loading result exists. The current amendment supplies
-dedicated empty program-files roots while preserving the command, toolchain, packages,
-synthetic program, and six-restore cumulative ceiling. The remedy still requires
-independent acceptance and runtime validation; the diagnosed failure is not an AOT or
-package-incompatibility result.
+The program-files environment correction removed the NuGet configuration-initialization
+failure. The fourth restore reached dependency resolution and reported two missing SDK
+runtime-pack archives in the local feed. Its partial assets are not a successful closure.
+The current amendment adds one bounded supplemental fetch for those exact public inputs,
+preserving source provenance, all five attempts, and every Windows-action ceiling.
+Native AOT publish and loading remain untested.
 
 ## Question and Exact Subject
 
@@ -39,7 +38,7 @@ this record does not need a self-referential commit hash. No product source is b
 | Project | `net10.0-windows`, `win-x64`, Release, `PublishAot=true`, self-contained; exact properties and commands in the accepted source |
 | MSAL | Client and Broker 4.83.1; NativeInterop 0.20.3; modern selected assets expected to be net8.0, netstandard2.0, and net9.0, respectively; confirm from actual assets before interpreting results |
 | Managed closure | Abstractions 8.14.0, DiagnosticSource 6.0.1, Unsafe 6.0.0, ValueTuple 4.5.0; exact direct constraints prevent transitive floating |
-| SDK package candidates | Seven 10.0.12 packages enumerated in `run.py`, including the separate NativeAOT runtime pack; unused candidates are not claimed as resolved dependencies |
+| SDK package candidates | Seven original 10.0.12 candidates plus the two evidenced supplemental runtime packs below; unused candidates are not claimed as resolved application dependencies |
 | VC tools | Existing Visual Studio 18 Enterprise, `VC/Tools/MSVC/14.51.36231`, Hostx64/x64; actual `link.exe` file version 14.51.36257.0 and `cl.exe` 19.51.36257.0 |
 | Windows SDK | Existing 10.0.26100.0 x64 UM and UCRT libraries and tools, with the selected VC x64 libraries; no floating discovery through `vcvarsall` |
 | Tool selection | `IlcUseEnvironmentalTools=true`, explicit `CppLinker`, and exact child `PATH`, `LIB`, and `INCLUDE`; the helper checks recorded SHA-256 identities for dotnet, link, cl, kernel32.lib, and ucrt.lib before a child starts |
@@ -110,7 +109,7 @@ workstation experiment under documented OS/process contracts, not a hostile-code
 or isolation of the Windows account. No registry, firewall, global tool, machine
 configuration, credential store, or unrelated application state may be changed.
 
-The fetch uses Python's standard-library HTTPS client without inherited proxy/auth
+Both fetch batches use Python's standard-library HTTPS client without inherited proxy/auth
 handlers, one fixed public flat-container URL per exact package. Restore uses only that
 local feed and an initially empty dedicated package cache. Later retries may use that
 cache and must not be called clean restores. Public-download success and local-feed
@@ -133,8 +132,8 @@ inventory or command lines are retained.
 NuGet's CoreCLR implementation requires `PROGRAMFILES(X86)` or its `PROGRAMFILES`
 fallback when initializing default configuration, even with `--configfile`. Both are
 set to the single dedicated `C:\Temp\azureauth-native-aot-76\empty-program-files`
-directory. Its absence is required before the one accepted source migration; the wrapper
-creates it and records that migration, then requires the directory to remain present,
+directory. PR #84 created it during its accepted source migration. The wrapper
+requires the directory to remain present,
 empty, and not a link before every action. No real machine-wide NuGet configuration is
 read through these variables. Existing dotnet, compiler, linker, and SDK paths remain
 explicit and unchanged. Do not populate this directory, copy host configuration into it,
@@ -147,16 +146,30 @@ Wave and exact protocol remain current, recovers the required independent review
 CI/commit-check receipts, and checks prior attempt results. Material prerequisite drift
 requires refreshed review. The wrapper checks ancestry, current Wave bytes, checkout
 and Windows-copy source bytes, prior consumption, feed identities, and prerequisites.
-The environment amendment uses its own merged commit as `ACCEPTED_COMMIT` in a detached
-checkout. The next restore retains PR #79's command and all environment entries, adding
-only the two dedicated program-files entries above. The controller retains PR #83's
-sanitized ordinary build diagnostics under the contract below. Public-fetch capacity
-remains one consumed batch in this exact
-protocol; the wrapper cannot fetch or create another root. The Wave's conditional extra
-fetch remains inactive unless a demonstrated missing dependency receives a separately
-accepted exact manifest and protocol within that Wave's cumulative bounds:
+The runtime-pack amendment uses its own merged commit as `ACCEPTED_COMMIT` in a detached
+checkout. All Windows source, commands, environment, toolchain, and probe APIs remain
+identical to PR #84. Only the WSL wrapper changes to supply the evidenced missing public
+archives. AOT-AUTHOR-013 was independently triaged as a blocking true positive: attempt
+05's two exact download requests and absent local-feed archives satisfy the accepted
+Wave's conditional-fetch criterion. This exact manifest narrows that allowance to:
+
+| Additional archive ID | Version | Fixed public URL |
+| --- | --- | --- |
+| Microsoft.WindowsDesktop.App.Runtime.win-x64 | 10.0.12 | `https://api.nuget.org/v3-flatcontainer/microsoft.windowsdesktop.app.runtime.win-x64/10.0.12/microsoft.windowsdesktop.app.runtime.win-x64.10.0.12.nupkg` |
+| Microsoft.AspNetCore.App.Runtime.win-x64 | 10.0.12 | `https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.app.runtime.win-x64/10.0.12/microsoft.aspnetcore.app.runtime.win-x64.10.0.12.nupkg` |
+
+After independent acceptance, fetch each archive once, without redirects, retries,
+inherited proxies or credentials. Require HTTP 200 and a positive Content-Length within
+the remaining 256 MiB batch limit before reading its body; bound every read to the
+remaining declared bytes. Reject a short response. Bound the batch with a 600-second
+process timer and each socket with a 30-second inactivity timeout. Retain public package
+ID/version, byte count, SHA-512, total received bytes, times, and success or the exception
+type and HTTP status when applicable. Do not retain raw exception or network diagnostics.
+An incomplete fetch consumes the batch, retains partial owned files, and stops further
+actions. No package installation or Windows process starts during this WSL fetch.
 
 ```text
+python3 tools/probes/windows-native-aot/run.py supplemental-fetch --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py restore --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py publish --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py positive --accepted ACCEPTED_COMMIT
@@ -164,25 +177,37 @@ python3 tools/probes/windows-native-aot/run.py missing --accepted ACCEPTED_COMMI
 python3 tools/probes/windows-native-aot/run.py decoy --accepted ACCEPTED_COMMIT
 ```
 
-These are WSL operator commands for this host boundary. Invoke one action at a time;
-do not batch past a result requiring inspection. Source amendments require independent
-acceptance before execution and must preserve the root's prior consumption. This one
-amendment accepts only the original PR #78 root, the PR #83 source copies, exact receipts
-01 through 04, and the existing `source-revision.json` and `diagnostic-revision.json`,
-whose SHA-256 identities are pinned in `run.py`. Before the next restore it verifies
-those copies, prior results, feed hashes, and absence of the new empty program-files
-directory. It replaces only the seven owned source copies, creates that empty directory,
-and writes `environment-revision.json` naming the prior and current accepted source and
-consumption. The original identity, both previous revision markers, and eight receipt
-files remain byte-for-byte unchanged. PowerShell receipts retain UTF-8 BOM-aware
-reading. Partial migration fails closed; another amendment requires explicit review.
-Later actions require this amendment's same accepted revision and the recorded empty
-directory. Known consumption is fetch 1, restore 3, publish 0, each case 0, and guard
-bootstrap 3. This amendment does not enlarge any ceiling or activate extra downloads.
+Invoke one action at a time and inspect each result. Before its only migration, the
+wrapper requires the original PR #78 root, the exact PR #84 source copies, ten pinned
+receipt hashes for attempts 01–05, all three existing revision-marker hashes, and the
+recorded failed-restore assets/lock hashes. Both supplemental archive paths and the
+new `runtime-pack-revision.json` must be absent. The two retained-copy paths
+`attempts/05/project.assets.json` and `attempts/05/packages.lock.json` must also be
+absent. After verifying their active originals, copy those exact bytes to these paths
+without overwriting anything, before source migration or a later restore. On every
+later action verify these retained copies against their original hashes; the active
+restore output paths may then change. AOT-REVIEW-014 was independently triaged as a
+blocking true positive and requires this narrow evidence preservation.
+
+The wrapper requires the existing empty
+program-files directory to remain empty and not a link. It replaces only seven owned
+source copies and records the old/new accepted revisions and prior counts in the new
+marker. It preserves the root identity, prior markers, receipts, home, feed, caches,
+outputs, and empty directory. Partial migration fails closed. Later actions require
+this amendment's same accepted source and retained marker; no migration resets capacity.
+
+Reserve the next sequential attempt and write `started.json` before any fetch request.
+The next restore requires a successful supplemental-fetch receipt; every later action
+rechecks both batches' archive hashes. A failed restore's assets do not authorize publish:
+a successful restore receipt and exact closure inspection remain prerequisites. Existing
+Windows actions and their sanitized-output/termination contract are unchanged. Known
+consumption is original fetch 1, supplemental fetch 0, restore 4, publish 0, each case 0,
+and guard bootstrap 4. No further fetch batch is enabled by this protocol.
 
 | Unit | Cumulative maximum, including failed starts and manual execution |
 | --- | --- |
 | Public package fetch | One batch, 14 package requests, no retries or redirects; 300 MiB per archive and 1.5 GiB total; a WSL process timer interrupts pending reads at a 600-second batch deadline, in addition to 30-second socket inactivity limits |
+| Supplemental public fetch | One batch, exactly the two requests above, at most 256 MiB total, no retry or redirect; 600-second batch deadline and 30-second socket inactivity limit |
 | Restore | Six cumulative Windows actions, including the two historical actions; at most 600 seconds each |
 | Native AOT publish | Two Windows actions, at most 900 seconds each, after successful restore and exact resolved closure inspection |
 | Synthetic cases | One positive, one missing-library, and one combined working-directory/PATH-decoy action; 30 seconds each; no repeat |
@@ -514,6 +539,65 @@ revision marker remain unchanged. Dedicated artifacts and sanitized receipts are
 intentionally retained; the historical Windows trust-path uncertainty remains. The
 remaining Native AOT, native loading, authentication, and production-publishing premises
 are unchanged and untested by this diagnosis.
+
+### Corrected Environment and Missing Runtime Packs
+
+Attempt 05 used accepted PR #84 commit
+`4cfde18c1e7348ca1341e50829b1a031af071dac`, tree
+`53f67e59be2f6d83eac01386989c22f753ebfe34`, after independent review, mandatory
+commit checks, full hk, and
+[CI](https://github.com/hcoona/microsoft-authentication-cli/actions/runs/34673704206).
+The exact amendment added only the two owned program-files environment entries to the
+Windows helper. The wrapper preserved every prior receipt and revision marker and
+recorded its source migration; SDK, packages, project, and restore command were unchanged.
+
+**Runtime observation:** From September 12 UTC 04:48:04.952127 to 04:48:15.2575888,
+guard compilation exited 0 and restore exited 1 in 8.361 seconds, with quiescence true
+and no controller safety stop. The complete sanitized stdout contained 774 characters
+before normalization, no truncation or suppressed lines, and no sensitive-output flag;
+stderr was empty. The configuration initializer error disappeared. The new diagnostic
+was `NU1101` for two packages absent from `public-snapshot`:
+
+| Missing SDK download | Exact requested version |
+| --- | --- |
+| Microsoft.WindowsDesktop.App.Runtime.win-x64 | 10.0.12 |
+| Microsoft.AspNetCore.App.Runtime.win-x64 | 10.0.12 |
+
+The generated assets file and lock file are outputs of a **failed** restore, not a
+successful resolved closure. They select MSAL's net8.0, Broker's netstandard2.0, and
+NativeInterop's net9.0 managed assets, plus `runtimes/win-x64/native/msalruntime.dll`.
+Their ten package libraries have the expected pinned versions. The assets explicitly
+request both missing archives through exact `downloadDependencies`; their only
+`frameworkReferences` entry is `Microsoft.NETCore.App`. The two missing archives were
+not among the fourteen fetched inputs. Source mapping excluded the SDK library-packs
+fallback; no network request failure, remote denial, private dependency, or package
+incompatibility is established by these local-source errors.
+
+**Source interpretation:** The pinned SDK's public
+[`ProcessFrameworkReferences`](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Tasks/Microsoft.NET.Build.Tasks/ProcessFrameworkReferences.cs)
+adds runtime-pack downloads for known frameworks when their packs are unavailable and
+transitive framework-reference downloads are enabled (lines 766–773). A download request
+therefore does not establish that the application references the desktop or ASP.NET
+framework. Keep the project and SDK command unchanged; do not infer a UI dependency or
+Native AOT desktop-framework failure from these two names.
+
+| Retained evidence | SHA-256 |
+| --- | --- |
+| Attempt 05 start | `4dc9b666df2d38d68aaff0a307e9f97ced505568a14b14928eccf56c3d3d9df2` |
+| Attempt 05 result | `b75eb2f1892c251a34538fe86e63860fd04174c44a6d8d7b3f05e8de3532407d` |
+| Environment revision marker | `810f4a5b7d8cf90c7fe03fae16607674cd7a5673edf44773afbd12c03f04e718` |
+| Failed-restore assets | `82bf316e8f0c6d71c78e4612880764256956b6d6da2940702d85541e022dda6f` |
+| Failed-restore lock file | `606af5113f23548d1bc87c55657f1c1f7e4ffa017557e8cb9c7f342690cb84a3` |
+
+Consumption is original fetch **1/1**, supplemental fetch **0/1**, restore **4/6**,
+publish **0/2**, each case **0/1**, and guard bootstrap **4/11**. All five attempts have
+complete receipts and no unresolved owned process. The empty program-files directory,
+extracted public packages, failed-restore outputs, and sanitized receipts are retained.
+The amendment preserves the two failed-restore files under attempt 05 before any retry
+can replace their active paths. No authentication, publish, or loading case ran.
+The original trust-path uncertainty
+remains; the corrected configuration and precise local-feed omission do not establish
+production publishing or Native AOT runtime compatibility.
 
 ### Fetched Public Archive Identities
 
