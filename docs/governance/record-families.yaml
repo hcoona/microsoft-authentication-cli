@@ -447,6 +447,21 @@ families:
     failure_mode: Authentication runs without an accepted procedure or their state effects, consumed limits, and evidence scope cannot be recovered.
     review_point: Independent record-system and research-evidence review before protocol acceptance, amendment, execution-evidence acceptance, or reliance on its conclusions
 
+  - id: developer-tooling-protocol
+    state: current
+    concern: Bounded developer-tool installation, client discovery, and public Learn retrieval procedure and observations
+    carrier: repository-file
+    path: docs/research/experiments/developer-tooling.md
+    format: markdown
+    producer: Tooling maintainer with sanitized execution evidence
+    maintainer: Tooling maintainer
+    consumers:
+      - Tooling operator before each bounded installation or discovery attempt
+      - Contributors and reviewers evaluating reproducible setup and actual host coverage
+    creation_trigger: The accepted tooling Wave requires installer and discovery acceptance without account or global Agent effects.
+    failure_mode: Tooling setup is executed without bounded effects or claimed complete without reproducibility and actual discovery evidence.
+    review_point: Independent record-system and research-evidence review before protocol, amendment, or execution-evidence acceptance
+
   - id: public-build-experiment-bundles
     state: current
     concern: Retained strict-JSON runtime evidence and reproducibility contract for the recorded issue #1 public-build experiment

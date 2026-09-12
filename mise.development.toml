@@ -1,0 +1,5 @@
+# Opt in with `mise -E development`; repository checks keep their smaller toolchain.
+[tools]
+"core:dotnet" = "10.0.401"
+"github:microsoft/apm" = "v0.29.0"
+node = "22.22.2"
