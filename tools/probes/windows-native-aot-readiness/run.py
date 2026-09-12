@@ -12,20 +12,30 @@ import re
 import base64
 from urllib.parse import unquote
 
-ROOT = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness-recovery')
+BASE = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-diagnostics')
+ROOT = BASE / 'round-01'
+RECOVERY = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness-recovery')
+PREFLIGHT_DIR = pathlib.Path('/tmp/azureauth-wave-work')
 OLD = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-76')
-WAVE_PARENT = '34e513c0b0d8282e92ff743ecc836c6320d0faa5'
-WAVE_SHA256 = '5cb960f88b04db808783df069373228592081da962b4afcd02e6eef3ae08a9f8'
+WAVE_PARENT = 'c479d4a458e665876deafef5190903ef2472bed0'
+WAVE_SHA256 = '5e45488af78a27de73702dbbb6a0112ca6294acd7961a1e811295fe310f75327'
 PRIOR = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness')
-PRIOR_COUNTS = {'restore': 1, 'publish': 1, 'cleanup': 0, 'wrong-architecture': 0}
+PRIOR_COUNTS = {'restore': 2, 'publish': 2, 'cleanup': 0, 'wrong-architecture': 0}
 REL = 'tools/probes/windows-native-aot-readiness/'
 PROTOCOL = 'docs/research/experiments/windows-native-aot.md'
 SOURCES = {name: REL + name for name in (
     'run.py', 'Program.cs', 'NativeAotReadinessProbe.csproj', 'global.json',
-    'nuget.config', 'Invoke-Action.ps1', 'Stop-Controller.ps1')}
-SOURCES['WindowsJob.cs'] = 'tools/probes/windows-native-aot/WindowsJob.cs'
+    'nuget.config', 'Invoke-Action.ps1', 'Stop-Controller.ps1', 'WindowsJob.cs')}
 SOURCES['protocol.md'] = PROTOCOL
-LIMITS = {'restore': 2, 'publish': 2, 'cleanup': 2, 'wrong-architecture': 2}
+LIMITS = {'restore': 3, 'publish': 3, 'cleanup': 1, 'wrong-architecture': 1}
+ACTION_ORDER = tuple(LIMITS)
+# This exact revision allocates one round; later rounds require accepted amendments.
+PREFLIGHT_HISTORY = {
+    '01-started': '822ca8280bbb872a003ed8c5da405cd2d4066bb42c2668da283a38302a75a53d',
+    '01-completed': 'e65e14768cdff88bcd2609f39b3657e2396070cb3c3ec060cf4350346187b9fa',
+    '02-started': '274857fa6d17b1ad8845756bc6acd4cfcd502983881bf7197090ee49fc89b873',
+    '02-completed': 'd6bbee1040159c0ef5ae14c7683a5dcd43953dce7de9a966008e1b07608e45d4',
+}
 OLD_COUNTS = {'fetch': 1, 'supplemental-fetch': 1, 'restore': 6, 'publish': 2,
               'positive': 1, 'missing': 1, 'decoy': 1, 'guard': 11}
 WRONG_ASSET = 'runtimes/win-x86/native/msalruntime_x86.dll'
@@ -99,6 +109,42 @@ PRIOR_FILES = ['attempts/14/NativeAotReadinessProbe.csproj.nuget.g.props',
  'source/34e513c0b0d8282e92ff743ecc836c6320d0faa5/run.py',
  'stopped.json']
 PRIOR_SHA256 = 'a27bb4f06e493f7c6b7a7d95d28b725e3e53de16f164e3c8526d22cd4ce84ab9'
+
+RECOVERY_FILES = [
+    'attempts/16/NativeAotReadinessProbe.csproj.nuget.g.props',
+    'attempts/16/NativeAotReadinessProbe.csproj.nuget.g.targets',
+    'attempts/16/WindowsJob.dll',
+    'attempts/16/compiler.json',
+    'attempts/16/completion.json',
+    'attempts/16/controller.json',
+    'attempts/16/packages.lock.json',
+    'attempts/16/project.assets.json',
+    'attempts/16/restore.json',
+    'attempts/16/result.json',
+    'attempts/16/started.json',
+    'attempts/16/subject.json',
+    'attempts/17/WindowsJob.dll',
+    'attempts/17/compiler.json',
+    'attempts/17/controller.json',
+    'attempts/17/out/NativeAotReadinessProbe.exe',
+    'attempts/17/out/msalruntime.dll',
+    'attempts/17/result.json',
+    'attempts/17/started.json',
+    'attempts/17/subject.json',
+    'identity.json',
+    'preparation-started.json',
+    'source/0bb071ba843358846e05de5518d94099cc14cd70/Invoke-Action.ps1',
+    'source/0bb071ba843358846e05de5518d94099cc14cd70/NativeAotReadinessProbe.csproj',
+    'source/0bb071ba843358846e05de5518d94099cc14cd70/Program.cs',
+    'source/0bb071ba843358846e05de5518d94099cc14cd70/Stop-Controller.ps1',
+    'source/0bb071ba843358846e05de5518d94099cc14cd70/WindowsJob.cs',
+    'source/0bb071ba843358846e05de5518d94099cc14cd70/global.json',
+    'source/0bb071ba843358846e05de5518d94099cc14cd70/nuget.config',
+    'source/0bb071ba843358846e05de5518d94099cc14cd70/protocol.md',
+    'source/0bb071ba843358846e05de5518d94099cc14cd70/run.py',
+    'stopped.json',
+]
+RECOVERY_SHA256 = '2bd066c64302012b65b9e76bd13c350ac9cacbb042a3385b5c47509869d78ee0'
 
 FEED = {'microsoft.aspnetcore.app.runtime.win-x64.10.0.12.nupkg': '9fca92913dca9245d2a6ef5453be3cc3311bac3c0b3890a4386c58d03fedbd63b051751b4b6a9193989c606d92ba447bfa2d5e3bc605e2c3a5fa2bdba218513c',
  'microsoft.dotnet.ilcompiler.10.0.12.nupkg': 'a9e3932bd0d16d6c78fde79b5c6d6fe74ca4104983f54be9f09d62085aa7cf7d1683cb3cbdf3dddad3e9a9a7b4c0c9d262676f28299308483afd96b34acba562',
@@ -191,7 +237,8 @@ try {
     $queue = New-Object 'Collections.Generic.Queue[string]'
     foreach ($path in @('C:\', 'C:\Temp', 'C:\Temp\azureauth-native-aot-76',
                        'C:\Temp\azureauth-native-aot-76\feed',
-                       'C:\Temp\azureauth-native-aot-readiness')) {
+                       'C:\Temp\azureauth-native-aot-readiness',
+                       'C:\Temp\azureauth-native-aot-readiness-recovery')) {
         if ((Get-Item -LiteralPath $path -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
             $failure = 'reparse-point'
             throw 'Linked prerequisite'
@@ -211,7 +258,12 @@ try {
             $seen[$path] = $true
         }
     }
-    $root = 'C:\Temp\azureauth-native-aot-readiness-recovery'
+    $base = 'C:\Temp\azureauth-native-aot-diagnostics'
+    if ((Test-Path -LiteralPath $base) -and
+        ((Get-Item -LiteralPath $base -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        $failure = 'reparse-point'; throw 'Linked diagnostic root'
+    }
+    $root = 'C:\Temp\azureauth-native-aot-diagnostics\round-01'
     if (Test-Path -LiteralPath $root) { $queue.Enqueue($root) }
     while ($queue.Count -gt 0) {
         $item = Get-Item -LiteralPath $queue.Dequeue() -Force
@@ -229,7 +281,8 @@ try {
 } catch { [Console]::Out.Write($failure); exit 1 }
 '''
     inputs = [('azureauth-native-aot-76', HISTORY_FILES + ['feed/' + name for name in FEED]),
-              ('azureauth-native-aot-readiness', PRIOR_FILES)]
+              ('azureauth-native-aot-readiness', PRIOR_FILES),
+              ('azureauth-native-aot-readiness-recovery', RECOVERY_FILES)]
     script = script.replace('__PREDECESSOR_PATHS__', ', '.join(
         "'C:\\Temp\\" + root + '\\' + name.replace('/', '\\').replace("'", "''") + "'"
         for root, names in inputs for name in names))
@@ -239,13 +292,43 @@ try {
             '-NonInteractive', '-EncodedCommand', base64.b64encode(script.encode('utf-16-le')).decode()],
             capture_output=True, timeout=60)
     except subprocess.TimeoutExpired:
-        raise SystemExit('Windows path ownership preflight failed: timeout.') from None
-    if result.returncode != 0 or result.stdout != b'direct-paths' or result.stderr:
-        classification = (result.stdout.decode('ascii') if result.stdout in (
-            b'direct-paths', b'reparse-point', b'path-query-failed') else 'unexpected-output')
-        raise SystemExit('Windows path ownership preflight failed: ' + json.dumps({
-            'classification': classification, 'exitCode': result.returncode,
-            'stderrPresent': bool(result.stderr)}))
+        return {'passed': False, 'classification': 'timeout', 'exitCode': None, 'stderrPresent': False}
+    classification = (result.stdout.decode('ascii') if result.stdout in (
+        b'direct-paths', b'reparse-point', b'path-query-failed') else 'unexpected-output')
+    return {'passed': result.returncode == 0 and result.stdout == b'direct-paths' and not result.stderr,
+            'classification': classification, 'exitCode': result.returncode, 'stderrPresent': bool(result.stderr)}
+
+
+def reserved_preflight(action, accepted, target):
+    ordinal = 3 + ACTION_ORDER.index(action)
+    expected = {f'aot-diagnostic-preflight-{i:02}-{suffix}.json'
+                for i in range(3, ordinal) for suffix in ('started', 'completed')}
+    if {p.name for p in PREFLIGHT_DIR.glob('aot-diagnostic-preflight-*.json')} != expected:
+        raise SystemExit('Diagnostic preflight inventory is incomplete or already consumed.')
+    for earlier in range(3, ordinal):
+        start_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{earlier:02}-started.json'
+        result_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{earlier:02}-completed.json'
+        start, result = read(start_path), read(result_path)
+        if (start.get('ordinal') != earlier or start.get('accepted') != accepted or
+                result.get('reservationSha256') != digest(start_path) or result.get('passed') is not True):
+            raise SystemExit('Earlier diagnostic preflight is incomplete or changed.')
+    start_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{ordinal:02}-started.json'
+    result_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{ordinal:02}-completed.json'
+    if any(PREFLIGHT_DIR.glob(f'aot-diagnostic-preflight-{ordinal:02}-*.json')):
+        raise SystemExit('This diagnostic preflight is already consumed; no retry.')
+    write_new(start_path, {'ordinal': ordinal, 'action': action, 'accepted': accepted,
+              'target': target, 'started': now(), 'priorCorrectedChecks': ordinal - 1,
+              'waveSha256': WAVE_SHA256})
+    outcome = {'passed': False, 'classification': 'preflight-incomplete'}
+    try:
+        outcome = windows_paths()
+    finally:
+        write_new(result_path, {'ordinal': ordinal, 'reservationSha256': digest(start_path),
+                  **outcome, 'ended': now()})
+    if not outcome['passed']:
+        raise SystemExit('Windows metadata preflight rejected: ' + json.dumps(outcome))
+    return {'ordinal': ordinal, 'startedSha256': digest(start_path),
+            'completedSha256': digest(result_path)}
 
 
 def restore_evidence(source):
@@ -324,9 +407,9 @@ def restore_evidence(source):
         for name, entry in framework.items():
             if name + '/' + entry['resolved'] not in libraries:
                 raise SystemExit('Unexpected locked package.')
-    if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-readiness-recovery\\packages'}:
+    if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-01\\packages'}:
         # NuGet normalizes its package root with a trailing directory separator.
-        if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-readiness-recovery\\packages\\'}:
+        if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-01\\packages\\'}:
             raise SystemExit('Unexpected package folder.')
     framework = assets['project']['frameworks']['net10.0-windows']
     downloads = framework['downloadDependencies']
@@ -397,9 +480,46 @@ def history():
         prior.update(name.encode() + b'\0' + bytes.fromhex(digest(PRIOR / name)))
     if prior.hexdigest() != PRIOR_SHA256:
         raise SystemExit('Stopped supplement evidence changed; no recovery.')
+    if {p.name for p in (RECOVERY / 'attempts').iterdir()} != {'16', '17'}:
+        raise SystemExit('Stopped recovery attempt inventory changed.')
+    recovery = hashlib.sha256()
+    for name in RECOVERY_FILES:
+        recovery.update(name.encode() + b'\0' + bytes.fromhex(digest(RECOVERY / name)))
+    if recovery.hexdigest() != RECOVERY_SHA256:
+        raise SystemExit('Stopped recovery evidence changed.')
+    for name, expected in PREFLIGHT_HISTORY.items():
+        if digest(PREFLIGHT_DIR / ('aot-corrected-preflight-' + name + '.json')) != expected:
+            raise SystemExit('Historical preflight evidence changed.')
     for name, expected in FEED.items():
         if digest(OLD / 'feed' / name, 'sha512') != expected:
             raise SystemExit('Historical public archive changed.')
+
+
+def valid_metadata(value):
+    if not isinstance(value, dict) or set(value) != {'State', 'Members'}:
+        return False
+    if value['State'] not in {'complete', 'budget-ended', 'query-failed', 'invalid-list',
+                              'worker-failed', 'unavailable-at-stop'}:
+        return False
+    members = value['Members']
+    if not isinstance(members, list) or len(members) > 32:
+        return False
+    states = {'verified-member', 'open-failed', 'budget-ended', 'membership-unverified',
+              'incarnation-unverified', 'image-unavailable'}
+    images = {'msvc-' + name for name in ('link', 'cl', 'mspdbsrv', 'mspdbcmf', 'c1', 'c1xx', 'c2')}
+    images.update({'dotnet-host', 'windows-console-host', 'framework-csc', 'native-aot-ilc', 'unknown'})
+    for slot, item in enumerate(members):
+        if (not isinstance(item, dict) or set(item) != {'Slot', 'ProcessId', 'CreationFileTime', 'State', 'ImageClass'} or
+                type(item['Slot']) is not int or item['Slot'] != slot or
+                item['State'] not in states or item['ImageClass'] not in images):
+            return False
+        if item['State'] == 'verified-member':
+            if (type(item['ProcessId']) is not int or not 0 < item['ProcessId'] <= 4294967295 or
+                    type(item['CreationFileTime']) is not int or not 0 < item['CreationFileTime'] < 2 ** 63):
+                return False
+        elif item['ProcessId'] is not None or item['CreationFileTime'] is not None or item['ImageClass'] != 'unknown':
+            return False
+    return True
 
 
 def completed(result, action):
@@ -431,6 +551,8 @@ def completed(result, action):
         if result.get(key) is not False:
             return False
     if action in ('restore', 'publish'):
+        if action == 'publish' and not valid_metadata(result.get('jobMetadata')):
+            return False
         if result.get('diagnosticsComplete') is not True:
             return False
         for stream in ('stdoutDiagnostic', 'stderrDiagnostic'):
@@ -488,13 +610,33 @@ def main():
     source_hashes = {name: hashlib.sha256(data).hexdigest() for name, data in sources.items()}
     history()
     direct(ROOT)
-    windows_paths()
+    if BASE.exists() and {p.name for p in BASE.iterdir()} - {'round-01'}:
+        raise SystemExit('Unallocated diagnostic round or shared file.')
+    if (ROOT / 'stopped.json').exists():
+        raise SystemExit('This diagnostic round is stopped.')
+    if ROOT.exists():
+        early_attempts = sorted((ROOT / 'attempts').iterdir())
+        if len(early_attempts) >= 4 or [p.name for p in early_attempts] != [
+                f'{i:02}' for i in range(18, 18 + len(early_attempts))]:
+            raise SystemExit('Diagnostic action inventory is invalid or exhausted.')
+        for index, prior in enumerate(early_attempts):
+            outcome = read(prior / 'result.json')
+            completion = read(prior / 'completion.json')
+            if (not completed(outcome, ACTION_ORDER[index]) or
+                    completion.get('resultSha256') != digest(prior / 'result.json')):
+                raise SystemExit('Incomplete prior action prevents another host preflight.')
+        if args.action != ACTION_ORDER[len(early_attempts)]:
+            raise SystemExit('Only the next diagnostic action may run.')
+    elif args.action != 'restore':
+        raise SystemExit('The fresh round must begin with restore.')
+    preflight = reserved_preflight(args.action, accepted, target)
     if not ROOT.exists():
         if args.action != 'restore':
             raise SystemExit('Start with the reserved restore/preparation.')
-        ROOT.mkdir()
+        ROOT.mkdir(parents=True)
         write_new(ROOT / 'preparation-started.json', {'accepted': accepted, 'started': now(),
                   'historicalSha256': HISTORY_SHA256, 'stoppedSupplementSha256': PRIOR_SHA256,
+                  'stoppedRecoverySha256': RECOVERY_SHA256,
                   'priorConsumption': OLD_COUNTS, 'supplementConsumption': PRIOR_COUNTS})
         for directory in ('attempts', 'source', 'feed', 'negative', 'home', 'temp', 'packages', 'http',
                           'empty-program-files', 'home/AppData/Roaming', 'home/AppData/Local'):
@@ -511,12 +653,14 @@ def main():
         (ROOT / 'negative' / 'msalruntime.dll').write_bytes(data)
         write_new(ROOT / 'identity.json', {'accepted': accepted, 'prepared': now(),
                   'historicalSha256': HISTORY_SHA256, 'stoppedSupplementSha256': PRIOR_SHA256,
+                  'stoppedRecoverySha256': RECOVERY_SHA256,
                   'priorConsumption': OLD_COUNTS, 'supplementConsumption': PRIOR_COUNTS})
     identity = read(ROOT / 'identity.json')
     if (ROOT / 'stopped.json').exists():
         raise SystemExit('A prior interruption or safety stop ends this sequence.')
     if (identity.get('historicalSha256') != HISTORY_SHA256 or identity.get('priorConsumption') != OLD_COUNTS or
-            identity.get('stoppedSupplementSha256') != PRIOR_SHA256 or identity.get('supplementConsumption') != PRIOR_COUNTS):
+            identity.get('stoppedSupplementSha256') != PRIOR_SHA256 or
+            identity.get('stoppedRecoverySha256') != RECOVERY_SHA256 or identity.get('supplementConsumption') != PRIOR_COUNTS):
         raise SystemExit('Root identity or consumption changed.')
     for name, expected in FEED.items():
         if digest(ROOT / 'feed' / name, 'sha512') != expected:
@@ -531,7 +675,7 @@ def main():
     source_inventory(source, source_hashes)
     direct(ROOT / 'attempts')
     attempts = sorted((ROOT / 'attempts').iterdir())
-    if len(attempts) > 6 or [p.name for p in attempts] != [f'{i:02}' for i in range(16, 16 + len(attempts))]:
+    if len(attempts) > 4 or [p.name for p in attempts] != [f'{i:02}' for i in range(18, 18 + len(attempts))]:
         raise SystemExit('New attempt sequence changed.')
     counts = PRIOR_COUNTS.copy()
     previous = []
@@ -568,14 +712,24 @@ def main():
         action = start['action']
         if action not in counts or not completed(result, action) or start['priorConsumption'] != counts:
             raise SystemExit('Prior action incomplete, stopped, or inconsistent.')
-        if start['historicalSha256'] != HISTORY_SHA256 or start.get('stoppedSupplementSha256') != PRIOR_SHA256:
+        if (start['historicalSha256'] != HISTORY_SHA256 or start.get('stoppedSupplementSha256') != PRIOR_SHA256 or
+                start.get('stoppedRecoverySha256') != RECOVERY_SHA256 or
+                start.get('guardOrdinal') != 5 + len(previous)):
             raise SystemExit('Prior historical binding changed.')
+        ordinal = 3 + len(previous)
+        if start.get('preflight') != {
+                'ordinal': ordinal,
+                'startedSha256': digest(PREFLIGHT_DIR / f'aot-diagnostic-preflight-{ordinal:02}-started.json'),
+                'completedSha256': digest(PREFLIGHT_DIR / f'aot-diagnostic-preflight-{ordinal:02}-completed.json')}:
+            raise SystemExit('Prior preflight binding changed.')
         counts[action] += 1
         previous.append((attempt, start, result))
-    if any(counts[key] > LIMITS[key] for key in counts) or counts[args.action] >= LIMITS[args.action] or len(attempts) >= 6:
+    if any(counts[key] > LIMITS[key] for key in counts) or counts[args.action] >= LIMITS[args.action] or len(attempts) >= 4:
         raise SystemExit('Cumulative capacity exhausted.')
     if counts[args.action] and any(s['action'] == args.action and s['accepted'] == accepted for _, s, _ in previous):
         raise SystemExit('Repeating an action requires a new reviewed protocol amendment, never an incidental retry.')
+    if args.action != ACTION_ORDER[len(attempts)]:
+        raise SystemExit('Only the next sequential action is allocated.')
     case_inputs = {}
     if args.action != 'restore':
         needed = 'restore' if args.action == 'publish' else 'publish'
@@ -598,15 +752,16 @@ def main():
                 if digest(ROOT / 'negative/msalruntime.dll') != WRONG_HASH:
                     raise SystemExit('Negative input changed.')
                 case_inputs['msalruntime.dll'] = {'path': 'negative/msalruntime.dll', 'sha256': WRONG_HASH}
-    attempt = ROOT / 'attempts' / f'{16 + len(attempts):02}'
+    attempt = ROOT / 'attempts' / f'{18 + len(attempts):02}'
     attempt.mkdir()
     write_new(attempt / 'started.json', {'action': args.action, 'accepted': accepted, 'target': target,
               'started': now(), 'priorConsumption': counts, 'historicalSha256': HISTORY_SHA256,
-              'stoppedSupplementSha256': PRIOR_SHA256,
+              'stoppedSupplementSha256': PRIOR_SHA256, 'stoppedRecoverySha256': RECOVERY_SHA256,
+              'guardOrdinal': 5 + len(attempts), 'preflight': preflight,
               'sourceSha256': source_hashes, 'caseInputs': case_inputs})
     powershell = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
     command = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-               'C:\\Temp\\azureauth-native-aot-readiness-recovery\\source\\' + accepted + '\\Invoke-Action.ps1',
+               'C:\\Temp\\azureauth-native-aot-diagnostics\\round-01\\source\\' + accepted + '\\Invoke-Action.ps1',
                '-Action', args.action, '-AttemptName', attempt.name, '-Accepted', accepted]
     try:
         subprocess.run(command, check=False, timeout=700, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -614,14 +769,17 @@ def main():
         write_new(ROOT / 'stopped.json', {'attempt': attempt.name, 'ended': now(),
                   'reason': 'controller-wait-interrupted', 'quiescenceConfirmed': False})
         emergency = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-                     'C:\\Temp\\azureauth-native-aot-readiness-recovery\\source\\' + accepted + '\\Stop-Controller.ps1',
+                     'C:\\Temp\\azureauth-native-aot-diagnostics\\round-01\\source\\' + accepted + '\\Stop-Controller.ps1',
                      '-AttemptName', attempt.name]
         try:
             subprocess.run(emergency, check=False, timeout=10, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         except (subprocess.TimeoutExpired, KeyboardInterrupt):
             pass  # No termination claim follows an incomplete emergency action.
-        raise SystemExit('Windows recovery attempted; retain uncertainty and stop all execution.')
+        raise SystemExit('Windows diagnostic action attempted; retain uncertainty and stop all execution.')
     result = read(attempt / 'result.json')
+    if 'jobMetadata' in result and not valid_metadata(result['jobMetadata']):
+        write_new(ROOT / 'stopped.json', {'attempt': attempt.name, 'ended': now(), 'reason': 'invalid-metadata-shape'})
+        raise SystemExit('Metadata shape is invalid; do not emit its contents or continue.')
     print(json.dumps(result, indent=2))
     if not completed(result, args.action) or result.get('reservationSha256') != digest(attempt / 'started.json'):
         write_new(ROOT / 'stopped.json', {'attempt': attempt.name, 'ended': now(), 'reason': 'incomplete-action'})
