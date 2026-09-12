@@ -455,82 +455,40 @@ condition, or an unresolved choice that cannot be called implementation-ready. R
 public toolchain/dependency contracts and supported alternatives before accepting an
 exception. Requirement acceptance does not establish compatibility of the current
 UI/MSAL host; the [concrete disposition](../designs/windows-ado-authentication.md#native-aot-target-disposition)
-currently leaves Windows publishing unresolved while assessing the Win32/Native AOT
-candidate. No non-AOT exception or implementation-readiness claim is accepted.
+selects Native AOT for the .NET 10 Windows x64 Win32 host at the preimplementation
+design level. No non-AOT exception is accepted. Implementation authorization remains
+separate from that decision and from the later evidence required for support.
 
-For that candidate, close the exact Broker/NativeInterop compatibility premise before
-implementation readiness: recover the resolved net8 client, netstandard Broker and net9
-NativeInterop assets, inspect all relevant AOT/trim diagnostics and native dependencies,
-and establish that the public loader works within the application-directory/System32
-search boundary. A separately authorized synthetic publish/loading check may establish
-part of that premise without accounts or token operations. The
-[synthetic protocol](../research/experiments/windows-native-aot.md) defines its exact
-scope and limits; execution authority remains with the current accepted Delivery Wave.
-Record the exact Windows C++ compiler/SDK/linker as well as .NET inputs in its protocol.
-Missing, wrong-architecture or unavailable native assets must fail without probing an
-arbitrary working directory or using a developer-machine dependency.
+The [latest synthetic results](../research/experiments/windows-native-aot.md#diagnostic-round-05-results)
+close the bounded preimplementation obligations below for their exact pinned source,
+toolchain, artifacts and existing host. They do not validate an unimplemented application.
 
-The [recorded synthetic results](../research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
-now cover native artifact production and actual Windows-host execution of the exact
-retained EXE. The positive case created MSAL configuration and entered the upstream
-NativeInterop configuration-allocation import with the module loaded from the application
-directory. Missing-library and working-directory/PATH-decoy cases both returned
-`DllNotFoundException` without loading the module. All three had explicit normal controller
-completion, zero job-process counts, and no termination request. These observations
-satisfy those three synthetic cases only; all experiment capacity is consumed.
+| Synthetic obligation | Accepted evidence and limit |
+| --- | --- |
+| Resolved provider assets and provenance | The ten-library graph selects net8.0 Client, netstandard2.0 Broker, net9.0 NativeInterop and the x64 DLL. All declared package/download payloads were checked against reused public archives; clean network restore remains unproved. |
+| Complete AOT/trim diagnostics and publish completion | Rooted provider compilation produced complete warning-free diagnostics. Publish completed with the accepted VCTIP cleanup criterion and final zero Job count. No suppression or dependency exception was needed; product build-helper and symbol behavior remain separate. |
+| Native dependency disposition | Exact native EXE/DLL identities, x64 PE headers and direct Windows/API-set imports are retained. Actual synthetic loading/allocation worked with restricted search. Dynamic WAM dependencies and deployment without development tools remain product validation obligations. |
+| Observable native cleanup | Export checks, a passing first-chance self-check, first and repeated disposal returns and zero observed cleanup exceptions support the pinned public wrapper path. Opaque native deallocation correctness and a shutdown return status are not claimed. |
+| Genuine wrong architecture | The pinned x86 DLL was rejected by the x64 EXE without loading its module. Expected subject failure completed normally; runtime termination was not used as success. |
+| Missing and decoy inputs | The [earlier cases](../research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results) failed to load the module with missing or working-directory/PATH-decoy inputs. Their artifact identity and historical publish uncertainty remain distinct. |
 
-The producing publish's historical controller stop still has no uniquely identified
-origin or retained AOT/trim diagnostics. The accepted retained-artifact disposition
-preserves that uncertainty; new runtime success does not satisfy publish-warning review
-or prove every native release/shutdown operation. Before implementation readiness or
-production publishing, retain the outstanding warning/dependency, full native cleanup,
-wrong-architecture, WAM/UI/authentication and complete-application evidence obligations.
-Preserve historical artifacts, receipts, consumption and trust-processing uncertainty.
-No non-AOT exception or disabled platform check is justified by these results.
+Both latest runtime cases require and have strict normal zero-process completion with
+no forced termination. Preserve all earlier stops, missing diagnostics and cumulative
+consumption; later success neither reconstructs old evidence nor authorizes replay.
+The [protocol](../research/experiments/windows-native-aot.md) owns exact execution
+procedures, while the accepted Delivery Wave owns authorization. Unused buffer is not
+a new runtime allocation.
 
-The [supplemental result](../research/experiments/windows-native-aot.md#readiness-results)
-adds a completed local-feed restore and native artifact production with the provider
-surface rooted for compilation. Its publish controller stopped on a remaining Job member
-and confirmed termination/quiescence before diagnostic screening. No publish-completion
-receipt or warning evidence, cleanup result, or wrong-architecture result follows. A
-recovery requires its own accepted Wave/protocol within carried-forward limits; subject
-exit zero and data inspection cannot substitute for the missing evidence.
-
-The [recovery result](../research/experiments/windows-native-aot.md#recovery-results)
-provides complete screened diagnostic evidence for the exact rooted symbol-free probe,
-with no observed AOT/trim/compiler/link warning. Its publish again stopped on a surviving
-Job member after the bounded normal drain; owned termination succeeded and final
-quiescence was confirmed. No publish-completion receipt or runtime result follows.
-Static x64 PE/import observations do not settle dynamic native dependencies. Preserve
-the remaining normal-completion, cleanup, wrong-architecture, dependency and product-symbol
-obligations and all historical diagnostic unknowns. The stopped recovery cannot resume
-or use its unused runtime capacity; restore/publish limits are exhausted. Further
-execution must use the later accepted buffered Wave and a fresh exact protocol amendment.
-The [first diagnostic round](../research/experiments/windows-native-aot.md#diagnostic-round-01-results)
-retained complete warning-free output and a verified Job member with unknown image class,
-then stopped with successful owned termination and final quiescence. It supplies no new
-runtime or normal-publish evidence. Preserve all these obligations; the publishing choice
-and preimplementation gap remain unresolved.
-
-The [third diagnostic round](../research/experiments/windows-native-aot.md#diagnostic-round-03-results)
-adds a sampled image-string match for MSVC `vctip.exe`, complete warning-free diagnostics
-and confirmed owned termination. It still lacks normal publish completion and runtime
-cases. A public build system's acceptance of surviving helpers cannot satisfy this
-experiment's zero-process completion rule. Preserve historical unknowns, the remaining
-cleanup/x86/dependency obligations and the unresolved publishing disposition.
-
-The [fourth diagnostic round](../research/experiments/windows-native-aot.md#diagnostic-round-04-results)
-satisfies its prospectively accepted synthetic publish-completion criterion: current
-verified VCTIP cleanup, complete warning-free diagnostics, bound artifacts and final
-quiescence. It does not reclassify earlier stops or relax runtime completion. Its next
-path preflight rejected before cleanup or x86 execution; those obligations remain open.
-The fresh-round environment correction must preserve complete active-input checks,
-independent sequential acceptance and each runtime's own-round publish prerequisite.
-Dynamic dependencies, product symbols, full-application behavior and the publishing
-disposition retain their existing validation obligations.
+For the implemented application, verify the resolved graph and every required native
+asset under application-directory/System32 search before claiming deployment support.
+Do not use arbitrary working directories, ambient `PATH`, runtime extraction or an
+undeclared developer-machine dependency to make the selected path work. Retain exact
+Windows C++ compiler/SDK/linker, .NET inputs and publishing properties in the applicable
+build evidence. A discovered blocker needs a reviewed correction or requirement-compliant
+exception; it cannot silently change the selected mode or weaken platform checks.
 
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
-sources against their normative contracts. Later candidate tests must cover HWND
+sources against their normative contracts. Later application tests must cover HWND
 readiness, creation failure, callback lifetime/ABI, creating-thread destruction, stalled
 UI dispatch, keyboard/accessibility/DPI/focus behavior, and cancellation racing provider
 completion. Verify strict Profile parsing and result allowlists on the published binary,

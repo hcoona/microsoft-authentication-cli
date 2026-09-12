@@ -1463,7 +1463,7 @@ not by these source findings. Synthetic and real-platform validation remain sepa
 
 ### Windows Native AOT Assessment
 
-**RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92:** Current Microsoft Learn
+**RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
 [Native AOT guidance](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/)
 continues to list Windows x64 as supported and now explicitly specifies Visual Studio
 2022 **or later** with Desktop development with C++ and default components. The existing
@@ -1483,12 +1483,12 @@ complete Broker path. Current guidance also explains that AOT assembly metadata 
 introduced in .NET 10: absence of that new metadata on older-targeted dependencies is
 not by itself proof of incompatibility.
 
-The refreshed sources preserve the preferred Native AOT route and the need for exact
-resolved-graph publishing diagnostics. They do not select the mode or remove runtime
-obligations. The [bounded readiness amendment](experiments/windows-native-aot.md) owns
-the next evidence; the existing design remains unresolved until that evidence receives
-its reviewed disposition. No interaction, account, cache, Profile, Linux-broker, browser,
-or support decision follows from this refresh.
+The `native-aot-publishing` decision trigger is satisfied by this source assessment
+and the exact-graph/runtime evidence below. The refreshed public sources remain compatible
+with the selected Win32 route; none establishes full Broker compatibility by itself.
+The Windows design consumes their bounded inference and the validation strategy retains
+later application obligations. No interaction, account, cache, Profile, Linux-broker,
+browser or support decision follows from this refresh.
 
 **Public desk findings, retrieved 2026-09-12 UTC:** This assessment applies to the
 Windows Slice's SDK 10.0.401/runtime 10.0.12, `net10.0-windows`/`win-x64`, MSAL and
@@ -1524,95 +1524,55 @@ and the AOT annotation work in [PR 5458](https://github.com/AzureAD/microsoft-au
 do not establish end-to-end Windows Broker compatibility. Do not extrapolate the older
 failure to 0.20.3 or extrapolate annotation to successful WAM execution.
 
-**Design inference and remaining premise:** A small Win32 host can remove the known
-managed UI blocker while preserving one-process HWND ownership. Existing MSAL AOT
-provisions and the newer NativeInterop asset justify assessing that candidate before
-accepting a non-AOT exception. The complete pinned Broker/native loading path remains
-unverified, so the design explicitly leaves production publishing unresolved and makes
-no implementation-readiness claim. Source-generation, loader search restrictions, and
-artifact closure must be evaluated on the resolved graph before selecting that mode.
-No startup, memory, size, authentication, or cancellation benefit was measured.
+**Accepted synthetic evidence, September 12, 2026:** The
+[latest round](experiments/windows-native-aot.md#diagnostic-round-05-results) binds
+accepted source `953b5ad9ea0fb470a54dc556955ec622211e6d6d` to the existing Windows
+host and exact public toolchain/package inputs. Its local-feed restore verified the ten
+resolved libraries, including net8.0 Client, netstandard2.0 Broker, net9.0 NativeInterop
+and the pinned x64 native DLL, against the retained public archives. This reused-feed
+result is not a clean public-network restore.
 
-**Synthetic runtime outcome, September 12, 2026:** The
-[Windows Native AOT experiment](experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
-resolved the observed restore failures: omitted program-files inputs broke NuGet
-configuration initialization, and two publicly downloadable SDK runtime packs were
-missing from the local feed. Correcting the actual Windows OS input then allowed native
-artifact production. Its controller stopped before retaining publish diagnostics; that
-historical stop's precise origin and warnings remain unknown.
+Complete screened native publish diagnostics contained no AOT/trim/compiler/link warning
+or suppressed diagnostic. The selected provider surface was rooted for compilation and
+never invoked. Publish completion used the prospectively accepted current VCTIP
+identity/accounting and owned-cleanup criterion, with final zero-process quiescence.
+Static PE inspection found native x64 images, Windows/API-set direct imports and no
+delay imports. Neither package annotations nor these import tables prove dynamic WAM
+dependency closure or product deployment without development-machine components.
 
-Under a separately accepted retained-artifact protocol, the native EXE actually ran on
-the Windows host through WSL. Positive reported Native AOT, successful MSAL configuration
-construction and upstream NativeInterop configuration allocation, with the native module
-loaded from the application directory. Missing and working-directory/PATH-decoy cases
-both returned `DllNotFoundException` without loading the module. All three controllers
-completed normally with zero job-process counts and no termination request. This resolves
-the tested synthetic allocation/loading/search premise for the exact pinned artifact.
-It does not establish warning-free compilation, every native cleanup operation, actual
-WAM/UI/authentication, wrong-architecture rejection or full application compatibility.
-All experiment capacity is consumed. No non-AOT exception or production-publishing
-selection follows, and historical trust-processing uncertainty remains explicit.
+The actual native EXE then created MSAL configuration and allocated parameters through
+the public NativeInterop API. Cleanup exports were present, first and repeated disposal
+returned, and a self-checked first-chance observer saw no cleanup exception. This
+supports observable cleanup without a managed or wrapper-reported failure, not proof
+of opaque native deallocation or a returned shutdown status. The separate genuine x86
+case rejected the DLL without loading the native module. Both runtime controllers
+completed normally with zero Job counts and no termination. The
+[earlier missing/decoy cases](experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
+retain their own artifact-specific restricted-search observations.
 
-**Supplemental observation, September 12, 2026:** The
-[readiness results](experiments/windows-native-aot.md#readiness-results) add a completed
-local-feed restore with ten resolved libraries and verified package/native-link payloads.
-A second synthetic subject rooted the selected provider API surface for compilation and
-published a native x64 EXE, PDB and the pinned native DLL; its process exited zero. One
-owned Job member remained, causing a recorded stop and successful bounded termination
-with final quiescence before diagnostics were retained. Warning/sensitive-output status
-and survivor identity remain unknown. No new runtime case executed. The new stop's exact
-branch does not identify historical attempt 10's cause. This supports native artifact
-production, not diagnostic acceptance, complete compatibility or publishing selection.
-Public linker documentation and the retained `/DEBUG` response support a PDB-helper
-hypothesis only. Under the recovery procedure, any surviving Job member causes a stop;
-its identity remains unknown rather than being inferred or newly inspected.
+**Design inference:** The public Windows x64 toolchain, small Win32/static-interop host,
+resolved dependency assets, rooted warning-free publish and bounded native runtime
+observations support the preimplementation Native AOT selection for the exact Windows
+Slice. No present synthetic evidence requires a package replacement, warning suppression,
+search-boundary exception or non-AOT mode. This resolves the design premise; it does not
+establish the complete application's WAM, account, UI, cancellation or deployment
+behavior. The native DLL and applicable Windows components remain required assets;
+single-executable native compilation is not a one-file distribution guarantee.
+No startup, memory, size, authentication or cancellation benefit was measured.
 
-**Recovery observation, September 12, 2026:** The
-[recovery results](experiments/windows-native-aot.md#recovery-results) retain a successful
-local-feed restore and complete screened output from a symbol-free Native AOT publish
-with the same rooted provider surface. No AOT/trim/compiler/link warning or diagnostic
-code appeared. The publish subject exited zero, but one Job member remained after the
-bounded normal drain, causing another stop with successful owned termination and final
-quiescence. Survivor identity remains unknown, even with debug-symbol output disabled.
-Data inspection confirms a native x64 EXE and the pinned native DLL; their static Windows
-and API-set imports do not establish dynamic dependency closure. No runtime case followed.
-This adds bounded diagnostic evidence without repairing earlier missing output or proving
-normal publish completion, cleanup, wrong-architecture rejection, or product symbol
-behavior. There is no observed package/network/compiler failure in this recovery.
-Restore/publish capacity is exhausted and the stop bars further execution; the preferred
-Native AOT route and unresolved publishing disposition remain unchanged.
+The [experiment authority](experiments/windows-native-aot.md) preserves every earlier
+stop, source/artifact identity, failed preparation, exhausted allowance and unknown.
+In particular, attempt 10's stop origin and missing diagnostics remain unknown; new
+warning-free output does not recover them. The stopped readiness, recovery and diagnostic
+roots remain ineligible for replay. The current VCTIP criterion does not retrospectively
+turn an old stop into success or establish absence of telemetry/helper effects.
 
-The [first buffered diagnostic round](experiments/windows-native-aot.md#diagnostic-round-01-results)
-also retained complete publish diagnostics without observed warnings, but stopped on
-normal Job quiescence. Its bounded snapshot verified a Job member whose tool-path class
-was unknown. Successful owned termination and final quiescence support a fresh reviewed
-diagnostic within the accepted buffer; they do not identify a tool or settle normal
-publication, cleanup or x86 rejection. The publishing premise remains unresolved.
-
-The [third diagnostic round](experiments/windows-native-aot.md#diagnostic-round-03-results)
-retained another complete warning-free publish result and a verified sampled member
-whose image string matched the fixed MSVC `vctip.exe` path. Owned termination succeeded,
-but normal completion failed; no cleanup or x86 runtime followed. Microsoft's public
-BuildXL source recognizes VCTIP as a surviving telemetry helper, which explains a
-plausible lifecycle mechanism without proving the sampled process's effects or earlier
-unknown identities. Its survival-handling examples do not override the accepted strict
-completion rule. The preferred AOT route and unresolved publishing choice remained unchanged
-after that stopped round.
-
-The [fourth diagnostic round](experiments/windows-native-aot.md#diagnostic-round-04-results)
-completed publish through the separately accepted current VCTIP identity/accounting and
-owned-cleanup criterion, with complete warning-free diagnostics and final quiescence.
-Its native x64 artifacts and resolved graph were independently accepted. The subsequent
-read-only preflight rejected a reparse point before cleanup or x86 execution, ending
-that round. A later link observation is only a candidate explanation. This resolves
-the bounded synthetic publish-completion premise; cleanup and wrong-architecture
-evidence and publishing selection remain open. The next exact correction separates
-each action's scratch environment while preserving active-input checks and all history.
-
-Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
-upstream compatibility reports can change the unresolved disposition and are routed by
-RECHECK-008. The concrete choice and preservation semantics belong to the Windows design;
-the validation strategy owns later evidence obligations.
+Immutable snapshots retain their evidence level. Mutable guidance and compatibility
+reports remain routed by RECHECK-008 for later applicable decisions and releases.
+The [Windows design](../designs/windows-ado-authentication.md#native-aot-target-disposition)
+owns the publishing choice, and the
+[validation strategy](../validation/strategy.md#native-aot-publishing) owns remaining
+full-application, WAM/UI, dynamic-dependency, symbol, performance and support obligations.
 
 ### Slice Design Recheck Assessment
 

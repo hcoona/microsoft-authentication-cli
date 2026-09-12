@@ -127,7 +127,7 @@ result, forwards cancellation, and invalidates late completion. Provider prompt 
 is not an application security control. Unknown or terminal failures cannot activate a
 PAT, alternate registration, browser, or account fallback.
 
-The Native AOT candidate replaces the managed desktop host with finite static Win32
+The selected Native AOT design replaces the managed desktop host with finite static Win32
 interop inside the same process. Explicit ABI/layout, callback lifetime, creating-thread
 window destruction and nonblocking cancellation are review obligations; the unmanaged
 boundary must not leak exceptions or accept a late success. Standard accessible controls
@@ -135,13 +135,16 @@ display bounded plain text and collect no credentials. Process DLL search must e
 the current directory and ambient `PATH`, retaining only the application directory and
 System32 before provider initialization. Validate the actual broker loader and every
 required native asset under those restrictions; Native AOT alone supplies no dependency
-integrity or DLL-loading guarantee. A conflict leaves the candidate unavailable.
+integrity or DLL-loading guarantee. A conflict makes the affected target unavailable.
 
 The native TMT model's process, UI, broker, caller, Profile and data flows do not change:
 these are internal host and deployment mitigations of its existing execution, tampering,
-disclosure and availability threats. No native model edit or new runtime mitigation
-observation is claimed. The unresolved publishing premise prevents an implementation-
-readiness claim, while existing Profile and security acceptance gates remain applicable.
+disclosure and availability threats. The
+[synthetic evidence](../research/experiments/windows-native-aot.md#diagnostic-round-05-results)
+supports the bounded loader/allocation/observable-cleanup premise; it does not mark
+product controls effective. The publishing choice is resolved at the design level.
+The native model and its candidate dispositions remain unchanged, and complete-application,
+Profile and security acceptance gates remain applicable.
 
 The optional lifetime pipe gives a cooperating caller a concrete cancellation signal.
 Its contract depends on ordinary writer-handle closure, not Linux-to-Windows signal
