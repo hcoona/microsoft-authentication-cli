@@ -27,3 +27,10 @@ __pycache__/
 # Operating-system files
 .DS_Store
 Thumbs.db
+
+# APM and Learn CLI generated local deployments
+apm_modules/
+.agents/skills/
+.github/mcp.json
+.codex/config.toml
+tools/learn-cli/node_modules/

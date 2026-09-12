@@ -75,6 +75,28 @@ The hook fails closed while any unstaged or untracked path remains. Stage the fi
 intended snapshot or temporarily set other work aside before committing so repository-wide
 path-based checks inspect the same tree Git will record.
 
+## .NET and Agent Tooling Bootstrap
+
+The optional `mise.development.toml` environment selects .NET SDK 10.0.401, APM v0.29.0,
+and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward; public
+NuGet configuration and C# conventions apply to future product code. The historical
+.NET 8 probe retains its own SDK and package inputs. Shared MSBuild/package files wait
+for a concrete product consumer.
+
+`apm.yml` selects three MSBuild Skills and Microsoft's two official Learn Skills for
+exactly GitHub Copilot CLI and Codex CLI. APM is their installation owner and owns the
+repository MCP projections. The Learn CLI direct version is in
+`tools/learn-cli/package.json`. Preserve official Skill behavior; the repository does
+not define another tool preference or invocation order. Never run `apm compile` over the
+hand-maintained `AGENTS.md`, or use another installer to duplicate these Skills.
+
+This bootstrap still requires resolved locks and actual acceptance evidence under the
+[developer-tooling protocol](docs/research/experiments/developer-tooling.md). Its bounded
+operator procedure applies after merge; general installation/replay commands will be
+published with the accepted locks and observations. Keep ordinary repository checks on
+the existing default mise environment during bootstrap. Do not infer installer authority
+from an unmerged configuration or from this contributor interface.
+
 ## Pull Requests
 
 A pull request should:
