@@ -1507,14 +1507,16 @@ artifact closure must be evaluated on the resolved graph before selecting that m
 No startup, memory, size, authentication, or cancellation benefit was measured.
 
 **Synthetic runtime outcome, September 12, 2026:** The
-[Windows Native AOT experiment](experiments/windows-native-aot.md#amended-restore-and-bounded-conclusion)
-downloaded all fourteen exact public inputs, but both permitted local-feed restores
-exited 1 without generating dependency assets. The reviewed SDK-startup and receipt-reader
-corrections did not resolve that failure; its cause remains unknown. No AOT publish or
-native-loading case ran, so this is a restore/controller-environment blocker, not a
-Native AOT incompatibility finding. It leaves the design inference and publishing gap
-above unchanged. Another investigation must preserve consumed capacity and obtain its
-own accepted authority and bounded diagnostic protocol before executing.
+[Windows Native AOT experiment](experiments/windows-native-aot.md#diagnostic-restore-and-nuget-environment-cause)
+downloaded all fourteen exact public inputs. Its third local-feed restore retained a
+NuGet configuration-initialization failure: missing `PROGRAMFILES(X86)` and `PROGRAMFILES`
+in the replacement environment lead to `Path.Combine` receiving null. Exact public
+source and installed CoreCLR IL support that cause for the diagnostic attempt; the
+earlier discarded messages are not reconstructed. The accepted bounded continuation
+requires validating the dedicated-empty-directory remedy. No dependency assets, AOT
+publish, or native-loading result exists yet. This environment failure does not establish
+a package/network defect or Native AOT incompatibility; the design inference and
+production-publishing gap remain unchanged.
 
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by

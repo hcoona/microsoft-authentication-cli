@@ -10,8 +10,9 @@ import subprocess
 
 ROOT = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-76')
 INITIAL = '3f21223c0d83aa8d2bb872499c40a4b08de1dcfe'
-PREVIOUS = 'a2aa598e54021792402ee5eef6324ddcd702f7bc'
+PREVIOUS = 'acf4b01d050019064dd6698289b4fdad9ba3184b'
 PREVIOUS_MARKER_SHA256 = '60ef44676aa3285735a73e7adbf8e7ca9dc06780a9e9a3296c7083dff9208dda'
+DIAGNOSTIC_MARKER_SHA256 = '64e44d686794942c7ea03b86cf675348104070e33e5a04783cbf4a23975aab96'
 INITIAL_RECEIPTS = {
     '01/started.json': '979db8fdf83c0435a32c74c7458b4f6686dc8dd31e8f6fc10179fd335832c820',
     '01/result.json': '8d5e5176aaa1c157338c1988c253b539a84f9fd48437b979e61eea723bfb47a5',
@@ -19,6 +20,8 @@ INITIAL_RECEIPTS = {
     '02/result.json': 'aa3358a4bc992d6fec9d36687d759a5eb0f4ff2dbfab03c58492936d97c62606',
     '03/started.json': 'ed065255c3cc5031051004714724e50f6591aa14cfad2ab6d70b771a6e6b8be7',
     '03/result.json': '918a0425d6bb178815385ec6e8572fc6b0d1ba8e16a2abf45aaa2ae76107e7cd',
+    '04/started.json': '645d18bfd5a205ed2d049b4178a3fe152b53bafa934e08c1da5bd28e005c1ce4',
+    '04/result.json': 'c594fd661df111688de8c34c015829472fb70ac1a0fabc1387cac6ef392c3406',
 }
 REL = 'tools/probes/windows-native-aot/'
 PROTOCOL = 'docs/research/experiments/windows-native-aot.md'
@@ -86,7 +89,9 @@ def main():
     original_revision = ROOT / 'source-revision.json'
     if hashlib.sha256(original_revision.read_bytes()).hexdigest() != PREVIOUS_MARKER_SHA256:
         raise SystemExit('Previous accepted source-revision evidence changed.')
-    revision_file = ROOT / 'diagnostic-revision.json'
+    if hashlib.sha256((ROOT / 'diagnostic-revision.json').read_bytes()).hexdigest() != DIAGNOSTIC_MARKER_SHA256:
+        raise SystemExit('Accepted diagnostic source-revision evidence changed.')
+    revision_file = ROOT / 'environment-revision.json'
     prior_revision = json.loads(revision_file.read_text())['accepted'] if revision_file.exists() else PREVIOUS
     if prior_revision not in (PREVIOUS, accepted):
         raise SystemExit('Another amendment needs explicit acceptance.')
@@ -125,12 +130,22 @@ def main():
             name, version = name_version.rsplit('/', 1)
             if library['type'] != 'package' or PACKAGES.get(name) != version:
                 raise SystemExit('Resolved dependency outside accepted closure.')
+    # NuGet needs these roots even with an explicit config file. Avoid host defaults.
+    empty_program_files = ROOT / 'empty-program-files'
+    if empty_program_files.is_symlink():
+        raise SystemExit('Owned program-files root must not be a link.')
     if prior_revision == PREVIOUS:
-        if args.action != 'restore' or [path.name for path in attempts] != ['01', '02', '03']:
-            raise SystemExit('Only the recorded diagnostic amendment is supported.')
+        if empty_program_files.exists():
+            raise SystemExit('Unrecorded program-files root already exists.')
+    elif not empty_program_files.is_dir() or any(empty_program_files.iterdir()):
+        raise SystemExit('Recorded program-files root must exist and remain empty.')
+    if prior_revision == PREVIOUS:
+        if args.action != 'restore' or [path.name for path in attempts] != ['01', '02', '03', '04']:
+            raise SystemExit('Only the recorded environment amendment is supported.')
         # Preserve original identity and receipts. A partial copy fails closed next time.
         for name in FILES:
             (ROOT / 'src' / name).write_bytes(sources[REL + name])
+        empty_program_files.mkdir()
         write(revision_file, {'initial': INITIAL, 'previous': PREVIOUS, 'accepted': accepted,
                              'changed': now(), 'priorConsumption': counts})
     # mkdir is the sequential reservation. Missing results block all later invocations.
