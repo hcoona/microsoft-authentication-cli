@@ -43,6 +43,53 @@ function Read-Output($Process, $Streams, $Seconds) {
     return @($texts[0].ToString(), $texts[1].ToString())
 }
 
+function Convert-BuildDiagnostic([string] $Text) {
+    # This exception to the strict probe emitter covers ordinary build output only.
+    $data = [ordered]@{ text = ''; truncated = $false; redacted = $false; suppressedLines = 0; sensitiveOutput = $false }
+    $sensitivePattern = '(?i)\b(access_token|refresh_token|id_token|client_secret|password|authorization|cookie)\s*[:=]|\bBearer\s+\S+|\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+|\bMSALRUNTIME_.*\b(log|trace)\b'
+    $clean = $Text -replace '\x1b\[[0-?]*[ -/]*[@-~]', ''
+    $clean = $clean -replace '[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', ''
+    if ($Text -match $sensitivePattern -or $clean -match $sensitivePattern) {
+        $data.sensitiveOutput = $true
+        return $data
+    }
+    $paths = [ordered]@{
+        $root = '<experiment-root>'; $vc = '<vc-tools>'
+        $sdk = '<windows-sdk>'; 'C:\Program Files\dotnet' = '<dotnet>'
+        'C:\Windows' = '<windows>'
+    }
+    foreach ($path in $paths.Keys) {
+        $clean = [regex]::Replace($clean, [regex]::Escape($path), $paths[$path], 'IgnoreCase')
+    }
+    $clean = [regex]::Replace($clean, '(?i)https?://[^\s<>"'']+', {
+        param($match)
+        $uri = $null
+        if ([Uri]::TryCreate($match.Value, [UriKind]::Absolute, [ref]$uri) -and
+            $uri.Host -in @('api.nuget.org', 'www.nuget.org', 'learn.microsoft.com', 'aka.ms')) {
+            return $uri.Scheme + '://' + $uri.Host + '/<url-detail-redacted>'
+        }
+        return '<url>'
+    })
+    $clean = $clean -replace '(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', '<email>'
+    $clean = $clean -replace '(?i)\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b', '<identifier>'
+    $data.redacted = $clean -cne $Text
+    $lines = New-Object 'Collections.Generic.List[string]'
+    foreach ($line in ($clean -split '\r?\n')) {
+        # Unknown host paths and environment assignments are not public evidence.
+        if ($line -match '(?i)(?<![a-z0-9])[a-z]:[\\/]|\\\\[^\s\\]+\\|/(home|Users)/' -or
+            $line -cmatch '^\s*[A-Z][A-Z0-9_]{1,}\s*=') {
+            $lines.Add('<suppressed: unexpected host path or environment assignment>')
+            $data.suppressedLines++
+        } else { $lines.Add($line) }
+    }
+    $kept = @($lines | Select-Object -First 256)
+    $textValue = [string]::Join("`n", $kept)
+    if ($lines.Count -gt 256 -or $textValue.Length -gt 32768) { $data.truncated = $true }
+    if ($textValue.Length -gt 32768) { $textValue = $textValue.Substring(0, 32768) }
+    $data.text = $textValue
+    return $data
+}
+
 try {
     Save-Json "$attempt\controller.json" @{ pid = $PID; started = (Get-Process -Id $PID).StartTime.ToUniversalTime().ToString('o') }
     $identities = @{
@@ -138,7 +185,7 @@ try {
     if ($guard.ActiveProcesses -ne 0) { throw 'Owned descendant survived normal exit' }
     $result.quiescent = $true
     if ($Action -in @('restore', 'publish')) {
-        # Keep diagnostic codes only; public source/tool inspection explains them later.
+        # Retain useful build diagnostics after sanitization; never persist raw output.
         $all = $texts[0].ToString() + $texts[1].ToString()
         $result.diagnosticCodes = @([regex]::Matches($all, '\b(?:IL|CS|NU|NETSDK|MSB|LNK)[0-9]{4,5}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique)
         $result.stdoutCharacters = $texts[0].Length
@@ -151,6 +198,11 @@ try {
             'System.ComponentModel.Win32Exception'
         ) | Where-Object { $all.Contains($_) })
         $result.commandParseFailure = $all.Contains('Unrecognized command or argument')
+        $result.stdoutDiagnostic = Convert-BuildDiagnostic $texts[0]
+        $result.stderrDiagnostic = Convert-BuildDiagnostic $texts[1]
+        if ($result.stdoutDiagnostic.sensitiveOutput -or $result.stderrDiagnostic.sensitiveOutput) {
+            throw 'Sensitive build output suppressed'
+        }
     } else {
         if ($texts[1].Length -ne 0) { throw 'Unexpected subject stderr; contents suppressed' }
         # Exact emitter order also rejects duplicate fields before JSON parsing.

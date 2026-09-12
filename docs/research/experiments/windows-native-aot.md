@@ -9,10 +9,12 @@ and [validation strategy](../../validation/strategy.md#native-aot-publishing) co
 the bounded conclusion. The historical Windows MSAL and tooling protocols retain their
 exhausted capacities; none of their helpers or subjects may execute here.
 
-The recorded outcome is an unresolved restore prerequisite: both permitted restores
-failed, so no Native AOT publish or loading case ran. Fetch and restore capacities are
-exhausted. The procedure below preserves the executed subjects and controls; it does
-not authorize replay or allow unused downstream capacity to bypass failed prerequisites.
+The recorded outcome remains an unresolved restore prerequisite: two restores failed,
+so no Native AOT publish or loading case ran. The diagnostic continuation preserves
+those attempts and extends cumulative restore capacity to six under the accepted Wave.
+The first continuation changes diagnostic retention only; commands, environment,
+toolchain, packages, and synthetic program remain unchanged. Execution still requires
+independent acceptance of this exact amendment and all pre-action gates below.
 
 ## Question and Exact Subject
 
@@ -134,11 +136,13 @@ Wave and exact protocol remain current, recovers the required independent review
 CI/commit-check receipts, and checks prior attempt results. Material prerequisite drift
 requires refreshed review. The wrapper checks ancestry, current Wave bytes, checkout
 and Windows-copy source bytes, prior consumption, feed identities, and prerequisites.
-The startup amendment used PR #79 merge commit
-`a2aa598e54021792402ee5eef6324ddcd702f7bc` as `ACCEPTED_COMMIT` in a detached checkout.
-The command forms below document that accepted procedure. Neither restore nor the
-blocked downstream actions may now run. Public-fetch capacity is also exhausted and
-the wrapper cannot fetch or create another root:
+The diagnostic amendment uses its own merged commit as `ACCEPTED_COMMIT` in a detached
+checkout. The first action repeats PR #79's restore command and replacement environment
+without modification. The controller retains useful sanitized ordinary build diagnostics
+under the contract below. Public-fetch capacity remains one consumed batch in this exact
+protocol; the wrapper cannot fetch or create another root. The Wave's conditional extra
+fetch remains inactive unless a demonstrated missing dependency receives a separately
+accepted exact manifest and protocol within that Wave's cumulative bounds:
 
 ```text
 python3 tools/probes/windows-native-aot/run.py restore --accepted ACCEPTED_COMMIT
@@ -151,21 +155,24 @@ python3 tools/probes/windows-native-aot/run.py decoy --accepted ACCEPTED_COMMIT
 These are WSL operator commands for this host boundary. Invoke one action at a time;
 do not batch past a result requiring inspection. Source amendments require independent
 acceptance before execution and must preserve the root's prior consumption. This one
-amendment accepts only the original PR #78 root and exact receipts 01 and 02, whose
-SHA-256 identities are pinned in `run.py`. Before the remaining restore, it verifies all
-original source copies, prior results, and feed hashes, then replaces only the seven
-accepted source copies and writes `source-revision.json`. Prior PowerShell JSON receipts are decoded with
-UTF-8 BOM support; their original bytes and hashes remain unchanged. The original identity
-and receipts remain unchanged. A partial source replacement fails closed; another amendment
-requires explicit review. Later actions require this amendment's same accepted revision.
+amendment accepts only the original PR #78 root, the PR #79 source copies, exact receipts
+01 through 03, and the original `source-revision.json`, whose SHA-256 identities are
+pinned in `run.py`. Before the diagnostic restore, it verifies those copies, prior
+results, and feed hashes, replaces only the seven owned source copies, and writes a new
+`diagnostic-revision.json` naming the prior and current accepted source and consumption.
+The original identity, revision marker, and six receipt files remain byte-for-byte
+unchanged. PowerShell receipts retain UTF-8 BOM-aware reading. A partial source
+replacement fails closed; another amendment requires explicit review. Later actions
+require this amendment's same accepted revision. Known consumption before the first
+continuation is fetch 1, restore 2, publish 0, each case 0, and guard bootstrap 2.
 
 | Unit | Cumulative maximum, including failed starts and manual execution |
 | --- | --- |
 | Public package fetch | One batch, 14 package requests, no retries or redirects; 300 MiB per archive and 1.5 GiB total; a WSL process timer interrupts pending reads at a 600-second batch deadline, in addition to 30-second socket inactivity limits |
-| Restore | Two Windows actions, at most 600 seconds each |
+| Restore | Six cumulative Windows actions, including the two historical actions; at most 600 seconds each |
 | Native AOT publish | Two Windows actions, at most 900 seconds each, after successful restore and exact resolved closure inspection |
 | Synthetic cases | One positive, one missing-library, and one combined working-directory/PATH-decoy action; 30 seconds each; no repeat |
-| Guard bootstrap | One standalone compiler action per Windows action, at most seven cumulatively; 60 seconds plus 10 seconds termination each, with no shared compiler/server mode, installation, or authentication subject execution |
+| Guard bootstrap | One standalone compiler action per Windows action, at most eleven cumulatively including the two historical compilations; 60 seconds plus 10 seconds termination each, with no shared compiler/server mode, installation, or authentication subject execution |
 | Windows controller | One per Windows action, 1,300-second WSL wait ceiling; child output at most 8 Mi characters in memory, never raw provider output on disk |
 | Subject process/termination bounds | Kernel Job Object limit of 32 simultaneously active processes per action; at most 10 seconds for job termination and active-process quiescence |
 
@@ -222,16 +229,47 @@ may start until the record is resolved; an actual safety stop remains a stop.
 Retain start/end times, accepted commit/tree and source hashes, capacity, tool versions,
 public package and output identities, resolved asset selection, warning/error codes,
 exit/timeout status, and the program's fixed JSON fields. Compiler diagnostic codes may
-be explained from public source/IL without replaying a publish. The startup amendment
-also records stdout/stderr character counts, presence of nine fixed public SDK exception
-type names, and a Boolean for the fixed English unrecognized-command diagnostic. It
-never retains messages, stack frames, arbitrary exception names, or command output.
-These classifiers describe emitted text, not proof of an exception's root cause. Never
-retain exception messages/stacks, account/tenant identifiers, tokens, native error context, raw broker
-diagnostics, or private local guidance. Unexpected output is suppressed and stops further
-subject execution. Preserve missing output or crashes as failures, not negative-case
-success. Read-only artifact inspection and sanitized record preparation are not new
-subject attempts.
+be explained from public source/IL without replaying a publish. Existing stdout/stderr
+counts, fixed exception-type matches, and command-parser Boolean remain available. The
+diagnostic continuation additionally permits ordinary SDK/MSBuild/NuGet/compiler text
+and public stack symbols from restore/publish only, after in-memory sanitization:
+
+- Keep stdout and stderr separate. For each, retain at most the first 256 lines and
+  32,768 characters, with explicit truncation, redaction, suppressed-line count, and
+  sensitive-output flags. The existing combined 8 Mi-character transient bound remains.
+- Normalize the exact experiment, VC, Windows SDK, dotnet, and Windows paths to stable
+  role placeholders. Suppress entire lines containing other drive/UNC/user-home paths
+  or uppercase environment-variable assignments. Do not enable environment dumps,
+  diagnostic verbosity, binary logging, or extra file loggers in this amendment.
+- Remove terminal escapes/control characters. Replace email and GUID identifiers.
+  URLs retain only scheme and one of four public hosts (`api.nuget.org`, `www.nuget.org`,
+  `learn.microsoft.com`, `aka.ms`); discard user information, paths, queries, fragments,
+  and other hosts. Preserve public method/type names and parameter names in stack
+  signatures, never runtime argument values or private file paths.
+- Scan both raw and control-normalized text before other redactions or truncation.
+  Credential/authorization assignments, bearer text, JWT-shaped values, or native
+  logging markers suppress the entire affected stream and trigger a safety stop after
+  owned-process quiescence. Do not persist raw output before sanitization. No exception
+  to the strict synthetic-case JSON emitter or to the prohibition on native/broker
+  diagnostics is granted. Controller/bootstrap exceptions still retain types only.
+
+This is a bounded synthetic public-build transcript, not a general private-log sanitizer.
+The fixed commands, source, package inputs, and replacement environment remain part of
+its privacy boundary. Review sanitized excerpts before placing them in public records;
+do not promote host/user details, dynamic argument values, or unrelated content into
+evidence merely because a pattern did not match. Suppression or truncation can still
+prevent diagnosis and must remain explicit. Verify the sanitizer using public/synthetic
+fixtures without starting the compiler, SDK, or probe before acceptance.
+
+The first diagnostic restore is an explained retry because the old capture contract
+discarded unanticipated messages. Inspect its result before any downstream action.
+Further attempts require an evidenced remedy or a reviewable diagnostic reason; changes
+to commands, environment, or executable source require another accepted exact amendment
+preserving all consumption. AOT-AUTHOR-010 was independently triaged as information loss
+that blocks the renewed diagnosis, not a historical retention-contract violation or proof
+that the discarded text necessarily contained the cause. No message is reconstructed.
+Preserve missing output or crashes as failures, not negative-case success. Read-only
+artifact inspection and sanitized record preparation are not new subject attempts.
 
 At completion retain only identified experiment-owned source, public dependencies,
 build/output artifacts and sanitized receipts for reproducibility. Local PID receipts
@@ -367,7 +405,7 @@ The earlier unmeasured trust-processing limitation remains as recorded above.
 | Attempt 03 result | `918a0425d6bb178815385ec6e8572fc6b0d1ba8e16a2abf45aaa2ae76107e7cd` |
 | Source-revision marker | `60ef44676aa3285735a73e7adbf8e7ca9dc06780a9e9a3296c7083dff9208dda` |
 
-Final consumption is fetch **1/1**, restore **2/2**, publish **0/2**, positive/missing/decoy
+Consumption at the original investigation's closure was fetch **1/1**, restore **2/2**, publish **0/2**, positive/missing/decoy
 **0/1 each**, and guard bootstrap **2/7**. All three attempts have complete receipts;
 there was no interrupted or manual subject replay. No owned subject remains running.
 The identified experiment-owned feed, amended source, home markers, guard outputs,
@@ -386,11 +424,10 @@ Supported source investigation identified and corrected the independent SDK firs
 control and receipt-decoding defects. Exact parser inspection did not support changing
 the restore command. Neither finding diagnoses the remaining exit 1, and no demonstrated
 AOT/dependency/host defect supports a further source remedy or provider/UI replacement.
-A later investigation would first need an accepted finite diagnostic protocol that can
-classify the restore failure without exposing sensitive output and that preserves these
-consumed attempts. It requires new or amended Wave authority; spare publish/case capacity
-cannot supply another restore. Current work ends with this bounded blocker and the
-unchanged production-publishing gap.
+That investigation ended with this bounded blocker and the unchanged production-publishing
+gap. The diagnostic continuation above supplies a new finite procedure under PR #82's
+accepted Wave while preserving these consumed attempts; unused publish/case capacity
+does not supply another restore. No continuation runtime observation is yet recorded.
 
 ### Fetched Public Archive Identities
 
