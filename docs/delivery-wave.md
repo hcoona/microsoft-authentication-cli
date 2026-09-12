@@ -22,8 +22,9 @@ the [Windows Slice design](designs/windows-ado-authentication.md), its
 [protocol schemas](../contracts/v1/request.schema.json), the
 [public dependency assessment](research/v1-public-contract-baseline.md#windows-native-aot-assessment),
 the [accepted original observations](research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results),
-the [stopped readiness supplement](research/experiments/windows-native-aot.md#readiness-results)
-and [recovery results](research/experiments/windows-native-aot.md#recovery-results),
+the [stopped readiness supplement](research/experiments/windows-native-aot.md#readiness-results),
+[recovery results](research/experiments/windows-native-aot.md#recovery-results),
+and [round-03 observations](research/experiments/windows-native-aot.md#diagnostic-round-03-results),
 the [validation basis](validation/strategy.md#native-aot-publishing), and
 [experiment safety](research/experiment-safety.md). The repository owner directed
 completion of the remaining AOT evidence and publishing design, stopping before
@@ -75,11 +76,20 @@ must fit the action ceiling and may not delay the normal stop decision or emerge
 termination beyond their accepted bounds.
 
 Preserve the two-second normal Job drain, charged to the action limit with at most
-100 milliseconds of scheduling tolerance, and strict zero-process normal completion.
+100 milliseconds of scheduling tolerance, and zero-process normal completion.
 The synthetic probe may omit debug symbols without selecting product symbol policy;
 preserve the rooted provider surface and complete AOT/trim diagnostics. Job membership
 or a tool label does not establish exclusive use of a potentially shared service.
-Neither a surviving helper nor its forced termination counts as successful completion.
+For future fresh rounds only, the owner accepts a narrow alternative publish completion:
+after a zero-exit publish subject with complete screened diagnostics and no unreviewed
+warnings or diagnostic suppression, remaining members may undergo expected owned-Job
+termination only when they satisfy an independently accepted, current VCTIP identity and
+ownership predicate. A stale snapshot alone is insufficient. Independently accept the
+exact finite verification, race handling, termination and evidence protocol before use;
+unknown, other or potentially shared members cannot qualify. Successful termination and
+proved final zero-process quiescence are required. This exception concerns synthetic
+publish cleanup only; it does not reclassify any historical stop or relax runtime
+completion. It neither authorizes telemetry nor establishes absence of helper effects.
 Retain screened diagnostics after owned termination on completed-capture failure paths.
 
 A failure or safety stop ends the affected round and preserves its root read-only.
@@ -96,8 +106,9 @@ incomplete/suppressed diagnostics, unexpected external effects, or a needed effe
 outside this grant ends all new execution and requires owner disposition. No remaining
 buffer overrides that boundary. Otherwise, reviewed corrections and executions within
 this grant require no repeated owner approval or Wave amendment merely to use the
-remaining allowance. Every runtime still requires its own round's normally completed,
-independently reviewed publish and fully bound artifacts.
+remaining allowance. Every runtime still requires its own round's independently reviewed
+publish, completed normally or through the accepted VCTIP cleanup criterion, and fully
+bound artifacts and dependencies before execution.
 
 Reuse only hash-verified public archives from the original experiment. No new package,
 SDK, compiler, debugger or tool installation is authorized. The exact protocol bounds
