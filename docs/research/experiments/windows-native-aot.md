@@ -446,6 +446,62 @@ and update validation consumers. Render affected standard diagrams, retain later
 application/WAM/UI/Profile/performance/release gates, close the Wave after accepting the
 bounded outcome, and stop before minimal Windows CLI implementation.
 
+### Rejected Recovery Preflight and Narrow Correction
+
+After PR #95 merged as `280325ed617852598aa316550db3d5ac3d3403fe` and its
+[actual postmerge review](https://github.com/hcoona/microsoft-authentication-cli/pull/95#issuecomment-5644796537),
+one `restore` wrapper invocation exited 1 with `Windows path ownership preflight failed.`
+The accepted source calls this read-only Windows PowerShell path check before creating
+the recovery root, preparation reservation, attempt 16, action controller, or compiler.
+The root remained absent when inspected at September 12, 2026, 08:40:47 UTC. No new
+restore, publish, runtime, or guard unit was consumed. This was a rejected metadata
+preflight, not a failed SDK restore or an observed experimental safety stop.
+
+The original check discarded its PowerShell return code and both streams, conflating
+a path-query failure, reparse rejection, and unexpected output. Its exact cause remains
+unknown. Later read-only metadata inspection found a symlink at the stopped supplement's
+`home/AppData/Local/Microsoft/Windows/INetCache/Content.IE5`. Its absolute target was
+within that stopped root; target text and content were not retained, and the target was
+not traversed. This is a plausible rejection input, not proof of the failed branch,
+link creator, creation time, or cache behavior.
+
+| Retained observation | SHA-256 |
+| --- | --- |
+| Preflight rejection receipt | `378b0570f953cc6e67741316ee02a0bd477ad073c71c1aa3e23b94c7d4eb881b` |
+| Later path metadata receipt | `53a2c370057428a1d6eead01e8c4358ba1f4dc66b2c3f26ae3576c72c01dc217` |
+| Target category, without target content | `dd257e135ce5c745467399cc868c2b2c86e69b059b5d463bac23b9deb7b73e37` |
+
+Independent AOT-READINESS-J triage confirmed the diagnostic gap and excessive scan of
+the immutable predecessor's unused home/cache. The prospective correction checks the
+exact `HISTORY_FILES`, sixteen original `FEED` archives, `PRIOR_FILES`, and all their
+ancestors, including both attempt-inventory directories. Their hashes and exact attempt
+inventories remain mandatory. Check ancestors lexically from the verified `C:\Temp`
+downward before querying each leaf; reuse only prefixes already verified as direct.
+It does not enumerate unused predecessor home/temp/cache
+trees, consume their contents, follow links, or alter any predecessor. There is no
+exception for a particular cache filename or target. Required input leaves and ancestors
+still reject reparse points. The active recovery root's entire recursive check and the
+controller's active-root checks remain unchanged; its home/cache can affect live actions
+and cannot inherit the immutable-predecessor exclusion.
+
+Before another host check, independently accept this exact source/protocol correction
+and refresh the accepted target and required review gates. Permit one corrected
+preparation preflight and then one preflight per remaining sequential action, at most
+six corrected checks total, each within the existing 60-second limit. Count failed
+checks; no incidental retry is allowed. Any corrected preflight rejection ends further
+execution pending a reviewed disposition and does not reset this cumulative count.
+The earlier rejected check remains recorded separately. No recovery root exists to
+resume or clean. Restore, publish, runtime and guard capacity remains exactly as listed
+above, and the wrapper still reserves each action before starting its controller.
+
+The corrected wrapper emits only fixed failure classes (`reparse-point`,
+`path-query-failed`, `unexpected-output`, or `timeout`), numeric exit status when
+available, and a Boolean for stderr presence. A `direct-paths` stdout value alongside
+an unsuccessful exit or stderr is also a rejection, not success. No arbitrary path,
+exception message, environment value, or raw stream becomes retained evidence. Preserve
+each rejected result in the work carrier before considering any later amendment; new
+diagnostics cannot reconstruct the discarded original result.
+
 ## Question and Exact Subject
 
 Can the pinned .NET 10 Windows x64 synthetic program publish with Native AOT and enter
