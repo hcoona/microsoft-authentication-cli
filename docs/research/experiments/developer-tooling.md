@@ -26,7 +26,7 @@ do not infer an empty-cache restore or cross-platform coverage.
 
 | Input | Exact selection and public provenance |
 | --- | --- |
-| .NET SDK | 10.0.401, `core:dotnet` in `mise.development.toml`, matching root `global.json`; Microsoft public SDK release distribution |
+| .NET SDK | 10.0.401, `http:dotnet-development` in `mise.development.toml`, matching root `global.json`; exact Microsoft public Linux x64 and Windows x64 SDK archives and SHA-512 values |
 | APM | `github:microsoft/apm` v0.29.0, official release assets |
 | Node.js | 22.22.2, public Node.js distribution; use its bundled npm |
 | Learn CLI | `@microsoft/learn-cli` 1.0.0 from `https://registry.npmjs.org/`; `tools/learn-cli/package.json` owns the direct dependency |
@@ -126,6 +126,14 @@ A subprocess timeout terminates its owned process group, then verifies that it e
    historical .NET 8 tool. Record host, mise, Node/npm, APM, and SDK versions. Run only
    `dotnet --version` / `--info` at the repository root to check SDK selection; do not run
    restore, build, publish, workload, certificate, or probe commands.
+   Use `http:dotnet-development`, not the `dotnet` registry alias: the observed alias
+   resolution selects a vfox backend whose lock identifies a mutable install script
+   without an SDK-archive checksum. The exact HTTP tool declares Microsoft's versioned
+   archives and SHA-512 values from the pinned
+   [.NET 10 release metadata](https://github.com/dotnet/core/blob/3b2b11b56f0dfa0f4c273fed44efbc32342ea475/release-notes/10.0/releases.json).
+   Lock only `http:dotnet-development`, `github:microsoft/apm`, and `node`, for
+   `linux-x64,windows-x64`; require archive URLs and checksums for all six tool/platform
+   entries before installation. This does not alter the separate historical HTTP tool.
 2. Generate the npm lock with `npm install --package-lock-only --ignore-scripts --no-audit
    --no-fund` in `tools/learn-cli`. Inspect the resolved transitive graph, public source
    URLs, integrity values, engines, licenses, and lifecycle scripts before `npm ci` with
@@ -197,6 +205,20 @@ subject compatibility, authentication support, or product implementation readine
 
 ## Execution History
 
-No attempt has executed under this protocol. Bootstrap acceptance alone does not establish
-repeatable installation or client discovery. The first execution must recover this zero
-baseline and bind the accepted revision before reserving its first attempt.
+On **2026-09-12 UTC**, mise lock generation attempt **1 of 3** executed under bootstrap
+revision `ec34c446c8c2528ad389a6cc64f706624e096cbb`, from 00:20:02.758673 to
+00:20:04.838337 UTC. The existing WSL development host and mise 2026.8.10 generated six
+Linux x64/Windows x64 entries and exited zero. Inspection found that `core:dotnet` resolved
+to `vfox:dotnet`; its entries named the mutable `dot.net/v1/dotnet-install` scripts and
+contained no SDK-archive checksums. This is a lock-generation observation, not successful
+locked SDK installation. No developer tool or package was installed, and no client or
+retrieval operation executed. All preserved instruction/probe/historical-toolchain and
+private-supplement comparisons matched.
+
+The generated lock is retained as temporary validation evidence rather than accepted as
+the developer lock. Installation stopped before invocation. The amended exact HTTP SDK
+descriptor resolves that discovered reproducibility gap without changing the SDK version,
+host scope, public source, or retained-installation boundary. Execute the corrected
+descriptor only after this amendment merges. **Two lock-generation invocations remain**;
+all other operation limits remain unused. Recover this history and rebind the amended
+accepted revision before the next attempt; protocol amendment does not reset capacity.
