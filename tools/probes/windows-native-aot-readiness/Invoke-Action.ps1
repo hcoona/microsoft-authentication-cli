@@ -6,7 +6,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
-$root = 'C:\Temp\azureauth-native-aot-diagnostics\round-02'
+$root = 'C:\Temp\azureauth-native-aot-diagnostics\round-03'
 $attempt = Join-Path "$root\attempts" $AttemptName
 $vc = 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231'
 $sdk = 'C:\Program Files (x86)\Windows Kits\10'

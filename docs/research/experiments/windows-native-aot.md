@@ -23,7 +23,79 @@ missing publish warnings remain unchanged. These synthetic results establish the
 allocation/loading/search path, not WAM authentication, complete native cleanup,
 production publishing, or support.
 
+## Diagnostic Round 03
+
+Round 02 ended at its [rejected metadata preflight](#diagnostic-round-02-preflight-result),
+before host-root preparation, guard compilation or restore. Independent triage confirmed
+a command-length defect. This fresh exact amendment reduces only preflight transport
+size; it does not repeat the invalid command or alter the synthetic subject, finite
+lexical diagnostic, toolchain, build arguments, evidence or completion rules from Round 02.
+It must merge before any new Windows preflight or experiment effect.
+
+### Exact Round and Cumulative Bounds
+
+Use a clean detached checkout of this accepted amendment, bound to the current target,
+its exact source/protocol and the unchanged buffered Wave hash. Apply Round 02's finite
+protocol with these replacements:
+
+| Unit | This exact round | Cumulative count after full success |
+| --- | --- | --- |
+| Local-feed restore | Attempt 20, 180 seconds | Four of ten restores |
+| Native AOT publish | Attempt 21, 600 seconds | Four of ten publishes |
+| Synthetic cleanup | Attempt 22, 30 seconds | One of four cleanup cases |
+| Genuine x86 rejection | Attempt 23, 30 seconds | One of four wrong-architecture cases |
+| Standalone guard | Ordinals 07–10, 30 seconds each | Ten of twenty-eight |
+| Corrected preflight | Ordinals 06–09, 60 seconds each | Nine of fifty; original rejected check separate |
+
+Use only `C:\Temp\azureauth-native-aot-diagnostics\round-03` for new host files.
+Round 02's root must remain absent; reject unexpected state there. The parent may contain
+only stopped round-01 and current round-03. Round 02 consumed preflight 05 but never
+reserved action 20 or guard 07. Carry the actual counts forward; retain all unstarted
+allocations as nonexecutable in the stopped round. No later round is allocated here.
+
+The four historical root aggregates, including round-01's exact 32-file manifest, remain
+unchanged. Add both failed-preflight 05 receipts to `DIAGNOSTIC_PREFLIGHT_HISTORY` and
+require their exact hashes before any new reservation. Preserve the failed result as
+failed; it is an immutable predecessor observation, not a successful current-round
+precondition. Current-round preflights start at 06 and require their own exact successful
+prior results. The original corrected-preflight 01–02 and diagnostic 03–05 records remain
+separate and immutable. All prior action/source/graph/completion checks still precede
+the next host preflight, and fresh-root preflight still precedes its writes.
+
+### Preflight Transport Correction
+
+Independent finding P confirmed that the prior 37,352-character Base64 argument alone
+exceeded the documented [CreateProcessW command-line limit](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw)
+of 32,767 UTF-16 code units including NUL. The retained failed preflight has no raw error
+text, so this deterministic source defect is not a reconstructed runtime error message.
+
+Group consecutive runs of the same 146 fixed predecessor input paths by their lexical
+parent directory in WSL, preserving the original input and check order. Encode each
+run's parent once with its finite leaf list. The PowerShell script reconstructs
+each exact input path and performs the unchanged named-input/ancestor reparse checks;
+there is no directory discovery, alternate path source, omitted input or added host query.
+The active round's recursive checks are unchanged. Preserve path screening, replacement
+streams, the 60-second preflight ceiling and the existing finite result classes.
+
+Construct the complete command in the pure `windows_path_command()` function before
+creating the preflight reservation. Use the fixed Windows executable path, flags and
+encoded argument to calculate the full command's UTF-16 length including NUL. Reject
+anything above 30,000 units, leaving margin below the documented limit, before any new
+reservation or host invocation. This is a static transport gate, not another preflight
+attempt or permission to retry a failed check. After that gate, exclusively reserve the
+next ordinal and invoke exactly the prepared command once. A failed or interrupted
+host preflight still consumes its ordinal and ends this round.
+
+No additional process API, metadata output, compiler invocation, authentication, account
+state, installation or remote effect is introduced. The finite snapshot and all success,
+round-stop/global-stop, retention and per-action independent review obligations remain
+those of Round 02. Another fresh round still requires reviewed evidence and an accepted
+exact amendment within the remaining Wave; no invalid command may be retried incidentally.
+
 ## Diagnostic Round 02
+
+**Stopped historical round:** Preflight 05 failed before root preparation. Its actions and
+guards never started; see [result](#diagnostic-round-02-preflight-result).
 
 Round 01's [reviewed stop](#diagnostic-round-01-results) left a verified Job member in
 an expected `unknown` image class. Its complete diagnostics and successful owned
@@ -124,6 +196,43 @@ accepted exact amendment within the remaining Wave. Failed termination, unproved
 quiescence, sensitive/incomplete/suppressed diagnostics or unexpected external effects
 end execution and require owner disposition. No tool class permits a shared-server
 exception, weakened completion rule or unrelated termination.
+
+### Diagnostic Round 02 Preflight Result
+
+After PR #100 accepted source/protocol
+`a8867ad065296ddaa528ecedaa82b9d49070ca7e`, tree
+`23770d1bc877e10d54786a87771b89c956045672`, the clean detached runner reserved corrected
+preflight 05 at September 12, 2026 UTC 10:52:08.815416. It returned at
+10:52:08.866669 with `passed=false`, `classification=unexpected-output`, exit 1 and
+`stderrPresent=true`. Raw streams were deliberately not retained under the accepted
+finite preflight protocol. Do not infer their contents or claim a specific observed
+Windows error.
+
+Round 02 ended before creating its host root or reserving action 20/guard 07. No restore,
+publish, runtime or package/tool acquisition ran. The designated root remains absent.
+Prior stopped roots and receipts remain unchanged. Corrected preflight consumption is
+now five, including this failed check; restores/publishes remain three each, guards six,
+and synthetic runtimes zero. Original thirteen-attempt limits and the original rejected
+preflight remain separate. A failure consumes capacity even when the subject never starts.
+
+Independent static reconstruction found 146 exact predecessor paths, a 14,006-character
+script and a 37,352-character encoded argument. The argument plus NUL alone exceeds
+CreateProcessW's documented 32,767 limit by 4,586 characters, before the executable and
+flags. Independent finding P was triaged true positive, blocking, confidence 10/10.
+This establishes a transport-size defect requiring correction; it does not prove the
+unretained actual error mechanism. The smallest correction factors repeated lexical
+parents and gates the full command length before reserving another host check.
+
+| Retained evidence | SHA-256 |
+| --- | --- |
+| Preflight 05 reservation | `56528742f6a2a88393bb55182e4939454a907f9f95ef4e46368ce8c68cc85f28` |
+| Preflight 05 result | `df57ff8b814dad24708d43ef5a917792e79fbe6437e59d1a8174acc316a1cdd9` |
+
+Independent evidence review found no build-diagnostic, unresolved-process, account-state
+or unexpected external-effect condition requiring a new owner disposition. The failed
+round cannot resume. The existing buffered Wave permits preparation and independent
+acceptance of the corrected fresh exact protocol above; no additional build/runtime
+compatibility or publishing conclusion follows from this rejected preflight.
 
 ## Diagnostic Round 01
 

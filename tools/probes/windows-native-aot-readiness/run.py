@@ -13,11 +13,11 @@ import base64
 from urllib.parse import unquote
 
 BASE = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-diagnostics')
-ROOT = BASE / 'round-02'
+ROOT = BASE / 'round-03'
 RECOVERY = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness-recovery')
 PREFLIGHT_DIR = pathlib.Path('/tmp/azureauth-wave-work')
 OLD = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-76')
-WAVE_PARENT = '2fea4a9c5d056e031d8d026a365093ab3e38ba3b'
+WAVE_PARENT = 'a8867ad065296ddaa528ecedaa82b9d49070ca7e'
 WAVE_SHA256 = '5e45488af78a27de73702dbbb6a0112ca6294acd7961a1e811295fe310f75327'
 PRIOR = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness')
 PRIOR_COUNTS = {'restore': 3, 'publish': 3, 'cleanup': 0, 'wrong-architecture': 0}
@@ -70,7 +70,9 @@ DIAGNOSTIC_FILES = ['attempts/18/NativeAotReadinessProbe.csproj.nuget.g.props',
  'source/2fea4a9c5d056e031d8d026a365093ab3e38ba3b/run.py',
  'stopped.json']
 DIAGNOSTIC_SHA256 = '79353af8cfe14823692e83407fcb636390dd74cdf35dd4d78197a416a109fa5f'
-DIAGNOSTIC_PREFLIGHT_HISTORY = {'aot-diagnostic-preflight-03-completed.json': 'f87d77ae290586d9c29fdc44bc008042e74f94b565aea0e9430075c97276345b',
+DIAGNOSTIC_PREFLIGHT_HISTORY = {'aot-diagnostic-preflight-05-started.json': '56528742f6a2a88393bb55182e4939454a907f9f95ef4e46368ce8c68cc85f28',
+ 'aot-diagnostic-preflight-05-completed.json': 'df57ff8b814dad24708d43ef5a917792e79fbe6437e59d1a8174acc316a1cdd9',
+ 'aot-diagnostic-preflight-03-completed.json': 'f87d77ae290586d9c29fdc44bc008042e74f94b565aea0e9430075c97276345b',
  'aot-diagnostic-preflight-03-started.json': '0a7386d7ab394c34724c470d308c77ee80fda885bba70c0fd34cdca65240bf68',
  'aot-diagnostic-preflight-04-completed.json': 'aae4e49b9bd2279aaa94bf65c62a7ca0387c505601e62e07c40f97ecfb1c35b3',
  'aot-diagnostic-preflight-04-started.json': '13323e0a90160e09f7e296b15e98de641c9c1154f11fa158f3c92ffad036874c'}
@@ -265,7 +267,7 @@ def source_inventory(source, expected):
             raise SystemExit('Dedicated source changed.')
 
 
-def windows_paths():
+def windows_path_command():
     # Read-only host preflight precedes all dedicated-root writes, including initial copy.
     script = r'''
 $ErrorActionPreference = 'Stop'
@@ -284,7 +286,9 @@ try {
     }
     # Predecessors supply only these immutable inputs, never their scratch home/cache.
     $seen = @{}
-    foreach ($inputPath in @(__PREDECESSOR_PATHS__)) {
+    foreach ($group in @(__PREDECESSOR_GROUPS__)) {
+      foreach ($leaf in $group.Names) {
+        $inputPath = $group.Directory + '\' + $leaf
         $path = 'C:\Temp'
         foreach ($part in $inputPath.Substring(8).Split('\')) {
             $path += '\' + $part
@@ -295,13 +299,14 @@ try {
             }
             $seen[$path] = $true
         }
+      }
     }
     $base = 'C:\Temp\azureauth-native-aot-diagnostics'
     if ((Test-Path -LiteralPath $base) -and
         ((Get-Item -LiteralPath $base -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
         $failure = 'reparse-point'; throw 'Linked diagnostic root'
     }
-    $root = 'C:\Temp\azureauth-native-aot-diagnostics\round-02'
+    $root = 'C:\Temp\azureauth-native-aot-diagnostics\round-03'
     if (Test-Path -LiteralPath $root) { $queue.Enqueue($root) }
     while ($queue.Count -gt 0) {
         $item = Get-Item -LiteralPath $queue.Dequeue() -Force
@@ -322,14 +327,34 @@ try {
               ('azureauth-native-aot-readiness', PRIOR_FILES),
               ('azureauth-native-aot-readiness-recovery', RECOVERY_FILES),
               ('azureauth-native-aot-diagnostics/round-01', DIAGNOSTIC_FILES)]
-    script = script.replace('__PREDECESSOR_PATHS__', ', '.join(
-        "'C:\\Temp\\" + root.replace('/', '\\') + '\\' + name.replace('/', '\\').replace("'", "''") + "'"
-        for root, names in inputs for name in names))
+    # Factor lexical parents only; reconstruct the same finite input paths on Windows.
+    groups = []
+    for root, names in inputs:
+        for name in names:
+            full = pathlib.PurePosixPath('C:/Temp') / root / name
+            parent = str(full.parent).replace('/', '\\')
+            if not groups or groups[-1][0] != parent:
+                groups.append((parent, []))
+            groups[-1][1].append(full.name)
+    quoted = lambda value: "'" + value.replace("'", "''") + "'"
+    script = script.replace('__PREDECESSOR_GROUPS__', ', '.join(
+        '@{ Directory = ' + quoted(parent) + '; Names = @(' +
+        ', '.join(quoted(leaf) for leaf in leaves) + ') }'
+        for parent, leaves in groups))
+    command = ['/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe',
+               '-NoLogo', '-NoProfile', '-NonInteractive', '-EncodedCommand',
+               base64.b64encode(script.encode('utf-16-le')).decode()]
+    windows_command = subprocess.list2cmdline([
+        r'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe', *command[1:]])
+    # Include NUL and keep margin below CreateProcessW's 32,767 UTF-16-unit limit.
+    if len((windows_command + '\0').encode('utf-16-le')) // 2 > 30000:
+        raise SystemExit('Preflight command exceeds its transport bound; no reservation or host start.')
+    return command
+
+
+def windows_paths(command):
     try:
-        result = subprocess.run([
-            '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe', '-NoLogo', '-NoProfile',
-            '-NonInteractive', '-EncodedCommand', base64.b64encode(script.encode('utf-16-le')).decode()],
-            capture_output=True, timeout=60)
+        result = subprocess.run(command, capture_output=True, timeout=60)
     except subprocess.TimeoutExpired:
         return {'passed': False, 'classification': 'timeout', 'exitCode': None, 'stderrPresent': False}
     classification = (result.stdout.decode('ascii') if result.stdout in (
@@ -339,12 +364,12 @@ try {
 
 
 def reserved_preflight(action, accepted, target):
-    ordinal = 5 + ACTION_ORDER.index(action)
+    ordinal = 6 + ACTION_ORDER.index(action)
     expected = {f'aot-diagnostic-preflight-{i:02}-{suffix}.json'
                 for i in range(3, ordinal) for suffix in ('started', 'completed')}
     if {p.name for p in PREFLIGHT_DIR.glob('aot-diagnostic-preflight-*.json')} != expected:
         raise SystemExit('Diagnostic preflight inventory is incomplete or already consumed.')
-    for earlier in range(5, ordinal):
+    for earlier in range(6, ordinal):
         start_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{earlier:02}-started.json'
         result_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{earlier:02}-completed.json'
         start, result = read(start_path), read(result_path)
@@ -355,12 +380,13 @@ def reserved_preflight(action, accepted, target):
     result_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{ordinal:02}-completed.json'
     if any(PREFLIGHT_DIR.glob(f'aot-diagnostic-preflight-{ordinal:02}-*.json')):
         raise SystemExit('This diagnostic preflight is already consumed; no retry.')
+    command = windows_path_command()
     write_new(start_path, {'ordinal': ordinal, 'action': action, 'accepted': accepted,
               'target': target, 'started': now(), 'priorCorrectedChecks': ordinal - 1,
               'waveSha256': WAVE_SHA256})
     outcome = {'passed': False, 'classification': 'preflight-incomplete'}
     try:
-        outcome = windows_paths()
+        outcome = windows_paths(command)
     finally:
         write_new(result_path, {'ordinal': ordinal, 'reservationSha256': digest(start_path),
                   **outcome, 'ended': now()})
@@ -446,9 +472,9 @@ def restore_evidence(source):
         for name, entry in framework.items():
             if name + '/' + entry['resolved'] not in libraries:
                 raise SystemExit('Unexpected locked package.')
-    if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-02\\packages'}:
+    if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-03\\packages'}:
         # NuGet normalizes its package root with a trailing directory separator.
-        if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-02\\packages\\'}:
+        if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-03\\packages\\'}:
             raise SystemExit('Unexpected package folder.')
     framework = assets['project']['frameworks']['net10.0-windows']
     downloads = framework['downloadDependencies']
@@ -670,7 +696,9 @@ def main():
     source_hashes = {name: hashlib.sha256(data).hexdigest() for name, data in sources.items()}
     history()
     direct(ROOT)
-    if BASE.exists() and {p.name for p in BASE.iterdir()} - {'round-01', 'round-02'}:
+    if (BASE / 'round-02').exists():
+        raise SystemExit('Rejected-preflight round acquired unexpected host state.')
+    if BASE.exists() and {p.name for p in BASE.iterdir()} - {'round-01', 'round-03'}:
         raise SystemExit('Unallocated diagnostic round or shared file.')
     if (ROOT / 'stopped.json').exists():
         raise SystemExit('This diagnostic round is stopped.')
@@ -770,7 +798,7 @@ def main():
                 start.get('stoppedDiagnosticSha256') != DIAGNOSTIC_SHA256 or
                 start.get('guardOrdinal') != 7 + len(previous)):
             raise SystemExit('Prior historical binding changed.')
-        ordinal = 5 + len(previous)
+        ordinal = 6 + len(previous)
         if start.get('preflight') != {
                 'ordinal': ordinal,
                 'startedSha256': digest(PREFLIGHT_DIR / f'aot-diagnostic-preflight-{ordinal:02}-started.json'),
@@ -819,7 +847,7 @@ def main():
               'sourceSha256': source_hashes, 'caseInputs': case_inputs})
     powershell = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
     command = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-               'C:\\Temp\\azureauth-native-aot-diagnostics\\round-02\\source\\' + accepted + '\\Invoke-Action.ps1',
+               'C:\\Temp\\azureauth-native-aot-diagnostics\\round-03\\source\\' + accepted + '\\Invoke-Action.ps1',
                '-Action', args.action, '-AttemptName', attempt.name, '-Accepted', accepted]
     try:
         subprocess.run(command, check=False, timeout=700, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -827,7 +855,7 @@ def main():
         write_new(ROOT / 'stopped.json', {'attempt': attempt.name, 'ended': now(),
                   'reason': 'controller-wait-interrupted', 'quiescenceConfirmed': False})
         emergency = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-                     'C:\\Temp\\azureauth-native-aot-diagnostics\\round-02\\source\\' + accepted + '\\Stop-Controller.ps1',
+                     'C:\\Temp\\azureauth-native-aot-diagnostics\\round-03\\source\\' + accepted + '\\Stop-Controller.ps1',
                      '-AttemptName', attempt.name]
         try:
             subprocess.run(emergency, check=False, timeout=10, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
