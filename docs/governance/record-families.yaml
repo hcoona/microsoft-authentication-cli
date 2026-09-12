@@ -447,6 +447,21 @@ families:
     failure_mode: Authentication runs without an accepted procedure or their state effects, consumed limits, and evidence scope cannot be recovered.
     review_point: Independent record-system and research-evidence review before protocol acceptance, amendment, execution-evidence acceptance, or reliance on its conclusions
 
+  - id: windows-native-aot-protocol
+    state: current
+    concern: Exact synthetic Windows Native AOT publish and upstream-import procedure and bounded observations
+    carrier: repository-file
+    path: docs/research/experiments/windows-native-aot.md
+    format: markdown
+    producer: Research maintainer with sanitized execution evidence
+    maintainer: Research maintainer
+    consumers:
+      - Experiment operator before each bounded download, build, or synthetic execution
+      - Architecture and validation reviewers evaluating the unresolved Windows Native AOT premise
+    creation_trigger: Issue #76 needs bounded synthetic evidence that public source alone cannot supply.
+    failure_mode: Native AOT compatibility is asserted without a reproducible safe subject or recoverable cumulative limits.
+    review_point: Independent record-system and research-evidence review before protocol acceptance, amendment, or reliance on observations
+
   - id: developer-tooling-protocol
     state: current
     concern: Bounded developer-tool installation, client discovery, and public Learn retrieval procedure and observations
