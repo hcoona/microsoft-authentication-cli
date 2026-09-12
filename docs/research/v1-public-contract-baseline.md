@@ -1507,18 +1507,18 @@ artifact closure must be evaluated on the resolved graph before selecting that m
 No startup, memory, size, authentication, or cancellation benefit was measured.
 
 **Synthetic runtime outcome, September 12, 2026:** The
-[Windows Native AOT experiment](experiments/windows-native-aot.md#corrected-environment-and-missing-runtime-packs)
-downloaded fourteen exact public inputs. Its third local-feed restore exposed missing
-program-files environment variables in NuGet configuration initialization. Correcting
-those variables let the fourth restore reach dependency resolution, which reported
-`NU1101` for the omitted WindowsDesktop and ASP.NET runtime-pack archives at 10.0.12.
-These are SDK download requests, not new application framework references. The failed
-restore's partial assets select the expected MSAL/Broker/NativeInterop assemblies but
-do not establish a successful closure. The bounded supplemental manifest supplies only
-those two evidenced inputs before retrying. No AOT publish or native-loading result
-exists yet. Neither preparation defect establishes Native AOT incompatibility; the
-design inference and production-publishing gap remain unchanged. Earlier discarded
-messages and unmeasured trust-processing effects retain their recorded limits.
+[Windows Native AOT experiment](experiments/windows-native-aot.md#supplemental-fetch-successful-restore-and-publish-host-identity)
+downloaded fourteen original and two supplemental public inputs, and its fifth restore
+succeeded with the expected MSAL/Broker/NativeInterop assets. Missing program-files
+variables and an incomplete local SDK-download manifest explained the earlier observed
+preparation failures. Both missing archives were publicly downloadable. The first publish
+then built the managed probe but hit the AOT cross-OS guard: the replacement Windows
+environment omitted `OS=Windows_NT`, which MSBuild does not synthesize on Windows.
+The exact host-identity correction remains to be validated without disabling that guard.
+No native executable or loading result exists yet, and these preparation defects do not
+establish Native AOT incompatibility. The design inference and production-publishing gap
+remain unchanged. Earlier discarded messages and unmeasured trust-processing effects
+retain their recorded limits.
 
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by

@@ -471,13 +471,14 @@ Missing, wrong-architecture or unavailable native assets must fail without probi
 arbitrary working directory or using a developer-machine dependency.
 
 The diagnostic continuation
-[validated the NuGet environment correction](../research/experiments/windows-native-aot.md#corrected-environment-and-missing-runtime-packs)
-and identified two SDK runtime-pack downloads missing from the local feed. Verify the
-accepted supplemental fetch and successful restored closure before publish/loading;
-partial assets from the fourth failed restore are not sufficient. Preserve cumulative
-counts and inspect selected application assets separately from SDK download-only packs.
-No AOT publish or native-loading result exists yet. All later runtime obligations remain
-unresolved, and these preparation defects do not justify a non-AOT exception.
+[restored the exact dependencies and identified the next host-input omission](../research/experiments/windows-native-aot.md#supplemental-fetch-successful-restore-and-publish-host-identity).
+The first publish produced managed artifacts but failed the AOT cross-OS guard because
+the isolated Windows environment omitted `OS=Windows_NT`. Validate that accurate-host
+correction with the remaining restore/publish actions; the latest restore must succeed
+under the corrected environment and its exact closure must be inspected before publish.
+Preserve the earlier assets and managed outputs. No AOT binary or native-loading result
+exists yet, so all later runtime obligations remain unresolved. These preparation defects
+do not justify a non-AOT exception or disabling upstream platform checks.
 
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later candidate tests must cover HWND

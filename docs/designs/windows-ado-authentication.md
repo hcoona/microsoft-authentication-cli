@@ -42,13 +42,13 @@ production publishing unselected and do not call the Slice implementation-ready 
 that essential premise has a reviewed disposition. This is a concrete design and next
 validation obligation, not permission to implement or publish it in the current Wave.
 
-The [bounded synthetic investigation](../research/experiments/windows-native-aot.md#corrected-environment-and-missing-runtime-packs)
-validated the program-files correction by reaching dependency resolution. The fourth
-restore now identifies two omitted SDK runtime-pack downloads at 10.0.12 in its local
-feed. These are not additional application framework references. The accepted bounded
-continuation requires supplying those exact inputs, successful restore and closure
-inspection before Native AOT publish/loading. Neither dependent action has run. The
-essential premise remains unresolved; these preparation defects do not establish AOT
+The [bounded synthetic investigation](../research/experiments/windows-native-aot.md#supplemental-fetch-successful-restore-and-publish-host-identity)
+restored the exact .NET 10 dependency set after correcting isolated-environment inputs
+and supplementing two SDK runtime packs. The first publish completed managed compilation
+but hit the Native AOT cross-OS guard because the replacement environment omitted the
+Windows `OS` identifier. Its accurate-host correction still needs the last permitted
+restore/publish validation. No AOT binary or upstream loading result exists. The essential
+premise remains unresolved; these preparation defects do not establish dependency
 incompatibility or justify changing the preferred host.
 
 The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
