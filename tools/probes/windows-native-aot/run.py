@@ -5,19 +5,24 @@ import datetime
 import hashlib
 import json
 import pathlib
-import signal
 import subprocess
-import urllib.error
-import urllib.request
 
 
 ROOT = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-76')
 INITIAL = '3f21223c0d83aa8d2bb872499c40a4b08de1dcfe'
-PREVIOUS = '4cfde18c1e7348ca1341e50829b1a031af071dac'
+PREVIOUS = '2198edf2d4690b37dd80ca8ca74074a6fb30de3a'
+RUNTIME_PACK_MARKER_SHA256 = 'c5dfd88f2431dfdfdbfe5174b1151b48e05f4ff5e3124c011ff0f0adecae4d79'
 ENVIRONMENT_MARKER_SHA256 = '810f4a5b7d8cf90c7fe03fae16607674cd7a5673edf44773afbd12c03f04e718'
 PREVIOUS_MARKER_SHA256 = '60ef44676aa3285735a73e7adbf8e7ca9dc06780a9e9a3296c7083dff9208dda'
 DIAGNOSTIC_MARKER_SHA256 = '64e44d686794942c7ea03b86cf675348104070e33e5a04783cbf4a23975aab96'
 INITIAL_RECEIPTS = {
+    '06/started.json': '7e5dbfb3c01c4ad5c8b64d30a2f0a559e23e1044b71f037afbe2ac7e0d02ed5b',
+    '06/result.json': 'ac47a238709da78c172faf17c50f877f12b6a04ce9af7999634c08ad3cdfb5f5',
+    '07/started.json': '080c75b9122f8f0829887286b1ac6d26a014d6de8323b2c14015ccf8ba477ff4',
+    '07/result.json': 'af15b47997e2eda59f3a0291892fdc9e53bf577f8544012ed2d57f4aacace98b',
+    '08/started.json': '7f9683cd9731e302b32c37957122fb91e85a76702c7b8557fd2d8644daf193c2',
+    '08/result.json': '494567236094ec67cc9486773847a759d7e44309612a8d954a70c691b2a60dd3',
+
     '05/started.json': '4dc9b666df2d38d68aaff0a307e9f97ced505568a14b14928eccf56c3d3d9df2',
     '05/result.json': 'b75eb2f1892c251a34538fe86e63860fd04174c44a6d8d7b3f05e8de3532407d',
     '01/started.json': '979db8fdf83c0435a32c74c7458b4f6686dc8dd31e8f6fc10179fd335832c820',
@@ -68,63 +73,9 @@ def now():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
 
 
-class NoRedirect(urllib.request.HTTPRedirectHandler):
-    def redirect_request(self, *args, **kwargs):
-        raise RuntimeError('Redirect rejected before another request')
-
-
-def fetch_deadline(signum, frame):
-    raise TimeoutError('Public fetch deadline reached')
-
-
-def supplemental_fetch(attempt):
-    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
-    downloaded = []
-    total = 0
-    current_package = ''
-    previous_handler = signal.signal(signal.SIGALRM, fetch_deadline)
-    signal.setitimer(signal.ITIMER_REAL, 600)
-    try:
-        for name, version in SUPPLEMENTAL.items():
-            current_package = name
-            filename = f'{name.lower()}.{version}.nupkg'
-            url = f'https://api.nuget.org/v3-flatcontainer/{name.lower()}/{version}/{filename}'
-            size = 0
-            digest = hashlib.sha512()
-            with opener.open(url, timeout=30) as response:
-                if response.url != url or response.status != 200:
-                    raise RuntimeError('Unexpected public response')
-                expected = int(response.headers['Content-Length'])
-                if expected <= 0 or expected > 256 * 1024**2 - total:
-                    raise RuntimeError('Download length outside remaining bound')
-                with (ROOT / 'feed' / filename).open('xb') as output:
-                    while size < expected:
-                        chunk = response.read(min(1024 * 1024, expected - size))
-                        if not chunk:
-                            raise RuntimeError('Incomplete public archive')
-                        size += len(chunk)
-                        total += len(chunk)
-                        digest.update(chunk)
-                        output.write(chunk)
-            downloaded.append({'id': name, 'version': version, 'bytes': size,
-                               'sha512': digest.hexdigest()})
-        result = {'exitCode': 0, 'quiescent': True, 'safetyStop': False,
-                  'packages': downloaded, 'downloadBytes': total, 'ended': now()}
-    except BaseException as error:
-        result = {'exitCode': 1, 'quiescent': True, 'safetyStop': True,
-                  'errorType': type(error).__name__, 'package': current_package,
-                  'httpStatus': error.code if isinstance(error, urllib.error.HTTPError) else None,
-                  'packages': downloaded, 'downloadBytes': total, 'ended': now()}
-    finally:
-        signal.setitimer(signal.ITIMER_REAL, 0)
-        signal.signal(signal.SIGALRM, previous_handler)
-    write(attempt / 'result.json', result)
-    return result
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=[key for key in LIMITS if key != 'fetch'])
+    parser.add_argument('action', choices=[key for key in LIMITS if key not in ('fetch', 'supplemental-fetch')])
     parser.add_argument('--accepted', required=True, help='Merged protocol commit')
     args = parser.parse_args()
     accepted = git('rev-parse', args.accepted).decode().strip()
@@ -158,7 +109,9 @@ def main():
         raise SystemExit('Accepted diagnostic source-revision evidence changed.')
     if hashlib.sha256((ROOT / 'environment-revision.json').read_bytes()).hexdigest() != ENVIRONMENT_MARKER_SHA256:
         raise SystemExit('Accepted environment-revision evidence changed.')
-    revision_file = ROOT / 'runtime-pack-revision.json'
+    if hashlib.sha256((ROOT / 'runtime-pack-revision.json').read_bytes()).hexdigest() != RUNTIME_PACK_MARKER_SHA256:
+        raise SystemExit('Accepted runtime-pack revision evidence changed.')
+    revision_file = ROOT / 'host-os-revision.json'
     prior_revision = json.loads(revision_file.read_text())['accepted'] if revision_file.exists() else PREVIOUS
     if prior_revision not in (PREVIOUS, accepted):
         raise SystemExit('Another amendment needs explicit acceptance.')
@@ -169,6 +122,7 @@ def main():
     attempts = sorted((ROOT / 'attempts').iterdir())
     counts = {key: 0 for key in LIMITS}
     completed = []
+    latest_sources = {}
     for attempt in attempts:
         started = json.loads((attempt / 'started.json').read_text())
         counts[started['action']] += 1
@@ -176,17 +130,19 @@ def main():
         if result.get('safetyStop') or not result.get('quiescent'):
             raise SystemExit('Previous safety stop or uncertain termination; no continuation.')
         completed.append((started['action'], result))
+        latest_sources[started['action']] = started['accepted']
     if counts[args.action] >= LIMITS[args.action]:
         raise SystemExit('Cumulative attempt capacity exhausted.')
     if sum(count for action, count in counts.items() if action not in ('fetch', 'supplemental-fetch')) >= 11:
         raise SystemExit('Cumulative guard bootstrap capacity exhausted.')
-    prerequisite = 'fetch' if args.action == 'supplemental-fetch' else (
-        'supplemental-fetch' if args.action == 'restore' else (
-            'restore' if args.action == 'publish' else 'publish'))
-    if not any(
-            action == prerequisite and result['exitCode'] == 0
-            for action, result in completed):
+    prerequisite = 'supplemental-fetch' if args.action == 'restore' else (
+        'restore' if args.action == 'publish' else 'publish')
+    latest_prerequisite = next((result for action, result in reversed(completed)
+                                if action == prerequisite), None)
+    if latest_prerequisite is None or latest_prerequisite['exitCode'] != 0:
         raise SystemExit('Prerequisite has no successful recorded outcome.')
+    if args.action != 'restore' and latest_sources.get(prerequisite) != accepted:
+        raise SystemExit('Prerequisite did not use this accepted source and environment.')
     for action, fetched in completed:
         if action not in ('fetch', 'supplemental-fetch'):
             continue
@@ -206,26 +162,36 @@ def main():
         raise SystemExit('Owned program-files root must not be a link.')
     if not empty_program_files.is_dir() or any(empty_program_files.iterdir()):
         raise SystemExit('Recorded program-files root must exist and remain empty.')
-    retained_inputs = {}
     for path, digest in {
         'src/obj/project.assets.json': '82bf316e8f0c6d71c78e4612880764256956b6d6da2940702d85541e022dda6f',
         'src/packages.lock.json': '606af5113f23548d1bc87c55657f1c1f7e4ffa017557e8cb9c7f342690cb84a3',
     }.items():
         retained = ROOT / 'attempts' / '05' / pathlib.Path(path).name
-        if retained.is_symlink() or (prior_revision == PREVIOUS and retained.exists()):
+        if retained.is_symlink():
             raise SystemExit('Unexpected retained failed-restore artifact.')
-        content = (ROOT / path if prior_revision == PREVIOUS else retained).read_bytes()
+        content = retained.read_bytes()
         if hashlib.sha256(content).hexdigest() != digest:
             raise SystemExit('Failed-restore evidence changed.')
+    retained_inputs = {}
+    for path, (attempt_name, digest) in {
+        'src/obj/project.assets.json': ('07', 'f3ef20674f6843d1356321de452abc6f93ddddb7355df45bf7da3db2c203689c'),
+        'src/packages.lock.json': ('07', '606af5113f23548d1bc87c55657f1c1f7e4ffa017557e8cb9c7f342690cb84a3'),
+        'src/bin/Release/net10.0-windows/win-x64/NativeAotProbe.dll': ('08', '27054f594066ab8493cc58a5025a72a31ca719bcdc659b3e1946db1a1400882f'),
+        'src/bin/Release/net10.0-windows/win-x64/NativeAotProbe.pdb': ('08', '0de760ddb121be7cd7dc1c666637e49515723fc5f7bd52e67f0feb8f64e12968'),
+        'src/bin/Release/net10.0-windows/win-x64/NativeAotProbe.deps.json': ('08', 'c1cd41f1638fee0e8b93e9afa3d5813f4a539ac1048f59b6abbc915b4ddc583e'),
+        'src/bin/Release/net10.0-windows/win-x64/NativeAotProbe.runtimeconfig.json': ('08', '16fd9da9872123c9c6ded9df23fad4b76414c1ec9fb27480158bf178283b97da'),
+    }.items():
+        retained = ROOT / 'attempts' / attempt_name / pathlib.Path(path).name
+        if retained.is_symlink() or (prior_revision == PREVIOUS and retained.exists()):
+            raise SystemExit('Unexpected retained preparation artifact.')
+        content = (ROOT / path if prior_revision == PREVIOUS else retained).read_bytes()
+        if hashlib.sha256(content).hexdigest() != digest:
+            raise SystemExit('Restore or managed-build evidence changed.')
         retained_inputs[retained] = content
     if prior_revision == PREVIOUS:
-        if args.action != 'supplemental-fetch' or [path.name for path in attempts] != ['01', '02', '03', '04', '05']:
-            raise SystemExit('Only the recorded runtime-pack amendment is supported.')
-        for name, version in SUPPLEMENTAL.items():
-            archive = ROOT / 'feed' / f'{name.lower()}.{version}.nupkg'
-            if archive.exists() or archive.is_symlink():
-                raise SystemExit('Supplemental archive already exists.')
-        # Retain the two verified outputs before restore can replace their active paths.
+        if args.action != 'restore' or [path.name for path in attempts] != [f'{i:02}' for i in range(1, 9)]:
+            raise SystemExit('Only the recorded host-OS amendment is supported.')
+        # Retain verified outputs before restore/publish can replace their active paths.
         for retained, content in retained_inputs.items():
             with retained.open('xb') as output:
                 output.write(content)
@@ -241,16 +207,13 @@ def main():
           'target': target, 'started': now(), 'priorConsumption': counts,
           'sourceSha256': {path: hashlib.sha256(data).hexdigest()
                            for path, data in sources.items()}})
-    if args.action == 'supplemental-fetch':
-        result = supplemental_fetch(attempt)
-    else:
-        powershell = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
-        cmd = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-               r'C:\Temp\azureauth-native-aot-76\src\Invoke-Action.ps1',
-               '-Action', args.action, '-AttemptName', attempt.name]
-        # Windows owns termination; a WSL interruption is not a termination receipt.
-        subprocess.run(cmd, check=False, timeout=1300)
-        result = json.loads((attempt / 'result.json').read_text(encoding='utf-8-sig'))
+    powershell = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
+    cmd = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
+           r'C:\Temp\azureauth-native-aot-76\src\Invoke-Action.ps1',
+           '-Action', args.action, '-AttemptName', attempt.name]
+    # Windows owns termination; a WSL interruption is not a termination receipt.
+    subprocess.run(cmd, check=False, timeout=1300)
+    result = json.loads((attempt / 'result.json').read_text(encoding='utf-8-sig'))
     print(json.dumps(result, indent=2))
 
 

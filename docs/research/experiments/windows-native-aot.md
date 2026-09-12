@@ -9,12 +9,12 @@ and [validation strategy](../../validation/strategy.md#native-aot-publishing) co
 the bounded conclusion. The historical Windows MSAL and tooling protocols retain their
 exhausted capacities; none of their helpers or subjects may execute here.
 
-The program-files environment correction removed the NuGet configuration-initialization
-failure. The fourth restore reached dependency resolution and reported two missing SDK
-runtime-pack archives in the local feed. Its partial assets are not a successful closure.
-The current amendment adds one bounded supplemental fetch for those exact public inputs,
-preserving source provenance, all five attempts, and every Windows-action ceiling.
-Native AOT publish and loading remain untested.
+The corrected environment and two supplemental runtime packs produced a successful
+restore. The first publish completed managed compilation but stopped at the Native AOT
+cross-OS guard because the replacement environment omitted `OS=Windows_NT`. The current
+amendment supplies that accurate host identifier and preserves the successful restore
+and failed-publish artifacts before the last restore and publish. No native executable
+or loading result exists; all original limits and historical evidence remain binding.
 
 ## Question and Exact Subject
 
@@ -109,7 +109,7 @@ workstation experiment under documented OS/process contracts, not a hostile-code
 or isolation of the Windows account. No registry, firewall, global tool, machine
 configuration, credential store, or unrelated application state may be changed.
 
-Both fetch batches use Python's standard-library HTTPS client without inherited proxy/auth
+Both completed fetch batches used Python's standard-library HTTPS client without inherited proxy/auth
 handlers, one fixed public flat-container URL per exact package. Restore uses only that
 local feed and an initially empty dedicated package cache. Later retries may use that
 cache and must not be called clean restores. Public-download success and local-feed
@@ -139,6 +139,12 @@ read through these variables. Existing dotnet, compiler, linker, and SDK paths r
 explicit and unchanged. Do not populate this directory, copy host configuration into it,
 inherit the host variables, or add unrelated environment variables as a speculative fix.
 
+The child environment also sets `OS=Windows_NT`, accurately identifying this existing
+Windows host for MSBuild and Native AOT. MSBuild's Windows evaluation normally imports
+that environment property rather than synthesizing it. Keep the upstream cross-OS guard
+enabled; do not set `DisableUnsupportedError` or attempt cross-OS compilation. All
+other child environment entries, commands, toolchain paths and package pins are unchanged.
+
 ## Execution and Finite Capacity
 
 Before **each** action, the operator refreshes `origin/main-v2`, confirms the accepted
@@ -146,30 +152,20 @@ Wave and exact protocol remain current, recovers the required independent review
 CI/commit-check receipts, and checks prior attempt results. Material prerequisite drift
 requires refreshed review. The wrapper checks ancestry, current Wave bytes, checkout
 and Windows-copy source bytes, prior consumption, feed identities, and prerequisites.
-The runtime-pack amendment uses its own merged commit as `ACCEPTED_COMMIT` in a detached
-checkout. All Windows source, commands, environment, toolchain, and probe APIs remain
-identical to PR #84. Only the WSL wrapper changes to supply the evidenced missing public
-archives. AOT-AUTHOR-013 was independently triaged as a blocking true positive: attempt
-05's two exact download requests and absent local-feed archives satisfy the accepted
-Wave's conditional-fetch criterion. This exact manifest narrows that allowance to:
+The host-OS amendment uses its own merged commit as `ACCEPTED_COMMIT` in a detached
+checkout. It adds only `OS=Windows_NT` to the Windows environment. AOT-AUTHOR-015 was
+independently triaged as a blocking true positive: the first publish's exact guard,
+accepted replacement environment, and fixed MSBuild source establish this host-identity
+omission. Its correction remains a runtime validation obligation, not a promised publish.
 
-| Additional archive ID | Version | Fixed public URL |
-| --- | --- | --- |
-| Microsoft.WindowsDesktop.App.Runtime.win-x64 | 10.0.12 | `https://api.nuget.org/v3-flatcontainer/microsoft.windowsdesktop.app.runtime.win-x64/10.0.12/microsoft.windowsdesktop.app.runtime.win-x64.10.0.12.nupkg` |
-| Microsoft.AspNetCore.App.Runtime.win-x64 | 10.0.12 | `https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.app.runtime.win-x64/10.0.12/microsoft.aspnetcore.app.runtime.win-x64.10.0.12.nupkg` |
-
-After independent acceptance, fetch each archive once, without redirects, retries,
-inherited proxies or credentials. Require HTTP 200 and a positive Content-Length within
-the remaining 256 MiB batch limit before reading its body; bound every read to the
-remaining declared bytes. Reject a short response. Bound the batch with a 600-second
-process timer and each socket with a 30-second inactivity timeout. Retain public package
-ID/version, byte count, SHA-512, total received bytes, times, and success or the exception
-type and HTTP status when applicable. Do not retain raw exception or network diagnostics.
-An incomplete fetch consumes the batch, retains partial owned files, and stops further
-actions. No package installation or Windows process starts during this WSL fetch.
+Both public-fetch batches are consumed. PR #85's exact supplemental downloader and
+manifest remain recoverable in Git; the current wrapper exposes no fetch action. Its
+two extra archives were WindowsDesktop and ASP.NET x64 runtime packs at 10.0.12, fetched
+once from fixed public NuGet flat-container URLs without redirects, retries, proxies or
+credentials, within the 256 MiB and 600-second/30-second bounds. Their observed identities
+are retained below. Every later action verifies all sixteen owned archive identities.
 
 ```text
-python3 tools/probes/windows-native-aot/run.py supplemental-fetch --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py restore --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py publish --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py positive --accepted ACCEPTED_COMMIT
@@ -177,37 +173,45 @@ python3 tools/probes/windows-native-aot/run.py missing --accepted ACCEPTED_COMMI
 python3 tools/probes/windows-native-aot/run.py decoy --accepted ACCEPTED_COMMIT
 ```
 
-Invoke one action at a time and inspect each result. Before its only migration, the
-wrapper requires the original PR #78 root, the exact PR #84 source copies, ten pinned
-receipt hashes for attempts 01–05, all three existing revision-marker hashes, and the
-recorded failed-restore assets/lock hashes. Both supplemental archive paths and the
-new `runtime-pack-revision.json` must be absent. The two retained-copy paths
-`attempts/05/project.assets.json` and `attempts/05/packages.lock.json` must also be
-absent. After verifying their active originals, copy those exact bytes to these paths
-without overwriting anything, before source migration or a later restore. On every
-later action verify these retained copies against their original hashes; the active
-restore output paths may then change. AOT-REVIEW-014 was independently triaged as a
-blocking true positive and requires this narrow evidence preservation.
+Invoke one action at a time and inspect each result. This final restore refreshes the
+successful graph under the corrected environment. The latest prerequisite action must
+have succeeded. Publish requires that latest restore to name this exact accepted source,
+and each case requires its latest publish to name that source. An older successful
+restore cannot mask failure or nonexecution of the corrected one, including interruption
+after migration but before attempt reservation. AOT-REVIEW-016 was independently triaged
+as a blocking true positive and is resolved by this prerequisite-source binding. Restore
+intentionally accepts the historical successful supplemental-fetch source.
+Inspect its actual closure before the final publish. No extra restore/publish capacity
+is granted if either remaining action fails.
 
-The wrapper requires the existing empty
-program-files directory to remain empty and not a link. It replaces only seven owned
-source copies and records the old/new accepted revisions and prior counts in the new
-marker. It preserves the root identity, prior markers, receipts, home, feed, caches,
-outputs, and empty directory. Partial migration fails closed. Later actions require
-this amendment's same accepted source and retained marker; no migration resets capacity.
+Before its only migration, the wrapper requires the original PR #78 root, exact PR #85
+source copies, sixteen pinned receipt hashes for attempts 01–08, all four existing
+revision-marker hashes, and unchanged retained attempt-05 assets/lock copies. It requires
+the owned program-files directory to remain empty and not a link. The new
+`host-os-revision.json` and six retained-copy paths must be absent. Verify and copy the
+successful active `project.assets.json` and `packages.lock.json` into attempt 07, and the
+four probe-owned `NativeAotProbe.dll`, `.pdb`, `.deps.json`, and `.runtimeconfig.json`
+files from `bin/Release/net10.0-windows/win-x64` into attempt 08. Use their observed
+hashes pinned in `run.py`; never overwrite prior evidence. Perform these exclusive copies
+before source replacement or another restore/publish. Every later action verifies these
+six retained files and both attempt-05 copies against their original hashes.
 
-Reserve the next sequential attempt and write `started.json` before any fetch request.
-The next restore requires a successful supplemental-fetch receipt; every later action
-rechecks both batches' archive hashes. A failed restore's assets do not authorize publish:
-a successful restore receipt and exact closure inspection remain prerequisites. Existing
-Windows actions and their sanitized-output/termination contract are unchanged. Known
-consumption is original fetch 1, supplemental fetch 0, restore 4, publish 0, each case 0,
-and guard bootstrap 4. No further fetch batch is enabled by this protocol.
+Replace only the seven owned source copies, then write `host-os-revision.json` with the
+old/new accepted revisions and prior counts. Preserve the root identity, earlier markers,
+all receipts, public feed, caches, and original active output files. Partial migration
+fails closed. Later actions require this amendment's same accepted revision; no migration
+resets capacity or clears a stop. Reserve the next sequential attempt and write its
+start receipt before invoking a Windows subject. The Windows process guard, diagnostic
+sanitizer, probe program, project, and commands retain their accepted behavior.
+
+Known consumption is original fetch 1/1, supplemental fetch 1/1, restore 5/6,
+publish 1/2, each case 0/1, and guard bootstrap 6/11. One restore plus one publish leaves
+three guard actions for the unchanged loading cases if prerequisites succeed.
 
 | Unit | Cumulative maximum, including failed starts and manual execution |
 | --- | --- |
 | Public package fetch | One batch, 14 package requests, no retries or redirects; 300 MiB per archive and 1.5 GiB total; a WSL process timer interrupts pending reads at a 600-second batch deadline, in addition to 30-second socket inactivity limits |
-| Supplemental public fetch | One batch, exactly the two requests above, at most 256 MiB total, no retry or redirect; 600-second batch deadline and 30-second socket inactivity limit |
+| Supplemental public fetch | One consumed batch, exactly the two PR #85 requests, at most 256 MiB total, no retry or redirect; 600-second batch deadline and 30-second socket inactivity limit |
 | Restore | Six cumulative Windows actions, including the two historical actions; at most 600 seconds each |
 | Native AOT publish | Two Windows actions, at most 900 seconds each, after successful restore and exact resolved closure inspection |
 | Synthetic cases | One positive, one missing-library, and one combined working-directory/PATH-decoy action; 30 seconds each; no repeat |
@@ -599,10 +603,98 @@ The original trust-path uncertainty
 remains; the corrected configuration and precise local-feed omission do not establish
 production publishing or Native AOT runtime compatibility.
 
+### Supplemental Fetch, Successful Restore, and Publish Host Identity
+
+Attempts 06–08 used accepted PR #85 commit
+`2198edf2d4690b37dd80ca8ca74074a6fb30de3a`, tree
+`889a88d0f9417fd4a7f879121bd7542c53b7d938`, after independent review, both independent
+finding dispositions, mandatory commit checks, full hk, and
+[CI](https://github.com/hcoona/microsoft-authentication-cli/actions/runs/34674562467).
+The migration preserved attempts 01–05 and every previous revision marker and copied the
+two hash-verified failed-restore files under attempt 05. No Windows command, environment,
+project or toolchain changed from PR #84 for these actions.
+
+| Attempt | UTC interval on September 12, 2026 | Actual observation |
+| --- | --- | --- |
+| 06: supplemental fetch | 05:08:05.767695–05:08:08.006253 | Exit 0; both exact public archives, 51,933,095 bytes; no retry/redirect; quiescent and no safety stop. |
+| 07: fifth restore | 05:08:15.437758–05:08:22.4412595 | Guard compilation exit 0; restore exit 0 in 5.464 seconds, with successful restore text, no diagnostic codes, and no stderr; quiescent and no safety stop. |
+| 08: first publish | 05:09:09.251410–05:09:18.9218069 | Guard compilation exit 0; publish exit 1 in 8.062 seconds after managed compilation; complete sanitized cross-OS guard diagnostic, no stderr; quiescent and no safety stop. |
+
+**Restore observation:** The supplementary archives were publicly downloadable, so
+attempt 05's errors were local-manifest omissions, not demonstrated network or access
+blocking. Attempt 07 used the existing dedicated cache and is not a clean-cache restore.
+Its assets have no restore errors and ten package libraries at the expected versions.
+The selected MSAL net8.0, Broker netstandard2.0, NativeInterop net9.0 and x64 native
+entries were compared byte-for-byte with their fetched archives. Cache archives also
+matched the owned feed. NuGet content hashes matched extraction metadata; those values
+are distinct from whole signed-archive SHA-512 identities. Five SDK download requests
+remain exactly 10.0.12, and the only application framework reference is
+`Microsoft.NETCore.App`. The native DLL is PE x64 (`0x8664`) with Windows system/API-set
+imports and no delay-import table; static imports alone do not prove runtime behavior.
+The lock file is unchanged from the failed restore, demonstrating why that file's
+presence alone cannot establish successful restore.
+
+**Publish observation:** The first publish produced the managed probe DLL and related
+PDB/dependency/runtime-configuration files. Its published output directory remained
+empty. The complete diagnostic was:
+
+```text
+Microsoft.NETCore.Native.Publish.targets(63,5): error : Cross-OS native compilation is not supported.
+```
+
+No AOT executable, ILCompiler analysis result, positive load, or negative loading result
+was produced. This was the existing Windows dotnet process invoked through WSL; it was
+not a Linux compiler attempting to target Windows.
+
+**Source finding and causal interpretation:** The exact public ILCompiler 10.0.12
+archive's `Microsoft.NETCore.Native.Publish.targets` has SHA-256
+`6fcb3f0491a79fd5a67281b44439e0685c17fe4c848a07477ab2a57a10a68c60`.
+Its lines 63–64 reject `_targetOS=win` when `OS` is not `Windows_NT`.
+`Microsoft.DotNet.ILCompiler.SingleEntry.targets` (SHA-256
+`345c9448182507befa430e80622f68c7ab09debe9c419d98b418f7f1cb79c34e`)
+derives the Windows target from the pinned RID. Both files match their
+[fixed runtime source](https://github.com/dotnet/runtime/tree/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/coreclr/nativeaot/BuildIntegration)
+apart from archive line endings. The NuGet package's VMR
+`95017c711e6afc1085133d440e42b4bd78155701` maps to that source.
+
+The selected SDK's separate VMR source manifest maps MSBuild to
+`b44cdcec4c79c50c67560876707d57d4f635fa3b`. Its
+[`Evaluator`](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Build/Evaluation/Evaluator.cs)
+(lines 1168–1173) synthesizes the `OS` property only on non-Windows. The accepted
+complete replacement environment omits `OS`, and neither the project nor command sets
+it. This accounts for the observed guard branch. AOT-AUTHOR-015 was independently
+triaged as a blocking true positive. The current correction supplies the true Windows
+host identifier; it does not disable a guard, change target OS, or prove AOT support.
+
+| Retained evidence | SHA-256 |
+| --- | --- |
+| Attempt 06 started.json | `7e5dbfb3c01c4ad5c8b64d30a2f0a559e23e1044b71f037afbe2ac7e0d02ed5b` |
+| Attempt 06 result.json | `ac47a238709da78c172faf17c50f877f12b6a04ce9af7999634c08ad3cdfb5f5` |
+| Attempt 07 started.json | `080c75b9122f8f0829887286b1ac6d26a014d6de8323b2c14015ccf8ba477ff4` |
+| Attempt 07 result.json | `af15b47997e2eda59f3a0291892fdc9e53bf577f8544012ed2d57f4aacace98b` |
+| Attempt 08 started.json | `7f9683cd9731e302b32c37957122fb91e85a76702c7b8557fd2d8644daf193c2` |
+| Attempt 08 result.json | `494567236094ec67cc9486773847a759d7e44309612a8d954a70c691b2a60dd3` |
+| Runtime-pack revision marker | `c5dfd88f2431dfdfdbfe5174b1151b48e05f4ff5e3124c011ff0f0adecae4d79` |
+| Attempt 07 project.assets.json | `f3ef20674f6843d1356321de452abc6f93ddddb7355df45bf7da3db2c203689c` |
+| Attempt 07 packages.lock.json | `606af5113f23548d1bc87c55657f1c1f7e4ffa017557e8cb9c7f342690cb84a3` |
+| Attempt 08 NativeAotProbe.dll | `27054f594066ab8493cc58a5025a72a31ca719bcdc659b3e1946db1a1400882f` |
+| Attempt 08 NativeAotProbe.pdb | `0de760ddb121be7cd7dc1c666637e49515723fc5f7bd52e67f0feb8f64e12968` |
+| Attempt 08 NativeAotProbe.deps.json | `c1cd41f1638fee0e8b93e9afa3d5813f4a539ac1048f59b6abbc915b4ddc583e` |
+| Attempt 08 NativeAotProbe.runtimeconfig.json | `16fd9da9872123c9c6ded9df23fad4b76414c1ec9fb27480158bf178283b97da` |
+
+Consumption is original fetch **1/1**, supplemental fetch **1/1**, restore **5/6**,
+publish **1/2**, each case **0/1**, and guard bootstrap **6/11**. All eight attempts
+have complete receipts, with no manual replay, interruption, or unresolved owned process.
+Public packages, sources, retained failed-restore evidence, successful restore outputs,
+managed artifacts, and sanitized receipts are intentionally retained. The amendment
+preserves the six newly identified files before they can be overwritten. No account,
+authentication, broker-session, UI, or resource operation ran. Historical trust-path
+uncertainty and all untested Native AOT/WAM/production-publishing obligations remain.
+
 ### Fetched Public Archive Identities
 
-All use the fixed public NuGet flat-container URL construction in the original protocol.
-These are fetched inputs, not a resolved dependency graph.
+The original fourteen and two supplemental archives used fixed public NuGet
+flat-container URLs. These are fetched inputs, not all application runtime assets.
 
 | Package | Version | SHA-512 |
 | --- | --- | --- |
@@ -620,3 +712,5 @@ These are fetched inputs, not a resolved dependency graph.
 | Microsoft.NETCore.App.Ref | 10.0.12 | `b8df7c98c76bba344b41d20151dc79e5a4dc764b5fdb893844fdfdb895be05247d31cb4e93452ba668beb2f3f62a3f30ed8b1242e06b7a0c53b11125fc69ba28` |
 | Microsoft.NETCore.App.Host.win-x64 | 10.0.12 | `33c2760f5936e1eb30609fc368974761bc331eb720fa0593bf92f9f050c6d91d67f673a22783160ab84c16d6736e8c02c10066ced6c06cceed378f5cbaa78588` |
 | Microsoft.NET.ILLink.Tasks | 10.0.12 | `a294f93f5a7e086ef4c466af79382add0e4e64a77b319d11b35d31e137b097a6dc3dbbb848ba381749fa4410889ef04ac68475d13d75f97d0cf5d8232847ee73` |
+| Microsoft.WindowsDesktop.App.Runtime.win-x64 | 10.0.12 | `05e188fca4c105c6b8a5dbaed677dfeb556f640c25cd5c2a366a3e795a93dba96db0026c42c17ffc308f26cb30f9f5e9011abe150ee954a89079de6282ff0a61` |
+| Microsoft.AspNetCore.App.Runtime.win-x64 | 10.0.12 | `9fca92913dca9245d2a6ef5453be3cc3311bac3c0b3890a4386c58d03fedbd63b051751b4b6a9193989c606d92ba447bfa2d5e3bc605e2c3a5fa2bdba218513c` |
