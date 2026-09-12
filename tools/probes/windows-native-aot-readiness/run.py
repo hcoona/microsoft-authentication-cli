@@ -13,21 +13,21 @@ import base64
 from urllib.parse import unquote
 
 BASE = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-diagnostics')
-ROOT = BASE / 'round-03'
+ROOT = BASE / 'round-04'
 RECOVERY = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness-recovery')
 PREFLIGHT_DIR = pathlib.Path('/tmp/azureauth-wave-work')
 OLD = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-76')
-WAVE_PARENT = 'a8867ad065296ddaa528ecedaa82b9d49070ca7e'
-WAVE_SHA256 = '5e45488af78a27de73702dbbb6a0112ca6294acd7961a1e811295fe310f75327'
+WAVE_PARENT = 'b69c50fc5a11b6fa207f677033e048d7d089fdb8'
+WAVE_SHA256 = '9cf67ada4d2f729a3e1fe5884385f7f79cf2076e9c15f7eced0c1cb2fc9bad60'
 PRIOR = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness')
-PRIOR_COUNTS = {'restore': 3, 'publish': 3, 'cleanup': 0, 'wrong-architecture': 0}
+PRIOR_COUNTS = {'restore': 4, 'publish': 4, 'cleanup': 0, 'wrong-architecture': 0}
 REL = 'tools/probes/windows-native-aot-readiness/'
 PROTOCOL = 'docs/research/experiments/windows-native-aot.md'
 SOURCES = {name: REL + name for name in (
     'run.py', 'Program.cs', 'NativeAotReadinessProbe.csproj', 'global.json',
     'nuget.config', 'Invoke-Action.ps1', 'Stop-Controller.ps1', 'WindowsJob.cs')}
 SOURCES['protocol.md'] = PROTOCOL
-LIMITS = {'restore': 4, 'publish': 4, 'cleanup': 1, 'wrong-architecture': 1}
+LIMITS = {'restore': 5, 'publish': 5, 'cleanup': 1, 'wrong-architecture': 1}
 ACTION_ORDER = tuple(LIMITS)
 # This exact revision allocates one round; later rounds require accepted amendments.
 PREFLIGHT_HISTORY = {
@@ -70,7 +70,16 @@ DIAGNOSTIC_FILES = ['attempts/18/NativeAotReadinessProbe.csproj.nuget.g.props',
  'source/2fea4a9c5d056e031d8d026a365093ab3e38ba3b/run.py',
  'stopped.json']
 DIAGNOSTIC_SHA256 = '79353af8cfe14823692e83407fcb636390dd74cdf35dd4d78197a416a109fa5f'
-DIAGNOSTIC_PREFLIGHT_HISTORY = {'aot-diagnostic-preflight-05-started.json': '56528742f6a2a88393bb55182e4939454a907f9f95ef4e46368ce8c68cc85f28',
+ROUND03_PRIOR = BASE / 'round-03'
+ROUND03_FILES = [name.replace('attempts/18/', 'attempts/20/').replace('attempts/19/', 'attempts/21/').replace(
+    '2fea4a9c5d056e031d8d026a365093ab3e38ba3b', 'd50a9caebf28e57fea0354c8a7c45a1e113fa6e8')
+    for name in DIAGNOSTIC_FILES]
+ROUND03_SHA256 = '0f2263722a0b1f8a6080304326ae97d678a4b919b2d813d0e3d6fb54bd7cd9ac'
+DIAGNOSTIC_PREFLIGHT_HISTORY = {'aot-diagnostic-preflight-06-started.json': 'a911546f997268f2fdcbb4d7392f5afae89483a2959895db265dc50eea160a4f',
+ 'aot-diagnostic-preflight-06-completed.json': '1f7b6d02f0ad0fa655343d4921d09caa5c6eb147a2affd58dbe3fb8b014f8d4c',
+ 'aot-diagnostic-preflight-07-started.json': 'a51e283e44db8fbffc4cb2dd41aad4806891bf61541cb955b5eb954fbef11eaa',
+ 'aot-diagnostic-preflight-07-completed.json': '65256a1db9fc39e001719e44e95c7387bdb775649368714a95e156d85e429e93',
+ 'aot-diagnostic-preflight-05-started.json': '56528742f6a2a88393bb55182e4939454a907f9f95ef4e46368ce8c68cc85f28',
  'aot-diagnostic-preflight-05-completed.json': 'df57ff8b814dad24708d43ef5a917792e79fbe6437e59d1a8174acc316a1cdd9',
  'aot-diagnostic-preflight-03-completed.json': 'f87d77ae290586d9c29fdc44bc008042e74f94b565aea0e9430075c97276345b',
  'aot-diagnostic-preflight-03-started.json': '0a7386d7ab394c34724c470d308c77ee80fda885bba70c0fd34cdca65240bf68',
@@ -306,7 +315,7 @@ try {
         ((Get-Item -LiteralPath $base -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
         $failure = 'reparse-point'; throw 'Linked diagnostic root'
     }
-    $root = 'C:\Temp\azureauth-native-aot-diagnostics\round-03'
+    $root = 'C:\Temp\azureauth-native-aot-diagnostics\round-04'
     if (Test-Path -LiteralPath $root) { $queue.Enqueue($root) }
     while ($queue.Count -gt 0) {
         $item = Get-Item -LiteralPath $queue.Dequeue() -Force
@@ -326,7 +335,8 @@ try {
     inputs = [('azureauth-native-aot-76', HISTORY_FILES + ['feed/' + name for name in FEED]),
               ('azureauth-native-aot-readiness', PRIOR_FILES),
               ('azureauth-native-aot-readiness-recovery', RECOVERY_FILES),
-              ('azureauth-native-aot-diagnostics/round-01', DIAGNOSTIC_FILES)]
+              ('azureauth-native-aot-diagnostics/round-01', DIAGNOSTIC_FILES),
+              ('azureauth-native-aot-diagnostics/round-03', ROUND03_FILES)]
     # Factor lexical parents only; reconstruct the same finite input paths on Windows.
     groups = []
     for root, names in inputs:
@@ -364,12 +374,12 @@ def windows_paths(command):
 
 
 def reserved_preflight(action, accepted, target):
-    ordinal = 6 + ACTION_ORDER.index(action)
+    ordinal = 8 + ACTION_ORDER.index(action)
     expected = {f'aot-diagnostic-preflight-{i:02}-{suffix}.json'
                 for i in range(3, ordinal) for suffix in ('started', 'completed')}
     if {p.name for p in PREFLIGHT_DIR.glob('aot-diagnostic-preflight-*.json')} != expected:
         raise SystemExit('Diagnostic preflight inventory is incomplete or already consumed.')
-    for earlier in range(6, ordinal):
+    for earlier in range(8, ordinal):
         start_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{earlier:02}-started.json'
         result_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{earlier:02}-completed.json'
         start, result = read(start_path), read(result_path)
@@ -472,9 +482,9 @@ def restore_evidence(source):
         for name, entry in framework.items():
             if name + '/' + entry['resolved'] not in libraries:
                 raise SystemExit('Unexpected locked package.')
-    if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-03\\packages'}:
+    if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-04\\packages'}:
         # NuGet normalizes its package root with a trailing directory separator.
-        if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-03\\packages\\'}:
+        if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-04\\packages\\'}:
             raise SystemExit('Unexpected package folder.')
     framework = assets['project']['frameworks']['net10.0-windows']
     downloads = framework['downloadDependencies']
@@ -562,6 +572,16 @@ def history():
         diagnostic.update(name.encode() + b'\0' + bytes.fromhex(digest(DIAGNOSTIC_PRIOR / name)))
     if diagnostic.hexdigest() != DIAGNOSTIC_SHA256:
         raise SystemExit('Stopped diagnostic evidence changed.')
+    if {p.name for p in (ROUND03_PRIOR / 'attempts').iterdir()} != {'20', '21'}:
+        raise SystemExit('Stopped round-03 attempt inventory changed.')
+    if any((ROUND03_PRIOR / 'attempts/21' / name).exists()
+           for name in ('completion.json', 'artifacts.json')):
+        raise SystemExit('Stopped round-03 publish cannot acquire completion evidence.')
+    round03 = hashlib.sha256()
+    for name in ROUND03_FILES:
+        round03.update(name.encode() + b'\0' + bytes.fromhex(digest(ROUND03_PRIOR / name)))
+    if round03.hexdigest() != ROUND03_SHA256:
+        raise SystemExit('Stopped round-03 evidence changed.')
     for name, expected in DIAGNOSTIC_PREFLIGHT_HISTORY.items():
         if digest(PREFLIGHT_DIR / name) != expected:
             raise SystemExit('Stopped diagnostic preflight evidence changed.')
@@ -574,10 +594,13 @@ def history():
 
 
 def valid_metadata(value):
-    if not isinstance(value, dict) or set(value) != {'State', 'Members'}:
+    if not isinstance(value, dict) or set(value) != {'State', 'Members', 'TotalProcessesBefore'}:
         return False
     if value['State'] not in {'complete', 'budget-ended', 'query-failed', 'invalid-list',
                               'worker-failed', 'unavailable-at-stop'}:
+        return False
+    total = value['TotalProcessesBefore']
+    if total is not None and (type(total) is not int or not 0 <= total <= 4294967295):
         return False
     members = value['Members']
     if not isinstance(members, list) or len(members) > 32:
@@ -590,6 +613,7 @@ def valid_metadata(value):
                  'dotnet', 'conhost', 'csc', 'ilc', 'unknown'}
     locations = {'msvc-bin-text', 'dotnet-installation-text', 'system32-text',
                  'framework-text', 'round-root-text', 'unknown'}
+    seen = set()
     for slot, item in enumerate(members):
         if (not isinstance(item, dict) or set(item) != {'Slot', 'ProcessId', 'CreationFileTime', 'State', 'ImageClass', 'BasenameClass', 'LocationClass'} or
                 type(item['Slot']) is not int or item['Slot'] != slot or
@@ -600,10 +624,36 @@ def valid_metadata(value):
             if (type(item['ProcessId']) is not int or not 0 < item['ProcessId'] <= 4294967295 or
                     type(item['CreationFileTime']) is not int or not 0 < item['CreationFileTime'] < 2 ** 63):
                 return False
+            if item['ProcessId'] in seen:
+                return False
+            seen.add(item['ProcessId'])
         elif (item['ProcessId'] is not None or item['CreationFileTime'] is not None or
               any(item[key] != 'unknown' for key in ('ImageClass', 'BasenameClass', 'LocationClass'))):
             return False
     return True
+
+
+def verified_vctip_cleanup(result):
+    value = result.get('jobMetadata')
+    if not valid_metadata(value) or value['State'] != 'complete' or not value['Members']:
+        return False
+    total = value['TotalProcessesBefore']
+    if type(total) is not int or not 1 <= total <= 4096:
+        return False
+    for key in ('jobTotalBeforeStop', 'jobTotalAfterStop'):
+        if type(result.get(key)) is not int or result[key] != total:
+            return False
+    if type(result.get('jobActiveAfterStop')) is not int or result['jobActiveAfterStop'] != 0:
+        return False
+    for key in ('activeProcessesAtNormalExit', 'jobActiveBeforeStop'):
+        if type(result.get(key)) is not int or not 1 <= result[key] <= len(value['Members']):
+            return False
+    if any(result.get(key) is not True for key in (
+            'jobTerminationRequested', 'jobTerminationSucceeded', 'vctipCleanupVerified')):
+        return False
+    return all(item['State'] == 'verified-member' and item['ImageClass'] == 'msvc-vctip' and
+               item['BasenameClass'] == 'vctip' and item['LocationClass'] == 'msvc-bin-text'
+               for item in value['Members'])
 
 
 def completed(result, action):
@@ -628,12 +678,18 @@ def completed(result, action):
         return False
     if type(result.get('normalDrainSeconds')) not in (int, float) or not 0 <= result['normalDrainSeconds'] <= 2.1:
         return False
-    for key in ('activeProcessesAtNormalExit', 'jobActiveBeforeStop'):
-        if type(result.get(key)) is not int or result[key] != 0:
+    if result.get('completionKind') == 'vctip-cleanup':
+        if action != 'publish' or not verified_vctip_cleanup(result):
             return False
-    for key in ('jobTerminationRequested', 'jobTerminationSucceeded'):
-        if result.get(key) is not False:
-            return False
+    elif result.get('completionKind') == 'normal':
+        for key in ('activeProcessesAtNormalExit', 'jobActiveBeforeStop'):
+            if type(result.get(key)) is not int or result[key] != 0:
+                return False
+        for key in ('jobTerminationRequested', 'jobTerminationSucceeded'):
+            if result.get(key) is not False:
+                return False
+    else:
+        return False
     if action in ('restore', 'publish'):
         if result['exitCode'] != 0:
             return False
@@ -647,6 +703,10 @@ def completed(result, action):
                 return False
             if type(item.get('suppressedLines')) is not int or item['suppressedLines'] != 0 or not isinstance(item.get('text'), str):
                 return False
+        if result['completionKind'] == 'vctip-cleanup' and (
+                result.get('diagnosticCodes') != [] or re.search(r'\bwarning\b',
+                    result['stdoutDiagnostic']['text'] + result['stderrDiagnostic']['text'], re.IGNORECASE)):
+            return False
         return True
     observation = result.get('observation', {})
     if not isinstance(observation, dict):
@@ -698,7 +758,7 @@ def main():
     direct(ROOT)
     if (BASE / 'round-02').exists():
         raise SystemExit('Rejected-preflight round acquired unexpected host state.')
-    if BASE.exists() and {p.name for p in BASE.iterdir()} - {'round-01', 'round-03'}:
+    if BASE.exists() and {p.name for p in BASE.iterdir()} - {'round-01', 'round-03', 'round-04'}:
         raise SystemExit('Unallocated diagnostic round or shared file.')
     if (ROOT / 'stopped.json').exists():
         raise SystemExit('This diagnostic round is stopped.')
@@ -711,7 +771,7 @@ def main():
         write_new(ROOT / 'preparation-started.json', {'accepted': accepted, 'started': now(),
                   'historicalSha256': HISTORY_SHA256, 'stoppedSupplementSha256': PRIOR_SHA256,
                   'stoppedRecoverySha256': RECOVERY_SHA256,
-                  'stoppedDiagnosticSha256': DIAGNOSTIC_SHA256,
+                  'stoppedDiagnosticSha256': DIAGNOSTIC_SHA256, 'stoppedRound03Sha256': ROUND03_SHA256,
                   'priorConsumption': OLD_COUNTS, 'supplementConsumption': PRIOR_COUNTS})
         for directory in ('attempts', 'source', 'feed', 'negative', 'home', 'temp', 'packages', 'http',
                           'empty-program-files', 'home/AppData/Roaming', 'home/AppData/Local'):
@@ -729,7 +789,7 @@ def main():
         write_new(ROOT / 'identity.json', {'accepted': accepted, 'prepared': now(),
                   'historicalSha256': HISTORY_SHA256, 'stoppedSupplementSha256': PRIOR_SHA256,
                   'stoppedRecoverySha256': RECOVERY_SHA256,
-                  'stoppedDiagnosticSha256': DIAGNOSTIC_SHA256,
+                  'stoppedDiagnosticSha256': DIAGNOSTIC_SHA256, 'stoppedRound03Sha256': ROUND03_SHA256,
                   'priorConsumption': OLD_COUNTS, 'supplementConsumption': PRIOR_COUNTS})
     identity = read(ROOT / 'identity.json')
     if (ROOT / 'stopped.json').exists():
@@ -739,7 +799,8 @@ def main():
     if (identity.get('historicalSha256') != HISTORY_SHA256 or identity.get('priorConsumption') != OLD_COUNTS or
             identity.get('stoppedSupplementSha256') != PRIOR_SHA256 or
             identity.get('stoppedRecoverySha256') != RECOVERY_SHA256 or
-            identity.get('stoppedDiagnosticSha256') != DIAGNOSTIC_SHA256 or identity.get('supplementConsumption') != PRIOR_COUNTS):
+            identity.get('stoppedDiagnosticSha256') != DIAGNOSTIC_SHA256 or
+            identity.get('stoppedRound03Sha256') != ROUND03_SHA256 or identity.get('supplementConsumption') != PRIOR_COUNTS):
         raise SystemExit('Root identity or consumption changed.')
     for name, expected in FEED.items():
         if digest(ROOT / 'feed' / name, 'sha512') != expected:
@@ -756,7 +817,7 @@ def main():
     source_inventory(source, source_hashes)
     direct(ROOT / 'attempts')
     attempts = sorted((ROOT / 'attempts').iterdir())
-    if len(attempts) > 4 or [p.name for p in attempts] != [f'{i:02}' for i in range(20, 20 + len(attempts))]:
+    if len(attempts) > 4 or [p.name for p in attempts] != [f'{i:02}' for i in range(22, 22 + len(attempts))]:
         raise SystemExit('New attempt sequence changed.')
     counts = PRIOR_COUNTS.copy()
     previous = []
@@ -796,9 +857,10 @@ def main():
         if (start['historicalSha256'] != HISTORY_SHA256 or start.get('stoppedSupplementSha256') != PRIOR_SHA256 or
                 start.get('stoppedRecoverySha256') != RECOVERY_SHA256 or
                 start.get('stoppedDiagnosticSha256') != DIAGNOSTIC_SHA256 or
-                start.get('guardOrdinal') != 7 + len(previous)):
+                start.get('stoppedRound03Sha256') != ROUND03_SHA256 or
+                start.get('guardOrdinal') != 9 + len(previous)):
             raise SystemExit('Prior historical binding changed.')
-        ordinal = 6 + len(previous)
+        ordinal = 8 + len(previous)
         if start.get('preflight') != {
                 'ordinal': ordinal,
                 'startedSha256': digest(PREFLIGHT_DIR / f'aot-diagnostic-preflight-{ordinal:02}-started.json'),
@@ -837,17 +899,17 @@ def main():
     if preflight is None:
         # Resolve every prior success, reservation, source, graph and artifact gate first.
         preflight = reserved_preflight(args.action, accepted, target)
-    attempt = ROOT / 'attempts' / f'{20 + len(attempts):02}'
+    attempt = ROOT / 'attempts' / f'{22 + len(attempts):02}'
     attempt.mkdir()
     write_new(attempt / 'started.json', {'action': args.action, 'accepted': accepted, 'target': target,
               'started': now(), 'priorConsumption': counts, 'historicalSha256': HISTORY_SHA256,
               'stoppedSupplementSha256': PRIOR_SHA256, 'stoppedRecoverySha256': RECOVERY_SHA256,
-              'stoppedDiagnosticSha256': DIAGNOSTIC_SHA256,
-              'guardOrdinal': 7 + len(attempts), 'preflight': preflight,
+              'stoppedDiagnosticSha256': DIAGNOSTIC_SHA256, 'stoppedRound03Sha256': ROUND03_SHA256,
+              'guardOrdinal': 9 + len(attempts), 'preflight': preflight,
               'sourceSha256': source_hashes, 'caseInputs': case_inputs})
     powershell = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
     command = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-               'C:\\Temp\\azureauth-native-aot-diagnostics\\round-03\\source\\' + accepted + '\\Invoke-Action.ps1',
+               'C:\\Temp\\azureauth-native-aot-diagnostics\\round-04\\source\\' + accepted + '\\Invoke-Action.ps1',
                '-Action', args.action, '-AttemptName', attempt.name, '-Accepted', accepted]
     try:
         subprocess.run(command, check=False, timeout=700, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -855,7 +917,7 @@ def main():
         write_new(ROOT / 'stopped.json', {'attempt': attempt.name, 'ended': now(),
                   'reason': 'controller-wait-interrupted', 'quiescenceConfirmed': False})
         emergency = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-                     'C:\\Temp\\azureauth-native-aot-diagnostics\\round-03\\source\\' + accepted + '\\Stop-Controller.ps1',
+                     'C:\\Temp\\azureauth-native-aot-diagnostics\\round-04\\source\\' + accepted + '\\Stop-Controller.ps1',
                      '-AttemptName', attempt.name]
         try:
             subprocess.run(emergency, check=False, timeout=10, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

@@ -23,6 +23,9 @@ public sealed class NativeAotJob : IDisposable
     private long metadataDeadline;
     private MetadataSnapshot metadata;
     public uint? ActiveBeforeStop { get; private set; }
+    public uint? TotalBeforeStop { get; private set; }
+    public uint? TotalAfterStop { get; private set; }
+    public uint? ActiveAfterStop { get; private set; }
     public bool TerminationRequested { get; private set; }
     public bool TerminationSucceeded { get; private set; }
     public Process Child { get; private set; }
@@ -50,8 +53,9 @@ public sealed class NativeAotJob : IDisposable
     {
         public string State { get; private set; }
         public MemberMetadata[] Members { get; private set; }
-        public MetadataSnapshot(string state, MemberMetadata[] members)
-        { State = state; Members = members; }
+        public uint? TotalProcessesBefore { get; private set; }
+        public MetadataSnapshot(string state, MemberMetadata[] members, uint? total = null)
+        { State = state; Members = members; TotalProcessesBefore = total; }
     }
 
     // Prepare the worker before subject execution. Normal drain and termination never join it.
@@ -118,6 +122,11 @@ public sealed class NativeAotJob : IDisposable
         try
         {
             if (!MetadataMayContinue) return new MetadataSnapshot("budget-ended", members.ToArray());
+            Accounting before;
+            if (!QueryJobAccounting(retainedJob, 1, out before,
+                (uint)Marshal.SizeOf(typeof(Accounting)), IntPtr.Zero))
+                return new MetadataSnapshot("query-failed", members.ToArray());
+            if (!MetadataMayContinue) return new MetadataSnapshot("budget-ended", members.ToArray());
             long listedBefore = DateTime.UtcNow.ToFileTimeUtc();
             if (!QueryJobProcessList(retainedJob, 3, buffer, (uint)bytes, IntPtr.Zero))
                 return new MetadataSnapshot("query-failed", members.ToArray());
@@ -134,7 +143,8 @@ public sealed class NativeAotJob : IDisposable
                     return new MetadataSnapshot("invalid-list", members.ToArray());
                 members.Add(InspectMember(retainedJob, (uint)candidate, slot, listedBefore));
             }
-            return new MetadataSnapshot(MetadataMayContinue ? "complete" : "budget-ended", members.ToArray());
+            return new MetadataSnapshot(MetadataMayContinue ? "complete" : "budget-ended",
+                members.ToArray(), before.TotalProcesses);
         }
         finally { Marshal.FreeHGlobal(buffer); }
     }
@@ -181,7 +191,7 @@ public sealed class NativeAotJob : IDisposable
         if (String.Equals(image, @"C:\Program Files\dotnet\dotnet.exe", StringComparison.OrdinalIgnoreCase)) return "dotnet-host";
         if (String.Equals(image, @"C:\Windows\System32\conhost.exe", StringComparison.OrdinalIgnoreCase)) return "windows-console-host";
         if (String.Equals(image, @"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe", StringComparison.OrdinalIgnoreCase)) return "framework-csc";
-        if (String.Equals(image, @"C:\Temp\azureauth-native-aot-diagnostics\round-03\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\10.0.12\tools\ilc.exe", StringComparison.OrdinalIgnoreCase)) return "native-aot-ilc";
+        if (String.Equals(image, @"C:\Temp\azureauth-native-aot-diagnostics\round-04\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\10.0.12\tools\ilc.exe", StringComparison.OrdinalIgnoreCase)) return "native-aot-ilc";
         return "unknown";
     }
 
@@ -202,7 +212,7 @@ public sealed class NativeAotJob : IDisposable
             @"C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\",
             @"C:\Program Files\dotnet\", @"C:\Windows\System32\",
             @"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\",
-            @"C:\Temp\azureauth-native-aot-diagnostics\round-03\"
+            @"C:\Temp\azureauth-native-aot-diagnostics\round-04\"
         };
         string[] classes = { "msvc-bin-text", "dotnet-installation-text", "system32-text",
             "framework-text", "round-root-text" };
@@ -289,29 +299,55 @@ public sealed class NativeAotJob : IDisposable
         }
     }
 
-    public uint ActiveProcesses
+    private Accounting ReadAccounting()
     {
-        get
-        {
-            Accounting info;
-            if (!QueryInformationJobObject(job, 1, out info, (uint)Marshal.SizeOf(typeof(Accounting)), IntPtr.Zero))
-                throw new Win32Exception();
-            return info.ActiveProcesses;
-        }
+        Accounting info;
+        if (!QueryInformationJobObject(job, 1, out info, (uint)Marshal.SizeOf(typeof(Accounting)), IntPtr.Zero))
+            throw new Win32Exception();
+        return info;
+    }
+
+    public uint ActiveProcesses { get { return ReadAccounting().ActiveProcesses; } }
+
+    // A completed list plus unchanged lifetime totals excludes later Job arrivals,
+    // including children that start and exit between the sample and final cleanup.
+    public bool VerifiedVctipCleanup()
+    {
+        MetadataSnapshot value = FinishMetadata();
+        if (value.State != "complete" || !value.TotalProcessesBefore.HasValue ||
+            value.TotalProcessesBefore.Value == 0 || value.TotalProcessesBefore.Value > 4096 ||
+            value.TotalProcessesBefore != TotalBeforeStop || TotalBeforeStop != TotalAfterStop ||
+            !TerminationRequested || !TerminationSucceeded || ActiveAfterStop != 0 ||
+            !ActiveBeforeStop.HasValue || ActiveBeforeStop.Value == 0 ||
+            value.Members.Length == 0 || value.Members.Length > 32 ||
+            value.Members.Length < ActiveBeforeStop.Value) return false;
+        foreach (MemberMetadata member in value.Members)
+            if (member.State != "verified-member" || member.ImageClass != "msvc-vctip" ||
+                member.BasenameClass != "vctip" || member.LocationClass != "msvc-bin-text") return false;
+        return true;
     }
 
     public bool Stop()
     {
         metadataCanceled = true;
         if (unassignedPending) return false;
-        ActiveBeforeStop = ActiveProcesses;
-        if (ActiveBeforeStop == 0) return true;
+        Accounting before = ReadAccounting();
+        ActiveBeforeStop = before.ActiveProcesses;
+        TotalBeforeStop = before.TotalProcesses;
+        if (ActiveBeforeStop == 0)
+        {
+            ActiveAfterStop = 0; TotalAfterStop = before.TotalProcesses;
+            return true;
+        }
         TerminationRequested = true;
         TerminationSucceeded = TerminateJobObject(job, 1);
         if (!TerminationSucceeded) throw new Win32Exception();
         var watch = Stopwatch.StartNew();
         while (ActiveProcesses != 0 && watch.ElapsedMilliseconds < 10000) System.Threading.Thread.Sleep(50);
-        return ActiveProcesses == 0;
+        Accounting after = ReadAccounting();
+        ActiveAfterStop = after.ActiveProcesses;
+        TotalAfterStop = after.TotalProcesses;
+        return ActiveAfterStop == 0;
     }
 
     public void Dispose()
@@ -371,6 +407,8 @@ public sealed class NativeAotJob : IDisposable
     private static extern bool SetInformationJobObject(SafeFileHandle job, int kind, ref ExtendedLimits limits, uint size);
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool QueryInformationJobObject(SafeFileHandle job, int kind, out Accounting info, uint size, IntPtr returned);
+    [DllImport("kernel32.dll", EntryPoint = "QueryInformationJobObject", SetLastError = true)]
+    private static extern bool QueryJobAccounting(IntPtr job, int kind, out Accounting info, uint size, IntPtr returned);
     [DllImport("kernel32.dll", EntryPoint = "QueryInformationJobObject", SetLastError = true)]
     private static extern bool QueryJobProcessList(IntPtr job, int kind, IntPtr buffer, uint size, IntPtr returned);
     [DllImport("kernel32.dll", SetLastError = true)]

@@ -1,6 +1,6 @@
 param([ValidatePattern('^[0-9]{2}$')][string] $AttemptName)
 $ErrorActionPreference = 'Stop'
-$attempt = "C:\Temp\azureauth-native-aot-diagnostics\round-03\attempts\$AttemptName"
+$attempt = "C:\Temp\azureauth-native-aot-diagnostics\round-04\attempts\$AttemptName"
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $result = [ordered]@{ controllerAbsent = $false; compilerAbsent = $false; quiescenceConfirmed = $false }
 # Emergency use only. Never treat WSL exit or a missing PID as Job quiescence.
