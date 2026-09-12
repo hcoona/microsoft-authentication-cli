@@ -1461,6 +1461,56 @@ absence of a public durable-write receipt still requires the accepted persistenc
 Concrete semantics are owned by the [Windows design](../designs/windows-ado-authentication.md),
 not by these source findings. Synthetic and real-platform validation remain separate.
 
+### Windows Native AOT Assessment
+
+**Public desk findings, retrieved 2026-09-12 UTC:** This assessment applies to the
+Windows Slice's SDK 10.0.401/runtime 10.0.12, `net10.0-windows`/`win-x64`, MSAL and
+Broker 4.83.1, and NativeInterop 0.20.3. No package was restored, loaded, built, published,
+or authenticated for these findings. Public NuGet archives were inspected as data only.
+
+| Public input | Finding and limit |
+| --- | --- |
+| [.NET Native AOT overview](https://github.com/dotnet/docs/blob/cc76ba79b6b0de125017d49b93ae101f13e3b2aa/docs/core/deploying/native-aot/index.md), prerequisites and limitations | Windows x64 is a supported compilation target. Native AOT requires trimming and excludes runtime code generation and built-in COM. Windows publishing needs the public Visual Studio C++ toolchain; the SDK pin alone is not the full reproducible build input. |
+| [Trimming incompatibilities](https://github.com/dotnet/docs/blob/cc76ba79b6b0de125017d49b93ae101f13e3b2aa/docs/core/deploying/trimming/incompatibilities.md), WPF and Windows Forms | Microsoft disables supported trimming for Windows Forms because of built-in COM reliance, and for WPF because necessary runtime/reflection behavior cannot be preserved by trimming analysis. Replacing WinForms with WPF does not supply a supported AOT path. |
+| [P/Invoke source generation](https://github.com/dotnet/docs/blob/cc76ba79b6b0de125017d49b93ae101f13e3b2aa/docs/standard/native-interop/pinvoke-source-generation.md) and [Native AOT interop](https://github.com/dotnet/docs/blob/cc76ba79b6b0de125017d49b93ae101f13e3b2aa/docs/core/deploying/native-aot/interop.md) | Compile-time marshalling and static unmanaged entry points avoid runtime-generated interop stubs. Ordinary Native AOT P/Invoke binds lazily by default; optional direct binding uses OS loader rules and does not honor `DefaultDllImportSearchPaths`. This supports a statically known Win32 surface, not an automatic guarantee for every third-party loader. |
+| Win32 [window creation](https://github.com/MicrosoftDocs/win32/blob/b46b3638e4691f4f451590e1f861db27649849bf/desktop-src/LearnWin32/creating-a-window.md) and [window messages](https://github.com/MicrosoftDocs/win32/blob/b46b3638e4691f4f451590e1f861db27649849bf/desktop-src/LearnWin32/window-messages.md) | Native windows expose HWNDs and receive messages through a registered window procedure. An application-owned thread/message loop can own a small parent and standard controls without Windows Forms. Correct callback lifetime, thread ownership, accessibility and cancellation remain application obligations. |
+| MSAL [shared build properties](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/Directory.Build.props), [client project](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Microsoft.Identity.Client.csproj), and [JSON helper](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Utils/JsonHelper.cs) | The net8-compatible build enables `IsAotCompatible`; the client supplies a net8.0 asset and its modern JSON path uses the generated `MsalJsonSerializerContext.Custom`. These are source-level AOT provisions. The separate Broker netstandard2.0 project does not thereby inherit the net8 AOT annotation. |
+| [NativeInterop 0.20.3 public package](https://www.nuget.org/packages/Microsoft.Identity.Client.NativeInterop/0.20.3) | The archive includes `lib/net9.0`, `lib/netstandard2.0`, and `lib/net462` managed assets and `runtimes/win-x64/native/msalruntime.dll`. Its net9.0 dependency group has no declared managed dependencies. The net9.0 DLL contains `IsTrimmable=True` metadata and the `get_BaseDirectory` string; unlike the older asset, it has no `get_Location` string. String/metadata inspection is not a full IL audit or a proof of the executed loading path. Public source links identify private OneAuth; that source was not accessed and is not an evidence dependency. |
+
+The three NuGet archives' SHA-512 identities, in Client/Broker/NativeInterop order, are:
+
+- `692ae5e6b961a2ef71b747a9877f7a7f0460a03f9fb2edc0fa7e4d457a5419a0f564afae53c6296b7e75e0ab2b1c61b3f621a9d56e99945bb047b02dcfe9a2bd`
+- `9923928bde2049ed3ec125f871eb37f125a2bb28d20e0d5ebdf59d1a7cb1f37858f4c7d818dd25fd72f1fa7ae96a01a1320d1a21bb3ba3a1379d3fe37463f2ec`
+- `e8d30c22acc6c14d91f09c9e8204278357f2500a11e1e7befb1443f0e806a9dd5522938d37733bfe3de11a1c4e30ccea4755f80fcd1f9de6d8c87a88910ae5cd`
+
+The first two packages' public repository metadata identifies the MSAL source commit
+above. These archive identities support recovery of the metadata assessment; they are
+not product lock files or installed-dependency acceptance.
+
+**Reported historical issue, not a current-version observation:** MSAL
+[issue 5226](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/issues/5226)
+reports an `Assembly.Location`/IL3000 Native AOT failure with MSAL 4.70.1 and
+NativeInterop 0.18.1 on .NET 9. It was closed on August 11, 2025. Issue closure does not
+identify a verified fix for this Slice's exact dependency set. Likewise,
+[issue 5248](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/issues/5248)
+and the AOT annotation work in [PR 5458](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/pull/5458)
+do not establish end-to-end Windows Broker compatibility. Do not extrapolate the older
+failure to 0.20.3 or extrapolate annotation to successful WAM execution.
+
+**Design inference and remaining premise:** A small Win32 host can remove the known
+managed UI blocker while preserving one-process HWND ownership. Existing MSAL AOT
+provisions and the newer NativeInterop asset justify assessing that candidate before
+accepting a non-AOT exception. The complete pinned Broker/native loading path remains
+unverified, so the design explicitly leaves production publishing unresolved and makes
+no implementation-readiness claim. Source-generation, loader search restrictions, and
+artifact closure must be evaluated on the resolved graph before selecting that mode.
+No startup, memory, size, authentication, or cancellation benefit was measured.
+
+Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
+upstream compatibility reports can change the unresolved disposition and are routed by
+RECHECK-008. The concrete choice and preservation semantics belong to the Windows design;
+the validation strategy owns later evidence obligations.
+
 ### Slice Design Recheck Assessment
 
 All seven registry entries were evaluated on **2026-09-11 UTC** for the concrete host,

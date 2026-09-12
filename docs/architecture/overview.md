@@ -8,6 +8,11 @@ Windows runtime, WAM integration, protocol 1 command-line/process semantics, and
 contract. This overview retains the broader conceptual architecture; mechanisms outside
 that Slice remain unselected and are not supported by its acceptance.
 
+The Slice's [Native AOT disposition](../designs/windows-ado-authentication.md#native-aot-target-disposition)
+defines a Win32 host candidate and an unresolved publishing compatibility premise. It
+does not claim implementation readiness. Changing managed UI technology within that
+single process adds no broker, consumer protocol, or cross-process bridge.
+
 ## System Boundary
 
 The normative product boundary is defined by

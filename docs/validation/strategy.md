@@ -454,7 +454,28 @@ evidence-backed exception with a specified alternative publishing mode and reass
 condition, or an unresolved choice that cannot be called implementation-ready. Review
 public toolchain/dependency contracts and supported alternatives before accepting an
 exception. Requirement acceptance does not establish compatibility of the current
-Windows Forms/MSAL host; the concrete disposition belongs to its design revision.
+UI/MSAL host; the [concrete disposition](../designs/windows-ado-authentication.md#native-aot-target-disposition)
+currently leaves Windows publishing unresolved while assessing the Win32/Native AOT
+candidate. No non-AOT exception or implementation-readiness claim is accepted.
+
+For that candidate, close the exact Broker/NativeInterop compatibility premise before
+implementation readiness: recover the resolved net8 client, netstandard Broker and net9
+NativeInterop assets, inspect all relevant AOT/trim diagnostics and native dependencies,
+and establish that the public loader works within the application-directory/System32
+search boundary. A separately authorized synthetic publish/loading check may establish
+that premise without accounts or token operations; this Wave does not authorize it.
+Record the exact Windows C++ compiler/SDK/linker as well as .NET inputs in its protocol.
+Missing, wrong-architecture or unavailable native assets must fail without probing an
+arbitrary working directory or using a developer-machine dependency.
+
+Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
+sources against their normative contracts. Later candidate tests must cover HWND
+readiness, creation failure, callback lifetime/ABI, creating-thread destruction, stalled
+UI dispatch, keyboard/accessibility/DPI/focus behavior, and cancellation racing provider
+completion. Verify strict Profile parsing and result allowlists on the published binary,
+including duplicate/unknown JSON fields and synthetic secret markers. Use the existing
+scenario matrix for account, tenant, interaction, reuse and lifetime semantics rather
+than treating an AOT publish as their acceptance.
 
 Before claiming a publishing mode is supported, retain evidence for the exact source,
 SDK, runtime identifier, native compiler, dependency versions, and publish configuration.
@@ -480,6 +501,14 @@ build/diagnostic costs using equivalent functionality and configuration. Record 
 measurement method and variability; claim only observed benefits. A desired benefit or
 an AOT setting alone is not a measured improvement. This validation basis is not an
 execution protocol; experiments require their own accepted authorization and protocol.
+
+The Windows comparison baseline is the same Win32 host, .NET/runtime, RID, provider pins,
+request/serialization behavior and native assets, published self-contained with JIT,
+without trimming or ReadyToRun. It is a comparison input, not an accepted exception.
+Separate synthetic help/invalid-request startup from silent and interactive network/UI
+time. Before running a comparison, its accepted protocol must specify numerical criteria
+appropriate to those workloads, warm/cold cache conditions, sample limits and variability;
+this desk review invents no measurement or benefit threshold after seeing results.
 
 ## Dependency Upgrade Matrix
 

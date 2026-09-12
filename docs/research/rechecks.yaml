@@ -101,3 +101,22 @@ rechecks:
     required_outcome: >-
       Record current public guidance and reproducible account-type behavior before
       selecting or enabling an Azure DevOps compatibility client profile.
+
+  - id: RECHECK-008
+    subject: Windows Native AOT UI and broker compatibility
+    sources:
+      - https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/
+      - https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/incompatibilities
+      - https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/issues/5226
+      - https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/issues/5248
+    triggers:
+      - kind: decision
+        value: native-aot-publishing
+      - kind: release
+        value: any
+    required_outcome: >-
+      Assess current public UI, AOT/trimming, and broker/native-loading contracts against
+      the exact Windows target and dependency pins before selecting a publishing mode
+      or accepting or renewing an exception. Distinguish reports, annotations, and
+      package metadata from observed publish and platform compatibility; disposition
+      the Windows design and its validation obligations when the premise changes.
