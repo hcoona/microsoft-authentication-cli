@@ -19,8 +19,14 @@ An accepted bootstrap is preparation for validation, not an installation-success
 ## Subject and Environment
 
 Use the current owner-designated WSL 2 Ubuntu 26.04 x64 development host, with existing
-mise 2026.8.10, Python 3.13.15, Git, and the repository's pinned check tools. No Windows
-subject or historical probe executes. Windows commands are documented but Windows runtime
+mise 2026.9.3, Python 3.13.15, Git, and the repository's pinned check tools. CI separately
+uses mise 2026.8.10; that workflow pin is not evidence of the local executable version.
+The existing Linux x64 mise executable must match the public
+[2026.9.3 release asset](https://github.com/jdx/mise/releases/tag/v2026.9.3), SHA-256
+`981bd9179cc089114a87b491fce2c4007ab05b5445dee7ad08e87e5dffcc154d`.
+Resolve and record its absolute path and hash before each operation, invoke that bound
+path, and stop if its identity changes. Do not update mise or alter the CI toolchain.
+No Windows subject or historical probe executes. Windows commands are documented but Windows runtime
 discovery remains unverified by this protocol. Existing public package caches are permitted;
 do not infer an empty-cache restore or cross-platform coverage.
 
@@ -79,6 +85,8 @@ Inspect only these nonsecret settings and key presence; reject any other key, in
 registry, credential, experimental, policy/service, scanner, or hook configuration. An
 unknown configuration is a preflight stop, not permission to read its credential values
 or rewrite user state. Recheck before every APM invocation, including frozen replay.
+This includes help/version diagnostics and APM invoked through `mise exec`; dispatching
+only on an operation-category name is insufficient.
 Explicit Git dependencies prevent ambient registry routing even if a default registry
 would otherwise apply; preflight also prevents other inherited external effects.
 
@@ -107,6 +115,10 @@ journal. Record operation, attempt, UTC start/end, accepted revision, input hash
 and retained effects. Failed starts, interruptions, and manual attempts all consume a slot.
 Recover unresolved starts as consumed before continuing; amendments do not reset limits.
 A subprocess timeout terminates its owned process group, then verifies that it exited.
+Bind expected version/help observations before each diagnostic. Compare the result
+immediately and stop on a mismatch before invoking the next command; a zero exit code
+alone does not satisfy an expected-version check. Verify the host mise version before
+the first resumed installer operation.
 
 | Operation | Cumulative maximum | Per-attempt limit |
 | --- | --- | --- |
@@ -207,8 +219,10 @@ subject compatibility, authentication support, or product implementation readine
 
 On **2026-09-12 UTC**, mise lock generation attempt **1 of 3** executed under bootstrap
 revision `ec34c446c8c2528ad389a6cc64f706624e096cbb`, from 00:20:02.758673 to
-00:20:04.838337 UTC. The existing WSL development host and mise 2026.8.10 generated six
-Linux x64/Windows x64 entries and exited zero. Inspection found that `core:dotnet` resolved
+00:20:04.838337 UTC. The existing WSL development host and PATH-resolved mise generated six
+Linux x64/Windows x64 entries and exited zero. The earlier attribution to mise 2026.8.10
+was not supported by a local executable/version receipt; it incorrectly used the CI pin.
+Inspection found that `core:dotnet` resolved
 to `vfox:dotnet`; its entries named the mutable `dot.net/v1/dotnet-install` scripts and
 contained no SDK-archive checksums. This is a lock-generation observation, not successful
 locked SDK installation. No developer tool or package was installed, and no client or
@@ -219,6 +233,57 @@ The generated lock is retained as temporary validation evidence rather than acce
 the developer lock. Installation stopped before invocation. The amended exact HTTP SDK
 descriptor resolves that discovered reproducibility gap without changing the SDK version,
 host scope, public source, or retained-installation boundary. Execute the corrected
-descriptor only after this amendment merges. **Two lock-generation invocations remain**;
-all other operation limits remain unused. Recover this history and rebind the amended
-accepted revision before the next attempt; protocol amendment does not reset capacity.
+descriptor only after its amendment merges. At the end of that attempt, **two
+lock-generation invocations remained** and all other operation limits were unused. Later
+observations below supersede that snapshot for current consumption; amendments do not
+reset capacity.
+
+### Host Identity and Diagnostic Preflight Correction
+
+The following later observations do not establish full conformance to the preceding
+protocol. Under the still-accepted bootstrap, diagnostics 1–3 ran sequentially on
+2026-09-12 from 00:33:50.021536 to 00:34:31.075287 UTC in the independently reviewed
+offline client namespace. They reported Codex CLI 0.153.4, Copilot CLI 1.0.84-4, and
+Copilot's documented OTel controls. Both installed client binaries matched their public
+release archives. No Skill listing, model request, or account access occurred.
+
+After SDK-descriptor amendment `df43187b8581ad73a5f7638a1df0589c4f932390` merged, lock
+attempt 2 ran from 00:38:25.482697 to 00:38:25.855217 UTC; mise installation attempt 1
+ran from 00:38:41.413793 to 00:38:54.470896 UTC on the same host. The six generated
+Linux/Windows archive URLs and checksums matched Microsoft's exact SDK 10.0.401 metadata,
+APM v0.29.0 release metadata, and Node.js 22.22.2 SHASUMS. The installer reported SDK/APM
+installation and reuse of the existing Node.js installation. The generated lock remains
+temporary evidence pending corrected validation.
+
+Diagnostics 4–9 then completed from 00:39:08 to 00:39:11 UTC. Diagnostic 4 reported
+**mise 2026.9.3**, contradicting the declared 2026.8.10 host. The diagnostic loop failed
+to compare that output immediately and continued with SDK version/info, Node, npm, and
+APM version commands. Those reported SDK 10.0.401, runtime 10.0.12, Node 22.22.2, npm
+10.9.7, and APM 0.29.0. No product/probe command executed. Earlier PATH-resolved mise
+invocations lacked a pre-attempt executable receipt, so attributing them to the later
+verified 2026.9.3 binary is an inference, not established execution identity.
+
+The APM version diagnostic also bypassed the repeated manager preflight because the
+helper checked only `apm-*` operation categories. The subsequent manager allowlist check
+passed without changing configuration, but cannot retroactively satisfy that preflight.
+All recorded preservation comparisons passed; this does not waive either deviation.
+Independent triage in Issue #68 confirmed both author-discovered failures. Further
+installer, discovery, and retrieval execution stopped before npm/APM package installation
+or any Skill-discovery/Learn operation.
+
+This correction binds the actual existing host executable, adds immediate diagnostic
+comparison, and covers indirect/diagnostic APM invocation without changing developer
+dependency pins, hosts, endpoints, retained-state boundaries, or CI. The now-recorded mise
+hash matches the public release's executable digest; the public 2026.9.3 HTTP/GitHub
+backend and installation sources support the required versioned archives, lock checks,
+and selected-tool installation. No tool update is required.
+
+Resume only after this correction merges. Verify the bound host version, regenerate and
+compare the development lock, perform a locked installation check against the declared
+existing installed state, and repeat the required SDK/tool version checks with immediate
+assertions and the APM preflight. Do not claim a fresh-cache installation or retroactive
+protocol compliance. Preserve and disclose the earlier deviations and installed state.
+Current consumption is **lock generation 2 of 3, mise installation 1 of 3, and diagnostics
+9 of 24**; respectively 1, 2, and 15 invocations remain. All other categories remain
+unused. The correction does not reset capacity; recover the sequential journal before
+every subsequent attempt.
