@@ -114,7 +114,10 @@ sets documented .NET telemetry, certificate-generation, global-tool-PATH, and wo
 notification controls, disables build servers/node reuse and diagnostics, and omits
 inherited feed credentials, NuGet plugins, startup hooks, proxies, and agent settings.
 PowerShell uses `-NoProfile -NonInteractive`; it passes no ambient environment to the
-subject. No MSAL or native logging/telemetry callback is installed. Controller/bootstrap
+subject. Restore and publish disable automatic response files and ancestor
+`Directory.Build.props`, `Directory.Build.targets`, and `Directory.Packages.props`
+imports through explicit command-line properties. No MSAL or native logging/telemetry
+callback is installed. Controller/bootstrap
 receipts contain only the corresponding PID and creation time; no unrelated process
 inventory or command lines are retained.
 
@@ -143,7 +146,7 @@ wrapper deliberately rejects adopting a root under another subject revision.
 
 | Unit | Cumulative maximum, including failed starts and manual execution |
 | --- | --- |
-| Public package fetch | One batch, 14 package requests, no retries or redirects; 300 MiB per archive and 1.5 GiB total, 600 seconds plus at most one 30-second socket wait |
+| Public package fetch | One batch, 14 package requests, no retries or redirects; 300 MiB per archive and 1.5 GiB total; a WSL process timer interrupts pending reads at a 600-second batch deadline, in addition to 30-second socket inactivity limits |
 | Restore | Two Windows actions, at most 600 seconds each |
 | Native AOT publish | Two Windows actions, at most 900 seconds each, after successful restore and exact resolved closure inspection |
 | Synthetic cases | One positive, one missing-library, and one combined working-directory/PATH-decoy action; 30 seconds each; no repeat |
@@ -179,7 +182,8 @@ Guard source/output/temp files are retained inside the dedicated experiment root
 
 The guard creates an anonymous Windows Job Object with `KILL_ON_JOB_CLOSE`, no breakaway
 permission, and a 32-active-process limit. It creates the subject suspended, assigns it
-to the job before resuming, and gives it only the explicit output/error pipe handles.
+to the job and retains its managed process handle before resuming, and gives it only
+the explicit output/error pipe handles. That handle remains alive through result capture.
 Assignment failure terminates the still-suspended root by its process handle; failure
 to confirm termination remains an unresolved stop. Normal exit requires zero active
 job processes. On timeout/failure, `TerminateJobObject` and a bounded active-process check

@@ -1,4 +1,4 @@
-// Issue #76 controller only; compiled in memory by the pinned Windows PowerShell host.
+// Issue #76 controller only; compiled by the pinned standalone Windows Framework compiler.
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -81,6 +81,8 @@ public sealed class NativeAotJob : IDisposable
             }
             unassignedPending = false;
             Child = Process.GetProcessById((int)process.ProcessId);
+            // Framework GetProcessById stores only a PID. Retain its handle before resume.
+            if (Child.Handle == IntPtr.Zero) throw new Win32Exception();
             if (ResumeThread(process.Thread) == uint.MaxValue) throw new Win32Exception();
         }
         finally

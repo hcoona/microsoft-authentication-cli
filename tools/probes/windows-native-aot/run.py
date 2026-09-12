@@ -5,6 +5,7 @@ import datetime
 import hashlib
 import json
 import pathlib
+import signal
 import subprocess
 import time
 import urllib.request
@@ -48,6 +49,10 @@ def now():
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, *args, **kwargs):
         raise RuntimeError('Redirect rejected before another request')
+
+
+def fetch_deadline(signum, frame):
+    raise TimeoutError('Public fetch deadline reached')
 
 
 def main():
@@ -127,6 +132,8 @@ def main():
         downloaded = []
         start = time.monotonic()
         total = 0
+        previous_handler = signal.signal(signal.SIGALRM, fetch_deadline)
+        signal.setitimer(signal.ITIMER_REAL, 600)
         try:
             for name, version in PACKAGES.items():
                 filename = f'{name.lower()}.{version}.nupkg'
@@ -150,6 +157,9 @@ def main():
         except BaseException as error:
             result = {'exitCode': 1, 'quiescent': True, 'safetyStop': True,
                       'errorType': type(error).__name__, 'packages': downloaded, 'ended': now()}
+        finally:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+            signal.signal(signal.SIGALRM, previous_handler)
         write(attempt / 'result.json', result)
     else:
         powershell = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'

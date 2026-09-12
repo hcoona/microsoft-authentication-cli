@@ -102,6 +102,9 @@ try {
         $exe = "$case\NativeAotProbe.exe"
         $arguments = ''
     }
+    if ($Action -in @('restore', 'publish')) {
+        $arguments += ' -noAutoResponse -p:ImportDirectoryBuildProps=false -p:ImportDirectoryBuildTargets=false -p:ImportDirectoryPackagesProps=false'
+    }
     # The pinned standalone compiler has no shared-compilation/build-server mode here.
     # Its process handle owns this one bootstrap process before the Job guard exists.
     $compileInfo = New-Object System.Diagnostics.ProcessStartInfo
