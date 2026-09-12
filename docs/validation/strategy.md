@@ -463,7 +463,9 @@ implementation readiness: recover the resolved net8 client, netstandard Broker a
 NativeInterop assets, inspect all relevant AOT/trim diagnostics and native dependencies,
 and establish that the public loader works within the application-directory/System32
 search boundary. A separately authorized synthetic publish/loading check may establish
-that premise without accounts or token operations; this Wave does not authorize it.
+part of that premise without accounts or token operations. The
+[synthetic protocol](../research/experiments/windows-native-aot.md) defines its exact
+scope and limits; execution authority remains with the current accepted Delivery Wave.
 Record the exact Windows C++ compiler/SDK/linker as well as .NET inputs in its protocol.
 Missing, wrong-architecture or unavailable native assets must fail without probing an
 arbitrary working directory or using a developer-machine dependency.
