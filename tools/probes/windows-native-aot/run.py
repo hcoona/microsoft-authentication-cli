@@ -10,11 +10,15 @@ import subprocess
 
 ROOT = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-76')
 INITIAL = '3f21223c0d83aa8d2bb872499c40a4b08de1dcfe'
+PREVIOUS = 'a2aa598e54021792402ee5eef6324ddcd702f7bc'
+PREVIOUS_MARKER_SHA256 = '60ef44676aa3285735a73e7adbf8e7ca9dc06780a9e9a3296c7083dff9208dda'
 INITIAL_RECEIPTS = {
     '01/started.json': '979db8fdf83c0435a32c74c7458b4f6686dc8dd31e8f6fc10179fd335832c820',
     '01/result.json': '8d5e5176aaa1c157338c1988c253b539a84f9fd48437b979e61eea723bfb47a5',
     '02/started.json': 'f10a9936a7c417a89f9194823879fd0d83ff31bcf9655b933296013493fba97e',
     '02/result.json': 'aa3358a4bc992d6fec9d36687d759a5eb0f4ff2dbfab03c58492936d97c62606',
+    '03/started.json': 'ed065255c3cc5031051004714724e50f6591aa14cfad2ab6d70b771a6e6b8be7',
+    '03/result.json': '918a0425d6bb178815385ec6e8572fc6b0d1ba8e16a2abf45aaa2ae76107e7cd',
 }
 REL = 'tools/probes/windows-native-aot/'
 PROTOCOL = 'docs/research/experiments/windows-native-aot.md'
@@ -34,7 +38,7 @@ PACKAGES = {
         'Microsoft.NETCore.App.Runtime.win-x64', 'Microsoft.NETCore.App.Ref',
         'Microsoft.NETCore.App.Host.win-x64', 'Microsoft.NET.ILLink.Tasks')},
 }
-LIMITS = {'fetch': 1, 'restore': 2, 'publish': 2, 'positive': 1,
+LIMITS = {'fetch': 1, 'restore': 6, 'publish': 2, 'positive': 1,
           'missing': 1, 'decoy': 1}
 
 
@@ -59,7 +63,7 @@ def main():
     target = git('rev-parse', 'origin/main-v2').decode().strip()
     git('merge-base', '--is-ancestor', INITIAL, accepted)
     git('merge-base', '--is-ancestor', accepted, target)
-    expected_wave = git('show', '5e1d0055e3ca933a23b3082283ab9cd28f4d88dc:docs/delivery-wave.md')
+    expected_wave = git('show', '801b1bb3cf5c79f7dcd8897cae2e4e94379d02c3:docs/delivery-wave.md')
     if git('show', target + ':docs/delivery-wave.md') != expected_wave:
         raise SystemExit('Wave changed: refresh authorization and review before execution.')
     # Run from a detached accepted checkout. Never build the evolving repository root.
@@ -79,9 +83,12 @@ def main():
     for path, digest in INITIAL_RECEIPTS.items():
         if hashlib.sha256((ROOT / 'attempts' / path).read_bytes()).hexdigest() != digest:
             raise SystemExit('Original attempt evidence changed.')
-    revision_file = ROOT / 'source-revision.json'
-    prior_revision = json.loads(revision_file.read_text())['accepted'] if revision_file.exists() else INITIAL
-    if prior_revision not in (INITIAL, accepted):
+    original_revision = ROOT / 'source-revision.json'
+    if hashlib.sha256(original_revision.read_bytes()).hexdigest() != PREVIOUS_MARKER_SHA256:
+        raise SystemExit('Previous accepted source-revision evidence changed.')
+    revision_file = ROOT / 'diagnostic-revision.json'
+    prior_revision = json.loads(revision_file.read_text())['accepted'] if revision_file.exists() else PREVIOUS
+    if prior_revision not in (PREVIOUS, accepted):
         raise SystemExit('Another amendment needs explicit acceptance.')
     for name in FILES:
         copied = ROOT / 'src' / name
@@ -99,6 +106,8 @@ def main():
         completed.append((started['action'], result))
     if counts[args.action] >= LIMITS[args.action]:
         raise SystemExit('Cumulative attempt capacity exhausted.')
+    if sum(count for action, count in counts.items() if action != 'fetch') >= 11:
+        raise SystemExit('Cumulative guard bootstrap capacity exhausted.')
     prerequisite = 'fetch' if args.action == 'restore' else (
         'restore' if args.action == 'publish' else 'publish')
     if not any(
@@ -116,13 +125,13 @@ def main():
             name, version = name_version.rsplit('/', 1)
             if library['type'] != 'package' or PACKAGES.get(name) != version:
                 raise SystemExit('Resolved dependency outside accepted closure.')
-    if prior_revision == INITIAL:
-        if args.action != 'restore' or [path.name for path in attempts] != ['01', '02']:
-            raise SystemExit('Only the recorded first-restore amendment is supported.')
+    if prior_revision == PREVIOUS:
+        if args.action != 'restore' or [path.name for path in attempts] != ['01', '02', '03']:
+            raise SystemExit('Only the recorded diagnostic amendment is supported.')
         # Preserve original identity and receipts. A partial copy fails closed next time.
         for name in FILES:
             (ROOT / 'src' / name).write_bytes(sources[REL + name])
-        write(revision_file, {'initial': INITIAL, 'accepted': accepted,
+        write(revision_file, {'initial': INITIAL, 'previous': PREVIOUS, 'accepted': accepted,
                              'changed': now(), 'priorConsumption': counts})
     # mkdir is the sequential reservation. Missing results block all later invocations.
     attempt = ROOT / 'attempts' / f'{len(attempts) + 1:02d}'
