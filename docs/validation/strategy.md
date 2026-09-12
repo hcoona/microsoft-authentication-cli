@@ -471,14 +471,17 @@ Missing, wrong-architecture or unavailable native assets must fail without probi
 arbitrary working directory or using a developer-machine dependency.
 
 The diagnostic continuation
-[restored the exact dependencies and identified the next host-input omission](../research/experiments/windows-native-aot.md#supplemental-fetch-successful-restore-and-publish-host-identity).
-The first publish produced managed artifacts but failed the AOT cross-OS guard because
-the isolated Windows environment omitted `OS=Windows_NT`. Validate that accurate-host
-correction with the remaining restore/publish actions; the latest restore must succeed
-under the corrected environment and its exact closure must be inspected before publish.
-Preserve the earlier assets and managed outputs. No AOT binary or native-loading result
-exists yet, so all later runtime obligations remain unresolved. These preparation defects
-do not justify a non-AOT exception or disabling upstream platform checks.
+[completed restore and produced a native artifact](../research/experiments/windows-native-aot.md#final-restore-native-artifact-and-controller-stop).
+The corrected Windows environment and complete local feed preserve the exact dependency
+graph. The final publish returned exit 0, followed by a controller safety stop with final
+quiescence but no retained publish diagnostics or uniquely identified stop origin. Do
+not count absent warning fields as zero warnings or artifact presence as a loading test.
+All three loading cases remain unrun, and restore/publish capacity is exhausted. Any
+future authorized continuation must disposition the stop, retain adequate stage and
+sanitized publish evidence, and establish normal controller completion before loading
+cases. Preserve the prior artifacts and consumption. Upstream allocation/import,
+restricted search, wrong-architecture rejection, WAM behavior, and full native cleanup
+remain outstanding. No non-AOT exception or disabled platform check is justified.
 
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later candidate tests must cover HWND
