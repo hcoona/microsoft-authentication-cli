@@ -95,7 +95,10 @@ variables; use a dedicated empty `GH_CONFIG_DIR`, disable Git credential helpers
 prompts through process-only Git configuration, and use only public HTTPS sources.
 Do not use a package-manager authentication fallback. Configure npm with an empty user
 configuration, the public registry, `--ignore-scripts`, `--no-audit`, and `--no-fund`.
-Do not copy user npm configuration or invoke `npx` with an unresolved package reference.
+Set process-only `NETRC` to an owned empty regular file and check that it remains empty
+before each invocation; Requests otherwise searches the user's netrc files independently
+of Git/GitHub credentials. Do not copy user npm configuration or invoke `npx` with an
+unresolved package reference.
 Keep APM's built-in checks enabled and pass `--no-trust-bin`; stop on unexpected components
 or an authentication request. APM manager state is not user-global Agent configuration.
 
@@ -283,7 +286,196 @@ compare the development lock, perform a locked installation check against the de
 existing installed state, and repeat the required SDK/tool version checks with immediate
 assertions and the APM preflight. Do not claim a fresh-cache installation or retroactive
 protocol compliance. Preserve and disclose the earlier deviations and installed state.
-Current consumption is **lock generation 2 of 3, mise installation 1 of 3, and diagnostics
-9 of 24**; respectively 1, 2, and 15 invocations remain. All other categories remain
-unused. The correction does not reset capacity; recover the sequential journal before
+At correction acceptance, consumption was **lock generation 2 of 3, mise installation
+1 of 3, and diagnostics 9 of 24**; respectively 1, 2, and 15 invocations remained. All
+other categories were unused at that point. The correction does not reset capacity; recover the sequential journal before
 every subsequent attempt.
+
+### Corrected Toolchain and Initial Deployment
+
+Under accepted correction `8db4773710550a21f3ea45c235afcf34274b0fbb`, diagnostic 10
+verified the bound mise 2026.9.3 first. Lock generation 3 then reproduced the six reviewed
+archive entries byte-for-byte, and locked mise installation 2 reported all three tools
+already installed. Diagnostics 11–15 immediately matched SDK 10.0.401, runtime 10.0.12,
+Node 22.22.2, npm 10.9.7, and APM 0.29.0, with repeated manager preflight. SDK selection
+used the repository root `global.json`; no restore/build/publish command ran. These
+operations completed from 01:00:05 to 01:00:32 UTC on 2026-09-12 and retained all
+preserved instruction/probe/historical-toolchain/private-supplement comparisons.
+
+npm lock generation 1 and installation 1 completed at 01:00:40 and 01:01:09 UTC.
+Public registry metadata review covered all 98 package entries, their SHA-512 integrity
+values, source URLs, licenses, engines, and lifecycle declarations before installation.
+All Node minimums fit 22.22.2; no entry declares an install script. Development
+prepare/prepublish declarations remain inert under `--ignore-scripts`. The resolved MCP
+SDK is 1.30.0. Independent source review compared all 22 official CLI files and 693 SDK
+files to their integrity-checked archives and confirmed compatibility with the bounded
+retrieval helper. This is dependency/source evidence, not retrieval success.
+
+APM installation 1 ran from 01:01:23.695759 to 01:01:29.537908 UTC. It deployed exactly
+the five selected Skills, including all six MSBuild support documents, into shared
+`.agents/skills/`; all eleven files matched the pinned source bytes. The lock lists only
+those five dependencies and the one Learn MCP server. Both client configuration files
+identify the public Learn endpoint. The native lock represents the shared Skill paths
+once; actual discovery by both clients remains a separate observation.
+
+The installer also printed two absent-policy warnings for an origin-derived conventional
+organization-policy candidate. Independent triage in
+[Issue #68](https://github.com/hcoona/microsoft-authentication-cli/issues/68#issuecomment-5642402292)
+classified the inferred private-policy access as a false positive: APM's built-in check
+uses GitHub's public Contents API, and a not-found response does not establish private
+content access. Subsequent existence/symlink-only checks found no repository policy
+cache or default user netrc files. Those later checks do not prove pre-attempt absence
+or anonymous packet-level behavior.
+
+The same source review found the separate Requests netrc credential fallback. Independent
+triage confirmed that gap in the helper's prospective credential controls; no actual
+credential read/use was established. Execution paused while a checked empty process-only
+`NETRC` control was prepared and reviewed. This implements the existing prohibition on
+ambient credentials without changing `HOME`/`CODEX_HOME`, disabling APM checks, adding
+scope, or resetting capacity. Preserve this historical limitation rather than claiming
+retroactive isolation. Any later discovered policy content requires source/effects
+review before dependent work continues.
+
+### Frozen Replay, Discovery, and Removal
+
+All remaining observations below occurred on 2026-09-12 UTC under accepted revision
+`8db4773710550a21f3ea45c235afcf34274b0fbb`, with the reviewed empty-NETRC control.
+Frozen APM attempts 1 and 2 completed at 01:06:14.921124 and 01:06:45.157695,
+respectively. The first replayed the tooling worktree; the second deployed into a fresh
+public repository copy with no `apm_modules/`. Both preserved all three lock files
+byte-for-byte, including native APM metadata, and all eleven projected source files.
+The disposable copy retained both seeded unrelated MCP entries and all 104 inventoried
+public tracked files. No repository policy cache appeared. Existing public download
+caches were available; this is not an empty-cache installation claim.
+
+Removal attempt 1 completed at 01:09:56.809969 in 0.132 seconds. It deleted only the
+five inventoried generated Skill directories, owned APM modules, and named Learn entries
+in that disposable copy. Both unrelated MCP entries and every inventoried public input
+and lock remained. This copy contained no Learn `node_modules`; npm removal was not
+observed. The check used explicit file removal, not upstream uninstall hooks.
+
+Codex CLI 0.153.4 and Copilot CLI 1.0.84-4 were identified against their official Linux
+x64 release artifacts. Their executable SHA-256 values were, respectively,
+`56ef98ab4032d317ab26e9b5e5a175650717351edb16ed9cde0cb6d1734d62da` and
+`35310a023f92c126099fe5e955728b565c0e77da5d67b34e609802460d065fad`.
+Discovery attempt 1 for each completed at 01:10:02.629660 and 01:10:12.880211,
+in 0.976 and 3.886 seconds. Each returned exactly one repository entry for every selected
+Skill at `.agents/skills/<name>/SKILL.md` (Codex) or its containing directory (Copilot).
+Codex reported repository scope; Copilot reported project scope and enabled entries.
+The two hand-maintained review Skills remained separate. Copilot also reported its
+bundled Skills; those were not APM-installed dependencies or extra selected Skills.
+
+The discovery envelope used `bwrap --unshare-all --die-with-parent --new-session` with
+an empty temporary root, fresh `/proc` and `/dev`, and only the fixed client, Git, named
+runtime libraries, and a read-only public repository projection mounted. It provided
+synthetic minimal Git metadata. Host credential/configuration stores, private supplements,
+IPC, and network transport were unavailable. `HOME`/`CODEX_HOME` identities were retained;
+namespace-local writes disappeared on exit. Copilot received
+`COPILOT_AUTO_UPDATE=false` and `COPILOT_OTEL_ENABLED=false`. This does not establish
+that every proprietary telemetry code path was disabled internally; external transport
+was blocked and ephemeral state was discarded.
+
+Codex ran `app-server --listen stdio://` with analytics/feedback disabled, both OTel
+exporters set to `none`, ephemeral credential storage, bundled Skills/plugins disabled,
+and trust limited to the projected repository. The exact local protocol sequence was:
+
+```json
+{"id":1,"method":"initialize","params":{"clientInfo":{"name":"repository-discovery","version":"1.0"},"capabilities":{"experimentalApi":true}}}
+{"method":"initialized"}
+{"id":2,"method":"skills/list","params":{"cwds":["<projected-repository>"],"forceReload":true}}
+```
+
+Codex reported project configuration/hooks/exec policies disabled in this isolated
+projection while Skills still loaded. The result does not prove automatic activation of
+its MCP configuration; both generated endpoint entries were checked separately against
+the declared endpoint and the direct protocol result.
+
+After the list response, stdin closed and the process exited. Copilot ran
+`skill list --json` and exited. Neither client received a model prompt, authentication
+request, or installed Skill workflow. This establishes local discovery in the declared
+Linux environment, not model selection behavior or Windows runtime coverage.
+
+### Public Learn Retrieval
+
+MCP initialization/tool listing attempt 1 completed at 01:10:18.849704 in 0.626 seconds.
+The direct HTTPS JSON-RPC session sent `initialize` (protocol `2025-03-26`, empty client
+capabilities), `notifications/initialized`, then `tools/list`. The returned schemas
+identified exactly the three expected tools. Each subsequent process sent one
+`tools/call` with the exact tool and public arguments from the procedure table.
+
+The official installed CLI entrypoint was
+`tools/learn-cli/node_modules/@microsoft/learn-cli/dist/index.js`. Diagnostic 16 verified
+its help surface at 01:07:46.843148. Its three retrieval commands used
+`mise exec -- node --import <reviewed-process-guard> <entrypoint>`, followed by `search`,
+`fetch`, or `code-search --language csharp` and the exact approved input. The guard left
+the installed CLI unchanged, checked the expected tool/arguments, allowed at most one
+`tools/call` per process, rejected redirects, and bounded other transport requests.
+A dedicated `XDG_CACHE_HOME` held Learn session/schema data; no user-global Agent
+configuration was written. Application results were inspected separately from process
+exit before recording success. Returned samples were not executed.
+
+These three commands omitted `-E development` and used the existing ambient mise
+`node=22` selection. The prior Node diagnostic, installed-version/link metadata, and
+reviewed mise resolution source support 22.22.2 as a retrospective inference, not an
+observed per-process runtime receipt. No version mismatch was established. Contributor
+commands explicitly select the development environment for future reproducibility; the
+successful retrievals were not repeated to replace this evidence limitation.
+
+| Interface and operation | Completion UTC | Elapsed seconds | Observed application result |
+| --- | --- | --- | --- |
+| MCP search | 01:10:23.158577 | 0.581 | Nonempty results included Native AOT deployment and official Learn URLs. |
+| MCP fetch | 01:10:32.007947 | 0.724 | Native AOT deployment Markdown, 10,937 characters including prerequisites. |
+| MCP code search | 01:10:39.498443 | 0.623 | C# `JsonSerializable`/`JsonSerializerContext` samples and source-generation links. |
+| CLI search | 01:10:51.873266 | 1.634 | Official CLI rendered Native AOT deployment results and excerpts. |
+| CLI fetch | 01:11:03.549918 | 0.874 | Official CLI rendered the approved Native AOT page as Markdown. |
+| CLI code search | 01:11:14.083237 | 0.976 | Official CLI rendered C# source-generation samples and official links. |
+
+All six operations succeeded on attempt 1, with nonempty results and no application
+error. CLI transport logs recorded exactly one successful `tools/call` per process.
+The first CLI session's optional GET stream returned HTTP 405; initialization, tool
+listing, and the single search call succeeded, and the process completed normally
+without replay. Subsequent commands used the declared session/schema cache. The
+representative code-sample source was
+[System.Text.Json source generation](https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/source-generation#specify-source-generation-mode).
+These are retrieval observations, not independent validation of every returned passage
+or a change to Microsoft's official Skill usage guidance.
+
+### Primary Checkout and Final Consumption
+
+Before primary-checkout deployment, the current accepted inputs and prospective paths
+were inventoried separately. The three reviewed locks were copied only into absent paths.
+Frozen APM attempt 3 completed at 01:11:53.571785 in 4.041 seconds; npm installation 2
+completed at 01:12:07.711929 in 3.635 seconds. Commands explicitly used
+`mise -E development exec`; APM retained the frozen/target/no-trust-bin/HTTPS flags, and
+npm retained `ci --ignore-scripts --no-audit --no-fund`.
+
+All eleven Skill/support files, both generated MCP configurations, and all three locks
+matched the tooling deployment exactly. The root Learn installation's 22 CLI files and
+693 MCP SDK files matched the previously reviewed installed archives. All inventoried
+public inputs, hand-maintained instructions, historical probe/toolchain files, and
+private-supplement preservation comparisons passed. APM emitted the same independently
+triaged absent-policy warnings; no policy cache appeared. Installed development tools,
+root/worktree dependencies, and declared public caches were retained for developer use.
+Every started process group had terminated when its operation ended.
+
+| Operation | Cumulative started / maximum |
+| --- | --- |
+| Development mise lock generation | 3 / 3 |
+| Development mise installation | 2 / 3 |
+| npm lock generation | 1 / 3 |
+| npm installation | 2 / 3 |
+| Initial APM deployment | 1 / 3 |
+| Frozen APM replay | 3 / 3 |
+| Disposable removal | 1 / 2 |
+| Diagnostics | 16 / 24 |
+| Codex discovery | 1 / 4 |
+| Copilot discovery | 1 / 4 |
+| MCP initialization/tool listing | 1 / 2 |
+| Each of six Learn interface/operation pairs | 1 / 2; one success, no further retrieval permitted |
+
+Counts include the earlier deviations and do not reset on protocol amendment. Native
+frozen APM replay, locked npm installation, exact file comparisons, and existing hk
+checks supply deterministic evidence; no additional permanent lock checker or control
+was introduced. The associated pull request carries independent review and hk/CI
+results. These observations do not establish Windows runtime coverage, authentication
+or Native AOT compatibility, product implementation readiness, or a new execution grant.
