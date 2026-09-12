@@ -1507,18 +1507,19 @@ artifact closure must be evaluated on the resolved graph before selecting that m
 No startup, memory, size, authentication, or cancellation benefit was measured.
 
 **Synthetic runtime outcome, September 12, 2026:** The
-[Windows Native AOT experiment](experiments/windows-native-aot.md#supplemental-fetch-successful-restore-and-publish-host-identity)
-downloaded fourteen original and two supplemental public inputs, and its fifth restore
-succeeded with the expected MSAL/Broker/NativeInterop assets. Missing program-files
-variables and an incomplete local SDK-download manifest explained the earlier observed
-preparation failures. Both missing archives were publicly downloadable. The first publish
-then built the managed probe but hit the AOT cross-OS guard: the replacement Windows
-environment omitted `OS=Windows_NT`, which MSBuild does not synthesize on Windows.
-The exact host-identity correction remains to be validated without disabling that guard.
-No native executable or loading result exists yet, and these preparation defects do not
-establish Native AOT incompatibility. The design inference and production-publishing gap
-remain unchanged. Earlier discarded messages and unmeasured trust-processing effects
-retain their recorded limits.
+[Windows Native AOT experiment](experiments/windows-native-aot.md#final-restore-native-artifact-and-controller-stop)
+resolved the observed restore failures: omitted program-files inputs broke NuGet
+configuration initialization, and two SDK runtime packs were missing from the local feed.
+Both were publicly downloadable, and the final restore retained the expected exact graph.
+The first publish's cross-OS guard was explained by the missing Windows `OS` input.
+After that correction, the last publish returned exit 0 and produced an x64 native EXE
+and the archive-matching native DLL. A controller safety stop then prevented diagnostic
+retention and all loading cases; final owned-process quiescence is recorded, but the
+precise stop origin and publish warnings are unavailable. All restore/publish capacity
+is consumed. This establishes native artifact production for the synthetic subject,
+not upstream allocation/loading success or a warning-free publish. No package
+incompatibility, non-AOT exception, or production-publishing selection follows. The
+remaining runtime premise and historical trust-processing uncertainty stay explicit.
 
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by

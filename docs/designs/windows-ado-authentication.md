@@ -42,14 +42,16 @@ production publishing unselected and do not call the Slice implementation-ready 
 that essential premise has a reviewed disposition. This is a concrete design and next
 validation obligation, not permission to implement or publish it in the current Wave.
 
-The [bounded synthetic investigation](../research/experiments/windows-native-aot.md#supplemental-fetch-successful-restore-and-publish-host-identity)
-restored the exact .NET 10 dependency set after correcting isolated-environment inputs
-and supplementing two SDK runtime packs. The first publish completed managed compilation
-but hit the Native AOT cross-OS guard because the replacement environment omitted the
-Windows `OS` identifier. Its accurate-host correction still needs the last permitted
-restore/publish validation. No AOT binary or upstream loading result exists. The essential
-premise remains unresolved; these preparation defects do not establish dependency
-incompatibility or justify changing the preferred host.
+The [bounded synthetic investigation](../research/experiments/windows-native-aot.md#final-restore-native-artifact-and-controller-stop)
+restored the exact .NET 10 graph and produced an x64 native executable after correcting
+the isolated build environment and two local-feed omissions. The final publish returned
+exit 0, but a controller safety stop prevented diagnostic retention and every loading
+case. Its final quiescence is recorded; the exact stop origin and AOT/trim warnings are
+unavailable. Native artifact production is now observed, while upstream allocation,
+loading/search behavior, and the complete application remain unvalidated. Resolve that
+controller/evidence gap through a separately authorized continuation before relying on
+loading results. The preferred host, unresolved essential premise, production-publishing
+disposition, and absence of a non-AOT exception remain unchanged.
 
 The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
 distinguishes the following alternatives:

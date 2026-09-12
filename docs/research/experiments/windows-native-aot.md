@@ -9,12 +9,13 @@ and [validation strategy](../../validation/strategy.md#native-aot-publishing) co
 the bounded conclusion. The historical Windows MSAL and tooling protocols retain their
 exhausted capacities; none of their helpers or subjects may execute here.
 
-The corrected environment and two supplemental runtime packs produced a successful
-restore. The first publish completed managed compilation but stopped at the Native AOT
-cross-OS guard because the replacement environment omitted `OS=Windows_NT`. The current
-amendment supplies that accurate host identifier and preserves the successful restore
-and failed-publish artifacts before the last restore and publish. No native executable
-or loading result exists; all original limits and historical evidence remain binding.
+The final corrected restore succeeded, and the last publish returned exit 0 and produced
+an x64 native executable. The controller then recorded a safety stop before retaining
+publish diagnostics; its exact originating stage is not recoverable. Final owned-process
+quiescence is recorded, but no loading case ran. Restore and publish capacities are
+exhausted, and the stop prohibits further execution. The retained procedure and artifacts
+are evidence, not a new execution grant. The bounded result below resolves the observed
+restore causes while preserving the remaining controller, loading, and support limits.
 
 ## Question and Exact Subject
 
@@ -204,7 +205,7 @@ resets capacity or clears a stop. Reserve the next sequential attempt and write 
 start receipt before invoking a Windows subject. The Windows process guard, diagnostic
 sanitizer, probe program, project, and commands retain their accepted behavior.
 
-Known consumption is original fetch 1/1, supplemental fetch 1/1, restore 5/6,
+Before the host-OS continuation, consumption was original fetch 1/1, supplemental fetch 1/1, restore 5/6,
 publish 1/2, each case 0/1, and guard bootstrap 6/11. One restore plus one publish leaves
 three guard actions for the unchanged loading cases if prerequisites succeed.
 
@@ -236,8 +237,12 @@ directory to the child PATH. Before touching NativeInterop, the program sets
 Positive success requires AOT, restricted search, configuration creation, and the loaded
 module's path matching the application directory. Missing and decoy should fail with no
 native module loaded. An unexpected successful decoy load stops subsequent actions.
-There is no wrong-architecture execution: this public package includes only the x64
-Windows native DLL; fabricating another executable subject is unnecessary here.
+No wrong-architecture case is included in this exact protocol. NativeInterop 0.20.3
+contains native assets for multiple runtime identifiers; the accepted `win-x64` restore
+selects `runtimes/win-x64/native/msalruntime.dll`. The three cases above do not establish
+wrong-architecture handling. AOT-AUTHOR-017 independently confirmed the earlier false
+package-inventory rationale; this correction changes neither the executed subject nor
+its case exclusions. The broader validation obligation remains outstanding.
 
 The controller first compiles its guard with the pinned standalone Framework compiler,
 using explicit source/output/references and a complete replacement environment. This
@@ -690,6 +695,102 @@ managed artifacts, and sanitized receipts are intentionally retained. The amendm
 preserves the six newly identified files before they can be overwritten. No account,
 authentication, broker-session, UI, or resource operation ran. Historical trust-path
 uncertainty and all untested Native AOT/WAM/production-publishing obligations remain.
+
+### Final Restore, Native Artifact, and Controller Stop
+
+Attempts 09–10 used accepted PR #86 commit
+`9055a9b473ab574a27469c96e31e1416ec69b14f`, tree
+`aecc450913943737f396faf93b8d81a89f26aae8`, after independent source/protocol review,
+independent finding triage, seven isolated prerequisite checks, mandatory commit checks,
+full hk, and
+[CI](https://github.com/hcoona/microsoft-authentication-cli/actions/runs/34675373960).
+The only Windows helper change was `OS=Windows_NT`. The accepted migration preserved all
+prior receipts and markers, copied the successful assets/lock under attempt 07 and the
+four managed outputs under attempt 08, and recorded `host-os-revision.json`. No platform
+guard was disabled, and no project, dependency, toolchain, command, or probe API changed.
+
+| Attempt | UTC interval on September 12, 2026 | Actual observation |
+| --- | --- | --- |
+| 09: sixth and final restore | 05:26:51.881923–05:26:55.6390960 | Guard compilation exit 0; restore exit 0 in 1.986 seconds; no diagnostic codes or stderr, complete sanitized success text; quiescent and no safety stop. |
+| 10: second and final publish | 05:27:57.192345–05:28:10.6269568 | Guard compilation exit 0; subject exit 0 in 11.856 seconds; controller safety stop true, final quiescence true, failure type `System.Management.Automation.RuntimeException`; publish diagnostics were not retained. |
+
+**Restore observation:** Assets and lock bytes are identical to retained attempt 07.
+All ten package versions, five exact 10.0.12 SDK downloads, and the sole
+`Microsoft.NETCore.App` framework reference remain unchanged. The actual
+`net10.0-windows/win-x64` target selects the same MSAL net8.0, Broker netstandard2.0,
+NativeInterop net9.0, and x64 native entries. Their extracted bytes and the cache archives
+were checked against the fetched archives before publish; NuGet content hashes matched
+extraction metadata. This was a restore using the existing dedicated cache, not a new
+clean-cache or network restore.
+
+**Native artifact observation:** After final quiescence, read-only inspection found
+exactly these three published files. The executable is PE x64 (`0x8664`) with a zero-size
+CLR runtime directory, Windows system/API-set imports, and no delay-import table. The
+published native DLL is byte-identical to the selected public archive entry. Together
+with the accepted `PublishAot=true` command and exit 0, these facts establish production
+of a native artifact by this synthetic publish. They do not establish its execution,
+warning-free compilation, complete native dependencies, or successful broker imports.
+Neither the EXE nor any managed output was executed.
+
+| Published artifact | Bytes | SHA-256 |
+| --- | --- | --- |
+| NativeAotProbe.exe | 2,419,200 | `e7fbef7f06f86236ae38658052e4e46d46e3851048c7ec878e215986214ae495` |
+| NativeAotProbe.pdb | 10,850,304 | `09cc29ee22678c93367bd43566dfd4544776caf30861232f5e04397da14a0cd7` |
+| msalruntime.dll | 2,949,656 | `9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79` |
+
+**Controller stop and evidence limit:** AOT-AUTHOR-018 independently confirmed the
+recorded stop and the limits of its diagnosis. In the exact helper, assignment of subject
+exit and elapsed time precedes the immediate job-accounting check and diagnostic
+assembly. `diagnosticCodes` and both diagnostic objects are absent. The explicit
+nonzero-`ActiveProcesses` branch is a possible origin; an exception while assembling the
+captured streams before the first diagnostic assignment is another. The generic retained
+exception type does not uniquely identify the originating statement. No job-process
+count, process identity, stop stage, or actual termination branch was retained.
+
+The final `quiescent=true` records the outcome of the owned compiler/job stop path.
+`WindowsJob.Stop()` may return when no process remains or terminate the job and wait for
+zero; this receipt does not identify which occurred. Do not claim a particular surviving
+compiler/server, forced termination, a timing race, sensitive-output detection, timeout,
+or a clean ordinary controller completion. The wrapper's exit 0 merely means it printed
+the result; the inner safety-stop field remains authoritative for continuation.
+No publish transcript, diagnostic count, or AOT/trim-warning disposition can be
+reconstructed from absent fields. Exit 0 does not mean there were no warnings.
+
+| Retained evidence | SHA-256 |
+| --- | --- |
+| Attempt 09 started.json | `f42d994b1eceebcac3fb496c2f7353c190dc8b5e79d58c8bcac6c8461ce8e138` |
+| Attempt 09 result.json | `df42f0549332ae31c2e0842523d78e489ce8c71851ce78792b1b95b78f20e09a` |
+| Attempt 10 started.json | `a6dbca61fe69c0aebbbde223fcfd940c42e63211b9164cfd46acfedc81fde298` |
+| Attempt 10 result.json | `7937ca9fb73eda4f1be0337d39689b41c9eeaf7898a0603f2f1eb92425331b6c` |
+| Host-OS revision marker | `7595b831ac11aceae750e1efbef47735209cb48c165191719805d7643a30a66d` |
+
+**Bounded disposition:** The observed NuGet configuration failure was caused by omitted
+program-files inputs. The next `NU1101` failures were two local-feed omissions;
+WindowsDesktop and ASP.NET runtime packs 10.0.12 were publicly downloadable. Correcting
+these inputs produced successful restores. Supplying the actual Windows OS identifier
+then advanced the unchanged publish beyond its earlier cross-OS guard to a native
+artifact and exit 0. These are observed preparation remedies, not evidence of blocked
+public packages or Native AOT incompatibility in MSAL/Broker/NativeInterop.
+
+The remaining experiment blocker is a recorded controller safety stop after successful
+subject exit, with insufficient retained stage/diagnostic detail to identify its exact
+origin. Positive, missing-library, and working-directory/PATH-decoy cases remain unrun;
+there is no upstream allocation/import or restricted-search runtime result. A later
+continuation would need a newly accepted bounded grant/protocol that dispositions this
+stop and retains its origin and sanitized publish diagnostics. It cannot clear the stop,
+reuse a case slot, or reset capacity merely by changing a source marker. This record
+proposes no executable remedy or new attempt.
+
+Final consumption is original fetch **1/1**, supplemental fetch **1/1**, restore **6/6**,
+publish **2/2**, each loading case **0/1**, and guard bootstrap **8/11**. Attempts 01–10
+all have complete receipts, with no manual replay or interrupted reservation. The safety
+stop blocks all remaining cases despite unused case/guard capacity. Owned sources, feed,
+caches, prior retained evidence, native artifacts, and sanitized receipts are
+intentionally retained. No account, authentication, broker-session, UI, or resource action
+was executed, and no account/session cleanup occurred. Historical Windows trust-path
+uncertainty remains unchanged. Production publishing, full native cleanup, WAM behavior,
+wrong-architecture rejection, and support remain unvalidated; no non-AOT exception or
+alternative host is selected. Close this bounded Wave only after accepting this evidence.
 
 ### Fetched Public Archive Identities
 
