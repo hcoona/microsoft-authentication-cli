@@ -73,9 +73,13 @@ the earlier missing output nor survivor identity is reconstructed. Static artifa
 inspection confirms native x64 images and their direct import tables, but no recovery
 runtime ran. Normal publish completion, native cleanup, wrong-architecture rejection,
 dynamic dependency closure and product symbols retain their outstanding obligations.
-The recovery is stopped and restore/publish capacity exhausted; another execution needs
-owner disposition and a new accepted Wave/protocol amendment. Native AOT remains the
-preferred candidate, with the publishing choice and implementation-readiness gap unchanged.
+The recovery remains stopped with its own restore/publish capacity exhausted. The later
+[diagnostic round](../research/experiments/windows-native-aot.md#diagnostic-round-01-results)
+again captured complete warning-free output and confirmed owned termination after the
+normal-completion stop. Its sampled Job member had an unknown image class; no new runtime
+ran. The accepted buffered Wave permits a fresh exact diagnostic amendment, preserving
+all stopped roots. Native AOT remains the preferred candidate, with the publishing choice
+and implementation-readiness gap unchanged.
 
 The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
 distinguishes the following alternatives:

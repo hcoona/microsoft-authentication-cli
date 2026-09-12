@@ -505,8 +505,12 @@ Static x64 PE/import observations do not settle dynamic native dependencies. Pre
 the remaining normal-completion, cleanup, wrong-architecture, dependency and product-symbol
 obligations and all historical diagnostic unknowns. The stopped recovery cannot resume
 or use its unused runtime capacity; restore/publish limits are exhausted. Further
-execution needs owner disposition and a new accepted Wave/protocol amendment. The
-publishing choice and preimplementation gap remain unresolved.
+execution must use the later accepted buffered Wave and a fresh exact protocol amendment.
+The [first diagnostic round](../research/experiments/windows-native-aot.md#diagnostic-round-01-results)
+retained complete warning-free output and a verified Job member with unknown image class,
+then stopped with successful owned termination and final quiescence. It supplies no new
+runtime or normal-publish evidence. Preserve all these obligations; the publishing choice
+and preimplementation gap remain unresolved.
 
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later candidate tests must cover HWND

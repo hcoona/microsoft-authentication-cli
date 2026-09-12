@@ -36,8 +36,14 @@ public sealed class NativeAotJob : IDisposable
         public long? CreationFileTime { get; private set; }
         public string State { get; private set; }
         public string ImageClass { get; private set; }
-        public MemberMetadata(int slot, string state, uint? pid, long? created, string image)
-        { Slot = slot; State = state; ProcessId = pid; CreationFileTime = created; ImageClass = image; }
+        public string BasenameClass { get; private set; }
+        public string LocationClass { get; private set; }
+        public MemberMetadata(int slot, string state, uint? pid, long? created, string image,
+            string basename = "unknown", string location = "unknown")
+        {
+            Slot = slot; State = state; ProcessId = pid; CreationFileTime = created;
+            ImageClass = image; BasenameClass = basename; LocationClass = location;
+        }
     }
 
     public sealed class MetadataSnapshot
@@ -158,7 +164,9 @@ public sealed class NativeAotJob : IDisposable
                 else if (!MetadataMayContinue) state = "budget-ended";
                 else if (!IsProcessInJob(process, retainedJob, out member) || !member) state = "membership-unverified";
                 else if (MetadataMayContinue)
-                    return new MemberMetadata(slot, "verified-member", pid, created, ClassifyImage(image.ToString()));
+                    return new MemberMetadata(slot, "verified-member", pid, created,
+                        ClassifyImage(image.ToString()), ClassifyBasename(image.ToString()),
+                        ClassifyLocation(image.ToString()));
                 else state = "budget-ended";
             }
         }
@@ -168,12 +176,38 @@ public sealed class NativeAotJob : IDisposable
     private static string ClassifyImage(string image)
     {
         const string vc = @"C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64\";
-        foreach (string name in new[] { "link", "cl", "mspdbsrv", "mspdbcmf", "c1", "c1xx", "c2" })
+        foreach (string name in new[] { "link", "cl", "mspdbsrv", "mspdbcmf", "c1", "c1xx", "c2", "vctip" })
             if (String.Equals(image, vc + name + ".exe", StringComparison.OrdinalIgnoreCase)) return "msvc-" + name;
         if (String.Equals(image, @"C:\Program Files\dotnet\dotnet.exe", StringComparison.OrdinalIgnoreCase)) return "dotnet-host";
         if (String.Equals(image, @"C:\Windows\System32\conhost.exe", StringComparison.OrdinalIgnoreCase)) return "windows-console-host";
         if (String.Equals(image, @"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe", StringComparison.OrdinalIgnoreCase)) return "framework-csc";
-        if (String.Equals(image, @"C:\Temp\azureauth-native-aot-diagnostics\round-01\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\10.0.12\tools\ilc.exe", StringComparison.OrdinalIgnoreCase)) return "native-aot-ilc";
+        if (String.Equals(image, @"C:\Temp\azureauth-native-aot-diagnostics\round-02\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\10.0.12\tools\ilc.exe", StringComparison.OrdinalIgnoreCase)) return "native-aot-ilc";
+        return "unknown";
+    }
+
+    // Lexical classes only: neither canonical paths nor executable identity/provenance.
+    private static string ClassifyBasename(string image)
+    {
+        int separator = image.LastIndexOf('\\');
+        string leaf = image.Substring(separator + 1);
+        foreach (string name in new[] { "link", "cl", "mspdbsrv", "mspdbcmf", "c1", "c1xx", "c2",
+            "vctip", "dotnet", "conhost", "csc", "ilc" })
+            if (String.Equals(leaf, name + ".exe", StringComparison.OrdinalIgnoreCase)) return name;
+        return "unknown";
+    }
+
+    private static string ClassifyLocation(string image)
+    {
+        string[] prefixes = {
+            @"C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\",
+            @"C:\Program Files\dotnet\", @"C:\Windows\System32\",
+            @"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\",
+            @"C:\Temp\azureauth-native-aot-diagnostics\round-02\"
+        };
+        string[] classes = { "msvc-bin-text", "dotnet-installation-text", "system32-text",
+            "framework-text", "round-root-text" };
+        for (int i = 0; i < prefixes.Length; i++)
+            if (image.StartsWith(prefixes[i], StringComparison.OrdinalIgnoreCase)) return classes[i];
         return "unknown";
     }
 
