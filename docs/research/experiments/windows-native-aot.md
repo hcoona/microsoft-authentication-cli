@@ -23,6 +23,115 @@ missing publish warnings remain unchanged. These synthetic results establish the
 allocation/loading/search path, not WAM authentication, complete native cleanup,
 production publishing, or support.
 
+## Diagnostic Round 05
+
+This exact fresh-round correction follows independently reviewed and triaged
+`AOT-ROUND04-PREFLIGHT10`. Round 04 completed restore and the approved VCTIP publish
+cleanup, then its next read-only preflight rejected a reparse point before any runtime
+or guard reservation. Its [results](#diagnostic-round-04-results) remain historical
+evidence; no action, preflight or artifact from that stopped round may resume.
+
+Apply Round 04 except for these explicit replacements. The same PR #103 Wave and
+SHA-256 `9cf67ada4d2f729a3e1fe5884385f7f79cf2076e9c15f7eced0c1cb2fc9bad60` authorize
+the correction. Merge this independently reviewed exact source/protocol before any
+host preflight or action, then bind the clean detached execution checkout to that
+accepted revision and the current unchanged target prerequisites.
+
+### Allocation and Preserved Evidence
+
+Use only `C:\Temp\azureauth-native-aot-diagnostics\round-05` for new host files. Preserve
+all six historical roots and the absence of round-02. Round-04 contributes 33 exact
+named inputs: derive `DIAGNOSTIC_FILES` with attempts 22/23 and source
+`e17eb0762b9ce13b9b173bce3e44d7434d00d30b`, remove `stopped.json`, add publish 23's
+`artifacts.json` and `completion.json`, and sort the resulting ASCII paths. The ordered
+name/NUL/binary-SHA-256 aggregate is
+`55dcd0469d69a44766fa143c88fe482d043d47183da06eaec3152d4270c84f61`.
+Require exactly attempts 22/23 and no root `stopped.json`; failed WSL preflight 10 is
+the durable stop evidence. Pin all six preflight 08–10 receipts below. Do not traverse
+historical home/cache trees or modify the observed link.
+
+| Unit | This exact round | Cumulative supplemental/diagnostic count after full success |
+| --- | --- | --- |
+| Local-feed restore | Attempt 24, once, 180 seconds | Six of ten restores |
+| Native AOT publish | Attempt 25, once, 600 seconds | Six of ten publishes |
+| Synthetic cleanup | Attempt 26, once, 30 seconds | One of four cleanup cases |
+| Genuine x86 rejection | Attempt 27, once, 30 seconds | One of four wrong-architecture cases |
+| Standalone guard | Ordinals 11–14, one per action, 30 seconds each | Fourteen of twenty-eight |
+| Corrected preflight | Ordinals 11–14, one per action, 60 seconds each | Fourteen of fifty; original rejected check separate |
+
+Prior consumption is restore five, publish five, guards ten, corrected preflights ten
+and no supplemental/diagnostic runtime. Round-04's unstarted runtime allocations consume
+no action or guard unit; the next available action reservation is 24. Preserve the
+original thirteen attempts separately. Failed starts/checks count, revisions never reset
+capacity, and no same-round retry or later-round allocation follows from this amendment.
+
+### Fresh Child Environment for Every Action
+
+Each action exclusively creates `attempts/<number>/scratch` after its durable action
+reservation and before its controller starts. Create only `home`, `temp`, `http`,
+`home/AppData`, `home/AppData/Roaming`, and `home/AppData/Local` beneath it. Existing
+paths reject rather than being reused or repaired. At most four such environments are
+created. Remove the shared root-level home/temp/HTTP-cache setup from this fresh round;
+all old roots remain untouched.
+
+Bind `USERPROFILE` and `DOTNET_CLI_HOME` to that action's `scratch/home`, `APPDATA` and
+`LOCALAPPDATA` to its corresponding subdirectories, `TEMP`/`TMP` to `scratch/temp`, and
+`NUGET_HTTP_CACHE_PATH` to `scratch/http`. Both the standalone guard compiler and the
+owned subject use this replacement environment. The existing
+[ProcessStartInfo environment contract](https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo.environmentvariables)
+permits explicit child variables with `UseShellExecute=false`; the Job launcher keeps
+its explicit native environment block. These are fresh dedicated file locations, not
+a new Windows identity, isolated OS profile, or proof that opaque components use only
+environment-derived paths. Account and credential state remain excluded.
+
+Keep the verified public feed, packages, source/build graph, native inputs and all
+evidence/artifacts under the shared round root. Their hashes, payload verification,
+restricted DLL search and provenance gates remain mandatory. No source, import,
+package, DLL, working-directory or search input may point into an earlier action's
+scratch environment. The fixed commands, package pins, Program.cs, rooted provider
+surface, symbols and telemetry controls are unchanged.
+
+After a preceding action has an independently accepted completion and quiescence,
+its scratch contents become unused retained files. Before the next action, the wrapper
+first validates the complete prior reservation/result/completion chain and applicable
+graph/artifact gates. Its Windows check still verifies every named historical input
+and ancestor, then checks the current round breadth first. The controller performs the
+same current-round traversal and validates the exact action/attempt pairing 24–27.
+Both check each item's reparse attribute before any descent or exclusion. Only the
+exact earlier action scratch directories may omit descent; their directory and every
+ancestor still reject links. For restore, publish, cleanup and x86, the excluded
+contents are respectively those of zero, one, two or three earlier scratch directories.
+No current scratch, sibling, prefix match, shared source/package/feed, evidence or
+artifact can qualify. No cache filename or reparse-target allowlist is added.
+
+The previous scratch is never a later input, search location or output. Every current
+input and active scratch retains complete checking. Existing stopped predecessor roots
+use only exact named evidence leaves with checked ancestors, as before. This separates
+inactive files from active inputs rather than relaxing checks on a reused environment.
+An unexpected link in an active input still rejects and ends the round. This correction
+does not identify the old link's creator or guarantee that a future child creates none.
+
+### Transport, Completion and Continuation
+
+The preflight preserves all 178 prior input paths and adds the 33 round-04 inputs, for
+211 total, retaining their consecutive grouping and ancestor-query order. Strip only
+outer line whitespace, blank lines and comment-only lines from the fixed generated
+PowerShell script before encoding; it has no here-strings or continuation backticks.
+Keep literal contents, statement order and failure categories unchanged. Static command
+lengths, including NUL, are 29,014 / 29,202 / 29,398 / 29,590 UTF-16 units for restore,
+publish, cleanup and x86. The unchanged 30,000-unit gate remains before reservation or
+host invocation. Review parsing and all four exact inclusion/exclusion sets before
+acceptance; test active-input rejection and lack of traversal into inactive contents.
+
+Keep every Round-04 timing, identity/accounting, diagnostic and completion predicate.
+Only publish may use verified `vctip-cleanup`; runtime completion still requires normal
+zero-process quiescence without termination. The four existing sequential commands use
+this amendment's accepted revision. Each action requires independent acceptance before
+the dependent action; runtime requires this round's own reviewed publish and bound
+artifacts. Failed preflight or action stops this round, with no historical replay;
+global-stop conditions remain unchanged. Retain all new files intentionally, accept
+observations and affected consumers together, and stop before product implementation.
+
 ## Diagnostic Round 04
 
 This fresh exact amendment implements the prospectively owner-approved VCTIP publish
@@ -170,6 +279,100 @@ allocation internals. X86 rejection tests this exact loader case. Accept resulti
 observations and affected assessment/design/validation conclusions atomically. Product
 WAM/UI/authentication, complete-application dynamic dependencies, symbols, performance,
 release and support validation remain distinct from preimplementation design readiness.
+
+### Diagnostic Round 04 Results
+
+PR #104 accepted protocol/source `e17eb0762b9ce13b9b173bce3e44d7434d00d30b`,
+tree `e0d4d0f9f8b7bacc313be2cfed328d9c536f014b`, under the unchanged PR #103 Wave.
+The clean detached runner used the existing Windows 11 x64 host through WSL 2, .NET
+SDK 10.0.401/runtime 10.0.12, MSVC 14.51.36231, Windows SDK 10.0.26100.0, and the
+unchanged authentication pins. All files and sanitized receipts are intentionally
+retained under the round-04 root; no acquisition or installation was needed.
+
+**Restore 22:** The subject and guard exited zero. The subject took 9.711 seconds,
+including a 0.010-second normal drain; all retained Job counts were zero, with no
+termination or safety stop. Complete screened output contained 194 stdout characters,
+zero stderr and no diagnostic codes. The runner verified all 187 package payloads and
+1,058 download-pack payloads against the reused public archives. The ten-library graph
+selects the net8.0 Client, netstandard2.0 Broker, net9.0 NativeInterop and package x64
+DLL. Its lock, generated NuGet imports and nine selected assets remain hash-bound.
+This is a local-feed restore, not a clean public-network restore. Independent review
+accepted it before publishing.
+
+**Publish 23:** The subject and guard exited zero, with complete screened diagnostics:
+315 stdout characters, zero stderr, no diagnostic codes or warning text, and no
+suppressed, truncated or sensitive lines. This covers the unchanged explicitly rooted
+provider surface, including never-invoked broker/account/token APIs. No blanket warning
+suppression or non-AOT fallback was used. The subject took 24.966 seconds, including a
+2.007-second normal drain. The drain retained one Job process, so completion used the
+prospectively accepted `vctip-cleanup` criterion rather than normal zero-process drain.
+
+The complete bounded snapshot contained one unique same-handle incarnation- and
+membership-verified member with `msvc-vctip` / `vctip` / `msvc-bin-text` classes. Lifetime
+Job totals were 13 before the list, before termination and after termination; both
+normal/pre-stop active counts were one. Owned termination was requested and succeeded,
+with final active count zero. The controller and independent Python predicate accepted
+the current identity/count/termination evidence, complete diagnostics and quiescence;
+`safetyStop=false`, `vctipCleanupVerified=true`, and artifact/completion receipts were
+issued. Independent review accepted this exact completion before runtime.
+
+This applies the accepted finite ownership/accounting and installed-toolchain premise.
+It does not establish an atomic snapshot, mapped executable-byte identity, service
+exclusivity, telemetry absence, or absence of opaque helper effects. The result does
+not identify any earlier unknown survivor or reclassify historical stops.
+
+| Published artifact | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Native x64 EXE | 8,643,584 | `c50fed6d41d2c732875bc06d0b140002fed7cef1866662cf7fef76d1a7800b4f` |
+| Pinned x64 `msalruntime.dll` | 2,949,656 | `9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79` |
+
+Read-only PE inspection found machine `0x8664`, PE32+ headers and zero CLR directories
+in both images. The EXE has 16 static imports and the DLL 50, with no delay imports;
+the complete lists match the retained recovery inspection. These are Windows modules
+and OS API-set contracts, including the EXE's Universal CRT imports. This supplies a
+static dependency disposition for the synthetic target, not dynamic WAM dependency
+closure or proof of a deployment without undeclared host prerequisites. There is no
+PDB in this synthetic output; PE debug-directory sizes are 56/84 bytes. Product symbol
+policy and complete-application deployment validation remain separate.
+
+**Preflight 10 and round stop:** Before cleanup 24, the read-only Windows path check
+ran from 21:15:09.593778Z through 21:15:11.363590Z on September 12, 2026, taking
+1.769812 seconds. It returned `reparse-point`, exit one and no stderr. The wrapper
+stopped before creating attempt 24, reserving guard 11 or starting a controller/subject.
+Cleanup 24 and x86 25 never ran. The failed WSL preflight pair is durable stop evidence;
+no host `stopped.json` was created or subsequently added. Round 04 cannot resume.
+
+Later read-only WSL metadata inspection found a single link at
+`home/AppData/Local/Microsoft/Windows/INetCache/Content.IE5`. Its absolute target was
+lexically within round-04; no target text/content was retained or traversed. This is
+a candidate rejection input, not proof of the exact failed Windows query, creator,
+creation time, canonical target identity, network behavior or external state access.
+Independent triage confirmed the stop and a prospective fresh-environment correction
+within the existing Wave, without a cache-name exception or repeated owner approval.
+
+| Retained evidence | SHA-256 |
+| --- | --- |
+| Restore 22 reservation | `57ea2fdd01b829e06c9e9c7656c06256147e7242f83eaafee0ef0d72a4b3fada` |
+| Restore 22 result | `e21a9b2e04cd3bf3452ac8f761f4fd61a894a603bda8c037e6bde8a22415661f` |
+| Restore 22 graph/payload receipt | `a02921b1b1ee7fbec065b062903049e6ce5a262306016a866da100326b485c2e` |
+| Restore 22 completion | `f722362f6761f474fad6088c65cfe5f099f5f934c08a8af16847c08579744544` |
+| Publish 23 reservation | `6d9226c1fadf113eeb7766cba152cd878962512549b98d3bff7f4777017e1d64` |
+| Publish 23 result | `f0919532b3ea8d78448db360c1fa04fb60098cfbc0b6b20d1a3f1a5292d053f3` |
+| Publish 23 artifact manifest | `7b14a697cbf9e9c184ac1f6d9fb0da55d3664174959c6568b40035228baced5d` |
+| Publish 23 completion | `f7640556eeb54ab6f2ee8a25fa8c52faebb0dbad3270286c7404460aaf9b91ad` |
+| Preflight 08 reservation/result | `305fcfeade8027a6c52b91d7604b95d62d5aa850b7033dfef02efdb72c9a1997` / `8118c3674e8dbd5d2b37e925a4a4ace1c0ad70343397ab5b591b4b8c92953638` |
+| Preflight 09 reservation/result | `03dddd7d42c2c263432cd648e4bd549a5ad69cd43ddb5e2f35b44d915712696a` / `a18ce53fae98f0b77a6429c03e057d3b36305761e2a164271f04d447ab3c376c` |
+| Preflight 10 reservation/result | `b510ac4d2d6ead782cd047cb48769ea666f65445554ca2f4d5f5faa9a40ed322` / `ac76c33ebb437afa283400f362cbf3d2cae7ecb4c4f089874239cffa6e62fd1d` |
+| Later link metadata | `fdd0cdcdc03b76492c4cfee45bfd59ebb541970898cc5ebc259c090692403f1b` |
+| Frozen 33-file round inventory | `55dcd0469d69a44766fa143c88fe482d043d47183da06eaec3152d4270c84f61` |
+
+Cumulative supplemental/diagnostic consumption is restore five, publish five, guards ten,
+corrected preflights ten and no runtime. Remaining Wave capacity is five restores,
+five publishes, four cleanup and four x86 cases, eighteen guards and forty corrected
+preflights; only an accepted fresh exact round may allocate any of it. Original exhausted
+capacity remains separate. Approved publish completion and complete warning-free
+diagnostics are supported; cleanup, x86 and publishing-design selection remain open.
+No historical missing diagnostic or unknown survivor is retrospectively resolved.
 
 ## Diagnostic Round 03
 

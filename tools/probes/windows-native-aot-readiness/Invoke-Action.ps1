@@ -6,7 +6,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
-$root = 'C:\Temp\azureauth-native-aot-diagnostics\round-04'
+$root = 'C:\Temp\azureauth-native-aot-diagnostics\round-05'
 $attempt = Join-Path "$root\attempts" $AttemptName
 $vc = 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231'
 $sdk = 'C:\Program Files (x86)\Windows Kits\10'
@@ -105,8 +105,26 @@ try {
             throw 'Linked input directory'
         }
     }
-    foreach ($item in Get-ChildItem -LiteralPath $root -Force -Recurse) {
+    $actionIndex = [Array]::IndexOf(@('restore', 'publish', 'cleanup', 'wrong-architecture'), $Action)
+    if ($actionIndex -lt 0 -or $AttemptName -cne [string](24 + $actionIndex)) {
+        throw 'Unallocated action/attempt'
+    }
+    $inactiveScratch = @()
+    for ($index = 0; $index -lt $actionIndex; $index++) {
+        $inactiveScratch += "$root\attempts\$([string](24 + $index))\scratch"
+    }
+    $queue = New-Object 'Collections.Generic.Queue[string]'
+    $queue.Enqueue($root)
+    while ($queue.Count -gt 0) {
+        $item = Get-Item -LiteralPath $queue.Dequeue() -Force
         if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Linked experiment input' }
+        # Previous completed scratch is neither an input nor an output of this action.
+        if ($inactiveScratch -contains $item.FullName) { continue }
+        if ($item.PSIsContainer) {
+            foreach ($child in Get-ChildItem -LiteralPath $item.FullName -Force) {
+                $queue.Enqueue($child.FullName)
+            }
+        }
     }
     Save-Json "$attempt\controller.json" @{ pid = $PID; started = (Get-Process -Id $PID).StartTime.ToUniversalTime().ToString('o') }
     $result.reservationSha256 = (Get-FileHash -LiteralPath "$attempt\started.json" -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -126,6 +144,7 @@ try {
         }
     }
     $source = "$root\source\$Accepted"
+    $scratch = "$attempt\scratch"
     $environment = @{
         SystemRoot = 'C:\Windows'; WINDIR = 'C:\Windows'; ComSpec = 'C:\Windows\System32\cmd.exe'
         OS = 'Windows_NT'
@@ -133,9 +152,9 @@ try {
         PATH = "$vc\bin\Hostx64\x64;$sdk\bin\$sdkVersion\x64;C:\Windows\System32;C:\Program Files\dotnet"
         LIB = "$vc\lib\x64;$sdk\Lib\$sdkVersion\ucrt\x64;$sdk\Lib\$sdkVersion\um\x64"
         INCLUDE = "$vc\include;$sdk\Include\$sdkVersion\ucrt;$sdk\Include\$sdkVersion\um;$sdk\Include\$sdkVersion\shared"
-        TEMP = "$root\temp"; TMP = "$root\temp"; USERPROFILE = "$root\home"
-        APPDATA = "$root\home\AppData\Roaming"; LOCALAPPDATA = "$root\home\AppData\Local"
-        DOTNET_ROOT = 'C:\Program Files\dotnet'; DOTNET_CLI_HOME = "$root\home"
+        TEMP = "$scratch\temp"; TMP = "$scratch\temp"; USERPROFILE = "$scratch\home"
+        APPDATA = "$scratch\home\AppData\Roaming"; LOCALAPPDATA = "$scratch\home\AppData\Local"
+        DOTNET_ROOT = 'C:\Program Files\dotnet'; DOTNET_CLI_HOME = "$scratch\home"
         DOTNET_CLI_TELEMETRY_OPTOUT = '1'; DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
         DOTNET_GENERATE_ASPNET_CERTIFICATE = 'false'; DOTNET_ADD_GLOBAL_TOOLS_TO_PATH = 'false'
         DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE = 'true'; DOTNET_MULTILEVEL_LOOKUP = '0'
@@ -143,7 +162,7 @@ try {
         DOTNET_NOLOGO = '1'; DOTNET_CLI_UI_LANGUAGE = 'en-US'; DOTNET_EnableDiagnostics = '0'
         MSBUILDDISABLENODEREUSE = '1'; MSBuildEnableWorkloadResolver = 'false'
         VSCMD_SKIP_SENDTELEMETRY = '1'; NUGET_PACKAGES = "$root\packages"
-        NUGET_HTTP_CACHE_PATH = "$root\http"; NUGET_CERT_REVOCATION_MODE = 'offline'
+        NUGET_HTTP_CACHE_PATH = "$scratch\http"; NUGET_CERT_REVOCATION_MODE = 'offline'
     }
     $stage = 'input-verification'
     $start = Get-Content -LiteralPath "$attempt\started.json" -Raw | ConvertFrom-Json

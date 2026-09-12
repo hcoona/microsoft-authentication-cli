@@ -519,6 +519,16 @@ cases. A public build system's acceptance of surviving helpers cannot satisfy th
 experiment's zero-process completion rule. Preserve historical unknowns, the remaining
 cleanup/x86/dependency obligations and the unresolved publishing disposition.
 
+The [fourth diagnostic round](../research/experiments/windows-native-aot.md#diagnostic-round-04-results)
+satisfies its prospectively accepted synthetic publish-completion criterion: current
+verified VCTIP cleanup, complete warning-free diagnostics, bound artifacts and final
+quiescence. It does not reclassify earlier stops or relax runtime completion. Its next
+path preflight rejected before cleanup or x86 execution; those obligations remain open.
+The fresh-round environment correction must preserve complete active-input checks,
+independent sequential acceptance and each runtime's own-round publish prerequisite.
+Dynamic dependencies, product symbols, full-application behavior and the publishing
+disposition retain their existing validation obligations.
+
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later candidate tests must cover HWND
 readiness, creation failure, callback lifetime/ABI, creating-thread destruction, stalled
