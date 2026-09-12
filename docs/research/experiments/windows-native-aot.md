@@ -23,6 +23,154 @@ missing publish warnings remain unchanged. These synthetic results establish the
 allocation/loading/search path, not WAM authentication, complete native cleanup,
 production publishing, or support.
 
+## Diagnostic Round 04
+
+This fresh exact amendment implements the prospectively owner-approved VCTIP publish
+completion criterion accepted in PR #103. Round 03 remains stopped; its sampled
+image-string classification and nonzero final Job count are separate observations.
+No historical stop, artifact or unused runtime allocation is reclassified or resumed.
+
+### Exact Allocation and Preserved Inputs
+
+Apply Round 03's protocol with only the explicit replacements below. The accepted Wave
+SHA-256 is `9cf67ada4d2f729a3e1fe5884385f7f79cf2076e9c15f7eced0c1cb2fc9bad60`,
+accepted at `b69c50fc5a11b6fa207f677033e048d7d089fdb8`. Before execution, merge this
+independently reviewed exact protocol/source amendment and use its clean detached
+accepted checkout, bound to the current target and unchanged Wave/source/protocol.
+
+Use only `C:\Temp\azureauth-native-aot-diagnostics\round-04` for new Windows files.
+The parent may contain stopped round-01 and round-03 plus this round; round-02 must
+remain absent. Preserve all five historical root aggregates and stopped attempt
+inventories. Add round-03's exact 32-file ordered name/NUL/binary-SHA-256 inventory,
+`0f2263722a0b1f8a6080304326ae97d678a4b919b2d813d0e3d6fb54bd7cd9ac`, and the four
+preflight 06–07 hashes in its [accepted result](#diagnostic-round-03-results).
+`ROUND03_FILES` derives the same inventory structure as round-01, substituting attempts
+20/21 and source `d50a9caebf28e57fea0354c8a7c45a1e113fa6e8`; no discovery or inference
+supplies an input. Publish 21 must still lack completion/artifact receipts.
+
+| Unit | This exact round | Cumulative supplemental/diagnostic count after full success |
+| --- | --- | --- |
+| Local-feed restore | Attempt 22, once, 180 seconds | Five of ten restores |
+| Native AOT publish | Attempt 23, once, 600 seconds | Five of ten publishes |
+| Synthetic cleanup | Attempt 24, once, 30 seconds | One of four cleanup cases |
+| Genuine x86 rejection | Attempt 25, once, 30 seconds | One of four wrong-architecture cases |
+| Standalone guard | Ordinals 09–12, one per action, 30 seconds each | Twelve of twenty-eight |
+| Corrected preflight | Ordinals 08–11, one per action, 60 seconds each | Eleven of fifty; original rejected check separate |
+
+Actual prior consumption is four restores, four publishes, eight guards, seven corrected
+preflights, and no synthetic runtime. Preserve the original thirteen attempts separately.
+Reserve starts and failures before invocation; revisions and unstarted allocations do not
+reset counts. No later round or same-round retry is allocated. Preflight receipts remain
+in the existing WSL scratch directory. Preserve the transport's consecutive-path ordering
+and 30,000-UTF-16-unit gate before reservation: the 178 predecessor inputs produce a
+26,782-unit command including NUL. Known prior source, successful completion, graph,
+artifact and history checks precede every dependent host preflight and action.
+
+The synthetic program, rooted provider surface, symbol-free project, .NET 10.0.401/
+10.0.12, MSAL/Broker 4.83.1, NativeInterop 0.20.3, build commands and sixteen reused public
+archives are unchanged. Keep replacement environments, existing telemetry controls,
+public payload verification, ten-library graph and restricted native search. This is not
+a clean network restore. No authentication, account/cache/WAM access, UI, installation,
+registry/privacy/firewall change, network telemetry, breakaway or shared-server cleanup
+is added. All new files are intentionally retained; old roots remain read-only.
+
+### Current VCTIP Predicate and Race Handling
+
+The only candidate helper is the fixed pinned MSVC Hostx64/x64 `vctip.exe` image path.
+In addition to the existing compiler/SDK file pins, verify that installed file's SHA-256
+`7775ba4e0e0b03de15caefc1b92e63acc0a3dd9e388648f5489c777dfdbaadc8` before each action.
+Its observed size is 514,528 bytes. This is a read-only disk identity gate, not a mapped
+executable-byte or canonical-path attestation. Trust the designated installed toolchain
+and ordinary OS access control under the experiment policy's workstation threat model;
+concurrent installation modification is outside this protocol.
+
+Microsoft's pinned [BuildXL source](#public-vctip-lifecycle-evidence) identifies VCTIP as
+a compiler child and documents explicit allowed-survivor cleanup. Together with the
+unnamed, noninherited owned Job and verified tool identity, this supplies the bounded
+helper-lifecycle basis. It does not prove service exclusivity or absence of opaque
+activity. No existing out-of-Job process can be inspected or terminated; `mspdbsrv` and
+all other/unknown classes are ineligible. Any evidence that this instance serves unrelated
+work or has unexpected external effects stops execution under the unchanged Wave boundary.
+
+Retain one metadata worker and one bounded process list during the existing two-second
+normal drain, with the same retained non-null Job handle, per-process minimal rights,
+same-handle creation/membership checks, fixed image buffer and finite classifications.
+Before querying that list, add one class-1
+[QueryInformationJobObject](https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-queryinformationjobobject)
+call on the retained Job handle. Retain only `TotalProcesses` as `TotalProcessesBefore`;
+discard CPU, I/O, page-fault and other timing fields. The
+[accounting contract](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_accounting_information)
+defines this as the lifetime number of associated processes, including terminated ones
+and failed limit-violating associations. Unlike the active count, it detects arrivals
+that start and finish between observations.
+
+The worker's bound becomes 194 query/open calls and 32 closes, including the single new
+accounting call. Snapshot JSON adds only nullable `TotalProcessesBefore`; its finite
+states and member fields remain unchanged and under 32 KiB. Check the same cancellation
+and drain deadline before/after the added call. No main-thread wait, worker join, second
+list or host-wide process query is introduced. Slow/failed/incomplete observations cannot
+qualify and cannot delay normal stop or emergency termination.
+
+Reuse the existing main-thread class-1 accounting calls immediately before owned-Job
+termination and at the final quiescence check to retain `jobTotalBeforeStop`,
+`jobTotalAfterStop` and `jobActiveAfterStop`. These calls already underpin stop ownership
+and quiescence; no additional main-thread metadata polling is introduced. The unchanged
+[TerminateJobObject contract](https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-terminatejobobject)
+ends owned members and nested children. The ordinary failure-cleanup path remains active
+regardless of qualification; an unknown member cannot become a successful publish merely
+because owned termination succeeded.
+
+Qualification requires a complete, nonempty list of at most 32 unique, incarnation- and
+membership-verified members, each with exact `ImageClass=msvc-vctip`, `BasenameClass=vctip`
+and `LocationClass=msvc-bin-text`. Its lifetime total must be an integer from 1 through
+4,096 and equal both retained termination totals. The normal-exit and pre-stop active
+counts must each be positive and no larger than this verified list. Require successful
+requested owned termination and final active count zero. Null/error totals, duplicate
+PIDs, unknown/other members, count changes or mismatches fail closed.
+
+The inference is deliberately bounded: with the same unnamed Job, no external Job
+handle exposure, no breakaway, and unchanged lifetime totals, no new member arrived
+between list preparation and final quiescence. Every surviving member is therefore from
+the verified set; exited members only reduce that set. The final total detects races
+between the pre-stop check and termination, including a child that already exited.
+This relies on documented accounting and the trusted finite build, not hostile kernel
+behavior or a 32-bit counter wrapping through billions of creations within this bounded
+action. A total above 4,096 rejects rather than widening the bound. The result does not
+claim an atomic process snapshot, reconstruct historical identities, prove lack of
+telemetry, or authorize otherwise excluded effects.
+
+### Completion and Sequential Evidence
+
+Keep the two-second normal drain, its 100-millisecond scheduling tolerance, action
+ceilings, ten-second owned termination limit, 700-second controller limit and ten-second
+emergency ceiling. Preserve termination before diagnostic screening. Normal completion
+still requires zero Job processes and no requested termination.
+
+A zero-exit publish with a remaining Job member is provisionally a safety stop while
+owned cleanup and screening run. Only after all current VCTIP checks, final quiescence,
+complete screened diagnostics, zero diagnostic codes and no warning text succeed may the
+controller set `completionKind=vctip-cleanup` and clear that provisional flag. Guard
+compilation must also exit zero with no compiler termination. A failed check retains the
+safety stop and cannot issue a publish-completion receipt. Python independently validates
+the finite identity/count/termination predicate and diagnostic completeness before binding
+artifacts. `completionKind=normal` remains the strict route for every other action;
+`none` is never a completion. Runtime actions cannot use the VCTIP exception.
+
+After each action, independently review the accepted source, reservation, retained
+result, diagnostics, ownership/termination and applicable graph/artifact evidence before
+its dependent action. Use the existing [four sequential commands](#sequential-actions-and-outcome)
+with this amendment's accepted revision. Publish 23 requires accepted restore 22.
+Cleanup 24 and x86 case 25 require this round's independently accepted qualifying publish,
+fully verified EXE/x64-DLL identities and restored dependency graph. The x86 input remains
+the genuine pinned package asset. Preserve durable round stops and all global-stop
+conditions. A rejected/failed action ends round-04; no old or stopped artifact is runnable.
+
+Native cleanup still tests wrapper-return/first-chance behavior, not opaque native
+allocation internals. X86 rejection tests this exact loader case. Accept resulting
+observations and affected assessment/design/validation conclusions atomically. Product
+WAM/UI/authentication, complete-application dynamic dependencies, symbols, performance,
+release and support validation remain distinct from preimplementation design readiness.
+
 ## Diagnostic Round 03
 
 **Stopped historical round:** Only restore 20 and publish 21 ran; see

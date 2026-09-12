@@ -6,7 +6,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
-$root = 'C:\Temp\azureauth-native-aot-diagnostics\round-03'
+$root = 'C:\Temp\azureauth-native-aot-diagnostics\round-04'
 $attempt = Join-Path "$root\attempts" $AttemptName
 $vc = 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231'
 $sdk = 'C:\Program Files (x86)\Windows Kits\10'
@@ -16,6 +16,8 @@ $result = [ordered]@{ exitCode = -1; quiescent = $false; safetyStop = $true }
 $guard = $null
 $compiler = $null
 $texts = $null
+$vctipPending = $false
+$result.completionKind = 'none'
 $stage = 'controller-start'
 $result.compilerTerminationRequested = $false
 $framework = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319'
@@ -114,6 +116,7 @@ try {
         $dotnet = '21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6'
         "$vc\bin\Hostx64\x64\link.exe" = '610aae3d74a66fa5ef54cac5df8ea8bcbb1fdd2a3db9087eb92088bd395eaf34'
         "$vc\bin\Hostx64\x64\cl.exe" = '315a654ea116864516a1674858e587e535e3bc3045ff32ed2f2739a2c1ec5640'
+        "$vc\bin\Hostx64\x64\vctip.exe" = '7775ba4e0e0b03de15caefc1b92e63acc0a3dd9e388648f5489c777dfdbaadc8'
         "$sdk\Lib\$sdkVersion\um\x64\kernel32.lib" = '341c7d56125a03b458e4d5093e4c79b33123ccfdfd610fe236937b8e6f3134bb'
         "$sdk\Lib\$sdkVersion\ucrt\x64\ucrt.lib" = '7ef4eac926bf597d2f243f16cdfed7e0db22cb3ca34a1d7e088a84c994a03d66'
     }
@@ -229,7 +232,11 @@ try {
     $result.normalDrainSeconds = [Math]::Round($drain.Elapsed.TotalSeconds, 3)
     $result.seconds = [Math]::Round($watch.Elapsed.TotalSeconds, 3)
     $result.activeProcessesAtNormalExit = $guard.ActiveProcesses
-    if ($result.activeProcessesAtNormalExit -ne 0) { throw 'Owned descendants survived normal exit' }
+    if ($result.activeProcessesAtNormalExit -ne 0) {
+        if ($Action -ne 'publish' -or $result.exitCode -ne 0) { throw 'Owned descendants survived normal exit' }
+        # This remains a safety stop unless all post-cleanup verification succeeds.
+        $vctipPending = $true
+    }
     $stage = 'observation-validation'
     if ($Action -notin @('restore', 'publish')) {
         if ($texts[1].Length -ne 0) { throw 'Unexpected subject stderr; contents suppressed' }
@@ -245,7 +252,8 @@ try {
             ($Action -eq 'wrong-architecture' -and $data.nativeModuleLoaded)) { throw 'Unexpected native search result' }
         $result.observation = $data
     }
-    $result.safetyStop = $false
+    $result.safetyStop = $vctipPending
+    if (-not $vctipPending) { $result.completionKind = 'normal' }
     $stage = 'completed'
 } catch {
     $result.safetyStop = $true
@@ -271,7 +279,13 @@ try {
         $result.terminationFailureType = $_.Exception.GetType().FullName
     }
     if ($guard) {
-        if ($Action -eq 'publish') { $result.jobMetadata = $guard.FinishMetadata() }
+        if ($Action -eq 'publish') {
+            $result.jobMetadata = $guard.FinishMetadata()
+            $result.vctipCleanupVerified = $guard.VerifiedVctipCleanup()
+            $result.jobTotalBeforeStop = $guard.TotalBeforeStop
+            $result.jobTotalAfterStop = $guard.TotalAfterStop
+            $result.jobActiveAfterStop = $guard.ActiveAfterStop
+        }
         $result.jobActiveBeforeStop = $guard.ActiveBeforeStop
         $result.jobTerminationRequested = $guard.TerminationRequested
         $result.jobTerminationSucceeded = $guard.TerminationSucceeded
@@ -301,6 +315,18 @@ try {
             $result.diagnosticsComplete = $false
             $result.diagnosticFailureType = $_.Exception.GetType().FullName
             if (-not $result.Contains('failureStage')) { $result.failureStage = 'diagnostic-screening' }
+        }
+    }
+    if ($vctipPending) {
+        if ($stage -eq 'completed' -and -not $result.Contains('failureStage') -and
+            $result.quiescent -and $result.vctipCleanupVerified -and
+            $result.diagnosticsComplete -and $result.diagnosticCodes.Count -eq 0 -and
+            ($result.stdoutDiagnostic.text + $result.stderrDiagnostic.text) -notmatch '\bwarning\b') {
+            $result.completionKind = 'vctip-cleanup'
+            $result.safetyStop = $false
+        } else {
+            $result.safetyStop = $true
+            if (-not $result.Contains('failureStage')) { $result.failureStage = 'vctip-cleanup-verification' }
         }
     }
     $result.ended = (Get-Date).ToUniversalTime().ToString('o')
