@@ -1506,6 +1506,16 @@ no implementation-readiness claim. Source-generation, loader search restrictions
 artifact closure must be evaluated on the resolved graph before selecting that mode.
 No startup, memory, size, authentication, or cancellation benefit was measured.
 
+**Synthetic runtime outcome, September 12, 2026:** The
+[Windows Native AOT experiment](experiments/windows-native-aot.md#amended-restore-and-bounded-conclusion)
+downloaded all fourteen exact public inputs, but both permitted local-feed restores
+exited 1 without generating dependency assets. The reviewed SDK-startup and receipt-reader
+corrections did not resolve that failure; its cause remains unknown. No AOT publish or
+native-loading case ran, so this is a restore/controller-environment blocker, not a
+Native AOT incompatibility finding. It leaves the design inference and publishing gap
+above unchanged. Another investigation must preserve consumed capacity and obtain its
+own accepted authority and bounded diagnostic protocol before executing.
+
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by
 RECHECK-008. The concrete choice and preservation semantics belong to the Windows design;

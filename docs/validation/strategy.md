@@ -470,6 +470,15 @@ Record the exact Windows C++ compiler/SDK/linker as well as .NET inputs in its p
 Missing, wrong-architecture or unavailable native assets must fail without probing an
 arbitrary working directory or using a developer-machine dependency.
 
+The first synthetic investigation
+[ended at the restore prerequisite](../research/experiments/windows-native-aot.md#amended-restore-and-bounded-conclusion):
+public downloads succeeded, but two restore exits of 1 produced no assets or lock file.
+Its restore capacity is exhausted, and no publish/loading evidence can be inferred from
+unused downstream capacity. A later authorized diagnostic protocol must distinguish the
+restore failure before claiming resolved assets or scheduling dependent publish/loading
+cases. The existing candidate and all runtime validation obligations remain unresolved;
+this preparation failure is not a basis for a non-AOT exception.
+
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later candidate tests must cover HWND
 readiness, creation failure, callback lifetime/ABI, creating-thread destruction, stalled

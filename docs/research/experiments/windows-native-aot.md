@@ -1,13 +1,18 @@
 # Windows Native AOT Synthetic Experiment
 
 This record owns the exact Issue #76 procedure and its cumulative observations. The
-[accepted Wave](../../delivery-wave.md#windows-native-aot-synthetic-compatibility-experiment)
+[accepted Wave](../../delivery-wave.md)
 owns authorization; [experiment safety](../experiment-safety.md) owns general policy.
 The [assessment](../v1-public-contract-baseline.md#windows-native-aot-assessment),
 [Windows design](../../designs/windows-ado-authentication.md#native-aot-target-disposition),
 and [validation strategy](../../validation/strategy.md#native-aot-publishing) consume
 the bounded conclusion. The historical Windows MSAL and tooling protocols retain their
 exhausted capacities; none of their helpers or subjects may execute here.
+
+The recorded outcome is an unresolved restore prerequisite: both permitted restores
+failed, so no Native AOT publish or loading case ran. Fetch and restore capacities are
+exhausted. The procedure below preserves the executed subjects and controls; it does
+not authorize replay or allow unused downstream capacity to bypass failed prerequisites.
 
 ## Question and Exact Subject
 
@@ -129,9 +134,11 @@ Wave and exact protocol remain current, recovers the required independent review
 CI/commit-check receipts, and checks prior attempt results. Material prerequisite drift
 requires refreshed review. The wrapper checks ancestry, current Wave bytes, checkout
 and Windows-copy source bytes, prior consumption, feed identities, and prerequisites.
-Record the accepted startup amendment's merge commit as `ACCEPTED_COMMIT`; from its
-detached checkout use only the remaining actions. The original public-fetch capacity is
-exhausted and the current wrapper cannot fetch or create another root:
+The startup amendment used PR #79 merge commit
+`a2aa598e54021792402ee5eef6324ddcd702f7bc` as `ACCEPTED_COMMIT` in a detached checkout.
+The command forms below document that accepted procedure. Neither restore nor the
+blocked downstream actions may now run. Public-fetch capacity is also exhausted and
+the wrapper cannot fetch or create another root:
 
 ```text
 python3 tools/probes/windows-native-aot/run.py restore --accepted ACCEPTED_COMMIT
@@ -264,8 +271,8 @@ files, original source copies, public feed, guard DLL, and sanitized receipts ar
 The empty log is not proof of either installation activity or its absence. Raw command
 output was not retained and does not establish the restore failure cause.
 
-Consumed capacity is fetch 1/1, restore 1/2, publish 0/2, each synthetic case 0/1, and
-guard bootstrap 1/7. There was no manual subject execution, interrupted attempt, or
+After attempt 02, consumed capacity was fetch 1/1, restore 1/2, publish 0/2, each
+synthetic case 0/1, and guard bootstrap 1/7. There was no manual subject execution, interrupted attempt, or
 replay. No old authentication helper ran. The initial wrapper and its download procedure
 remain recoverable from PR #78; this amendment cannot repeat that fetch.
 
@@ -319,7 +326,7 @@ require proof of every internal OS/provider operation. This historical uncertain
 does not require a new owner risk decision or end the investigation. Continuation still
 requires acceptance of this exact correction, verified original root/source/feed/receipts,
 and the ordinary pre-action gates. Any actual stop condition remains binding; source
-migration cannot clear it. The remaining restore is an explained retry after correcting
+migration cannot clear it. The second restore was accepted as an explained retry after correcting
 the unsupported startup path, with the original failure cause still unknown. The original
 restore/publish arguments remain unchanged: exact System.CommandLine tokenizer and SDK
 forwarding inspection shows their MSBuild switches are forwarded, so a CLI-parse
@@ -329,6 +336,61 @@ AOT-AUTHOR-009 was independently classified as a blocking true positive: Windows
 PowerShell's UTF-8 result contains a BOM that the original prior-result reader rejects.
 The amendment uses `utf-8-sig` for that reader, matching its existing immediate-result
 reader. Read-only parsing reproduced this defect; it did not consume another attempt.
+
+### Amended Restore and Bounded Conclusion
+
+Attempt 03 used accepted PR #79 commit
+`a2aa598e54021792402ee5eef6324ddcd702f7bc`, tree
+`e26281dbaa36fbe118e79da05e28dbd364cb8a22`, after passing independent review, mandatory
+commit checks, full local hk, and
+[CI](https://github.com/hcoona/microsoft-authentication-cli/actions/runs/34669184276).
+The host, SDK/toolchain, dependency pins, probe API, and restore arguments were unchanged.
+The source amendment verified and preserved all original receipt bytes, source copies,
+feed identities, and prior consumption before replacing the seven owned source copies.
+The retained revision marker identifies the exact accepted amendment and prior counts.
+
+| Attempt | UTC interval on September 12, 2026 | Observation |
+| --- | --- | --- |
+| 03: second restore | 03:05:47.458523–03:05:50.7137638 | Guard compiler exit 0; restore exit 1 in 1.554 seconds; owned work quiescent; controller safety stop false. Captured stdout had 427 characters and stderr zero. No retained diagnostic code, fixed exception-type match, or unrecognized-command phrase. |
+
+The new classifiers did not identify the failure cause. No raw output was retained or
+reconstructed. Read-only inspection after quiescence found no `obj` directory,
+`project.assets.json`, lock file, extracted packages, HTTP-cache files, or published
+output. The single earlier zero-byte workload log remains; no additional file appeared
+in the dedicated temporary directory. These observations do not identify the precise
+last SDK stage, prove unchanged external Windows state, or establish a package failure.
+The earlier unmeasured trust-processing limitation remains as recorded above.
+
+| Retained receipt | SHA-256 |
+| --- | --- |
+| Attempt 03 start | `ed065255c3cc5031051004714724e50f6591aa14cfad2ab6d70b771a6e6b8be7` |
+| Attempt 03 result | `918a0425d6bb178815385ec6e8572fc6b0d1ba8e16a2abf45aaa2ae76107e7cd` |
+| Source-revision marker | `60ef44676aa3285735a73e7adbf8e7ca9dc06780a9e9a3296c7083dff9208dda` |
+
+Final consumption is fetch **1/1**, restore **2/2**, publish **0/2**, positive/missing/decoy
+**0/1 each**, and guard bootstrap **2/7**. All three attempts have complete receipts;
+there was no interrupted or manual subject replay. No owned subject remains running.
+The identified experiment-owned feed, amended source, home markers, guard outputs,
+zero-byte log, revision marker, and sanitized receipts are intentionally retained.
+No account, broker-session, or installation cleanup was performed.
+
+**Conclusion:** The fourteen pinned public packages were downloaded successfully. The
+local-feed restore prerequisite remains blocked by two unexplained exit-1 outcomes in
+this controller/toolchain environment. No resolved dependency graph, AOT/trim diagnostic,
+published binary, positive load, or search-path negative result exists. The result is
+not evidence that .NET 10, MSAL, Broker, or NativeInterop is incompatible with Native AOT.
+It does not resolve the preferred Win32/Native AOT candidate, select another dependency
+or host, or justify a non-AOT exception.
+
+Supported source investigation identified and corrected the independent SDK first-use
+control and receipt-decoding defects. Exact parser inspection did not support changing
+the restore command. Neither finding diagnoses the remaining exit 1, and no demonstrated
+AOT/dependency/host defect supports a further source remedy or provider/UI replacement.
+A later investigation would first need an accepted finite diagnostic protocol that can
+classify the restore failure without exposing sensitive output and that preserves these
+consumed attempts. It requires new or amended Wave authority; spare publish/case capacity
+cannot supply another restore. Current work ends with this bounded blocker and the
+unchanged production-publishing gap.
 
 ### Fetched Public Archive Identities
 
