@@ -89,6 +89,14 @@ narrows the experiment-lifecycle investigation without selecting production publ
 or establishing the sampled process's external effects. Preserve the existing gap and
 later application/WAM/UI validation gates.
 
+The [fourth diagnostic result](../research/experiments/windows-native-aot.md#diagnostic-round-04-results)
+adds independently accepted, warning-free publish completion through the prospectively
+approved VCTIP cleanup criterion. Final owned-Job quiescence and native artifact identities
+were verified. The following path preflight stopped the round before either runtime;
+native cleanup and wrong-architecture evidence remain outstanding. This advances the
+synthetic publishing premise without selecting the product publishing mode. A fresh
+per-action environment correction does not change this host design or its UML/C4 views.
+
 The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
 distinguishes the following alternatives:
 

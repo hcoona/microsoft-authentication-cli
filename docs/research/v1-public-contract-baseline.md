@@ -1596,7 +1596,18 @@ but normal completion failed; no cleanup or x86 runtime followed. Microsoft's pu
 BuildXL source recognizes VCTIP as a surviving telemetry helper, which explains a
 plausible lifecycle mechanism without proving the sampled process's effects or earlier
 unknown identities. Its survival-handling examples do not override the accepted strict
-completion rule. The preferred AOT route and unresolved publishing choice remain unchanged.
+completion rule. The preferred AOT route and unresolved publishing choice remained unchanged
+after that stopped round.
+
+The [fourth diagnostic round](experiments/windows-native-aot.md#diagnostic-round-04-results)
+completed publish through the separately accepted current VCTIP identity/accounting and
+owned-cleanup criterion, with complete warning-free diagnostics and final quiescence.
+Its native x64 artifacts and resolved graph were independently accepted. The subsequent
+read-only preflight rejected a reparse point before cleanup or x86 execution, ending
+that round. A later link observation is only a candidate explanation. This resolves
+the bounded synthetic publish-completion premise; cleanup and wrong-architecture
+evidence and publishing selection remain open. The next exact correction separates
+each action's scratch environment while preserving active-input checks and all history.
 
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by

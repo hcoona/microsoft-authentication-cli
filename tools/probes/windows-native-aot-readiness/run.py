@@ -13,21 +13,21 @@ import base64
 from urllib.parse import unquote
 
 BASE = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-diagnostics')
-ROOT = BASE / 'round-04'
+ROOT = BASE / 'round-05'
 RECOVERY = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness-recovery')
 PREFLIGHT_DIR = pathlib.Path('/tmp/azureauth-wave-work')
 OLD = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-76')
 WAVE_PARENT = 'b69c50fc5a11b6fa207f677033e048d7d089fdb8'
 WAVE_SHA256 = '9cf67ada4d2f729a3e1fe5884385f7f79cf2076e9c15f7eced0c1cb2fc9bad60'
 PRIOR = pathlib.Path('/mnt/c/Temp/azureauth-native-aot-readiness')
-PRIOR_COUNTS = {'restore': 4, 'publish': 4, 'cleanup': 0, 'wrong-architecture': 0}
+PRIOR_COUNTS = {'restore': 5, 'publish': 5, 'cleanup': 0, 'wrong-architecture': 0}
 REL = 'tools/probes/windows-native-aot-readiness/'
 PROTOCOL = 'docs/research/experiments/windows-native-aot.md'
 SOURCES = {name: REL + name for name in (
     'run.py', 'Program.cs', 'NativeAotReadinessProbe.csproj', 'global.json',
     'nuget.config', 'Invoke-Action.ps1', 'Stop-Controller.ps1', 'WindowsJob.cs')}
 SOURCES['protocol.md'] = PROTOCOL
-LIMITS = {'restore': 5, 'publish': 5, 'cleanup': 1, 'wrong-architecture': 1}
+LIMITS = {'restore': 6, 'publish': 6, 'cleanup': 1, 'wrong-architecture': 1}
 ACTION_ORDER = tuple(LIMITS)
 # This exact revision allocates one round; later rounds require accepted amendments.
 PREFLIGHT_HISTORY = {
@@ -75,6 +75,13 @@ ROUND03_FILES = [name.replace('attempts/18/', 'attempts/20/').replace('attempts/
     '2fea4a9c5d056e031d8d026a365093ab3e38ba3b', 'd50a9caebf28e57fea0354c8a7c45a1e113fa6e8')
     for name in DIAGNOSTIC_FILES]
 ROUND03_SHA256 = '0f2263722a0b1f8a6080304326ae97d678a4b919b2d813d0e3d6fb54bd7cd9ac'
+
+ROUND04_PRIOR = BASE / 'round-04'
+ROUND04_FILES = sorted([name.replace('attempts/18/', 'attempts/22/').replace('attempts/19/', 'attempts/23/').replace(
+    '2fea4a9c5d056e031d8d026a365093ab3e38ba3b', 'e17eb0762b9ce13b9b173bce3e44d7434d00d30b')
+    for name in DIAGNOSTIC_FILES if name != 'stopped.json'] +
+    ['attempts/23/artifacts.json', 'attempts/23/completion.json'])
+ROUND04_SHA256 = '55dcd0469d69a44766fa143c88fe482d043d47183da06eaec3152d4270c84f61'
 DIAGNOSTIC_PREFLIGHT_HISTORY = {'aot-diagnostic-preflight-06-started.json': 'a911546f997268f2fdcbb4d7392f5afae89483a2959895db265dc50eea160a4f',
  'aot-diagnostic-preflight-06-completed.json': '1f7b6d02f0ad0fa655343d4921d09caa5c6eb147a2affd58dbe3fb8b014f8d4c',
  'aot-diagnostic-preflight-07-started.json': 'a51e283e44db8fbffc4cb2dd41aad4806891bf61541cb955b5eb954fbef11eaa',
@@ -85,6 +92,12 @@ DIAGNOSTIC_PREFLIGHT_HISTORY = {'aot-diagnostic-preflight-06-started.json': 'a91
  'aot-diagnostic-preflight-03-started.json': '0a7386d7ab394c34724c470d308c77ee80fda885bba70c0fd34cdca65240bf68',
  'aot-diagnostic-preflight-04-completed.json': 'aae4e49b9bd2279aaa94bf65c62a7ca0387c505601e62e07c40f97ecfb1c35b3',
  'aot-diagnostic-preflight-04-started.json': '13323e0a90160e09f7e296b15e98de641c9c1154f11fa158f3c92ffad036874c'}
+DIAGNOSTIC_PREFLIGHT_HISTORY.update({'aot-diagnostic-preflight-08-started.json': '305fcfeade8027a6c52b91d7604b95d62d5aa850b7033dfef02efdb72c9a1997',
+ 'aot-diagnostic-preflight-08-completed.json': '8118c3674e8dbd5d2b37e925a4a4ace1c0ad70343397ab5b591b4b8c92953638',
+ 'aot-diagnostic-preflight-09-started.json': '03dddd7d42c2c263432cd648e4bd549a5ad69cd43ddb5e2f35b44d915712696a',
+ 'aot-diagnostic-preflight-09-completed.json': 'a18ce53fae98f0b77a6429c03e057d3b36305761e2a164271f04d447ab3c376c',
+ 'aot-diagnostic-preflight-10-started.json': 'b510ac4d2d6ead782cd047cb48769ea666f65445554ca2f4d5f5faa9a40ed322',
+ 'aot-diagnostic-preflight-10-completed.json': 'ac76c33ebb437afa283400f362cbf3d2cae7ecb4c4f089874239cffa6e62fd1d'})
 OLD_COUNTS = {'fetch': 1, 'supplemental-fetch': 1, 'restore': 6, 'publish': 2,
               'positive': 1, 'missing': 1, 'decoy': 1, 'guard': 11}
 WRONG_ASSET = 'runtimes/win-x86/native/msalruntime_x86.dll'
@@ -276,7 +289,7 @@ def source_inventory(source, expected):
             raise SystemExit('Dedicated source changed.')
 
 
-def windows_path_command():
+def windows_path_command(action):
     # Read-only host preflight precedes all dedicated-root writes, including initial copy.
     script = r'''
 $ErrorActionPreference = 'Stop'
@@ -315,7 +328,8 @@ try {
         ((Get-Item -LiteralPath $base -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
         $failure = 'reparse-point'; throw 'Linked diagnostic root'
     }
-    $root = 'C:\Temp\azureauth-native-aot-diagnostics\round-04'
+    $root = 'C:\Temp\azureauth-native-aot-diagnostics\round-05'
+    $inactiveScratch = @(__INACTIVE_SCRATCH__)
     if (Test-Path -LiteralPath $root) { $queue.Enqueue($root) }
     while ($queue.Count -gt 0) {
         $item = Get-Item -LiteralPath $queue.Dequeue() -Force
@@ -323,6 +337,7 @@ try {
             $failure = 'reparse-point'
             throw 'Linked input'
         }
+        if ($inactiveScratch -contains $item.FullName) { continue }
         if ($item.PSIsContainer) {
             foreach ($child in Get-ChildItem -LiteralPath $item.FullName -Force) {
                 $queue.Enqueue($child.FullName)
@@ -336,7 +351,8 @@ try {
               ('azureauth-native-aot-readiness', PRIOR_FILES),
               ('azureauth-native-aot-readiness-recovery', RECOVERY_FILES),
               ('azureauth-native-aot-diagnostics/round-01', DIAGNOSTIC_FILES),
-              ('azureauth-native-aot-diagnostics/round-03', ROUND03_FILES)]
+              ('azureauth-native-aot-diagnostics/round-03', ROUND03_FILES),
+              ('azureauth-native-aot-diagnostics/round-04', ROUND04_FILES)]
     # Factor lexical parents only; reconstruct the same finite input paths on Windows.
     groups = []
     for root, names in inputs:
@@ -351,6 +367,13 @@ try {
         '@{ Directory = ' + quoted(parent) + '; Names = @(' +
         ', '.join(quoted(leaf) for leaf in leaves) + ') }'
         for parent, leaves in groups))
+    inactive = [str(pathlib.PureWindowsPath('C:/Temp/azureauth-native-aot-diagnostics/round-05/attempts') / str(number) / 'scratch')
+                for number in range(24, 24 + ACTION_ORDER.index(action))]
+    script = script.replace('__INACTIVE_SCRATCH__', ', '.join(quoted(path) for path in inactive))
+    # This script contains no here-strings or continuation backticks. Trim indentation
+    # and comment-only lines while preserving statement order and literal contents.
+    script = '\n'.join(line.strip() for line in script.splitlines()
+                       if line.strip() and not line.lstrip().startswith('#'))
     command = ['/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe',
                '-NoLogo', '-NoProfile', '-NonInteractive', '-EncodedCommand',
                base64.b64encode(script.encode('utf-16-le')).decode()]
@@ -374,12 +397,12 @@ def windows_paths(command):
 
 
 def reserved_preflight(action, accepted, target):
-    ordinal = 8 + ACTION_ORDER.index(action)
+    ordinal = 11 + ACTION_ORDER.index(action)
     expected = {f'aot-diagnostic-preflight-{i:02}-{suffix}.json'
                 for i in range(3, ordinal) for suffix in ('started', 'completed')}
     if {p.name for p in PREFLIGHT_DIR.glob('aot-diagnostic-preflight-*.json')} != expected:
         raise SystemExit('Diagnostic preflight inventory is incomplete or already consumed.')
-    for earlier in range(8, ordinal):
+    for earlier in range(11, ordinal):
         start_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{earlier:02}-started.json'
         result_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{earlier:02}-completed.json'
         start, result = read(start_path), read(result_path)
@@ -390,7 +413,7 @@ def reserved_preflight(action, accepted, target):
     result_path = PREFLIGHT_DIR / f'aot-diagnostic-preflight-{ordinal:02}-completed.json'
     if any(PREFLIGHT_DIR.glob(f'aot-diagnostic-preflight-{ordinal:02}-*.json')):
         raise SystemExit('This diagnostic preflight is already consumed; no retry.')
-    command = windows_path_command()
+    command = windows_path_command(action)
     write_new(start_path, {'ordinal': ordinal, 'action': action, 'accepted': accepted,
               'target': target, 'started': now(), 'priorCorrectedChecks': ordinal - 1,
               'waveSha256': WAVE_SHA256})
@@ -482,9 +505,9 @@ def restore_evidence(source):
         for name, entry in framework.items():
             if name + '/' + entry['resolved'] not in libraries:
                 raise SystemExit('Unexpected locked package.')
-    if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-04\\packages'}:
+    if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-05\\packages'}:
         # NuGet normalizes its package root with a trailing directory separator.
-        if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-04\\packages\\'}:
+        if set(assets['packageFolders']) != {'C:\\Temp\\azureauth-native-aot-diagnostics\\round-05\\packages\\'}:
             raise SystemExit('Unexpected package folder.')
     framework = assets['project']['frameworks']['net10.0-windows']
     downloads = framework['downloadDependencies']
@@ -582,6 +605,15 @@ def history():
         round03.update(name.encode() + b'\0' + bytes.fromhex(digest(ROUND03_PRIOR / name)))
     if round03.hexdigest() != ROUND03_SHA256:
         raise SystemExit('Stopped round-03 evidence changed.')
+    if {p.name for p in (ROUND04_PRIOR / 'attempts').iterdir()} != {'22', '23'}:
+        raise SystemExit('Stopped round-04 attempt inventory changed.')
+    if (ROUND04_PRIOR / 'stopped.json').exists():
+        raise SystemExit('Round-04 acquired an unexpected host stop marker.')
+    round04 = hashlib.sha256()
+    for name in ROUND04_FILES:
+        round04.update(name.encode() + b'\0' + bytes.fromhex(digest(ROUND04_PRIOR / name)))
+    if round04.hexdigest() != ROUND04_SHA256:
+        raise SystemExit('Stopped round-04 evidence changed.')
     for name, expected in DIAGNOSTIC_PREFLIGHT_HISTORY.items():
         if digest(PREFLIGHT_DIR / name) != expected:
             raise SystemExit('Stopped diagnostic preflight evidence changed.')
@@ -758,7 +790,7 @@ def main():
     direct(ROOT)
     if (BASE / 'round-02').exists():
         raise SystemExit('Rejected-preflight round acquired unexpected host state.')
-    if BASE.exists() and {p.name for p in BASE.iterdir()} - {'round-01', 'round-03', 'round-04'}:
+    if BASE.exists() and {p.name for p in BASE.iterdir()} - {'round-01', 'round-03', 'round-04', 'round-05'}:
         raise SystemExit('Unallocated diagnostic round or shared file.')
     if (ROOT / 'stopped.json').exists():
         raise SystemExit('This diagnostic round is stopped.')
@@ -772,9 +804,9 @@ def main():
                   'historicalSha256': HISTORY_SHA256, 'stoppedSupplementSha256': PRIOR_SHA256,
                   'stoppedRecoverySha256': RECOVERY_SHA256,
                   'stoppedDiagnosticSha256': DIAGNOSTIC_SHA256, 'stoppedRound03Sha256': ROUND03_SHA256,
+                  'stoppedRound04Sha256': ROUND04_SHA256,
                   'priorConsumption': OLD_COUNTS, 'supplementConsumption': PRIOR_COUNTS})
-        for directory in ('attempts', 'source', 'feed', 'negative', 'home', 'temp', 'packages', 'http',
-                          'empty-program-files', 'home/AppData/Roaming', 'home/AppData/Local'):
+        for directory in ('attempts', 'source', 'feed', 'negative', 'packages', 'empty-program-files'):
             (ROOT / directory).mkdir(parents=True, exist_ok=True)
         for name, expected in FEED.items():
             with (ROOT / 'feed' / name).open('xb') as output:
@@ -790,6 +822,7 @@ def main():
                   'historicalSha256': HISTORY_SHA256, 'stoppedSupplementSha256': PRIOR_SHA256,
                   'stoppedRecoverySha256': RECOVERY_SHA256,
                   'stoppedDiagnosticSha256': DIAGNOSTIC_SHA256, 'stoppedRound03Sha256': ROUND03_SHA256,
+                  'stoppedRound04Sha256': ROUND04_SHA256,
                   'priorConsumption': OLD_COUNTS, 'supplementConsumption': PRIOR_COUNTS})
     identity = read(ROOT / 'identity.json')
     if (ROOT / 'stopped.json').exists():
@@ -800,7 +833,8 @@ def main():
             identity.get('stoppedSupplementSha256') != PRIOR_SHA256 or
             identity.get('stoppedRecoverySha256') != RECOVERY_SHA256 or
             identity.get('stoppedDiagnosticSha256') != DIAGNOSTIC_SHA256 or
-            identity.get('stoppedRound03Sha256') != ROUND03_SHA256 or identity.get('supplementConsumption') != PRIOR_COUNTS):
+            identity.get('stoppedRound03Sha256') != ROUND03_SHA256 or
+            identity.get('stoppedRound04Sha256') != ROUND04_SHA256 or identity.get('supplementConsumption') != PRIOR_COUNTS):
         raise SystemExit('Root identity or consumption changed.')
     for name, expected in FEED.items():
         if digest(ROOT / 'feed' / name, 'sha512') != expected:
@@ -817,7 +851,7 @@ def main():
     source_inventory(source, source_hashes)
     direct(ROOT / 'attempts')
     attempts = sorted((ROOT / 'attempts').iterdir())
-    if len(attempts) > 4 or [p.name for p in attempts] != [f'{i:02}' for i in range(22, 22 + len(attempts))]:
+    if len(attempts) > 4 or [p.name for p in attempts] != [f'{i:02}' for i in range(24, 24 + len(attempts))]:
         raise SystemExit('New attempt sequence changed.')
     counts = PRIOR_COUNTS.copy()
     previous = []
@@ -858,9 +892,10 @@ def main():
                 start.get('stoppedRecoverySha256') != RECOVERY_SHA256 or
                 start.get('stoppedDiagnosticSha256') != DIAGNOSTIC_SHA256 or
                 start.get('stoppedRound03Sha256') != ROUND03_SHA256 or
-                start.get('guardOrdinal') != 9 + len(previous)):
+                start.get('stoppedRound04Sha256') != ROUND04_SHA256 or
+                start.get('guardOrdinal') != 11 + len(previous)):
             raise SystemExit('Prior historical binding changed.')
-        ordinal = 8 + len(previous)
+        ordinal = 11 + len(previous)
         if start.get('preflight') != {
                 'ordinal': ordinal,
                 'startedSha256': digest(PREFLIGHT_DIR / f'aot-diagnostic-preflight-{ordinal:02}-started.json'),
@@ -899,17 +934,23 @@ def main():
     if preflight is None:
         # Resolve every prior success, reservation, source, graph and artifact gate first.
         preflight = reserved_preflight(args.action, accepted, target)
-    attempt = ROOT / 'attempts' / f'{22 + len(attempts):02}'
+    attempt = ROOT / 'attempts' / f'{24 + len(attempts):02}'
     attempt.mkdir()
     write_new(attempt / 'started.json', {'action': args.action, 'accepted': accepted, 'target': target,
               'started': now(), 'priorConsumption': counts, 'historicalSha256': HISTORY_SHA256,
               'stoppedSupplementSha256': PRIOR_SHA256, 'stoppedRecoverySha256': RECOVERY_SHA256,
               'stoppedDiagnosticSha256': DIAGNOSTIC_SHA256, 'stoppedRound03Sha256': ROUND03_SHA256,
-              'guardOrdinal': 9 + len(attempts), 'preflight': preflight,
+                  'stoppedRound04Sha256': ROUND04_SHA256,
+              'guardOrdinal': 11 + len(attempts), 'preflight': preflight,
               'sourceSha256': source_hashes, 'caseInputs': case_inputs})
+    # Every child receives fresh scratch paths; completed prior scratch is never reused.
+    for directory in ('scratch', 'scratch/home', 'scratch/temp', 'scratch/http',
+                      'scratch/home/AppData', 'scratch/home/AppData/Roaming',
+                      'scratch/home/AppData/Local'):
+        (attempt / directory).mkdir()
     powershell = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
     command = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-               'C:\\Temp\\azureauth-native-aot-diagnostics\\round-04\\source\\' + accepted + '\\Invoke-Action.ps1',
+               'C:\\Temp\\azureauth-native-aot-diagnostics\\round-05\\source\\' + accepted + '\\Invoke-Action.ps1',
                '-Action', args.action, '-AttemptName', attempt.name, '-Accepted', accepted]
     try:
         subprocess.run(command, check=False, timeout=700, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -917,7 +958,7 @@ def main():
         write_new(ROOT / 'stopped.json', {'attempt': attempt.name, 'ended': now(),
                   'reason': 'controller-wait-interrupted', 'quiescenceConfirmed': False})
         emergency = [powershell, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-                     'C:\\Temp\\azureauth-native-aot-diagnostics\\round-04\\source\\' + accepted + '\\Stop-Controller.ps1',
+                     'C:\\Temp\\azureauth-native-aot-diagnostics\\round-05\\source\\' + accepted + '\\Stop-Controller.ps1',
                      '-AttemptName', attempt.name]
         try:
             subprocess.run(emergency, check=False, timeout=10, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
