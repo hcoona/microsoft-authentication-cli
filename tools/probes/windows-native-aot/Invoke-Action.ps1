@@ -70,6 +70,7 @@ try {
         DOTNET_CLI_TELEMETRY_OPTOUT = '1'; DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
         DOTNET_GENERATE_ASPNET_CERTIFICATE = 'false'; DOTNET_ADD_GLOBAL_TOOLS_TO_PATH = 'false'
         DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE = 'true'; DOTNET_MULTILEVEL_LOOKUP = '0'
+        DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK = 'true'
         DOTNET_NOLOGO = '1'; DOTNET_CLI_UI_LANGUAGE = 'en-US'; DOTNET_EnableDiagnostics = '0'
         MSBUILDDISABLENODEREUSE = '1'; MSBuildEnableWorkloadResolver = 'false'
         VSCMD_SKIP_SENDTELEMETRY = '1'; NUGET_PACKAGES = "$root\packages"
@@ -140,6 +141,16 @@ try {
         # Keep diagnostic codes only; public source/tool inspection explains them later.
         $all = $texts[0].ToString() + $texts[1].ToString()
         $result.diagnosticCodes = @([regex]::Matches($all, '\b(?:IL|CS|NU|NETSDK|MSB|LNK)[0-9]{4,5}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique)
+        $result.stdoutCharacters = $texts[0].Length
+        $result.stderrCharacters = $texts[1].Length
+        $result.sdkExceptionTypes = @(@(
+            'System.ArgumentException', 'System.ArgumentNullException',
+            'System.NullReferenceException', 'System.TypeInitializationException',
+            'System.IO.DirectoryNotFoundException', 'System.IO.FileNotFoundException',
+            'System.IO.IOException', 'System.UnauthorizedAccessException',
+            'System.ComponentModel.Win32Exception'
+        ) | Where-Object { $all.Contains($_) })
+        $result.commandParseFailure = $all.Contains('Unrecognized command or argument')
     } else {
         if ($texts[1].Length -ne 0) { throw 'Unexpected subject stderr; contents suppressed' }
         # Exact emitter order also rejects duplicate fields before JSON parsing.

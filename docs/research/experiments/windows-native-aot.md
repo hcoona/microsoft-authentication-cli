@@ -74,7 +74,7 @@ source at MSAL commit `d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f`:
   safe-handle release implementation catches exceptions.
 - `Core`, `Module.Startup`, logging callbacks, account/result handles, discovery,
   authentication, and broker sessions are not invoked. `Marshal.Prelink` is excluded:
-  the [.NET 10 Native AOT implementation](https://github.com/dotnet/runtime/blob/95017c711e6afc1085133d440e42b4bd78155701/src/coreclr/nativeaot/System.Private.CoreLib/src/System/Runtime/InteropServices/Marshal.NativeAot.cs)
+  the [.NET 10 Native AOT implementation](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/coreclr/nativeaot/System.Private.CoreLib/src/System/Runtime/InteropServices/Marshal.NativeAot.cs)
   makes it a no-op.
 
 This establishes a bounded public API/source inference that allocation/import/cleanup
@@ -100,18 +100,19 @@ case directories, and sanitized attempt evidence. A preexisting root is rejected
 initial fetch; it cannot reset capacity or establish ownership. This is an existing
 workstation experiment under documented OS/process contracts, not a hostile-code sandbox
 or isolation of the Windows account. No registry, firewall, global tool, machine
-configuration, credential store, or unrelated application state is changed.
+configuration, credential store, or unrelated application state may be changed.
 
 The fetch uses Python's standard-library HTTPS client without inherited proxy/auth
 handlers, one fixed public flat-container URL per exact package. Restore uses only that
 local feed and an initially empty dedicated package cache. Later retries may use that
 cache and must not be called clean restores. Public-download success and local-feed
-restore success are distinct observations. Signature revocation checking is offline;
+restore success are distinct observations. NuGet signature revocation checking is offline;
 NuGet auditing is disabled for this bounded restore, not as repository security policy.
 
 Every subject child receives a complete replacement environment. The accepted helper
 sets documented .NET telemetry, certificate-generation, global-tool-PATH, and workload
-notification controls, disables build servers/node reuse and diagnostics, and omits
+notification controls, explicitly sets `DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=true`,
+disables build servers/node reuse and diagnostics, and omits
 inherited feed credentials, NuGet plugins, startup hooks, proxies, and agent settings.
 PowerShell uses `-NoProfile -NonInteractive`; it passes no ambient environment to the
 subject. Restore and publish disable automatic response files and ancestor
@@ -128,10 +129,11 @@ Wave and exact protocol remain current, recovers the required independent review
 CI/commit-check receipts, and checks prior attempt results. Material prerequisite drift
 requires refreshed review. The wrapper checks ancestry, current Wave bytes, checkout
 and Windows-copy source bytes, prior consumption, feed identities, and prerequisites.
-Record the first protocol merge's commit as `ACCEPTED_COMMIT`; from its detached checkout:
+Record the accepted startup amendment's merge commit as `ACCEPTED_COMMIT`; from its
+detached checkout use only the remaining actions. The original public-fetch capacity is
+exhausted and the current wrapper cannot fetch or create another root:
 
 ```text
-python3 tools/probes/windows-native-aot/run.py fetch --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py restore --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py publish --accepted ACCEPTED_COMMIT
 python3 tools/probes/windows-native-aot/run.py positive --accepted ACCEPTED_COMMIT
@@ -141,8 +143,14 @@ python3 tools/probes/windows-native-aot/run.py decoy --accepted ACCEPTED_COMMIT
 
 These are WSL operator commands for this host boundary. Invoke one action at a time;
 do not batch past a result requiring inspection. Source amendments require independent
-acceptance before execution and must preserve the root's prior consumption; the initial
-wrapper deliberately rejects adopting a root under another subject revision.
+acceptance before execution and must preserve the root's prior consumption. This one
+amendment accepts only the original PR #78 root and exact receipts 01 and 02, whose
+SHA-256 identities are pinned in `run.py`. Before the remaining restore, it verifies all
+original source copies, prior results, and feed hashes, then replaces only the seven
+accepted source copies and writes `source-revision.json`. Prior PowerShell JSON receipts are decoded with
+UTF-8 BOM support; their original bytes and hashes remain unchanged. The original identity
+and receipts remain unchanged. A partial source replacement fails closed; another amendment
+requires explicit review. Later actions require this amendment's same accepted revision.
 
 | Unit | Cumulative maximum, including failed starts and manual execution |
 | --- | --- |
@@ -159,8 +167,9 @@ the subject. An incomplete or unreadable receipt, exhausted capacity, safety sto
 uncertain termination prevents continuation. Attempts and effects do not reset on a
 protocol amendment, failed preparation, checkout, operator change, or machine switch.
 There is no second machine authorized by this exact protocol. Spare restore/publish
-capacity permits only an explained retry of the same accepted source when no safety stop
-occurred; it does not authorize unreviewed fixes.
+capacity permits only an explained retry of the current accepted source when no
+unresolved safety stop exists. Changed source requires an accepted amendment; neither
+an amendment nor source replacement resets capacity or clears an unresolved effect.
 
 Each case uses a fresh process and isolated application directory. Positive contains the
 published executable and its published x64 `msalruntime.dll`; missing contains only the
@@ -206,8 +215,12 @@ may start until the record is resolved; an actual safety stop remains a stop.
 Retain start/end times, accepted commit/tree and source hashes, capacity, tool versions,
 public package and output identities, resolved asset selection, warning/error codes,
 exit/timeout status, and the program's fixed JSON fields. Compiler diagnostic codes may
-be explained from public source/IL without replaying a publish. Never retain exception
-messages/stacks, account/tenant identifiers, tokens, native error context, raw broker
+be explained from public source/IL without replaying a publish. The startup amendment
+also records stdout/stderr character counts, presence of nine fixed public SDK exception
+type names, and a Boolean for the fixed English unrecognized-command diagnostic. It
+never retains messages, stack frames, arbitrary exception names, or command output.
+These classifiers describe emitted text, not proof of an exception's root cause. Never
+retain exception messages/stacks, account/tenant identifiers, tokens, native error context, raw broker
 diagnostics, or private local guidance. Unexpected output is suppressed and stops further
 subject execution. Preserve missing output or crashes as failures, not negative-case
 success. Read-only artifact inspection and sanitized record preparation are not new
@@ -228,5 +241,113 @@ is accepted, close the Wave entry through its separately reviewed deletion.
 
 ## Observations
 
-No subject execution is recorded by this protocol proposal. Initial consumption is zero;
-the first execution must recover the accepted merge and its gate evidence.
+### Initial Execution
+
+Runtime observations on September 12, 2026 used PR #78 commit
+`3f21223c0d83aa8d2bb872499c40a4b08de1dcfe`, tree
+`c46afd0e89d617ebdb69b4b5df8070a9081dfd07`, with its passing independent review,
+commit checks, and [CI](https://github.com/hcoona/microsoft-authentication-cli/actions/runs/34668110177).
+The host reported Windows version `10.0.26200.0`, AMD64, PowerShell 5.1.26100.9444,
+and the pinned SDK/runtime directories. The initiating host was WSL 2, kernel
+6.18.33.1-microsoft-standard-WSL2, Ubuntu 26.04.1 LTS, Python 3.13.15.
+No account, tenant, scopes, authentication UI, token, or resource request applies.
+Existing account/session state was not examined.
+
+| Attempt | UTC interval | Observation |
+| --- | --- | --- |
+| 01: public fetch | 02:42:45.688308–02:42:53.499435 | Exit 0; fourteen exact archives, 121,318,968 bytes; no redirect/retry; quiescent and no fetch safety stop. The three authentication archive hashes matched the assessment before restore. |
+| 02: first restore | 02:43:12.597034–02:43:18.0973811 | Guard compiler exit 0; subject exit 1 in 3.801 seconds; owned work quiescent; no retained diagnostic code. No assets, lock file, extracted package, published binary, or loading result was produced. The controller reported no safety stop; the later source finding below is a separate required disposition. |
+
+The dedicated home contains a first-use sentinel and local NuGet migration marker; the
+dedicated temporary directory contains one zero-byte SDK workload log. These identified
+files, original source copies, public feed, guard DLL, and sanitized receipts are retained.
+The empty log is not proof of either installation activity or its absence. Raw command
+output was not retained and does not establish the restore failure cause.
+
+Consumed capacity is fetch 1/1, restore 1/2, publish 0/2, each synthetic case 0/1, and
+guard bootstrap 1/7. There was no manual subject execution, interrupted attempt, or
+replay. No old authentication helper ran. The initial wrapper and its download procedure
+remain recoverable from PR #78; this amendment cannot repeat that fetch.
+
+### SDK Startup Finding
+
+AOT-AUTHOR-007 was independently classified as a blocking true positive. The initial
+replacement environment omitted an independent .NET 10 first-use control. The installed
+SDK `.version` identifies dotnet/dotnet commit
+`e34a38d2ae1fc26406a317517196e55c68ff83ab`; its public
+[source manifest](https://github.com/dotnet/dotnet/blob/e34a38d2ae1fc26406a317517196e55c68ff83ab/src/source-manifest.json)
+identifies SDK source `32593ca81f8aae7b0d41c1a7198529c3365106b8`.
+At that source,
+[Program.cs](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/dotnet/Program.cs)
+captures first use before writing the sentinel and runs
+[WorkloadIntegrityChecker](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/dotnet/Commands/Workload/WorkloadIntegrityChecker.cs).
+That checker can construct an installer and install existing workloads. Notification
+and MSBuild workload-resolver controls do not disable this branch. Microsoft's
+[documented environment control](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-environment-variables#dotnet_skip_workload_integrity_check)
+explicitly skips it; the amended helper sets that control without enabling installation.
+Program.cs catches integrity-check exceptions and continues, so the missing control alone
+does not explain restore exit 1. Preserve that distinction and the original receipt.
+
+Read-only inspection of the installed `dotnet.dll` (SHA-256
+`616dbda77bc20692d615e2a679f31ffff04f693e8d6b3e24779cf8838adb6a85`) and matching public
+[InstallerBase](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/dotnet/Installer/Windows/InstallerBase.cs)
+and [MsiInstallerBase](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/dotnet/Commands/Workload/Install/MsiInstallerBase.cs)
+supports a narrower effects inference. The current SDK has the MSI-selection marker.
+`InstallerBase` has a required explicit static constructor that dereferences
+`PROCESSOR_ARCHITECTURE`, absent from the executed replacement environment.
+`MsiPackageCache` invokes that base constructor before `MsiInstallerBase` can construct
+its Windows Update agent or installation-record repository. This path cannot reach
+`UpdateAgent.Stop`, successful installer return, or `InstallWorkloads`. This is an
+inference from the exact source/environment/IL, not a measured installation-state diff.
+The empty log does not establish the cutoff; its background writer can exit before
+flushing queued events.
+
+AOT-REVIEW-008 was independently classified as a blocking true positive: the earlier
+[WorkloadUtilities](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/dotnet/Commands/Workload/WorkloadUtilities.cs)
+→ [SignCheck](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/dotnet/Commands/Workload/SignCheck.cs)
+→ [Signature](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/dotnet/Installer/Windows/Security/Signature.cs)
+path can call `WinVerifyTrust` with online revocation allowed by its own policy.
+`NUGET_CERT_REVOCATION_MODE` does not control that path. Actual policy, URL retrieval,
+and Windows trust-cache effects were not measured; no actual request or mutation is
+established. No registry/trust-cache inspection or cleanup was performed. Skipping the
+entire integrity branch removes this prospective path as well as the installer path;
+it does not retroactively establish that all earlier effects were absent.
+
+Independent recovery and triage found no observed out-of-bound effect, unresolved
+termination, or capacity gap in the retained evidence. The accepted policy does not
+require proof of every internal OS/provider operation. This historical uncertainty alone
+does not require a new owner risk decision or end the investigation. Continuation still
+requires acceptance of this exact correction, verified original root/source/feed/receipts,
+and the ordinary pre-action gates. Any actual stop condition remains binding; source
+migration cannot clear it. The remaining restore is an explained retry after correcting
+the unsupported startup path, with the original failure cause still unknown. The original
+restore/publish arguments remain unchanged: exact System.CommandLine tokenizer and SDK
+forwarding inspection shows their MSBuild switches are forwarded, so a CLI-parse
+explanation is unsupported.
+
+AOT-AUTHOR-009 was independently classified as a blocking true positive: Windows
+PowerShell's UTF-8 result contains a BOM that the original prior-result reader rejects.
+The amendment uses `utf-8-sig` for that reader, matching its existing immediate-result
+reader. Read-only parsing reproduced this defect; it did not consume another attempt.
+
+### Fetched Public Archive Identities
+
+All use the fixed public NuGet flat-container URL construction in the original protocol.
+These are fetched inputs, not a resolved dependency graph.
+
+| Package | Version | SHA-512 |
+| --- | --- | --- |
+| Microsoft.Identity.Client | 4.83.1 | `692ae5e6b961a2ef71b747a9877f7a7f0460a03f9fb2edc0fa7e4d457a5419a0f564afae53c6296b7e75e0ab2b1c61b3f621a9d56e99945bb047b02dcfe9a2bd` |
+| Microsoft.Identity.Client.Broker | 4.83.1 | `9923928bde2049ed3ec125f871eb37f125a2bb28d20e0d5ebdf59d1a7cb1f37858f4c7d818dd25fd72f1fa7ae96a01a1320d1a21bb3ba3a1379d3fe37463f2ec` |
+| Microsoft.Identity.Client.NativeInterop | 0.20.3 | `e8d30c22acc6c14d91f09c9e8204278357f2500a11e1e7befb1443f0e806a9dd5522938d37733bfe3de11a1c4e30ccea4755f80fcd1f9de6d8c87a88910ae5cd` |
+| Microsoft.IdentityModel.Abstractions | 8.14.0 | `175ef8bf78b63f3c327e680d5cf7721d74f29e96460e686b22b4e67c264fb036a7a9bea1473f4a5b487337ab7a560c861b51ed1aa744777f303362262b01a8b4` |
+| System.Diagnostics.DiagnosticSource | 6.0.1 | `80a0f9bf3a7afdb28d9f00e1f301feeacb39c34fe4ac8f55a392377e2e018fb546fc3fc56e2fe4336dea222b7ab3f4bab58a0b8d86eb18c71951ef2e1c752789` |
+| System.Runtime.CompilerServices.Unsafe | 6.0.0 | `d4057301be4ec4936f24b9ce003b5ec4d99681ab6d9b65d5393dd38d04cdec37784aaa12c1a8b50ac3767ed878dae425749490773fec01e734f93cf1045822b3` |
+| System.ValueTuple | 4.5.0 | `fa00ebb5045d12c51274f64411c551981beceb1266a8606a4731063109b95ea1f15939197bf3d2ba899db61e593dc39bfce876908bba34286823525093ae3d8e` |
+| Microsoft.DotNet.ILCompiler | 10.0.12 | `a9e3932bd0d16d6c78fde79b5c6d6fe74ca4104983f54be9f09d62085aa7cf7d1683cb3cbdf3dddad3e9a9a7b4c0c9d262676f28299308483afd96b34acba562` |
+| runtime.win-x64.Microsoft.DotNet.ILCompiler | 10.0.12 | `3875d56e9404026f57c1b1a0673c722b5485340b693422c7c9ea118f40301b51ed173871ee525818080de8230ee0ac6147c56e352d4da8929532b3b3959d684d` |
+| Microsoft.NETCore.App.Runtime.NativeAOT.win-x64 | 10.0.12 | `bc56dd1d11b4a49874cc12cfa66f0163fa1a353fb84d8158e336e2eb779ebd7ae0aa487d660bc85043c833589a33f348ea6674cf1bf61744fe1ae9d38168e9c8` |
+| Microsoft.NETCore.App.Runtime.win-x64 | 10.0.12 | `39afcb222032eabebe2c7fa51a37c491c6b0f456796ad7888431971b8eef4f689caee5454260398ce0ffafe491c565891b35e73afc67585a3e4c4bde995710ee` |
+| Microsoft.NETCore.App.Ref | 10.0.12 | `b8df7c98c76bba344b41d20151dc79e5a4dc764b5fdb893844fdfdb895be05247d31cb4e93452ba668beb2f3f62a3f30ed8b1242e06b7a0c53b11125fc69ba28` |
+| Microsoft.NETCore.App.Host.win-x64 | 10.0.12 | `33c2760f5936e1eb30609fc368974761bc331eb720fa0593bf92f9f050c6d91d67f673a22783160ab84c16d6736e8c02c10066ced6c06cceed378f5cbaa78588` |
+| Microsoft.NET.ILLink.Tasks | 10.0.12 | `a294f93f5a7e086ef4c466af79382add0e4e64a77b319d11b35d31e137b097a6dc3dbbb848ba381749fa4410889ef04ac68475d13d75f97d0cf5d8232847ee73` |
