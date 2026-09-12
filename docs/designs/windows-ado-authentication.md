@@ -42,16 +42,20 @@ production publishing unselected and do not call the Slice implementation-ready 
 that essential premise has a reviewed disposition. This is a concrete design and next
 validation obligation, not permission to implement or publish it in the current Wave.
 
-The [bounded synthetic investigation](../research/experiments/windows-native-aot.md#final-restore-native-artifact-and-controller-stop)
-restored the exact .NET 10 graph and produced an x64 native executable after correcting
-the isolated build environment and two local-feed omissions. The final publish returned
-exit 0, but a controller safety stop prevented diagnostic retention and every loading
-case. Its final quiescence is recorded; the exact stop origin and AOT/trim warnings are
-unavailable. Native artifact production is now observed, while upstream allocation,
-loading/search behavior, and the complete application remain unvalidated. Resolve that
-controller/evidence gap through a separately authorized continuation before relying on
-loading results. The preferred host, unresolved essential premise, production-publishing
-disposition, and absence of a non-AOT exception remain unchanged.
+The [bounded synthetic investigation](../research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
+restored the exact .NET 10 graph, produced an x64 native EXE, and subsequently executed
+that retained artifact on the Windows host through WSL. The positive case created MSAL
+configuration and entered the upstream NativeInterop configuration-allocation path with
+its module in the application directory. Missing-library and working-directory/PATH-decoy
+cases both failed to load the module as expected. All three controllers completed normally.
+The tested synthetic allocation/import and restricted-search premise is now supported
+by runtime evidence for this artifact and host.
+
+The historical publish-controller stop and unavailable AOT/trim warnings remain unresolved;
+the runtime cases do not recover that evidence. Full provider/WAM/UI behavior, complete
+native cleanup, wrong-architecture rejection and the actual application remain unvalidated.
+The preferred host, production-publishing disposition and absence of a non-AOT exception
+remain unchanged; these synthetic results do not make the whole design implementation-ready.
 
 The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
 distinguishes the following alternatives:
