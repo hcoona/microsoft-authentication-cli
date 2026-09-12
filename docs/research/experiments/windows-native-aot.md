@@ -181,7 +181,15 @@ verification, use the four sequential commands in
 [Sequential Actions and Outcome](#sequential-actions-and-outcome), now bound to this
 accepted diagnostic revision and round. Independently review each action's source,
 reservation, diagnostics, termination, and applicable graph/artifact evidence before
-its dependent action. Every runtime requires this round's normally completed reviewed
+its dependent action. Restore and publish require exit zero in both immediate and
+recovered completion checks. An otherwise normally completed build with nonzero exit
+creates a durable `build-failed` round stop without relabeling it as a safety failure.
+The genuine wrong-architecture case retains its expected exit one. Before reserving
+another preflight, verify all previous reservations, results, source, required evidence
+maps, graph and artifact identities. Bind an existing root to this exact revision;
+missing source cannot be recopied to repair it. These gates implement independently
+triaged finding N and prevent a failed or changed predecessor from causing another host
+check. Every runtime requires this round's normally completed reviewed
 publish, exact EXE/x64-DLL provenance, and the unchanged genuine x86 negative input.
 Stopped artifacts from any round remain ineligible.
 

@@ -551,6 +551,8 @@ def completed(result, action):
         if result.get(key) is not False:
             return False
     if action in ('restore', 'publish'):
+        if result['exitCode'] != 0:
+            return False
         if action == 'publish' and not valid_metadata(result.get('jobMetadata')):
             return False
         if result.get('diagnosticsComplete') is not True:
@@ -614,25 +616,11 @@ def main():
         raise SystemExit('Unallocated diagnostic round or shared file.')
     if (ROOT / 'stopped.json').exists():
         raise SystemExit('This diagnostic round is stopped.')
-    if ROOT.exists():
-        early_attempts = sorted((ROOT / 'attempts').iterdir())
-        if len(early_attempts) >= 4 or [p.name for p in early_attempts] != [
-                f'{i:02}' for i in range(18, 18 + len(early_attempts))]:
-            raise SystemExit('Diagnostic action inventory is invalid or exhausted.')
-        for index, prior in enumerate(early_attempts):
-            outcome = read(prior / 'result.json')
-            completion = read(prior / 'completion.json')
-            if (not completed(outcome, ACTION_ORDER[index]) or
-                    completion.get('resultSha256') != digest(prior / 'result.json')):
-                raise SystemExit('Incomplete prior action prevents another host preflight.')
-        if args.action != ACTION_ORDER[len(early_attempts)]:
-            raise SystemExit('Only the next diagnostic action may run.')
-    elif args.action != 'restore':
-        raise SystemExit('The fresh round must begin with restore.')
-    preflight = reserved_preflight(args.action, accepted, target)
+    preflight = None
     if not ROOT.exists():
         if args.action != 'restore':
             raise SystemExit('Start with the reserved restore/preparation.')
+        preflight = reserved_preflight(args.action, accepted, target)
         ROOT.mkdir(parents=True)
         write_new(ROOT / 'preparation-started.json', {'accepted': accepted, 'started': now(),
                   'historicalSha256': HISTORY_SHA256, 'stoppedSupplementSha256': PRIOR_SHA256,
@@ -658,6 +646,8 @@ def main():
     identity = read(ROOT / 'identity.json')
     if (ROOT / 'stopped.json').exists():
         raise SystemExit('A prior interruption or safety stop ends this sequence.')
+    if identity.get('accepted') != accepted:
+        raise SystemExit('A new revision cannot resume this round.')
     if (identity.get('historicalSha256') != HISTORY_SHA256 or identity.get('priorConsumption') != OLD_COUNTS or
             identity.get('stoppedSupplementSha256') != PRIOR_SHA256 or
             identity.get('stoppedRecoverySha256') != RECOVERY_SHA256 or identity.get('supplementConsumption') != PRIOR_COUNTS):
@@ -669,6 +659,8 @@ def main():
         raise SystemExit('Dedicated program-files directory changed.')
     source = ROOT / 'source' / accepted
     if not source.exists():
+        if preflight is None:
+            raise SystemExit('An existing round cannot replace missing source.')
         source.mkdir()
         for name, data in sources.items():
             (source / name).write_bytes(data)
@@ -752,6 +744,9 @@ def main():
                 if digest(ROOT / 'negative/msalruntime.dll') != WRONG_HASH:
                     raise SystemExit('Negative input changed.')
                 case_inputs['msalruntime.dll'] = {'path': 'negative/msalruntime.dll', 'sha256': WRONG_HASH}
+    if preflight is None:
+        # Resolve every prior success, reservation, source, graph and artifact gate first.
+        preflight = reserved_preflight(args.action, accepted, target)
     attempt = ROOT / 'attempts' / f'{18 + len(attempts):02}'
     attempt.mkdir()
     write_new(attempt / 'started.json', {'action': args.action, 'accepted': accepted, 'target': target,
@@ -782,7 +777,10 @@ def main():
         raise SystemExit('Metadata shape is invalid; do not emit its contents or continue.')
     print(json.dumps(result, indent=2))
     if not completed(result, args.action) or result.get('reservationSha256') != digest(attempt / 'started.json'):
-        write_new(ROOT / 'stopped.json', {'attempt': attempt.name, 'ended': now(), 'reason': 'incomplete-action'})
+        reason = 'build-failed' if (args.action in ('restore', 'publish') and
+                  type(result.get('exitCode')) is int and result['exitCode'] != 0 and
+                  result.get('safetyStop') is False and result.get('quiescent') is True) else 'incomplete-action'
+        write_new(ROOT / 'stopped.json', {'attempt': attempt.name, 'ended': now(), 'reason': reason})
         raise SystemExit('Action lacks explicit bounded completion; stop.')
     evidence = {}
     if args.action == 'restore' and result['exitCode'] == 0:
