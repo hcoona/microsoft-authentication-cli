@@ -81,6 +81,14 @@ ran. The accepted buffered Wave permits a fresh exact diagnostic amendment, pres
 all stopped roots. Native AOT remains the preferred candidate, with the publishing choice
 and implementation-readiness gap unchanged.
 
+The [third diagnostic result](../research/experiments/windows-native-aot.md#diagnostic-round-03-results)
+now identifies the sampled image string as the fixed MSVC `vctip.exe` path and again
+retains complete warning-free output. The controller still stopped on nonzero Job
+membership and confirmed owned termination; no new runtime evidence follows. This
+narrows the experiment-lifecycle investigation without selecting production publishing
+or establishing the sampled process's external effects. Preserve the existing gap and
+later application/WAM/UI validation gates.
+
 The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
 distinguishes the following alternatives:
 

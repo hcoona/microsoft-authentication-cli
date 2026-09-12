@@ -512,6 +512,13 @@ then stopped with successful owned termination and final quiescence. It supplies
 runtime or normal-publish evidence. Preserve all these obligations; the publishing choice
 and preimplementation gap remain unresolved.
 
+The [third diagnostic round](../research/experiments/windows-native-aot.md#diagnostic-round-03-results)
+adds a sampled image-string match for MSVC `vctip.exe`, complete warning-free diagnostics
+and confirmed owned termination. It still lacks normal publish completion and runtime
+cases. A public build system's acceptance of surviving helpers cannot satisfy this
+experiment's zero-process completion rule. Preserve historical unknowns, the remaining
+cleanup/x86/dependency obligations and the unresolved publishing disposition.
+
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later candidate tests must cover HWND
 readiness, creation failure, callback lifetime/ABI, creating-thread destruction, stalled
