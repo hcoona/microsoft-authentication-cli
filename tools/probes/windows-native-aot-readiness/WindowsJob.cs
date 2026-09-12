@@ -181,7 +181,7 @@ public sealed class NativeAotJob : IDisposable
         if (String.Equals(image, @"C:\Program Files\dotnet\dotnet.exe", StringComparison.OrdinalIgnoreCase)) return "dotnet-host";
         if (String.Equals(image, @"C:\Windows\System32\conhost.exe", StringComparison.OrdinalIgnoreCase)) return "windows-console-host";
         if (String.Equals(image, @"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe", StringComparison.OrdinalIgnoreCase)) return "framework-csc";
-        if (String.Equals(image, @"C:\Temp\azureauth-native-aot-diagnostics\round-02\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\10.0.12\tools\ilc.exe", StringComparison.OrdinalIgnoreCase)) return "native-aot-ilc";
+        if (String.Equals(image, @"C:\Temp\azureauth-native-aot-diagnostics\round-03\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\10.0.12\tools\ilc.exe", StringComparison.OrdinalIgnoreCase)) return "native-aot-ilc";
         return "unknown";
     }
 
@@ -202,7 +202,7 @@ public sealed class NativeAotJob : IDisposable
             @"C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\",
             @"C:\Program Files\dotnet\", @"C:\Windows\System32\",
             @"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\",
-            @"C:\Temp\azureauth-native-aot-diagnostics\round-02\"
+            @"C:\Temp\azureauth-native-aot-diagnostics\round-03\"
         };
         string[] classes = { "msvc-bin-text", "dotnet-installation-text", "system32-text",
             "framework-text", "round-root-text" };
