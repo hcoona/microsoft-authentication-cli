@@ -42,12 +42,13 @@ production publishing unselected and do not call the Slice implementation-ready 
 that essential premise has a reviewed disposition. This is a concrete design and next
 validation obligation, not permission to implement or publish it in the current Wave.
 
-The [bounded synthetic investigation](../research/experiments/windows-native-aot.md#amended-restore-and-bounded-conclusion)
-ended at two failed restores after successful public package downloads; neither Native AOT
-publish nor upstream loading ran. This leaves the essential premise unresolved and does
-not establish an AOT/dependency incompatibility or justify changing the preferred host.
-Any later executable investigation first needs a bounded diagnosis of that restore failure
-under new or amended authority, preserving the historical attempt consumption.
+The [bounded synthetic investigation](../research/experiments/windows-native-aot.md#diagnostic-restore-and-nuget-environment-cause)
+identified missing program-files environment variables as the cause of its diagnostic
+restore's NuGet configuration failure. The dedicated-empty-directory correction still
+needs runtime validation under the accepted protocol and cumulative limits. Neither
+Native AOT publish nor upstream loading has run. The essential premise remains
+unresolved; this environment defect does not establish AOT/dependency incompatibility
+or justify changing the preferred host.
 
 The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
 distinguishes the following alternatives:

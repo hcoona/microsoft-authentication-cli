@@ -9,12 +9,13 @@ and [validation strategy](../../validation/strategy.md#native-aot-publishing) co
 the bounded conclusion. The historical Windows MSAL and tooling protocols retain their
 exhausted capacities; none of their helpers or subjects may execute here.
 
-The recorded outcome remains an unresolved restore prerequisite: two restores failed,
-so no Native AOT publish or loading case ran. The diagnostic continuation preserves
-those attempts and extends cumulative restore capacity to six under the accepted Wave.
-The first continuation changes diagnostic retention only; commands, environment,
-toolchain, packages, and synthetic program remain unchanged. Execution still requires
-independent acceptance of this exact amendment and all pre-action gates below.
+The diagnostic restore identified a NuGet configuration-initialization failure caused
+by missing program-files environment variables. Three restores have failed; no resolved
+assets, Native AOT publish, or loading result exists. The current amendment supplies
+dedicated empty program-files roots while preserving the command, toolchain, packages,
+synthetic program, and six-restore cumulative ceiling. The remedy still requires
+independent acceptance and runtime validation; the diagnosed failure is not an AOT or
+package-incompatibility result.
 
 ## Question and Exact Subject
 
@@ -129,6 +130,16 @@ callback is installed. Controller/bootstrap
 receipts contain only the corresponding PID and creation time; no unrelated process
 inventory or command lines are retained.
 
+NuGet's CoreCLR implementation requires `PROGRAMFILES(X86)` or its `PROGRAMFILES`
+fallback when initializing default configuration, even with `--configfile`. Both are
+set to the single dedicated `C:\Temp\azureauth-native-aot-76\empty-program-files`
+directory. Its absence is required before the one accepted source migration; the wrapper
+creates it and records that migration, then requires the directory to remain present,
+empty, and not a link before every action. No real machine-wide NuGet configuration is
+read through these variables. Existing dotnet, compiler, linker, and SDK paths remain
+explicit and unchanged. Do not populate this directory, copy host configuration into it,
+inherit the host variables, or add unrelated environment variables as a speculative fix.
+
 ## Execution and Finite Capacity
 
 Before **each** action, the operator refreshes `origin/main-v2`, confirms the accepted
@@ -136,10 +147,11 @@ Wave and exact protocol remain current, recovers the required independent review
 CI/commit-check receipts, and checks prior attempt results. Material prerequisite drift
 requires refreshed review. The wrapper checks ancestry, current Wave bytes, checkout
 and Windows-copy source bytes, prior consumption, feed identities, and prerequisites.
-The diagnostic amendment uses its own merged commit as `ACCEPTED_COMMIT` in a detached
-checkout. The first action repeats PR #79's restore command and replacement environment
-without modification. The controller retains useful sanitized ordinary build diagnostics
-under the contract below. Public-fetch capacity remains one consumed batch in this exact
+The environment amendment uses its own merged commit as `ACCEPTED_COMMIT` in a detached
+checkout. The next restore retains PR #79's command and all environment entries, adding
+only the two dedicated program-files entries above. The controller retains PR #83's
+sanitized ordinary build diagnostics under the contract below. Public-fetch capacity
+remains one consumed batch in this exact
 protocol; the wrapper cannot fetch or create another root. The Wave's conditional extra
 fetch remains inactive unless a demonstrated missing dependency receives a separately
 accepted exact manifest and protocol within that Wave's cumulative bounds:
@@ -155,16 +167,18 @@ python3 tools/probes/windows-native-aot/run.py decoy --accepted ACCEPTED_COMMIT
 These are WSL operator commands for this host boundary. Invoke one action at a time;
 do not batch past a result requiring inspection. Source amendments require independent
 acceptance before execution and must preserve the root's prior consumption. This one
-amendment accepts only the original PR #78 root, the PR #79 source copies, exact receipts
-01 through 03, and the original `source-revision.json`, whose SHA-256 identities are
-pinned in `run.py`. Before the diagnostic restore, it verifies those copies, prior
-results, and feed hashes, replaces only the seven owned source copies, and writes a new
-`diagnostic-revision.json` naming the prior and current accepted source and consumption.
-The original identity, revision marker, and six receipt files remain byte-for-byte
-unchanged. PowerShell receipts retain UTF-8 BOM-aware reading. A partial source
-replacement fails closed; another amendment requires explicit review. Later actions
-require this amendment's same accepted revision. Known consumption before the first
-continuation is fetch 1, restore 2, publish 0, each case 0, and guard bootstrap 2.
+amendment accepts only the original PR #78 root, the PR #83 source copies, exact receipts
+01 through 04, and the existing `source-revision.json` and `diagnostic-revision.json`,
+whose SHA-256 identities are pinned in `run.py`. Before the next restore it verifies
+those copies, prior results, feed hashes, and absence of the new empty program-files
+directory. It replaces only the seven owned source copies, creates that empty directory,
+and writes `environment-revision.json` naming the prior and current accepted source and
+consumption. The original identity, both previous revision markers, and eight receipt
+files remain byte-for-byte unchanged. PowerShell receipts retain UTF-8 BOM-aware
+reading. Partial migration fails closed; another amendment requires explicit review.
+Later actions require this amendment's same accepted revision and the recorded empty
+directory. Known consumption is fetch 1, restore 3, publish 0, each case 0, and guard
+bootstrap 3. This amendment does not enlarge any ceiling or activate extra downloads.
 
 | Unit | Cumulative maximum, including failed starts and manual execution |
 | --- | --- |
@@ -427,7 +441,79 @@ AOT/dependency/host defect supports a further source remedy or provider/UI repla
 That investigation ended with this bounded blocker and the unchanged production-publishing
 gap. The diagnostic continuation above supplies a new finite procedure under PR #82's
 accepted Wave while preserving these consumed attempts; unused publish/case capacity
-does not supply another restore. No continuation runtime observation is yet recorded.
+does not supply another restore. Its first runtime observation follows.
+
+### Diagnostic Restore and NuGet Environment Cause
+
+Attempt 04 used accepted PR #83 commit
+`acf4b01d050019064dd6698289b4fdad9ba3184b`, tree
+`d6437dcbe25c7074f7e84eb6ffb2c10a327360eb`, after independent protocol/source review,
+PowerShell syntax and synthetic sanitizer validation, mandatory commit checks, full hk,
+and [CI](https://github.com/hcoona/microsoft-authentication-cli/actions/runs/34672879787).
+It ran on the same Windows/WSL host with unchanged SDK/toolchain, package pins, command,
+and replacement environment. The new diagnostics were the only subject-observation
+change; no additional package was fetched and no authentication operation was introduced.
+
+**Runtime observation:** From September 12 UTC 04:29:31.768910 to 04:29:35.0597893,
+the guard compiler exited 0 and restore exited 1 in 1.407 seconds. Owned processes were
+quiescent and the controller safety stop was false. All 427 stdout characters were
+retained after known-path normalization, with no truncation, line suppression, or
+sensitive-output flag; stderr was empty. The relevant diagnostic was:
+
+```text
+NuGet.targets(782,5): error : The type initializer for 'NuGet.Configuration.ConfigurationDefaults' threw an exception.
+NuGet.targets(782,5): error :   Value cannot be null. (Parameter 'path1')
+```
+
+The task had printed `Determining projects to restore...`. Read-only inspection found
+no `obj` directory or resolved dependency assets. This identifies configuration
+initialization as the observed failure stage, before a resolved package graph or AOT
+publish. The old empty classifiers did not match these messages because no numeric
+diagnostic code or fully qualified fixed exception-type name was printed. Equal output
+length does not reconstruct or identify the discarded messages from attempts 02 and 03.
+
+**Source finding and causal interpretation:** The installed SDK's dotnet VMR
+`e34a38d2ae1fc26406a317517196e55c68ff83ab`
+[source manifest](https://github.com/dotnet/dotnet/blob/e34a38d2ae1fc26406a317517196e55c68ff83ab/src/source-manifest.json)
+maps NuGet.Client to `c269b982bdef148f92489ef4179cdc59094f652c`.
+[`ConfigurationDefaults.InitializeInstance`](https://github.com/NuGet/NuGet.Client/blob/c269b982bdef148f92489ef4179cdc59094f652c/src/NuGet.Core/NuGet.Configuration/Settings/ConfigurationDefaults.cs)
+calls `NuGetEnvironment.GetFolderPath(MachineWideSettingsBaseDirectory)`.
+The Windows CoreCLR path in
+[`NuGetEnvironment.CalculateFolderPath` and `GetFolderPath`](https://github.com/NuGet/NuGet.Client/blob/c269b982bdef148f92489ef4179cdc59094f652c/src/NuGet.Core/NuGet.Common/PathUtil/NuGetEnvironment.cs)
+reads `PROGRAMFILES(X86)`, falls back to `PROGRAMFILES` if empty, then calls
+`Path.Combine(machineWideBaseDir, "NuGet")`. Both variables were omitted from the
+accepted complete replacement environment, making the first argument null.
+
+Static inspection of the installed CoreCLR IL independently confirmed this call path;
+no NuGet assembly was loaded or executed for that inspection. `dotnet.deps.json`
+identifies these components as 7.9.0-rc.42413. The installed SHA-256 identities are:
+
+| Assembly | SHA-256 |
+| --- | --- |
+| NuGet.Common.dll | `537a15963cf134fc30e1314007cb276778309beb7672d4735d32fa8b022536b5` |
+| NuGet.Configuration.dll | `b4696a39a890bbefeecb01099eedf990d3e108e7ad7d2d57d8cdf4c296dd06f6` |
+
+AOT-AUTHOR-012 was independently triaged as a blocking true positive: this is the
+replacement-environment cause of attempt 04's NuGet configuration failure. It is not
+evidence of a defective MSAL, Broker, NativeInterop, or other package, a missing
+dependency, or network/access blocking. No additional download is justified by this
+finding. The current amendment maps the two required variables to one owned empty
+directory, avoiding the host's real `NuGetDefaults.Config` and machine-wide settings.
+Successful restore after that correction remains a runtime validation obligation.
+
+| Retained receipt | SHA-256 |
+| --- | --- |
+| Attempt 04 start | `645d18bfd5a205ed2d049b4178a3fe152b53bafa934e08c1da5bd28e005c1ce4` |
+| Attempt 04 result | `c594fd661df111688de8c34c015829472fb70ac1a0fabc1387cac6ef392c3406` |
+| Diagnostic revision marker | `64e44d686794942c7ea03b86cf675348104070e33e5a04783cbf4a23975aab96` |
+
+Consumption is fetch **1/1**, restore **3/6**, publish **0/2**, each case **0/1**, and
+guard bootstrap **3/11**. All four attempts have complete receipts; no manual replay,
+interruption, or unresolved owned process is recorded. Original receipts and the earlier
+revision marker remain unchanged. Dedicated artifacts and sanitized receipts are
+intentionally retained; the historical Windows trust-path uncertainty remains. The
+remaining Native AOT, native loading, authentication, and production-publishing premises
+are unchanged and untested by this diagnosis.
 
 ### Fetched Public Archive Identities
 
