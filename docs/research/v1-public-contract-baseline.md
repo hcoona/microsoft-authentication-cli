@@ -1564,7 +1564,8 @@ and survivor identity remain unknown. No new runtime case executed. The new stop
 branch does not identify historical attempt 10's cause. This supports native artifact
 production, not diagnostic acceptance, complete compatibility or publishing selection.
 Public linker documentation and the retained `/DEBUG` response support a PDB-helper
-hypothesis only; the recovery procedure must independently identify any future survivor.
+hypothesis only. Under the recovery procedure, any surviving Job member causes a stop;
+its identity remains unknown rather than being inferred or newly inspected.
 
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by

@@ -327,7 +327,8 @@ results remain unresolved.
 This is a distinct prospective execution grant for the same synthetic question, subject
 to acceptance of the amended Wave and this exact source/protocol. It never resumes the
 stopped PR #94 sequence or changes its receipts. Its purpose is to retain complete
-screened publish diagnostics and complete the previously defined synthetic cleanup and genuine x86 rejection cases.
+screened publish diagnostics and complete the previously defined synthetic cleanup and
+genuine x86 rejection cases.
 Product implementation, WAM, accounts, UI, credentials, resources, tool/package acquisition,
 performance measurements, and a non-AOT exception remain excluded.
 
@@ -338,7 +339,8 @@ Bind the complete current
 directory, the unchanged original `WindowsJob.cs`, and this protocol to one accepted
 commit in a clean detached checkout. `Program.cs` and .NET selection remain byte-identical
 to PR #94. The sole project change adds `DebugType=none`; the only NuGet configuration
-change is the dedicated local-feed path under the new recovery root. The wrapper binds the accepted Wave's exact SHA-256,
+change is the dedicated local-feed path under the new recovery root. The wrapper binds
+the accepted Wave's exact SHA-256,
 current target/source, original thirteen-attempt aggregate, and the stopped supplement's
 33-file evidence aggregate:
 `a27bb4f06e493f7c6b7a7d95d28b725e3e53de16f164e3c8526d22cd4ce84ab9`.
@@ -371,8 +373,8 @@ compiler/Job termination budgets, and ten-second emergency ceiling remain. The c
 may wait at most two seconds for normal Job accounting to drain, charged to the action's
 existing time limit; its 25-millisecond polling permits at most 100 milliseconds of
 scheduling tolerance in the retained duration. It records initial/final counts and
-drain duration. This finite wait
-is a new prospective rule, not a reinterpretation of attempt 15.
+drain duration. This finite wait is a new prospective rule, not a reinterpretation of
+attempt 15.
 
 ### Symbol Generation and Diagnostic Completion
 
@@ -389,7 +391,7 @@ Native AOT mode, optimization and warning controls remain unchanged.
 
 Microsoft's [LNK1318 guidance](https://learn.microsoft.com/en-us/cpp/error-messages/tool-errors/linker-tools-error-lnk1318)
 states that a PDB server started by one linker can be used by another. The independently
-triaged AOT-READINESS-H finding therefore rejects treating a sole Job-owned server's
+triaged AOT-READINESS-REVIEW-H finding therefore rejects treating a sole Job-owned server's
 identity as proof of exclusive use. The recovery introduces no helper exception or
 new process-identification APIs. Suppressing this probe's symbol output avoids deliberately
 requesting that service, but does not identify attempt 15's survivor or guarantee that
@@ -413,8 +415,8 @@ raw output or infer clean diagnostics from missing fields. Capture interrupted b
 remains incomplete. This fixes diagnostic loss without delaying termination or promoting
 a stopped action to completion.
 
-The Python completion predicates require exact types and normal drain bounds, and either
-ordinary zero-process completion with no termination request. Surviving or forcibly
+The Python completion predicates require exact types, normal drain bounds, and ordinary
+zero-process completion with no termination request. Surviving or forcibly
 terminated descendants cannot satisfy successful completion.
 Successful restores bind `restore.json`; successful publishes bind `artifacts.json`;
 other completions bind an explicitly empty map. Source, graph, generated imports, all
