@@ -1507,16 +1507,18 @@ artifact closure must be evaluated on the resolved graph before selecting that m
 No startup, memory, size, authentication, or cancellation benefit was measured.
 
 **Synthetic runtime outcome, September 12, 2026:** The
-[Windows Native AOT experiment](experiments/windows-native-aot.md#diagnostic-restore-and-nuget-environment-cause)
-downloaded all fourteen exact public inputs. Its third local-feed restore retained a
-NuGet configuration-initialization failure: missing `PROGRAMFILES(X86)` and `PROGRAMFILES`
-in the replacement environment lead to `Path.Combine` receiving null. Exact public
-source and installed CoreCLR IL support that cause for the diagnostic attempt; the
-earlier discarded messages are not reconstructed. The accepted bounded continuation
-requires validating the dedicated-empty-directory remedy. No dependency assets, AOT
-publish, or native-loading result exists yet. This environment failure does not establish
-a package/network defect or Native AOT incompatibility; the design inference and
-production-publishing gap remain unchanged.
+[Windows Native AOT experiment](experiments/windows-native-aot.md#corrected-environment-and-missing-runtime-packs)
+downloaded fourteen exact public inputs. Its third local-feed restore exposed missing
+program-files environment variables in NuGet configuration initialization. Correcting
+those variables let the fourth restore reach dependency resolution, which reported
+`NU1101` for the omitted WindowsDesktop and ASP.NET runtime-pack archives at 10.0.12.
+These are SDK download requests, not new application framework references. The failed
+restore's partial assets select the expected MSAL/Broker/NativeInterop assemblies but
+do not establish a successful closure. The bounded supplemental manifest supplies only
+those two evidenced inputs before retrying. No AOT publish or native-loading result
+exists yet. Neither preparation defect establishes Native AOT incompatibility; the
+design inference and production-publishing gap remain unchanged. Earlier discarded
+messages and unmeasured trust-processing effects retain their recorded limits.
 
 Immutable snapshots above retain their evidence level. Mutable Native AOT guidance and
 upstream compatibility reports can change the unresolved disposition and are routed by

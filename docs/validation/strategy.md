@@ -471,14 +471,13 @@ Missing, wrong-architecture or unavailable native assets must fail without probi
 arbitrary working directory or using a developer-machine dependency.
 
 The diagnostic continuation
-[identified a NuGet environment prerequisite](../research/experiments/windows-native-aot.md#diagnostic-restore-and-nuget-environment-cause):
-missing program-files variables caused configuration initialization to receive a null
-path. Validate the dedicated-empty-directory correction with the accepted exact protocol
-and preserved cumulative counts, then inspect successful resolved assets before dependent
-publish/loading cases. Public download success and the explained initialization failure
-do not establish package closure or Native AOT compatibility. The existing candidate and
-all runtime validation obligations remain unresolved; this preparation failure is not a
-basis for a non-AOT exception.
+[validated the NuGet environment correction](../research/experiments/windows-native-aot.md#corrected-environment-and-missing-runtime-packs)
+and identified two SDK runtime-pack downloads missing from the local feed. Verify the
+accepted supplemental fetch and successful restored closure before publish/loading;
+partial assets from the fourth failed restore are not sufficient. Preserve cumulative
+counts and inspect selected application assets separately from SDK download-only packs.
+No AOT publish or native-loading result exists yet. All later runtime obligations remain
+unresolved, and these preparation defects do not justify a non-AOT exception.
 
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later candidate tests must cover HWND
