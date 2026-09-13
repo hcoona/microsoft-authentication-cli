@@ -2066,3 +2066,226 @@ actual WSL behavior, Native AOT, deployment or complete Slice acceptance. Numeri
 65004 remains a bounded repository mapping with the accepted diagnostic-stability
 limitation. Original failures, receipts, controller backups, synthetic files and
 consumed reservations remain intentionally retained.
+
+## Owned Win32 Host Scenario Supplement
+
+This supplement adds a fixed credential-free `owned-host` selection after the
+[accepted adapter evidence](#controlled-adapter-redgreen-evidence). It extends the
+future suite choices to `cli`, `adapter` and `owned-host`; non-test actions still
+forbid a suite. Earlier selections, assertions, observations and consumed
+reservations remain unchanged. Exact source and artifact admission is required
+before each action.
+
+### Scope and Ordering
+
+Select a new fixed `owned-host` suite in the existing Windows scenario executable,
+using the same four projects, locks, SDK 10.0.401/runtime 10.0.12, MSAL/Broker 4.83.1
+and NativeInterop 0.20.3. No restore, download, installation or project change is
+needed for these added C# files. The production provider factory stays unavailable.
+Every provider, account selector, Profile and result in these cases is synthetic;
+no public client application, native broker or account/cache API is reached.
+
+After accepted adapter 0018 evidence, independently admit a current-source
+no-restore build with a narrow two-controller transition. Preserve exact previous
+controller bytes, bootstrap artifact, Job code, stop helper and migration receipt.
+The first migration action is no-restore build 0019 after finalized
+Windows 0018. Its WSL reservation SHA-256 is
+`00c13bdb95279b555ec1f3b11a2092d2ce7db33e38dc1622de613a0ce20dac29`
+and final SHA-256 is
+`919c9e080c088138976029b4b426cc7973e8ed94384eac465ff43bc29a50abcd`.
+Its Windows final is
+`b2da009da472b0cae433cbcbbf3e6aee106b5872d32b3ec5800637afe36d5ed2`.
+Prior `run_windows.py` SHA-256 is
+`1b1c9aa5bd563b8c0c9aba61dc57774cc1f2f30296eb836b8bb4536acd23ecf6`
+and `Invoke-WindowsValidation.ps1` is
+`a42e9dc7b85972ba980ac3405e6ebd74892c21e1f59be59f0f49143dac17b100`.
+No standalone helper replacement is authorized; source/protocol/execution
+identities still require independent admission after this supplement is accepted.
+Accept complete source/artifact and generated registration review before one
+inert-red run. The zero-HWND host starts no thread, window,
+provider or child; its five controls and ten business failures must match the fixed
+selection. Green host implementation begins only after actual red acceptance.
+Preserve every test assertion and dependency from accepted red through green.
+
+### Fixed Commands and Initial Source
+
+Use the accepted `python3 -I tools/validation/run_windows.py` with exact full
+`--protocol`, `--source`, `--target` commits and independent `--review` URL.
+The first action is `build`; after complete actual artifact review, the inert
+test uses `test --suite owned-host --expect red`. A later separately admitted
+green build precedes `test --suite owned-host --expect green`. There is no
+automatic sequence or permission to bypass the review between actions.
+
+The selected build remains the existing Windows scenario project in Release
+with `--no-restore`, `--disable-build-servers`, one node, no node reuse, no
+automatic response file and `UseSharedCompilation=false`. The selected test
+remains the source-bound scenario DLL through the pinned Windows dotnet host,
+with `--report-trx`, the dedicated results directory and the literal filter
+below. Retain the existing replacement environment, fixed path preflight,
+230-second action-controller wait and bounded cancellation/termination procedure.
+
+The initial red candidate adds only these three files within the existing
+projects. Its independent admission must bind their bytes, the complete candidate
+commit/tree, all existing source and graph inputs, and the built artifact:
+
+| Initial inert-red source path | SHA-256 |
+| --- | --- |
+| `src/Authentication.Windows/OwnedRequestHost.cs` | `afcf17e38a130f24665e52aa3dd1d2d7a2a405be26bae330e9627e3dfcfbdfdc` |
+| `tests/Authentication.Windows.Scenarios/OwnedHostScenarios.cs` | `c3ff5f81012baa35ca21a0e413cca83d8107faba0cea13be61f130ddcd9c14b9` |
+| `tests/Authentication.Windows.Scenarios/OwnedWindowObservation.cs` | `fe8a1f5e8171e780ad4f49c2e22bb161fd5b0dc78d9164d56916ad2ee709010d` |
+
+The accepted helper replacement bytes are independently bound to the protocol
+revision; the narrow first-build migration uses these new controller identities:
+
+| Helper | SHA-256 |
+| --- | --- |
+| `run_windows.py` | `0b3997c5ce411f2da45eb1c4cb20030f543e2c5754e1fc32f111699a64ab330e` |
+| `Invoke-WindowsValidation.ps1` | `af0b1c461171179637f12efe02d8a8151d77f258352524a5ffdacd99e30af445` |
+| `run_managed.py` | `48ff49d0efa85e78e0e71ba8ef950f857d950ffe982f141a46001caa26b81929` |
+
+The third helper receives the symmetric history interpretation in this amendment;
+it is not a third live Windows controller replacement. Bootstrap, Job source and
+stop-helper bytes remain unchanged. No helper executes merely because its source
+or this supplement has been reviewed.
+
+### Fixed Cases
+
+| OwnedHostScenarios method | Inert red prediction | First failed assertion line |
+| --- | --- | --- |
+| `SilentSuccessDoesNotCreateOwnedUi` | Passed | None |
+| `ForbiddenInteractionDoesNotCreateOwnedUi` | Passed | None |
+| `MissingPresentationPreventsInteraction` | Passed | None |
+| `ReadyParentCarriesAdmittedBranding` | Failed | 86 |
+| `CreationFailurePreventsInteractiveAcquisition` | Failed | 109 |
+| `OriginalCancellationBeforeCreationWins` | Passed | None |
+| `CancellationDuringCreationRejectsLateParent` | Failed | 298 |
+| `CloseDuringCreationCannotReopenHost` | Failed | 298 |
+| `ClosedHostCannotReopen` | Passed | None |
+| `InternalCloseDoesNotCancelCaller` | Failed | 373 |
+| `CompletionWaitsForActualUiThreadExit` | Failed | 373 |
+| `CancelButtonStopsPendingAuthentication` | Failed | 263 |
+| `CaptionCloseStopsPendingAuthentication` | Failed | 263 |
+| `EscapeStopsPendingAuthentication` | Failed | 263 |
+| `PostReadinessCallbackFaultIsContained` | Failed | 373 |
+
+The line numbers refer to the exact `OwnedHostScenarios.cs` bytes bound above.
+Actual-red review must inspect every failed assertion, its explicit source message
+where present, and actual source/PDB correspondence:
+
+- Line 86: `Assert.IsNotNull(result.Success)` fails because success is absent; it
+  has no custom message.
+- Line 109: `Assert.IsTrue(reached)` with "The actual creation checkpoint was not
+  reached." The injected creation exception is unreachable in inert red.
+- Line 298: `Assert.IsTrue(gate.Entered.Task.IsCompletedSuccessfully)` with "The
+  required owned-thread checkpoint was not reached." The completed operation wins
+  the preceding wait; a timeout is not the expected failure.
+- Line 373: `Assert.AreNotEqual((nint)0, parent)` with "The owned parent is not
+  ready." This precedes any native ownership observation.
+- Line 263: `Assert.IsTrue(entered.Task.IsCompletedSuccessfully)` with "A ready
+  parent did not reach provider interaction." This precedes any native message.
+
+The shared invocation-commit assertions at lines 405 and 406 and every required
+teardown must pass. MSTest's generated wording and Release stack presentation
+remain actual artifact evidence; do not invent their complete formatting. Matching
+aggregate outcomes alone cannot accept a different failure cause.
+
+These are source predictions conditional on successful build/discovery. Missing
+creation/readiness checkpoints must fail promptly at the business assertion.
+No timeout, fixture cleanup error, static stop marker, native/loader exception or
+missing/discovered-extra case is accepted as intended red. Green requires fifteen
+Passed, no other outcomes and normal runner/outer exit 0. Red requires only the
+listed ten failures, five Passed and the prospectively reviewed runner exit 2.
+Keep all sixteen TRX counters, actual class/name identities and definition/result
+joins exact, without DataRow expansion. Both controllers own this literal filter:
+
+```text
+FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotCreateOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ForbiddenInteractionDoesNotCreateOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.MissingPresentationPreventsInteraction|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ReadyParentCarriesAdmittedBranding|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CreationFailurePreventsInteractiveAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.OriginalCancellationBeforeCreationWins|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringCreationRejectsLateParent|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CloseDuringCreationCannotReopenHost|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ClosedHostCannotReopen|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.InternalCloseDoesNotCancelCaller|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CompletionWaitsForActualUiThreadExit|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancelButtonStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CaptionCloseStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.EscapeStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.PostReadinessCallbackFaultIsContained
+```
+
+No user-supplied filter/settings, suite wildcard, environment-selected provider,
+public product test flag or arbitrary native message selector is admitted. Keep
+normal MTP construction and all five extension registrations. Original CLI/Profile
+and adapter assertions remain untouched; this result replaces neither batch.
+
+### Native Effects and Attendance
+
+The inert red has zero native/UI effects. The green H suite has at most
+ten top-level owned windows, never simultaneously across fixtures: seven may be
+shown and three remain hidden. The five controls create none. Ready branding,
+internal close, actual-thread completion, three cancellation routes and callback
+containment create one visible parent each. Creation-failure injection and the two
+creation-race cases allocate one hidden parent each, before injected failure or
+terminal invalidation. Count controls and declared native descendants within each
+parent separately; the observation helper admits at most sixteen descendants.
+
+Visible green execution requires the designated Windows interactive session and
+an attending operator who can identify and close the fork-branded synthetic
+prompts. Establish readiness only after complete preparation and exact admission.
+No state-unlock, WAM surface, consent, external application control, global input,
+focus/activation workaround or desktop/DPI setting change is allowed. The operator
+may report an unexpected surface or request cancellation through the existing outer
+controller procedure. Do not convert closing an unexpected surface into a retry.
+
+The fixed helper observes only proven nonzero HWNDs belonging to the current
+subject and descendants of that parent. It rejects null/broadcast handles, caps
+text/class buffers at 2048/256 characters, roots its enumeration callback, contains
+callback exceptions, and uses static System32 imports. Scalar messages target only
+the known parent or actual Cancel Button; BM_CLICK is not proof of physical focus
+or keyboard usability. Synchronous same-process GetWindowText retains its buffer
+through actual return and is subject to the external process bound.
+
+### Fixture Lifetime and Fail-Closed Result
+
+Cases run serially with a fresh host/request. The finite checkpoint wait is five
+seconds. Teardown releases every gate and independently attempts caller cancellation,
+host close, invocation disposal/drain, invocation observation and actual host thread
+completion. At most five asynchronous teardown waits are bounded at five seconds
+each. Synchronous shutdown/native calls retain the 120-second total subject,
+capture and Job-drain bound; the independent controller is the final enforcement.
+
+Any uncertain cleanup, live started thread or checkpoint timeout latches the
+fixture's process-wide stop before later host activation. The failed fixture and
+all its shared resources remain rooted until process exit. Dispose occurs only
+after every required drain succeeds. Write the fixed synthetic marker
+`temp/owned-host-safety-stop.json`; a marker-write failure cannot release the latch.
+The Windows controller must observe the marker while capturing and again before
+normal success; the outer helper independently rejects its presence and retains
+its hash among finalized evidence. Every history reader must reject a finalized
+ordinary continuation that carries this safety stop. Static fixture stopping
+prevents further host activation before the outer observer reacts.
+
+The existing nonbreakaway Job, 32-process ceiling, 120-second subject/capture/drain
+limit, 8 MiB combined output ceiling and bounded native stop procedure are retained.
+Any safety failure stops both validation loops; preserve failed receipts, all roots,
+original times, tool/source hashes, controller backups and consumed reservations.
+No automatic rerun or cleanup is allowed. A green failure is an unexpected result
+requiring independent classification, not permission for another run.
+
+### Accounting and Evidence Limits
+
+Each H suite run consumes one Windows build/test action and zero child-product
+process units. No case starts a child and any process-* evidence is rejected.
+Both history readers and the controller must distinguish the exact suite with
+zero reservedProcessScenarios without changing old records or refunding any full
+CLI batch. Existing protocol allocation remains 36 synthetic process units.
+Process fault and permanent-thread-drain cases require a separate accepted process supplement;
+this selection allocates no child-product launches. Preserve the final unchanged
+twelve-unit CLI batch for separate admission. At finalized Windows 0018, Linux
+preparation is 8/11 and build/test 29/80; Windows preparation is 5/5 and build/test
+13/40; combined preparation is 13/16 and build/test 42/120. Process reservations
+remain 24/36 and charged downloads 768 MiB. Recover current history before every
+admission; these checkpoints neither reset capacity nor waive an intervening stop.
+
+The production inert host and complete actual red artifact must be independently
+reviewed. Later green source review must prove checkpoint placement on the actual
+owned STA/background thread, HWND ownership, callback containment, context/delegate
+lifetime, creation/destruction and real-thread completion. For both late-parent
+cases, the direct opening task must return zero; hidden-before/destroyed-after
+samples cannot exclude transient display. Explicitly review terminal synchronization
+at every native show/readiness-publication path to establish that separate property.
+
+Local callback notification does not prove the shared process fault/commit decision.
+Permanent owned-thread stall/drain, actual WSL pipe/caller behavior, exact production
+Native AOT, attended visual/keyboard/focus/accessibility/DPI observations and real
+WAM/accounts/cache/consent/reuse retain their separate evidence obligations. No H
+result completes the Slice or supplies a general platform/support claim.

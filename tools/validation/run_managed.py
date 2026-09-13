@@ -293,7 +293,7 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter"):
+            if suite not in ("cli", "adapter", "owned-host") or (suite == "owned-host" and number <= 18):
                 raise ValueError("Unknown Windows test selection")
             required = 12 if suite == "cli" else 0
         else:
@@ -320,6 +320,8 @@ def windows_consumption():
             raise ValueError("Noncontiguous Windows action history")
         receipt = json.loads((action / "result.json").read_text())
         started = json.loads((action / "started.json").read_text())
+        if (windows / action.name / "temp/owned-host-safety-stop.json").exists():
+            raise ValueError("Owned-host fixture safety stop forbids both validation loops")
         if action.name == "0002":
             verify_disposed_windows_preparation(action, windows / action.name)
         elif action.name == "0003":
