@@ -18,6 +18,10 @@ public sealed class RequestInvocation : IDisposable
 
     public Task OperationCompletion => lifetime.OperationCompletion;
 
+    public long? TerminalTimestamp => lifetime.TerminalTimestamp;
+
+    public Task CompleteAsync() => lifetime.CompleteAsync();
+
     public RequestInvocation(IReadOnlyList<string> arguments, IRequestHost host,
         long entryTimestamp, CancellationToken cancellationToken = default)
     {
@@ -29,9 +33,19 @@ public sealed class RequestInvocation : IDisposable
 
     // The returned observation is provisional. Only TryCommitResult can prepare output.
     public Task<AuthenticationOutcome> RunAsync(IProfileSource profiles,
-        Func<ClientProfile, IAuthenticationProvider> createProvider) => lifetime.RunAsync(async token =>
+        Func<ClientProfile, IAuthenticationProvider> createProvider,
+        Task<bool>? hostAdmission = null) => lifetime.RunAsync(async token =>
         {
             if (Request is null) return new(null, AuthenticationFailure.InvalidRequest);
+
+            // Native admission can block independently. Stop waiting with the
+            // original token; a late admission must never resume Profile work.
+            if (hostAdmission is not null)
+            {
+                var admitted = await hostAdmission.WaitAsync(token).ConfigureAwait(false);
+                token.ThrowIfCancellationRequested();
+                if (!admitted) return new(null, AuthenticationFailure.InvalidRequest);
+            }
 
             ReadOnlyMemory<byte> bytes;
             try

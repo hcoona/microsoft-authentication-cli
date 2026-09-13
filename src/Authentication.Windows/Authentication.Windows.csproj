@@ -6,5 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../Authentication.Core/Authentication.Core.csproj" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="[4.83.1]" />
+    <PackageReference Include="Microsoft.Identity.Client.Broker" Version="[4.83.1]" />
+    <PackageReference Include="Microsoft.Identity.Client.NativeInterop" Version="[0.20.3]" />
   </ItemGroup>
 </Project>

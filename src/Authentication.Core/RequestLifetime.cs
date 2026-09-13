@@ -16,6 +16,7 @@ public sealed class RequestLifetime : IDisposable
     private CancellationTokenRegistration callerRegistration;
     private ITimer? deadlineTimer;
     private Task cancellationCallbacks = Task.CompletedTask;
+    private long terminalTimestamp = long.MinValue;
     private AuthenticationOutcome? outcome;
     private bool started;
     private bool committed;
@@ -24,6 +25,25 @@ public sealed class RequestLifetime : IDisposable
     // The host can include operation observation in its bounded shutdown drain.
     // Completion here does not establish owned-UI or process quiescence.
     public Task OperationCompletion => operationObserved.Task;
+
+    // Read without the terminal lock so a process watchdog never waits on work.
+    public long? TerminalTimestamp
+    {
+        get
+        {
+            var value = Volatile.Read(ref terminalTimestamp);
+            return value == long.MinValue ? null : value;
+        }
+    }
+
+    public async Task CompleteAsync()
+    {
+        // Select assigns cancellationCallbacks before publishing terminal. Reading
+        // it before that publication could miss callbacks that are still running.
+        await terminal.Task.ConfigureAwait(false);
+        await OperationCompletion.ConfigureAwait(false);
+        await cancellationCallbacks.ConfigureAwait(false);
+    }
 
     public RequestLifetime(TimeProvider clock, long entryTimestamp, TimeSpan timeout,
         CancellationToken cancellationToken = default)
@@ -159,6 +179,7 @@ public sealed class RequestLifetime : IDisposable
     // Called with gate held. A selected outcome invalidates every late observation.
     private void Select(AuthenticationOutcome selected)
     {
+        Volatile.Write(ref terminalTimestamp, clock.GetTimestamp());
         outcome = selected;
         deadlineTimer?.Dispose();
         // CancelAsync marks the token now without running provider callbacks inline.
@@ -214,8 +235,7 @@ public sealed class RequestLifetime : IDisposable
     {
         // Pending provider work remains subject to the host's finite shutdown bound.
         // Do not dispose its source while callbacks or operation observation use it.
-        await OperationCompletion.ConfigureAwait(false);
-        await cancellationCallbacks.ConfigureAwait(false);
+        await CompleteAsync().ConfigureAwait(false);
         providerCancellation.Dispose();
     }
 

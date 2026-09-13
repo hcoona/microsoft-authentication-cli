@@ -1645,3 +1645,172 @@ Public timing and process API basis:
 - [Windows QPC guidance](https://learn.microsoft.com/windows/win32/sysinfo/acquiring-high-resolution-time-stamps)
 - [Explicit process handle lists](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute)
 - [CreateProcessW](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw)
+
+## Windows CLI Process Evidence
+
+The first process loop used the accepted supplement above, protocol/controller
+`03ecb488e7d4f6962bc874e2c312bc6e892659fa` and accepted target
+`58f03cf76f5dd764cf8797baf72157ac6728f448`. The operator was `/root`; independent
+reviewers `/root/lifetime_triage` and `/root/wave_review` supplied source,
+artifact, evidence, and finding-triage reviews through
+[PR #126](https://github.com/hcoona/microsoft-authentication-cli/pull/126).
+The existing Windows 11 x64/WSL host, public dependency pins, replacement
+environment, retained roots, and account-free effects boundary remain unchanged.
+The four successful Profile cases exercised their controlled synthetic provider.
+No real MSAL/WAM provider construction, account enumeration, token acquisition,
+UI, or authenticated service request was executed.
+
+### Graph and Actual Red
+
+The [graph-adoption review](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653064155)
+accepted restore 0010's four exact generated locks and resolved public graph.
+They were adopted without byte changes in source
+`3e0281ef458b0a1469e04e08856e432182e0b2ff`, tree
+`f8b3b02143c8ce9f24817155ef57698294dbb938`. That source preserves the rejecting
+process boundary and all ten previously accepted Profile cases.
+The [build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653120160)
+and [actual-artifact/test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653230468)
+bind build 0011 and the single full expected-red test 0012. Build 0011 completed
+with zero warnings or errors; the inspected shared process boundary remained
+the constant exit-2 stub. The build review binds 167 source files, 547 artifacts,
+and 376 tool inputs, including both executable entry points and generated test
+registration. No further restore occurred.
+
+On September 13, 2026, test 0012 ran from `12:33:30.0255106Z` to
+`12:33:32.8385674Z`, reporting 2.78 seconds and MTP exit 2. All 22 cases
+executed: ten Profile cases passed and twelve process cases failed their
+intended business assertions. Every other outcome counter was zero. The
+[independent actual-red review](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653327341)
+correlates each first assertion with the inspected stub and child evidence.
+Missing later business markers, output, and expected exits establish the
+intended missing behavior; they do not establish implemented shutdown behavior.
+
+All twelve sequential children exited normally with code 2, empty stdout, and
+no child-added stderr. The blocked-diagnostics capture contains exactly the
+fixture's 4,096 literal `D` bytes; the other stderr captures are empty. All ten
+controlled children retained their original managed-entry evidence. No setup,
+loader, capture, infrastructure, or safety failure contributed to the red result.
+Outer capture completed with 18,331 stdout bytes and empty stderr. The Job had
+zero active processes and 26 total processes; no termination was requested.
+Both final receipts were sealed, and the successful outer session was collected.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| Test 0012 WSL final | `986afddf29ecbf89a81ac2040e9aa52844c6c5b883fd9e2e8067b07f22165201` |
+| Test 0012 Windows final | `4c4e2b2234d6c584a2b9eb975fb35424a37d8f3e0a00db0758b0689f610d7147` |
+| Test 0012 TRX | `64159dd0b685e9ae10443b1dd867fada469ee0e4d019bef52c26c71e6822173d` |
+| Independent causality audit | `6061a7c30cccaad1fc26fac4272f946ca22dd2377b12a0aac05c092d986b2da1` |
+| Actual-red review | `a2ee0c561c009c9b5ded952ec3d3097f80aa2765748cd7d1cb22d074bd9909af` |
+
+After 0012, preparation consumption is 12/16 combined and 5/5 Windows;
+build/test is 34/120 combined and 7/40 Windows. Process reservations are 12/36,
+separate from the twelve actual child launches. Charged public downloads remain
+768 MiB. Synthetic files, captures, markers, and receipts are intentionally
+retained; no account or credential state was exercised. Green implementation
+and execution retain separate reviews and the unchanged assertions. These
+observations supply no WAM, UI, account reuse, WSL disconnection, Native AOT,
+or complete Slice acceptance claim.
+
+### Green Process Behavior and Linux Regression
+
+The implemented source is `a5b9b418c81be632bf115053eca9b4efbbf85820`, tree
+`9083b5801d33280d2798786acda2fcfba2a5142e`. All 22 admitted scenario assertions
+remain unchanged from actual red 0012. The implementation supplies original-entry
+lifetime tracking, an independent process watchdog, worker completion drain,
+admission before Profile/provider effects, bounded native pipe/output handling,
+and detached diagnostics. The production provider factory still returns
+`mechanism_unavailable`; this increment does not construct a real WAM provider.
+
+The [source/build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653491458)
+binds successful Windows build 0013 under protocol
+`03ecb488e7d4f6962bc874e2c312bc6e892659fa` and target
+`58f03cf76f5dd764cf8797baf72157ac6728f448`. It exited 0 in 14.963 seconds with
+zero warnings/errors, complete capture, normal zero-active Job accounting and
+no requested termination. Independent inspection covered 170 source files,
+547 artifacts, all copied package outputs, native imports, actual entrypoints,
+generated test registration and runtime selection. The outer session was collected.
+
+Linux build 0036 and full regression 0037 then used that same product source
+under accepted protocol `ec96e19f184f50555b461b39e432485eaf098408` and target
+`22d527d596ecfa13fa0fcc740b9be7fb3d322a57`. Build 0036 exited 0 in 7.824 seconds,
+without warnings/errors, termination or uncertain quiescence. Its 251 artifacts
+include both regenerated SourceLink maps naming the admitted source; the exact
+restore 0035 receipt and complete active pointer remain unchanged under the
+[metadata correction](#linux-restore-metadata-and-sourcelink).
+Test 0037 exited 0 in 0.9 seconds: all 243 cases passed, with every other counter
+zero. The [independent actual-result acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653753405)
+matched all distinct class/name identities to the prior complete suite and
+verified all source and build artifacts unchanged. Both outer sessions were collected.
+
+The [single Windows green admission](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653771063)
+used the new accepted protocol and target above with the exact matching executor,
+reusing completed build 0013. The four Windows controllers and retained restored
+graph were unchanged; no Windows migration, restore or rebuild was required.
+Test 0014 completed on September 13, 2026, at `14:20:35.8295304Z`, in 6.834
+seconds with MTP exit 0. All 22 exact cases passed: ten Profile file cases and
+twelve process cases. Every other outcome counter was zero. Outer capture was
+complete with 642 stdout bytes and empty stderr. The Job had zero active and
+26 total processes, with no requested termination or safety stop. The collected
+outer session exited 0 and finalized at `14:23:29.902270+00:00`, confirming
+protected-input agreement, quiescence and continuation allowed.
+
+The [independent actual-green acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653880772)
+verified all 124 finalized evidence files, 2,515 protected inputs and 376 tools
+without a mismatch. Its sealed audit SHA-256 is
+`6caf437c3ad41afee4b127aaac102cd1156601fd3b3040b8c70f0e0afb9e127c`.
+
+Every child retained `forced=false` and confirmed quiescence. These are actual
+product exits; no fixture-enforced stop supplied the shutdown observations.
+
+| Process case | Observed outcome |
+| --- | --- |
+| help | Actual CLI help, expected command/options, exit 0. |
+| malformed | One safe protocol-1 `invalid_request` failure, exit 1. |
+| success | One exact selected synthetic success despite broken diagnostics, exit 0. |
+| file-stdin | `invalid_request` before Profile/provider effects, exit 1. |
+| closed-stdin | `cancelled` before authentication, exit 1. |
+| close-pending | Writer closure rejected late success; cancellation and candidate-return markers retained, exit 1. |
+| unused-stdin | Closed stdin without the flag preserved selected success, exit 0. |
+| data-close | Payload ignored without leakage; writer closure canceled the request, exit 1. |
+| deadline | Uncooperative work and blocked callback ended through product exit 2; the delivered failure was a safe timeout without a token. |
+| broken-output | Candidate returned, empty stdout, transport-failure exit 2. |
+| blocked-output | 262,588 buffered bytes observed; incomplete delivery ended through product exit 2. |
+| blocked-diagnostics | Selected success and exit 0 with the fixture's 4,096-byte diagnostic prefill retained. |
+
+Timing uses the original timestamps and common frequency of 10,000,000 ticks
+per second. From the original managed entry, earliest observed exit was
+2.0220965 seconds for deadline, 1.0883609 seconds for blocked output, and
+0.1000613 seconds for blocked diagnostics. From the parent's pre-close timestamp,
+exit was 0.0597056 seconds for close-pending and 0.0603433 seconds for data-close.
+These meet the original two-second and one-second allowances with the
+prospectively fixed 100 ms observation tolerance. Fixture start-to-end duration
+is a separate measurement; no deadline or tolerance was reset after observation.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| Windows build 0013 WSL final | `8485cacd080f447bd932e1e2e80644f2ce4a2b6f7c44c2f235b861303403423d` |
+| Windows build 0013 Windows final | `80b931e48199cfafabadacd8d2019bf63dd28cf97d537468a05674be03b39748` |
+| Windows build 0013 manifest | `c82a5697738a5a0b9fdfeb41173ce43131884394ae3318145ad2d0a51a0cbcc4` |
+| Linux build 0036 final | `2aaf1f778dae8d8323158869b53f45bce327a1b08b21897d2427f2b9b73e71dd` |
+| Linux build 0036 manifest | `9b90bc82db1f59e7e1bb2514575ed9f08ed75068733f6fc96aae13bb3d4a44c5` |
+| Linux test 0037 final | `67c88b315a48cbbc0e7c3114d5fbb39f3bb097fb842a3f46f43e2a2f0343b60b` |
+| Linux test 0037 TRX | `4ea100a9acd4338153daf787c096f57dd4afecf4a2a368e1eb538e0f10bcb3ab` |
+| Windows test 0014 WSL final | `d71e129cfdeb8d47fc83146319242c2948d4948240fd15cee39914b45ba4653d` |
+| Windows test 0014 Windows final | `b32b4370942fe521b3e6f2cc45ff7033595e47add27ed540b5a2a94c4982d71a` |
+| Windows test 0014 TRX | `ec5b1dc45831e10733cf80882b3785a68aeea2816bd22b29b648aeb670c74887` |
+
+After 0014, Linux consumption is preparation 8/11 and build/test 29/80; Windows
+consumption is preparation 5/5 and build/test 9/40. Combined consumption is
+preparation 13/16 and build/test 38/120. Process reservations are 24/36, including
+both full batches; downloads remain charged at 768 MiB. All prior failed actions,
+receipts, captures, original timestamps, synthetic files and reservations remain
+intentionally retained. No repeated red, filtered run or retry occurred.
+
+These observations establish the exact managed CLI/process and Profile behavior
+above. The asynchronously written disk-output cursor correction retains its
+source/artifact review; the unchanged pipe suite does not establish runtime
+coverage of that disk-handle condition. Real WAM/accounts/cache/consent/reuse,
+owned UI/accessibility, console cancellation, actual WSL caller disconnection,
+Native AOT artifact/deployment, Profile activation and complete Slice acceptance
+remain separate obligations. A later documentation-only head does not replace
+the immutable source identity of these executed artifacts.
