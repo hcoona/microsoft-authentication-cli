@@ -132,7 +132,7 @@ try {
         DOTNET_CLI_USE_MSBUILD_SERVER = '0'; MSBUILDDISABLENODEREUSE = '1'
         MSBuildEnableWorkloadResolver = 'false'; DOTNET_NOLOGO = '1'; DOTNET_CLI_UI_LANGUAGE = 'en-US'
     }
-    $project = 'tests\Authentication.Windows.Scenarios\Authentication.Windows.Scenarios.csproj'
+    $project = 'Windows.slnx'
     $exe = $dotnet
     $working = "$root\subject"
     $seconds = 120
