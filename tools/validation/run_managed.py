@@ -50,6 +50,11 @@ DISPOSED_WINDOWS_PREPARATION = {
     "started.json": "b5f6e94a9240778dd028610f5c0c76fe9fafcea2aa0f27bf84d19e9839839142",
     "result.json": "437df40a2c76f7e288de3fd5d36beff41f8b0318a85a55d0b2c24a3ab179d43e",
 }
+DISPOSED_WINDOWS_RESTORE = {
+    "started.json": "98d325740fc4c3cf7e34132faadc2494396a069e8da3885eb72ade65c34fef4c",
+    "windows-input.json": "e3075e32ca4d0a5dcc0221d6102ec6ced0db89ff0f3a092f8dcb184e76c2a899",
+    "result.json": "891a2040d258df4af84deccadce7388092a430416df2f94bf0e7b93f4ec9527a",
+}
 
 
 def utc():
@@ -187,6 +192,12 @@ def windows_consumption():
         started = json.loads((action / "started.json").read_text())
         if action.name == "0002":
             verify_disposed_windows_preparation(action, windows / action.name)
+        elif action.name == "0003":
+            if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_RESTORE) or any(
+                (action / name).is_symlink() or digest(action / name) != expected
+                for name, expected in DISPOSED_WINDOWS_RESTORE.items()
+            ):
+                raise ValueError("Disposed Windows restore receipt changed")
         elif receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action stops both validation loops")
         for name, expected in receipt["evidence"].items():
@@ -200,7 +211,7 @@ def windows_consumption():
             raise ValueError("Unknown Windows action allocation")
     if preparation > 4 or build_test > 40:
         raise ValueError("Windows allocation exceeded")
-    if number == 2:
+    if number in (2, 3):
         raise ValueError("Windows restore must complete before Linux continuation")
     return preparation, build_test
 

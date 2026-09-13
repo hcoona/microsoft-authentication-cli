@@ -51,6 +51,8 @@ TOOLS = {
     DOTNET + "sdk\\10.0.401\\NuGet.Packaging.dll": "634860396d6941beb5b007ff0e467e3817b4582dd8e7a15ab089fa6aec66375c",
     DOTNET + "sdk\\10.0.401\\NuGet.Protocol.dll": "9a0912695ccf83daa3c92e4a456db9226d79ac34deb07a10b98ffc85372dc0e4",
     DOTNET + "sdk\\10.0.401\\NuGet.Commands.dll": "3d1ea1e9fc18469646c2dc6b6639d91e595ce1031ac7ddc6d27cb02d196ea015",
+    DOTNET + "sdk\\10.0.401\\NuGet.Common.dll": "537a15963cf134fc30e1314007cb276778309beb7672d4735d32fa8b022536b5",
+    DOTNET + "sdk\\10.0.401\\NuGet.Configuration.dll": "b4696a39a890bbefeecb01099eedf990d3e108e7ad7d2d57d8cdf4c296dd06f6",
     DOTNET + "shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll":
         "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
     FRAMEWORK + "csc.exe": "46809206887326d2d24db1eff1f3064de972c3451abe766b49111450a5e08e00",
@@ -114,7 +116,15 @@ DISPOSED_WINDOWS_PREPARATION = {
     "started.json": "b5f6e94a9240778dd028610f5c0c76fe9fafcea2aa0f27bf84d19e9839839142",
     "result.json": "437df40a2c76f7e288de3fd5d36beff41f8b0318a85a55d0b2c24a3ab179d43e",
 }
-PREVIOUS_WINDOWS_RUNNER = "5890dff4e499ab7d29efdde378c06f71cc975d49e6116daed8896f033b02fece"
+DISPOSED_WINDOWS_RESTORE = {
+    "started.json": "98d325740fc4c3cf7e34132faadc2494396a069e8da3885eb72ade65c34fef4c",
+    "windows-input.json": "e3075e32ca4d0a5dcc0221d6102ec6ced0db89ff0f3a092f8dcb184e76c2a899",
+    "result.json": "891a2040d258df4af84deccadce7388092a430416df2f94bf0e7b93f4ec9527a",
+}
+PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "5670156edbc55851435adca4212f07569d540972656c0ff2cb876b366ab7baed",
+    "Invoke-WindowsValidation.ps1": "6c577f6638d5fdaa243e92bc0a5c3bc263b70b1b2ed6c847e6ac32a67af1d113",
+}
 
 
 def utc():
@@ -228,6 +238,12 @@ def histories():
         result = read(action / "result.json")
         if action.name == "0002":
             verify_disposed_windows_preparation(action)
+        elif action.name == "0003":
+            direct(action)
+            if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_RESTORE) or any(
+                digest(action / name) != expected for name, expected in DISPOSED_WINDOWS_RESTORE.items()
+            ):
+                raise ValueError("Disposed Windows restore receipt changed")
         elif result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action")
         for name, expected in result["evidence"].items():
@@ -439,7 +455,7 @@ def main():
         if not HISTORY.exists():
             HISTORY.mkdir(mode=0o700)
         linux, previous = histories()
-        if previous and previous[-1][0].name == "0002" and (
+        if previous and previous[-1][0].name in ("0002", "0003") and (
             args.action != "restore" or args.source != previous[-1][1]["source"]
         ):
             raise ValueError("The first continuation must restore the unchanged admitted source")
@@ -477,40 +493,45 @@ def main():
             if read(ROOT / "owner.json") != marker or sorted(path.name for path in (ROOT / "actions").iterdir()) != [p.name for p, _, _ in previous]:
                 raise ValueError("Unknown or conflicting Windows root history")
             action.mkdir()
-            for name in ("home", "home/roaming", "home/local", "temp", "results"):
+            for name in ("home", "home/roaming", "home/local", "temp", "results", "empty-program-files"):
                 (action / name).mkdir()
+            migrations = {}
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
                 direct(path)
-                if name == "run_windows.py" and len(previous) == 2 and not path.exists():
+                if name in PREVIOUS_CONTROLLERS and len(previous) == 3 and not path.exists():
                     raise ValueError("The pre-migration Windows controller disappeared")
                 if path.exists():
-                    if name == "run_windows.py" and len(previous) == 2:
-                        if digest(path) != PREVIOUS_WINDOWS_RUNNER:
+                    if name in PREVIOUS_CONTROLLERS and len(previous) == 3:
+                        expected_previous = PREVIOUS_CONTROLLERS[name]
+                        if digest(path) != expected_previous:
                             raise ValueError("Unexpected pre-migration Windows controller")
-                        retained = action / "retained-run_windows.py"
+                        retained = action / ("retained-" + name)
                         with retained.open("xb") as stream:
                             stream.write(path.read_bytes())
-                        if digest(retained) != PREVIOUS_WINDOWS_RUNNER:
+                        if digest(retained) != expected_previous:
                             raise ValueError("Retained controller identity changed")
                         with path.open("wb") as stream:
                             stream.write(data)
                         replacement = hashlib.sha256(data).hexdigest()
                         if digest(path) != replacement:
                             raise ValueError("Corrected controller identity changed")
-                        write_new(action / "controller-migration.json", {
-                            "previousProtocol": previous[-1][1]["protocol"],
-                            "protocol": args.protocol,
+                        migrations[name] = {
                             "retained": retained.name,
-                            "previousSha256": PREVIOUS_WINDOWS_RUNNER,
+                            "previousSha256": expected_previous,
                             "sha256": replacement,
-                        })
+                        }
                     elif path.read_bytes() != data:
                         raise ValueError("Existing controller changed")
                 else:
                     with path.open("xb") as stream:
                         stream.write(data)
+            if migrations:
+                write_new(action / "controller-migration.json", {
+                    "previousProtocol": previous[-1][1]["protocol"],
+                    "protocol": args.protocol, "files": migrations,
+                })
             for name, (original, retained_cache, content_hash) in archives.items():
                 expected = ARCHIVES[name][1]
                 path = ROOT / "feed" / name
@@ -585,6 +606,9 @@ def main():
                 raise ValueError("Windows action stopped")
             if snapshot(ROOT / "subject") != before:
                 raise ValueError("Tracked source changed during execution")
+            direct(action / "empty-program-files")
+            if not (action / "empty-program-files").is_dir() or list((action / "empty-program-files").iterdir()):
+                raise ValueError("Empty program-files directory changed during execution")
             for name, expected in inputs.items():
                 if args.action != "test" and "obj" in Path(name).parts:
                     continue  # Restore/build may replace their generated metadata.

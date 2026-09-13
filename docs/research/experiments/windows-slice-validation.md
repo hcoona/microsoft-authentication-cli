@@ -1078,3 +1078,89 @@ and 27/120 build/test; charged downloads remain 768 MiB with no new download. Re
 all dedicated files and failed starts. No capacity or effects boundary is enlarged.
 There is still no Windows restore/build/test result, and Native AOT, UI/WAM, real
 account reuse, process/WSL behavior and overall Slice acceptance remain open.
+
+## Windows Action 0003 NuGet Environment Disposition
+
+The next restore used unchanged red source
+`09604cb901167f73bc9b6b1495262381f554d476`, tree
+`63c7e8dfc6eec2aec7b1c79154b9494c33ba8da8`, accepted protocol
+`5067d92dee2f56c5f11a51c30b496fddc6eef3d2`, target
+`f9f8f67ed0973386ec8d7dfc0c99ee2d27e219f4`, and its independent
+[action admission](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652090072).
+The [failure investigation](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652133156)
+records the exact invocation, evidence, retained-input audit and bounded conclusion.
+Its [independent triage](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652135829)
+confirms the environment defect and this bounded correction.
+
+**Runtime observation:** The WSL reservation began September 13 UTC
+08:00:25.422465. Windows restore ran from 08:04:43.2717117 until the final
+Windows receipt at 08:04:44.7657094; reported child capture duration was 1.459
+seconds. All three projects failed NuGet `ConfigurationDefaults` initialization
+with `Value cannot be null. (Parameter 'path1')`. The complete capture was 1,495
+stdout bytes and empty stderr. Child exit was 1, with normal zero-active-process
+completion, no safety stop and no Job termination request. The WSL final receipt
+at 08:05:46.568339 correctly retains `continuation_allowed=false`,
+`quiescent=true` and `error_type=ValueError`. This is a failed restore, not a red
+business test. No generated graph, new Windows lock, build or test exists.
+
+The prior one-file controller migration completed and remains hash-bound in the
+failed action's evidence. All 1,235 protected inputs, 152 source files, complete
+1,057-file package cache and admitted tools remained unchanged after execution.
+Retain the dedicated first-use markers and SDK diagnostic log as well as the
+complete receipts and capture. Original Windows 0002 and Linux 0022 remain unchanged.
+
+**Source finding and causal interpretation:** The recorded replacement environment
+omitted both `PROGRAMFILES(X86)` and `PROGRAMFILES`. The identical pinned SDK cause
+and isolated correction are already established in the
+[Native AOT environment diagnosis](windows-native-aot.md#diagnostic-restore-and-nuget-environment-cause).
+NuGet's CoreCLR implementation reads those variables to construct its machine-wide
+defaults path even with `--configfile`; two absent values cause the observed null
+argument. The installed NuGet.Common and NuGet.Configuration assemblies match that
+accepted diagnosis. Add their exact hashes to the current helper's tool checks;
+no installation, download, package change or new diagnostic execution is needed.
+
+For each subsequent action, exclusively create `empty-program-files` under that
+action's dedicated directory. The Windows controller verifies it is a direct,
+empty directory before subject invocation and maps both required variables to it.
+The WSL helper verifies it remains empty after quiescent execution. Retain it.
+Do not inherit the host variables, read host NuGet defaults through them, populate
+this directory, or add unrelated environment inputs. Explicit tool paths, complete
+cache reuse, empty restore source, cleared configuration and all execution limits
+remain unchanged.
+
+Both history guards recognize only these exact failed WSL receipts, then verify
+every Windows evidence hash bound by the original result:
+
+| Retained WSL file | SHA-256 |
+| --- | --- |
+| 0003 started.json | `98d325740fc4c3cf7e34132faadc2494396a069e8da3885eb72ade65c34fef4c` |
+| 0003 windows-input.json | `e3075e32ca4d0a5dcc0221d6102ec6ced0db89ff0f3a092f8dcb184e76c2a899` |
+| 0003 result.json | `891a2040d258df4af84deccadce7388092a430416df2f94bf0e7b93f4ec9527a` |
+
+The first continuation must be a newly admitted Windows restore of the same red
+source. Linux remains stopped until that continuation completes normally. Changed
+receipts or bound evidence stop both loops. This disposition preserves a known
+quiescent failure; it does not rewrite the failure as success or admit another action.
+Refresh independent source, authority, complete cache/tool and bootstrap-helper
+review before the next reservation. Resolved-graph, build and test gates remain separate.
+
+During new action 0004 only, migrate two copied controller files to their exact
+newly accepted protocol bytes. Their required original SHA-256 identities are
+`5670156edbc55851435adca4212f07569d540972656c0ff2cb876b366ab7baed`
+for `run_windows.py` and
+`6c577f6638d5fdaa243e92bc0a5c3bc263b70b1b2ed6c847e6ac32a67af1d113`
+for `Invoke-WindowsValidation.ps1`. After normal reservation and root preflight,
+exclusively preserve each original as `retained-<filename>` in action 0004 and
+verify it before replacement. Verify each replacement and retain both protocol
+identities and each file's old/new hashes and backup name in
+`controller-migration.json`; bind the record and both backups in final evidence.
+Missing or unexpected originals, existing backups, changed replacements or an
+interrupted migration stop continuation. Preserve action 0003's migration record
+and backup. No other controller, bootstrap DLL, source, cache, history or permission
+is changed; no pre-action overwrite, cleanup or bootstrap repetition is permitted.
+
+Consumption after 0003 is 3/4 Windows preparations, including 2/3 restores, and
+0/40 Windows build/test. Combined consumption is 10/16 preparations and 27/120
+build/test; charged downloads remain 768 MiB. The next restore consumes the final
+currently allocated Windows preparation even if it fails. No capacity is reset or
+enlarged. Overall Slice acceptance and all real-platform claims remain open.

@@ -99,6 +99,11 @@ try {
     }
     Assert-Direct "$root\empty-feed"
     if (@(Get-ChildItem -LiteralPath "$root\empty-feed" -Force).Count -ne 0) { throw 'Nonempty fallback feed' }
+    Assert-Direct "$action\empty-program-files"
+    if (-not (Get-Item -LiteralPath "$action\empty-program-files" -Force).PSIsContainer -or
+        @(Get-ChildItem -LiteralPath "$action\empty-program-files" -Force).Count -ne 0) {
+        throw 'Invalid empty program-files directory'
+    }
     # Check every active input/output directory before any owned compiler or subject.
     foreach ($base in @("$root\subject", "$root\feed", "$root\packages", $action)) {
         $queue = [Collections.Generic.Queue[string]]::new()
@@ -114,6 +119,7 @@ try {
     $environment = @{
         SystemRoot = 'C:\Windows'; WINDIR = 'C:\Windows'; ComSpec = 'C:\Windows\System32\cmd.exe'
         OS = 'Windows_NT'; PROCESSOR_ARCHITECTURE = 'AMD64'
+        PROGRAMFILES = "$action\empty-program-files"; 'PROGRAMFILES(X86)' = "$action\empty-program-files"
         PATH = 'C:\Program Files\dotnet;C:\Windows\System32'
         USERPROFILE = "$action\home"; APPDATA = "$action\home\roaming"; LOCALAPPDATA = "$action\home\local"
         TMP = "$action\temp"; TEMP = "$action\temp"; DOTNET_CLI_HOME = "$action\home"
