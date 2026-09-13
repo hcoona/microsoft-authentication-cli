@@ -1001,3 +1001,80 @@ the single TRX and exact case outcomes before further reliance. Retain all dedic
 files and failed starts. Synthetic managed file results establish only their actual
 source and Windows file/application boundary; UI, WAM, process transport, WSL lifetime,
 Native AOT, real account reuse and overall Slice acceptance remain open.
+
+## Windows Action 0002 Preparation Disposition
+
+The first Windows restore reservation stopped during WSL source preparation on
+2026-09-13, from 07:36:27.939277Z through 07:38:42.857508Z. It used source
+`09604cb901167f73bc9b6b1495262381f554d476`, tree
+`63c7e8dfc6eec2aec7b1c79154b9494c33ba8da8`, accepted protocol/helper
+`cb665807d0261bc80fa969aae2249600f2d20bb1`, target
+`6110ea919ef05a32e48984ada7ab05983fdfa0bf`, and the independent
+[bootstrap/first-restore gate](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5651975254).
+
+The [failure investigation](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652009605)
+and [independent triage](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652012490)
+confirmed all 152 source files retain their immutable Git blob contents. DrvFS
+presents each tracked mode 100644 file as executable; inherited `core.filemode=true`
+therefore makes the existing-worktree diff fail with 152 mode-only changes.
+Command-scoped `core.filemode=false` produces an empty successful diff. Bootstrap
+created the worktree and verified bytes without exercising this later comparison.
+
+The original result records `CalledProcessError`, `continuation_allowed=false`,
+`quiescent=false`, and empty evidence. Its exception class does not identify the
+failed command by itself. The exact accepted control flow, independently reproduced
+mode mismatch, and retained file sets support failure at the first existing-source
+diff, before the Windows action controller or restore subject. WSL action 0002
+contains only its original start and result; the Windows action contains exactly
+empty `home`, `home/local`, `home/roaming`, `temp`, and `results` directories. No
+Windows input reservation, invocation, controller, Job, output, restore graph or
+new lock exists. The bounded read-only Windows path preflight completed before
+those directories were created; this is not an observation of no Windows activity.
+
+Preserve the original false/false receipt. This disposition records the recoverable
+pre-subject boundary without inventing a Windows process-quiescence result or
+marking the action successful. After independent review and target-branch acceptance,
+both history guards may recognize only these exact receipt bytes and the unchanged
+empty Windows directory boundary. All other missing, changed, failed, uncertain or
+nonquiescent evidence still stops both loops. Original Linux action 0022 and Windows
+bootstrap 0001 remain unchanged.
+
+| Windows action 0002 evidence | SHA-256 |
+| --- | --- |
+| WSL `started.json` | `b5f6e94a9240778dd028610f5c0c76fe9fafcea2aa0f27bf84d19e9839839142` |
+| WSL `result.json` | `437df40a2c76f7e288de3fd5d36beff41f8b0318a85a55d0b2c24a3ab179d43e` |
+| Local console log | `a41a97dda14ac0178aa30eeba51af8b634e58426d590279fad865f59de5439da` |
+
+The corrected Git wrapper applies `core.filemode=false` only to commands evaluating
+the dedicated Windows-volume subject. Immutable commit/tree and raw byte checks,
+untracked-source and lock-adoption checks, Windows ownership/path/reparse checks,
+and all other controls remain required. It changes no shared Git configuration,
+filesystem permission, tracked Git mode or source content.
+
+The first subsequent action must be a newly admitted Windows restore of the same
+immutable red source. It consumes a new reservation; it is not a replay or a retry
+authorized by this disposition alone. Before that action, independently refresh
+source, authority, complete retained cache/tool inputs and bootstrap-helper binding.
+Linux execution remains stopped until that Windows continuation completes normally.
+Build/test and generated-graph gates remain separate.
+
+During that next reserved restore only, migrate the copied `controller/run_windows.py`
+from SHA-256 `5890dff4e499ab7d29efdde378c06f71cc975d49e6116daed8896f033b02fece`
+to the exact newly accepted helper bytes. The helper first performs ordinary accepted
+root preflight and validates the exact failed history. It exclusively creates
+`retained-run_windows.py` under the new action, copies and verifies the original
+bytes, then replaces only that controller file and verifies the new digest. Record
+both protocol identities, both hashes and the retained filename in
+`controller-migration.json`; include the retained copy and migration record in the
+normal final evidence binding. A missing/unrecognized old file, existing backup,
+changed replacement or interrupted migration stops continuation. This is a one-file
+migration in one consumed action, not a general controller upgrade or repair path.
+PowerShell/Job source, bootstrap DLL, package inputs and toolchain remain unchanged.
+No pre-action overwrite, receipt edit, cleanup or bootstrap repetition is permitted.
+
+Consumption after the failed reservation is 2/4 Windows preparation actions, including
+1/3 restores, and 0/40 Windows build/test. Combined consumption is 9/16 preparation
+and 27/120 build/test; charged downloads remain 768 MiB with no new download. Retain
+all dedicated files and failed starts. No capacity or effects boundary is enlarged.
+There is still no Windows restore/build/test result, and Native AOT, UI/WAM, real
+account reuse, process/WSL behavior and overall Slice acceptance remain open.

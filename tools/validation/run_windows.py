@@ -110,6 +110,11 @@ DISPOSED = {
     "result.json": "c02ba234adac677a63147c57fa0fca240846839953743d08c08e2576dd43bba7",
     "output.txt": "b91afcbc9cd5f0437906fdb6a314f34c9b0fe3a3e9cb9d2c6044ab6032958442",
 }
+DISPOSED_WINDOWS_PREPARATION = {
+    "started.json": "b5f6e94a9240778dd028610f5c0c76fe9fafcea2aa0f27bf84d19e9839839142",
+    "result.json": "437df40a2c76f7e288de3fd5d36beff41f8b0318a85a55d0b2c24a3ab179d43e",
+}
+PREVIOUS_WINDOWS_RUNNER = "5890dff4e499ab7d29efdde378c06f71cc975d49e6116daed8896f033b02fece"
 
 
 def utc():
@@ -154,8 +159,11 @@ def write_new(path, value):
 
 
 def git(*arguments, cwd=REPOSITORY):
+    # DrvFS executable bits are synthetic; immutable tree and byte checks remain.
+    windows_modes = ["-c", "core.filemode=false"] if cwd == ROOT / "subject" else []
     return subprocess.check_output(
-        ["/usr/bin/git", "-c", "core.hooksPath=/dev/null", "-c", "core.autocrlf=false", *arguments],
+        ["/usr/bin/git", "-c", "core.hooksPath=/dev/null", "-c", "core.autocrlf=false",
+         *windows_modes, *arguments],
         cwd=cwd, timeout=30, stderr=subprocess.DEVNULL,
     ).decode().strip()
 
@@ -218,13 +226,36 @@ def histories():
         if action.name != f"{index:04d}":
             raise ValueError("Noncontiguous Windows history")
         result = read(action / "result.json")
-        if result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
+        if action.name == "0002":
+            verify_disposed_windows_preparation(action)
+        elif result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action")
         for name, expected in result["evidence"].items():
             if digest(ROOT / "actions" / action.name / name) != expected:
                 raise ValueError("Windows evidence changed")
         windows.append((action, read(action / "started.json"), result))
     return linux, windows
+
+
+def verify_disposed_windows_preparation(action):
+    """Recognize only the accepted pre-subject stop, without changing its receipts."""
+    direct(action)
+    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_PREPARATION):
+        raise ValueError("Disposed Windows reservation changed")
+    for name, expected in DISPOSED_WINDOWS_PREPARATION.items():
+        if digest(action / name) != expected:
+            raise ValueError("Disposed Windows receipt changed")
+    failed = ROOT / "actions/0002"
+    direct(failed)
+    paths = list(failed.rglob("*"))
+    if {str(path.relative_to(failed)) for path in paths} != {
+        "home", "home/local", "home/roaming", "temp", "results",
+    }:
+        raise ValueError("Disposed Windows pre-subject boundary changed")
+    for path in paths:
+        direct(path)
+        if not path.is_dir():
+            raise ValueError("Disposed Windows directory changed")
 
 
 def public_archives(protocol):
@@ -408,6 +439,10 @@ def main():
         if not HISTORY.exists():
             HISTORY.mkdir(mode=0o700)
         linux, previous = histories()
+        if previous and previous[-1][0].name == "0002" and (
+            args.action != "restore" or args.source != previous[-1][1]["source"]
+        ):
+            raise ValueError("The first continuation must restore the unchanged admitted source")
         preparation = args.action in ("bootstrap", "restore")
         prep = sum(start["action"] in ("bootstrap", "restore") for _, start, _ in previous)
         tests = len(previous) - prep
@@ -447,8 +482,31 @@ def main():
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
+                direct(path)
+                if name == "run_windows.py" and len(previous) == 2 and not path.exists():
+                    raise ValueError("The pre-migration Windows controller disappeared")
                 if path.exists():
-                    if path.read_bytes() != data:
+                    if name == "run_windows.py" and len(previous) == 2:
+                        if digest(path) != PREVIOUS_WINDOWS_RUNNER:
+                            raise ValueError("Unexpected pre-migration Windows controller")
+                        retained = action / "retained-run_windows.py"
+                        with retained.open("xb") as stream:
+                            stream.write(path.read_bytes())
+                        if digest(retained) != PREVIOUS_WINDOWS_RUNNER:
+                            raise ValueError("Retained controller identity changed")
+                        with path.open("wb") as stream:
+                            stream.write(data)
+                        replacement = hashlib.sha256(data).hexdigest()
+                        if digest(path) != replacement:
+                            raise ValueError("Corrected controller identity changed")
+                        write_new(action / "controller-migration.json", {
+                            "previousProtocol": previous[-1][1]["protocol"],
+                            "protocol": args.protocol,
+                            "retained": retained.name,
+                            "previousSha256": PREVIOUS_WINDOWS_RUNNER,
+                            "sha256": replacement,
+                        })
+                    elif path.read_bytes() != data:
                         raise ValueError("Existing controller changed")
                 else:
                     with path.open("xb") as stream:
