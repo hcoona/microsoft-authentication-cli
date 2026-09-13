@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using Authentication.Core;
 using Microsoft.Identity.Client;
@@ -58,15 +59,35 @@ public static class MsalBoundary
         if (body is null || body.Length > 8192)
             return false;
 
+        JsonDocument document;
         try
         {
-            using var document = JsonDocument.Parse(body, new JsonDocumentOptions
+            document = JsonDocument.Parse(body, new JsonDocumentOptions
             {
                 MaxDepth = 8,
                 AllowDuplicateProperties = false,
                 AllowTrailingCommas = false,
                 CommentHandling = JsonCommentHandling.Disallow,
             });
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+        catch (ArgumentException exception) when (exception.InnerException is EncoderFallbackException)
+        {
+            // Raw unpaired UTF-16 cannot supply structured denial evidence.
+            return false;
+        }
+        catch (InvalidOperationException)
+        {
+            // Duplicate-property validation also decodes escaped property names.
+            // Invalid surrogate escapes fail here before a document is returned.
+            return false;
+        }
+
+        using (document)
+        {
             var root = document.RootElement;
             if (root.ValueKind != JsonValueKind.Object
                 || !root.TryGetProperty("error_codes", out var codes)
@@ -83,10 +104,6 @@ public static class MsalBoundary
 
             // Recognition follows validation of the complete document and array.
             return denied;
-        }
-        catch (JsonException)
-        {
-            return false;
         }
     }
 }
