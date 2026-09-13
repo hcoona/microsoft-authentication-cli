@@ -2289,3 +2289,67 @@ Permanent owned-thread stall/drain, actual WSL pipe/caller behavior, exact produ
 Native AOT, attended visual/keyboard/focus/accessibility/DPI observations and real
 WAM/accounts/cache/consent/reuse retain their separate evidence obligations. No H
 result completes the Slice or supplies a general platform/support claim.
+
+## Wave Ceiling Binding Refresh
+
+[PR #131](https://github.com/hcoona/microsoft-authentication-cli/pull/131) accepts the
+owner-selected outer ceiling of 60 synthetic process scenarios at target
+`666ed8b72c3458061d32056dfb2869cccd5779d5`, Wave blob
+`956aebe0e19cce7dbd08dcaa7fe83a9ef9e01f7c`. Both managed helpers now bind that exact
+Wave. This supplement preserves the existing 36-unit protocol allocation, all other
+allocations, charged history and the final unchanged twelve-unit CLI batch. The
+remaining outer capacity does not allocate another scenario, retry or effect.
+
+The first Windows action under this refresh is the single H-green test 0022 on
+unchanged source `ecc4c23bfc58b739b01a2b2879438cbd58fec965`, tree
+`45ff7f2d40e5672257ab237afb67dc897da5199c`, using completed no-restore build 0021.
+The [prior actual-build review](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5655566484)
+is reusable evidence, not current execution admission after the authority change.
+Before reservation, the Windows helper requires at least 21 finalized Windows
+actions and these exact WSL-side build receipts:
+
+| Build 0021 receipt | SHA-256 |
+| --- | --- |
+| `started.json` | `7ae88b209f6a36ba4851508376d7d92811fe6262218f12e5a95fb055cc5de857` |
+| `result.json` | `58ce379fe433a11573b31163b27bfe98321d9544768cf8109d9f6d819b3a427b` |
+
+At exactly 21 previous Windows actions, only `test --suite owned-host --expect green`
+on that unchanged source is permitted. The existing history readers still reject
+an incomplete, changed or stopped action. During that admitted action's existing
+reservation, replace only retained `controller/run_windows.py` through the existing
+exclusive backup and migration procedure. Its required old bytes are 71,741 bytes
+with SHA-256
+`0b3997c5ce411f2da45eb1c4cb20030f543e2c5754e1fc32f111699a64ab330e`, matching accepted
+protocol `17dbf912d847b55c4366be7ab851f30079137f73`. Retain those exact bytes as
+`actions/0022/retained-run_windows.py`; `controller-migration.json` binds the old/new
+hashes and protocol revisions. Both history readers and final evidence retain these
+files' hash bindings. Missing or unexpected old bytes, partial migration, or failed
+finalization stops both loops without refund or automatic retry.
+
+The replacement wrapper SHA-256 is
+`242a1c7266a4100a7db6eed90a91df700ea6042c80cb7fc4d218d6487c46fdee`.
+The matching `run_managed.py` SHA-256 is
+`f6a05f9592e7b8505a543adce79139f8abc7520b9ba7860a945070a2b4243bfe`; that helper is
+not a retained Windows controller replacement. Keep the PowerShell controller,
+stop helper, Job source/bootstrap, source checkout, dependency graph and build 0021
+artifacts unchanged. No standalone migration, bootstrap, restore, rebuild or
+historical red replay is allocated by this supplement.
+
+Before H execution, independently refresh the accepted target/protocol ancestry,
+the prior red and actual-build evidence reuse, exact source/artifact admission,
+current history and capacity, and the protected input map with the replacement
+wrapper hash. Bind the complete public admission and its URL to the prospective
+command. The accepted local provider-admission design from
+[PR #134](https://github.com/hcoona/microsoft-authentication-cli/pull/134) does not
+require this synthetic H provider to inspect real logon metadata. Its real-provider
+implementation and evidence remain separate prerequisites.
+
+Only after preparation and refreshed admission may actual attending-operator
+readiness be established. Preserve the fixed fifteen H cases, seven potentially
+visible and three hidden serial parents, one build/test action and zero process
+units, 120-second subject/capture/Job-drain limit, 8 MiB output limit and all original
+fixture stop/termination rules. At build 0021, consumption is Linux preparation
+8/11 and build/test 29/80, Windows preparation 5/5 and build/test 16/40, combined
+preparation 13/16 and build/test 45/120, with 24/36 process units and 768 MiB charged
+downloads. Recover current history before admission; this checkpoint grants no
+reset. No H execution, result or attendance follows from accepting this refresh.

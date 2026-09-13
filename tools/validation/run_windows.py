@@ -35,7 +35,7 @@ NUGET_CONFIG = (
     '<fallbackPackageFolders><clear/></fallbackPackageFolders></configuration>\n'
 ).encode("utf-8")
 PROTOCOL = "docs/research/experiments/windows-slice-validation.md"
-WAVE = "8bbc98cc2e892a33c06d190983d9c0a09a8d6282"
+WAVE = "956aebe0e19cce7dbd08dcaa7fe83a9ef9e01f7c"
 GRANT = "a0f741b59e09f1eb95594dbfde7a6e634d962210"
 CONTROLLERS = ("run_windows.py", "Invoke-WindowsValidation.ps1",
                "Stop-WindowsValidation.ps1", "WindowsValidationJob.cs")
@@ -206,6 +206,12 @@ OWNED_HOST_PREVIOUS_CONTROLLERS = {
 }
 OWNED_HOST_PRIOR_FINAL = "919c9e080c088138976029b4b426cc7973e8ed94384eac465ff43bc29a50abcd"
 OWNED_HOST_PRIOR_START = "00c13bdb95279b555ec1f3b11a2092d2ce7db33e38dc1622de613a0ce20dac29"
+
+WAVE_REFRESH_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "0b3997c5ce411f2da45eb1c4cb20030f543e2c5754e1fc32f111699a64ab330e",
+}
+WAVE_REFRESH_PRIOR_START = "7ae88b209f6a36ba4851508376d7d92811fe6262218f12e5a95fb055cc5de857"
+WAVE_REFRESH_PRIOR_FINAL = "58ce379fe433a11573b31163b27bfe98321d9544768cf8109d9f6d819b3a427b"
 
 ADAPTER_PREVIOUS_CONTROLLERS = {
     "run_windows.py": "93486d23aff1ade31b314c0d0c588af250ca200068297539507517a5946d2bb6",
@@ -834,6 +840,15 @@ def main():
         if len(previous) < 18 or digest(HISTORY / "0018/result.json") != OWNED_HOST_PRIOR_FINAL or \
                 digest(HISTORY / "0018/started.json") != OWNED_HOST_PRIOR_START:
             raise ValueError("Accepted adapter green history prerequisite changed")
+        if len(previous) < 21 or digest(HISTORY / "0021/started.json") != WAVE_REFRESH_PRIOR_START or \
+                digest(HISTORY / "0021/result.json") != WAVE_REFRESH_PRIOR_FINAL:
+            raise ValueError("Accepted owned-host green build prerequisite changed")
+        wave_refresh_transition = len(previous) == 21
+        if wave_refresh_transition and (
+            args.action != "test" or args.suite != "owned-host" or args.expect != "green" or
+            args.source != previous[-1][1]["source"]
+        ):
+            raise ValueError("The Wave refresh must test the unchanged admitted owned-host green build")
         owned_host_transition = len(previous) == 18
         if owned_host_transition and args.action != "build":
             raise ValueError("The first owned-host action must build with its controller transition")
@@ -895,7 +910,8 @@ def main():
                                     TEST_PREVIOUS_CONTROLLERS if len(previous) == 6 else
                                     PROCESS_PREVIOUS_CONTROLLERS if graph_transition else
                                     ADAPTER_PREVIOUS_CONTROLLERS if adapter_transition else
-                                    OWNED_HOST_PREVIOUS_CONTROLLERS if owned_host_transition else {})
+                                    OWNED_HOST_PREVIOUS_CONTROLLERS if owned_host_transition else
+                                    WAVE_REFRESH_PREVIOUS_CONTROLLERS if wave_refresh_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
