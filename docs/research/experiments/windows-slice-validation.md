@@ -1930,3 +1930,139 @@ unobserved until their separately admitted actions finalize.
 Real WAM/UI/accounts/cache/consent, actual WSL behavior, Native AOT and overall
 Slice acceptance retain their separate gates. No adapter-only result replaces
 CLI/process, real-platform or complete Slice evidence.
+
+## Controlled Adapter Red/Green Evidence
+
+The increment in [PR #130](https://github.com/hcoona/microsoft-authentication-cli/pull/130)
+adds the accepted 21 adapter scenarios in the existing Windows scenario project.
+It uses only synthetic public MSAL observations, the existing coordinator/lifetime,
+a fake host/clock, a directly invoked rejecting custom-UI callback and an in-memory
+HTTP terminal. The production provider factory remains unavailable. All original
+CLI/Profile cases, project inputs, public dependency locks and selected versions
+remain unchanged.
+
+### Accepted Red Result
+
+Executed red source `07ce16aa2b3fb90037ed3a29d261ac9ea6461a87`, tree
+`5afb3b71dde3288d8759a0165a77145146a8200d`, used accepted protocol
+`52434a9306e46962849c6bae4191c06ba21bcb98` and target
+`ea868e52e93ef0dcc02650cf616eae782c1a39e1` on the designated Windows 11 x64
+host from WSL2. The pinned SDK/runtime and reviewed retained public package graph
+remain the execution basis. No restore, download or tool installation occurred.
+
+The [actual build 0015 review](https://github.com/hcoona/microsoft-authentication-cli/pull/130#issuecomment-5654227729)
+accepted the successful no-restore build, zero warnings/errors, complete source,
+input, artifact and PE/PDB bindings, and the exact two-controller migration.
+The previous controller bytes and migration receipt remain retained. The
+[separate red admission](https://github.com/hcoona/microsoft-authentication-cli/pull/130#issuecomment-5654227827)
+then permitted exactly adapter test 0016.
+
+The [independent actual-red acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/130#issuecomment-5654345242)
+confirms **21 executed cases: 13 intended business-assertion failures and 8 passing
+controls**. Every other outcome counter is zero. The embedded runner exited 2 in
+1.122 controller-measured seconds; complete capture contains 21,728 stdout bytes
+and empty stderr. The Job ended with two total and zero active processes, with no
+termination or safety stop. Windows ended at 2026-09-13T15:45:59.3181906Z; WSL
+finalized at 15:48:40.094791Z, and the outer session was collected at exit 0.
+
+The failures establish the missing failure mapping, claims continuation, original
+cancellation propagation, observed result projection, rejecting-UI outcome and
+managed HTTP product identity. Later assertions behind those first failures were
+not reached; the accepted report identifies those limits. The eight controls
+passed. Every case identity and TRX join agrees with the fixed selection, and all
+175 source files, 547 artifacts, 2,520 protected inputs and 376 tool entries retain
+the accepted identities. No CLI child-process batch was selected or charged.
+
+### Reviewed Green Correction
+
+Green implementation began only after actual-red acceptance was published.
+Failure mapping follows the accepted ordinal precedence and original token;
+structured denial recognition retains all size/depth/array/duplicate limits.
+Projection preserves observed result fields, including missing scopes as missing
+metadata. The custom-UI callback rejects navigation with the sanitized outcome.
+The managed handler preserves dependency tokens and original cancellation while
+emitting one existing registered product/version token.
+
+Independent source review found that malformed raw UTF-16 and escaped malformed
+property names can throw non-JsonException failures from JsonDocument.Parse,
+masking independent retry hints. The [finding](https://github.com/hcoona/microsoft-authentication-cli/pull/130#issuecomment-5654388285),
+[addendum](https://github.com/hcoona/microsoft-authentication-cli/pull/130#issuecomment-5654407447)
+and [independent true-positive triage](https://github.com/hcoona/microsoft-authentication-cli/pull/130#issuecomment-5654407576)
+are pinned public-source reasoning. The narrow correction handles only the known
+exception categories at the parse call, leaving subsequent guarded processing and
+classification precedence unchanged. Both original adapter test files remain
+byte-identical to red. The existing 21 scenarios do not exercise those exact two
+malformed-text/retry combinations; no runtime reproduction or real WAM occurrence
+is claimed.
+
+### Accepted Green Build
+
+Corrected green source `b26a26e1eb2d6a7e34ff0e58b4c6d3b460547dd8`, tree
+`0c44a33dc369c24226ad925baf2b895f3f85ad4f`, retains the same accepted protocol
+and target above. Only MsalBoundary.cs, RejectingWebUi.cs and
+ManagedUserAgentHandler.cs changed from the admitted red implementation.
+MsalAdapterScenarios.cs remains SHA-256
+`39916e41a3bc7399324777e1a77ff82ceb70d8621cf765f8547e1fab3c2d64fb`;
+ManagedTransportScenarios.cs remains
+`21dac163f0f922951590ccc65ba4fed37f260f47f70c8266d2ef22b097ab81b8`.
+
+The [independent actual build 0017 review](https://github.com/hcoona/microsoft-authentication-cli/pull/130#issuecomment-5654607274)
+accepted the no-restore build with zero warnings/errors, complete capture of
+713 stdout bytes and empty stderr, normal exit 0, eight total Job processes and
+zero active processes. No termination or safety stop occurred. The controller
+measured 12.647 seconds; the build tool separately reported 11.94 seconds.
+Windows ended at 2026-09-13T16:29:26.4548616Z and WSL finalized at
+16:32:17.662068Z. The outer session was collected at exit 0.
+
+The independent actual-artifact review verified 175 source files, 547 artifacts,
+438 copied public-package outputs, 1,989 protected build inputs and 376 installed
+tool entries, with complete actual IL/PDB bindings. All 416 scenario methods
+retained their red-build IL. The compiled malformed-text correction matched the
+reviewed source. Build input counts exclude the additional generated artifacts
+protected during a subsequent test; they are not interchangeable counts.
+
+| Green build evidence | SHA-256 |
+| --- | --- |
+| Build 0017 WSL final | `2c766fd23c2522d073e12ae8f98ba600c3f87220f2793e577d520868248396bb` |
+| Build 0017 Windows final | `52616fead1d1290c56a8b912c7c7706e0d8d26a41d13ef0e84fe9ac0165c0f37` |
+| Build 0017 manifest | `6f048262f3860d2afd57ccae498264f868e522bb7ac1eecff50761ed19640466` |
+
+The [separate green admission](https://github.com/hcoona/microsoft-authentication-cli/pull/130#issuecomment-5654607397)
+permits exactly the unchanged 21-case adapter action 0018. Its actual result and
+independent review remain distinct from source/build admission.
+
+### Green Scenario Result
+
+Windows action 0018 executed the unchanged fixed selection against the exact
+green source and build above. All 21 cases passed; the other 13 outcome counters
+are zero. The controller recorded normal exit 0 in 1.035 seconds, complete
+capture of 639 stdout bytes and empty stderr, two total Job processes and zero
+active processes. No termination or safety stop occurred. Windows ended at
+2026-09-13T16:55:01.0234879Z; WSL finalized at 16:57:45.973435Z and the outer
+session was collected at exit 0. Controller duration excludes the outer
+protected-input and installed-tool hashing.
+
+| Green test evidence | SHA-256 |
+| --- | --- |
+| Test 0018 WSL final | `919c9e080c088138976029b4b426cc7973e8ed94384eac465ff43bc29a50abcd` |
+| Test 0018 Windows final | `b2da009da472b0cae433cbcbbf3e6aee106b5872d32b3ec5800637afe36d5ed2` |
+| Test 0018 TRX | `62774360efdfab51a7640ce62314adeffc8b29198f20b1e8f0e1db3493d4c476` |
+
+After 0018, Linux consumption remains preparation 8/11 and build/test 29/80;
+Windows consumption is preparation 5/5 and build/test 13/40. Combined consumption
+is preparation 13/16 and build/test 42/120. Process reservations remain 24/36,
+and charged downloads remain 768 MiB. The final unchanged 12-unit CLI batch is
+preserved. No additional restore, process batch, filtered retry or replay occurred.
+
+The [independent actual-green acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/130#issuecomment-5654731004)
+verified all 21 case definitions/results and their complete counter joins, all
+2,520 protected test inputs, 376 installed-tool entries, source/artifact continuity,
+controller/restore identities, full retained history and exact-source CI.
+A later evidence-only commit does not change the source that produced these results.
+
+These controlled adapter observations do not replace the original CLI/process
+result and do not establish real WAM, accounts/cache/consent/reuse, owned UI,
+actual WSL behavior, Native AOT, deployment or complete Slice acceptance. Numeric
+65004 remains a bounded repository mapping with the accepted diagnostic-stability
+limitation. Original failures, receipts, controller backups, synthetic files and
+consumed reservations remain intentionally retained.
