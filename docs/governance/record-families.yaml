@@ -462,6 +462,21 @@ families:
     failure_mode: Native AOT compatibility is asserted without a reproducible safe subject or recoverable cumulative limits.
     review_point: Independent record-system and research-evidence review before protocol acceptance, amendment, or reliance on observations
 
+  - id: windows-slice-validation-protocol
+    state: current
+    concern: Bounded source admission, managed scenario execution, and sanitized validation evidence for the first Windows authentication Slice
+    carrier: repository-file
+    path: docs/research/experiments/windows-slice-validation.md
+    format: markdown
+    producer: Implementation and validation maintainers with independent admission review
+    maintainer: Validation maintainer
+    consumers:
+      - Implementer and operator before each bounded dependency, build, or scenario action
+      - Validation and research reviewers accepting scenario evidence and its limitations
+    creation_trigger: Issue #108 requires a controlled implementation test loop under the accepted Windows Slice grant.
+    failure_mode: Development tests execute without recoverable source, effects, or cumulative limits, or synthetic results are substituted for real-platform acceptance.
+    review_point: Independent record-system and research-evidence review before protocol acceptance, amendment, source admission, or reliance on observations
+
   - id: developer-tooling-protocol
     state: current
     concern: Bounded developer-tool installation, client discovery, and public Learn retrieval procedure and observations
