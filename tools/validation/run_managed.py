@@ -55,6 +55,11 @@ DISPOSED_WINDOWS_RESTORE = {
     "windows-input.json": "e3075e32ca4d0a5dcc0221d6102ec6ced0db89ff0f3a092f8dcb184e76c2a899",
     "result.json": "891a2040d258df4af84deccadce7388092a430416df2f94bf0e7b93f4ec9527a",
 }
+DISPOSED_WINDOWS_TEST = {
+    "started.json": "4fb0599b8aaacbcbb2099a2254426b3ac8a2ff16cfd5cacb90222c08b648a8c9",
+    "windows-input.json": "3064a64bf43690bc5efc0c9022c6fe52da8d3a36880ec76efe5d691b1fdc1989",
+    "result.json": "4ef1514ecd4e19cf02657a38ed73e5e920cb30cf38df9d54472ca89b3784f6ff",
+}
 
 
 def utc():
@@ -198,6 +203,8 @@ def windows_consumption():
                 for name, expected in DISPOSED_WINDOWS_RESTORE.items()
             ):
                 raise ValueError("Disposed Windows restore receipt changed")
+        elif action.name == "0006":
+            verify_disposed_windows_test(action, windows / action.name)
         elif receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action stops both validation loops")
         for name, expected in receipt["evidence"].items():
@@ -213,6 +220,8 @@ def windows_consumption():
         raise ValueError("Windows allocation exceeded")
     if number in (2, 3):
         raise ValueError("Windows restore must complete before Linux continuation")
+    if number == 6:
+        raise ValueError("Windows red test must complete before Linux continuation")
     return preparation, build_test
 
 
@@ -232,6 +241,32 @@ def verify_disposed_windows_preparation(action, failed):
         "home", "home/local", "home/roaming", "temp", "results",
     } or any(path.is_symlink() or not path.is_dir() for path in paths):
         raise ValueError("Disposed Windows pre-subject boundary changed")
+
+
+def verify_disposed_windows_test(action, failed):
+    """Retain only the exact generated-name stop and its empty pre-subject boundary."""
+    for root in (action, failed):
+        if any(path.is_symlink() for path in (root, *root.parents)):
+            raise ValueError("Linked disposed Windows evidence")
+    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_TEST) or any(
+        (action / name).is_symlink() or digest(action / name) != expected
+        for name, expected in DISPOSED_WINDOWS_TEST.items()
+    ):
+        raise ValueError("Disposed Windows test receipt changed")
+    directories = {"home", "home/local", "home/roaming", "temp", "results", "empty-program-files"}
+    evidence = json.loads((action / "result.json").read_text())["evidence"]
+    paths = list(failed.rglob("*"))
+    if {str(path.relative_to(failed)) for path in paths} != directories | set(evidence):
+        raise ValueError("Disposed Windows test boundary changed")
+    for path in paths:
+        name = str(path.relative_to(failed))
+        if path.is_symlink():
+            raise ValueError("Linked disposed Windows evidence")
+        if name in directories:
+            if not path.is_dir():
+                raise ValueError("Disposed Windows test directory changed")
+        elif not path.is_file() or digest(path) != evidence[name]:
+            raise ValueError("Disposed Windows test evidence changed")
 
 
 def main():
