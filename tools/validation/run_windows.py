@@ -200,6 +200,13 @@ SUPERSEDED_LOCKS = (
     "tests/Authentication.Windows.Scenarios/packages.lock.json",
 )
 
+OWNED_HOST_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "1b1c9aa5bd563b8c0c9aba61dc57774cc1f2f30296eb836b8bb4536acd23ecf6",
+    "Invoke-WindowsValidation.ps1": "a42e9dc7b85972ba980ac3405e6ebd74892c21e1f59be59f0f49143dac17b100",
+}
+OWNED_HOST_PRIOR_FINAL = "919c9e080c088138976029b4b426cc7973e8ed94384eac465ff43bc29a50abcd"
+OWNED_HOST_PRIOR_START = "00c13bdb95279b555ec1f3b11a2092d2ce7db33e38dc1622de613a0ce20dac29"
+
 ADAPTER_PREVIOUS_CONTROLLERS = {
     "run_windows.py": "93486d23aff1ade31b314c0d0c588af250ca200068297539507517a5946d2bb6",
     "Invoke-WindowsValidation.ps1": "bf90ffed77171eb553eed0350dabddbfc14966e1e3584fea3e77e867b6ec559f",
@@ -227,8 +234,27 @@ ADAPTER_RED = {'Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentReq
  'Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing': 'Passed',
  'Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri': 'Failed',
  'Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation': 'Failed'}
+OWNED_HOST_RED = {
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotCreateOwnedUi': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.ForbiddenInteractionDoesNotCreateOwnedUi': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.MissingPresentationPreventsInteraction': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.ReadyParentCarriesAdmittedBranding': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CreationFailurePreventsInteractiveAcquisition': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.OriginalCancellationBeforeCreationWins': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringCreationRejectsLateParent': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CloseDuringCreationCannotReopenHost': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.ClosedHostCannotReopen': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.InternalCloseDoesNotCancelCaller': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CompletionWaitsForActualUiThreadExit': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CancelButtonStopsPendingAuthentication': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CaptionCloseStopsPendingAuthentication': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.EscapeStopsPendingAuthentication': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.PostReadinessCallbackFaultIsContained': 'Failed',
+}
 TEST_FILTERS = {'cli': 'FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.ExplicitFilePreservesSelectedProfileAndRequest|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.FileSizeLimitAppliesBeforeAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.ReplacingFileAfterAdmissionCannotChangeTheInFlightProfile|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.UnreadableOrInvalidFileStopsBeforeProviderConstruction|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.RootHelpCompletesWithoutAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.MalformedAuthenticationReturnsTheBootstrapFailure|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.SelectedRequestReturnsOneSuccessDespiteBrokenDiagnostics|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.FlaggedRegularFileStopsBeforeProfileAndProvider|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.AlreadyClosedLifetimePipeCancelsBeforeAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.WriterClosureRejectsLateSuccessAndEndsTheProcess|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.ClosedStdinWithoutTheFlagDoesNotCancel|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.LifetimePipePayloadIsIgnoredAndClosureStillCancels|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.DeadlineEndsUncooperativeWorkWithinTheProcessBound|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.BrokenResultReaderEndsWithTransportFailure|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.UndrainedResultPipeCannotKeepTheProcessAlive|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.BlockedDiagnosticsDoNotChangeTheAuthenticationResultOrKeepTheProcessAlive',
  'adapter': 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentRequirementHonorsInteractionPermission|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.SilentClaimsReachOneContinuationAndSecondChallengeStops|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.AccessDeniedWinsOverUiRequiredAndRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.Structured65004WinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DenialTextAndNativeCodeDoNotImplyEntraDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DuplicateErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.NonNumericErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MalformedOrOverBudgetBodiesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ProviderUserCancellationRemainsCancelled|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalCancellationWinsOverDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalDeadlineWinsLateProviderCancellation|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.HttpTimeoutDoesNotConsumeRequestDeadline|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RetryableProviderStopsWithoutApplicationRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RecognizedNetworkErrorStopsWithoutRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnknownProviderConfigurationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnexplainedCancellationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UserMismatchWinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ResultProjectionPreservesObservedMetadata|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri|FullyQualifiedName=Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation'}
+
+TEST_FILTERS["owned-host"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotCreateOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ForbiddenInteractionDoesNotCreateOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.MissingPresentationPreventsInteraction|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ReadyParentCarriesAdmittedBranding|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CreationFailurePreventsInteractiveAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.OriginalCancellationBeforeCreationWins|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringCreationRejectsLateParent|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CloseDuringCreationCannotReopenHost|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ClosedHostCannotReopen|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.InternalCloseDoesNotCancelCaller|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CompletionWaitsForActualUiThreadExit|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancelButtonStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CaptionCloseStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.EscapeStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.PostReadinessCallbackFaultIsContained'
 
 
 def validate_windows_reservation_pair(started, peer, link, final, start_hash, final_hash, evidence):
@@ -279,7 +305,7 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter"):
+            if suite not in ("cli", "adapter", "owned-host") or (suite == "owned-host" and number <= 18):
                 raise ValueError("Unknown Windows test selection")
             required = 12 if suite == "cli" else 0
         else:
@@ -293,6 +319,9 @@ def windows_process_reservation(number, started):
 
 
 def selected_cases(suite, expected):
+    if suite == "owned-host":
+        return {name: outcome if expected == "red" else "Passed"
+                for name, outcome in OWNED_HOST_RED.items()}
     if suite == "adapter":
         return {name: outcome if expected == "red" else "Passed"
                 for name, outcome in ADAPTER_RED.items()}
@@ -455,6 +484,8 @@ def histories():
         if action.name != f"{index:04d}":
             raise ValueError("Noncontiguous Windows history")
         result = read(action / "result.json")
+        if (ROOT / "actions" / action.name / "temp/owned-host-safety-stop.json").exists():
+            raise ValueError("Owned-host fixture safety stop forbids continuation")
         if action.name == "0002":
             verify_disposed_windows_preparation(action)
         elif action.name == "0003":
@@ -752,7 +783,7 @@ def main():
     for name in ("protocol", "source", "target", "review"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--expect", choices=("red", "green"), default="green")
-    parser.add_argument("--suite", choices=("cli", "adapter"))
+    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host"))
     args = parser.parse_args()
     if (args.action == "test") != (args.suite is not None):
         raise ValueError("Test actions require one finite suite; other actions forbid it")
@@ -800,6 +831,12 @@ def main():
         if len(previous) < 14 or digest(HISTORY / "0014/result.json") != ADAPTER_PRIOR_FINAL or \
                 digest(HISTORY / "0014/started.json") != ADAPTER_PRIOR_START:
             raise ValueError("Accepted CLI green history prerequisite changed")
+        if len(previous) < 18 or digest(HISTORY / "0018/result.json") != OWNED_HOST_PRIOR_FINAL or \
+                digest(HISTORY / "0018/started.json") != OWNED_HOST_PRIOR_START:
+            raise ValueError("Accepted adapter green history prerequisite changed")
+        owned_host_transition = len(previous) == 18
+        if owned_host_transition and args.action != "build":
+            raise ValueError("The first owned-host action must build with its controller transition")
         adapter_transition = len(previous) == 14
         if adapter_transition and args.action != "build":
             raise ValueError("The first adapter action must build with its controller transition")
@@ -857,7 +894,8 @@ def main():
             previous_controllers = (PREVIOUS_CONTROLLERS if len(previous) == 3 else
                                     TEST_PREVIOUS_CONTROLLERS if len(previous) == 6 else
                                     PROCESS_PREVIOUS_CONTROLLERS if graph_transition else
-                                    ADAPTER_PREVIOUS_CONTROLLERS if adapter_transition else {})
+                                    ADAPTER_PREVIOUS_CONTROLLERS if adapter_transition else
+                                    OWNED_HOST_PREVIOUS_CONTROLLERS if owned_host_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
@@ -966,6 +1004,8 @@ def main():
             if interrupted or code != 0 or win.get("safetyStop") is not False or not result["quiescent"] or \
                     win.get("reservationSha256") != digest(action / "started.json"):
                 raise ValueError("Windows action stopped")
+            if (action / "temp/owned-host-safety-stop.json").exists():
+                raise ValueError("Owned-host fixture safety stop forbids continuation")
             if snapshot(ROOT / "subject") != before:
                 raise ValueError("Tracked source changed during execution")
             direct(action / "empty-program-files")
@@ -1005,7 +1045,7 @@ def main():
                 if args.suite == "cli":
                     process_evidence(action, args.expect)
                 elif any(path.name.startswith("process-") for path in action.rglob("*")):
-                    raise ValueError("Adapter selection produced forbidden process evidence")
+                    raise ValueError("Child-free selection produced forbidden process evidence")
             result["continuation_allowed"] = True
         except Exception as error:
             result["error_type"] = type(error).__name__
@@ -1020,7 +1060,8 @@ def main():
                                       for path in action.rglob("*") if path.is_file() and
                                       "home" not in path.relative_to(action).parts and
                                       ("temp" not in path.relative_to(action).parts or
-                                       path.relative_to(action).parts[1].startswith("process-"))}
+                                       (path.relative_to(action).parts[1].startswith("process-") or
+                                        path.relative_to(action).parts[1] == "owned-host-safety-stop.json"))}
             write_new(local / "result.json", result)
         print(json.dumps({"action": local.name, "continuation_allowed": result["continuation_allowed"],
                           "quiescent": result["quiescent"], "tests": result.get("tests")}))
