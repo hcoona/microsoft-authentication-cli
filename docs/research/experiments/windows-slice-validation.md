@@ -1573,3 +1573,67 @@ Public timing and process API basis:
 - [Windows QPC guidance](https://learn.microsoft.com/windows/win32/sysinfo/acquiring-high-resolution-time-stamps)
 - [Explicit process handle lists](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute)
 - [CreateProcessW](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw)
+
+## Windows CLI Process Evidence
+
+The first process loop used the accepted supplement above, protocol/controller
+`03ecb488e7d4f6962bc874e2c312bc6e892659fa` and accepted target
+`58f03cf76f5dd764cf8797baf72157ac6728f448`. The operator was `/root`; independent
+reviewers `/root/lifetime_triage` and `/root/wave_review` supplied source,
+artifact, evidence, and finding-triage reviews through
+[PR #126](https://github.com/hcoona/microsoft-authentication-cli/pull/126).
+The existing Windows 11 x64/WSL host, public dependency pins, replacement
+environment, retained roots, and account-free effects boundary remain unchanged.
+No provider construction, account enumeration, authentication, real UI, or
+authenticated request was executed.
+
+### Graph and Actual Red
+
+The [graph-adoption review](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653064155)
+accepted restore 0010's four exact generated locks and resolved public graph.
+They were adopted without byte changes in source
+`3e0281ef458b0a1469e04e08856e432182e0b2ff`, tree
+`f8b3b02143c8ce9f24817155ef57698294dbb938`. That source preserves the rejecting
+process boundary and all ten previously accepted Profile cases.
+The [build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653120160)
+and [actual-artifact/test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653230468)
+bind build 0011 and the single full expected-red test 0012. Build 0011 completed
+with zero warnings or errors; the inspected shared process boundary remained
+the constant exit-2 stub. The build review binds 167 source files, 547 artifacts,
+and 376 tool inputs, including both executable entry points and generated test
+registration. No further restore occurred.
+
+On September 13, 2026, test 0012 ran from `12:33:30.0255106Z` to
+`12:33:32.8385674Z`, reporting 2.78 seconds and MTP exit 2. All 22 cases
+executed: ten Profile cases passed and twelve process cases failed their
+intended business assertions. Every other outcome counter was zero. The
+[independent actual-red review](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653327341)
+correlates each first assertion with the inspected stub and child evidence.
+Missing later business markers, output, and expected exits establish the
+intended missing behavior; they do not establish implemented shutdown behavior.
+
+All twelve sequential children exited normally with code 2, empty stdout, and
+no child-added stderr. The blocked-diagnostics capture contains exactly the
+fixture's 4,096 literal `D` bytes; the other stderr captures are empty. All ten
+controlled children retained their original managed-entry evidence. No setup,
+loader, capture, infrastructure, or safety failure contributed to the red result.
+Outer capture completed with 18,331 stdout bytes and empty stderr. The Job had
+zero active processes and 26 total processes; no termination was requested.
+Both final receipts were sealed, and the successful outer session was collected.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| Test 0012 WSL final | `986afddf29ecbf89a81ac2040e9aa52844c6c5b883fd9e2e8067b07f22165201` |
+| Test 0012 Windows final | `4c4e2b2234d6c584a2b9eb975fb35424a37d8f3e0a00db0758b0689f610d7147` |
+| Test 0012 TRX | `64159dd0b685e9ae10443b1dd867fada469ee0e4d019bef52c26c71e6822173d` |
+| Independent causality audit | `6061a7c30cccaad1fc26fac4272f946ca22dd2377b12a0aac05c092d986b2da1` |
+| Actual-red review | `a2ee0c561c009c9b5ded952ec3d3097f80aa2765748cd7d1cb22d074bd9909af` |
+
+After 0012, preparation consumption is 12/16 combined and 5/5 Windows;
+build/test is 34/120 combined and 7/40 Windows. Process reservations are 12/36,
+separate from the twelve actual child launches. Charged public downloads remain
+768 MiB. Synthetic files, captures, markers, and receipts are intentionally
+retained; no account or credential state was exercised. Green implementation
+and execution retain separate reviews and the unchanged assertions. These
+observations supply no WAM, UI, account reuse, WSL disconnection, Native AOT,
+or complete Slice acceptance claim.
