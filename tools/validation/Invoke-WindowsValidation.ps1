@@ -92,7 +92,7 @@ try {
     if ($owner.Value -cne [Security.Principal.WindowsIdentity]::GetCurrent().User.Value) { throw 'Unverified root owner' }
     foreach ($property in $start.toolSha256.PSObject.Properties) { Assert-Hash $property.Name $property.Value }
     foreach ($property in $start.fileSha256.PSObject.Properties) {
-        if ($property.Name -notmatch '^[A-Za-z0-9_./-]+$' -or $property.Name -match '(^|/)\.\.(/|$)') {
+        if ($property.Name -notmatch '^[A-Za-z0-9_./,=-]+$' -or $property.Name -match '(^|/)\.\.(/|$)') {
             throw 'Unexpected relative input'
         }
         Assert-Hash (Join-Path $root $property.Name) $property.Value

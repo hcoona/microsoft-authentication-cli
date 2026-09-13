@@ -1164,3 +1164,75 @@ Consumption after 0003 is 3/4 Windows preparations, including 2/3 restores, and
 build/test; charged downloads remain 768 MiB. The next restore consumes the final
 currently allocated Windows preparation even if it fails. No capacity is reset or
 enlarged. Overall Slice acceptance and all real-platform claims remain open.
+
+## Windows Action 0006 Generated-Input Disposition
+
+Test reservation 0006 used unchanged source
+`86c211775342c774a47fce513e0fc10616ee87e9`, tree
+`021ea81162a2d66608c47f54e3ab6a7b060b74ed`, accepted target
+`daa4dd9116dd323e49967534392219624f74cc08` and protocol
+`df91dd42df9242bc28a26425e81a4a6b12ff9c6b`. The independent
+[artifact and test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652449134)
+bound successful build 0005 and all 316 artifacts. WSL reserved the test at
+09:29:15.932122 UTC on 2026-09-13 and finalized at 09:33:54.988178 UTC.
+
+The Windows controller stopped during `host-inputs` at line 96, before invocation
+recording, helper loading or subject start. Its final receipt at 09:33:54.8902711
+UTC records a runtime exception, exit -1, safety stop, incomplete capture and
+`captureDisposition=not-started`. Its quiescent result reflects the pre-subject
+path with no compiler or Job to stop; it is not Job process-accounting evidence.
+WSL retains `continuation_allowed=false` and `quiescent=true`. No test executed,
+and this action supplies no business-red evidence.
+
+The [independent finding](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652477275)
+and [independent true-positive triage](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652487296)
+identify three unchanged `.NETCoreApp,Version=v10.0.AssemblyAttributes.cs` files:
+one in each Core, Windows and Windows-scenario Release obj directory. Their comma
+and equals characters fail the controller's filename class. Each file remains
+SHA-256 `93d67476196ebfc80d1d7d8844b91146cfd678d105f5ce635eb900ca40610c9b`,
+matching both build and test inventories. Correct only that character class to
+`^[A-Za-z0-9_./,=-]+$`; retain traversal rejection, literal-path hashing, root and
+volume checks, no-reparse checks and complete input/artifact verification.
+
+Both history readers recognize only the exact original 0006 receipts below and
+their hash-bound Windows evidence. Preserve the original failed result, three
+Windows files (`started.json`, `controller.json`, `windows-result.json`) and six
+directories (`home`, `home/local`, `home/roaming`, `temp`, `results`,
+`empty-program-files`). The leaf directories remain empty. Missing, additional,
+changed or linked evidence fails closed; other failed or uncertain actions still
+stop both loops. Original Windows 0002/0003 and Linux 0022 remain unchanged.
+
+| WSL 0006 evidence | SHA-256 |
+| --- | --- |
+| `started.json` | `4fb0599b8aaacbcbb2099a2254426b3ac8a2ff16cfd5cacb90222c08b648a8c9` |
+| `windows-input.json` | `3064a64bf43690bc5efc0c9022c6fe52da8d3a36880ec76efe5d691b1fdc1989` |
+| `result.json` | `4ef1514ecd4e19cf02657a38ed73e5e920cb30cf38df9d54472ca89b3784f6ff` |
+
+The independent preservation audit verified all 1,557 reserved inputs, 316 build
+artifacts, 158 source files, both original/tracked locks, complete cache, tools,
+restore graph and prior histories. After this correction is accepted, the first
+continuation must be a newly admitted direct-DLL expected-red test of the same
+source and unchanged build 0005. Refresh the published admission, accepted target,
+Wave and input/artifact checks before reservation. No restore or rebuild is
+required by this controller correction. Linux execution stays stopped until that
+Windows continuation completes normally. Actual failed cases and first assertions
+still require independent review before green implementation.
+
+During new action 0007 only, retain and migrate the two changed active controller
+copies. Required original SHA-256 values are
+`bec5e035be9d54afd871bee648f2018f4ead6fec747c871f8c1c98f9a31db105` for
+`run_windows.py` and
+`131a4834275afe9e7041eb8d5cc106f9220127a68a75fd2383d021309a99ae9d` for
+`Invoke-WindowsValidation.ps1`. After normal reservation and root preflight,
+exclusively retain each original as `retained-<filename>` within 0007 before
+replacing its active copy with exact newly accepted bytes. Bind both versions and
+the migration record in final evidence. Any missing, changed or interrupted
+migration stops continuation. Preserve earlier migrations, bootstrap DLL/source,
+source checkout, locks, restore metadata and build artifacts unchanged.
+
+Consumption after 0006 is **4/4 Windows preparations**, including 3/3 restores, and
+**2/40 Windows build/test**; combined consumption is **11/16 preparations** and
+**29/120 build/test**. Charged downloads remain 768 MiB. The newly admitted test
+consumes Windows 3/40 and combined 30/120 even if it fails. No capacity, effect or
+product scope is added. No actual business red/green, real WAM/UI, account reuse,
+process/WSL lifetime, Native AOT or overall Slice acceptance follows from this stop.
