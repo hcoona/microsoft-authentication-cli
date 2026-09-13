@@ -120,6 +120,9 @@ internal sealed partial class OwnedRequestHost
         {
             if (host is null) return DefWindowProcW(window, message, parameter, detail);
             host.checkpoint?.Invoke(OwnedHostCheckpoint.MessageDispatch, window);
+            // A reentrant terminal callback may already have destroyed this parent.
+            // Nested destruction callbacks retain nativeParent until DestroyWindow returns.
+            if (host.showing && host.nativeParent == 0) return 0;
             switch (message)
             {
                 case 0x0010: // WM_CLOSE: explicit user cancellation, never internal closure.
