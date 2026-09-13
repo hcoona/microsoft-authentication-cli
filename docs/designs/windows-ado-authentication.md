@@ -311,6 +311,35 @@ Profile/client identity is bound by the application instance and its request-loc
 operation context. It is not inferred from token text. Every candidate carries that
 context back to the coordinator; a callback for another or ended operation is discarded.
 
+### Managed HTTP Identity
+
+The [operational identity registry](../governance/operational-identities.yaml) owns the
+fork's HTTP product token and development-version behavior. The Windows adapter supplies
+one thread-safe, process-owned HTTP client through MSAL's supported
+`WithHttpClientFactory(IMsalHttpClientFactory)` seam. A small managed handler adds the
+selected product/version token once to each outgoing `User-Agent`, including when MSAL
+has supplied its own request header. Preserve dependency-owned product tokens; do not
+add account, tenant, Profile, token, machine or persistent identifiers. Forward the
+original cancellation token and introduce no application retry or telemetry exporter.
+
+The pinned MSAL 4.83.1
+[builder](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/AppConfig/BaseAbstractApplicationBuilder.cs#L66-L93)
+accepts this factory, and its
+[HTTP manager](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Http/HttpManager.cs#L214-L259)
+sends managed requests through the returned client. Microsoft's
+[HTTP client contract](https://learn.microsoft.com/entra/msal/dotnet/advanced/httpclient)
+requires safe client reuse and states that MSAL does not dispose the client. The
+one-process host owns its lifetime. `WithClientName` and `WithClientVersion` alone are
+not evidence that an HTTP `User-Agent` was set.
+
+This selection applies to fork-owned managed requests, including MSAL authority
+discovery when needed. WAM/native broker transport and its HTTP identity remain
+dependency-owned; no claim is made that the managed factory controls those requests.
+The OAuth client registration, consent/audit identity, mechanism and Profile gates are
+unchanged. A synthetic message-handler test must establish header behavior before the
+networked adapter executes; real authentication retains its Wave/protocol and owner
+risk-decision prerequisites.
+
 ### Resolution, Acquisition, and Failure Classification
 
 Use MSAL's returned real accounts as the visible account set. Do not consult upstream

@@ -121,5 +121,30 @@ selected_v2:
     required_before: release
 
   - id: user-agent
-    value: null
+    value: hcoona-microsoft-authentication-cli
     required_before: networked-implementation
+    selection_evidence:
+      owning_component: Windows MSAL adapter's managed HTTP client factory and handler
+      location: >-
+        HTTP User-Agent product token on requests sent through the fork-owned managed
+        transport. WAM/native broker transport remains dependency-owned and is not
+        represented as using this token.
+      version_behavior: >-
+        Append product version 0.0.0 during the undistributed implementation Slice.
+        The token identifies this repository fork, not a supported protocol or release.
+        A later release must record its version mapping before distribution.
+      collision_test: >-
+        The selected token includes the fork owner and repository identity and differs
+        from the reserved AzureAuth product and command identifiers. Before executing
+        the networked adapter, a controlled HTTP handler test must verify one exact
+        fork product/version token even when a dependency supplies another User-Agent,
+        with no account, tenant, Profile, token, machine or persistent identifier in
+        the fork token.
+        This is a validation obligation, not a completed transport observation.
+      migration_or_import: >-
+        No upstream User-Agent configuration, environment value or persisted identity
+        is imported. Dependency-owned request headers and broker identity retain their
+        documented ownership; no OAuth registration or Profile is changed by this token.
+      cleanup_owner: >-
+        The one CLI process owns the managed HTTP client and transient headers. There
+        is no persisted identity or uninstall action; process exit releases its resources.
