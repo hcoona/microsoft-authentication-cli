@@ -19,6 +19,12 @@ local fastSteps = new Mapping<String, Step> {
   ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
     types = null
     match_any = textRecordSelectors
+    // These generated locks retain the exact bytes accepted by the validation protocol.
+    // hk's whitespace fixer would rewrite their CRLF line endings.
+    exclude = List(
+      "src/Authentication.Windows/packages.lock.json",
+      "tests/Authentication.Windows.Scenarios/packages.lock.json",
+    )
   }
   ["gitleaks"] = (Builtins.gitleaks) {
     types = null

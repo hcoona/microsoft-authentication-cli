@@ -46,6 +46,15 @@ DISPOSED_BUILD_HASHES = {
     "result.json": "c02ba234adac677a63147c57fa0fca240846839953743d08c08e2576dd43bba7",
     "output.txt": "b91afcbc9cd5f0437906fdb6a314f34c9b0fe3a3e9cb9d2c6044ab6032958442",
 }
+DISPOSED_WINDOWS_PREPARATION = {
+    "started.json": "b5f6e94a9240778dd028610f5c0c76fe9fafcea2aa0f27bf84d19e9839839142",
+    "result.json": "437df40a2c76f7e288de3fd5d36beff41f8b0318a85a55d0b2c24a3ab179d43e",
+}
+DISPOSED_WINDOWS_RESTORE = {
+    "started.json": "98d325740fc4c3cf7e34132faadc2494396a069e8da3885eb72ade65c34fef4c",
+    "windows-input.json": "e3075e32ca4d0a5dcc0221d6102ec6ced0db89ff0f3a092f8dcb184e76c2a899",
+    "result.json": "891a2040d258df4af84deccadce7388092a430416df2f94bf0e7b93f4ec9527a",
+}
 
 
 def utc():
@@ -167,6 +176,64 @@ def artifact_hashes(checkout):
             if path.is_file() and ("bin" in path.parts or path.name == "project.assets.json")}
 
 
+def windows_consumption():
+    """Recover the sibling loop while holding the existing shared action lock."""
+    history = ROOT / "windows-actions"
+    if not history.exists():
+        return 0, 0
+    if history.is_symlink():
+        raise ValueError("Linked Windows action history")
+    preparation, build_test, number = 0, 0, 0
+    windows = Path("/mnt/c/Temp/azureauth-windows-slice-108/actions")
+    for number, action in enumerate(sorted(history.iterdir()), 1):
+        if action.is_symlink() or action.name != f"{number:04d}":
+            raise ValueError("Noncontiguous Windows action history")
+        receipt = json.loads((action / "result.json").read_text())
+        started = json.loads((action / "started.json").read_text())
+        if action.name == "0002":
+            verify_disposed_windows_preparation(action, windows / action.name)
+        elif action.name == "0003":
+            if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_RESTORE) or any(
+                (action / name).is_symlink() or digest(action / name) != expected
+                for name, expected in DISPOSED_WINDOWS_RESTORE.items()
+            ):
+                raise ValueError("Disposed Windows restore receipt changed")
+        elif receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
+            raise ValueError("Unresolved Windows action stops both validation loops")
+        for name, expected in receipt["evidence"].items():
+            if digest(windows / action.name / name) != expected:
+                raise ValueError("Windows action evidence changed")
+        if started["action"] in ("bootstrap", "restore"):
+            preparation += 1
+        elif started["action"] in ("build", "test"):
+            build_test += 1
+        else:
+            raise ValueError("Unknown Windows action allocation")
+    if preparation > 4 or build_test > 40:
+        raise ValueError("Windows allocation exceeded")
+    if number in (2, 3):
+        raise ValueError("Windows restore must complete before Linux continuation")
+    return preparation, build_test
+
+
+def verify_disposed_windows_preparation(action, failed):
+    """Keep the exact pre-subject Windows stop in the shared capacity history."""
+    for root in (action, failed):
+        if any(path.is_symlink() for path in (root, *root.parents)):
+            raise ValueError("Linked disposed Windows evidence")
+    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_PREPARATION):
+        raise ValueError("Disposed Windows reservation changed")
+    for name, expected in DISPOSED_WINDOWS_PREPARATION.items():
+        path = action / name
+        if path.is_symlink() or digest(path) != expected:
+            raise ValueError("Disposed Windows receipt changed")
+    paths = list(failed.rglob("*"))
+    if {str(path.relative_to(failed)) for path in paths} != {
+        "home", "home/local", "home/roaming", "temp", "results",
+    } or any(path.is_symlink() or not path.is_dir() for path in paths):
+        raise ValueError("Disposed Windows pre-subject boundary changed")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("fetch", "restore", "build", "test"))
@@ -219,6 +286,7 @@ def main():
     # Lock plus exclusive starts provides sequential, crash-visible accounting.
     with (ROOT / "action.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        windows_preparation, windows_build_test = windows_consumption()
         previous = sorted((ROOT / "actions").iterdir())
         receipts = []
         for number, action in enumerate(previous, 1):
@@ -241,6 +309,9 @@ def main():
             raise ValueError("Initial preparation allocation exhausted")
         if sum(item["action"] in ("build", "test") for item in receipts) + (not preparation) > 80:
             raise ValueError("Initial build/test allocation exhausted")
+        if sum(item["action"] in ("fetch", "restore") for item in receipts) + preparation + windows_preparation > 16 or \
+                sum(item["action"] in ("build", "test") for item in receipts) + (not preparation) + windows_build_test > 120:
+            raise ValueError("Combined Linux/Windows Wave capacity exhausted")
         if sum(item["reserved_download_bytes"] for item in receipts) + (128 * 1024 * 1024 if arguments.action == "fetch" else 0) > 1024**3:
             raise ValueError("Initial public download allocation exhausted")
         action = ROOT / "actions" / f"{len(previous) + 1:04d}"
