@@ -5,8 +5,8 @@ namespace Authentication.Windows;
 
 public sealed class RejectingWebUi : ICustomWebUi
 {
-    // This baseline fails safely without navigating or returning an authorization URI.
+    // A lost broker cannot enable browser navigation through MSAL's fallback callback.
     public Task<Uri> AcquireAuthorizationCodeAsync(Uri authorizationUri, Uri redirectUri,
         CancellationToken cancellationToken) =>
-        Task.FromException<Uri>(new ProviderFailureException(AuthenticationFailure.InternalFailure));
+        Task.FromException<Uri>(new ProviderFailureException(AuthenticationFailure.MechanismUnavailable));
 }
