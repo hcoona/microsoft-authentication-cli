@@ -5,16 +5,42 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
     private readonly IAuthenticationProvider provider = provider;
     private readonly IRequestHost host = host;
 
-    public Task<AuthenticationOutcome> AuthenticateAsync(
+    public async Task<AuthenticationOutcome> AuthenticateAsync(
         AuthenticationRequest request,
         CancellationToken cancellationToken = default)
     {
-        // Initial TDD admission: no provider operation is implemented yet. The first
-        // scenario run must demonstrate the specified missing business behavior.
-        _ = provider;
+        // Clock-driven candidate and lifetime rules follow the selected-account loop.
         _ = host;
-        _ = request;
-        _ = cancellationToken;
-        return Task.FromResult(new AuthenticationOutcome(null, AuthenticationFailure.InternalFailure));
+        var accounts = await provider.GetAccountsAsync(cancellationToken);
+        ProviderAccount? selected = null;
+        foreach (var account in accounts)
+        {
+            if (!string.Equals(account.Email, request.AccountEmail, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (selected is not null)
+            {
+                return new(null, AuthenticationFailure.AccountAmbiguous);
+            }
+
+            selected = account;
+        }
+
+        if (selected is null)
+        {
+            return new(null, AuthenticationFailure.InteractionRequired);
+        }
+
+        var operationId = Guid.NewGuid();
+        var candidate = await provider.AcquireSilentAsync(request, selected, operationId, cancellationToken);
+        if (!string.Equals(candidate.Email, request.AccountEmail, StringComparison.OrdinalIgnoreCase)
+            || (request.ExactTenant is not null && candidate.Tenant != request.ExactTenant))
+        {
+            return new(null, AuthenticationFailure.IdentityValidationFailed);
+        }
+
+        return new(candidate, null, PersistenceUnconfirmed: true);
     }
 }
