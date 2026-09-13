@@ -1236,3 +1236,127 @@ Consumption after 0006 is **4/4 Windows preparations**, including 3/3 restores, 
 consumes Windows 3/40 and combined 30/120 even if it fails. No capacity, effect or
 product scope is added. No actual business red/green, real WAM/UI, account reuse,
 process/WSL lifetime, Native AOT or overall Slice acceptance follows from this stop.
+
+## Windows Profile File Red/Green Evidence
+
+The physical-file increment exercises the existing application boundary through a
+Windows fixed-volume Profile reader, with controlled provider and UI seams. It
+uses the existing Windows 11 x64 host through WSL 2, SDK 10.0.401/runtime 10.0.12
+and MSTest 4.1.0. These are credential-free managed observations. They do not
+establish product-process transport, WSL lifetime, real WAM/UI, account reuse,
+Native AOT publishing or overall Slice acceptance.
+
+The author/operator was `/root`; independent reviewers `/root/lifetime_triage`
+and `/root/wave_review` supplied source admission and actual-evidence reviews in
+[PR #121](https://github.com/hcoona/microsoft-authentication-cli/pull/121).
+The accepted Wave blob remained `8bbc98cc2e892a33c06d190983d9c0a09a8d6282`.
+
+| Source role | Commit | Tree |
+| --- | --- | --- |
+| Bootstrap and successful restore | `09604cb901167f73bc9b6b1495262381f554d476` | `63c7e8dfc6eec2aec7b1c79154b9494c33ba8da8` |
+| Executed red | `86c211775342c774a47fce513e0fc10616ee87e9` | `021ea81162a2d66608c47f54e3ab6a7b060b74ed` |
+| Green reader | `4a577756ab6c8bacdf8f612d560ecad9ad2fbe5c` | `c2f2f9d85080412c0182da64e0f2b83668a54b94` |
+
+Bootstrap 0001 bound protocol `cb665807d0261bc80fa969aae2249600f2d20bb1`
+and target `6110ea919ef05a32e48984ada7ab05983fdfa0bf`. Successful restore
+0004 bound protocol `df91dd42df9242bc28a26425e81a4a6b12ff9c6b` and target
+`1285a4463aa4d4cac6bbe5432ba091002f61f782`. Build 0005 used that protocol
+and target `daa4dd9116dd323e49967534392219624f74cc08`. Red test 0007, green
+build 0008 and green test 0009
+bound protocol `13b991102dfc45a892f6a5318130c429af2aca4d` and target
+`8520262c7b7a3bae3baa3c5834c1c30f27f90849`.
+
+The [restore graph review](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652286932)
+verified the same public 19-package test graph and build-only dependencies against
+the complete retained cache. Restore metadata names the owned empty feed and SDK
+library-packs; the fixed source mapping excludes the latter. This is not a
+fresh-cache, singleton-source metadata or signature-verification claim. PR #124
+preserved the exact generated CRLF lock bytes; source 86c2117 adopted them without
+changing the test or project source. Build 0005 retained the originals.
+
+The [red test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652570841)
+reused the successful source-bound build 0005. The [actual-red review](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652629187)
+confirmed ten executed cases, four intended failures and six passing rejection
+guards. The personal/work rows, exactly 65,536-byte row and replacement-after-
+admission case failed first at the shared `AssertSuccess` outcome assertion:
+expected `success`, actual `invalid_request`. Later success, request/Profile
+metadata and snapshot assertions were not reached. The 65,537-byte, missing,
+directory, malformed-JSON, invalid-UTF-8 and sharing-denied guards passed on the
+constant-rejection reader; those vacuous passes do not establish reader behavior.
+
+The [concrete reader review](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652649292)
+and [green build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652677308)
+bind the implementation and unchanged ten cases. The reader moves potentially
+blocking path/open work off the lifetime caller, checks caller and opened-handle
+volumes, opens once with read-only sharing, bounds length before allocation and
+returns the completed snapshot to the existing strict parser. Expected file
+failures omit original exception details; cancellation retains its original token.
+System32 LibraryImport declarations use the exact three Windows W exports.
+
+The [artifact and green-test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652722285)
+verified all 158 source files and 316 artifacts, totaling 51,872,400 bytes. Only
+14 expected reader/reference/scenario outputs changed from build 0005; 302
+artifacts, the generated MTP entry, five registrations, runtime configuration and
+dependency mappings remained unchanged. All 12 restore inputs, 12 restore
+metadata files and original/adopted locks matched. The completed controller
+checks and existing public provenance reviews remained applicable.
+
+Offline inspection of the actual reader DLL confirmed exactly three kernel32 W
+imports, their native-width handle and int/uint/pointer signatures, System32-only
+search attributes, UTF-16 pinning and SafeFileHandle marshalling with finally
+cleanup. No DLL was loaded for inspection and no extra build property or generated
+source emission was required. These artifact bindings supplement source review;
+they are not Native AOT or additional runtime observations.
+
+| Action | Windows final UTC, 2026-09-13 | Child seconds | Observation |
+| --- | --- | ---: | --- |
+| 0001 bootstrap | 07:30:58.4195200 | 0.296 | Exit 0; empty stdout/stderr; normal compiler completion. |
+| 0004 restore | 08:36:37.5439069 | 2.137 | Exit 0; 431 stdout bytes; normal zero-active Job. |
+| 0005 red-source build | 09:20:52.0635828 | 11.010 | Exit 0; zero warnings/errors; 562 stdout bytes. |
+| 0007 red test | 10:02:28.0340529 | 1.139 | MTP exit 2; ten executed, four intended failures, six guard passes. |
+| 0008 green build | 10:25:30.3060134 | 9.214 | Exit 0; zero warnings/errors; 562 stdout bytes. |
+| 0009 green test | 10:35:58.5544519 | 0.893 | MTP exit 0; ten executed/passed, every other counter zero. |
+
+The green test's complete stdout was 639 bytes; stderr was empty throughout these
+six actions. Every restore/build/test above completed with normal zero-active Job
+accounting and no termination request. Green build and test WSL receipts finalized
+at 10:26:57.559118 and 10:37:17.372194 UTC, respectively, with continuation
+and quiescence true. The single green TRX contains 15,693 bytes.
+
+The [independent actual-green review](https://github.com/hcoona/microsoft-authentication-cli/pull/121#issuecomment-5652763522)
+confirms exact name/data-row continuity for all ten cases.
+The unchanged success assertions now verify the selected personal/work email,
+Profile client/name, exact tenant/scopes, synthetic token and matching success
+exit. Exactly 65,536 bytes succeeds; 65,537 bytes and the five file/format defects
+produce the safe configuration failure before provider construction. The
+replacement callback changes its own file after admission while the in-flight
+request retains the original Profile.
+
+All ten scenario directories, the directory-case child and eight synthetic files
+matched their expected final contents, including the one 383-byte replacement
+Profile. The final reservation retains the same 158 source files and 316 build
+artifacts, original locks and controllers. Full controller checks and prior
+unchanged-input reviews remain applicable; no additional dependency audit or
+new platform claim is inferred.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| Build 0005 receipt | `20f2539905b84a473be89e5aa6f376a49e5e917456931b19e73382d453e061ce` |
+| Red 0007 TRX | `94da0e2f4eab6bd5bac773f686824cc8846a9078c84dacc602f44980ea7d1922` |
+| Green build 0008 receipt | `8cb8c5964895053fe8018dcbe6185dcc488b55596dd8007ca2d5b92fd4286c00` |
+| Green test 0009 TRX | `199ad82c3ea378eebaf20f45220b22320ca483bf1a5c38889d7afa96ffdff011` |
+| Green test 0009 Windows final | `6065b25aeae33e1dec93cb44845d7de7f6f0edc7c71f08b556f210c0b0cdad18` |
+| Green test 0009 WSL final | `671423982a15fd3cfd94a9fa70a16a8a240c972399a51019926ff2b1ef2fb48d` |
+
+Consumption through 0009 is Windows preparation 4/4, including restores 3/3,
+and build/test 5/40; combined consumption is preparation 11/16 and build/test
+32/120. Charged downloads remain 768 MiB. No new fetch, restore or installation
+occurred during the red/green pair.
+
+Original failed Windows actions 0002, 0003 and 0006 retain their accepted
+dispositions and exact receipts. The two-controller migration completed inside
+0007, retaining both originals and its hash-bound migration record. Original Linux
+0022 and all 34 Linux actions remain unchanged. No failed action was retried under
+its old identity, removed or converted into success. Dedicated artifacts and
+synthetic fixtures remain intentionally retained. Raw machine-bearing output and
+TRX filenames remain local; no account or credential state was exercised.
