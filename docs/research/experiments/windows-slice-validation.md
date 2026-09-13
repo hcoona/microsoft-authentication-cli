@@ -499,3 +499,54 @@ fallback are inspected source, not cancellation-race or cleanup-fault test evide
 The complete terminal latch, original deadline, finite process/UI shutdown, result
 transport, actual Windows/WAM behavior, cross-process reuse, exact Native AOT
 artifact and overall Slice acceptance remain open under Issue #108.
+
+## Action 0022 Build Disposition
+
+Action 0022 attempted the source-bound no-restore build for
+[PR #116](https://github.com/hcoona/microsoft-authentication-cli/pull/116) on
+2026-09-13, from 04:43:47.026593Z through 04:43:53.717371Z. Source
+`1f671c139ca24e987eebc8da6413035cf3daeea8`, tree
+`c0c4db88c6d033226c700e094f8e2074c29682f9`, used accepted protocol/helper
+`45d142e0ba3318aabcaddc3b5881618e351ad97a` and target
+`3fc8a1657c0d61d5b00b96986c0b3a4121ba1e4a` under the independent
+[source admission](https://github.com/hcoona/microsoft-authentication-cli/pull/116#issuecomment-5651200853).
+
+The build returned exit 1 in 6.595 child seconds, with zero warnings and two
+CS1061 errors at `RequestLifetimeScenarios.cs:403` and `:407`. Inside the nested
+timer of the `TimeProvider` subclass, the inherited `TimeProvider.System`
+property hides the intended `System` namespace. The independently
+[triaged correction](https://github.com/hcoona/microsoft-authentication-cli/pull/116#issuecomment-5651213332)
+qualifies those references with `global::`; it changes no business expectation
+or dependency. No test ran, and no red business-test evidence exists for this
+attempt. The admitted conditional test did not run because its build gate failed.
+
+The independent [actual failure review](https://github.com/hcoona/microsoft-authentication-cli/pull/116#issuecomment-5651221809)
+confirms the complete output, original source and input integrity, and effect limits.
+The result remains `unexpected-result` with `continuation_allowed: false`, no
+termination and confirmed process-group quiescence. Preserve that receipt, all
+source/input/output bindings and consumed capacity. The partial build is not an
+accepted test artifact. The source and installed SDK/restore graph retain their
+recorded identities; no new download, restore, Windows or authentication action
+occurred.
+
+After independent review and target-branch acceptance, this disposition permits
+the helper to recognize only the exact historical stop below while retaining it
+in the contiguous history and capacity count. It does not mark the build
+successful, authorize a retry, or excuse another stop. A corrected immutable
+source still needs fresh independent admission, a successful source-bound build,
+the unchanged graph/artifact gate, and separately checked test execution under
+this protocol. The first subsequent subject action must build a different,
+independently admitted corrected source. Changed or missing evidence, another failed action, an unaccepted
+helper, or any ordinary source/effects/integrity failure still stops execution.
+
+| Action 0022 evidence | SHA-256 |
+| --- | --- |
+| `started.json` | `5db34bcbc6740c80b58553d56c7aa8779c11cb21ffc115f21568fc2abe88cf4f` |
+| `inputs.json` | `f2f2b439225c90b130c8f662d54e813e604a7c55bbec3498aba02d900151b5a8` |
+| `result.json` | `c02ba234adac677a63147c57fa0fca240846839953743d08c08e2576dd43bba7` |
+| `output.txt` | `b91afcbc9cd5f0437906fdb6a314f34c9b0fe3a3e9cb9d2c6044ab6032958442` |
+
+All 22 actions are resolved and quiescent; 0022 is the sole historical stop.
+Consumption is 7 of 12 preparation actions, 15 of 80 build/test actions and
+768 MiB of the 1 GiB charged download limit. Action 0023 has not run. No capacity
+is reset or enlarged. The overall Windows Slice acceptance remains open.

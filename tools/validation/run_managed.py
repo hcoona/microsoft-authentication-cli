@@ -38,6 +38,15 @@ SDK_HASHES = {
         "26304a2985357b9ee277f273667fcd9c892edae3ee6eba76f739033e95eb39b3",
 }
 
+# Exact reviewed disposition in the protocol's "Action 0022 Build Disposition".
+# This does not change the failed receipt or admit another source or execution.
+DISPOSED_BUILD_HASHES = {
+    "started.json": "5db34bcbc6740c80b58553d56c7aa8779c11cb21ffc115f21568fc2abe88cf4f",
+    "inputs.json": "f2f2b439225c90b130c8f662d54e813e604a7c55bbec3498aba02d900151b5a8",
+    "result.json": "c02ba234adac677a63147c57fa0fca240846839953743d08c08e2576dd43bba7",
+    "output.txt": "b91afcbc9cd5f0437906fdb6a314f34c9b0fe3a3e9cb9d2c6044ab6032958442",
+}
+
 
 def utc():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -46,6 +55,13 @@ def utc():
 def digest(path):
     with path.open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def disposed_build_stop(action):
+    return action.name == "0022" and all(
+        (action / name).is_file() and digest(action / name) == expected
+        for name, expected in DISPOSED_BUILD_HASHES.items()
+    )
 
 
 def write_new(path, value):
@@ -209,9 +225,17 @@ def main():
             if action.name != f"{number:04d}":
                 raise ValueError("Noncontiguous action history")
             receipt = json.loads((action / "result.json").read_text())
-            if not receipt["continuation_allowed"]:
+            prior_start = json.loads((action / "started.json").read_text())
+            if action.name == "0022":
+                if not disposed_build_stop(action):
+                    raise ValueError("Disposed build evidence changed or is missing")
+                if number == len(previous) and (
+                    arguments.action != "build" or arguments.source == prior_start["source"]
+                ):
+                    raise ValueError("Disposed build stop requires a newly admitted corrected-source build")
+            elif not receipt["continuation_allowed"]:
                 raise ValueError("Previous stop requires independently accepted disposition")
-            receipts.append(json.loads((action / "started.json").read_text()))
+            receipts.append(prior_start)
         preparation = arguments.action in ("fetch", "restore")
         if sum(item["action"] in ("fetch", "restore") for item in receipts) + preparation > 12:
             raise ValueError("Initial preparation allocation exhausted")
