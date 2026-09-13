@@ -264,6 +264,7 @@ def main():
                 "NUGET_HTTP_CACHE_PATH": str(action / "home" / "http"),
                 "NUGET_PLUGINS_CACHE_PATH": str(action / "home" / "plugins"),
                 "DOTNET_CLI_TELEMETRY_OPTOUT": "1", "TESTINGPLATFORM_TELEMETRY_OPTOUT": "1",
+                "DOTNET_NUGET_SIGNATURE_VERIFICATION": "false",
                 "DOTNET_SKIP_FIRST_TIME_EXPERIENCE": "1", "DOTNET_GENERATE_ASPNET_CERTIFICATE": "false",
                 "DOTNET_ADD_GLOBAL_TOOLS_TO_PATH": "false", "DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE": "true",
                 "DOTNET_CLI_USE_MSBUILD_SERVER": "0", "MSBUILDDISABLENODEREUSE": "1",
