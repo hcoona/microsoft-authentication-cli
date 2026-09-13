@@ -93,7 +93,18 @@ the helper does not select versions, traverse dependency graphs, or extract pack
 Restore uses only the dedicated local feed populated by successful fetches. Its explicit
 config clears inherited sources and mappings and supplies no credentials. Disable NuGet
 audit network retrieval for this offline loop; package provenance and dependency review
-remain required. No public online restore claim follows from this procedure.
+remain required. Set `DOTNET_NUGET_SIGNATURE_VERIFICATION=false` in the isolated child
+environment: Linux SDK 8 and later otherwise enable signature verification, whose
+certificate-chain construction can request revocation information or missing issuers
+even with only a local package source. Offline revocation mode alone does not prevent
+issuer retrieval. The [independent source triage](https://github.com/hcoona/microsoft-authentication-cli/pull/111#issuecomment-5650237964)
+binds this behavior and the opt-out to the installed SDK's public source.
+
+This loop supplies no NuGet signature-chain or certificate-revocation evidence. Retain
+the fixed HTTPS NuGet.org provenance, original archive sizes and SHA-512 hashes, public
+manifest/import inspection, and exact lock/resolved-asset review. Hash agreement proves
+byte identity, not signer authenticity or certificate status. Do not change an OS trust
+store. No public online restore claim follows from this procedure.
 Set dedicated package, HTTP,
 plugin, home and temporary directories under `/var/tmp/azureauth-windows-slice-108`.
 Do not use the user's NuGet cache or credential providers. An initially empty dedicated
@@ -132,7 +143,8 @@ stores, profiler settings and inherited NuGet/plugin configuration.
 Set `DOTNET_CLI_TELEMETRY_OPTOUT=1`, `DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1`,
 `DOTNET_GENERATE_ASPNET_CERTIFICATE=false`, `DOTNET_ADD_GLOBAL_TOOLS_TO_PATH=false`,
 `DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE=true`, `DOTNET_CLI_USE_MSBUILD_SERVER=0`,
-`MSBUILDDISABLENODEREUSE=1`, and `TESTINGPLATFORM_TELEMETRY_OPTOUT=1`.
+`MSBUILDDISABLENODEREUSE=1`, `TESTINGPLATFORM_TELEMETRY_OPTOUT=1`, and
+`DOTNET_NUGET_SIGNATURE_VERIFICATION=false`.
 Use `UseSharedCompilation=false`, one MSBuild node and disabled node reuse; never enable
 an interactive restore. Review imported public test targets before executing tests.
 
@@ -215,7 +227,112 @@ without duplicating the scenario obligations in the validation strategy.
 
 - [MSTest runner setup and direct assembly execution](https://learn.microsoft.com/dotnet/core/testing/unit-testing-mstest-running-tests).
 - [MTP exit codes](https://learn.microsoft.com/dotnet/core/testing/microsoft-testing-platform-exit-codes).
+- [Linux NuGet signature verification and its opt-out](https://learn.microsoft.com/dotnet/core/tools/nuget-signed-package-verification#linux).
 - [Existing developer-tool installation and controls](developer-tooling.md).
 - [General experiment policy](../experiment-safety.md).
 
-No execution has occurred under this protocol.
+## Initial Public Package Fetches
+
+Actions 0001 through 0004 ran on 2026-09-13 under accepted protocol
+`80ba853c9b9f6d254a5f09936b7c4f306af8ec5a`, using candidate source
+`cffda724a7111c5dadfe539a6c16eeb3d67fdbd2`, tree
+`3ea46e1aa805e170ab9733e8e53d83581a7e8765`. Each had its own independent
+[PR #111 admission](https://github.com/hcoona/microsoft-authentication-cli/pull/111),
+after inspecting the preceding downloaded manifests. These were Python archive fetches;
+no .NET, package restore, build, test, Windows or authentication operation ran.
+
+| Action | UTC interval | Packages | Actual bytes | Child seconds |
+| --- | --- | --- | --- | --- |
+| 0001 | 02:24:45.602–02:24:45.921 | 1 | 30,590 | 0.183 |
+| 0002 | 02:25:42.620–02:25:46.168 | 5 | 24,061,025 | 3.441 |
+| 0003 | 02:26:55.681–02:26:58.613 | 9 | 21,759,220 | 2.870 |
+| 0004 | 02:30:12.006–02:30:12.781 | 3 | 4,969,307 | 0.704 |
+
+All four returned exit zero, no termination reason, confirmed owned-process-group
+quiescence and unchanged tracked source. Original archives, per-package sizes/SHA-512,
+immutable starts/results, replacement environments and source/toolchain hashes remain
+in the dedicated root. No retry, interruption or cleanup occurred. After action 0004,
+consumption was 4/12 preparation, 0/80 build/test and 512 MiB/1 GiB charged downloads;
+actual completed bodies totaled 50,820,142 bytes. Later protocol revisions and source
+changes retain this consumption and recover subsequent receipts before another action.
+
+The certificate-request issue was found through public-source review before any
+restore, not through an observed network violation. The reviewed opt-out must be
+accepted before restore admission. These fetches establish only public archive
+preparation; complete dependency/import review, resolution and scenario evidence remain
+outstanding.
+
+## Selected-Account Core Red/Green Evidence
+
+Actions 0005 through 0013 continued on 2026-09-13 in the same dedicated WSL2 Linux x64
+root, using the existing verified SDK 10.0.401/runtime 10.0.12. Actions 0005/0006 used
+the original protocol above; restore and every build/test used the accepted offline
+correction at `45d142e0ba3318aabcaddc3b5881618e351ad97a`. Each source and sequential
+action had an independent [PR #111 admission](https://github.com/hcoona/microsoft-authentication-cli/pull/111).
+No Windows executable, WAM, account, token service, Profile file or broker cache was used.
+
+| Action | UTC interval | Child seconds | Observation |
+| --- | --- | --- | --- |
+| 0005 fetch | 02:31:57.307–02:31:57.684 | 0.306 | Two public archives, 3,045,698 bytes; exit 0 |
+| 0006 fetch | 02:33:08.223–02:33:08.502 | 0.215 | Two public archives, 1,094,105 bytes; exit 0 |
+| 0007 restore | 02:44:25.347–02:44:29.883 | 4.459 | Local-feed resolution; exit 0 |
+| 0008 build | 02:48:14.881–02:48:22.581 | 7.507 | Initial stub compiled; exit 0 |
+| 0009 test | 02:48:45.862–02:48:46.793 | 0.773 | Seven executed, seven intended assertion failures; exit 2 |
+| 0010 build | 02:58:29.665–02:58:36.830 | 6.932 | Selected-account correction compiled; exit 0 |
+| 0011 test | 02:58:52.111–02:58:52.976 | 0.723 | 17 executed, nine passed, eight intended assertion failures; exit 2 |
+| 0012 build | 03:06:25.400–03:06:32.470 | 6.883 | Candidate-validation correction compiled; exit 0 |
+| 0013 test | 03:06:38.833–03:06:39.684 | 0.717 | 19 executed and passed, zero skipped; exit 0 |
+
+Actions 0005 through 0009 bind initial source `cffda724a7111c5dadfe539a6c16eeb3d67fdbd2`,
+tree `3ea46e1aa805e170ab9733e8e53d83581a7e8765`. Actions 0010/0011 bind
+`14ab4f6f6a12e04bb55b0a0518388a1d31b53ea4`, tree
+`ba5a316572d0a27218291a1f8c1edc65624ef8aa`. Actions 0012/0013 bind
+`0a64cf1544d1223784cc3cd8faa57a4f4e5fdd0f`, tree
+`05e3a1b74ad7e05f11f34fa5584ec7f6750b3c9d`. The
+[first red review](https://github.com/hcoona/microsoft-authentication-cli/pull/111#issuecomment-5650398308)
+and [candidate red review](https://github.com/hcoona/microsoft-authentication-cli/pull/111#issuecomment-5650501859)
+confirm the intended missing behavior caused the failures after successful compilation
+and discovery. Compilation or infrastructure failure was not treated as red evidence.
+
+The independently reviewed restore resolves 19 public test packages and no core package.
+Three of the 22 fetched archives are legitimately pruned by .NET 10. The
+[resolved-graph review](https://github.com/hcoona/microsoft-authentication-cli/pull/111#issuecomment-5650383832)
+records their public provenance, actual imports and the distinction between NuGet's
+signed-package content hash and whole-archive hash. Both generated locks were adopted
+byte-identically into source and retained before checkout replaced the untracked files.
+Their SHA-256 values are `a29c6aa8cfb81874ff8bb78dc369d7416f28c9b8cc47e99592bfc019b20c41eb`
+(core) and `ef446f7b1e091a753526bc30525b7c630b2c42c282e75c6d167cde33f561a695`
+(scenarios). Later builds reused that graph without restore. Restore and all three builds
+had zero warnings/errors; generated runtime controls and extension registrations were
+inspected before each full-assembly execution.
+
+The final scenario assembly SHA-256 is
+`906e7ba04cd22b7417f51800fdef314c243524c43d354622ca713f27f51139f3`; action 0012's
+build receipt is `e58a747e0ad23f8e444e93c31acba8dbc29a7ef612b407e2fa48e745008b218b`.
+The [independent green review](https://github.com/hcoona/microsoft-authentication-cli/pull/111#issuecomment-5650579393)
+confirms all 19 named case outcomes and their artifact/source bindings.
+Action 0013's TRX SHA-256 is
+`a27939493bac73011d4c004d553fe13a07e2a9fb359b0bffaae6501a168c6336`; its result receipt
+is `767a5f1952ddcf66f23dbbb632fcb476b9a68c959531b97fc00f6df839fc05d8`.
+All actions report unchanged tracked source, no termination reason and confirmed owned
+process-group quiescence. No retry, interruption or cleanup occurred. Original archives,
+receipts, generated locks and local outputs remain retained; raw host/path-bearing TRX
+and tool output are not public records. Historical artifact hashes remain evidence for
+their original source; later builds may replace generated binaries as this protocol permits.
+
+After action 0013, cumulative consumption is **7/12 preparation, 6/80 build/test and
+768 MiB/1 GiB charged downloads**, with 54,959,945 actual completed download bytes.
+There has been no Windows publish or process scenario. Future revisions retain these
+counts and recover every later receipt before execution.
+
+These observations establish the tested application-boundary behavior: unique strict
+personal/work account selection, ambiguity and missing-account handling, constrained
+tenant preservation, candidate metadata/expiry/dynamic-scope validation, same-operation
+default permission handling, and preservation of valid metadata with unconfirmed
+persistence. The provider and clock are controlled substitutes after request admission.
+The two default-permission cases were added with the correction and were not previously
+executed red tests. Real resource/client/cloud association still depends on the future
+request-local adapter. CLI/Profile admission, typed provider failures, interaction,
+cancellation/deadline/commitment, real Windows/MSAL integration and required platform
+evidence remain incomplete. This core increment does not complete the Slice or establish
+support, release readiness, durable broker persistence, or real silent reuse.
