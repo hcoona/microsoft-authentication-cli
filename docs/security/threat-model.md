@@ -127,6 +127,16 @@ result, forwards cancellation, and invalidates late completion. Provider prompt 
 is not an application security control. Unknown or terminal failures cannot activate a
 PAT, alternate registration, browser, or account fallback.
 
+Before real provider initialization, the [local host admission design](../designs/windows-ado-authentication.md#local-windows-host-admission)
+checks only the current process/thread, its own logon, local session, station and desktop.
+Unknown required state fails closed; checks do not change identity, inspect other users,
+unlock the desktop or repair services. Treat own-logon metadata as transient sensitive
+input: retain only the fields needed for local comparisons and expose no native details
+through results, diagnostics or telemetry. Volatile conditions are rechecked at provider
+and owned-UI effect boundaries under the original deadline. These snapshots do not
+certify continuing WAM availability or exhaustive alternate-launch provenance. The
+later protocol must declare the actual metadata access and account effects separately.
+
 The selected Native AOT design replaces the managed desktop host with finite static Win32
 interop inside the same process. Explicit ABI/layout, callback lifetime, creating-thread
 window destruction and nonblocking cancellation are review obligations; the unmanaged
