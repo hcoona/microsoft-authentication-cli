@@ -120,3 +120,20 @@ rechecks:
       or accepting or renewing an exception. Distinguish reports, annotations, and
       package metadata from observed publish and platform compatibility; disposition
       the Windows design and its validation obligations when the premise changes.
+
+  - id: RECHECK-009
+    subject: Entra numeric denial recognition
+    sources:
+      - https://learn.microsoft.com/en-us/entra/identity-platform/reference-error-codes
+    triggers:
+      - kind: decision
+        value: provider-failure-mapping
+      - kind: release
+        value: any
+    required_outcome: >-
+      Reassess the currently documented meaning and stability limits of numeric
+      65004 denial recognition before accepting or revising the Windows adapter
+      failure mapping and at release review. Preserve the distinction between
+      diagnostic error_codes and the application error contract; update or
+      explicitly disposition affected Windows design and validation conclusions
+      without treating this review as a service-stability guarantee.
