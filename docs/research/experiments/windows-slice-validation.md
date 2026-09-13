@@ -336,3 +336,77 @@ request-local adapter. CLI/Profile admission, typed provider failures, interacti
 cancellation/deadline/commitment, real Windows/MSAL integration and required platform
 evidence remain incomplete. This core increment does not complete the Slice or establish
 support, release readiness, durable broker persistence, or real silent reuse.
+
+## Request and Profile Admission Red/Green Evidence
+
+The next managed increment continued in the same retained WSL2 root under protocol
+`45d142e0ba3318aabcaddc3b5881618e351ad97a`, with current accepted target
+`ad9221f5f799d119c96f8490fbb35e065ddfd28b`. The accepted CLI/Profile contracts
+already owned these core rules. No Profile file, Windows API, real provider, account,
+credential, service or broker cache was used; the reviewed dependency graph was reused
+without another fetch or restore.
+
+Red candidate `53646a93c34e3bf728be975d0c9565fdb0c612fe`, tree
+`71b415bd771ba180887a8828a894a17a222f1d0f`, added rejecting argument/Profile stubs
+and focused contract/core fixtures. Its exact
+[source admission](https://github.com/hcoona/microsoft-authentication-cli/pull/114#issuecomment-5650790523)
+preceded action 0014. That no-restore build ran from 03:31:07.834935Z to
+03:31:14.727311Z on 2026-09-13, returning exit 0, zero warnings/errors and 6.684
+child seconds. Independent [build review](https://github.com/hcoona/microsoft-authentication-cli/pull/114#issuecomment-5650804746)
+confirmed source, graph, generated entry point, runtime and every retained artifact.
+
+Action 0015 then ran from 03:32:35.744317Z to 03:32:36.757797Z, returning MTP
+exit 2 in 0.825 child seconds. All 95 cases executed: 80 passed and the exact 15
+admitted assertions failed, with no skips or other failure counters. The six valid
+argument cases and four valid Profile documents failed their non-null assertions;
+five valid tenant cases failed successful resolution. The prior 19 account/candidate
+scenarios stayed green. The other 61 passes were rejection guards against reject-all
+stubs and did not yet establish functioning parsing. The independent
+[red review](https://github.com/hcoona/microsoft-authentication-cli/pull/114#issuecomment-5650847076)
+inspected every outcome and failure location.
+
+Both actions completed without termination, with confirmed owned-process-group
+quiescence and unchanged source/graph/toolchain identities. The red scenario assembly
+SHA-256 was `f220a9fb1504814e35ca3b219808bcb3ff4201bfdafeeecb3f05abf7dfaca7c4`;
+build receipt `300433ce45926c8a15f663fc84d7e7c44aa609e3730c07c803f4437a09862e7b`;
+single red TRX `400c06476a43137d84a9b2a70440a499004852766da3e35b86b228929534d247`;
+and test result `b5bd7ee6287c9d83662fb6f31bf464878b590f3392a9c7fd0aaffd4ce9adfcc9`.
+
+Green candidate `bb922ce000f13520d5e45a5733fc5fc600d72586`, tree
+`08ca59b5de08c11ea4cf67000dde0ef2628091e7`, implemented the accepted request,
+Profile and tenant rules. It also added 41 boundary cases, which have no prior-red
+claim. The independent [green admission](https://github.com/hcoona/microsoft-authentication-cli/pull/114#issuecomment-5650901897)
+bound that exact source and expected all 136 cases to pass. Action 0016's no-restore
+build ran from 03:43:21.556389Z to 03:43:28.679013Z, returning exit 0, zero
+warnings/errors and 6.908 child seconds. Its independent
+[build review](https://github.com/hcoona/microsoft-authentication-cli/pull/114#issuecomment-5650914798)
+verified source, graph, generated runner and all 249 artifacts before test execution.
+
+Action 0017 ran from 03:44:47.163771Z to 03:44:48.077168Z, returning MTP exit 0
+in 0.750 child seconds. All 136 tests executed and passed: 65 request cases, 52
+Profile/tenant cases and the prior 19 account/candidate cases. Every non-success
+counter was zero. The prior 15 intended failures were resolved, all other original
+cases remained green, and the additional boundary cases passed. The independent
+[green confirmation](https://github.com/hcoona/microsoft-authentication-cli/pull/114#issuecomment-5650926667)
+compared every result with the red TRX and verified all retained integrity evidence.
+
+The green build and test completed normally with confirmed owned-process-group
+quiescence, no termination and unchanged source/graph/toolchain/artifact identities.
+The green scenario assembly SHA-256 is
+`15bc885854b3a2ec5d8ae4e07dd08ff5861e8b204a7f2b0dea7dc0dc4d40844b`;
+build receipt `0213672d830fc0964c388d74f45fa1d262595a328f521950c0be2335a6c3f43c`;
+single green TRX `a781c35d2924009a80b4472e8a53da82b92a3468148a53f6d9f7cc2997b821f2`;
+and test result `4cd9a5748db982b9290b370b4ed5db9353b5f75994355f67ecd24478e9e76c01`.
+
+All 17 actions are resolved. Cumulative consumption is 7 of 12 preparation actions,
+10 of 80 build/test actions and 768 MiB of the 1 GiB charged download limit. Actual
+downloaded content remains 54,959,945 bytes in the same 22 original archives; the
+resolved test graph still uses 19 packages. No new download, restore, Windows action,
+real authentication, forced termination or cleanup occurred. Experiment-owned files
+remain intentionally retained; standard path-bearing output and TRX stay local.
+
+These results establish the tested in-memory admission rules. They do not establish
+Windows fixed-volume/file eligibility, read-once Profile I/O, CLI process transport,
+deadline/cancellation behavior, provider construction, real WAM/UI, cross-process
+reuse, deployment or overall Slice acceptance. The accepted contracts and validation
+strategy retain those obligations; Issue #108 remains open.
