@@ -1,0 +1,193 @@
+using Authentication.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace Authentication.Scenarios;
+
+// Focused contract/core-rule tests for the accepted argument projection.
+// Filesystem eligibility, actual process I/O and provider work are separate scenarios.
+[TestClass]
+public sealed class RequestSyntaxTests
+{
+    private const string ProfilePath = @"C:\Auth Profiles\selected.json";
+    private const string Email = "Personal+Alias@example.test";
+    private const string Resource = "499b84ac-1321-427f-aa17-267ca6975798";
+    private const string Scope = Resource + "/user_impersonation";
+    private const string Tenant = "11111111-2222-3333-4444-555555555555";
+
+    [TestMethod]
+    public void ExplicitPersonalRequestPreservesIntentAndAppliesOnlyOptionalDefaults()
+    {
+        var request = RequestSyntax.Parse(Arguments());
+
+        Assert.IsNotNull(request);
+        Assert.AreEqual(ProfilePath, request.ProfilePath);
+        Assert.AreEqual(Email, request.AccountEmail);
+        CollectionAssert.AreEqual(new[] { Scope }, request.Scopes.ToArray());
+        Assert.IsFalse(request.InteractionAllowed);
+        Assert.IsNull(request.Tenant);
+        Assert.AreEqual(120, request.TimeoutSeconds);
+        Assert.IsFalse(request.CancelOnStdinClose);
+        Assert.IsFalse(request.TelemetryStderr);
+    }
+
+    [TestMethod]
+    public void WorkRequestRetainsExactTenantAndExplicitHostControls()
+    {
+        var arguments = Arguments();
+        Set(arguments, "--account-email", "work@example.test");
+        Set(arguments, "--interaction", "interactive-if-needed");
+        arguments.AddRange([
+            "--tenant", Tenant, "--timeout-seconds", "30",
+            "--cancel-on-stdin-close", "--telemetry", "stderr",
+        ]);
+
+        var request = RequestSyntax.Parse(arguments);
+
+        Assert.IsNotNull(request);
+        Assert.AreEqual("work@example.test", request.AccountEmail);
+        Assert.AreEqual(Tenant, request.Tenant);
+        Assert.IsTrue(request.InteractionAllowed);
+        Assert.AreEqual(30, request.TimeoutSeconds);
+        Assert.IsTrue(request.CancelOnStdinClose);
+        Assert.IsTrue(request.TelemetryStderr);
+    }
+
+    [TestMethod]
+    [DataRow("499b84ac-1321-427f-aa17-267ca6975798/.default")]
+    [DataRow("api://example.test/application/read")]
+    [DataRow("https://example.test/resource/read")]
+    public void ExplicitResourcesDoNotNeedAResourceCatalog(string scope)
+    {
+        var arguments = Arguments();
+        Set(arguments, "--scope", scope);
+
+        var request = RequestSyntax.Parse(arguments);
+
+        Assert.IsNotNull(request);
+        CollectionAssert.AreEqual(new[] { scope }, request.Scopes.ToArray());
+    }
+
+    [TestMethod]
+    public void MultipleDynamicPermissionsPreserveTheirSpellingAndOrder()
+    {
+        var arguments = Arguments();
+        arguments.AddRange(["--scope", Resource + "/Read"]);
+
+        var request = RequestSyntax.Parse(arguments);
+
+        Assert.IsNotNull(request);
+        CollectionAssert.AreEqual(new[] { Scope, Resource + "/Read" }, request.Scopes.ToArray());
+    }
+
+    [TestMethod]
+    [DataRow("--protocol")]
+    [DataRow("--profile")]
+    [DataRow("--account-email")]
+    [DataRow("--scope")]
+    [DataRow("--interaction")]
+    public void RequiredIntentHasNoImplicitSelection(string option)
+    {
+        var arguments = Arguments();
+        arguments.RemoveRange(arguments.IndexOf(option), 2);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    [DataRow("unsupported-version")]
+    [DataRow("repeated-scalar")]
+    [DataRow("repeated-lifetime-flag")]
+    [DataRow("unknown-option")]
+    [DataRow("equals-syntax")]
+    [DataRow("wrong-case")]
+    [DataRow("positional-target")]
+    [DataRow("response-file")]
+    [DataRow("missing-value")]
+    public void UnsupportedArgumentFormsCannotBecomeAnAuthenticationRequest(string defect)
+    {
+        var arguments = Arguments();
+        switch (defect)
+        {
+            case "unsupported-version": Set(arguments, "--protocol", "2"); break;
+            case "repeated-scalar": arguments.AddRange(["--protocol", "1"]); break;
+            case "repeated-lifetime-flag":
+                arguments.AddRange(["--cancel-on-stdin-close", "--cancel-on-stdin-close"]);
+                break;
+            case "unknown-option": arguments.AddRange(["--cache", "shared"]); break;
+            case "equals-syntax":
+                arguments.RemoveRange(1, 2);
+                arguments.Insert(1, "--protocol=1");
+                break;
+            case "wrong-case": arguments[1] = "--Protocol"; break;
+            case "positional-target": arguments.Add("repository"); break;
+            case "response-file": arguments.Add("@request.rsp"); break;
+            case "missing-value": arguments.Add("--tenant"); break;
+            default: throw new InvalidOperationException("Unknown synthetic defect.");
+        }
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    [DataRow("--account-email", "missing-at")]
+    [DataRow("--account-email", "@example.test")]
+    [DataRow("--account-email", "a@@example.test")]
+    [DataRow("--account-email", "a b@example.test")]
+    [DataRow("--account-email", "a\u0000@example.test")]
+    [DataRow("--profile", "relative.json")]
+    [DataRow("--profile", @"C:relative.json")]
+    [DataRow("--profile", @"\\server\share\profile.json")]
+    [DataRow("--profile", "/home/profiles/selected.json")]
+    [DataRow("--profile", @"\\?\C:\profile.json")]
+    [DataRow("--interaction", "allow")]
+    [DataRow("--scope", "openid")]
+    [DataRow("--scope", "User.Read")]
+    [DataRow("--scope", "https://example.test/resource/")]
+    [DataRow("--scope", "https://user@example.test/read")]
+    [DataRow("--scope", "https://example.test?query/read")]
+    [DataRow("--scope", "https://example.test#fragment/read")]
+    [DataRow("--scope", "https://example.test/read write")]
+    [DataRow("--scope", "urn:resource/read")]
+    public void InvalidCoreSelectorsFailClosed(string option, string value)
+    {
+        var arguments = Arguments();
+        Set(arguments, option, value);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    [DataRow("0")]
+    [DataRow("601")]
+    [DataRow("-1")]
+    [DataRow("1.5")]
+    [DataRow("NaN")]
+    public void DeadlineOverrideMustBeABoundedInteger(string value)
+    {
+        var arguments = Arguments();
+        arguments.AddRange(["--timeout-seconds", value]);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    [DataRow(Scope)]
+    [DataRow("api://different.example.test/read")]
+    [DataRow(Resource + "/.default")]
+    public void DuplicateMixedResourceAndMixedDefaultPermissionsAreRejected(string extraScope)
+    {
+        var arguments = Arguments();
+        arguments.AddRange(["--scope", extraScope]);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    private static List<string> Arguments() =>
+    [
+        "authenticate", "--protocol", "1", "--profile", ProfilePath,
+        "--account-email", Email, "--scope", Scope, "--interaction", "non-interactive-only",
+    ];
+
+    private static void Set(List<string> arguments, string option, string value) =>
+        arguments[arguments.IndexOf(option) + 1] = value;
+}
