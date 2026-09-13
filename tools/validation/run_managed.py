@@ -226,13 +226,15 @@ def main():
                 raise ValueError("Noncontiguous action history")
             receipt = json.loads((action / "result.json").read_text())
             prior_start = json.loads((action / "started.json").read_text())
-            if not receipt["continuation_allowed"]:
+            if action.name == "0022":
                 if not disposed_build_stop(action):
-                    raise ValueError("Previous stop requires independently accepted disposition")
+                    raise ValueError("Disposed build evidence changed or is missing")
                 if number == len(previous) and (
                     arguments.action != "build" or arguments.source == prior_start["source"]
                 ):
                     raise ValueError("Disposed build stop requires a newly admitted corrected-source build")
+            elif not receipt["continuation_allowed"]:
+                raise ValueError("Previous stop requires independently accepted disposition")
             receipts.append(prior_start)
         preparation = arguments.action in ("fetch", "restore")
         if sum(item["action"] in ("fetch", "restore") for item in receipts) + preparation > 12:
