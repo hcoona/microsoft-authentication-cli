@@ -77,7 +77,25 @@ function Read-Output($Process, $Streams, [int] $Seconds, $Watch) {
 try {
     Assert-Hash "$action\started.json" $ReservationSha256
     $start = Get-Content -LiteralPath "$action\started.json" -Raw | ConvertFrom-Json
-    if ($start.action -notin @('bootstrap', 'restore', 'build', 'test')) { throw 'Unallocated action' }
+    if ($start.action -cnotin @('bootstrap', 'restore', 'build', 'test')) { throw 'Unallocated action' }
+    if (-not ($start.PSObject.Properties.Name -ccontains 'testSuite')) { throw 'Missing finite selection' }
+    if ($start.expected -cnotin @('red', 'green') -or
+        ($start.action -cne 'test' -and $start.expected -cne 'green')) { throw 'Invalid result expectation' }
+    $filter = $null
+    if ($start.action -ceq 'test') {
+        if ($start.testSuite -ceq 'cli') {
+            $filter = 'FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.ExplicitFilePreservesSelectedProfileAndRequest|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.FileSizeLimitAppliesBeforeAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.ReplacingFileAfterAdmissionCannotChangeTheInFlightProfile|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.UnreadableOrInvalidFileStopsBeforeProviderConstruction|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.RootHelpCompletesWithoutAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.MalformedAuthenticationReturnsTheBootstrapFailure|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.SelectedRequestReturnsOneSuccessDespiteBrokenDiagnostics|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.FlaggedRegularFileStopsBeforeProfileAndProvider|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.AlreadyClosedLifetimePipeCancelsBeforeAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.WriterClosureRejectsLateSuccessAndEndsTheProcess|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.ClosedStdinWithoutTheFlagDoesNotCancel|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.LifetimePipePayloadIsIgnoredAndClosureStillCancels|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.DeadlineEndsUncooperativeWorkWithinTheProcessBound|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.BrokenResultReaderEndsWithTransportFailure|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.UndrainedResultPipeCannotKeepTheProcessAlive|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.BlockedDiagnosticsDoNotChangeTheAuthenticationResultOrKeepTheProcessAlive'
+            $reserved = 12
+        } elseif ($start.testSuite -ceq 'adapter') {
+            $filter = 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentRequirementHonorsInteractionPermission|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.SilentClaimsReachOneContinuationAndSecondChallengeStops|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.AccessDeniedWinsOverUiRequiredAndRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.Structured65004WinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DenialTextAndNativeCodeDoNotImplyEntraDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DuplicateErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.NonNumericErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MalformedOrOverBudgetBodiesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ProviderUserCancellationRemainsCancelled|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalCancellationWinsOverDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalDeadlineWinsLateProviderCancellation|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.HttpTimeoutDoesNotConsumeRequestDeadline|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RetryableProviderStopsWithoutApplicationRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RecognizedNetworkErrorStopsWithoutRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnknownProviderConfigurationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnexplainedCancellationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UserMismatchWinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ResultProjectionPreservesObservedMetadata|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri|FullyQualifiedName=Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation'
+            $reserved = 0
+        } else { throw 'Unknown finite selection' }
+    } else {
+        if ($null -ne $start.testSuite) { throw 'Non-test selection' }
+        $reserved = 0
+    }
+    if (($start.reservedProcessScenarios -isnot [int] -and $start.reservedProcessScenarios -isnot [long]) -or
+        $start.reservedProcessScenarios -ne $reserved) { throw 'Incorrect process reservation' }
     Save-Json "$action\controller.json" @{
         pid = $PID; started = [Diagnostics.Process]::GetCurrentProcess().StartTime.ToUniversalTime().ToString('o')
     }
@@ -156,7 +174,7 @@ try {
             ' -p:UseSharedCompilation=false -m:1 -nr:false -noAutoResponse'
     } else {
         $arguments = 'tests\Authentication.Windows.Scenarios\bin\Release\net10.0-windows\Authentication.Windows.Scenarios.dll' +
-            ' --report-trx --results-directory "' + $action + '\results"'
+            ' --report-trx --results-directory "' + $action + '\results"' + ' --filter "' + $filter + '"'
     }
     Save-Json "$action\invocation.json" @{
         executable = $exe; arguments = $arguments; workingDirectory = $working

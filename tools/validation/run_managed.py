@@ -245,6 +245,67 @@ def verify_built_source_links(checkout, source):
         raise ValueError("Built SourceLink maps differ from the admitted source")
 
 
+def validate_windows_reservation_pair(started, peer, link, final, start_hash, final_hash, evidence):
+    """Bind the initial WSL admission to its verified Windows execution copy."""
+    if evidence.get("started.json") != start_hash or evidence.get("windows-result.json") != final_hash or \
+            link != {"sha256": start_hash} or final.get("reservationSha256") != start_hash:
+        raise ValueError("Missing or inconsistent Windows reservation link")
+    extensions = {"fileSha256", "toolSha256"}
+    if started.get("action") != "bootstrap":
+        extensions.update(("helperPath", "helperSha256"))
+    if not extensions <= peer.keys() or extensions & started.keys() or \
+            {key: value for key, value in peer.items() if key not in extensions} != started:
+        raise ValueError("WSL and Windows reservation copies disagree")
+
+
+def verify_windows_reservation_pair(action, windows_action, result, started):
+    paths = (windows_action / "started.json", windows_action / "windows-result.json", action / "windows-input.json")
+    for path in paths:
+        if any(part.is_symlink() for part in (path, *path.parents)):
+            raise ValueError("Linked Windows reservation evidence")
+
+    def unique(items):
+        value = {}
+        for key, item in items:
+            if key in value:
+                raise ValueError("Duplicate Windows reservation field")
+            value[key] = item
+        return value
+
+    peer, final, link = (json.loads(path.read_text(), object_pairs_hook=unique) for path in paths)
+    validate_windows_reservation_pair(started, peer, link, final,
+                                     digest(paths[0]), digest(paths[1]), result["evidence"])
+
+
+def windows_process_reservation(number, started):
+    """Preserve historical full batches and require explicit new finite selections."""
+    action = started.get("action")
+    if action not in ("bootstrap", "restore", "build", "test"):
+        raise ValueError("Unknown Windows action allocation")
+    if number <= 14:
+        if "testSuite" in started:
+            raise ValueError("Historical Windows selection changed")
+        required = 12 if number > 9 and action == "test" else 0
+    else:
+        if "testSuite" not in started:
+            raise ValueError("Missing Windows selection")
+        suite = started["testSuite"]
+        if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
+            raise ValueError("Unexpected Windows result expectation")
+        if action == "test":
+            if suite not in ("cli", "adapter"):
+                raise ValueError("Unknown Windows test selection")
+            required = 12 if suite == "cli" else 0
+        else:
+            if suite is not None:
+                raise ValueError("Non-test Windows selection")
+            required = 0
+    reserved = started.get("reservedProcessScenarios", 0 if number <= 9 else None)
+    if type(reserved) is not int or reserved != required:
+        raise ValueError("Unrecoverable Windows process reservation")
+    return reserved
+
+
 def windows_consumption():
     """Recover the sibling loop while holding the existing shared action lock."""
     history = ROOT / "windows-actions"
@@ -274,10 +335,9 @@ def windows_consumption():
         for name, expected in receipt["evidence"].items():
             if digest(windows / action.name / name) != expected:
                 raise ValueError("Windows action evidence changed")
-        required = 12 if number > 9 and started["action"] == "test" else 0
-        reserved = started.get("reservedProcessScenarios", 0 if number <= 9 else None)
-        if type(reserved) is not int or reserved != required:
-            raise ValueError("Unrecoverable Windows process reservation")
+        if action.name not in ("0002", "0003", "0006"):
+            verify_windows_reservation_pair(action, windows / action.name, receipt, started)
+        reserved = windows_process_reservation(number, started)
         process_scenarios += reserved
         if started["action"] in ("bootstrap", "restore"):
             preparation += 1

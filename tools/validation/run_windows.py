@@ -200,6 +200,150 @@ SUPERSEDED_LOCKS = (
     "tests/Authentication.Windows.Scenarios/packages.lock.json",
 )
 
+ADAPTER_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "93486d23aff1ade31b314c0d0c588af250ca200068297539507517a5946d2bb6",
+    "Invoke-WindowsValidation.ps1": "bf90ffed77171eb553eed0350dabddbfc14966e1e3584fea3e77e867b6ec559f",
+}
+ADAPTER_PRIOR_FINAL = "d71e129cfdeb8d47fc83146319242c2948d4948240fd15cee39914b45ba4653d"
+ADAPTER_PRIOR_START = "527ed232989800a81fa9eaced39cd66c24c7eb01c309ca5f24ea83746f257f1a"
+ADAPTER_RED = {'Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentRequirementHonorsInteractionPermission': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.SilentClaimsReachOneContinuationAndSecondChallengeStops': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.AccessDeniedWinsOverUiRequiredAndRetryHint': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.Structured65004WinsOverRetryHint': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.DenialTextAndNativeCodeDoNotImplyEntraDenial': 'Passed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.DuplicateErrorCodesDoNotCreateDenial': 'Passed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.NonNumericErrorCodesDoNotCreateDenial': 'Passed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.MalformedOrOverBudgetBodiesDoNotCreateDenial': 'Passed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.ProviderUserCancellationRemainsCancelled': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalCancellationWinsOverDenial': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalDeadlineWinsLateProviderCancellation': 'Passed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.HttpTimeoutDoesNotConsumeRequestDeadline': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.RetryableProviderStopsWithoutApplicationRetry': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.RecognizedNetworkErrorStopsWithoutRetry': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.UnknownProviderConfigurationStaysInternal': 'Passed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.UnexplainedCancellationStaysInternal': 'Passed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.UserMismatchWinsOverRetryHint': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.ResultProjectionPreservesObservedMetadata': 'Failed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing': 'Passed',
+ 'Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri': 'Failed',
+ 'Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation': 'Failed'}
+TEST_FILTERS = {'cli': 'FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.ExplicitFilePreservesSelectedProfileAndRequest|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.FileSizeLimitAppliesBeforeAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.ReplacingFileAfterAdmissionCannotChangeTheInFlightProfile|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.UnreadableOrInvalidFileStopsBeforeProviderConstruction|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.RootHelpCompletesWithoutAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.MalformedAuthenticationReturnsTheBootstrapFailure|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.SelectedRequestReturnsOneSuccessDespiteBrokenDiagnostics|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.FlaggedRegularFileStopsBeforeProfileAndProvider|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.AlreadyClosedLifetimePipeCancelsBeforeAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.WriterClosureRejectsLateSuccessAndEndsTheProcess|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.ClosedStdinWithoutTheFlagDoesNotCancel|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.LifetimePipePayloadIsIgnoredAndClosureStillCancels|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.DeadlineEndsUncooperativeWorkWithinTheProcessBound|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.BrokenResultReaderEndsWithTransportFailure|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.UndrainedResultPipeCannotKeepTheProcessAlive|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.BlockedDiagnosticsDoNotChangeTheAuthenticationResultOrKeepTheProcessAlive',
+ 'adapter': 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentRequirementHonorsInteractionPermission|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.SilentClaimsReachOneContinuationAndSecondChallengeStops|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.AccessDeniedWinsOverUiRequiredAndRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.Structured65004WinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DenialTextAndNativeCodeDoNotImplyEntraDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DuplicateErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.NonNumericErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MalformedOrOverBudgetBodiesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ProviderUserCancellationRemainsCancelled|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalCancellationWinsOverDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalDeadlineWinsLateProviderCancellation|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.HttpTimeoutDoesNotConsumeRequestDeadline|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RetryableProviderStopsWithoutApplicationRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RecognizedNetworkErrorStopsWithoutRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnknownProviderConfigurationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnexplainedCancellationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UserMismatchWinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ResultProjectionPreservesObservedMetadata|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri|FullyQualifiedName=Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation'}
+
+
+def validate_windows_reservation_pair(started, peer, link, final, start_hash, final_hash, evidence):
+    """Bind the initial WSL admission to its verified Windows execution copy."""
+    if evidence.get("started.json") != start_hash or evidence.get("windows-result.json") != final_hash or \
+            link != {"sha256": start_hash} or final.get("reservationSha256") != start_hash:
+        raise ValueError("Missing or inconsistent Windows reservation link")
+    extensions = {"fileSha256", "toolSha256"}
+    if started.get("action") != "bootstrap":
+        extensions.update(("helperPath", "helperSha256"))
+    if not extensions <= peer.keys() or extensions & started.keys() or \
+            {key: value for key, value in peer.items() if key not in extensions} != started:
+        raise ValueError("WSL and Windows reservation copies disagree")
+
+
+def verify_windows_reservation_pair(action, windows_action, result, started):
+    paths = (windows_action / "started.json", windows_action / "windows-result.json", action / "windows-input.json")
+    for path in paths:
+        if any(part.is_symlink() for part in (path, *path.parents)):
+            raise ValueError("Linked Windows reservation evidence")
+
+    def unique(items):
+        value = {}
+        for key, item in items:
+            if key in value:
+                raise ValueError("Duplicate Windows reservation field")
+            value[key] = item
+        return value
+
+    peer, final, link = (json.loads(path.read_text(), object_pairs_hook=unique) for path in paths)
+    validate_windows_reservation_pair(started, peer, link, final,
+                                     digest(paths[0]), digest(paths[1]), result["evidence"])
+
+
+def windows_process_reservation(number, started):
+    """Preserve historical full batches and require explicit new finite selections."""
+    action = started.get("action")
+    if action not in ("bootstrap", "restore", "build", "test"):
+        raise ValueError("Unknown Windows action allocation")
+    if number <= 14:
+        if "testSuite" in started:
+            raise ValueError("Historical Windows selection changed")
+        required = 12 if number > 9 and action == "test" else 0
+    else:
+        if "testSuite" not in started:
+            raise ValueError("Missing Windows selection")
+        suite = started["testSuite"]
+        if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
+            raise ValueError("Unexpected Windows result expectation")
+        if action == "test":
+            if suite not in ("cli", "adapter"):
+                raise ValueError("Unknown Windows test selection")
+            required = 12 if suite == "cli" else 0
+        else:
+            if suite is not None:
+                raise ValueError("Non-test Windows selection")
+            required = 0
+    reserved = started.get("reservedProcessScenarios", 0 if number <= 9 else None)
+    if type(reserved) is not int or reserved != required:
+        raise ValueError("Unrecoverable Windows process reservation")
+    return reserved
+
+
+def selected_cases(suite, expected):
+    if suite == "adapter":
+        return {name: outcome if expected == "red" else "Passed"
+                for name, outcome in ADAPTER_RED.items()}
+    if suite != "cli":
+        raise ValueError("Unknown Windows test selection")
+    prefix = "Authentication.Windows.Scenarios."
+    cases = {prefix + "ProfileFileScenarios." + name: "Passed" for name in FILE_CASES}
+    cases.update({prefix + "ProcessScenarios." + name: "Failed" if expected == "red" else "Passed"
+                  for name in PROCESS_CASES})
+    return cases
+
+
+def validate_selected_report(report, suite, expected):
+    """Bind every expanded result to its class/name definition and full counters."""
+    cases = selected_cases(suite, expected)
+    required = {"total": len(cases), "executed": len(cases),
+                "passed": sum(value == "Passed" for value in cases.values()),
+                "failed": sum(value == "Failed" for value in cases.values())}
+    required.update({name: 0 for name in (
+        "error", "timeout", "aborted", "inconclusive", "passedButRunAborted", "notRunnable",
+        "notExecuted", "disconnected", "warning", "completed", "inProgress", "pending")})
+    counters = report.findall(".//{*}Counters")
+    if len(counters) != 1 or counters[0].attrib != {key: str(value) for key, value in required.items()}:
+        raise ValueError("Unexpected admitted case counts")
+    definitions = report.findall(".//{*}UnitTest")
+    identities = {}
+    for definition in definitions:
+        identity = definition.attrib["id"]
+        methods = definition.findall("{*}TestMethod")
+        if identity in identities or len(methods) != 1:
+            raise ValueError("Duplicate or ambiguous test definition")
+        method = methods[0]
+        if definition.attrib["name"] != method.attrib["name"]:
+            raise ValueError("Test definition name changed")
+        identities[identity] = (method.attrib["className"] + "." + method.attrib["name"],
+                                method.attrib["name"])
+    results = report.findall(".//{*}UnitTestResult")
+    observed, result_ids = {}, set()
+    for node in results:
+        identity = node.attrib["testId"]
+        if identity in result_ids or identity not in identities:
+            raise ValueError("Duplicate or undefined test result")
+        result_ids.add(identity)
+        qualified, name = identities[identity]
+        if node.attrib["testName"] != name or qualified in observed:
+            raise ValueError("Ambiguous expanded test result")
+        observed[qualified] = node.attrib["outcome"]
+    if len(definitions) != len(cases) or result_ids != set(identities) or observed != cases:
+        raise ValueError("Unexpected case classes, names or dispositions")
+    return counters[0].attrib
+
 
 def utc():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -326,7 +470,10 @@ def histories():
         for name, expected in result["evidence"].items():
             if digest(ROOT / "actions" / action.name / name) != expected:
                 raise ValueError("Windows evidence changed")
-        windows.append((action, read(action / "started.json"), result))
+        started = read(action / "started.json")
+        if action.name not in ("0002", "0003", "0006"):
+            verify_windows_reservation_pair(action, ROOT / "actions" / action.name, result, started)
+        windows.append((action, started, result))
     return linux, windows
 
 
@@ -605,7 +752,10 @@ def main():
     for name in ("protocol", "source", "target", "review"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--expect", choices=("red", "green"), default="green")
+    parser.add_argument("--suite", choices=("cli", "adapter"))
     args = parser.parse_args()
+    if (args.action == "test") != (args.suite is not None):
+        raise ValueError("Test actions require one finite suite; other actions forbid it")
     os.umask(0o077)
     if platform.system() != "Linux" or platform.machine() != "x86_64" or "microsoft" not in platform.release().lower():
         raise ValueError("Requires the designated WSL2 host")
@@ -647,18 +797,21 @@ def main():
             args.action != "test" or args.expect != "red" or args.source != previous[-1][1]["source"]
         ):
             raise ValueError("The first continuation must test the unchanged admitted red build")
+        if len(previous) < 14 or digest(HISTORY / "0014/result.json") != ADAPTER_PRIOR_FINAL or \
+                digest(HISTORY / "0014/started.json") != ADAPTER_PRIOR_START:
+            raise ValueError("Accepted CLI green history prerequisite changed")
+        adapter_transition = len(previous) == 14
+        if adapter_transition and args.action != "build":
+            raise ValueError("The first adapter action must build with its controller transition")
         graph_transition = len(previous) == 9
         if graph_transition and args.action != "restore":
             raise ValueError("The first process increment action establishes its new graph")
         if len(previous) < 9:
             raise ValueError("This amendment requires the completed accepted file history")
-        reserved_processes = 12 if args.action == "test" else 0
+        reserved_processes = 12 if args.suite == "cli" else 0
         prior_processes = 0
         for historical, started, _ in previous:
-            required = 12 if int(historical.name) > 9 and started["action"] == "test" else 0
-            reservation = started.get("reservedProcessScenarios", 0 if int(historical.name) <= 9 else None)
-            if type(reservation) is not int or reservation != required:
-                raise ValueError("Unrecoverable process reservation")
+            reservation = windows_process_reservation(int(historical.name), started)
             prior_processes += reservation
         if prior_processes + reserved_processes > 36:
             raise ValueError("Process scenario allocation exhausted")
@@ -680,7 +833,7 @@ def main():
                  "review": args.review, "expected": args.expect, "linuxActions": len(linux),
                  "priorWindowsPreparation": prep, "priorWindowsBuildTest": tests,
                  "reservedProcessScenarios": reserved_processes, "priorProcessScenarios": prior_processes,
-                 "graphTransition": graph_transition}
+                 "graphTransition": graph_transition, "testSuite": args.suite}
         write_new(local / "started.json", start)
         result = {"continuation_allowed": False, "quiescent": False, "evidence": {}}
         action = ROOT / "actions" / local.name
@@ -703,7 +856,8 @@ def main():
             migrations = {}
             previous_controllers = (PREVIOUS_CONTROLLERS if len(previous) == 3 else
                                     TEST_PREVIOUS_CONTROLLERS if len(previous) == 6 else
-                                    PROCESS_PREVIOUS_CONTROLLERS if graph_transition else {})
+                                    PROCESS_PREVIOUS_CONTROLLERS if graph_transition else
+                                    ADAPTER_PREVIOUS_CONTROLLERS if adapter_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
@@ -840,18 +994,18 @@ def main():
                 if len(reports) != 1:
                     raise ValueError("Missing or ambiguous test evidence")
                 report = ET.parse(reports[0])
-                counters = report.find(".//{*}Counters")
-                if counters is None or int(counters.attrib["executed"]) != 22 or \
-                        int(counters.attrib["failed"]) != (12 if args.expect == "red" else 0) or \
-                        int(counters.attrib["passed"]) != (10 if args.expect == "red" else 22):
-                    raise ValueError("Unexpected admitted case counts")
-                results = report.findall(".//{*}UnitTestResult")
-                expected_cases = {name: "Passed" for name in FILE_CASES}
-                expected_cases.update({name: "Failed" if args.expect == "red" else "Passed" for name in PROCESS_CASES})
-                if len(results) != 22 or {node.attrib["testName"]: node.attrib["outcome"] for node in results} != expected_cases:
-                    raise ValueError("Unexpected case names or dispositions")
-                process_evidence(action, args.expect)
-                result["tests"] = counters.attrib
+                invocation = read(action / "invocation.json")
+                expected_arguments = (
+                    "tests\\Authentication.Windows.Scenarios\\bin\\Release\\net10.0-windows\\Authentication.Windows.Scenarios.dll"
+                    + ' --report-trx --results-directory "' + WINDOWS + "\\actions\\" + action.name
+                    + '\\results" --filter "' + TEST_FILTERS[args.suite] + '"')
+                if invocation["arguments"] != expected_arguments:
+                    raise ValueError("Windows test selection differs from the admitted literal")
+                result["tests"] = validate_selected_report(report, args.suite, args.expect)
+                if args.suite == "cli":
+                    process_evidence(action, args.expect)
+                elif any(path.name.startswith("process-") for path in action.rglob("*")):
+                    raise ValueError("Adapter selection produced forbidden process evidence")
             result["continuation_allowed"] = True
         except Exception as error:
             result["error_type"] = type(error).__name__

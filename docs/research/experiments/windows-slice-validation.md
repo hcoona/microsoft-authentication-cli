@@ -1814,3 +1814,119 @@ owned UI/accessibility, console cancellation, actual WSL caller disconnection,
 Native AOT artifact/deployment, Profile activation and complete Slice acceptance
 remain separate obligations. A later documentation-only head does not replace
 the immutable source identity of these executed artifacts.
+
+## Controlled Adapter Scenario Supplement
+
+This supplement selects credential-free adapter scenarios after the accepted
+[CLI green result](#green-process-behavior-and-linux-regression). It changes the
+future fixed test command and selection/accounting rules described below; earlier
+unfiltered invocations, assertions, observations and consumed reservations remain
+unchanged. Exact source/artifact admission is still required for each action.
+
+### Subject and Effects
+
+Reuse Windows.slnx, the existing four selected projects, exact locks and restored public package graph, SDK 10.0.401/runtime 10.0.12, MSAL/Broker 4.83.1, and NativeInterop 0.20.3. Add the controlled mapper/projection/custom-UI and managed HTTP-handler cases to Authentication.Windows.Scenarios. No additional project, dependency, restore, tool installation or package download is proposed.
+
+Only public synthetic MSAL exception/result values, the existing coordinator/lifetime, a fake host/clock, a directly called rejecting callback, and an in-memory HTTP terminal handler may execute. No real PublicClientApplication, account/cache API, broker loading, window, network terminal handler, authentication, child process or Native AOT publish is covered. Review every selected entry, static initializer, generated registration and actual artifact before execution.
+
+### Fixed Selection and Source Admission
+
+The current full CLI batch remains exactly its 22 unchanged cases. New adapter selection must be a separate finite helper choice with a controller-owned literal positive filter, no caller-supplied expression, arbitrary vector, exit override or settings. Keep normal MTP builder creation and all five extension registrations. Select all 21 methods below, without DataRow expansion, and verify every actual class/name identity and outcome. Reject missing, duplicate, unexpected, skipped or not-executed results; total/executed/Passed/Failed must exactly agree with the manifest, and all other counters must be zero.
+
+A test action requires `--suite adapter` or `--suite cli`; non-test actions forbid
+a suite, and only tests may select an expected red result. No caller filter or
+settings argument is admitted. Both the outer helper and Windows controller own
+the literal selections. The exact adapter filter is:
+
+```text
+FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentRequirementHonorsInteractionPermission|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.SilentClaimsReachOneContinuationAndSecondChallengeStops|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.AccessDeniedWinsOverUiRequiredAndRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.Structured65004WinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DenialTextAndNativeCodeDoNotImplyEntraDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DuplicateErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.NonNumericErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MalformedOrOverBudgetBodiesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ProviderUserCancellationRemainsCancelled|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalCancellationWinsOverDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalDeadlineWinsLateProviderCancellation|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.HttpTimeoutDoesNotConsumeRequestDeadline|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RetryableProviderStopsWithoutApplicationRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RecognizedNetworkErrorStopsWithoutRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnknownProviderConfigurationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnexplainedCancellationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UserMismatchWinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ResultProjectionPreservesObservedMetadata|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri|FullyQualifiedName=Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation
+```
+
+The inert baseline has 13 intended business failures and 8 passing safety controls; compile, fixture, loader and discovery failures cannot satisfy red. Independently review the exact immutable source and first failed assertions before admission, then actual red before green implementation. Preserve admitted scenario assertions. Green requires all 21 Passed and normal outer exit 0; red requires the embedded runner's reviewed assertion-failure exit 2.
+
+| Fully qualified case | Inert red prediction |
+| --- | --- |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentRequirementHonorsInteractionPermission` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.SilentClaimsReachOneContinuationAndSecondChallengeStops` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.AccessDeniedWinsOverUiRequiredAndRetryHint` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.Structured65004WinsOverRetryHint` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.DenialTextAndNativeCodeDoNotImplyEntraDenial` | Passed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.DuplicateErrorCodesDoNotCreateDenial` | Passed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.NonNumericErrorCodesDoNotCreateDenial` | Passed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.MalformedOrOverBudgetBodiesDoNotCreateDenial` | Passed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.ProviderUserCancellationRemainsCancelled` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalCancellationWinsOverDenial` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalDeadlineWinsLateProviderCancellation` | Passed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.HttpTimeoutDoesNotConsumeRequestDeadline` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.RetryableProviderStopsWithoutApplicationRetry` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.RecognizedNetworkErrorStopsWithoutRetry` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.UnknownProviderConfigurationStaysInternal` | Passed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.UnexplainedCancellationStaysInternal` | Passed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.UserMismatchWinsOverRetryHint` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.ResultProjectionPreservesObservedMetadata` | Failed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing` | Passed |
+| `Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri` | Failed |
+| `Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation` | Failed |
+
+### Reservation and Controller Transition
+
+Each selected adapter execution consumes one Windows build/test action and zero child-process units. Reject any process-* fixture or child evidence for this selection. Preserve all prior starts/results and their recorded 12-unit full CLI test reservations. Both Linux and Windows history readers recover the old and new suite shapes
+symmetrically and reject altered, unknown or ambiguous selection/accounting.
+For every ordinary finalized action, require the WSL start to equal the verified
+Windows start after removing only its documented file/tool/helper additions.
+Require both start and `windows-result.json` evidence hashes, the existing
+`windows-input.json` link and Windows `reservationSha256` to agree before any
+accounting. Preserve the exact disposed 0002, 0003 and 0006 exceptions and their
+original evidence. Missing or inconsistent copies stop both loops; a coherent
+change to only one suite/charge pair cannot refund capacity. All Windows preparation remains exhausted. Existing cumulative build/test, download and process ceilings remain unchanged; the unused third full CLI reservation is not simultaneously reallocated here.
+
+The first action under this controller supplement is no-restore Windows build
+0015, after exactly fourteen finalized actions. Verify the immutable 0014 WSL
+start SHA-256 `527ed232989800a81fa9eaced39cd66c24c7eb01c309ca5f24ea83746f257f1a`
+and WSL final SHA-256
+`d71e129cfdeb8d47fc83146319242c2948d4948240fd15cee39914b45ba4653d`.
+Its Windows final remains
+`b32b4370942fe521b3e6f2cc45ff7033595e47add27ed540b5a2a94c4982d71a`.
+During that build reservation only, the required prior controller hashes are
+`93486d23aff1ade31b314c0d0c588af250ca200068297539507517a5946d2bb6`
+for `run_windows.py` and
+`bf90ffed77171eb553eed0350dabddbfc14966e1e3584fea3e77e867b6ec559f`
+for `Invoke-WindowsValidation.ps1`. Retain their prior bytes and a hash-bound migration receipt through the existing narrow migration procedure during an admitted build; no standalone bootstrap, rewrite outside an action, restore, historical replay or automatic retry. Keep WindowsValidationJob.cs, bootstrap artifact and stop helper unchanged. Accept run_managed.py's matching history interpretation in the same protocol amendment. A failed or partial migration stops both loops pending its own disposition.
+
+Future `--suite cli` regression positively selects exactly sixteen original
+methods: four Profile methods expanding to ten cases, and twelve process methods.
+The literal filter in both controllers uses full method equality, never a class
+substring, wildcard or negative exclusion. Keep all original 22 expanded
+class/name identities, assertions, process evidence and twelve reservations. The adapter-only result cannot replace that evidence. No existing historical invocation is rewritten or retrospectively described as filtered.
+
+Retain the replacement environment, dedicated roots, complete public input/artifact hashes, current-source no-restore build prerequisite, 120-second subject/capture/Job-drain limit, 8 MiB output bound, nonbreakaway 32-process Job, original bounded termination, complete capture and quiescence conditions. The Windows controller and outer helper must independently agree on the finite selection. No completion or acceptance claim follows before both finalized receipts, collected outer session and independent actual evidence review.
+
+### Admission, Capacity and Claim Limits
+
+At the accepted 0014 checkpoint, Linux preparation is 8/11 and build/test 29/80;
+Windows preparation is 5/5 and build/test 9/40; combined preparation is 13/16 and
+build/test 38/120. Process reservations are 24/36, and charged downloads remain
+768 MiB. No new restore or download allocation is introduced. Preserve all roots,
+previous controller bytes, failures, receipts and reservations. Refresh actual
+history and accepted target/protocol/source before each new admission.
+
+The first red source adds only the controlled C# cases and inert adapter seams
+within the existing four projects. All non-C# graph inputs, exact dependency
+locks and restore metadata remain unchanged. A current-source no-restore build
+and independent complete artifact review must precede its test. Confirm actual
+entrypoints, static initializers, normal MTP builder and all five extension
+registrations; selection alone does not prove effect confinement. The first
+actual red must fail its intended business assertions, never compilation,
+loader, discovery, fixture or safety checks. Independently accept that result
+before green implementation; preserve assertions through green.
+
+[MSTest's public runner contract](https://learn.microsoft.com/dotnet/core/testing/unit-testing-mstest-running-tests#configurations-and-filters)
+permits direct DLL execution with `--filter` and a quoted OR expression using
+`FullyQualifiedName`. This is public API evidence, not an observed local test.
+The existing original CLI result also establishes the pinned TRX expanded-name
+and sixteen-counter shape without another run. New suite outcomes remain
+unobserved until their separately admitted actions finalize.
+
+Real WAM/UI/accounts/cache/consent, actual WSL behavior, Native AOT and overall
+Slice acceptance retain their separate gates. No adapter-only result replaces
+CLI/process, real-platform or complete Slice evidence.

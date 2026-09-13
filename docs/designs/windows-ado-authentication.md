@@ -301,7 +301,7 @@ validation; the number of conceptual architecture boxes is not a class count.
    `cp1`, PoP, or username/password API. Keep provider PII/default logging disabled.
 4. Check broker availability. The pinned availability API is obsolete but still present;
    confine that compatibility dependency to the adapter. Install a rejecting
-   `ICustomWebUI` before any interactive call so an MSAL fallback cannot open a browser
+   `ICustomWebUi` before any interactive call so an MSAL fallback cannot open a browser
    if broker availability changes. Do not implement an OAuth exchange in that callback.
 5. Use the concrete `ClientApplicationBase.GetAccountsAsync(CancellationToken)` overload,
    which exists even though the interface's older overload omits cancellation. Thread
@@ -357,8 +357,15 @@ always wins and is never replaced. This mapping comes from the existing architec
 not from an email suffix or a new account-kind request.
 
 Only no match or a classified `MsalUiRequiredException` can advance to the one interactive
-call. With permission, establish the owned UI first, pass the requested email as login
-hint, and use the same account when uniquely resolved. Forward an opaque claims challenge
+call. With permission, establish the owned UI first. The pinned builder makes
+`WithAccount` and `WithLoginHint` mutually exclusive: use `WithAccount` for the
+uniquely resolved real account, from which MSAL derives the observed username hint;
+otherwise use `WithLoginHint` with the requested email. Preserve the original request
+email separately, including when its casing differs from the observed account spelling.
+Neither choice replaces strict final matching. The pinned
+[interactive builder](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/AcquireTokenInteractiveParameterBuilder.cs)
+and [request parameters](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Internal/Requests/AuthenticationRequestParameters.cs)
+own that API behavior. Forward an opaque claims challenge
 only when it came from this request's silent exception. No caller claims payload,
 cross-process continuation, automatic interactive retry, or browser/device-code path is
 provided. MSAL/WAM may perform their own documented protocol steps within the original
@@ -385,6 +392,80 @@ arbitrary provider text. An interactive call that again requires interaction ter
 as `interaction_required`. State-related interaction requirements follow the same
 permission policy; an unexplained broker failure does not authorize account deletion,
 cache repair, or retries.
+
+### Adapter Observation Boundary
+
+Evaluate original-token cancellation before interpreting provider observations;
+the existing request lifetime determines cancellation versus the original
+deadline. Use ordinal provider-code comparison. Known cancellation, denial, and
+identity mismatch precede the broader UI-required and retryable branches.
+
+| Public observation | Existing outcome and reason |
+| --- | --- |
+| Original operation token is canceled | Propagate cancellation carrying that token. |
+| `authentication_canceled` | `cancelled`. |
+| `access_denied` or positively recognized structured Entra code 65004 | `denied`. |
+| `user_mismatch` | `identity_validation_failed`. |
+| `MsalUiRequiredException` | `interaction_required`; `ConsentRequired` classification uses `consent_required`. |
+| Explicit availability/host failure, rejecting custom UI, `platform_not_supported`, or `wam_runtime_init_failed` | `mechanism_unavailable`. |
+| Remaining `MsalException.IsRetryable` | `temporarily_unavailable` / `provider_transient`. |
+| `service_not_available` or `temporarily_unavailable` | `temporarily_unavailable` / `service_transient`. |
+| `network_not_available`, or `HttpRequestException` with NameResolutionError/ConnectionError | `temporarily_unavailable` / `network_transient`. |
+| HTTP cancellation with an inner `TimeoutException` while the original token remains active | `temporarily_unavailable` / `network_transient`. |
+| Other observations, including unexplained cancellation and unknown configuration/native errors | `internal_failure`. |
+
+The MSAL exception type and its public retry hint already normalize the relevant
+broker statuses. Do not duplicate a private native enum or interpret
+AdditionalExceptionData numeric values as Entra error codes. A provider timeout
+does not establish expiry of the caller's deadline. No branch introduces an
+application retry, alternate mechanism, account repair, or raw diagnostic export.
+Only claims from this request's silent UI-required exception may reach its single
+interactive continuation; a subsequent challenge ends the request.
+
+For the accepted 65004 denial example, inspect only a bounded public
+`MsalServiceException.ResponseBody`: at most 8,192 UTF-16 code units before JSON
+parsing, maximum JSON depth 8, and at most 16 top-level `error_codes` entries.
+Require one root object and exactly one case-sensitive `error_codes` property
+whose complete array consists of Int32 integers. Recognize 65004 only after
+validating the entire document and array. Reject duplicates, trailing syntax,
+comments, trailing commas, malformed data, and exceeded bounds. Never inspect
+messages, descriptions, URLs, inner-exception text, or nested error-code arrays
+to infer denial. These bounds limit recognition work; they are not a public
+input contract or evidence that all real WAM denials can be distinguished.
+Unrecognized details contribute no denial evidence; independent known codes,
+types, and retry hints retain their defined precedence.
+
+[Microsoft's error reference](https://learn.microsoft.com/entra/identity-platform/reference-error-codes) identifies `error` as the application reaction code
+and numeric `error_codes` as diagnostic information. It explicitly warns that
+the numbers can change and that applications depending on them can break.
+Recognizing the existing design's 65004 example is a bounded repository mapping
+choice based on its currently documented meaning, not a stable MSAL or service
+contract. Pinning MSAL does not freeze service diagnostics. Reassess this narrow
+premise when accepting or revising the mapping and at release review through
+`RECHECK-009` in the existing [recheck registry](../research/rechecks.yaml). That review cannot create stability
+or complete observability that the provider does not promise.
+
+Some pinned account-discovery failure paths return an empty list. Supported
+public APIs cannot reconstruct that hidden reason; apply the existing no-match
+permission policy and retain that evidence limitation. No extra discovery or
+private diagnostic path is introduced.
+
+The exact custom-UI interface spelling is
+`Microsoft.Identity.Client.Extensibility.ICustomWebUi`. Its implementation always
+rejects navigation with the sanitized mechanism-unavailable failure. Directly
+testing that callback does not prove real broker-disappearance behavior.
+
+The exact source basis is MSAL 4.83.1 commit
+`d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f`:
+[exception evidence](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/MsalServiceException.cs),
+[UI-required classification](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/MsalUiRequiredException.cs),
+[broker translation](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs),
+and [custom UI contract](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Extensibility/ICustomWebUI.cs).
+The .NET 10 [HTTP cancellation contract](https://learn.microsoft.com/dotnet/api/system.net.http.httpclient.sendasync?view=net-10.0)
+and [network categories](https://learn.microsoft.com/dotnet/api/system.net.http.httprequesterror?view=net-10.0)
+supply the non-MSAL observations. These are source contracts and repository mapping
+choices; controlled exception/result fixtures cannot establish real denial, broker,
+UI, account discovery or network behavior.
 
 ### UML Request Sequence
 
@@ -429,13 +510,18 @@ denial, cancellation, timeout, and invalid candidates do not continue to it.
 
 ### Authoritative Result and State Observations
 
-Validate `AuthenticationResult.Account.Username`, `TenantId`, `Scopes`, `TokenType`,
+Validate `AuthenticationResult.Account?.Username`, `TenantId`, `Scopes`, `TokenType`,
 `ExpiresOn`, nonempty access token, and operation context. Require the requested email,
 the exact tenant when constrained, and the same client/cloud/resource context. Preserve
 the provider's email spelling, tenant, token type, expiration, granted scopes, and
 correlation GUID when nonempty. Reject already expired candidates; impose no additional
 minimum remaining lifetime. Use provider metadata rather than parsing an access or ID
 token in application code.
+Missing account email and invalid or missing tenant metadata remain missing in the
+adapter projection; requested values must not fill them. Keep the request-local
+operation identifier separately from the observed correlation ID. The pinned
+[public result shape](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/AuthenticationResult.cs)
+provides the observed fields; projection does not establish persistence.
 
 The public `authority` is the canonical Public Cloud authority URI formed from the
 validated single-cloud operation and actual `TenantId`:
