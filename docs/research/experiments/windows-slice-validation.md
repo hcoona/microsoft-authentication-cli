@@ -550,3 +550,89 @@ All 22 actions are resolved and quiescent; 0022 is the sole historical stop.
 Consumption is 7 of 12 preparation actions, 15 of 80 build/test actions and
 768 MiB of the 1 GiB charged download limit. Action 0023 has not run. No capacity
 is reset or enlarged. The overall Windows Slice acceptance remains open.
+
+## Request Lifetime Scenario Evidence
+
+The lifetime increment in [PR #116](https://github.com/hcoona/microsoft-authentication-cli/pull/116)
+preserves the 166 preceding cases and adds 24 controlled application/terminal-rule
+cases. The scenario source is `tests/Authentication.Scenarios/RequestLifetimeScenarios.cs`;
+the implementation boundary is `src/Authentication.Core/RequestLifetime.cs`.
+The existing Windows design and validation strategy retain the required behavior.
+
+After the action 0022 compilation disposition above was accepted, corrected source
+`5312f6ddcca43260ed9fc1b7c10de58daa631492`, tree
+`3e37c1658f5acb15247b7ea5fa1e81cabcac1428`, received fresh independent
+[admission](https://github.com/hcoona/microsoft-authentication-cli/pull/116#issuecomment-5651304230).
+Actions 0023 and 0024 used accepted target
+`414c8f100af4078a4223ba47605681dc9c239f75` and protocol/helper
+`eb9d24d95a4e85578770fc167edb6c8b648e304b` on 2026-09-13 UTC.
+
+| Action | UTC start to result | Child seconds | Actual result |
+| --- | --- | ---: | --- |
+| 0023, corrected-source build | 05:08:22.765352 to 05:08:30.074716 | 7.114 | Exit 0; zero warnings and errors. |
+| 0024, full red test | 05:08:58.112461 to 05:09:00.998798 | 2.755 | Exit 2; 190 executed, 172 passed, 18 intended assertion failures. |
+
+The independent [actual-red review](https://github.com/hcoona/microsoft-authentication-cli/pull/116#issuecomment-5651321205)
+confirms every failed name, row, message and caller: 11 pending-operation terminal
+selection assertions, three missing provider-token notifications, three incorrect
+timeout/cancellation outcomes and one unsafe admission-exception escape. All 166
+preceding cases and six new guards passed. Every other TRX outcome counter is
+zero. Controlled tasks were released and drained; both actions ended normally
+with confirmed process-group quiescence and unchanged source, SDK, graph and
+artifacts. The parallel synthetic suite's duration is not product timing evidence.
+
+The build receipt SHA-256 is
+`832b00c17e553776c2afd7d9df568fd9cf4bd52c864f5d54a738c3c905073dac`;
+the single red TRX is
+`b62b1de57332fddfd378123ddba3054ed5df69914dbb79d1b93ba7278cd6f23f`.
+Complete receipt/output bindings are retained in the independent review. The
+original failed action 0022 remains unchanged and counted; it is not red evidence.
+
+Green source `9008959bbbda0c95e0a65dabc6ee3c4072b2338a`, tree
+`80ae260fe363bffb1b8869d63e8a1f5e508dd9ac`, preserves that red source in its
+ancestry and leaves every test unchanged. Its independent
+[green admission](https://github.com/hcoona/microsoft-authentication-cli/pull/116#issuecomment-5651355864)
+bound actions 0025 and 0026 to the same accepted target and protocol/helper above.
+
+| Action | UTC start to result | Child seconds | Actual result |
+| --- | --- | ---: | --- |
+| 0025, green-source build | 05:20:32.574846 to 05:20:40.103360 | 7.341 | Exit 0; zero warnings and errors. |
+| 0026, full green test | 05:21:13.439752 to 05:21:14.363864 | 0.786 | Exit 0; 190 executed and passed; zero failures or skipped cases. |
+
+The executor inspected the source-bound build, complete command/environment and
+output, all 144 source entries and 249 artifact paths/hashes, eight graph inputs,
+eight restore metadata files, four SDK/runtime identities and generated test
+entry, five registrations and runtime configuration before the conditional test.
+A separate fresh accepted-target/Wave and published-admission check preceded each
+action. The full green run retained every name and data row from red. All other
+TRX outcome counters were zero; both actions ended normally without termination,
+with confirmed quiescence and unchanged source, SDK, graph and artifacts.
+
+The green build receipt SHA-256 is
+`64dc048bcdeea2c9240aef95816057aac53040d86e5858294a53d1ad865e6eb5`;
+the single green TRX is
+`5cf3159e06fe31eb3d6cc901bcb7602d4a0f8983db8b6334ec2f1bed7fef49ff`.
+The independent [actual-green review](https://github.com/hcoona/microsoft-authentication-cli/pull/116#issuecomment-5651369741)
+confirms these results, exact red-to-green case continuity and complete integrity;
+it retains the full receipt/output and executor-gate bindings.
+
+The tested implementation retains the original monotonic deadline, selects
+cancellation/timeout while controlled dependencies remain pending, invalidates
+late outcomes, and notifies the provider token without waiting for its callbacks.
+Only the single commitment boundary supplies the deliverable outcome; caller
+cancellation before commitment suppresses success and its warning. An already
+latched failure remains authoritative. Operation observation and deferred token
+source disposal do not establish UI/process quiescence or extend the future
+host's shutdown allowance.
+
+Consumption through 0026 is **7/12 preparation, 19/80 build/test, and 768 MiB/1 GiB
+charged downloads**. All 26 contiguous actions are resolved and quiescent. The
+original action 0022 remains the sole false continuation receipt under its exact
+accepted disposition. No new fetch, restore or installation was needed. Dedicated
+files remain intentionally retained; raw machine-bearing output and TRX filenames
+remain local.
+
+These are controlled Linux managed observations under the unchanged SDK/runtime,
+public dependency, offline signature-chain and synthetic-state limits above.
+They do not establish real WAM, Windows/WSL UI or process shutdown, pipe/result
+transport, Native AOT behavior, account reuse, or overall Slice acceptance.
