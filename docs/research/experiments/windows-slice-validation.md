@@ -636,3 +636,82 @@ These are controlled Linux managed observations under the unchanged SDK/runtime,
 public dependency, offline signature-chain and synthetic-state limits above.
 They do not establish real WAM, Windows/WSL UI or process shutdown, pipe/result
 transport, Native AOT behavior, account reuse, or overall Slice acceptance.
+
+## Result-Contract Red/Green Evidence
+
+Actions 0027 through 0030 ran on 2026-09-13 under the unchanged accepted Wave,
+target `9e623f58654bd9ae481ec32db1a67f8c0f26d479`, and protocol/helper
+`9f31b601bc7e3b64f2c030e332b49751370cb971`. The existing designated WSL2 Linux
+x64 host reused verified SDK 10.0.401/runtime 10.0.12 and the reviewed public
+package graph. No fetch, restore or installation occurred. Every command ran
+under the accepted replacement environment and finite managed limits.
+
+The red source was `4db00c4883e9708da33d68c298857cc308775bd2`, tree
+`62315817135af4ed1cba5d181a0694ae37ec6a75`. Its
+[independent admission](https://github.com/hcoona/microsoft-authentication-cli/pull/118#issuecomment-5651448083)
+covered one build and conditional full test after the executor's source,
+artifact, command/environment and generated-runner gate. The
+[actual red review](https://github.com/hcoona/microsoft-authentication-cli/pull/118#issuecomment-5651462530)
+confirmed every failed row and retained prior scenario.
+
+The green source was `c6c36e2f3216d514f35e8c40da79d44cf1640212`, tree
+`507ecf81e1690d144bf8a180917e5d8bf2685991`. Its
+[independent admission](https://github.com/hcoona/microsoft-authentication-cli/pull/118#issuecomment-5651500024)
+covered the corresponding green pair. Only result projection and coordinator
+reason propagation changed after red; every test remained byte-identical.
+The
+[actual green review](https://github.com/hcoona/microsoft-authentication-cli/pull/118#issuecomment-5651511745)
+confirmed full case continuity and source/artifact integrity.
+
+| Action | UTC interval | Child seconds | Observation |
+| --- | --- | --- | --- |
+| 0027 build | 05:42:10.546871–05:42:17.845790 | 7.133 | Exit 0, zero warnings/errors |
+| 0028 red test | 05:42:48.513330–05:42:49.575139 | 0.910 | 218 executed, 196 passed, 22 intended assertion failures; exit 2 |
+| 0029 green build | 05:54:31.364569–05:54:38.531874 | 7.014 | Exit 0, zero warnings/errors |
+| 0030 green test | 05:54:58.328076–05:54:59.265091 | 0.805 | 218 executed and passed, zero failed/skipped/other outcomes; exit 0 |
+
+The 28 added cases protect protocol-1 output values, field allowlists, framing,
+matching status and application reason propagation. The red failures were eight
+missing success-status projections, ten missing typed-outcome projections
+(including cancellation before commitment), and four lost structured reasons.
+All 190 preceding cases passed. Six new guards also passed against the fixed
+safe internal_failure seam. Success metadata checks after the eight exit
+assertions, projection after the four reason assertions, and the cancellation
+case's later duplicate-commit/operation-completion assertions were not reached
+in red. Passing guards on a constant seam do not establish their later branches.
+
+Green preserved the exact red case-name/data-row set and passed all 218 cases,
+including those later assertions and the implemented defensive branches. The
+explicit field writer preserves success metadata, opaque token escaping and
+optional nonempty correlation without fixing field/scope order or JSON interior
+whitespace. Failure projection exposes only finite outcome/reason fields.
+Structured consent and provider/network/service transient reasons survive the
+coordinator; later validated interactive success does not retain earlier consent.
+Cancellation before commitment emits no token or persistence warning.
+
+All four actions completed normally with no termination and confirmed owned-process
+quiescence. Complete outputs, both TRX files, starts/results, command/environments,
+146 source hashes, 249 artifact paths/hashes, eight graph inputs, eight generated
+restore files and four SDK/runtime identities were independently checked. The
+generated entry and five registrations retain their accepted contents; runtime
+10.0.12 retains disabled roll-forward. No source or artifact changed during either
+test. Raw machine-named TRX and path-bearing output remain local.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| Red build receipt, action 0027 | `a410ecfb2639e4a3e5a28ed58809de5481b592f73ba55e7b1e72a4f820ac1cef` |
+| Red TRX, action 0028 | `430cac27f1cb7017f07743133fd0a976169dbd8ddc07735c84aa2719a68ba502` |
+| Green build receipt, action 0029 | `46df2cbcce3201127de6d37edb14ba228a3d1d534c0965db3218f86cb9ae27b0` |
+| Green TRX, action 0030 | `31c71c1c843eeabb7bc1b7c446242fdae6510fda7bafb955c79cf9eb9464e517` |
+
+Through action 0030, history has 30 contiguous resolved/quiescent actions and
+consumption is 7/12 preparation, 23/80 build/test and 768 MiB/1 GiB charged
+public downloads. The original action 0022 receipt and exact disposition remain
+unchanged. All dedicated evidence and generated files are intentionally retained.
+
+These observations use synthetic emails, token/claims markers, provider outcomes
+and managed hosts only. They establish neither actual stdout delivery nor matching
+process exit, Windows/WSL pipe or shutdown behavior, real UI/WAM, account/cache
+state or reuse, Native AOT artifact behavior, Profile activation, broader support,
+or overall Slice acceptance. Those obligations remain open under their existing
+canonical validation basis and required protocol/owner decisions.

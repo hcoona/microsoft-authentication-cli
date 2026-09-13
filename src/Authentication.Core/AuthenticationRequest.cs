@@ -25,11 +25,21 @@ public enum AuthenticationFailure
     Timeout,
 }
 
+public enum AuthenticationReason
+{
+    None,
+    ConsentRequired,
+    ProviderTransient,
+    NetworkTransient,
+    ServiceTransient,
+}
+
 public sealed record AuthenticationOutcome(
     TokenCandidate? Success,
     AuthenticationFailure? Failure,
     bool PersistenceUnconfirmed = false,
-    bool Interactive = false)
+    bool Interactive = false,
+    AuthenticationReason Reason = AuthenticationReason.None)
 {
     public override string ToString() => Failure?.ToString() ?? "Success";
 }
@@ -46,7 +56,8 @@ public sealed record TokenCandidate(
     IReadOnlyList<string> Scopes,
     string TokenType,
     DateTimeOffset ExpiresOn,
-    Guid OperationId)
+    Guid OperationId,
+    Guid? CorrelationId = null)
 {
     public override string ToString() => nameof(TokenCandidate);
 }
@@ -82,10 +93,13 @@ public interface IRequestHost
 
 // The adapter supplies structured categories, never provider message text. Claims are
 // request-local opaque input for the one permitted continuation and are not output.
-public sealed class ProviderFailureException(AuthenticationFailure failure, string? claims = null)
+public sealed class ProviderFailureException(AuthenticationFailure failure, string? claims = null,
+    AuthenticationReason reason = AuthenticationReason.None)
     : Exception("Authentication provider failed.")
 {
     public AuthenticationFailure Failure { get; } = failure;
 
     public string? Claims { get; } = claims;
+
+    public AuthenticationReason Reason { get; } = reason;
 }

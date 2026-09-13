@@ -22,7 +22,7 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         }
         catch (ProviderFailureException exception)
         {
-            outcome = new(null, SafeFailure(exception.Failure), Interactive: interactive);
+            outcome = new(null, SafeFailure(exception.Failure), Interactive: interactive, Reason: exception.Reason);
         }
         catch (Exception)
         {
@@ -72,6 +72,7 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
             }
 
             string? claims = null;
+            var interactionReason = AuthenticationReason.None;
             if (selected is not null)
             {
                 try
@@ -84,13 +85,14 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
                 catch (ProviderFailureException exception) when (exception.Failure == AuthenticationFailure.InteractionRequired)
                 {
                     claims = exception.Claims;
+                    interactionReason = exception.Reason;
                 }
             }
 
             cancellationToken.ThrowIfCancellationRequested();
             if (!request.InteractionAllowed)
             {
-                return new(null, AuthenticationFailure.InteractionRequired);
+                return new(null, AuthenticationFailure.InteractionRequired, Reason: interactionReason);
             }
 
             closeOwnedUi = true;
