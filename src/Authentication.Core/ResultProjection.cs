@@ -86,6 +86,7 @@ public static class ResultProjection
         var reason = (failure, outcome.Reason) switch
         {
             (_, AuthenticationReason.None) => name,
+            (AuthenticationFailure.InvalidRequest, AuthenticationReason.InvalidConfiguration) => "invalid_configuration",
             (AuthenticationFailure.InteractionRequired, AuthenticationReason.ConsentRequired) => "consent_required",
             (AuthenticationFailure.TemporarilyUnavailable, AuthenticationReason.ProviderTransient) => "provider_transient",
             (AuthenticationFailure.TemporarilyUnavailable, AuthenticationReason.NetworkTransient) => "network_transient",

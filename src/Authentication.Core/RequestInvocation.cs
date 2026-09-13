@@ -12,6 +12,7 @@ public interface IProfileSource
 public sealed class RequestInvocation : IDisposable
 {
     private readonly RequestLifetime lifetime;
+    private readonly IRequestHost host;
 
     public ParsedRequest? Request { get; }
 
@@ -20,6 +21,7 @@ public sealed class RequestInvocation : IDisposable
     public RequestInvocation(IReadOnlyList<string> arguments, IRequestHost host,
         long entryTimestamp, CancellationToken cancellationToken = default)
     {
+        this.host = host;
         Request = RequestSyntax.Parse(arguments);
         lifetime = new(host.Clock, entryTimestamp,
             TimeSpan.FromSeconds(Request?.TimeoutSeconds ?? 120), cancellationToken);
@@ -29,15 +31,45 @@ public sealed class RequestInvocation : IDisposable
     public Task<AuthenticationOutcome> RunAsync(IProfileSource profiles,
         Func<ClientProfile, IAuthenticationProvider> createProvider) => lifetime.RunAsync(async token =>
         {
-            if (Request is not null)
+            if (Request is null) return new(null, AuthenticationFailure.InvalidRequest);
+
+            ReadOnlyMemory<byte> bytes;
+            try
             {
                 token.ThrowIfCancellationRequested();
-                await profiles.ReadAsync(Request.ProfilePath, token).ConfigureAwait(false);
+                bytes = await profiles.ReadAsync(Request.ProfilePath, token).ConfigureAwait(false);
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+            {
+                return InvalidConfiguration();
             }
 
-            // Red seam: Profile semantics and provider composition are not implemented.
-            return new(null, AuthenticationFailure.InternalFailure);
+            token.ThrowIfCancellationRequested();
+            var profile = ProfileSyntax.Parse(bytes);
+            if (profile is null || !ProfileSyntax.TryResolveTenant(profile, Request.Tenant, out var tenant))
+            {
+                return InvalidConfiguration();
+            }
+
+            var request = new AuthenticationRequest(Request.AccountEmail, Request.Scopes,
+                Request.InteractionAllowed, tenant);
+            token.ThrowIfCancellationRequested();
+            IAuthenticationProvider provider;
+            try
+            {
+                provider = createProvider(profile);
+            }
+            catch (ProviderFailureException exception)
+            {
+                return new(null, exception.Failure, Reason: exception.Reason);
+            }
+
+            token.ThrowIfCancellationRequested();
+            return await new RequestCoordinator(provider, host).AuthenticateAsync(request, token).ConfigureAwait(false);
         });
+
+    private static AuthenticationOutcome InvalidConfiguration() =>
+        new(null, AuthenticationFailure.InvalidRequest, Reason: AuthenticationReason.InvalidConfiguration);
 
     public bool TryCommitResult(out SerializedResult? result)
     {
