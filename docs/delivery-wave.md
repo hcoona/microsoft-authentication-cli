@@ -48,7 +48,7 @@ downloads may use public NuGet.org and official .NET distribution endpoints, wit
 credentials. New experiment-owned files stay in dedicated build/test roots outside
 production installations and are intentionally retained. Maximum cumulative capacity is
 16 dependency preparation/restore actions, 120 build/test actions, 12 Native AOT publish
-actions and 47 synthetic process scenarios, with at most 4 GiB of newly downloaded public
+actions and 60 synthetic process scenarios, with at most 4 GiB of newly downloaded public
 dependency content. Exact per-action time, output and termination limits and source
 admission are owned by the accepted protocol. No new toolchain installation is granted.
 
