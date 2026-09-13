@@ -167,6 +167,36 @@ def artifact_hashes(checkout):
             if path.is_file() and ("bin" in path.parts or path.name == "project.assets.json")}
 
 
+def windows_consumption():
+    """Recover the sibling loop while holding the existing shared action lock."""
+    history = ROOT / "windows-actions"
+    if not history.exists():
+        return 0, 0
+    if history.is_symlink():
+        raise ValueError("Linked Windows action history")
+    preparation, build_test = 0, 0
+    windows = Path("/mnt/c/Temp/azureauth-windows-slice-108/actions")
+    for number, action in enumerate(sorted(history.iterdir()), 1):
+        if action.is_symlink() or action.name != f"{number:04d}":
+            raise ValueError("Noncontiguous Windows action history")
+        receipt = json.loads((action / "result.json").read_text())
+        started = json.loads((action / "started.json").read_text())
+        if receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
+            raise ValueError("Unresolved Windows action stops both validation loops")
+        for name, expected in receipt["evidence"].items():
+            if digest(windows / action.name / name) != expected:
+                raise ValueError("Windows action evidence changed")
+        if started["action"] in ("bootstrap", "restore"):
+            preparation += 1
+        elif started["action"] in ("build", "test"):
+            build_test += 1
+        else:
+            raise ValueError("Unknown Windows action allocation")
+    if preparation > 4 or build_test > 40:
+        raise ValueError("Windows allocation exceeded")
+    return preparation, build_test
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("fetch", "restore", "build", "test"))
@@ -219,6 +249,7 @@ def main():
     # Lock plus exclusive starts provides sequential, crash-visible accounting.
     with (ROOT / "action.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        windows_preparation, windows_build_test = windows_consumption()
         previous = sorted((ROOT / "actions").iterdir())
         receipts = []
         for number, action in enumerate(previous, 1):
@@ -241,6 +272,9 @@ def main():
             raise ValueError("Initial preparation allocation exhausted")
         if sum(item["action"] in ("build", "test") for item in receipts) + (not preparation) > 80:
             raise ValueError("Initial build/test allocation exhausted")
+        if sum(item["action"] in ("fetch", "restore") for item in receipts) + preparation + windows_preparation > 16 or \
+                sum(item["action"] in ("build", "test") for item in receipts) + (not preparation) + windows_build_test > 120:
+            raise ValueError("Combined Linux/Windows Wave capacity exhausted")
         if sum(item["reserved_download_bytes"] for item in receipts) + (128 * 1024 * 1024 if arguments.action == "fetch" else 0) > 1024**3:
             raise ValueError("Initial public download allocation exhausted")
         action = ROOT / "actions" / f"{len(previous) + 1:04d}"

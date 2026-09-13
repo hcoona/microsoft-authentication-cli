@@ -795,3 +795,209 @@ The source supplies a read-only Profile seam and an immutable parsed snapshot;
 its controlled bytes cannot establish the later Windows fixed-volume/open-once
 reader. Prepared output is not proof of successful transport or bounded shutdown.
 Profile activation and required real-account and platform evidence remain open.
+
+## Windows Managed File Scenarios
+
+This supplement allocates credential-free managed Windows file validation from the
+existing Wave. It allocates no Native AOT publishing, child-product process scenarios,
+UI/WAM, account enumeration/acquisition, account/cache/consent changes, or resource
+requests. Those remaining claims require their later protocols. All earlier Linux
+observations, including original action 0022, remain unchanged.
+
+### Windows Subject and Source Admission
+
+The initial subject is `Authentication.Windows` and
+`tests/Authentication.Windows.Scenarios/Authentication.Windows.Scenarios.csproj`, using
+`net10.0-windows`, SDK 10.0.401/runtime 10.0.12 and MSTest 4.1.0. It exercises the accepted
+RequestInvocation through a physical Windows Profile reader, a controlled provider and
+no real UI. No real MSAL application, account/cache API, native broker load or network
+path is admitted in these test entry points. Compatibility analysis is not AOT publishing.
+
+The initial ten cases cover explicit personal/work email, exactly 65,536 bytes, rejection
+of 65,537 bytes, backing-file replacement after admission, missing file, directory,
+malformed JSON, invalid UTF-8 and sharing denial. The fixture creates ten scenario
+directories, the directory-case child and eight synthetic files, each at most 65,537
+bytes, under the action's dedicated temporary directory. Intentionally retain these
+files. The first constant-failure reader expects four failures at the shared success
+assertion and six passing rejection guards; later assertions in those failed cases are
+not established by that red run. A corrected reader must run the unchanged ten cases.
+
+Before each immutable source runs, independently review its exact commit/tree, complete
+project/import/package graph, entry point and fixture effects, commands, expected cases
+and exact red or green result in the coordinating PR. Inspect generated test entry,
+extension registrations and runtime configuration after build and before test. Source
+changes require a new admitted build. Graph changes require a new admitted restore and
+resolved-graph review. Before a later action relies on expected red, independently
+review its actual failed names, rows, first assertions and passing guards. Source
+admission cannot enlarge this supplement or waive those prerequisites.
+
+### Windows Environment and Retained Inputs
+
+Use the existing Windows 11 x64 host through WSL 2, as its ordinary non-SYSTEM user.
+The dedicated Windows root is `C:\Temp\azureauth-windows-slice-108`; create it only after
+this supplement is accepted. The fixed read-only PowerShell preflight checks the local
+fixed volume, direct parent/root paths and any existing root's owner before WSL writes
+Windows files. The action controller then verifies Windows ownership, direct paths,
+complete input hashes and no-follow directory traversal before any compiler or subject.
+Reject an unrecognized root, reparse point, changed input or ownership uncertainty.
+The workstation threat model permits sequential verified file operations; these helpers
+are not a hostile-code sandbox.
+
+Retain a root marker, detached source checkout, original public archives, dedicated
+complete package entries, controller copies and per-action outputs. The WSL-side
+`windows-actions/` directory under the existing Linux root owns contiguous reservations
+and final continuation receipts, including failed Windows starts. Its corresponding
+Windows action directory contains the hash-bound input reservation and Windows process,
+invocation, output and termination evidence. Copy source from an immutable detached Git
+checkout and verify its actual bytes. Retain generated locks before adopting their
+identical tracked copies; do not silently discard or change them.
+
+Use the installed `C:\Program Files\dotnet` SDK/runtime and Framework64
+`v4.0.30319` standalone C# compiler. Do not install or repair tools. Verify the fixed
+executable, SDK/runtime, NuGet and Framework identities in
+[`run_windows.py`](../../../tools/validation/run_windows.py) before invocation and after
+quiescent execution. Root global.json selects SDK 10.0.401 without roll-forward; project
+properties select runtime 10.0.12 without roll-forward. Installed-state reuse is not
+fresh installation, signer, revocation or deployment evidence.
+
+#### Complete Public Package Cache Reuse
+
+Windows NuGet signature verification is always enabled for package installation during
+restore. `DOTNET_NUGET_SIGNATURE_VERIFICATION=false` is not a Windows opt-out. A local
+archive source can still cause certificate-chain network retrieval or root-store
+updates; offline revocation alone does not exclude those effects. This supplement
+therefore reuses only complete, verified retained global-package entries and admits no
+package-installation fallback.
+
+The input set is the accepted Linux loop's 19 MSTest graph entries plus the retained
+Windows `Microsoft.NET.ILLink.Tasks` 10.0.12 entry for compatibility analysis. Original
+public archive lengths and SHA-512 values are pinned in `run_windows.py`. Preserve
+original `.nupkg`, `.nupkg.sha512` and `.nupkg.metadata` bytes. The NuGet signed-package
+content hash is distinct from the whole-archive hash; compare each against its own
+accepted evidence. Do not fabricate completion metadata or replace a content hash.
+
+Before copying, independently review every selected entry's original public provenance,
+manifest, build imports, executable assets, complete file inventory and cache metadata.
+Verify payload bytes against the original ZIP parts, including NuGet's normal part-name
+decoding, lowercase manifest name and omission of OPC container metadata. Reject missing
+or extra payloads, invalid Windows names, case collisions and linked paths. Copy only
+those verified entries losslessly into the new dedicated package root, preserving the
+historical donors. The initial candidate contains 20 entries, 1,057 retained files and
+195,109,241 bytes. This is a read-only preparation inventory, not a Windows copy or
+execution observation. Each action binds and rechecks the actual inventory.
+
+The installed SDK identifies NuGet `7.9.0-rc.42413` and public source revision
+`e34a38d2ae1fc26406a317517196e55c68ff83ab`. At that revision,
+[GlobalPackagesFolderUtility](https://github.com/dotnet/dotnet/blob/e34a38d2ae1fc26406a317517196e55c68ff83ab/src/nuget-client/src/NuGet.Core/NuGet.Protocol/Utility/GlobalPackagesFolderUtility.cs#L45)
+recognizes complete existing entries and returns the retained package without new
+signature verification.
+[PackageExtractor](https://github.com/dotnet/dotnet/blob/e34a38d2ae1fc26406a317517196e55c68ff83ab/src/nuget-client/src/NuGet.Core/NuGet.Packaging/PackageExtractor.cs#L695)
+places installation and signature verification behind the missing-metadata branch.
+Its internal cache flag is not evidence that this experiment verified a signature.
+The [Windows verification documentation](https://learn.microsoft.com/dotnet/core/tools/nuget-signed-package-verification#windows)
+and [installed-package documentation](https://learn.microsoft.com/nuget/concepts/troubleshooting-installed-packages#package-signature-log-message)
+provide the public contract context. The source identity is tied to inspected installed
+NuGet assemblies, not inferred from a general SDK tag.
+
+Keep provenance archives in a separate directory that is never a restore source. The
+only configured source is the verified empty `empty-feed` directory. Clear inherited
+sources, mappings, fallback folders and additional project sources; supply no credentials.
+Use only the dedicated verified global cache, with audit and workload resolution disabled.
+A cache miss, incomplete entry, unexpected package/download item, or graph change stops
+preparation for review; do not repair, recopy, extract from an archive or retry.
+Independently review the new Windows lock, selected assets, generated imports, source
+mapping and package folders before build/test. No online restore or signature-chain
+claim follows from this procedure, and it changes no OS trust settings.
+
+Start each compiler/subject with a replacement environment. Bind both TMP and TEMP to
+the verified action-owned fixed-volume directory: non-SYSTEM Windows temporary-path
+selection prefers TMP. Bind USERPROFILE, APPDATA, LOCALAPPDATA, DOTNET_CLI_HOME and NuGet
+package/HTTP/plugin paths beneath the dedicated root. Keep required Windows system
+variables and only the selected dotnet/System32 paths. Omit inherited credentials,
+proxies, startup hooks, profilers, developer configuration and private feeds. Disable
+.NET/MTP telemetry, first-run changes, workload lookup/updates, build servers, shared
+compilation and node reuse. Do not change OS privacy or account settings.
+
+### Windows Actions, Capacity and Evidence
+
+Allocate at most four Windows preparation actions and forty Windows build/test actions,
+alongside Linux's existing twelve and eighty. Those sums fit Wave ceilings of sixteen
+and 120. No new downloads, publish actions or synthetic child-product process actions
+are allocated here. One test action runs all ten admitted managed file cases; no case
+launches a product child. Preparation consists of exactly one helper bootstrap and at
+most three independently admitted restores, including failed starts. Copying verified
+source and public cache/archive inputs belongs to the recorded bootstrap/preparation;
+it creates no additional execution allocation.
+
+Both helpers use the existing Linux `action.lock` for the entire action and inspect both
+contiguous histories before reserving another action. The updated Linux helper rejects
+an unresolved Windows action too. Subsequent Linux execution must use this accepted
+revision's symmetric history check; the previous helper remains historical evidence.
+Preserve all 34 earlier Linux actions, the original 0022 disposition and consumption of
+7/12 preparation, 27/80 build/test and 768 MiB/1 GiB charged downloads. No Windows action
+is an executed observation merely because this supplement is accepted. Ambiguous capacity,
+changed evidence or unresolved termination stops both loops. No concurrent execution or
+history reset is permitted.
+
+Invoke the accepted helper through `python3 -I tools/validation/run_windows.py` with one
+of `bootstrap`, `restore`, `build` or `test`, full `--protocol`, `--source` and `--target`
+commits, and the exact independent `--review` PR-comment URL. Only test accepts expected
+red through `--expect red`. The helper binds the accepted Wave/protocol, source and
+controller bytes before reserving the action, and records the reservation before the
+fixed Windows path preflight or any compiler/subject invocation. There is no arbitrary
+command, filter, retry, dependency selection, environment or expected-exit override.
+
+The concrete commands and replacement environment are in
+[`Invoke-WindowsValidation.ps1`](../../../tools/validation/Invoke-WindowsValidation.ps1):
+
+- Bootstrap the fixed reviewed `WindowsValidationJob.cs` once with the pinned Framework
+  compiler, `/noconfig /nologo /target:library`, one owned output DLL and explicit absolute
+  System/System.Core references. The normal implicit mscorlib reference and compiler
+  runtime/configuration are verified installed inputs. No response file, analyzer,
+  generator, shared compiler, custom task or extra source is permitted. Retain the
+  same compiler process object/handle through completion or stop. Bind its output DLL
+  to the accepted source, command and installed inputs; later actions verify that
+  artifact and source before loading it. A failed bootstrap stops, rather than retrying.
+- Restore only the fixed Windows scenario project with its owned config and complete
+  package cache, disabled audit/parallelism/shared compilation, one node and no node
+  reuse or automatic response file. Use locked mode after the reviewed lock is tracked.
+- Build that project in Release with no restore, disabled build servers/shared compilation,
+  one node, no node reuse and no automatic response file.
+- Execute only its source-bound DLL through the selected Windows dotnet host, using the
+  embedded MTP TRX reporter and the dedicated results directory.
+
+For each restore/build/test, the reviewed
+[`WindowsValidationJob.cs`](../../../tools/validation/WindowsValidationJob.cs) creates the
+child suspended, restricts inherited output handles, assigns it to the owned Job and
+resumes only after assignment. Retain its incarnation handle. Set KILL_ON_JOB_CLOSE and
+a 32-process ceiling without breakaway. No VCTIP or compiler-survivor exception applies.
+Require normal zero-active-process completion before accepting an expected result.
+
+The standalone bootstrap gets 30 seconds and each restore gets 180 seconds. Each build
+or test gets 120 seconds. The same stopwatch covers subject start, capture and normal
+Job drain; no new timeout starts at a later stage. Bound combined captured bytes to
+8 MiB, retaining a bounded prefix and disposition on failure. On timeout, cancellation
+or overflow, stop the owned compiler by its retained handle or terminate the Job and
+verify quiescence within ten further seconds. Persist captured bytes only after
+confirmed quiescence; no raw process or machine-bearing output is published directly.
+
+The WSL helper bounds the fixed path-preflight controller wait to twenty seconds and
+its action-controller wait, including input verification, to 230 seconds. SIGINT/SIGTERM
+creates an action cancellation marker and allows up to fifteen seconds for normal
+Windows stop. A controller timeout or unconfirmed stop invokes the fixed
+[`Stop-WindowsValidation.ps1`](../../../tools/validation/Stop-WindowsValidation.ps1) for
+at most ten seconds; local interop-proxy termination gets at most five seconds. Emergency
+termination verifies retained PID/start-time identity, never a bare reused PID.
+Controller absence and WSL exit do not prove Job quiescence: emergency or incomplete
+Windows evidence stops the loop with explicit uncertainty and retained files.
+No subsequent action or speculative cleanup is permitted from that state.
+
+Every final receipt binds exact command/environment, source, tools, public archive/cache
+inputs, restore metadata and applicable artifacts, plus UTC timing, exit, capture
+disposition, Job accounting and stop results. Restore metadata means the explicit NuGet
+assets/dgspec/generated-import files; build-only JSON is included in the build receipt.
+A build cannot silently redefine restore prerequisites. After an expected test, inspect
+the single TRX and exact case outcomes before further reliance. Retain all dedicated
+files and failed starts. Synthetic managed file results establish only their actual
+source and Windows file/application boundary; UI, WAM, process transport, WSL lifetime,
+Native AOT, real account reuse and overall Slice acceptance remain open.
