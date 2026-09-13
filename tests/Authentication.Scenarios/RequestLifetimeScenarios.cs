@@ -400,11 +400,11 @@ public sealed class RequestLifetimeScenarios
             private bool disposed;
             public bool Change(TimeSpan dueTime, TimeSpan period)
             {
-                if (period != System.Threading.Timeout.InfiniteTimeSpan) throw new NotSupportedException("One-shot fixture timers only.");
+                if (period != global::System.Threading.Timeout.InfiniteTimeSpan) throw new NotSupportedException("One-shot fixture timers only.");
                 lock (clock.gate)
                 {
                     if (disposed) return false;
-                    due = dueTime == System.Threading.Timeout.InfiniteTimeSpan ? null : clock.timestamp + dueTime.Ticks;
+                    due = dueTime == global::System.Threading.Timeout.InfiniteTimeSpan ? null : clock.timestamp + dueTime.Ticks;
                     return true;
                 }
             }
