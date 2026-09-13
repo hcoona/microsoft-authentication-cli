@@ -14,9 +14,10 @@ controls:
       - docs/governance/governance-system.md#gov-005-controls-implement-policy
       - docs/governance/record-system.md#record-system-gate
       - docs/research/experiments/windows-slice-validation.md#windows-environment-and-retained-inputs
+      - docs/research/experiments/windows-slice-validation.md#windows-cli-process-supplement
     invariant: >-
       Pre-commit checks run only when the worktree matches the staged snapshot, and
-      tracked text has no unresolved conflict markers or whitespace errors. The two
+      tracked text has no unresolved conflict markers or whitespace errors. The four
       generated Windows lock paths named in the trailing-whitespace step retain their
       reviewed restore bytes instead of undergoing whitespace rewriting. Their byte
       integrity is established by the existing protocol's independent admission review,

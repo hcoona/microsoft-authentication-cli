@@ -22,6 +22,8 @@ local fastSteps = new Mapping<String, Step> {
     // These generated locks retain the exact bytes accepted by the validation protocol.
     // hk's whitespace fixer would rewrite their CRLF line endings.
     exclude = List(
+      "src/Authentication.Core/packages.lock.json",
+      "src/Authentication.Cli/packages.lock.json",
       "src/Authentication.Windows/packages.lock.json",
       "tests/Authentication.Windows.Scenarios/packages.lock.json",
     )

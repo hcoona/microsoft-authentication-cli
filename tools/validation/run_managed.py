@@ -188,7 +188,7 @@ def windows_consumption():
         return 0, 0
     if history.is_symlink():
         raise ValueError("Linked Windows action history")
-    preparation, build_test, number = 0, 0, 0
+    preparation, build_test, number, process_scenarios = 0, 0, 0, 0
     windows = Path("/mnt/c/Temp/azureauth-windows-slice-108/actions")
     for number, action in enumerate(sorted(history.iterdir()), 1):
         if action.is_symlink() or action.name != f"{number:04d}":
@@ -210,13 +210,18 @@ def windows_consumption():
         for name, expected in receipt["evidence"].items():
             if digest(windows / action.name / name) != expected:
                 raise ValueError("Windows action evidence changed")
+        required = 12 if number > 9 and started["action"] == "test" else 0
+        reserved = started.get("reservedProcessScenarios", 0 if number <= 9 else None)
+        if type(reserved) is not int or reserved != required:
+            raise ValueError("Unrecoverable Windows process reservation")
+        process_scenarios += reserved
         if started["action"] in ("bootstrap", "restore"):
             preparation += 1
         elif started["action"] in ("build", "test"):
             build_test += 1
         else:
             raise ValueError("Unknown Windows action allocation")
-    if preparation > 4 or build_test > 40:
+    if preparation > 5 or build_test > 40 or process_scenarios > 36:
         raise ValueError("Windows allocation exceeded")
     if number in (2, 3):
         raise ValueError("Windows restore must complete before Linux continuation")
@@ -340,7 +345,7 @@ def main():
                 raise ValueError("Previous stop requires independently accepted disposition")
             receipts.append(prior_start)
         preparation = arguments.action in ("fetch", "restore")
-        if sum(item["action"] in ("fetch", "restore") for item in receipts) + preparation > 12:
+        if sum(item["action"] in ("fetch", "restore") for item in receipts) + preparation > 11:
             raise ValueError("Initial preparation allocation exhausted")
         if sum(item["action"] in ("build", "test") for item in receipts) + (not preparation) > 80:
             raise ValueError("Initial build/test allocation exhausted")
