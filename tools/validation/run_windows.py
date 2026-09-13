@@ -125,6 +125,15 @@ PREVIOUS_CONTROLLERS = {
     "run_windows.py": "5670156edbc55851435adca4212f07569d540972656c0ff2cb876b366ab7baed",
     "Invoke-WindowsValidation.ps1": "6c577f6638d5fdaa243e92bc0a5c3bc263b70b1b2ed6c847e6ac32a67af1d113",
 }
+DISPOSED_WINDOWS_TEST = {
+    "started.json": "4fb0599b8aaacbcbb2099a2254426b3ac8a2ff16cfd5cacb90222c08b648a8c9",
+    "windows-input.json": "3064a64bf43690bc5efc0c9022c6fe52da8d3a36880ec76efe5d691b1fdc1989",
+    "result.json": "4ef1514ecd4e19cf02657a38ed73e5e920cb30cf38df9d54472ca89b3784f6ff",
+}
+TEST_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "bec5e035be9d54afd871bee648f2018f4ead6fec747c871f8c1c98f9a31db105",
+    "Invoke-WindowsValidation.ps1": "131a4834275afe9e7041eb8d5cc106f9220127a68a75fd2383d021309a99ae9d",
+}
 
 
 def utc():
@@ -244,6 +253,8 @@ def histories():
                 digest(action / name) != expected for name, expected in DISPOSED_WINDOWS_RESTORE.items()
             ):
                 raise ValueError("Disposed Windows restore receipt changed")
+        elif action.name == "0006":
+            verify_disposed_windows_test(action)
         elif result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action")
         for name, expected in result["evidence"].items():
@@ -272,6 +283,30 @@ def verify_disposed_windows_preparation(action):
         direct(path)
         if not path.is_dir():
             raise ValueError("Disposed Windows directory changed")
+
+
+def verify_disposed_windows_test(action):
+    """Retain only the exact generated-name stop and its empty pre-subject boundary."""
+    direct(action)
+    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_TEST) or any(
+        digest(action / name) != expected for name, expected in DISPOSED_WINDOWS_TEST.items()
+    ):
+        raise ValueError("Disposed Windows test receipt changed")
+    failed = ROOT / "actions/0006"
+    direct(failed)
+    directories = {"home", "home/local", "home/roaming", "temp", "results", "empty-program-files"}
+    evidence = read(action / "result.json")["evidence"]
+    paths = list(failed.rglob("*"))
+    if {str(path.relative_to(failed)) for path in paths} != directories | set(evidence):
+        raise ValueError("Disposed Windows test boundary changed")
+    for path in paths:
+        direct(path)
+        name = str(path.relative_to(failed))
+        if name in directories:
+            if not path.is_dir():
+                raise ValueError("Disposed Windows test directory changed")
+        elif not path.is_file() or digest(path) != evidence[name]:
+            raise ValueError("Disposed Windows test evidence changed")
 
 
 def public_archives(protocol):
@@ -459,6 +494,10 @@ def main():
             args.action != "restore" or args.source != previous[-1][1]["source"]
         ):
             raise ValueError("The first continuation must restore the unchanged admitted source")
+        if previous and previous[-1][0].name == "0006" and (
+            args.action != "test" or args.expect != "red" or args.source != previous[-1][1]["source"]
+        ):
+            raise ValueError("The first continuation must test the unchanged admitted red build")
         preparation = args.action in ("bootstrap", "restore")
         prep = sum(start["action"] in ("bootstrap", "restore") for _, start, _ in previous)
         tests = len(previous) - prep
@@ -496,15 +535,17 @@ def main():
             for name in ("home", "home/roaming", "home/local", "temp", "results", "empty-program-files"):
                 (action / name).mkdir()
             migrations = {}
+            previous_controllers = (PREVIOUS_CONTROLLERS if len(previous) == 3 else
+                                    TEST_PREVIOUS_CONTROLLERS if len(previous) == 6 else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
                 direct(path)
-                if name in PREVIOUS_CONTROLLERS and len(previous) == 3 and not path.exists():
+                if name in previous_controllers and not path.exists():
                     raise ValueError("The pre-migration Windows controller disappeared")
                 if path.exists():
-                    if name in PREVIOUS_CONTROLLERS and len(previous) == 3:
-                        expected_previous = PREVIOUS_CONTROLLERS[name]
+                    if name in previous_controllers:
+                        expected_previous = previous_controllers[name]
                         if digest(path) != expected_previous:
                             raise ValueError("Unexpected pre-migration Windows controller")
                         retained = action / ("retained-" + name)
