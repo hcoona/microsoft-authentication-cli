@@ -551,6 +551,16 @@ owned. A forced termination or incomplete write is a transport failure, not a fa
 typed result. This is the exceptional fail-closed boundary, not a resident watchdog
 process or a mechanism for making unsupported platforms work.
 
+The managed process host keeps its entry thread as the watchdog and moves request
+work, native handle I/O, and cleanup onto dedicated background work. It reads the
+original deadline and first terminal/cancellation timestamps without waiting on
+request locks. Result commitment is serialized with host cancellation; complete
+native transfer and required operation, cancellation-callback, and lifetime-pipe
+drain are prerequisites for a matching result exit. Pipe admission runs within the
+original request lifetime and precedes Profile access. An initially closed pipe
+cannot release Profile work while cancellation propagation is pending. Optional
+diagnostics have separate bounded bytes and do not participate in required drain.
+
 External broker windows/session changes are not forcibly rolled back. Forward cancellation
 through MSAL, close the owned parent, invalidate completion, and write a fixed sanitized
 completion/cancellation indication to stderr when available. Do not wait for the user to
