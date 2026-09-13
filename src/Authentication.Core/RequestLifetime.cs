@@ -9,13 +9,24 @@ public sealed class RequestLifetime : IDisposable
     private AuthenticationOutcome? outcome;
     private bool committed;
 
+    // The host can include operation observation in its bounded shutdown drain.
+    // Completion here does not establish owned-UI or process quiescence.
+    public Task OperationCompletion { get; private set; } = Task.CompletedTask;
+
     public RequestLifetime(TimeProvider clock, long entryTimestamp, TimeSpan timeout,
         CancellationToken cancellationToken = default)
     {
         this.cancellationToken = cancellationToken;
     }
 
-    public async Task<AuthenticationOutcome> RunAsync(Func<CancellationToken, Task<AuthenticationOutcome>> operation)
+    public Task<AuthenticationOutcome> RunAsync(Func<CancellationToken, Task<AuthenticationOutcome>> operation)
+    {
+        var pending = ObserveOperationAsync(operation);
+        OperationCompletion = pending;
+        return pending;
+    }
+
+    private async Task<AuthenticationOutcome> ObserveOperationAsync(Func<CancellationToken, Task<AuthenticationOutcome>> operation)
     {
         outcome = await operation(cancellationToken);
         return outcome;

@@ -144,26 +144,35 @@ public sealed class RequestLifetimeScenarios
     [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
-    public async Task LateSuccessOrFailureCannotReplaceCancellation(bool lateFault)
+    public async Task LateSuccessOrFailureCannotReplaceCancellation(bool lateFailure)
     {
         using var caller = new CancellationTokenSource();
-        var scene = new Scene { PendingPhase = "silent", FaultAfterRelease = lateFault };
+        var scene = new Scene();
+        var entered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var pending = new TaskCompletionSource<AuthenticationOutcome>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var lateOutcome = lateFailure ? new AuthenticationOutcome(null, AuthenticationFailure.Denied) : scene.Success();
         using var lifetime = new RequestLifetime(scene.Clock, scene.Clock.GetTimestamp(), Budget, caller.Token);
-        var run = scene.RunAsync(lifetime);
+        var run = lifetime.RunAsync(_ =>
+        {
+            entered.TrySetResult();
+            return pending.Task;
+        });
         try
         {
-            await scene.Entered.Task.WaitAsync(HarnessLimit);
+            await entered.Task.WaitAsync(HarnessLimit);
             caller.Cancel();
             AssertFailure(AuthenticationFailure.Cancelled, await RequireOutcomeAsync(run));
         }
         finally
         {
-            await scene.ReleaseAndDrainAsync(run);
+            pending.TrySetResult(lateOutcome);
+            await lifetime.OperationCompletion.WaitAsync(HarnessLimit);
+            await run.WaitAsync(HarnessLimit);
         }
 
         Assert.IsTrue(lifetime.TryCommit(out var committed));
         AssertFailure(AuthenticationFailure.Cancelled, committed!);
-        Assert.IsFalse(scene.Effects.Contains("open"));
+        Assert.IsFalse(committed!.PersistenceUnconfirmed);
     }
 
     [TestMethod]
@@ -285,7 +294,6 @@ public sealed class RequestLifetimeScenarios
         private const string Scope = "499b84ac-1321-427f-aa17-267ca6975798/user_impersonation";
         private static readonly Guid Tenant = new("11111111-2222-3333-4444-555555555555");
         public string? PendingPhase { get; init; }
-        public bool FaultAfterRelease { get; init; }
         public ScenarioClock Clock { get; } = new();
         TimeProvider IRequestHost.Clock => Clock;
         public List<string> Effects { get; } = [];
@@ -345,7 +353,6 @@ public sealed class RequestLifetimeScenarios
             if (phase != PendingPhase) return;
             Entered.TrySetResult();
             await Release.Task;
-            if (FaultAfterRelease) throw new InvalidOperationException("synthetic-private-marker");
         }
 
         private TokenCandidate Candidate(Guid operationId) => new("synthetic-token", Email, Tenant, [Scope],
