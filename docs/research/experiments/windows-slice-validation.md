@@ -715,3 +715,83 @@ process exit, Windows/WSL pipe or shutdown behavior, real UI/WAM, account/cache
 state or reuse, Native AOT artifact behavior, Profile activation, broader support,
 or overall Slice acceptance. Those obligations remain open under their existing
 canonical validation basis and required protocol/owner decisions.
+
+## Application Invocation Red/Green Evidence
+
+The application increment joins protocol-1 argument and Profile admission,
+selected-account coordination, original request lifetime and committed result
+projection. These are synthetic Linux managed observations under this protocol,
+not evidence of Windows file/volume semantics, pipes, stdout/process delivery,
+UI/WAM, Native AOT, account reuse or overall Slice acceptance.
+
+The author/executor was `/root`; independent reviewer `/root/lifetime_triage`
+reviewed source admission and actual evidence in [PR #119](https://github.com/hcoona/microsoft-authentication-cli/pull/119).
+Both pairs bind accepted target `e177747edb28ff7c20237b0531d06226ac59779b`,
+protocol/helper revision `9f31b601bc7e3b64f2c030e332b49751370cb971`, and
+unchanged Wave blob `8bbc98cc2e892a33c06d190983d9c0a09a8d6282`.
+
+| Source role | Commit | Tree |
+| --- | --- | --- |
+| Executed red | `d4affc6b5e5ca3cd8469efbc75ec954ab7e0eedc` | `2ba2feb5f867605ed620d195ee0d777ee0e5728a` |
+| Executed green | `4d8f25c73fb11fe26ab11be41ac7ddd20e62b53d` | `fa1819ff21b3beb468be65bda86bf9527c8a1e00` |
+
+The red [admission](https://github.com/hcoona/microsoft-authentication-cli/pull/119#issuecomment-5651631751)
+and [actual-evidence review](https://github.com/hcoona/microsoft-authentication-cli/pull/119#issuecomment-5651643695)
+bind the exact failed names, rows, first assertions and execution integrity.
+The green [admission](https://github.com/hcoona/microsoft-authentication-cli/pull/119#issuecomment-5651670680)
+requires the unchanged full case set and a new source-bound build. The independent
+[actual-green review](https://github.com/hcoona/microsoft-authentication-cli/pull/119#issuecomment-5651686945)
+confirms all 243 cases passed with exact red-to-green continuity.
+
+| Action | UTC start to result, 2026-09-13 | Child seconds | Observation |
+| --- | --- | ---: | --- |
+| 0031 red-source build | 06:20:15.989334 to 06:20:23.177029 | 6.995 | Exit 0; zero warnings/errors. |
+| 0032 red test | 06:20:48.307920 to 06:20:49.357488 | 0.893 | MTP exit 2; 243 executed, 224 passed, 19 intended failures. |
+| 0033 green build | 06:29:27.055253 to 06:29:34.195778 | 6.973 | Exit 0; zero warnings/errors. |
+| 0034 green test | 06:29:59.036381 to 06:30:00.056417 | 0.853 | MTP exit 0; all 243 executed/passed, zero failed or skipped. |
+
+Red failed at thirteen wrong-outcome assertions, five missing-success-status
+assertions and one missing provisional success. The latter's message names
+`provisional.Success`; the runtime stack reports the line adjacent to the assertion.
+All 218 previous names/data rows remained and passed. The 25 new application
+cases contained 19 intended failures and six passing guards: cancelled/expired
+admission, pending-read cancellation/deadline, caller timeout during reading and
+unexpected construction failure. The last passed before its factory executed.
+Later configuration-reason/privacy, success/Profile metadata, backing mutation,
+provider-budget, interaction-order and commitment assertions were not reached in
+the failed red cases. These limits remain part of the red evidence.
+
+Green changed only invocation composition and the allowed configuration-reason
+projection. All tests and expectations remained byte-identical, and the exact
+243 names/data rows were retained. The invocation now validates the Profile and
+tenant before creating a provider, carries explicit intent to the coordinator,
+and commits the allowlisted result under the original lifetime. Later assertions
+now verify safe failures, selected Profile/request metadata, the immutable parsed
+snapshot, remaining budget, permission-gated interaction and cancellation before
+commitment. No provider text or Profile contents are exposed in failure output.
+
+All four actions completed normally with no termination and confirmed
+quiescence. Complete source, command/replacement environment, SDK, graph/restore
+and artifact integrity were independently verified. The 148 source entries,
+249 artifacts, four SDK identities, eight graph inputs and eight restore metadata
+files matched; the generated entry, five registrations and runtime configuration
+retained the accepted contents. SDK 10.0.401, runtime 10.0.12, MSTest 4.1.0 and the
+19-package graph were unchanged. No fetch, restore or installation occurred.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| 0031 source-bound build receipt | `f7f5e6de213e6f84dbf90b2cf11e7d44c66b763fb74dc4fa294d1641a8ab4b9a` |
+| 0032 single red TRX | `11a659961baaf3cb230bdf2fafcb91d98d7fb13643e83a04044073c892e1ff1c` |
+| 0033 source-bound build receipt | `7d47bf38c64218c0ba1de122a7576d62400c368116236363478cb29c39f8e616` |
+| 0034 single green TRX | `5f528a856d863870937c57df8123b1a8ebb6265a6ee854988694a3badc1a6da7` |
+
+Consumption through 0034 is 7/12 preparation actions, 27/80 build/test actions
+and 768 MiB/1 GiB charged downloads. All 34 contiguous actions are resolved and
+quiescent; original action 0022 retains its accepted disposition and exact bytes.
+Raw machine-bearing output and TRX filenames remain local. Dedicated files remain
+intentionally retained, with no historical replay or capacity reset.
+
+The source supplies a read-only Profile seam and an immutable parsed snapshot;
+its controlled bytes cannot establish the later Windows fixed-volume/open-once
+reader. Prepared output is not proof of successful transport or bounded shutdown.
+Profile activation and required real-account and platform evidence remain open.

@@ -32,6 +32,7 @@ public enum AuthenticationReason
     ProviderTransient,
     NetworkTransient,
     ServiceTransient,
+    InvalidConfiguration,
 }
 
 public sealed record AuthenticationOutcome(
