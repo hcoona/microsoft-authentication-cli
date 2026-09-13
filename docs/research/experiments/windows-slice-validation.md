@@ -1584,8 +1584,9 @@ artifact, evidence, and finding-triage reviews through
 [PR #126](https://github.com/hcoona/microsoft-authentication-cli/pull/126).
 The existing Windows 11 x64/WSL host, public dependency pins, replacement
 environment, retained roots, and account-free effects boundary remain unchanged.
-No provider construction, account enumeration, authentication, real UI, or
-authenticated request was executed.
+The four successful Profile cases exercised their controlled synthetic provider.
+No real MSAL/WAM provider construction, account enumeration, token acquisition,
+UI, or authenticated service request was executed.
 
 ### Graph and Actual Red
 
