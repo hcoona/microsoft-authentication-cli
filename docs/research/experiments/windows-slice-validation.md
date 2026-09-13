@@ -410,3 +410,92 @@ Windows fixed-volume/file eligibility, read-once Profile I/O, CLI process transp
 deadline/cancellation behavior, provider construction, real WAM/UI, cross-process
 reuse, deployment or overall Slice acceptance. The accepted contracts and validation
 strategy retain those obligations; Issue #108 remains open.
+
+## Interaction and Failure Scenarios
+
+The red source for [PR #115](https://github.com/hcoona/microsoft-authentication-cli/pull/115)
+is `03076c4546077251fcf402abe33b418a3ed56ab8`, tree
+`6747e705ba863ba403d1e87f0863c4393e7b014e`. It adds controlled interaction scenarios
+and malformed granted-scope cases while retaining the previous coordinator. The
+new provider/host methods have inert defaults. Accepted protocol/helper revision
+`45d142e0ba3318aabcaddc3b5881618e351ad97a` and target
+`959583a5df1777954d675542f25d633812d83f43` bind these actions.
+
+The independent [red admission](https://github.com/hcoona/microsoft-authentication-cli/pull/115#issuecomment-5651020941)
+preceded action 0018's no-restore build, which ran on 2026-09-13 from
+03:59:06.572365Z through 03:59:13.718058Z. It returned exit 0 with zero warnings
+and errors in 6.958 child seconds. The independent
+[build gate](https://github.com/hcoona/microsoft-authentication-cli/pull/115#issuecomment-5651026285)
+verified the source, graph, SDK, generated entry point, five registrations, runtime
+configuration and all 249 artifacts before the conditional test.
+
+Action 0019 ran from 04:00:23.996616Z through 04:00:24.972035Z, returning MTP
+exit 2 in 0.833 child seconds. All 166 cases executed: 140 passed and exactly 26
+admitted assertions failed; every other counter was zero. Independent
+[red confirmation](https://github.com/hcoona/microsoft-authentication-cli/pull/115#issuecomment-5651047584)
+compared exact names and assertion locations. All 136 preceding cases remained
+present and green. Three interaction guards and the valid empty default grant
+array were the four new passing cases.
+
+Nine failures use the fixture wrapper's fixed boundary assertion because injected
+discovery/silent exceptions escape the coordinator. The TRX retains the assertion
+and caller locations, not the original exceptions. Thirteen interaction failures
+occur before the coordinator reaches the interactive fixture branches; they show
+missing continuation and required outcomes, not execution of those later branches.
+The other four failures reproduce the independently
+[triaged malformed-scope defect](https://github.com/hcoona/microsoft-authentication-cli/issues/108#issuecomment-5650968273):
+dynamic and default-permission candidates incorrectly succeed with null or empty
+extra grant items. A valid empty grant array for the same default-permission
+operation remains distinct and passes.
+
+Both actions completed without termination, with confirmed process-group quiescence
+and unchanged source, toolchain, graph and artifact identities. The red scenario
+assembly SHA-256 is `b87f41d65f0316103ae19956129269c48c6f6f74bfb2d1d3825c1e21f1e4d5e5`;
+build receipt `31accaf3a2ef0749fe408025fd79129376f6815d5185704f372580ad8a30b143`;
+single red TRX `118deebeb07765ed1b1218440e6cae607f865819151beb060fea286cc3ba3c9f`;
+and test result `4bd2413757689362b46ea602d50bc4b0362f5fd04c257120d66c334319633055`.
+
+Green source `c7b433c3d4d96145d476baa2a3e6f8ad792c2297`, tree
+`b861d60b0354306175407a83d3e0e1e2c60fed27`, changes only the coordinator from
+that red source; every test remains unchanged. The independent
+[green admission](https://github.com/hcoona/microsoft-authentication-cli/pull/115#issuecomment-5651075515)
+covers a build followed by one conditional full test on the same source. Action
+0020 ran from 04:12:23.097445Z through 04:12:30.217077Z, returning exit 0 with
+zero warnings/errors in 6.956 child seconds. Before test execution, the executor
+inspected complete output and command/environment/source bindings and verified
+every source, SDK, graph, restore and artifact hash, including unchanged generated
+entry, registrations and runtime configuration. This satisfied the admission's
+conditional gate without a separate independent build-review round.
+
+After a fresh accepted-target/Wave and published-admission check, action 0021 ran
+from 04:12:56.375430Z through 04:12:57.315587Z. It returned MTP exit 0 in 0.795
+child seconds: **166 executed and 166 passed**, with every other counter zero.
+The exact test-name set equals the red run; all 26 prior failures now pass and all
+140 prior passes remain green. Both actions completed without termination, with
+confirmed process-group quiescence and unchanged source, toolchain, graph and
+artifact identities.
+
+The independent [combined green review](https://github.com/hcoona/microsoft-authentication-cli/pull/115#issuecomment-5651085588)
+confirmed the conditional gate, actual command/environment controls, complete
+output, exact case comparison and every retained source/artifact identity.
+
+The green scenario assembly SHA-256 is
+`9ba4cbaeaa5f8c3ac768358126c2af362a4e227c2d130e91dd66479d2f618dad`;
+build receipt `6ee723a97371359d15a05272b8751623457ab0e270ea05d739f500557d6107d2`;
+single green TRX `2c64dcee8c68b977773e1e092dbaeeb40ff94220e0d505d5334adcb9d6143676`;
+and test result `0da4e6d70689886732887893ef588e1f0e51f266bcee4d312f2b4e102fe0548d`.
+
+All 21 actions are resolved. Cumulative consumption is 7 of 12 preparation actions,
+14 of 80 build/test actions and 768 MiB of the 1 GiB charged download limit. Actual
+downloads remain 54,959,945 bytes across the same 22 archives; the resolved graph
+retains 19 packages. No fetch, restore, Windows action, real authentication, forced
+termination or cleanup occurred. Experiment-owned files are intentionally retained;
+standard path-bearing output and TRX remain local.
+
+These results establish the tested silent-first and permission-gated continuation,
+safe provider failure outcomes, required synthetic parent readiness/closure, and
+shared candidate validation. The cooperative cancellation checks and cleanup-fault
+fallback are inspected source, not cancellation-race or cleanup-fault test evidence.
+The complete terminal latch, original deadline, finite process/UI shutdown, result
+transport, actual Windows/WAM behavior, cross-process reuse, exact Native AOT
+artifact and overall Slice acceptance remain open under Issue #108.

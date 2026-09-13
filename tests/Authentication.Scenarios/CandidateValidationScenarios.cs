@@ -70,6 +70,37 @@ public sealed class CandidateValidationScenarios
         Assert.IsTrue(outcome.PersistenceUnconfirmed);
     }
 
+    [TestMethod]
+    [DataRow(false, "")]
+    [DataRow(false, null)]
+    [DataRow(true, "")]
+    [DataRow(true, null)]
+    public async Task MalformedExtraGrantedScopeCannotEnterSuccessfulMetadata(bool defaultPermission, string? malformed)
+    {
+        var provider = new CandidateProvider(candidate => candidate with { Scopes = [Scope, malformed!] });
+        var requested = defaultPermission ? "499b84ac-1321-427f-aa17-267ca6975798/.default" : Scope;
+
+        var outcome = await new RequestCoordinator(provider, new ScenarioHost())
+            .AuthenticateAsync(new AuthenticationRequest(Email, [requested], false, null));
+
+        Assert.AreEqual(AuthenticationFailure.IdentityValidationFailed, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+    }
+
+    [TestMethod]
+    public async Task DefaultPermissionMayRetainAnEmptyGrantArrayFromTheSameOperation()
+    {
+        var provider = new CandidateProvider(candidate => candidate with { Scopes = [] });
+
+        var outcome = await new RequestCoordinator(provider, new ScenarioHost())
+            .AuthenticateAsync(new AuthenticationRequest(
+                Email, ["499b84ac-1321-427f-aa17-267ca6975798/.default"], false, null));
+
+        Assert.IsNull(outcome.Failure);
+        Assert.IsNotNull(outcome.Success);
+        Assert.IsEmpty(outcome.Success.Scopes);
+    }
+
     private sealed class CandidateProvider(Func<TokenCandidate, TokenCandidate> transform)
         : IAuthenticationProvider
     {
