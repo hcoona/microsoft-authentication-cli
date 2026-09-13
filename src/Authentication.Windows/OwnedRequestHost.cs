@@ -22,6 +22,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
     private nint parent;
     private bool terminal;
     private bool published;
+    private bool showing;
     private Task? cancellation;
     private Task? faultNotification;
     private Exception? cleanupFailure;
@@ -137,8 +138,17 @@ internal sealed partial class OwnedRequestHost : IRequestHost
         terminal = true;
         ready.TrySetResult(0);
         // Detachment and posting share this lock, so a recycled HWND cannot receive
-        // a late close. Never wait for native destruction on the caller's thread.
-        if (parent != 0) PostOwnedClose(parent);
+        // a late close. Calls from another thread never wait for native destruction.
+        if (parent == 0) return;
+        if (showing && currentHost == this)
+        {
+            // Monitor allows this UI thread to reenter during SetWindowPos. Destroy
+            // the still-owned HWND before returning into that pending native show;
+            // posting a close would allow its visibility change to continue first.
+            parent = 0;
+            AbortNativeShow();
+        }
+        else PostOwnedClose(parent);
     }
 
     private bool IsTerminal
@@ -212,10 +222,13 @@ internal sealed partial class OwnedRequestHost : IRequestHost
             lock (gate)
             {
                 // This is the only native show and readiness publication path.
-                // Terminal invalidation is serialized with both, including reentrant
-                // native callbacks during show. Creation checkpoints hold no lock.
+                // The gate orders other threads; reentrant terminal callbacks destroy
+                // the HWND before native show can continue. Creation checkpoints hold
+                // no lock, and neither path can publish readiness after invalidation.
                 if (IsTerminal) return;
-                ShowNativeParent(window);
+                showing = true;
+                try { ShowNativeParent(window); }
+                finally { showing = false; }
                 if (IsTerminal) return;
                 published = true;
                 ready.TrySetResult(window);

@@ -154,13 +154,7 @@ internal sealed partial class OwnedRequestHost
     {
         // Destruction sends callbacks synchronously and destroys child controls.
         // Keep the context and font alive until it has actually returned successfully.
-        if (nativeParent != 0)
-        {
-            if (DestroyWindow(nativeParent) == 0)
-                throw new InvalidOperationException("Owned window destruction failed.");
-            nativeParent = 0;
-            cancelButton = 0;
-        }
+        DestroyNativeParent();
         if (font != 0)
         {
             if (DeleteObject(font) == 0)
@@ -172,6 +166,30 @@ internal sealed partial class OwnedRequestHost
             if (UnregisterClassW(className!, instance) == 0)
                 throw new InvalidOperationException("Owned window class release failed.");
             windowClass = 0;
+        }
+    }
+
+    private void AbortNativeShow()
+    {
+        try { DestroyNativeParent(); }
+        catch (Exception)
+        {
+            // A failed native veto cannot return to the pending visibility change.
+            // Reuse the existing sanitized, current-process-only fail-closed exit.
+            WindowsStandardHandles.Terminate();
+        }
+        // Font, class and thread context remain alive until SetWindowPos unwinds
+        // into RunWindow's ordinary finally. No callback releases them early.
+    }
+
+    private void DestroyNativeParent()
+    {
+        if (nativeParent != 0)
+        {
+            if (DestroyWindow(nativeParent) == 0)
+                throw new InvalidOperationException("Owned window destruction failed.");
+            nativeParent = 0;
+            cancelButton = 0;
         }
     }
 
