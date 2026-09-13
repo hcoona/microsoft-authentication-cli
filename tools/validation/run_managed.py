@@ -30,6 +30,20 @@ GRANT = "a0f741b59e09f1eb95594dbfde7a6e634d962210"
 WAVE_BLOB = "8bbc98cc2e892a33c06d190983d9c0a09a8d6282"
 PROJECT = "tests/Authentication.Scenarios/Authentication.Scenarios.csproj"
 ASSEMBLY = "tests/Authentication.Scenarios/bin/Release/net10.0/Authentication.Scenarios.dll"
+RESTORE_METADATA = tuple(
+    f"{directory}/obj/{name}"
+    for directory, project in (
+        ("src/Authentication.Core", "Authentication.Core"),
+        ("tests/Authentication.Scenarios", "Authentication.Scenarios"),
+    )
+    for name in ("project.assets.json", f"{project}.csproj.nuget.dgspec.json",
+                 f"{project}.csproj.nuget.g.props", f"{project}.csproj.nuget.g.targets")
+)
+SOURCE_LINK_MAPS = (
+    "src/Authentication.Core/obj/Release/net10.0/Authentication.Core.sourcelink.json",
+    "tests/Authentication.Scenarios/obj/Release/net10.0/Authentication.Scenarios.sourcelink.json",
+)
+RESTORE_0035_SHA256 = "e8517bb57c776292e0298ba3f4c3a31661a13762b019c1d4aeade093f77f3cd6"
 SDK_HASHES = {
     "dotnet": "01d89e0a0191052bfea616cd4ce624c8faf13b05bbddf7f64499c23e2a9d9269",
     "sdk/10.0.401/dotnet.dll": "bf8844d3d50869c1c05ff4aaf1908a81ca657106bed52be1388a8323690f5049",
@@ -178,7 +192,57 @@ def restore_inputs(checkout, config):
 def artifact_hashes(checkout):
     return {str(path.relative_to(checkout)): digest(path)
             for name in ("src", "tests") for path in (checkout / name).rglob("*")
-            if path.is_file() and ("bin" in path.parts or path.name == "project.assets.json")}
+            if path.is_file() and ("bin" in path.parts or path.name == "project.assets.json"
+                                   or str(path.relative_to(checkout)) in SOURCE_LINK_MAPS)}
+
+
+def restore_metadata_hashes(checkout):
+    return {name: digest(checkout / name) for name in RESTORE_METADATA}
+
+
+def restore_metadata_projection(restore, prior_actions):
+    latest = None
+    for action in reversed(prior_actions):
+        if json.loads((action / "started.json").read_text())["action"] == "restore":
+            result = json.loads((action / "result.json").read_text())
+            if result["status"] != "expected-result" or result["exit_code"] != 0 or \
+                    not result["continuation_allowed"] or not result["quiescent"] or \
+                    result["termination"] is not None:
+                raise ValueError("Latest restore did not complete successfully")
+            latest = action / "restore.json"
+            break
+    if latest is None or restore != json.loads(latest.read_text()):
+        raise ValueError("Active restore differs from its latest successful receipt")
+    historical = ROOT / "actions/0035/restore.json"
+    if latest == historical and digest(historical) != RESTORE_0035_SHA256:
+        raise ValueError("Historical restore receipt changed")
+    paths = set(restore["assets"])
+    if paths == set(RESTORE_METADATA):
+        return restore["assets"]
+    # Preserve the exact successful receipt; only its two explained build outputs
+    # leave the restore prerequisite projection. No general obj-file exemption.
+    if latest != historical or paths != set(RESTORE_METADATA) | set(SOURCE_LINK_MAPS):
+        raise ValueError("Unrecognized restore metadata inventory")
+    return {name: restore["assets"][name] for name in RESTORE_METADATA}
+
+
+def verify_source_link_transition(checkout, restore):
+    if set(restore["assets"]) == set(RESTORE_METADATA):
+        return
+    previous = json.loads((ROOT / "build.json").read_text())
+    recorded = set(SOURCE_LINK_MAPS) & set(previous["artifacts"])
+    if recorded and recorded != set(SOURCE_LINK_MAPS):
+        raise ValueError("Incomplete previous SourceLink build evidence")
+    expected = previous["artifacts"] if recorded else restore["assets"]
+    if any(digest(checkout / name) != expected[name] for name in SOURCE_LINK_MAPS):
+        raise ValueError("SourceLink inputs changed before the next build")
+
+
+def verify_built_source_links(checkout, source):
+    expected = {"documents": {str(checkout) + "/*":
+                f"https://raw.githubusercontent.com/hcoona/microsoft-authentication-cli/{source}/*"}}
+    if any(json.loads((checkout / name).read_text()) != expected for name in SOURCE_LINK_MAPS):
+        raise ValueError("Built SourceLink maps differ from the admitted source")
 
 
 def windows_consumption():
@@ -418,11 +482,11 @@ def main():
                     command.append("--locked-mode")
             else:
                 restore = json.loads((ROOT / "restore.json").read_text())
-                if restore["inputs"] != restore_inputs(checkout, config) or restore["assets"] != {
-                    path: digest(checkout / path) for path in restore["assets"]
-                }:
+                if restore["inputs"] != restore_inputs(checkout, config) or \
+                        restore_metadata_projection(restore, previous) != restore_metadata_hashes(checkout):
                     raise ValueError("Restore inputs or generated assets changed")
                 if arguments.action == "build":
+                    verify_source_link_transition(checkout, restore)
                     command = [dotnet, "build", PROJECT, "-c", "Release", "--no-restore",
                                "--disable-build-servers", "-m:1", "-nr:false",
                                "-p:UseSharedCompilation=false", "--verbosity", "minimal"]
@@ -457,13 +521,12 @@ def main():
                         raise ValueError("A package identity was already fetched")
                     os.link(package, target)
             if arguments.action == "restore" and passed:
-                restored = {"inputs": restore_inputs(checkout, config), "assets": {
-                    str(path.relative_to(checkout)): digest(path)
-                    for name in ("src", "tests") for path in (checkout / name).rglob("*")
-                    if path.is_file() and "obj" in path.parts and path.suffix in (".json", ".props", ".targets")}}
+                restored = {"inputs": restore_inputs(checkout, config),
+                            "assets": restore_metadata_hashes(checkout)}
                 write_new(action / "restore.json", restored)
                 (ROOT / "restore.json").write_text(json.dumps(restored), encoding="utf-8")
             if arguments.action == "build" and passed:
+                verify_built_source_links(checkout, arguments.source)
                 built = {"source": arguments.source, "artifacts": artifact_hashes(checkout)}
                 write_new(action / "build.json", built)
                 (ROOT / "build.json").write_text(json.dumps(built), encoding="utf-8")

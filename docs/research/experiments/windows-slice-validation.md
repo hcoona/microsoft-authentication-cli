@@ -132,6 +132,78 @@ replace the checkout's generated outputs. Do not infer replayable historical bin
 from their hashes alone. In particular,
 do not remove or change historical probe roots or ordinary application state.
 
+## Linux Restore Metadata and SourceLink
+
+This supplement corrects only the Linux metadata classification. Windows commands,
+controllers, evidence and allocations remain unchanged. Accept this protocol/helper
+revision before using its changed Linux checks; independent source, graph, build and test
+admission remain required. No additional restore, retry, download or capacity is granted.
+
+Restore metadata is exactly four direct `obj` files for each of Authentication.Core and
+Authentication.Scenarios: `project.assets.json`, `<project>.csproj.nuget.dgspec.json`,
+`<project>.csproj.nuget.g.props`, and `<project>.csproj.nuget.g.targets`. Record these eight
+files on future restores and check their complete hashes and the existing graph-input
+map before every build and test. Before selecting either metadata inventory, require the
+active restore record to equal the complete immutable receipt of the latest successful
+restore action in the retained history. An eight-file shape alone does not establish a
+new restore. Missing or changed entries stop execution. Do not treat
+arbitrary recursive `obj` JSON files as NuGet restore inputs.
+
+### Restore 0035 Classification Correction
+
+Linux restore 0035 used accepted protocol `03ecb488e7d4f6962bc874e2c312bc6e892659fa`
+and candidate `a5b9b418c81be632bf115053eca9b4efbbf85820`. It completed with exit 0,
+no termination and confirmed quiescence in 2.44 seconds. The [actual graph review](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653602026)
+confirmed its 14 graph inputs, empty Core dependency graph and unchanged 19-package
+scenario graph. The old collector also recorded two retained build outputs:
+
+- `src/Authentication.Core/obj/Release/net10.0/Authentication.Core.sourcelink.json`
+- `tests/Authentication.Scenarios/obj/Release/net10.0/Authentication.Scenarios.sourcelink.json`
+
+Both maps still named prior source `4d8f25c73fb11fe26ab11be41ac7ddd20e62b53d`, with
+SHA-256 `47fb3766926323477157af2e77186f013dc669eec6567520de89633764bd5c0d`. The
+[independent true-positive triage](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653606933)
+confirmed that the pinned SDK regenerates SourceLink before compilation using current
+Git information. Freezing these build outputs as restore inputs would reject a later
+test after a normal fresh build. This is a source/SDK-based prediction, not an observed
+failed build or test. The successful restore and its dependency graph remain valid.
+
+Preserve all original receipts and the active restore pointer without rewriting them:
+
+| Restore 0035 evidence | SHA-256 |
+| --- | --- |
+| `started.json` | `ef2898b097b53ac247e701682ba4a60c442c4e5aeca34bac1628ed6d089ed943` |
+| `result.json` | `807645e1ea15ccd2b8583a4689b47f2dedf6aaa6e0d1705c48f9052b15a7ed97` |
+| `restore.json` | `e8517bb57c776292e0298ba3f4c3a31661a13762b019c1d4aeade093f77f3cd6` |
+
+For this exact hash-bound successful receipt only, derive the eight-file NuGet projection
+in memory by excluding only the two named SourceLink entries. The active pointer must
+contain the same complete record, including all 14 graph inputs. Reject missing NuGet
+entries, changed historical receipt bytes, changed active-record content or unexplained
+extra metadata. Before the first new build, verify that all ten current files still
+match their historical hashes. No manual metadata edit, SourceLink deletion, replacement
+restore or historical action replay is permitted.
+
+The [draft continuity finding](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653640720)
+and [independent triage](https://github.com/hcoona/microsoft-authentication-cli/pull/126#issuecomment-5653640834)
+confirmed that an eight-entry fast path must not accept a trimmed 0035 active record.
+This is static control-flow evidence; the retained active record remains complete and
+unchanged. Genuine later successful restores may establish the new eight-file inventory.
+
+The two generated SourceLink maps belong to fresh source-bound build evidence. After
+each successful new build, verify that their document mapping names the owned checkout
+and the admitted commit at the public repository's raw-content URL, then include both
+map hashes in the immutable build artifact record. Subsequent tests require that new
+build and the unchanged complete artifact map, including SourceLink. Later builds may
+regenerate the maps for a newly admitted source. A prior build that lacks this expanded
+artifact evidence cannot satisfy a new test admission.
+
+At discovery, Linux actions 1-35 consumed preparation 8/11 and build/test 27/80; Windows
+actions 1-13 consumed preparation 5/5 and build/test 8/40. Combined preparation is 13/16
+and build/test 35/120; process reservations remain 12/36 and charged downloads 768 MiB.
+These completed actions retain their consumption and conclusions. Refresh actual shared
+history before each later admission; this correction does not admit the next action.
+
 ## Environment and Commands
 
 Start every subject with a replacement environment. Include only the pinned Linux SDK
