@@ -9,8 +9,6 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         AuthenticationRequest request,
         CancellationToken cancellationToken = default)
     {
-        // Clock-driven candidate and lifetime rules follow the selected-account loop.
-        _ = host;
         var accounts = await provider.GetAccountsAsync(cancellationToken);
         ProviderAccount? selected = null;
         foreach (var account in accounts)
@@ -35,12 +33,31 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
 
         var operationId = Guid.NewGuid();
         var candidate = await provider.AcquireSilentAsync(request, selected, operationId, cancellationToken);
-        if (!string.Equals(candidate.Email, request.AccountEmail, StringComparison.OrdinalIgnoreCase)
-            || (request.ExactTenant is not null && candidate.Tenant != request.ExactTenant))
+        if (string.IsNullOrEmpty(candidate.AccessToken)
+            || !string.Equals(candidate.Email, request.AccountEmail, StringComparison.OrdinalIgnoreCase)
+            || candidate.Tenant is null
+            || (request.ExactTenant is not null && candidate.Tenant != request.ExactTenant)
+            || string.IsNullOrEmpty(candidate.TokenType)
+            || candidate.ExpiresOn <= host.Clock.GetUtcNow()
+            || candidate.OperationId != operationId
+            || !SatisfiesScopes(request.Scopes, candidate.Scopes))
         {
             return new(null, AuthenticationFailure.IdentityValidationFailed);
         }
 
         return new(candidate, null, PersistenceUnconfirmed: true);
+    }
+
+    private static bool SatisfiesScopes(IReadOnlyList<string> requested, IReadOnlyList<string> granted)
+    {
+        // Admission has already established one resource and isolated /.default.
+        // The operation ID above binds its result to that original resource request;
+        // providers need not return the literal /.default spelling among grants.
+        if (requested.Count == 1 && requested[0].EndsWith("/.default", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return requested.All(scope => granted.Contains(scope, StringComparer.Ordinal));
     }
 }
