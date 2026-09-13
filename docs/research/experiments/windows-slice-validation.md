@@ -1360,3 +1360,216 @@ dispositions and exact receipts. The two-controller migration completed inside
 its old identity, removed or converted into success. Dedicated artifacts and
 synthetic fixtures remain intentionally retained. Raw machine-bearing output and
 TRX filenames remain local; no account or credential state was exercised.
+
+## Windows CLI Process Supplement
+
+This supplement extends the completed file loop for Issue #108. It supersedes the
+earlier supplement's fixed restore/build project, future per-host preparation
+allocation, package input set, and ten-case test vector for subsequent actions.
+All recorded observations, failed receipts, consumed units, and historical source
+and controller identities above remain unchanged. Acceptance of this protocol is
+a preparation prerequisite; each exact source, graph, build, and test still needs
+its applicable independent admission review before execution.
+
+### Subject and Effects
+
+The fixed restore/build root is `Windows.slnx`, selecting Authentication.Core,
+Authentication.Windows, Authentication.Cli, and Authentication.Windows.Scenarios.
+The CLI retains `net10.0-windows`, `win-x64`, self-contained and Native AOT publish
+configuration. This supplement admits only managed build/development execution;
+it allocates no publish command or Native AOT artifact claim.
+
+The Windows library declares exact Client/Broker 4.83.1 and NativeInterop 0.20.3
+dependencies. Their presence does not admit real provider construction, account
+enumeration, token acquisition, broker loading, UI, cache/consent access, or
+resource requests. The actual CLI cases stop at root help and malformed
+authentication. Ten further process cases use the scenario executable's finite
+test-only selector and controlled provider through the same production process
+boundary. Production CLI syntax has no test selector or ambient provider mode.
+
+The custom scenario Main records original managed entry before child dispatch.
+Its normal MTP branch retains builder creation, all five generated extension
+self-registration hooks, build, and run. Inspect generated registration source,
+actual entry metadata, selected runtime/dependency mapping, native imports and
+DLL layout after build. The exact CLI help/malformed artifact and controlled
+child artifact are separate evidence subjects. Keep the existing ten accepted
+Profile file cases and their assertions unchanged.
+
+The process fixture admits only fixed reviewed DLL/argument vectors, the pinned
+Windows dotnet host, a replacement environment, and three explicitly inherited
+standard handles. No shell or breakaway is permitted. Close unused child ends;
+the parent retains the sole lifetime writer. All children inherit the existing
+nonbreakaway Job, including its 32-process ceiling and kill-on-close behavior.
+No new bootstrap is needed. Synthetic Profile files, markers, child receipts and
+captures stay under the action-owned temporary directory and are intentionally
+retained. No actual account selector or credential-bearing input is admitted.
+
+### One Graph-Establishing Restore
+
+Transfer one unused Linux preparation unit to Windows. Linux preparation becomes
+at most 11 actions; Windows preparation becomes at most 5, including the already
+completed single bootstrap and at most 4 restores. Combined preparation remains
+16. Through Windows 0009, consumption is Linux 7 and Windows 4 preparations,
+Linux 27 and Windows 5 build/test actions. Linux build/test remains at most 80,
+Windows at most 40, and their combined ceiling remains 120. Charged downloads
+remain 768 MiB; this supplement admits no new download or toolchain installation.
+
+The first subsequent Windows reservation must be the one new graph-establishing
+restore. It consumes Windows preparation 5/5 and combined preparation 12/16 even
+if it fails. It is not an automatic retry allocation. No additional Windows
+restore is available afterward. No helper may reset or refund any old or new
+reservation. Both history readers enforce the revised allocations and retain
+all original failure dispositions and evidence hashes.
+
+Before synchronizing the immutable graph-establishment source, retain the three
+superseded selected-project locks: Core, Windows and Windows.Scenarios. Record
+their bytes/hashes, prior source and accepted restore-receipt identity in the new
+action. That source intentionally omits those locks; the new CLI has no lock yet.
+Do not remove or regenerate the separate Linux Authentication.Scenarios lock.
+The Core lock is presently an empty `net10.0` graph; do not assume its bytes will
+remain identical or accept a new RID/dependency without explanation.
+
+Generate all four selected-project locks once. Independently review their exact
+graph, dependency pruning, imports, native assets, compiler/runtime download
+items and content hashes. Adopt byte-identical generated locks in a new source
+commit before build, preserving originals during adoption. The hk whitespace
+exclusion covers these four generated locks so it cannot rewrite accepted CRLF
+bytes; other checks still apply. No failed restore, lock, or generated assets
+file may be repaired in place. Any changed graph or unexplained input stops
+continuation pending the applicable accepted disposition.
+
+The solution is an explicit graph input alongside global.json, every relevant
+project/import/config/lock and the generated NuGet assets/dgspec/import files.
+Build uses Release, `--no-restore`, disabled build servers/shared compilation,
+one node, no node reuse and no automatic response file. The restore retains the
+owned empty source, complete verified public package cache, disabled audit and
+parallelism, and the existing explicit fallback/source exclusions. Future builds
+require unchanged accepted restore inputs and metadata. Tests require a new
+source-bound build and independently reviewed outputs for each changed source;
+stale bin/obj files do not become execution candidates by being present.
+
+The reviewed cache extension consists of these eight complete entries:
+
+| Package | Version | Role |
+| --- | --- | --- |
+| Microsoft.Identity.Client | 4.83.1 | Selected managed provider dependency |
+| Microsoft.Identity.Client.Broker | 4.83.1 | Selected broker adapter dependency |
+| Microsoft.Identity.Client.NativeInterop | 0.20.3 | Selected interop/native assets |
+| Microsoft.IdentityModel.Abstractions | 8.14.0 | Selected transitive dependency |
+| Microsoft.DotNet.ILCompiler | 10.0.12 | AOT build integration |
+| runtime.win-x64.Microsoft.DotNet.ILCompiler | 10.0.12 | Selected compiler download item |
+| Microsoft.NETCore.App.Runtime.NativeAOT.win-x64 | 10.0.12 | Selected AOT runtime download item |
+| Microsoft.NETCore.App.Runtime.win-x64 | 10.0.12 | Managed self-contained runtime |
+
+Their original public archives, complete payloads and original NuGet completion
+metadata are retained in the historical public donor root. The independently
+reviewed inventory contains 707 files. The existing copy-and-verify algorithm
+checks every payload against its original archive and preserves metadata; it
+does not install an archive or suppress Windows signature verification. Only
+these additions may be copied during the first new restore reservation. All
+previously accepted entries must already exist unchanged. The fixed archive
+lengths/SHA-512s and signed content hashes are in `run_windows.py`.
+
+Bind the installed Microsoft.NETCore.App.Ref and Microsoft.NETCore.App.Host.win-x64
+10.0.12 packs separately to their original public archives. Verify the exact
+348-file targeting/analyzer payload and 12-file apphost payload before use,
+include each selected file hash among the Windows tool inputs, and recheck them
+after execution. These installed packs are not new complete-cache imports.
+`DisableTransitiveFrameworkReferenceDownloads=true` excludes unrelated framework
+packs; actual resolved downloads still require independent review. Ordinary lock
+entries alone do not establish compiler/runtime/targeting input completeness.
+
+### Process Cases, Timing and Evidence
+
+Reserve twelve process units before every full 22-case test action. Allow at most
+three such reservations, totaling 36 of the Wave's 40 process units: the planned
+red and unchanged green use 24, leaving at most one separately reviewed complete
+corrective batch. Every reservation remains charged, including incomplete or
+failed starts. There is no automatic retry, case filter, partial-batch refund or
+permission to use the four unallocated Wave units. Record reserved capacity
+separately from actual child launches.
+
+| Fixed child case | Required observation |
+| --- | --- |
+| help | Actual CLI root help completes without authentication. |
+| malformed | Actual CLI malformed protocol returns one safe invalid_request and exit 1. |
+| success | Selected synthetic request returns one protocol-1 success and exit 0 despite broken stderr. |
+| file-stdin | A flagged regular-file handle is rejected before Profile/provider effects. |
+| closed-stdin | Already-closed flagged pipe cancels before authentication. |
+| close-pending | Sole writer closure rejects the late candidate and ends within the shutdown allowance. |
+| unused-stdin | Closed stdin without the flag permits success. |
+| data-close | Synthetic payload is ignored; subsequent writer closure still cancels without leakage. |
+| deadline | Timeout ends uncooperative provider work and a blocked cancellation callback. |
+| broken-output | Broken result transport ends with exit 2 and no fabricated replacement result. |
+| blocked-output | Observed buffered output cannot keep the process alive; incomplete delivery is transport failure. |
+| blocked-diagnostics | Complete authentication success and exit 0 survive blocked diagnostics with bounded process completion. |
+
+Run children sequentially. The fixture configures six seconds of observation, an
+at-most-2,000-ms native termination wait if needed, and capture draining against
+the remaining eight-second stopwatch envelope. This is not a strict bound on
+synchronous receipt/file I/O or arbitrary OS scheduling. The existing outer
+120-second subject/capture/Job-drain limit, 8 MiB outer output limit and bounded
+termination remain necessary. Each child stream capture has a 512 KiB ceiling.
+Fixture enforcement is recorded separately and never proves product shutdown.
+
+Measure product intervals with the original managed-entry timestamp, parent
+writer-close before/after timestamps, buffered-output observation, earliest
+observed process exit, and common timestamp frequency. TimeProvider.System uses
+Stopwatch/QPC on this Windows host; the documented cross-process clock basis
+supports comparison on the same machine. Writer-close cases allow one second
+from the pre-close timestamp. Deadline, blocked-output and blocked-diagnostic
+cases select timeout 1 and allow two seconds from managed entry. Fix observation
+tolerance prospectively at 100 ms, covering 10 ms polling and scheduling
+uncertainty; it does not change the product allowance. Do not enlarge tolerance
+after observing a failure. Candidate-returned precedes validation and does not
+start an invented product deadline.
+
+The fixture keeps an in-memory fatal stop latch and attempts a persistent
+`process-safety-stop.json` under outer TEMP. Failed child start, uncertain wait,
+termination/quiescence failure, capture failure, and evidence-finalization failure
+block all later launches even if writing the stop marker fails. A single shared
+finalization path also runs after early assertions: confirm exit, retain actual
+stdout/stderr and exit/timestamps, and write the exclusive final receipt before
+releasing ownership. Never retry or overwrite failed finalization.
+
+The controller rejects a safety marker, missing child receipt/capture/managed
+entry, unexpected case names/counts, or changed protected inputs. Retain and
+hash-bind all process fixtures and markers even though ordinary temporary caches
+remain outside the published evidence projection. The rejecting source must
+execute 22 cases: the same ten file cases pass and all twelve process cases fail
+their business expectations. Every red child must exit 2 normally with empty
+stdout and no child-added stderr. The blocked-diagnostics fixture preloads its
+stderr pipe before launch: only that case retains exactly `diagnosticPrefill`
+literal `D` bytes, with a bound of 1 through 65,536. Every other red stderr
+capture is empty. The ten controlled children must retain managed-entry evidence.
+Independent actual-red review must correlate the exact stub/artifacts, first
+failed assertions, child evidence and normal outer completion. Compilation,
+loader, discovery, setup or safety failures cannot satisfy red. Review actual
+red before implementing green; keep the admitted scenario assertions unchanged.
+Green requires all 22 exact cases to pass and complete child evidence.
+
+### Controller Transition and Claim Limits
+
+Accept this record and controller changes before use. During the first new
+restore reservation only, retain the exact prior active `run_windows.py` and
+`Invoke-WindowsValidation.ps1` bytes before replacing them; verify prior hashes
+from accepted revision `13b991102dfc45a892f6a5318130c429af2aca4d` and bind old/new
+protocols and hashes in the migration receipt. Keep the existing bootstrap DLL,
+WindowsValidationJob source and stop helper unchanged. Both history readers
+recover old actions and cumulative reservations symmetrically. Missing, changed
+or unresolved evidence stops both loops. No historical failure becomes success.
+
+The resulting evidence establishes only the exact tested managed Windows
+process boundary. A Windows-parent pipe fixture operated through WSL does not
+establish WSL caller disconnection. Console cancellation, real HWND/UI and
+accessibility, actual WAM, selected-account/cache/consent/reuse behavior, Native
+AOT artifact acceptance and the complete Slice remain separate obligations.
+Preparation of their protocols is permitted; account-state effects still need
+the concrete owner risk amendment required by the accepted Wave.
+
+Public timing and process API basis:
+
+- [TimeProvider.GetTimestamp](https://learn.microsoft.com/dotnet/api/system.timeprovider.gettimestamp?view=net-10.0)
+- [Windows QPC guidance](https://learn.microsoft.com/windows/win32/sysinfo/acquiring-high-resolution-time-stamps)
+- [Explicit process handle lists](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute)
+- [CreateProcessW](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw)

@@ -1,4 +1,4 @@
-"""Run one admitted Windows managed-file action under the accepted Slice protocol.
+"""Run one admitted Windows managed-file/process action under the accepted Slice protocol.
 
 The WSL history survives failed Windows starts. No authentication, publishing,
 package download, arbitrary command, or automatic retry is exposed here.
@@ -39,7 +39,7 @@ WAVE = "8bbc98cc2e892a33c06d190983d9c0a09a8d6282"
 GRANT = "a0f741b59e09f1eb95594dbfde7a6e634d962210"
 CONTROLLERS = ("run_windows.py", "Invoke-WindowsValidation.ps1",
                "Stop-WindowsValidation.ps1", "WindowsValidationJob.cs")
-PROJECT = "tests/Authentication.Windows.Scenarios/Authentication.Windows.Scenarios.csproj"
+PROJECT = "Windows.slnx"
 POWERSHELL = Path("/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe")
 DOTNET = "C:\\Program Files\\dotnet\\"
 FRAMEWORK = "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\"
@@ -136,6 +136,71 @@ TEST_PREVIOUS_CONTROLLERS = {
 }
 
 
+# Exact cache additions and one-time transition after the accepted file loop.
+PROCESS_PREVIOUS_CONTROLLERS = {'run_windows.py': 'f0259f9d8b48cae8f4bb00bcc0c905cf2edf99dd3e131483920048d089e0b990',
+ 'Invoke-WindowsValidation.ps1': '2255721d7774bb0cca0cf5819cb673f7c2b3cde7afd3ef0d00749df9a97f7223'}
+PROCESS_ARCHIVES = {'microsoft.identity.client.4.83.1.nupkg': (4391519,
+                                            '692ae5e6b961a2ef71b747a9877f7a7f0460a03f9fb2edc0fa7e4d457a5419a0f564afae53c6296b7e75e0ab2b1c61b3f621a9d56e99945bb047b02dcfe9a2bd',
+                                            'jOLIrZ3cynoqHLLO1cXplFFabrhrMEYs/EuKHvmCyrOm1axqiVFT6nCSnHxk7w5+d2BeQfCdM12Yf/0X7OeS1g=='),
+ 'microsoft.identity.client.broker.4.83.1.nupkg': (90323,
+                                                   '9923928bde2049ed3ec125f871eb37f125a2bb28d20e0d5ebdf59d1a7cb1f37858f4c7d818dd25fd72f1fa7ae96a01a1320d1a21bb3ba3a1379d3fe37463f2ec',
+                                                   'r5F/Iwm/DeRA8JP2yxpW31gDxXfehvDilI4U6t80bAhnass0Czjwkdyx8LbZYbeeTB5J8jUp90qSxIf/tBeJ0A=='),
+ 'microsoft.identity.client.nativeinterop.0.20.3.nupkg': (20066978,
+                                                          'e8d30c22acc6c14d91f09c9e8204278357f2500a11e1e7befb1443f0e806a9dd5522938d37733bfe3de11a1c4e30ccea4755f80fcd1f9de6d8c87a88910ae5cd',
+                                                          'k8f/a/IdBYU905Js0QUd0nuoN680adS393QhrcOyAvCbnteKCNUdzuMIi9pROlJrbjxPqQXRNcf3a9cjE65UfA=='),
+ 'microsoft.identitymodel.abstractions.8.14.0.nupkg': (115275,
+                                                       '175ef8bf78b63f3c327e680d5cf7721d74f29e96460e686b22b4e67c264fb036a7a9bea1473f4a5b487337ab7a560c861b51ed1aa744777f303362262b01a8b4',
+                                                       'iwbCpSjD3ehfTwBhtSNEtKPK0ICun6ov7Ibx6ISNA9bfwIyzI2Siwyi9eJFCJBwxowK9xcA1mj+jBWiigeqgcQ=='),
+ 'microsoft.dotnet.ilcompiler.10.0.12.nupkg': (94736,
+                                               'a9e3932bd0d16d6c78fde79b5c6d6fe74ca4104983f54be9f09d62085aa7cf7d1683cb3cbdf3dddad3e9a9a7b4c0c9d262676f28299308483afd96b34acba562',
+                                               'AawF393Q+VkdrnrnI1gu612zh5iqpa1AGSvnKCQ3IkMgSKJXIQbO1sXYRgEzOU4f0cPZ6MaCCF29xZSGWlmbuQ=='),
+ 'runtime.win-x64.microsoft.dotnet.ilcompiler.10.0.12.nupkg': (11908112,
+                                                               '3875d56e9404026f57c1b1a0673c722b5485340b693422c7c9ea118f40301b51ed173871ee525818080de8230ee0ac6147c56e352d4da8929532b3b3959d684d',
+                                                               'clsgU9GnioCJ+PBzQTCoJHxLXRU+7O/BzYrwRT8CUP7jgyYjNgJmNsQ/kbzAA7MG5kDvFoFvIBGHGzYdINh/EQ=='),
+ 'microsoft.netcore.app.runtime.nativeaot.win-x64.10.0.12.nupkg': (29492822,
+                                                                   'bc56dd1d11b4a49874cc12cfa66f0163fa1a353fb84d8158e336e2eb779ebd7ae0aa487d660bc85043c833589a33f348ea6674cf1bf61744fe1ae9d38168e9c8',
+                                                                   'MPm78CKSJf8Sb0nbXgvzedp2uwFQX4JONl618NhEeAEznK9JLzQ6ETfJZ+UcoW5ScTqa27a+JGQDXD3bUAMTrA=='),
+ 'microsoft.netcore.app.runtime.win-x64.10.0.12.nupkg': (39968868,
+                                                         '39afcb222032eabebe2c7fa51a37c491c6b0f456796ad7888431971b8eef4f689caee5454260398ce0ffafe491c565891b35e73afc67585a3e4c4bde995710ee',
+                                                         'H3eh1w8Yevp6yO2+R3zbOPfwJ1vs2c/5PKa1ez7igGCF8EIycnzZr8gTjeVBAKjCPbyGuOdMSazLUnNqMsfTkw==')}
+INSTALLED_PACKS = {'Microsoft.NETCore.App.Ref': ('10.0.12',
+                               7188850,
+                               'b8df7c98c76bba344b41d20151dc79e5a4dc764b5fdb893844fdfdb895be05247d31cb4e93452ba668beb2f3f62a3f30ed8b1242e06b7a0c53b11125fc69ba28',
+                               ['analyzers/', 'data/', 'ref/']),
+ 'Microsoft.NETCore.App.Host.win-x64': ('10.0.12',
+                                        5790931,
+                                        '33c2760f5936e1eb30609fc368974761bc331eb720fa0593bf92f9f050c6d91d67f673a22783160ab84c16d6736e8c02c10066ced6c06cceed378f5cbaa78588',
+                                        ['runtimes/'])}
+FILE_CASES = ['ExplicitFilePreservesSelectedProfileAndRequest ("personal@example.test")',
+ 'ExplicitFilePreservesSelectedProfileAndRequest ("work@example.test")',
+ 'FileSizeLimitAppliesBeforeAuthentication (65536)',
+ 'FileSizeLimitAppliesBeforeAuthentication (65537)',
+ 'ReplacingFileAfterAdmissionCannotChangeTheInFlightProfile',
+ 'UnreadableOrInvalidFileStopsBeforeProviderConstruction ("missing")',
+ 'UnreadableOrInvalidFileStopsBeforeProviderConstruction ("directory")',
+ 'UnreadableOrInvalidFileStopsBeforeProviderConstruction ("malformed-json")',
+ 'UnreadableOrInvalidFileStopsBeforeProviderConstruction ("invalid-utf8")',
+ 'UnreadableOrInvalidFileStopsBeforeProviderConstruction ("sharing-denied")']
+PROCESS_CASES = {'RootHelpCompletesWithoutAuthentication': 'help',
+ 'MalformedAuthenticationReturnsTheBootstrapFailure': 'malformed',
+ 'SelectedRequestReturnsOneSuccessDespiteBrokenDiagnostics': 'success',
+ 'FlaggedRegularFileStopsBeforeProfileAndProvider': 'file-stdin',
+ 'AlreadyClosedLifetimePipeCancelsBeforeAuthentication': 'closed-stdin',
+ 'WriterClosureRejectsLateSuccessAndEndsTheProcess': 'close-pending',
+ 'ClosedStdinWithoutTheFlagDoesNotCancel': 'unused-stdin',
+ 'LifetimePipePayloadIsIgnoredAndClosureStillCancels': 'data-close',
+ 'DeadlineEndsUncooperativeWorkWithinTheProcessBound': 'deadline',
+ 'BrokenResultReaderEndsWithTransportFailure': 'broken-output',
+ 'UndrainedResultPipeCannotKeepTheProcessAlive': 'blocked-output',
+ 'BlockedDiagnosticsDoNotChangeTheAuthenticationResultOrKeepTheProcessAlive': 'blocked-diagnostics'}
+ARCHIVES.update({name: values[:2] for name, values in PROCESS_ARCHIVES.items()})
+SUPERSEDED_LOCKS = (
+    "src/Authentication.Core/packages.lock.json",
+    "src/Authentication.Windows/packages.lock.json",
+    "tests/Authentication.Windows.Scenarios/packages.lock.json",
+)
+
+
 def utc():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
 
@@ -205,7 +270,8 @@ def files_under(directory):
 
 def graph_inputs():
     subject = ROOT / "subject"
-    result = {"subject/global.json": digest(subject / "global.json"), "nuget.config": digest(ROOT / "nuget.config")}
+    result = {"subject/global.json": digest(subject / "global.json"), "nuget.config": digest(ROOT / "nuget.config"),
+              "subject/Windows.slnx": digest(subject / PROJECT)}
     for base in (subject / "src", subject / "tests"):
         for current, directories, files in os.walk(base):
             directories[:] = [name for name in directories if name not in ("bin", "obj")]
@@ -323,6 +389,11 @@ def public_archives(protocol):
     prior = Path("/mnt/c/Temp/azureauth-native-aot-diagnostics/round-05")
     archives[filename] = (prior / "feed" / filename, prior / "packages/microsoft.net.illink.tasks/10.0.12",
                           "xi+BDjFpW+Sb+MHFHaH6Y/gV9I8BluFwRXc1QyCdoZbIK26eNiBeFuMTe/FMwc33G1wdHCyDg7CVTmb8OdQrMQ==")
+    for filename, (_, _, content_hash) in PROCESS_ARCHIVES.items():
+        # Package IDs contain dots; derive the finite reviewed cache directory.
+        match = re.fullmatch(r"(.+)\.([0-9]+\.[0-9]+\.[0-9]+)\.nupkg", filename)
+        name, version = match.groups()
+        archives[filename] = (prior / "feed" / filename, prior / "packages" / name / version, content_hash)
     if set(archives) != set(ARCHIVES):
         raise ValueError("The independently reviewed public archive graph changed")
     for filename, (path, cache, content_hash) in archives.items():
@@ -363,6 +434,67 @@ def verify_cache(archive, cache, content_hash):
     if actual != expected:
         raise ValueError("Incomplete or extended retained package cache")
     return {name: digest(cache / name) for name in expected}
+
+
+def installed_packs():
+    """Bind installed targeting/apphost payloads to retained public archives."""
+    tools = dict(TOOLS)
+    donor = Path("/mnt/c/Temp/azureauth-native-aot-diagnostics/round-05/feed")
+    for name, (version, size, expected, prefixes) in INSTALLED_PACKS.items():
+        archive = donor / f"{name.lower()}.{version}.nupkg"
+        if archive.stat().st_size != size or digest(archive, "sha512") != expected:
+            raise ValueError("Installed-pack provenance changed")
+        base = Path("/mnt/c/Program Files/dotnet/packs") / name / version
+        admitted = set()
+        with zipfile.ZipFile(archive) as package:
+            for item in package.infolist():
+                relative = unquote(item.filename)
+                if item.is_dir() or not any(relative.startswith(prefix) for prefix in prefixes):
+                    continue
+                actual = digest(base / relative)
+                if actual != hashlib.sha256(package.read(item)).hexdigest():
+                    raise ValueError("Installed pack differs from public payload")
+                admitted.add(relative)
+                tools[DOTNET + "packs\\" + name + "\\" + version + "\\" + relative.replace("/", "\\")] = actual
+        if {str(item.relative_to(base)) for item in base.rglob("*") if item.is_file()} != admitted:
+            raise ValueError("Installed pack file set changed")
+    return tools
+
+
+def process_evidence(action, expected):
+    """Validate completeness separately from the independent business-red review."""
+    temporary = action / "temp"
+    if (temporary / "process-safety-stop.json").exists():
+        raise ValueError("Fixture safety stop forbids continuation")
+    cases = set(PROCESS_CASES.values())
+    if {path.name for path in temporary.glob("process-*")} != {"process-" + case for case in cases}:
+        raise ValueError("Missing or unexpected process reservation")
+    for case in sorted(cases):
+        directory = temporary / ("process-" + case)
+        reserved = read(directory / "reserved.json")
+        started = read(directory / "started.json")
+        receipt = read(directory / "result.json")
+        if reserved.get("scenario") != case or started.get("pid", 0) <= 0 or \
+                started.get("executable") != DOTNET + "dotnet.exe" or receipt.get("quiescent") is not True:
+            raise ValueError("Incomplete child ownership/exit evidence")
+        for name in ("stdout", "stderr"):
+            count = (directory / (name + ".bin")).stat().st_size
+            if count != receipt.get(name + "Bytes") or count > 524288:
+                raise ValueError("Incomplete bounded child capture")
+        if not isinstance(receipt.get("exitObservedTimestamp"), int) or receipt["exitObservedTimestamp"] <= 0:
+            raise ValueError("Missing child exit observation")
+        if case not in ("help", "malformed"):
+            entered = int((directory / "entered").read_text())
+            if entered <= 0 or receipt.get("entryTimestamp") != entered or \
+                    receipt["exitObservedTimestamp"] < entered or receipt.get("timestampFrequency", 0) <= 0:
+                raise ValueError("Missing managed-entry evidence")
+        if expected == "red":
+            prefill = receipt.get("diagnosticPrefill")
+            if type(prefill) is not int or (not 1 <= prefill <= 65536 if case == "blocked-diagnostics" else prefill != 0):
+                raise ValueError("Unexpected synthetic diagnostic prefill")
+            if receipt.get("forced") is not False or receipt.get("exitCode") != 2 or receipt["stdoutBytes"] != 0 or \
+                    (directory / "stderr.bin").read_bytes() != b"D" * prefill:
+                raise ValueError("Rejecting-stub red differs from admitted execution")
 
 
 def windows_wait(command, seconds, cancel_path=None):
@@ -428,12 +560,28 @@ exit 0
         raise ValueError("Windows path preflight failed or interrupted")
 
 
-def prepare_source(source, action):
+def prepare_source(source, action, graph_transition=False):
     subject = ROOT / "subject"
     if not subject.exists():
         git("worktree", "add", "--detach", str(subject), source)
     else:
         git("diff", "--exit-code", "HEAD", cwd=subject)
+        if graph_transition:
+            paths = set(git("ls-tree", "-r", "--name-only", source).splitlines())
+            if any(name in paths for name in (*SUPERSEDED_LOCKS, "src/Authentication.Cli/packages.lock.json")):
+                raise ValueError("Graph-establishment source must declare regenerated locks")
+            retained = {}
+            for name in SUPERSEDED_LOCKS:
+                saved = action / "superseded-locks" / name
+                saved.parent.mkdir(parents=True, exist_ok=True)
+                with saved.open("xb") as stream:
+                    stream.write((subject / name).read_bytes())
+                retained[name] = digest(saved)
+            write_new(action / "lock-transition.json", {
+                "priorSource": git("rev-parse", "HEAD", cwd=subject), "source": source,
+                "priorRestoreReceiptSha256": digest(ROOT / "actions/0004/restore.json"),
+                "retainedSha256": retained,
+            })
         for path in git("ls-files", "--others", "--exclude-standard", cwd=subject).splitlines():
             if Path(path).name != "packages.lock.json" or not path.startswith(("src/", "tests/")):
                 raise ValueError("Unreviewed source file")
@@ -475,7 +623,8 @@ def main():
     for name in (PROTOCOL, "tools/validation/run_managed.py", *("tools/validation/" + name for name in CONTROLLERS)):
         if git("hash-object", str(REPOSITORY / name)) != git("rev-parse", f"{args.protocol}:{name}"):
             raise ValueError("Controller/protocol differs from accepted bytes")
-    for path, expected in TOOLS.items():
+    admitted_tools = installed_packs()
+    for path, expected in admitted_tools.items():
         if digest(Path("/mnt/c") / path[3:].replace("\\", "/")) != expected:
             raise ValueError("Installed tool identity changed")
     direct(LINUX)
@@ -498,10 +647,25 @@ def main():
             args.action != "test" or args.expect != "red" or args.source != previous[-1][1]["source"]
         ):
             raise ValueError("The first continuation must test the unchanged admitted red build")
+        graph_transition = len(previous) == 9
+        if graph_transition and args.action != "restore":
+            raise ValueError("The first process increment action establishes its new graph")
+        if len(previous) < 9:
+            raise ValueError("This amendment requires the completed accepted file history")
+        reserved_processes = 12 if args.action == "test" else 0
+        prior_processes = 0
+        for historical, started, _ in previous:
+            required = 12 if int(historical.name) > 9 and started["action"] == "test" else 0
+            reservation = started.get("reservedProcessScenarios", 0 if int(historical.name) <= 9 else None)
+            if type(reservation) is not int or reservation != required:
+                raise ValueError("Unrecoverable process reservation")
+            prior_processes += reservation
+        if prior_processes + reserved_processes > 36:
+            raise ValueError("Process scenario allocation exhausted")
         preparation = args.action in ("bootstrap", "restore")
         prep = sum(start["action"] in ("bootstrap", "restore") for _, start, _ in previous)
         tests = len(previous) - prep
-        if prep + preparation > 4 or tests + (not preparation) > 40:
+        if prep + preparation > 5 or tests + (not preparation) > 40:
             raise ValueError("Windows allocation exhausted")
         if sum(item["action"] in ("fetch", "restore") for item in linux) + prep + preparation > 16 or \
                 sum(item["action"] in ("build", "test") for item in linux) + tests + (not preparation) > 120:
@@ -514,7 +678,9 @@ def main():
         start = {"action": args.action, "utc": utc(), "protocol": args.protocol, "source": args.source,
                  "sourceTree": git("rev-parse", args.source + "^{tree}"), "target": args.target,
                  "review": args.review, "expected": args.expect, "linuxActions": len(linux),
-                 "priorWindowsPreparation": prep, "priorWindowsBuildTest": tests}
+                 "priorWindowsPreparation": prep, "priorWindowsBuildTest": tests,
+                 "reservedProcessScenarios": reserved_processes, "priorProcessScenarios": prior_processes,
+                 "graphTransition": graph_transition}
         write_new(local / "started.json", start)
         result = {"continuation_allowed": False, "quiescent": False, "evidence": {}}
         action = ROOT / "actions" / local.name
@@ -536,7 +702,8 @@ def main():
                 (action / name).mkdir()
             migrations = {}
             previous_controllers = (PREVIOUS_CONTROLLERS if len(previous) == 3 else
-                                    TEST_PREVIOUS_CONTROLLERS if len(previous) == 6 else {})
+                                    TEST_PREVIOUS_CONTROLLERS if len(previous) == 6 else
+                                    PROCESS_PREVIOUS_CONTROLLERS if graph_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
@@ -577,7 +744,7 @@ def main():
                 expected = ARCHIVES[name][1]
                 path = ROOT / "feed" / name
                 if not path.exists():
-                    if args.action != "bootstrap":
+                    if not (graph_transition and name in PROCESS_ARCHIVES):
                         raise ValueError("Public feed lost an input")
                     with path.open("xb") as stream:
                         stream.write(original.read_bytes())
@@ -586,7 +753,7 @@ def main():
                 admitted_files = verify_cache(original, retained_cache, content_hash)
                 cache = ROOT / "packages" / retained_cache.parent.name / retained_cache.name
                 if not cache.exists():
-                    if args.action != "bootstrap":
+                    if not (graph_transition and name in PROCESS_ARCHIVES):
                         raise ValueError("A previously admitted package cache is missing")
                     cache.mkdir(parents=True)
                     for relative, expected_file in admitted_files.items():
@@ -608,7 +775,7 @@ def main():
                     stream.write(NUGET_CONFIG)
             if config.read_bytes() != NUGET_CONFIG:
                 raise ValueError("Restore config differs from the fixed cache-only boundary")
-            before = prepare_source(args.source, action)
+            before = prepare_source(args.source, action, graph_transition)
             inputs = {"subject/" + name: expected for name, expected in before.items()}
             for base in (ROOT / "controller", ROOT / "feed", ROOT / "packages"):
                 inputs.update(files_under(base))
@@ -625,7 +792,7 @@ def main():
                 if built["source"] != args.source or built["artifacts"] != generated("build"):
                     raise ValueError("Unchanged source-bound build required")
                 inputs.update(built["artifacts"])
-            start.update(fileSha256=inputs, toolSha256=TOOLS)
+            start.update(fileSha256=inputs, toolSha256=admitted_tools)
             if args.action != "bootstrap":
                 bootstrap = read(ROOT / "actions/0001/bootstrap.json")
                 start.update(helperPath="actions/0001/WindowsValidationJob.dll", helperSha256=bootstrap["sha256"])
@@ -655,7 +822,7 @@ def main():
                     continue  # Restore/build may replace their generated metadata.
                 if digest(ROOT / name) != expected:
                     raise ValueError("Protected execution input changed")
-            for name, expected in TOOLS.items():
+            for name, expected in admitted_tools.items():
                 if digest(Path("/mnt/c") / name[3:].replace("\\", "/")) != expected:
                     raise ValueError("Installed tool changed during execution")
             expected_exit = 2 if args.expect == "red" else 0
@@ -672,11 +839,18 @@ def main():
                 reports = list((action / "results").glob("*.trx"))
                 if len(reports) != 1:
                     raise ValueError("Missing or ambiguous test evidence")
-                counters = ET.parse(reports[0]).find(".//{*}Counters")
-                if counters is None or int(counters.attrib["executed"]) != 10 or \
-                        int(counters.attrib["failed"]) != (4 if args.expect == "red" else 0) or \
-                        int(counters.attrib["passed"]) != (6 if args.expect == "red" else 10):
+                report = ET.parse(reports[0])
+                counters = report.find(".//{*}Counters")
+                if counters is None or int(counters.attrib["executed"]) != 22 or \
+                        int(counters.attrib["failed"]) != (12 if args.expect == "red" else 0) or \
+                        int(counters.attrib["passed"]) != (10 if args.expect == "red" else 22):
                     raise ValueError("Unexpected admitted case counts")
+                results = report.findall(".//{*}UnitTestResult")
+                expected_cases = {name: "Passed" for name in FILE_CASES}
+                expected_cases.update({name: "Failed" if args.expect == "red" else "Passed" for name in PROCESS_CASES})
+                if len(results) != 22 or {node.attrib["testName"]: node.attrib["outcome"] for node in results} != expected_cases:
+                    raise ValueError("Unexpected case names or dispositions")
+                process_evidence(action, args.expect)
                 result["tests"] = counters.attrib
             result["continuation_allowed"] = True
         except Exception as error:
@@ -691,7 +865,8 @@ def main():
                 result["evidence"] = {str(path.relative_to(action)): digest(path)
                                       for path in action.rglob("*") if path.is_file() and
                                       "home" not in path.relative_to(action).parts and
-                                      "temp" not in path.relative_to(action).parts}
+                                      ("temp" not in path.relative_to(action).parts or
+                                       path.relative_to(action).parts[1].startswith("process-"))}
             write_new(local / "result.json", result)
         print(json.dumps({"action": local.name, "continuation_allowed": result["continuation_allowed"],
                           "quiescent": result["quiescent"], "tests": result.get("tests")}))
