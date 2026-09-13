@@ -166,6 +166,74 @@ public sealed class ProfileSyntaxTests
         Assert.IsFalse(ProfileSyntax.TryResolveTenant(SyntheticProfile(new Guid(Tenant)), selector, out _));
     }
 
+    [TestMethod]
+    [DataRow("1.0", true)]
+    [DataRow("10e-1", true)]
+    [DataRow("0.01e2", true)]
+    [DataRow("1e+0000", true)]
+    [DataRow("1.0000000000000000000000000000000000001", false)]
+    [DataRow("0.9999999999999999999999999999999999999", false)]
+    [DataRow("-1", false)]
+    [DataRow("1e2147483647", false)]
+    [DataRow("true", false)]
+    [DataRow("\"1\"", false)]
+    public void SchemaVersionUsesExactJsonNumericEquality(string number, bool accepted)
+    {
+        var document = ProfileJson.Replace("\"schemaVersion\": 1", "\"schemaVersion\": " + number);
+
+        Assert.AreEqual(accepted, Parse(document) is not null);
+    }
+
+    [TestMethod]
+    [DataRow("", false)]
+    [DataRow("null", false)]
+    [DataRow("[]", false)]
+    [DataRow("{}", false)]
+    public void ProfileRequiresOneCompleteConfigurationObject(string document, bool accepted)
+    {
+        Assert.AreEqual(accepted, Parse(document) is not null);
+    }
+
+    [TestMethod]
+    public void DecodedDuplicateNamesCannotHideBehindJsonEscapes()
+    {
+        var document = ProfileJson.Replace("\"name\":", "\"na\\u006de\": \"first\", \"name\":");
+
+        Assert.IsNull(Parse(document));
+    }
+
+    [TestMethod]
+    public void MalformedEscapedUnicodeIsRejected()
+    {
+        Assert.IsNull(Parse(ProfileJson.Replace("synthetic-selected-profile", "\\ud800")));
+    }
+
+    [TestMethod]
+    public void ASecondJsonValueCannotFollowTheProfile()
+    {
+        Assert.IsNull(Parse(ProfileJson + " {}"));
+    }
+
+    [TestMethod]
+    [DataRow(128, true)]
+    [DataRow(129, false)]
+    public void ProfileNameLengthCountsUnicodeCharacters(int length, bool accepted)
+    {
+        var name = string.Concat(Enumerable.Repeat("\U0001f600", length));
+
+        Assert.AreEqual(accepted, Parse(ProfileJson.Replace("synthetic-selected-profile", name)) is not null);
+    }
+
+    [TestMethod]
+    [DataRow("")]
+    [DataRow("organizations")]
+    [DataRow("COMMON")]
+    [DataRow("{11111111-2222-3333-4444-555555555555}")]
+    public void InvalidMultitenantSelectorDoesNotBecomeCommon(string selector)
+    {
+        Assert.IsFalse(ProfileSyntax.TryResolveTenant(SyntheticProfile(null), selector, out _));
+    }
+
     private static ClientProfile? Parse(string document) => ProfileSyntax.Parse(Encoding.UTF8.GetBytes(document));
 
     private static ClientProfile SyntheticProfile(Guid? tenant) =>

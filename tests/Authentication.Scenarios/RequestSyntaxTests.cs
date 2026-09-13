@@ -182,6 +182,103 @@ public sealed class RequestSyntaxTests
         Assert.IsNull(RequestSyntax.Parse(arguments));
     }
 
+    [TestMethod]
+    [DataRow("--account-email", 320, true)]
+    [DataRow("--account-email", 321, false)]
+    [DataRow("--profile", 32767, true)]
+    [DataRow("--profile", 32768, false)]
+    [DataRow("--scope", 2048, true)]
+    [DataRow("--scope", 2049, false)]
+    public void SelectorLengthsMatchTheContract(string option, int length, bool accepted)
+    {
+        var arguments = Arguments();
+        var value = option switch
+        {
+            "--account-email" => new string('a', length - 13) + "@example.test",
+            "--profile" => @"C:\" + new string('a', length - 3),
+            "--scope" => Resource + "/" + new string('a', length - Resource.Length - 1),
+            _ => throw new InvalidOperationException("Unknown synthetic selector."),
+        };
+        Set(arguments, option, value);
+
+        Assert.AreEqual(accepted, RequestSyntax.Parse(arguments) is not null);
+    }
+
+    [TestMethod]
+    [DataRow(64, true)]
+    [DataRow(65, false)]
+    public void ScopeCountHasAnInclusiveLimit(int count, bool accepted)
+    {
+        var arguments = Arguments();
+        for (var index = 1; index < count; index++)
+        {
+            arguments.AddRange(["--scope", Resource + "/permission" + index]);
+        }
+
+        Assert.AreEqual(accepted, RequestSyntax.Parse(arguments) is not null);
+    }
+
+    [TestMethod]
+    [DataRow("1", 1)]
+    [DataRow("600", 600)]
+    [DataRow("+1", 1)]
+    public void ExplicitDeadlineAndTelemetryOffPreserveTheirMeaning(string text, int expected)
+    {
+        var arguments = Arguments();
+        arguments.AddRange(["--timeout-seconds", text, "--telemetry", "off"]);
+
+        var request = RequestSyntax.Parse(arguments);
+
+        Assert.IsNotNull(request);
+        Assert.AreEqual(expected, request.TimeoutSeconds);
+        Assert.IsFalse(request.TelemetryStderr);
+    }
+
+    [TestMethod]
+    [DataRow("COMMON")]
+    [DataRow("organizations")]
+    [DataRow("not-a-guid")]
+    [DataRow("{11111111-2222-3333-4444-555555555555}")]
+    public void InvalidTenantSelectorCannotEnterTheRequest(string tenant)
+    {
+        var arguments = Arguments();
+        arguments.AddRange(["--tenant", tenant]);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    public void ResourceCaseIsNotNormalizedIntoAnEquivalentResource()
+    {
+        var arguments = Arguments();
+        Set(arguments, "--scope", "https://EXAMPLE.test/read");
+        arguments.AddRange(["--scope", "https://example.test/write"]);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    public void EmptyUserInfoIsStillDisallowed()
+    {
+        var arguments = Arguments();
+        Set(arguments, "--scope", "https://@example.test/read");
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    public void EmailLengthCountsUnicodeCharactersWithoutRewritingThem()
+    {
+        var arguments = Arguments();
+        var email = string.Concat(Enumerable.Repeat("\U0001f600", 307)) + "@example.test";
+        Set(arguments, "--account-email", email);
+
+        var request = RequestSyntax.Parse(arguments);
+
+        Assert.IsNotNull(request);
+        Assert.AreEqual(email, request.AccountEmail);
+    }
+
     private static List<string> Arguments() =>
     [
         "authenticate", "--protocol", "1", "--profile", ProfilePath,
