@@ -46,6 +46,10 @@ DISPOSED_BUILD_HASHES = {
     "result.json": "c02ba234adac677a63147c57fa0fca240846839953743d08c08e2576dd43bba7",
     "output.txt": "b91afcbc9cd5f0437906fdb6a314f34c9b0fe3a3e9cb9d2c6044ab6032958442",
 }
+DISPOSED_WINDOWS_PREPARATION = {
+    "started.json": "b5f6e94a9240778dd028610f5c0c76fe9fafcea2aa0f27bf84d19e9839839142",
+    "result.json": "437df40a2c76f7e288de3fd5d36beff41f8b0318a85a55d0b2c24a3ab179d43e",
+}
 
 
 def utc():
@@ -174,14 +178,16 @@ def windows_consumption():
         return 0, 0
     if history.is_symlink():
         raise ValueError("Linked Windows action history")
-    preparation, build_test = 0, 0
+    preparation, build_test, number = 0, 0, 0
     windows = Path("/mnt/c/Temp/azureauth-windows-slice-108/actions")
     for number, action in enumerate(sorted(history.iterdir()), 1):
         if action.is_symlink() or action.name != f"{number:04d}":
             raise ValueError("Noncontiguous Windows action history")
         receipt = json.loads((action / "result.json").read_text())
         started = json.loads((action / "started.json").read_text())
-        if receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
+        if action.name == "0002":
+            verify_disposed_windows_preparation(action, windows / action.name)
+        elif receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action stops both validation loops")
         for name, expected in receipt["evidence"].items():
             if digest(windows / action.name / name) != expected:
@@ -194,7 +200,27 @@ def windows_consumption():
             raise ValueError("Unknown Windows action allocation")
     if preparation > 4 or build_test > 40:
         raise ValueError("Windows allocation exceeded")
+    if number == 2:
+        raise ValueError("Windows restore must complete before Linux continuation")
     return preparation, build_test
+
+
+def verify_disposed_windows_preparation(action, failed):
+    """Keep the exact pre-subject Windows stop in the shared capacity history."""
+    for root in (action, failed):
+        if any(path.is_symlink() for path in (root, *root.parents)):
+            raise ValueError("Linked disposed Windows evidence")
+    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_PREPARATION):
+        raise ValueError("Disposed Windows reservation changed")
+    for name, expected in DISPOSED_WINDOWS_PREPARATION.items():
+        path = action / name
+        if path.is_symlink() or digest(path) != expected:
+            raise ValueError("Disposed Windows receipt changed")
+    paths = list(failed.rglob("*"))
+    if {str(path.relative_to(failed)) for path in paths} != {
+        "home", "home/local", "home/roaming", "temp", "results",
+    } or any(path.is_symlink() or not path.is_dir() for path in paths):
+        raise ValueError("Disposed Windows pre-subject boundary changed")
 
 
 def main():
