@@ -3615,3 +3615,68 @@ intended failures. Source 984a232 still predates PR #142's Core integration.
 Independent actual-red acceptance must precede a separate integrated green
 implementation and admission. No production composition, actual native admission,
 WAM, account reuse, WSL, Native AOT or whole-Slice acceptance follows.
+
+## Request Context Initialization Evidence
+
+The existing personal, fixed-work and explicit-work application scenarios now
+require provider initialization to receive the same admitted email, scopes,
+interaction permission and normalized tenant as acquisition. The
+[Windows design](../../designs/windows-ado-authentication.md) and
+[scenario basis](../../validation/strategy.md#windows-slice-design-acceptance)
+remain the behavior authorities; this increment adds no public CLI option.
+
+The [independently accepted red](https://github.com/hcoona/microsoft-authentication-cli/pull/145#issuecomment-5663137262)
+used source `adf81fc494cd52933769d88d99cbf8cd312b0b5d`, tree
+`ef80dbd42dffaa19dddb5f1a00111eec7c2ff612`, under protocol
+`aa9eb65e48832cb83b86dd5a63df660eb35848c6`. Linux build 0042 completed normally;
+test 0043 executed all 250 cases, with 247 Passed and the three intended
+selected-Profile cases Failed at their preserved success assertion. Runner exit
+was 2 and outer exit was 0. The later initializer-context assertions were not
+reached in red.
+
+The [reviewed green source](https://github.com/hcoona/microsoft-authentication-cli/pull/145#issuecomment-5663220522),
+`23f66ee80a66b6e2e1588ab0f61d44421c083314`, tree
+`86fc12ae5a86207a6c9c15354b771f88bae2491d`, forwards the normalized request through
+one invocation path. The profile-only overload adapts to the request-aware factory;
+Profile admission, tenant resolution, cancellation and result commitment remain
+shared. All scenario bytes are unchanged from red.
+
+The [green admission](https://github.com/hcoona/microsoft-authentication-cli/pull/145#issuecomment-5670046505)
+binds accepted protocol `2dd0927b1d41b96945c22a12025576a1c1d76e94`, SDK
+10.0.401/runtime 10.0.12, MSTest 4.1.0, the existing public package graph and the
+credential-free Linux environment. The [accepted build 0044](https://github.com/hcoona/microsoft-authentication-cli/pull/145#issuecomment-5670148204)
+completed with exit 0, zero warnings/errors, complete capture and normal
+process-group quiescence in 8.7 seconds. Its complete 251-file artifact inventory,
+source-bound portable PDBs and unchanged 96-method/250-case discovery were
+independently verified before test admission.
+
+The [independently accepted green test 0045](https://github.com/hcoona/microsoft-authentication-cli/pull/145#issuecomment-5670236645) executed
+all 250 cases, all Passed, with every other outcome counter zero. All sixteen
+counters and complete definition/entry/execution/result joins were checked.
+The three former failures reached their retained success assertions and the later
+initializer-context checks. Runner and fully collected outer exits were 0;
+capture was complete, termination was unnecessary and process-group quiescence
+was confirmed. Recorded subject time was 0.967 seconds.
+
+| Actual evidence | SHA-256 |
+| --- | --- |
+| Build 0044 result | `79bcd137adb032e020daf2aacac415518fbd3aac454e250149f42230f792398d` |
+| Test 0043 red result | `c46d620df476551cbf3a9ed4cf25f7f3598a4335c2f75dfaef0b7a53e0530b43` |
+| Test 0043 complete TRX | `882ce89a0ee69321812e2ce2c25cb4bc6ebb3f25d6948e0890053f3e24bfa982` |
+| Test 0045 green result | `ff517b9e7cae29d6aa221518967426f6acbaeccc7b234c1f3c217930e41605b6` |
+| Test 0045 complete TRX | `c0c4e926b3b5c42bcb796b1f7743f87ee0d39cc8d57dc4613d8e3aa97f290372` |
+
+At completed 0045, all 80 actions are finalized: Linux 45 and Windows 35.
+Build/test usage is Linux 37/80 and Windows 30/40, combined 67/120. Preparation
+remains 13/16, charged downloads 768 MiB, and process reservations 24/36 under
+the outer ceiling of 60, preserving the final twelve CLI units. Earlier stopped
+attempts remain charged. Dedicated artifacts and sanitized evidence are
+intentionally retained; no replay, refund or new capacity follows.
+
+This result establishes request-context forwarding in the controlled Linux
+application scenarios. Providers, profiles, accounts and tokens are synthetic;
+there is no Windows subject, broker/account-store access or network request.
+It does not establish real provider initialization, production process/owned-host
+composition, Windows/WAM/UI/WSL behavior, account reuse, Native AOT or whole-Slice
+acceptance. Integration of later accepted records preserves the exact executed
+Core and scenario bytes; it is not a new runtime execution.

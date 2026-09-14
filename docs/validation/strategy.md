@@ -450,6 +450,11 @@ binds core request termination, cancellation/deadline precedence and withholding
 uncommitted success to the unchanged red/green scenarios. Actual UI fault/commit
 synchronization and owned-thread/process drain require production integration evidence.
 
+The [request-context initialization result](../research/experiments/windows-slice-validation.md#request-context-initialization-evidence)
+binds the existing personal, fixed-work and explicit-work application scenarios to
+the same admitted request at provider initialization and acquisition. It supplies
+controlled forwarding evidence; real provider and process integration remain separate.
+
 The design's public dependency premises and security/TMT update receive independent
 architecture, consistency, minimality, security, record-system, and research-evidence
 review. Record schema checks, native TMT open/analysis, review identities, findings and
