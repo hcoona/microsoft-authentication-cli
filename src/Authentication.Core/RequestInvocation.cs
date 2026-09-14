@@ -33,14 +33,12 @@ public sealed class RequestInvocation : IDisposable
 
     // The returned observation is provisional. Only TryCommitResult can prepare output.
     public Task<AuthenticationOutcome> RunAsync(IProfileSource profiles,
-        Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
+        Func<ClientProfile, IAuthenticationProvider> createProvider,
         Task<bool>? hostAdmission = null) =>
-        // Keep initialization unavailable until its admitted-context scenarios run red.
-        RunAsync(profiles, _ => throw new ProviderFailureException(
-            AuthenticationFailure.MechanismUnavailable), hostAdmission);
+        RunAsync(profiles, (profile, _) => createProvider(profile), hostAdmission);
 
     public Task<AuthenticationOutcome> RunAsync(IProfileSource profiles,
-        Func<ClientProfile, IAuthenticationProvider> createProvider,
+        Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
         Task<bool>? hostAdmission = null) => lifetime.RunAsync(async token =>
         {
             if (Request is null) return new(null, AuthenticationFailure.InvalidRequest);
@@ -78,7 +76,7 @@ public sealed class RequestInvocation : IDisposable
             IAuthenticationProvider provider;
             try
             {
-                provider = createProvider(profile);
+                provider = createProvider(profile, request);
             }
             catch (ProviderFailureException exception)
             {
