@@ -2218,9 +2218,11 @@ creation-race cases allocate one hidden parent each, before injected failure or
 terminal invalidation. Count controls and declared native descendants within each
 parent separately; the observation helper admits at most sixteen descendants.
 
-Visible green execution requires the designated Windows interactive session and
-an attending operator who can identify and close the fork-branded synthetic
-prompts. Establish readiness only after complete preparation and exact admission.
+Visible green execution requires the designated Windows interactive session.
+Actions through 0037 require an attending operator who can identify and close the
+fork-branded synthetic prompts, with readiness established only after complete
+preparation and exact admission. Later actions follow
+[automated synthetic UI coordination](#automated-synthetic-ui-coordination).
 No state-unlock, WAM surface, consent, external application control, global input,
 focus/activation workaround or desktop/DPI setting change is allowed. The operator
 may report an unexpected surface or request cancellation through the existing outer
@@ -2433,8 +2435,10 @@ This is neither an H test result nor evidence of a completed preparation sweep;
 it does not identify the exact verification substage or prove lock acquisition.
 No prior charge is refunded. The withdrawn attendance response cannot be reused.
 
-The helper now requires the following handoff for every `test --suite owned-host
---expect green` invocation. It is not an optional switch or a generic resume API.
+The helper requires the following handoff for every `test --suite owned-host
+--expect green` invocation. The [automated-selection amendment](#automated-synthetic-ui-coordination)
+below determines whether a later action requires an owner response. The handoff
+is not an optional switch or a generic resume API.
 Other selections retain their existing execution bounds and require no attendance
 receipt. These files are sanitized operational evidence under the existing action
 record, with the typed contracts below; they are not a new governed record family.
@@ -2470,8 +2474,10 @@ record, with the typed contracts below; they are not a new governed record famil
    controller PID/start incarnation. The reservation binds the accepted source,
    protocol, target, admission URL and complete input/tool maps. The WSL helper
    validates the receipt before emitting one `awaiting-operator` event. Only then
-   may the coordinator request a fresh explicit attending-operator response.
-5. Release only after that fresh actual response, while the same controller is
+   may the coordinator request a fresh explicit attending-operator response when
+   the action requires one, or follow the automated-selection amendment.
+5. Release only after that fresh actual response, or the independently verified
+   automatic-release condition in that amendment, while the same controller is
    waiting and neither cancellation nor finalization exists. The coordinator
    exclusively creates one empty regular file named `attendance-release-<hash>`,
    where `<hash>` is the complete ready receipt's SHA-256. The exact filename binds
@@ -3680,3 +3686,127 @@ It does not establish real provider initialization, production process/owned-hos
 composition, Windows/WAM/UI/WSL behavior, account reuse, Native AOT or whole-Slice
 acceptance. Integration of later accepted records preserves the exact executed
 Core and scenario bytes; it is not a new runtime execution.
+
+## Automated Synthetic UI Coordination
+
+For Windows actions first reserved under this amendment at 0038 or later, the
+existing `owned-host` green and `ui-admission` selections require no owner
+attendance when their exact admission confirms that all fixture actions and
+required observations are automated. Visible synthetic windows alone do not
+require the owner to wait at the desktop. The designated existing Windows
+interactive session and every current credential-free effects, process, output,
+time, ownership, stop and capacity boundary remain required.
+
+The [prepared-action handoff](#preparation-and-attending-operator-handoff) still
+runs through the unchanged accepted helpers. Complete admission and preparation,
+receive the actual `awaiting-operator` event, and independently verify the exact
+ready receipt and the live controller before the coordinator immediately supplies
+the existing exclusive empty release marker. For these automated selections,
+that release requires no owner-readiness request or reply. Do not pre-create or
+replay a marker, refresh a pending action, bypass cancellation or expiry, or
+change prepared inputs. All current receipt schemas and the four-hour maximum
+remain unchanged; the coordinator does not deliberately wait for the owner.
+The historical `attendance-*` names identify the prepared-action gate and do not
+by themselves establish human attendance in these future automated actions.
+
+The admission review must bind the exact automation, owned windows and required
+observations. Existing scalar messages remain limited to the admitted subject's
+proven windows and controls; this amendment adds no global input, external UI
+control, state unlock, account selection, consent or WAM interaction. A new
+selection or automation mechanism still requires its own accepted exact protocol.
+Automated results establish only the properties they observe, including the
+existing limitations concerning physical keyboard, focus and usability.
+
+If an admitted action actually needs owner input, choice or state unlock,
+finish preparation and live verification before requesting a fresh explicit
+readiness response, then release only the same waiting action after that reply.
+No late or earlier response can release another action. An unexpected human
+interaction or surface follows the existing stop procedure; do not turn it into
+an automatic retry or extend the action's effects.
+
+Do not request attendance solely to watch these tests. Use the admitted automation
+for observations, and retain any observation it cannot establish as an open
+evidence obligation. Automated success cannot substitute for that missing evidence.
+
+Actions through 0037 retain their original attendance rules, receipts, observed
+responses and charged failures. This prospective procedure does not reinterpret
+history, allocate another execution, refund capacity or establish a runtime
+result. The general [interaction policy](../experiment-safety.md#interaction-and-telemetry)
+owns when operator attendance is necessary.
+
+## Owned UI Admission Evidence
+
+The owned request host now rechecks eligibility on its actual STA thread before
+creating a native parent and before its sole show/readiness path. Both observations
+receive the original request token and occur outside the host gate so that caller
+cancellation can complete. Existing terminal checks and native, thread and callback
+cleanup remain required. The Windows design and scenario basis remain the behavior
+authorities; this result changes no public CLI contract.
+
+The [accepted red](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5670000828)
+used source `984a232995e41e90476cb0aa8b2228af2000874c`, accepted build 0032 and
+Windows test 0035 under protocol `2dd0927b1d41b96945c22a12025576a1c1d76e94`.
+All 21 cases executed: sixteen Passed and five failed at the intended admission
+assertions. The failures cover rejection before creation, rejection before showing,
+original-token observations on the owned STA, and both cancellation-during-recheck
+rows. The remaining sixteen cases, including silent success, passed. Earlier
+expired attendance actions remain charged and are not test results.
+
+The integrated green source is `5487007d6afb77324554407cd0272fddd5f99ff0`, tree
+`657c88e7917e28559d13ee2ae7d4cc78be54d0ed`. It incorporates the accepted host-fault
+lifetime and request-context changes at target/protocol
+`0d5fa85840ca99573d8b59967afd87e245c11db8`. All UI scenario bytes remain unchanged
+from red. SDK 10.0.401/runtime 10.0.12, MSTest 4.1.0, MSAL/Broker 4.83.1 and
+NativeInterop 0.20.3 retain their accepted public dependency identities.
+
+The [accepted Windows build 0036](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5670876319)
+completed normally in 15.72 seconds with zero warnings/errors. Independent review
+bound all 547 artifacts, the four PE/PDB identities and physical source documents,
+and the exact twenty selected methods expanding to 21 cases. These Windows PDBs contain no SourceLink map; immutable source and
+physical/generated document checksums supply provenance.
+`NativeWindowsHostObservations` was compiled but remains unconstructed and uninvoked
+by these fixtures. Its real native admission and production use remain unvalidated.
+
+The [independently accepted green test 0037](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5671238577)
+executed all 21 cases, all Passed, with all thirteen other outcome counters zero.
+Complete definition, entry, execution and result joins matched the exact admission.
+The five former failures now pass and the sixteen prior passes remain green.
+Capture included the complete 642-byte stdout and empty stderr. Subject/capture
+time was 1.776 seconds; both Job processes drained normally to zero, with no
+termination or safety stop. The original outer invocation was fully collected at
+exit 0, with continuation allowed and complete source/input/tool postchecks.
+
+This action retained its actual attended handoff: preparation completed at
+2026-09-14 21:27:58 UTC, independent live verification preceded a fresh owner
+response, and one exact release marker was supplied at 21:38:11 UTC. The controller
+recorded 613,797 milliseconds of waiting within the original four-hour limit.
+The [independently triaged private checker defect](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5671129310)
+and its corrected verification changed neither the prepared inputs nor the
+reservation or deadline. No additional subject or repeated test ran. The later
+automated-coordination amendment does not reinterpret this attendance evidence.
+
+These are credential-free controlled observations on the designated existing
+Windows 11 x64 interactive host, initiated through the admitted WSL 2 helper.
+Providers, accounts and tokens were synthetic. The admitted maximum was thirteen
+serial parents, eight potentially shown and five hidden, with at most one parent
+at a time. These are source-admitted bounds, not independently counted desktop
+observations. No real WAM, account/cache/consent access, network resource request,
+production CLI child or native admission observation was performed.
+
+| Actual evidence | SHA-256 |
+| --- | --- |
+| Build 0036 manifest | `361518785200746cbae8669d5a6dd2e5588c7a2575114d9b11e2a93bab77c64a` |
+| Test 0037 Windows result | `7cac46ad67cb2ffc04f5f890b8a81700ac9ba83acd4ecd6b6c00e4943aebc9e5` |
+| Test 0037 WSL result | `632955ce8c14d50aff82b018d94e11d3d9994765d922d744fcce0829ed46699f` |
+| Test 0037 complete TRX | `b6474e42b638df14209973842a9379c024fc703081df604f4d7194912b896ee3` |
+
+All 82 actions are finalized: Linux 45 and Windows 37. Build/test usage is Linux
+37/80 and Windows 32/40, combined 69/120. Preparation remains 13/16, downloads
+768 MiB, and process reservations 24/36 under the outer ceiling 60, preserving the
+final twelve CLI units. Dedicated artifacts and sanitized evidence are intentionally
+retained. No capacity reset, historical replay or further execution is implied.
+
+The result establishes the controlled owned-UI admission scenarios and their
+existing host regressions. It does not establish production process/host/provider
+composition, actual native eligibility, real WAM, selected-account or cross-process
+reuse, WSL lifetime, physical usability, final Native AOT or whole-Slice acceptance.

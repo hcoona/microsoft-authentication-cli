@@ -110,8 +110,20 @@ account store, or create another planned side effect.
 - Ensure the operator can identify and close prompts created by the test. Authentication
   secrets and device codes may appear only on the intended operator surface, not in
   captured output, agent traces, screenshots, or committed evidence.
-- Do not run interactive experiments in CI or unattended sessions. Manual assistance
-  must use the accepted procedure and counts toward the same attempt limits.
+- Require operator attendance when an accepted action needs human input, a choice,
+  or state unlock. Finish preparation and verify the actual
+  waiting action before requesting a fresh readiness response. Do not run those
+  actions in CI or unattended sessions. Manual assistance must use the accepted
+  procedure and counts toward the same attempt limits.
+- Fully automated, credential-free synthetic window tests do not require operator
+  attendance solely because a window is visible. Their accepted protocol and exact
+  admission must cover the automation, owned surfaces, required observations, and
+  bounded termination on the designated host/session. Keep sign-in, account choice,
+  consent, and state unlock under operator control. Unexpected human interaction
+  follows the protocol's stop procedure; it is not permission to automate it.
+- Do not request desktop attendance solely to watch automated work. Use admitted
+  automation for observations; if it cannot establish a required observation,
+  leave that claim unvalidated until suitable evidence is admitted.
 
 ### Network and Resource Effects
 
