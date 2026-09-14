@@ -155,7 +155,15 @@ public sealed class OwnedProcessScenarios
     {
         Assert.IsFalse(child.Forced, "The product must end before fixture enforcement.");
         Assert.AreEqual(code, child.ExitCode);
-        Assert.AreEqual(0, child.Error.Length);
+        ReadOnlySpan<byte> indication = [];
+        if (child.Output.Length != 0)
+        {
+            using var result = ParseOne(child.Output);
+            indication = result.RootElement.GetProperty("outcome").GetString() == "cancelled"
+                ? "Authentication request cancelled.\n"u8 : "Authentication request completed.\n"u8;
+        }
+        // Optional diagnostics may end with the process before their writer drains.
+        Assert.IsTrue(indication.StartsWith(child.Error), "Unexpected diagnostic bytes.");
     }
 
     private static void AssertExitBound(ProcessFixture child, string firstEnding)
