@@ -3406,3 +3406,96 @@ and UI-thread checks, not actual native admission facts or real WAM behavior.
 Production fault/commit synchronization, complete process/WSL lifetime, final
 Native AOT, real-account/reuse and physical UI acceptance remain required. This
 increment does not finish the Windows Slice.
+
+## Windows Action 0033 Attendance-Expiry Disposition
+
+The UI-admission red reservation 0033 used accepted target/protocol
+`aa9eb65e48832cb83b86dd5a63df660eb35848c6`, unchanged source
+`984a232995e41e90476cb0aa8b2228af2000874c`, tree
+`6e2e0d8b470c04c3668f2b98588bee9503b05b73`, and accepted build 0032 under the
+[independent test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5663169601).
+The [independent actual-stop review](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5667952255)
+classifies the result as normal attendance expiry before subject launch, with no
+material implementation finding. This is neither red business-assertion evidence
+nor a green result. Build 0032 retains its
+[accepted artifact evidence](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5663082330);
+it is not rebuilt by this disposition. Source 984a232 predates the integrated
+Core host-fault change in PR #142; the unchanged UI-red selection does not claim
+that later integrated Core. Integrate the then-current accepted target in a
+distinct green source only after actual UI-red acceptance.
+
+**Observed preparation and stop:** Windows published ready at 2026-09-14
+11:37:05.861138 UTC, and the outer wrapper emitted validated `awaiting-operator`.
+The prepared reservation bound the admitted 2,529-entry protected input map,
+376-entry installed-tool map, exact invocation and live controller incarnation.
+No controller migration occurred in 0033. These are preparation observations;
+successful-action source/tool postchecks did not run after the safety stop and
+do not establish complete post-stop input integrity.
+
+Windows finalized at 12:07:05.916061 UTC in `attendance`, with failure line 35
+identifying the accepted monotonic 1,800-second expiry check, exit -1,
+`safetyStop=true`, `captureCompleted=false` and `captureDisposition=not-started`.
+Actual Job accounting records zero total and active processes before and after
+Stop; no termination was requested. Empty-Job cleanup, rather than controller
+disappearance, establishes quiescence. WSL finalized at 12:07:06.009565 UTC with
+`continuation_allowed=false`, `quiescent=true` and `error_type=ValueError`.
+The original outer session was fully collected with exit 1 and no test counts.
+No release, acknowledgement, subject, capture, cancellation, fixture-stop or TRX
+record exists. No test window, scenario assertion, native admission observation,
+account operation or authentication ran.
+
+**Exact retained disposition:** Both history readers recognize only these three
+WSL receipts and their five hash-bound Windows evidence files. Preserve the
+original false result and its consumed build/test unit; no receipt is rewritten.
+
+| WSL 0033 receipt | SHA-256 |
+| --- | --- |
+| `started.json` | `4785c692765970cd909c341470e3d8e750f448e45bc53ad3165a70e0cdaf46a7` |
+| `windows-input.json` | `e07476d8b99467266698e3f212c2b687c3538b57eb8484d9812456713e1f618c` |
+| `result.json` | `6c4596568982d0e44924d58d8386dee0b58f6d7f73a809047bd34860a46b1766` |
+
+The exact Windows files are `started.json`, `controller.json`, `invocation.json`,
+`attendance-ready.json` and `windows-result.json`; the final Windows result has
+SHA-256 `51b6df7ccaa54b72e34e90c730ef8b937386f52f5167920cee46e37e00165fde`.
+The only directories are `home`, `home/local`, `home/roaming`, `temp`, `results`
+and `empty-program-files`; their leaf directories remain empty. Reject missing,
+additional, changed, linked or wrong-type receipts, evidence files or directories.
+The earlier 0022 disposition remains exact and unchanged. This exception accepts
+no other stopped action and relaxes no successful-action attendance check.
+
+**Continuation and migration:** After this disposition merges, the first action
+is one independently admitted Windows 0034 `test --suite ui-admission --expect red`
+on unchanged source 984a232 and build 0032. Recover all forty-three Linux and
+thirty-three Windows actions. Refresh exact accepted target/protocol/Wave,
+source/build, protected inputs, installed tools, current history and remaining
+capacity before reservation; prior integrity observations are historical.
+Linux execution remains stopped until Windows 0034 completes normally.
+
+Only within 0034, retain and replace `run_windows.py` through the existing
+controller-migration procedure. Its retained previous SHA-256 is
+`0046cb65cba438fc2650b4d8178197e18a70694177ababa9c7186f87ae6cc5ef`; the replacement
+is `5e03199cf13fa0215d159c5c57699c352b737ed2e3f3a810026d623cc30471c2`.
+`Invoke-WindowsValidation.ps1` stays unchanged at
+`c91e044adaa941bb999cfe0c579c6cea0e97808331b7cde8e823a7de41b79c1b`.
+The symmetric Linux reader is
+`aea379b8727083906a12e640c69a0d10c705aabcab82238ec0d8b11227e934b6`;
+it is not a retained Windows migration. No standalone repair, new restore,
+source rebuild, reservation refund or automatic retry is authorized.
+
+The new helper must finish preparation and publish a new live ready receipt before
+requesting fresh owner attendance. An earlier or late response cannot release
+0034. The expired 0033 gate cannot be released, extended, resumed or overwritten.
+Keep the 1,800-second preparation and attendance bounds, 230-second controller
+work allowance, 120-second subject/capture/Job-drain limit, 8 MiB output bound,
+32-process Job ceiling, original stop procedure and unchanged 21-case selection.
+The red prediction remains sixteen passes and five intended failures. Accept its
+actual complete evidence independently before green implementation.
+
+Through Linux 0043 and Windows 0033, preparation is Linux 8/11 and Windows 5/5,
+combined 13/16; build/test consumption is Linux 35/80 and Windows 28/40, combined
+63/120. The newly admitted 0034 consumes one further Windows build/test unit,
+reaching Windows 29/40 and combined 64/120 if no intervening consumption occurs.
+Downloads remain 768 MiB and synthetic process reservations 24/36 under the outer
+ceiling 60, preserving the final twelve CLI units. This disposition does not
+establish UI-red success, real native admission, production composition, WAM,
+account reuse, WSL or final Native AOT acceptance.
