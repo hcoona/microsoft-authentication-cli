@@ -102,7 +102,13 @@ public sealed class ApplicationScenarios
         if (kind == "fixed-work") scene.ProfileBytes = FixedProfile();
         if (kind == "explicit-work") arguments.AddRange(["--tenant", Tenant]);
         using var invocation = scene.Create(arguments);
-        await RunAsync(invocation, scene);
+        AuthenticationRequest? initializationRequest = null;
+        await invocation.RunAsync(scene, (profile, request) =>
+        {
+            initializationRequest = request;
+            return scene.CreateProvider(profile);
+        }).WaitAsync(HarnessLimit);
+        await invocation.CompleteAsync().WaitAsync(HarnessLimit);
 
         using var json = AssertSuccess(Commit(invocation), email);
         Assert.AreEqual(Tenant, json.RootElement.GetProperty("tenantId").GetString());
@@ -116,6 +122,11 @@ public sealed class ApplicationScenarios
         CollectionAssert.AreEquivalent(new[] { Scope }, scene.ProviderRequest.Scopes.ToArray());
         Assert.IsFalse(scene.ProviderRequest.InteractionAllowed);
         Assert.AreEqual(kind == "personal" ? (Guid?)null : new Guid(Tenant), scene.ProviderRequest.ExactTenant);
+        Assert.IsNotNull(initializationRequest);
+        Assert.AreEqual(email, initializationRequest.AccountEmail);
+        CollectionAssert.AreEquivalent(new[] { Scope }, initializationRequest.Scopes.ToArray());
+        Assert.IsFalse(initializationRequest.InteractionAllowed);
+        Assert.AreEqual(kind == "personal" ? (Guid?)null : new Guid(Tenant), initializationRequest.ExactTenant);
         CollectionAssert.AreEqual(new[] { ProfilePath }, scene.Reads);
     }
 

@@ -138,6 +138,26 @@ DISPOSED_WINDOWS_ATTENDANCE = {
     "started.json": "f4d69974990731e5a32f35df7c71935982c7fc8f480ef58d90395567cfc75e29",
     "windows-input.json": "5b47542488f8d4ec2db81cecb3b0d8fa39e349d0c9e4cb9c71a69795b61547d1",
 }
+
+# Exact accepted UI-admission attendance expiry; the failed charge remains retained.
+DISPOSED_UI_ATTENDANCE = {
+    "result.json": "6c4596568982d0e44924d58d8386dee0b58f6d7f73a809047bd34860a46b1766",
+    "started.json": "4785c692765970cd909c341470e3d8e750f448e45bc53ad3165a70e0cdaf46a7",
+    "windows-input.json": "e07476d8b99467266698e3f212c2b687c3538b57eb8484d9812456713e1f618c",
+}
+
+# Exact second UI-admission expiry, including its completed wrapper migration.
+DISPOSED_UI_ATTENDANCE_0034 = {
+    "result.json": "2ba6cd4445dba723dcfd30dca57772c751ccf9d3fb775e5e0bfb688da2c21d83",
+    "started.json": "74efac252f02bd01ca8ab75d4d6cc179d5f1fdfcfa4bcd7132f52712d03ec940",
+    "windows-input.json": "e937ebb25470f0ec025af48a4e87d5683777423e9e283d5cc328880f9f98b46f",
+}
+ATTENDANCE_SECONDS = 14400
+
+EXTENDED_ATTENDANCE_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "5e03199cf13fa0215d159c5c57699c352b737ed2e3f3a810026d623cc30471c2",
+    "Invoke-WindowsValidation.ps1": "c91e044adaa941bb999cfe0c579c6cea0e97808331b7cde8e823a7de41b79c1b",
+}
 TEST_PREVIOUS_CONTROLLERS = {
     "run_windows.py": "bec5e035be9d54afd871bee648f2018f4ead6fec747c871f8c1c98f9a31db105",
     "Invoke-WindowsValidation.ps1": "131a4834275afe9e7041eb8d5cc106f9220127a68a75fd2383d021309a99ae9d",
@@ -224,6 +244,10 @@ WAVE_REFRESH_PRIOR_FINAL = "58ce379fe433a11573b31163b27bfe98321d9544768cf8109d9f
 
 ATTENDANCE_PREVIOUS_CONTROLLERS = {
     "run_windows.py": "0e5a2a3360e19200a0e81b84f87b42d94a96e12ca56524c85800c55378574b30",
+}
+
+UI_ATTENDANCE_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "0046cb65cba438fc2650b4d8178197e18a70694177ababa9c7186f87ae6cc5ef",
 }
 
 ADAPTER_PREVIOUS_CONTROLLERS = {
@@ -327,6 +351,36 @@ HOST_ADMISSION_RED = {
     'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ObservationsRunOnTheCallingThreadWithOriginalCancellation': 'Failed',
 }
 
+UI_ADMISSION_PRIOR_START = "b04688941e504d594947544e26f12d87c99d7de0bbd86b280e17c1ee20e63f68"
+UI_ADMISSION_PRIOR_FINAL = "ba41f9bbcee348c694f187d8b966fb097baea450c938cc866e3bf77e6a73cd58"
+UI_ADMISSION_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "0747221d12d689ca80b9022ffcfa6cd23a5584165398482cdd1b5bbc0bed3c5b",
+    "Invoke-WindowsValidation.ps1": "3263b10d1c478c723a6c9c0b3d5926d47a5cdba5bca1da5184b132543596daeb",
+}
+UI_ADMISSION_RED = {
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotCreateOwnedUi': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.ForbiddenInteractionDoesNotCreateOwnedUi': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.MissingPresentationPreventsInteraction': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.ReadyParentCarriesAdmittedBranding': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CreationFailurePreventsInteractiveAcquisition': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.OriginalCancellationBeforeCreationWins': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringCreationRejectsLateParent': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CloseDuringCreationCannotReopenHost': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.ClosedHostCannotReopen': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.InternalCloseDoesNotCancelCaller': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CompletionWaitsForActualUiThreadExit': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CancelButtonStopsPendingAuthentication': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CaptionCloseStopsPendingAuthentication': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.EscapeStopsPendingAuthentication': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.PostReadinessCallbackFaultIsContained': 'Passed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.UiRejectionBeforeCreationPreventsParentAndAcquisition': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.UiRejectionBeforeShowingWithholdsParentAndAcquisition': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.UiRechecksUseOriginalTokenOnTheOwnedStaThread': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringUiRecheckPreventsAcquisition (1)': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringUiRecheckPreventsAcquisition (2)': 'Failed',
+    'Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotInspectTheOwnedUiThread': 'Passed',
+}
+
 TEST_FILTERS = {'cli': 'FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.ExplicitFilePreservesSelectedProfileAndRequest|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.FileSizeLimitAppliesBeforeAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.ReplacingFileAfterAdmissionCannotChangeTheInFlightProfile|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.UnreadableOrInvalidFileStopsBeforeProviderConstruction|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.RootHelpCompletesWithoutAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.MalformedAuthenticationReturnsTheBootstrapFailure|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.SelectedRequestReturnsOneSuccessDespiteBrokenDiagnostics|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.FlaggedRegularFileStopsBeforeProfileAndProvider|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.AlreadyClosedLifetimePipeCancelsBeforeAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.WriterClosureRejectsLateSuccessAndEndsTheProcess|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.ClosedStdinWithoutTheFlagDoesNotCancel|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.LifetimePipePayloadIsIgnoredAndClosureStillCancels|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.DeadlineEndsUncooperativeWorkWithinTheProcessBound|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.BrokenResultReaderEndsWithTransportFailure|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.UndrainedResultPipeCannotKeepTheProcessAlive|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.BlockedDiagnosticsDoNotChangeTheAuthenticationResultOrKeepTheProcessAlive',
  'adapter': 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentRequirementHonorsInteractionPermission|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.SilentClaimsReachOneContinuationAndSecondChallengeStops|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.AccessDeniedWinsOverUiRequiredAndRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.Structured65004WinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DenialTextAndNativeCodeDoNotImplyEntraDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DuplicateErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.NonNumericErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MalformedOrOverBudgetBodiesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ProviderUserCancellationRemainsCancelled|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalCancellationWinsOverDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalDeadlineWinsLateProviderCancellation|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.HttpTimeoutDoesNotConsumeRequestDeadline|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RetryableProviderStopsWithoutApplicationRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RecognizedNetworkErrorStopsWithoutRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnknownProviderConfigurationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnexplainedCancellationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UserMismatchWinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ResultProjectionPreservesObservedMetadata|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri|FullyQualifiedName=Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation'}
 
@@ -338,6 +392,8 @@ TEST_FILTERS["local-provider"] = 'FullyQualifiedName=Authentication.Windows.Scen
 
 TEST_FILTERS["host-admission"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ConstructionDoesNotObserveLocalState|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.PrecancelledRequestDoesNotObserveLocalState|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.OrdinaryInteractiveLogonKindsPermitSelectedAccountAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.UnsupportedPlatformStopsBeforeWindowsObservations|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ServerOrUnobservableProductPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ImpersonationOrUnknownThreadIdentityPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.MissingOrInvalidOwnLogonPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ServiceIdentitiesPrecludeAccountDiscovery|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.NoninteractiveAndAlternateCredentialLogonKindsAreRejected|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.HiddenWindowStationPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.MissingOrDifferentWindowStationUserPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.InactiveOrUnobservableSessionPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.NoninputOrUnobservableDesktopPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.CancellationAfterAnyObservationStopsFurtherQueriesAndInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.OriginalCancellationWinsWhenAnObservationThrows|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.UnexpectedObservationFaultRemainsSanitizedInternalFailure|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.SessionLossBeforeSilentAcquisitionPreventsItsEffect|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ImpersonationBeforeSilentAcquisitionPreventsItsEffect|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.InputDesktopLossAfterReadinessPreventsInteractionAndClosesParent|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.CancellationDuringVolatileObservationPreventsAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.EachProviderEffectHasFreshVolatileObservations|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ObservationsRunOnTheCallingThreadWithOriginalCancellation'
 
+
+TEST_FILTERS["ui-admission"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotCreateOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ForbiddenInteractionDoesNotCreateOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.MissingPresentationPreventsInteraction|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ReadyParentCarriesAdmittedBranding|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CreationFailurePreventsInteractiveAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.OriginalCancellationBeforeCreationWins|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringCreationRejectsLateParent|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CloseDuringCreationCannotReopenHost|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ClosedHostCannotReopen|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.InternalCloseDoesNotCancelCaller|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CompletionWaitsForActualUiThreadExit|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancelButtonStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CaptionCloseStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.EscapeStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.PostReadinessCallbackFaultIsContained|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.UiRejectionBeforeCreationPreventsParentAndAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.UiRejectionBeforeShowingWithholdsParentAndAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.UiRechecksUseOriginalTokenOnTheOwnedStaThread|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringUiRecheckPreventsAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotInspectTheOwnedUiThread'
 
 def validate_windows_reservation_pair(started, peer, link, final, start_hash, final_hash, evidence):
     """Bind the initial WSL admission to its verified Windows execution copy."""
@@ -370,7 +426,8 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
     validate_windows_reservation_pair(started, peer, link, final,
                                      digest(paths[0]), digest(paths[1]), result["evidence"])
     if int(action.name) >= 22 and started.get("action") == "test" and \
-            started.get("testSuite") == "owned-host" and started.get("expected") == "green":
+            (started.get("testSuite") == "ui-admission" or
+             started.get("testSuite") == "owned-host" and started.get("expected") == "green"):
         evidence = result["evidence"]
         ready_path = windows_action / "attendance-ready.json"
         released_path = windows_action / "attendance-released.json"
@@ -381,10 +438,11 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
         released = json.loads(released_path.read_text(), object_pairs_hook=unique)
         ready_hash, released_hash = digest(ready_path), digest(released_path)
         marker_name = "attendance-release-" + ready_hash
+        wait_seconds = 1800 if int(action.name) <= 34 else ATTENDANCE_SECONDS
         if set(ready) != {"action", "reservationSha256", "waitSeconds", "invocationSha256",
                           "controllerSha256", "preparedUtc"} or ready["action"] != action.name or \
                 ready["reservationSha256"] != digest(paths[0]) or type(ready["waitSeconds"]) is not int or \
-                ready["waitSeconds"] != 1800 or ready["invocationSha256"] != evidence.get("invocation.json") or \
+                ready["waitSeconds"] != wait_seconds or ready["invocationSha256"] != evidence.get("invocation.json") or \
                 ready["controllerSha256"] != evidence.get("controller.json") or \
                 evidence.get("attendance-ready.json") != ready_hash or \
                 evidence.get("attendance-released.json") != released_hash or \
@@ -392,7 +450,7 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
                 final.get("attendanceReleasedSha256") != released_hash or \
                 set(released) != {"readySha256", "releaseName", "waitMilliseconds"} or \
                 released["readySha256"] != ready_hash or released["releaseName"] != marker_name or \
-                type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < 1800000 or \
+                type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < wait_seconds * 1000 or \
                 evidence.get(marker_name) != hashlib.sha256(b"").hexdigest() or "cancel" in evidence or \
                 [name for name in evidence if name.startswith("attendance-release-")] != [marker_name]:
             raise ValueError("Retained attendance binding changed")
@@ -414,10 +472,11 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission") or \
                     (suite == "owned-host" and number <= 18) or \
                     (suite == "local-provider" and number <= 24) or \
-                    (suite == "host-admission" and number <= 28):
+                    (suite == "host-admission" and number <= 28) or \
+                    (suite == "ui-admission" and number <= 32):
                 raise ValueError("Unknown Windows test selection")
             required = 12 if suite == "cli" else 0
         else:
@@ -431,6 +490,9 @@ def windows_process_reservation(number, started):
 
 
 def selected_cases(suite, expected):
+    if suite == "ui-admission":
+        return {name: outcome if expected == "red" else "Passed"
+                for name, outcome in UI_ADMISSION_RED.items()}
     if suite == "host-admission":
         return {name: outcome if expected == "red" else "Passed"
                 for name, outcome in HOST_ADMISSION_RED.items()}
@@ -616,27 +678,33 @@ def histories():
             verify_disposed_windows_test(action)
         elif action.name == "0022":
             verify_disposed_windows_attendance(action, ROOT / "actions" / action.name)
+        elif action.name == "0033":
+            verify_disposed_windows_attendance(
+                action, ROOT / "actions" / action.name, DISPOSED_UI_ATTENDANCE)
+        elif action.name == "0034":
+            verify_disposed_windows_attendance(
+                action, ROOT / "actions" / action.name, DISPOSED_UI_ATTENDANCE_0034)
         elif result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action")
         for name, expected in result["evidence"].items():
             if digest(ROOT / "actions" / action.name / name) != expected:
                 raise ValueError("Windows evidence changed")
         started = read(action / "started.json")
-        if action.name not in ("0002", "0003", "0006", "0022"):
+        if action.name not in ("0002", "0003", "0006", "0022", "0033", "0034"):
             verify_windows_reservation_pair(action, ROOT / "actions" / action.name, result, started)
         windows.append((action, started, result))
     return linux, windows
 
 
-def verify_disposed_windows_attendance(action, failed):
-    """Preserve the exact expired wait, empty Job evidence and completed migration."""
+def verify_disposed_windows_attendance(action, failed, receipts=DISPOSED_WINDOWS_ATTENDANCE):
+    """Preserve an exactly disposed expired wait and its empty Job evidence."""
     for root in (action, failed):
         if any(path.is_symlink() for path in (root, *root.parents)):
             raise ValueError("Linked disposed attendance evidence")
-    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_ATTENDANCE) or any(
+    if {path.name for path in action.iterdir()} != set(receipts) or any(
         (action / name).is_symlink() or not (action / name).is_file() or
         digest(action / name) != expected
-        for name, expected in DISPOSED_WINDOWS_ATTENDANCE.items()
+        for name, expected in receipts.items()
     ):
         raise ValueError("Disposed attendance receipt changed")
     evidence = json.loads((action / "result.json").read_text())["evidence"]
@@ -847,7 +915,7 @@ def attendance_ready(action, reservation_hash):
     if set(ready) != {"action", "reservationSha256", "waitSeconds", "invocationSha256",
                       "controllerSha256", "preparedUtc"} or ready["action"] != action.name or \
             ready["reservationSha256"] != reservation_hash or type(ready["waitSeconds"]) is not int or \
-            ready["waitSeconds"] != 1800 or ready["invocationSha256"] != digest(action / "invocation.json") or \
+            ready["waitSeconds"] != ATTENDANCE_SECONDS or ready["invocationSha256"] != digest(action / "invocation.json") or \
             ready["controllerSha256"] != digest(action / "controller.json") or \
             not isinstance(ready["preparedUtc"], str):
         raise ValueError("Unbound attendance readiness")
@@ -860,7 +928,7 @@ def attendance_released(action, ready_hash):
     name = "attendance-release-" + ready_hash
     if set(released) != {"readySha256", "releaseName", "waitMilliseconds"} or \
             released["readySha256"] != ready_hash or released["releaseName"] != name or \
-            type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < 1800000:
+            type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < ATTENDANCE_SECONDS * 1000:
         raise ValueError("Unbound attendance release")
     marker = action / name
     direct(marker)
@@ -871,7 +939,7 @@ def attendance_released(action, ready_hash):
 
 
 def windows_wait(command, seconds, cancel_path=None, attendance=None):
-    """Keep one work allowance; exclude only the one actual H attendance wait."""
+    """Keep one work allowance; exclude only the one actual attendance wait."""
     interrupted = False
 
     def cancel(_number, _frame):
@@ -902,19 +970,19 @@ def windows_wait(command, seconds, cancel_path=None, attendance=None):
                         ready_hash = attendance_ready(action, reservation_hash)
                         ready_at = time.monotonic()
                         print(json.dumps({"action": action.name, "state": "awaiting-operator",
-                                          "readySha256": ready_hash, "waitSeconds": 1800}), flush=True)
+                                          "readySha256": ready_hash, "waitSeconds": ATTENDANCE_SECONDS}), flush=True)
                     if ready_at is not None and not release_seen:
-                        excluded = min(time.monotonic() - ready_at, 1800)
+                        excluded = min(time.monotonic() - ready_at, ATTENDANCE_SECONDS)
                         if (action / "attendance-released.json").exists():
                             # Receipt duration can only reduce the locally observed exclusion.
                             excluded = min(excluded, attendance_released(action, ready_hash))
                             release_seen = True
-                        elif time.monotonic() - ready_at >= 1800:
+                        elif time.monotonic() - ready_at >= ATTENDANCE_SECONDS:
                             interrupted = True
                 except (ValueError, OSError, KeyError, TypeError):
                     interrupted = True
             now = time.monotonic()
-            if now - began - excluded >= seconds or now - began >= seconds + (1800 if attendance else 0):
+            if now - began - excluded >= seconds or now - began >= seconds + (ATTENDANCE_SECONDS if attendance else 0):
                 if cancel_path is not None:
                     cancel_path.touch(exist_ok=True)
                 return None, True
@@ -1009,11 +1077,12 @@ def main():
     for name in ("protocol", "source", "target", "review"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--expect", choices=("red", "green"), default="green")
-    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission"))
+    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission"))
     args = parser.parse_args()
     if (args.action == "test") != (args.suite is not None):
         raise ValueError("Test actions require one finite suite; other actions forbid it")
-    attended = args.action == "test" and args.suite == "owned-host" and args.expect == "green"
+    attended = args.action == "test" and (args.suite == "ui-admission" or
+                                         args.suite == "owned-host" and args.expect == "green")
     with preparation_budget(attended) as finish_preparation:
         return execute(args, attended, finish_preparation)
 
@@ -1077,6 +1146,26 @@ def execute(args, attended, finish_preparation):
         if len(previous) < 27 or digest(HISTORY / "0027/started.json") != HOST_ADMISSION_PRIOR_START or \
                 digest(HISTORY / "0027/result.json") != HOST_ADMISSION_PRIOR_FINAL:
             raise ValueError("Accepted local-provider green result prerequisite changed")
+        if len(previous) < 31 or digest(HISTORY / "0031/started.json") != UI_ADMISSION_PRIOR_START or \
+                digest(HISTORY / "0031/result.json") != UI_ADMISSION_PRIOR_FINAL:
+            raise ValueError("Accepted host-admission green result prerequisite changed")
+        if len(previous) < 34:
+            raise ValueError("The extended attendance disposition requires all thirty-four Windows actions")
+        extended_attendance_transition = len(previous) == 34
+        if extended_attendance_transition and (
+            args.action != "test" or args.suite != "ui-admission" or args.expect != "red" or
+            args.source != previous[-1][1]["source"]
+        ):
+            raise ValueError("The first extended wait must test the unchanged admitted UI red build")
+        ui_attendance_transition = len(previous) == 33
+        if ui_attendance_transition and (
+            args.action != "test" or args.suite != "ui-admission" or args.expect != "red" or
+            args.source != previous[-1][1]["source"]
+        ):
+            raise ValueError("The first continuation must test the unchanged admitted UI red build")
+        ui_admission_transition = len(previous) == 31
+        if ui_admission_transition and args.action != "build":
+            raise ValueError("The first UI-admission action must build with its controller transition")
         host_admission_transition = len(previous) == 27
         if host_admission_transition and args.action != "build":
             raise ValueError("The first host-admission action must build with its controller transition")
@@ -1160,7 +1249,10 @@ def execute(args, attended, finish_preparation):
                                     WAVE_REFRESH_PREVIOUS_CONTROLLERS if wave_refresh_transition else
                                     ATTENDANCE_PREVIOUS_CONTROLLERS if attendance_transition else
                                     LOCAL_PROVIDER_PREVIOUS_CONTROLLERS if local_provider_transition else
-                                    HOST_ADMISSION_PREVIOUS_CONTROLLERS if host_admission_transition else {})
+                                    HOST_ADMISSION_PREVIOUS_CONTROLLERS if host_admission_transition else
+                                    UI_ADMISSION_PREVIOUS_CONTROLLERS if ui_admission_transition else
+                                    UI_ATTENDANCE_PREVIOUS_CONTROLLERS if ui_attendance_transition else
+                                    EXTENDED_ATTENDANCE_PREVIOUS_CONTROLLERS if extended_attendance_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name

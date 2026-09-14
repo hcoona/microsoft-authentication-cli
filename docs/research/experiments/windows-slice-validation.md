@@ -2463,7 +2463,9 @@ record, with the typed contracts below; they are not a new governed record famil
    accept `.pending`. Preexisting attendance files fail the action.
 4. The complete ready object has exactly `action` (four-digit action name),
    `reservationSha256`, `invocationSha256`, `controllerSha256` (lowercase SHA-256
-   strings), `waitSeconds` (integer 1800), and `preparedUtc` (UTC ISO timestamp).
+   strings), `waitSeconds` (integer 14400 from action 0035 onward), and
+   `preparedUtc` (UTC ISO timestamp). Historical actions through 0034 retain
+   integer 1800 and their original release bounds; do not reinterpret them.
    The hashes bind this action's full Windows reservation, exact invocation and
    controller PID/start incarnation. The reservation binds the accepted source,
    protocol, target, admission URL and complete input/tool maps. The WSL helper
@@ -2479,12 +2481,15 @@ record, with the typed contracts below; they are not a new governed record famil
    bulk input recheck after asking for attendance. The existing cooperating-process
    trust model and unchanged-input boundary apply; no installed-tool file leases
    or protection against arbitrary same-user mutation are claimed.
-6. Wait once for at most 1,800 seconds using the Windows monotonic stopwatch.
+6. From action 0035 onward, wait once for at most 14,400 seconds (four hours)
+   using the Windows monotonic stopwatch. The empty Job and exclusive action lock
+   remain held; preparation and subject work retain their separate original limits.
    Cancellation or expiry wins over a simultaneously observed release. Reject
    multiple, differently named, linked, nonregular or nonempty release markers.
    Before launch, publish completed `attendance-released.json` by the same
    exclusive close/flush/move procedure. Its exact fields are `readySha256`,
-   `releaseName`, and integer `waitMilliseconds` in `[0, 1800000)`. The controller
+   `releaseName`, and integer `waitMilliseconds` in `[0, 14400000)`. Historical
+   actions through 0034 retain `[0, 1800000)`. The controller
    checks cancellation and expiry again immediately before the original subject
    stopwatch and `Start`. Receipt acceptance does not override that last check.
 7. Preserve the existing 230-second total Windows controller work allowance outside
@@ -2495,7 +2500,8 @@ record, with the typed contracts below; they are not a new governed record famil
    wait. Thus it can under-credit a polling/publication interval, but cannot give
    unused wait time to work or reset the work budget. Windows also checks its own
    work elapsed before publishing ready and before launch. The absolute controller
-   wall bound is 2,030 seconds, plus existing bounded stop/collection procedures.
+   wall bound is 14,630 seconds from action 0035 onward; historical actions through
+   0034 retain 2,030 seconds, plus existing bounded stop/collection procedures.
    Checks poll at 50 milliseconds. The original 120-second subject/start/capture/
    normal-Job-drain timer begins after release and remains unchanged. Cancellation
    has at most 15 seconds to finalize within the remaining controller bound;
@@ -3169,3 +3175,508 @@ request or child-product launch. Per-native-query cancellation, ABI and resource
 ownership, UI-thread checks before create/show, production composition, process/WSL
 lifetime, the final Native AOT artifact and real-account/UI/reuse acceptance remain
 open. This increment does not complete the Windows Slice.
+
+
+## Owned Host Fault Lifetime Evidence
+
+[PR #142](https://github.com/hcoona/microsoft-authentication-cli/pull/142) adds the
+core lifetime notification for an owned-host fault. The scenario source uses controlled
+providers, a fake host and monotonic clock on Linux; no native Windows, UI, broker,
+account, cache or identity/resource service was accessed. The existing accepted
+SDK/runtime, package graph, isolated replacement environment and finite managed-loop
+bounds apply.
+
+Red source `a1b0e10cf26b8874a66d48e78f1c8761429d25ec`, tree
+`5c371da6d9e02b1a44d73b468a873af01dd63021`, added seven methods with an inert
+`RequestLifetime.FailHost`. The source/build and actual-build/test admissions bind
+accepted protocol `f57bfd02309f3eab31d99d904a3ebd9a5bfd5d64` and target
+`3c4f53b0026dd1561d822065468d39cac849f656`:
+[source/build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662017730),
+[build acceptance and test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662144699).
+
+| Linux action | UTC on 2026-09-14 | Subject seconds | Actual result |
+| --- | --- | ---: | --- |
+| 0038, red build | 09:42:48.735598–09:42:57.261014 | 8.022 | Exit 0, zero warnings/errors. |
+| 0039, full red test | 09:52:40.195428–09:52:41.258132 | 0.875 | Exit 2; 250 executed, 246 passed, four intended assertion failures. |
+
+The [independent actual-red acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662195715)
+joins every result to its compiled case. All 243 prior cases remained present and
+passed. Four added methods exposed missing failure before start, terminal selection
+while discovery remained pending, withholding a validated success before commitment,
+and checking an expired deadline before delayed timer dispatch. The pending-phase
+loop stops at discovery in red; later phases and assertions are not red observations.
+The other three added methods preserved selected failures, caller cancellation and
+committed output. All twelve other outcome counters were zero.
+
+Red build receipt SHA-256:
+`7c0b229702f09e84064e621ae030785c3d32068215c5728eaa4e8d57959c1595`;
+red test receipt:
+`821d55b52df133fe0c22d21f897e737dccb258a339d779992f915952d8be4f60`;
+sole red TRX:
+`d1a4856f325d7a47a3ccc3e4eb8058fbcad0f278003632114a8d7c77e3e719df`.
+
+Both actions completed normally with confirmed owned-process quiescence and complete
+output. Source, SDK, graph, restore metadata and build artifact identities matched;
+no retry, interruption or cleanup occurred. Dedicated files are intentionally retained.
+
+Green source `a3b7c7aad6df4dde2cfcc3335985adabe04769c6`, tree
+`00c7cd40e03f8aad6b0721ada0f8b7c6d10d4241`, changes only RequestLifetime after the
+accepted red. The exact scenario bytes remain unchanged. A fault selects terminal
+failure for a pending request, honoring existing caller cancellation and the original
+deadline; before commitment it withholds a provisional success without changing the
+first terminal timestamp. Already selected failures and committed output remain stable.
+
+The [green-source admission](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662283509)
+and [actual-build acceptance and test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662350433)
+bind the same protocol and target, all source and restored inputs, actual assemblies/PDBs,
+unchanged generated runner registrations and exact case inventory.
+
+| Linux action | UTC on 2026-09-14 | Subject seconds | Actual result |
+| --- | --- | ---: | --- |
+| 0040, green build | 10:05:41.622802–10:05:49.072231 | 7.240 | Exit 0, zero warnings/errors. |
+| 0041, full green test | 10:12:47.618799–10:12:48.689870 | 0.876 | Exit 0; all 250 cases passed, every other outcome counter zero. |
+
+The [independent actual-green acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662450317)
+confirms the complete result and its continuity with the admitted build.
+The green TRX preserves all 250 definition, entry, execution and result joins from red,
+including all 243 previous cases. The seven added methods exercise the fixed fault
+scenarios, including every finite pending-phase loop iteration on the passing path;
+those iterations are not additional runner cases or independent runtime telemetry.
+
+Green build receipt SHA-256:
+`0852988a48350af9517b07033908b248d52ae7055db9e9ff163786f6a801c1c5`;
+build manifest:
+`84cff68b01e736c819cd68718989ea9ef5324109534a59e31e91929eff10ec21`;
+green test receipt:
+`448ed356244494ce9caf0a4b6cba79b11f13c1c09c0826af85494baf09f388fe`;
+sole green TRX:
+`cccfb455259232442cf031639636749e3d288897f6a5c438b6b58ad084b3924f`.
+
+Both green actions completed normally with fully collected outer exit 0, complete
+capture, confirmed quiescence and continuation allowed. Source, SDK, graph, restore
+metadata and artifact identities remained bound to the admitted inputs. No retry,
+interruption, termination or cleanup occurred; dedicated files are intentionally retained.
+
+At completed 0041, all 72 Linux/Windows action pairs were finalized. Linux build/test
+consumption was 33/80, Windows 26/40 and combined 59/120. Preparation remained Linux
+8/11, Windows 5/5 and combined 13/16. Downloads remained 768 MiB; synthetic process
+reservations remained 24/36 under the outer ceiling 60, with the final twelve CLI
+process units preserved. Historical stopped actions remained false and charged.
+No new Windows action or child-product process ran.
+
+These controlled core results do not establish synchronization of an actual UI fault
+with production result commitment or UI-thread/process drain. Production composition,
+native observations, WAM, WSL, Native AOT and real-account/reuse acceptance retain their
+existing obligations.
+
+## Owned UI Admission Supplement
+
+This supplement selects the existing owned-host regression scenarios together with
+the new UI-thread admission scenarios. The accepted
+[Windows host design](../../designs/windows-ado-authentication.md#local-windows-host-admission)
+and [validation strategy](../../validation/strategy.md#windows-slice-design-acceptance)
+remain the behavior authorities. The current credential-free Wave permits the
+bounded owned-window effects. Each source, build and test requires independent
+exact admission before execution; this supplement grants no account operation.
+
+### Subject and Fixed Selection
+
+Use the existing Windows 11 x64 host, WSL2 controller, SDK 10.0.401/runtime 10.0.12,
+MSTest 4.1.0 and retained public package graph. Keep the existing no-restore Release
+build of `Windows.slnx` and managed scenario assembly. Select no bootstrap, restore,
+download, installation, publish or production child-process action.
+
+The initial red candidate is PR #143 source
+`984a232995e41e90476cb0aa8b2228af2000874c`, tree
+`6e2e0d8b470c04c3668f2b98588bee9503b05b73`. Its optional owned-host admission
+argument is inert. The host SHA-256 is
+`ef8158ebbdee79716d2b82fc971bdc73dad750577fd6fcc15d0bd82990c6942e`;
+the scenario SHA-256 is
+`67c2c9688577e7258f748884c37434225cc894e914cc09fc9133993d48da51c8`.
+Exact source admission may bind a later integration revision only when these red
+semantics and the complete reviewed source/project identities remain explicit.
+
+The build includes `NativeWindowsHostObservations.cs`, SHA-256
+`b94d448974221d7e8e79d1ab9484665b11a214651a193c4da42982e15499a7eb`.
+The fixed test selection never constructs or invokes it. Native own-logon/session
+metadata observations, real provider initialization and production composition are
+not selected. All providers, profiles, accounts, tokens and admission observations
+are synthetic. The real owned Win32 host and existing owned-window observation
+helper supply the native effects; there is no broker/account/store/network access.
+
+`test --suite ui-admission` selects exactly the fifteen method names already fixed
+by the [Owned Win32 Host supplement](#owned-win32-host-scenario-supplement) plus
+the following five methods in
+`Authentication.Windows.Scenarios.OwnedHostScenarios`, using literal positive
+`FullyQualifiedName` clauses with no wildcard. Preserve both cancellation DataRows
+as separate full discovery names in result validation.
+
+| Added method | Cases | Inert red prediction |
+| --- | ---: | --- |
+| `UiRejectionBeforeCreationPreventsParentAndAcquisition` | 1 | Failed: expected unavailable, synthetic acquisition succeeds. |
+| `UiRejectionBeforeShowingWithholdsParentAndAcquisition` | 1 | Failed: expected unavailable, synthetic acquisition succeeds. |
+| `UiRechecksUseOriginalTokenOnTheOwnedStaThread` | 1 | Failed: expected two observations, inert seam records zero. |
+| `CancellationDuringUiRecheckPreventsAcquisition` | 2, arguments 1 and 2 | Failed: expected cancelled, synthetic acquisition succeeds. |
+| `SilentSuccessDoesNotInspectTheOwnedUiThread` | 1 | Passed: silent success with no UI observation. |
+
+The full selection is twenty methods and twenty-one cases. The unchanged fifteen
+existing methods are expected Passed in both stages. Red requires sixteen Passed
+and five intended Failed, runner exit 2 and outer exit 0. Green requires twenty-one
+Passed, every other outcome counter zero and runner/outer exit 0. Bind all sixteen
+TRX counters and complete definition/entry/execution/result joins. A compiler,
+loader, fixture, native, timeout or drain failure is not intended red evidence.
+Accept actual red independently before implementing the green UI checks, without
+changing assertions to fit the observation. Preserve generated runner registrations.
+
+### Windows, Attendance and Observation Boundaries
+
+Both stages use the real already-implemented host and can show windows. Fixtures
+remain serial and create at most one top-level owned parent at a time. The admitted
+finite paths predict at most fifteen parents in red (twelve potentially shown,
+three hidden) and thirteen in green (eight potentially shown, five hidden), plus
+their fixed child controls. These are source-derived ceilings, not measured counts
+or claims that an operator saw every surface.
+
+Both red and green require the existing
+[prepared/live-ready/release attendance procedure](#preparation-and-attending-operator-handoff).
+Complete source and actual-build admission, controller setup and the
+live `attendance-ready.json` observation before asking the owner to attend. Only
+a fresh explicit readiness reply permits release of that exact prepared action.
+Earlier replies, earlier release files, elapsed time and automation alone cannot
+satisfy this handoff. Keep the finite wait selected by that procedure for the action,
+cancellation, reservation binding and expiry stop; no automatic retry is allowed.
+The owner may leave between the red and green stages while implementation, builds
+and reviews proceed. Do not ask the owner to wait through that preparation.
+
+All scenario inputs are programmatic and target only known owned HWNDs. Existing
+helpers inspect owned controls and post bounded Win32 messages for Cancel, caption
+close and Escape. They do not establish Microsoft UI Automation accessibility,
+physical keyboard/focus/DPI behavior, visual readability or human usability.
+Keep sign-in, account choice, consent, unlock and any later manual observation
+under their separately accepted protocols and operator control. Historical
+`owned-host` selection and attendance requirements remain unchanged.
+
+The new rejection scenarios observe native creation activity and visibility at
+their boundaries; final mutable observations follow natural invocation and host
+completion. Preserve existing fixture teardown, stop latch and safety marker.
+Snapshots cannot exclude every transient show/hide: independent green source
+review must verify admission before `CreateNativeParent` and before the sole
+`ShowNativeParent`/readiness path, original-token checks and terminal ordering.
+
+### Controller Transition, Capacity and Retention
+
+The existing controllers last executed Windows 0031 under protocol
+`f57bfd02309f3eab31d99d904a3ebd9a5bfd5d64`. Its WSL `started.json` SHA-256 is
+`b04688941e504d594947544e26f12d87c99d7de0bbd86b280e17c1ee20e63f68`, and its
+`result.json` SHA-256 is
+`ba41f9bbcee348c694f187d8b966fb097baea450c938cc866e3bf77e6a73cd58`.
+The migration is exclusively part of admitted build 0032 and backs up each old
+controller to `actions/0032/retained-<controller-name>` before replacing it.
+
+| Controller | Required old SHA-256 | Replacement SHA-256 |
+| --- | --- | --- |
+| `run_windows.py` | `0747221d12d689ca80b9022ffcfa6cd23a5584165398482cdd1b5bbc0bed3c5b` | `0046cb65cba438fc2650b4d8178197e18a70694177ababa9c7186f87ae6cc5ef` |
+| `Invoke-WindowsValidation.ps1` | `3263b10d1c478c723a6c9c0b3d5926d47a5cdba5bca1da5184b132543596daeb` | `c91e044adaa941bb999cfe0c579c6cea0e97808331b7cde8e823a7de41b79c1b` |
+
+The symmetric Linux history reader has SHA-256
+`b7d356fd7bceaf8f98832a268ca32961777b10438aed17f8694aa72e2c4339f7`.
+It is not another retained Windows migration. Both readers reject the new test
+selection at or before 0032 and preserve the original attendance receipt checks
+while requiring them for either new test expectation.
+
+Require the completed thirty-one Windows actions and their unchanged receipt
+bindings. Exactly the separately admitted next build performs the existing backup
+and controller migration for `run_windows.py` and `Invoke-WindowsValidation.ps1`;
+the Linux history reader receives the symmetric new selection/attendance rule.
+Preserve all historical selections, charged stopped outcomes and retained backups.
+Partial migration, changed input or uncertain quiescence stops both loops; no
+standalone repair, refund or replay is permitted.
+
+At completed Linux 0041, build/test consumption is Linux 33/80, Windows 26/40 and
+combined 59/120. The red build/test and green build/test progression adds four
+Windows actions, reaching Windows 30/40 and combined 63/120 if no intervening
+consumption occurs. Before each reservation recover actual cumulative history.
+Preparation remains 13/16, downloads 768 MiB and process reservations 24/36 under
+the outer ceiling 60; preserve the final twelve CLI process units. This selection
+reserves no production child-process units.
+
+Keep the existing 120-second subject/capture/Job-drain allowance, 230-second outer
+work allowance excluding the admitted attendance wait, 8 MiB output ceiling,
+32-process nonbreakaway Job ceiling, exclusive shared lock and bounded stop path.
+Inspect complete capture, source/artifact continuity, all results and normal Job
+drain after fully collecting the original outer helper. Dedicated source,
+artifacts, migration backups and sanitized evidence are intentionally retained.
+
+Passing these controlled scenarios establishes the selected owned-host outcomes
+and UI-thread checks, not actual native admission facts or real WAM behavior.
+Production fault/commit synchronization, complete process/WSL lifetime, final
+Native AOT, real-account/reuse and physical UI acceptance remain required. This
+increment does not finish the Windows Slice.
+
+## Windows Action 0033 Attendance-Expiry Disposition
+
+The UI-admission red reservation 0033 used accepted target/protocol
+`aa9eb65e48832cb83b86dd5a63df660eb35848c6`, unchanged source
+`984a232995e41e90476cb0aa8b2228af2000874c`, tree
+`6e2e0d8b470c04c3668f2b98588bee9503b05b73`, and accepted build 0032 under the
+[independent test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5663169601).
+The [independent actual-stop review](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5667952255)
+classifies the result as normal attendance expiry before subject launch, with no
+material implementation finding. This is neither red business-assertion evidence
+nor a green result. Build 0032 retains its
+[accepted artifact evidence](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5663082330);
+it is not rebuilt by this disposition. Source 984a232 predates the integrated
+Core host-fault change in PR #142; the unchanged UI-red selection does not claim
+that later integrated Core. Integrate the then-current accepted target in a
+distinct green source only after actual UI-red acceptance.
+
+**Observed preparation and stop:** Windows published ready at 2026-09-14
+11:37:05.861138 UTC, and the outer wrapper emitted validated `awaiting-operator`.
+The prepared reservation bound the admitted 2,529-entry protected input map,
+376-entry installed-tool map, exact invocation and live controller incarnation.
+No controller migration occurred in 0033. These are preparation observations;
+successful-action source/tool postchecks did not run after the safety stop and
+do not establish complete post-stop input integrity.
+
+Windows finalized at 12:07:05.916061 UTC in `attendance`, with failure line 35
+identifying the accepted monotonic 1,800-second expiry check, exit -1,
+`safetyStop=true`, `captureCompleted=false` and `captureDisposition=not-started`.
+Actual Job accounting records zero total and active processes before and after
+Stop; no termination was requested. Empty-Job cleanup, rather than controller
+disappearance, establishes quiescence. WSL finalized at 12:07:06.009565 UTC with
+`continuation_allowed=false`, `quiescent=true` and `error_type=ValueError`.
+The original outer session was fully collected with exit 1 and no test counts.
+No release, acknowledgement, subject, capture, cancellation, fixture-stop or TRX
+record exists. No test window, scenario assertion, native admission observation,
+account operation or authentication ran.
+
+**Exact retained disposition:** Both history readers recognize only these three
+WSL receipts and their five hash-bound Windows evidence files. Preserve the
+original false result and its consumed build/test unit; no receipt is rewritten.
+
+| WSL 0033 receipt | SHA-256 |
+| --- | --- |
+| `started.json` | `4785c692765970cd909c341470e3d8e750f448e45bc53ad3165a70e0cdaf46a7` |
+| `windows-input.json` | `e07476d8b99467266698e3f212c2b687c3538b57eb8484d9812456713e1f618c` |
+| `result.json` | `6c4596568982d0e44924d58d8386dee0b58f6d7f73a809047bd34860a46b1766` |
+
+The exact Windows files are `started.json`, `controller.json`, `invocation.json`,
+`attendance-ready.json` and `windows-result.json`; the final Windows result has
+SHA-256 `51b6df7ccaa54b72e34e90c730ef8b937386f52f5167920cee46e37e00165fde`.
+The only directories are `home`, `home/local`, `home/roaming`, `temp`, `results`
+and `empty-program-files`; their leaf directories remain empty. Reject missing,
+additional, changed, linked or wrong-type receipts, evidence files or directories.
+The earlier 0022 disposition remains exact and unchanged. This exception accepts
+no other stopped action and relaxes no successful-action attendance check.
+
+**Continuation and migration:** After this disposition merges, the first action
+is one independently admitted Windows 0034 `test --suite ui-admission --expect red`
+on unchanged source 984a232 and build 0032. Recover all forty-three Linux and
+thirty-three Windows actions. Refresh exact accepted target/protocol/Wave,
+source/build, protected inputs, installed tools, current history and remaining
+capacity before reservation; prior integrity observations are historical.
+Linux execution remains stopped until Windows 0034 completes normally.
+
+Only within 0034, retain and replace `run_windows.py` through the existing
+controller-migration procedure. Its retained previous SHA-256 is
+`0046cb65cba438fc2650b4d8178197e18a70694177ababa9c7186f87ae6cc5ef`; the replacement
+is `5e03199cf13fa0215d159c5c57699c352b737ed2e3f3a810026d623cc30471c2`.
+`Invoke-WindowsValidation.ps1` stays unchanged at
+`c91e044adaa941bb999cfe0c579c6cea0e97808331b7cde8e823a7de41b79c1b`.
+The symmetric Linux reader is
+`aea379b8727083906a12e640c69a0d10c705aabcab82238ec0d8b11227e934b6`;
+it is not a retained Windows migration. No standalone repair, new restore,
+source rebuild, reservation refund or automatic retry is authorized.
+
+The new helper must finish preparation and publish a new live ready receipt before
+requesting fresh owner attendance. An earlier or late response cannot release
+0034. The expired 0033 gate cannot be released, extended, resumed or overwritten.
+Keep the 1,800-second preparation and attendance bounds, 230-second controller
+work allowance, 120-second subject/capture/Job-drain limit, 8 MiB output bound,
+32-process Job ceiling, original stop procedure and unchanged 21-case selection.
+The red prediction remains sixteen passes and five intended failures. Accept its
+actual complete evidence independently before green implementation.
+
+Through Linux 0043 and Windows 0033, preparation is Linux 8/11 and Windows 5/5,
+combined 13/16; build/test consumption is Linux 35/80 and Windows 28/40, combined
+63/120. The newly admitted 0034 consumes one further Windows build/test unit,
+reaching Windows 29/40 and combined 64/120 if no intervening consumption occurs.
+Downloads remain 768 MiB and synthetic process reservations 24/36 under the outer
+ceiling 60, preserving the final twelve CLI units. This disposition does not
+establish UI-red success, real native admission, production composition, WAM,
+account reuse, WSL or final Native AOT acceptance.
+
+
+## Second UI Attendance Expiry and Four-Hour Handoff
+
+Windows action 0034 completed preparation under accepted protocol and target
+`8ad077f7283db77a8456accbd1ea7ca82c10840f`, unchanged source
+`984a232995e41e90476cb0aa8b2228af2000874c`, tree
+`6e2e0d8b470c04c3668f2b98588bee9503b05b73`, and accepted build 0032. It used the
+[independent admission](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5668232923).
+The original 0033 disposition's first continuation was this action; its new
+attendance expiry supplies no red result. The disposition and next-action rule
+below supersede that completed first-continuation requirement, without changing
+either stopped action or its original time limits.
+
+The [independent stop review](https://github.com/hcoona/microsoft-authentication-cli/pull/143#issuecomment-5669125606)
+accepts normal attendance expiry before subject launch, the completed wrapper
+migration and bounded empty-Job cleanup. It admits no future action.
+
+**Observed preparation and stop:** Windows published ready at 2026-09-14
+18:01:38.6976286 UTC. The wrapper emitted validated `awaiting-operator`, and a
+separate narrow check bound the live controller incarnation, complete reservation,
+2,529-entry protected-input map, 376-entry installed-tool map, exact invocation
+and completed one-wrapper migration. No release was created. Windows finalized
+at 18:31:38.7735521 UTC in `attendance`, failure line 35, with exit -1,
+`safetyStop=true`, `captureCompleted=false` and `captureDisposition=not-started`.
+Actual Job total and active counts were zero before and after Stop, with no
+termination requested. Empty-Job cleanup establishes quiescence.
+
+WSL finalized at 18:31:38.873649 UTC with `continuation_allowed=false`,
+`quiescent=true` and `error_type=ValueError`. The original outer session was fully
+collected with exit 1 and no test counts. No subject, release, acknowledgement,
+capture, cancellation, fixture-stop or TRX exists. No scenario, test window,
+account operation or authentication ran. Prepared input and tool bindings remain
+preparation observations: successful-action source/tool postchecks did not run
+and full current post-stop integrity is not established by them.
+
+**Exact retained disposition:** Preserve the false result and charged unit. Both
+history readers recognize only these three exact WSL receipts and their seven
+hash-bound Windows evidence files, using the existing strict type/path verifier.
+
+| WSL 0034 receipt | SHA-256 |
+| --- | --- |
+| `started.json` | `74efac252f02bd01ca8ab75d4d6cc179d5f1fdfcfa4bcd7132f52712d03ec940` |
+| `windows-input.json` | `e937ebb25470f0ec025af48a4e87d5683777423e9e283d5cc328880f9f98b46f` |
+| `result.json` | `2ba6cd4445dba723dcfd30dca57772c751ccf9d3fb775e5e0bfb688da2c21d83` |
+
+The exact Windows files are `started.json`, `controller.json`, `invocation.json`,
+`attendance-ready.json`, `controller-migration.json`, `retained-run_windows.py`
+and `windows-result.json`. The final Windows result has SHA-256
+`1df49cd9ab262d65e37678b51cf32afbf5fc6f42392737eefc1bd3f05261d7e4`.
+The only directories are `home`, `home/local`, `home/roaming`, `temp`, `results`
+and `empty-program-files`; their leaf directories remain empty. Retain the
+completed migration, its old wrapper backup and all original receipts. Reject
+missing, added, changed, linked or wrong-type files and directories. The earlier
+0022 and 0033 exceptions remain exact. This is no general expiry bypass.
+
+**Four-hour attendance limit:** For newly admitted attended tests from Windows
+0035 onward, the prepared empty-Job gate waits once for at most 14,400 seconds.
+This accommodates a delayed return to the desktop after preparation. Keep the
+exclusive shared action lock and unchanged-input boundary throughout the wait.
+Cancel a pending action if relied-on authority or inputs materially change; do
+not refresh, extend or restart it in place. No subject starts during this wait.
+
+The ready receipt has integer `waitSeconds=14400`; the release acknowledgement
+has integer `waitMilliseconds` in `[0, 14400000)`. Both live verifiers, both
+historical readers, PowerShell's monotonic expiry check and the outer wrapper's
+wait exclusion use that same bound. Historical actions through 0034 still require
+1800 and `[0, 1800000)` respectively. No old receipt or late readiness response
+is reusable. Complete preparation, verify the new live-ready receipt, then
+request a fresh explicit owner response and report that action's actual deadline.
+Release only that same still-waiting controller after the fresh response.
+Cancellation and expiry still win over release.
+
+The wrapper excludes only the observed attendance interval and freezes that
+exclusion to the lesser of its own observation and the bound release duration.
+The WSL preparation timer remains 1,800 seconds, Windows controller work remains
+230 seconds outside attendance, and subject/capture/Job drain remains 120 seconds.
+Keep the 8 MiB capture and 32-process Job ceilings, original stop procedure and
+intentional retention. No work, execution or cleanup budget becomes four hours.
+No automatic retry, periodic relaunch, account effect or new capacity is granted.
+
+**First continuation and migration:** After merge and separate exact admission,
+the first action is Windows 0035 `test --suite ui-admission --expect red`, using
+unchanged source 984a232 and build 0032. Recover all forty-three Linux and
+thirty-four Windows actions; refresh accepted target/protocol/Wave, source/build,
+protected inputs, tools, current history and capacity before reservation. Linux
+execution remains stopped until that Windows continuation completes normally.
+
+Only inside 0035's reservation, use the existing exclusive backup/replacement
+procedure for these two retained controllers and record both migrations:
+
+| Controller | Previous SHA-256 | Replacement SHA-256 |
+| --- | --- | --- |
+| `run_windows.py` | `5e03199cf13fa0215d159c5c57699c352b737ed2e3f3a810026d623cc30471c2` | `46459e4cf476c22e28432fa1397026a4b1b56f8580119e685db120dc6c7b4e55` |
+| `Invoke-WindowsValidation.ps1` | `c91e044adaa941bb999cfe0c579c6cea0e97808331b7cde8e823a7de41b79c1b` | `454a59e9d5fae0993c8842f50c11701c0311c5999830bea177f5cee130f0c104` |
+
+The symmetric managed reader is
+`3881500e2e2564f2cb1869d5e27e739bff323e90e91c876285bfbee635fd0fab`;
+it is not a retained Windows migration. Stop/Job helpers remain unchanged.
+No standalone repair, restore, rebuild, source integration or refund is included.
+
+At finalized Linux 0043 and Windows 0034, preparation remains 13/16, Linux
+build/test 35/80, Windows 29/40 and combined 64/120. One newly reserved 0035
+consumes Windows 30/40 and combined 65/120. Downloads remain 768 MiB and process
+reservations 24/36 under the outer ceiling 60, preserving the final twelve CLI
+units. Keep the exact 21-case selection and prediction of sixteen passes and five
+intended failures. Source 984a232 still predates PR #142's Core integration.
+Independent actual-red acceptance must precede a separate integrated green
+implementation and admission. No production composition, actual native admission,
+WAM, account reuse, WSL, Native AOT or whole-Slice acceptance follows.
+
+## Request Context Initialization Evidence
+
+The existing personal, fixed-work and explicit-work application scenarios now
+require provider initialization to receive the same admitted email, scopes,
+interaction permission and normalized tenant as acquisition. The
+[Windows design](../../designs/windows-ado-authentication.md) and
+[scenario basis](../../validation/strategy.md#windows-slice-design-acceptance)
+remain the behavior authorities; this increment adds no public CLI option.
+
+The [independently accepted red](https://github.com/hcoona/microsoft-authentication-cli/pull/145#issuecomment-5663137262)
+used source `adf81fc494cd52933769d88d99cbf8cd312b0b5d`, tree
+`ef80dbd42dffaa19dddb5f1a00111eec7c2ff612`, under protocol
+`aa9eb65e48832cb83b86dd5a63df660eb35848c6`. Linux build 0042 completed normally;
+test 0043 executed all 250 cases, with 247 Passed and the three intended
+selected-Profile cases Failed at their preserved success assertion. Runner exit
+was 2 and outer exit was 0. The later initializer-context assertions were not
+reached in red.
+
+The [reviewed green source](https://github.com/hcoona/microsoft-authentication-cli/pull/145#issuecomment-5663220522),
+`23f66ee80a66b6e2e1588ab0f61d44421c083314`, tree
+`86fc12ae5a86207a6c9c15354b771f88bae2491d`, forwards the normalized request through
+one invocation path. The profile-only overload adapts to the request-aware factory;
+Profile admission, tenant resolution, cancellation and result commitment remain
+shared. All scenario bytes are unchanged from red.
+
+The [green admission](https://github.com/hcoona/microsoft-authentication-cli/pull/145#issuecomment-5670046505)
+binds accepted protocol `2dd0927b1d41b96945c22a12025576a1c1d76e94`, SDK
+10.0.401/runtime 10.0.12, MSTest 4.1.0, the existing public package graph and the
+credential-free Linux environment. The [accepted build 0044](https://github.com/hcoona/microsoft-authentication-cli/pull/145#issuecomment-5670148204)
+completed with exit 0, zero warnings/errors, complete capture and normal
+process-group quiescence in 8.7 seconds. Its complete 251-file artifact inventory,
+source-bound portable PDBs and unchanged 96-method/250-case discovery were
+independently verified before test admission.
+
+The [independently accepted green test 0045](https://github.com/hcoona/microsoft-authentication-cli/pull/145#issuecomment-5670236645) executed
+all 250 cases, all Passed, with every other outcome counter zero. All sixteen
+counters and complete definition/entry/execution/result joins were checked.
+The three former failures reached their retained success assertions and the later
+initializer-context checks. Runner and fully collected outer exits were 0;
+capture was complete, termination was unnecessary and process-group quiescence
+was confirmed. Recorded subject time was 0.967 seconds.
+
+| Actual evidence | SHA-256 |
+| --- | --- |
+| Build 0044 result | `79bcd137adb032e020daf2aacac415518fbd3aac454e250149f42230f792398d` |
+| Test 0043 red result | `c46d620df476551cbf3a9ed4cf25f7f3598a4335c2f75dfaef0b7a53e0530b43` |
+| Test 0043 complete TRX | `882ce89a0ee69321812e2ce2c25cb4bc6ebb3f25d6948e0890053f3e24bfa982` |
+| Test 0045 green result | `ff517b9e7cae29d6aa221518967426f6acbaeccc7b234c1f3c217930e41605b6` |
+| Test 0045 complete TRX | `c0c4e926b3b5c42bcb796b1f7743f87ee0d39cc8d57dc4613d8e3aa97f290372` |
+
+At completed 0045, all 80 actions are finalized: Linux 45 and Windows 35.
+Build/test usage is Linux 37/80 and Windows 30/40, combined 67/120. Preparation
+remains 13/16, charged downloads 768 MiB, and process reservations 24/36 under
+the outer ceiling of 60, preserving the final twelve CLI units. Earlier stopped
+attempts remain charged. Dedicated artifacts and sanitized evidence are
+intentionally retained; no replay, refund or new capacity follows.
+
+This result establishes request-context forwarding in the controlled Linux
+application scenarios. Providers, profiles, accounts and tokens are synthetic;
+there is no Windows subject, broker/account-store access or network request.
+It does not establish real provider initialization, production process/owned-host
+composition, Windows/WAM/UI/WSL behavior, account reuse, Native AOT or whole-Slice
+acceptance. Integration of later accepted records preserves the exact executed
+Core and scenario bytes; it is not a new runtime execution.
