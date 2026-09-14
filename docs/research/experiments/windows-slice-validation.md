@@ -3169,3 +3169,96 @@ request or child-product launch. Per-native-query cancellation, ABI and resource
 ownership, UI-thread checks before create/show, production composition, process/WSL
 lifetime, the final Native AOT artifact and real-account/UI/reuse acceptance remain
 open. This increment does not complete the Windows Slice.
+
+
+## Owned Host Fault Lifetime Evidence
+
+[PR #142](https://github.com/hcoona/microsoft-authentication-cli/pull/142) adds the
+core lifetime notification for an owned-host fault. The scenario source uses controlled
+providers, a fake host and monotonic clock on Linux; no native Windows, UI, broker,
+account, cache or identity/resource service was accessed. The existing accepted
+SDK/runtime, package graph, isolated replacement environment and finite managed-loop
+bounds apply.
+
+Red source `a1b0e10cf26b8874a66d48e78f1c8761429d25ec`, tree
+`5c371da6d9e02b1a44d73b468a873af01dd63021`, added seven methods with an inert
+`RequestLifetime.FailHost`. The source/build and actual-build/test admissions bind
+accepted protocol `f57bfd02309f3eab31d99d904a3ebd9a5bfd5d64` and target
+`3c4f53b0026dd1561d822065468d39cac849f656`:
+[source/build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662017730),
+[build acceptance and test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662144699).
+
+| Linux action | UTC on 2026-09-14 | Subject seconds | Actual result |
+| --- | --- | ---: | --- |
+| 0038, red build | 09:42:48.735598–09:42:57.261014 | 8.022 | Exit 0, zero warnings/errors. |
+| 0039, full red test | 09:52:40.195428–09:52:41.258132 | 0.875 | Exit 2; 250 executed, 246 passed, four intended assertion failures. |
+
+The [independent actual-red acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662195715)
+joins every result to its compiled case. All 243 prior cases remained present and
+passed. Four added methods exposed missing failure before start, terminal selection
+while discovery remained pending, withholding a validated success before commitment,
+and checking an expired deadline before delayed timer dispatch. The pending-phase
+loop stops at discovery in red; later phases and assertions are not red observations.
+The other three added methods preserved selected failures, caller cancellation and
+committed output. All twelve other outcome counters were zero.
+
+Red build receipt SHA-256:
+`7c0b229702f09e84064e621ae030785c3d32068215c5728eaa4e8d57959c1595`;
+red test receipt:
+`821d55b52df133fe0c22d21f897e737dccb258a339d779992f915952d8be4f60`;
+sole red TRX:
+`d1a4856f325d7a47a3ccc3e4eb8058fbcad0f278003632114a8d7c77e3e719df`.
+
+Both actions completed normally with confirmed owned-process quiescence and complete
+output. Source, SDK, graph, restore metadata and build artifact identities matched;
+no retry, interruption or cleanup occurred. Dedicated files are intentionally retained.
+
+Green source `a3b7c7aad6df4dde2cfcc3335985adabe04769c6`, tree
+`00c7cd40e03f8aad6b0721ada0f8b7c6d10d4241`, changes only RequestLifetime after the
+accepted red. The exact scenario bytes remain unchanged. A fault selects terminal
+failure for a pending request, honoring existing caller cancellation and the original
+deadline; before commitment it withholds a provisional success without changing the
+first terminal timestamp. Already selected failures and committed output remain stable.
+
+The [green-source admission](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662283509)
+and [actual-build acceptance and test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662350433)
+bind the same protocol and target, all source and restored inputs, actual assemblies/PDBs,
+unchanged generated runner registrations and exact case inventory.
+
+| Linux action | UTC on 2026-09-14 | Subject seconds | Actual result |
+| --- | --- | ---: | --- |
+| 0040, green build | 10:05:41.622802–10:05:49.072231 | 7.240 | Exit 0, zero warnings/errors. |
+| 0041, full green test | 10:12:47.618799–10:12:48.689870 | 0.876 | Exit 0; all 250 cases passed, every other outcome counter zero. |
+
+The [independent actual-green acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/142#issuecomment-5662450317)
+confirms the complete result and its continuity with the admitted build.
+The green TRX preserves all 250 definition, entry, execution and result joins from red,
+including all 243 previous cases. The seven added methods exercise the fixed fault
+scenarios, including every finite pending-phase loop iteration on the passing path;
+those iterations are not additional runner cases or independent runtime telemetry.
+
+Green build receipt SHA-256:
+`0852988a48350af9517b07033908b248d52ae7055db9e9ff163786f6a801c1c5`;
+build manifest:
+`84cff68b01e736c819cd68718989ea9ef5324109534a59e31e91929eff10ec21`;
+green test receipt:
+`448ed356244494ce9caf0a4b6cba79b11f13c1c09c0826af85494baf09f388fe`;
+sole green TRX:
+`cccfb455259232442cf031639636749e3d288897f6a5c438b6b58ad084b3924f`.
+
+Both green actions completed normally with fully collected outer exit 0, complete
+capture, confirmed quiescence and continuation allowed. Source, SDK, graph, restore
+metadata and artifact identities remained bound to the admitted inputs. No retry,
+interruption, termination or cleanup occurred; dedicated files are intentionally retained.
+
+At completed 0041, all 72 Linux/Windows action pairs were finalized. Linux build/test
+consumption was 33/80, Windows 26/40 and combined 59/120. Preparation remained Linux
+8/11, Windows 5/5 and combined 13/16. Downloads remained 768 MiB; synthetic process
+reservations remained 24/36 under the outer ceiling 60, with the final twelve CLI
+process units preserved. Historical stopped actions remained false and charged.
+No new Windows action or child-product process ran.
+
+These controlled core results do not establish synchronization of an actual UI fault
+with production result commitment or UI-thread/process drain. Production composition,
+native observations, WAM, WSL, Native AOT and real-account/reuse acceptance retain their
+existing obligations.

@@ -445,6 +445,11 @@ bounded evidence. It covers synthetic fact classification and suppressed provide
 effects; native observations, UI-thread integration and real-provider acceptance
 retain the obligations above.
 
+The [controlled owned-host fault result](../research/experiments/windows-slice-validation.md#owned-host-fault-lifetime-evidence)
+binds core request termination, cancellation/deadline precedence and withholding
+uncommitted success to the unchanged red/green scenarios. Actual UI fault/commit
+synchronization and owned-thread/process drain require production integration evidence.
+
 The design's public dependency premises and security/TMT update receive independent
 architecture, consistency, minimality, security, record-system, and research-evidence
 review. Record schema checks, native TMT open/analysis, review identities, findings and
