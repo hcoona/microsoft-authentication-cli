@@ -131,6 +131,13 @@ DISPOSED_WINDOWS_TEST = {
     "windows-input.json": "3064a64bf43690bc5efc0c9022c6fe52da8d3a36880ec76efe5d691b1fdc1989",
     "result.json": "4ef1514ecd4e19cf02657a38ed73e5e920cb30cf38df9d54472ca89b3784f6ff",
 }
+
+# Exact accepted pre-subject attendance expiry; never a general failed-action bypass.
+DISPOSED_WINDOWS_ATTENDANCE = {
+    "result.json": "c15dd433a4d9a104d27e529909f7a8ec28e5b38d2bfa2dcad450e469a6b94338",
+    "started.json": "f4d69974990731e5a32f35df7c71935982c7fc8f480ef58d90395567cfc75e29",
+    "windows-input.json": "5b47542488f8d4ec2db81cecb3b0d8fa39e349d0c9e4cb9c71a69795b61547d1",
+}
 TEST_PREVIOUS_CONTROLLERS = {
     "run_windows.py": "bec5e035be9d54afd871bee648f2018f4ead6fec747c871f8c1c98f9a31db105",
     "Invoke-WindowsValidation.ps1": "131a4834275afe9e7041eb8d5cc106f9220127a68a75fd2383d021309a99ae9d",
@@ -214,6 +221,10 @@ WAVE_REFRESH_PREVIOUS_CONTROLLERS = {
 }
 WAVE_REFRESH_PRIOR_START = "7ae88b209f6a36ba4851508376d7d92811fe6262218f12e5a95fb055cc5de857"
 WAVE_REFRESH_PRIOR_FINAL = "58ce379fe433a11573b31163b27bfe98321d9544768cf8109d9f6d819b3a427b"
+
+ATTENDANCE_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "0e5a2a3360e19200a0e81b84f87b42d94a96e12ca56524c85800c55378574b30",
+}
 
 ADAPTER_PREVIOUS_CONTROLLERS = {
     "run_windows.py": "93486d23aff1ade31b314c0d0c588af250ca200068297539507517a5946d2bb6",
@@ -531,16 +542,42 @@ def histories():
                 raise ValueError("Disposed Windows restore receipt changed")
         elif action.name == "0006":
             verify_disposed_windows_test(action)
+        elif action.name == "0022":
+            verify_disposed_windows_attendance(action, ROOT / "actions" / action.name)
         elif result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action")
         for name, expected in result["evidence"].items():
             if digest(ROOT / "actions" / action.name / name) != expected:
                 raise ValueError("Windows evidence changed")
         started = read(action / "started.json")
-        if action.name not in ("0002", "0003", "0006"):
+        if action.name not in ("0002", "0003", "0006", "0022"):
             verify_windows_reservation_pair(action, ROOT / "actions" / action.name, result, started)
         windows.append((action, started, result))
     return linux, windows
+
+
+def verify_disposed_windows_attendance(action, failed):
+    """Preserve the exact expired wait, empty Job evidence and completed migration."""
+    for root in (action, failed):
+        if any(path.is_symlink() for path in (root, *root.parents)):
+            raise ValueError("Linked disposed attendance evidence")
+    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_ATTENDANCE) or any(
+        (action / name).is_symlink() or not (action / name).is_file() or
+        digest(action / name) != expected
+        for name, expected in DISPOSED_WINDOWS_ATTENDANCE.items()
+    ):
+        raise ValueError("Disposed attendance receipt changed")
+    evidence = json.loads((action / "result.json").read_text())["evidence"]
+    directories = {"home", "home/local", "home/roaming", "temp", "results", "empty-program-files"}
+    paths = list(failed.rglob("*"))
+    if {str(path.relative_to(failed)) for path in paths} != directories | set(evidence):
+        raise ValueError("Disposed attendance boundary changed")
+    for path in paths:
+        name = str(path.relative_to(failed))
+        if path.is_symlink() or (name in directories and not path.is_dir()):
+            raise ValueError("Disposed attendance directory changed")
+        if name not in directories and (not path.is_file() or digest(path) != evidence[name]):
+            raise ValueError("Disposed attendance evidence changed")
 
 
 def verify_disposed_windows_preparation(action):
@@ -960,6 +997,14 @@ def execute(args, attended, finish_preparation):
         if len(previous) < 21 or digest(HISTORY / "0021/started.json") != WAVE_REFRESH_PRIOR_START or \
                 digest(HISTORY / "0021/result.json") != WAVE_REFRESH_PRIOR_FINAL:
             raise ValueError("Accepted owned-host green build prerequisite changed")
+        if len(previous) < 22 or digest(HISTORY / "0022/result.json") != DISPOSED_WINDOWS_ATTENDANCE["result.json"]:
+            raise ValueError("Accepted attendance-expiry disposition prerequisite changed")
+        attendance_transition = len(previous) == 22
+        if attendance_transition and (
+            args.action != "test" or args.suite != "owned-host" or args.expect != "green" or
+            args.source != previous[-1][1]["source"]
+        ):
+            raise ValueError("The first continuation must test the unchanged admitted owned-host build")
         wave_refresh_transition = len(previous) == 21
         if wave_refresh_transition and (
             args.action != "test" or args.suite != "owned-host" or args.expect != "green" or
@@ -1028,7 +1073,8 @@ def execute(args, attended, finish_preparation):
                                     PROCESS_PREVIOUS_CONTROLLERS if graph_transition else
                                     ADAPTER_PREVIOUS_CONTROLLERS if adapter_transition else
                                     OWNED_HOST_PREVIOUS_CONTROLLERS if owned_host_transition else
-                                    WAVE_REFRESH_PREVIOUS_CONTROLLERS if wave_refresh_transition else {})
+                                    WAVE_REFRESH_PREVIOUS_CONTROLLERS if wave_refresh_transition else
+                                    ATTENDANCE_PREVIOUS_CONTROLLERS if attendance_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name

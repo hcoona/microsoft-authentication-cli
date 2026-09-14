@@ -75,6 +75,13 @@ DISPOSED_WINDOWS_TEST = {
     "result.json": "4ef1514ecd4e19cf02657a38ed73e5e920cb30cf38df9d54472ca89b3784f6ff",
 }
 
+# Exact accepted pre-subject attendance expiry; never a general failed-action bypass.
+DISPOSED_WINDOWS_ATTENDANCE = {
+    "result.json": "c15dd433a4d9a104d27e529909f7a8ec28e5b38d2bfa2dcad450e469a6b94338",
+    "started.json": "f4d69974990731e5a32f35df7c71935982c7fc8f480ef58d90395567cfc75e29",
+    "windows-input.json": "5b47542488f8d4ec2db81cecb3b0d8fa39e349d0c9e4cb9c71a69795b61547d1",
+}
+
 
 def utc():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -359,12 +366,14 @@ def windows_consumption():
                 raise ValueError("Disposed Windows restore receipt changed")
         elif action.name == "0006":
             verify_disposed_windows_test(action, windows / action.name)
+        elif action.name == "0022":
+            verify_disposed_windows_attendance(action, windows / action.name)
         elif receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action stops both validation loops")
         for name, expected in receipt["evidence"].items():
             if digest(windows / action.name / name) != expected:
                 raise ValueError("Windows action evidence changed")
-        if action.name not in ("0002", "0003", "0006"):
+        if action.name not in ("0002", "0003", "0006", "0022"):
             verify_windows_reservation_pair(action, windows / action.name, receipt, started)
         reserved = windows_process_reservation(number, started)
         process_scenarios += reserved
@@ -380,7 +389,33 @@ def windows_consumption():
         raise ValueError("Windows restore must complete before Linux continuation")
     if number == 6:
         raise ValueError("Windows red test must complete before Linux continuation")
+    if number == 22:
+        raise ValueError("Windows owned-host test must complete before Linux continuation")
     return preparation, build_test
+
+
+def verify_disposed_windows_attendance(action, failed):
+    """Preserve the exact expired wait, empty Job evidence and completed migration."""
+    for root in (action, failed):
+        if any(path.is_symlink() for path in (root, *root.parents)):
+            raise ValueError("Linked disposed attendance evidence")
+    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_ATTENDANCE) or any(
+        (action / name).is_symlink() or not (action / name).is_file() or
+        digest(action / name) != expected
+        for name, expected in DISPOSED_WINDOWS_ATTENDANCE.items()
+    ):
+        raise ValueError("Disposed attendance receipt changed")
+    evidence = json.loads((action / "result.json").read_text())["evidence"]
+    directories = {"home", "home/local", "home/roaming", "temp", "results", "empty-program-files"}
+    paths = list(failed.rglob("*"))
+    if {str(path.relative_to(failed)) for path in paths} != directories | set(evidence):
+        raise ValueError("Disposed attendance boundary changed")
+    for path in paths:
+        name = str(path.relative_to(failed))
+        if path.is_symlink() or (name in directories and not path.is_dir()):
+            raise ValueError("Disposed attendance directory changed")
+        if name not in directories and (not path.is_file() or digest(path) != evidence[name]):
+            raise ValueError("Disposed attendance evidence changed")
 
 
 def verify_disposed_windows_preparation(action, failed):
