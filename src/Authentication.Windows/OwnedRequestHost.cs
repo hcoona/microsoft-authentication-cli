@@ -13,6 +13,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
     private readonly Func<Task> cancel;
     private readonly Action fault;
     private readonly Action<OwnedHostCheckpoint, nint>? checkpoint;
+    private readonly IWindowsHostAdmission? admission;
     private readonly TaskCompletionSource<nint> ready = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private readonly TaskCompletionSource completed = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private ClientProfile? profile;
@@ -33,8 +34,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
         this.cancel = cancel;
         this.fault = fault;
         this.checkpoint = checkpoint;
-        // Controlled UI-thread admission scenarios precede wiring this boundary.
-        _ = admission;
+        this.admission = admission;
     }
 
     public TimeProvider Clock => TimeProvider.System;
@@ -215,11 +215,15 @@ internal sealed partial class OwnedRequestHost : IRequestHost
         {
             checkpoint?.Invoke(OwnedHostCheckpoint.ThreadStarted, 0);
             if (IsTerminal) return;
+            RecheckAdmission();
+            if (IsTerminal) return;
             var window = CreateNativeParent();
             lock (gate) parent = window;
             checkpoint?.Invoke(OwnedHostCheckpoint.HiddenParentCreated, window);
             if (IsTerminal) return;
             CreateNativeControls(window, profile!);
+            if (IsTerminal) return;
+            RecheckAdmission();
 
             lock (gate)
             {
@@ -269,6 +273,24 @@ internal sealed partial class OwnedRequestHost : IRequestHost
             // managed context stays rooted through destruction and the final checkpoint.
             currentHost = null;
         }
+    }
+
+    private void RecheckAdmission()
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        try
+        {
+            // Observe on the actual STA, outside the gate so cancellation can close
+            // the host. Recheck terminal state before creation or the gated show.
+            admission?.Recheck(cancellationToken);
+        }
+        catch
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            throw;
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
     }
 
     private async Task JoinWindowAsync(Thread ownedThread)
