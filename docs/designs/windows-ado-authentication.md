@@ -295,12 +295,14 @@ validation; the number of conceptual architecture boxes is not a class count.
 2. Normalize tenant policy once. A fixed Profile uses its fixed GUID and rejects a
    conflicting selector. Multitenant omission becomes `common`; an explicit GUID remains
    an exact resource-tenant constraint throughout.
-3. Construct a fresh `PublicClientApplication` using the chosen Profile and trusted
-   cloud, with Windows broker enabled and `ListOperatingSystemAccounts = true`.
+3. Keep the provider factory and constructor inert. At the start of its first
+   `GetAccountsAsync(originalToken)`, complete the local host admission below on request
+   work, then construct a fresh `PublicClientApplication` using the chosen Profile and
+   trusted cloud, with Windows broker enabled and `ListOperatingSystemAccounts = true`.
    Use no persistent cache callbacks, MSAL logging callback, default OS account sentinel,
    `cp1`, PoP, or username/password API. Keep provider PII/default logging disabled.
-4. Check broker availability. The pinned availability API is obsolete but still present;
-   confine that compatibility dependency to the adapter. Install a rejecting
+4. Check broker availability using the pinned synchronous `IsBrokerAvailable()` API;
+   confine that dependency to the adapter. Install a rejecting
    `ICustomWebUi` before any interactive call so an MSAL fallback cannot open a browser
    if broker availability changes. Do not implement an OAuth exchange in that callback.
 5. Use the concrete `ClientApplicationBase.GetAccountsAsync(CancellationToken)` overload,
@@ -310,6 +312,92 @@ validation; the number of conceptual architecture boxes is not a class count.
 Profile/client identity is bound by the application instance and its request-local
 operation context. It is not inferred from token text. Every candidate carries that
 context back to the coordinator; a callback for another or ended operation is discarded.
+
+### Local Windows Host Admission
+
+Microsoft's [WAM integration contract](https://learn.microsoft.com/entra/msal/dotnet/acquiring-tokens/desktop-mobile/wam#integration-best-practices)
+requires an active interactive Windows user session capable of displaying UI, even for
+silent acquisition. The checks below implement the selected host boundary; passing them
+does not establish WAM health or broaden platform support. Perform them before creating
+the real MSAL application or checking broker availability. A synthetic provider does not
+need to inspect real logon state merely to exercise the owned window.
+
+| Required local condition | Selected observation and rejection boundary |
+| --- | --- |
+| Windows 11 client on native x64 | Check Windows before any Windows import. Require both process and OS architecture to be x64, excluding x64 emulation on ARM64. Use `Environment.OSVersion` for NT 10.0, build at least 22000, and a positive workstation-product comparison with `VerifyVersionInfoW` / `VerSetConditionMask`, selecting only `VER_PRODUCT_TYPE`, `VER_EQUAL`, and `VER_NT_WORKSTATION`. A failed comparison rejects admission. |
+| Calling thread is not impersonating | `OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, ...)` must fail specifically with `ERROR_NO_TOKEN`. A returned token, anonymous impersonation, or any other failure rejects admission. Capture the native error immediately and close any returned token. |
+| Own process has an interactive local logon | Open only the current process token with `TOKEN_QUERY`. Use `GetTokenInformation(TokenStatistics).AuthenticationId` to query that one logon through `LsaGetLogonSessionData`. Require sufficient returned structure size, the matching LUID and a valid nonnull SID; reject LocalSystem, LocalService and NetworkService. Accept only `Interactive`, `RemoteInteractive`, `CachedInteractive` or `CachedRemoteInteractive`. Other types, including `NewCredentials`, reject admission. |
+| Current session is actively connected | Obtain the current process's nonzero session ID with `ProcessIdToSessionId`. Query only that local session with `WTSQuerySessionInformationW(WTSConnectState)` and require a correctly sized `WTSActive` value. Unknown, disconnected, malformed or unavailable state rejects admission. |
+| Visible station belongs to the local logon user | On the borrowed `GetProcessWindowStation` handle, require successful `GetUserObjectInformationW(UOI_FLAGS)` with `WSF_VISIBLE`. Require a bounded valid nonempty `UOI_USER_SID` equal to the own-logon SID. Missing associated user, mismatch or failed observation rejects admission. |
+| Calling desktop currently receives input | On the borrowed `GetThreadDesktop(GetCurrentThreadId())` handle, require successful `GetUserObjectInformationW(UOI_IO)` with a true native BOOL. A desktop handle alone does not satisfy this condition. |
+
+The [.NET OS architecture contract](https://learn.microsoft.com/dotnet/core/compatibility/interop/7.0/osarchitecture-emulation)
+distinguishes the host from emulation. [.NET's OS version property](https://learn.microsoft.com/dotnet/api/system.environment.osversion?view=net-10.0)
+supplies actual version discovery. The workstation comparison follows the public
+[VersionHelpers.h product-type test](https://github.com/microsoft/win32metadata/blob/b07213e28bcc48221c155024f9c5e0e1a92c6497/generation/WinSDK/RecompiledIdlHeaders/um/VersionHelpers.h#L135-L142);
+`IsWindowsServer` itself is an inline helper, not an exported entry point. Do not use
+the deprecated, manifest-sensitive `VerifyVersionInfoW` API to discover major/minor/build.
+Its [type-mask contract](https://learn.microsoft.com/windows/win32/api/winbase/nf-winbase-verifyversioninfow)
+ignores unselected fields. Build 22000 identifies the
+[original Windows 11 generation](https://learn.microsoft.com/windows-insider/older-windows-insider-preview-builds#windows-11,-version-21h2-original-release),
+not compatibility with every later product or servicing release.
+
+The [thread-token API](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-openthreadtoken)
+does not revert impersonation when `OpenAsSelf` is true. The
+[own-logon query](https://learn.microsoft.com/windows/win32/api/ntsecapi/nf-ntsecapi-lsagetlogonsessiondata)
+requires no administrator role for the session owner. Its
+[logon-type contract](https://learn.microsoft.com/windows/win32/api/ntsecapi/ne-ntsecapi-security_logon_type)
+distinguishes `NewCredentials`, which can keep the local identity while replacing outbound
+credentials. The station SID comparison detects a different local user; it does not prove
+equal logon sessions or exhaustively detect same-user alternate-launch provenance. Retain
+normal launch as an acceptance precondition; do not silently require `LOGON_WINLOGON`,
+another user's token, a shell process, or privileged `WTSQueryUserToken` access.
+
+The [WTS query](https://learn.microsoft.com/windows/win32/api/wtsapi32/nf-wtsapi32-wtsquerysessioninformationw)
+can fail when Remote Desktop Services is unavailable. A session ID is not substitute
+connection evidence; return unavailable without starting or repairing the service. Do
+not impose a physical-console-only condition. The
+[user-object information contract](https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-getuserobjectinformationw)
+defines both associated-user SID and input-desktop observations. Neither visible station
+surfaces nor `OpenInputDesktop` success alone proves all required conditions.
+
+Recheck the original token before and after each synchronous observation, before
+classifying its result or releasing the next effect. A rejected or unobservable required
+condition yields the existing sanitized `mechanism_unavailable`; cancellation/deadline
+retain precedence and programming faults retain `internal_failure`. No native diagnostic,
+SID, LUID, session ID or returned account metadata enters results, stderr or telemetry.
+Bound variable buffers and parsing; use static System32 interop with reviewed ABI layouts.
+Close owned process/thread token handles, free WTS buffers with `WTSFreeMemory`, and free
+the LSA buffer once with `LsaFreeReturnBuffer` after SID comparisons finish. Its SID remains
+borrowed; station, thread-desktop and pseudo-handles remain borrowed too. Never inspect or
+copy the returned LSA name, domain, UPN, profile-path or logon-server strings. The query
+still retrieves local metadata, which the later execution protocol must explicitly cover.
+
+Stable process architecture and logon observations need not be repeated in this process,
+which never changes identity. Recheck calling-thread impersonation, session connection
+and input desktop immediately before each later provider operation. For real-provider
+interaction, recheck those volatile conditions on the actual owned UI thread before
+native creation and before showing/publishing its parent, as well as on the calling
+thread before the interactive provider effect. Retain the coordinator's post-readiness
+token check and terminal/show synchronization. Rejection closes any owned UI through the
+same lifetime path; it cannot restart acquisition. There is no background polling,
+wait-for-unlock, identity/desktop switching or new timeout. Synchronous checks run on
+request/UI work, with the independent process watchdog retaining its existing bound.
+
+In pinned MSAL 4.83.1, [IsBrokerAvailable](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/PublicClientApplication.cs#L91-L98)
+is synchronous, has no cancellation parameter, and marks obsolescence only under its
+Android/iOS conditional. Its [runtime broker](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/RuntimeBroker.cs#L685-L708)
+can initialize process-global `NativeInterop.Core`. It is a provider effect after local
+admission, bracketed by original-token checks, not an inert installed-package probe.
+False or recognized initialization failure follows the existing unavailable mapping;
+success does not prove account visibility, UI or persistence. Do not poll it or add
+account discovery to verify availability. Preserve the rejecting custom web UI.
+
+These predicates are snapshots, not an atomic freeze of the Windows session or a defense
+against a compromised current user. The selected normal host and exact Native AOT
+interop still require the evidence in the [validation strategy](../validation/strategy.md#windows-slice-design-acceptance).
+This design admits no local metadata query, broker initialization or account experiment;
+execution retains its accepted Wave, exact protocol and source/artifact review gates.
 
 ### Managed HTTP Identity
 
