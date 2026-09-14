@@ -70,21 +70,24 @@ public sealed class RequestLifetime : IDisposable
             if (started) throw new InvalidOperationException("A lifetime owns one request.");
             started = true;
 
-            if (callerCancellation.IsCancellationRequested)
+            if (outcome is null)
             {
-                Select(Failed(AuthenticationFailure.Cancelled));
-            }
-            else if (Remaining <= TimeSpan.Zero)
-            {
-                Select(Failed(AuthenticationFailure.Timeout));
-            }
-            else
-            {
-                deadlineTimer = clock.CreateTimer(static state => ((RequestLifetime)state!).CheckDeadline(),
-                    this, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
-                callerRegistration = callerCancellation.Register(static state => ((RequestLifetime)state!).CancelFromCaller(), this);
-                // Registration may synchronously observe an already requested cancellation.
-                if (outcome is null) CheckDeadline();
+                if (callerCancellation.IsCancellationRequested)
+                {
+                    Select(Failed(AuthenticationFailure.Cancelled));
+                }
+                else if (Remaining <= TimeSpan.Zero)
+                {
+                    Select(Failed(AuthenticationFailure.Timeout));
+                }
+                else
+                {
+                    deadlineTimer = clock.CreateTimer(static state => ((RequestLifetime)state!).CheckDeadline(),
+                        this, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+                    callerRegistration = callerCancellation.Register(static state => ((RequestLifetime)state!).CancelFromCaller(), this);
+                    // Registration may synchronously observe an already requested cancellation.
+                    if (outcome is null) CheckDeadline();
+                }
             }
 
             if (outcome is not null)
@@ -216,10 +219,21 @@ public sealed class RequestLifetime : IDisposable
         }
     }
 
-    // An owned-host fault is distinct from caller cancellation. Its controlled
-    // acceptance scenarios precede implementation of this notification path.
+    // Host faults terminate pending work and suppress success before commitment.
+    // Keep the first terminal timestamp and any previously selected failure.
     public void FailHost()
     {
+        lock (gate)
+        {
+            if (disposed || committed || outcome is { Success: null }) return;
+            var failure = callerCancellation.IsCancellationRequested
+                ? AuthenticationFailure.Cancelled
+                : outcome is null && Remaining <= TimeSpan.Zero
+                    ? AuthenticationFailure.Timeout
+                    : AuthenticationFailure.InternalFailure;
+            if (outcome is null) Select(Failed(failure));
+            else outcome = Failed(failure);
+        }
     }
 
     public void Dispose()
