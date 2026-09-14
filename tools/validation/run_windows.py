@@ -295,6 +295,38 @@ LOCAL_PROVIDER_RED = {
     'Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.NoninteractivePermissionDoesNotOpenHostAfterSilentChallenge': 'Failed',
 }
 
+# Completed local-provider green precedes the synthetic host-fact selection.
+HOST_ADMISSION_PRIOR_START = "701478479cf1bf1c4fa5dbfdce4d02d5facd015b067a825785b51515d27408dd"
+HOST_ADMISSION_PRIOR_FINAL = "ac1b287b7dafbb2082e173efad20585f062731b922ff593c33410184740c1456"
+HOST_ADMISSION_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "0e01a22ee8e63720f54ad6525976d1b282656f33a8682919fd316b7ff4633d39",
+    "Invoke-WindowsValidation.ps1": "dc4019e3ba3f62cafda1222f4468f270cf1b935c7ec7ca761f0b36c2a290a3ce",
+}
+HOST_ADMISSION_RED = {
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ConstructionDoesNotObserveLocalState': 'Passed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.PrecancelledRequestDoesNotObserveLocalState': 'Passed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.OrdinaryInteractiveLogonKindsPermitSelectedAccountAcquisition': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.UnsupportedPlatformStopsBeforeWindowsObservations': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ServerOrUnobservableProductPreventsInitialization': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ImpersonationOrUnknownThreadIdentityPreventsInitialization': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.MissingOrInvalidOwnLogonPreventsInitialization': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ServiceIdentitiesPrecludeAccountDiscovery': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.NoninteractiveAndAlternateCredentialLogonKindsAreRejected': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.HiddenWindowStationPreventsInitialization': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.MissingOrDifferentWindowStationUserPreventsInitialization': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.InactiveOrUnobservableSessionPreventsInitialization': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.NoninputOrUnobservableDesktopPreventsInitialization': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.CancellationAfterAnyObservationStopsFurtherQueriesAndInitialization': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.OriginalCancellationWinsWhenAnObservationThrows': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.UnexpectedObservationFaultRemainsSanitizedInternalFailure': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.SessionLossBeforeSilentAcquisitionPreventsItsEffect': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ImpersonationBeforeSilentAcquisitionPreventsItsEffect': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.InputDesktopLossAfterReadinessPreventsInteractionAndClosesParent': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.CancellationDuringVolatileObservationPreventsAcquisition': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.EachProviderEffectHasFreshVolatileObservations': 'Failed',
+    'Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ObservationsRunOnTheCallingThreadWithOriginalCancellation': 'Failed',
+}
+
 TEST_FILTERS = {'cli': 'FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.ExplicitFilePreservesSelectedProfileAndRequest|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.FileSizeLimitAppliesBeforeAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.ReplacingFileAfterAdmissionCannotChangeTheInFlightProfile|FullyQualifiedName=Authentication.Windows.Scenarios.ProfileFileScenarios.UnreadableOrInvalidFileStopsBeforeProviderConstruction|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.RootHelpCompletesWithoutAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.MalformedAuthenticationReturnsTheBootstrapFailure|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.SelectedRequestReturnsOneSuccessDespiteBrokenDiagnostics|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.FlaggedRegularFileStopsBeforeProfileAndProvider|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.AlreadyClosedLifetimePipeCancelsBeforeAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.WriterClosureRejectsLateSuccessAndEndsTheProcess|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.ClosedStdinWithoutTheFlagDoesNotCancel|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.LifetimePipePayloadIsIgnoredAndClosureStillCancels|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.DeadlineEndsUncooperativeWorkWithinTheProcessBound|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.BrokenResultReaderEndsWithTransportFailure|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.UndrainedResultPipeCannotKeepTheProcessAlive|FullyQualifiedName=Authentication.Windows.Scenarios.ProcessScenarios.BlockedDiagnosticsDoNotChangeTheAuthenticationResultOrKeepTheProcessAlive',
  'adapter': 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentRequirementHonorsInteractionPermission|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.SilentClaimsReachOneContinuationAndSecondChallengeStops|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.AccessDeniedWinsOverUiRequiredAndRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.Structured65004WinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DenialTextAndNativeCodeDoNotImplyEntraDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DuplicateErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.NonNumericErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MalformedOrOverBudgetBodiesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ProviderUserCancellationRemainsCancelled|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalCancellationWinsOverDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalDeadlineWinsLateProviderCancellation|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.HttpTimeoutDoesNotConsumeRequestDeadline|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RetryableProviderStopsWithoutApplicationRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RecognizedNetworkErrorStopsWithoutRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnknownProviderConfigurationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnexplainedCancellationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UserMismatchWinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ResultProjectionPreservesObservedMetadata|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri|FullyQualifiedName=Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation'}
 
@@ -302,6 +334,9 @@ TEST_FILTERS["owned-host"] = 'FullyQualifiedName=Authentication.Windows.Scenario
 
 
 TEST_FILTERS["local-provider"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.ConstructionDoesNotObserveHostOrInitializeProvider|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.PrecancelledRequestStopsBeforeHostAdmission|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.RejectedHostPreventsInitializationAndOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.AdmittedHostAllowsOneSelectedAccountSilentResult|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.CancellationDuringAdmissionPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.OriginalCancellationWinsOverAdmissionRejection|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.CancellationDuringInitializationPreventsDiscovery|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.UnavailableInitializationPreventsDiscoveryAndOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.UnexpectedInitializationFaultStaysInternalFailure|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.UnexpectedHostObservationFaultStaysInternalFailure|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.LostEligibilityBeforeSilentPreventsAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.LostEligibilityAfterReadinessPreventsInteractionAndClosesHost|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.CancellationDuringVolatileRecheckPreventsNextEffect|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.EligibleInteractiveContinuationUsesOriginalRequestAndOneParent|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.NoninteractivePermissionDoesNotOpenHostAfterSilentChallenge'
+
+
+TEST_FILTERS["host-admission"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ConstructionDoesNotObserveLocalState|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.PrecancelledRequestDoesNotObserveLocalState|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.OrdinaryInteractiveLogonKindsPermitSelectedAccountAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.UnsupportedPlatformStopsBeforeWindowsObservations|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ServerOrUnobservableProductPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ImpersonationOrUnknownThreadIdentityPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.MissingOrInvalidOwnLogonPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ServiceIdentitiesPrecludeAccountDiscovery|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.NoninteractiveAndAlternateCredentialLogonKindsAreRejected|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.HiddenWindowStationPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.MissingOrDifferentWindowStationUserPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.InactiveOrUnobservableSessionPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.NoninputOrUnobservableDesktopPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.CancellationAfterAnyObservationStopsFurtherQueriesAndInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.OriginalCancellationWinsWhenAnObservationThrows|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.UnexpectedObservationFaultRemainsSanitizedInternalFailure|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.SessionLossBeforeSilentAcquisitionPreventsItsEffect|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ImpersonationBeforeSilentAcquisitionPreventsItsEffect|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.InputDesktopLossAfterReadinessPreventsInteractionAndClosesParent|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.CancellationDuringVolatileObservationPreventsAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.EachProviderEffectHasFreshVolatileObservations|FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.ObservationsRunOnTheCallingThreadWithOriginalCancellation'
 
 
 def validate_windows_reservation_pair(started, peer, link, final, start_hash, final_hash, evidence):
@@ -379,9 +414,10 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission") or \
                     (suite == "owned-host" and number <= 18) or \
-                    (suite == "local-provider" and number <= 24):
+                    (suite == "local-provider" and number <= 24) or \
+                    (suite == "host-admission" and number <= 28):
                 raise ValueError("Unknown Windows test selection")
             required = 12 if suite == "cli" else 0
         else:
@@ -395,6 +431,9 @@ def windows_process_reservation(number, started):
 
 
 def selected_cases(suite, expected):
+    if suite == "host-admission":
+        return {name: outcome if expected == "red" else "Passed"
+                for name, outcome in HOST_ADMISSION_RED.items()}
     if suite == "local-provider":
         return {name: outcome if expected == "red" else "Passed"
                 for name, outcome in LOCAL_PROVIDER_RED.items()}
@@ -970,7 +1009,7 @@ def main():
     for name in ("protocol", "source", "target", "review"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--expect", choices=("red", "green"), default="green")
-    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider"))
+    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission"))
     args = parser.parse_args()
     if (args.action == "test") != (args.suite is not None):
         raise ValueError("Test actions require one finite suite; other actions forbid it")
@@ -1035,6 +1074,12 @@ def execute(args, attended, finish_preparation):
         if len(previous) < 23 or digest(HISTORY / "0023/started.json") != LOCAL_PROVIDER_PRIOR_START or \
                 digest(HISTORY / "0023/result.json") != LOCAL_PROVIDER_PRIOR_FINAL:
             raise ValueError("Accepted owned-host green result prerequisite changed")
+        if len(previous) < 27 or digest(HISTORY / "0027/started.json") != HOST_ADMISSION_PRIOR_START or \
+                digest(HISTORY / "0027/result.json") != HOST_ADMISSION_PRIOR_FINAL:
+            raise ValueError("Accepted local-provider green result prerequisite changed")
+        host_admission_transition = len(previous) == 27
+        if host_admission_transition and args.action != "build":
+            raise ValueError("The first host-admission action must build with its controller transition")
         local_provider_transition = len(previous) == 23
         if local_provider_transition and args.action != "build":
             raise ValueError("The first local-provider action must build with its controller transition")
@@ -1114,7 +1159,8 @@ def execute(args, attended, finish_preparation):
                                     OWNED_HOST_PREVIOUS_CONTROLLERS if owned_host_transition else
                                     WAVE_REFRESH_PREVIOUS_CONTROLLERS if wave_refresh_transition else
                                     ATTENDANCE_PREVIOUS_CONTROLLERS if attendance_transition else
-                                    LOCAL_PROVIDER_PREVIOUS_CONTROLLERS if local_provider_transition else {})
+                                    LOCAL_PROVIDER_PREVIOUS_CONTROLLERS if local_provider_transition else
+                                    HOST_ADMISSION_PREVIOUS_CONTROLLERS if host_admission_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
