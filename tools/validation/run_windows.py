@@ -138,6 +138,13 @@ DISPOSED_WINDOWS_ATTENDANCE = {
     "started.json": "f4d69974990731e5a32f35df7c71935982c7fc8f480ef58d90395567cfc75e29",
     "windows-input.json": "5b47542488f8d4ec2db81cecb3b0d8fa39e349d0c9e4cb9c71a69795b61547d1",
 }
+
+# Exact accepted UI-admission attendance expiry; the failed charge remains retained.
+DISPOSED_UI_ATTENDANCE = {
+    "result.json": "6c4596568982d0e44924d58d8386dee0b58f6d7f73a809047bd34860a46b1766",
+    "started.json": "4785c692765970cd909c341470e3d8e750f448e45bc53ad3165a70e0cdaf46a7",
+    "windows-input.json": "e07476d8b99467266698e3f212c2b687c3538b57eb8484d9812456713e1f618c",
+}
 TEST_PREVIOUS_CONTROLLERS = {
     "run_windows.py": "bec5e035be9d54afd871bee648f2018f4ead6fec747c871f8c1c98f9a31db105",
     "Invoke-WindowsValidation.ps1": "131a4834275afe9e7041eb8d5cc106f9220127a68a75fd2383d021309a99ae9d",
@@ -224,6 +231,10 @@ WAVE_REFRESH_PRIOR_FINAL = "58ce379fe433a11573b31163b27bfe98321d9544768cf8109d9f
 
 ATTENDANCE_PREVIOUS_CONTROLLERS = {
     "run_windows.py": "0e5a2a3360e19200a0e81b84f87b42d94a96e12ca56524c85800c55378574b30",
+}
+
+UI_ATTENDANCE_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "0046cb65cba438fc2650b4d8178197e18a70694177ababa9c7186f87ae6cc5ef",
 }
 
 ADAPTER_PREVIOUS_CONTROLLERS = {
@@ -653,27 +664,30 @@ def histories():
             verify_disposed_windows_test(action)
         elif action.name == "0022":
             verify_disposed_windows_attendance(action, ROOT / "actions" / action.name)
+        elif action.name == "0033":
+            verify_disposed_windows_attendance(
+                action, ROOT / "actions" / action.name, DISPOSED_UI_ATTENDANCE)
         elif result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action")
         for name, expected in result["evidence"].items():
             if digest(ROOT / "actions" / action.name / name) != expected:
                 raise ValueError("Windows evidence changed")
         started = read(action / "started.json")
-        if action.name not in ("0002", "0003", "0006", "0022"):
+        if action.name not in ("0002", "0003", "0006", "0022", "0033"):
             verify_windows_reservation_pair(action, ROOT / "actions" / action.name, result, started)
         windows.append((action, started, result))
     return linux, windows
 
 
-def verify_disposed_windows_attendance(action, failed):
-    """Preserve the exact expired wait, empty Job evidence and completed migration."""
+def verify_disposed_windows_attendance(action, failed, receipts=DISPOSED_WINDOWS_ATTENDANCE):
+    """Preserve an exactly disposed expired wait and its empty Job evidence."""
     for root in (action, failed):
         if any(path.is_symlink() for path in (root, *root.parents)):
             raise ValueError("Linked disposed attendance evidence")
-    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_ATTENDANCE) or any(
+    if {path.name for path in action.iterdir()} != set(receipts) or any(
         (action / name).is_symlink() or not (action / name).is_file() or
         digest(action / name) != expected
-        for name, expected in DISPOSED_WINDOWS_ATTENDANCE.items()
+        for name, expected in receipts.items()
     ):
         raise ValueError("Disposed attendance receipt changed")
     evidence = json.loads((action / "result.json").read_text())["evidence"]
@@ -1118,6 +1132,14 @@ def execute(args, attended, finish_preparation):
         if len(previous) < 31 or digest(HISTORY / "0031/started.json") != UI_ADMISSION_PRIOR_START or \
                 digest(HISTORY / "0031/result.json") != UI_ADMISSION_PRIOR_FINAL:
             raise ValueError("Accepted host-admission green result prerequisite changed")
+        if len(previous) < 33:
+            raise ValueError("The UI attendance disposition requires all thirty-three Windows actions")
+        ui_attendance_transition = len(previous) == 33
+        if ui_attendance_transition and (
+            args.action != "test" or args.suite != "ui-admission" or args.expect != "red" or
+            args.source != previous[-1][1]["source"]
+        ):
+            raise ValueError("The first continuation must test the unchanged admitted UI red build")
         ui_admission_transition = len(previous) == 31
         if ui_admission_transition and args.action != "build":
             raise ValueError("The first UI-admission action must build with its controller transition")
@@ -1205,7 +1227,8 @@ def execute(args, attended, finish_preparation):
                                     ATTENDANCE_PREVIOUS_CONTROLLERS if attendance_transition else
                                     LOCAL_PROVIDER_PREVIOUS_CONTROLLERS if local_provider_transition else
                                     HOST_ADMISSION_PREVIOUS_CONTROLLERS if host_admission_transition else
-                                    UI_ADMISSION_PREVIOUS_CONTROLLERS if ui_admission_transition else {})
+                                    UI_ADMISSION_PREVIOUS_CONTROLLERS if ui_admission_transition else
+                                    UI_ATTENDANCE_PREVIOUS_CONTROLLERS if ui_attendance_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
