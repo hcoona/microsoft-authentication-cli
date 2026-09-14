@@ -145,6 +145,19 @@ DISPOSED_UI_ATTENDANCE = {
     "started.json": "4785c692765970cd909c341470e3d8e750f448e45bc53ad3165a70e0cdaf46a7",
     "windows-input.json": "e07476d8b99467266698e3f212c2b687c3538b57eb8484d9812456713e1f618c",
 }
+
+# Exact second UI-admission expiry, including its completed wrapper migration.
+DISPOSED_UI_ATTENDANCE_0034 = {
+    "result.json": "2ba6cd4445dba723dcfd30dca57772c751ccf9d3fb775e5e0bfb688da2c21d83",
+    "started.json": "74efac252f02bd01ca8ab75d4d6cc179d5f1fdfcfa4bcd7132f52712d03ec940",
+    "windows-input.json": "e937ebb25470f0ec025af48a4e87d5683777423e9e283d5cc328880f9f98b46f",
+}
+ATTENDANCE_SECONDS = 14400
+
+EXTENDED_ATTENDANCE_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "5e03199cf13fa0215d159c5c57699c352b737ed2e3f3a810026d623cc30471c2",
+    "Invoke-WindowsValidation.ps1": "c91e044adaa941bb999cfe0c579c6cea0e97808331b7cde8e823a7de41b79c1b",
+}
 TEST_PREVIOUS_CONTROLLERS = {
     "run_windows.py": "bec5e035be9d54afd871bee648f2018f4ead6fec747c871f8c1c98f9a31db105",
     "Invoke-WindowsValidation.ps1": "131a4834275afe9e7041eb8d5cc106f9220127a68a75fd2383d021309a99ae9d",
@@ -425,10 +438,11 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
         released = json.loads(released_path.read_text(), object_pairs_hook=unique)
         ready_hash, released_hash = digest(ready_path), digest(released_path)
         marker_name = "attendance-release-" + ready_hash
+        wait_seconds = 1800 if int(action.name) <= 34 else ATTENDANCE_SECONDS
         if set(ready) != {"action", "reservationSha256", "waitSeconds", "invocationSha256",
                           "controllerSha256", "preparedUtc"} or ready["action"] != action.name or \
                 ready["reservationSha256"] != digest(paths[0]) or type(ready["waitSeconds"]) is not int or \
-                ready["waitSeconds"] != 1800 or ready["invocationSha256"] != evidence.get("invocation.json") or \
+                ready["waitSeconds"] != wait_seconds or ready["invocationSha256"] != evidence.get("invocation.json") or \
                 ready["controllerSha256"] != evidence.get("controller.json") or \
                 evidence.get("attendance-ready.json") != ready_hash or \
                 evidence.get("attendance-released.json") != released_hash or \
@@ -436,7 +450,7 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
                 final.get("attendanceReleasedSha256") != released_hash or \
                 set(released) != {"readySha256", "releaseName", "waitMilliseconds"} or \
                 released["readySha256"] != ready_hash or released["releaseName"] != marker_name or \
-                type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < 1800000 or \
+                type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < wait_seconds * 1000 or \
                 evidence.get(marker_name) != hashlib.sha256(b"").hexdigest() or "cancel" in evidence or \
                 [name for name in evidence if name.startswith("attendance-release-")] != [marker_name]:
             raise ValueError("Retained attendance binding changed")
@@ -667,13 +681,16 @@ def histories():
         elif action.name == "0033":
             verify_disposed_windows_attendance(
                 action, ROOT / "actions" / action.name, DISPOSED_UI_ATTENDANCE)
+        elif action.name == "0034":
+            verify_disposed_windows_attendance(
+                action, ROOT / "actions" / action.name, DISPOSED_UI_ATTENDANCE_0034)
         elif result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action")
         for name, expected in result["evidence"].items():
             if digest(ROOT / "actions" / action.name / name) != expected:
                 raise ValueError("Windows evidence changed")
         started = read(action / "started.json")
-        if action.name not in ("0002", "0003", "0006", "0022", "0033"):
+        if action.name not in ("0002", "0003", "0006", "0022", "0033", "0034"):
             verify_windows_reservation_pair(action, ROOT / "actions" / action.name, result, started)
         windows.append((action, started, result))
     return linux, windows
@@ -898,7 +915,7 @@ def attendance_ready(action, reservation_hash):
     if set(ready) != {"action", "reservationSha256", "waitSeconds", "invocationSha256",
                       "controllerSha256", "preparedUtc"} or ready["action"] != action.name or \
             ready["reservationSha256"] != reservation_hash or type(ready["waitSeconds"]) is not int or \
-            ready["waitSeconds"] != 1800 or ready["invocationSha256"] != digest(action / "invocation.json") or \
+            ready["waitSeconds"] != ATTENDANCE_SECONDS or ready["invocationSha256"] != digest(action / "invocation.json") or \
             ready["controllerSha256"] != digest(action / "controller.json") or \
             not isinstance(ready["preparedUtc"], str):
         raise ValueError("Unbound attendance readiness")
@@ -911,7 +928,7 @@ def attendance_released(action, ready_hash):
     name = "attendance-release-" + ready_hash
     if set(released) != {"readySha256", "releaseName", "waitMilliseconds"} or \
             released["readySha256"] != ready_hash or released["releaseName"] != name or \
-            type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < 1800000:
+            type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < ATTENDANCE_SECONDS * 1000:
         raise ValueError("Unbound attendance release")
     marker = action / name
     direct(marker)
@@ -922,7 +939,7 @@ def attendance_released(action, ready_hash):
 
 
 def windows_wait(command, seconds, cancel_path=None, attendance=None):
-    """Keep one work allowance; exclude only the one actual H attendance wait."""
+    """Keep one work allowance; exclude only the one actual attendance wait."""
     interrupted = False
 
     def cancel(_number, _frame):
@@ -953,19 +970,19 @@ def windows_wait(command, seconds, cancel_path=None, attendance=None):
                         ready_hash = attendance_ready(action, reservation_hash)
                         ready_at = time.monotonic()
                         print(json.dumps({"action": action.name, "state": "awaiting-operator",
-                                          "readySha256": ready_hash, "waitSeconds": 1800}), flush=True)
+                                          "readySha256": ready_hash, "waitSeconds": ATTENDANCE_SECONDS}), flush=True)
                     if ready_at is not None and not release_seen:
-                        excluded = min(time.monotonic() - ready_at, 1800)
+                        excluded = min(time.monotonic() - ready_at, ATTENDANCE_SECONDS)
                         if (action / "attendance-released.json").exists():
                             # Receipt duration can only reduce the locally observed exclusion.
                             excluded = min(excluded, attendance_released(action, ready_hash))
                             release_seen = True
-                        elif time.monotonic() - ready_at >= 1800:
+                        elif time.monotonic() - ready_at >= ATTENDANCE_SECONDS:
                             interrupted = True
                 except (ValueError, OSError, KeyError, TypeError):
                     interrupted = True
             now = time.monotonic()
-            if now - began - excluded >= seconds or now - began >= seconds + (1800 if attendance else 0):
+            if now - began - excluded >= seconds or now - began >= seconds + (ATTENDANCE_SECONDS if attendance else 0):
                 if cancel_path is not None:
                     cancel_path.touch(exist_ok=True)
                 return None, True
@@ -1132,8 +1149,14 @@ def execute(args, attended, finish_preparation):
         if len(previous) < 31 or digest(HISTORY / "0031/started.json") != UI_ADMISSION_PRIOR_START or \
                 digest(HISTORY / "0031/result.json") != UI_ADMISSION_PRIOR_FINAL:
             raise ValueError("Accepted host-admission green result prerequisite changed")
-        if len(previous) < 33:
-            raise ValueError("The UI attendance disposition requires all thirty-three Windows actions")
+        if len(previous) < 34:
+            raise ValueError("The extended attendance disposition requires all thirty-four Windows actions")
+        extended_attendance_transition = len(previous) == 34
+        if extended_attendance_transition and (
+            args.action != "test" or args.suite != "ui-admission" or args.expect != "red" or
+            args.source != previous[-1][1]["source"]
+        ):
+            raise ValueError("The first extended wait must test the unchanged admitted UI red build")
         ui_attendance_transition = len(previous) == 33
         if ui_attendance_transition and (
             args.action != "test" or args.suite != "ui-admission" or args.expect != "red" or
@@ -1228,7 +1251,8 @@ def execute(args, attended, finish_preparation):
                                     LOCAL_PROVIDER_PREVIOUS_CONTROLLERS if local_provider_transition else
                                     HOST_ADMISSION_PREVIOUS_CONTROLLERS if host_admission_transition else
                                     UI_ADMISSION_PREVIOUS_CONTROLLERS if ui_admission_transition else
-                                    UI_ATTENDANCE_PREVIOUS_CONTROLLERS if ui_attendance_transition else {})
+                                    UI_ATTENDANCE_PREVIOUS_CONTROLLERS if ui_attendance_transition else
+                                    EXTENDED_ATTENDANCE_PREVIOUS_CONTROLLERS if extended_attendance_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
