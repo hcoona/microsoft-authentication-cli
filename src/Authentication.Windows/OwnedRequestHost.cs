@@ -28,11 +28,13 @@ internal sealed partial class OwnedRequestHost : IRequestHost
     private Exception? cleanupFailure;
 
     internal OwnedRequestHost(Func<Task> cancel, Action fault,
-        Action<OwnedHostCheckpoint, nint>? checkpoint = null)
+        Action<OwnedHostCheckpoint, nint>? checkpoint = null, IWindowsHostAdmission? admission = null)
     {
         this.cancel = cancel;
         this.fault = fault;
         this.checkpoint = checkpoint;
+        // Controlled UI-thread admission scenarios precede wiring this boundary.
+        _ = admission;
     }
 
     public TimeProvider Clock => TimeProvider.System;

@@ -245,6 +245,135 @@ public sealed class OwnedHostScenarios
         // obligation; this local case proves callback containment and notification.
     }
 
+    [TestMethod]
+    public async Task UiRejectionBeforeCreationPreventsParentAndAcquisition()
+    {
+        var admission = new UiAdmission
+        {
+            RecheckAction = _ => throw new ProviderFailureException(AuthenticationFailure.MechanismUnavailable),
+        };
+        await using var fixture = new Fixture(admission);
+        var created = false;
+        var nativeCreationObserved = false;
+        fixture.Checkpoint = (stage, window) =>
+        {
+            created |= stage == OwnedHostCheckpoint.HiddenParentCreated;
+            nativeCreationObserved |= stage == OwnedHostCheckpoint.MessageDispatch && window != 0;
+        };
+
+        var result = await fixture.InvokeAsync();
+        Assert.AreEqual(AuthenticationFailure.MechanismUnavailable, result.Failure);
+        await fixture.CompleteAsync();
+        Assert.IsFalse(created);
+        Assert.IsFalse(nativeCreationObserved);
+        Assert.AreEqual(0, fixture.Provider.InteractiveCalls);
+        Assert.AreEqual(1, admission.Observations.Count);
+        Assert.IsNotNull(fixture.UiThread);
+        Assert.IsFalse(fixture.UiThread.IsAlive);
+    }
+
+    [TestMethod]
+    public async Task UiRejectionBeforeShowingWithholdsParentAndAcquisition()
+    {
+        var admission = new UiAdmission();
+        nint hidden = 0;
+        bool? visibleAtCreation = null;
+        bool? visibleAtRejection = null;
+        admission.RecheckAction = _ =>
+        {
+            if (admission.Observations.Count == 2)
+            {
+                visibleAtRejection = OwnedWindowObservation.IsVisible(hidden);
+                throw new ProviderFailureException(AuthenticationFailure.MechanismUnavailable);
+            }
+        };
+        await using var fixture = new Fixture(admission);
+        fixture.Checkpoint = (stage, window) =>
+        {
+            if (stage != OwnedHostCheckpoint.HiddenParentCreated) return;
+            hidden = window;
+            visibleAtCreation = OwnedWindowObservation.IsVisible(window);
+        };
+
+        var result = await fixture.InvokeAsync();
+        Assert.AreEqual(AuthenticationFailure.MechanismUnavailable, result.Failure);
+        await fixture.CompleteAsync();
+        Assert.AreNotEqual((nint)0, hidden);
+        Assert.AreEqual(false, visibleAtCreation);
+        Assert.AreEqual(false, visibleAtRejection);
+        Assert.AreEqual(0, fixture.Provider.InteractiveCalls);
+        Assert.AreEqual(2, admission.Observations.Count);
+        Assert.IsFalse(OwnedWindowObservation.Exists(hidden));
+        Assert.AreEqual((nint)0, await fixture.Host.OpenInteractionAsync(CancellationToken.None));
+        // The snapshots catch showing before rejection; source-placement review
+        // must still exclude a transient show/hide between these observations.
+    }
+
+    [TestMethod]
+    public async Task UiRechecksUseOriginalTokenOnTheOwnedStaThread()
+    {
+        var admission = new UiAdmission();
+        await using var fixture = new Fixture(admission);
+        CancellationToken original = default;
+        fixture.Provider.Interactive = (request, _, operation, token) =>
+        {
+            original = token;
+            return Task.FromResult(Candidate(request, operation));
+        };
+
+        var result = await fixture.InvokeAsync();
+        await fixture.CompleteAsync();
+        Assert.AreEqual(2, admission.Observations.Count);
+        Assert.IsNotNull(result.Success);
+        Assert.IsTrue(original.CanBeCanceled);
+        foreach (var observation in admission.Observations)
+        {
+            Assert.AreSame(fixture.UiThread, observation.Thread);
+            Assert.AreEqual(ApartmentState.STA, observation.Apartment);
+            Assert.AreEqual(original, observation.Token);
+        }
+    }
+
+    [TestMethod]
+    [DataRow(1)]
+    [DataRow(2)]
+    public async Task CancellationDuringUiRecheckPreventsAcquisition(int observation)
+    {
+        var admission = new UiAdmission();
+        await using var fixture = new Fixture(admission);
+        admission.RecheckAction = _ =>
+        {
+            if (admission.Observations.Count == observation)
+                fixture.CancelCallerAsync().WaitAsync(FixtureLimit).GetAwaiter().GetResult();
+        };
+
+        var result = await fixture.InvokeAsync();
+        Assert.AreEqual(AuthenticationFailure.Cancelled, result.Failure);
+        Assert.IsNull(result.Success);
+        await fixture.CompleteAsync();
+        Assert.AreEqual(0, fixture.Provider.InteractiveCalls);
+        Assert.AreEqual(observation, admission.Observations.Count);
+        Assert.AreEqual((nint)0, await fixture.Host.OpenInteractionAsync(CancellationToken.None));
+    }
+
+    [TestMethod]
+    public async Task SilentSuccessDoesNotInspectTheOwnedUiThread()
+    {
+        var admission = new UiAdmission
+        {
+            RecheckAction = _ => throw new InvalidOperationException("Unexpected synthetic UI recheck."),
+        };
+        await using var fixture = new Fixture(admission);
+        fixture.Provider.VisibleAccount = true;
+
+        var result = await fixture.InvokeAsync();
+        Assert.IsNotNull(result.Success);
+        await fixture.CompleteAsync();
+        Assert.AreEqual(0, admission.Observations.Count);
+        Assert.IsNull(fixture.UiThread);
+        Assert.AreEqual(0, fixture.Provider.InteractiveCalls);
+    }
+
     private static async Task CancelPendingAsync(string action)
     {
         await using var fixture = new Fixture();
@@ -302,6 +431,21 @@ public sealed class OwnedHostScenarios
         "SYNTHETIC_OWNED_HOST_TOKEN", request.AccountEmail, Guid.Parse("11111111-2222-3333-4444-555555555555"),
         request.Scopes, "Bearer", DateTimeOffset.UtcNow.AddHours(1), operation);
 
+    private sealed class UiAdmission : IWindowsHostAdmission
+    {
+        internal readonly List<(Thread Thread, ApartmentState Apartment, CancellationToken Token)> Observations = [];
+        internal Action<CancellationToken>? RecheckAction;
+
+        public void Admit(CancellationToken cancellationToken) =>
+            throw new InvalidOperationException("UI work must not repeat process admission.");
+
+        public void Recheck(CancellationToken cancellationToken)
+        {
+            Observations.Add((Thread.CurrentThread, Thread.CurrentThread.GetApartmentState(), cancellationToken));
+            RecheckAction?.Invoke(cancellationToken);
+        }
+    }
+
     private sealed class Fixture : IAsyncDisposable, IRequestHost
     {
         // Serial scheduling alone does not stop another case after unsafe teardown.
@@ -325,7 +469,7 @@ public sealed class OwnedHostScenarios
         private Task? callerCancellation;
         private readonly List<Pause> pauses = [];
 
-        internal Fixture()
+        internal Fixture(IWindowsHostAdmission? admission = null)
         {
             if (Volatile.Read(ref stoppedFixture) is not null)
                 throw new InvalidOperationException("The owned-host batch stopped after a fixture safety failure.");
@@ -343,7 +487,7 @@ public sealed class OwnedHostScenarios
                     UiApartment = Thread.CurrentThread.GetApartmentState();
                 }
                 Checkpoint?.Invoke(stage, window);
-            });
+            }, admission);
         }
 
         TimeProvider IRequestHost.Clock => Host.Clock;
@@ -388,6 +532,12 @@ public sealed class OwnedHostScenarios
 
         internal Task<AuthenticationOutcome> InvokeAsync(bool interactionAllowed = true, bool bindProfile = true) =>
             invocationObservation = InvokeCoreAsync(interactionAllowed, bindProfile);
+
+        internal async Task CompleteAsync()
+        {
+            if (invocation is not null) await invocation.CompleteAsync().WaitAsync(FixtureLimit);
+            await Host.Completion.WaitAsync(FixtureLimit);
+        }
 
         private async Task<AuthenticationOutcome> InvokeCoreAsync(bool interactionAllowed, bool bindProfile)
         {
