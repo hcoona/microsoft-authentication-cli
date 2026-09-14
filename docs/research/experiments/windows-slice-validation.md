@@ -3079,3 +3079,93 @@ It does not establish actual native ABI/layouts, per-native-query cancellation,
 resource ownership, host metadata, UI-thread checks before create/show, MSAL/WAM
 initialization, production wiring, process/WSL lifetime, Native AOT, UI presentation
 or real-account/reuse behavior. Those original acceptance obligations remain open.
+
+### Controlled Windows Host Admission Red Evidence
+
+Windows build 0028 and test 0029 used accepted target/protocol
+`f57bfd02309f3eab31d99d904a3ebd9a5bfd5d64` and inert source
+`723f121f05859c116f2a2d01615864a3fa802bea`, tree
+`fe278c2ddf687ef1beaca7b57a71f31443dc08c1`. The no-restore Release build
+completed in 12.593 seconds with zero warnings and errors. Its manifest SHA-256 is
+`540e3c8774b7fb9f482f84c86bf01204b315d5e46eb52cbbcad4a08014da4238`.
+The [actual-build review and single-red-test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/140#issuecomment-5660636876)
+accepted the source-bound assembly/PDB, generated runner, exact case selection,
+dependency/runtime mapping and artifacts before test execution.
+
+Test 0029 executed the twenty-two selected methods once: two Passed and twenty
+Failed at their individually predicted first business assertions. All sixteen TRX
+counters were inspected: total/executed twenty-two, passed two, failed twenty, and
+all other counters zero. The runner exited 2 after 1.243 seconds; the fully
+collected outer exited 0 with continuation allowed and confirmed quiescence.
+Capture was complete, with no safety stop, termination request or remaining owned
+process. The TRX SHA-256 is
+`21cd73b1894ab70be0c35baffe995b16dfc31a708ce7f5634338753a434c15f9`;
+the WSL final receipt SHA-256 is
+`48498ee2301f1ef922f9ce632d17db8e5b82e14f1308c584011e5f596277c295`.
+
+The [independent actual-red acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/140#issuecomment-5660937330)
+joined every definition, entry, execution and result to the unchanged admitted
+source and artifacts. Release stack frames 282 and 298 were individually bound
+through the actual PDB/IL and unique assertion messages to first source assertions
+283 and 299; neither source assertions nor expected outcomes changed. No repeat execution was needed.
+
+At completed 0029, Windows build/test consumption was 24/40 and combined consumption
+53/120. Preparation, downloads and synthetic child-product reservations were
+unchanged. Stopped 0022 remained false and charged. The dedicated source, artifacts
+and sanitized evidence were retained. These synthetic failures establish the
+missing controlled classifier behavior and permit its green implementation; they
+do not establish assertions after each first failure, actual native observations,
+UI, provider initialization or account behavior. Green source and each build/test
+retain separate exact admission.
+
+### Controlled Windows Host Admission Green Evidence
+
+Windows build 0030 and test 0031 used the same accepted target/protocol
+`f57bfd02309f3eab31d99d904a3ebd9a5bfd5d64` and green source
+`5cc9092badfabd04c691e625f5c2909dd79409e7`, tree
+`9b4bda42fc96face9036bc2dd596565e75e02a24`. Only the classifier changed from
+red; its SHA-256 is
+`a75fbe4c3bf837b78535afba73552b7893c07e2bfaed6144eaa7ad3d8ef5fd18`.
+All twenty-two scenario methods and assertions remained byte-identical. The
+no-restore Release build completed in 12.493 seconds with zero warnings and errors;
+its manifest SHA-256 is
+`4f4b85c8f5d66ba8ef58cb2458db9bada23978d1d0c6ffd4e9319745aba05c06`.
+The [actual-build review and single-green-test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/140#issuecomment-5661442413)
+accepted the actual assemblies/PDBs, unchanged scenario semantics, generated runner,
+exact selection, dependency/runtime mapping and prospective test inputs before
+execution. No controller migration occurred in these two actions.
+
+Test 0031 executed the twenty-two selected methods once, all Passed. All sixteen
+TRX counters were inspected: total, executed and passed were twenty-two; every
+other counter was zero. The runner exited 0 after 0.981 seconds, and the fully
+collected outer exited 0 with continuation allowed and confirmed quiescence.
+Capture was complete: 639 stdout bytes and empty stderr. Both Job processes ended
+normally, with zero active at normal exit and before/after the stop check, no
+termination request and no safety stop. The TRX SHA-256 is
+`e7a71c5b15671ed0bd83d3f556a4a59479fcbb4e234f11aafb8e1708118bfbd1`;
+the WSL final receipt SHA-256 is
+`ba41f9bbcee348c694f187d8b966fb097baea450c938cc866e3bf77e6a73cd58`.
+
+The [independent actual-green acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/140#issuecomment-5661781682)
+joined all definitions, entries, executions and results to the admitted source and
+artifacts, checked complete capture and source/artifact continuity, and accepted
+normal zero-process completion. The passing unchanged methods cover all 62 fixture
+iterations and 61 coordinator requests by their finite source paths; those counts
+are not additional runner cases or per-row runtime telemetry.
+
+At completed 0031, all 68 Linux/Windows action pairs were finalized. Windows
+build/test consumption was 26/40, Linux 29/80 and combined 55/120. Preparation
+remained Linux 8/11, Windows 5/5 and combined 13/16. Downloads remained 768 MiB;
+synthetic process reservations remained 24/36 under the outer ceiling 60, with the
+final twelve CLI process units preserved. Stopped 0022 remained false and charged.
+No 0032 or Linux 0038 was started. Dedicated source, artifacts and sanitized
+evidence were intentionally retained.
+
+The controlled result establishes ordinary-user fact admission, rejection of the
+selected unsupported or unobservable facts, original cancellation and sanitization,
+and fresh volatile observations before provider effects. These fixtures exercise
+no native query, MSAL/WAM initialization, account/store access, window, network
+request or child-product launch. Per-native-query cancellation, ABI and resource
+ownership, UI-thread checks before create/show, production composition, process/WSL
+lifetime, the final Native AOT artifact and real-account/UI/reuse acceptance remain
+open. This increment does not complete the Windows Slice.
