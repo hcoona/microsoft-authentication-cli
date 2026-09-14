@@ -2459,3 +2459,86 @@ Preparation, attendance and execution all belong to the same reserved H action;
 waiting adds no process-scenario unit and does not create a new preparation action.
 A protocol merge supplies no actual attendance or test observation. Refreshed exact
 independent execution admission is required before running these changed helpers.
+
+## Windows Action 0022 Attendance-Expiry Disposition
+
+The single H-green reservation 0022 used accepted target/protocol
+`c35f833792cba5fe9d65edab3eb800e1a3a2acb2`, unchanged source
+`ecc4c23bfc58b739b01a2b2879438cbd58fec965`, tree
+`45ff7f2d40e5672257ab237afb67dc897da5199c`, and completed build 0021 under the
+[independent admission](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5657758723).
+The [independent actual-stop review](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5658156282) classifies its result
+as a normal expired attendance wait before subject launch, with no material
+implementation finding. This is neither H-green nor failed business-assertion evidence.
+
+Preparation completed and the wrapper emitted validated `awaiting-operator` after
+Windows published ready at 2026-09-14 01:42:53.299848 UTC. The ready reservation
+matched the admitted 2,524-entry input map, unchanged 376-entry tool map and exact
+inner invocation. Both controller replacements and retained backups completed
+within 0022. These are actual prepared-gate and migration observations. The full
+successful-action source/tool postchecks did not run after the safety stop; no
+complete post-stop input-integrity claim follows from those earlier checks.
+
+The Windows controller finalized at 02:12:53.356048 UTC in `attendance`, with
+failure line 35 identifying the monotonic 1,800-second expiry check, exit -1,
+`safetyStop=true`, `captureCompleted=false`, and `captureDisposition=not-started`.
+Actual empty-Job accounting records zero active and total processes before and
+after Stop, with no termination required. This establishes the bounded empty-Job
+cleanup; process disappearance is not its basis. The 1,800.0562-second UTC interval
+corroborates the accepted monotonic check without supplying a separate monotonic
+trace. WSL finalized at 02:12:53.442815 UTC with `continuation_allowed=false`,
+`quiescent=true` and `error_type=ValueError`. The outer session was fully collected
+with exit 1 and no test counts. No release, acknowledgement, subject, capture,
+cancel or fixture-stop record exists; the result directory is empty. No test
+window, H assertion, real account or authentication operation ran.
+
+Preserve every original receipt and the completed two-controller migration.
+Both history readers recognize only these exact WSL receipts and their eight
+hash-bound Windows evidence files:
+
+| WSL 0022 receipt | SHA-256 |
+| --- | --- |
+| `started.json` | `f4d69974990731e5a32f35df7c71935982c7fc8f480ef58d90395567cfc75e29` |
+| `windows-input.json` | `5b47542488f8d4ec2db81cecb3b0d8fa39e349d0c9e4cb9c71a69795b61547d1` |
+| `result.json` | `c15dd433a4d9a104d27e529909f7a8ec28e5b38d2bfa2dcad450e469a6b94338` |
+
+The Windows evidence set is exactly `started.json`, `controller.json`,
+`invocation.json`, `attendance-ready.json`, `controller-migration.json`,
+`retained-run_windows.py`, `retained-Invoke-WindowsValidation.ps1`, and
+`windows-result.json`. The only directories are `home`, `home/local`,
+`home/roaming`, `temp`, `results`, and `empty-program-files`; their leaf directories
+remain empty. Reject any missing, additional, changed, linked or wrong-type
+receipt, evidence file or directory. The exact failed receipt remains false and
+counted. This exception does not accept a different attendance stop or relax the
+ready/released/unique-marker checks for normally completed H-green actions.
+
+After this disposition is accepted, the first continuation is one newly admitted
+H-green test 0023 on unchanged source ecc4 and build 0021. Linux execution remains
+stopped until that Windows continuation completes normally. Refresh exact
+independent admission, accepted target/protocol/Wave, retained source/build and
+current input/history/capacity bindings before its reservation. Earlier integrity
+observations remain historical. The actual helper must complete all preparation
+checks before requesting a fresh response for the new live ready receipt. The
+expired 0022 gate cannot be released, resumed, overwritten or extended; a late
+response to it cannot release 0023. No automatic retry or previous charge refund
+is permitted. Keep the 1,800-second preparation and attendance bounds, 230-second
+controller work allowance, 120-second subject/capture/Job-drain limit, H15 selection,
+native effects, cleanup and stop rules unchanged.
+
+During 0023's existing reservation only, retain the current 80,345-byte wrapper,
+SHA-256 `0e5a2a3360e19200a0e81b84f87b42d94a96e12ca56524c85800c55378574b30`,
+as `retained-run_windows.py` before replacing it with this accepted revision's
+wrapper. Bind old/new hashes and protocol revisions in `controller-migration.json`
+and final evidence. No standalone replacement is admitted. The PowerShell
+controller, stop helper, Job source/bootstrap and completed 0022 migration stay
+unchanged. The symmetric managed-reader change is not a Windows controller
+replacement. Current replacement and executor hashes are bound by the new exact
+independent admission, rather than duplicating future commit identities here.
+
+Consumption after 0022 is Linux preparation 8/11 and build/test 29/80, Windows
+preparation 5/5 and build/test 17/40, combined preparation 13/16 and build/test
+46/120. A reserved 0023 consumes Windows 18/40 and combined 47/120 even if it stops.
+Process reservations stay 24/36, charged downloads stay 768 MiB, and the final
+unchanged twelve-unit CLI batch remains reserved for separate admission. No
+bootstrap, restore, rebuild, red replay, process allocation, account-state effect,
+support claim or whole-Slice acceptance is added.
