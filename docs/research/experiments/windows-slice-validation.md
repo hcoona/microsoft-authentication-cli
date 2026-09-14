@@ -3262,3 +3262,147 @@ These controlled core results do not establish synchronization of an actual UI f
 with production result commitment or UI-thread/process drain. Production composition,
 native observations, WAM, WSL, Native AOT and real-account/reuse acceptance retain their
 existing obligations.
+
+## Owned UI Admission Supplement
+
+This supplement selects the existing owned-host regression scenarios together with
+the new UI-thread admission scenarios. The accepted
+[Windows host design](../../designs/windows-ado-authentication.md#local-windows-host-admission)
+and [validation strategy](../../validation/strategy.md#windows-slice-design-acceptance)
+remain the behavior authorities. The current credential-free Wave permits the
+bounded owned-window effects. Each source, build and test requires independent
+exact admission before execution; this supplement grants no account operation.
+
+### Subject and Fixed Selection
+
+Use the existing Windows 11 x64 host, WSL2 controller, SDK 10.0.401/runtime 10.0.12,
+MSTest 4.1.0 and retained public package graph. Keep the existing no-restore Release
+build of `Windows.slnx` and managed scenario assembly. Select no bootstrap, restore,
+download, installation, publish or production child-process action.
+
+The initial red candidate is PR #143 source
+`984a232995e41e90476cb0aa8b2228af2000874c`, tree
+`6e2e0d8b470c04c3668f2b98588bee9503b05b73`. Its optional owned-host admission
+argument is inert. The host SHA-256 is
+`ef8158ebbdee79716d2b82fc971bdc73dad750577fd6fcc15d0bd82990c6942e`;
+the scenario SHA-256 is
+`67c2c9688577e7258f748884c37434225cc894e914cc09fc9133993d48da51c8`.
+Exact source admission may bind a later integration revision only when these red
+semantics and the complete reviewed source/project identities remain explicit.
+
+The build includes `NativeWindowsHostObservations.cs`, SHA-256
+`b94d448974221d7e8e79d1ab9484665b11a214651a193c4da42982e15499a7eb`.
+The fixed test selection never constructs or invokes it. Native own-logon/session
+metadata observations, real provider initialization and production composition are
+not selected. All providers, profiles, accounts, tokens and admission observations
+are synthetic. The real owned Win32 host and existing owned-window observation
+helper supply the native effects; there is no broker/account/store/network access.
+
+`test --suite ui-admission` selects exactly the fifteen method names already fixed
+by the [Owned Win32 Host supplement](#owned-win32-host-scenario-supplement) plus
+the following five methods in
+`Authentication.Windows.Scenarios.OwnedHostScenarios`, using literal positive
+`FullyQualifiedName` clauses with no wildcard. Preserve both cancellation DataRows
+as separate full discovery names in result validation.
+
+| Added method | Cases | Inert red prediction |
+| --- | ---: | --- |
+| `UiRejectionBeforeCreationPreventsParentAndAcquisition` | 1 | Failed: expected unavailable, synthetic acquisition succeeds. |
+| `UiRejectionBeforeShowingWithholdsParentAndAcquisition` | 1 | Failed: expected unavailable, synthetic acquisition succeeds. |
+| `UiRechecksUseOriginalTokenOnTheOwnedStaThread` | 1 | Failed: expected two observations, inert seam records zero. |
+| `CancellationDuringUiRecheckPreventsAcquisition` | 2, arguments 1 and 2 | Failed: expected cancelled, synthetic acquisition succeeds. |
+| `SilentSuccessDoesNotInspectTheOwnedUiThread` | 1 | Passed: silent success with no UI observation. |
+
+The full selection is twenty methods and twenty-one cases. The unchanged fifteen
+existing methods are expected Passed in both stages. Red requires sixteen Passed
+and five intended Failed, runner exit 2 and outer exit 0. Green requires twenty-one
+Passed, every other outcome counter zero and runner/outer exit 0. Bind all sixteen
+TRX counters and complete definition/entry/execution/result joins. A compiler,
+loader, fixture, native, timeout or drain failure is not intended red evidence.
+Accept actual red independently before implementing the green UI checks, without
+changing assertions to fit the observation. Preserve generated runner registrations.
+
+### Windows, Attendance and Observation Boundaries
+
+Both stages use the real already-implemented host and can show windows. Fixtures
+remain serial and create at most one top-level owned parent at a time. The admitted
+finite paths predict at most fifteen parents in red (twelve potentially shown,
+three hidden) and thirteen in green (eight potentially shown, five hidden), plus
+their fixed child controls. These are source-derived ceilings, not measured counts
+or claims that an operator saw every surface.
+
+Both red and green require the existing
+[prepared/live-ready/release attendance procedure](#preparation-and-attending-operator-handoff).
+Complete source and actual-build admission, controller setup and the
+live `attendance-ready.json` observation before asking the owner to attend. Only
+a fresh explicit readiness reply permits release of that exact prepared action.
+Earlier replies, earlier release files, elapsed time and automation alone cannot
+satisfy this handoff. Keep its 1,800-second finite wait,
+cancellation, reservation binding and expiry stop; no automatic retry is allowed.
+The owner may leave between the red and green stages while implementation, builds
+and reviews proceed. Do not ask the owner to wait through that preparation.
+
+All scenario inputs are programmatic and target only known owned HWNDs. Existing
+helpers inspect owned controls and post bounded Win32 messages for Cancel, caption
+close and Escape. They do not establish Microsoft UI Automation accessibility,
+physical keyboard/focus/DPI behavior, visual readability or human usability.
+Keep sign-in, account choice, consent, unlock and any later manual observation
+under their separately accepted protocols and operator control. Historical
+`owned-host` selection and attendance requirements remain unchanged.
+
+The new rejection scenarios observe native creation activity and visibility at
+their boundaries; final mutable observations follow natural invocation and host
+completion. Preserve existing fixture teardown, stop latch and safety marker.
+Snapshots cannot exclude every transient show/hide: independent green source
+review must verify admission before `CreateNativeParent` and before the sole
+`ShowNativeParent`/readiness path, original-token checks and terminal ordering.
+
+### Controller Transition, Capacity and Retention
+
+The existing controllers last executed Windows 0031 under protocol
+`f57bfd02309f3eab31d99d904a3ebd9a5bfd5d64`. Its WSL `started.json` SHA-256 is
+`b04688941e504d594947544e26f12d87c99d7de0bbd86b280e17c1ee20e63f68`, and its
+`result.json` SHA-256 is
+`ba41f9bbcee348c694f187d8b966fb097baea450c938cc866e3bf77e6a73cd58`.
+The migration is exclusively part of admitted build 0032 and backs up each old
+controller to `actions/0032/retained-<controller-name>` before replacing it.
+
+| Controller | Required old SHA-256 | Replacement SHA-256 |
+| --- | --- | --- |
+| `run_windows.py` | `0747221d12d689ca80b9022ffcfa6cd23a5584165398482cdd1b5bbc0bed3c5b` | `0046cb65cba438fc2650b4d8178197e18a70694177ababa9c7186f87ae6cc5ef` |
+| `Invoke-WindowsValidation.ps1` | `3263b10d1c478c723a6c9c0b3d5926d47a5cdba5bca1da5184b132543596daeb` | `c91e044adaa941bb999cfe0c579c6cea0e97808331b7cde8e823a7de41b79c1b` |
+
+The symmetric Linux history reader has SHA-256
+`b7d356fd7bceaf8f98832a268ca32961777b10438aed17f8694aa72e2c4339f7`.
+It is not another retained Windows migration. Both readers reject the new test
+selection at or before 0032 and preserve the original attendance receipt checks
+while requiring them for either new test expectation.
+
+Require the completed thirty-one Windows actions and their unchanged receipt
+bindings. Exactly the separately admitted next build performs the existing backup
+and controller migration for `run_windows.py` and `Invoke-WindowsValidation.ps1`;
+the Linux history reader receives the symmetric new selection/attendance rule.
+Preserve all historical selections, charged stopped outcomes and retained backups.
+Partial migration, changed input or uncertain quiescence stops both loops; no
+standalone repair, refund or replay is permitted.
+
+At completed Linux 0041, build/test consumption is Linux 33/80, Windows 26/40 and
+combined 59/120. The red build/test and green build/test progression adds four
+Windows actions, reaching Windows 30/40 and combined 63/120 if no intervening
+consumption occurs. Before each reservation recover actual cumulative history.
+Preparation remains 13/16, downloads 768 MiB and process reservations 24/36 under
+the outer ceiling 60; preserve the final twelve CLI process units. This selection
+reserves no production child-process units.
+
+Keep the existing 120-second subject/capture/Job-drain allowance, 230-second outer
+work allowance excluding the admitted attendance wait, 8 MiB output ceiling,
+32-process nonbreakaway Job ceiling, exclusive shared lock and bounded stop path.
+Inspect complete capture, source/artifact continuity, all results and normal Job
+drain after fully collecting the original outer helper. Dedicated source,
+artifacts, migration backups and sanitized evidence are intentionally retained.
+
+Passing these controlled scenarios establishes the selected owned-host outcomes
+and UI-thread checks, not actual native admission facts or real WAM behavior.
+Production fault/commit synchronization, complete process/WSL lifetime, final
+Native AOT, real-account/reuse and physical UI acceptance remain required. This
+increment does not finish the Windows Slice.
