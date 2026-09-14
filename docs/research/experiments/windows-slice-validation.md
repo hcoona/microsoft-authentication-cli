@@ -2316,29 +2316,35 @@ actions and these exact WSL-side build receipts:
 At exactly 21 previous Windows actions, only `test --suite owned-host --expect green`
 on that unchanged source is permitted. The existing history readers still reject
 an incomplete, changed or stopped action. During that admitted action's existing
-reservation, replace only retained `controller/run_windows.py` through the existing
-exclusive backup and migration procedure. Its required old bytes are 71,741 bytes
-with SHA-256
-`0b3997c5ce411f2da45eb1c4cb20030f543e2c5754e1fc32f111699a64ab330e`, matching accepted
-protocol `17dbf912d847b55c4366be7ab851f30079137f73`. Retain those exact bytes as
-`actions/0022/retained-run_windows.py`; `controller-migration.json` binds the old/new
-hashes and protocol revisions. Both history readers and final evidence retain these
-files' hash bindings. Missing or unexpected old bytes, partial migration, or failed
-finalization stops both loops without refund or automatic retry.
+reservation, replace exactly the following two retained controllers through the
+existing exclusive backup and migration procedure:
 
-The replacement wrapper SHA-256 is
-`242a1c7266a4100a7db6eed90a91df700ea6042c80cb7fc4d218d6487c46fdee`.
+| Controller | Required old SHA-256 | Replacement SHA-256 |
+| --- | --- | --- |
+| `run_windows.py` | `0b3997c5ce411f2da45eb1c4cb20030f543e2c5754e1fc32f111699a64ab330e` | `0e5a2a3360e19200a0e81b84f87b42d94a96e12ca56524c85800c55378574b30` |
+| `Invoke-WindowsValidation.ps1` | `af0b1c461171179637f12efe02d8a8151d77f258352524a5ffdacd99e30af445` | `a63d1715179171227c9df3875bd538ba744568954809d40202cf0a4d420f0635` |
+
+The old wrapper is 71,741 bytes and the old PowerShell controller is 21,016 bytes,
+matching accepted protocol `17dbf912d847b55c4366be7ab851f30079137f73`.
+Retain them as `actions/0022/retained-run_windows.py` and
+`actions/0022/retained-Invoke-WindowsValidation.ps1`; `controller-migration.json`
+binds both old/new hashes and protocol revisions. Both history readers and final
+evidence retain these files' hash bindings. Missing or unexpected old bytes,
+partial migration, or failed finalization stops both loops without refund or
+an automatic retry. Acceptance of the amendment precedes either replacement;
+there is no standalone migration or individually admitted partial upgrade.
+
 The matching `run_managed.py` SHA-256 is
-`f6a05f9592e7b8505a543adce79139f8abc7520b9ba7860a945070a2b4243bfe`; that helper is
-not a retained Windows controller replacement. Keep the PowerShell controller,
-stop helper, Job source/bootstrap, source checkout, dependency graph and build 0021
-artifacts unchanged. No standalone migration, bootstrap, restore, rebuild or
-historical red replay is allocated by this supplement.
+`108f8ae72052b7ec85b961d77e951e4a1616b35e0b249781b26f4a02c12c3cdf`. Its only additional change
+validates the retained attendance bindings when the Linux loop recovers Windows
+history; it is not a retained Windows controller replacement. Keep the stop helper,
+Job source/bootstrap, source checkout, dependency graph and build 0021 artifacts
+unchanged. No bootstrap, restore, rebuild or historical red replay is allocated.
 
 Before H execution, independently refresh the accepted target/protocol ancestry,
 the prior red and actual-build evidence reuse, exact source/artifact admission,
-current history and capacity, and the protected input map with the replacement
-wrapper hash. Bind the complete public admission and its URL to the prospective
+current history and capacity, and the protected input map with both replacement
+controller hashes. Bind the complete public admission and its URL to the prospective
 command. The accepted local provider-admission design from
 [PR #134](https://github.com/hcoona/microsoft-authentication-cli/pull/134) does not
 require this synthetic H provider to inspect real logon metadata. Its real-provider
@@ -2353,3 +2359,103 @@ fixture stop/termination rules. At build 0021, consumption is Linux preparation
 preparation 13/16 and build/test 45/120, with 24/36 process units and 768 MiB charged
 downloads. Recover current history before admission; this checkpoint grants no
 reset. No H execution, result or attendance follows from accepting this refresh.
+
+
+### Preparation and Attending-Operator Handoff
+
+[H-PREP-01](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5657522469)
+and its [independent true-positive triage](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5657522570)
+require the handoff inside the actual prepared invocation. The earlier helper start
+was interrupted before reservation and migration: its outer session was collected
+with exit 143, its PID was absent, both Windows 0022 directories and Linux 0038
+were absent, and the retained wrapper was unchanged. The sanitized stop receipt is
+444 bytes, SHA-256 `00a84e7354c36f2e01d5cadcc832d483451b36635939c2a48b4af6bec29ba30f`.
+This is neither an H test result nor evidence of a completed preparation sweep;
+it does not identify the exact verification substage or prove lock acquisition.
+No prior charge is refunded. The withdrawn attendance response cannot be reused.
+
+The helper now requires the following handoff for every `test --suite owned-host
+--expect green` invocation. It is not an optional switch or a generic resume API.
+Other selections retain their existing execution bounds and require no attendance
+receipt. These files are sanitized operational evidence under the existing action
+record, with the typed contracts below; they are not a new governed record family.
+
+1. Finish exact admission before invoking the helper. While the operator is absent,
+   perform the invocation's full WSL tool/history/archive/source/cache/build checks
+   and Windows input/environment/invocation checks. Keep the shared action lock
+   from tool verification through preparation, waiting, execution and finalization.
+   Do not run the other loop or mutate prepared inputs, controllers, artifacts,
+   installed tools or authority during that interval. Cancel if a relied-on input
+   or authority materially changes; do not refresh a pending action in place.
+2. Bound WSL preparation, including its work before reservation, to one 1,800-second
+   elapsed-time timer. SIGINT/SIGTERM interrupts that preparation. Disarm the timer
+   only when handing off to the Windows action controller or finalizing failure;
+   no automatic retry follows. Existing subprocess limits remain (Git 30 seconds,
+   Windows preflight 20 seconds, local proxy collection 5 seconds). Before
+   reservation, interruption leaves no charged action or subject and the outer
+   exit must be collected and inspected. After reservation, preserve that charge
+   and stopped/incomplete receipts; both loops remain stopped. An interrupted
+   preflight is not subject or Job execution. Existing finalization rules apply.
+3. In Windows, load the bound Job helper and construct the empty Job after all
+   input checks. Immediately before the original subject stopwatch and `Start`,
+   require the single attendance gate. Publish `attendance-ready.json` by writing
+   and flushing its exclusive `.pending` file, closing it, and moving it to the
+   previously absent final name in the same action directory. Consumers never
+   accept `.pending`. Preexisting attendance files fail the action.
+4. The complete ready object has exactly `action` (four-digit action name),
+   `reservationSha256`, `invocationSha256`, `controllerSha256` (lowercase SHA-256
+   strings), `waitSeconds` (integer 1800), and `preparedUtc` (UTC ISO timestamp).
+   The hashes bind this action's full Windows reservation, exact invocation and
+   controller PID/start incarnation. The reservation binds the accepted source,
+   protocol, target, admission URL and complete input/tool maps. The WSL helper
+   validates the receipt before emitting one `awaiting-operator` event. Only then
+   may the coordinator request a fresh explicit attending-operator response.
+5. Release only after that fresh actual response, while the same controller is
+   waiting and neither cancellation nor finalization exists. The coordinator
+   exclusively creates one empty regular file named `attendance-release-<hash>`,
+   where `<hash>` is the complete ready receipt's SHA-256. The exact filename binds
+   the entire ready object, including reservation/action/incarnation; the empty
+   body is its strict zero-byte schema. Never pre-create, overwrite, replay or
+   derive release from an earlier response, silence or elapsed time. There is no
+   bulk input recheck after asking for attendance. The existing cooperating-process
+   trust model and unchanged-input boundary apply; no installed-tool file leases
+   or protection against arbitrary same-user mutation are claimed.
+6. Wait once for at most 1,800 seconds using the Windows monotonic stopwatch.
+   Cancellation or expiry wins over a simultaneously observed release. Reject
+   multiple, differently named, linked, nonregular or nonempty release markers.
+   Before launch, publish completed `attendance-released.json` by the same
+   exclusive close/flush/move procedure. Its exact fields are `readySha256`,
+   `releaseName`, and integer `waitMilliseconds` in `[0, 1800000)`. The controller
+   checks cancellation and expiry again immediately before the original subject
+   stopwatch and `Start`. Receipt acceptance does not override that last check.
+7. Preserve the existing 230-second total Windows controller work allowance outside
+   this one wait. The WSL wrapper actively enforces that budget before readiness
+   and after release with a monotonic clock. Its exclusion starts only after it
+   validates the complete ready receipt; on release acknowledgement it freezes
+   the exclusion to the lesser of its observed wait and the controller's recorded
+   wait. Thus it can under-credit a polling/publication interval, but cannot give
+   unused wait time to work or reset the work budget. Windows also checks its own
+   work elapsed before publishing ready and before launch. The absolute controller
+   wall bound is 2,030 seconds, plus existing bounded stop/collection procedures.
+   Checks poll at 50 milliseconds. The original 120-second subject/start/capture/
+   normal-Job-drain timer begins after release and remains unchanged. Cancellation
+   has at most 15 seconds to finalize within the remaining controller bound;
+   retain the 10-second emergency stop and 5-second local proxy collection limits.
+8. Timeout, withdrawal, invalid release, missing controller or uncertain finalization
+   never authorizes launch or another attempt. A normal pre-subject stop records
+   attendance stage, safety stop, capture not started and actual empty-Job cleanup;
+   it is not a failing scenario assertion. Retain any reservation and all receipts.
+   Incomplete finalization invokes the existing identity-bound emergency stop;
+   neither proxy nor controller disappearance proves Job quiescence. Both loops
+   stop, without refund, retry or extension of the one attendance wait.
+9. Before accepting green, the wrapper validates the ready/released objects and
+   unique empty marker, their hashes in the Windows final result, and absence of
+   cancellation. Both history readers validate the same retained bindings for
+   H-green actions starting at 0022. Existing evidence hashing includes the ready,
+   release, acknowledgement, controller, invocation and migration files. Preserve
+   all existing source/tool postchecks and actual H15/TRX/Job evidence checks.
+
+Preparation, attendance and execution all belong to the same reserved H action;
+waiting adds no process-scenario unit and does not create a new preparation action.
+A protocol merge supplies no actual attendance or test observation. Refreshed exact
+independent execution admission is required before running these changed helpers.

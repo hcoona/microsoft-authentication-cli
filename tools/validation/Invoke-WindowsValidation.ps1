@@ -13,6 +13,8 @@ $dotnet = 'C:\Program Files\dotnet\dotnet.exe'
 $guard = $null
 $compiler = $null
 $capture = $null
+$attendanceWatch = $null
+$controllerWatch = [Diagnostics.Stopwatch]::StartNew()
 $stage = 'reservation'
 $result = [ordered]@{ safetyStop = $true; quiescent = $false; exitCode = -1; captureCompleted = $false }
 
@@ -21,6 +23,16 @@ function Save-Json([string] $Path, $Value) {
     $stream = [IO.File]::Open($Path, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::Read)
     try { $stream.Write($bytes, 0, $bytes.Length); $stream.Flush($true) }
     finally { $stream.Dispose() }
+}
+
+function Save-CompleteJson([string] $Path, $Value) {
+    Save-Json ($Path + '.pending') $Value
+    [IO.File]::Move(($Path + '.pending'), $Path)
+}
+
+function Assert-AttendanceOpen {
+    if (Test-Path -LiteralPath "$action\cancel") { throw 'Attendance cancelled' }
+    if ($attendanceWatch.Elapsed.TotalSeconds -ge 1800) { throw 'Attendance expired' }
 }
 
 function Assert-Direct([string] $Path) {
@@ -213,6 +225,45 @@ try {
         Assert-Hash $helper $start.helperSha256
         Add-Type -Path $helper -ErrorAction Stop -WarningAction Stop
         $guard = [WindowsValidationJob]::new()
+        if ($start.action -ceq 'test' -and $start.testSuite -ceq 'owned-host' -and $start.expected -ceq 'green') {
+            $stage = 'attendance'
+            if ($controllerWatch.Elapsed.TotalSeconds -ge 230) { throw 'Preparation expired' }
+            if (@(Get-ChildItem -LiteralPath $action -Filter 'attendance-*' -Force).Count -ne 0) {
+                throw 'Preexisting attendance evidence'
+            }
+            $attendanceWatch = [Diagnostics.Stopwatch]::StartNew()
+            Save-CompleteJson "$action\attendance-ready.json" @{
+                action = $ActionName; reservationSha256 = $ReservationSha256; waitSeconds = 1800
+                invocationSha256 = (Get-FileHash -LiteralPath "$action\invocation.json").Hash.ToLowerInvariant()
+                controllerSha256 = (Get-FileHash -LiteralPath "$action\controller.json").Hash.ToLowerInvariant()
+                preparedUtc = (Get-Date).ToUniversalTime().ToString('o')
+            }
+            $readyHash = (Get-FileHash -LiteralPath "$action\attendance-ready.json").Hash.ToLowerInvariant()
+            $releaseName = 'attendance-release-' + $readyHash
+            while ($true) {
+                Assert-AttendanceOpen
+                $releases = @(Get-ChildItem -LiteralPath $action -Filter 'attendance-release-*' -Force)
+                if ($releases.Count -gt 0) {
+                    if ($releases.Count -ne 1 -or $releases[0].Name -cne $releaseName) { throw 'Invalid attendance release' }
+                    Assert-Direct $releases[0].FullName
+                    if ($releases[0].PSIsContainer -or $releases[0].Length -ne 0) { throw 'Invalid release marker' }
+                    break
+                }
+                Start-Sleep -Milliseconds 50
+            }
+            Assert-AttendanceOpen
+            $waitMilliseconds = [long]$attendanceWatch.Elapsed.TotalMilliseconds
+            Save-CompleteJson "$action\attendance-released.json" @{
+                readySha256 = $readyHash; releaseName = $releaseName; waitMilliseconds = $waitMilliseconds
+            }
+            $result.attendanceReadySha256 = $readyHash
+            $result.attendanceReleasedSha256 = (Get-FileHash -LiteralPath "$action\attendance-released.json").Hash.ToLowerInvariant()
+            if ($controllerWatch.Elapsed.TotalSeconds - ($waitMilliseconds / 1000.0) -ge 230) {
+                throw 'Controller work allowance expired'
+            }
+            # Withdrawal or expiry wins even when the release was observed concurrently.
+            Assert-AttendanceOpen
+        }
         $stage = 'subject'
         $watch = [Diagnostics.Stopwatch]::StartNew()
         $guard.Start($exe, $arguments, $working, $environment)

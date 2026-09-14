@@ -954,15 +954,34 @@ def test_spawn_and_post_spawn_fault_cleanup() -> None:
 
 
 def test_cancellation_initialization_fixed_point_and_between_subjects() -> None:
+    def await_descendant_pid(path: Path) -> int | None:
+        # Capture initialization precedes the supervisor's command deadline.
+        deadline = time.monotonic() + 1.0
+        while time.monotonic() < deadline:
+            try:
+                value = path.read_text(encoding="ascii")
+            except FileNotFoundError:
+                value = ""
+            if value.isdecimal() and int(value) > 0:
+                return int(value)
+            time.sleep(0.01)
+        return None
+
     pid_file = WORK / "cancel-initialization-grandchild.pid"
     original_dup = runner.os.dup
     interrupted = False
+    child_pid = None
+    initialization_setup_error = None
 
     def interrupt_dup(descriptor: int) -> int:
-        nonlocal interrupted
+        nonlocal interrupted, child_pid, initialization_setup_error
         if not interrupted:
             interrupted = True
-            time.sleep(0.25)
+            try:
+                child_pid = await_descendant_pid(pid_file)
+            except Exception as error:
+                initialization_setup_error = type(error).__name__
+            # Even failed setup must enter the supervisor's owned cleanup path.
             raise KeyboardInterrupt()
         return original_dup(descriptor)
 
@@ -975,7 +994,10 @@ def test_cancellation_initialization_fixed_point_and_between_subjects() -> None:
         )
     finally:
         runner.os.dup = original_dup
-    child_pid = int(pid_file.read_text(encoding="ascii"))
+    check(
+        interrupted and child_pid is not None and initialization_setup_error is None,
+        "initialization descendant fixture did not become ready before interruption",
+    )
     check(
         initialization.termination == "cancelled"
         and initialization.quiescence_proved
@@ -1014,22 +1036,40 @@ def test_cancellation_initialization_fixed_point_and_between_subjects() -> None:
         check(signal_event.wait(1), "SIGINT did not become an invocation cancellation event")
 
     signal_pid_file = WORK / "sigterm-grandchild.pid"
+    signalled_pid = None
+    signal_setup_error = None
+    signal_injection_started = False
+    signal_delivered = False
+
+    def signal_after_setup(descriptor: int) -> int:
+        nonlocal signalled_pid, signal_setup_error, signal_injection_started, signal_delivered
+        if not signal_injection_started:
+            signal_injection_started = True
+            try:
+                signalled_pid = await_descendant_pid(signal_pid_file)
+            except Exception as error:
+                signal_setup_error = type(error).__name__
+            # Deliver the real signal while its invocation handler is still active.
+            # On failed setup, cancellation still cleans up before the assertion.
+            os.kill(os.getpid(), runner.signal.SIGTERM)
+            signal_delivered = True
+        return original_dup(descriptor)
+
     with runner._invocation_cancellation() as signal_event:
-        signal_thread = threading.Thread(
-            target=lambda: (
-                time.sleep(0.08),
-                os.kill(os.getpid(), runner.signal.SIGTERM),
+        runner.os.dup = signal_after_setup
+        try:
+            signalled = supervised(
+                "instant-grandchild",
+                str(signal_pid_file),
+                timeout=2,
+                cancel=signal_event,
             )
-        )
-        signal_thread.start()
-        signalled = supervised(
-            "instant-grandchild",
-            str(signal_pid_file),
-            timeout=2,
-            cancel=signal_event,
-        )
-        signal_thread.join()
-    signalled_pid = int(signal_pid_file.read_text(encoding="ascii"))
+        finally:
+            runner.os.dup = original_dup
+    check(
+        signal_delivered and signalled_pid is not None and signal_setup_error is None,
+        "SIGTERM descendant fixture did not become ready before signal delivery",
+    )
     check(
         signalled.termination == "cancelled"
         and signalled.quiescence_proved
