@@ -298,7 +298,7 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
     validate_windows_reservation_pair(started, peer, link, final,
                                      digest(paths[0]), digest(paths[1]), result["evidence"])
     if int(action.name) >= 22 and started.get("action") == "test" and \
-            (started.get("testSuite") == "ui-admission" or
+            (started.get("testSuite") in ("ui-admission", "owned-process") or
              started.get("testSuite") == "owned-host" and started.get("expected") == "green"):
         evidence = result["evidence"]
         ready_path = windows_action / "attendance-ready.json"
@@ -344,13 +344,14 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process") or \
                     (suite == "owned-host" and number <= 18) or \
                     (suite == "local-provider" and number <= 24) or \
                     (suite == "host-admission" and number <= 28) or \
-                    (suite == "ui-admission" and number <= 32):
+                    (suite == "ui-admission" and number <= 32) or \
+                    (suite == "owned-process" and number <= 38):
                 raise ValueError("Unknown Windows test selection")
-            required = 12 if suite == "cli" else 0
+            required = 12 if suite == "cli" else 10 if suite == "owned-process" else 0
         else:
             if suite is not None:
                 raise ValueError("Non-test Windows selection")
@@ -368,15 +369,16 @@ def windows_consumption():
         return 0, 0
     if history.is_symlink():
         raise ValueError("Linked Windows action history")
-    preparation, build_test, number, process_scenarios = 0, 0, 0, 0
+    preparation, build_test, number, process_scenarios, owned_processes = 0, 0, 0, 0, 0
     windows = Path("/mnt/c/Temp/azureauth-windows-slice-108/actions")
     for number, action in enumerate(sorted(history.iterdir()), 1):
         if action.is_symlink() or action.name != f"{number:04d}":
             raise ValueError("Noncontiguous Windows action history")
         receipt = json.loads((action / "result.json").read_text())
         started = json.loads((action / "started.json").read_text())
-        if (windows / action.name / "temp/owned-host-safety-stop.json").exists():
-            raise ValueError("Owned-host fixture safety stop forbids both validation loops")
+        if any((windows / action.name / "temp" / marker).exists()
+               for marker in ("owned-host-safety-stop.json", "process-safety-stop.json")):
+            raise ValueError("Owned fixture safety stop forbids both validation loops")
         if action.name == "0002":
             verify_disposed_windows_preparation(action, windows / action.name)
         elif action.name == "0003":
@@ -404,13 +406,16 @@ def windows_consumption():
             verify_windows_reservation_pair(action, windows / action.name, receipt, started)
         reserved = windows_process_reservation(number, started)
         process_scenarios += reserved
+        if started.get("testSuite") == "owned-process":
+            owned_processes += reserved
         if started["action"] in ("bootstrap", "restore"):
             preparation += 1
         elif started["action"] in ("build", "test"):
             build_test += 1
         else:
             raise ValueError("Unknown Windows action allocation")
-    if preparation > 5 or build_test > 40 or process_scenarios > 36:
+    if preparation > 5 or build_test > 40 or process_scenarios > 56 or \
+            owned_processes > 20 or process_scenarios - owned_processes > 36:
         raise ValueError("Windows allocation exceeded")
     if number in (2, 3):
         raise ValueError("Windows restore must complete before Linux continuation")

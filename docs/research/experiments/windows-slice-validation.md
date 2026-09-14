@@ -3810,3 +3810,226 @@ The result establishes the controlled owned-UI admission scenarios and their
 existing host regressions. It does not establish production process/host/provider
 composition, actual native eligibility, real WAM, selected-account or cross-process
 reuse, WSL lifetime, physical usability, final Native AOT or whole-Slice acceptance.
+
+## Owned Host Process Composition Supplement
+
+This supplement selects ten credential-free child-process scenarios after the
+[accepted owned UI admission](#owned-ui-admission-evidence). It connects the
+existing lazy owned host to the real process worker using controlled providers,
+while leaving real MSAL initialization and native host classification inactive.
+It adds the finite `owned-process` selection; all prior selections, actual
+source/evidence identities, expiry dispositions and charges remain unchanged.
+
+### Subject and Source Admission
+
+Use the existing Windows 11 x64 interactive session, WSL2 controller, Windows.slnx
+four-project graph, .NET SDK 10.0.401/runtime 10.0.12, MSTest 4.1.0, MSAL/Broker
+4.83.1 and NativeInterop 0.20.3 with the same locks, public packages, generated
+restore inputs and retained toolchain. No restore, public download, installation,
+publish, new project or dependency is selected.
+
+The initial red candidate is based on accepted
+`396d6008e94a7ecbe86506d618fbe5a2d3b769a3` and has initial candidate tree
+`9b089bf2392ae513b236f67145dd02d7db481184`. Exact admission binds its eventual
+immutable source commit, complete tree, nine changed source files below and
+unchanged graph. A later integrated source must retain the same red assertions,
+controlled effects and explicit missing behaviors, with refreshed source review.
+
+| Initial red source | SHA-256 |
+| --- | --- |
+| `src/Authentication.Cli/Program.cs` | `abf5eff9e242b6efe47607d00a29573644e706888fb524f47c472a5093fde384` |
+| `src/Authentication.Core/RequestInvocation.cs` | `db28af72fc7a7fddf5ab2b71c86b62b4b1b8bfcdf149a4f3fbb515acc420b3c1` |
+| `src/Authentication.Windows/OwnedRequestHost.cs` | `974f46553ab5995e1a9d20eae83b26123dc5189d96326faa660bfec536424f64` |
+| `src/Authentication.Windows/WindowsProcess.cs` | `725eb510e3f7936fdfc2af2ad4230bb606eba12deed3619f36fa800577a6409f` |
+| `tests/Authentication.Windows.Scenarios/OwnedWindowObservation.cs` | `5f1c911705b002e214b3de626bdc42a0050e44ce554cf547065fc79ad832e869` |
+| `tests/Authentication.Windows.Scenarios/ProcessChild.cs` | `5c1a4dc64cef69e75c19c0222c287b66e753ee56c0d9d443a6ca537b39e4e184` |
+| `tests/Authentication.Windows.Scenarios/ProcessFixture.cs` | `fa25a80815a698cf76fe4d69deda54459c873e854d0c28a4149a1550a920e18c` |
+| `tests/Authentication.Windows.Scenarios/OwnedProcessChild.cs` | `ad7d69ec442683a95a69ac7e9871f87c15b3d2bfb7500da21d79779bb4b1e03e` |
+| `tests/Authentication.Windows.Scenarios/OwnedProcessScenarios.cs` | `0e79e52148b64cb5b3ec7fefd57b304985ad1a117a2bca6dc940c1cac10e7ee4` |
+
+The red glue reuses the entry-thread watchdog and shared process worker. It
+constructs an inert owned host, binds the already admitted immutable Profile,
+passes the normalized request to its synthetic provider and forwards asynchronous
+host notifications to the existing process cancellation/core host-fault rules.
+Dormant internal checkpoints arrange observations outside result-commitment locks.
+It intentionally lacks synchronous typed host observation at commitment,
+pre-readiness cancellation classification, the first host-ending watchdog
+observation and actual owned-host completion in process drain. Those are the
+selected red-to-green obligations. The production executable has no test flags or
+environment-selected provider; its provider factory remains unavailable. Merely
+compiling the native observation implementation does not execute its queries.
+
+### Fixed Cases and Expected Results
+
+The filter contains exactly the following fully qualified methods in
+`Authentication.Windows.Scenarios.OwnedProcessScenarios`. Each method reserves one
+listed child exactly once. No data rows, other test classes or dynamic selections
+are included. Independent artifact review must bind generated registration,
+method/case count, PE/PDB/source inputs and the complete command before the test.
+
+| Method | Child | Initial red |
+| --- | --- | --- |
+| `NormalOwnedClosurePreservesSuccessAndDrains` | `host-success` | Passed |
+| `LocalCancellationSuppressesSuccessBeforeDelayedNotification` | `host-cancel` | Failed |
+| `LocalHostFaultSuppressesSuccessBeforeDelayedNotification` | `host-fault` | Failed |
+| `CancellationDuringCreationSurvivesClosureFailure` | `host-create-cancel` | Failed |
+| `OrdinaryCreationFailureRemainsMechanismUnavailable` | `host-create-failure` | Passed |
+| `CleanupFaultAfterNormalClosureSuppressesUncommittedSuccess` | `host-fault-before-commit` | Failed |
+| `CleanupFaultAfterCommitCannotReplaceTheResult` | `host-fault-after-commit` | Failed |
+| `ProcessWaitsForTheActualOwnedThreadExit` | `host-ui-join` | Failed |
+| `ProcessWaitsForTheOutgoingOwnedCallback` | `host-callback-drain` | Failed |
+| `NormalClosureArmsTheBoundBeforeCoreTerminalSelection` | `host-close-stall` | Failed |
+
+Initial red requires exactly ten executed cases, two passes, eight intended
+business assertion failures, all other counters zero and MTP exit 2. Each child
+enters the shared production process using its controlled provider and a real
+owned parent. `host-create-cancel` and `host-create-failure` return one
+`mechanism_unavailable` result with child exit 1. The other eight return one
+synthetic interactive success result with child exit 0. No child has stderr or
+fixture-forced termination. Compilation, loader, discovery, checkpoint/setup,
+capture, safety or unexpected child-exit failures are not acceptable red.
+Independent actual-red review identifies the first failed assertion and correlates
+all ten complete child captures, event markers, ordering, exit and outer Job drain.
+Do not implement green until that review accepts the actual red observations.
+
+Green retains every admitted assertion and synthetic provider/fixture behavior.
+It requires all ten exact cases to pass, all other counters zero and MTP exit 0:
+
+| Child | Sole protocol outcome | Child exit |
+| --- | --- | --- |
+| `host-success` | `success`, interactive synthetic candidate | 0 |
+| `host-cancel` | `cancelled`, no token or warning fields | 1 |
+| `host-fault` | `internal_failure`, no token or warning fields | 1 |
+| `host-create-cancel` | `cancelled`, no token or warning fields | 2 |
+| `host-create-failure` | `mechanism_unavailable`, no token or warning fields | 1 |
+| `host-fault-before-commit` | `internal_failure`, no token or warning fields | 2 |
+| `host-fault-after-commit` | Already committed synthetic `success` remains unchanged | 2 |
+| `host-ui-join` | Already committed synthetic `success` remains unchanged | 2 |
+| `host-callback-drain` | `cancelled`, no token or warning fields | 2 |
+| `host-close-stall` | No output before bounded termination | 2 |
+
+Child exit 2 is the product's exceptional transport/shutdown outcome, distinct
+from the outer MTP red code. A previously committed success JSON followed by
+child exit 2 does not establish usable authentication success. The two exit-0/1
+controls establish normal completion; faulted or stalled cleanup cannot be
+reported as normally drained. Only fixed synthetic values may appear in output.
+
+### Windows, Scheduling and Completion Effects
+
+Each sequential child owns at most one parent and its existing static text and
+Cancel control. At most ten parents are created per action: two creation-only
+hidden parents and eight potentially visible parents, with one child/parent at a
+time. Use the existing supplied-HWND ownership checks and observations; do not
+enumerate the desktop, inspect other windows or use global keyboard/mouse input.
+The selected automation needs no human input, choice or state unlock.
+
+The cancel/fault races post only scalar WM_CLOSE or WM_NULL to the same child's
+verified owned parent. The pre-readiness cancellation case additionally sends
+WM_CLOSE synchronously on that parent's creating thread, after verifying both
+process and thread ownership with GetWindowThreadProcessId/GetCurrentThreadId.
+It never sends a blocking cross-thread message or broadcasts. The close checkpoint
+then injects a synthetic exception after actual local user-cancel dispatch.
+This checks that the original cancellation survives a later close failure.
+Both outgoing notification paths remain gated until after result commitment;
+no callback may replace the earlier typed cancellation with another failure.
+
+Other checkpoints inject the declared post-readiness or final-cleanup fault,
+observe native destruction before actual thread exit, or retain outgoing callback
+work after cancellation forwarding. The callback-only fixture first performs a
+bounded join and records actual STA exit before commitment while its outgoing
+callback stays pending; it does not await aggregate host completion. This keeps
+callback drain distinct from still-pending thread drain. The provider candidates
+remain synthetic.
+Before/after-commit checkpoints do not hold any commitment gate. The Closing
+checkpoint is deliberately inside the host's local close operation so its bounded
+stall exposes the gap before core terminal selection. Green must publish the first
+host-ending observation before that checkpoint. It must retain the existing
+host-to-process-to-core lock order and lock-free independent entry-thread watchdog.
+
+All explicit fixture waits or stalls are at most three seconds, with a four-second
+request deadline. The product's one-second local shutdown allowance starts at its
+first ending observation, including ordinary coordinator closure, and is not
+extended by those fixture waits. The existing same-host Windows QPC clock basis
+and fixed 100 ms observation tolerance apply. Retain event timestamps before/after
+commitment and notification, the first host-closing marker, native cleanup and
+actual child exit. Normal scenarios observe completed host work; thread and
+callback stalls deliberately require the product's own bounded process exit.
+
+Reuse ProcessFixture's six-second child enforcement, two-second termination wait,
+eight-second final capture bound, fixed replacement environment, explicit inherited
+pipe handle list and outer non-breakaway Job. No shell or unrelated process is
+started. Any fixture-forced termination, failed launch, uncertain owned child exit,
+failed capture/finalization or safety marker stops later launches and both loops.
+Retain the complete existing `temp/process-*` evidence projection: reservation,
+start, stdout/stderr, fixed timestamp markers and exclusive final receipt for each
+child. Per-stream capture remains at most 524,288 bytes; controller and subject
+output/termination limits remain unchanged. Each fixed test and no-restore build
+has the existing 120-second subject allowance, and controller work has 230 seconds
+excluding the exact
+prepared-action wait. No new termination target or cleanup authority is added.
+
+Apply the [automated prepared-action procedure](#automated-synthetic-ui-coordination)
+to both red and green `owned-process` tests. Prepare the exact action, receive its
+actual awaiting event, independently verify the same ready receipt and live
+controller, then immediately create its exclusive empty release marker. Do not
+ask the owner to watch or confirm attendance for these automated scenarios. The
+unchanged four-hour maximum, expiry/cancellation precedence and receipt schemas
+still apply. Unexpected human interaction or any other UI surface follows the
+existing stop procedure; it is not permission to automate or retry it.
+
+### Controller Transition and Capacity
+
+The first new Windows action under this supplement is one independently admitted
+no-restore build 0038, after all 45 Linux and 37 Windows actions have finalized.
+Bind the accepted Windows 0037 WSL start
+`6e319296ad021197545950ab6805d578df817a4b5e339e65f9eeaf4c429b08df`
+and final
+`632955ce8c14d50aff82b018d94e11d3d9994765d922d744fcce0829ed46699f`.
+All through-0037 attendance, source, controller, artifact and result evidence keeps
+its original meaning and identity. Do not replay any accepted test.
+
+During that build reservation only, the existing migration path retains and
+replaces the two active Windows controllers, binding prior/current protocols and
+exact old/new bytes in its receipt. No standalone replacement is permitted.
+WindowsValidationJob.cs, its retained bootstrap DLL and Stop-WindowsValidation.ps1
+remain unchanged. The Linux history reader changes only to recover the new exact
+selection, prepared-action receipts and protected cumulative allocations.
+
+| Helper | Accepted prior SHA-256 | Proposed SHA-256 |
+| --- | --- | --- |
+| `run_windows.py` | `46459e4cf476c22e28432fa1397026a4b1b56f8580119e685db120dc6c7b4e55` | `10c7e85802ef7ed2c2c31acaeaa871141c5ae78da3bd7c557a28fac44eb2b030` |
+| `Invoke-WindowsValidation.ps1` | `454a59e9d5fae0993c8842f50c11701c0311c5999830bea177f5cee130f0c104` | `aaab817f2b56092619b6af0a0af6c08f9e187986c149d3a9fcf3fdf7c1c9c506` |
+| `run_managed.py` | `3881500e2e2564f2cb1869d5e27e739bff323e90e91c876285bfbee635fd0fab` | `2066550f4fdef2ed82046c15ec8c5c6c9c59fd9c9e833d66d0acce4e7eac4d26` |
+
+The proposed helpers preserve old selectors and assertions, including the CLI
+rejecting-stub capture branch, and add the exact owned-process report/child branch.
+Both history readers reject malformed or undercharged new reservations and retain
+all prior charges. Allocate exactly ten process units per newly reserved
+`owned-process` test, even if the action stops before launch. Admit at most one
+red and one green test, twenty new units in total; a stopped test does not refund
+its reservation or grant a retry.
+
+Raise this protocol's process ceiling from 36 to 56 within the unchanged Wave
+ceiling of 60. Keep the existing CLI suballocation at 36, of which 24 are consumed;
+the final twelve CLI units cannot be consumed by this new selection. At most
+twenty units belong to the new owned-process selection. The remaining four Wave
+units are unallocated buffer and require another exact protocol before use.
+
+After 0037, build/test consumption is Linux 37/80 and Windows 32/40, combined
+69/120. The planned red build/test and, only after actual-red acceptance, green
+build/test consume four Windows units, reaching 36/40 and combined 73/120 if no
+intervening consumption occurs. Preparation remains 13/16, Windows 5/5, charged
+downloads 768 MiB, and prior synthetic process charges 24. No restore, publish or
+new download is authorized. The helpers retain the shared action lock and all
+existing finite stop conditions. Admission is separate for every build and test;
+this supplement does not start an automatic sequence.
+
+Source, dependency, artifact, domain and actual-result reviews remain required.
+This selection establishes only the exact managed Windows process/owned-host
+composition outcomes it observes. Real native admission, real MSAL initialization,
+account selection, WAM, cache/reuse, physical UI usability, actual WSL caller
+lifetime, final product Native AOT and whole-Slice acceptance remain open.
+Account-state effects still require the concrete owner risk amendment in the Wave.
+
+Official API basis for the added same-thread scalar close:
+[SendMessageW](https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-sendmessagew).
