@@ -2932,3 +2932,150 @@ account/store operation, network request, window or child-product process. Nativ
 admission and initialization, actual UI-thread rechecks, production composition,
 process/WSL lifetime, final Native AOT, UI presentation and real-account/reuse
 acceptance remain open; this result does not complete the Windows Slice.
+
+## Controlled Windows Host Admission Supplement
+
+This supplement selects twenty-two synthetic host-admission scenarios after the
+accepted [local-provider green result](#local-provider-admission-green-evidence).
+The [local Windows host design](../../designs/windows-ado-authentication.md#local-windows-host-admission)
+and [scenario basis](../../validation/strategy.md#windows-slice-design-acceptance)
+remain the behavior authorities. The existing credential-free Wave permits this
+bounded selection; actual native metadata queries and real provider initialization
+remain outside it. Each source, build and test requires independent exact admission
+in the coordinating pull request before execution.
+
+### Subject, Effects and Fixed Selection
+
+Use the existing Windows 11 x64 host through the accepted WSL2 controller, SDK
+10.0.401/runtime 10.0.12, MSTest 4.1.0 and unchanged public package graph. Keep the
+existing cache-only, no-restore Release build of `Windows.slnx` and managed scenario
+assembly. No bootstrap, restore, dependency addition, toolchain installation,
+publish, production installation or new network request is selected.
+
+The inert red candidate adds only `WindowsHostAdmission.cs` and
+`WindowsHostAdmissionScenarios.cs`; their SHA-256 identities are respectively
+`26623d3d50eb0c6aff768841065f37c57c6a97917f175c4c89840762b7dfe062` and
+`ed9c0dbcb19be9de728a882d3932c3451569f3373d3494f250341f90c8566e4c`.
+Exact commit/tree, complete source/project bindings and the PR carrier belong to
+source admission. Keep all existing assertions and the unavailable production CLI
+provider unchanged. Green implements the classifier using the same controlled
+observation boundary; implementing or executing a native observer is not selected
+by this supplement.
+
+The fixtures run the real request coordinator, local provider and host-admission
+boundary with synthetic platform, product, thread, logon/station, session and
+desktop facts. One synchronous internal boundary returns only decision facts;
+it exports no native handles, SID, LUID, session ID or returned account metadata.
+The provider, initializer and parent are controlled substitutes. Construction is
+inert. The sentinel parent `1` never reaches a native API. No selected fixture
+queries native host state, constructs MSAL/WAM, accesses an account/store, creates
+a window, performs file/network operations or launches a child-product process.
+Existing controller infrastructure observations retain their previously accepted
+scope. All credentials, identities and error markers in the fixtures are synthetic.
+
+All methods belong to `Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios`.
+Both controllers select exactly the following methods with literal
+`FullyQualifiedName=<class>.<method>` clauses joined by `|`, without a wildcard or
+DataRow expansion. Existing MTP entry and five extension registrations are unchanged.
+
+| Method | Inert red prediction | First failed source assertion |
+| --- | --- | --- |
+| `ConstructionDoesNotObserveLocalState` | Passed | None |
+| `PrecancelledRequestDoesNotObserveLocalState` | Passed | None |
+| `OrdinaryInteractiveLogonKindsPermitSelectedAccountAcquisition` | Failed | Line 50: successful ordinary-user acquisition |
+| `UnsupportedPlatformStopsBeforeWindowsObservations` | Failed | Line 309 via 76: platform observation reached |
+| `ServerOrUnobservableProductPreventsInitialization` | Failed | Line 309 via 87: product observation reached |
+| `ImpersonationOrUnknownThreadIdentityPreventsInitialization` | Failed | Line 309 via 97: thread observation reached |
+| `MissingOrInvalidOwnLogonPreventsInitialization` | Failed | Line 309 via 111: logon observation reached |
+| `ServiceIdentitiesPrecludeAccountDiscovery` | Failed | Line 309 via 125: logon observation reached |
+| `NoninteractiveAndAlternateCredentialLogonKindsAreRejected` | Failed | Line 309 via 135: logon observation reached |
+| `HiddenWindowStationPreventsInitialization` | Failed | Line 309 via 143: logon observation reached |
+| `MissingOrDifferentWindowStationUserPreventsInitialization` | Failed | Line 309 via 152: logon observation reached |
+| `InactiveOrUnobservableSessionPreventsInitialization` | Failed | Line 309 via 166: session observation reached |
+| `NoninputOrUnobservableDesktopPreventsInitialization` | Failed | Line 309 via 176: desktop observation reached |
+| `CancellationAfterAnyObservationStopsFurtherQueriesAndInitialization` | Failed | Line 317 via 187: cancelled outcome |
+| `OriginalCancellationWinsWhenAnObservationThrows` | Failed | Line 317 via 205: cancelled outcome |
+| `UnexpectedObservationFaultRemainsSanitizedInternalFailure` | Failed | Line 317 via 221: internal-failure outcome |
+| `SessionLossBeforeSilentAcquisitionPreventsItsEffect` | Failed | Line 235: discovery reached before session loss |
+| `ImpersonationBeforeSilentAcquisitionPreventsItsEffect` | Failed | Line 249: discovery reached before identity change |
+| `InputDesktopLossAfterReadinessPreventsInteractionAndClosesParent` | Failed | Line 259: parent reached before desktop loss |
+| `CancellationDuringVolatileObservationPreventsAcquisition` | Failed | Line 317 via 272: cancelled outcome |
+| `EachProviderEffectHasFreshVolatileObservations` | Failed | Line 283: successful interactive continuation |
+| `ObservationsRunOnTheCallingThreadWithOriginalCancellation` | Failed | Line 299: successful calling-thread continuation |
+
+These are static predictions requiring successful build and exact discovery, not
+runtime observations or promised Release stack-frame line numbers. A rejected-fact
+scenario must reach its designated observation, so constant rejection cannot pass.
+The fixed loops expand no runner cases: full green traverses 62 fixture iterations
+and 61 coordinator requests. Red stops each failing method at its first assertion;
+it cannot establish later rows or assertions. Fixtures dispose their cancellation
+sources and start no asynchronous/native work requiring a UI drain.
+
+Select `test --suite host-admission --expect red` or
+`test --suite host-admission --expect green`, retaining the required full
+protocol/source/target revisions and independent review URL. Red requires exactly
+two Passed and twenty Failed, runner exit 2 and fully collected outer exit 0.
+Green requires twenty-two Passed, all other outcomes zero and runner/outer exit 0.
+Preserve all sixteen TRX counters and complete definition/entry/execution/result
+joins. Individually accept intended business failures before green implementation;
+compiler, analyzer, loader, fixture, native or timeout failures are not red evidence.
+
+### History, Controller Transition and Limits
+
+Before the first reservation require at least 27 finalized Windows actions and the
+unchanged completed 0027 WSL receipts: `started.json` SHA-256
+`701478479cf1bf1c4fa5dbfdce4d02d5facd015b067a825785b51515d27408dd` and
+`result.json` SHA-256
+`ac1b287b7dafbb2082e173efad20585f062731b922ff593c33410184740c1456`.
+At exactly 27 previous actions only a separately admitted build 0028 may begin the
+one-time transition. Under its existing exclusive reservation, use the accepted
+backup/migration procedure for exactly these two retained controllers:
+
+| Controller | Required old SHA-256 | Replacement SHA-256 |
+| --- | --- | --- |
+| `run_windows.py` | `0e01a22ee8e63720f54ad6525976d1b282656f33a8682919fd316b7ff4633d39` | `0747221d12d689ca80b9022ffcfa6cd23a5584165398482cdd1b5bbc0bed3c5b` |
+| `Invoke-WindowsValidation.ps1` | `dc4019e3ba3f62cafda1222f4468f270cf1b935c7ec7ca761f0b36c2a290a3ce` | `3263b10d1c478c723a6c9c0b3d5926d47a5cdba5bca1da5184b132543596daeb` |
+
+The old controllers executed 0027 under protocol
+`4edee1a99c2a898a481931c394a39646045fda36` and remain unchanged at accepted
+target `14d494135022ceffaa430b1efdfd8510dfe71ac4`. Preserve their bytes in
+`actions/0028/retained-run_windows.py` and
+`actions/0028/retained-Invoke-WindowsValidation.ps1`; the existing migration receipt
+binds old/new hashes and protocol revisions. Partial migration or unexpected bytes
+stops both loops without refund, retry or standalone repair. Preserve all original
+receipts, backups, stop/Job helpers, toolchain and package caches. Stopped 0022
+remains false and charged; no prior action is replayed.
+
+The symmetric Linux history-reader change has SHA-256
+`064f1156539f9284d890a05560e548ba42fa0e5b4d8331fd1b022037dcb21388`.
+It is not a third retained Windows controller migration. Both history readers and
+the Windows controller admit this selection only after 0028, reserve zero process
+scenarios and preserve every historical full CLI charge. Keep the common complete
+TRX validation and rejection of child-product evidence for this selection.
+
+The planned progression is a red build/test pair, then a green build/test pair only
+after independent actual-red acceptance and refreshed green-source admission.
+At completed 0027, preparation is Linux 8/11, Windows 5/5 and combined 13/16;
+build/test is Linux 29/80, Windows 22/40 and combined 51/120. Four admitted actions
+would bring Windows build/test to 26/40 and combined consumption to 55/120. No
+preparation, downloads or child-product units are added. Preserve 768 MiB charged
+downloads, 24/36 synthetic process reservations, the outer ceiling 60 and the final
+twelve CLI process units. Failed starts remain charged; no automatic rerun is allowed.
+
+Keep the 120-second subject/capture/Job-drain limit, 230-second outer wait, 8 MiB
+combined output ceiling, 32-process nonbreakaway Job ceiling, shared action lock and
+bounded stop procedure. This synthetic selection needs no desktop attendance or
+release marker; the existing owned-host green attendance requirement is unchanged.
+Before each test, independently inspect the actual build, source-bound assembly,
+generated runner/registrations, dependency/runtime mapping and exact case discovery.
+Afterward inspect source/artifact continuity, complete capture, all joins/counters,
+normal Job drain and fully collected outer result. Unexpected results, changed
+inputs, incomplete capture or uncertain quiescence stop both loops for independent
+classification. Dedicated source, artifacts and sanitized evidence are retained.
+
+Passing this selection establishes controlled host-fact classification, original
+cancellation, sanitization and fresh volatile observations before provider effects.
+It does not establish actual native ABI/layouts, per-native-query cancellation,
+resource ownership, host metadata, UI-thread checks before create/show, MSAL/WAM
+initialization, production wiring, process/WSL lifetime, Native AOT, UI presentation
+or real-account/reuse behavior. Those original acceptance obligations remain open.
