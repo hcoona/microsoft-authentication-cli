@@ -113,6 +113,13 @@ DISPOSED = {
     "result.json": "c02ba234adac677a63147c57fa0fca240846839953743d08c08e2576dd43bba7",
     "output.txt": "b91afcbc9cd5f0437906fdb6a314f34c9b0fe3a3e9cb9d2c6044ab6032958442",
 }
+# Exact stopped-result disposition; the original failed receipts remain unchanged.
+DISPOSED_OWNED_PROCESS_RED = {
+    "started.json": "9ad80c13d63adec92abc0557b01ff9006e860d714f36455917b17a904f06d416",
+    "windows-input.json": "a926fad126c073e6a0fe3127dfccc34fa3e7f846f6d920778001a66272a17bc5",
+    "result.json": "70a2f2e0d177ce230ac7765e95f8682200878a466b40b698fb9af034e0615572",
+}
+
 DISPOSED_WINDOWS_PREPARATION = {
     "started.json": "b5f6e94a9240778dd028610f5c0c76fe9fafcea2aa0f27bf84d19e9839839142",
     "result.json": "437df40a2c76f7e288de3fd5d36beff41f8b0318a85a55d0b2c24a3ab179d43e",
@@ -704,6 +711,8 @@ def histories():
         elif action.name == "0034":
             verify_disposed_windows_attendance(
                 action, ROOT / "actions" / action.name, DISPOSED_UI_ATTENDANCE_0034)
+        elif action.name == "0039":
+            verify_disposed_owned_process_red(action, ROOT / "actions" / action.name)
         elif result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action")
         for name, expected in result["evidence"].items():
@@ -714,6 +723,30 @@ def histories():
             verify_windows_reservation_pair(action, ROOT / "actions" / action.name, result, started)
         windows.append((action, started, result))
     return linux, windows
+
+
+def verify_disposed_owned_process_red(action, failed):
+    """Recognize only the accepted failed 0039 evidence, never a replacement result."""
+    for root in (action, failed):
+        if any(path.is_symlink() for path in (root, *root.parents)):
+            raise ValueError("Linked disposed owned-process evidence")
+    if action.name != "0039" or {path.name for path in action.iterdir()} != set(DISPOSED_OWNED_PROCESS_RED) or any(
+        not (action / name).is_file() or (action / name).is_symlink() or digest(action / name) != expected
+        for name, expected in DISPOSED_OWNED_PROCESS_RED.items()
+    ):
+        raise ValueError("Disposed owned-process receipts changed")
+    evidence = json.loads((action / "result.json").read_text())["evidence"]
+    paths = list(failed.rglob("*"))
+    directories = sorted(str(path.relative_to(failed)) for path in paths if path.is_dir())
+    directory_hash = hashlib.sha256(json.dumps(directories, separators=(",", ":")).encode()).hexdigest()
+    if directory_hash != "0ee100b271ff3f109ea874d8f2a3fde3c20741f249898d22ca62c2b56519d2aa" or \
+            {str(path.relative_to(failed)) for path in paths if path.is_file()} != set(evidence):
+        raise ValueError("Disposed owned-process evidence boundary changed")
+    for path in paths:
+        if path.is_symlink() or not (path.is_dir() or path.is_file()):
+            raise ValueError("Invalid disposed owned-process evidence entry")
+        if path.is_file() and digest(path) != evidence[str(path.relative_to(failed))]:
+            raise ValueError("Disposed owned-process evidence changed")
 
 
 def verify_disposed_windows_attendance(action, failed, receipts=DISPOSED_WINDOWS_ATTENDANCE):
@@ -900,7 +933,7 @@ def process_evidence(action, expected, suite="cli"):
                 raise ValueError("Missing managed-entry evidence")
         if suite == "owned-process":
             if receipt.get("forced") is not False or receipt.get("diagnosticPrefill") != 0 or \
-                    receipt.get("bufferedOutput") != 0 or receipt["stderrBytes"] != 0:
+                    receipt.get("bufferedOutput") != 0:
                 raise ValueError("Owned-process capture or termination differs from its admission")
             output = (directory / "stdout.bin").read_bytes()
             if expected == "red":
@@ -919,6 +952,10 @@ def process_evidence(action, expected, suite="cli"):
                     "host-callback-drain": ("cancelled", 2),
                     "host-close-stall": (None, 2),
                 }[case]
+            indication = (b"" if outcome is None else b"Authentication request cancelled.\n"
+                          if outcome == "cancelled" else b"Authentication request completed.\n")
+            if not indication.startswith((directory / "stderr.bin").read_bytes()):
+                raise ValueError("Owned-process diagnostics exceed the optional fixed indication")
             if receipt.get("exitCode") != exit_code:
                 raise ValueError("Unexpected owned-process exit")
             if outcome is None:
@@ -1212,6 +1249,13 @@ def execute(args, attended, finish_preparation):
         if len(previous) < 37 or digest(HISTORY / "0037/started.json") != OWNED_PROCESS_PRIOR_START or \
                 digest(HISTORY / "0037/result.json") != OWNED_PROCESS_PRIOR_FINAL:
             raise ValueError("Accepted UI-admission green history prerequisite changed")
+        if len(previous) < 39:
+            raise ValueError("The owned-process disposition requires all thirty-nine Windows actions")
+        diagnostics_transition = len(previous) == 39
+        if diagnostics_transition and (args.action != "build" or args.source == previous[-1][1]["source"]):
+            raise ValueError("Disposed owned-process red requires a newly admitted corrected-source build")
+        if args.suite == "owned-process" and args.expect != "green":
+            raise ValueError("The owned-process red reservation is consumed; only green remains")
         owned_process_transition = len(previous) == 37
         if owned_process_transition and args.action != "build":
             raise ValueError("The first owned-process action must build with its controller transition")
@@ -1322,7 +1366,9 @@ def execute(args, attended, finish_preparation):
                                     UI_ADMISSION_PREVIOUS_CONTROLLERS if ui_admission_transition else
                                     UI_ATTENDANCE_PREVIOUS_CONTROLLERS if ui_attendance_transition else
                                     EXTENDED_ATTENDANCE_PREVIOUS_CONTROLLERS if extended_attendance_transition else
-                                    OWNED_PROCESS_PREVIOUS_CONTROLLERS if owned_process_transition else {})
+                                    OWNED_PROCESS_PREVIOUS_CONTROLLERS if owned_process_transition else
+                                    {"run_windows.py": "10c7e85802ef7ed2c2c31acaeaa871141c5ae78da3bd7c557a28fac44eb2b030"}
+                                    if diagnostics_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name

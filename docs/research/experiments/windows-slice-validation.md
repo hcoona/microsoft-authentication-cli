@@ -3880,19 +3880,23 @@ method/case count, PE/PDB/source inputs and the complete command before the test
 | `ProcessWaitsForTheOutgoingOwnedCallback` | `host-callback-drain` | Failed |
 | `NormalClosureArmsTheBoundBeforeCoreTerminalSelection` | `host-close-stall` | Failed |
 
-Initial red requires exactly ten executed cases, two passes, eight intended
+The initial red admission required exactly ten executed cases, two passes, eight intended
 business assertion failures, all other counters zero and MTP exit 2. Each child
 enters the shared production process using its controlled provider and a real
 owned parent. `host-create-cancel` and `host-create-failure` return one
 `mechanism_unavailable` result with child exit 1. The other eight return one
-synthetic interactive success result with child exit 0. No child has stderr or
-fixture-forced termination. Compilation, loader, discovery, checkpoint/setup,
+synthetic interactive success result with child exit 0. Its empty-stderr expectation
+was incorrect; the [0039 disposition](#windows-action-0039-diagnostic-expectation-disposition)
+preserves the actual failed run and defines the corrected diagnostic predicate.
+No child may have fixture-forced termination. Compilation, loader, discovery, checkpoint/setup,
 capture, safety or unexpected child-exit failures are not acceptable red.
 Independent actual-red review identifies the first failed assertion and correlates
 all ten complete child captures, event markers, ordering, exit and outer Job drain.
-Do not implement green until that review accepts the actual red observations.
+Do not implement green until that review accepts the actual red observations or
+the exact qualified 0039 disposition is accepted with its required evidence review.
 
-Green retains every admitted assertion and synthetic provider/fixture behavior.
+Green retains every admitted business, setup, ordering and drain assertion and
+synthetic provider/fixture behavior, with only the diagnostic correction below.
 It requires all ten exact cases to pass, all other counters zero and MTP exit 0:
 
 | Child | Sole protocol outcome | Child exit |
@@ -4033,3 +4037,127 @@ Account-state effects still require the concrete owner risk amendment in the Wav
 
 Official API basis for the added same-thread scalar close:
 [SendMessageW](https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-sendmessagew).
+
+## Windows Action 0039 Diagnostic-Expectation Disposition
+
+Windows 0039 completed all ten selected cases under protocol/target
+`9f649e8d2ca46ecc719ad36c3aa895da8e23c7fb`, using source
+`8f4610a1dbdeed4e6374d05c3c62a3425fd1b425`, tree
+`9b089bf2392ae513b236f67145dd02d7db481184`. Its preceding no-restore build 0038
+completed with zero warnings/errors and 547 artifacts; its
+[independent artifact acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/148#issuecomment-5672004666)
+and [exact test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/148#issuecomment-5672019856)
+retain their original bindings. This disposition does not change either subject.
+
+The actual TRX is **10 executed, 0 passed, 10 failed**, with all other counters
+zero. MTP exited 2; the outer helper exited 1, recorded `ValueError`, omitted its
+`tests` field and retained `continuation_allowed=false`, `quiescent=true`.
+Native execution took 6.63 seconds with complete capture, no safety stop or
+termination request, and 22 total Job processes with none active. Every child
+was unforced and its captures and final receipt are complete. The automated
+prepared-action release required no owner interaction. All dedicated artifacts
+remain intentionally retained; no account, broker, cache or external service
+operation was selected.
+
+The [originating OP-RED-02 finding](https://github.com/hcoona/microsoft-authentication-cli/pull/148#issuecomment-5672268083)
+and [independent true-positive triage](https://github.com/hcoona/microsoft-authentication-cli/pull/148#issuecomment-5672256937)
+identify the invalid empty-stderr expectation. All ten children emitted exactly
+the permitted 34-byte `Authentication request completed.\n` indication. The
+accepted design separates that fixed human indication from optional telemetry
+and excludes diagnostic work from required process drain. The two control tests
+first failed only the empty-stderr assertion. The other eight first failed the
+intended outcome/exit assertion after their required setup and ordering checks.
+The actual counters necessarily fail the helper's TRX validation; its later
+child-stderr predicate would also reject the captures. The receipt has no
+exception stack, so the exact recorded throw site is not established by that
+source-derived sequence alone.
+
+Independent inspection separately evaluated every original non-stderr control
+assertion, including assertions skipped after the actual first failure:
+
+- `host-success` has the required provider, candidate, closing, native-cleanup
+  and host-drain markers, no pending cancellation/fault marker, unforced exit 0
+  and one success result with all exact synthetic token/email/tenant metadata
+  and interactive acquisition.
+- `host-create-failure` has the required hidden-parent, native-cleanup and
+  host-drain markers, no provider-ready or pending-cancellation marker, unforced
+  exit 1 and only the protocol-1 `mechanism_unavailable` outcome/reason fields.
+
+The disposition accepts eight observed intended business failures and these two
+separately inspected control observations as the qualified basis for the four
+existing GREEN obligations. It does not accept a clean 2/8 RED run, turn either
+failed control into a passed test, or claim corrected tests have executed.
+Acceptance requires independent research-evidence review of the exact source,
+compiled-artifact binding, complete captures and markers, relevant protected
+input/tool postconditions, normal Job drain and the diagnostic-only correction.
+The accepted amendment and that review must precede GREEN implementation. Exact
+source, artifact and action admission remain separate before execution.
+
+### Corrected Diagnostic Predicate
+
+Only `OwnedProcessScenarios.AssertExit` and the corresponding owned-process
+helper predicate change. Preserve production diagnostics, all ten selected
+methods and every business, setup, ordering, output and shutdown-bound assertion.
+For one committed result, captured stderr may be any byte prefix, including
+empty or complete, of `Authentication request cancelled.\n` for `cancelled`, or
+`Authentication request completed.\n` for any other admitted outcome. Without
+a committed result, the close-stall case requires empty stderr. No extra bytes,
+telemetry events, provider text or raw exception output are allowed. This bounds
+diagnostic content without requiring the optional writer to drain.
+
+Microsoft's [anonymous-pipe contract](https://learn.microsoft.com/windows/win32/ipc/anonymous-pipe-operations)
+defines full-write completion or an error, while
+[TerminateProcess](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminateprocess#remarks)
+cancels pending I/O. These contracts do not establish complete-or-empty capture
+when a background writer ends with the process. Prefix allowance is a bounded
+validation rule, not an observation of partial output in 0039. No partial
+indication was observed there. The corrected source assertion SHA-256 is
+`cb5197bc9c97ea10f257f26a7fb5131489782dc0b67832b253ca0fdee36dcb70`.
+
+### Exact History and First Continuation
+
+Preserve all original bytes and charges. Both history readers recognize only
+the following exact WSL receipt set for stopped Windows 0039:
+
+| Receipt | SHA-256 |
+| --- | --- |
+| `started.json` | `9ad80c13d63adec92abc0557b01ff9006e860d714f36455917b17a904f06d416` |
+| `windows-input.json` | `a926fad126c073e6a0fe3127dfccc34fa3e7f846f6d920778001a66272a17bc5` |
+| `result.json` | `70a2f2e0d177ce230ac7765e95f8682200878a466b40b698fb9af034e0615572` |
+
+The final receipt binds all 194 Windows evidence files. Both readers check the
+complete file set, hashes, direct paths, unchanged reservation and prepared-action
+release bindings, and absence of safety markers. Its 19-directory shape is bound
+by SHA-256 `0ee100b271ff3f109ea874d8f2a3fde3c20741f249898d22ca62c2b56519d2aa`
+over the sorted relative directory names serialized as compact JSON. No generic
+failed-action exception is added. Native final SHA-256 is
+`d384323ea4bd80b1842dbee0a5ca3429b9b2d801f630338b698f320fc1e7be49`;
+the sole 33,192-byte TRX is
+`6e7311ea061492f9b2fc1c2bbb946e8ee0dd9356cfade1471f6df6a0df8d8e6a`.
+Machine-derived filenames remain private.
+
+The first continuation is a separately admitted no-restore Windows build 0040
+of newly reviewed corrected source. During that action only, use the existing
+retaining migration path to replace `run_windows.py`, whose prior SHA-256 is
+`10c7e85802ef7ed2c2c31acaeaa871141c5ae78da3bd7c557a28fac44eb2b030`.
+Retain its old bytes and bind prior/new protocols and helper hashes in the
+migration receipt. The PowerShell, native Job and stop controllers stay unchanged;
+no standalone replacement is allowed. Linux continuation remains blocked until
+that Windows build completes. Proposed helper SHA-256 values are:
+
+| Helper | SHA-256 |
+| --- | --- |
+| `run_windows.py` | `d1c7f31e6c68cf11520c998cbb3af78dba277484ea90ce07dca23a1f67167271` |
+| `run_managed.py` | `d354c86de672ba814aebd350a91ad20d96b7b3aa34fd0bebc1e53974d6451749` |
+
+After 0039, all 45 Linux and 39 Windows actions are finalized. Build/test charges
+are Linux 37/80, Windows 34/40, combined 71/120. Preparation remains 13/16,
+including Windows 5/5, and downloads remain 768 MiB. Process charges are 34/56:
+24 CLI and all ten units of the stopped owned-process RED. Only the one remaining
+ten-case owned-process GREEN is available; no further RED or retry is admitted.
+The protected final twelve CLI units remain available, bringing planned final
+process consumption to 56, within the unchanged Wave ceiling of 60. Its four
+unallocated buffer units remain unavailable without another exact protocol.
+No charge is refunded or reassigned. Future GREEN still requires all ten cases
+to pass with MTP exit 0 and their admitted child outcomes and measured bounds.
+All prior evidence limitations and remaining whole-Slice obligations remain open.
