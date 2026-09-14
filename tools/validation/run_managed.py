@@ -283,7 +283,8 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
     validate_windows_reservation_pair(started, peer, link, final,
                                      digest(paths[0]), digest(paths[1]), result["evidence"])
     if int(action.name) >= 22 and started.get("action") == "test" and \
-            started.get("testSuite") == "owned-host" and started.get("expected") == "green":
+            (started.get("testSuite") == "ui-admission" or
+             started.get("testSuite") == "owned-host" and started.get("expected") == "green"):
         evidence = result["evidence"]
         ready_path = windows_action / "attendance-ready.json"
         released_path = windows_action / "attendance-released.json"
@@ -327,10 +328,11 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission") or \
                     (suite == "owned-host" and number <= 18) or \
                     (suite == "local-provider" and number <= 24) or \
-                    (suite == "host-admission" and number <= 28):
+                    (suite == "host-admission" and number <= 28) or \
+                    (suite == "ui-admission" and number <= 32):
                 raise ValueError("Unknown Windows test selection")
             required = 12 if suite == "cli" else 0
         else:
