@@ -6,14 +6,37 @@ namespace Authentication.Windows;
 // prefixes, callbacks, native I/O and cleanup never execute on that thread.
 public static class WindowsProcess
 {
+    public static int Run(string[] arguments, long entryTimestamp) =>
+        RunOwned(arguments, entryTimestamp,
+            (_, _) => throw new ProviderFailureException(AuthenticationFailure.MechanismUnavailable));
+
     public static int Run(string[] arguments, long entryTimestamp, IRequestHost host,
-        Func<ClientProfile, IAuthenticationProvider> createProvider, IProfileSource? profiles = null)
+        Func<ClientProfile, IAuthenticationProvider> createProvider, IProfileSource? profiles = null) =>
+        RunCore(arguments, entryTimestamp, _ => host, (profile, _) => createProvider(profile), profiles, null);
+
+    // Controlled constructors/checkpoints are internal to the scenario executable.
+    // The product never selects them through arguments or environment variables.
+    internal static int RunOwned(string[] arguments, long entryTimestamp,
+        Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
+        IProfileSource? profiles = null,
+        Func<Func<Task>, Action, OwnedRequestHost>? createHost = null,
+        Action<OwnedProcessCheckpoint>? checkpoint = null) =>
+        RunCore(arguments, entryTimestamp,
+            process => createHost is null
+                ? new OwnedRequestHost(process.Cancel, process.FailHost)
+                : createHost(process.Cancel, process.FailHost),
+            createProvider, profiles, checkpoint);
+
+    private static int RunCore(string[] arguments, long entryTimestamp,
+        Func<ProcessState, IRequestHost> createHost,
+        Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
+        IProfileSource? profiles, Action<OwnedProcessCheckpoint>? checkpoint)
     {
         var process = new ProcessState(entryTimestamp);
         try
         {
-            new Thread(() => Execute(process, arguments, entryTimestamp, host, createProvider,
-                profiles ?? new WindowsProfileSource())) { IsBackground = true }.Start();
+            new Thread(() => Execute(process, arguments, entryTimestamp, createHost, createProvider,
+                profiles ?? new WindowsProfileSource(), checkpoint)) { IsBackground = true }.Start();
 
             while (true)
             {
@@ -35,7 +58,9 @@ public static class WindowsProcess
     }
 
     private static void Execute(ProcessState process, string[] arguments, long entryTimestamp,
-        IRequestHost host, Func<ClientProfile, IAuthenticationProvider> createProvider, IProfileSource profiles)
+        Func<ProcessState, IRequestHost> createHost,
+        Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
+        IProfileSource profiles, Action<OwnedProcessCheckpoint>? checkpoint)
     {
         var exitCode = 2;
         RequestInvocation? invocation = null;
@@ -55,6 +80,7 @@ public static class WindowsProcess
                 return;
             }
 
+            var host = createHost(process);
             invocation = new RequestInvocation(arguments, host, entryTimestamp, process.CancellationToken);
             process.Publish(invocation);
             Console.CancelKeyPress += cancelHandler;
@@ -64,8 +90,14 @@ public static class WindowsProcess
                 pipe.Start();
             }
 
-            _ = invocation.RunAsync(profiles, createProvider, pipe?.Admission).GetAwaiter().GetResult();
+            _ = invocation.RunAsync(profiles, (profile, request) =>
+            {
+                if (host is OwnedRequestHost owned) owned.BindProfile(profile);
+                return createProvider(profile, request);
+            }, pipe?.Admission).GetAwaiter().GetResult();
+            checkpoint?.Invoke(OwnedProcessCheckpoint.BeforeCommit);
             if (!process.TryCommit(invocation, out var result)) return;
+            checkpoint?.Invoke(OwnedProcessCheckpoint.AfterCommit);
             pipe?.Stop();
             WindowsDiagnostics.Completed(result!, invocation.Request?.TelemetryStderr == true, entryTimestamp);
             exitCode = WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json)
@@ -155,6 +187,8 @@ public static class WindowsProcess
             return cancelled.Task;
         }
 
+        internal void FailHost() => Volatile.Read(ref invocation)?.FailHost();
+
         private async Task ObserveCancellationAsync()
         {
             try { await callerCancellation.CancelAsync().ConfigureAwait(false); }
@@ -190,4 +224,10 @@ public static class WindowsProcess
         internal void Finish(int exitCode) => Volatile.Write(ref completion,
             new ProcessCompletion(exitCode, TimeProvider.System.GetTimestamp()));
     }
+}
+
+internal enum OwnedProcessCheckpoint
+{
+    BeforeCommit,
+    AfterCommit,
 }

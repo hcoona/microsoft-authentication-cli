@@ -63,6 +63,13 @@ internal static unsafe partial class OwnedWindowObservation
             throw new InvalidOperationException("Owned scalar message could not be posted.");
     }
 
+    internal static void CloseOnCreatingThread(nint window)
+    {
+        if (RequireOwned(window) != GetCurrentThreadId())
+            throw new InvalidOperationException("Synchronous closure requires the creating thread.");
+        _ = SendMessageW(window, 0x0010, 0, 0); // WM_CLOSE, same-thread owned parent only.
+    }
+
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
     private static int ObserveChild(nint window, nint context)
     {
@@ -121,4 +128,12 @@ internal static unsafe partial class OwnedWindowObservation
     [LibraryImport("user32.dll")]
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     private static partial int PostMessageW(nint window, uint message, nuint parameter, nint detail);
+
+    [LibraryImport("kernel32.dll")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+    private static partial uint GetCurrentThreadId();
+
+    [LibraryImport("user32.dll")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+    private static partial nint SendMessageW(nint window, uint message, nuint parameter, nint detail);
 }

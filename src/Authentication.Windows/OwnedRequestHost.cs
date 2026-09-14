@@ -138,6 +138,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
     {
         if (terminal) return;
         terminal = true;
+        checkpoint?.Invoke(OwnedHostCheckpoint.Closing, parent);
         ready.TrySetResult(0);
         // Detachment and posting share this lock, so a recycled HWND cannot receive
         // a late close. Calls from another thread never wait for native destruction.
@@ -327,4 +328,5 @@ internal enum OwnedHostCheckpoint
     HiddenParentCreated,
     MessageDispatch,
     NativeCleanupCompleted,
+    Closing,
 }

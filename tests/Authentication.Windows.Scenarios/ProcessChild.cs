@@ -21,6 +21,7 @@ internal static class ProcessChild
 
     internal static int Run(string scenario, string[] arguments, long entry)
     {
+        if (OwnedProcessChild.Supports(scenario)) return OwnedProcessChild.Run(scenario, arguments, entry);
         if (scenario is not ("success" or "file-stdin" or "closed-stdin" or "close-pending"
             or "unused-stdin" or "data-close" or "deadline" or "broken-output"
             or "blocked-output" or "blocked-diagnostics")) return 90;
