@@ -275,6 +275,33 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
     peer, final, link = (json.loads(path.read_text(), object_pairs_hook=unique) for path in paths)
     validate_windows_reservation_pair(started, peer, link, final,
                                      digest(paths[0]), digest(paths[1]), result["evidence"])
+    if int(action.name) >= 22 and started.get("action") == "test" and \
+            started.get("testSuite") == "owned-host" and started.get("expected") == "green":
+        evidence = result["evidence"]
+        ready_path = windows_action / "attendance-ready.json"
+        released_path = windows_action / "attendance-released.json"
+        for path in (ready_path, released_path):
+            if any(part.is_symlink() for part in (path, *path.parents)) or path.stat().st_size > 8192:
+                raise ValueError("Invalid retained attendance receipt")
+        ready = json.loads(ready_path.read_text(), object_pairs_hook=unique)
+        released = json.loads(released_path.read_text(), object_pairs_hook=unique)
+        ready_hash, released_hash = digest(ready_path), digest(released_path)
+        marker_name = "attendance-release-" + ready_hash
+        if set(ready) != {"action", "reservationSha256", "waitSeconds", "invocationSha256",
+                          "controllerSha256", "preparedUtc"} or ready["action"] != action.name or \
+                ready["reservationSha256"] != digest(paths[0]) or type(ready["waitSeconds"]) is not int or \
+                ready["waitSeconds"] != 1800 or ready["invocationSha256"] != evidence.get("invocation.json") or \
+                ready["controllerSha256"] != evidence.get("controller.json") or \
+                evidence.get("attendance-ready.json") != ready_hash or \
+                evidence.get("attendance-released.json") != released_hash or \
+                final.get("attendanceReadySha256") != ready_hash or \
+                final.get("attendanceReleasedSha256") != released_hash or \
+                set(released) != {"readySha256", "releaseName", "waitMilliseconds"} or \
+                released["readySha256"] != ready_hash or released["releaseName"] != marker_name or \
+                type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < 1800000 or \
+                evidence.get(marker_name) != hashlib.sha256(b"").hexdigest() or "cancel" in evidence or \
+                [name for name in evidence if name.startswith("attendance-release-")] != [marker_name]:
+            raise ValueError("Retained attendance binding changed")
 
 
 def windows_process_reservation(number, started):

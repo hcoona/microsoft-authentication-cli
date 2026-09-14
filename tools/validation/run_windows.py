@@ -6,6 +6,7 @@ package download, arbitrary command, or automatic retry is exposed here.
 
 import argparse
 import base64
+from contextlib import contextmanager
 import datetime
 import fcntl
 import hashlib
@@ -208,6 +209,7 @@ OWNED_HOST_PRIOR_FINAL = "919c9e080c088138976029b4b426cc7973e8ed94384eac465ff43b
 OWNED_HOST_PRIOR_START = "00c13bdb95279b555ec1f3b11a2092d2ce7db33e38dc1622de613a0ce20dac29"
 
 WAVE_REFRESH_PREVIOUS_CONTROLLERS = {
+    "Invoke-WindowsValidation.ps1": "af0b1c461171179637f12efe02d8a8151d77f258352524a5ffdacd99e30af445",
     "run_windows.py": "0b3997c5ce411f2da45eb1c4cb20030f543e2c5754e1fc32f111699a64ab330e",
 }
 WAVE_REFRESH_PRIOR_START = "7ae88b209f6a36ba4851508376d7d92811fe6262218f12e5a95fb055cc5de857"
@@ -293,6 +295,33 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
     peer, final, link = (json.loads(path.read_text(), object_pairs_hook=unique) for path in paths)
     validate_windows_reservation_pair(started, peer, link, final,
                                      digest(paths[0]), digest(paths[1]), result["evidence"])
+    if int(action.name) >= 22 and started.get("action") == "test" and \
+            started.get("testSuite") == "owned-host" and started.get("expected") == "green":
+        evidence = result["evidence"]
+        ready_path = windows_action / "attendance-ready.json"
+        released_path = windows_action / "attendance-released.json"
+        for path in (ready_path, released_path):
+            if any(part.is_symlink() for part in (path, *path.parents)) or path.stat().st_size > 8192:
+                raise ValueError("Invalid retained attendance receipt")
+        ready = json.loads(ready_path.read_text(), object_pairs_hook=unique)
+        released = json.loads(released_path.read_text(), object_pairs_hook=unique)
+        ready_hash, released_hash = digest(ready_path), digest(released_path)
+        marker_name = "attendance-release-" + ready_hash
+        if set(ready) != {"action", "reservationSha256", "waitSeconds", "invocationSha256",
+                          "controllerSha256", "preparedUtc"} or ready["action"] != action.name or \
+                ready["reservationSha256"] != digest(paths[0]) or type(ready["waitSeconds"]) is not int or \
+                ready["waitSeconds"] != 1800 or ready["invocationSha256"] != evidence.get("invocation.json") or \
+                ready["controllerSha256"] != evidence.get("controller.json") or \
+                evidence.get("attendance-ready.json") != ready_hash or \
+                evidence.get("attendance-released.json") != released_hash or \
+                final.get("attendanceReadySha256") != ready_hash or \
+                final.get("attendanceReleasedSha256") != released_hash or \
+                set(released) != {"readySha256", "releaseName", "waitMilliseconds"} or \
+                released["readySha256"] != ready_hash or released["releaseName"] != marker_name or \
+                type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < 1800000 or \
+                evidence.get(marker_name) != hashlib.sha256(b"").hexdigest() or "cancel" in evidence or \
+                [name for name in evidence if name.startswith("attendance-release-")] != [marker_name]:
+            raise ValueError("Retained attendance binding changed")
 
 
 def windows_process_reservation(number, started):
@@ -681,8 +710,59 @@ def process_evidence(action, expected):
                 raise ValueError("Rejecting-stub red differs from admitted execution")
 
 
-def windows_wait(command, seconds, cancel_path=None):
-    """Bound this Windows controller wait; loss of the Linux proxy is not cleanup."""
+@contextmanager
+def preparation_budget(enabled):
+    """Bound H preparation, including work before its action reservation."""
+    if not enabled:
+        yield lambda: None
+        return
+
+    def stop(number, _frame):
+        if number == signal.SIGALRM:
+            raise TimeoutError("WSL preparation expired")
+        raise InterruptedError("WSL preparation interrupted")
+
+    previous = {number: signal.signal(number, stop)
+                for number in (signal.SIGALRM, signal.SIGINT, signal.SIGTERM)}
+    signal.setitimer(signal.ITIMER_REAL, 1800)
+    try:
+        yield lambda: signal.setitimer(signal.ITIMER_REAL, 0)
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        for number, handler in previous.items():
+            signal.signal(number, handler)
+
+
+def attendance_ready(action, reservation_hash):
+    ready = read(action / "attendance-ready.json")
+    if set(ready) != {"action", "reservationSha256", "waitSeconds", "invocationSha256",
+                      "controllerSha256", "preparedUtc"} or ready["action"] != action.name or \
+            ready["reservationSha256"] != reservation_hash or type(ready["waitSeconds"]) is not int or \
+            ready["waitSeconds"] != 1800 or ready["invocationSha256"] != digest(action / "invocation.json") or \
+            ready["controllerSha256"] != digest(action / "controller.json") or \
+            not isinstance(ready["preparedUtc"], str):
+        raise ValueError("Unbound attendance readiness")
+    datetime.datetime.fromisoformat(ready["preparedUtc"])
+    return digest(action / "attendance-ready.json")
+
+
+def attendance_released(action, ready_hash):
+    released = read(action / "attendance-released.json")
+    name = "attendance-release-" + ready_hash
+    if set(released) != {"readySha256", "releaseName", "waitMilliseconds"} or \
+            released["readySha256"] != ready_hash or released["releaseName"] != name or \
+            type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < 1800000:
+        raise ValueError("Unbound attendance release")
+    marker = action / name
+    direct(marker)
+    if not marker.is_file() or marker.stat().st_size != 0 or \
+            list(action.glob("attendance-release-*")) != [marker]:
+        raise ValueError("Invalid attendance release marker")
+    return released["waitMilliseconds"] / 1000
+
+
+def windows_wait(command, seconds, cancel_path=None, attendance=None):
+    """Keep one work allowance; exclude only the one actual H attendance wait."""
     interrupted = False
 
     def cancel(_number, _frame):
@@ -692,17 +772,48 @@ def windows_wait(command, seconds, cancel_path=None):
     old = {number: signal.signal(number, cancel) for number in (signal.SIGINT, signal.SIGTERM)}
     process = None
     try:
+        began = time.monotonic()
         process = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                                    stderr=subprocess.DEVNULL, start_new_session=True)
-        deadline = time.monotonic() + seconds
         cancellation_started = None
+        ready_at = ready_hash = None
+        excluded = 0
+        release_seen = False
         while process.poll() is None:
-            if interrupted and cancellation_started is None:
-                cancellation_started = time.monotonic()
+            now = time.monotonic()
+            if cancel_path is not None and cancel_path.exists():
+                interrupted = True
+            if attendance is not None and not interrupted:
+                action, reservation_hash = attendance
+                try:
+                    if ready_at is None and (action / "attendance-ready.json").exists():
+                        # Reject lateness before permitting any wait exclusion.
+                        if now - began >= seconds:
+                            raise TimeoutError("Windows preparation expired")
+                        ready_hash = attendance_ready(action, reservation_hash)
+                        ready_at = time.monotonic()
+                        print(json.dumps({"action": action.name, "state": "awaiting-operator",
+                                          "readySha256": ready_hash, "waitSeconds": 1800}), flush=True)
+                    if ready_at is not None and not release_seen:
+                        excluded = min(time.monotonic() - ready_at, 1800)
+                        if (action / "attendance-released.json").exists():
+                            # Receipt duration can only reduce the locally observed exclusion.
+                            excluded = min(excluded, attendance_released(action, ready_hash))
+                            release_seen = True
+                        elif time.monotonic() - ready_at >= 1800:
+                            interrupted = True
+                except (ValueError, OSError, KeyError, TypeError):
+                    interrupted = True
+            now = time.monotonic()
+            if now - began - excluded >= seconds or now - began >= seconds + (1800 if attendance else 0):
                 if cancel_path is not None:
-                    cancel_path.touch(exist_ok=False)
-                deadline = min(deadline, cancellation_started + 15)
-            if time.monotonic() >= deadline:
+                    cancel_path.touch(exist_ok=True)
+                return None, True
+            if interrupted and cancellation_started is None:
+                cancellation_started = now
+                if cancel_path is not None:
+                    cancel_path.touch(exist_ok=True)
+            if cancellation_started is not None and now - cancellation_started >= 15:
                 return None, True
             time.sleep(0.05)
         return process.returncode, interrupted
@@ -793,6 +904,12 @@ def main():
     args = parser.parse_args()
     if (args.action == "test") != (args.suite is not None):
         raise ValueError("Test actions require one finite suite; other actions forbid it")
+    attended = args.action == "test" and args.suite == "owned-host" and args.expect == "green"
+    with preparation_budget(attended) as finish_preparation:
+        return execute(args, attended, finish_preparation)
+
+
+def execute(args, attended, finish_preparation):
     os.umask(0o077)
     if platform.system() != "Linux" or platform.machine() != "x86_64" or "microsoft" not in platform.release().lower():
         raise ValueError("Requires the designated WSL2 host")
@@ -810,10 +927,6 @@ def main():
     for name in (PROTOCOL, "tools/validation/run_managed.py", *("tools/validation/" + name for name in CONTROLLERS)):
         if git("hash-object", str(REPOSITORY / name)) != git("rev-parse", f"{args.protocol}:{name}"):
             raise ValueError("Controller/protocol differs from accepted bytes")
-    admitted_tools = installed_packs()
-    for path, expected in admitted_tools.items():
-        if digest(Path("/mnt/c") / path[3:].replace("\\", "/")) != expected:
-            raise ValueError("Installed tool identity changed")
     direct(LINUX)
     stat = LINUX.stat()
     if stat.st_uid != os.getuid() or stat.st_mode & 0o777 != 0o700 or read(LINUX / "owner.json") != {
@@ -823,6 +936,10 @@ def main():
     # Reuse the Linux action lock: neither loop can execute while the other owns it.
     with (LINUX / "action.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        admitted_tools = installed_packs()
+        for path, expected in admitted_tools.items():
+            if digest(Path("/mnt/c") / path[3:].replace("\\", "/")) != expected:
+                raise ValueError("Installed tool identity changed")
         if not HISTORY.exists():
             HISTORY.mkdir(mode=0o700)
         linux, previous = histories()
@@ -1011,8 +1128,10 @@ def main():
             write_new(local / "windows-input.json", {"sha256": digest(action / "started.json")})
             command = powershell("-File", WINDOWS + "\\controller\\Invoke-WindowsValidation.ps1",
                                  "-ActionName", action.name, "-ReservationSha256", digest(action / "started.json"))
+            finish_preparation()
             launched = True
-            code, interrupted = windows_wait(command, 230, action / "cancel")
+            code, interrupted = windows_wait(command, 230, action / "cancel",
+                                             (action, digest(action / "started.json")) if attended else None)
             if code is None:
                 raise ValueError("Windows controller wait expired")
             win = read(action / "windows-result.json")
@@ -1020,6 +1139,13 @@ def main():
             if interrupted or code != 0 or win.get("safetyStop") is not False or not result["quiescent"] or \
                     win.get("reservationSha256") != digest(action / "started.json"):
                 raise ValueError("Windows action stopped")
+            if attended:
+                ready_hash = attendance_ready(action, digest(action / "started.json"))
+                attendance_released(action, ready_hash)
+                if win.get("attendanceReadySha256") != ready_hash or \
+                        win.get("attendanceReleasedSha256") != digest(action / "attendance-released.json") or \
+                        (action / "cancel").exists():
+                    raise ValueError("Final attendance binding changed")
             if (action / "temp/owned-host-safety-stop.json").exists():
                 raise ValueError("Owned-host fixture safety stop forbids continuation")
             if snapshot(ROOT / "subject") != before:
@@ -1070,6 +1196,7 @@ def main():
                                         "-ActionName", action.name), 10)
                 # Emergency controller absence is never accepted as Job quiescence.
         finally:
+            finish_preparation()
             result["utc"] = utc()
             if result["quiescent"]:
                 result["evidence"] = {str(path.relative_to(action)): digest(path)
