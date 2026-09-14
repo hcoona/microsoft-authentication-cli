@@ -2290,6 +2290,65 @@ Native AOT, attended visual/keyboard/focus/accessibility/DPI observations and re
 WAM/accounts/cache/consent/reuse retain their separate evidence obligations. No H
 result completes the Slice or supplies a general platform/support claim.
 
+### Owned-Host Inert-Red Evidence
+
+Windows test 0020 executed the fifteen fixed H cases once on September 13, 2026,
+under protocol `17dbf912d847b55c4366be7ab851f30079137f73` and accepted target
+`480a9b98f9b12c6011fa6c8e2af0e55a70e7d03a`. Actual source was
+`75159ace9af9ed3bf6457e35955b73533f003cee`, tree
+`2dc5fb9d878bba52f43f3dd9bf2989399f1a79fc`. It retained SDK 10.0.401/runtime
+10.0.12, MSTest 4.1.0 and the unchanged MSAL/Broker/NativeInterop graph. This was
+credential-free managed execution on the existing Windows 11 x64 host, initiated
+through the accepted WSL controller. The inert host created no thread or window;
+every provider and Profile was synthetic, with no WAM, account, cache, consent,
+authentication, network, or child-product operation.
+
+The [build0019 artifact review and one-red admission](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5655081375)
+accepted the actual source-bound assembly, generated entry and all five ordinary
+MTP registrations. The [independent actual-red acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5655239789)
+joined all fifteen definitions, results and entries, verified all sixteen counters,
+and accepted precisely five Passed controls and ten intended business failures.
+Every other counter was zero. All ten applicable invocation paths passed the two
+shared commit assertions; all fifteen fixtures completed their required teardown.
+No timeout, fixture/native/loader failure, safety stop, or incomplete capture was
+substituted for an intended assertion.
+
+The actual first failures and complete messages are retained in that review.
+ReadyParentCarriesAdmittedBranding failed at the source-line-86
+`Assert.IsNotNull(result.Success)` assertion, while its optimized runtime stack
+displayed line 85. Actual PDB/IL and the exact caller-expression message identify
+the line-86 assertion; the review preserves that distinction without claiming a
+captured JIT native-to-IL map. The other nine failures match their fixed assertion
+groups. Passing guards establish only the inert branches, not real UI behavior.
+
+The admitted runner exited 2 and the fully collected outer session exited 0.
+Windows completed at 18:21:04.7773811 UTC; subject/capture/drain took 1.108 seconds.
+Capture contained 15,140 stdout bytes and no stderr. The Job reported two total
+and zero active processes; no termination was requested. Finalized WSL and Windows
+receipts report quiescence and permitted continuation. No source, dependency,
+controller, or existing artifact changed during the test, and no restore occurred.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| WSL final result | `0d44b18848e10497b2d3c877c98b1854356491ec124c61817bc391928f3b2762` |
+| Windows final result | `85fd8635b2cfb02313168251ed705d38bc5bcdff94fb1f2a1d30dedfb0df5a25` |
+| Sole TRX, 37,453 bytes | `bd674d5227edcb0fef1af80129e89dd8d3838985aa0630fdab5960ccca156660` |
+| Scenario assembly | `5659d722e82036b6bfc7bc7c913ce037d8dedc295a3e6ee76b1030ff145a4c94` |
+
+After 0020, preparation remains Linux 8/11 and Windows 5/5, combined 13/16.
+Build/test consumption is Linux 29/80 and Windows 15/40, combined 44/120.
+Synthetic process reservations remain 24/36 and charged downloads 768 MiB.
+Both 0019 and 0020 consume build/test actions; H execution consumes zero
+child-product units. Earlier failed attempts, original receipts, retained roots,
+controller backups and the final twelve-unit CLI allocation remain intact.
+No repeated red, retry, cleanup, or machine/account-state transition occurred.
+
+Actual-red acceptance satisfies the prerequisite for green source implementation
+with the frozen assertions and dependencies. It supplies no green execution,
+physical UI, shared process composition, Native AOT, real authentication, or Slice
+completion evidence. Future source/artifact admission and attended readiness remain
+required by the supplement above. Raw TRX filenames and machine metadata stay local.
+
 ## Wave Ceiling Binding Refresh
 
 [PR #131](https://github.com/hcoona/microsoft-authentication-cli/pull/131) accepts the
@@ -2542,3 +2601,78 @@ Process reservations stay 24/36, charged downloads stay 768 MiB, and the final
 unchanged twelve-unit CLI batch remains reserved for separate admission. No
 bootstrap, restore, rebuild, red replay, process allocation, account-state effect,
 support claim or whole-Slice acceptance is added.
+
+## Owned Win32 Host Green Evidence
+
+Windows test 0023 executed the unchanged fifteen H scenarios on September 14,
+2026, under accepted protocol/target
+`4e2f090196e752e453f0636d442690a5555a6083` and the
+[single-action admission](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5658315847).
+Actual source was `ecc4c23bfc58b739b01a2b2879438cbd58fec965`, tree
+`45ff7f2d40e5672257ab237afb67dc897da5199c`. The existing Windows 11 x64 host,
+SDK 10.0.401/runtime 10.0.12, MSTest 4.1.0 and public dependency graph were
+unchanged. The production provider factory remained unavailable; every provider,
+Profile, account and result was synthetic. No real WAM, account/cache/consent,
+authentication, network or child-product operation was performed.
+
+The [green source and one-build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5655402627)
+retained every accepted inert-red assertion. The
+[actual build 0021 review](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5655566484)
+accepted the source-bound assembly, generated entry/registrations, native ABI,
+PDB/IL and lifetime correspondence. That build completed with zero warnings/errors,
+normal subject and fully collected outer exit 0, and 12.754 seconds of
+subject/capture/drain. Its 547-artifact manifest is SHA-256
+`941589af07f9f718b2842bd03a1872724926d2c8b8e7512bc6d3fdde5b3ba7d2`;
+the reused scenario assembly is
+`64c2241ef6f329262f5c2a2b895477b4dc0c1a38679beda311a3b404d20ed0a2`.
+No rebuild or restore occurred for 0023.
+
+The accepted action-0022 disposition preserved that expired reservation, its
+false result, completed migration and consumed action. The separately admitted
+0023 retained the old wrapper and completed only its declared wrapper replacement.
+Actual preparation checked the 2,524-entry protected input map and 376-entry tool
+map before publishing ready at 03:06:20.742272 UTC. The outer helper validated
+that ready receipt before a fresh attendance request. After a timely explicit
+operator response and a small live-gate recheck, the coordinator exclusively
+created the single empty release marker bound to the complete ready SHA-256.
+The acknowledgement records 1,145,071 milliseconds of waiting; no expired
+response or 0022 gate was reused.
+
+The [independent actual-green review](https://github.com/hcoona/microsoft-authentication-cli/pull/133#issuecomment-5658640064) accepted all
+fifteen definition/entry/execution/result joins and all sixteen TRX counters:
+total, executed and passed were 15; every other counter was zero. All frozen
+business and commit assertions passed. The Windows subject started at
+03:25:25.846996 UTC and finalized at 03:25:27.621700 UTC; the recorded
+subject/capture/drain interval was 1.738 seconds. The runner and fully collected
+outer session both exited 0. Complete capture contained 642 stdout bytes and no
+stderr. The Job recorded two total and zero active processes, with no termination
+requested and no safety stop. Both final receipts establish quiescence and
+permitted continuation. Successful-path source, protected-input and installed-tool
+postchecks completed; all thirteen final evidence-file hashes, including the
+ready/release/acknowledgement and migration records, were retained.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| WSL final result | `2043defeed2bd068a5e9cba888c3b08b85aad4b6e40dc868216900d4e94dac41` |
+| Windows final result | `3445d6dc8267c4bad1696cfb3c71d614a52a2989662deb8a5864d2cdf517bc10` |
+| Sole TRX, 21,329 bytes | `3b02e52bd8923d03dd43ac57f2802743ab1fe081e0412af4d816686dab5ebc37` |
+| Ready receipt | `bca8f66c6efae38f45b0c5c5dc0341a64da76c06ac0f5642098eb8c39b9b4805` |
+| Release acknowledgement | `4d2fe9c5a1e23cd725e91c3249ca911a4e86805e76a492950c55a8358107be14` |
+| Wrapper migration | `112a1468dc7dca712948dc6e39c6bd4ad1ff3ed47330dc76bdcb3dbf56a18fc4` |
+
+The attending operator observed brief window flashes and could not read their
+content. That observation corroborates visible activity but does not establish
+readability, physical keyboard/focus behavior, accessibility or DPI presentation.
+The automated Win32 assertions retain their declared content, ownership, message
+routing and lifetime scope; they do not supply those separate visual claims.
+
+After 0023, preparation remains Linux 8/11 and Windows 5/5, combined 13/16.
+Build/test consumption is Linux 29/80 and Windows 18/40, combined 47/120.
+Process reservations remain 24/36 and charged downloads 768 MiB. Preserve every
+original charge and receipt, the retained roots and controller backups, and the
+final unchanged twelve-unit CLI process batch. This result supplies H-green
+evidence only. Shared process fault/commit and permanent-stall composition,
+actual WSL caller/pipe lifetime, final production Native AOT, remaining UI
+presentation evidence and real-provider/account acceptance remain open. No later
+execution, production-provider activation, release or whole-Slice acceptance is
+admitted by this observation. Raw TRX basenames and machine metadata stay local.
