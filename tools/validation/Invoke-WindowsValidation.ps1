@@ -14,6 +14,7 @@ $guard = $null
 $compiler = $null
 $capture = $null
 $attendanceWatch = $null
+$attendanceSeconds = 14400
 $controllerWatch = [Diagnostics.Stopwatch]::StartNew()
 $stage = 'reservation'
 $result = [ordered]@{ safetyStop = $true; quiescent = $false; exitCode = -1; captureCompleted = $false }
@@ -32,7 +33,7 @@ function Save-CompleteJson([string] $Path, $Value) {
 
 function Assert-AttendanceOpen {
     if (Test-Path -LiteralPath "$action\cancel") { throw 'Attendance cancelled' }
-    if ($attendanceWatch.Elapsed.TotalSeconds -ge 1800) { throw 'Attendance expired' }
+    if ($attendanceWatch.Elapsed.TotalSeconds -ge $attendanceSeconds) { throw 'Attendance expired' }
 }
 
 function Assert-Direct([string] $Path) {
@@ -246,7 +247,7 @@ try {
             }
             $attendanceWatch = [Diagnostics.Stopwatch]::StartNew()
             Save-CompleteJson "$action\attendance-ready.json" @{
-                action = $ActionName; reservationSha256 = $ReservationSha256; waitSeconds = 1800
+                action = $ActionName; reservationSha256 = $ReservationSha256; waitSeconds = $attendanceSeconds
                 invocationSha256 = (Get-FileHash -LiteralPath "$action\invocation.json").Hash.ToLowerInvariant()
                 controllerSha256 = (Get-FileHash -LiteralPath "$action\controller.json").Hash.ToLowerInvariant()
                 preparedUtc = (Get-Date).ToUniversalTime().ToString('o')

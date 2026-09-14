@@ -82,6 +82,21 @@ DISPOSED_WINDOWS_ATTENDANCE = {
     "windows-input.json": "5b47542488f8d4ec2db81cecb3b0d8fa39e349d0c9e4cb9c71a69795b61547d1",
 }
 
+# Exact accepted UI-admission attendance expiry; the failed charge remains retained.
+DISPOSED_UI_ATTENDANCE = {
+    "result.json": "6c4596568982d0e44924d58d8386dee0b58f6d7f73a809047bd34860a46b1766",
+    "started.json": "4785c692765970cd909c341470e3d8e750f448e45bc53ad3165a70e0cdaf46a7",
+    "windows-input.json": "e07476d8b99467266698e3f212c2b687c3538b57eb8484d9812456713e1f618c",
+}
+
+# Exact second UI-admission expiry, including its completed wrapper migration.
+DISPOSED_UI_ATTENDANCE_0034 = {
+    "result.json": "2ba6cd4445dba723dcfd30dca57772c751ccf9d3fb775e5e0bfb688da2c21d83",
+    "started.json": "74efac252f02bd01ca8ab75d4d6cc179d5f1fdfcfa4bcd7132f52712d03ec940",
+    "windows-input.json": "e937ebb25470f0ec025af48a4e87d5683777423e9e283d5cc328880f9f98b46f",
+}
+ATTENDANCE_SECONDS = 14400
+
 
 def utc():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -295,10 +310,11 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
         released = json.loads(released_path.read_text(), object_pairs_hook=unique)
         ready_hash, released_hash = digest(ready_path), digest(released_path)
         marker_name = "attendance-release-" + ready_hash
+        wait_seconds = 1800 if int(action.name) <= 34 else ATTENDANCE_SECONDS
         if set(ready) != {"action", "reservationSha256", "waitSeconds", "invocationSha256",
                           "controllerSha256", "preparedUtc"} or ready["action"] != action.name or \
                 ready["reservationSha256"] != digest(paths[0]) or type(ready["waitSeconds"]) is not int or \
-                ready["waitSeconds"] != 1800 or ready["invocationSha256"] != evidence.get("invocation.json") or \
+                ready["waitSeconds"] != wait_seconds or ready["invocationSha256"] != evidence.get("invocation.json") or \
                 ready["controllerSha256"] != evidence.get("controller.json") or \
                 evidence.get("attendance-ready.json") != ready_hash or \
                 evidence.get("attendance-released.json") != released_hash or \
@@ -306,7 +322,7 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
                 final.get("attendanceReleasedSha256") != released_hash or \
                 set(released) != {"readySha256", "releaseName", "waitMilliseconds"} or \
                 released["readySha256"] != ready_hash or released["releaseName"] != marker_name or \
-                type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < 1800000 or \
+                type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < wait_seconds * 1000 or \
                 evidence.get(marker_name) != hashlib.sha256(b"").hexdigest() or "cancel" in evidence or \
                 [name for name in evidence if name.startswith("attendance-release-")] != [marker_name]:
             raise ValueError("Retained attendance binding changed")
@@ -373,12 +389,18 @@ def windows_consumption():
             verify_disposed_windows_test(action, windows / action.name)
         elif action.name == "0022":
             verify_disposed_windows_attendance(action, windows / action.name)
+        elif action.name == "0033":
+            verify_disposed_windows_attendance(
+                action, windows / action.name, DISPOSED_UI_ATTENDANCE)
+        elif action.name == "0034":
+            verify_disposed_windows_attendance(
+                action, windows / action.name, DISPOSED_UI_ATTENDANCE_0034)
         elif receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action stops both validation loops")
         for name, expected in receipt["evidence"].items():
             if digest(windows / action.name / name) != expected:
                 raise ValueError("Windows action evidence changed")
-        if action.name not in ("0002", "0003", "0006", "0022"):
+        if action.name not in ("0002", "0003", "0006", "0022", "0033", "0034"):
             verify_windows_reservation_pair(action, windows / action.name, receipt, started)
         reserved = windows_process_reservation(number, started)
         process_scenarios += reserved
@@ -396,18 +418,20 @@ def windows_consumption():
         raise ValueError("Windows red test must complete before Linux continuation")
     if number == 22:
         raise ValueError("Windows owned-host test must complete before Linux continuation")
+    if number in (33, 34):
+        raise ValueError("Windows UI-admission red must complete before Linux continuation")
     return preparation, build_test
 
 
-def verify_disposed_windows_attendance(action, failed):
-    """Preserve the exact expired wait, empty Job evidence and completed migration."""
+def verify_disposed_windows_attendance(action, failed, receipts=DISPOSED_WINDOWS_ATTENDANCE):
+    """Preserve an exactly disposed expired wait and its empty Job evidence."""
     for root in (action, failed):
         if any(path.is_symlink() for path in (root, *root.parents)):
             raise ValueError("Linked disposed attendance evidence")
-    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_ATTENDANCE) or any(
+    if {path.name for path in action.iterdir()} != set(receipts) or any(
         (action / name).is_symlink() or not (action / name).is_file() or
         digest(action / name) != expected
-        for name, expected in DISPOSED_WINDOWS_ATTENDANCE.items()
+        for name, expected in receipts.items()
     ):
         raise ValueError("Disposed attendance receipt changed")
     evidence = json.loads((action / "result.json").read_text())["evidence"]
