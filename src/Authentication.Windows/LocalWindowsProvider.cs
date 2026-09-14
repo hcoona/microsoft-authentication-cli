@@ -10,39 +10,71 @@ internal interface IWindowsHostAdmission
     void Recheck(CancellationToken cancellationToken);
 }
 
-// Inert initial baseline for the local-provider admission scenarios. The later
-// implementation will guard initialization and each provider effect here. No real
-// environment observer or MSAL initializer is supplied by this increment.
+// One instance belongs to one sequential coordinator request. Native observations
+// and MSAL initialization are supplied separately; construction remains inert.
 internal sealed class LocalWindowsProvider : IAuthenticationProvider
 {
+    private readonly IWindowsHostAdmission admission;
+    private readonly Func<CancellationToken, IAuthenticationProvider> initialize;
+    private IAuthenticationProvider? provider;
+
     internal LocalWindowsProvider(IWindowsHostAdmission admission,
         Func<CancellationToken, IAuthenticationProvider> initialize)
     {
         ArgumentNullException.ThrowIfNull(admission);
         ArgumentNullException.ThrowIfNull(initialize);
+        this.admission = admission;
+        this.initialize = initialize;
     }
 
     public Task<IReadOnlyList<ProviderAccount>> GetAccountsAsync(CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-        return Task.FromException<IReadOnlyList<ProviderAccount>>(Unavailable());
+        return PrepareOperation(cancellationToken).GetAccountsAsync(cancellationToken);
     }
 
     public Task<TokenCandidate> AcquireSilentAsync(AuthenticationRequest request,
         ProviderAccount account, Guid operationId, CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-        return Task.FromException<TokenCandidate>(Unavailable());
+        return PrepareOperation(cancellationToken).AcquireSilentAsync(
+            request, account, operationId, cancellationToken);
     }
 
     public Task<TokenCandidate> AcquireInteractiveAsync(AuthenticationRequest request,
         ProviderAccount? account, string? claims, nint parentWindow, Guid operationId,
         CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-        return Task.FromException<TokenCandidate>(Unavailable());
+        return PrepareOperation(cancellationToken).AcquireInteractiveAsync(
+            request, account, claims, parentWindow, operationId, cancellationToken);
     }
 
-    private static ProviderFailureException Unavailable() =>
-        new(AuthenticationFailure.MechanismUnavailable);
+    private IAuthenticationProvider PrepareOperation(CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (provider is null)
+        {
+            Observe(admission.Admit, cancellationToken);
+            Observe(token => provider = initialize(token), cancellationToken);
+            ArgumentNullException.ThrowIfNull(provider);
+        }
+
+        Observe(admission.Recheck, cancellationToken);
+        return provider;
+    }
+
+    private static void Observe(Action<CancellationToken> observation, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        try
+        {
+            observation(cancellationToken);
+        }
+        catch
+        {
+            // Cancellation also wins when the synchronous effect throws.
+            cancellationToken.ThrowIfCancellationRequested();
+            throw;
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+    }
 }

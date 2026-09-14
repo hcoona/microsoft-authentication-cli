@@ -327,7 +327,9 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host") or (suite == "owned-host" and number <= 18):
+            if suite not in ("cli", "adapter", "owned-host", "local-provider") or \
+                    (suite == "owned-host" and number <= 18) or \
+                    (suite == "local-provider" and number <= 24):
                 raise ValueError("Unknown Windows test selection")
             required = 12 if suite == "cli" else 0
         else:
