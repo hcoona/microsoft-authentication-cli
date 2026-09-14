@@ -25,24 +25,70 @@ internal enum WindowsSessionConnection { Unavailable, ZeroSession, Active, Inact
 internal sealed record WindowsLocalLogon(uint LogonType, WindowsLogonIdentity Identity,
     bool VisibleStation, bool? StationUserMatches);
 
-// Inert red baseline. The native observations and admission implementation follow
-// independent acceptance of the controlled scenario failures.
+// Classifies synchronous local observations before initialization and later effects.
+// Construction remains inert; the caller supplies the observation implementation.
 internal sealed class WindowsHostAdmission : IWindowsHostAdmission
 {
+    private readonly IWindowsHostObservations observations;
+
     internal WindowsHostAdmission(IWindowsHostObservations observations)
     {
         ArgumentNullException.ThrowIfNull(observations);
+        this.observations = observations;
     }
 
     public void Admit(CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-        throw new ProviderFailureException(AuthenticationFailure.MechanismUnavailable);
+        var platform = Observe(observations.ReadPlatform, cancellationToken);
+        Require(platform.IsWindows && platform.ProcessArchitecture == Architecture.X64
+            && platform.OsArchitecture == Architecture.X64
+            && platform.Version.Major == 10 && platform.Version.Minor == 0
+            && platform.Version.Build >= 22000);
+        Require(Observe(observations.ReadWorkstationProduct, cancellationToken) == true);
+        Require(Observe(observations.ReadThreadIdentity, cancellationToken) == WindowsThreadIdentity.NoToken);
+
+        var logon = Observe(observations.ReadOwnLogonAndStation, cancellationToken);
+        Require(logon is
+        {
+            LogonType: 2 or 10 or 11 or 12,
+            Identity: WindowsLogonIdentity.User,
+            VisibleStation: true,
+            StationUserMatches: true,
+        });
+
+        Require(Observe(observations.ReadSessionConnection, cancellationToken) == WindowsSessionConnection.Active);
+        Require(Observe(observations.ReadInputDesktop, cancellationToken) == true);
     }
 
     public void Recheck(CancellationToken cancellationToken)
     {
+        Require(Observe(observations.ReadThreadIdentity, cancellationToken) == WindowsThreadIdentity.NoToken);
+        Require(Observe(observations.ReadSessionConnection, cancellationToken) == WindowsSessionConnection.Active);
+        Require(Observe(observations.ReadInputDesktop, cancellationToken) == true);
+    }
+
+    private static T Observe<T>(Func<CancellationToken, T> observation, CancellationToken cancellationToken)
+    {
         cancellationToken.ThrowIfCancellationRequested();
-        throw new ProviderFailureException(AuthenticationFailure.MechanismUnavailable);
+        T result;
+        try
+        {
+            result = observation(cancellationToken);
+        }
+        catch
+        {
+            // Preserve original cancellation even when an observation faults.
+            cancellationToken.ThrowIfCancellationRequested();
+            throw;
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+        return result;
+    }
+
+    private static void Require(bool eligible)
+    {
+        if (!eligible)
+            throw new ProviderFailureException(AuthenticationFailure.MechanismUnavailable);
     }
 }
