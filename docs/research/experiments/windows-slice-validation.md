@@ -2676,3 +2676,174 @@ actual WSL caller/pipe lifetime, final production Native AOT, remaining UI
 presentation evidence and real-provider/account acceptance remain open. No later
 execution, production-provider activation, release or whole-Slice acceptance is
 admitted by this observation. Raw TRX basenames and machine metadata stay local.
+
+## Local Provider Admission Scenario Supplement
+
+This supplement selects the fifteen controlled local-provider admission cases in
+[PR #136](https://github.com/hcoona/microsoft-authentication-cli/pull/136), after
+the accepted [owned-host green result](#owned-win32-host-green-evidence). The
+[local Windows host design](../../designs/windows-ado-authentication.md#local-windows-host-admission)
+and [scenario basis](../../validation/strategy.md#windows-slice-design-acceptance)
+remain the behavior authorities. This is an execution selection within the existing
+credential-free Wave, not admission of native host observations or real provider
+initialization. Each actual source/build/test still requires its independent exact
+admission in the coordinating PR before execution.
+
+### Subject and Source Boundaries
+
+Use the existing Windows 11 x64 host through the accepted WSL2 controller, pinned
+SDK 10.0.401/runtime 10.0.12, MSTest 4.1.0, and unchanged public package graph.
+The root remains `Windows.slnx`; use the existing cache-only no-restore Release
+build and managed scenario assembly. No bootstrap, restore, dependency addition,
+toolchain installation, Native AOT publish or production installation is selected.
+
+The inert baseline adds only `LocalWindowsProvider.cs` and
+`LocalProviderAdmissionScenarios.cs`. The integrated candidate retains the accepted
+owned-host code and reuses its existing assembly-wide friend declaration. Baseline
+provider SHA-256 is
+`11d2a42d9b95dd9e16df827f858f3a83ab40d79b4275a83a831c85caddbaa6d2`;
+the unchanged scenario source SHA-256 is
+`d45a04fcbd6410f0c1e6d73c138095371d294672e0e0e1160d4df9372707aa5a`.
+Exact commit/tree and complete current project/source bindings belong to the
+independent source admission. Keep the production CLI provider unavailable.
+
+The fixtures exercise the real request coordinator and result projection with
+synthetic host-admission, initializer and provider outcomes. They cover the order
+of local admission, one request-local initialization, account discovery and
+acquisition; original cancellation around those effects; eligibility loss before
+later acquisition; and closure after controlled readiness. The initializer remains
+behind local admission. Construction itself must remain inert. Tests deliberately
+allow a substitute to return after cancellation so the production boundary must
+prevent the next effect rather than rely on cooperative substitutes.
+
+Both red and green selections have zero native queries, windows, account/store
+operations, WAM/MSAL initialization, network requests and child-product launches.
+The parent value `1` is only an in-memory sentinel, never a native handle. Every
+account, token and error marker is synthetic. Normal MTP entry and all five extension
+registrations remain unchanged. Existing CLI/Profile, adapter and H assertions are
+not replaced or selected by this batch. No public test flag, environment-selected
+provider, wildcard filter or arbitrary suite is added.
+
+### Fixed Cases and Red Evidence
+
+All methods belong to `Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios`.
+The line numbers below identify the exact scenario-source assertions, not a promised
+Release stack presentation. Actual red review must join each reported failure to
+its source, message and actual PDB/IL as needed. A different first assertion,
+compilation/analyzer/loader/native error, timeout or fixture failure is not intended
+red evidence.
+
+| Method | Inert red prediction | First failed assertion |
+| --- | --- | --- |
+| `ConstructionDoesNotObserveHostOrInitializeProvider` | Passed | None |
+| `PrecancelledRequestStopsBeforeHostAdmission` | Passed | None |
+| `RejectedHostPreventsInitializationAndOwnedUi` | Failed | Line 44: admission reached once |
+| `AdmittedHostAllowsOneSelectedAccountSilentResult` | Failed | Line 54: successful selected-account result |
+| `CancellationDuringAdmissionPreventsInitialization` | Failed | Line 216 via line 71: cancelled outcome |
+| `OriginalCancellationWinsOverAdmissionRejection` | Failed | Line 216 via line 85: cancelled outcome |
+| `CancellationDuringInitializationPreventsDiscovery` | Failed | Line 216 via line 95: cancelled outcome |
+| `UnavailableInitializationPreventsDiscoveryAndOwnedUi` | Failed | Line 107: initializer reached once |
+| `UnexpectedInitializationFaultStaysInternalFailure` | Failed | Line 216 via line 121: internal-failure outcome |
+| `UnexpectedHostObservationFaultStaysInternalFailure` | Failed | Line 216 via line 134: internal-failure outcome |
+| `LostEligibilityBeforeSilentPreventsAcquisition` | Failed | Line 148: discovery reached once |
+| `LostEligibilityAfterReadinessPreventsInteractionAndClosesHost` | Failed | Line 163: controlled readiness reached once |
+| `CancellationDuringVolatileRecheckPreventsNextEffect` | Failed | Line 216 via line 178: cancelled outcome |
+| `EligibleInteractiveContinuationUsesOriginalRequestAndOneParent` | Failed | Line 189: successful interactive continuation |
+| `NoninteractivePermissionDoesNotOpenHostAfterSilentChallenge` | Failed | Line 216 via line 205: interaction-required outcome |
+
+These predictions require successful build and exact discovery. Red requires
+precisely two Passed and thirteen Failed results, runner exit 2 and collected outer
+exit 0. Green requires fifteen Passed, no other outcomes, and normal runner/outer
+exit 0. Preserve all sixteen TRX counters and exact class/method identities with
+complete definition/entry/execution/result joins, without DataRow expansion or
+missing/extra cases. Teardown disposes each fixture's synthetic cancellation source;
+it starts no asynchronous/native work that requires a separate UI drain. All later
+business, continuity, prevented-effect and result-projection assertions must pass
+in green. Independent actual red acceptance precedes green implementation.
+
+Both controllers contain the same fixed `local-provider` filter:
+
+```text
+FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.ConstructionDoesNotObserveHostOrInitializeProvider|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.PrecancelledRequestStopsBeforeHostAdmission|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.RejectedHostPreventsInitializationAndOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.AdmittedHostAllowsOneSelectedAccountSilentResult|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.CancellationDuringAdmissionPreventsInitialization|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.OriginalCancellationWinsOverAdmissionRejection|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.CancellationDuringInitializationPreventsDiscovery|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.UnavailableInitializationPreventsDiscoveryAndOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.UnexpectedInitializationFaultStaysInternalFailure|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.UnexpectedHostObservationFaultStaysInternalFailure|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.LostEligibilityBeforeSilentPreventsAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.LostEligibilityAfterReadinessPreventsInteractionAndClosesHost|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.CancellationDuringVolatileRecheckPreventsNextEffect|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.EligibleInteractiveContinuationUsesOriginalRequestAndOneParent|FullyQualifiedName=Authentication.Windows.Scenarios.LocalProviderAdmissionScenarios.NoninteractivePermissionDoesNotOpenHostAfterSilentChallenge
+```
+
+The normal command selection is `test --suite local-provider --expect red` or
+`test --suite local-provider --expect green`, retaining the existing required full
+protocol/source/target revisions and independent review URL. These are protocol
+forms, not a runnable admission or automatic red/green sequence.
+
+### Retained History and Controller Transition
+
+The first action under this supplement is a separately admitted no-restore build
+0024. Before reservation, require at least 23 finalized Windows actions and the
+unchanged accepted H-green 0023 WSL receipts:
+
+| Receipt | SHA-256 |
+| --- | --- |
+| `started.json` | `10fc85a750e5494f7844332154b859ef97181ce6139fadae37fa2c06c90ee9e2` |
+| `result.json` | `2043defeed2bd068a5e9cba888c3b08b85aad4b6e40dc868216900d4e94dac41` |
+
+At exactly 23 prior Windows actions, only a build may begin the transition. During
+that action's existing exclusive reservation, replace only these two retained
+controllers through the existing backup/migration procedure:
+
+| Controller | Required old SHA-256 | Replacement SHA-256 |
+| --- | --- | --- |
+| `run_windows.py` | `ec31b39b0cec4865cd7c0b4c8012b989ae6b0615b79938b9640a78c6cccde162` | `0e01a22ee8e63720f54ad6525976d1b282656f33a8682919fd316b7ff4633d39` |
+| `Invoke-WindowsValidation.ps1` | `a63d1715179171227c9df3875bd538ba744568954809d40202cf0a4d420f0635` | `dc4019e3ba3f62cafda1222f4468f270cf1b935c7ec7ca761f0b36c2a290a3ce` |
+
+The old bytes are the controllers used by 0023 under protocol
+`4e2f090196e752e453f0636d442690a5555a6083`, retained unchanged by accepted
+target `2f9dc5d734560df3ea3bb4a254faf1517be2739f`. Preserve them as
+`actions/0024/retained-run_windows.py` and
+`actions/0024/retained-Invoke-WindowsValidation.ps1`; the normal migration receipt
+binds both revisions and old/new hashes. Partial migration or unexpected bytes stop
+both loops without refund, automatic retry or standalone repair. The stop helper,
+Job source/bootstrap, package caches, toolchain, original receipts and prior
+controller backups remain unchanged. In particular, stopped 0022 remains false and
+charged, and successful 0023 is not replayed.
+
+The symmetric `run_managed.py` history-reader change is SHA-256
+`757b038505bafb09994c93e6b1b0b92dd01baca3a6696077d210346b836fa125`.
+It is not a third retained Windows controller migration. Both readers and the
+Windows controller admit this new test selection only after action 0024 and require
+zero reserved process scenarios; all older full CLI charges remain exact. The
+Windows reader retains the common full-counter/result validation and rejects any
+child-product process evidence for this suite.
+
+### Limits, Review and Remaining Obligations
+
+The planned initial progression is one red build/test pair followed, only after
+independent actual-red acceptance and refreshed green-source admission, by one green
+build/test pair. Every build and test consumes one Windows build/test action. Keep
+the original 120-second subject/capture/Job-drain limit, 230-second outer controller
+wait, 8 MiB combined output ceiling, 32-process nonbreakaway Job ceiling, shared
+action lock and existing bounded cancellation/stop procedure. This selection has no
+visible interaction and needs no desktop attendance or release marker; the existing
+H-green attendance requirement is unchanged.
+
+Recover current history before each admission. At completed 0023, preparation is
+Linux 8/11 and Windows 5/5, combined 13/16; build/test is Linux 29/80 and Windows
+18/40, combined 47/120. Four successfully admitted actions would bring Windows
+build/test to 22/40 and combined build/test to 51/120. No preparation, download or
+child-product process units are added by this selection. Keep charged downloads at
+768 MiB, reservations at 24/36, the outer ceiling 60 and the final unchanged twelve
+CLI process units. Earlier failures and any new failed start remain charged.
+
+Before the first test, independently inspect the actual build, source-bound
+assembly, generated entry/extension registrations, dependency/runtime mapping and
+the fixed case discovery. Accept intended business failures individually; aggregate
+counts alone cannot accept red. After every test, inspect actual source/artifact
+continuity, complete capture, all result joins/counters, normal owned Job drain and
+fully collected outer result. Preserve dedicated roots and sanitized evidence.
+Unexpected results, changed inputs, incomplete capture or uncertain quiescence stop
+both loops and require independent classification. No automatic rerun is admitted.
+
+Passing this batch proves controlled admission/initialization/acquisition ordering
+and cancellation behavior only. Actual local OS/product/architecture, thread-token,
+own-logon, SID/station, WTS and input-desktop predicates; real provider initialization
+and broker availability; owned-thread pre-create/show checks; native stalls under
+the original deadline; process fault/commit composition; WSL caller/pipe lifetime;
+final production wiring and Native AOT; UI presentation and real-account/reuse
+acceptance retain their separate evidence obligations. No whole-Slice, release,
+Profile activation or general platform-support acceptance follows from this batch.
