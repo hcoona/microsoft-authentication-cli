@@ -2887,3 +2887,48 @@ in the dedicated roots. These synthetic observations establish the missing local
 boundary behavior and permit its green implementation; they do not establish later
 assertions after the first failure, native observations, real initialization, UI or
 account behavior. Green source and each build/test retain separate exact admission.
+
+### Local Provider Admission Green Evidence
+
+Windows build 0026 and test 0027 used accepted target/protocol
+`4edee1a99c2a898a481931c394a39646045fda36` and implemented source
+`61685d4b51ce4c4fd959503e0be5c47af99bf987`, tree
+`a78e1d74553c4d39a87bb012ab419e260abf2dbe`. The fifteen scenario cases
+remained byte-identical to the accepted red source, SHA-256
+`d45a04fcbd6410f0c1e6d73c138095371d294672e0e0e1160d4df9372707aa5a`.
+The [green-source review](https://github.com/hcoona/microsoft-authentication-cli/pull/136#issuecomment-5659487932)
+accepted the request-local implementation after actual-red acceptance. The no-restore
+Release build completed in 6.485 seconds with zero warnings and errors, fully
+collected outer exit 0 and confirmed quiescence. Its manifest SHA-256 is
+`f100410237e0e8aa5e7c870d76ccfcae978363ef28b278707397e706245c30a7`.
+
+The [actual-build review and single-green-test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/136#issuecomment-5659653172)
+accepted the source, assembly/PDB, generated runner, dependency and artifact bindings.
+Test 0027 executed all fifteen selected cases once, all Passed. All sixteen TRX
+counters were inspected: total/executed/passed fifteen, failed zero, and every other
+counter zero. The runner exited 0 after 0.985 seconds; the fully collected outer
+process exited 0 with continuation allowed and confirmed quiescence. Capture was
+complete, with no safety stop, termination request or remaining owned process.
+The TRX SHA-256 is
+`63409024437da757b13cb28e5c3ed0873352f45442b82aaf4dd09c7bf8a6d1eb`;
+the WSL final receipt SHA-256 is
+`ac1b287b7dafbb2082e173efad20585f062731b922ff593c33410184740c1456`.
+
+The [independent actual-green acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/136#issuecomment-5659851781)
+confirmed all fifteen source-bound definition, entry, execution and result joins,
+source/artifact continuity, complete capture and quiescence.
+
+At completed 0027, Windows build/test consumption is 22/40 and combined consumption
+is 51/120. Preparation remains Linux 8/11 and Windows 5/5, combined 13/16;
+downloads remain 768 MiB and synthetic child-product reservations remain 24/36,
+within the outer ceiling of 60. The final twelve CLI process units remain reserved.
+Stopped 0022 remains false and charged. Dedicated source, artifacts and sanitized
+evidence are intentionally retained.
+
+These runtime observations establish the controlled admission, initialization,
+provider-argument continuity, cancellation and prevented-effect assertions in the
+fixed fifteen cases. They exercise no native host query, actual MSAL initialization,
+account/store operation, network request, window or child-product process. Native
+admission and initialization, actual UI-thread rechecks, production composition,
+process/WSL lifetime, final Native AOT, UI presentation and real-account/reuse
+acceptance remain open; this result does not complete the Windows Slice.
