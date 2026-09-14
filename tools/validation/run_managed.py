@@ -75,6 +75,13 @@ DISPOSED_WINDOWS_TEST = {
     "result.json": "4ef1514ecd4e19cf02657a38ed73e5e920cb30cf38df9d54472ca89b3784f6ff",
 }
 
+# Exact accepted pre-subject attendance expiry; never a general failed-action bypass.
+DISPOSED_WINDOWS_ATTENDANCE = {
+    "result.json": "c15dd433a4d9a104d27e529909f7a8ec28e5b38d2bfa2dcad450e469a6b94338",
+    "started.json": "f4d69974990731e5a32f35df7c71935982c7fc8f480ef58d90395567cfc75e29",
+    "windows-input.json": "5b47542488f8d4ec2db81cecb3b0d8fa39e349d0c9e4cb9c71a69795b61547d1",
+}
+
 
 def utc():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -275,6 +282,33 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
     peer, final, link = (json.loads(path.read_text(), object_pairs_hook=unique) for path in paths)
     validate_windows_reservation_pair(started, peer, link, final,
                                      digest(paths[0]), digest(paths[1]), result["evidence"])
+    if int(action.name) >= 22 and started.get("action") == "test" and \
+            started.get("testSuite") == "owned-host" and started.get("expected") == "green":
+        evidence = result["evidence"]
+        ready_path = windows_action / "attendance-ready.json"
+        released_path = windows_action / "attendance-released.json"
+        for path in (ready_path, released_path):
+            if any(part.is_symlink() for part in (path, *path.parents)) or path.stat().st_size > 8192:
+                raise ValueError("Invalid retained attendance receipt")
+        ready = json.loads(ready_path.read_text(), object_pairs_hook=unique)
+        released = json.loads(released_path.read_text(), object_pairs_hook=unique)
+        ready_hash, released_hash = digest(ready_path), digest(released_path)
+        marker_name = "attendance-release-" + ready_hash
+        if set(ready) != {"action", "reservationSha256", "waitSeconds", "invocationSha256",
+                          "controllerSha256", "preparedUtc"} or ready["action"] != action.name or \
+                ready["reservationSha256"] != digest(paths[0]) or type(ready["waitSeconds"]) is not int or \
+                ready["waitSeconds"] != 1800 or ready["invocationSha256"] != evidence.get("invocation.json") or \
+                ready["controllerSha256"] != evidence.get("controller.json") or \
+                evidence.get("attendance-ready.json") != ready_hash or \
+                evidence.get("attendance-released.json") != released_hash or \
+                final.get("attendanceReadySha256") != ready_hash or \
+                final.get("attendanceReleasedSha256") != released_hash or \
+                set(released) != {"readySha256", "releaseName", "waitMilliseconds"} or \
+                released["readySha256"] != ready_hash or released["releaseName"] != marker_name or \
+                type(released["waitMilliseconds"]) is not int or not 0 <= released["waitMilliseconds"] < 1800000 or \
+                evidence.get(marker_name) != hashlib.sha256(b"").hexdigest() or "cancel" in evidence or \
+                [name for name in evidence if name.startswith("attendance-release-")] != [marker_name]:
+            raise ValueError("Retained attendance binding changed")
 
 
 def windows_process_reservation(number, started):
@@ -332,12 +366,14 @@ def windows_consumption():
                 raise ValueError("Disposed Windows restore receipt changed")
         elif action.name == "0006":
             verify_disposed_windows_test(action, windows / action.name)
+        elif action.name == "0022":
+            verify_disposed_windows_attendance(action, windows / action.name)
         elif receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action stops both validation loops")
         for name, expected in receipt["evidence"].items():
             if digest(windows / action.name / name) != expected:
                 raise ValueError("Windows action evidence changed")
-        if action.name not in ("0002", "0003", "0006"):
+        if action.name not in ("0002", "0003", "0006", "0022"):
             verify_windows_reservation_pair(action, windows / action.name, receipt, started)
         reserved = windows_process_reservation(number, started)
         process_scenarios += reserved
@@ -353,7 +389,33 @@ def windows_consumption():
         raise ValueError("Windows restore must complete before Linux continuation")
     if number == 6:
         raise ValueError("Windows red test must complete before Linux continuation")
+    if number == 22:
+        raise ValueError("Windows owned-host test must complete before Linux continuation")
     return preparation, build_test
+
+
+def verify_disposed_windows_attendance(action, failed):
+    """Preserve the exact expired wait, empty Job evidence and completed migration."""
+    for root in (action, failed):
+        if any(path.is_symlink() for path in (root, *root.parents)):
+            raise ValueError("Linked disposed attendance evidence")
+    if {path.name for path in action.iterdir()} != set(DISPOSED_WINDOWS_ATTENDANCE) or any(
+        (action / name).is_symlink() or not (action / name).is_file() or
+        digest(action / name) != expected
+        for name, expected in DISPOSED_WINDOWS_ATTENDANCE.items()
+    ):
+        raise ValueError("Disposed attendance receipt changed")
+    evidence = json.loads((action / "result.json").read_text())["evidence"]
+    directories = {"home", "home/local", "home/roaming", "temp", "results", "empty-program-files"}
+    paths = list(failed.rglob("*"))
+    if {str(path.relative_to(failed)) for path in paths} != directories | set(evidence):
+        raise ValueError("Disposed attendance boundary changed")
+    for path in paths:
+        name = str(path.relative_to(failed))
+        if path.is_symlink() or (name in directories and not path.is_dir()):
+            raise ValueError("Disposed attendance directory changed")
+        if name not in directories and (not path.is_file() or digest(path) != evidence[name]):
+            raise ValueError("Disposed attendance evidence changed")
 
 
 def verify_disposed_windows_preparation(action, failed):

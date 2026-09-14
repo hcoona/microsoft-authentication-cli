@@ -1,7 +1,4 @@
-using System.Runtime.CompilerServices;
 using Authentication.Core;
-
-[assembly: InternalsVisibleTo("Authentication.Windows.Scenarios")]
 
 namespace Authentication.Windows;
 
