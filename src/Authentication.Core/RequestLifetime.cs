@@ -216,6 +216,12 @@ public sealed class RequestLifetime : IDisposable
         }
     }
 
+    // An owned-host fault is distinct from caller cancellation. Its controlled
+    // acceptance scenarios precede implementation of this notification path.
+    public void FailHost()
+    {
+    }
+
     public void Dispose()
     {
         lock (gate)

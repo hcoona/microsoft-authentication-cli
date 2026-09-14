@@ -269,6 +269,144 @@ public sealed class RequestLifetimeScenarios
         Assert.IsFalse(outcome.ToString().Contains("synthetic-private-marker", StringComparison.Ordinal));
     }
 
+    [TestMethod]
+    public async Task HostFaultBeforeStartPreventsDiscoveryAndUi()
+    {
+        var scene = new Scene();
+        using var lifetime = new RequestLifetime(scene.Clock, scene.Clock.GetTimestamp(), Budget);
+        lifetime.FailHost();
+        var outcome = await scene.RunAsync(lifetime);
+
+        AssertFailure(AuthenticationFailure.InternalFailure, outcome);
+        Assert.AreEqual(0, scene.Effects.Count);
+        await lifetime.CompleteAsync().WaitAsync(HarnessLimit);
+    }
+
+    [TestMethod]
+    public async Task HostFaultEndsPendingRequestAndSuppressesLaterEffects()
+    {
+        foreach (var phase in new[] { "discover", "silent", "open", "interactive" })
+        {
+            var scene = new Scene { PendingPhase = phase };
+            using var lifetime = new RequestLifetime(scene.Clock, scene.Clock.GetTimestamp(), Budget);
+            var run = scene.RunAsync(lifetime);
+            try
+            {
+                await scene.Entered.Task.WaitAsync(HarnessLimit);
+                lifetime.FailHost();
+                Assert.IsTrue(run.IsCompleted,
+                    "Host failure must select a terminal result before the pending dependency returns.");
+                AssertFailure(AuthenticationFailure.InternalFailure, await run);
+                Assert.IsTrue(scene.ProviderToken.IsCancellationRequested);
+                Assert.IsFalse(scene.Body.IsCompleted);
+                Assert.IsTrue(lifetime.TryCommit(out var committed));
+                AssertFailure(AuthenticationFailure.InternalFailure, committed!);
+            }
+            finally
+            {
+                await scene.ReleaseAndDrainAsync(run);
+                await lifetime.CompleteAsync().WaitAsync(HarnessLimit);
+            }
+
+            Assert.IsFalse(scene.Effects.SkipWhile(effect => effect != phase).Skip(1)
+                .Any(effect => effect is "silent" or "open" or "interactive"));
+            Assert.IsFalse(lifetime.TryCommit(out _));
+        }
+    }
+
+    [TestMethod]
+    public async Task HostFaultBeforeCommitWithholdsValidatedTokenAndWarning()
+    {
+        var scene = new Scene();
+        using var lifetime = new RequestLifetime(scene.Clock, scene.Clock.GetTimestamp(), Budget);
+        Assert.IsNotNull((await scene.RunAsync(lifetime)).Success);
+        lifetime.FailHost();
+
+        Assert.IsTrue(lifetime.TryCommit(out var committed));
+        AssertFailure(AuthenticationFailure.InternalFailure, committed!);
+        Assert.IsFalse(committed!.PersistenceUnconfirmed);
+        var serialized = ResultProjection.Serialize(committed);
+        Assert.AreEqual(1, serialized.ExitCode);
+        Assert.IsFalse(System.Text.Encoding.UTF8.GetString(serialized.Utf8Json)
+            .Contains("synthetic-token", StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    public async Task HostFaultPreservesPreviouslySelectedFailures()
+    {
+        foreach (var failure in new[]
+            { AuthenticationFailure.Denied, AuthenticationFailure.Cancelled, AuthenticationFailure.Timeout })
+        {
+            var scene = new Scene();
+            using var lifetime = new RequestLifetime(scene.Clock, scene.Clock.GetTimestamp(), Budget);
+            await lifetime.RunAsync(_ => Task.FromResult(new AuthenticationOutcome(null, failure)));
+            lifetime.FailHost();
+
+            Assert.IsTrue(lifetime.TryCommit(out var committed));
+            AssertFailure(failure, committed!);
+        }
+    }
+
+    [TestMethod]
+    public async Task CancelledCallerRetainsPrecedenceWhenHostFaultArrives()
+    {
+        using var caller = new CancellationTokenSource();
+        var scene = new Scene { PendingPhase = "silent" };
+        using var lifetime = new RequestLifetime(scene.Clock, scene.Clock.GetTimestamp(), Budget, caller.Token);
+        var run = scene.RunAsync(lifetime);
+        try
+        {
+            await scene.Entered.Task.WaitAsync(HarnessLimit);
+            await caller.CancelAsync();
+            lifetime.FailHost();
+            AssertFailure(AuthenticationFailure.Cancelled, await run);
+            Assert.IsTrue(lifetime.TryCommit(out var committed));
+            AssertFailure(AuthenticationFailure.Cancelled, committed!);
+        }
+        finally
+        {
+            await scene.ReleaseAndDrainAsync(run);
+        }
+    }
+
+    [TestMethod]
+    public async Task HostFaultObservesExpiredDeadlineBeforeDelayedTimerDispatch()
+    {
+        var scene = new Scene { PendingPhase = "silent" };
+        using var lifetime = new RequestLifetime(scene.Clock, scene.Clock.GetTimestamp(), Budget);
+        var run = scene.RunAsync(lifetime);
+        try
+        {
+            await scene.Entered.Task.WaitAsync(HarnessLimit);
+            scene.Clock.Advance(Budget, dispatchTimers: false);
+            lifetime.FailHost();
+            Assert.IsTrue(run.IsCompleted,
+                "Host failure must check the original deadline without waiting for timer dispatch.");
+            AssertFailure(AuthenticationFailure.Timeout, await run);
+            Assert.IsTrue(lifetime.TryCommit(out var committed));
+            AssertFailure(AuthenticationFailure.Timeout, committed!);
+        }
+        finally
+        {
+            await scene.ReleaseAndDrainAsync(run);
+        }
+    }
+
+    [TestMethod]
+    public async Task HostFaultAfterCommitCannotReplaceOrDuplicateTheResult()
+    {
+        var scene = new Scene();
+        using var lifetime = new RequestLifetime(scene.Clock, scene.Clock.GetTimestamp(), Budget);
+        var outcome = await scene.RunAsync(lifetime);
+        Assert.IsTrue(lifetime.TryCommit(out var committed));
+        Assert.AreSame(outcome, committed);
+        lifetime.FailHost();
+
+        Assert.IsNotNull(committed!.Success);
+        Assert.IsFalse(lifetime.TryCommit(out var duplicate));
+        Assert.IsNull(duplicate);
+    }
+
     private static void AssertFailure(AuthenticationFailure expected, AuthenticationOutcome outcome)
     {
         Assert.AreEqual(expected, outcome.Failure);
