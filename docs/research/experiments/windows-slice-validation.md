@@ -6275,3 +6275,215 @@ bindings do not report a fixture or compiler execution.
 | `run_windows.py` | 140,320 | `1a81fc6f88b5f4e0918c84921ecea6756dd24d555a5c4dc004e7fa54acc62606` |
 | `run_windows_final_guard_prepare.py` | 66,953 | `c4d5bd722ccef384d77d805f4484638d7c08b080820ca0e9a1824a0ffd186d61` |
 | `validate_final_guard_successor_fixture.py` | 15,807 | `13a5dcb5f57cec6c2b855a684d19979d861adb4a343968c2caf3c22f2b77f195` |
+
+## Final-Publish SDK and Compiler Identity Copy
+
+This section permits preparation of one separately admitted raw-data copy for the
+missing direct SDK, MSBuild task, and Roslyn compiler identity inputs. Its outcome is
+fifteen required file copies and four conditional presence/content results at the
+fixed paths below. It does not establish complete SDK, shared-runtime, dependency,
+compiler-input, Native AOT, or Slice closure. DLL and executable bytes are data only.
+Do not load, inspect through a runtime API, invoke, or execute any selected file.
+
+Use the existing WSL Linux review environment and the existing public Windows SDK
+10.0.401/toolchain and dedicated public-package locations. The SDK19 operation makes
+no Windows process, network request, dependency download, installation, SDK/MSBuild
+evaluation, restore, build, test, compilation, link, publish, account, WAM, UI, consent,
+or authentication-cache observation or update. It neither materializes final product
+source nor places or rewrites restore files. The six accepted native2/dispatch4
+metadata copies and twelve accepted restore copies are excluded from collection and
+remain reusable within their accepted scopes.
+
+### Fixed Input Selection
+
+Each row is one literal slot. The inactive source contains the exact corresponding
+`/mnt/c/` path, with no argument-supplied path, property expansion, wildcard, directory
+listing, recursive walk, alternate SDK selection, or metadata-driven follow-up. Confirm
+the intended built-in SDK/Roslyn layout against the selected source before exact
+admission; a different or unresolved layout is not permission to discover another path.
+
+| Slot | Exact Windows path | Outcome required | Maximum bytes |
+| --- | --- | --- | ---: |
+| seed-01 | `C:\Program Files\dotnet\sdk\10.0.401\dotnet.runtimeconfig.json` | Required content | 65,536 |
+| seed-02 | `C:\Program Files\dotnet\sdk\10.0.401\dotnet.deps.json` | Required content | 4,194,304 |
+| seed-03 | `C:\Program Files\dotnet\sdk\10.0.401\dotnet.runtimeconfig.dev.json` | Content or exact leaf absence | 65,536 |
+| seed-04 | `C:\Program Files\dotnet\sdk\10.0.401\dotnet.dll` | Required content | 16,777,216 |
+| seed-05 | `C:\Program Files\dotnet\sdk\10.0.401\MSBuild.dll` | Required content | 16,777,216 |
+| seed-06 | `C:\Program Files\dotnet\sdk\10.0.401\Microsoft.Build.dll` | Required content | 16,777,216 |
+| seed-07 | `C:\Program Files\dotnet\sdk\10.0.401\Microsoft.Build.Framework.dll` | Required content | 8,388,608 |
+| seed-08 | `C:\Program Files\dotnet\sdk\10.0.401\Microsoft.Build.Tasks.Core.dll` | Required content | 16,777,216 |
+| seed-09 | `C:\Program Files\dotnet\sdk\10.0.401\Microsoft.Build.Utilities.Core.dll` | Required content | 8,388,608 |
+| seed-10 | `C:\Temp\azureauth-windows-slice-108\packages\microsoft.dotnet.ilcompiler\10.0.12\tools\netstandard\ILCompiler.Build.Tasks.dll` | Required content | 4,194,304 |
+| csc-01 | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\Microsoft.CSharp.Core.targets` | Required content | 1,048,576 |
+| csc-02 | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll` | Required content | 8,388,608 |
+| csc-03 | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\csc.dll` | Required content | 16,777,216 |
+| csc-04 | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\csc.exe` | Content or exact leaf absence | 4,194,304 |
+| host-01 | `C:\Program Files\dotnet\dotnet.exe` | Required content | 1,048,576 |
+| csc-05 | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\csc.runtimeconfig.json` | Required content | 65,536 |
+| csc-06 | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\csc.deps.json` | Required content | 4,194,304 |
+| csc-07 | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\Microsoft.Build.Tasks.CodeAnalysis.deps.json` | Content or exact leaf absence | 4,194,304 |
+| csc-08 | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\csc.runtimeconfig.dev.json` | Content or exact leaf absence | 65,536 |
+
+Five slots retain these accepted 0052 historical hashes. They must match on the initial
+read. The other present files receive a prospective first-capture hash exactly once
+per selected slot; every later original/readback read requires that exact observed hash,
+length and identity. A prospective hash is an observation, not accepted SDK authenticity,
+public provenance, source correspondence or historical continuity.
+
+| Slot | Historical SHA-256 |
+| --- | --- |
+| `seed-02` | `7cf8fff4144ef3484f052c4a4734a53f4d65023798f11da62f3c45ae4353d8e8` |
+| `seed-04` | `616dbda77bc20692d615e2a679f31ffff04f693e8d6b3e24779cf8838adb6a85` |
+| `seed-05` | `22f7b95c5cc1e7287a9d561a0e88719c4d545c5f3892e3e6501051f5abcbe147` |
+| `seed-10` | `dbd168e677d11e9a3daeac5839c63a22d66b3719d5f9d1b4b7dffe3eda05c6c0` |
+| `host-01` | `21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6` |
+
+For each of the four conditional slots, only an absent leaf beneath an existing,
+no-follow directory chain is an accepted absence outcome. Missing parents, inaccessible
+paths, symlinks, nonregular leaves and other errors fail the invocation. Observe each
+initially absent leaf a second time after the content copies and under the same stable
+parent identity; presence or parent change fails. Do not convert an unreadable file into
+absence, create a missing parent, produce an empty placeholder, or select an alternate
+host. Two observations are bounded absence evidence, not an atomic or continuing
+filesystem guarantee. Present conditional slots receive the same content, continuity
+and readback checks as required slots.
+
+The added Csc development-config predicate follows the conditional pinned host-source
+rule: the runtime parses the selected application development config before the main
+config, and development-config probing paths can survive later main-config parsing
+([runtime source](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/native/corehost/runtime_config.cpp#L342-L419)).
+Independent triage accepts this one predicate; it does not accept the entire host trace
+or bind an installed host to that public source. If `csc.exe` is present, its bytes
+require a later offline managed-target and bundle-state check before accepting the
+adjacent `csc.dll` route. Apphost existence alone does not establish that mapping.
+Required-content rows are capture expectations, not a universal claim that the host
+rejects every missing main-config or dependency-manifest file.
+
+### One Invocation and Finite Effects
+
+SDK19 has exactly one invocation. Record its start and the remaining one-time capacity
+before launch. A failed start, inactive-source rejection, input error, output collision,
+lock contention, interruption, timeout, partial transport or nonzero exit consumes it.
+There is no retry, repair, resume, alternate output directory, or broader selection.
+Existing action counts and all previous consumed helper admissions remain unchanged;
+this credential-free review copy does not add a restore/build/test/publish/process
+scenario or refund an earlier action. Any later target or precompiler observation needs
+its own accepted source/effects admission.
+
+Before launch, recover the current accepted Wave/protocol and prior dispositions,
+finish any active source or observer operation, and independently admit the exact
+source, runtime, literal invocation, output location and capacity record. Preparing
+this section or its inactive source performs no original-root access and does not grant
+its own execution. The current names observer and its single invocation are unchanged.
+
+The sole future invocation retains the existing lock
+`/var/tmp/azureauth-windows-slice-108/action.lock`: open that existing regular file
+read-only through no-follow traversal, acquire a nonblocking exclusive lock, verify its
+held/path identity before and after collection, and release/close it during finalization.
+Do not create the lock, read or write its contents, wait for it, or retry contention.
+Do not read any other original-root file beyond the nineteen listed inputs. Concurrent
+experiment or observer work is not permitted during this invocation.
+
+Use these cumulative limits for the collector's intentional data operations:
+
+| Bound | Maximum |
+| --- | ---: |
+| Literal input slots | 19 |
+| Required present files | 15 |
+| Optional leaf observations, including rechecks | 8 |
+| Individual file bytes | The exact per-row limits above |
+| Aggregate original content | 134,217,728 bytes (128 MiB) |
+| Content reads, including original continuity and private readbacks | 58 |
+| Aggregate bytes read | 402,718,720 bytes (384 MiB + 64 KiB) |
+| New file output bytes, including inventory | 134,283,264 bytes (128 MiB + 64 KiB) |
+| Canonical inventory bytes | 65,536 bytes |
+| Counted path operations | 4,096 |
+| Read/write chunk | 65,536 bytes |
+| Original collector clock | 90,000 milliseconds |
+| Outer TERM deadline, including interpreter startup | 95 seconds |
+| Nonresetting KILL grace | 2 seconds |
+| Complete original combined tool capture retained for acceptance | 16 KiB |
+
+If `P` files are present and their total length is `S`, normal completion uses exactly
+`3 * P + 1` content reads: each original once, each original again for continuity, each
+new raw copy once, then the inventory once. It reads `3 * S + I` bytes and writes
+`S + I`, where `I` is the inventory length. The per-row content ceilings sum to
+132,382,720 bytes, below the aggregate original bound. The 128 MiB ceiling is a
+conservative budget for this fixed nineteen-slot frontier, with 1,835,008 bytes of
+headroom above those per-file ceilings. It is not an observed content total or a bound
+for complete SDK/dependency closure. The corresponding maximum normal read total is
+397,213,696 bytes and maximum normal output is 132,448,256 bytes, including the full
+65,536-byte inventory allowance. Missing optional leaves are not content reads. They use four initial optional observations plus one recheck per absent
+leaf, at most eight. These counters describe intentional collector data/path operations;
+ordinary Linux interpreter, standard-library, ELF loader and watchdog startup are covered
+by their separate runtime review, not an exhaustive system-wide I/O count.
+
+The source clock is monotonic, starts once in `main`, and never resets. Check it and
+latched cancellation before and after bounded I/O, sync, output validation, resource
+finalization and final stdout flush. The external watchdog includes startup and cannot
+turn a late source-clock result into success. These are bounded-operation/watchdog
+controls under the accepted OS assumptions, not a guarantee against an uninterruptible
+kernel/filesystem stall or proof of global process quiescence.
+
+### Output, Source and Runtime Admission
+
+Create only the new private directory `/tmp/windows-final-publish-sdk19-offline-v1`
+with mode `0700`, after every initial required/present-content read and optional absence
+observation passes. Require exclusive no-follow creation; reject a preexisting root.
+Use only the nineteen fixed flat output labels in the source and `inventory.json`.
+Absent leaves have an inventory entry and no raw file. Never enumerate the directory.
+Create raw/inventory files exclusively with initial mode `0600`, sync complete bytes,
+seal them `0444`, sync again and sync the held output directory. Retain held directory
+identity and verify its final path identity. Read back every raw copy and the canonical
+ASCII, sorted-key, compact JSON inventory with one trailing LF.
+
+Original content reads require stable device/inode/length/mtime/ctime across the opened
+file and final no-follow leaf lookup, regular-file type and the exact applicable hash.
+The later original reads additionally require the first-read identity, length, hash and
+raw-byte equality. These are bounded continuity checks; the operation does not write
+original content or claim an atomic snapshot against hostile concurrent replacement.
+
+The prepared inactive source is 27,884 bytes with SHA-256
+`6b997d1ed3cc4d1db3b8f87c2509845fc30debe678cf8618601295e7d44400ac`.
+After independent source/procedure acceptance, the only proposed activation changes
+`ACTIVE = False` to `ACTIVE = True`, producing 27,883 bytes with SHA-256
+`edb0ef1887f6556d757b07b421a962852201639f17b54ef8775eb29f848ec20b`
+at `/tmp/collect_windows_final_publish_sdk19.accepted.py`. This predicted source has
+not been materialized or executed by preparation. Its preparation-basis protocol pin
+is provenance only; exact execution admission must bind the then-current accepted
+protocol amendment and Wave independently.
+
+Use the existing reviewed Linux runtime, with fresh identity and startup-context checks
+at exact admission. The prior accepted identities below are reuse candidates, not a
+claim that preparation re-read the installed files or validated the future environment.
+
+| Runtime file | Bytes | Prior accepted SHA-256 |
+| --- | ---: | --- |
+| `/usr/bin/bash` | 1,540,520 | `3efccc187bafa75ff1e37d246270ab3e7aa559f242c7a52bf3ec2a1b5450bdbd` |
+| `/usr/bin/gnutimeout` | 39,968 | `1ba715580334044dbd32873bddd7f8a19687cda1cf5e9f44be7266af6c048766` |
+| `/usr/bin/python3.14` | 7,477,160 | `52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41` |
+
+The proposed literal is the following command in
+`/tmp/azureauth-windows-names-accepted-108`, with nonlogin `/usr/bin/bash`, no TTY,
+no pipeline/status wrapper and complete original capture:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 95s /usr/bin/python3.14 -I -B -S /tmp/collect_windows_final_publish_sdk19.accepted.py
+```
+
+Require isolated, no-bytecode, no-site and nonoptimized Python startup. Recheck the
+accepted shell/loader/startup injection boundary and selected GNU watchdog identity;
+do not substitute `/usr/bin/timeout`, use `--foreground` or `--preserve-status`, add
+code injection, or load candidate modules for a test. No Windows executable or SDK
+dependency is launched. Source/AST inspection remains data-only preparation.
+
+Accept an outcome only after independent review of the original normal zero exit,
+complete original transport, exact inventory/copy bytes and finite counters, finalization,
+source/runtime/literal bindings, and each conditional absence or content classification.
+An inventory descriptor alone cannot establish completion. Keep `graphAccepted`,
+`artifactAccepted`, `continuation_allowed`, `sdkHistoricalContinuityEstablished`, and
+`sdkProvenanceAccepted` false. On every failure preserve all complete or partial private
+output and the original start/transport evidence; do not delete, rewrite, recollect or
+accept partial data as successful transport. This operation supplies only the admitted
+direct identity frontier. Any shared-runtime/dependency selection, Csc plan, precompiler
+observation, original response join or final publication retains its separate gates.
