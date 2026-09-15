@@ -7187,3 +7187,110 @@ rejects missing-property access. The tracked inactive controller now branches on
 and rejecting unsupported types. This source correction does not identify the lost
 original exception or establish runtime success. The executed active source remains
 unchanged, and the correction grants no activation or execution.
+
+## One Current 0056 Bootstrap Observation
+
+The original 0056 observer remains failed and its dedicated build/test unit consumed.
+This amendment selects one separate read-only observation of its Windows PowerShell
+bootstrap's current presence, absence or unknown state. It does not repeat the
+observer, collect another original receipt, execute a compiler, or change account
+state. The existing credential-free Wave entry covers this bounded lifetime question;
+no desktop attendance is required.
+
+### Source Basis and Remaining Question
+
+The source finding above supplies a qualified reachability exclusion for the exact
+old active controller, SHA-256
+`731ba855e775b326c1716c242ed630b02f472f2d322e621a71464ae16cd1c4d5`,
+under the accepted ordinary Windows PowerShell 5.1/.NET Framework/FileSystem-provider
+trust. Its first authority `Read-Bound` enters the defective `Assert-Direct` before
+opening an input stream. The raw nonroot parent lacks the provider note property;
+StrictMode terminates that path before the clock handshake, guard load, Job
+construction or `guard.Start`. Earlier bootstrap/admission failure cannot reach
+those operations either, and the outer catch/finally has no alternate subject entry.
+Thus this selected route cannot create the guarded subject or its descendants.
+This source conclusion does not identify the discarded original exception or claim
+an observed historical no-launch result. Ordinary runtime/provider/OS activity is
+within the existing trust boundary, not an additional descendant-survey obligation.
+
+The independent source-exclusion addendum is 11,278 bytes, SHA-256
+`e936924ef6c587be62c4123dd7c6a4dad204d838a32b4927ac0b949683b447a8`.
+The remaining observation concerns only the fixed original PowerShell bootstrap.
+No original PID, Job handle, descendant inventory, original-root read or cleanup is
+selected. Preserve the original nonzero outcome and every original receipt flag.
+
+### Exact Query and Effects
+
+Use [the dedicated source](../../../tools/validation/Observe-WindowsCoreCscBootstrap.ps1)
+as one independently admitted `EncodedCommand` of its exact UTF-16LE source text.
+Invoke the existing Windows PowerShell image with `-NoLogo`, `-NoProfile` and
+`-NonInteractive`, from the existing WSL environment through nonlogin Bash with no
+TTY. Independently bind the accepted commit, exact source bytes, runtime route and
+literal tool arguments before the sole call. No source parsing, test invocation or
+native preflight is authorized as a separate attempt. No Windows script file is
+created; encoded source cannot match the original raw controller-path selector.
+
+The source performs one module-qualified `Get-CimInstance` query in local
+`root/cimv2`, with no ComputerName, CimSession, InputObject, remote transport or
+privilege change. [The documented default route](https://learn.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance?view=powershell-5.1)
+uses local WMI through COM. Ordinary installed runtime, module and provider trust
+remains unchanged; no SDK/tool installation, loader inventory or account/store
+access is selected.
+
+The fixed WQL predicate selects `powershell.exe` rows with a null/empty command line
+or the literal old 0056 controller-path substring, using escaped backslashes and
+only the two surrounding LIKE wildcards. It requests CommandLine and ExecutablePath
+only. Each returned row is either the exact old bootstrap tuple or ambiguous;
+none is silently discarded. The image path must match ignoring case, and all
+fourteen original argv tokens must match the literal order, paths and both entire
+authority/invocation hashes. Each whitespace-free token may have paired outer
+quotes; alternate spellings, extra/reordered tokens and partial quotes are unknown.
+The source fixes these values from the admitted original arguments; it does not
+read them from the failed action. No PID, creation-date or parent filter excludes a
+late original bootstrap. Missing attribution, duplicate matches and inaccessible
+properties remain unknown.
+
+Rows are classified in memory. Do not emit or retain raw command lines, image
+paths, process rows, account names, environment values or provider errors. Do not
+invoke a process/Job control method, launch a subject, inspect an account/cache,
+write Windows files, read original experiment files, or adjust security settings.
+
+### Bounds, Original Completion and Disposition
+
+Exactly one launch attempt and one query are permitted. Every outcome, including
+failed startup, consumes the observation. There is no retry or additional query.
+Record the original invocation once in the existing private execution carrier;
+this observation adds no restore/build/test/publish or synthetic-scenario debit.
+The failed observer's durable shared-history charge remains unchanged at 87/120.
+
+The query requests a five-second operation timeout. The script's nonresetting
+elapsed acceptance limit is 15,000 ms, checked before querying, on each streamed
+row and after enumeration. At most sixteen rows receive property examination;
+the seventeenth row aborts before its properties are read. Each examined command
+line is limited to 4,096 UTF-16 code units and each image path to 512. Oversized
+values abort as unknown. These are source consumption/acceptance bounds, not
+quotas on internal WMI work or already materialized rejected rows.
+
+Accept at most one sanitized JSON line and 2,048 combined original stdout/stderr
+bytes. The original tool invocation has a 30-second completion acceptance deadline,
+including startup. If it yields a session, collect only that original session within
+the remaining allowance. Native call latency is not a hard termination guarantee:
+timeout, late/missing host completion, extra output or transport uncertainty remains
+unknown. Stop dependent work at the deadline and retain unresolved lifetime without
+process control or a replacement call. A printed line alone or an outer watchdog
+is not proof that the Windows host exited.
+
+Accept `absent` or `present` only with complete timely original host exit zero,
+the exact output schema, `queryCompleted: true`, `reason: complete`, elapsed time
+within 15,000 ms and consistent counters. Absence requires zero rows, exact matches
+and ambiguities; presence requires exactly one row/match and zero ambiguities.
+Every other outcome stays unknown. Independently review that original outcome.
+Current absence may combine with the accepted source exclusion to resolve only
+this bounded lifetime question. It does not accept the original observer, graph,
+artifact, publication or account scenarios. Keep current history readers blocked
+until the required existing handoff/current-consumer disposition is accepted.
+
+Retain the sanitized original transport and its review in the existing private
+execution carrier. Preserve original and partial artifacts without cleanup. This
+amendment does not refund the observer, rewrite original receipts or enable any
+other experiment.
