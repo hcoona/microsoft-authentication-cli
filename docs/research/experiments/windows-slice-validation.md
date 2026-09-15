@@ -5202,6 +5202,18 @@ history readers and final caller source identities in an immutable source/protoc
 snapshot. Draft source acceptance is not activation acceptance. No actual DLL hash
 is required or invented before the compiler produces it.
 
+The final-mode factory also requires the later final caller's already established
+earlier absolute Windows performance-counter deadline. It retains the original
+running controller/action Stopwatches and intersects all applicable remaining
+time with that shared deadline. It checks after Job/root creation, assignment and
+handle acquisition and before resume. A proven-never-resumed root can be stopped
+only while shared, controller and action time remain; the single stop/confirmation
+window is at most ten seconds inside those bounds. A delayed native return cannot
+start a new wait after a bound expires or establish timely confirmation. Possible
+resume still forbids termination. Ordinary guard behavior is unchanged. The
+disabled final caller rejects a missing shared deadline; this is not final-publish
+activation or a new timing allowance.
+
 The sole compiler is the existing pinned x64 Framework `csc.exe`, with its existing
 configuration, `System.dll`, `System.Core.dll`, implicit `mscorlib.dll` and x64 Windows
 PowerShell host. The sealed compiler recipe fixes these six tool hashes, one C#
@@ -5235,6 +5247,24 @@ markers and receipt policy. The handoff manifest precedes its independent accept
 neither record contains its own future review hash. They bind original history and
 do not create a replacement ledger. A caller Boolean, environment variable or URL
 cannot supply missing authority.
+
+Public authority and freshness GETs use the existing GitHub CLI 2.88.0 at
+`/home/shuaizhang/.local/share/mise/installs/github-cli/2.88.0/gh_2.88.0_linux_amd64/bin/gh`,
+exactly 38,613,154 bytes with SHA-256
+`8854d3cbf95e3a426df6e47e9471c7d2e4d33d2815813229b078283a55a6cb0a`.
+The dispatcher verifies this regular, nonlinked executable through bounded reads
+inside the existing thirty-second Git/GET sublimit. Fixed GET arguments, headers,
+authentication environment and output limits remain unchanged. No PATH fallback,
+installation, shim or authentication change is permitted by this correction.
+
+Preserve the existing evidence root and original post-0053 manifest, handoff
+acceptance and receipt-policy paths and bytes. Refreshed source review, execution
+admission and publication bindings use `source-review-v2.json`,
+`execution-admission-v2.json` and `publication-v2.json` within that same root.
+The unchanged handoff acceptance therefore still refers to its original manifest
+path. No prior immutable authority input is overwritten and no history rerun is
+implied. New source/protocol acceptance and a separately reviewed literal launcher
+remain prerequisites to the sole guard compilation.
 
 The original WSL action clock is 230 seconds. One bounded external admission load,
 one target-freshness check before reservation, fixed Windows preflight, source copy,
@@ -5289,6 +5319,14 @@ final factory. That later invocation retains its own exact final publish protoco
 capacity, source/recipe and no-kill failure rules. Guard preparation alone does not
 admit final publication or establish Native AOT or whole-Slice acceptance.
 
+The guard preparation dispatcher and any later complete final caller must check
+their original deadline and latched cancellation after durable final receipt
+persistence and again after lock release and signal-handler restoration, before
+normal return. A late or cancelled original invocation fails
+even when its preserved receipt contains an earlier normal observation. The
+receipt is retained unchanged and cannot alone establish original completion;
+there is no retry, rewritten success or replacement clock.
+
 ### Integrated Source Binding
 
 This supplement follows the accepted [shared default HTTP evidence](#shared-default-http-composition-evidence)
@@ -5299,14 +5337,14 @@ remain disabled and retain rejecting admission and completion hooks.
 
 | Component | Repository path | SHA-256 |
 | --- | --- | --- |
-| dispatcher | [`run_windows_final_guard_prepare.py`](../../../tools/validation/run_windows_final_guard_prepare.py) | `4ce05f15d406be44ec770f56fcef56c9cca04ecab15e64bebdb578f32cb987e0` |
-| controller | [`Invoke-WindowsFinalGuardPrepare.ps1`](../../../tools/validation/Invoke-WindowsFinalGuardPrepare.ps1) | `8554ba38ec149dddc5869204b09dcca05a3a5cfc339849514fadc3dd622fca8d` |
-| guard | [`WindowsFinalPublishGuard.cs`](../../../tools/validation/WindowsFinalPublishGuard.cs) | `973d9a6ec33c0bfeafe182ec067a67d3b9eee76212b2be71296a24e598aa32e4` |
+| dispatcher | [`run_windows_final_guard_prepare.py`](../../../tools/validation/run_windows_final_guard_prepare.py) | `fbe2ff7adbc18cb15cccc1ee91c7f32e0756a4dff8d7569b2decea79c3861db0` |
+| controller | [`Invoke-WindowsFinalGuardPrepare.ps1`](../../../tools/validation/Invoke-WindowsFinalGuardPrepare.ps1) | `ea93b4eecfea6eed623a3149b648e93686db4f8bafa81561ff28ad0379e4ebae` |
+| guard | [`WindowsFinalPublishGuard.cs`](../../../tools/validation/WindowsFinalPublishGuard.cs) | `d38846b080d5ee092fae9e21c9031712b56289093b50ca048d50589cca50ff4b` |
 | preflight | [`WindowsFinalGuardPreflight.body.txt`](../../../tools/validation/WindowsFinalGuardPreflight.body.txt) | `11a93b9504b70e2caf1e7e6c2f333f1cda178e0adcf88d5998d3eca83450e8b9` |
 | finalPublishDispatcher | [`run_windows_final_publish.py`](../../../tools/validation/run_windows_final_publish.py) | `fc7fe6539b2927994bbd51e81259872c3bee8df7a16e41c02c25a3319d39e176` |
-| finalPublishController | [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | `eb2bf1782cf0708a7e264ad16a61098afc5fc7d94e98210be4be48743a00911d` |
-| linuxHistoryReader | [`run_managed.py`](../../../tools/validation/run_managed.py) | `6d9bbf05d5ba20b4e0bd66dc021af177e4d8f2d928152e6d559163f1ef6f3a8d` |
-| windowsHistoryReader | [`run_windows.py`](../../../tools/validation/run_windows.py) | `63f0872ac141953f988c12abbdba75179f909b023d63680ef50e3f937037cfe3` |
+| finalPublishController | [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | `ef16811f0f8cf481ee6a54b9b7f0552c14bbd6eeeca32bb391c255e52d35628e` |
+| linuxHistoryReader | [`run_managed.py`](../../../tools/validation/run_managed.py) | `49d0f29668bd002ff4488fe95cb561e314d60ea877c8d26df0be28d4e5a79d4b` |
+| windowsHistoryReader | [`run_windows.py`](../../../tools/validation/run_windows.py) | `b9fc3b79d8137be6547ad0f8d8bca8c933b9e37bf4893b485cfb1a631dcd1b84` |
 | windowsHistoryController | [`Invoke-WindowsValidation.ps1`](../../../tools/validation/Invoke-WindowsValidation.ps1) | `c19e7830088476d6b03b078bf42af3daee0b08e1a76da0827ce974a10b9b7216` |
 
 The compiler recipe, six installed-tool pins, thirty-entry replacement environment,

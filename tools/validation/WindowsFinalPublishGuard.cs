@@ -19,6 +19,7 @@ public sealed class WindowsValidationJob : IDisposable
     private bool unassignedPending;
     private readonly bool retainFinalPublishFailures;
     private readonly Stopwatch finalPublishControllerWatch;
+    private readonly long finalPublishOuterDeadlineCounter;
     private Stopwatch finalPublishActionWatch;
     private static readonly bool FinalPublishDraftOnly = false;
     private bool finalPublishStartAttempted;
@@ -41,24 +42,35 @@ public sealed class WindowsValidationJob : IDisposable
     public StreamReader Output { get; private set; }
     public StreamReader Error { get; private set; }
 
-    public WindowsValidationJob() : this(false, null) { }
+    public WindowsValidationJob() : this(false, null, 0) { }
 
     // PRIVATE DRAFT: a future accepted source/guard binding must remove this gate.
-    public static WindowsValidationJob CreateFinalPublishDraft(Stopwatch controllerWatch)
+    public static WindowsValidationJob CreateFinalPublishDraft(Stopwatch controllerWatch,
+        long outerDeadlineCounter)
     {
         if (FinalPublishDraftOnly)
             throw new InvalidOperationException("Final publish guard has no accepted execution binding");
         if (controllerWatch == null || !controllerWatch.IsRunning || controllerWatch.ElapsedMilliseconds >= 700000)
             throw new InvalidOperationException("Missing or expired original controller clock");
-        return new WindowsValidationJob(true, controllerWatch);
+        if (!Stopwatch.IsHighResolution || Stopwatch.Frequency <= 0 ||
+            outerDeadlineCounter <= 0 || outerDeadlineCounter <= Stopwatch.GetTimestamp())
+            throw new InvalidOperationException("Missing or expired original shared counter deadline");
+        return new WindowsValidationJob(true, controllerWatch, outerDeadlineCounter);
     }
 
-    private WindowsValidationJob(bool retainFailures, Stopwatch controllerWatch)
+    private WindowsValidationJob(bool retainFailures, Stopwatch controllerWatch, long outerDeadlineCounter)
     {
         retainFinalPublishFailures = retainFailures;
         finalPublishControllerWatch = controllerWatch;
+        finalPublishOuterDeadlineCounter = outerDeadlineCounter;
+        if (retainFinalPublishFailures) AssertFinalPublishTime(false);
         job = new SafeFileHandle(CreateJobObject(IntPtr.Zero, null), true);
         if (job.IsInvalid) throw new Win32Exception();
+        if (retainFinalPublishFailures && FinalPublishRemainingMilliseconds(false) <= 0)
+        {
+            job.Dispose();
+            throw new InvalidOperationException("Original deadline expired after Job creation");
+        }
         var limits = new ExtendedLimits();
         limits.Basic.LimitFlags = retainFinalPublishFailures ? 0x8u : 0x2008u;
         // Final publish: ACTIVE_PROCESS only. Existing modes retain KILL_ON_JOB_CLOSE.
@@ -69,6 +81,36 @@ public sealed class WindowsValidationJob : IDisposable
             job.Dispose();
             throw new Win32Exception();
         }
+        if (retainFinalPublishFailures && FinalPublishRemainingMilliseconds(false) <= 0)
+        {
+            job.Dispose();
+            throw new InvalidOperationException("Original deadline expired after Job configuration");
+        }
+    }
+
+    // The earlier shared QPC deadline never restarts at receipt or guard creation.
+    // Floor remaining milliseconds so no wait can round beyond that deadline.
+    private long FinalPublishRemainingMilliseconds(bool requireAction)
+    {
+        if (!retainFinalPublishFailures || finalPublishControllerWatch == null ||
+            !finalPublishControllerWatch.IsRunning) return 0;
+        long ticks = finalPublishOuterDeadlineCounter - Stopwatch.GetTimestamp();
+        if (ticks <= 0) return 0;
+        long shared = (long)Math.Floor(Math.Min(700000m,
+            (decimal)ticks * 1000m / Stopwatch.Frequency));
+        long remaining = Math.Min(shared, 700000 - finalPublishControllerWatch.ElapsedMilliseconds);
+        if (requireAction)
+        {
+            if (finalPublishActionWatch == null || !finalPublishActionWatch.IsRunning) return 0;
+            remaining = Math.Min(remaining, 600000 - finalPublishActionWatch.ElapsedMilliseconds);
+        }
+        return Math.Max(0L, remaining);
+    }
+
+    private void AssertFinalPublishTime(bool requireAction)
+    {
+        if (FinalPublishRemainingMilliseconds(requireAction) <= 0)
+            throw new InvalidOperationException("Missing or expired original shared/controller/action deadline");
     }
 
     // The action watch is the original clock started immediately before this call.
@@ -90,10 +132,7 @@ public sealed class WindowsValidationJob : IDisposable
             if (finalPublishStartAttempted)
                 throw new InvalidOperationException("Final publish permits one root start only");
             finalPublishStartAttempted = true;
-            if (finalPublishActionWatch == null || !finalPublishActionWatch.IsRunning ||
-                finalPublishActionWatch.ElapsedMilliseconds >= 600000 ||
-                finalPublishControllerWatch.ElapsedMilliseconds >= 700000)
-                throw new InvalidOperationException("Missing or expired original deadline");
+            AssertFinalPublishTime(true);
         }
         output = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
         error = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
@@ -126,12 +165,14 @@ public sealed class WindowsValidationJob : IDisposable
             startup.Error = error.ClientSafePipeHandle.DangerousGetHandle();
             startup.Attributes = attributes;
             var command = new StringBuilder("\"" + executable + "\" " + arguments);
+            if (retainFinalPublishFailures) AssertFinalPublishTime(true);
             // CREATE_SUSPENDED | CREATE_UNICODE_ENVIRONMENT | EXTENDED_STARTUPINFO_PRESENT | CREATE_NO_WINDOW
             if (!CreateProcess(executable, command, IntPtr.Zero, IntPtr.Zero, true,
                 0x4 | 0x400 | 0x80000 | 0x8000000, environmentPointer, working,
                 ref startup, out process)) throw new Win32Exception();
             unassignedPending = true;
             if (retainFinalPublishFailures) finalPublishRootCreated = true;
+            if (retainFinalPublishFailures) AssertFinalPublishTime(true);
             if (!AssignProcessToJobObject(job, process.Process))
             {
                 // Final-publish cleanup is centralized in catch, before handle release.
@@ -143,30 +184,44 @@ public sealed class WindowsValidationJob : IDisposable
             }
             unassignedPending = false;
             if (retainFinalPublishFailures) finalPublishRootAssigned = true;
+            if (retainFinalPublishFailures) AssertFinalPublishTime(true);
             Child = Process.GetProcessById((int)process.ProcessId);
             // Framework GetProcessById stores only a PID. Retain its handle before resume.
             if (Child.Handle == IntPtr.Zero) throw new Win32Exception();
-            if (retainFinalPublishFailures && (finalPublishActionWatch.ElapsedMilliseconds >= 600000 ||
-                finalPublishControllerWatch.ElapsedMilliseconds >= 700000))
-                throw new InvalidOperationException("Original deadline expired before resume");
+            if (retainFinalPublishFailures) AssertFinalPublishTime(true);
             // Set before the native call: any unknown resume outcome forbids cleanup.
             if (retainFinalPublishFailures) finalPublishResumeAttempted = true;
             if (ResumeThread(process.Thread) == uint.MaxValue) throw new Win32Exception();
+            if (retainFinalPublishFailures) AssertFinalPublishTime(true);
         }
         catch
         {
             if (retainFinalPublishFailures && finalPublishRootCreated && !finalPublishResumeAttempted)
             {
-                long remaining = 700000 - finalPublishControllerWatch.ElapsedMilliseconds;
+                long stopBeganCounter = Stopwatch.GetTimestamp();
+                long remaining = FinalPublishRemainingMilliseconds(true);
                 if (remaining > 0 && !NeverResumedRootTerminationRequested)
                 {
                     // Original CreateProcess handle, never a PID lookup or descendant stop.
                     NeverResumedRootTerminationRequested = true;
                     NeverResumedRootTerminationSucceeded = TerminateProcess(process.Process, 1);
                     if (NeverResumedRootTerminationSucceeded)
-                        NeverResumedRootExitConfirmed = WaitForSingleObject(process.Process,
-                            (uint)Math.Min(10000L, Math.Max(0L,
-                                700000 - finalPublishControllerWatch.ElapsedMilliseconds))) == 0;
+                    {
+                        // A delayed native return cannot grant a new wait or extend
+                        // the existing ten-second stop window or either original clock.
+                        decimal elapsed = (decimal)(Stopwatch.GetTimestamp() - stopBeganCounter) *
+                            1000m / Stopwatch.Frequency;
+                        long stopRemaining = (long)Math.Floor(Math.Max(0m, 10000m - elapsed));
+                        long wait = Math.Min(stopRemaining, FinalPublishRemainingMilliseconds(true));
+                        if (wait > 0)
+                        {
+                            uint observed = WaitForSingleObject(process.Process, (uint)wait);
+                            decimal observedElapsed = (decimal)(Stopwatch.GetTimestamp() - stopBeganCounter) *
+                                1000m / Stopwatch.Frequency;
+                            NeverResumedRootExitConfirmed = observed == 0 && observedElapsed < 10000m &&
+                                FinalPublishRemainingMilliseconds(true) > 0;
+                        }
+                    }
                     if (NeverResumedRootExitConfirmed) unassignedPending = false;
                 }
             }

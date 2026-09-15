@@ -22,6 +22,7 @@ from pathlib import Path
 import re
 import secrets
 import signal
+import stat
 import subprocess
 import time
 
@@ -33,7 +34,7 @@ PROJECTION = Path("/mnt/c/Temp/azureauth-windows-slice-108")
 POWERSHELL = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
 PROTOCOL_PATH = "docs/research/experiments/windows-slice-validation.md"
 ACTION = "final-guard-prepare"
-SOURCE_SHA256 = "973d9a6ec33c0bfeafe182ec067a67d3b9eee76212b2be71296a24e598aa32e4"
+SOURCE_SHA256 = "d38846b080d5ee092fae9e21c9031712b56289093b50ca048d50589cca50ff4b"
 RECIPE = {'paths': {'compiledArtifactReceiptTemplate': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\guard-build.json', 'compiledArtifactTemplate': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\WindowsFinalPublishGuard.dll', 'compilerWorkingDirectoryTemplate': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\source', 'copiedSourceTemplate': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\source\\WindowsValidationJob.cs', 'guardActionFourDigits': None, 'onlyDynamicPathSubstitution': 'GUARD_ACTION4; derive once from the fresh contiguous durable Windows reservation, not from this proposal.', 'preparationControllerDirectoryTemplate': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\controller', 'sharedActionLock': '/var/tmp/azureauth-windows-slice-108/action.lock', 'windowsActionTemplate': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}', 'windowsRoot': 'C:\\Temp\\azureauth-windows-slice-108', 'wslActionTemplate': '/var/tmp/azureauth-windows-slice-108/windows-actions/${GUARD_ACTION4}', 'wslHistoryRoot': '/var/tmp/azureauth-windows-slice-108/windows-actions', 'wslWindowsProjectionTemplate': '/mnt/c/Temp/azureauth-windows-slice-108/actions/${GUARD_ACTION4}'}, 'compilerInvocation': {'analyzers': [], 'argumentVectorTemplate': ['/noconfig', '/nologo', '/target:library', '/out:C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\WindowsFinalPublishGuard.dll', '/reference:C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.dll', '/reference:C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.Core.dll', 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\source\\WindowsValidationJob.cs'], 'callerArgumentOrEnvironmentOverridesAllowed': False, 'clearInheritedEnvironment': True, 'compilerConfiguration': 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe.config', 'customTasks': [], 'executable': 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe', 'explicitReferences': ['C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.dll', 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.Core.dll'], 'generators': [], 'implicitMscorlibReference': 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\mscorlib.dll', 'nativeAotLinkerOrPdbServiceSelected': False, 'nativeArgumentsTemplate': '/noconfig /nologo /target:library /out:"C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\WindowsFinalPublishGuard.dll" /reference:"C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.dll" /reference:"C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.Core.dll" "C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\source\\WindowsValidationJob.cs"', 'packageRestoreOrCopy': False, 'preservesOriginalBootstrapEnvironmentRecipe': True, 'productSymbolPolicyChanged': False, 'replacementEnvironmentEntryCount': 30, 'replacementEnvironmentTemplate': {'APPDATA': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\home\\roaming', 'ComSpec': 'C:\\Windows\\System32\\cmd.exe', 'DOTNET_ADD_GLOBAL_TOOLS_TO_PATH': 'false', 'DOTNET_CLI_HOME': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\home', 'DOTNET_CLI_TELEMETRY_OPTOUT': '1', 'DOTNET_CLI_UI_LANGUAGE': 'en-US', 'DOTNET_CLI_USE_MSBUILD_SERVER': '0', 'DOTNET_CLI_WORKLOAD_UPDATE_NOTIFY_DISABLE': 'true', 'DOTNET_GENERATE_ASPNET_CERTIFICATE': 'false', 'DOTNET_NOLOGO': '1', 'DOTNET_ROLL_FORWARD': 'Disable', 'DOTNET_ROOT': 'C:\\Program Files\\dotnet', 'DOTNET_SKIP_FIRST_TIME_EXPERIENCE': '1', 'LOCALAPPDATA': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\home\\local', 'MSBUILDDISABLENODEREUSE': '1', 'MSBuildEnableWorkloadResolver': 'false', 'NUGET_HTTP_CACHE_PATH': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\home\\http', 'NUGET_PACKAGES': 'C:\\Temp\\azureauth-windows-slice-108\\packages', 'NUGET_PLUGINS_CACHE_PATH': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\home\\plugins', 'OS': 'Windows_NT', 'PATH': 'C:\\Program Files\\dotnet;C:\\Windows\\System32', 'PROCESSOR_ARCHITECTURE': 'AMD64', 'PROGRAMFILES': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\empty-program-files', 'PROGRAMFILES(X86)': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\empty-program-files', 'SystemRoot': 'C:\\Windows', 'TEMP': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\temp', 'TESTINGPLATFORM_TELEMETRY_OPTOUT': '1', 'TMP': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\temp', 'USERPROFILE': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\home', 'WINDIR': 'C:\\Windows'}, 'resolvedArgumentStringBytesAndHash': None, 'resolvedEnvironmentBytesAndHash': None, 'responseFiles': [], 'sharedCompiler': False, 'sourceFiles': ['C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\source\\WindowsValidationJob.cs'], 'workingDirectoryTemplate': 'C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\source'}, 'tools': {'installedToolReadPerformed': False, 'newToolInstallationOrRepairAllowed': False, 'sha256': {'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.Core.dll': 'fd1097aed825d392a5dc8d19384381d4bb2a43498ea1c9d917f5d80c66600e1b', 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.dll': '2b3c17c6208a0b4b6beb94e1a066f99ba06cdb2ea919479e99d47e8c6d96dc71', 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe': '46809206887326d2d24db1eff1f3064de972c3451abe766b49111450a5e08e00', 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe.config': '2d4610ade011e530d817dd3ba4fc787e5dc0c2297cc520c30a643b8fb13f9093', 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\mscorlib.dll': '5bffb20e1217bad314143d7e5c4c809bf9f522e8a0a063c8e7e9b25113de26eb', 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe': '8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e'}, 'source': 'Accepted immutable tools/validation/run_windows.py TOOLS entries'}}
 
 # The final independently reviewed launcher must pin this one fixed envelope.
@@ -45,6 +46,9 @@ AUTHORITY_PATH = Path('/tmp/windows-final-guard-execution-authority.json')
 EVIDENCE_ROOT = Path('/tmp/windows-final-guard-authority-inputs')
 REPOSITORY = Path('/home/shuaizhang/s/github.com/hcoona/microsoft-authentication-cli')
 FORK = 'hcoona/microsoft-authentication-cli'
+GITHUB_CLI_PATH = '/home/shuaizhang/.local/share/mise/installs/github-cli/2.88.0/gh_2.88.0_linux_amd64/bin/gh'
+GITHUB_CLI_BYTES = 38613154
+GITHUB_CLI_SHA256 = '8854d3cbf95e3a426df6e47e9471c7d2e4d33d2815813229b078283a55a6cb0a'
 GRANT = 'a0f741b59e09f1eb95594dbfde7a6e634d962210'
 PACKAGE = Path(__file__).parent.parent
 PREFLIGHT_BODY_SHA256 = '11a93b9504b70e2caf1e7e6c2f333f1cda178e0adcf88d5998d3eca83450e8b9'
@@ -73,11 +77,11 @@ COMPONENT_REPOSITORY_PATHS = {
     'windowsHistoryController': 'tools/validation/Invoke-WindowsValidation.ps1',
 }
 EVIDENCE_SELECTORS = {
-    'sourceReview': 'source-review.json',
+    'sourceReview': 'source-review-v2.json',
     'handoffManifest': 'post0053-handoff.json',
     'handoffAcceptance': 'post0053-handoff-acceptance.json',
-    'executionAdmission': 'execution-admission.json',
-    'publication': 'publication.json',
+    'executionAdmission': 'execution-admission-v2.json',
+    'publication': 'publication-v2.json',
     'receiptPolicy': 'receipt-artifact-policy.json',
 }
 LIMITS = {
@@ -188,10 +192,39 @@ def bound_input(binding, deadline, cancelled, continuity, limit=1024 * 1024):
     return data
 
 
+def verify_github_cli(deadline, cancelled):
+    check_time(deadline, cancelled)
+    path = direct(GITHUB_CLI_PATH)
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    try:
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_size != GITHUB_CLI_BYTES or not info.st_mode & 0o111:
+            raise ValueError('Fixed GitHub CLI type, size or executable mode changed')
+        digest = hashlib.sha256()
+        total = 0
+        with os.fdopen(fd, 'rb', closefd=False) as stream:
+            while chunk := stream.read(1024 * 1024):
+                check_time(deadline, cancelled)
+                total += len(chunk)
+                if total > GITHUB_CLI_BYTES:
+                    raise ValueError('Fixed GitHub CLI exceeded its exact size')
+                digest.update(chunk)
+        if total != GITHUB_CLI_BYTES or digest.hexdigest() != GITHUB_CLI_SHA256:
+            raise ValueError('Fixed GitHub CLI identity changed')
+    finally:
+        os.close(fd)
+    check_time(deadline, cancelled)
+
+
 def public_read(argv, deadline, cancelled, output_limit=1024 * 1024):
     """One fixed local Git/GET process; never a Windows proxy or subject runner."""
     check_time(deadline, cancelled)
     end = min(deadline, time.monotonic_ns() + 30_000_000_000)
+    if argv[0] not in ('/usr/bin/git', GITHUB_CLI_PATH):
+        raise ValueError('Unknown fixed local verification executable')
+    if argv[0] == GITHUB_CLI_PATH:
+        verify_github_cli(end, cancelled)
+    check_time(end, cancelled)
     process = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, env={
                                    **{key: value for key, value in os.environ.items()
@@ -246,7 +279,7 @@ def git_read(arguments, deadline, cancelled):
 
 def github_get(endpoint, deadline, cancelled):
     # Endpoints are constructed only below from the fixed fork and checked IDs.
-    return public_read(['/usr/bin/gh', 'api', '--hostname', 'github.com', '--method', 'GET',
+    return public_read([GITHUB_CLI_PATH, 'api', '--hostname', 'github.com', '--method', 'GET',
                         '-H', 'Accept: application/vnd.github+json',
                         '-H', 'X-GitHub-Api-Version: 2022-11-28', endpoint], deadline, cancelled)
 
@@ -1000,9 +1033,16 @@ def prepare_guard_candidate():
                 result["utc"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
                 result["continuation_allowed"] = False
                 write_new(local / "result.json", encode(result))
+                if result["normalCompletion"]:
+                    # Preserve the receipt if persistence returns late or cancelled;
+                    # the same original invocation must fail before normal return.
+                    check_time(deadline, lambda: interrupted)
     finally:
         for value, handler in old_handlers.items():
             signal.signal(value, handler)
+    if result["normalCompletion"]:
+        # Include shared-lock release and original signal-handler restoration.
+        check_time(deadline, lambda: interrupted)
     return result
 
 
