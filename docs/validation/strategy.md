@@ -481,6 +481,16 @@ Only the construction helper executes; the remaining concrete session bindings h
 source and compiled review. Real availability, discovery/acquisition, native/default
 activation, WAM/account reuse, Windows/WSL lifetime and final Native AOT remain open.
 
+The [shared default HTTP composition result](../research/experiments/windows-slice-validation.md#shared-default-http-composition-evidence)
+binds two unchanged red/green scenarios to the common public/default composition:
+HTTP ownership survives pending cancellation work, actual request/host/pipe/cancellation
+drains precede disposal, and disposal precedes process completion. A disposal stall
+retains the product watchdog and exits within the original ending allowance without
+fixture enforcement. Native admission, DLL-search setup, MSAL session and network
+transport are controlled substitutes. This supplies managed Windows process ownership
+evidence; real default dependency activation, WAM/account reuse, actual WSL caller
+lifetime, final Native AOT and overall Slice acceptance remain open.
+
 The design's public dependency premises and security/TMT update receive independent
 architecture, consistency, minimality, security, record-system, and research-evidence
 review. Record schema checks, native TMT open/analysis, review identities, findings and

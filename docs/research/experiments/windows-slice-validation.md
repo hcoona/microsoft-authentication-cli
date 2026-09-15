@@ -5016,3 +5016,144 @@ Before each test, independently review actual PE/PDB/IL, generated registration,
 The exact source/compiled line coordinates are bound when those inputs exist; the protocol freezes the required semantic assertions now. No phase may waive a prior accepted gate. Broader effects, a third child or a weakened completion contract require a revised accepted proposal before dependent work.
 
 Future source and artifact identities must be bound at their corresponding admission gates. Real own-identity/default/broker/account/WSL and final Native AOT obligations remain open.
+
+## Shared Default HTTP Composition Evidence
+
+The shared default HTTP increment uses accepted protocol and target
+`7b12039c10c5a196b6cb99385bf7d849c4f23820`. Public and controlled entries share one
+request-local composition. The controlled selection replaces native admission, loader,
+MSAL session and network transport; it exercises actual owned Windows processes,
+pipes, STA parents, cancellation, HTTP ownership and process completion.
+
+### Accepted RED and GREEN Source
+
+RED source `1bddba0fd2ffc94cfa3fd33e8cd77cfc46ddf0be`, tree
+`2553ee4872123e46b5cc4530b90d57f3cee7e019`, contains two nonparameterized scenarios,
+each launching one sequential child. The
+[actual build 0050 review](https://github.com/hcoona/microsoft-authentication-cli/pull/156#issuecomment-5677043079)
+accepts its 547 artifacts, actual PE/PDB/IL, 57 physical source documents and generated
+registration. There are 126 attributed methods and 133 projected cases; only the two
+shared default HTTP methods are selected by the separate test admission.
+
+The [actual RED 0051 review](https://github.com/hcoona/microsoft-authentication-cli/pull/156#issuecomment-5677684197)
+accepts exactly two executed and failed cases, with every other outcome counter zero.
+Their first failures are the intended missing `http-dispose-entered` assertions at
+source lines 49 and 69, joined to actual PDB/IL and complete reports. The cancellation
+child completes its existing drains and returns cancelled JSON with exit 1. The
+synthetic-success child completes its drains and returns success JSON with exit 0;
+the missing disposal prevents it from entering the later stall/watchdog assertions.
+All prerequisite markers, captures and child receipts are complete. Neither fixture
+enforcement nor a safety marker occurred.
+
+The original test invocation was fully collected with outer exit 0. The test runner
+returned expected exit 2 in 1.619 seconds; six total Job processes ended with zero
+active, complete capture and no termination or safety stop. Host-closing-to-observed-exit
+intervals were 89.3521 ms and 63.3389 ms, within the fixed 1,100 ms bound.
+One offline collector correction added the source-required `correlationId` to the
+exact synthetic success schema with canonical nonzero UUID validation. Independent
+triage and acceptance used the original completed run; no test was repeated.
+
+| RED 0051 evidence | SHA-256 |
+| --- | --- |
+| WSL start | `d5455126f811c4a93348c18db730ff0250d9115bacadb2969a185dcc7e5fd60b` |
+| Windows start | `656250b320033d34a4ea1711aa1d804f7bbaa782decbac45a76497c7348a5fc4` |
+| WSL final | `ccb9d5cfdb5885c86366a2d0e2de94f3784f44ff61957d05092bef05b521af6f` |
+| Windows final | `64edd959c495a686a2a6701023fc53f6995aeaee032c70980dd2fbe78e1f3955` |
+| Complete TRX | `766ffc2a82fe2434f784b7062d50ae7499189585bd02b3a5c748d2a86f52d003` |
+
+After actual RED acceptance, GREEN source
+`7188ea56da826f6025b703a26458d16bb9c7faf5`, tree
+`42bb296c88df8c9d3eb55a9c37176a79952c7001`, adds only the retained `disposeHttp()`
+call after invocation, owned-host, pipe and process-cancellation completion. The
+[independent source and build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/156#issuecomment-5677861691)
+binds the one-line change and unchanged tests. Disposal
+runs on the request worker before process completion is published; the calling-thread
+watchdog remains active. All other 195 tracked files, including 32 test files and 17
+project/build/lock files, are unchanged. Source review alone does not establish the
+GREEN runtime result.
+
+### Accepted GREEN Build
+
+The [actual GREEN build 0052 review](https://github.com/hcoona/microsoft-authentication-cli/pull/156#issuecomment-5678218400)
+accepts four projects with zero warnings or errors, complete captures and normal
+quiescence. The build took 6.365 seconds; four total Job processes ended with zero
+active and no termination or safety stop. Its complete 2,010-entry input map,
+376-entry tool map and invocation equal the admitted maps.
+
+The 547 outputs comprise 109 freshly hashed nonpackage outputs and 438 unchanged
+copied package outputs. Actual PE/PDB/IL review joins the same 126 methods, 133
+projected cases, 57 physical source documents and 27 fixed marker sites. Tests are
+unchanged. The sole compiled method delta adds the shared disposal invocation in
+`WindowsProcess.Execute`, after the actual retained work drains and before process
+completion. The other 1,569 selected method bodies remain equivalent. This does
+not independently establish a join of the pipe observer's operating-system thread.
+
+| GREEN build 0052 evidence | SHA-256 |
+| --- | --- |
+| WSL start | `7af2f971c69d7ac8fd07377d714f5a0a01fbe1904f84c36066466516762e4c2d` |
+| Windows start | `4f84e8a746296ba5abd9fcd81dc11bbd4d1feba5589521c019ec7c81e92956d4` |
+| WSL final | `83191d517037e3619a214add289d2ad3a858bc75468bdf2d4da6f16bef2760a1` |
+| Windows final | `4770ca948516f9a8b0be438fb3227632acb1bd61e68a4ac623ae561bb7f6935c` |
+| Artifact manifest | `9128d1c4008201ad48057e52f96ac93769dd24722d9c27f4fe6ad13449d299b8` |
+
+### Accepted GREEN Scenarios
+
+The [actual GREEN 0053 review](https://github.com/hcoona/microsoft-authentication-cli/pull/156#issuecomment-5678817646)
+accepts the two unchanged scenarios from GREEN source
+`7188ea56da826f6025b703a26458d16bb9c7faf5` under the original `7b12039` protocol.
+The complete TRX has exactly two executed, passed cases and every other outcome
+counter zero. Each method joins to its one admitted child and complete captures.
+
+The cancellation child observes pending HTTP, provider and cancellation work,
+releases the held drain, and returns complete cancelled JSON with exit 1. Actual
+request, owned-host, pipe and process-cancellation completion precedes HTTP disposal;
+disposal completes before process return. No premature disposal or cancellation-order
+violation is observed. The disposal-stall child returns the complete synthetic
+success object, then enters HTTP disposal and the fixed stall. The product watchdog
+terminates it with exit 2; disposal completion and process return are absent. Neither
+child needs fixture enforcement, and no safety marker is present.
+
+The cancellation child's entry-to-observed-exit interval is 212.9687 ms. The stall
+child's candidate-returned-to-observed-exit interval is 1,034.4391 ms; that source-bound
+marker precedes its internal terminal selection. Both conservatively satisfy the
+1,000 ms shutdown allowance plus 100 ms observation tolerance. Host-closing intervals
+are 90.0006 ms and 1,028.1662 ms, respectively; the host-closing marker alone does not
+identify the earliest internal ending. Both children also satisfy the unchanged
+4-second request deadline and original 5,100 ms observation bound. Source and compiled
+review preserve the watchdog's original ending timestamps throughout drain and disposal.
+
+The original invocation is fully collected with outer exit 0. The Windows test runner
+returns exit 0 in 3.016 seconds, with complete 640-byte stdout and empty stderr. All
+six Job processes end with zero active, complete capture and no controller
+termination or safety stop. Automated preparation and release require no human input.
+
+| GREEN 0053 evidence | SHA-256 |
+| --- | --- |
+| WSL start | `512a6fff83fe2c20075a60f27bb48d95ee66c0cbe4248c10b0652986f685a4fb` |
+| Windows start | `74d802115cb0eb69368c1f36dc0f7e3d7aa55c5af71c1e8c4ae5cd193815e972` |
+| WSL final | `d5a19df41f143141df9b0de804da0be0bf52b0d7efc27c04b11b71927fbc9b51` |
+| Windows final | `13f59f733b8714e10ab1e32b48318db4b217bcc348753ab4b8c3a49be0bde642` |
+| Prepared-ready receipt | `a5e7ce4b4ebc729730db248544f4a4d8cc9e9c299c5575b02f4a56ee72c45a15` |
+| Automatic-release receipt | `5e5d34b9ac45474edd9d83d561c879f54a46a314c10d4a3fa1d9456ca09d0a0b` |
+| Complete TRX | `dd780d7ecbbb11f51b00fc16d9c6facf2840e7ff52a51a4027a5d0a26b0c64ec` |
+
+### Consumption and Evidence Limits
+
+The completed four-action RED/GREEN cycle consumes its entire allocation. Windows
+build/test is 48/48, Linux build/test is 37/80, and combined build/test is 85/120.
+Synthetic process consumption is 48/60, including owned-process 20/20 and shared
+default HTTP 4/4. The remaining twelve process units are reserved for the unchanged
+final CLI selection. Preparation remains 13/16, including Windows 5/5 and Linux 8/11;
+downloads remain 768 MiB. This evidence update reserves no capacity and admits no
+retry, additional child, restore, publish or authentication action.
+
+These controlled observations establish shared default HTTP ownership through actual
+Windows process drain and disposal, including retention of the product watchdog.
+They substitute native admission, DLL search setup, MSAL session and network transport.
+No account enumeration, token acquisition, real WAM interaction, authenticated resource
+request or account/cache effect occurs. Synthetic success uses the exact thirteen-field
+schema, including a canonical nonzero correlation UUID; it is not an acquired token.
+Artifacts and sanitized experiment evidence are intentionally retained. Executed source
+and protocol identities remain distinct from the later PR #156 documentation merge.
+Real dependency activation, WAM and selected-account reuse, actual WSL caller lifetime,
+final Native AOT and overall Slice acceptance remain open.
