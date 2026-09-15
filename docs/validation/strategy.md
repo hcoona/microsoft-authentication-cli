@@ -468,8 +468,18 @@ binds sixteen unchanged red/green scenarios to request initialization, Profile/t
 mapping, exact account and claims continuation, cancellation, safe provider failures,
 and one owned HTTP client retained until cancellation and drain. Controlled sessions
 and a terminal HTTP handler with no network transport establish these observations. Concrete
-MSAL construction, real broker availability and accounts, default entry activation,
-Windows/WSL lifetime and final Native AOT retain their separate evidence obligations.
+MSAL construction has separate evidence below. Real broker availability and accounts,
+default entry activation, Windows/WSL lifetime and final Native AOT retain their
+separate evidence obligations.
+
+The [concrete MSAL construction result](../research/experiments/windows-slice-validation.md#concrete-msal-construction-evidence)
+binds four unchanged red/green scenarios to the real shared production application
+builder: common, organizations and an exact synthetic tenant configuration, plus
+original cancellation before construction. Supplied HTTP-factory identity, disabled
+logging and no client request or transport send are observed in that selection.
+Only the construction helper executes; the remaining concrete session bindings have
+source and compiled review. Real availability, discovery/acquisition, native/default
+activation, WAM/account reuse, Windows/WSL lifetime and final Native AOT remain open.
 
 The design's public dependency premises and security/TMT update receive independent
 architecture, consistency, minimality, security, record-system, and research-evidence
