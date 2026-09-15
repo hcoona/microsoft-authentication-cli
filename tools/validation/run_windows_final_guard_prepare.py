@@ -42,8 +42,8 @@ RECIPE = {'paths': {'compiledArtifactReceiptTemplate': 'C:\\Temp\\azureauth-wind
 # caller URL/boolean creates authority. No own-source or future-review hash lives
 # in this dispatcher. The launcher, source review and publication precede use.
 REVIEWED_LAUNCH = None
-AUTHORITY_PATH = Path('/tmp/windows-final-guard-execution-authority.json')
-EVIDENCE_ROOT = Path('/tmp/windows-final-guard-authority-inputs')
+AUTHORITY_PATH = Path('/tmp/windows-final-guard-0055-execution-authority.json')
+EVIDENCE_ROOT = Path('/tmp/windows-final-guard-0055-authority-inputs')
 REPOSITORY = Path('/home/shuaizhang/s/github.com/hcoona/microsoft-authentication-cli')
 FORK = 'hcoona/microsoft-authentication-cli'
 GITHUB_CLI_PATH = '/home/shuaizhang/.local/share/mise/installs/github-cli/2.88.0/gh_2.88.0_linux_amd64/bin/gh'
@@ -61,6 +61,7 @@ COMPONENT_SELECTORS = {
     'preflight': 'candidate/WindowsFinalGuardPreflight.body.txt',
     'finalPublishDispatcher': 'candidate/run_windows_final_publish.draft.py',
     'finalPublishController': 'candidate/Invoke-WindowsFinalPublish.draft.ps1',
+    'guardHistory': 'authority-inputs/final_guard_history.py',
     'linuxHistoryReader': 'authority-inputs/run_managed.py',
     'windowsHistoryReader': 'authority-inputs/run_windows.py',
     'windowsHistoryController': 'authority-inputs/Invoke-WindowsValidation.ps1',
@@ -72,21 +73,24 @@ COMPONENT_REPOSITORY_PATHS = {
     'preflight': 'tools/validation/WindowsFinalGuardPreflight.body.txt',
     'finalPublishDispatcher': 'tools/validation/run_windows_final_publish.py',
     'finalPublishController': 'tools/validation/Invoke-WindowsFinalPublish.ps1',
+    'guardHistory': 'tools/validation/final_guard_history.py',
     'linuxHistoryReader': 'tools/validation/run_managed.py',
     'windowsHistoryReader': 'tools/validation/run_windows.py',
     'windowsHistoryController': 'tools/validation/Invoke-WindowsValidation.ps1',
 }
 EVIDENCE_SELECTORS = {
     'sourceReview': 'source-review-v2.json',
-    'handoffManifest': 'post0053-handoff.json',
-    'handoffAcceptance': 'post0053-handoff-acceptance.json',
+    'handoffManifest': '/tmp/windows-final-guard-authority-inputs/post0053-handoff.json',
+    'handoffAcceptance': '/tmp/windows-final-guard-authority-inputs/post0053-handoff-acceptance.json',
     'executionAdmission': 'execution-admission-v2.json',
     'publication': 'publication-v2.json',
-    'receiptPolicy': 'receipt-artifact-policy.json',
+    'receiptPolicy': '/tmp/windows-final-guard-authority-inputs/receipt-artifact-policy.json',
+    'failedGuardDisposition': '/tmp/windows-final-guard-0054-failed-history-disposition-v1.json',
+    'fixtureDisposition': 'fixture-disposition.json',
 }
 LIMITS = {
-    'guardPreparations': 1, 'linuxPreparationCeiling': 10,
-    'windowsPreparationCeiling': 6, 'combinedPreparationCeiling': 16,
+    'guardPreparations': 2, 'linuxPreparationCeiling': 9,
+    'windowsPreparationCeiling': 7, 'combinedPreparationCeiling': 16, 'fixtureBuildTestCharge': 1,
     'windowsBuildTestCeiling': 48, 'combinedBuildTestCeiling': 120,
     'reservedProcessScenarios': 0, 'preparationCharge': 1,
     'buildTestCharge': 0, 'publishCharge': 0,
@@ -103,7 +107,7 @@ def binding_spec(path):
 
 
 ENVELOPE_SPEC = {
-    'schema': 'final-guard-external-authority-v1',
+    'schema': 'final-guard-external-authority-v2',
     'repository': FORK, 'branch': 'main-v2', 'scope': 'compiler-only-final-guard-prepare',
     'target': {'commit': '@rev', 'tree': '@rev'},
     'wave': {'path': 'docs/delivery-wave.md', 'blob': '@rev', 'sha256': '@hash'},
@@ -135,6 +139,8 @@ class VerifiedAdmission:
     component_bytes: object
     continuity: tuple
     preflight_command: tuple
+    guard_module: object
+    guard_state: dict
 
 
 def freeze(value):
@@ -184,7 +190,18 @@ def authority_bytes(path, deadline, cancelled, limit=1024 * 1024):
     return data
 
 
+class AdmissionContinuity(list):
+    def __init__(self):
+        super().__init__()
+        self.reads = 0
+        self.bytes = 0
+
+
 def bound_input(binding, deadline, cancelled, continuity, limit=1024 * 1024):
+    continuity.reads += 1
+    continuity.bytes += binding['bytes'] + 1
+    if continuity.reads > 128 or continuity.bytes > 67108864:
+        raise ValueError('Shared guard-validation input bound exceeded')
     data = authority_bytes(binding['path'], deadline, cancelled, limit)
     if len(data) != binding['bytes'] or hash_bytes(data) != binding['sha256']:
         raise ValueError('External input binding changed')
@@ -402,7 +419,7 @@ def load_external_admission(deadline, cancelled):
     if DRAFT_ONLY or REVIEWED_LAUNCH is None:
         raise RuntimeError('UNBOUND: separately reviewed literal envelope launcher')
     assert_shape(REVIEWED_LAUNCH, binding_spec(AUTHORITY_PATH))
-    continuity = []
+    continuity = AdmissionContinuity()
     envelope_bytes = bound_input(REVIEWED_LAUNCH, deadline, cancelled, continuity)
     envelope = decode(envelope_bytes)
     assert_shape(envelope, ENVELOPE_SPEC)
@@ -460,12 +477,14 @@ def load_external_admission(deadline, cancelled):
                                        8 * 1024 * 1024 if role == 'handoffManifest' else 1024 * 1024)
                       for role in EVIDENCE_SELECTORS}
     evidence = {role: decode(data) for role, data in evidence_bytes.items()}
-    source_review = {'schema': 'final-guard-source-acceptance-v1', 'accepted': True,
+    source_review = {'schema': 'final-guard-source-acceptance-v2', 'accepted': True,
                      'scope': 'guard-preparation-source-activation-and-final-callers',
                      'source': envelope['source'], 'components': envelope['components'],
                      'callerPolicy': 'fixed-final-only-callers-no-generic-helper-use',
                      'protocol': envelope['protocol'], 'recipeSha256': RECIPE_SHA256,
-                     'preflight': envelope['preflight'], 'toolSha256': envelope['toolSha256']}
+                     'preflight': envelope['preflight'], 'toolSha256': envelope['toolSha256'],
+                     'failedGuardDisposition': envelope['failedGuardDisposition'],
+                     'fixtureDisposition': envelope['fixtureDisposition']}
     assert_shape(evidence['sourceReview'], source_review)
     validate_handoff(evidence['handoffManifest'], evidence['handoffAcceptance'], envelope)
     policy = {'schema': 'final-guard-receipt-artifact-policy-v1', 'scope': ACTION,
@@ -474,8 +493,9 @@ def load_external_admission(deadline, cancelled):
     assert_shape(evidence['receiptPolicy'], policy)
     admission = {key: envelope[key] for key in ('repository', 'branch', 'scope', 'target', 'wave', 'protocol',
                   'source', 'handoffSource', 'handoffProtocol', 'components', 'sourceReview', 'handoffManifest', 'handoffAcceptance',
-                  'receiptPolicy', 'rootMarkers', 'recipeSha256', 'toolSha256', 'preflight', 'limits')}
-    admission.update(schema='final-guard-execution-admission-v1', accepted=True)
+                  'receiptPolicy', 'rootMarkers', 'recipeSha256', 'toolSha256', 'preflight', 'limits',
+                  'failedGuardDisposition', 'fixtureDisposition')}
+    admission.update(schema='final-guard-execution-admission-v2', accepted=True)
     assert_shape(evidence['executionAdmission'], admission)
     publication = evidence['publication']
     roles = ('sourceReview', 'handoffAcceptance', 'executionAdmission')
@@ -498,19 +518,43 @@ def load_external_admission(deadline, cancelled):
         'linuxOwnerSha256': envelope['rootMarkers']['linuxOwnerSha256'],
         'windowsOwnerSha256': envelope['rootMarkers']['windowsOwnerSha256'],
     }
+    import importlib.util
+    module_path = PACKAGE / COMPONENT_SELECTORS['guardHistory']
+    spec = importlib.util.spec_from_file_location('accepted_final_guard_history', module_path)
+    guard_module = importlib.util.module_from_spec(spec)
+    exec(compile(components['guardHistory'], str(module_path), 'exec', dont_inherit=True), guard_module.__dict__)
+    if Path(guard_module.__file__).absolute() != module_path:
+        raise ValueError('Actual guard-history module source changed')
+    guard_state = guard_module.new_state(deadline=deadline / 1_000_000_000)
+    guard_state['deadline'] = deadline / 1_000_000_000
+    guard_state['moduleBinding'] = {'path': str(module_path), 'bytes': len(components['guardHistory']), 'sha256': hash_bytes(components['guardHistory'])}
+    guard_state['reads'] = continuity.reads
+    guard_state['bytes'] = continuity.bytes
+    guard_module.load_context(envelope['failedGuardDisposition'], envelope['fixtureDisposition'], guard_state)
+    guard_state['checkpoints'] = 0
     check_time(deadline, cancelled)
     return VerifiedAdmission(envelope_bytes, hash_bytes(envelope_bytes), freeze(envelope), freeze(accepted),
                              evidence_bytes['handoffManifest'], evidence_bytes['handoffAcceptance'],
-                             freeze(components), tuple(continuity), command)
+                             freeze(components), tuple(continuity), command, guard_module, guard_state)
 
 
 def assert_descriptor_continuity(descriptor, deadline, cancelled):
     if type(descriptor) is not VerifiedAdmission:
         raise ValueError('Original verified descriptor required')
-    for path, size, digest in descriptor.continuity:
-        data = authority_bytes(path, deadline, cancelled, 8 * 1024 * 1024)
-        if len(data) != size or hash_bytes(data) != digest:
-            raise ValueError('Verified dependency changed; no reload or retry')
+    state = descriptor.guard_state
+    state['checkpoints'] += 1
+    if state['checkpoints'] > 3:
+        raise ValueError('No fourth private continuity checkpoint')
+    fixed = {path: ({'path': path, 'bytes': size, 'sha256': digest},
+                   8388608 if path.endswith('/post0053-handoff.json') else 1048576)
+             for path, size, digest in descriptor.continuity}
+    for path, value in state['continuity'].items():
+        if path in fixed and fixed[path][0] != value[0]:
+            raise ValueError('Conflicting fixed private dependency')
+        fixed[path] = value
+    for path, (item, limit) in fixed.items():
+        check_time(deadline, cancelled)
+        descriptor.guard_module._guard_file(path, item, state, limit, track=False)
     if hash_bytes(descriptor.envelope_bytes) != descriptor.envelope_sha256:
         raise ValueError('Immutable envelope continuity changed')
 
@@ -607,7 +651,9 @@ def names(directory):
     values = sorted(path.name for path in directory.iterdir())
     if values != [f"{index:04d}" for index in range(1, len(values) + 1)]:
         raise ValueError("Noncontiguous original history")
-    if any(not direct(directory / value).is_dir() for value in values):
+    # Exact0054 leaf kind/link checks belong to the shared D54 transaction.
+    if any(not direct(directory / value).is_dir() for value in values
+           if not (directory in (HISTORY, PROJECTION / "actions") and value == "0054")):
         raise ValueError("Non-directory history entry")
     return values
 
@@ -698,6 +744,18 @@ def refresh_histories_under_lock(descriptor, deadline, cancelled):
     if manifest.get("defaultHttpGreenAccepted") is not True:
         raise ValueError("Dependent ordinary GREEN validation is incomplete")
     tail = actual_windows[len(prefix):]
+    if not tail or tail[0] != '0054':
+        raise ValueError('Exact disposed0054 successor prefix required')
+    guard = descriptor.guard_module
+    state = descriptor.guard_state
+    state['deadline'] = min(deadline / 1_000_000_000, time.monotonic() + 30.0)
+    # The fixed validator owns exactly two0054 content/metadata passes.
+    guard.validate_history_action('dispatcher', HISTORY / '0054', PROJECTION / 'actions' / '0054',
+                                 None, None, state)
+    state['deadline'] = deadline / 1_000_000_000
+    totals['windows'][0] += 1
+    starts.append(state['failedStarted'])
+    tail = tail[1:]
     if tail:
         if ACCEPTED_TAIL is None or ACCEPTED_FINAL_ALLOCATION is None or tail != [item["number"] for item in ACCEPTED_TAIL]:
             raise ValueError("UNBOUND: final-stage completion/artifact acceptance")
@@ -726,25 +784,14 @@ def refresh_histories_under_lock(descriptor, deadline, cancelled):
             raise ValueError("Unaccepted synthetic process allocation")
         if processes > 60 and not ACCEPTED_FINAL_ALLOCATION.get("wave61AcceptanceSha256"):
             raise ValueError("W01 needs its separate accepted Wave amendment")
-        if lp > 10 or wp > 6 or lp + wp > 16 or wb > 50 or lb + wb > 120 or publish > 1:
+        if lp > 9 or wp > 7 or lp + wp > 16 or wb > 50 or lb + wb + 1 > 120 or publish > 1:
             raise ValueError("Final-stage allocation exceeded")
     return totals, starts, len(actual_windows), manifest
 
 
 def reserve_guard_under_lock(totals, starts, count, manifest, clock_started, descriptor, deadline, cancelled):
     accepted = descriptor.accepted
-    if any(start["action"] == ACTION for start in starts):
-        raise ValueError("The single guard preparation is already reserved")
-    if sum(start["action"] == "bootstrap" for start in starts) != 1 or sum(start["action"] == "restore" for start in starts) != 4:
-        raise ValueError("Original bootstrap/restore composition changed")
-    lp, lb, _, _ = totals["linux"]
-    wp, wb, publish, processes = totals["windows"]
-    if lp > 10 or wp + 1 > 6 or lp + wp + 1 > 16 or lb + wb > 120:
-        raise ValueError("Preparation transfer/combined ceiling exceeded")
-    if wb > 48 or publish != 0 or processes != 48:
-        raise ValueError("Unexpected post-GREEN final-stage handoff")
-    # No fifth restore, second bootstrap, product test or publish is reserved here.
-    number = f"{count + 1:04d}"
+    number = descriptor.guard_module.successor_reservation(totals, starts, count, descriptor.guard_state)
     if len(number) != 4:
         raise ValueError("Action number overflow")
     local = direct(HISTORY / number)
