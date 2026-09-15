@@ -417,6 +417,30 @@ OWNED_PROCESS_RED = {
 TEST_FILTERS["owned-process"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.NormalOwnedClosurePreservesSuccessAndDrains|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.LocalCancellationSuppressesSuccessBeforeDelayedNotification|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.LocalHostFaultSuppressesSuccessBeforeDelayedNotification|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CancellationDuringCreationSurvivesClosureFailure|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.OrdinaryCreationFailureRemainsMechanismUnavailable|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CleanupFaultAfterNormalClosureSuppressesUncommittedSuccess|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CleanupFaultAfterCommitCannotReplaceTheResult|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.ProcessWaitsForTheActualOwnedThreadExit|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.ProcessWaitsForTheOutgoingOwnedCallback|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.NormalClosureArmsTheBoundBeforeCoreTerminalSelection'
 
 
+MSAL_COMPOSITION_PRIOR_START = "5d1fd49bef654fdfd4dd5773c7f766115549e99dee348b0ad7638fa25f1274e4"
+MSAL_COMPOSITION_PRIOR_FINAL = "06c6a4077e3272a6584f21ec35095d3f34f6e03b7de4ba406949acec4f1b37d9"
+MSAL_COMPOSITION_PREVIOUS_CONTROLLERS = {'run_windows.py': 'd1c7f31e6c68cf11520c998cbb3af78dba277484ea90ce07dca23a1f67167271', 'Invoke-WindowsValidation.ps1': 'aaab817f2b56092619b6af0a0af6c08f9e187986c149d3a9fcf3fdf7c1c9c506'}
+MSAL_COMPOSITION_CASES = (
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.OrdinaryMultitenantProfileUsesCommon',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.FixedWorkProfileUsesItsTenant',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.ExplicitWorkTenantOverridesCommon',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.LegacyPersonalAccountUsesTheTransferTenant',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.LegacyWorkAccountRetainsOrganizations',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.ExplicitResourceTenantWinsOverLegacyPersonalRouting',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.SilentClaimsContinueWithTheSameAccountAndNoCompetingHint',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.NoVisibleMatchUsesOnlyTheRequestedLoginHint',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.ASecondChallengeStopsAndDoesNotExposeProviderDetails',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.DiscoveryFailureUsesTheSameSafeProviderClassification',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.ProviderInitializationFailureUsesTheSameSafeClassification',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.CancellationDuringLoaderSetupPreventsSessionConstruction',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.FailedLoaderSetupPreventsSessionConstruction',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.CancellationDuringSessionConstructionPreventsDiscovery',
+    'Authentication.Windows.Scenarios.MsalCompositionScenarios.OriginalCancellationWinsOverADiscoveryFailure',
+    'Authentication.Windows.Scenarios.MsalHttpOwnershipScenarios.OneOwnedClientSurvivesOperationsUntilCancellationAndDrain',
+)
+TEST_FILTERS["msal-composition"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.OrdinaryMultitenantProfileUsesCommon|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.FixedWorkProfileUsesItsTenant|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.ExplicitWorkTenantOverridesCommon|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.LegacyPersonalAccountUsesTheTransferTenant|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.LegacyWorkAccountRetainsOrganizations|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.ExplicitResourceTenantWinsOverLegacyPersonalRouting|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.SilentClaimsContinueWithTheSameAccountAndNoCompetingHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.NoVisibleMatchUsesOnlyTheRequestedLoginHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.ASecondChallengeStopsAndDoesNotExposeProviderDetails|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.DiscoveryFailureUsesTheSameSafeProviderClassification|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.ProviderInitializationFailureUsesTheSameSafeClassification|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.CancellationDuringLoaderSetupPreventsSessionConstruction|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.FailedLoaderSetupPreventsSessionConstruction|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.CancellationDuringSessionConstructionPreventsDiscovery|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.OriginalCancellationWinsOverADiscoveryFailure|FullyQualifiedName=Authentication.Windows.Scenarios.MsalHttpOwnershipScenarios.OneOwnedClientSurvivesOperationsUntilCancellationAndDrain'
+
+
 def validate_windows_reservation_pair(started, peer, link, final, start_hash, final_hash, evidence):
     """Bind the initial WSL admission to its verified Windows execution copy."""
     if evidence.get("started.json") != start_hash or evidence.get("windows-result.json") != final_hash or \
@@ -494,12 +518,13 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition") or \
                     (suite == "owned-host" and number <= 18) or \
                     (suite == "local-provider" and number <= 24) or \
                     (suite == "host-admission" and number <= 28) or \
                     (suite == "ui-admission" and number <= 32) or \
-                    (suite == "owned-process" and number <= 38):
+                    (suite == "owned-process" and number <= 38) or \
+                    (suite == "msal-composition" and number <= 42):
                 raise ValueError("Unknown Windows test selection")
             required = 12 if suite == "cli" else 10 if suite == "owned-process" else 0
         else:
@@ -513,6 +538,9 @@ def windows_process_reservation(number, started):
 
 
 def selected_cases(suite, expected):
+    if suite == "msal-composition":
+        return {name: "Failed" if expected == "red" else "Passed"
+                for name in MSAL_COMPOSITION_CASES}
     if suite == "owned-process":
         return {name: outcome if expected == "red" else "Passed"
                 for name, outcome in OWNED_PROCESS_RED.items()}
@@ -1172,7 +1200,7 @@ def main():
     for name in ("protocol", "source", "target", "review"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--expect", choices=("red", "green"), default="green")
-    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process"))
+    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition"))
     args = parser.parse_args()
     if (args.action == "test") != (args.suite is not None):
         raise ValueError("Test actions require one finite suite; other actions forbid it")
@@ -1251,6 +1279,18 @@ def execute(args, attended, finish_preparation):
             raise ValueError("Accepted UI-admission green history prerequisite changed")
         if len(previous) < 39:
             raise ValueError("The owned-process disposition requires all thirty-nine Windows actions")
+        if len(previous) < 41 or digest(HISTORY / "0041/started.json") != MSAL_COMPOSITION_PRIOR_START or \
+                digest(HISTORY / "0041/result.json") != MSAL_COMPOSITION_PRIOR_FINAL:
+            raise ValueError("Accepted owned-process green history prerequisite changed")
+        msal_composition_transition = len(previous) == 41
+        if msal_composition_transition and args.action != "build":
+            raise ValueError("The first MSAL composition action must build with its controller transition")
+        if args.suite == "msal-composition":
+            prior_composition = [start for _, start, _ in previous
+                                 if start.get("testSuite") == "msal-composition"]
+            wanted = [] if args.expect == "red" else ["red"]
+            if [start["expected"] for start in prior_composition] != wanted:
+                raise ValueError("MSAL composition permits one red and one subsequent green test")
         diagnostics_transition = len(previous) == 39
         if diagnostics_transition and (args.action != "build" or args.source == previous[-1][1]["source"]):
             raise ValueError("Disposed owned-process red requires a newly admitted corrected-source build")
@@ -1354,7 +1394,8 @@ def execute(args, attended, finish_preparation):
             for name in ("home", "home/roaming", "home/local", "temp", "results", "empty-program-files"):
                 (action / name).mkdir()
             migrations = {}
-            previous_controllers = (PREVIOUS_CONTROLLERS if len(previous) == 3 else
+            previous_controllers = (MSAL_COMPOSITION_PREVIOUS_CONTROLLERS if msal_composition_transition else
+                                    PREVIOUS_CONTROLLERS if len(previous) == 3 else
                                     TEST_PREVIOUS_CONTROLLERS if len(previous) == 6 else
                                     PROCESS_PREVIOUS_CONTROLLERS if graph_transition else
                                     ADAPTER_PREVIOUS_CONTROLLERS if adapter_transition else
