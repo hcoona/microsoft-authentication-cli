@@ -5338,7 +5338,7 @@ remain disabled and retain rejecting admission and completion hooks.
 | Component | Repository path | SHA-256 |
 | --- | --- | --- |
 | dispatcher | [`run_windows_final_guard_prepare.py`](../../../tools/validation/run_windows_final_guard_prepare.py) | `fbe2ff7adbc18cb15cccc1ee91c7f32e0756a4dff8d7569b2decea79c3861db0` |
-| controller | [`Invoke-WindowsFinalGuardPrepare.ps1`](../../../tools/validation/Invoke-WindowsFinalGuardPrepare.ps1) | `ea93b4eecfea6eed623a3149b648e93686db4f8bafa81561ff28ad0379e4ebae` |
+| controller | [`Invoke-WindowsFinalGuardPrepare.ps1`](../../../tools/validation/Invoke-WindowsFinalGuardPrepare.ps1) | `f3224a309a2ec6f6f988518d97e815eaacd4783a54ae85fea7d8738c078b5598` |
 | guard | [`WindowsFinalPublishGuard.cs`](../../../tools/validation/WindowsFinalPublishGuard.cs) | `d38846b080d5ee092fae9e21c9031712b56289093b50ca048d50589cca50ff4b` |
 | preflight | [`WindowsFinalGuardPreflight.body.txt`](../../../tools/validation/WindowsFinalGuardPreflight.body.txt) | `11a93b9504b70e2caf1e7e6c2f333f1cda178e0adcf88d5998d3eca83450e8b9` |
 | finalPublishDispatcher | [`run_windows_final_publish.py`](../../../tools/validation/run_windows_final_publish.py) | `fc7fe6539b2927994bbd51e81259872c3bee8df7a16e41c02c25a3319d39e176` |
@@ -5351,3 +5351,235 @@ The compiler recipe, six installed-tool pins, thirty-entry replacement environme
 authority shape and fixed preflight are defined by these exact source bytes. Acceptance
 does not replace retained controllers or read evidence. Those operations require the
 separate literal launcher and actual authority bindings described above.
+
+## Final Guard Preparation Failure and Entry-Point Correction
+
+### Original Failure and Partial Observation
+
+The sole guard preparation used the accepted PR #158 source/protocol at
+`dc3a342a24970aba77eed8a900292d1db6b78cf2`, tree
+`4650a4c22ce3746845bbdcb28f39ab3d8671803b`, with the original controller
+`ea93b4eecfea6eed623a3149b648e93686db4f8bafa81561ff28ad0379e4ebae`.
+Its [source review](https://github.com/hcoona/microsoft-authentication-cli/pull/158#issuecomment-5680246772)
+and [execution admission](https://github.com/hcoona/microsoft-authentication-cli/pull/158#issuecomment-5680309745)
+remain historical bindings. The original WSL launcher call completed with exit 1
+on September 15, 2026, at 12:51:07 UTC. Its complete 169-byte result reports
+`failureType=RuntimeError`, with `normalCompletion`, `quiescent`,
+`artifactAccepted` and `continuation_allowed` all false. No original normal-call
+completion record was created; no normal postpreparation collector or DLL parser ran.
+
+A separately reviewed file observer then consumed its single invocation and failed
+with `Observed path changed during bounded read`. Its full envelope was fifteen
+seconds, 64 file reads, 2 MiB read bytes, 1 MiB output and 1,024 path operations.
+It retained only three private copies before failure: WSL `started.json`, WSL
+`result.json` and WSL `windows-input.json`. No final observation inventory, complete
+second pass or completed collection acceptance exists. Preserve both failed calls,
+all partial copies and every original receipt unchanged; the observer's remaining
+loop body, one-call allocation and original clock cannot be reused.
+
+| Retained evidence | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Original launcher output | 169 | `99263a024b0463175678aa46330b36f830f5501845ae28caa92730320b37222c` |
+| Original launcher failure record | 1,551 | `2e2b3cd67bb32d4c19ba8eb8b45b91f00a04249925fd4b1db5abe52848af385b` |
+| Original observer failed-call record | 1,459 | `e10c1d0c105e8a64b6c47bfe2659979998c93548a2685da9a1eacd3c64339b7f` |
+| Partial WSL start copy | 1,632 | `3ed0846d150abd790c9a0793df686d04a3e924eaccaca68f96f802c67ae89a07` |
+| Partial WSL result copy | 194 | `feee51e22fab6207ddc7f9ec7c0a2db03b038a9a350cad4c1f050f7750c10d58` |
+| Partial Windows-input copy held in WSL | 83 | `77031c737e1dc79a1201be35503c10ca9a11b29fdf592e69062d59714c157193` |
+
+Independent partial-evidence review joined those three copies to the original
+authority, post-0053 handoff, source and failed result. The WSL result matches the
+original launcher result; `windows-input.json` hashes the copied WSL start. The
+durable start identifies action 0054 and charges one preparation, with all other
+action charges zero. Retain that charge: the recorded-counter projection is Linux
+preparation 8/10, Windows 6/6 and combined 14/16. This projection is not a fresh
+complete-history acceptance. A failed start is not refundable, and unused combined
+capacity does not grant a second guard preparation or raise the Windows ceiling.
+
+The traceback identifies a later Windows content snapshot, but its exact role is
+unknown: missing roles produce no copy, so any of eleven later Windows content
+roles could have rejected. The observer discarded the mismatching metadata before
+raising; the changed field, filesystem cause and original before/after values are
+unavailable. Do not attribute the rejection to a particular receipt, benign
+timestamp drift, file modification, DrvFS or a concurrent process. Partial file
+evidence does not establish the actual Windows failure stage, controller/compiler
+execution, original proxy completion, process ownership or present quiescence.
+
+### Corrected Source and Continuing Gates
+
+Independent triage accepted source finding
+`GUARD-PREPARATION-CONTROLLER-ACTIVATION-001`: the original controller defined
+`Invoke-GuardPreparationCandidate` but never invoked it, and ended in an
+unconditional `UNBOUND` throw. That is a confirmed source defect, not a uniquely
+established runtime cause. The original Windows controller bytes have not yet been
+accepted from actual execution evidence.
+
+The corrected controller invokes the existing function exactly once, requires a
+scalar `Int32` result equal to 0 or 1, and explicitly exits with that result. It
+adds no catch, conversion, replacement clock or receipt change. Existing function
+bodies, compiler restrictions, finalization, normal-completion predicates and false
+artifact/continuation flags remain unchanged. PowerShell's documented
+[return behavior](https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_return?view=powershell-5.1)
+includes all success-stream output, so unexpected extra output must reject instead
+of being coerced into a successful exit. The explicit exit preserves the documented
+[`powershell.exe -File` result](https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_powershell_exe?view=powershell-5.1).
+This is source acceptance only; the corrected controller has not executed.
+
+The source table above binds the corrected bytes for prospective review; it does
+not replace the original controller or revise the old admission. Both original
+history readers still require exactly one normally completed, independently
+accepted guard preparation. They do not accept this failed action. The dispatcher
+still rejects an existing guard reservation. Further preparation requires an
+explicit accepted finite allocation within the Wave, independently accepted failure
+and safety disposition, narrow failed-history compatibility in both readers and
+the dispatcher, and refreshed exact source/protocol/launcher admission. This change
+supplies none of those execution permissions and allocates no additional compiler,
+build/test, publish or synthetic process action.
+
+Normal collection, managed artifact acceptance, B/R/L and the final caller remain
+blocked. Any future reader or source change must refresh their actual paths and
+source bindings, including the prospective final-caller provenance check. A failed
+action cannot supply a successful guard projection or DLL acceptance. Preserve
+unknown ownership and completion; do not repair false flags, synthesize absent
+receipts, reuse the failed action number, load an old guard or perform speculative
+cleanup. Real WAM, selected-account reuse and overall Slice acceptance remain open.
+
+### One Additional Failure-File Observation After the Guard Stop
+
+The sole guard preparation and its first failure-file observer both ended with
+nonzero original exits. Preserve those failures, original receipts and private
+partial copies. The transferred preparation unit remains charged; this amendment
+allocates no new compiler preparation, restore, build/test, publish, download or
+synthetic process unit. It does not activate a corrected controller or reopen
+normal collection, B/R/L, DLL inspection, process cleanup or final publication.
+
+The first observer stopped before completing its first content pass and before
+its continuity/readback inventory. Three retained WSL copies join the original
+failed reservation/result, but missing earlier Windows roles produce no copy.
+Neither the rejecting Windows role nor the changed metadata field is known. A
+later observer cannot recreate those discarded historical values. Do not infer
+a file-system defect, active writer, successful compilation or quiescence.
+
+Subject to independent source/admission/invocation review after this protocol
+amendment is accepted, permit exactly one additional file observation, ordinal 2
+for this same failed guard call. Preserve the first observer and its admission
+unchanged. Charge its entire declared envelope cumulatively; elapsed time or
+unused reads cannot become a new first invocation. There is no third observation,
+retry, automatic diagnostic broadening, repaired receipt or replacement guard clock.
+
+The tracked source `tools/validation/observe_windows_final_guard_failure.py`
+remains inactive with `SECOND_OBSERVATION_ADMISSION = None`. Before use, independently
+bind one exact external admission at
+`/tmp/windows-final-guard-failure-observation2-admission-v1.json`. Its closed fields
+are schema, accepted, scope, protocol, originalFailure, firstObserverFailure,
+authority, observationOrdinal, candidateActionNumber, limits and cumulativeLimits.
+Use schema `final-guard-failure-observation-admission-v1`, accepted true, scope
+`one-additional-read-only-failure-observation`, ordinal 2, candidate `0054`, and
+exact source limits below. Protocol binds the actually accepted commit, tree,
+canonical protocol path and SHA-256. Original failure, first observer failure and
+E descriptors must equal the preserved exact source pins. Acceptance comes from
+the accepted amendment and independent review, never the Boolean alone.
+
+Materialize the exact accepted source in a new private file and replace only the
+null admission assignment with that actual path/bytes/SHA-256 descriptor. Preserve
+the tracked inactive source and both original observers. Independently bind the
+actual source, sole assignment delta, accepted protocol/admission and invocation
+before use. The sole command is `exec /usr/bin/python3 -I -B
+/tmp/observe_windows_final_guard_failure2.accepted.py`, with the original repository
+cwd, login false, no added argv/environment/optimization, and one completely
+collected original tool call. This read-only step needs no attendance wait.
+
+The read surface is exactly the prior 24 roles at the same candidate action paths.
+The fixed WSL prefix is
+`/var/tmp/azureauth-windows-slice-108/windows-actions/0054`; the Windows projection
+is `/mnt/c/Temp/azureauth-windows-slice-108/actions/0054`. The candidate derives from
+the original 53-entry M and is not a new reservation or acceptance of current state.
+Fourteen roles are content eligible; their per-role ceilings are unchanged:
+
+| Role | Prefix | Relative path | Maximum content bytes |
+| --- | --- | --- | ---: |
+| wslStarted | wsl | started.json | 8192 |
+| wslResult | wsl | result.json | 4096 |
+| windowsInput | wsl | windows-input.json | 2048 |
+| windowsStarted | windows | started.json | 8192 |
+| invocation | windows | invocation.json | 32768 |
+| authority | windows | authority.json | 16384 |
+| controller | windows | final-guard/controller/Invoke-WindowsFinalGuardPrepare.ps1 | 65536 |
+| ready | windows | clock-ready.json | 2048 |
+| readyPending | windows | clock-ready.json.pending | 2048 |
+| reply | windows | clock-remaining.json | 2048 |
+| compiler | windows | compiler.json | 4096 |
+| compilerPending | windows | compiler.json.pending | 4096 |
+| windowsResult | windows | windows-result.json | 16384 |
+| windowsResultPending | windows | windows-result.json.pending | 16384 |
+
+Each eligible present regular file receives at most one bounded content read;
+permit only one extra byte beyond its ceiling to detect growth, then stop that
+read and retain a typed oversized anomaly. The ten metadata-only roles remain
+the two candidate action directories, both cancel paths, Windows
+`temp/owned-host-safety-stop.json`, `temp/process-safety-stop.json`, `guard-build.json`,
+`stdout.bin`, `stderr.bin`, and `final-guard/WindowsFinalPublishGuard.dll`. No content
+of those last four files or of a safety marker is opened or hashed.
+
+Use no-follow descriptor-relative directory traversal, metadata, leaf opens and
+exclusive output creation. Capture each before/after path dictionary, its parent
+identity, each opened-file dictionary before/after the bounded read, and typed
+read/OS errors. Preserve observed atime separately; it was not part of the original
+mismatch predicate. The original status/type/device/inode/size/mode/mtime/ctime
+comparison remains, and all differences remain anomalies. Skip linked, nonregular,
+oversized, unavailable or changed opened-identity content. No predicate is weakened
+to obtain success.
+
+Persist each obtained metadata/error dictionary as a bounded append-only JSON
+journal event and fsync it before subsequent classification. Persist classification
+in the journal and raw-copy descriptors in the final inventory. A per-role missing path, typed OS failure,
+metadata difference, partial read or size anomaly must preserve its full obtained
+metadata and continue only to the next already listed role. No arbitrary path is
+followed. Global timeout, cancellation, resource exhaustion, unavailable durable
+output or unexpected programming failure stops the observer and preserves all
+partial files; already lost or unpersisted data cannot be invented.
+
+After at most one content attempt per role, perform only bounded private-copy
+readbacks and prerequisite continuity reads. The eight fixed private prerequisites
+are original guard failure/output/E/M, first observer failure, and its three partial
+WSL copies; do not traverse historical paths in M. The ninth input is the newly
+accepted small diagnostic admission. Keep every original source/evidence pin and
+failed flag unchanged. The original failed observer's metadata is unavailable;
+this second observation records new facts only.
+
+The second invocation has 30 seconds, at most 64 file reads and 2 MiB actual total
+read bytes including private prerequisites/readbacks, 1 MiB written output,
+1,024 path operations and 16 KiB chunks. Journal and final inventory each have a
+256 KiB ceiling. Its maximum successful read count is 48: nine private inputs read
+twice, fourteen original content attempts, fourteen raw-copy readbacks, journal
+readback and inventory readback. Cumulative bounds including the first observer's
+entire reserved envelope are exactly two diagnostic invocations, 45 seconds,
+128 file reads, 4 MiB read, 2 MiB written and 2,048 path operations. The failed
+guard's original 230-second clock is closed and is never restarted or extended.
+
+The only new output is exclusive
+`/tmp/windows-final-guard-failure-observation2-offline-v1`, with at most fourteen
+role.bin copies, `events.jsonl` and `observation.json`. Retain the output-directory
+and journal descriptors. Journal writes are sequential through the original file
+descriptor; a 0444 pathname does not imply that its retained writer has completed.
+Each obtained event is file-fsynced; the created journal and copies are parent-fsynced.
+Raw copies are exclusive 0444 files with exact readbacks; the final journal and
+inventory are independently hash-bound and reread after journal closure. No output
+or input directory is enumerated, and no predecessor is overwritten or removed.
+
+Report transportComplete independently from stableEvidenceAccepted. Only full
+completion of the original second-observer tool call and all fixed role attempts
+can support complete transport; role anomalies remain explicit even when transport completes. Both
+inventory and result retain false stable-evidence, stage/consumption (where
+applicable), process ownership, quiescence, artifact and continuation acceptance.
+A nonzero original observer result invalidates complete transport even if an
+inventory was written earlier. Classifying a mismatch must not erase its recorded
+before/after dictionaries. Independent review owns actual partial/complete evidence
+interpretation and bounded failure/capacity disposition.
+
+No process enumeration, PID lookup/reopen, stop/signal of another process, Windows
+helper, native API, SDK/compiler, account/cache, DLL load, network call or source
+repair is selected. Later file existence, receipt PIDs and typed errors cannot
+establish current process ownership or quiescence. Unknown safety state continues
+to block experiment continuation. If the second observation is incomplete or
+insufficient, preserve it and return to source-only disposition; no further
+original observation or experiment follows under this amendment.
