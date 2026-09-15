@@ -4,6 +4,7 @@ param(
     [Parameter(Mandatory = $true)]
     [ValidatePattern('^[0-9a-f]{64}$')][string] $ReservationSha256
 )
+$defaultHttpPriorAction = 49
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $root = 'C:\Temp\azureauth-windows-slice-108'
@@ -106,6 +107,12 @@ try {
         } elseif ($start.testSuite -ceq 'adapter') {
             $filter = 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentRequirementHonorsInteractionPermission|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.SilentClaimsReachOneContinuationAndSecondChallengeStops|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.AccessDeniedWinsOverUiRequiredAndRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.Structured65004WinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DenialTextAndNativeCodeDoNotImplyEntraDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DuplicateErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.NonNumericErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MalformedOrOverBudgetBodiesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ProviderUserCancellationRemainsCancelled|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalCancellationWinsOverDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalDeadlineWinsLateProviderCancellation|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.HttpTimeoutDoesNotConsumeRequestDeadline|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RetryableProviderStopsWithoutApplicationRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RecognizedNetworkErrorStopsWithoutRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnknownProviderConfigurationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnexplainedCancellationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UserMismatchWinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ResultProjectionPreservesObservedMetadata|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri|FullyQualifiedName=Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation'
             $reserved = 0
+        } elseif ($start.testSuite -ceq 'default-http-composition') {
+            if ($null -eq $defaultHttpPriorAction -or [int]$ActionName -le ($defaultHttpPriorAction + 1)) {
+                throw 'Default HTTP selection predates its admitted retaining build'
+            }
+            $filter = 'FullyQualifiedName=Authentication.Windows.Scenarios.DefaultHttpCompositionScenarios.SharedDefaultHttpOwnershipSurvivesCancellationUntilDrain|FullyQualifiedName=Authentication.Windows.Scenarios.DefaultHttpCompositionScenarios.SharedDefaultHttpDisposalStallRetainsTheProcessWatchdog'
+            $reserved = 2
         } elseif ($start.testSuite -ceq 'msal-construction') {
             if ([int]$ActionName -le 46) { throw 'MSAL-construction selection predates its admission' }
             $filter = 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalConstructionScenarios.OrdinaryProfileConstructsCommonApplication|FullyQualifiedName=Authentication.Windows.Scenarios.MsalConstructionScenarios.LegacyProfileConstructsOrganizationsApplication|FullyQualifiedName=Authentication.Windows.Scenarios.MsalConstructionScenarios.ExactTenantProfileConstructsRestrictedApplication|FullyQualifiedName=Authentication.Windows.Scenarios.MsalConstructionScenarios.OriginalCancellationPreventsApplicationConstruction'
@@ -252,6 +259,7 @@ try {
         Add-Type -Path $helper -ErrorAction Stop -WarningAction Stop
         $guard = [WindowsValidationJob]::new()
         if ($start.action -ceq 'test' -and ($start.testSuite -ceq 'ui-admission' -or $start.testSuite -ceq 'owned-process' -or
+            $start.testSuite -ceq 'default-http-composition' -or
             ($start.testSuite -ceq 'owned-host' -and $start.expected -ceq 'green'))) {
             $stage = 'attendance'
             if ($controllerWatch.Elapsed.TotalSeconds -ge 230) { throw 'Preparation expired' }

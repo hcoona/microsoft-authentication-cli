@@ -4831,3 +4831,188 @@ read-only Windows version query. Full creation's availability call, account/toke
 operations and default entry activation are outside this selection. Construction
 evidence cannot close real WAM/account reuse, native/default composition, actual
 Windows/WSL lifetime, final Native AOT or overall Slice acceptance.
+
+## Shared Default HTTP Composition Supplement
+
+This supplement covers one controlled shared-composition HTTP ownership increment
+under Issue #108. The [concrete MSAL construction result](#concrete-msal-construction-evidence)
+is its accepted prerequisite. Real native admission, WAM/accounts, Windows/WSL
+lifetime and final Native AOT retain their separate evidence obligations.
+
+### Purpose, prerequisites and exact selection
+
+This proposal can be prepared without executing an action. Its later protocol promotion requires actual construction RED/GREEN acceptance and current-state rebinding. The bounded cycle is one RED no-restore build, one RED test, one GREEN no-restore build and one GREEN test for shared default HTTP ownership. Every action requires separate admission, and actual RED acceptance precedes GREEN implementation. Reuse existing process/host/HTTP/fixture mechanisms; do not replay consumed suites or allocations.
+
+One internal selection, default-http-composition, contains exactly two nonparameterized methods declared by `Authentication.Windows.Scenarios.DefaultHttpCompositionScenarios`, with one ProcessFixture child each. The method identities and exact controller filter are fixed together:
+
+| Method | Child | Required GREEN result |
+| --- | --- | --- |
+| SharedDefaultHttpOwnershipSurvivesCancellationUntilDrain | default-http-cancel-drain | Original cancellation reaches pending managed HTTP/provider/callback work; real core/host/pipe/process drain precedes HTTP disposal; one cancelled JSON and matching exit 1; no fixture enforcement. |
+| SharedDefaultHttpDisposalStallRetainsTheProcessWatchdog | default-http-dispose-stall | Actual completed request drain and committed synthetic success precede a three-second disposal stall on request work; independent product watchdog ends child with exit 2 under the local bound; no replacement result or normal process return. |
+
+The triggering sequence and first expected RED assertions are fixed below; this supplement owns the fixed marker whitelist. No data rows, third normal case, hidden child, preflight, repeat or retry is included. Both children use existing ProcessChild synthetic Profile/email/scope/tenant, interactive-if-needed, four-second timeout, real --cancel-on-stdin-close pipes and real WindowsProfileSource. Controlled discovery returns no accounts, opening one actual owned STA parent per child. The synthetic session returns only existing synthetic results and consumes the shared owner through a terminal non-network handler.
+
+The public default and internal fixture entry must use one request-local production composition. Internal-only substitutes provide one shared token-checking admission object, a cancellation-checking loader callback, controlled session factory and terminal HTTP transport. NativeWindowsHostObservations and real MSAL are not selected. There is no public test option, environment-selected provider, skip-availability switch or duplicate default implementation.
+
+One passive BeforeHttpDisposal checkpoint follows actual invocation.CompleteAsync, ownedHost.Completion, pipe.Completion and process.CancellationCompletion, before owner.Dispose and process.Finish. It performs no drain itself. Bind that exact source/compiled location and underlying completion semantics, alongside actual task/host snapshots and external disposal/process witnesses. Preserve owner retention on partial initialization failure through source review, without adding another case.
+
+RED must enter both scenarios and fail first at the fixed missing-disposal assertion after setup/existing-drain prerequisites succeed. It normally returns cancelled exit 1 or synthetic success exit 0 because the new ownership disposal is absent. GREEN retains the same methods/assertions and supplies the missing connection. Source/PDB/report must bind actual first failures; setup or harness failures are not useful RED.
+
+### First RED assertions
+
+Each case must first establish the shared owner, controlled HTTP/provider path,
+owned parent and existing production drains described below. Then require the
+missing `http-dispose-entered` witness with the exact assertion message:
+
+| Method | First intended RED assertion message |
+| --- | --- |
+| `SharedDefaultHttpOwnershipSurvivesCancellationUntilDrain` | `Shared process ownership must dispose HTTP after drain before completion.` |
+| `SharedDefaultHttpDisposalStallRetainsTheProcessWatchdog` | `Shared process ownership must enter HTTP disposal before completion.` |
+
+The first case must already have completed the drained cancelled path with exit 1.
+The second reaches committed synthetic success and the pre-disposal drain boundary;
+its missing-disposal assertion precedes the later watchdog/exit-2 requirements.
+RED normally returns exit 0 in that second child because disposal is absent.
+Do not require a stall marker in RED, add a RED-specific branch to the tests, or
+weaken existing production drain behavior. GREEN changes only the missing disposal
+connection after independently accepted actual RED and retains both tests.
+
+### Selected real effects and excluded native identity work
+
+Each test launches two sequential scenario children, at most one child and one owned parent at a time. Across the RED/GREEN cycle: at most four children and four transient parents, each with the existing Static label and Cancel button. Compiler/runner/framework descendants remain within the original Job accounting; child-unit allocations do not redefine Job processes.
+
+| Surface | Exact bounded selection |
+| --- | --- |
+| Process launch | Existing ProcessFixture uses fixed C:\Program Files\dotnet\dotnet.exe, admitted scenario assembly/literal arguments and CreateProcessW with current no-window, Unicode-environment and extended-startup flags. Retain SetHandleInformation and Initialize/Update/DeleteProcThreadAttributeList with only stdin-read/stdout-write/stderr-write inherited. No shell, alternate executable, helper child or Job breakaway. |
+| Environment/files | Preserve the fixed replacement SystemRoot/WINDIR/Windows/.NET environment and per-child TEMP/TMP/USERPROFILE/APPDATA/LOCALAPPDATA. Fresh child directories contain exclusive reservations/start/final receipts, one synthetic Profile, fixed markers, stdout/stderr and case 1's one exclusive release-drain control file. Retain these intentionally; no production installation/configuration or account-state cleanup. |
+| Pipes/owned handles | Same three anonymous CreatePipe pairs; close parent copies of inherited child ends. Case 1 closes its input writer using existing CloseInput and records both close timestamps. No input payload, extra pipe, regular-file stdin, broken output reader, blocked output/diagnostics or overlapped fixture pipe is selected. CloseHandle/SafeFileHandle ownership remains unchanged. |
+| Lifetime/output | Child GetStdHandle/GetFileType/PeekNamedPipe on borrowed stdin observes EOF and/or normal Stop. WindowsLifetimePipe.Completion drains cancellation forwarding. One result uses existing synchronous pipe WriteFile. The fixtures do not select payload Discard, overlapped I/O or disk-output positioning paths. |
+| Capture/supervision | Existing bounded FileStream background capture, WaitForSingleObject/GetExitCodeProcess/CloseHandle and TimeProvider/QPC observations. Fixture TerminateProcess is safety-only and invalidates intended outcomes. Case 2 deliberately selects product GetCurrentProcess/TerminateProcess(exit 2), with existing Environment.Exit fallback. No unrelated process is observed/terminated. |
+| Profile snapshot | Existing bounded local fixed-volume read, GetDriveTypeW/GetVolumePathNameW/GetFinalPathNameByHandleW and owned file handle/buffer lifetime, only for the fixture-created Profile. No external path, directory scan, provisioning or account metadata read. |
+| Owned STA construction/show | Existing GetModuleHandleW, read-only SystemParametersInfoW(SPI_GETNONCLIENTMETRICS), CreateFontIndirectW, shared LoadCursorW(IDC_ARROW), RegisterClassExW, AdjustWindowRectEx and CreateWindowExW create one child-owned parent/Static/Button. Same-thread SendMessageW(WM_SETFONT); existing SetWindowPos no-activation/no-z-order flags. Ordinary managed/STA runtime infrastructure may run. |
+| Owned message pump/teardown | Existing GetMessageW/IsDialogMessageW/TranslateMessage/DispatchMessageW/DefWindowProcW, owned PostMessageW(WM_APP+1), PostQuitMessage, DestroyWindow, DeleteObject for owned font and UnregisterClassW. Module/cursor/system-brush references remain borrowed. No global input or foreign windows. |
+| Owned observations/cancellation | GetWindowThreadProcessId/IsWindowVisible/IsWindow only on the supplied child-owned HWND. Case 1 posts scalar WM_CLOSE via PostMessageW after ownership verification. No synchronous cross-thread close, broadcast, SendInput, global hotkey, desktop enumeration, UI Automation, screenshots or human account input. |
+| Managed HTTP | One MsalHttpClientFactory/HttpClient/ManagedUserAgentHandler per child over a terminal HttpMessageHandler, one synthetic send and bounded cancellation/callback work. Case 2 delays handler Dispose exactly three seconds. No network inner transport, SocketsHttpHandler/HttpClientHandler, DNS, socket, proxy, credential/cookie/certificate or service request. |
+
+This is real process/pipe/owned-window native execution, not no-native-effects evidence. Do not construct or invoke NativeWindowsHostObservations: no own-thread/process token queries, GetTokenInformation, LsaGetLogonSessionData, SID/station-user comparison, WTS/session/input-desktop or own-logon admission. Real loader restriction is replaced internally. No real MSAL Build/IsBrokerAvailable/GetAccountsAsync/ExecuteAsync, NativeInterop.Core, WAM, browser, certificate store, accounts/token/cache/consent operation or actual default valid-input runtime path is selected.
+
+The source-reviewed default dependency selection may be concrete without executing it in these controlled scenarios. Actual own-identity reads retain the independently triaged owner-risk requirement; the future combined real-account/native proposal remains necessary.
+
+### Scenario scheduling, timing and output
+
+Case 1: after shared composition/HTTP/owned-parent readiness, owned WM_CLOSE starts the outgoing callback and `host-callback-pending`, but forwarding waits for HTTP notification. The parent immediately closes the real stdin writer; actual EOF is the first process cancellation forwarding. The HTTP linked-token callback only records an in-memory timestamp and TrySetResult notification with asynchronous continuations, then returns without waiting or file/marker I/O. The separately registered original-token observer may hold only after observing that notification; if it arrives too early, it emits/signals `cancellation-order-invalid` outside the HTTP callback and returns without holding, making the attempt a prerequisite failure. Register it before the send, but verify the actual ordering/check in source and IL instead of relying on registration order alone. Keep send/provider operations pending independently of notification. The outgoing callback invokes the process-cancel delegate, retains its Task, records `host-callback-forwarded` without awaiting completion, and waits for release before awaiting that retained Task. A bounded child observer records `pending-drain-observed` only after HTTP notification and invocation of the process-cancel delegate have occurred, while the actual retained send and provider tasks, actual `OwnedRequestHost.Completion`, and both held callbacks remain pending. The transport must still be undisposed, and both disposal-entry and process-return markers must be absent. The observer must not await the held work or drain any production task to establish this conjunctive snapshot. The parent alone creates one exclusive empty `release-drain`; the child records `drain-release-observed` and releases the held gate. The parent makes that same release attempt in prerequisite-failure cleanup if the file is still absent; no overwrite, replacement child, refund or production-task drain is permitted. All holds remain at most three seconds and normal release must fit the already-running local watchdog allowance. Production alone performs the real drains before disposal.
+
+Case 2: one normal synthetic HTTP/provider result completes; existing before/after-commit evidence and complete success output precede cleanup. After actual drains, handler Dispose records `http-dispose-entered` and `dispose-stall-entered` and blocks request work for three seconds. Product watchdog alone must produce exit 2; neither `http-dispose-completed` nor `process-returned` is allowed. A success JSON already committed cannot be retracted/replaced; exit 2 makes this transport failure rather than normal matching success.
+
+Preserve four-second request deadline, one-second local product shutdown allowance from its first ending observation and the same-host Windows QPC basis with fixed 100 ms observation tolerance. Retain host-closing, writer-close interval, commitment, disposal-entered and actual exit timestamps. Measure no later than 1,100 ms from the first established local ending bound; disposal does not reset it. All explicit control waits/stalls are at most three seconds, but normal cancellation release must fit the already running product allowance. Slow setup does not permit a longer budget or retry.
+
+Retain ProcessFixture six-second child enforcement, two-second termination wait, eight-second final capture bound and 524,288 bytes per child stream. Preserve 120-second subject/capture/normal-drain allowance, 230-second controller bound excluding prepared wait, 8 MiB combined output, outer non-breakaway 32-process Job, shared action lock, stop procedure and zero-active completion. No unbounded in-process test or new terminator is selected.
+
+Both tests use the existing automated prepared-action procedure: exact preparation, actual awaiting event, independent matching ready-receipt/live-controller check, exclusive empty release marker. Preserve four-hour prepared-wait maximum, expiry/cancellation precedence and receipt schema. No human attendance confirmation is required for these owned scripted surfaces. Unexpected input, unlock, foreign UI or machine/state switch follows the existing stop rule.
+
+Complete each child's reservation/start/captures/timestamps/exclusive final receipt before acceptance. Apply the corrected owned-process diagnostic predicate: only a prefix, possibly empty, of the expected fixed completed/cancelled indication is allowed; arbitrary bytes or fabricated complete diagnostics are not accepted. Exact-one-result JSON and exit semantics remain as above.
+
+Fixture enforcement, failed launch, uncertain child/Job exit, incomplete capture/finalization, unexpected effects, safety marker or latched stop ends later launches and both loops. An expected domain assertion failure after complete evidence is classified through independent RED review, not automatic continuation. No stopped/unlaunched child refunds its reservation.
+
+### Fixed marker whitelist and ordering
+
+This proposed protocol owns the exact whitelist below for these two selectors only. Each child starts in its existing fresh reserved directory. Each listed marker may be emitted at most once and contains only one invariant decimal TimeProvider.System timestamp followed by a newline, using ProcessChild.Mark. Names are fixed literals, never arbitrary caller input or a payload escape hatch. No callback-returning aliases or additional informational markers are admitted. `release-drain` is the single parent-created empty control file, not a timestamp marker. Existing reservation/start/final receipts, Profile and capture files keep their own fixed schemas.
+
+R/G means required in both the intended RED path and GREEN. The different phase expectations explain the same unchanged test assertions; tests must not branch on expected RED/GREEN. Failure-only markers are allowed diagnostic filenames but must be absent for intended evidence. Case-specific markers are prohibited in the other case. Missing setup/drain witnesses fail prerequisites before either fixed missing-disposal assertion.
+
+| Marker | Cancellation/drain case | Disposal-stall case | Fixed timestamp meaning |
+| --- | --- | --- | --- |
+| `entered` | R/G | R/G | Child entry, using the existing entry timestamp. |
+| `provider-created` | R/G | R/G | Entry to the one shared request-local composition; not completed provider initialization. |
+| `http-owner-created` | R/G | R/G | The one real HTTP owner has been allocated and retained on request work. |
+| `loader-entered` | R/G | R/G | Controlled loader callback checks original cancellation and records its entry; no real loader action. |
+| `session-created` | R/G | R/G | Controlled factory has checked synthetic settings and shared owner/admission identity and created its session. |
+| `ui-thread-started` | R/G | R/G | Existing ThreadStarted checkpoint verifies the actual owned STA thread. |
+| `hidden-parent-created` | R/G | R/G | Existing HiddenParentCreated checkpoint verifies this child owns the still-hidden HWND. |
+| `provider-ready` | R/G | R/G | Controlled interactive call has verified the supplied parent belongs to this child and is visible. |
+| `http-send-entered` | R/G | R/G | The single terminal non-network send has entered; in case1 its linked-token notification is registered. |
+| `host-closing` | R/G | R/G | Existing Closing checkpoint observation; it is not a later cancellation/disposal timestamp. |
+| `native-cleanup-completed` | R/G | R/G | Existing native-cleanup checkpoint verifies the owned HWND no longer exists; does not imply aggregate host completion. |
+| `before-commit` | R/G | R/G | Existing BeforeCommit checkpoint, before the result commitment attempt. |
+| `after-commit` | R/G | R/G | Existing AfterCommit checkpoint after commitment succeeds; output writing still follows this checkpoint. |
+| `drain-boundary` | R/G | R/G | Passive BeforeHttpDisposal checkpoint only after every actual required completion succeeded. |
+| `http-dispose-entered` | G; missing is RED | G; missing is RED | Entry to the real terminal handler Dispose reached through production owner disposal. |
+| `http-dispose-completed` | G only | Absent | Normal handler disposal completion; never emitted by the wrapper. |
+| `process-returned` | R/G | R only | Child wrapper has returned from WindowsProcess; never an owner-disposal signal. |
+| `premature-http-disposal` | Failure only | Failure only | Disposal observed a retained actual task/host or controlled callback still pending; always invalid evidence. |
+| `host-callback-pending` | R/G | Absent | Outgoing callback entered before it invokes the process-cancel delegate. |
+| `http-cancel-observed` | R/G | Absent | Published outside the HTTP callback, carrying that callback's actual notification timestamp. |
+| `provider-callback-pending` | R/G | Absent | Original-token observer saw prior HTTP notification and is entering its bounded hold. |
+| `host-callback-forwarded` | R/G | Absent | Process-cancel delegate was invoked and its Task retained; does not claim Task completion. |
+| `pending-drain-observed` | R/G | Absent | Child verified all specified pre-release pending/undisposed observations without draining them. |
+| `drain-release-observed` | R/G | Absent | Child observed the parent's empty release file immediately before releasing the held test gate. |
+| `cancellation-order-invalid` | Failure only | Absent | Original-token observer ran before HTTP notification; it returned without holding and the prerequisite fails. |
+| `candidate-returned` | Absent | R/G | Controlled session is returning its complete existing synthetic success after the send completed. |
+| `dispose-stall-entered` | Absent | G only | Handler enters its exact three-second synchronous disposal stall on request work. |
+
+The common path must establish owner retention, controlled loader/session settings and verified owned readiness before its terminal send. In case1, retain the causal order: `http-send-entered` -> `host-callback-pending` -> the parent CloseInput interval/actual EOF -> HTTP notification -> original-token hold and host delegate invocation -> `pending-drain-observed` -> parent release -> `drain-release-observed` -> successful production drains -> `drain-boundary`. The original-token hold and host delegate invocation need not be ordered relative to each other. HTTP notification must precede either's blocking wait. Native cleanup and commitment observations may interleave with the held work; do not invent a total order for independent events.
+
+For a normal disposal return, require `drain-boundary` -> `http-dispose-entered` -> `http-dispose-completed` -> `process-returned`. In case2, require `candidate-returned` before commitment, successful actual output writing before the post-drain location, and `drain-boundary` -> `http-dispose-entered` -> `dispose-stall-entered`; completed-disposal and process-return markers must remain absent when the product watchdog exits. `after-commit` alone proves commitment, not completed output writing. Preserve the complete captured success JSON and source/compiled ordering of output before cleanup.
+
+Markers witness the reviewed source locations and controlled observations only. Preserve actual task completion, STA/callback join, pipe cancellation forwarding, output bytes, receipts and first-ending timestamps as the underlying evidence. No marker resets a watchdog bound or certifies a failed/skipped drain. The two failure-only markers and fixture safety failures cannot be classified as the intended missing-disposal RED.
+
+### Exact capacity and protected twelve
+
+Following accepted construction and a refresh confirming no intervening consumption, raise Windows protocol build/test ceiling 44 -> 48 and process protocol ceiling 56 -> 60. Wave combined build/test stays 120 and Wave process stays 60. Allocate exactly four new child units to default-http-composition; do not reuse exhausted owned-process or protected CLI units.
+
+| Counter/allocation | Accepted construction baseline | After this cycle, absent intervening use |
+| --- | --- | --- |
+| Windows build/test consumed/ceiling | 44/44 | 48/48 |
+| Linux build/test | 37/80 | 37/80 |
+| Combined build/test | 81/120 | 85/120 |
+| Charged child units | 44 | 48 |
+| Protocol process ceiling | 56 | 60 |
+| CLI allocation | 36 total; 24 consumed, final 12 protected | Unchanged |
+| Owned-process allocation | 20/20 consumed | Unchanged |
+| New default-http-composition allocation | 0/4 | 4/4 consumed |
+| Total including protected final CLI | 44+12=56 | 48+12=60 |
+| Unallocated Wave child buffer | 4 | 0 |
+
+RED build, RED test, GREEN build and GREEN test each reserve one Windows build/test unit. Each exactly-two-case test reserves both child units before launch even if a case is stopped/unlaunched. At most one RED and one GREEN test; no retry, refund or buffer remains. A third case/data row requires a new accepted capacity decision before dependent work.
+
+Preserve the existing final CLI selectors and assertions unchanged: help, malformed, success, file-stdin, closed-stdin, close-pending, unused-stdin, data-close, deadline, broken-output, blocked-output, blocked-diagnostics. None is selected here and their final twelve units remain protected. Preparation remains 13/16 including Windows 5/5, downloads 768 MiB; no restore/download/publish/toolchain installation is selected. Actual reservation admission must refresh consumed totals rather than assume the forecast arithmetic.
+
+### Controller migration and staged admission
+
+Original construction test 0049 has completed and been fully collected with outer exit 0 and four passed cases. Its executed protocol is `ae53bc2448c2e24d3df0eac61daf5d6bd143a4bc`; its WSL start SHA-256 is `746dffeac49b23fa9b061522e25a8f88afe14d4c802372615f62c2b3fbfbdea2` and WSL final SHA-256 is `75a3b87ffe77ca8f5935e6628e7e5604e48ce392f68ac62a48dc0c4515703e8f`. The [independent actual GREEN acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/154#issuecomment-5676096910) accepts the bounded concrete-MSAL construction observations for executed source `16506630fc857c8b4af32653a216378b94581e3d`, tree `278808f59f6b395f5b2ae85a0e4231f22beb8d52`, under original protocol `ae53bc2448c2e24d3df0eac61daf5d6bd143a4bc`. These executed identities remain distinct from the PR #154 documentation merge. This construction acceptance does not admit the future default-HTTP cycle.
+
+| Promotion prerequisite | Binding |
+| --- | --- |
+| Independent actual construction GREEN acceptance review URL | [Accepted original action 0049](https://github.com/hcoona/microsoft-authentication-cli/pull/154#issuecomment-5676096910) |
+| PR #154 accepted merge commit and tree | `f1f102cd4a37c4d4538c6a24a98557043de91a3f`, tree `1b5c6012a57023ebc7ba5f8426a82d64a7e3918d` |
+| Refreshed accepted Wave/prerequisite identities and consumed counters | Accepted target `f1f102cd4a37c4d4538c6a24a98557043de91a3f`; Wave blob `956aebe0e19cce7dbd08dcaa7fe83a9ef9e01f7c` remains unchanged. The completed 45 Linux and 49 Windows reservations retain the construction-baseline counters above; no subsequent reservation exists at promotion. |
+| Independent final design, protocol and controller proposal reviews | Required in the proposing pull request for the exact integrated protocol and controller tree before merge. Separate source, build, artifact, test and actual-result gates below remain required. |
+
+After those prerequisites and this protocol are accepted, the first new reservation is no-restore build **0050**, following the complete original 0049 history. It must build separately admitted new immutable source, distinct from the preceding construction source `16506630fc857c8b4af32653a216378b94581e3d`. The controller verifies the exact preceding WSL start/final receipts and executed protocol, retains the existing active controller bytes, and replaces only the two active Windows controllers during this first build reservation. There is no standalone migration, history repair, replay or additional action. Bootstrap, WindowsValidationJob, stop components and every historical migration retain their existing identities and meaning.
+
+| Helper | Accepted ae53 SHA-256 | Proposed final SHA-256 |
+| --- | --- | --- |
+| `run_windows.py` | `64ca92f7778e8c80d609cff11ff577a5cfc6c1bed313c70ac14c5c22f7eda49f` | `67830befaac40cbe5be94f8b9f29a0c0936bdd32501bc0e23b77ba194e7ae739` |
+| `Invoke-WindowsValidation.ps1` | `15670d2705e4f8921affe7ac030edb50815503c7aeb2ea7956772ee938cc278b` | `c19e7830088476d6b03b078bf42af3daee0b08e1a76da0827ce974a10b9b7216` |
+| `run_managed.py` | `f0d0c330ee38e92e49e453961a1e476112a5a217290c016d37ef6d465828f123` | `fbf223e2d258cdc696514e36974f85499eef473ea8c8e5dabc9461fdc3ba6b6a` |
+
+`run_managed.py` is the shared Linux history reader updated in the proposed protocol checkout; it is not a third active Windows controller replacement. The retaining migration records the previous protocol as ae53 and the new protocol from the required immutable runtime argument. Its two active previous hashes must match the table; the new hashes bind the exact prospective bytes above.
+
+The controllers bind action 49 and the actual preceding identities. They preserve mandatory immutable protocol/source/target/review arguments, accepted-byte and history checks, source/artifact protection and separate admission. A new protocol commit, RED/GREEN source commits, actual artifacts and each admission review are supplied and independently bound at the applicable staged gate; no controller self-hash or future artifact identity is fabricated in source.
+
+The controller permits exactly the four subsequent action kinds: RED no-restore build, RED test, GREEN no-restore build and GREEN test. Both tests select only the two methods above and reserve two children each. No other suite may consume these four new Windows slots or the protected final CLI allocation. A failure or changed prerequisite retains the existing fail-stop behavior; subsequent work needs its separately accepted gate. Controller constants do not authorize execution.
+
+Reviewed controllers/history readers must add only the exact two-case selector, +2 charge per test/+4 total, Windows 48/process 60/combined 120 ceilings and preserved CLI twelve/owned twenty. Retain old selectors/assertions, source/artifact checks and fail-stop parsing. Extend existing child marker/report projection only for the exact fixed witnesses in the admitted future source; no arbitrary child or marker support. The exact prospective old/new hashes are fixed in the table above; any candidate change requires rebinding and independent review.
+
+Before each test, independently review actual PE/PDB/IL, generated registration, exact two method/case identities and one-child mapping, original source/assertion coordinates, unchanged dependency graph, literal command/environment and substitutions/effects/drain/watchdog paths. After every action, independently accept complete report/captures, exact case/child/result joins, first actual failures, markers/timing, counters, receipts and zero-active Job result. Actual RED acceptance precedes GREEN. Source review must prove public default calls the same common composition; this does not claim its real dependency branch ran.
+
+### Staged protocol, source, artifact and result gates
+
+1. **Protocol proposal and merge.** Before promoting this proposal, bind actual construction RED/GREEN acceptance and refresh accepted Wave/prerequisite identities and consumed counters. The tracked protocol fixes these two cases, first intended assertions, the exact marker/effects/time/capacity boundaries, unchanged owner-risk exclusions, prepared-action routing and reviewed controller/reader changes. Accept required routed reviews and exact old/new retaining-migration hashes before protocol merge. Future scenario build artifacts are not inputs to this protocol-acceptance gate; the accepted protocol is what permits the later bounded build.
+2. **Each source and build admission.** After protocol acceptance, separately bind/review the immutable RED source/tree, unchanged graph/dependencies, fixed child selection/marker calls/assertions, shared production composition and nonblocking notification/drain/disposal paths. Bind its exact no-restore build map, literal command/environment, time/effects limits and prepared-action handling. The first separately admitted build alone may perform the protocol's retaining controller migration. Before GREEN source/build work, both actual RED first failures must already be independently accepted. No action follows merely because a protocol or source change merged.
+3. **Actual build acceptance, then each test admission.** Fully collect the original build and independently review its actual PE/PDB/IL, source checksums, generated registration, the exact two methods and one-child mapping, marker sites, public/shared composition, cancellation/drain/ownership/watchdog paths, dependency outputs and complete build receipts. Only then bind those accepted artifacts to the separate test's exact input/invocation maps and literal command/environment, fixed selection and child charge, current counters and prepared-ready/release procedure. Future artifact hashes are required here, not before the protocol enabling the build is accepted.
+4. **Actual test acceptance and transition.** Fully collect every child and the original runner; review complete captures, exact case/child/result joins, marker/time semantics, counters, receipts and actual quiescence. Independently accept both complete first RED failures before GREEN implements the missing disposal connection. GREEN reuses unchanged scenarios and repeats its own source/build/artifact/test gates. Mechanical collection and markers alone cannot establish contextual acceptance or authorize another action.
+
+The exact source/compiled line coordinates are bound when those inputs exist; the protocol freezes the required semantic assertions now. No phase may waive a prior accepted gate. Broader effects, a third child or a weakened completion contract require a revised accepted proposal before dependent work.
+
+Future source and artifact identities must be bound at their corresponding admission gates. Real own-identity/default/broker/account/WSL and final Native AOT obligations remain open.

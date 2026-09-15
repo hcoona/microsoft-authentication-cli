@@ -455,6 +455,26 @@ MSAL_COMPOSITION_CASES = (
 TEST_FILTERS["msal-composition"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.OrdinaryMultitenantProfileUsesCommon|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.FixedWorkProfileUsesItsTenant|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.ExplicitWorkTenantOverridesCommon|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.LegacyPersonalAccountUsesTheTransferTenant|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.LegacyWorkAccountRetainsOrganizations|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.ExplicitResourceTenantWinsOverLegacyPersonalRouting|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.SilentClaimsContinueWithTheSameAccountAndNoCompetingHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.NoVisibleMatchUsesOnlyTheRequestedLoginHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.ASecondChallengeStopsAndDoesNotExposeProviderDetails|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.DiscoveryFailureUsesTheSameSafeProviderClassification|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.ProviderInitializationFailureUsesTheSameSafeClassification|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.CancellationDuringLoaderSetupPreventsSessionConstruction|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.FailedLoaderSetupPreventsSessionConstruction|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.CancellationDuringSessionConstructionPreventsDiscovery|FullyQualifiedName=Authentication.Windows.Scenarios.MsalCompositionScenarios.OriginalCancellationWinsOverADiscoveryFailure|FullyQualifiedName=Authentication.Windows.Scenarios.MsalHttpOwnershipScenarios.OneOwnedClientSurvivesOperationsUntilCancellationAndDrain'
 
 
+# Bind the completed preceding construction action.
+# Its accepted review and the new protocol remain prerequisites for promotion.
+DEFAULT_HTTP_PRIOR_ACTION = 49
+DEFAULT_HTTP_PRIOR_START = "746dffeac49b23fa9b061522e25a8f88afe14d4c802372615f62c2b3fbfbdea2"
+DEFAULT_HTTP_PRIOR_FINAL = "75a3b87ffe77ca8f5935e6628e7e5604e48ce392f68ac62a48dc0c4515703e8f"
+DEFAULT_HTTP_PRIOR_PROTOCOL = "ae53bc2448c2e24d3df0eac61daf5d6bd143a4bc"
+DEFAULT_HTTP_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "64ca92f7778e8c80d609cff11ff577a5cfc6c1bed313c70ac14c5c22f7eda49f",
+    "Invoke-WindowsValidation.ps1": "15670d2705e4f8921affe7ac030edb50815503c7aeb2ea7956772ee938cc278b",
+}
+DEFAULT_HTTP_CLASS = 'Authentication.Windows.Scenarios.DefaultHttpCompositionScenarios'
+DEFAULT_HTTP_CASES = {'SharedDefaultHttpOwnershipSurvivesCancellationUntilDrain': 'default-http-cancel-drain', 'SharedDefaultHttpDisposalStallRetainsTheProcessWatchdog': 'default-http-dispose-stall'}
+TEST_FILTERS["default-http-composition"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.DefaultHttpCompositionScenarios.SharedDefaultHttpOwnershipSurvivesCancellationUntilDrain|FullyQualifiedName=Authentication.Windows.Scenarios.DefaultHttpCompositionScenarios.SharedDefaultHttpDisposalStallRetainsTheProcessWatchdog'
+
+
+DEFAULT_HTTP_COMMON_MARKERS = ('entered', 'provider-created', 'http-owner-created', 'loader-entered', 'session-created', 'ui-thread-started', 'hidden-parent-created', 'provider-ready', 'http-send-entered', 'host-closing', 'native-cleanup-completed', 'before-commit', 'after-commit', 'drain-boundary')
+DEFAULT_HTTP_CANCEL_MARKERS = ('host-callback-pending', 'http-cancel-observed', 'provider-callback-pending', 'host-callback-forwarded', 'pending-drain-observed', 'drain-release-observed')
+DEFAULT_HTTP_OTHER_MARKERS = ('http-dispose-entered', 'http-dispose-completed', 'process-returned', 'premature-http-disposal', 'cancellation-order-invalid', 'candidate-returned', 'dispose-stall-entered')
+
+
 def validate_windows_reservation_pair(started, peer, link, final, start_hash, final_hash, evidence):
     """Bind the initial WSL admission to its verified Windows execution copy."""
     if evidence.get("started.json") != start_hash or evidence.get("windows-result.json") != final_hash or \
@@ -486,7 +506,7 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
     validate_windows_reservation_pair(started, peer, link, final,
                                      digest(paths[0]), digest(paths[1]), result["evidence"])
     if int(action.name) >= 22 and started.get("action") == "test" and \
-            (started.get("testSuite") in ("ui-admission", "owned-process") or
+            (started.get("testSuite") in ("ui-admission", "owned-process", "default-http-composition") or
              started.get("testSuite") == "owned-host" and started.get("expected") == "green"):
         evidence = result["evidence"]
         ready_path = windows_action / "attendance-ready.json"
@@ -532,16 +552,19 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition", "msal-construction") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition", "msal-construction", "default-http-composition") or \
                     (suite == "owned-host" and number <= 18) or \
                     (suite == "local-provider" and number <= 24) or \
                     (suite == "host-admission" and number <= 28) or \
                     (suite == "ui-admission" and number <= 32) or \
                     (suite == "owned-process" and number <= 38) or \
                     (suite == "msal-composition" and number <= 42) or \
-                    (suite == "msal-construction" and number <= 46):
+                    (suite == "msal-construction" and number <= 46) or \
+                    (suite == "default-http-composition" and
+                     (type(DEFAULT_HTTP_PRIOR_ACTION) is not int or number <= DEFAULT_HTTP_PRIOR_ACTION + 1)):
                 raise ValueError("Unknown Windows test selection")
-            required = 12 if suite == "cli" else 10 if suite == "owned-process" else 0
+            required = (12 if suite == "cli" else 10 if suite == "owned-process" else
+                        2 if suite == "default-http-composition" else 0)
         else:
             if suite is not None:
                 raise ValueError("Non-test Windows selection")
@@ -553,6 +576,9 @@ def windows_process_reservation(number, started):
 
 
 def selected_cases(suite, expected):
+    if suite == "default-http-composition":
+        return {DEFAULT_HTTP_CLASS + "." + name: "Failed" if expected == "red" else "Passed"
+                for name in DEFAULT_HTTP_CASES}
     if suite == "msal-construction":
         return {name: "Failed" if expected == "red" else "Passed"
                 for name in MSAL_CONSTRUCTION_CASES}
@@ -955,7 +981,8 @@ def process_evidence(action, expected, suite="cli"):
     temporary = action / "temp"
     if (temporary / "process-safety-stop.json").exists():
         raise ValueError("Fixture safety stop forbids continuation")
-    cases = set((OWNED_PROCESS_CASES if suite == "owned-process" else PROCESS_CASES).values())
+    cases = set((DEFAULT_HTTP_CASES if suite == "default-http-composition" else
+                 OWNED_PROCESS_CASES if suite == "owned-process" else PROCESS_CASES).values())
     if {path.name for path in temporary.glob("process-*")} != {"process-" + case for case in cases}:
         raise ValueError("Missing or unexpected process reservation")
     for case in sorted(cases):
@@ -1019,6 +1046,8 @@ def process_evidence(action, expected, suite="cli"):
                         raise ValueError("Owned-process success differs from the synthetic candidate")
                 elif set(value) != {"protocol", "outcome", "reason"} or value.get("reason") != outcome:
                     raise ValueError("Owned-process failure contains unexpected fields")
+        if suite == "default-http-composition":
+            default_http_evidence(directory, case, expected, receipt)
         if suite == "cli" and expected == "red":
             prefill = receipt.get("diagnosticPrefill")
             if type(prefill) is not int or (not 1 <= prefill <= 65536 if case == "blocked-diagnostics" else prefill != 0):
@@ -1026,6 +1055,102 @@ def process_evidence(action, expected, suite="cli"):
             if receipt.get("forced") is not False or receipt.get("exitCode") != 2 or receipt["stdoutBytes"] != 0 or \
                     (directory / "stderr.bin").read_bytes() != b"D" * prefill:
                 raise ValueError("Rejecting-stub red differs from admitted execution")
+
+
+def default_http_evidence(directory, case, expected, receipt):
+    """Project only fixed v2 witnesses; contextual RED acceptance remains separate."""
+    cancellation = case == "default-http-cancel-drain"
+    if case not in DEFAULT_HTTP_CASES.values() or expected not in ("red", "green"):
+        raise ValueError("Unknown default HTTP evidence selection")
+    required = set(DEFAULT_HTTP_COMMON_MARKERS)
+    required.update(DEFAULT_HTTP_CANCEL_MARKERS if cancellation else ("candidate-returned",))
+    if cancellation or expected == "red":
+        required.add("process-returned")
+    if expected == "green":
+        required.update(("http-dispose-entered", "http-dispose-completed" if cancellation else "dispose-stall-entered"))
+    whitelist = set(DEFAULT_HTTP_COMMON_MARKERS + DEFAULT_HTTP_CANCEL_MARKERS + DEFAULT_HTTP_OTHER_MARKERS)
+    fixed_files = {"reserved.json", "started.json", "result.json", "profile.json", "stdout.bin", "stderr.bin"}
+    controls = {"release-drain"} if cancellation else set()
+    paths = {path.name: path for path in directory.iterdir()}
+    if set(paths) - fixed_files - controls - whitelist or set(paths) != fixed_files | required | controls:
+        raise ValueError("Default HTTP evidence has missing, foreign or failure-only files")
+    for path in paths.values():
+        direct(path)
+        if not path.is_file():
+            raise ValueError("Default HTTP evidence is not a fixed regular file")
+    if cancellation and paths["release-drain"].stat().st_size != 0:
+        raise ValueError("The fixed drain release must be empty")
+    markers = {}
+    for name in required:
+        if paths[name].stat().st_size > 32:
+            raise ValueError("Oversized default HTTP timestamp marker")
+        raw = paths[name].read_bytes()
+        if not re.fullmatch(rb"[1-9][0-9]*\n", raw):
+            raise ValueError("Invalid invariant default HTTP timestamp marker")
+        markers[name] = int(raw)
+    if receipt.get("forced") is not False or receipt.get("diagnosticPrefill") != 0 or \
+            receipt.get("bufferedOutput") != 0 or receipt.get("bufferedObservedTimestamp") != 0:
+        raise ValueError("Default HTTP fixture termination or synthetic buffering is forbidden")
+    frequency, exited = receipt.get("timestampFrequency"), receipt.get("exitObservedTimestamp")
+    if type(frequency) is not int or frequency <= 0 or type(exited) is not int or \
+            receipt.get("entryTimestamp") != markers["entered"] or \
+            any(not markers["entered"] <= stamp <= exited for stamp in markers.values()):
+        raise ValueError("Unbound default HTTP timestamp evidence")
+    edges = [
+        ("entered", "provider-created"), ("provider-created", "http-owner-created"),
+        ("http-owner-created", "loader-entered"), ("loader-entered", "session-created"),
+        ("session-created", "provider-ready"), ("ui-thread-started", "hidden-parent-created"),
+        ("hidden-parent-created", "provider-ready"), ("provider-ready", "http-send-entered"),
+        ("host-closing", "native-cleanup-completed"), ("native-cleanup-completed", "drain-boundary"),
+        ("before-commit", "after-commit"), ("after-commit", "drain-boundary"),
+    ]
+    if cancellation:
+        before, after = receipt.get("writerCloseBefore"), receipt.get("writerCloseAfter")
+        if type(before) is not int or type(after) is not int or \
+                not markers["host-callback-pending"] <= before <= after <= exited or \
+                before > markers["http-cancel-observed"]:
+            raise ValueError("Default HTTP cancellation lacks its actual writer-close interval")
+        edges.extend((
+            ("http-send-entered", "host-callback-pending"),
+            ("host-closing", "host-callback-pending"),
+            ("http-cancel-observed", "provider-callback-pending"),
+            ("http-cancel-observed", "host-callback-forwarded"),
+            ("provider-callback-pending", "pending-drain-observed"),
+            ("host-callback-forwarded", "pending-drain-observed"),
+            ("pending-drain-observed", "drain-release-observed"),
+            ("drain-release-observed", "drain-boundary"),
+        ))
+    else:
+        if receipt.get("writerCloseBefore") != 0 or receipt.get("writerCloseAfter") != 0:
+            raise ValueError("Disposal-stall case must not close the input writer")
+        edges.extend((("http-send-entered", "candidate-returned"), ("candidate-returned", "before-commit")))
+    if expected == "green":
+        edges.append(("drain-boundary", "http-dispose-entered"))
+        edges.append(("http-dispose-entered", "http-dispose-completed" if cancellation else "dispose-stall-entered"))
+    if cancellation or expected == "red":
+        edges.append(("http-dispose-completed" if expected == "green" else "drain-boundary", "process-returned"))
+    if any(markers[left] > markers[right] for left, right in edges):
+        raise ValueError("Default HTTP causal marker order changed")
+    # Preserve this observation bound; source review must still bind the earliest ending.
+    if (exited - markers["host-closing"]) * 1000 > frequency * 1100:
+        raise ValueError("Default HTTP exit exceeded the existing observed local ending bound")
+    outcome = "cancelled" if cancellation else "success"
+    exit_code = 1 if cancellation else 0 if expected == "red" else 2
+    indication = b"Authentication request cancelled.\n" if cancellation else b"Authentication request completed.\n"
+    if receipt.get("exitCode") != exit_code or not indication.startswith(paths["stderr.bin"].read_bytes()):
+        raise ValueError("Default HTTP exit or optional fixed diagnostics changed")
+    output = paths["stdout.bin"].read_bytes()
+    if not output.endswith(b"\n") or output.count(b"\n") != 1 or output.startswith(b"\xef\xbb\xbf"):
+        raise ValueError("Default HTTP output must be one UTF-8 protocol result")
+    value = json.loads(output.decode("utf-8"), object_pairs_hook=pairs)
+    if type(value.get("protocol")) is not int or value["protocol"] != 1 or value.get("outcome") != outcome:
+        raise ValueError("Default HTTP protocol result changed")
+    if cancellation:
+        if set(value) != {"protocol", "outcome", "reason"} or value.get("reason") != "cancelled":
+            raise ValueError("Default HTTP cancellation contains unexpected fields")
+    elif value.get("accessToken") != "SYNTHETIC_PROCESS_SCENARIO_TOKEN" or \
+            value.get("accountEmail") != "personal@example.test" or value.get("interaction") != "interactive":
+        raise ValueError("Default HTTP success differs from the synthetic candidate")
 
 
 @contextmanager
@@ -1218,11 +1343,11 @@ def main():
     for name in ("protocol", "source", "target", "review"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--expect", choices=("red", "green"), default="green")
-    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition", "msal-construction"))
+    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition", "msal-construction", "default-http-composition"))
     args = parser.parse_args()
     if (args.action == "test") != (args.suite is not None):
         raise ValueError("Test actions require one finite suite; other actions forbid it")
-    attended = args.action == "test" and (args.suite in ("ui-admission", "owned-process") or
+    attended = args.action == "test" and (args.suite in ("ui-admission", "owned-process", "default-http-composition") or
                                          args.suite == "owned-host" and args.expect == "green")
     with preparation_budget(attended) as finish_preparation:
         return execute(args, attended, finish_preparation)
@@ -1303,6 +1428,31 @@ def execute(args, attended, finish_preparation):
         if len(previous) < 45 or digest(HISTORY / "0045/started.json") != MSAL_CONSTRUCTION_PRIOR_START or \
                 digest(HISTORY / "0045/result.json") != MSAL_CONSTRUCTION_PRIOR_FINAL:
             raise ValueError("Accepted MSAL composition green history prerequisite changed")
+        if type(DEFAULT_HTTP_PRIOR_ACTION) is not int or DEFAULT_HTTP_PRIOR_ACTION <= 46 or \
+                any(not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value)
+                    for value in (DEFAULT_HTTP_PRIOR_START, DEFAULT_HTTP_PRIOR_FINAL)) or \
+                not isinstance(DEFAULT_HTTP_PRIOR_PROTOCOL, str) or \
+                not re.fullmatch(r"[0-9a-f]{40}", DEFAULT_HTTP_PRIOR_PROTOCOL):
+            raise ValueError("Default HTTP preceding accepted identities are unresolved")
+        prior_name = f"{DEFAULT_HTTP_PRIOR_ACTION:04d}"
+        if len(previous) < DEFAULT_HTTP_PRIOR_ACTION or \
+                digest(HISTORY / prior_name / "started.json") != DEFAULT_HTTP_PRIOR_START or \
+                digest(HISTORY / prior_name / "result.json") != DEFAULT_HTTP_PRIOR_FINAL or \
+                previous[DEFAULT_HTTP_PRIOR_ACTION - 1][1]["protocol"] != DEFAULT_HTTP_PRIOR_PROTOCOL:
+            raise ValueError("Accepted construction completion prerequisite changed")
+        default_http_transition = len(previous) == DEFAULT_HTTP_PRIOR_ACTION
+        if default_http_transition and (args.action != "build" or args.source == previous[-1][1]["source"]):
+            raise ValueError("The first default HTTP action must build new admitted source with its retaining migration")
+        default_http_cycle = (
+            ("build", None, "green"), ("test", "default-http-composition", "red"),
+            ("build", None, "green"), ("test", "default-http-composition", "green"),
+        )
+        advanced = previous[DEFAULT_HTTP_PRIOR_ACTION:]
+        if len(advanced) >= len(default_http_cycle) or any(
+                (start["action"], start["testSuite"], start["expected"]) != default_http_cycle[index]
+                for index, (_, start, _) in enumerate(advanced)) or \
+                (args.action, args.suite, args.expect) != default_http_cycle[len(advanced)]:
+            raise ValueError("Default HTTP permits only one separately admitted red/green build/test cycle")
         msal_construction_transition = len(previous) == 45
         if msal_construction_transition and args.action != "build":
             raise ValueError("The first MSAL construction action must build with its controller transition")
@@ -1373,22 +1523,29 @@ def execute(args, attended, finish_preparation):
             raise ValueError("The first process increment action establishes its new graph")
         if len(previous) < 9:
             raise ValueError("This amendment requires the completed accepted file history")
-        reserved_processes = 12 if args.suite == "cli" else 10 if args.suite == "owned-process" else 0
+        reserved_processes = (12 if args.suite == "cli" else 10 if args.suite == "owned-process" else
+                              2 if args.suite == "default-http-composition" else 0)
         prior_processes = 0
         owned_processes = 0
+        default_http_processes = 0
         for historical, started, _ in previous:
             reservation = windows_process_reservation(int(historical.name), started)
             prior_processes += reservation
             if started.get("testSuite") == "owned-process":
                 owned_processes += reservation
+            if started.get("testSuite") == "default-http-composition":
+                default_http_processes += reservation
         new_owned = reserved_processes if args.suite == "owned-process" else 0
-        if prior_processes + reserved_processes > 56 or owned_processes + new_owned > 20 or \
-                prior_processes - owned_processes + reserved_processes - new_owned > 36:
+        new_default_http = reserved_processes if args.suite == "default-http-composition" else 0
+        if prior_processes + reserved_processes > 60 or owned_processes + new_owned > 20 or \
+                default_http_processes + new_default_http > 4 or \
+                prior_processes - owned_processes - default_http_processes + \
+                reserved_processes - new_owned - new_default_http > 36:
             raise ValueError("Process scenario allocation exhausted")
         preparation = args.action in ("bootstrap", "restore")
         prep = sum(start["action"] in ("bootstrap", "restore") for _, start, _ in previous)
         tests = len(previous) - prep
-        if prep + preparation > 5 or tests + (not preparation) > 44:
+        if prep + preparation > 5 or tests + (not preparation) > 48:
             raise ValueError("Windows allocation exhausted")
         if sum(item["action"] in ("fetch", "restore") for item in linux) + prep + preparation > 16 or \
                 sum(item["action"] in ("build", "test") for item in linux) + tests + (not preparation) > 120:
@@ -1424,7 +1581,8 @@ def execute(args, attended, finish_preparation):
             for name in ("home", "home/roaming", "home/local", "temp", "results", "empty-program-files"):
                 (action / name).mkdir()
             migrations = {}
-            previous_controllers = (MSAL_CONSTRUCTION_PREVIOUS_CONTROLLERS if msal_construction_transition else
+            previous_controllers = (DEFAULT_HTTP_PREVIOUS_CONTROLLERS if default_http_transition else
+                                    MSAL_CONSTRUCTION_PREVIOUS_CONTROLLERS if msal_construction_transition else
                                     MSAL_COMPOSITION_PREVIOUS_CONTROLLERS if msal_composition_transition else
                                     PREVIOUS_CONTROLLERS if len(previous) == 3 else
                                     TEST_PREVIOUS_CONTROLLERS if len(previous) == 6 else
@@ -1597,7 +1755,7 @@ def execute(args, attended, finish_preparation):
                 if invocation["arguments"] != expected_arguments:
                     raise ValueError("Windows test selection differs from the admitted literal")
                 result["tests"] = validate_selected_report(report, args.suite, args.expect)
-                if args.suite in ("cli", "owned-process"):
+                if args.suite in ("cli", "owned-process", "default-http-composition"):
                     process_evidence(action, args.expect, args.suite)
                 elif any(path.name.startswith("process-") for path in action.rglob("*")):
                     raise ValueError("Child-free selection produced forbidden process evidence")

@@ -103,6 +103,8 @@ DISPOSED_UI_ATTENDANCE_0034 = {
     "windows-input.json": "e937ebb25470f0ec025af48a4e87d5683777423e9e283d5cc328880f9f98b46f",
 }
 ATTENDANCE_SECONDS = 14400
+# Preserve the completed preceding action boundary in shared history recovery.
+DEFAULT_HTTP_PRIOR_ACTION = 49
 
 
 def utc():
@@ -305,7 +307,7 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
     validate_windows_reservation_pair(started, peer, link, final,
                                      digest(paths[0]), digest(paths[1]), result["evidence"])
     if int(action.name) >= 22 and started.get("action") == "test" and \
-            (started.get("testSuite") in ("ui-admission", "owned-process") or
+            (started.get("testSuite") in ("ui-admission", "owned-process", "default-http-composition") or
              started.get("testSuite") == "owned-host" and started.get("expected") == "green"):
         evidence = result["evidence"]
         ready_path = windows_action / "attendance-ready.json"
@@ -351,16 +353,19 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition", "msal-construction") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition", "msal-construction", "default-http-composition") or \
                     (suite == "owned-host" and number <= 18) or \
                     (suite == "local-provider" and number <= 24) or \
                     (suite == "host-admission" and number <= 28) or \
                     (suite == "ui-admission" and number <= 32) or \
                     (suite == "owned-process" and number <= 38) or \
                     (suite == "msal-composition" and number <= 42) or \
-                    (suite == "msal-construction" and number <= 46):
+                    (suite == "msal-construction" and number <= 46) or \
+                    (suite == "default-http-composition" and
+                     (type(DEFAULT_HTTP_PRIOR_ACTION) is not int or number <= DEFAULT_HTTP_PRIOR_ACTION + 1)):
                 raise ValueError("Unknown Windows test selection")
-            required = 12 if suite == "cli" else 10 if suite == "owned-process" else 0
+            required = (12 if suite == "cli" else 10 if suite == "owned-process" else
+                        2 if suite == "default-http-composition" else 0)
         else:
             if suite is not None:
                 raise ValueError("Non-test Windows selection")
@@ -379,6 +384,8 @@ def windows_consumption():
     if history.is_symlink():
         raise ValueError("Linked Windows action history")
     preparation, build_test, number, process_scenarios, owned_processes = 0, 0, 0, 0, 0
+    default_http_processes = 0
+    default_http_phases = []
     windows = Path("/mnt/c/Temp/azureauth-windows-slice-108/actions")
     for number, action in enumerate(sorted(history.iterdir()), 1):
         if action.is_symlink() or action.name != f"{number:04d}":
@@ -419,14 +426,19 @@ def windows_consumption():
         process_scenarios += reserved
         if started.get("testSuite") == "owned-process":
             owned_processes += reserved
+        if started.get("testSuite") == "default-http-composition":
+            default_http_processes += reserved
+            default_http_phases.append(started["expected"])
         if started["action"] in ("bootstrap", "restore"):
             preparation += 1
         elif started["action"] in ("build", "test"):
             build_test += 1
         else:
             raise ValueError("Unknown Windows action allocation")
-    if preparation > 5 or build_test > 44 or process_scenarios > 56 or \
-            owned_processes > 20 or process_scenarios - owned_processes > 36:
+    if preparation > 5 or build_test > 48 or process_scenarios > 60 or \
+            owned_processes > 20 or default_http_processes > 4 or \
+            process_scenarios - owned_processes - default_http_processes > 36 or \
+            default_http_phases not in ([], ["red"], ["red", "green"]):
         raise ValueError("Windows allocation exceeded")
     if number in (2, 3):
         raise ValueError("Windows restore must complete before Linux continuation")
