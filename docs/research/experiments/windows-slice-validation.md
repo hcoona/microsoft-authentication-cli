@@ -4719,3 +4719,115 @@ This construction increment cannot close real broker availability/discovery, acc
 selection/reuse, native/default composition, actual Windows/WSL lifetime, final Native
 AOT or whole-Slice acceptance. The current Wave's real-account effects boundary and
 concrete owner risk decision remain prerequisites to those later account operations.
+
+## Concrete MSAL Construction Evidence
+
+Issue #108 and [PR #154](https://github.com/hcoona/microsoft-authentication-cli/pull/154)
+carry this increment under the construction supplement accepted at
+`ae53bc2448c2e24d3df0eac61daf5d6bd143a4bc`. Root authored and operated the
+source and actions; independent reviews identify their reviewers in the PR.
+The existing Windows x64 host, SDK 10.0.401/runtime 10.0.12 and pinned
+MSAL/Broker 4.83.1/NativeInterop 0.20.3 graph remain the declared environment.
+
+### Accepted RED
+
+RED source `946db9d47d034e5781262505dbb4fe5b7e2834da`, tree
+`de98eb37a520ae57832cc102b0d8df012fbcee6a`, adds four fixed scenarios and an
+inert production construction helper. [Build 0046 and its independent artifact
+review](https://github.com/hcoona/microsoft-authentication-cli/pull/154#issuecomment-5675166122)
+bind the exact helper, all four methods, generated registration and PE/PDB source
+correspondence. The build completed with zero warnings or errors. No restore,
+download or dependency change occurred.
+
+[Actual RED 0047 acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/154#issuecomment-5675412217)
+joins every definition, entry, execution and result. All four cases failed at their
+intended first assertions, with total/executed/failed each four and every other
+counter zero. The three configuration cases report the unique required
+`Assert.IsNotNull(application)` message. Their observed shared runtime frame is
+line 25; the bound assertion's static source/PDB position is line 27. The record
+preserves both coordinates without rewriting the runtime frame or inferring its
+cause. The cancellation case reports the required `Assert.Fail` at line 51.
+Later configuration and HTTP assertions were not reached in RED.
+
+The original test action was fully collected with expected MTP exit 2, complete
+5,040-byte stdout and empty stderr, 0.989-second subject/capture/drain, two total
+Job processes and zero active processes. No termination or safety stop occurred.
+The sole TRX SHA-256 is
+`92ea6711b538716644827d2306b25e995db67b64fc50882835e9e78d4b6bcc64`.
+The separately reviewed offline collector correction repaired its prospective-map
+field assumption; it did not modify or rerun the subject or its historical records.
+
+### Reviewed GREEN Source and Build
+
+Following actual RED acceptance, GREEN source
+`16506630fc857c8b4af32653a216378b94581e3d`, tree
+`278808f59f6b395f5b2ae85a0e4231f22beb8d52`, changes only the concrete factory
+and nested session. The [independent source review](https://github.com/hcoona/microsoft-authentication-cli/pull/154#issuecomment-5675478257)
+verifies the real public builder, original cancellation, mandatory broker
+availability in full production creation, cancellation-aware account discovery,
+selected-account acquisition and rejecting fallback UI. All four scenario bodies
+and assertions remain byte-for-byte unchanged.
+
+Build 0048 completed with zero warnings or errors, native exit 0, complete
+713-byte stdout and empty stderr, 12.479-second subject/capture/drain, eight
+total Job processes and zero active processes. No termination or safety stop
+occurred. The original build and its separately reviewed offline reader were
+fully collected with exit 0. The [independent actual-artifact review](https://github.com/hcoona/microsoft-authentication-cli/pull/154#issuecomment-5675839060)
+accepted all ten
+factory/session/state-machine methods, complete input/invocation bindings,
+54 physical source documents, 124 discovered methods and 131 projected cases.
+All 321 selected scenario method/IL/sequence-point records match build 0046.
+
+The only assembly-reference addition is the already pinned
+`Microsoft.Identity.Client.Broker` 4.83.1.0 in the Windows assembly, with
+the expected scoped `WithBroker` member and direct helper call. No native ABI
+or controller delta occurred. The managed Windows assembly SHA-256 is
+`4f4a151907948243e62106e15a6e69eb1a81278500ea89594217ae7c3709e2d7`;
+the scenario assembly SHA-256 is
+`7349524132c7cc771029e19667f283e680f8d7d83569b7fc3525b284ca30f2c1`.
+These are managed build artifacts, not final Native AOT output.
+
+### Accepted GREEN and Retention
+
+The original GREEN test 0049 selected the same four scenario bodies and assertions.
+Its controller reports total/executed/passed each four and every other counter
+zero, with original outer exit 0 and confirmed quiescence. The subject/capture/drain
+took 0.889 seconds, with native exit 0, complete 637-byte stdout, empty stderr,
+two total Job processes and zero active processes. No termination or safety stop
+occurred. The one separately reviewed offline collection joined all four definitions,
+entries, executions and Passed results, with one Completed summary and no global
+RunInfo or ErrorInfo. The three configuration cases reached their unchanged
+client/authority/redirect/broker-enable/logging/factory assertions; the original
+cancellation case passed before construction. The [independent actual GREEN review](https://github.com/hcoona/microsoft-authentication-cli/pull/154#issuecomment-5676096910)
+accepted the complete report, captures and unchanged compiled-scenario basis.
+`BrokerOptions` assignments remain source/compiled findings because the public
+configuration has no getters for those options. These results do not observe
+real account listing or MSA passthrough effects.
+
+| GREEN 0049 evidence | SHA-256 |
+| --- | --- |
+| Sole TRX | `714ce0e97ef5a0f1510000248b67b26f8edb9171a9f819467ae7156cbdb84a9a` |
+| WSL start | `746dffeac49b23fa9b061522e25a8f88afe14d4c802372615f62c2b3fbfbdea2` |
+| Windows start | `a042a8cfa70404adde91bfcd0de9657153f54cc49c6493c5eed9b67c20f46da3` |
+| WSL final | `75a3b87ffe77ca8f5935e6628e7e5604e48ce392f68ac62a48dc0c4515703e8f` |
+| Windows final | `996177e70c0a6310456f93c618358c7a239f71834d132cb5f74f47f9e690331f` |
+| Raw invocation | `f9379b7f12c396bfe4dcd13d6f80472dd44cf0fcd5522edc2dd1c0c02dc7dcd4` |
+
+After this four-action construction cycle, all 45 Linux and 49 Windows action
+reservations are finalized. Windows build/test consumption is 44/44, Linux is
+37/80 and combined consumption is 81/120. Preparation remains 13/16, including
+Windows 5/5; downloads remain 768 MiB. Process consumption remains 44/56,
+including owned-process 20/20. Preserve the protected twelve CLI process units
+and four unallocated Wave process units. Source, artifacts, action receipts and
+captures remain in the dedicated roots; no historical action was replayed,
+refunded, repaired or deleted. A new selection requires its accepted allocation
+and protocol before execution.
+
+### Evidence Boundary
+
+Only the shared production construction helper is selected for runtime validation.
+The selected path includes process-local MSAL initialization and the admitted
+read-only Windows version query. Full creation's availability call, account/token
+operations and default entry activation are outside this selection. Construction
+evidence cannot close real WAM/account reuse, native/default composition, actual
+Windows/WSL lifetime, final Native AOT or overall Slice acceptance.
