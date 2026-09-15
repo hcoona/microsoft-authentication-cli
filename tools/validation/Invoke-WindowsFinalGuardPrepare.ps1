@@ -14,7 +14,7 @@ $script:AcceptedControllerSha256 = $null
 $script:AcceptedDispatcherSha256 = $null
 $script:AcceptedSourceReviewSha256 = $null
 $script:AcceptedAdmissionSha256 = $null
-$script:ExpectedSourceSha256 = '973d9a6ec33c0bfeafe182ec067a67d3b9eee76212b2be71296a24e598aa32e4'
+$script:ExpectedSourceSha256 = 'd38846b080d5ee092fae9e21c9031712b56289093b50ca048d50589cca50ff4b'
 $script:RecipeJson = @'
 {
   "compilerInvocation": {
@@ -196,7 +196,7 @@ $script:AuthorityShapeJson = @'
   },
   "executionAdmission": {
     "bytes": "@size",
-    "path": "/tmp/windows-final-guard-authority-inputs/execution-admission.json",
+    "path": "/tmp/windows-final-guard-authority-inputs/execution-admission-v2.json",
     "sha256": "@hash"
   },
   "handoffAcceptance": {
@@ -251,7 +251,7 @@ $script:AuthorityShapeJson = @'
   },
   "publication": {
     "bytes": "@size",
-    "path": "/tmp/windows-final-guard-authority-inputs/publication.json",
+    "path": "/tmp/windows-final-guard-authority-inputs/publication-v2.json",
     "sha256": "@hash"
   },
   "receiptPolicy": {
@@ -278,7 +278,7 @@ $script:AuthorityShapeJson = @'
   },
   "sourceReview": {
     "bytes": "@size",
-    "path": "/tmp/windows-final-guard-authority-inputs/source-review.json",
+    "path": "/tmp/windows-final-guard-authority-inputs/source-review-v2.json",
     "sha256": "@hash"
   },
   "target": {

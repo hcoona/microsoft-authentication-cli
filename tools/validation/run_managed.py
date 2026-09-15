@@ -362,7 +362,7 @@ FINAL_GUARD_BINDING_PATH = "/tmp/windows-final-guard-history-binding.json"
 FINAL_GUARD_EVIDENCE_ROOT = "/tmp/windows-final-guard-authority-inputs"
 FINAL_GUARD_BINDING_REVIEW_PATH = FINAL_GUARD_EVIDENCE_ROOT + "/history-binding-review.json"
 FINAL_GUARD_RECIPE_SHA256 = "ed0fa260a638d3594a18dc51cbc87b588bdfa45f4fd90c7b9ce2fec501e65bcc"
-FINAL_GUARD_SOURCE_SHA256 = "973d9a6ec33c0bfeafe182ec067a67d3b9eee76212b2be71296a24e598aa32e4"
+FINAL_GUARD_SOURCE_SHA256 = "d38846b080d5ee092fae9e21c9031712b56289093b50ca048d50589cca50ff4b"
 FINAL_GUARD_PREFLIGHT_SHA256 = "11a93b9504b70e2caf1e7e6c2f333f1cda178e0adcf88d5998d3eca83450e8b9"
 FINAL_GUARD_PREFLIGHT_ARGV_SHA256 = "47a11709b88178a0963d560b866a79d20d9e9310407c8e161365344870897bfb"
 FINAL_GUARD_AUTHORITY_SPEC = {'branch': 'main-v2',
@@ -421,7 +421,7 @@ FINAL_GUARD_AUTHORITY_SPEC = {'branch': 'main-v2',
                                          'sha256': '@hash',
                                          'tree': '@rev'}},
  'executionAdmission': {'bytes': '@size',
-                        'path': '/tmp/windows-final-guard-authority-inputs/execution-admission.json',
+                        'path': '/tmp/windows-final-guard-authority-inputs/execution-admission-v2.json',
                         'sha256': '@hash'},
  'handoffAcceptance': {'bytes': '@size',
                        'path': '/tmp/windows-final-guard-authority-inputs/post0053-handoff-acceptance.json',
@@ -458,7 +458,7 @@ FINAL_GUARD_AUTHORITY_SPEC = {'branch': 'main-v2',
               'sha256': '@hash',
               'tree': '@rev'},
  'publication': {'bytes': '@size',
-                 'path': '/tmp/windows-final-guard-authority-inputs/publication.json',
+                 'path': '/tmp/windows-final-guard-authority-inputs/publication-v2.json',
                  'sha256': '@hash'},
  'receiptPolicy': {'bytes': '@size',
                    'path': '/tmp/windows-final-guard-authority-inputs/receipt-artifact-policy.json',
@@ -474,7 +474,7 @@ FINAL_GUARD_AUTHORITY_SPEC = {'branch': 'main-v2',
  'scope': 'compiler-only-final-guard-prepare',
  'source': {'commit': '@rev', 'tree': '@rev'},
  'sourceReview': {'bytes': '@size',
-                  'path': '/tmp/windows-final-guard-authority-inputs/source-review.json',
+                  'path': '/tmp/windows-final-guard-authority-inputs/source-review-v2.json',
                   'sha256': '@hash'},
  'target': {'commit': '@rev', 'tree': '@rev'},
  'toolSha256': {'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.Core.dll': 'fd1097aed825d392a5dc8d19384381d4bb2a43498ea1c9d917f5d80c66600e1b',

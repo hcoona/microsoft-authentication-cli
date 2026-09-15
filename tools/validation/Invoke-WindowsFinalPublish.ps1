@@ -8,7 +8,7 @@ $ProgressPreference = 'SilentlyContinue'
 # No parameterized top-level launcher exists. Even removing the outer draft refusal
 # leaves both admission hooks fail-closed until exact future source is reviewed.
 function Assert-ExactFinalPublishAdmission($Binding) {
-    throw 'UNBOUND: accepted protocol/source/graph/recipe/guard/capacity/reservation are required'
+    throw 'UNBOUND: accepted protocol/source/graph/recipe/guard/capacity/reservation and original shared QPC deadline are required'
 }
 
 function Assert-ExactFinalPublishPostconditions($Binding, $Result) {
@@ -182,7 +182,13 @@ function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
     try {
         if ($ControllerWatch.ElapsedMilliseconds -ge 700000) { throw 'Controller expired before guard' }
         if (Test-Path -LiteralPath "$action\cancel") { throw 'Cancellation before guard' }
-        $guard = [WindowsValidationJob]::CreateFinalPublishDraft($ControllerWatch)
+        if ($null -eq $Binding.originalOuterDeadlineCounter -or
+            ($Binding.originalOuterDeadlineCounter -isnot [long] -and $Binding.originalOuterDeadlineCounter -isnot [int]) -or
+            -not [Diagnostics.Stopwatch]::IsHighResolution -or
+            $Binding.originalOuterDeadlineCounter -le [Diagnostics.Stopwatch]::GetTimestamp()) {
+            throw 'UNBOUND: missing or expired original shared QPC deadline'
+        }
+        $guard = [WindowsValidationJob]::CreateFinalPublishDraft($ControllerWatch, [long]$Binding.originalOuterDeadlineCounter)
         $result.stage = 'subject'
         if (Test-Path -LiteralPath "$action\cancel") { throw 'Cancellation before subject' }
         # This clock starts immediately before root creation and never restarts.
