@@ -7,8 +7,10 @@ namespace Authentication.Windows;
 public static class WindowsProcess
 {
     public static int Run(string[] arguments, long entryTimestamp) =>
-        RunOwned(arguments, entryTimestamp,
-            (_, _) => throw new ProviderFailureException(AuthenticationFailure.MechanismUnavailable));
+        RunDefault(arguments, entryTimestamp,
+            new WindowsHostAdmission(new NativeWindowsHostObservations()),
+            WindowsLoader.RestrictSearch, new MsalSessionFactory(),
+            () => new MsalHttpClientFactory(new HttpClientHandler()));
 
     public static int Run(string[] arguments, long entryTimestamp, IRequestHost host,
         Func<ClientProfile, IAuthenticationProvider> createProvider, IProfileSource? profiles = null) =>
@@ -16,6 +18,27 @@ public static class WindowsProcess
 
     // Controlled constructors/checkpoints are internal to the scenario executable.
     // The product never selects them through arguments or environment variables.
+    internal static int RunDefault(string[] arguments, long entryTimestamp,
+        IWindowsHostAdmission admission, Action<CancellationToken> restrictDllSearch,
+        IMsalSessionFactory sessions, Func<MsalHttpClientFactory> createHttp,
+        Func<Func<Task>, Action, IWindowsHostAdmission, OwnedRequestHost>? createHost = null,
+        Action<OwnedProcessCheckpoint>? checkpoint = null)
+    {
+        MsalHttpClientFactory? http = null;
+        return RunCore(arguments, entryTimestamp,
+            process => createHost is null
+                ? new OwnedRequestHost(process.Cancel, process.FailHost, admission: admission)
+                : createHost(process.Cancel, process.FailHost, admission),
+            (profile, request) => new LocalWindowsProvider(admission, token =>
+            {
+                token.ThrowIfCancellationRequested();
+                // Retain ownership before loader/session initialization can fail.
+                http ??= createHttp();
+                return MsalAuthenticationProvider.Initialize(profile, request, sessions, http,
+                    restrictDllSearch, token);
+            }), null, checkpoint, () => http?.Dispose());
+    }
+
     internal static int RunOwned(string[] arguments, long entryTimestamp,
         Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
         IProfileSource? profiles = null,
@@ -30,13 +53,13 @@ public static class WindowsProcess
     private static int RunCore(string[] arguments, long entryTimestamp,
         Func<ProcessState, IRequestHost> createHost,
         Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
-        IProfileSource? profiles, Action<OwnedProcessCheckpoint>? checkpoint)
+        IProfileSource? profiles, Action<OwnedProcessCheckpoint>? checkpoint, Action? disposeHttp = null)
     {
         var process = new ProcessState(entryTimestamp);
         try
         {
             new Thread(() => Execute(process, arguments, entryTimestamp, createHost, createProvider,
-                profiles ?? new WindowsProfileSource(), checkpoint)) { IsBackground = true }.Start();
+                profiles ?? new WindowsProfileSource(), checkpoint, disposeHttp)) { IsBackground = true }.Start();
 
             while (true)
             {
@@ -60,7 +83,7 @@ public static class WindowsProcess
     private static void Execute(ProcessState process, string[] arguments, long entryTimestamp,
         Func<ProcessState, IRequestHost> createHost,
         Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
-        IProfileSource profiles, Action<OwnedProcessCheckpoint>? checkpoint)
+        IProfileSource profiles, Action<OwnedProcessCheckpoint>? checkpoint, Action? disposeHttp)
     {
         var exitCode = 2;
         RequestInvocation? invocation = null;
@@ -128,6 +151,11 @@ public static class WindowsProcess
                 ownedHost?.Completion.GetAwaiter().GetResult();
                 pipe?.Completion.GetAwaiter().GetResult();
                 process.CancellationCompletion.GetAwaiter().GetResult();
+                if (disposeHttp is not null)
+                {
+                    checkpoint?.Invoke(OwnedProcessCheckpoint.BeforeHttpDisposal);
+                    // RED: the shared HTTP disposal connection is still pending.
+                }
                 drained = true;
             }
             catch (Exception)
@@ -270,4 +298,5 @@ internal enum OwnedProcessCheckpoint
 {
     BeforeCommit,
     AfterCommit,
+    BeforeHttpDisposal,
 }
