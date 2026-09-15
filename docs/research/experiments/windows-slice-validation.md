@@ -5510,6 +5510,48 @@ substitute an unexpanded wildcard, guessed SourceLink value or invented output
 bytes for a complete plan. Actual response bytes and source/task diagnostic
 receipts remain original-execution evidence.
 
+##### ASCII Default-Detect Batch Inputs
+
+The existing `batchEncoding` contract also admits exactly
+`{"mode":"ascii-default-detect","useUtf8Encoding":"Detect","codePageTool":null}`
+for the two selected native Exec companions. This closed variant contains no numeric
+OEM or selected-codepage field. Both the fully substituted original command and the
+resolved working directory must contain only ASCII characters. Preserve the existing
+non-UNC working-directory predicate, exact native consumer/response joins, quoting,
+ordered task/environment evidence and original response-byte comparison. Reject an
+unknown mode, extra fields, non-ASCII input, a nonnull codepage tool or any encoding
+override other than the original `Detect` default. The existing numeric variant and
+its source-derived selection and conditional tool-pin rules remain available.
+
+This is a source-derived equivalence for the selected input case. MSBuild
+[`ToolTask.UseUtf8Encoding`](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Utilities/ToolTask.cs#L204)
+defaults to `Detect`.
+[`Exec.CreateTemporaryBatchFile`](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Tasks/Exec.cs#L198-L277)
+selects its encoding using the command plus working directory;
+[`EncodingUtilities.BatchFileEncoding`](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Shared/EncodingUtilities.cs#L228-L260)
+retains the default OEM encoding for representable Detect input and suppresses a
+UTF-8 preamble. The selected
+[`IlcCompile` and Windows linker Exec tasks](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets#L320-L398)
+do not override that default. Under the ordinary supported Windows OEM encoding
+behavior in the accepted workstation model, ASCII maps to identical bytes. The
+selected and default codepages remain equal, so Exec emits no `chcp` line and has
+no codepage-tool input for this branch. No numeric OEM value is asserted or inferred.
+
+The expected batch has exactly these five lines, each terminated by CRLF, without
+a BOM: `setlocal`, `set errorlevel=dummy`, `set errorlevel=`, the fully substituted
+original command, and `exit %errorlevel%`. Both current validators reject non-ASCII
+input before serialization; the Python encoder also uses strict ASCII. The
+PowerShell encoder receives only that checked command and fixed ASCII framing.
+Keep the original retained batch-byte equality check and complete successful task
+join. These planned bytes do not assert that an original batch has been produced
+or consumed. The equivalence concerns batch inputs, not arbitrary native-output
+decoding; the original UTF-8 MSBuild logger contract remains unchanged.
+
+The final graph and literal source admission must bind this variant before use.
+This amendment adds no query, helper, execution, capacity, current-machine codepage
+observation or new runtime claim. It does not activate the disabled validators or
+complete the remaining compiler/native-input, graph, artifact or scenario gates.
+
 #### Original Lifetime, Completion and Retention
 
 The original WSL clock starts before admission and retains a 700-second outer
