@@ -417,6 +417,20 @@ OWNED_PROCESS_RED = {
 TEST_FILTERS["owned-process"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.NormalOwnedClosurePreservesSuccessAndDrains|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.LocalCancellationSuppressesSuccessBeforeDelayedNotification|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.LocalHostFaultSuppressesSuccessBeforeDelayedNotification|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CancellationDuringCreationSurvivesClosureFailure|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.OrdinaryCreationFailureRemainsMechanismUnavailable|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CleanupFaultAfterNormalClosureSuppressesUncommittedSuccess|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CleanupFaultAfterCommitCannotReplaceTheResult|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.ProcessWaitsForTheActualOwnedThreadExit|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.ProcessWaitsForTheOutgoingOwnedCallback|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.NormalClosureArmsTheBoundBeforeCoreTerminalSelection'
 
 
+MSAL_CONSTRUCTION_PRIOR_START = "5e3e684f790c30eed91f4a26829f5cb4cedbe63303d5003ef0eda09cc5f18985"
+MSAL_CONSTRUCTION_PRIOR_FINAL = "6c0d567b62b8e3f856b3dd67d7a1cee0d4c93bdc458a1f5a6487a80a81b6023c"
+MSAL_CONSTRUCTION_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "c0477077eff68182bae6f6b7d9aced6e56d3e3864d15bcd2b7ea25e8c75924e8",
+    "Invoke-WindowsValidation.ps1": "7bbac1e2f2688d9057258c4ad7b67493c8f78926aa297387c9f2e410d4eb212f",
+}
+MSAL_CONSTRUCTION_CASES = (
+    'Authentication.Windows.Scenarios.MsalConstructionScenarios.OrdinaryProfileConstructsCommonApplication',
+    'Authentication.Windows.Scenarios.MsalConstructionScenarios.LegacyProfileConstructsOrganizationsApplication',
+    'Authentication.Windows.Scenarios.MsalConstructionScenarios.ExactTenantProfileConstructsRestrictedApplication',
+    'Authentication.Windows.Scenarios.MsalConstructionScenarios.OriginalCancellationPreventsApplicationConstruction',
+)
+TEST_FILTERS["msal-construction"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalConstructionScenarios.OrdinaryProfileConstructsCommonApplication|FullyQualifiedName=Authentication.Windows.Scenarios.MsalConstructionScenarios.LegacyProfileConstructsOrganizationsApplication|FullyQualifiedName=Authentication.Windows.Scenarios.MsalConstructionScenarios.ExactTenantProfileConstructsRestrictedApplication|FullyQualifiedName=Authentication.Windows.Scenarios.MsalConstructionScenarios.OriginalCancellationPreventsApplicationConstruction'
+
 MSAL_COMPOSITION_PRIOR_START = "5d1fd49bef654fdfd4dd5773c7f766115549e99dee348b0ad7638fa25f1274e4"
 MSAL_COMPOSITION_PRIOR_FINAL = "06c6a4077e3272a6584f21ec35095d3f34f6e03b7de4ba406949acec4f1b37d9"
 MSAL_COMPOSITION_PREVIOUS_CONTROLLERS = {'run_windows.py': 'd1c7f31e6c68cf11520c998cbb3af78dba277484ea90ce07dca23a1f67167271', 'Invoke-WindowsValidation.ps1': 'aaab817f2b56092619b6af0a0af6c08f9e187986c149d3a9fcf3fdf7c1c9c506'}
@@ -518,13 +532,14 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition", "msal-construction") or \
                     (suite == "owned-host" and number <= 18) or \
                     (suite == "local-provider" and number <= 24) or \
                     (suite == "host-admission" and number <= 28) or \
                     (suite == "ui-admission" and number <= 32) or \
                     (suite == "owned-process" and number <= 38) or \
-                    (suite == "msal-composition" and number <= 42):
+                    (suite == "msal-composition" and number <= 42) or \
+                    (suite == "msal-construction" and number <= 46):
                 raise ValueError("Unknown Windows test selection")
             required = 12 if suite == "cli" else 10 if suite == "owned-process" else 0
         else:
@@ -538,6 +553,9 @@ def windows_process_reservation(number, started):
 
 
 def selected_cases(suite, expected):
+    if suite == "msal-construction":
+        return {name: "Failed" if expected == "red" else "Passed"
+                for name in MSAL_CONSTRUCTION_CASES}
     if suite == "msal-composition":
         return {name: "Failed" if expected == "red" else "Passed"
                 for name in MSAL_COMPOSITION_CASES}
@@ -1200,7 +1218,7 @@ def main():
     for name in ("protocol", "source", "target", "review"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--expect", choices=("red", "green"), default="green")
-    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition"))
+    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition", "msal-construction"))
     args = parser.parse_args()
     if (args.action == "test") != (args.suite is not None):
         raise ValueError("Test actions require one finite suite; other actions forbid it")
@@ -1282,6 +1300,18 @@ def execute(args, attended, finish_preparation):
         if len(previous) < 41 or digest(HISTORY / "0041/started.json") != MSAL_COMPOSITION_PRIOR_START or \
                 digest(HISTORY / "0041/result.json") != MSAL_COMPOSITION_PRIOR_FINAL:
             raise ValueError("Accepted owned-process green history prerequisite changed")
+        if len(previous) < 45 or digest(HISTORY / "0045/started.json") != MSAL_CONSTRUCTION_PRIOR_START or \
+                digest(HISTORY / "0045/result.json") != MSAL_CONSTRUCTION_PRIOR_FINAL:
+            raise ValueError("Accepted MSAL composition green history prerequisite changed")
+        msal_construction_transition = len(previous) == 45
+        if msal_construction_transition and args.action != "build":
+            raise ValueError("The first MSAL construction action must build with its controller transition")
+        if args.suite == "msal-construction":
+            prior_construction = [start for _, start, _ in previous
+                                  if start.get("testSuite") == "msal-construction"]
+            wanted = [] if args.expect == "red" else ["red"]
+            if [start["expected"] for start in prior_construction] != wanted:
+                raise ValueError("MSAL construction permits one red and one subsequent green test")
         msal_composition_transition = len(previous) == 41
         if msal_composition_transition and args.action != "build":
             raise ValueError("The first MSAL composition action must build with its controller transition")
@@ -1358,7 +1388,7 @@ def execute(args, attended, finish_preparation):
         preparation = args.action in ("bootstrap", "restore")
         prep = sum(start["action"] in ("bootstrap", "restore") for _, start, _ in previous)
         tests = len(previous) - prep
-        if prep + preparation > 5 or tests + (not preparation) > 40:
+        if prep + preparation > 5 or tests + (not preparation) > 44:
             raise ValueError("Windows allocation exhausted")
         if sum(item["action"] in ("fetch", "restore") for item in linux) + prep + preparation > 16 or \
                 sum(item["action"] in ("build", "test") for item in linux) + tests + (not preparation) > 120:
@@ -1394,7 +1424,8 @@ def execute(args, attended, finish_preparation):
             for name in ("home", "home/roaming", "home/local", "temp", "results", "empty-program-files"):
                 (action / name).mkdir()
             migrations = {}
-            previous_controllers = (MSAL_COMPOSITION_PREVIOUS_CONTROLLERS if msal_composition_transition else
+            previous_controllers = (MSAL_CONSTRUCTION_PREVIOUS_CONTROLLERS if msal_construction_transition else
+                                    MSAL_COMPOSITION_PREVIOUS_CONTROLLERS if msal_composition_transition else
                                     PREVIOUS_CONTROLLERS if len(previous) == 3 else
                                     TEST_PREVIOUS_CONTROLLERS if len(previous) == 6 else
                                     PROCESS_PREVIOUS_CONTROLLERS if graph_transition else
