@@ -5371,6 +5371,356 @@ are required before the copy may enter a later v2 handoff. Actual v2 handoff
 assembly, complete final source/graph/K and final publication admission remain
 separate; this operation neither runs L again nor opens those gates.
 
+### Inactive Whole Final-Caller Integration
+
+The final-publication source integrates the existing env35 Csc/Exec consumers,
+original-guard provenance joins and narrow successor-history compatibility. This
+increment prepares one final Native AOT publication procedure. All four source
+entry gates remain disabled, and the reviewed literal-launch binding remains
+absent. Merging this source or protocol text does not activate a final caller,
+reserve a publication, run a metadata observer or establish an actual graph,
+handoff, K, native artifact or support claim. Separate whole-source/protocol,
+actual-input and exact invocation acceptance remain required. Any later source
+activation must itself be independently accepted as exact immutable source; no
+runtime patch or caller Boolean may bypass these gates.
+
+The source files below are the complete inactive component bytes. Original guard
+preparation records and their earlier disabled-loader identities remain historical
+inputs; their hashes are not replaced by this integration's current file links.
+The original guard C# source, compiled guard, readers and preparation controllers
+are unchanged. Source integration uses these Git filenames. The later private
+materialization keeps the existing `.draft` filenames required by the component
+contract, and verifies equality to the corresponding accepted Git blobs.
+
+| Inactive component | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [`run_windows_final_publish.py`](../../../tools/validation/run_windows_final_publish.py) | 7611 | `bccf09306d92b1aa0f7e341c28414d9fa9bb64ce4cd556a243372c7fb64f0d69` |
+| [`final_publish_contracts.py`](../../../tools/validation/final_publish_contracts.py) | 120176 | `e56e09b5616cf7b2ace5e6bd12fda1fa558c3986a383e2383b46adb7a8a4a444` |
+| [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | 86205 | `9ec02f16468d06869052e956f9a471fa79fb7da6f3cd67d0f404795d6b4f96c4` |
+| [`Start-WindowsFinalPublish.ps1`](../../../tools/validation/Start-WindowsFinalPublish.ps1) | 12107 | `7ce257e4e23fbc1cdc3e97602a002f1d518fcaf98513fc5c5b0064ba1647d362` |
+
+#### Selected Product, Recipe and Effects
+
+Select only product commit `503360753accd0829801953823b1b57a4f852440`, tree
+`8506cdd9781c8a331ea12ea8fe27a55292eec073`. Its exact complete `src` and
+`global.json` inventory must match the independently accepted source and actual
+dedicated `sources/` materialization. Retain SDK 10.0.401/runtime 10.0.12,
+MSAL/Broker 4.83.1 and NativeInterop 0.20.3. Existing public restore bytes may be
+reused only after exact final project/import/reference/RID and path-consumption
+correspondence is established. Historical `subject/` paths are not blindly
+rewritten, assumed unused or treated as a complete final graph. This procedure
+allocates no restore, fetch, tool installation, guard compilation, fixture or
+synthetic process case.
+
+The existing sealed recipe carrier is exactly 5,223 bytes, SHA-256
+`2fcf2e7e265b91e1103b0c91e240079e04d87dfd505d633c281a4abe53e900c2`.
+Its single external descriptor remains part of source, graph, K and execution
+acceptance. The source reads those exact bytes from the existing private package
+`recipe.json`; it does not introduce another tracked recipe authority. A missing,
+changed or noncanonical recipe rejects admission. Copying that same accepted
+recipe into the owned action preserves its identity and creates no new recipe.
+
+Launch only the nominated `C:\Program Files\dotnet\dotnet.exe` in the admitted
+source root to publish `src\Authentication.Cli\Authentication.Cli.csproj` for
+Release, win-x64, self-contained Native AOT and runtime 10.0.12. The fixed vector
+retains `--no-restore`, `--disable-build-servers`, `UseSharedCompilation=false`,
+`IlcUseEnvironmentalTools=true`, the recipe's exact `CppLinker`, `-m:1`,
+`-nr:false` and `-noAutoResponse`; compilation remains included. Preserve trim
+and compiler diagnostics, warnings-as-errors and ordinary symbols. No blanket
+warning suppression, symbol stripping, provider override or extra response input
+is allowed.
+
+The env35 recipe makes exactly its existing four changes to the prior retained
+recipe: `MSBUILDPRESERVETOOLTEMPFILES=1`, detailed verbosity, `-tl:off`, and
+`-clp:ShowEventId;ForceNoAlign;DisableConsoleColor`. It has exactly 35 replacement
+root environment entries. Resolve only the existing action, source and package
+root slots and once-reserved endpoint. Retain the exact PATH, LIB, INCLUDE,
+telemetry, build-server, dedicated home/cache/temp and NuGet-signature policy.
+Serialize unique case-insensitive names in ordinal-ignore-case order as the
+existing UTF-16LE native block. Do not mutate the controller or host environment.
+
+The only endpoint override is `_MSPDBSRV_ENDPOINT_`, containing the one nonzero,
+lowercase 32-character UUIDv4 generated during the original durable reservation.
+Reject known reuse against admitted original starts; do not invent a historical
+endpoint or enumerate host services. Keep `_MSPDBSRV_`, `LINK`, `_LINK_`, `CL`,
+`_CL_` and the signature-disabling variable absent, including case variants.
+The exact five recipe-selected linker/PDB tool pins and their existing toolchain
+paths remain unchanged. A fresh ordinary linker and its direct child environment
+must be established by source and graph acceptance, not inferred from a filename.
+
+The existing ordinary PDB endpoint conclusion remains conditional on successful
+environment read and duplication. It does not prove isolation on every error,
+exclusive service ownership or finite server lifetime. No new allocator, helper,
+process, service, installed-root or account investigation is implied.
+
+#### Exact External Inputs and Graph Closure
+
+Use `final-publish-external-authority-v2` with the existing nine exact input roles:
+source review, handoff, handoff acceptance, graph, graph acceptance, guard
+acceptance, caller authorization K, execution review and publication bindings.
+The envelope joins selected product, exact component Git blobs, integration and
+protocol ancestry, current target/Wave, recipe, original root markers and the
+unchanged thirteen-field G. Both current target identity and accepted protocol
+bytes must match. Source and execution acceptance cannot be inferred from a URL
+or Boolean; retain the existing six public review bindings and contextual
+independent review of their exact subjects. No new external input schema or
+alternate authority path is introduced.
+
+The existing K carrier joins the accepted B/R, original completion and managed
+artifact records, exact original L source and opaque original L outcome
+acceptance. K does not rerun L, parse a replacement acceptance schema or create
+the Windows artifact copy. Preserve its eight inputs, two passes, sixteen reads,
+16 MiB aggregate and 1 MiB per-input bound. The independent reviewer must assess
+actual L semantics and the existing source/history/fixture joins. Unknown actual
+K, graph and handoff bindings remain absent in this preparation.
+
+Require `final-publish-exact-graph-v2` and the existing
+`final-publish-tool-response-contract-v1`: complete source/protected-input closure,
+exact absent ambient inputs, selected SDK/runtime/import/task/tool/consumer pins,
+effective properties, finite generated paths and ordered producer/consumer plans.
+The nine host roles remain sdkHost, sdkForwarder, msbuild, corelib, taskHost,
+logger, utilities, cscTask and execTask. Bind each to one exact protected input.
+No evaluated property, source/reference/restore-path use, native dependency or
+compiler branch is invented merely because its source is available.
+
+Keep the original WriteLinesToFile ILC/link adapter and its exact CRLF/BOM rules.
+Csc has its separate source-bound UTF-8 BOM response with no added newline.
+Select the actual built-in apphost or `dotnet exec` branch, bind the compiler DLL
+and selected host, and prove the unused apphost absent when required. Preserve
+ordered Csc overrides `DOTNET_ROOT=` then the pinned SDK root. The exact direct
+ToolTask-child environment is derived from the root recipe, ordered SDK
+overrides and ordered task overrides; final names remain unique ignoring case.
+
+Require exactly one ILC and one linker Exec companion, with their exact native
+consumer, static response association and source-bound OEM or UTF-8 no-BOM batch
+serialization. Pin the command processor and conditional codepage tool where
+actually selected. Preserve the single logging service, no out-of-process task
+hosts, detailed UTF-8 en-US stdout event branch, planned project/target/import
+occurrences and globally monotonic task IDs. Original command, ordered environment
+override and preservation messages must join the same successfully closed task
+by exact byte offsets, lengths and hashes.
+
+Static and tool response plans together remain at most 32; static generated paths,
+temporary-directory roles and tool plans share the existing 10,000 bound. Each
+response remains at most 8 MiB, command templates at most 1 MiB and console lines
+at most 2 MiB. Temporary roles use existing finite full-match names and require
+complete retained membership; stale, undeclared or ambiguous members reject.
+There are no preexisting top-level or unreviewed nested response files. Do not
+substitute an unexpanded wildcard, guessed SourceLink value or invented output
+bytes for a complete plan. Actual response bytes and source/task diagnostic
+receipts remain original-execution evidence.
+
+#### Original Lifetime, Completion and Retention
+
+The original WSL clock starts before admission and retains a 700-second outer
+bound through reservation, capture, collection and finalization. The shared lock
+covers current-history validation, original reservation and collection. Derive the
+next action only from accepted contiguous history, preserve its durable charge and
+create only its exact Windows pair and bridge. Any partial reservation remains
+charged and retained. No retry, replacement endpoint or capacity refund occurs.
+
+The original Windows controller clock starts before its admission and never
+restarts. The twenty-second ready/remaining-time exchange anchors the cross-host
+deadline to the earlier Windows ready counter, subtracting the existing one-tick
+ordering allowance. The complete 600-second action and ten-second never-resumed
+root allowance must fit before creation. The action clock begins immediately
+before root creation and includes capture and natural drain. Drain is at most
+2,000 ms or remaining action time, with at most 100 ms observation tolerance and
+no crossing of 600 seconds. Combined capture remains 8 MiB; the nonbreakaway Job
+allows at most 32 active members.
+
+Load only the independently accepted original guard DLL through the existing
+exact loader; reject a preloaded/ambiguous guard type and check assembly identity
+and location. Select only its final no-kill factory. Assign the suspended root
+before resume and retain the original process/handle. Omit kill-on-close for this
+mode. A single exact-handle stop is allowed only for a root proven never resumed,
+within its existing ten-second allowance. Unknown resume outcome is a possibly
+executed failure and takes retention. No Job, descendant, helper or resumed-root
+termination is permitted.
+
+After original native root zero exit, both original streams at EOF and natural
+zero active Job members at drain, the still-running Windows controller snapshots
+generated responses and issues `final-publish-postconditions-v2` within the
+original timing and cancellation bounds. Overall success additionally requires
+original controller and bootstrap completion with zero exits, complete
+unsuppressed diagnostics, unchanged source/inputs, all timing predicates and
+natural zero active Job members at final accounting. A WSL proxy zero alone is
+insufficient. After that original controller/bootstrap completion and final
+accounting, WSL independently re-renders, joins original messages and compares
+original and snapshot bytes before acceptance. Retain actual native image, asset
+and symbol bytes for separate artifact acceptance before any product use.
+
+After disposing the retained original controller and durably saving its final
+receipt, the original bootstrap checks its final zero-exit decision against the
+same original deadline counter, bootstrap stopwatch and existing action cancel
+marker. Normal completion must remain true and the original deadline must be
+present. Check cancellation before sampling the clocks; require elapsed bootstrap
+time below 700,000 ms and the current Windows counter strictly before that
+original deadline. A failed check or exception returns nonzero without rewriting
+the durable receipt. No finalization write, new timer, retry or process operation
+may intervene between this final check and zero exit.
+
+Any timeout, cancellation, changed input, capture/ownership failure, nonzero exit,
+unknown completion or survivor latches failure. The passive emergency observation
+is at most ten seconds within the original outer deadline; it never terminates
+Windows work. Retain all available evidence and possibly live work, close local
+handles without kill-on-close and stop dependent execution. Later quiescence does
+not erase failure, and finite controller observation does not bound survivor
+lifetime. No PID reopen, process scan, historical cleanup exception or symbol-free
+fallback is allowed. Original false artifact/continuation flags remain unchanged.
+
+Final source activation, complete graph/recipe/K/handoff acceptance and exact
+literal execution admission remain distinct. The twelve reserved final CLI
+synthetic cases, actual WSL caller lifetime, real WAM/account journey, release and
+whole-Slice acceptance retain their own gates. No authentication, account/cache/
+consent effect, resource request, deployment or support commitment is admitted.
+
+### Prospective Final-Caller Successor History
+
+A later complete final caller uses `final-publish-after-guard-handoff-v2` while
+retaining the six fields `schema`, `source`, `histories`, `recomputedCounters`,
+`knownEndpoints` and `guardAction`. Ordinary entries retain the existing complete
+entry shape and evidence checks. The sole closed exception is Windows action
+0054, represented by exactly `number` and `failedGuardDisposition`. Its number
+is `0054`; its descriptor equals the original successor authority's exact failed
+history disposition. No other platform, action number, extra field or alternate
+failure may use this variant. It does not assert a complete 0054 tree inventory.
+
+Preserve the accepted post-0053 manifest and acceptance bytes. The later handoff
+contains the exact original 45 Linux and 53 Windows entries, followed only on
+Windows by disposed 0054 and independently accepted successful 0055. Source-bound
+hashes of the compact, ordered original entry lists enforce that prefix without
+another provenance input. The handoff reviewer verifies their derivation from the
+unchanged accepted manifest. The paired action order remains contiguous; reject
+an intervening product reservation, duplicate, reordered or third guard. Only
+successful 0055 supplies the thirteen-field loader identity and successful
+completion/artifact joins. A final caller derives 0056 only from that accepted
+history; the post-collection check permits only its own original reservation.
+
+The original handoff-acceptance field shape may remain unchanged. Its
+`completePairedHistoryAccepted` statement means complete ordered paired history
+with this narrow disposed-failure variant, not complete fresh 0054 metadata or
+current process quiescence. Independent acceptance binds the exact v2 handoff,
+unchanged original dispositions and original guard acceptance. A new schema
+value or a caller Boolean alone does not supply that acceptance.
+
+#### One Original 0055 Local-Names Observation
+
+To supply only the successful-0055 `localEntryNames` value, permit one separately
+admitted names-only observation of the existing WSL `windows-actions/0055`
+directory under the dedicated Linux experiment root. This is one original
+invocation, including a failed admission or lock acquisition; there is no retry.
+Before it runs, independently accept the exact source, this protocol revision,
+original successful guard evidence and completed Windows acceptance-copy outcome,
+then admit the exact runtime, literal command, working directory and output path.
+Whole final graph and K acceptance are not prerequisites to this limited input
+observation, but remain prerequisites to final publication. An inactive source
+package supplies no observation or execution grant.
+
+Use the existing shared action lock with one nonblocking exclusive acquisition;
+do not create, truncate or read its contents. Open the one fixed directory through
+no-follow ancestors, with at most sixteen components, and retain its descriptor.
+Perform exactly one direct enumeration, reading names only. Admit at most sixteen
+names, each at most 255 UTF-8 bytes; observing a seventeenth entry rejects. Reject
+invalid UTF-8, control characters and non-leaf names. Do not open or query child
+entries, recurse, enumerate the Windows directory or touch action 0054. Check
+held/current directory kind and identity before and after enumeration and before
+completion; size, mtime or ctime changes reject. This establishes the bounded
+original observation, not an atomic snapshot against an uncooperative writer or
+a fresh complete history, process-ownership or global-quiescence claim.
+
+Sort the observed names using the existing Python handoff ordering. Write one
+exclusively created private record of at most 8 KiB, carrying those names and the
+original source/protocol/observation identity; synchronize, seal read-only and
+read back that owned record once. Capture at most 2 KiB of complete descriptor
+output. Original file content reads and further metadata/content discovery are
+prohibited. All lock, directory, output and finalization work shares one original
+thirty-second monotonic source deadline and latched cancellation. An independently
+pinned WSL watchdog permits at most 35 seconds before TERM and two further seconds
+before KILL of this sole observer; late completion cannot satisfy the source bound.
+No Windows process, product reservation or capacity debit occurs.
+
+Missing or linked paths, lock contention, changed identity, overflow, incomplete
+capture or any I/O/cancellation/time failure stops this sole invocation and blocks
+use of a partial list. Retain originals, every partial private output and the
+complete original tool transport; no repair, deletion or replacement observation
+is allowed. Independently accept original completion and the complete names before
+inserting them into the existing ordinary entry. The final caller still performs
+its existing admission-time and post-completion history comparisons. This
+allowance creates no new handoff schema, general collector or execution helper.
+
+#### Original Provenance and Final History Continuity
+
+The original successor authority already read by K must join the exact original
+manifest and acceptance, failed disposition, singleton fixture and successor
+limits. K may retain these already-checked values in internal admission state;
+it adds no provenance read or persistent carrier. Preserve K's eight inputs,
+two passes, sixteen reads, 16 MiB aggregate, 1 MiB per-input limit and existing
+deadlines. K's independent reviewer must establish that the separately accepted
+actual L consumed the same accepted history module, disposition and fixture.
+Pinning raw L and its acceptance does not establish those contextual semantics.
+Do not execute L again as part of K or introduce another loader identity field.
+
+For this later final caller only, current failed-history continuity uses exactly
+two source-bound checkpoints under its existing shared lock: before the final
+reservation and after original completion collection. The first checkpoint
+observes the seventeen fixed metadata roles, then reads the seven fixed content
+roles once. The second reads those same seven roles once, then observes the same
+seventeen metadata roles. Compare the two complete snapshots. A failed, repeated,
+reordered or interrupted checkpoint cannot obtain another pass. This prospective
+schedule does not change the original compiler-reader transaction or replay L.
+
+Across both checkpoints, permit at most fourteen regular-file read operations,
+123,152 admitted payload bytes and fourteen additional one-byte EOF sentinel
+requests, for at most 123,166 requested bytes. Permit at most 34 fixed metadata
+leaf observations and sixteen components in each fixed no-follow ancestor walk.
+The metadata roles remain fourteen expected absences, the zero-byte regular
+Windows cancel marker and both action directories. No descendant enumeration or
+metadata-only content read occurs. Directory kind and the two current snapshots
+supply continuity; historical directory allocation size is not a fresh predicate.
+Each content read verifies exact size/hash and stable device, inode, mode, size,
+mtime, ctime and link count before/after reading and against its current leaf.
+The second checkpoint requires the same current identities and bytes as the first.
+No historical ctime discrepancy waives a new discrepancy.
+
+Both checkpoints share one remaining allowance of thirty seconds of active
+failed-history verification, including all fixed-role I/O and validation. Deduct
+each actual interval from that same allowance; never restart it at the second
+checkpoint. The original final caller's outer deadline and cancellation remain
+in force throughout the gap and every check. A checkpoint's deadline is the
+earlier of that outer deadline and the remaining shared verification allowance.
+This is an explicit prospective final-caller schedule, not another thirty-second
+compiler-reader transaction at each checkpoint. Unrelated ordinary history,
+K, source/graph and completion checks retain their existing limits and do not
+borrow this allowance. Exact final source and invocation review must accept the
+whole combined schedule before either new current-state observation is admitted.
+
+Preserve the original failed result flags and derive exactly one preparation
+charge from its accepted disposition. Count both guard preparations once. Exact
+post-0055 product counters are Linux `[8,37,0,0]` and Windows `[7,48,0,48]`;
+preparation ceilings remain Linux 9, Windows 7 and combined 16. Preserve the
+external singleton fixture debit in every relevant combined-capacity check:
+`37+48+1=86/120`, leaving 34. A final publication charges zero preparation and
+build/test, one publish and zero synthetic process scenarios. There is no refund,
+extra guard or new fixture/product reservation.
+
+The separately admitted Windows artifact-acceptance copy above remains its own
+materialization and verification gate. Neither B/R/L nor the failed variant
+creates it. Require independent acceptance of its original completed invocation;
+the successful-0055 ordinary entry must include its exact hash.
+The final caller compares its bytes with the same independently accepted actual
+artifact record already read by K. Original receipts and their false flags are
+never rewritten. No copy or original-root observation is performed by preparing
+this source and contract proposal.
+
+This subsection defines prospective history compatibility only. Final entrypoints
+remain disabled and future actual K, v2 handoff, graph, copy and invocation
+bindings remain absent until independently accepted. A complete final protocol,
+exact source/environment/SDK/runtime/task/import/response graph, actual L evidence,
+public review bindings and separately reviewed final literal admission remain
+required. This subsection grants no final publication, historical retry, process
+query, cleanup, account action, installation, support or whole-Slice acceptance.
+
 The guard preparation dispatcher and any later complete final caller must check
 their original deadline and latched cancellation after durable final receipt
 persistence and again after lock release and signal-handler restoration, before
