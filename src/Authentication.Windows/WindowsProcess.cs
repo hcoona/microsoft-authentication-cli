@@ -154,7 +154,7 @@ public static class WindowsProcess
                 if (disposeHttp is not null)
                 {
                     checkpoint?.Invoke(OwnedProcessCheckpoint.BeforeHttpDisposal);
-                    // RED: the shared HTTP disposal connection is still pending.
+                    disposeHttp();
                 }
                 drained = true;
             }
