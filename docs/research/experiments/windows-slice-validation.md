@@ -5319,6 +5319,58 @@ final factory. That later invocation retains its own exact final publish protoco
 capacity, source/recipe and no-kill failure rules. Guard preparation alone does not
 admit final publication or establish Native AOT or whole-Slice acceptance.
 
+A separately admitted, one-time data-copy operation may materialize only the
+already independently accepted managed-artifact acceptance bytes for original
+0055 at its exact `final-guard/artifact-acceptance.json` Windows destination.
+Before this operation, accept its exact source, this canonical supplement and
+literal invocation on the current target. Original successful B/R, completion
+and artifact acceptance, actual L outcome acceptance and its unchanged
+thirteen-field G are required. This allowance creates no new artifact-acceptance
+schema, product reservation or permission to execute a final caller.
+
+Use the existing WSL Python host and the fixed `/mnt/c` projection of that
+Windows destination, under the existing shared action lock. The private source
+is the exact original 1,886-byte acceptance record; copy its raw bytes without
+JSON rewriting. Bind six fixed private roles: that source, B, R, original
+completion acceptance, original G output and independent actual L outcome
+acceptance. Read each once initially and once for continuity after the write.
+Do not recursively follow their descriptors or read original receipt or DLL
+content. These joins preserve original receipts and their false flags; they do
+not establish a fresh complete ledger or current global process quiescence.
+
+The destination's existing parent must already exist. Use fixed no-follow walks
+of at most sixteen components and one exclusive create at exactly the bound
+leaf. An existing file, directory, link or replacement rejects; do not read an
+existing destination or choose another name. Make one write of exactly 1,886
+bytes, require its full return, synchronize the new file and its existing parent,
+and perform one exact byte/hash/identity readback through the owned descriptor.
+Retain the completed readback identity. At the final check, require both the
+current no-follow leaf and held descriptor to equal that retained identity, while
+preserving the existing parent and lock checks. No directory creation,
+rename, overwrite, receipt repair, DLL load, Windows process or cleanup occurs.
+Any partial destination is intentionally retained and blocks continuation until
+separately disposed. There is no retry, including after a pre-write failure.
+
+The entire copy, input continuity, resource finalization and complete descriptor
+output share one original thirty-second source deadline and latched cancellation.
+A separately pinned GNU watchdog permits at most 35 seconds before TERM and two
+additional seconds before KILL of this sole WSL process; it cannot justify late
+normal completion. Retain the original invocation, exact exit and complete
+combined output. Bound output to 4 KiB. The successful intentional read schedule
+is thirteen reads: twelve private-role reads and one owned-destination readback,
+64,990 payload bytes plus thirteen EOF sentinel requests, at most 65,003 requested
+bytes. Runtime startup is separately reviewed; this count is not an OS I/O claim.
+Only the destination creation, one content write and file/parent synchronization
+are permitted write effects. Ordinary counters and the fixture debit are unchanged.
+
+The sole copy invocation requires prior canonical acceptance and exact source,
+runtime, command, working-directory, output, watchdog and existing-authority
+review. A prepared inactive script or this proposal supplies no execution grant.
+An independently accepted original zero exit and exact output/readback evidence
+are required before the copy may enter a later v2 handoff. Actual v2 handoff
+assembly, complete final source/graph/K and final publication admission remain
+separate; this operation neither runs L again nor opens those gates.
+
 The guard preparation dispatcher and any later complete final caller must check
 their original deadline and latched cancellation after durable final receipt
 persistence and again after lock release and signal-handler restoration, before
