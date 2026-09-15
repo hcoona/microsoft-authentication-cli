@@ -21,6 +21,7 @@ from pathlib import Path
 import platform
 import re
 import signal
+import stat
 import subprocess
 import sys
 import time
@@ -558,6 +559,131 @@ FINAL_GUARD_REVIEWED_BINDING = None
 FINAL_GUARD_SUCCESSOR_BINDING = None
 
 
+# Exact failed 0056 evidence; activation remains part of a reviewed future caller.
+CORE_CSC_FAILED_DISPOSITION_BINDING = None
+CORE_CSC_FAILED_DISPOSITION = {
+    "path": "/tmp/windows-core-csc-0056-failed-history-disposition-root-v1.json",
+    "bytes": 3202,
+    "sha256": "6a241958bfd4693de219393c5920277e18ead52f8d039cd265f412837d142525",
+}
+CORE_CSC_FAILED_ORIGINALS = {
+    "wsl-result": "/var/tmp/azureauth-windows-slice-108/windows-actions/0056/result.json",
+    "wsl-started": "/var/tmp/azureauth-windows-slice-108/windows-actions/0056/started.json",
+    "wsl-controller-attempt": "/var/tmp/azureauth-windows-slice-108/windows-actions/0056/controller-start-attempt.json",
+    "windows-started": "/mnt/c/Temp/azureauth-windows-slice-108/actions/0056/started.json",
+    "wsl-invocation": "/var/tmp/azureauth-windows-slice-108/windows-actions/0056/invocation.json",
+    "windows-invocation": "/mnt/c/Temp/azureauth-windows-slice-108/actions/0056/invocation.json",
+}
+
+
+def verify_disposed_core_csc_observer(state=None, deadline=None, cancelled=None):
+    """Read only the disposition and six fixed originals, never a complete tree.
+
+    Each pass has seven content reads requesting at most 15,093 bytes. Final
+    publication uses two passes sharing 30 seconds and checks current continuity;
+    an ordinary history reader uses one pass. Historical absence stays historical.
+    """
+    if CORE_CSC_FAILED_DISPOSITION_BINDING != CORE_CSC_FAILED_DISPOSITION:
+        raise ValueError("UNBOUND: exact failed 0056 disposition")
+    state = {} if state is None else state
+    if state.get("failed") or state.get("passes", 0) >= 2:
+        raise ValueError("Failed 0056 history verification cannot repeat")
+    began = time.monotonic()
+    remaining = state.get("remainingSeconds", 30.0)
+    end = began + remaining
+    if deadline is not None:
+        end = min(end, deadline)
+    state["passes"] = state.get("passes", 0) + 1
+    state["failed"] = True
+    snapshot = {}
+
+    def check():
+        if cancelled is not None and cancelled():
+            raise InterruptedError("Failed 0056 history verification cancelled")
+        if time.monotonic() >= end:
+            raise TimeoutError("Failed 0056 shared history deadline exhausted")
+
+    def identity(info):
+        return (info.st_dev, info.st_ino, info.st_mode, info.st_size,
+                info.st_mtime_ns, info.st_ctime_ns, info.st_nlink)
+
+    def fixed_read(path, expected):
+        path = Path(path)
+        if not path.is_absolute() or len(path.parts) > 17:
+            raise ValueError("Invalid fixed 0056 evidence path")
+        for parent in reversed(path.parents):
+            check()
+            if not stat.S_ISDIR(os.stat(parent, follow_symlinks=False).st_mode):
+                raise ValueError("Nonordinary 0056 evidence ancestor")
+        check()
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        try:
+            before = os.fstat(fd)
+            if not stat.S_ISREG(before.st_mode) or before.st_size != expected["bytes"]:
+                raise ValueError("Failed 0056 evidence type or size changed")
+            check()
+            with os.fdopen(fd, "rb", closefd=False) as stream:
+                raw = stream.read(expected["bytes"] + 1)
+            check()
+            after = os.fstat(fd)
+            current = os.stat(path, follow_symlinks=False)
+            if (identity(before) != identity(after) or identity(after) != identity(current) or
+                    len(raw) != expected["bytes"] or hashlib.sha256(raw).hexdigest() != expected["sha256"]):
+                raise ValueError("Failed 0056 evidence identity or bytes changed")
+            snapshot[str(path)] = identity(after)
+            return raw
+        finally:
+            os.close(fd)
+
+    try:
+        disposition = json.loads(fixed_read(
+            CORE_CSC_FAILED_DISPOSITION["path"], CORE_CSC_FAILED_DISPOSITION))
+        # The complete descriptor hash pins all accepted historical and lifetime
+        # evidence references. Only these six fixed originals are reread here.
+        if (disposition["schema"] != "core-csc-observer-failed-history-disposition-v1" or
+                disposition["actionNumber"] != "0056" or disposition["actionKind"] != "core-csc-observer" or
+                set(disposition["originalCopies"]) != set(CORE_CSC_FAILED_ORIGINALS)):
+            raise ValueError("Wrong exact failed 0056 disposition")
+        raw = {role: fixed_read(path, disposition["originalCopies"][role])
+               for role, path in CORE_CSC_FAILED_ORIGINALS.items()}
+        if raw["wsl-started"] != raw["windows-started"] or raw["wsl-invocation"] != raw["windows-invocation"]:
+            raise ValueError("Failed 0056 original pairs changed")
+        started, result = json.loads(raw["wsl-started"]), json.loads(raw["wsl-result"])
+        invocation, attempt = json.loads(raw["wsl-invocation"]), json.loads(raw["wsl-controller-attempt"])
+        reservation_hash = hashlib.sha256(raw["wsl-started"]).hexdigest()
+        if (started["number"] != "0056" or started["action"] != "core-csc-observer" or
+                started["handoffSha256"] != disposition["baseHandoff"]["sha256"] or
+                started["priorCounters"] != {"linux": [8, 37, 0, 0], "windows": [7, 48, 0, 48]} or
+                [started[key] for key in ("preparationCharge", "buildTestCharge", "publishCharge",
+                                         "reservedProcessScenarios")] != [0, 1, 0, 0] or
+                any(value["reservationSha256"] != reservation_hash for value in (result, invocation, attempt)) or
+                result["invocationSha256"] != hashlib.sha256(raw["wsl-invocation"]).hexdigest() or
+                invocation["endpoint"] != started["endpoint"]):
+            raise ValueError("Failed 0056 reservation or original charge changed")
+        if (result["failureType"] != "RuntimeError" or result["outcome"] != "incomplete" or
+                result["proxyExitCode"] is not None or result["launchAttempted"] is not True or
+                result["safetyStop"] is not True or any(result[key] is not False for key in (
+                    "normalCompletion", "quiescent", "originalWindowsCompletionJoined",
+                    "graphAccepted", "artifactAccepted", "independentObservationAccepted", "continuation_allowed"))):
+            raise ValueError("Failed 0056 original result flags changed")
+        if state.get("snapshot") is not None and snapshot != state["snapshot"]:
+            raise ValueError("Failed 0056 current continuity changed")
+        check()
+        state["snapshot"] = snapshot
+        state["failed"] = False
+        return started, result
+    finally:
+        state["remainingSeconds"] = remaining - (time.monotonic() - began)
+        if state["remainingSeconds"] <= 0:
+            state["failed"] = True
+            raise TimeoutError("Failed 0056 shared verification time exhausted")
+        try:
+            check()
+        except BaseException:
+            state["failed"] = True
+            raise
+
+
 def guard_transaction():
     if DRAFT_ONLY or FINAL_GUARD_SUCCESSOR_BINDING is None:
         raise ValueError("UNBOUND: exact successor reader/module/dispositions")
@@ -595,12 +721,17 @@ def verify_accepted_final_guard_preparation(action, windows_action, started, res
                "windowsHistoryReader": str(REPOSITORY / "tools/validation/run_windows.py")}
     if str(Path(__file__).absolute()) not in readers.values():
         raise ValueError("Reader path is not its actual accepted source")
+    # Current source admission covers this wrapper. The unchanged guard validator
+    # checks the original 0055 reader bytes only as historical evidence.
+    original_readers = Path("/tmp/azureauth-windows-guard-successor-fixture-source-108/tools/validation")
+    historical_readers = {"linuxHistoryReader": str(original_readers / "run_managed.py"),
+                          "windowsHistoryReader": str(original_readers / "run_windows.py")}
     if own_transaction and Path(action).name == "0055":
         module.validate_history_action('windows-reader',
             Path("/var/tmp/azureauth-windows-slice-108/windows-actions/0054"),
             Path("/mnt/c/Temp/azureauth-windows-slice-108/actions/0054"), None, None, state)
     value = module.validate_history_action('windows-reader', action, windows_action, started, result,
-                                          state, FINAL_GUARD_REVIEWED_BINDING, readers)
+                                          state, FINAL_GUARD_REVIEWED_BINDING, historical_readers)
     if own_transaction:
         module.finish(state)
     return value
@@ -611,6 +742,10 @@ def windows_process_reservation(number, started):
     action = started.get("action")
     if action == "final-guard-prepare":
         return final_guard_process_reservation(started)
+    if action == "core-csc-observer":
+        if number != 56 or started.get("number") != "0056" or started.get("reservedProcessScenarios") != 0:
+            raise ValueError("Wrong disposed observer process allocation")
+        return 0
     if action not in ("bootstrap", "restore", "build", "test"):
         raise ValueError("Unknown Windows action allocation")
     if number <= 14:
@@ -841,6 +976,16 @@ def histories():
             verify_accepted_final_guard_preparation(action, ROOT / "actions" / action.name, None, None, guard_context)
             prefix = "failed" if action.name == "0054" else "success"
             started, result = (guard_context[1][prefix + key] for key in ("Started", "Result"))
+        elif action.name == "0056":
+            if (guard_context is None or not guard_context[1].get("successValidated") or
+                    guard_preparations != 2 or len(windows) != 55 or
+                    sum(start["action"] in ("bootstrap", "restore", "final-guard-prepare")
+                        for _, start, _ in windows) != 7 or
+                    sum(start["action"] in ("build", "test") for _, start, _ in windows) != 48 or
+                    sum(windows_process_reservation(int(prior.name), start)
+                        for prior, start, _ in windows) != 48):
+                raise ValueError("Disposed 0056 requires the accepted 0054/0055 prefix")
+            started, result = verify_disposed_core_csc_observer()
         else:
             result = read(action / "result.json")
             started = read(action / "started.json")
@@ -873,9 +1018,11 @@ def histories():
             guard_preparations += 1
             if guard_preparations > 2 or action.name != ("0054" if guard_preparations == 1 else "0055"):
                 raise ValueError("Unallocated guard history composition")
+        elif action.name == "0056" and started.get("action") == "core-csc-observer":
+            pass  # Exact disposition preserves the original incomplete result.
         elif result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action")
-        if started.get("action") != "final-guard-prepare":
+        if started.get("action") not in ("final-guard-prepare", "core-csc-observer"):
             for name, expected in result["evidence"].items():
                 if digest(ROOT / "actions" / action.name / name) != expected:
                     raise ValueError("Windows evidence changed")
@@ -1636,15 +1783,20 @@ def execute(args, attended, finish_preparation):
         ordinary_prep = sum(start["action"] in ("bootstrap", "restore") for _, start, _ in previous)
         guard_preparations = sum(start["action"] == "final-guard-prepare" for _, start, _ in previous)
         prep = ordinary_prep + guard_preparations
-        tests = len(previous) - prep
+        tests = sum(start["action"] in ("build", "test") for _, start, _ in previous)
+        disposed_observers = sum(start["action"] == "core-csc-observer" for _, start, _ in previous)
+        aggregate_tests = tests + disposed_observers
+        if len(previous) != prep + aggregate_tests or disposed_observers > 1:
+            raise ValueError("Unknown or repeated Windows allocation")
         if guard_preparations > 2 or ordinary_prep + preparation > 5 or \
-                prep + preparation > 7 or tests + (not preparation) > 48:
+                prep + preparation > 7 or tests + (not preparation) > 48 or \
+                aggregate_tests + (not preparation) > 49:
             raise ValueError("Windows allocation exhausted")
         linux_preparation = sum(item["action"] in ("fetch", "restore") for item in linux)
         if linux_preparation > 9:
             raise ValueError("Transferred Linux preparation allocation exceeded")
         if linux_preparation + prep + preparation > 16 or \
-                sum(item["action"] in ("build", "test") for item in linux) + tests + (not preparation) + 1 > 120:
+                sum(item["action"] in ("build", "test") for item in linux) + aggregate_tests + (not preparation) + 1 > 120:
             raise ValueError("Combined Wave capacity exhausted")
         if args.action == "bootstrap" and previous or args.action != "bootstrap" and not previous:
             raise ValueError("Bootstrap occurs exactly once, before restore/build/test")
@@ -1654,7 +1806,7 @@ def execute(args, attended, finish_preparation):
         start = {"action": args.action, "utc": utc(), "protocol": args.protocol, "source": args.source,
                  "sourceTree": git("rev-parse", args.source + "^{tree}"), "target": args.target,
                  "review": args.review, "expected": args.expect, "linuxActions": len(linux),
-                 "priorWindowsPreparation": prep, "priorWindowsBuildTest": tests,
+                 "priorWindowsPreparation": prep, "priorWindowsBuildTest": aggregate_tests,
                  "reservedProcessScenarios": reserved_processes, "priorProcessScenarios": prior_processes,
                  "graphTransition": graph_transition, "testSuite": args.suite}
         write_new(local / "started.json", start)
