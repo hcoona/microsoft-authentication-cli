@@ -351,13 +351,14 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process", "msal-composition", "msal-construction") or \
                     (suite == "owned-host" and number <= 18) or \
                     (suite == "local-provider" and number <= 24) or \
                     (suite == "host-admission" and number <= 28) or \
                     (suite == "ui-admission" and number <= 32) or \
                     (suite == "owned-process" and number <= 38) or \
-                    (suite == "msal-composition" and number <= 42):
+                    (suite == "msal-composition" and number <= 42) or \
+                    (suite == "msal-construction" and number <= 46):
                 raise ValueError("Unknown Windows test selection")
             required = 12 if suite == "cli" else 10 if suite == "owned-process" else 0
         else:
@@ -424,7 +425,7 @@ def windows_consumption():
             build_test += 1
         else:
             raise ValueError("Unknown Windows action allocation")
-    if preparation > 5 or build_test > 40 or process_scenarios > 56 or \
+    if preparation > 5 or build_test > 44 or process_scenarios > 56 or \
             owned_processes > 20 or process_scenarios - owned_processes > 36:
         raise ValueError("Windows allocation exceeded")
     if number in (2, 3):

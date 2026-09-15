@@ -4554,3 +4554,168 @@ and default composition, real WAM/account selection and reuse, Windows/WSL lifet
 final Native AOT and whole-Slice acceptance remain open. The current account-state
 effects boundary and concrete owner risk amendment remain prerequisites to the later
 real-account operations.
+
+## Concrete MSAL Construction Supplement
+
+This supplement selects one construction/contract red/green increment under Issue
+#108 and the accepted Windows Slice Wave. The [MSAL adapter composition result](#msal-adapter-composition-evidence)
+is its prerequisite. The real availability, account operations, native/default entry,
+WSL lifetime and final Native AOT obligations remain open.
+
+### Production Boundary and Fixed Selection
+
+Reuse Windows.slnx, its existing four-project graph, SDK 10.0.401/runtime 10.0.12,
+MSTest 4.1.0, MSAL/Broker 4.83.1 and NativeInterop 0.20.3, with the existing public
+caches and restore outputs. No restore, download, dependency change, tool installation
+or Native AOT publish is selected.
+
+Add a concrete factory/session behind the existing `IMsalSessionFactory` and
+`IMsalSession` interfaces. One internal production `BuildApplication` helper uses the
+real public MSAL builder and supplied HTTP factory. Production `Create` calls that
+same helper, checks original cancellation around construction and mandatory real
+broker availability, and returns a usable session only after availability succeeds.
+Account discovery remains a later cancellation-aware operation. Preserve host admission
+and loader restriction before factory creation; never select MSAL's OS-account sentinel.
+Do not add an availability bypass, fluent-builder mock or reflected configuration model.
+The default product entry remains unavailable during this increment.
+
+Initial source adds `MsalSessionFactory.cs` and `MsalConstructionScenarios.cs`.
+Every existing production/scenario file, project and pinned dependency input remains
+unchanged from the accepted composition prerequisite. The RED factory calls the inert
+construction helper and then reports mechanism unavailability. GREEN implements only
+the construction helper and concrete session bindings; all four scenario bodies and
+assertions remain unchanged. Separately bind each immutable source/tree at admission.
+
+Only `BuildApplication` executes in this selection. The remaining factory/session
+bindings receive public-API, source and compiled review without executing availability,
+discovery or acquisition. Per-operation tenant mapping preserves `common` and
+`organizations`; `WithTenantId` applies only to the admitted restrictive or transfer
+tenant GUID. Construction results do not establish per-operation behavior.
+
+The `msal-construction` filter selects exactly four methods in
+`Authentication.Windows.Scenarios.MsalConstructionScenarios`, without data rows:
+
+All cases use synthetic client ID `22222222-3333-4444-5555-666666666666`, public
+authority host `https://login.microsoftonline.com/`, and explicit redirect
+`ms-appx-web://microsoft.aad.brokerplugin/22222222-3333-4444-5555-666666666666`.
+The restrictive tenant is synthetic `11111111-2222-3333-4444-555555555555`.
+The ordinary, legacy and restrictive cases select `common`, `organizations` and that
+GUID respectively. Listing OS accounts is configured true; MSA passthrough is true
+only for the legacy case. These are local intentions, with no account call selected.
+
+| Method | Required result | First expected RED failure |
+| --- | --- | --- |
+| `OrdinaryProfileConstructsCommonApplication` | Real public configuration retains the synthetic client, common authority, explicit redirect, supplied factory and broker enablement. | First non-null application assertion. |
+| `LegacyProfileConstructsOrganizationsApplication` | Real public configuration retains organizations authority and the same explicit configuration constraints. | First non-null application assertion. |
+| `ExactTenantProfileConstructsRestrictedApplication` | Real public configuration retains the exact synthetic tenant authority and the same explicit configuration constraints. | First non-null application assertion. |
+| `OriginalCancellationPreventsApplicationConstruction` | Original already-canceled token cancels before construction or HTTP-factory use. | Required cancellation assertion. |
+
+Each successful construction case also asserts disabled PII/default logging, no logging
+callback or unsolicited capabilities, supplied factory identity and no request for its
+client. The factory wraps the existing owned HTTP client over a rejecting terminal
+handler with no network transport. Any client request or send is an unexpected selected
+effect and fails the case. Dispose the owned client after synchronous work returns.
+There is no pending HTTP request to drain in these cases.
+
+Public `IAppConfig` does not expose `BrokerOptions`; `ListOperatingSystemAccounts` and
+`MsaPassthrough` assignments receive source review and retain later real-effect
+obligations. No public-getter runtime coverage is claimed for those options.
+
+The RED construction helper deliberately returns `null!` without construction or
+cancellation. RED requires total/executed/failed each 4, every other counter zero,
+four intended assertion failures and MTP exit 2. Compilation, setup, discovery, loader, timeout,
+aborted, capture or safety failures cannot establish RED. Independently accept every
+complete first failure before GREEN implements the construction helper and concrete
+session bindings. GREEN retains all four scenario bodies/assertions and requires
+total/executed/passed each 4, every other counter zero, all four results Passed,
+summary Completed, no RunInfo/ErrorInfo and MTP exit 0.
+
+### Construction Effects and Public Source Basis
+
+The pinned MSAL NET_CORE construction path uses managed dependency loading/JIT,
+process-local allocations, static dictionaries/singletons/semaphores, time reads,
+in-memory user and legacy token-cache objects, and a read-only Windows version query.
+It is not managed-only or effect-free. The supplied non-network HTTP factory is retained
+without asking for its client. No credential-bearing cache is supplied.
+
+At MSAL commit `d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f`:
+
+- [`BrokerExtension.WithBroker`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/BrokerExtension.cs#L48)
+  selects the OS check and installs a broker creator delegate.
+  [`Win32VersionApi`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Platforms/Features/DesktopOS/Win32VersionApi.cs#L156)
+  reads version data through `ntdll!RtlGetVersion`; it does not call WAM.
+- [`PublicClientApplicationBuilder.Build`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/AppConfig/PublicClientApplicationBuilder.cs#L360)
+  constructs the application. [`ServiceBundle`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Internal/ServiceBundle.cs#L23)
+  retains the supplied factory, selects the disabled logger, and constructs local
+  services; HTTP/discovery operations remain uncalled.
+- [`TokenCache`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/TokenCache.cs#L64)
+  and the [`NetCorePlatformProxy`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Platforms/netstandard/NetCorePlatformProxy.cs#L155)
+  select process-local in-memory cache implementations. Certificate-store access is
+  deferred to a later device-authentication operation, outside this selection.
+- [`RuntimeBroker`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/RuntimeBroker.cs#L56)
+  places NativeInterop.Core construction and its ProcessExit subscription inside a
+  lazy factory. `IsBrokerAvailable` evaluates that path and is expressly excluded.
+
+These are source findings, not runtime absence-of-effects evidence. Exact action
+admission must bind the selected package assets and compiled helper path; this source
+basis does not extend to other target frameworks, arbitrary authorities, extra callbacks,
+shared/custom persistent caches or Native AOT output. Ordinary framework allocation,
+URI, synchronization and lazy behavior remain within the declared trust base.
+
+Exclude real availability/account APIs, every `ExecuteAsync`, provider/browser/UI
+availability helpers, certificate/key operations, cache callbacks/serialization,
+persistent credential-store access, network/default transport, NativeInterop.Core,
+actual WAM and default entry activation. Loader restriction and native host observations
+do not execute in these four cases. End the isolated process to discard its MSAL static
+memory; no production cache cleanup or state reset is permitted. No case creates a
+window, launches a child, or needs human input, choice or unlock.
+
+### Admission, Transition and Capacity
+
+Bind the immutable source/tree, changed source, unchanged graph and inputs separately
+for every no-restore build and test. Before each test, independently review actual
+PE/PDB/IL, generated registration, the four case identities and constructor effects,
+full literal command/environment and selected dependency assets. Afterward accept the
+complete report and captures, exact case/result joins, counters, receipts and Job drain.
+Source/artifact inspection cannot substitute for runtime scenario evidence.
+
+The first new reservation is build 0046 after all 45 Linux and 45 Windows actions
+have finalized. Bind the accepted 0045 WSL start
+`5e3e684f790c30eed91f4a26829f5cb4cedbe63303d5003ef0eda09cc5f18985`
+and final
+`6c0d567b62b8e3f856b3dd67d7a1cee0d4c93bdc458a1f5a6487a80a81b6023c`.
+The [independent actual GREEN acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5674576945)
+binds their completed sixteen-case prerequisite. Only this reservation may retain and
+replace the two active controllers; no standalone controller mutation or history
+repair is allowed. The Linux reader recognizes the new zero-child selection and Windows
+ceiling while preserving prior history rules. Bootstrap, Job and stop components remain
+unchanged.
+
+| Helper | Accepted prior SHA-256 | Proposed SHA-256 |
+| --- | --- | --- |
+| `run_windows.py` | `c0477077eff68182bae6f6b7d9aced6e56d3e3864d15bcd2b7ea25e8c75924e8` | `64ca92f7778e8c80d609cff11ff577a5cfc6c1bed313c70ac14c5c22f7eda49f` |
+| `Invoke-WindowsValidation.ps1` | `7bbac1e2f2688d9057258c4ad7b67493c8f78926aa297387c9f2e410d4eb212f` | `15670d2705e4f8921affe7ac030edb50815503c7aeb2ea7956772ee938cc278b` |
+| `run_managed.py` | `ddf40d86777a03881a93e7bac55736b22915b6705a221dbcf3c5e9d39731fb21` | `f0d0c330ee38e92e49e453961a1e476112a5a217290c016d37ef6d465828f123` |
+
+The helpers require the accepted 0045 history, one construction RED test and at most
+one subsequent GREEN test; each reserves zero child-process units. They do not
+authorize another test selection or permit a failed-attempt capacity refund.
+
+Allocate four Windows build/test units for one RED build/test and one GREEN build/test:
+Windows 40/40 becomes 44/44 and combined 77/120 becomes 81/120 if no intervening
+consumption occurs. Linux remains 37/80. Overlapping platform ceilings remain subject
+to the combined 120 maximum. Preparation remains 13/16 including Windows 5/5, downloads
+remain 768 MiB, and process consumption remains 44/56 including owned 20/20. Preserve
+the protected final twelve CLI units and four unallocated Wave process units.
+
+Retain the 120-second subject/capture/normal-drain and 230-second controller limits,
+8 MiB combined output, non-breakaway 32-process Job, zero-active completion, full
+source/tool/history postchecks, bounded termination, stop conditions and intentional
+retention. Each action needs separate admission; no retry, refund or automatic
+follow-up is selected. Capacity exhaustion, unexpected effects, incomplete evidence
+or uncertain quiescence stops further execution.
+
+This construction increment cannot close real broker availability/discovery, account
+selection/reuse, native/default composition, actual Windows/WSL lifetime, final Native
+AOT or whole-Slice acceptance. The current Wave's real-account effects boundary and
+concrete owner risk decision remain prerequisites to those later account operations.
