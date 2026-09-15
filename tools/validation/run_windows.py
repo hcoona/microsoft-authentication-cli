@@ -113,6 +113,13 @@ DISPOSED = {
     "result.json": "c02ba234adac677a63147c57fa0fca240846839953743d08c08e2576dd43bba7",
     "output.txt": "b91afcbc9cd5f0437906fdb6a314f34c9b0fe3a3e9cb9d2c6044ab6032958442",
 }
+# Exact stopped-result disposition; the original failed receipts remain unchanged.
+DISPOSED_OWNED_PROCESS_RED = {
+    "started.json": "9ad80c13d63adec92abc0557b01ff9006e860d714f36455917b17a904f06d416",
+    "windows-input.json": "a926fad126c073e6a0fe3127dfccc34fa3e7f846f6d920778001a66272a17bc5",
+    "result.json": "70a2f2e0d177ce230ac7765e95f8682200878a466b40b698fb9af034e0615572",
+}
+
 DISPOSED_WINDOWS_PREPARATION = {
     "started.json": "b5f6e94a9240778dd028610f5c0c76fe9fafcea2aa0f27bf84d19e9839839142",
     "result.json": "437df40a2c76f7e288de3fd5d36beff41f8b0318a85a55d0b2c24a3ab179d43e",
@@ -395,6 +402,21 @@ TEST_FILTERS["host-admission"] = 'FullyQualifiedName=Authentication.Windows.Scen
 
 TEST_FILTERS["ui-admission"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotCreateOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ForbiddenInteractionDoesNotCreateOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.MissingPresentationPreventsInteraction|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ReadyParentCarriesAdmittedBranding|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CreationFailurePreventsInteractiveAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.OriginalCancellationBeforeCreationWins|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringCreationRejectsLateParent|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CloseDuringCreationCannotReopenHost|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ClosedHostCannotReopen|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.InternalCloseDoesNotCancelCaller|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CompletionWaitsForActualUiThreadExit|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancelButtonStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CaptionCloseStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.EscapeStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.PostReadinessCallbackFaultIsContained|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.UiRejectionBeforeCreationPreventsParentAndAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.UiRejectionBeforeShowingWithholdsParentAndAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.UiRechecksUseOriginalTokenOnTheOwnedStaThread|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringUiRecheckPreventsAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotInspectTheOwnedUiThread'
 
+OWNED_PROCESS_PRIOR_START = "6e319296ad021197545950ab6805d578df817a4b5e339e65f9eeaf4c429b08df"
+OWNED_PROCESS_PRIOR_FINAL = "632955ce8c14d50aff82b018d94e11d3d9994765d922d744fcce0829ed46699f"
+OWNED_PROCESS_PREVIOUS_CONTROLLERS = {
+    "run_windows.py": "46459e4cf476c22e28432fa1397026a4b1b56f8580119e685db120dc6c7b4e55",
+    "Invoke-WindowsValidation.ps1": "454a59e9d5fae0993c8842f50c11701c0311c5999830bea177f5cee130f0c104",
+}
+OWNED_PROCESS_CASES = {'NormalOwnedClosurePreservesSuccessAndDrains': 'host-success', 'LocalCancellationSuppressesSuccessBeforeDelayedNotification': 'host-cancel', 'LocalHostFaultSuppressesSuccessBeforeDelayedNotification': 'host-fault', 'CancellationDuringCreationSurvivesClosureFailure': 'host-create-cancel', 'OrdinaryCreationFailureRemainsMechanismUnavailable': 'host-create-failure', 'CleanupFaultAfterNormalClosureSuppressesUncommittedSuccess': 'host-fault-before-commit', 'CleanupFaultAfterCommitCannotReplaceTheResult': 'host-fault-after-commit', 'ProcessWaitsForTheActualOwnedThreadExit': 'host-ui-join', 'ProcessWaitsForTheOutgoingOwnedCallback': 'host-callback-drain', 'NormalClosureArmsTheBoundBeforeCoreTerminalSelection': 'host-close-stall'}
+OWNED_PROCESS_RED = {
+    "Authentication.Windows.Scenarios.OwnedProcessScenarios." + name:
+        "Passed" if child in ("host-success", "host-create-failure") else "Failed"
+    for name, child in OWNED_PROCESS_CASES.items()
+}
+TEST_FILTERS["owned-process"] = 'FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.NormalOwnedClosurePreservesSuccessAndDrains|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.LocalCancellationSuppressesSuccessBeforeDelayedNotification|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.LocalHostFaultSuppressesSuccessBeforeDelayedNotification|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CancellationDuringCreationSurvivesClosureFailure|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.OrdinaryCreationFailureRemainsMechanismUnavailable|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CleanupFaultAfterNormalClosureSuppressesUncommittedSuccess|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CleanupFaultAfterCommitCannotReplaceTheResult|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.ProcessWaitsForTheActualOwnedThreadExit|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.ProcessWaitsForTheOutgoingOwnedCallback|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.NormalClosureArmsTheBoundBeforeCoreTerminalSelection'
+
+
 def validate_windows_reservation_pair(started, peer, link, final, start_hash, final_hash, evidence):
     """Bind the initial WSL admission to its verified Windows execution copy."""
     if evidence.get("started.json") != start_hash or evidence.get("windows-result.json") != final_hash or \
@@ -426,7 +448,7 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
     validate_windows_reservation_pair(started, peer, link, final,
                                      digest(paths[0]), digest(paths[1]), result["evidence"])
     if int(action.name) >= 22 and started.get("action") == "test" and \
-            (started.get("testSuite") == "ui-admission" or
+            (started.get("testSuite") in ("ui-admission", "owned-process") or
              started.get("testSuite") == "owned-host" and started.get("expected") == "green"):
         evidence = result["evidence"]
         ready_path = windows_action / "attendance-ready.json"
@@ -472,13 +494,14 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process") or \
                     (suite == "owned-host" and number <= 18) or \
                     (suite == "local-provider" and number <= 24) or \
                     (suite == "host-admission" and number <= 28) or \
-                    (suite == "ui-admission" and number <= 32):
+                    (suite == "ui-admission" and number <= 32) or \
+                    (suite == "owned-process" and number <= 38):
                 raise ValueError("Unknown Windows test selection")
-            required = 12 if suite == "cli" else 0
+            required = 12 if suite == "cli" else 10 if suite == "owned-process" else 0
         else:
             if suite is not None:
                 raise ValueError("Non-test Windows selection")
@@ -490,6 +513,9 @@ def windows_process_reservation(number, started):
 
 
 def selected_cases(suite, expected):
+    if suite == "owned-process":
+        return {name: outcome if expected == "red" else "Passed"
+                for name, outcome in OWNED_PROCESS_RED.items()}
     if suite == "ui-admission":
         return {name: outcome if expected == "red" else "Passed"
                 for name, outcome in UI_ADMISSION_RED.items()}
@@ -664,8 +690,9 @@ def histories():
         if action.name != f"{index:04d}":
             raise ValueError("Noncontiguous Windows history")
         result = read(action / "result.json")
-        if (ROOT / "actions" / action.name / "temp/owned-host-safety-stop.json").exists():
-            raise ValueError("Owned-host fixture safety stop forbids continuation")
+        if any((ROOT / "actions" / action.name / "temp" / marker).exists()
+               for marker in ("owned-host-safety-stop.json", "process-safety-stop.json")):
+            raise ValueError("Owned fixture safety stop forbids continuation")
         if action.name == "0002":
             verify_disposed_windows_preparation(action)
         elif action.name == "0003":
@@ -684,6 +711,8 @@ def histories():
         elif action.name == "0034":
             verify_disposed_windows_attendance(
                 action, ROOT / "actions" / action.name, DISPOSED_UI_ATTENDANCE_0034)
+        elif action.name == "0039":
+            verify_disposed_owned_process_red(action, ROOT / "actions" / action.name)
         elif result.get("continuation_allowed") is not True or result.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action")
         for name, expected in result["evidence"].items():
@@ -694,6 +723,30 @@ def histories():
             verify_windows_reservation_pair(action, ROOT / "actions" / action.name, result, started)
         windows.append((action, started, result))
     return linux, windows
+
+
+def verify_disposed_owned_process_red(action, failed):
+    """Recognize only the accepted failed 0039 evidence, never a replacement result."""
+    for root in (action, failed):
+        if any(path.is_symlink() for path in (root, *root.parents)):
+            raise ValueError("Linked disposed owned-process evidence")
+    if action.name != "0039" or {path.name for path in action.iterdir()} != set(DISPOSED_OWNED_PROCESS_RED) or any(
+        not (action / name).is_file() or (action / name).is_symlink() or digest(action / name) != expected
+        for name, expected in DISPOSED_OWNED_PROCESS_RED.items()
+    ):
+        raise ValueError("Disposed owned-process receipts changed")
+    evidence = json.loads((action / "result.json").read_text())["evidence"]
+    paths = list(failed.rglob("*"))
+    directories = sorted(str(path.relative_to(failed)) for path in paths if path.is_dir())
+    directory_hash = hashlib.sha256(json.dumps(directories, separators=(",", ":")).encode()).hexdigest()
+    if directory_hash != "0ee100b271ff3f109ea874d8f2a3fde3c20741f249898d22ca62c2b56519d2aa" or \
+            {str(path.relative_to(failed)) for path in paths if path.is_file()} != set(evidence):
+        raise ValueError("Disposed owned-process evidence boundary changed")
+    for path in paths:
+        if path.is_symlink() or not (path.is_dir() or path.is_file()):
+            raise ValueError("Invalid disposed owned-process evidence entry")
+        if path.is_file() and digest(path) != evidence[str(path.relative_to(failed))]:
+            raise ValueError("Disposed owned-process evidence changed")
 
 
 def verify_disposed_windows_attendance(action, failed, receipts=DISPOSED_WINDOWS_ATTENDANCE):
@@ -851,12 +904,12 @@ def installed_packs():
     return tools
 
 
-def process_evidence(action, expected):
+def process_evidence(action, expected, suite="cli"):
     """Validate completeness separately from the independent business-red review."""
     temporary = action / "temp"
     if (temporary / "process-safety-stop.json").exists():
         raise ValueError("Fixture safety stop forbids continuation")
-    cases = set(PROCESS_CASES.values())
+    cases = set((OWNED_PROCESS_CASES if suite == "owned-process" else PROCESS_CASES).values())
     if {path.name for path in temporary.glob("process-*")} != {"process-" + case for case in cases}:
         raise ValueError("Missing or unexpected process reservation")
     for case in sorted(cases):
@@ -878,7 +931,49 @@ def process_evidence(action, expected):
             if entered <= 0 or receipt.get("entryTimestamp") != entered or \
                     receipt["exitObservedTimestamp"] < entered or receipt.get("timestampFrequency", 0) <= 0:
                 raise ValueError("Missing managed-entry evidence")
-        if expected == "red":
+        if suite == "owned-process":
+            if receipt.get("forced") is not False or receipt.get("diagnosticPrefill") != 0 or \
+                    receipt.get("bufferedOutput") != 0:
+                raise ValueError("Owned-process capture or termination differs from its admission")
+            output = (directory / "stdout.bin").read_bytes()
+            if expected == "red":
+                outcome = "mechanism_unavailable" if case in ("host-create-cancel", "host-create-failure") else "success"
+                exit_code = 1 if outcome == "mechanism_unavailable" else 0
+            else:
+                outcome, exit_code = {
+                    "host-success": ("success", 0),
+                    "host-cancel": ("cancelled", 1),
+                    "host-fault": ("internal_failure", 1),
+                    "host-create-cancel": ("cancelled", 2),
+                    "host-create-failure": ("mechanism_unavailable", 1),
+                    "host-fault-before-commit": ("internal_failure", 2),
+                    "host-fault-after-commit": ("success", 2),
+                    "host-ui-join": ("success", 2),
+                    "host-callback-drain": ("cancelled", 2),
+                    "host-close-stall": (None, 2),
+                }[case]
+            indication = (b"" if outcome is None else b"Authentication request cancelled.\n"
+                          if outcome == "cancelled" else b"Authentication request completed.\n")
+            if not indication.startswith((directory / "stderr.bin").read_bytes()):
+                raise ValueError("Owned-process diagnostics exceed the optional fixed indication")
+            if receipt.get("exitCode") != exit_code:
+                raise ValueError("Unexpected owned-process exit")
+            if outcome is None:
+                if output:
+                    raise ValueError("Stalled pre-terminal closure unexpectedly produced output")
+            else:
+                if not output.endswith(b"\n") or output.count(b"\n") != 1 or output.startswith(b"\xef\xbb\xbf"):
+                    raise ValueError("Owned-process output is not one UTF-8 protocol result")
+                value = json.loads(output.decode("utf-8"), object_pairs_hook=pairs)
+                if type(value.get("protocol")) is not int or value["protocol"] != 1 or value.get("outcome") != outcome:
+                    raise ValueError("Unexpected owned-process result")
+                if outcome == "success":
+                    if value.get("accessToken") != "SYNTHETIC_PROCESS_SCENARIO_TOKEN" or \
+                            value.get("accountEmail") != "personal@example.test" or value.get("interaction") != "interactive":
+                        raise ValueError("Owned-process success differs from the synthetic candidate")
+                elif set(value) != {"protocol", "outcome", "reason"} or value.get("reason") != outcome:
+                    raise ValueError("Owned-process failure contains unexpected fields")
+        if suite == "cli" and expected == "red":
             prefill = receipt.get("diagnosticPrefill")
             if type(prefill) is not int or (not 1 <= prefill <= 65536 if case == "blocked-diagnostics" else prefill != 0):
                 raise ValueError("Unexpected synthetic diagnostic prefill")
@@ -1077,11 +1172,11 @@ def main():
     for name in ("protocol", "source", "target", "review"):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--expect", choices=("red", "green"), default="green")
-    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission"))
+    parser.add_argument("--suite", choices=("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process"))
     args = parser.parse_args()
     if (args.action == "test") != (args.suite is not None):
         raise ValueError("Test actions require one finite suite; other actions forbid it")
-    attended = args.action == "test" and (args.suite == "ui-admission" or
+    attended = args.action == "test" and (args.suite in ("ui-admission", "owned-process") or
                                          args.suite == "owned-host" and args.expect == "green")
     with preparation_budget(attended) as finish_preparation:
         return execute(args, attended, finish_preparation)
@@ -1151,6 +1246,19 @@ def execute(args, attended, finish_preparation):
             raise ValueError("Accepted host-admission green result prerequisite changed")
         if len(previous) < 34:
             raise ValueError("The extended attendance disposition requires all thirty-four Windows actions")
+        if len(previous) < 37 or digest(HISTORY / "0037/started.json") != OWNED_PROCESS_PRIOR_START or \
+                digest(HISTORY / "0037/result.json") != OWNED_PROCESS_PRIOR_FINAL:
+            raise ValueError("Accepted UI-admission green history prerequisite changed")
+        if len(previous) < 39:
+            raise ValueError("The owned-process disposition requires all thirty-nine Windows actions")
+        diagnostics_transition = len(previous) == 39
+        if diagnostics_transition and (args.action != "build" or args.source == previous[-1][1]["source"]):
+            raise ValueError("Disposed owned-process red requires a newly admitted corrected-source build")
+        if args.suite == "owned-process" and args.expect != "green":
+            raise ValueError("The owned-process red reservation is consumed; only green remains")
+        owned_process_transition = len(previous) == 37
+        if owned_process_transition and args.action != "build":
+            raise ValueError("The first owned-process action must build with its controller transition")
         extended_attendance_transition = len(previous) == 34
         if extended_attendance_transition and (
             args.action != "test" or args.suite != "ui-admission" or args.expect != "red" or
@@ -1195,12 +1303,17 @@ def execute(args, attended, finish_preparation):
             raise ValueError("The first process increment action establishes its new graph")
         if len(previous) < 9:
             raise ValueError("This amendment requires the completed accepted file history")
-        reserved_processes = 12 if args.suite == "cli" else 0
+        reserved_processes = 12 if args.suite == "cli" else 10 if args.suite == "owned-process" else 0
         prior_processes = 0
+        owned_processes = 0
         for historical, started, _ in previous:
             reservation = windows_process_reservation(int(historical.name), started)
             prior_processes += reservation
-        if prior_processes + reserved_processes > 36:
+            if started.get("testSuite") == "owned-process":
+                owned_processes += reservation
+        new_owned = reserved_processes if args.suite == "owned-process" else 0
+        if prior_processes + reserved_processes > 56 or owned_processes + new_owned > 20 or \
+                prior_processes - owned_processes + reserved_processes - new_owned > 36:
             raise ValueError("Process scenario allocation exhausted")
         preparation = args.action in ("bootstrap", "restore")
         prep = sum(start["action"] in ("bootstrap", "restore") for _, start, _ in previous)
@@ -1252,7 +1365,10 @@ def execute(args, attended, finish_preparation):
                                     HOST_ADMISSION_PREVIOUS_CONTROLLERS if host_admission_transition else
                                     UI_ADMISSION_PREVIOUS_CONTROLLERS if ui_admission_transition else
                                     UI_ATTENDANCE_PREVIOUS_CONTROLLERS if ui_attendance_transition else
-                                    EXTENDED_ATTENDANCE_PREVIOUS_CONTROLLERS if extended_attendance_transition else {})
+                                    EXTENDED_ATTENDANCE_PREVIOUS_CONTROLLERS if extended_attendance_transition else
+                                    OWNED_PROCESS_PREVIOUS_CONTROLLERS if owned_process_transition else
+                                    {"run_windows.py": "10c7e85802ef7ed2c2c31acaeaa871141c5ae78da3bd7c557a28fac44eb2b030"}
+                                    if diagnostics_transition else {})
             for name in CONTROLLERS:
                 data = (REPOSITORY / "tools/validation" / name).read_bytes()
                 path = ROOT / "controller" / name
@@ -1370,8 +1486,9 @@ def execute(args, attended, finish_preparation):
                         win.get("attendanceReleasedSha256") != digest(action / "attendance-released.json") or \
                         (action / "cancel").exists():
                     raise ValueError("Final attendance binding changed")
-            if (action / "temp/owned-host-safety-stop.json").exists():
-                raise ValueError("Owned-host fixture safety stop forbids continuation")
+            if any((action / "temp" / marker).exists()
+                   for marker in ("owned-host-safety-stop.json", "process-safety-stop.json")):
+                raise ValueError("Owned fixture safety stop forbids continuation")
             if snapshot(ROOT / "subject") != before:
                 raise ValueError("Tracked source changed during execution")
             direct(action / "empty-program-files")
@@ -1408,8 +1525,8 @@ def execute(args, attended, finish_preparation):
                 if invocation["arguments"] != expected_arguments:
                     raise ValueError("Windows test selection differs from the admitted literal")
                 result["tests"] = validate_selected_report(report, args.suite, args.expect)
-                if args.suite == "cli":
-                    process_evidence(action, args.expect)
+                if args.suite in ("cli", "owned-process"):
+                    process_evidence(action, args.expect, args.suite)
                 elif any(path.name.startswith("process-") for path in action.rglob("*")):
                     raise ValueError("Child-free selection produced forbidden process evidence")
             result["continuation_allowed"] = True

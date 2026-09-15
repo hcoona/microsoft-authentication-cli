@@ -27,6 +27,8 @@ internal sealed partial class OwnedRequestHost : IRequestHost
     private Task? cancellation;
     private Task? faultNotification;
     private Exception? cleanupFailure;
+    private OwnedHostObservation observation;
+    private long endingTimestamp = long.MinValue;
 
     internal OwnedRequestHost(Func<Task> cancel, Action fault,
         Action<OwnedHostCheckpoint, nint>? checkpoint = null, IWindowsHostAdmission? admission = null)
@@ -38,6 +40,22 @@ internal sealed partial class OwnedRequestHost : IRequestHost
     }
 
     public TimeProvider Clock => TimeProvider.System;
+
+    internal long? EndingTimestamp
+    {
+        get
+        {
+            var value = Volatile.Read(ref endingTimestamp);
+            return value == long.MinValue ? null : value;
+        }
+    }
+
+    // Only bounded process/core state work may run here. Native dispatch records
+    // its observation and queues notifications without calling into those gates.
+    internal void WithLocalObservation(Action<OwnedHostObservation> action)
+    {
+        lock (gate) action(observation);
+    }
 
     internal Task Completion
     {
@@ -63,6 +81,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
             if (thread is not null) return ready.Task;
             if (profile is null || cancellationToken.IsCancellationRequested)
             {
+                Ending();
                 terminal = true;
                 ready.TrySetResult(0);
                 return ready.Task;
@@ -88,6 +107,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
             }
             catch (Exception)
             {
+                Ending();
                 terminal = true;
                 ready.TrySetResult(0);
                 cancellationRegistration.Unregister();
@@ -137,6 +157,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
     private void CloseLocked()
     {
         if (terminal) return;
+        Ending();
         terminal = true;
         checkpoint?.Invoke(OwnedHostCheckpoint.Closing, parent);
         ready.TrySetResult(0);
@@ -172,8 +193,13 @@ internal sealed partial class OwnedRequestHost : IRequestHost
         {
             if (terminal) return;
             // A callback's synchronous prefix or outstanding asynchronous work must
-            // not block native dispatch. The local terminal latch is immediate.
-            CloseLocked();
+            // not block native dispatch. Preserve cancellation before a failed
+            // close could otherwise publish zero-parent unavailability.
+            observation = OwnedHostObservation.UserCancellation;
+            Ending();
+            ready.TrySetException(new ProviderFailureException(AuthenticationFailure.Cancelled));
+            try { CloseLocked(); }
+            catch (Exception exception) { RecordCleanupFailureLocked(exception); }
             cancellation = Task.Run(async () =>
             {
                 try { await cancel().ConfigureAwait(false); }
@@ -198,7 +224,9 @@ internal sealed partial class OwnedRequestHost : IRequestHost
 
     private void NotifyFaultLocked()
     {
-        // The callback remains a distinct host-fault notification, never user cancel.
+        // A cleanup fault must not erase an earlier local user cancellation.
+        if (observation == OwnedHostObservation.None) observation = OwnedHostObservation.HostFault;
+        Ending();
         try { faultNotification ??= Task.Run(fault); }
         catch (Exception exception) { cleanupFailure ??= exception; }
     }
@@ -251,6 +279,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
         {
             lock (gate)
             {
+                Ending();
                 terminal = true;
                 ready.TrySetResult(0);
                 parent = 0; // Prevent cross-thread posts before destruction/reuse.
@@ -294,6 +323,9 @@ internal sealed partial class OwnedRequestHost : IRequestHost
         cancellationToken.ThrowIfCancellationRequested();
     }
 
+    private void Ending() => Interlocked.CompareExchange(ref endingTimestamp,
+        Clock.GetTimestamp(), long.MinValue);
+
     private async Task JoinWindowAsync(Thread ownedThread)
     {
         try
@@ -318,6 +350,13 @@ internal sealed partial class OwnedRequestHost : IRequestHost
             completed.TrySetException(exception);
         }
     }
+}
+
+internal enum OwnedHostObservation
+{
+    None,
+    UserCancellation,
+    HostFault,
 }
 
 // These internal checkpoints control finite scheduling and callback faults in

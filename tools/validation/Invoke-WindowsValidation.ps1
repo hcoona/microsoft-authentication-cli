@@ -60,8 +60,9 @@ function Read-Output($Process, $Streams, [int] $Seconds, $Watch) {
     try {
         while (-not ($Process.HasExited -and $done[0] -and $done[1])) {
             if (Test-Path -LiteralPath "$action\cancel") { $disposition = 'cancelled'; throw 'Caller cancellation' }
-            if (Test-Path -LiteralPath "$action\temp\owned-host-safety-stop.json") {
-                $disposition = 'fixture-safety-stop'; throw 'Owned-host fixture safety stop'
+            if ((Test-Path -LiteralPath "$action\temp\owned-host-safety-stop.json") -or
+        (Test-Path -LiteralPath "$action\temp\process-safety-stop.json")) {
+                $disposition = 'fixture-safety-stop'; throw 'Owned fixture safety stop'
             }
             if ($Watch.Elapsed.TotalSeconds -ge $Seconds) { $disposition = 'timeout'; throw 'Execution timeout' }
             for ($index = 0; $index -lt 2; $index++) {
@@ -105,6 +106,10 @@ try {
         } elseif ($start.testSuite -ceq 'adapter') {
             $filter = 'FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ConsentRequirementHonorsInteractionPermission|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.SilentClaimsReachOneContinuationAndSecondChallengeStops|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.AccessDeniedWinsOverUiRequiredAndRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.Structured65004WinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DenialTextAndNativeCodeDoNotImplyEntraDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.DuplicateErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.NonNumericErrorCodesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MalformedOrOverBudgetBodiesDoNotCreateDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ProviderUserCancellationRemainsCancelled|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalCancellationWinsOverDenial|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.OriginalDeadlineWinsLateProviderCancellation|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.HttpTimeoutDoesNotConsumeRequestDeadline|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RetryableProviderStopsWithoutApplicationRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RecognizedNetworkErrorStopsWithoutRetry|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnknownProviderConfigurationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UnexplainedCancellationStaysInternal|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.UserMismatchWinsOverRetryHint|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.ResultProjectionPreservesObservedMetadata|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MissingAccountAndInvalidTenantRemainMissing|FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.RejectedCustomUiCannotReturnAuthorizationUri|FullyQualifiedName=Authentication.Windows.Scenarios.ManagedTransportScenarios.ManagedUserAgentIsSingleStableAndForwardsCancellation'
             $reserved = 0
+        } elseif ($start.testSuite -ceq 'owned-process') {
+            if ([int]$ActionName -le 38) { throw 'Owned-process selection predates its admission' }
+            $filter = 'FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.NormalOwnedClosurePreservesSuccessAndDrains|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.LocalCancellationSuppressesSuccessBeforeDelayedNotification|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.LocalHostFaultSuppressesSuccessBeforeDelayedNotification|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CancellationDuringCreationSurvivesClosureFailure|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.OrdinaryCreationFailureRemainsMechanismUnavailable|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CleanupFaultAfterNormalClosureSuppressesUncommittedSuccess|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.CleanupFaultAfterCommitCannotReplaceTheResult|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.ProcessWaitsForTheActualOwnedThreadExit|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.ProcessWaitsForTheOutgoingOwnedCallback|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedProcessScenarios.NormalClosureArmsTheBoundBeforeCoreTerminalSelection'
+            $reserved = 10
         } elseif ($start.testSuite -ceq 'ui-admission') {
             if ([int]$ActionName -le 32) { throw 'UI-admission selection predates its admission' }
             $filter = 'FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotCreateOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ForbiddenInteractionDoesNotCreateOwnedUi|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.MissingPresentationPreventsInteraction|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ReadyParentCarriesAdmittedBranding|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CreationFailurePreventsInteractiveAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.OriginalCancellationBeforeCreationWins|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringCreationRejectsLateParent|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CloseDuringCreationCannotReopenHost|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.ClosedHostCannotReopen|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.InternalCloseDoesNotCancelCaller|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CompletionWaitsForActualUiThreadExit|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancelButtonStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CaptionCloseStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.EscapeStopsPendingAuthentication|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.PostReadinessCallbackFaultIsContained|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.UiRejectionBeforeCreationPreventsParentAndAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.UiRejectionBeforeShowingWithholdsParentAndAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.UiRechecksUseOriginalTokenOnTheOwnedStaThread|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.CancellationDuringUiRecheckPreventsAcquisition|FullyQualifiedName=Authentication.Windows.Scenarios.OwnedHostScenarios.SilentSuccessDoesNotInspectTheOwnedUiThread'
@@ -238,7 +243,7 @@ try {
         Assert-Hash $helper $start.helperSha256
         Add-Type -Path $helper -ErrorAction Stop -WarningAction Stop
         $guard = [WindowsValidationJob]::new()
-        if ($start.action -ceq 'test' -and ($start.testSuite -ceq 'ui-admission' -or
+        if ($start.action -ceq 'test' -and ($start.testSuite -ceq 'ui-admission' -or $start.testSuite -ceq 'owned-process' -or
             ($start.testSuite -ceq 'owned-host' -and $start.expected -ceq 'green'))) {
             $stage = 'attendance'
             if ($controllerWatch.Elapsed.TotalSeconds -ge 230) { throw 'Preparation expired' }
@@ -293,8 +298,9 @@ try {
         $result.activeProcessesAtNormalExit = $guard.ActiveProcesses
         if ($result.activeProcessesAtNormalExit -ne 0) { throw 'Owned descendants survived' }
     }
-    if (Test-Path -LiteralPath "$action\temp\owned-host-safety-stop.json") {
-        throw 'Owned-host fixture safety stop'
+    if ((Test-Path -LiteralPath "$action\temp\owned-host-safety-stop.json") -or
+        (Test-Path -LiteralPath "$action\temp\process-safety-stop.json")) {
+        throw 'Owned fixture safety stop'
     }
     $result.captureCompleted = $true
     $result.seconds = $capture.seconds

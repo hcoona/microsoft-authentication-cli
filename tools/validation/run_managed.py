@@ -60,6 +60,13 @@ DISPOSED_BUILD_HASHES = {
     "result.json": "c02ba234adac677a63147c57fa0fca240846839953743d08c08e2576dd43bba7",
     "output.txt": "b91afcbc9cd5f0437906fdb6a314f34c9b0fe3a3e9cb9d2c6044ab6032958442",
 }
+# Exact stopped-result disposition; the original failed receipts remain unchanged.
+DISPOSED_OWNED_PROCESS_RED = {
+    "started.json": "9ad80c13d63adec92abc0557b01ff9006e860d714f36455917b17a904f06d416",
+    "windows-input.json": "a926fad126c073e6a0fe3127dfccc34fa3e7f846f6d920778001a66272a17bc5",
+    "result.json": "70a2f2e0d177ce230ac7765e95f8682200878a466b40b698fb9af034e0615572",
+}
+
 DISPOSED_WINDOWS_PREPARATION = {
     "started.json": "b5f6e94a9240778dd028610f5c0c76fe9fafcea2aa0f27bf84d19e9839839142",
     "result.json": "437df40a2c76f7e288de3fd5d36beff41f8b0318a85a55d0b2c24a3ab179d43e",
@@ -298,7 +305,7 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
     validate_windows_reservation_pair(started, peer, link, final,
                                      digest(paths[0]), digest(paths[1]), result["evidence"])
     if int(action.name) >= 22 and started.get("action") == "test" and \
-            (started.get("testSuite") == "ui-admission" or
+            (started.get("testSuite") in ("ui-admission", "owned-process") or
              started.get("testSuite") == "owned-host" and started.get("expected") == "green"):
         evidence = result["evidence"]
         ready_path = windows_action / "attendance-ready.json"
@@ -344,13 +351,14 @@ def windows_process_reservation(number, started):
         if started.get("expected") not in ("red", "green") or (action != "test" and started["expected"] != "green"):
             raise ValueError("Unexpected Windows result expectation")
         if action == "test":
-            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission") or \
+            if suite not in ("cli", "adapter", "owned-host", "local-provider", "host-admission", "ui-admission", "owned-process") or \
                     (suite == "owned-host" and number <= 18) or \
                     (suite == "local-provider" and number <= 24) or \
                     (suite == "host-admission" and number <= 28) or \
-                    (suite == "ui-admission" and number <= 32):
+                    (suite == "ui-admission" and number <= 32) or \
+                    (suite == "owned-process" and number <= 38):
                 raise ValueError("Unknown Windows test selection")
-            required = 12 if suite == "cli" else 0
+            required = 12 if suite == "cli" else 10 if suite == "owned-process" else 0
         else:
             if suite is not None:
                 raise ValueError("Non-test Windows selection")
@@ -368,15 +376,16 @@ def windows_consumption():
         return 0, 0
     if history.is_symlink():
         raise ValueError("Linked Windows action history")
-    preparation, build_test, number, process_scenarios = 0, 0, 0, 0
+    preparation, build_test, number, process_scenarios, owned_processes = 0, 0, 0, 0, 0
     windows = Path("/mnt/c/Temp/azureauth-windows-slice-108/actions")
     for number, action in enumerate(sorted(history.iterdir()), 1):
         if action.is_symlink() or action.name != f"{number:04d}":
             raise ValueError("Noncontiguous Windows action history")
         receipt = json.loads((action / "result.json").read_text())
         started = json.loads((action / "started.json").read_text())
-        if (windows / action.name / "temp/owned-host-safety-stop.json").exists():
-            raise ValueError("Owned-host fixture safety stop forbids both validation loops")
+        if any((windows / action.name / "temp" / marker).exists()
+               for marker in ("owned-host-safety-stop.json", "process-safety-stop.json")):
+            raise ValueError("Owned fixture safety stop forbids both validation loops")
         if action.name == "0002":
             verify_disposed_windows_preparation(action, windows / action.name)
         elif action.name == "0003":
@@ -395,6 +404,8 @@ def windows_consumption():
         elif action.name == "0034":
             verify_disposed_windows_attendance(
                 action, windows / action.name, DISPOSED_UI_ATTENDANCE_0034)
+        elif action.name == "0039":
+            verify_disposed_owned_process_red(action, windows / action.name)
         elif receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action stops both validation loops")
         for name, expected in receipt["evidence"].items():
@@ -404,13 +415,16 @@ def windows_consumption():
             verify_windows_reservation_pair(action, windows / action.name, receipt, started)
         reserved = windows_process_reservation(number, started)
         process_scenarios += reserved
+        if started.get("testSuite") == "owned-process":
+            owned_processes += reserved
         if started["action"] in ("bootstrap", "restore"):
             preparation += 1
         elif started["action"] in ("build", "test"):
             build_test += 1
         else:
             raise ValueError("Unknown Windows action allocation")
-    if preparation > 5 or build_test > 40 or process_scenarios > 36:
+    if preparation > 5 or build_test > 40 or process_scenarios > 56 or \
+            owned_processes > 20 or process_scenarios - owned_processes > 36:
         raise ValueError("Windows allocation exceeded")
     if number in (2, 3):
         raise ValueError("Windows restore must complete before Linux continuation")
@@ -420,7 +434,33 @@ def windows_consumption():
         raise ValueError("Windows owned-host test must complete before Linux continuation")
     if number in (33, 34):
         raise ValueError("Windows UI-admission red must complete before Linux continuation")
+    if number == 39:
+        raise ValueError("Windows corrected owned-process build must complete before Linux continuation")
     return preparation, build_test
+
+
+def verify_disposed_owned_process_red(action, failed):
+    """Recognize only the accepted failed 0039 evidence, never a replacement result."""
+    for root in (action, failed):
+        if any(path.is_symlink() for path in (root, *root.parents)):
+            raise ValueError("Linked disposed owned-process evidence")
+    if action.name != "0039" or {path.name for path in action.iterdir()} != set(DISPOSED_OWNED_PROCESS_RED) or any(
+        not (action / name).is_file() or (action / name).is_symlink() or digest(action / name) != expected
+        for name, expected in DISPOSED_OWNED_PROCESS_RED.items()
+    ):
+        raise ValueError("Disposed owned-process receipts changed")
+    evidence = json.loads((action / "result.json").read_text())["evidence"]
+    paths = list(failed.rglob("*"))
+    directories = sorted(str(path.relative_to(failed)) for path in paths if path.is_dir())
+    directory_hash = hashlib.sha256(json.dumps(directories, separators=(",", ":")).encode()).hexdigest()
+    if directory_hash != "0ee100b271ff3f109ea874d8f2a3fde3c20741f249898d22ca62c2b56519d2aa" or \
+            {str(path.relative_to(failed)) for path in paths if path.is_file()} != set(evidence):
+        raise ValueError("Disposed owned-process evidence boundary changed")
+    for path in paths:
+        if path.is_symlink() or not (path.is_dir() or path.is_file()):
+            raise ValueError("Invalid disposed owned-process evidence entry")
+        if path.is_file() and digest(path) != evidence[str(path.relative_to(failed))]:
+            raise ValueError("Disposed owned-process evidence changed")
 
 
 def verify_disposed_windows_attendance(action, failed, receipts=DISPOSED_WINDOWS_ATTENDANCE):
