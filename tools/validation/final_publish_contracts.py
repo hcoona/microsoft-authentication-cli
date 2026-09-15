@@ -1500,6 +1500,131 @@ def names(path):
     return values
 
 
+# Exact failed 0056 evidence; activation remains part of a reviewed future caller.
+CORE_CSC_FAILED_DISPOSITION_BINDING = None
+CORE_CSC_FAILED_DISPOSITION = {
+    "path": "/tmp/windows-core-csc-0056-failed-history-disposition-root-v1.json",
+    "bytes": 3202,
+    "sha256": "6a241958bfd4693de219393c5920277e18ead52f8d039cd265f412837d142525",
+}
+CORE_CSC_FAILED_ORIGINALS = {
+    "wsl-result": "/var/tmp/azureauth-windows-slice-108/windows-actions/0056/result.json",
+    "wsl-started": "/var/tmp/azureauth-windows-slice-108/windows-actions/0056/started.json",
+    "wsl-controller-attempt": "/var/tmp/azureauth-windows-slice-108/windows-actions/0056/controller-start-attempt.json",
+    "windows-started": "/mnt/c/Temp/azureauth-windows-slice-108/actions/0056/started.json",
+    "wsl-invocation": "/var/tmp/azureauth-windows-slice-108/windows-actions/0056/invocation.json",
+    "windows-invocation": "/mnt/c/Temp/azureauth-windows-slice-108/actions/0056/invocation.json",
+}
+
+
+def verify_disposed_core_csc_observer(state=None, deadline=None, cancelled=None):
+    """Read only the disposition and six fixed originals, never a complete tree.
+
+    Each pass has seven content reads requesting at most 15,093 bytes. Final
+    publication uses two passes sharing 30 seconds and checks current continuity;
+    an ordinary history reader uses one pass. Historical absence stays historical.
+    """
+    if CORE_CSC_FAILED_DISPOSITION_BINDING != CORE_CSC_FAILED_DISPOSITION:
+        raise ValueError("UNBOUND: exact failed 0056 disposition")
+    state = {} if state is None else state
+    if state.get("failed") or state.get("passes", 0) >= 2:
+        raise ValueError("Failed 0056 history verification cannot repeat")
+    began = time.monotonic()
+    remaining = state.get("remainingSeconds", 30.0)
+    end = began + remaining
+    if deadline is not None:
+        end = min(end, deadline)
+    state["passes"] = state.get("passes", 0) + 1
+    state["failed"] = True
+    snapshot = {}
+
+    def check():
+        if cancelled is not None and cancelled():
+            raise InterruptedError("Failed 0056 history verification cancelled")
+        if time.monotonic() >= end:
+            raise TimeoutError("Failed 0056 shared history deadline exhausted")
+
+    def identity(info):
+        return (info.st_dev, info.st_ino, info.st_mode, info.st_size,
+                info.st_mtime_ns, info.st_ctime_ns, info.st_nlink)
+
+    def fixed_read(path, expected):
+        path = Path(path)
+        if not path.is_absolute() or len(path.parts) > 17:
+            raise ValueError("Invalid fixed 0056 evidence path")
+        for parent in reversed(path.parents):
+            check()
+            if not stat.S_ISDIR(os.stat(parent, follow_symlinks=False).st_mode):
+                raise ValueError("Nonordinary 0056 evidence ancestor")
+        check()
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        try:
+            before = os.fstat(fd)
+            if not stat.S_ISREG(before.st_mode) or before.st_size != expected["bytes"]:
+                raise ValueError("Failed 0056 evidence type or size changed")
+            check()
+            with os.fdopen(fd, "rb", closefd=False) as stream:
+                raw = stream.read(expected["bytes"] + 1)
+            check()
+            after = os.fstat(fd)
+            current = os.stat(path, follow_symlinks=False)
+            if (identity(before) != identity(after) or identity(after) != identity(current) or
+                    len(raw) != expected["bytes"] or hashlib.sha256(raw).hexdigest() != expected["sha256"]):
+                raise ValueError("Failed 0056 evidence identity or bytes changed")
+            snapshot[str(path)] = identity(after)
+            return raw
+        finally:
+            os.close(fd)
+
+    try:
+        disposition = json.loads(fixed_read(
+            CORE_CSC_FAILED_DISPOSITION["path"], CORE_CSC_FAILED_DISPOSITION))
+        # The complete descriptor hash pins all accepted historical and lifetime
+        # evidence references. Only these six fixed originals are reread here.
+        if (disposition["schema"] != "core-csc-observer-failed-history-disposition-v1" or
+                disposition["actionNumber"] != "0056" or disposition["actionKind"] != "core-csc-observer" or
+                set(disposition["originalCopies"]) != set(CORE_CSC_FAILED_ORIGINALS)):
+            raise ValueError("Wrong exact failed 0056 disposition")
+        raw = {role: fixed_read(path, disposition["originalCopies"][role])
+               for role, path in CORE_CSC_FAILED_ORIGINALS.items()}
+        if raw["wsl-started"] != raw["windows-started"] or raw["wsl-invocation"] != raw["windows-invocation"]:
+            raise ValueError("Failed 0056 original pairs changed")
+        started, result = json.loads(raw["wsl-started"]), json.loads(raw["wsl-result"])
+        invocation, attempt = json.loads(raw["wsl-invocation"]), json.loads(raw["wsl-controller-attempt"])
+        reservation_hash = hashlib.sha256(raw["wsl-started"]).hexdigest()
+        if (started["number"] != "0056" or started["action"] != "core-csc-observer" or
+                started["handoffSha256"] != disposition["baseHandoff"]["sha256"] or
+                started["priorCounters"] != {"linux": [8, 37, 0, 0], "windows": [7, 48, 0, 48]} or
+                [started[key] for key in ("preparationCharge", "buildTestCharge", "publishCharge",
+                                         "reservedProcessScenarios")] != [0, 1, 0, 0] or
+                any(value["reservationSha256"] != reservation_hash for value in (result, invocation, attempt)) or
+                result["invocationSha256"] != hashlib.sha256(raw["wsl-invocation"]).hexdigest() or
+                invocation["endpoint"] != started["endpoint"]):
+            raise ValueError("Failed 0056 reservation or original charge changed")
+        if (result["failureType"] != "RuntimeError" or result["outcome"] != "incomplete" or
+                result["proxyExitCode"] is not None or result["launchAttempted"] is not True or
+                result["safetyStop"] is not True or any(result[key] is not False for key in (
+                    "normalCompletion", "quiescent", "originalWindowsCompletionJoined",
+                    "graphAccepted", "artifactAccepted", "independentObservationAccepted", "continuation_allowed"))):
+            raise ValueError("Failed 0056 original result flags changed")
+        if state.get("snapshot") is not None and snapshot != state["snapshot"]:
+            raise ValueError("Failed 0056 current continuity changed")
+        check()
+        state["snapshot"] = snapshot
+        state["failed"] = False
+        return started, result
+    finally:
+        state["remainingSeconds"] = remaining - (time.monotonic() - began)
+        if state["remainingSeconds"] <= 0:
+            state["failed"] = True
+            raise TimeoutError("Failed 0056 shared verification time exhausted")
+        try:
+            check()
+        except BaseException:
+            state["failed"] = True
+            raise
+
+
 def classify(platform, start):
     action = start.get('action')
     if platform == 'linux':
@@ -1620,7 +1745,7 @@ def verify_failed_handoff(admission, deadline, cancelled, reserved):
     state = admission['failedHistory']
     expected_pass = 0 if reserved is None else 1
     if (state['failed'] or state['passes'] != expected_pass or
-            (reserved is not None and reserved != '0056')):
+            (reserved is not None and reserved != '0057')):
         fail('Failed-history checkpoint is missing, repeated or reordered')
     # Latch before I/O. An interrupted or rejected pass cannot obtain a retry.
     state['failed'] = True
@@ -1685,18 +1810,22 @@ def refresh_history(admission, deadline, cancelled, reserved=None):
     keys(manifest['recomputedCounters'], ('linux', 'windows'))
     for platform, pin in ORIGINAL_HISTORY_PREFIX.items():
         entries = manifest['histories'][platform]
-        expected_length = pin['entries'] + (2 if platform == 'windows' else 0)
+        expected_length = pin['entries'] + (3 if platform == 'windows' else 0)
         if (type(entries) is not list or len(entries) != expected_length or
                 any(type(item) is not dict for item in entries) or
                 sha(compact(entries[:pin['entries']])) != pin['compactSha256']):
             fail('Original accepted M53 prefix or exact successor suffix changed')
-    failed_entry, successful_entry = manifest['histories']['windows'][-2:]
+    failed_entry, successful_entry, observer_entry = manifest['histories']['windows'][-3:]
     keys(failed_entry, ('number', 'failedGuardDisposition'))
     if (failed_entry['number'] != '0054' or successful_entry.get('number') != '0055' or
             manifest['guardAction'] != '0055' or
             compact(failed_entry['failedGuardDisposition']) != compact(
                 admission['callerProvenance']['successorHistory']['failedGuardDisposition'])):
         fail('Exact failed 0054 and successful 0055 handoff join changed')
+    keys(observer_entry, ('number', 'failedObserverDisposition'))
+    if (observer_entry['number'] != '0056' or
+            observer_entry['failedObserverDisposition'] != CORE_CSC_FAILED_DISPOSITION):
+        fail('Exact failed 0056 handoff disposition changed')
     totals = {'linux': [0, 0, 0, 0], 'windows': [0, 0, 0, 0]}
     starts = []
     endpoints = []
@@ -1721,6 +1850,15 @@ def refresh_history(admission, deadline, cancelled, reserved=None):
                 failed = verify_failed_handoff(admission, deadline, cancelled, reserved)
                 totals[platform] = [a + b for a, b in zip(totals[platform], failed['charge'])]
                 starts.append(failed['started'])
+                continue
+            if platform == 'windows' and item['number'] == '0056':
+                if totals != {'linux': [8, 37, 0, 0], 'windows': [7, 48, 0, 48]}:
+                    fail('Original post-0055 charges changed before disposed 0056')
+                start, _original_result = verify_disposed_core_csc_observer(
+                    admission.setdefault('failedObserverHistory', {}), deadline, cancelled)
+                totals[platform][1] += 1
+                starts.append(start)
+                endpoints.append(string(start['endpoint'], '[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}'))
                 continue
             keys(item, ('number', 'localEntryNames', 'localFiles', 'windowsFiles', 'safetyMarkers'))
             local = base / item['number']
@@ -1764,15 +1902,16 @@ def refresh_history(admission, deadline, cancelled, reserved=None):
     if totals != manifest['recomputedCounters'] or sorted(endpoints) != manifest['knownEndpoints'] or len(endpoints) != len(set(endpoints)):
         fail('Original counters or endpoint history mismatch')
     if (sum(s['action'] == 'final-guard-prepare' for s in starts) != 2 or
-            starts[-1]['action'] != 'final-guard-prepare' or
-            manifest['histories']['windows'][-1]['number'] != manifest['guardAction']):
-        fail('Publication requires disposed 0054 followed by the original successful final 0055')
+            sum(s['action'] == 'core-csc-observer' for s in starts) != 1 or
+            starts[-1]['action'] != 'core-csc-observer' or
+            successful_entry['number'] != manifest['guardAction']):
+        fail('Publication requires disposed 0054, original successful 0055 and disposed 0056')
     if sum(s['action'] == 'bootstrap' for s in starts) != 1 or sum(s['action'] == 'restore' for s in starts) != 4:
         fail('Original five bootstrap/restore actions changed')
     lp, lb, lpub, ls = totals['linux']
     wp, wb, wpub, ws = totals['windows']
-    if (compact(totals) != compact({'linux': [8, 37, 0, 0], 'windows': [7, 48, 0, 48]}) or
-            lp > 9 or wp != 7 or lp + wp > 16 or wb > 48 or lb + wb + 1 > 120 or
+    if (compact(totals) != compact({'linux': [8, 37, 0, 0], 'windows': [7, 49, 0, 48]}) or
+            lp > 9 or wp != 7 or lp + wp > 16 or lb > 79 or wb > 49 or lb + wb + 1 > 120 or
             lpub != 0 or wpub != 0 or ls != 0 or ws != 48 or wpub + 1 > 12):
         fail('After-guard cumulative allocation differs from the accepted publication-only slot')
     # Exact original guard evidence is joined to the thirteen-field projection.
@@ -1788,7 +1927,7 @@ def refresh_history(admission, deadline, cancelled, reserved=None):
             fail('Original guard artifact or completion binding changed')
     if sha(read(local / 'result.json', deadline, cancelled)) != guard['preparationWslResultSha256']:
         fail('Original guard WSL completion changed')
-    if manifest['histories']['windows'][-1]['windowsFiles'].get('final-guard/artifact-acceptance.json') != guard['artifactAcceptanceSha256']:
+    if successful_entry['windowsFiles'].get('final-guard/artifact-acceptance.json') != guard['artifactAcceptanceSha256']:
         fail('Original artifact acceptance copy is absent from the admitted handoff')
     artifact_copy = read(projection(guard['artifactAcceptancePath']), deadline, cancelled, CALLER_PROVENANCE_LIMIT)
     if (sha(artifact_copy) != guard['artifactAcceptanceSha256'] or

@@ -5580,15 +5580,18 @@ consent effect, resource request, deployment or support commitment is admitted.
 A later complete final caller uses `final-publish-after-guard-handoff-v2` while
 retaining the six fields `schema`, `source`, `histories`, `recomputedCounters`,
 `knownEndpoints` and `guardAction`. Ordinary entries retain the existing complete
-entry shape and evidence checks. The sole closed exception is Windows action
-0054, represented by exactly `number` and `failedGuardDisposition`. Its number
+entry shape and evidence checks. Windows action
+0054 has its closed exception, represented by exactly `number` and
+`failedGuardDisposition`. Its number
 is `0054`; its descriptor equals the original successor authority's exact failed
 history disposition. No other platform, action number, extra field or alternate
 failure may use this variant. It does not assert a complete 0054 tree inventory.
 
 Preserve the accepted post-0053 manifest and acceptance bytes. The later handoff
 contains the exact original 45 Linux and 53 Windows entries, followed only on
-Windows by disposed 0054 and independently accepted successful 0055. Source-bound
+Windows by disposed 0054, independently accepted successful 0055, and the exact
+[disposed 0056 variant](#exact-0056-failed-history-disposition). Preserve the complete
+accepted post-0055 handoff bytes as the predecessor of that added suffix. Source-bound
 hashes of the compact, ordered original entry lists enforce that prefix without
 another provenance input. The handoff reviewer verifies their derivation from the
 unchanged accepted manifest. The paired action order remains contiguous; reject
@@ -5700,7 +5703,9 @@ charge from its accepted disposition. Count both guard preparations once. Exact
 post-0055 product counters are Linux `[8,37,0,0]` and Windows `[7,48,0,48]`;
 preparation ceilings remain Linux 9, Windows 7 and combined 16. Preserve the
 external singleton fixture debit in every relevant combined-capacity check:
-`37+48+1=86/120`, leaving 34. A final publication charges zero preparation and
+`37+48+1=86/120` at that post-0055 boundary. The later dedicated 0056 charge raises
+the current combined count to 87/120 as specified by its
+[exact disposition](#exact-0056-failed-history-disposition). A final publication charges zero preparation and
 build/test, one publish and zero synthetic process scenarios. There is no refund,
 extra guard or new fixture/product reservation.
 
@@ -7085,8 +7090,9 @@ that completion remains unknown. Releasing the local lease is not evidence that 
 receipts completed. A fresh original deadline/cancellation check after all local
 persistence and lock/handler finalization decides the original caller's success.
 A provisional success-looking receipt cannot override a late, nonzero, cancelled or
-uncollected original invocation. Any incomplete pair blocks subsequent work; retain
-owned partial state without speculative cleanup or a replacement receipt.
+uncollected original invocation. An incomplete pair blocks subsequent work until
+its separately accepted exact failure disposition; retain owned partial state
+without speculative cleanup or a replacement receipt.
 
 ### Dedicated Allocation and Later Consumers
 
@@ -7107,9 +7113,10 @@ including failed start, consumes the unit; a partial reservation blocks continua
 Use the existing paired history/handoff carrier, with no second ledger.
 
 The prospective ordinary readers fail closed when they encounter this observer,
-including a provisional successful receipt. Independent acceptance of the original
-outcome must update the existing handoff and its current consumers in the same change
-before later publication or validation. Preserve all old receipts, flags, historical
+including a provisional successful receipt, except for the subsequently accepted
+[exact failed-0056 disposition](#exact-0056-failed-history-disposition). That disposition
+updates the existing handoff and its current consumers together before later
+publication or validation. Preserve all old receipts, flags, historical
 48/80 limits and dispositions. A failed observer does not receive another unit.
 
 Before this action can execute, independently admit the complete current physical and
@@ -7161,16 +7168,19 @@ The Windows result, clock-ready, clock-remaining and subject-start-attempt leave
 were absent at their individual observations; the cancellation leaf was a regular
 empty file by metadata. The three inspected pending leaves were also absent.
 These observations are not an atomic snapshot and do not independently prove that
-no process started or that every process has exited. The exact underlying failure
-and Windows/helper quiescence remain unresolved. The controller's outer admission
+no process started or that every process has exited. At the initial recovery, the exact underlying failure
+and Windows/helper quiescence remained unresolved. The later
+[current-bootstrap result](#current-bootstrap-observation-outcome) resolves only
+its stated current lifetime question. The controller's outer admission
 catch does not persist its exception, and the dispatcher discarded bootstrap output;
 the retained evidence cannot recreate those diagnostics.
 
 Both the observer and its initial recovery invocation are consumed. Preserve all
 original receipts, partial state and false graph, artifact, independent-observation
 and continuation flags. The exit-zero receipt copier remains ineligible. Current
-history readers must continue to reject this incomplete pair; no accepted successor
-handoff or continuation grant is created by this failure record. Before dependent
+history readers rejected this incomplete pair before the later
+[exact failed-history disposition](#exact-0056-failed-history-disposition). This original
+failure record itself creates no successor handoff or continuation grant. Before dependent
 execution, resolve the outstanding lifetime evidence and accept the required bounded
 protocol and current-consumer changes. No observer retry, additional recovery,
 speculative cleanup, publication or account operation is authorized here.
@@ -7294,3 +7304,135 @@ Retain the sanitized original transport and its review in the existing private
 execution carrier. Preserve original and partial artifacts without cleanup. This
 amendment does not refund the observer, rewrite original receipts or enable any
 other experiment.
+
+### Current Bootstrap Observation Outcome
+
+The sole query executed under accepted protocol commit
+`a42b6a648d4dfe4dc542256b9a8cc3faf70e0bd7` and the exact tracked source above.
+Its original tool invocation yielded once; collection of that same original session
+completed with exit code zero. The complete combined output was one 160-byte JSON
+line ending in CRLF: `status: absent`, `reason: complete`, `queryCompleted: true`,
+zero rows, zero exact matches, zero ambiguous rows and `elapsedMs: 1630`.
+The conservative Linux monotonic interval, including pre-call bookkeeping,
+Windows startup and original completion collection, was exactly 2,687,223,000 ns
+(2,687.223 ms), within the 30-second acceptance deadline.
+
+| Evidence role | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Exact query invocation admission | 7,222 | `c6bf6399e9c7a719f2c9c6f90ef27b31375afb5c8d5693c53f5e9343c8cf25bf` |
+| Complete original query transport | 1,920 | `629bf72891f0785693df27f36c798e8b293853705b2b82dbcc23317461d603cd` |
+| Independent original outcome review | 6,267 | `6f83fab9ad93260677671763237d0e57e53f5a5096a896efc01a73e78b8a296e` |
+
+Independent review accepted the current absence of the exact original bootstrap.
+Combined with the separately accepted old-source reachability exclusion, this
+resolves the selected current bootstrap/subject lifetime question under the
+existing ordinary runtime/provider trust. The bootstrap absence is a current
+observation; the guarded-subject exclusion remains a source-qualified inference.
+Neither conclusion recovers the original exception, observes historical no-launch,
+proves future absence or establishes general host/provider quiescence.
+
+The observation consumed its only attempt. No query capacity remains, and this
+result grants no retry, cleanup, account operation or SDK execution. No original
+files were read or changed by the query. Preserve the failed observer's original
+receipts, all false flags and its consumed build/test charge. Compiler graph,
+artifact, final CLI/WSL and account evidence remain incomplete.
+
+## Exact 0056 Failed-History Disposition
+
+Accept only action 0056 as the original failed `core-csc-observer`, with its bounded
+current lifetime resolved by the evidence above. This is a historical failure
+variant for the existing readers and handoff; it does not accept the observer,
+compiler graph, artifact or original Windows completion. Keep the exact original
+WSL `RuntimeError`, `safetyStop: true`, `launchAttempted: true`, null proxy status
+and all original false completion, quiescence and continuation flags.
+
+The existing `final-publish-after-guard-handoff-v2` carrier retains its six fields,
+unchanged 45-Linux/53-Windows prefix, disposed 0054 and successful 0055. Append only
+Windows entry `0056`, with exactly `number` and `failedObserverDisposition`.
+The latter descriptor binds the private `core-csc-observer-failed-history-disposition-v1`
+instance to the existing canonical protocol section, predecessor handoff, original
+tool result, accepted recovery report and six copied originals, accepted source
+exclusion, current-bootstrap transport and independent outcome review. The
+canonical protocol/source revision is supplied by the enclosing exact admission;
+the private evidence binding does not grant authority. Preserve the predecessor
+manifest and acceptance bytes, and independently accept the new exact handoff
+through its existing acceptance carrier before any consumer executes.
+
+The six known original roles are the paired starts, paired invocations, WSL result
+and WSL controller-attempt record. Their exact sizes and hashes remain those in
+the initial recovery table. The byte-identical starts and invocations, their
+reservation joins, original product and protocol identities, previous counters
+and fixed `[0,1,0,0]` charge identify this exact failure. No other action number,
+platform, observer, reordered suffix or arbitrary failed receipt may use this
+variant. Unbound, changed or incomplete required evidence rejects.
+
+### Prospective Fixed-Role Verification
+
+The private disposition instance is 3,202 bytes, SHA-256
+`6a241958bfd4693de219393c5920277e18ead52f8d039cd265f412837d142525`.
+Each of the three current consumers retains an unbound
+`CORE_CSC_FAILED_DISPOSITION_BINDING`; separately reviewed source materialization
+must supply exactly that descriptor before use. Do not accept an alternate path,
+CLI/environment override, different instance or arbitrary accepted Boolean.
+The existing enclosing source/protocol and original-history acceptance gates remain.
+
+One ordinary-reader pass reads that fixed private instance and the six fixed
+original roles, each for its exact length plus one byte. There are seven reads
+requesting at most 15,093 bytes, including 11,890 requested original bytes. Paths
+are source-fixed and direct; each walk checks at most sixteen ancestors. Require
+regular files, exact sizes/hashes and stable device, inode, mode, size, mtime, ctime
+and link count before/after reading and against the current leaf. No directory
+listing, absent-leaf probe, additional original read, private historical-review
+reread or Windows operation is selected by this verification. The seven fixed
+paths require at most forty ancestor stat calls and twenty-one held/leaf identity
+observations, sixty-one metadata calls per pass.
+
+The final publication caller uses the same seven-read check at its two existing
+history checkpoints, for at most fourteen reads requesting 30,186 bytes and
+122 metadata calls. Both
+passes share thirty seconds of active verification time and require the same
+current identities and bytes at the second checkpoint. The original caller's
+outer deadline/cancellation remains in force through the gap and each check;
+the earlier deadline always wins. A failed pass latches failure, and neither
+consumer may restart the allowance or obtain a third pass. The ordinary reader's
+single pass also has a thirty-second allowance. These checks add no experiment
+reservation and borrow no time or reads from the unchanged 0054/0055 schedule.
+They remain prospective until the complete enclosing source, schedule, handoff
+and literal invocation have their separate exact admission.
+
+This failure variant does not assert a complete 0056 directory inventory or a
+new snapshot of the old report's absence observations. In particular, the original
+`windows-input.json`, staged payload inventories and current missing Windows
+receipt are not needed to count and retain this resolved failure. Do not fabricate
+their content or promote source-expected output to an observed file. Retain all
+original and partial state without cleanup. Future fixed-role continuity checks
+are separate current observations and cannot replace the failed original outcome.
+
+Count one observer build/test charge and zero preparation, publication or synthetic
+charges. Current totals are Linux `[8,37,0,0]`, Windows `[7,49,0,48]` and combined
+`37 + 49 + 1 = 87/120`, including the existing fixture exactly once. Ordinary Windows
+build/test remains exhausted at 48; the aggregate 49 includes this sole dedicated
+unit. Linux's prospective ceiling remains 79. The twelve final CLI scenarios,
+preparation 15/16 and publication 0/12 are unchanged. Derive the next Windows number
+from the admitted contiguous history; with this exact suffix it is 0057. This
+number does not allocate or authorize another action.
+
+The final caller's second 0054 continuity checkpoint therefore requires reserved
+action 0057 for this exact suffix. Its first checkpoint still has no reservation;
+the original pass order, failure latch, evidence, continuity and budgets remain.
+
+Current consumers recognize the exact failed branch before their ordinary-success,
+complete-inventory and Windows-completion checks, without rewriting those original
+receipts. Final publication selects successful guard 0055 by its exact number rather
+than assuming it is the last action. Preserve all 0054/0055 validators and their
+original provenance, all other historical dispositions and the existing final
+source, graph, K, artifact, publication and literal-execution admission gates.
+
+The ordinary wrappers validate their current executing source through their existing
+current-source admission and actual `__file__` identity check. Their unchanged
+historical 0055 validator receives the fixed retained original reader paths already
+recognized by the final caller. It continues checking those original bytes against
+the original 0055 authority. Passing a later current wrapper as though it were the
+historical source would fail those pins before reaching 0056; do not repair that
+mismatch by rewriting original pins, weakening the historical check or substituting
+historical-source acceptance for current-source admission.
