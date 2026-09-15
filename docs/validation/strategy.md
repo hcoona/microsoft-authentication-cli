@@ -463,6 +463,14 @@ windows establish those process-composition observations. They do not establish 
 native admission, production MSAL initialization, WAM/account reuse, actual WSL caller
 lifetime, final Native AOT or whole-Slice acceptance.
 
+The [MSAL adapter composition result](../research/experiments/windows-slice-validation.md#msal-adapter-composition-evidence)
+binds sixteen unchanged red/green scenarios to request initialization, Profile/tenant
+mapping, exact account and claims continuation, cancellation, safe provider failures,
+and one owned HTTP client retained until cancellation and drain. Controlled sessions
+and a terminal HTTP handler with no network transport establish these observations. Concrete
+MSAL construction, real broker availability and accounts, default entry activation,
+Windows/WSL lifetime and final Native AOT retain their separate evidence obligations.
+
 The design's public dependency premises and security/TMT update receive independent
 architecture, consistency, minimality, security, record-system, and research-evidence
 review. Record schema checks, native TMT open/analysis, review identities, findings and

@@ -4400,3 +4400,157 @@ rules. Further Windows allocation or native/AOT/account evidence needs its exact
 accepted amendment. This controlled adapter result cannot complete the still-open
 native admission, real MSAL/WAM, reuse, actual Windows/WSL lifetime or final product
 Native AOT obligations; real account effects retain their concrete owner risk gate.
+
+## MSAL Adapter Composition Evidence
+
+This increment implements the selected adapter mapping and HTTP ownership omissions
+in the [composition supplement](#msal-adapter-composition-supplement). Source
+`bd7e217aba300e1a77e0fef183e24fc1bf5429fb`, tree
+`632edd8daa3bd69d9a5e8ead67720b6365001b36`, adds the internal session boundary,
+inert adapter/factory baseline and sixteen scenarios. Every prior source and scenario
+file remains unchanged from accepted `71223ab9225f3ff9713f07c68cdb469d428d2b04`.
+Accepted protocol/target `caef2cedd4bc3db06c3661c0735374c50d4691de` governs the
+executions. Independent reviewer `/root/lifetime_triage` accepted actual build and
+RED evidence; `/root/wave_review` supplied action admission and the source-coordinate
+triage. `/root` authored the implementation and operated the actions.
+
+### Accepted RED
+
+The [single build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5673503206)
+selected no-restore Release build 0042. Its original invocation completed with exit 0;
+the Windows build completed in 12.625 seconds, with zero warnings/errors, complete 713-byte
+stdout, empty stderr, eight cumulative Job processes and zero active at exit.
+The [actual-build acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5673751476)
+binds its 547-artifact manifest, actual PE/PDB/IL, 52 physical source documents and
+generated registration. There are 120 attributed methods and 127 projected cases,
+including exactly sixteen new cases. Only this reservation performed the accepted
+retaining replacement of both controllers; original bytes and migration evidence
+remain retained.
+
+Current catch types and unchanged prior source were directly reviewed. Two historical
+catch-TypeRef names were not retained independently, so the comparison does not claim
+complete historical semantic token equivalence. Named ClassLayout owners retain their
+packing and size despite metadata RID renumbering. These recorded decoding limits do
+not establish a changed native ABI.
+
+The [separate RED admission](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5673767604)
+selected test 0043. Its original invocation completed with outer exit 0; MTP returned
+the expected exit 2 in 1.349 seconds. Exactly sixteen cases executed and failed;
+zero passed and every other outcome counter was zero. Complete stdout is 21,677 bytes,
+stderr is empty, and two cumulative Job processes ended with zero active. No safety
+stop or termination occurred; the final receipts allow continuation.
+
+The [actual RED acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5673950211)
+correlates every complete TRX result and stdout failure with its exact method,
+compiled assertion and intended missing behavior. Eight success assertions fail
+because initialization returns safe mechanism unavailability before loader/session
+work. Six classification assertions require interaction, temporary unavailability
+or cancellation instead. The failed-loader case passes the safe classification,
+then fails because the loader callback was not reached. HTTP ownership first fails
+reference equality at line 17 / IL 103, before the first send at IL 183; its covering
+finally follows factory disposal.
+
+For `NoVisibleMatchUsesOnlyTheRequestedLoginHint`, the runtime frame reports line 108
+while the source/PDB assertion is line 109. The
+[independent triage](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5673941488)
+accepts this specific first failure using the exact method, unique first `IsNotNull`
+call at IL 150, success expression and message. Both coordinates remain preserved;
+no runtime stack-mapping explanation, normalized line, changed assertion or retry
+is claimed.
+
+| Actual receipt | SHA-256 |
+| --- | --- |
+| Build 0042 manifest | `2577a3ce26172c1330654a9fbbcb5a92ac11875e2deea2e0fb10ecbcb18f8d60` |
+| Build 0042 WSL final | `ffa4e76ff59a2d0e9204368d9ac0ca9e5e7497a3dcaa66d92e53005032a2e57f` |
+| Build 0042 Windows final | `997eb1fa4558c63a1723921e045507fea42773afe3f790a1e1ec78fc9fc696c6` |
+| Test 0043 WSL final | `f05d091ff7532d86e24e1cd2199de3b43b90740fcbe365a2b803e813dcd54af9` |
+| Test 0043 Windows final | `984f675e3296b8d77bce9839e05bc5ec64db007698f66839a2d4a3447eeb811f` |
+| Complete RED TRX | `efef4ca961d2fbcd66443b781da1333e24b29656e279a17828f27f373e17dd5a` |
+
+### Reviewed GREEN Source
+
+After actual RED acceptance, source
+`ec4303bf8be9d680155d3b3673ea3ccdccb5974a`, tree
+`ece5571897a6b001785f1fdfe63e9c3855c6c172`, changes only
+`MsalAuthenticationProvider.cs` and `MsalHttpClientFactory.cs`. All sixteen cases
+and assertions, the internal session boundary, project/dependency inputs and default
+unavailable entry remain unchanged. The
+[independent source review](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5673986488)
+binds controlled loader/session ordering, original cancellation, Profile/tenant/redirect
+mapping, exact account handles, claims and mutually exclusive account/login hint.
+Legacy MSA transfer routing applies only to silent calls without an exact resource
+tenant. One owned HTTP client retains its managed User-Agent handler and supplied
+transport until owner disposal after request drain.
+
+### Accepted GREEN Build
+
+The [separate build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5674106847)
+selected no-restore Release build 0044 from the reviewed GREEN source. The original
+invocation completed with exit 0; the Windows build completed in 11.759 seconds, with zero
+warnings/errors, complete 713-byte stdout, empty stderr, eight cumulative Job processes
+and zero active at exit. No controller migration, termination or safety stop occurred.
+
+The [independent actual-build acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5674355065)
+binds 2,005 inputs, 376 tools and 547 artifacts, including 109 freshly hashed
+non-package outputs and 438 reused package identities. The actual PE/PDB/IL and
+registration preserve all sixteen selected definitions and assertions. Only the two
+intended production source checksums changed. Existing CLI, Core and scenario method
+semantics remain unchanged; two changed catch TypeRef tokens in another Windows method
+resolve directly in both builds to `System.Text.Json.JsonException` and
+`System.InvalidOperationException`. This current comparison does not reconstruct the
+older build 0040 decoding limitation.
+
+Compiled mapping preserves original cancellation, exact account identity, tenant
+precedence, request context, safe result/failure projection and mutually exclusive
+account/login hint. The actual HTTP factory returns one owned client. The scenario
+owner supplies cancellation and drain before disposal; the factory does not implement
+an independent request-drain protocol. Compilation establishes no passing test result.
+
+| Actual receipt | SHA-256 |
+| --- | --- |
+| Build 0044 manifest | `0cc53ebb95904ef27db08afde61447c0bdeca2c6958da7039a75804d980544a9` |
+| Build 0044 WSL final | `f3eb03a037424f599f5ea7f39164bd6903749e15c9bebfe2587ab6c1a01b7145` |
+| Build 0044 Windows final | `002882acccf6fb4ddb1825a55c04ec80b6a7d9d09e5100f1bace250d6df52d63` |
+
+### Accepted GREEN Scenarios
+
+The [separate GREEN admission](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5674411161)
+selected test 0045 against the accepted build 0044 artifacts. The original invocation
+completed with MTP/outer exit 0. Exactly sixteen cases executed and passed, with zero
+failed and every other outcome counter zero. Windows test execution took 0.929 seconds;
+complete stdout is 639 bytes and stderr is empty. Two cumulative Job processes ended
+with zero active, no termination and no safety stop. Source/tool/history postchecks
+completed, and the final receipts allow continuation.
+
+The [independent actual GREEN acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/152#issuecomment-5674576945) binds the complete report and captures to all sixteen
+unchanged definitions, execution/result joins and compiled assertions. The report has a
+Completed summary and no RunInfo or ErrorInfo. Profile and tenant mapping, account
+identity, claims continuation, original cancellation and safe failure projection pass
+through the real coordinator and local provider to controlled sessions. The HTTP case
+observes the same client across operations, cancellation of its pending managed request,
+and transport disposal only after the scenario owner drains that request. It does not
+establish production-process HTTP ownership or an independent factory drain protocol.
+
+| Actual receipt | SHA-256 |
+| --- | --- |
+| Test 0045 WSL start | `5e3e684f790c30eed91f4a26829f5cb4cedbe63303d5003ef0eda09cc5f18985` |
+| Test 0045 WSL final | `6c0d567b62b8e3f856b3dd67d7a1cee0d4c93bdc458a1f5a6487a80a81b6023c` |
+| Test 0045 Windows start | `71573fef37f1aa5ec5c0f2c6a35dafcae52c24ce33bab3c5353683b7e6f0f7bf` |
+| Test 0045 Windows final | `3b3c2c82c004ffaab825d7699acd73c816340b03a4e2388d5aa3ceb017e55d42` |
+| Complete GREEN TRX | `e4d220ffd29940dce34e119b3d4eb6149d509e2dc71ac042cf404016afb473bb` |
+
+After 0045, all ninety actions are finalized: Linux 45 and Windows 45. Build/test use
+is Linux 37/80 and Windows 40/40, combined 77/120. Preparation remains 13/16 including
+Windows 5/5, with 768 MiB charged downloads. Process use remains 44/56, including all
+twenty owned-process units. The final twelve CLI units remain protected and the four
+additional Wave process units unallocated. No retry, refund or next action is admitted
+by this evidence; a further Windows action needs the applicable accepted allocation and
+exact admission. Dedicated artifacts and all prior stopped histories remain retained.
+
+These are controlled adapter and HTTP ownership observations, with no real loader,
+MSAL application construction, broker availability/account call, token acquisition,
+network, UI, cache or consent operation selected. Concrete MSAL construction, native
+and default composition, real WAM/account selection and reuse, Windows/WSL lifetime,
+final Native AOT and whole-Slice acceptance remain open. The current account-state
+effects boundary and concrete owner risk amendment remain prerequisites to the later
+real-account operations.
