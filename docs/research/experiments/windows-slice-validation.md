@@ -5676,3 +5676,200 @@ Further preparation still requires the explicit finite allocation, narrow
 failed-history compatibility and refreshed source/protocol/launcher admission
 specified above. Normal collection, DLL acceptance, B/R/L, final publication and
 real-account execution remain closed under this evidence-only change.
+
+## One Further Guard Preparation After Disposed Failure
+
+The [accepted failed-action disposition](#failed-preparation-safety-disposition)
+retains action 0054 and its preparation charge. This supplement allocates exactly
+one further compiler-only preparation using the corrected controller and existing
+compiler recipe, preceded by one charged offline validation-infrastructure fixture.
+It supersedes only the prospective authority form, history compatibility and
+allocations identified below. Original evidence and consumed allocations remain
+unchanged. Neither failed invocation nor either consumed observer can run again.
+Final product, final CLI/WSL and real-account gates remain separate.
+
+### Successor Capacity and Action Identity
+
+Transfer one unused Linux preparation unit to Windows: Linux ceiling 10 becomes
+9, Windows ceiling 6 becomes 7, and combined preparation remains 16. Ordinary
+Windows bootstrap/restore remains five. Cumulative guard preparation is exactly
+one disposed failure and at most one new preparation. Preserve product-history
+counters Linux `[8,37,0,0]` and Windows `[6,48,0,48]` before the new action.
+Its durable reservation charges one preparation even if preparation fails,
+producing Windows `[7,48,0,48]` and combined preparation 15/16. There is no refund,
+retry or third guard. Publish, synthetic process, download and account-effect
+allocations remain unchanged.
+
+The fixture consumes exactly one build/test unit from the existing combined 120
+ceiling, separately from the unchanged product-history counters: `37+48+1=86/120`,
+with 34 units remaining. It consumes no preparation, publish or synthetic process
+unit. This fixed singleton debit is not a new platform ledger or a Python/tooling
+test exemption. Both readers, dispatcher and controller include it exactly once
+in every successor or prospective combined-capacity check, including checks nested
+through another validator. Product-history ceilings Linux 80 and Windows 48 stay
+unchanged. Later final callers must preserve the same accounting.
+
+Use the unchanged accepted post-0053 manifest and handoff acceptance, plus one
+separately bound disposition of original 0054. Require exactly that prefix, no
+intervening Linux/Windows product-history reservation and no reserved successor.
+Only the explicitly named, charged external fixture may intervene. Derive 0055
+from contiguous durable product history; a caller cannot select its number.
+Permit one original successor dispatcher invocation only, including a failed
+preflight or admission. Exact source, protocol, authority and literal launcher
+admission remain prerequisites to its side effects.
+
+### Exact Failed-History Compatibility
+
+The original post-0053 manifest and acceptance remain byte-for-byte unchanged.
+One private disposition binds the actually accepted canonical failure conclusion,
+original authority/call/output, original handoff/acceptance, second-observer
+inventory/journal/call/output and independent actual-evidence review. Its exact
+closed source-defined contract fixes seven original content roles and seventeen
+metadata roles, one preparation charge and all original false result flags.
+Independent review and exact source/admission bindings establish its authority;
+a Boolean alone does not. It is not a complete post-0054 tree inventory.
+
+During a separately admitted successor action, revalidate only those fixed roles
+under the existing shared lock. Require the seven admitted content hashes,
+paired start/result/authority/source joins, fourteen expected absences, a
+zero-byte regular Windows cancel marker and both action directories. Preserve
+no-follow traversal and strict within-read identity, size, mtime and ctime
+checks. Fresh directory checks establish directory kind and within-check
+continuity; the historical allocation size is not a fresh predicate. The pinned
+historical invocation ctime discrepancy cannot waive any new discrepancy.
+Do not enumerate 0054 descendants, read metadata-only role contents, repair
+receipts, query processes or infer current global process quiescence.
+Unexpected content, kind, link, marker, disappearance, newly present
+expected-absent role or continuity failure rejects the new invocation.
+
+Both history readers count exact failed 0054 once and return only its typed
+retained preparation charge. It supplies no loader projection, DLL, artifact
+acceptance or successful completion. Only separately accepted successful 0055
+may enter the common normal completion, clock, compiler, capture, source and
+artifact validators. Reject any other failed guard, duplicate, reordered or
+third guard and intervening product history. Successful 0055 prior counters
+equal original handoff counters plus the failed preparation charge. Original
+success requirements remain in force.
+
+The dispatcher, both readers and Windows preparation controller must agree on
+one closed successor authority, disposition/fixture bindings and finite ceilings.
+The original v1 authority remains immutable failed-0054 history; it is not an
+alternative successful-0055 authority. The successor uses a new private authority
+and evidence root for source review, admission and publication bindings. Retain
+original handoff, acceptance and receipt-policy paths. Independently rebind exact
+component tables and actual detached reader paths before use.
+
+### Shared Finite History and Continuity Reads
+
+Each history-reader transaction shares one 30-second deadline, 128 regular-file
+reads and 64 MiB cumulative bytes across failed 0054, private provenance,
+fixture disposition and successful 0055. Nested validation never resets these
+bounds. Dispatcher under-lock failed-history verification has at most 30 seconds
+capped by the original 230-second deadline. Later already-required private input
+continuity checks use the original outer deadline and the same cumulative read
+and byte counters; they neither acquire another 30-second interval nor require
+the whole compiler action to finish inside the initial history interval.
+
+Original 0054 content is limited to two passes over seven files: at most fourteen
+regular-file reads and 123,152 bytes. Metadata-only observations are limited to
+two passes over seventeen roles: at most 34 leaf probes. Each fixed ancestor
+walk has at most sixteen components. Ordinary private files have a 1 MiB limit;
+the original handoff manifest has an 8 MiB limit. Existing smaller clock, empty
+stream and successful-artifact bounds remain applicable.
+
+Use a source-defined closed private-role table, with no recursive traversal of
+provenance descriptors. Load it once initially, then recheck only at the existing
+three dispatcher continuity checkpoints or the reader's one continuity pass.
+Count repeated occurrences against the shared budget, including fixture records.
+Independent exact source review must identify all roles and the worst-case read,
+byte, probe and continuity schedule before runtime binding. If it cannot fit,
+amend the protocol prospectively before any execution.
+
+### One Charged Offline Compatibility Fixture
+
+Before successor preparation, independently admit one exact offline fixture of
+the production-used validation bodies on the existing WSL2 Linux x64 host. Pin
+the actual existing Python interpreter, immutable module and harness paths and
+bytes, source/protocol revisions, recipe, dedicated output root and literal
+command. No dependency resolution, installation, Windows process, compiler,
+network, original experiment-root access or nested candidate subprocess is
+permitted. No product action may run concurrently while this fixture is pending.
+
+The sole invocation uses one Python process and a 30-second outer limit enforced
+by that process's Linux alarm. The launcher arms the sole alarm before reading,
+compiling or importing the harness; the harness inherits the remaining interval
+without restarting it. No external timeout supervisor is selected. It
+has at most 24 named cases, 72 calls to actual production validation bodies,
+8 MiB of synthetic input bytes and 64 KiB combined captured output/report.
+Record one exclusive, durable start and fixed charge one before importing or
+calling candidate code. Failure, interruption or failure to start the candidate
+consumes the allocation. Retain the original start, result and output in its
+dedicated private root; do not overwrite or retry. A missing or ambiguous charge,
+failed fixture, timeout or incomplete original result stops successor admission.
+
+Use only the smallest production-used import-safe validation body and narrow
+byte/metadata I/O seam. Production wrappers keep their actual `__file__`, source,
+admission, fixed-path and no-follow checks. The fixture imports real pinned
+modules and supplies immutable in-memory synthetic bytes and metadata with a
+requested-I/O log. The immutable recipe may embed exact hash-bound bytes from
+the accepted offline failed-action copies and private provenance as historical
+fixture seeds. All presented I/O observations remain fixture inputs; synthetic
+0055 records and metadata establish no new runtime observation. It opens no
+original evidence path. Do not spoof module paths,
+toggle acceptance or draft globals, call production main/reservation/launch entrypoints,
+copy or extract predicates into substitute validators, or stub successful
+validation. Source review covers actual filesystem behavior and the PowerShell
+mirror; this fixture cannot establish real Windows or no-follow syscall behavior. The separately hash-bound
+same-process fixture launcher may call the import-safe harness
+`main(admission_binding)`; the entrypoint prohibition applies to production
+candidate components.
+
+The positive failed case yields only the retained charge. The positive synthetic
+0055 case must retain all ordinary success gates. Within the same finite matrix,
+negative cases cover changed bindings/content/review/false flags, unexpected
+markers/kinds/links/metadata changes, old authority on 0055, wrong action/order,
+duplicate/third guard, intervening product history, counter mismatches and missing
+normal success gates. Include product-history sum 119 plus fixture one fitting
+120, sum 120 plus fixture one rejecting, and nested helpers counting the debit
+once. Keep the fixture outside hk; source inspection and hk do not claim to have
+executed it.
+
+Independently accept the exact original fixture outcome before binding its fixed
+charge and disposition into successor authority. A synthetic fixture disposition
+inside the matrix supplies no production authority. Its acceptance does not
+establish actual guard completion or replace source, artifact or launcher review.
+
+### Preserved Preparation and Completion Bounds
+
+The new preparation retains the original 230-second outer clock, 20-second
+preflight and clock handshake, 30-second compiler limit, 8 MiB combined compiler
+output and at most ten seconds of permitted compiler termination inside the
+original remaining allowance. No attendance wait, old guard load, self-test,
+PID reopening, process scan, installation, package resolution or new toolchain
+is selected. Preserve compiler recipe, tool pins, replacement environment and
+action-local source/output rules; derive recipe paths from the new reservation.
+
+Preparation still requires original compiler/controller/proxy exits zero,
+complete empty diagnostics, unchanged admitted inputs and the expected DLL.
+Its original artifact and continuation flags remain false. Independently accepted
+original-call completion and managed-artifact review precede any B/R/L or final
+caller admission. Failure preserves evidence and consumed capacity, stops
+dependent execution and supplies no diagnostic retry or speculative cleanup.
+
+### Successor Source Binding
+
+The following exact source bytes implement this supplement. The shared history
+module is an explicit `guardHistory` component owned by the protocol revision.
+The fixture harness remains import-safe and is outside hk. Exact detached paths,
+commit/tree identities, interpreter, recipe, private inputs and literal commands
+require independent admission after this source and protocol merge. These source
+bindings do not report a fixture or compiler execution.
+
+| Component under `tools/validation/` | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `Invoke-WindowsFinalGuardPrepare.ps1` | 44,658 | `6fa31902c4960277c8f7b9b15061112eca957f2d46d69cfc65f0e96173b9645b` |
+| `final_guard_history.py` | 56,316 | `96e30b1576b3e7524ddf05c7dc4229ca83c1530402d39594d0de172673668df3` |
+| `run_managed.py` | 47,657 | `dd13f97e79fe84719c7540dced4a975ed22e43a85d6fbd57038264cf6056fca4` |
+| `run_windows.py` | 140,320 | `1a81fc6f88b5f4e0918c84921ecea6756dd24d555a5c4dc004e7fa54acc62606` |
+| `run_windows_final_guard_prepare.py` | 66,953 | `c4d5bd722ccef384d77d805f4484638d7c08b080820ca0e9a1824a0ffd186d61` |
+| `validate_final_guard_successor_fixture.py` | 15,807 | `13a5dcb5f57cec6c2b855a684d19979d861adb4a343968c2caf3c22f2b77f195` |

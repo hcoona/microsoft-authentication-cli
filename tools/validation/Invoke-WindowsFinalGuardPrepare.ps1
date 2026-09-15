@@ -161,6 +161,14 @@ $script:AuthorityShapeJson = @'
       "sha256": "@hash",
       "tree": "@rev"
     },
+    "guardHistory": {
+      "bytes": "@size",
+      "commit": "@rev",
+      "gitBlob": "@rev",
+      "repositoryPath": "tools/validation/final_guard_history.py",
+      "sha256": "@hash",
+      "tree": "@rev"
+    },
     "linuxHistoryReader": {
       "bytes": "@size",
       "commit": "@rev",
@@ -196,7 +204,17 @@ $script:AuthorityShapeJson = @'
   },
   "executionAdmission": {
     "bytes": "@size",
-    "path": "/tmp/windows-final-guard-authority-inputs/execution-admission-v2.json",
+    "path": "/tmp/windows-final-guard-0055-authority-inputs/execution-admission-v2.json",
+    "sha256": "@hash"
+  },
+  "failedGuardDisposition": {
+    "bytes": "@size",
+    "path": "/tmp/windows-final-guard-0054-failed-history-disposition-v1.json",
+    "sha256": "@hash"
+  },
+  "fixtureDisposition": {
+    "bytes": "@size",
+    "path": "/tmp/windows-final-guard-0055-authority-inputs/fixture-disposition.json",
     "sha256": "@hash"
   },
   "handoffAcceptance": {
@@ -225,10 +243,11 @@ $script:AuthorityShapeJson = @'
     "combinedPreparationCeiling": 16,
     "compilerMilliseconds": 30000,
     "externalCallMilliseconds": 30000,
-    "guardPreparations": 1,
+    "fixtureBuildTestCharge": 1,
+    "guardPreparations": 2,
     "handshakeMilliseconds": 20000,
     "installation": false,
-    "linuxPreparationCeiling": 10,
+    "linuxPreparationCeiling": 9,
     "outerMilliseconds": 230000,
     "preflightMilliseconds": 20000,
     "preparationCharge": 1,
@@ -236,7 +255,7 @@ $script:AuthorityShapeJson = @'
     "reservedProcessScenarios": 0,
     "retry": false,
     "windowsBuildTestCeiling": 48,
-    "windowsPreparationCeiling": 6
+    "windowsPreparationCeiling": 7
   },
   "preflight": {
     "argvSha256": "47a11709b88178a0963d560b866a79d20d9e9310407c8e161365344870897bfb",
@@ -251,7 +270,7 @@ $script:AuthorityShapeJson = @'
   },
   "publication": {
     "bytes": "@size",
-    "path": "/tmp/windows-final-guard-authority-inputs/publication-v2.json",
+    "path": "/tmp/windows-final-guard-0055-authority-inputs/publication-v2.json",
     "sha256": "@hash"
   },
   "receiptPolicy": {
@@ -270,7 +289,7 @@ $script:AuthorityShapeJson = @'
     },
     "windowsOwnerSha256": "@hash"
   },
-  "schema": "final-guard-external-authority-v1",
+  "schema": "final-guard-external-authority-v2",
   "scope": "compiler-only-final-guard-prepare",
   "source": {
     "commit": "@rev",
@@ -278,7 +297,7 @@ $script:AuthorityShapeJson = @'
   },
   "sourceReview": {
     "bytes": "@size",
-    "path": "/tmp/windows-final-guard-authority-inputs/source-review-v2.json",
+    "path": "/tmp/windows-final-guard-0055-authority-inputs/source-review-v2.json",
     "sha256": "@hash"
   },
   "target": {
@@ -436,7 +455,7 @@ function Assert-ExactExternalSourceAdmission($OuterWatch, [string] $Action, [str
         if ($envelope.components.$role.commit -cne $envelope.source.commit -or
             $envelope.components.$role.tree -cne $envelope.source.tree) { throw 'Guard source component role changed' }
     }
-    foreach ($role in @('linuxHistoryReader', 'windowsHistoryReader', 'windowsHistoryController')) {
+    foreach ($role in @('linuxHistoryReader', 'windowsHistoryReader', 'windowsHistoryController', 'guardHistory')) {
         if ($envelope.components.$role.commit -cne $envelope.protocol.commit -or
             $envelope.components.$role.tree -cne $envelope.protocol.tree) { throw 'Protocol component role changed' }
     }
@@ -507,6 +526,7 @@ function Assert-Remaining($OuterWatch, $Clock, [string] $Cancel) {
 }
 
 function Assert-ExactOriginalClockHandoff($Invocation, $Start, $OuterWatch, [string] $Action, [string] $Cancel) {
+    if ($ActionName -cne '0055') { throw 'Only the separately admitted successor0055 is permitted' }
     if ($Invocation.schema -cne 'final-guard-invocation-v1' -or $Invocation.action -cne $ActionName -or
         $Invocation.reservationSha256 -cne $ReservationSha256 -or
         $Invocation.clockNonce -cnotmatch '^[0-9a-f]{64}$' -or $Invocation.clockNonce -cne $Start.clockNonce -or
