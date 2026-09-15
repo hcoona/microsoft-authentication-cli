@@ -137,21 +137,21 @@ public sealed class OwnedProcessScenarios
         Assert.IsFalse(child.Marked("before-commit"));
     }
 
-    private static void RequireMarkers(ProcessFixture child, params string[] names)
+    internal static void RequireMarkers(ProcessFixture child, params string[] names)
     {
         Assert.IsTrue(child.Marked("entered"), "Actual controlled entry is required.");
         foreach (var name in names)
             Assert.IsTrue(child.Marked(name), "The required actual state was not observed: " + name);
     }
 
-    private static void AssertOrdered(ProcessFixture child, params string[] names)
+    internal static void AssertOrdered(ProcessFixture child, params string[] names)
     {
         for (var index = 1; index < names.Length; index++)
             Assert.IsTrue(child.MarkerTimestamp(names[index - 1]) <= child.MarkerTimestamp(names[index]),
                 "The required actual event ordering was not established.");
     }
 
-    private static void AssertExit(ProcessFixture child, uint code)
+    internal static void AssertExit(ProcessFixture child, uint code)
     {
         Assert.IsFalse(child.Forced, "The product must end before fixture enforcement.");
         Assert.AreEqual(code, child.ExitCode);
@@ -166,7 +166,7 @@ public sealed class OwnedProcessScenarios
         Assert.IsTrue(indication.StartsWith(child.Error), "Unexpected diagnostic bytes.");
     }
 
-    private static void AssertExitBound(ProcessFixture child, string firstEnding)
+    internal static void AssertExitBound(ProcessFixture child, string firstEnding)
     {
         var start = child.MarkerTimestamp(firstEnding);
         Assert.IsTrue(start > 0 && child.ExitObservedTimestamp >= start);
@@ -176,7 +176,7 @@ public sealed class OwnedProcessScenarios
             <= TimeSpan.FromMilliseconds(1100), "Owned shutdown exceeded the measured local bound.");
     }
 
-    private static void AssertFailure(ProcessFixture child, string outcome)
+    internal static void AssertFailure(ProcessFixture child, string outcome)
     {
         using var json = ParseOne(child.Output);
         Assert.AreEqual(outcome, json.RootElement.GetProperty("outcome").GetString());
@@ -185,7 +185,7 @@ public sealed class OwnedProcessScenarios
             json.RootElement.EnumerateObject().Select(property => property.Name).ToArray());
     }
 
-    private static void AssertSuccess(ProcessFixture child)
+    internal static void AssertSuccess(ProcessFixture child)
     {
         using var json = ParseOne(child.Output);
         var result = json.RootElement;
