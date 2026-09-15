@@ -1033,9 +1033,16 @@ def prepare_guard_candidate():
                 result["utc"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
                 result["continuation_allowed"] = False
                 write_new(local / "result.json", encode(result))
+                if result["normalCompletion"]:
+                    # Preserve the receipt if persistence returns late or cancelled;
+                    # the same original invocation must fail before normal return.
+                    check_time(deadline, lambda: interrupted)
     finally:
         for value, handler in old_handlers.items():
             signal.signal(value, handler)
+    if result["normalCompletion"]:
+        # Include shared-lock release and original signal-handler restoration.
+        check_time(deadline, lambda: interrupted)
     return result
 
 

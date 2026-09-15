@@ -5319,9 +5319,10 @@ final factory. That later invocation retains its own exact final publish protoco
 capacity, source/recipe and no-kill failure rules. Guard preparation alone does not
 admit final publication or establish Native AOT or whole-Slice acceptance.
 
-A later complete final caller must check the same original deadline and latched
-cancellation after durable final receipt persistence and relevant context
-finalization, before normal return. A late or cancelled original invocation fails
+The guard preparation dispatcher and any later complete final caller must check
+their original deadline and latched cancellation after durable final receipt
+persistence and again after lock release and signal-handler restoration, before
+normal return. A late or cancelled original invocation fails
 even when its preserved receipt contains an earlier normal observation. The
 receipt is retained unchanged and cannot alone establish original completion;
 there is no retry, rewritten success or replacement clock.
@@ -5336,7 +5337,7 @@ remain disabled and retain rejecting admission and completion hooks.
 
 | Component | Repository path | SHA-256 |
 | --- | --- | --- |
-| dispatcher | [`run_windows_final_guard_prepare.py`](../../../tools/validation/run_windows_final_guard_prepare.py) | `419ef046bddea192a9b63fd4e9da705265b7c2556de94bf477505ad79f9ce4c4` |
+| dispatcher | [`run_windows_final_guard_prepare.py`](../../../tools/validation/run_windows_final_guard_prepare.py) | `fbe2ff7adbc18cb15cccc1ee91c7f32e0756a4dff8d7569b2decea79c3861db0` |
 | controller | [`Invoke-WindowsFinalGuardPrepare.ps1`](../../../tools/validation/Invoke-WindowsFinalGuardPrepare.ps1) | `ea93b4eecfea6eed623a3149b648e93686db4f8bafa81561ff28ad0379e4ebae` |
 | guard | [`WindowsFinalPublishGuard.cs`](../../../tools/validation/WindowsFinalPublishGuard.cs) | `d38846b080d5ee092fae9e21c9031712b56289093b50ca048d50589cca50ff4b` |
 | preflight | [`WindowsFinalGuardPreflight.body.txt`](../../../tools/validation/WindowsFinalGuardPreflight.body.txt) | `11a93b9504b70e2caf1e7e6c2f333f1cda178e0adcf88d5998d3eca83450e8b9` |
