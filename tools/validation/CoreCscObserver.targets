@@ -1,0 +1,53 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    INACTIVE SOURCE PROPOSAL ONLY. Both literal-false target conditions must remain
+    unchanged until a separately reviewed artifact and exact protocol admit activation.
+    This file has not been imported or evaluated. It is not an execution procedure.
+    No global activation property, custom task, factory, or compiler replacement exists.
+    The source-root literal below is proposed diagnostic-path data, not a filesystem claim.
+    The marker path is a new protocol proposal. Neither path has been created or probed.
+    A future protocol must preseed the marker with exactly zero bytes. The marker requires
+    one node, no multithreaded mode, fresh file reads, and no competing writer or cleanup.
+    Reads require exact text states; all IO errors stop. Retain the marker after every outcome.
+  -->
+  <Target Name="_Issue108CoreCscObserveBefore5033607"
+          BeforeTargets="CoreCompile"
+          Condition="'false' == 'true'">
+    <Message Importance="high"
+             Text="Issue108 Core Csc observer boundary: Project=$(MSBuildProjectFullPath); Configuration=$(Configuration); TargetFramework=$(TargetFramework); RuntimeIdentifier=$(RuntimeIdentifier); SelfContained=$(SelfContained); PublishAot=$(PublishAot); IsPublishing=$(_IsPublishing); OriginalSkipCompilerExecution=$(SkipCompilerExecution); OriginalProvideCommandLineArgs=$(ProvideCommandLineArgs); OriginalTargetsTriggeredByCompilation=$(TargetsTriggeredByCompilation); UseSharedCompilation=$(UseSharedCompilation); UseHostCompilerIfAvailable=$(UseHostCompilerIfAvailable)." />
+    <Error Code="AUTH108CSCCONTEXT"
+           Text="The compiler boundary does not match the admitted Core context."
+           Condition="'$(MSBuildProjectFullPath)' != 'C:\Temp\azureauth-windows-slice-108\observers\core-csc-5033607\source\src\Authentication.Core\Authentication.Core.csproj' or '$(Configuration)' != 'Release' or '$(TargetFramework)' != 'net10.0' or '$(RuntimeIdentifier)' != '' or '$(SelfContained)' != 'true' or '$(PublishAot)' != 'true' or '$(_IsPublishing)' != 'true' or '$(RuntimeFrameworkVersion)' != '10.0.12' or '$(MSBuildRuntimeType)' != 'Core'" />
+    <Error Code="AUTH108CSCCONTROLS"
+           Text="The original compiler or post-compilation controls do not match the observer prerequisite."
+           Condition="('$(SkipCompilerExecution)' != '' and '$(SkipCompilerExecution)' != 'false') or ('$(ProvideCommandLineArgs)' != '' and '$(ProvideCommandLineArgs)' != 'false') or '$(TargetsTriggeredByCompilation)' != '' or '$(UseSharedCompilation)' != 'false'" />
+    <Error Code="AUTH108CSCBATCH"
+           Text="The observer requires an empty resource-batching input before Core Csc."
+           Condition="'@(_CoreCompileResourceInputs)' != ''" />
+    <Error Code="AUTH108CSCREPEAT"
+           Text="The preseeded observer marker is not empty; no further Csc task is admitted."
+           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\core-csc-5033607\first-core-compile.claim')), ''))" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\core-csc-5033607\first-core-compile.claim"
+                      Lines="core-csc-observer-claimed"
+                      Overwrite="false"
+                      WriteOnlyWhenDifferent="false" />
+    <Error Code="AUTH108CSCMARKER"
+           Text="The observer marker does not contain the exact claimed text; Csc is not admitted."
+           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\core-csc-5033607\first-core-compile.claim')), 'core-csc-observer-claimed%0D%0A'))" />
+    <PropertyGroup>
+      <SkipCompilerExecution>true</SkipCompilerExecution>
+      <ProvideCommandLineArgs>true</ProvideCommandLineArgs>
+      <TargetsTriggeredByCompilation>_Issue108CoreCscObserveStop5033607</TargetsTriggeredByCompilation>
+    </PropertyGroup>
+    <Error Code="AUTH108CSCASSIGN"
+           Text="The local observer controls did not take effect."
+           Condition="'$(SkipCompilerExecution)' != 'true' or '$(ProvideCommandLineArgs)' != 'true' or '$(TargetsTriggeredByCompilation)' != '_Issue108CoreCscObserveStop5033607'" />
+  </Target>
+
+  <!-- Called only by the unchanged CoreCompile post-Csc CallTarget in a future admitted artifact. -->
+  <Target Name="_Issue108CoreCscObserveStop5033607"
+          Condition="'false' == 'true'">
+    <Error Code="AUTH108CSCSTOP"
+           Text="Intentional observer stop after the original skipped Core Csc task. This is not compilation or publish success." />
+  </Target>
+</Project>

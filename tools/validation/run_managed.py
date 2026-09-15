@@ -475,6 +475,8 @@ def windows_consumption():
                 raise ValueError("Noncontiguous Windows action history")
             receipt = json.loads((action / "result.json").read_text())
             started = json.loads((action / "started.json").read_text())
+            if started.get("action") == "core-csc-observer":
+                raise ValueError("Dedicated observer remains charged; independently accepted original outcome and handoff required")
             if any((windows / action.name / "temp" / marker).exists()
                    for marker in ("owned-host-safety-stop.json", "process-safety-stop.json")):
                 raise ValueError("Owned fixture safety stop forbids both validation loops")
@@ -709,7 +711,7 @@ def main():
         preparation = arguments.action in ("fetch", "restore")
         if sum(item["action"] in ("fetch", "restore") for item in receipts) + preparation > 9:
             raise ValueError("Initial preparation allocation exhausted")
-        if sum(item["action"] in ("build", "test") for item in receipts) + (not preparation) > 80:
+        if sum(item["action"] in ("build", "test") for item in receipts) + (not preparation) > 79:
             raise ValueError("Initial build/test allocation exhausted")
         if sum(item["action"] in ("fetch", "restore") for item in receipts) + preparation + windows_preparation > 16 or \
                 sum(item["action"] in ("build", "test") for item in receipts) + (not preparation) + windows_build_test + 1 > 120:
