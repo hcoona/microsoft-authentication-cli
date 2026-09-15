@@ -6693,3 +6693,89 @@ component disabled. Independent outcome review permits only offline interpretati
 accepted raw copies and names; graph, artifact, source-provenance and execution
 acceptance remain separate. On any failure preserve all partial outputs and original
 start/transport evidence without rewriting or accepting partial transport.
+
+### Accepted Host Identity Collection and Offline Interpretation
+
+HOST14 completed its sole invocation under protocol commit
+`4a0de51a129575301c53a59538af12edea150136` with original exit zero and complete
+transport. Independent review accepted twelve raw copies totaling 49,290,603 bytes,
+the bounded absences of `framework-03` and `fxr-01`, and equal complete immediate-name
+snapshots containing `6.0.36`, `8.0.31` and `10.0.12`. The collector recorded 37
+intentional payload reads totaling 147,885,871 bytes and 49,304,665 output bytes.
+Its remaining invocation capacity is zero.
+
+A separately source- and runtime-reviewed offline parser then completed exactly once
+with original exit zero. It read the accepted raw-outcome record and twelve copies:
+thirteen payload reads totaling 49,317,033 bytes. Independent outcome review accepted
+the completed supported-subset projection. It performed no original or installed-root
+read, absent-leaf probe, DLL load, IL execution, or earlier-parser replay. Its remaining
+invocation capacity is also zero. The original projection retains false semantic,
+runtime-selection, graph, artifact and execution acceptance flags; the contextual
+conclusions below do not rewrite that receipt.
+
+| Retained evidence | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Original HOST14 transport | 1,041 | `788fcee73a2af3c81a669bb7d0ba7260360a840156c0ba1e9e0efbc093f0e4b9` |
+| HOST14 inventory | 14,062 | `2e10a7bddb0bdaeb3e525bc7c82499a27cfe3e7a1365c9e85e884a402c11d512` |
+| Independent raw-outcome acceptance | 26,430 | `d21945e8bbae11c284d6401c77c871aa5d0e0ff630da4c61e6605f7c1a3c3822` |
+| Executed offline parser source | 47,326 | `08c299f04277e44d0ab1a29bb32b723d5f2df716f519763a9e0ae797a1311fc7` |
+| Independent parser source/runtime admission | 6,908 | `6c2a2d5474306fb333ccf63eb908d97359f45beb0cb5e1d8b33a539173fa4c77` |
+| Original parser transport | 1,192 | `765997054d5926709945672338f09ee565d401cc35ae862421f08a9f5574d85c` |
+| Completed inert projection | 188,341 | `df62bdc5f4cc6e0449a72a5599556fc7c0bc114f60dc63b2b29b96d31d369dd5` |
+| Independent parser outcome acceptance | 5,318 | `d4378003b8eb9761417a529bc5b27c3f7314e058eadcb9d30a614f8725a45053` |
+
+The supported parser subset does not implement the runtime's complete metadata loader,
+signature validation, fallback version-resource language selection, or every custom
+attribute. A review-helper assertion incorrectly required sorted JSON reserialization
+to reproduce the original bytes after numeric object keys became strings. That helper
+stopped before creating an acceptance record. The corrected review checked the original
+exact hash, stable identity and duplicate-rejecting JSON. The parser itself neither
+failed nor retried, and its output did not change.
+
+The accepted `.version` projection contains valid UTF-8 without a BOM and five lines.
+Its first line has forty UTF-16 code units, with first ten `e34a38d2ae`; its second
+line is the nonempty `BuildNumber` `10.0.401`. The remaining fields are `win-x64`,
+`10.0.401-servicing.26423.113` and feature band `10.0.400`. Applying the pinned
+`DotnetVersionFile` and `Product` sources cited above selects `Product.Version`
+`10.0.401` without the version-resource fallback, conditional on the selected owning
+CoreUtils assembly and its source/location correspondence.
+
+CoreUtils contains the expected `Product`, `DotnetFiles` and `DotnetVersionFile` type
+declarations. CoreUtils, Cli.Utils and Configurer declare assembly version
+`10.0.401.0`; the two Roslyn dependency assemblies declare `5.9.0.0`. Their
+informational versions identify aggregate commit
+`e34a38d2ae1fc26406a317517196e55c68ff83ab`. The immutable
+[aggregate source manifest](https://github.com/dotnet/dotnet/blob/e34a38d2ae1fc26406a317517196e55c68ff83ab/src/source-manifest.json)
+maps this aggregate to SDK `32593ca81f8aae7b0d41c1a7198529c3365106b8`, MSBuild
+`b44cdcec4c79c50c67560876707d57d4f635fa3b` and Roslyn
+`f7797ed513e3035983346552ac2d9ca2281bc2ec`.
+
+The hostfxr, hostpolicy, coreclr and CoreLib version-resource declarations identify
+aggregate `95017c711e6afc1085133d440e42b4bd78155701`. Its immutable
+[source manifest](https://github.com/dotnet/dotnet/blob/95017c711e6afc1085133d440e42b4bd78155701/src/source-manifest.json)
+maps runtime to `4271d88e0aebf3d04f188f1334c2220d80555ef6`. Native fixed versions
+are `10.0.1226.42308`; coreclr's comma-separated ProductVersion string is a formatting
+difference, not a conflicting runtime selection. CoreLib's copied hash matches the
+required historical hash. These are contextual identity joins under the existing
+public-toolchain trust basis, not complete binary/source equivalence or loading evidence.
+
+The framework configuration declares only `tfm: net10.0` in `runtimeOptions`; its
+dependency manifest declares runtime target `.NETCoreApp,Version=v10.0/win-x64` and
+library `Microsoft.NETCore.App.Runtime.win-x64/10.0.12`. Applying the pinned hostfxr
+name-comparison rule to the accepted complete name set gives the unique conditional
+maximum `10.0.12`; the fixed captured path supplies its parent/leaf identity. The
+framework development-config and Roslyn app-local hostfxr absences remain bounded
+observations. They do not establish continuing absence or actual runtime loading.
+
+The SDK's
+[first-use sentinel source](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/Microsoft.DotNet.Configurer/FirstTimeUseNoticeSentinel.cs)
+therefore derives the filename `10.0.401.dotnetFirstUseSentinel`. This is a source
+conclusion for later isolated SDK preparation. No sentinel or planned final source root
+was created or probed by this work. Its actual location, preparation, existence checks,
+host/root selection, environment and input continuity remain later execution predicates.
+
+No product reservation or build/test, preparation, publish, download or synthetic-process
+capacity was added or consumed by these review operations. All four final-publication
+components remain disabled. Precompiler observation, final Native AOT publication,
+final CLI and WSL scenarios, and real account acceptance remain open under their own
+protocol and admission requirements.
