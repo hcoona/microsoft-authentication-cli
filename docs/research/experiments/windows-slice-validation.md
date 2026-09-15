@@ -5157,3 +5157,159 @@ Artifacts and sanitized experiment evidence are intentionally retained. Executed
 and protocol identities remain distinct from the later PR #156 documentation merge.
 Real dependency activation, WAM and selected-account reuse, actual WSL caller lifetime,
 final Native AOT and overall Slice acceptance remain open.
+
+## Final Native AOT Guard Preparation Supplement
+
+This supplement allocates one compiler-only preparation action for the dedicated
+final-publish guard. The current Delivery Wave already permits that infrastructure
+preparation within its existing effects and cumulative preparation ceiling. It does
+not authorize final product publication, synthetic final CLI or WSL execution, or any
+real account operation. Each of those retains its separately accepted protocol and
+admission prerequisites.
+
+### Capacity and Preserved History
+
+Transfer one unused Linux preparation unit to Windows: Linux's ceiling changes from
+11 to 10, Windows's from 5 to 6, and the combined ceiling remains 16. Only the new
+`final-guard-prepare` category may consume the transferred unit. Ordinary Windows
+bootstrap and restore remain limited to their existing five reservations. The guard
+charges one preparation and zero build/test, publish, download or synthetic process
+units, starting at its durable WSL reservation even if startup or compilation fails.
+There is no retry or refund.
+
+The completed shared default HTTP sequence records Linux preparation 8, Windows
+preparation 5, combined preparation 13, Linux build/test 37, Windows build/test 48,
+combined build/test 85 and synthetic process consumption 48. With no intervening
+preparation, the guard would produce Linux preparation 8/10, Windows 6/6 and combined
+14/16. Current complete histories and counters must be independently bound and then
+refreshed under the existing shared lock before reservation; this arithmetic does
+not replace that check or choose an action number.
+
+Use the existing paired Linux/Windows histories and contiguous reservation order.
+Preserve all original controller and bootstrap artifacts, receipt bytes, failed-action
+dispositions and retaining migrations. Windows action 0002 still has its original
+two WSL files and five empty Windows directories, with no native final receipt.
+The completed default HTTP cycle stays closed. The ordinary PowerShell controller
+is unchanged, and the final guard does not replace its original guard or load it
+for compilation.
+
+### Exact Source and Compiler Recipe
+
+The dedicated managed guard preserves the reviewed final-only no-kill mode and its
+scoped factory/caller routes. Before compilation, independently accept its exact
+activated source and the preparation dispatcher/controller, preflight, compatible
+history readers and final caller source identities in an immutable source/protocol
+snapshot. Draft source acceptance is not activation acceptance. No actual DLL hash
+is required or invented before the compiler produces it.
+
+The sole compiler is the existing pinned x64 Framework `csc.exe`, with its existing
+configuration, `System.dll`, `System.Core.dll`, implicit `mscorlib.dll` and x64 Windows
+PowerShell host. The sealed compiler recipe fixes these six tool hashes, one C#
+source, `/noconfig /nologo /target:library`, exactly two explicit references and one
+new output DLL. It selects no response file, analyzer, generator, shared compiler,
+SDK project, restore, linker, PDB service or new tool installation. Final product
+symbol generation is unaffected.
+
+Derive the four-digit action number once from the durable contiguous reservation.
+Within that action, copy the exact accepted C# source to
+`final-guard/source/WindowsValidationJob.cs`, use that source directory as compiler
+working directory, and write only `final-guard/WindowsFinalPublishGuard.dll` as the
+compiled artifact. Retain action-local copies of the exact preparation controller,
+preflight and authority envelope. Existing destinations, links, source rewriting or
+additional compiler inputs reject. Source and tool identities are checked before
+and after compilation.
+
+The compiler clears inherited environment and uses the fixed thirty-entry bootstrap
+replacement environment with only the action-number path substitution. Its existing
+telemetry, first-run, build-server and action-local home/temp controls remain. There
+is no final-publish endpoint or inherited compiler override. The fixed package-cache
+path string in that environment does not select package access or a restore.
+
+### Authority, Clocks and Completion
+
+Before use, a separately reviewed literal launcher pins one exact external authority
+envelope. The envelope binds the current accepted target/Wave/protocol, immutable
+source/component identities, source and execution reviews, their complete public
+publication bindings, the independently accepted post-0053 handoff, recipe, root
+markers and receipt policy. The handoff manifest precedes its independent acceptance;
+neither record contains its own future review hash. They bind original history and
+do not create a replacement ledger. A caller Boolean, environment variable or URL
+cannot supply missing authority.
+
+The original WSL action clock is 230 seconds. One bounded external admission load,
+one target-freshness check before reservation, fixed Windows preflight, source copy,
+compiler, capture and completion all remain within it. There is no attendance wait.
+The Windows ready message and sole WSL remaining-time reply bind the original
+reservation, invocation and nonce. Windows derives its deadline from the earlier
+ready ticks plus the remaining allowance, never the reply-receive time. The fixed
+preflight and handshake each have a twenty-second sublimit; neither resets the
+original clock.
+
+One original retained compiler Process/handle owns start, exit, capture and any
+permitted compiler stop. Its thirty-second clock starts immediately before Start
+and includes complete capture. Combined compiler output is at most 8 MiB. On timeout,
+cancellation or overflow, the controller may stop only that original standalone
+compiler and wait at most ten seconds within the original remaining allowance.
+There is no PID replacement, process scan, old emergency-script fallback or guard
+load/self-test. Unknown ownership or completion is retained and blocks continuation.
+
+Preparation succeeds only with original compiler/controller/proxy exits zero,
+confirmed compiler completion, both streams at EOF, complete empty diagnostics,
+unchanged inputs and one nonempty expected DLL. Retain complete source/tool,
+command/environment, clock, capture, artifact and paired receipt bindings. Later
+zero exit does not erase a failure. Original preparation and artifact receipts keep
+their false artifact-acceptance and continuation flags; an independent review owns
+acceptance of actual original completion and managed PE/IL/source/compiler evidence.
+
+### Later Reader and Loader Acceptance
+
+The two compatible original Python readers recognize exactly one separately
+accepted guard preparation while preserving ordinary historical validators and
+capacity checks. The concrete consumer first verifies external binding B and its
+independent review R, then independent original-completion and artifact-acceptance
+records, before reading the seventeen bound original action files and DLL. It
+checks exact closed schemas, unchanged source/protocol/recipe/clock/capture/receipt
+joins, original false flags and final input continuity. Its fixed-path no-link
+reads have thirty seconds, 128 reads and 64 MiB total; clocks are at most 2 KiB,
+ordinary inputs 1 MiB, DLL/handoff 8 MiB, and successful compiler streams empty.
+
+The dependency order is source acceptance, actual preparation, independent original
+completion/artifact acceptance, B, independent R, then a separately reviewed literal
+launcher L. L verifies accepted provenance, contextual reviewer independence and
+current authority before supplying the exact B/R descriptors. No future evidence
+hash is inserted into already accepted reader source. Missing evidence rejects;
+original receipts and active controllers are never repaired.
+
+The consumer returns the existing thirteen-field final-loader identity projection.
+It neither creates the future Windows artifact-acceptance copy nor loads the DLL.
+Any later accepted final caller must verify and materialize those same acceptance
+bytes, reject an already defined guard type, load only the exact accepted DLL with
+`Add-Type -Path`, and verify assembly identity/location before selecting the scoped
+final factory. That later invocation retains its own exact final publish protocol,
+capacity, source/recipe and no-kill failure rules. Guard preparation alone does not
+admit final publication or establish Native AOT or whole-Slice acceptance.
+
+### Integrated Source Binding
+
+This supplement follows the accepted [shared default HTTP evidence](#shared-default-http-composition-evidence)
+and preserves its original source and execution receipts. The immutable source admission
+for this preparation must bind the following repository files; SHA-256 values identify
+the complete source bytes, not a compiled artifact. The two final-publish entrypoints
+remain disabled and retain rejecting admission and completion hooks.
+
+| Component | Repository path | SHA-256 |
+| --- | --- | --- |
+| dispatcher | [`run_windows_final_guard_prepare.py`](../../../tools/validation/run_windows_final_guard_prepare.py) | `4ce05f15d406be44ec770f56fcef56c9cca04ecab15e64bebdb578f32cb987e0` |
+| controller | [`Invoke-WindowsFinalGuardPrepare.ps1`](../../../tools/validation/Invoke-WindowsFinalGuardPrepare.ps1) | `8554ba38ec149dddc5869204b09dcca05a3a5cfc339849514fadc3dd622fca8d` |
+| guard | [`WindowsFinalPublishGuard.cs`](../../../tools/validation/WindowsFinalPublishGuard.cs) | `973d9a6ec33c0bfeafe182ec067a67d3b9eee76212b2be71296a24e598aa32e4` |
+| preflight | [`WindowsFinalGuardPreflight.body.txt`](../../../tools/validation/WindowsFinalGuardPreflight.body.txt) | `11a93b9504b70e2caf1e7e6c2f333f1cda178e0adcf88d5998d3eca83450e8b9` |
+| finalPublishDispatcher | [`run_windows_final_publish.py`](../../../tools/validation/run_windows_final_publish.py) | `fc7fe6539b2927994bbd51e81259872c3bee8df7a16e41c02c25a3319d39e176` |
+| finalPublishController | [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | `eb2bf1782cf0708a7e264ad16a61098afc5fc7d94e98210be4be48743a00911d` |
+| linuxHistoryReader | [`run_managed.py`](../../../tools/validation/run_managed.py) | `6d9bbf05d5ba20b4e0bd66dc021af177e4d8f2d928152e6d559163f1ef6f3a8d` |
+| windowsHistoryReader | [`run_windows.py`](../../../tools/validation/run_windows.py) | `63f0872ac141953f988c12abbdba75179f909b023d63680ef50e3f937037cfe3` |
+| windowsHistoryController | [`Invoke-WindowsValidation.ps1`](../../../tools/validation/Invoke-WindowsValidation.ps1) | `c19e7830088476d6b03b078bf42af3daee0b08e1a76da0827ce974a10b9b7216` |
+
+The compiler recipe, six installed-tool pins, thirty-entry replacement environment,
+authority shape and fixed preflight are defined by these exact source bytes. Acceptance
+does not replace retained controllers or read evidence. Those operations require the
+separate literal launcher and actual authority bindings described above.

@@ -5,6 +5,11 @@ This helper records consumption and enforces the mechanical execution boundaries
 It is not a hostile-code sandbox or a replacement for contextual admission review.
 """
 
+# PRIVATE SOURCE-ONLY PROPOSAL. No reader or subject execution is admitted.
+DRAFT_ONLY = False
+if DRAFT_ONLY:
+    raise RuntimeError("DRAFT_ONLY: prospective final guard history integration")
+
 import argparse
 import datetime
 import fcntl
@@ -337,9 +342,570 @@ def verify_windows_reservation_pair(action, windows_action, result, started):
             raise ValueError("Retained attendance binding changed")
 
 
+def final_guard_process_reservation(started):
+    """The sole compiler-only preparation has no ordinary test selection."""
+    if started.get("action") != "final-guard-prepare" or any(
+            key in started for key in ("testSuite", "expected")):
+        raise ValueError("Wrong final guard preparation category")
+    for key, expected in (("preparationCharge", 1), ("buildTestCharge", 0),
+                          ("publishCharge", 0), ("reservedProcessScenarios", 0)):
+        if type(started.get(key)) is not int or started[key] != expected:
+            raise ValueError("Incorrect final guard preparation charge")
+    return 0
+
+
+# Exact descriptors are supplied only by a separately independently reviewed
+# launcher after materializing original evidence. No CLI/environment override,
+# accepted Boolean, own-source hash substitution, or new persistent ledger exists.
+FINAL_GUARD_REVIEWED_BINDING = None
+FINAL_GUARD_BINDING_PATH = "/tmp/windows-final-guard-history-binding.json"
+FINAL_GUARD_EVIDENCE_ROOT = "/tmp/windows-final-guard-authority-inputs"
+FINAL_GUARD_BINDING_REVIEW_PATH = FINAL_GUARD_EVIDENCE_ROOT + "/history-binding-review.json"
+FINAL_GUARD_RECIPE_SHA256 = "ed0fa260a638d3594a18dc51cbc87b588bdfa45f4fd90c7b9ce2fec501e65bcc"
+FINAL_GUARD_SOURCE_SHA256 = "973d9a6ec33c0bfeafe182ec067a67d3b9eee76212b2be71296a24e598aa32e4"
+FINAL_GUARD_PREFLIGHT_SHA256 = "11a93b9504b70e2caf1e7e6c2f333f1cda178e0adcf88d5998d3eca83450e8b9"
+FINAL_GUARD_PREFLIGHT_ARGV_SHA256 = "47a11709b88178a0963d560b866a79d20d9e9310407c8e161365344870897bfb"
+FINAL_GUARD_AUTHORITY_SPEC = {'branch': 'main-v2',
+ 'components': {'controller': {'bytes': '@size',
+                               'commit': '@rev',
+                               'gitBlob': '@rev',
+                               'repositoryPath': 'tools/validation/Invoke-WindowsFinalGuardPrepare.ps1',
+                               'sha256': '@hash',
+                               'tree': '@rev'},
+                'dispatcher': {'bytes': '@size',
+                               'commit': '@rev',
+                               'gitBlob': '@rev',
+                               'repositoryPath': 'tools/validation/run_windows_final_guard_prepare.py',
+                               'sha256': '@hash',
+                               'tree': '@rev'},
+                'finalPublishController': {'bytes': '@size',
+                                           'commit': '@rev',
+                                           'gitBlob': '@rev',
+                                           'repositoryPath': 'tools/validation/Invoke-WindowsFinalPublish.ps1',
+                                           'sha256': '@hash',
+                                           'tree': '@rev'},
+                'finalPublishDispatcher': {'bytes': '@size',
+                                           'commit': '@rev',
+                                           'gitBlob': '@rev',
+                                           'repositoryPath': 'tools/validation/run_windows_final_publish.py',
+                                           'sha256': '@hash',
+                                           'tree': '@rev'},
+                'guard': {'bytes': '@size',
+                          'commit': '@rev',
+                          'gitBlob': '@rev',
+                          'repositoryPath': 'tools/validation/WindowsFinalPublishGuard.cs',
+                          'sha256': '@hash',
+                          'tree': '@rev'},
+                'linuxHistoryReader': {'bytes': '@size',
+                                       'commit': '@rev',
+                                       'gitBlob': '@rev',
+                                       'repositoryPath': 'tools/validation/run_managed.py',
+                                       'sha256': '@hash',
+                                       'tree': '@rev'},
+                'preflight': {'bytes': '@size',
+                              'commit': '@rev',
+                              'gitBlob': '@rev',
+                              'repositoryPath': 'tools/validation/WindowsFinalGuardPreflight.body.txt',
+                              'sha256': '@hash',
+                              'tree': '@rev'},
+                'windowsHistoryController': {'bytes': '@size',
+                                             'commit': '@rev',
+                                             'gitBlob': '@rev',
+                                             'repositoryPath': 'tools/validation/Invoke-WindowsValidation.ps1',
+                                             'sha256': '@hash',
+                                             'tree': '@rev'},
+                'windowsHistoryReader': {'bytes': '@size',
+                                         'commit': '@rev',
+                                         'gitBlob': '@rev',
+                                         'repositoryPath': 'tools/validation/run_windows.py',
+                                         'sha256': '@hash',
+                                         'tree': '@rev'}},
+ 'executionAdmission': {'bytes': '@size',
+                        'path': '/tmp/windows-final-guard-authority-inputs/execution-admission.json',
+                        'sha256': '@hash'},
+ 'handoffAcceptance': {'bytes': '@size',
+                       'path': '/tmp/windows-final-guard-authority-inputs/post0053-handoff-acceptance.json',
+                       'sha256': '@hash'},
+ 'handoffManifest': {'bytes': '@size',
+                     'path': '/tmp/windows-final-guard-authority-inputs/post0053-handoff.json',
+                     'sha256': '@hash'},
+ 'handoffProtocol': {'commit': '@rev', 'sha256': '@hash'},
+ 'handoffSource': {'commit': '@rev', 'tree': '@rev'},
+ 'limits': {'accountEffects': False,
+            'buildTestCharge': 0,
+            'cleanupMillisecondsWithinOriginal': 10000,
+            'combinedBuildTestCeiling': 120,
+            'combinedPreparationCeiling': 16,
+            'compilerMilliseconds': 30000,
+            'externalCallMilliseconds': 30000,
+            'guardPreparations': 1,
+            'handshakeMilliseconds': 20000,
+            'installation': False,
+            'linuxPreparationCeiling': 10,
+            'outerMilliseconds': 230000,
+            'preflightMilliseconds': 20000,
+            'preparationCharge': 1,
+            'publishCharge': 0,
+            'reservedProcessScenarios': 0,
+            'retry': False,
+            'windowsBuildTestCeiling': 48,
+            'windowsPreparationCeiling': 6},
+ 'preflight': {'argvSha256': '47a11709b88178a0963d560b866a79d20d9e9310407c8e161365344870897bfb',
+               'bodySha256': '11a93b9504b70e2caf1e7e6c2f333f1cda178e0adcf88d5998d3eca83450e8b9'},
+ 'protocol': {'blob': '@rev',
+              'commit': '@rev',
+              'path': 'docs/research/experiments/windows-slice-validation.md',
+              'sha256': '@hash',
+              'tree': '@rev'},
+ 'publication': {'bytes': '@size',
+                 'path': '/tmp/windows-final-guard-authority-inputs/publication.json',
+                 'sha256': '@hash'},
+ 'receiptPolicy': {'bytes': '@size',
+                   'path': '/tmp/windows-final-guard-authority-inputs/receipt-artifact-policy.json',
+                   'sha256': '@hash'},
+ 'recipeSha256': 'ed0fa260a638d3594a18dc51cbc87b588bdfa45f4fd90c7b9ce2fec501e65bcc',
+ 'repository': 'hcoona/microsoft-authentication-cli',
+ 'rootMarkers': {'linuxOwnerSha256': '@hash',
+                 'semanticMarker': {'grant': 'a0f741b59e09f1eb95594dbfde7a6e634d962210',
+                                    'issue': 108,
+                                    'protocol_family': 'docs/research/experiments/windows-slice-validation.md'},
+                 'windowsOwnerSha256': '@hash'},
+ 'schema': 'final-guard-external-authority-v1',
+ 'scope': 'compiler-only-final-guard-prepare',
+ 'source': {'commit': '@rev', 'tree': '@rev'},
+ 'sourceReview': {'bytes': '@size',
+                  'path': '/tmp/windows-final-guard-authority-inputs/source-review.json',
+                  'sha256': '@hash'},
+ 'target': {'commit': '@rev', 'tree': '@rev'},
+ 'toolSha256': {'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.Core.dll': 'fd1097aed825d392a5dc8d19384381d4bb2a43498ea1c9d917f5d80c66600e1b',
+                'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\System.dll': '2b3c17c6208a0b4b6beb94e1a066f99ba06cdb2ea919479e99d47e8c6d96dc71',
+                'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe': '46809206887326d2d24db1eff1f3064de972c3451abe766b49111450a5e08e00',
+                'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe.config': '2d4610ade011e530d817dd3ba4fc787e5dc0c2297cc520c30a643b8fb13f9093',
+                'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\mscorlib.dll': '5bffb20e1217bad314143d7e5c4c809bf9f522e8a0a063c8e7e9b25113de26eb',
+                'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe': '8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e'},
+ 'wave': {'blob': '@rev', 'path': 'docs/delivery-wave.md', 'sha256': '@hash'}}
+
+
+def _guard_shape(value, spec):
+    if type(spec) is dict:
+        if type(value) is not dict or set(value) != set(spec):
+            raise ValueError("Missing or unknown final guard fields")
+        for key, child in spec.items():
+            _guard_shape(value[key], child)
+    elif type(spec) is list:
+        if type(value) is not list or len(value) != len(spec):
+            raise ValueError("Wrong final guard sequence")
+        for item, child in zip(value, spec):
+            _guard_shape(item, child)
+    elif type(spec) is str and spec.startswith("@"):
+        if spec in ("@size", "@bytes", "@positive", "@nonnegative"):
+            low, high = (0, 8388608) if spec in ("@size", "@bytes") else (0, 9223372036854775807)
+            if spec in ("@size", "@positive"):
+                low = 1
+            if type(value) is not int or not low <= value <= high:
+                raise ValueError("Invalid final guard integer")
+        else:
+            patterns = {
+                "@hash": r"[0-9a-f]{64}", "@rev": r"[0-9a-f]{40}",
+                "@action": r"(?!0000)[0-9]{4}", "@reviewer": r"[A-Za-z0-9_./-]{1,160}",
+                "@assembly": r"WindowsFinalPublishGuard, Version=(?:[0-9]{1,5}\.){3}[0-9]{1,5}, Culture=neutral, PublicKeyToken=null",
+                "@timestamp": r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,9})?(?:Z|\+00:00)",
+            }
+            if type(value) is not str or spec not in patterns or re.fullmatch(patterns[spec], value) is None:
+                raise ValueError("Invalid final guard string")
+            if spec == "@timestamp":
+                datetime.datetime.fromisoformat(value.replace("Z", "+00:00"))
+            if spec == "@assembly" and any(int(part) > 65535 for part in value.split("Version=", 1)[1].split(",", 1)[0].split(".")):
+                raise ValueError("Invalid managed assembly version")
+    elif type(value) is not type(spec) or value != spec:
+        raise ValueError("Fixed final guard value changed")
+
+
+def _guard_json(data):
+    def unique(items):
+        value = {}
+        for key, item in items:
+            if key in value:
+                raise ValueError("Duplicate final guard JSON field")
+            value[key] = item
+        return value
+    def finite(_value):
+        raise ValueError("Nonfinite final guard JSON")
+    return json.loads(data.decode("utf-8-sig"), object_pairs_hook=unique, parse_constant=finite)
+
+
+def _guard_encode(value, compact=False):
+    options = {"sort_keys": True, "ensure_ascii": True, "allow_nan": False}
+    options.update({"separators": (",", ":")} if compact else {"indent": 2})
+    return (json.dumps(value, **options) + "\n").encode("ascii")
+
+
+def _guard_file(path, descriptor, state, limit=1048576):
+    """Bounded direct regular-file read; every ancestor is opened without links."""
+    import stat
+    _guard_shape(descriptor, {"path": str(path), "bytes": "@bytes", "sha256": "@hash"})
+    if descriptor["bytes"] > limit or time.monotonic() >= state["deadline"]:
+        raise ValueError("Final guard input or reader time bound exceeded")
+    raw_path = str(path)
+    parts = raw_path.split("/")
+    if not raw_path.startswith("/") or any(item in ("", ".", "..") for item in parts[1:]):
+        raise ValueError("Noncanonical final guard input path")
+    state["reads"] += 1
+    state["bytes"] += descriptor["bytes"]
+    if state["reads"] > 128 or state["bytes"] > 67108864:
+        raise ValueError("Final guard cumulative read bound exceeded")
+    parent = os.open("/", os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    handle = None
+    try:
+        for part in parts[1:-1]:
+            next_parent = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent)
+            os.close(parent)
+            parent = next_parent
+        handle = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
+        before = os.fstat(handle)
+        if not stat.S_ISREG(before.st_mode) or before.st_size != descriptor["bytes"]:
+            raise ValueError("Missing, nonregular or wrong-size final guard input")
+        chunks, remaining = [], before.st_size
+        while remaining:
+            if time.monotonic() >= state["deadline"]:
+                raise TimeoutError("Final guard receipt reader expired")
+            chunk = os.read(handle, min(remaining, 65536))
+            if not chunk:
+                raise ValueError("Truncated final guard input")
+            chunks.append(chunk)
+            remaining -= len(chunk)
+        if os.read(handle, 1):
+            raise ValueError("Final guard input grew during read")
+        after = os.fstat(handle)
+        if (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_ctime_ns) != (
+                after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_ctime_ns):
+            raise ValueError("Final guard input changed during read")
+        data = b"".join(chunks)
+    finally:
+        if handle is not None:
+            os.close(handle)
+        os.close(parent)
+    if hashlib.sha256(data).hexdigest() != descriptor["sha256"] or time.monotonic() >= state["deadline"]:
+        raise ValueError("Final guard input hash or time bound failed")
+    state["continuity"].append((raw_path, dict(descriptor), limit))
+    return data
+
+
+def _guard_manifest_shape(manifest, authority):
+    """Validate the accepted handoff data, without replacing historical validators."""
+    if type(manifest) is not dict or set(manifest) != {
+            "schema", "source", "protocol", "histories", "recomputedCounters", "defaultHttpGreenAccepted"}:
+        raise ValueError("Invalid original handoff fields")
+    _guard_shape({key: manifest[key] for key in ("schema", "source", "protocol", "defaultHttpGreenAccepted")}, {
+        "schema": "final-guard-original-history-handoff-v1", "source": authority["handoffSource"],
+        "protocol": authority["handoffProtocol"], "defaultHttpGreenAccepted": True})
+    if type(manifest["histories"]) is not dict or set(manifest["histories"]) != {"linux", "windows"}:
+        raise ValueError("Invalid original handoff platforms")
+    _guard_shape(manifest["recomputedCounters"], {"linux": ["@nonnegative"] * 4, "windows": ["@nonnegative"] * 4})
+    for platform, entries in manifest["histories"].items():
+        if type(entries) is not list or not 1 <= len(entries) <= 9998:
+            raise ValueError("Invalid original handoff length")
+        for number, item in enumerate(entries, 1):
+            if type(item) is not dict or set(item) != {"number", "localEntryNames", "localFiles", "windowsFiles", "safetyMarkers"}:
+                raise ValueError("Invalid original handoff entry")
+            _guard_shape(item["number"], f"{number:04d}")
+            names = item["localEntryNames"]
+            if type(names) is not list or len(names) > 10000 or any(type(name) is not str for name in names):
+                raise ValueError("Invalid original local inventory")
+            if names != sorted(set(names)):
+                raise ValueError("Nonunique original local inventory")
+            for name in names:
+                if not re.fullmatch(r"[A-Za-z0-9_.-]{1,240}", name) or name in (".", ".."):
+                    raise ValueError("Nonlocal original entry name")
+            for key in ("localFiles", "windowsFiles"):
+                files = item[key]
+                if type(files) is not dict or len(files) > 10000:
+                    raise ValueError("Invalid original file inventory")
+                for name, digest in files.items():
+                    if type(name) is not str or len(name) > 2048 or name.startswith("/") or "\\" in name or any(
+                            part in ("", ".", "..") for part in name.split("/")):
+                        raise ValueError("Nonlocal original inventory path")
+                    _guard_shape(digest, "@hash")
+            if "started.json" not in item["localFiles"]:
+                raise ValueError("Missing original reservation binding")
+            markers = item["safetyMarkers"]
+            if type(markers) is not dict or set(markers) != {"owned-host-safety-stop.json", "process-safety-stop.json"}:
+                raise ValueError("Missing original marker dispositions")
+            for digest in markers.values():
+                if digest is not None:
+                    _guard_shape(digest, "@hash")
+
+
+def verify_accepted_final_guard_preparation(action, windows_action, started, result):
+    """Consume exact original completion and independent artifact acceptance only.
+
+    Source/schema review precedes compilation. The later reviewed launcher pins
+    an external binding and its independent review; no future artifact hash is
+    inserted into these reader bytes. Ordinary direct use remains unbound.
+    """
+    final_guard_process_reservation(started)
+    if DRAFT_ONLY or FINAL_GUARD_REVIEWED_BINDING is None:
+        raise ValueError("UNBOUND: separately reviewed final guard evidence binding")
+    state = {"deadline": time.monotonic() + 30.0, "reads": 0, "bytes": 0, "continuity": []}
+    anchor = FINAL_GUARD_REVIEWED_BINDING
+    descriptor = lambda path: {"path": str(path), "bytes": "@bytes", "sha256": "@hash"}
+    _guard_shape(anchor, {"binding": descriptor(FINAL_GUARD_BINDING_PATH),
+                          "review": descriptor(FINAL_GUARD_BINDING_REVIEW_PATH)})
+    binding_bytes = _guard_file(FINAL_GUARD_BINDING_PATH, anchor["binding"], state)
+    binding = _guard_json(binding_bytes)
+    review = _guard_json(_guard_file(FINAL_GUARD_BINDING_REVIEW_PATH, anchor["review"], state))
+    if type(binding) is not dict:
+        raise ValueError("Invalid final guard external binding")
+    number = binding.get("actionNumber")
+    _guard_shape(number, "@action")
+    local_root = "/var/tmp/azureauth-windows-slice-108/windows-actions/" + number
+    windows_root = "/mnt/c/Temp/azureauth-windows-slice-108/actions/" + number
+    native_root = "C:\\Temp\\azureauth-windows-slice-108\\actions\\" + number
+    if str(action) != local_root or str(windows_action) != windows_root:
+        raise ValueError("Guard history action path differs from exact binding")
+    paths = {
+        "wslStarted": local_root + "/started.json", "wslResult": local_root + "/result.json",
+        "windowsInput": local_root + "/windows-input.json", "windowsStarted": windows_root + "/started.json",
+        "invocation": windows_root + "/invocation.json", "compiler": windows_root + "/compiler.json",
+        "ready": windows_root + "/clock-ready.json", "reply": windows_root + "/clock-remaining.json",
+        "windowsResult": windows_root + "/windows-result.json", "guardBuild": windows_root + "/guard-build.json",
+        "authority": windows_root + "/authority.json", "stdout": windows_root + "/stdout.bin",
+        "stderr": windows_root + "/stderr.bin", "source": windows_root + "/final-guard/source/WindowsValidationJob.cs",
+        "controller": windows_root + "/final-guard/controller/Invoke-WindowsFinalGuardPrepare.ps1",
+        "preflight": windows_root + "/final-guard/controller/WindowsFinalGuardPreflight.body.txt",
+        "dll": windows_root + "/final-guard/WindowsFinalPublishGuard.dll",
+    }
+    reader_paths = {"linuxHistoryReader": str(REPOSITORY / "tools/validation/run_managed.py"),
+                    "windowsHistoryReader": str(REPOSITORY / "tools/validation/run_windows.py")}
+    _guard_shape(binding, {
+        "schema": "final-guard-history-binding-v1", "scope": "one-original-final-guard-preparation",
+        "actionNumber": number, "files": {role: descriptor(path) for role, path in paths.items()},
+        "readerSources": {role: descriptor(path) for role, path in reader_paths.items()},
+        "recipe": descriptor(FINAL_GUARD_EVIDENCE_ROOT + "/guard-recipe.json"),
+        "completionAcceptance": descriptor(FINAL_GUARD_EVIDENCE_ROOT + "/original-completion-acceptance.json"),
+        "artifactAcceptance": descriptor(FINAL_GUARD_EVIDENCE_ROOT + "/managed-artifact-acceptance.json"),
+        "expectedAssemblyFullName": "@assembly", "acceptedLoaderSourceSha256": "@hash",
+        "artifactAcceptanceWindowsPath": native_root + "\\final-guard\\artifact-acceptance.json",
+    })
+    if _guard_encode(binding, compact=True) != binding_bytes:
+        raise ValueError("Noncanonical external guard binding")
+    _guard_shape(review, {
+        "schema": "final-guard-history-binding-review-v1", "disposition": "accepted",
+        "scope": "original-completion-and-managed-artifact-history-consumption",
+        "binding": anchor["binding"], "readerSources": binding["readerSources"],
+        "author": "@reviewer", "reviewer": "@reviewer", "reviewedUtc": "@timestamp",
+        "originalEvidenceUnchanged": True, "independentCompletionAndArtifactReview": True,
+        "noExecutionGrant": True,
+    })
+    if review["author"] == review["reviewer"]:
+        raise ValueError("Guard binding author cannot independently review it")
+    sha = {role: binding["files"][role]["sha256"] for role in paths}
+    completion = _guard_json(_guard_file(binding["completionAcceptance"]["path"], binding["completionAcceptance"], state))
+    _guard_shape(completion, {
+        "schema": "final-guard-original-completion-acceptance-v1", "disposition": "accepted",
+        "scope": "one-original-compiler-controller-wsl-completion", "actionNumber": number,
+        "files": binding["files"], "source": {"commit": "@rev", "tree": "@rev"},
+        "protocol": FINAL_GUARD_AUTHORITY_SPEC["protocol"],
+        "originalProxyExitCode": 0, "originalWindowsControllerExitCode": 0,
+        "normalCompletion": True, "quiescent": True, "compilerTerminationRequested": False,
+        "safetyStop": False, "originalFlagsRemainFalse": True, "reviewer": "@reviewer", "reviewedUtc": "@timestamp",
+    })
+    final_guard = {
+        "actionNumber": number, "sourceSha256": sha["source"], "dllSha256": sha["dll"],
+        "guardBuildSha256": sha["guardBuild"], "preparationWindowsResultSha256": sha["windowsResult"],
+        "preparationWslResultSha256": sha["wslResult"], "preparationReservationSha256": sha["wslStarted"],
+        "invocationSha256": sha["invocation"], "compilerReceiptSha256": sha["compiler"],
+        "expectedAssemblyFullName": binding["expectedAssemblyFullName"],
+        "acceptedLoaderSourceSha256": binding["acceptedLoaderSourceSha256"],
+    }
+    artifact = _guard_json(_guard_file(binding["artifactAcceptance"]["path"], binding["artifactAcceptance"], state))
+    _guard_shape(artifact, {
+        "schema": "final-guard-managed-artifact-acceptance-v1", "disposition": "accepted",
+        "scope": "exact-managed-final-guard-source-pe-il-and-final-loader-binding", "acceptedFinalGuard": final_guard,
+        "artifact": binding["files"]["dll"], "completionAcceptance": binding["completionAcceptance"],
+        "managedPeAndIlReviewed": True, "sourceAndCompilerBindingReviewed": True,
+        "noLoadOrSelfTestPerformed": True, "reviewer": "@reviewer", "reviewedUtc": "@timestamp",
+    })
+    if review["author"] in (completion["reviewer"], artifact["reviewer"]):
+        raise ValueError("Originating author cannot supply independent guard acceptance")
+    # No action-root read precedes the exact binding, its independent review,
+    # original normal-completion acceptance and managed-artifact acceptance.
+    limits = {role: (8388608 if role == "dll" else 2048 if role in ("ready", "reply") else
+                    0 if role in ("stdout", "stderr") else 1048576) for role in paths}
+    raw = {role: _guard_file(path, binding["files"][role], state, limits[role]) for role, path in paths.items()}
+    data = {role: _guard_json(raw[role]) for role in (
+        "wslStarted", "wslResult", "windowsInput", "windowsStarted", "invocation", "compiler",
+        "ready", "reply", "windowsResult", "guardBuild", "authority")}
+    if raw["wslStarted"] != raw["windowsStarted"] or data["wslStarted"] != started or data["wslResult"] != result:
+        raise ValueError("Original guard history objects or reservation pair changed")
+    for role in ("wslStarted", "wslResult", "windowsInput", "windowsStarted", "invocation", "guardBuild"):
+        if _guard_encode(data[role]) != raw[role]:
+            raise ValueError("Noncanonical original Python guard receipt")
+    authority = data["authority"]
+    _guard_shape(authority, FINAL_GUARD_AUTHORITY_SPEC)
+    _guard_shape(completion["source"], authority["source"])
+    _guard_shape(completion["protocol"], authority["protocol"])
+    if _guard_encode(authority, compact=True) != raw["authority"]:
+        raise ValueError("Noncanonical original guard authority")
+    if authority["recipeSha256"] != binding["recipe"]["sha256"] or binding["recipe"]["bytes"] != 6720:
+        raise ValueError("Original compiler recipe binding changed")
+    recipe_bytes = _guard_file(binding["recipe"]["path"], binding["recipe"], state)
+    recipe = _guard_json(recipe_bytes.replace(b"${GUARD_ACTION4}", number.encode("ascii")))
+    if recipe["paths"]["windowsActionTemplate"] != native_root:
+        raise ValueError("Original compiler recipe action substitution changed")
+    # These are original authority evidence copies, not a new acceptance ledger.
+    evidence = {}
+    for role in ("sourceReview", "handoffManifest", "handoffAcceptance", "executionAdmission", "receiptPolicy"):
+        item = authority[role]
+        evidence[role] = _guard_json(_guard_file(item["path"], item, state, 8388608 if role == "handoffManifest" else 1048576))
+    _guard_shape(evidence["sourceReview"], {
+        "schema": "final-guard-source-acceptance-v1", "accepted": True,
+        "scope": "guard-preparation-source-activation-and-final-callers", "source": authority["source"],
+        "components": authority["components"], "callerPolicy": "fixed-final-only-callers-no-generic-helper-use",
+        "protocol": authority["protocol"], "recipeSha256": FINAL_GUARD_RECIPE_SHA256,
+        "preflight": authority["preflight"], "toolSha256": authority["toolSha256"],
+    })
+    _guard_manifest_shape(evidence["handoffManifest"], authority)
+    manifest = evidence["handoffManifest"]
+    _guard_shape(evidence["handoffAcceptance"], {
+        "schema": "final-guard-handoff-acceptance-v1", "accepted": True,
+        "scope": "complete-original-post0053-history", "source": authority["handoffSource"],
+        "protocol": authority["handoffProtocol"], "manifestBinding": authority["handoffManifest"],
+        "completeHistoryAccepted": True, "dispositionsAccepted": True, "greenAccepted": True,
+    })
+    if int(number) != len(manifest["histories"]["windows"]) + 1:
+        raise ValueError("Guard is not the next original handoff action")
+    policy = {"schema": "final-guard-receipt-artifact-policy-v1", "scope": "final-guard-prepare",
+              "originalCompletionRequired": True, "managedArtifactReviewRequired": True,
+              "artifactAcceptedOnCollection": False, "continuationAllowedOnCollection": False}
+    _guard_shape(evidence["receiptPolicy"], policy)
+    admission = {key: authority[key] for key in (
+        "repository", "branch", "scope", "target", "wave", "protocol", "source", "handoffSource",
+        "handoffProtocol", "components", "sourceReview", "handoffManifest", "handoffAcceptance",
+        "receiptPolicy", "rootMarkers", "recipeSha256", "toolSha256", "preflight", "limits")}
+    admission.update(schema="final-guard-execution-admission-v1", accepted=True)
+    _guard_shape(evidence["executionAdmission"], admission)
+    for role, item in authority["components"].items():
+        owner = authority["protocol"] if role in ("linuxHistoryReader", "windowsHistoryReader", "windowsHistoryController") else authority["source"]
+        if item["commit"] != owner["commit"] or item["tree"] != owner["tree"]:
+            raise ValueError("Original source/protocol role changed")
+    for role, path in reader_paths.items():
+        original = authority["components"][role]
+        expected = {"path": path, "bytes": original["bytes"], "sha256": original["sha256"]}
+        _guard_shape(binding["readerSources"][role], expected)
+        _guard_file(path, expected, state)
+    if str(Path(__file__).absolute()) not in reader_paths.values():
+        raise ValueError("Guard reader is not the accepted materialized reader")
+    for role in ("source", "controller", "preflight"):
+        component = authority["components"]["guard" if role == "source" else role]
+        if sha[role] != component["sha256"] or len(raw[role]) != component["bytes"]:
+            raise ValueError("Original guard source component changed")
+    if sha["source"] != FINAL_GUARD_SOURCE_SHA256 or sha["preflight"] != FINAL_GUARD_PREFLIGHT_SHA256:
+        raise ValueError("Fixed guard or preflight source changed")
+    if binding["acceptedLoaderSourceSha256"] != authority["components"]["finalPublishController"]["sha256"]:
+        raise ValueError("Final loader differs from original accepted source")
+    authority_fields = {
+        "authoritySha256": sha["authority"], "sourceReviewSha256": authority["sourceReview"]["sha256"],
+        "admissionSha256": authority["executionAdmission"]["sha256"],
+        "preflightBodySha256": FINAL_GUARD_PREFLIGHT_SHA256, "preflightArgvSha256": FINAL_GUARD_PREFLIGHT_ARGV_SHA256,
+    }
+    _guard_shape(started, {
+        "action": "final-guard-prepare", "utc": "@timestamp", "protocol": authority["protocol"]["commit"],
+        "source": authority["source"]["commit"], "sourceTree": authority["source"]["tree"],
+        "waveBlob": authority["wave"]["blob"], "reviewSha256": authority_fields["admissionSha256"],
+        "handoffSha256": authority["handoffManifest"]["sha256"], "priorCounters": manifest["recomputedCounters"],
+        "reservedProcessScenarios": 0, "preparationCharge": 1, "buildTestCharge": 0, "publishCharge": 0,
+        "sourceSha256": sha["source"], "sourceBlob": authority["components"]["guard"]["gitBlob"],
+        "preparationControllerSha256": sha["controller"], "dispatcherSha256": authority["components"]["dispatcher"]["sha256"],
+        **{key: value for key, value in authority_fields.items() if key != "admissionSha256"},
+        "clockNonce": "@hash", "originalClockStartNanoseconds": "@positive", "originalClockDeadlineNanoseconds": "@positive",
+    })
+    if started["originalClockDeadlineNanoseconds"] - started["originalClockStartNanoseconds"] != 230000000000:
+        raise ValueError("Original outer clock changed")
+    lp, lb, lpub, lproc = started["priorCounters"]["linux"]
+    wp, wb, wpub, wproc = started["priorCounters"]["windows"]
+    if not (lp <= 10 and lb <= 80 and lpub == lproc == 0 and wp == 5 and wb <= 48 and wpub == 0 and wproc == 48
+            and lp + wp + 1 <= 16 and lb + wb <= 120):
+        raise ValueError("Original guard capacity handoff changed")
+    _guard_shape(data["windowsInput"], {"sha256": sha["wslStarted"]})
+    invocation = data["invocation"]
+    _guard_shape(invocation, {
+        "schema": "final-guard-invocation-v1", "action": number, "paths": recipe["paths"],
+        "compiler": recipe["compilerInvocation"], "toolSha256": recipe["tools"]["sha256"],
+        "reservationSha256": sha["wslStarted"], **authority_fields, "clockNonce": started["clockNonce"],
+        "originalOuterLimitMilliseconds": 230000, "clockHandshakeLimitMilliseconds": 20000,
+    })
+    _guard_shape(data["compiler"], {"pid": "@positive", "started": "@timestamp",
+                                  "sourceSha256": sha["source"], "invocationSha256": sha["invocation"]})
+    clock_identity = {"action": number, "nonce": started["clockNonce"], "reservationSha256": sha["wslStarted"],
+                      "invocationSha256": sha["invocation"], "originalOuterLimitMilliseconds": 230000}
+    ready, reply = data["ready"], data["reply"]
+    _guard_shape(ready, {"schema": "final-guard-clock-ready-v1", **clock_identity,
+                         "windowsReadyElapsedTicks": "@nonnegative", "windowsClockFrequency": "@positive"})
+    _guard_shape(reply, {"schema": "final-guard-clock-remaining-v1", **clock_identity,
+                         "readySha256": sha["ready"], "remainingMilliseconds": "@positive"})
+    if _guard_encode(reply, compact=True) != raw["reply"] or reply["remainingMilliseconds"] > 230000:
+        raise ValueError("Original one-frame clock reply changed")
+    ticks, frequency = ready["windowsReadyElapsedTicks"], ready["windowsClockFrequency"]
+    deadline_ticks = ticks + reply["remainingMilliseconds"] * frequency // 1000
+    if deadline_ticks > 9223372036854775807 or ticks * 1000 >= 20000 * frequency:
+        raise ValueError("Invalid original clock deadline or ready time")
+    clock = {"readySha256": sha["ready"], "replySha256": sha["reply"], "nonce": started["clockNonce"],
+             "windowsReadyElapsedTicks": ticks, "windowsClockFrequency": frequency,
+             "remainingMilliseconds": reply["remainingMilliseconds"], "windowsDeadlineElapsedTicks": deadline_ticks}
+    window_result = data["windowsResult"]
+    _guard_shape(window_result, {
+        "schema": "final-guard-windows-result-v1", "reservationSha256": sha["wslStarted"],
+        "invocationSha256": sha["invocation"], "normalCompletion": True, "safetyStop": False,
+        "compilerCompletionConfirmed": True, "compilerTerminationRequested": False, "compilerExitCode": 0,
+        "captureCompleted": True, "bothStreamsEof": True, "artifactAccepted": False, "continuation_allowed": False,
+        "stage": "compiler-normal-awaiting-outer-and-artifact-review", "authorityVerified": True, **authority_fields,
+        "clockHandoff": clock, "dllSha256": sha["dll"], "dllBytes": len(raw["dll"]), "startAttempted": True,
+        "stdoutBytes": 0, "stderrBytes": 0, "stdoutSha256": sha["stdout"], "stderrSha256": sha["stderr"],
+        "captureDisposition": "complete", "outerMilliseconds": "@nonnegative", "ended": "@timestamp",
+    })
+    if not raw["dll"] or window_result["outerMilliseconds"] >= 230000 or (
+            window_result["outerMilliseconds"] * frequency > deadline_ticks * 1000):
+        raise ValueError("Guard artifact empty or original Windows completion late")
+    _guard_shape(data["guardBuild"], {
+        "schema": "final-guard-build-v1", "reservationSha256": sha["wslStarted"],
+        "windowsResultSha256": sha["windowsResult"], "invocationSha256": sha["invocation"],
+        "sourceSha256": sha["source"], "toolSha256": invocation["toolSha256"], "dllSha256": sha["dll"],
+        "dllBytes": len(raw["dll"]), "dllPath": native_root + "\\final-guard\\WindowsFinalPublishGuard.dll",
+        "artifactAccepted": False, "continuation_allowed": False, "clockHandoff": clock, **authority_fields,
+    })
+    _guard_shape(result, {
+        "normalCompletion": True, "quiescent": True, "artifactAccepted": False, "continuation_allowed": False,
+        "guardBuildSha256": sha["guardBuild"], "clockHandoff": clock, "authoritySha256": sha["authority"],
+        "preflightBodySha256": FINAL_GUARD_PREFLIGHT_SHA256, "preflightArgvSha256": FINAL_GUARD_PREFLIGHT_ARGV_SHA256,
+        "utc": "@timestamp",
+    })
+    # The final caller needs a Windows path to the same acceptance bytes. Its
+    # eventual materialization and launch are separate admission, not this reader.
+    # Do not manufacture that Windows copy or mutate any original false flag here.
+    stop_markers = (local_root + "/cancel", windows_root + "/cancel",
+                    windows_root + "/temp/owned-host-safety-stop.json", windows_root + "/temp/process-safety-stop.json")
+    for marker in stop_markers:
+        if any(path.is_symlink() for path in (Path(marker), *Path(marker).parents)) or os.path.lexists(marker):
+            raise ValueError("Guard stop marker or linked marker path forbids history continuation")
+    for path, item, limit in tuple(state["continuity"]):
+        _guard_file(path, item, state, limit)
+    for marker in stop_markers:
+        if any(path.is_symlink() for path in (Path(marker), *Path(marker).parents)) or os.path.lexists(marker):
+            raise ValueError("Guard stop marker changed during final continuity check")
+    if time.monotonic() >= state["deadline"]:
+        raise TimeoutError("Guard history verification expired at completion")
+    # Success means only this one independently accepted historical preparation
+    # can be counted. It does not authorize final tests, publish, W01 or a load.
+    return {**final_guard, "artifactAcceptancePath": binding["artifactAcceptanceWindowsPath"],
+            "artifactAcceptanceSha256": binding["artifactAcceptance"]["sha256"]}
+
+
 def windows_process_reservation(number, started):
     """Preserve historical full batches and require explicit new finite selections."""
     action = started.get("action")
+    if action == "final-guard-prepare":
+        return final_guard_process_reservation(started)
     if action not in ("bootstrap", "restore", "build", "test"):
         raise ValueError("Unknown Windows action allocation")
     if number <= 14:
@@ -386,6 +952,7 @@ def windows_consumption():
     preparation, build_test, number, process_scenarios, owned_processes = 0, 0, 0, 0, 0
     default_http_processes = 0
     default_http_phases = []
+    guard_preparations = 0
     windows = Path("/mnt/c/Temp/azureauth-windows-slice-108/actions")
     for number, action in enumerate(sorted(history.iterdir()), 1):
         if action.is_symlink() or action.name != f"{number:04d}":
@@ -415,13 +982,19 @@ def windows_consumption():
                 action, windows / action.name, DISPOSED_UI_ATTENDANCE_0034)
         elif action.name == "0039":
             verify_disposed_owned_process_red(action, windows / action.name)
+        elif started.get("action") == "final-guard-prepare":
+            guard_preparations += 1
+            if guard_preparations != 1:
+                raise ValueError("A second final guard preparation is not allocated")
+            verify_accepted_final_guard_preparation(action, windows / action.name, started, receipt)
         elif receipt.get("continuation_allowed") is not True or receipt.get("quiescent") is not True:
             raise ValueError("Unresolved Windows action stops both validation loops")
-        for name, expected in receipt["evidence"].items():
-            if digest(windows / action.name / name) != expected:
-                raise ValueError("Windows action evidence changed")
-        if action.name not in ("0002", "0003", "0006", "0022", "0033", "0034"):
-            verify_windows_reservation_pair(action, windows / action.name, receipt, started)
+        if started.get("action") != "final-guard-prepare":
+            for name, expected in receipt["evidence"].items():
+                if digest(windows / action.name / name) != expected:
+                    raise ValueError("Windows action evidence changed")
+            if action.name not in ("0002", "0003", "0006", "0022", "0033", "0034"):
+                verify_windows_reservation_pair(action, windows / action.name, receipt, started)
         reserved = windows_process_reservation(number, started)
         process_scenarios += reserved
         if started.get("testSuite") == "owned-process":
@@ -429,13 +1002,14 @@ def windows_consumption():
         if started.get("testSuite") == "default-http-composition":
             default_http_processes += reserved
             default_http_phases.append(started["expected"])
-        if started["action"] in ("bootstrap", "restore"):
+        if started["action"] in ("bootstrap", "restore", "final-guard-prepare"):
             preparation += 1
         elif started["action"] in ("build", "test"):
             build_test += 1
         else:
             raise ValueError("Unknown Windows action allocation")
-    if preparation > 5 or build_test > 48 or process_scenarios > 60 or \
+    if preparation > 6 or preparation - guard_preparations > 5 or \
+            build_test > 48 or process_scenarios > 60 or \
             owned_processes > 20 or default_http_processes > 4 or \
             process_scenarios - owned_processes - default_http_processes > 36 or \
             default_http_phases not in ([], ["red"], ["red", "green"]):
@@ -616,7 +1190,7 @@ def main():
                 raise ValueError("Previous stop requires independently accepted disposition")
             receipts.append(prior_start)
         preparation = arguments.action in ("fetch", "restore")
-        if sum(item["action"] in ("fetch", "restore") for item in receipts) + preparation > 11:
+        if sum(item["action"] in ("fetch", "restore") for item in receipts) + preparation > 10:
             raise ValueError("Initial preparation allocation exhausted")
         if sum(item["action"] in ("build", "test") for item in receipts) + (not preparation) > 80:
             raise ValueError("Initial build/test allocation exhausted")
