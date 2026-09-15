@@ -7096,7 +7096,8 @@ while leaving ordinary Windows build/test capacity at 48. The Wave combined ceil
 remains 120. With unchanged history, the charge produces `37 + 49 + 1 = 87/120`,
 including the existing fixture debit exactly once. Preparation remains 15/16, publish
 0/12 and synthetic processes 48/60; the twelve final CLI scenarios remain protected.
-This proposal has not consumed or reserved the new unit.
+The original execution below consumed the dedicated unit. The allocation and
+historical limits remain unchanged; no replacement invocation is admitted.
 
 Recover the original counters and derive the action number under the existing shared
 lock. Preserve the immutable 45-Linux/53-Windows prefix, disposed 0054 and accepted
@@ -7116,3 +7117,73 @@ source predicates, prepared inputs, exact activated source/runtime/literal and f
 effects. No account step or human input is selected here; automated preparation and
 observation do not require desktop attendance. The separate final-publication graph,
 Native AOT artifact, final CLI/WSL scenarios and real account acceptance remain open.
+
+### Original 0056 Failure and Initial Evidence Recovery
+
+The observer executed once under accepted protocol commit
+`698ca30f95502a4f1cf8023ef51c0fc40918a083` and returned exit code 1 with complete,
+empty tool output. This is a failed original invocation. Its original WSL result
+records `RuntimeError`, `outcome: incomplete`, `normalCompletion: false`,
+`safetyStop: true`, `originalWindowsCompletionJoined: false` and `quiescent: false`.
+Neither a successful observation nor an accepted compiler graph was obtained.
+
+The separately admitted initial read-only recovery then executed exactly once and
+returned exit code 0. It attempted eleven fixed optional content roles, copied six
+stable regular files, and recorded fixed-path metadata for cancellation and three
+pending receipt names. It performed no process survey, SDK or Windows execution,
+cleanup, account operation, original-receipt rewrite or additional reservation.
+The recovery completed 6 original reads requesting 11,890 bytes and 7 offline
+readbacks requesting 18,874 bytes. Its seven output files contain 18,867 bytes,
+including the 6,983-byte report. All counts remained within its admitted bounds.
+
+| Retained evidence role | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Original observer tool transport | 1,520 | `cbd183a7cb55e1460324e41ae090919d9436edad3c8a3e150486fb1837e61a9d` |
+| Initial recovery invocation admission | 8,159 | `174db4d7808307dcb36f384ae2cba2298449821d3a7a6e1257ca5facd63a37df` |
+| Initial recovery tool transport | 1,257 | `49067e1d95af609b40becce774d90b91cf8d036a2dc72de8263042bddf066856` |
+| Initial recovery report | 6,983 | `08b2171399b61923fdc578b01fe323804f986aceb17e1e0d504ad530173b8db4` |
+| Original WSL result copy | 702 | `c59142ee188f40b10fdd1023d32e97d915f07d5e3851b07f3b745ee289475ad2` |
+| Original paired start copies, each | 844 | `cf7354484567563e7269ab255e7d2e47f3372c775a223213ad6c3b70aeba9fdf` |
+| Original WSL controller-attempt copy | 106 | `8735ca9319f97ee9a406133598420b094bf0e3de4ad33c3a241f7b6f70265746` |
+| Original paired invocation copies, each | 4,694 | `896dcf2a0ccfae09dcecf7dfaec46db7f06dd8faf846b0157ab2cbc64b60d54f` |
+
+The byte-identical paired starts record action 0056, the accepted protocol and product
+source, the previous Linux `[8,37,0,0]` and Windows `[7,48,0,48]` counters, and a
+one-unit build/test charge. The paired invocations, controller-attempt record and WSL
+result bind that reservation by hash. The durable debit is therefore consumed:
+Windows aggregate build/test usage is 49, and combined usage including the existing
+fixture exactly once is `37 + 49 + 1 = 87/120`. Preparation remains 15/16, publication
+0/12 and synthetic scenarios 48/60. The dedicated unit cannot be refunded or reused.
+
+The WSL result records a launch attempt and launch/handshake timestamps, but no
+completed clock exchange or Windows completion join. Its `proxyExitCode` is null.
+The Windows result, clock-ready, clock-remaining and subject-start-attempt leaves
+were absent at their individual observations; the cancellation leaf was a regular
+empty file by metadata. The three inspected pending leaves were also absent.
+These observations are not an atomic snapshot and do not independently prove that
+no process started or that every process has exited. The exact underlying failure
+and Windows/helper quiescence remain unresolved. The controller's outer admission
+catch does not persist its exception, and the dispatcher discarded bootstrap output;
+the retained evidence cannot recreate those diagnostics.
+
+Both the observer and its initial recovery invocation are consumed. Preserve all
+original receipts, partial state and false graph, artifact, independent-observation
+and continuation flags. The exit-zero receipt copier remains ineligible. Current
+history readers must continue to reject this incomplete pair; no accepted successor
+handoff or continuation grant is created by this failure record. Before dependent
+execution, resolve the outstanding lifetime evidence and accept the required bounded
+protocol and current-consumer changes. No observer retry, additional recovery,
+speculative cleanup, publication or account operation is authorized here.
+
+Source review identified a separate early-admission defect in the original
+controller's `Assert-Direct`: after following `FileInfo.Directory` or
+`DirectoryInfo.Parent`, it read the provider-added `PSIsContainer` property on the
+returned CLR object. [Get-Member's provider-property example](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-member?view=powershell-5.1#example-7-determine-which-object-properties-you-can-set)
+and the documented [Directory](https://learn.microsoft.com/en-us/dotnet/api/system.io.fileinfo.directory?view=netframework-4.8.1)
+and [Parent](https://learn.microsoft.com/en-us/dotnet/api/system.io.directoryinfo.parent?view=netframework-4.8.1)
+return types support this finding; [StrictMode](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/set-strictmode?view=powershell-5.1)
+rejects missing-property access. The tracked inactive controller now branches on
+`DirectoryInfo` and `FileInfo`, preserving ancestor traversal and reparse rejection
+and rejecting unsupported types. This source correction does not identify the lost
+original exception or establish runtime success. The executed active source remains
+unchanged, and the correction grants no activation or execution.

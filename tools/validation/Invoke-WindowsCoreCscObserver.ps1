@@ -38,7 +38,10 @@ function Assert-Direct([string] $Path) {
     $item = Get-Item -LiteralPath $Path -Force
     while ($null -ne $item) {
         if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Reparse input' }
-        if ($item.PSIsContainer) { $item = $item.Parent } else { $item = $item.Directory }
+        # Parent and Directory return CLR objects without provider note properties.
+        if ($item -is [IO.DirectoryInfo]) { $item = $item.Parent }
+        elseif ($item -is [IO.FileInfo]) { $item = $item.Directory }
+        else { throw 'Unsupported filesystem input' }
     }
 }
 function Get-BytesSha256([byte[]] $Bytes) {
