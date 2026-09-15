@@ -5409,9 +5409,9 @@ execution, original proxy completion, process ownership or present quiescence.
 Independent triage accepted source finding
 `GUARD-PREPARATION-CONTROLLER-ACTIVATION-001`: the original controller defined
 `Invoke-GuardPreparationCandidate` but never invoked it, and ended in an
-unconditional `UNBOUND` throw. That is a confirmed source defect, not a uniquely
-established runtime cause. The original Windows controller bytes have not yet been
-accepted from actual execution evidence.
+unconditional `UNBOUND` throw. That is a confirmed source defect. The completed
+second observation below binds the retained original Windows controller bytes and
+supports a separately qualified historical failure disposition.
 
 The corrected controller invokes the existing function exactly once, requires a
 scalar `Int32` result equal to 0 or 1, and explicitly exits with that result. It
@@ -5439,7 +5439,7 @@ Normal collection, managed artifact acceptance, B/R/L and the final caller remai
 blocked. Any future reader or source change must refresh their actual paths and
 source bindings, including the prospective final-caller provenance check. A failed
 action cannot supply a successful guard projection or DLL acceptance. Preserve
-unknown ownership and completion; do not repair false flags, synthesize absent
+the original false flags and the limits of the disposition below; do not synthesize absent
 receipts, reuse the failed action number, load an old guard or perform speculative
 cleanup. Real WAM, selected-account reuse and overall Slice acceptance remain open.
 
@@ -5583,3 +5583,96 @@ establish current process ownership or quiescence. Unknown safety state continue
 to block experiment continuation. If the second observation is incomplete or
 insufficient, preserve it and return to source-only disposition; no further
 original observation or experiment follows under this amendment.
+
+### Completed Second Failure-File Observation
+
+The additional observer executed exactly once under accepted protocol commit
+`7ef831b8c95aa8ba2387f2c6b4cea5a3799a26c8`, tree
+`4c82254296cf37e0472a8c6bee6c95a24b39ee20`. Its original tool call returned exit 0
+in approximately 0.39 seconds, with complete, untruncated output and no yielded
+session. The original output was preserved from the execution handoff with that
+provenance stated explicitly. No human interaction was required.
+
+The observer attempted all 24 fixed roles and retained seven raw content copies,
+a 93-event journal and the final inventory. Offline readback verified their
+declared lengths and SHA-256 hashes. Transport completed; the observer retained
+false stable-evidence, process-ownership, quiescence, artifact and continuation
+acceptance flags. Neither the successful observer exit nor the presence of its
+inventory changes the failed guard result.
+
+| Retained evidence | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Second observer original output | 476 | `a5243748164384386b96145a07a68faaff52bf9d021e546b42da3fbfa00407e3` |
+| Second observer original-call record | 1,342 | `26036800f0ab97ccd5be62ddb2d3dc8b372e42d6dc6affe2ecdbd8e397110215` |
+| Second observer inventory | 30,694 | `46b119069d4f3d18fb9c067a32f2f6d8e2605b49365d99b0a2a982cb8f992614` |
+| Second observer journal | 29,775 | `f2efe2a56d230c0617a93c8e828f275547f3da3b5fcf408a303dfa60f2c7833b` |
+| Windows invocation copy | 7,001 | `0a825b6d574b939e735e039ba4649510c4776f668b40c6ac70f610798982f936` |
+| Windows authority copy | 7,161 | `eab860fa6249ec583e33a637c2c9b0c12ae3302d3b1d2ae4bd3278fb729a55cc` |
+| Original Windows controller copy | 43,873 | `ea93b4eecfea6eed623a3149b648e93686db4f8bafa81561ff28ad0379e4ebae` |
+
+The WSL start, result and Windows-input copies match the three first-observer
+copies recorded above. The copied Windows start is byte-identical to the WSL
+start. The authority and controller copies match the original admitted bytes;
+the controller is the version with the confirmed missing entry-point call.
+These are retained-file observations, not a snapshot of code loaded in memory.
+
+Fifteen roles have anomaly classifications: fourteen absent paths and one metadata
+difference. The absent roles are both ready paths, the clock reply, both compiler
+paths, both Windows-result paths, WSL cancel, both safety-stop paths, guard-build,
+stdout, stderr and the DLL. The Windows cancel marker is present. Missing files
+remain observed absences and do not individually prove that a process never ran.
+
+The invocation's `ctimeNanoseconds` differs between the initial path observation
+and the opened-file observation. Opened-file metadata before and after the read
+and the final path metadata agree. Device, inode, file type, size, permissions,
+mtime and separately recorded atime agree across all four observations. Preserve
+the ctime discrepancy: neither its cause nor the first observer's rejecting role
+or discarded metadata can be recovered from this later observation. Do not call
+the discrepancy a content mutation, benign timestamp drift or a filesystem defect.
+
+Both diagnostic allocations are consumed. Their cumulative reserved envelope
+remains two calls, 45 seconds, 128 file reads, 4 MiB read, 2 MiB output and 2,048
+path operations. The guard's closed 230-second clock and consumed preparation
+charge remain unchanged. This evidence update adds no observation, preparation,
+build/test, publish, download or synthetic process capacity.
+
+### Failed Preparation Safety Disposition
+
+Independent offline review accepted the complete diagnostic transport and the
+following narrow historical inference. It did not accept globally stable metadata
+or change the observer's comparison predicate or false flags.
+
+The invocation copy is byte-identical to an independent reconstruction using the
+original dispatcher's literal recipe and JSON serialization, original reservation
+and copied authority. This establishes the captured invocation's content and
+semantic identity independently of the unresolved ctime discrepancy. Together
+with the exact start, authority and controller joins, it supplies the positive
+historical inputs needed for the inference. It does not establish uninterrupted
+file metadata stability or explain either observer's metadata behavior.
+
+Under the accepted workstation and immutable-history assumptions, the original
+dispatcher's positive Windows-input and invocation writes occur only after
+successful preflight. The observed absence of ready, reply and later completion
+outputs excludes successful clock exchange, normal collection and subsequent
+admission or history checks. In the pinned original source, the remaining
+`RuntimeError` path observes the original controller/proxy exit before clock
+handoff. The failure handler preserves the actual exception class; it does not
+convert unrelated read, write, cancellation or timeout failures into that class.
+The retained original controller defines its preparation function without calling
+it and terminates in the unconditional throw, so that top-level path starts no
+compiler or other experiment child.
+
+These combined source and historical observations support safe intentional
+retention of failed action 0054. This is an inference about that failed attempt,
+not a direct current-process inventory, measured numerical native exit, normal
+completion or accepted compiled artifact. The original `quiescent: false`,
+`normalCompletion: false`, artifact and continuation flags remain unchanged. No
+cleanup, process query or signal was performed to obtain this disposition.
+
+The failed reservation still consumes one preparation unit: Linux 8/10, Windows
+6/6 and combined 14/16 in the recorded-counter projection. No capacity is refunded.
+The single guard preparation and both diagnostic allocations remain exhausted.
+Further preparation still requires the explicit finite allocation, narrow
+failed-history compatibility and refreshed source/protocol/launcher admission
+specified above. Normal collection, DLL acceptance, B/R/L, final publication and
+real-account execution remain closed under this evidence-only change.
