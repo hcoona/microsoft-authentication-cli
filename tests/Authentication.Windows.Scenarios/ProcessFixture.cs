@@ -48,7 +48,7 @@ internal sealed partial class ProcessFixture : IDisposable
     {
         RequireActiveSuite();
         if (!OperatingSystem.IsWindows()) throw new InvalidOperationException("Windows scenario required.");
-        if (scenario is not ("help" or "malformed" or "success" or "file-stdin" or "closed-stdin"
+        if (!OwnedProcessChild.Supports(scenario) && scenario is not ("help" or "malformed" or "success" or "file-stdin" or "closed-stdin"
             or "close-pending" or "unused-stdin" or "data-close" or "deadline"
             or "broken-output" or "blocked-output" or "blocked-diagnostics"))
             throw new InvalidOperationException("Unallocated child scenario.");
@@ -101,7 +101,8 @@ internal sealed partial class ProcessFixture : IDisposable
             {
                 arguments.AddRange(["authenticate", "--protocol", "1", "--profile", profilePath,
                     "--account-email", ProcessChild.Email, "--scope", ProcessChild.Scope,
-                    "--interaction", "non-interactive-only", "--tenant", ProcessChild.Tenant,
+                    "--interaction", OwnedProcessChild.Supports(scenario) ? "interactive-if-needed" : "non-interactive-only",
+                    "--tenant", ProcessChild.Tenant,
                     "--timeout-seconds", scenario is "deadline" or "blocked-output" or "blocked-diagnostics" ? "1" : "4"]);
                 if (scenario is "file-stdin" or "closed-stdin" or "close-pending" or "data-close")
                     arguments.Add("--cancel-on-stdin-close");
@@ -122,6 +123,9 @@ internal sealed partial class ProcessFixture : IDisposable
     }
 
     internal bool Marked(string name) => File.Exists(Path.Combine(DirectoryPath, name));
+
+    internal long MarkerTimestamp(string name) =>
+        long.Parse(File.ReadAllText(Path.Combine(DirectoryPath, name)), CultureInfo.InvariantCulture);
 
     internal async Task<bool> WaitForMarkerAsync(string name)
     {

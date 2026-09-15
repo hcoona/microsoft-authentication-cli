@@ -22,6 +22,8 @@ public sealed class RequestInvocation : IDisposable
 
     public Task CompleteAsync() => lifetime.CompleteAsync();
 
+    public void FailHost() => lifetime.FailHost();
+
     public RequestInvocation(IReadOnlyList<string> arguments, IRequestHost host,
         long entryTimestamp, CancellationToken cancellationToken = default)
     {

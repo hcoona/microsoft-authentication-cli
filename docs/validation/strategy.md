@@ -447,13 +447,21 @@ retain the obligations above.
 
 The [controlled owned-host fault result](../research/experiments/windows-slice-validation.md#owned-host-fault-lifetime-evidence)
 binds core request termination, cancellation/deadline precedence and withholding
-uncommitted success to the unchanged red/green scenarios. Actual UI fault/commit
-synchronization and owned-thread/process drain require production integration evidence.
+uncommitted success to the unchanged red/green scenarios. That core-only result does
+not by itself establish actual UI fault/commit synchronization or process drain.
 
 The [request-context initialization result](../research/experiments/windows-slice-validation.md#request-context-initialization-evidence)
 binds the existing personal, fixed-work and explicit-work application scenarios to
 the same admitted request at provider initialization and acquisition. It supplies
-controlled forwarding evidence; real provider and process integration remain separate.
+controlled forwarding evidence; real provider initialization remains separate.
+
+The [owned-host process result](../research/experiments/windows-slice-validation.md#owned-host-process-composition-evidence)
+binds the ten managed Windows scenarios to typed local cancellation/fault consumption
+before result commitment, cancellation during creation, the first host-ending bound,
+and actual owned-thread/callback drain. The controlled providers and owned native
+windows establish those process-composition observations. They do not establish real
+native admission, production MSAL initialization, WAM/account reuse, actual WSL caller
+lifetime, final Native AOT or whole-Slice acceptance.
 
 The design's public dependency premises and security/TMT update receive independent
 architecture, consistency, minimality, security, record-system, and research-evidence

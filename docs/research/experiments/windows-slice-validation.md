@@ -4161,3 +4161,104 @@ unallocated buffer units remain unavailable without another exact protocol.
 No charge is refunded or reassigned. Future GREEN still requires all ten cases
 to pass with MTP exit 0 and their admitted child outcomes and measured bounds.
 All prior evidence limitations and remaining whole-Slice obligations remain open.
+
+## Owned Host Process Composition Evidence
+
+The four GREEN obligations use source
+`e64229bed5c29d6ba4b6346ed76bf7a8162bf553`, tree
+`508d9e75fc8e28c49fa0925628066e11006fce5f`, under accepted protocol/target
+`01d0993ab41e5b7fdf47d795f794397426b8d425`. The
+[independent source review](https://github.com/hcoona/microsoft-authentication-cli/pull/148#issuecomment-5672560416)
+binds the two production corrections and unchanged ten-case business fixture.
+The [qualified 0039 acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/148#issuecomment-5672507711)
+remains its prerequisite; the actual earlier result stays 0 passed / 10 failed.
+
+The host synchronously retains typed cancellation or host failure and consumes it
+before result commitment, preserving host-to-process-to-core lock order. Cancellation
+during creation completes pending readiness with the typed cancellation outcome
+before closure. The first host-ending timestamp is published before closure and
+read by the independent watchdog. Process completion waits for invocation completion
+before the owned thread and outgoing callbacks; failed or stalled cleanup cannot
+be reported as normal completion. Production provider initialization remains inactive.
+
+| GREEN production source | SHA-256 |
+| --- | --- |
+| `src/Authentication.Windows/OwnedRequestHost.cs` | `41c5b0ca176da8b3adbb8db92f076fb12242d84a6c0333f886c1eb71b4390fdd` |
+| `src/Authentication.Windows/WindowsProcess.cs` | `1f55cb947b4c9f95a3995360566640ae91581dc3fd7279cc556823e856c9dae5` |
+
+The [separate build admission](https://github.com/hcoona/microsoft-authentication-cli/pull/148#issuecomment-5672677481)
+selected one no-restore Release build 0040. Its original outer invocation completed
+with exit 0. Native build execution ended at 2026-09-15T00:29:10.4354023Z and took
+12.549 seconds, with zero warnings/errors, complete capture, empty stderr, eight
+total Job processes and zero active processes, without termination. The build
+manifest contains 547 artifacts. Its
+[independent acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/148#issuecomment-5672906977)
+binds the actual source, PE/PDB/IL, 47 physical source documents, generated test
+registration, complete command and protected-input postchecks. The registered
+104 methods and 111 projected cases include exactly the ten owned-process methods;
+registration is not evidence that those tests have executed. The native ABI and
+all business assertions remain unchanged.
+
+Only the active `run_windows.py` changed during the recorded retaining migration.
+Its old bytes, the original stopped 0039 history and all prior charges remain
+preserved. Build 0040 consumes one Windows build/test unit: Windows 35/40 and
+combined 72/120, with Linux 37/80, preparation 13/16, Windows preparation 5/5,
+768 MiB charged downloads and 34/56 process units unchanged.
+
+| Actual build receipt | SHA-256 |
+| --- | --- |
+| WSL `started.json` | `d1850aab5f383af17820b5a806eebe0055ac2bdeaa0dcb99f53a154b15d02fd9` |
+| WSL `windows-input.json` | `8a103e2e49a424230ab87d3b41213fdc10ea52f01a594046a62bbabe8bfe555d` |
+| WSL `result.json` | `b1ab5bcbb9435076d07b538d064cd657753e8e308dbf59bc9e93276df2fb9ce1` |
+| Windows `windows-result.json` | `78005d5aab6790000bcd742d6de71b78db77337ac106bd923ab8a8cf37b920d6` |
+| Windows `build.json` | `124d191355bdd4a5d02d03834f890bc2fd8b4a4c560a60e8f0d9d767d4fcb1c6` |
+
+The [separate GREEN test admission](https://github.com/hcoona/microsoft-authentication-cli/pull/148#issuecomment-5672935900)
+selected only the unchanged ten owned-process cases against those accepted artifacts.
+Windows 0041 completed with **10 executed, 10 passed, 0 failed**, every other outcome
+counter zero, and MTP/outer exit 0. Native execution took 9.365 seconds; stdout was
+642 bytes and stderr empty, with complete capture, 22 cumulative Job processes and
+zero active processes. No Job termination or safety stop occurred. The helper completed
+its source, tool, protected-input and history postchecks and allowed continuation.
+
+Preparation published the exact ready record at 2026-09-15T00:58:27.9665534Z. Independent
+live-controller verification and the reviewed immediate automatic release used the same
+reservation. No owner input or attendance was required. Both gate acknowledgements and
+the final 190-file evidence set remain retained with the sole 15,025-byte TRX. The
+original outer invocation was fully collected; no subject retry occurred.
+
+The ten actual child outcomes and exits match the existing GREEN table. All three
+synthetic success objects have the twelve required fields and omit the optional
+correlation ID, which the unchanged fixture leaves null. A committed success followed
+by child exit 2 remains unsuccessful shutdown/transport, not usable authentication.
+The no-result close-stall child has empty output and diagnostics. The
+[independent actual-result acceptance](https://github.com/hcoona/microsoft-authentication-cli/pull/148#issuecomment-5673162805)
+binds every child outcome, exit, capture, required/prohibited marker and ordering.
+Four normal exits occurred 45.355–68.311 ms after host-closing with aggregate drain
+evidence. Six exceptional exits occurred 1,017.371–1,026.692 ms afterward without
+normal drain or fixture-forced termination, within the original one-second product
+allowance and fixed 100 ms observation tolerance. The private offline reader's
+mandatory-correlation defect received independent triage and correction review;
+its failed inspection remains preserved and did not trigger a subject rerun.
+
+| Actual GREEN receipt | SHA-256 |
+| --- | --- |
+| WSL `started.json` | `5d1fd49bef654fdfd4dd5773c7f766115549e99dee348b0ad7638fa25f1274e4` |
+| WSL `windows-input.json` | `988d9ed2e5133e2458858a09b77fead5c23ebe63f1e6a2769f0d75ca3875c771` |
+| WSL `result.json` | `06c6a4077e3272a6584f21ec35095d3f34f6e03b7de4ba406949acec4f1b37d9` |
+| Windows `windows-result.json` | `b203ea83bbe5d823d2b93a57c92094559d55b7dc3af038f391e1a6f59f052072` |
+| Complete TRX | `10d3c5dafb904fd575d9af46374117a0f5cc4d5ca050fe1fa26e51f42289f1d7` |
+
+After 0041, all 86 actions are finalized: Linux 45 and Windows 41. Build/test use is
+Linux 37/80 and Windows 36/40, combined 73/120. Preparation remains 13/16, including
+Windows 5/5, with 768 MiB charged downloads. Process use is 44/56: 24 CLI and all twenty
+owned-process units. The final twelve CLI units remain protected, and the Wave's four
+additional buffer units are unallocated. No new action or retry is admitted by this
+result. All dedicated files and prior stopped histories remain intentionally retained.
+
+These observations concern the exact managed Windows production-process/owned-host
+composition with controlled providers and real owned test windows. Real native admission,
+production MSAL initialization, WAM/account selection, reuse, Windows/WSL lifetime, final
+Native AOT and whole-Slice acceptance remain open. No account, broker, cache, consent or
+resource operation was selected. Account-state effects still require the concrete owner
+risk amendment and its exact protocol.
