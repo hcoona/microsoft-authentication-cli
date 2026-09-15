@@ -6487,3 +6487,209 @@ output and the original start/transport evidence; do not delete, rewrite, recoll
 accept partial data as successful transport. This operation supplies only the admitted
 direct identity frontier. Any shared-runtime/dependency selection, Csc plan, precompiler
 observation, original response join or final publication retains its separate gates.
+
+## Fixed Host and Runtime Identity Follow-up
+
+After the independently accepted SDK19 outcome, this section permits preparation of
+one separately admitted raw-data collection of fourteen fixed leaves and two bounded
+name observations of one fixed directory. It resolves the next missing identity and
+selection inputs for the existing final-publish work. It does not admit an SDK process,
+MSBuild evaluation, precompiler observation, compilation, final publication, or account
+operation. All earlier one-time collectors, parsers, observers and experiments retain
+their consumed capacity and cannot be replayed.
+
+SDK19 completed its sole invocation with an independently accepted original zero exit,
+complete transport, seventeen content copies and two bounded leaf absences:
+`seed-03` and `csc-08`. Its copied payload totaled 16,821,497 bytes; the 16,432-byte
+inventory has SHA-256
+`2f5c537c1161aae5c6a915d55039b1e94770d03cb24ffa06287870fac1fe285a`.
+These are raw-copy outcomes, not an SDK, compiler or authentication execution result.
+
+Use the existing WSL Linux review environment and the existing public Windows
+SDK 10.0.401/runtime 10.0.12 installation. Read each selected DLL as inert data. No
+Windows process, network request, dependency download, installation, restore, build,
+test, publish, WAM, UI, token, account, consent or authentication-cache effect occurs.
+Reuse the accepted SDK19, native2, dispatch4 and restore12 data within their scopes;
+none of their files are collected again.
+
+### Fixed Leaves and One Directory
+
+Each table row is a literal input. The inactive source fixes its corresponding
+`/mnt/c/` path and flat private output name. Arguments, metadata and observed directory
+names cannot select any additional file. Required content is a capture expectation,
+not a claim that every runtime rejects a missing manifest.
+
+| Slot | Exact Windows path | Required outcome | Maximum bytes |
+| --- | --- | --- | ---: |
+| `entry-01` | `C:\Program Files\dotnet\sdk\10.0.401\.version` | Content or exact leaf absence | 65,536 |
+| `entry-02` | `C:\Program Files\dotnet\sdk\10.0.401\Microsoft.DotNet.Cli.CoreUtils.dll` | Required content | 4,194,304 |
+| `entry-03` | `C:\Program Files\dotnet\sdk\10.0.401\Microsoft.DotNet.Cli.Utils.dll` | Required content | 8,388,608 |
+| `entry-04` | `C:\Program Files\dotnet\sdk\10.0.401\Microsoft.DotNet.Configurer.dll` | Required content | 4,194,304 |
+| `cscdep-01` | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\Microsoft.CodeAnalysis.dll` | Required content | 16,777,216 |
+| `cscdep-02` | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\Microsoft.CodeAnalysis.CSharp.dll` | Required content | 33,554,432 |
+| `framework-01` | `C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\Microsoft.NETCore.App.deps.json` | Required content | 4,194,304 |
+| `framework-02` | `C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\Microsoft.NETCore.App.runtimeconfig.json` | Required content | 65,536 |
+| `framework-03` | `C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\Microsoft.NETCore.App.runtimeconfig.dev.json` | Content or exact leaf absence | 65,536 |
+| `runtime-01` | `C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\hostpolicy.dll` | Required content | 4,194,304 |
+| `runtime-02` | `C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\coreclr.dll` | Required content | 16,777,216 |
+| `runtime-03` | `C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Private.CoreLib.dll` | Required content | 33,554,432 |
+| `fxr-01` | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\hostfxr.dll` | Content or exact leaf absence | 4,194,304 |
+| `fxr-02` | `C:\Program Files\dotnet\host\fxr\10.0.12\hostfxr.dll` | Required content | 4,194,304 |
+
+Only `runtime-03` has a required prior historical hash:
+`1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678`,
+from the accepted 0052 exact tool-map path. Other present leaves receive one prospective
+first-capture hash; all later original/readback reads require that exact hash, length,
+identity and bytes. A prospective hash establishes an observed identity, not signer,
+revocation, installation or complete source-equivalence evidence.
+
+The three optional leaves follow SDK19's existing-parent, exact-leaf absence rule:
+observe each once initially, and recheck each absent leaf after copying under its
+unchanged parent identity. Missing parents, inaccessible files, symlinks, nonregular
+leaves and other errors fail. Do not create placeholders or infer absence from an error.
+
+The one directory is exactly `C:\Program Files\dotnet\host\fxr`, observed through
+`/mnt/c/Program Files/dotnet/host/fxr`. Hold its no-follow directory identity and take
+two complete immediate-name snapshots around the fixed-leaf collection. Each successful
+snapshot has at most 32 entries. One additional entry may be retrieved solely to detect
+overflow and fail; at most 66 entry observations occur across both snapshots. Require
+strict UTF-8 with at most 1,024 bytes per name and 65,536 name bytes across both
+snapshots; the complete canonical inventory also has a separate 65,536-byte ceiling.
+Do not read entry
+contents, inspect discovered child paths, recurse, follow links or use a discovered
+name in a file path. Reject incomplete enumeration, encoding ambiguity, duplicate
+names, changed name sets or changed held/path directory identity.
+
+The name set is deliberately a conservative superset of the directory-only names used
+by the public host selector. The fixed `fxr-02` path supplies the expected version's
+directory and file identity. Collection does not parse versions, choose a host, or
+require the name evidence to establish a runtime choice while original files are open.
+After independent raw-outcome acceptance, offline review must apply the exact
+source-bound version parse, comparison and rendering rules to establish an unambiguous
+maximum of `10.0.12`. A higher or ambiguous candidate, canonical-name mismatch, or
+unexpected app-local `fxr-01` content bars the proposed runtime route; it never permits
+another read target or alternate host selection under this operation. Refresh relied-on
+selection and file continuity before a later separately admitted execution. Two
+snapshots do not establish atomic or continuing filesystem state.
+
+### Why These Inputs Are Needed
+
+SDK19's accepted configurations request `Microsoft.NETCore.App` 10.0.12. The compiler
+configuration also declares `Major` roll-forward; the unchanged explicit
+`DOTNET_ROLL_FORWARD=Disable` is applied later by the
+[host configuration source](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/native/corehost/runtime_config.cpp).
+This is a conditional source inference, requiring the actual selected host and
+parent/child environment before execution. It does not select a hostfxr version.
+
+The [hostfxr selector](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/native/corehost/fxr_resolver.cpp)
+selects the highest parseable direct version-directory name, including prereleases,
+then checks its fixed `hostfxr.dll`; framework roll-forward settings do not choose it.
+The compiler's app-local hostfxr check is separate. SDK19's narrow native-byte analysis
+supports the adjacent `csc.dll` and non-bundle relationship; its application version
+resource does not establish native apphost search options.
+
+The selected framework's
+[configuration parsing](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/native/corehost/fxr/fx_resolver.cpp)
+includes its own development configuration. SDK19's SDK/compiler development-config
+absences do not cover that different leaf. Framework declarations remain candidate
+assets and settings until their exact content and relevant selection are reviewed.
+
+The SDK's [version-file parser](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/Microsoft.DotNet.Cli.CoreUtils/DotnetVersionFile.cs)
+uses the second line verbatim for `BuildNumber`. A yielded first line shorter than ten
+UTF-16 code units, including an empty line, throws before fallback. Only a null
+`BuildNumber` selects
+the [Product version-resource fallback](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/Microsoft.DotNet.Cli.CoreUtils/Product.cs).
+An empty second line does not select fallback. Bind the actual owning assembly and
+successful parsing before deriving any first-use sentinel filename. This collection
+creates no sentinel and does not change the current publish recipe.
+
+The two compiler dependency leaves are distinct names declared by `csc.deps.json` and
+requested by the captured compiler assembly. Repeated dependency declarations do not
+justify duplicate collection or recursively following other asset names. The three
+SDK entry assemblies supply the specific first-use and forwarding identities; shared
+runtime copies supply the next host/runtime identity inputs. No complete SDK audit or
+whole binary-to-source proof is implied.
+
+### Single Invocation, Bounds and Acceptance
+
+This operation has exactly one invocation. A failed start, inactive-source rejection,
+lock contention, input error, collision, cancellation, timeout, partial transport or
+nonzero exit consumes it. Record the start before launch; no retry, repair, resume,
+alternate output directory or capacity refund is allowed. This inert copy does not
+consume a restore/build/test/publish or synthetic-process scenario, and does not reset
+any existing cumulative counter.
+
+Retain SDK19's no-follow existing `action.lock`, read-only open, nonblocking exclusive
+lock, held/path identity checks and final release. No other original-root file is
+read. Perform no original-path, lock or planned-output preprobe during preparation.
+There is no concurrent original observer or experiment during this invocation.
+
+| Bound | Maximum |
+| --- | ---: |
+| Fixed leaf slots | 14 |
+| Required present leaves | 11 |
+| Optional leaf observations, including absent-leaf rechecks | 6 |
+| Direct directory snapshots | 2 |
+| Entries in one successful snapshot | 32 |
+| Entry observations, including overflow detection | 66 |
+| Strict UTF-8 bytes per name | 1,024 bytes |
+| Name bytes across both snapshots | 65,536 bytes |
+| Aggregate original content | 150,994,944 bytes (144 MiB) |
+| Content reads, including continuity and readback | 43 |
+| Aggregate bytes read | 453,050,368 bytes (432 MiB + 64 KiB) |
+| New output bytes, including inventory | 151,060,480 bytes (144 MiB + 64 KiB) |
+| Canonical inventory bytes | 65,536 bytes |
+| Counted path operations | 4,096 |
+| Read/write chunk | 65,536 bytes |
+| Original collector clock | 90,000 milliseconds |
+| Outer TERM deadline, including startup | 95 seconds |
+| Nonresetting KILL grace | 2 seconds |
+| Complete original combined tool capture | 16 KiB |
+
+The per-leaf ceilings sum to 134,414,336 bytes. If `P` leaves are present with total
+content `S`, and the inventory has `I` bytes, normal completion performs `3 * P + 1`
+content reads, reads `3 * S + I` bytes and writes `S + I` bytes. The maximum normal
+read total from the row ceilings is 403,308,544 bytes; maximum normal output is
+134,479,872 bytes, including the full inventory allowance. Name observations and
+optional absences are counted separately and do not read leaf content.
+
+Retain SDK19's one monotonic source clock, latched cancellation, checks around bounded
+I/O, sync, readback, finalization and final stdout flush, plus its original external
+watchdog and runtime/startup-context admission. Ordinary Linux interpreter, standard
+library, ELF loader and watchdog startup retain their separate reviewed boundary;
+these counters are not exhaustive system-wide I/O totals.
+
+Create only `/tmp/windows-final-publish-host14-offline-v1`, mode `0700`, after all
+initial required/present reads, optional observations and the first bounded name
+snapshot pass. Reject an existing root. Exclusively create the fixed flat raw copies
+and canonical `inventory.json`, initially `0600`, then sync, seal `0444`, sync again,
+sync the held output directory, verify its final identity, and read back complete bytes.
+Absent leaves appear only in inventory. Do not enumerate output. Use SDK19's stable
+original identity, raw-byte continuity, canonical ASCII JSON with trailing LF, complete
+original transport and normal-zero-exit acceptance requirements.
+
+The reviewed inactive source is 31,499 bytes with SHA-256
+`0b701cabe6183c550f7c376471ec50ae4175e3352b8d0d16cb38be0bb918a05c`.
+Its only permitted activation changes the single `ACTIVE = False` assignment to
+`ACTIVE = True`; the resulting source is 31,498 bytes with SHA-256
+`0f1f64e8883098bbb943945b05fd660117a615856eea879f1893da4e188efa98`,
+exclusively materialized at `/tmp/collect_windows_final_publish_host14.accepted.py`.
+The accompanying procedure is 26,143 bytes with SHA-256
+`46e70373497e853aab2b3679f9b8b79049591ea9fc022ace31868be5642cde32`.
+Do not import, invoke or test the inactive source during review.
+
+After independent admission, use nonlogin, noninteractive `/usr/bin/bash`, no TTY,
+and working directory `/tmp/azureauth-windows-sdk-compiler-identity-accepted-108`.
+The only literal invocation is:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 95s /usr/bin/python3.14 -I -B -S /tmp/collect_windows_final_publish_host14.accepted.py
+```
+
+Independent admission binds the accepted amendment,
+unchanged Wave, exact source/runtime/literal, fixed input/output locations, one-time
+capacity, finite operation accounting and complete capture. Keep every final execution
+component disabled. Independent outcome review permits only offline interpretation of
+accepted raw copies and names; graph, artifact, source-provenance and execution
+acceptance remain separate. On any failure preserve all partial outputs and original
+start/transport evidence without rewriting or accepting partial transport.
