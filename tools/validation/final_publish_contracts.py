@@ -5,7 +5,8 @@ No caller-supplied dictionary, review boolean or source hash grants execution.
 """
 
 DRAFT_ONLY = True
-if DRAFT_ONLY:
+CORE_CSC_HISTORY_ONLY = False
+if DRAFT_ONLY and not CORE_CSC_HISTORY_ONLY:
     raise RuntimeError('DRAFT_ONLY: final publication contracts are unadmitted')
 
 import contextlib
@@ -279,8 +280,16 @@ def read(path, deadline, cancelled, limit=8388608):
         st = os.fstat(fd)
         if not stat.S_ISREG(st.st_mode) or st.st_size > limit:
             fail('Nonregular or oversized input')
+        requested = limit + 1
+        if CORE_CSC_HISTORY_ONLY:
+            requested = st.st_size + 1
+            core_csc_charge_read(requested)
         with os.fdopen(fd, 'rb', closefd=False) as stream:
-            data = stream.read(limit + 1)
+            data = stream.read(requested)
+        if CORE_CSC_HISTORY_ONLY:
+            after = os.fstat(fd)
+            if (failed_identity(st) != failed_identity(after) or len(data) != st.st_size):
+                fail('Observer history input changed during read')
         if len(data) > limit:
             fail('Input exceeded limit')
     finally:
@@ -1482,7 +1491,10 @@ def load_admission(deadline, cancelled):
 
 
 def names(path):
-    values = sorted(p.name for p in direct(path).iterdir())
+    if CORE_CSC_HISTORY_ONLY:
+        values = core_csc_names(path, 100)
+    else:
+        values = sorted(p.name for p in direct(path).iterdir())
     if values != [f'{i:04d}' for i in range(1, len(values) + 1)]:
         fail('Incomplete or noncontiguous original action history')
     return values
@@ -1567,6 +1579,8 @@ def failed_content(state, deadline, cancelled):
         budget(deadline, cancelled)
         state['reads'] += 1
         state['requestedBytes'] += pin['bytes'] + 1
+        if CORE_CSC_HISTORY_ONLY:
+            core_csc_charge_read(pin['bytes'] + 1)
         if state['reads'] > 14 or state['requestedBytes'] > 123166:
             fail('Failed-history content allowance exhausted')
         parent, leaf = failed_parent(pin['path'], deadline, cancelled)
@@ -1710,7 +1724,11 @@ def refresh_history(admission, deadline, cancelled, reserved=None):
                 continue
             keys(item, ('number', 'localEntryNames', 'localFiles', 'windowsFiles', 'safetyMarkers'))
             local = base / item['number']
-            if sorted(p.name for p in direct(local).iterdir()) != item['localEntryNames']:
+            if CORE_CSC_HISTORY_ONLY:
+                observed_names = core_csc_names(local, len(item['localEntryNames']), deadline, cancelled)
+            else:
+                observed_names = sorted(p.name for p in direct(local).iterdir())
+            if observed_names != item['localEntryNames']:
                 fail('Original receipt inventory changed')
             for field, directory in (('localFiles', local), ('windowsFiles', PROJECTION / 'actions' / item['number'])):
                 if type(item[field]) is not dict or len(item[field]) > 20000:
@@ -1777,6 +1795,269 @@ def refresh_history(admission, deadline, cancelled, reserved=None):
             artifact_copy != admission['callerProvenance']['artifactAcceptanceBytes']):
         fail('Independent actual guard artifact acceptance changed')
     return totals, manifest
+
+
+_CORE_CSC_STARTED = False
+_CORE_CSC_READS = 0
+_CORE_CSC_REQUESTED_BYTES = 0
+_CORE_CSC_CLOCK = None
+CORE_CSC_INPUTS = {
+    'handoff': {'path': '/tmp/windows-final-publish-0055-completed-handoff-collector-v1.json',
+                'bytes': 174955, 'sha256': '622c8835b7af93ddfcda4a0a5f8f17881eeff631e94b247e336d83c1b0e63710'},
+    'handoffAcceptance': {'path': '/tmp/windows-final-publish-0055-handoff-acceptance-root-v1.json',
+                          'bytes': 351, 'sha256': '101bdb6a6fb4c1cd8059887966bbc7f970c0a10a209fbc91c1bb044dbb033ad0'},
+    'guardAcceptance': {'path': '/tmp/windows-final-publish-0055-guard-acceptance-candidate-wave-v1.json',
+                        'bytes': 1346, 'sha256': '35eed91b45c1f49f5f2b7f2d5a90ea61ff82fa37cebf4150353227e77b66a018'},
+    'artifactAcceptance': {'path': '/tmp/windows-final-guard-0055-authority-inputs/managed-artifact-acceptance.json',
+                           'bytes': 1886, 'sha256': 'c118cc8b9ca6deb0685162177b9940c94a453ad3e87f39cdd2f88ffe6eacf55d'},
+}
+
+
+def core_csc_charge_read(requested):
+    """One finite allowance across both original-history checkpoints."""
+    global _CORE_CSC_READS, _CORE_CSC_REQUESTED_BYTES
+    if not CORE_CSC_HISTORY_ONLY or not DRAFT_ONLY or not _CORE_CSC_STARTED:
+        fail('Unadmitted observer history use')
+    _CORE_CSC_READS += 1
+    _CORE_CSC_REQUESTED_BYTES += requested
+    if _CORE_CSC_READS > 4096 or _CORE_CSC_REQUESTED_BYTES > 268435456:
+        fail('Observer history read allowance exhausted')
+
+
+def core_csc_names(path, maximum, deadline=None, cancelled=None):
+    if deadline is None:
+        deadline, cancelled = _CORE_CSC_CLOCK
+    result = []
+    # scandir yields entries incrementally; Path.iterdir may materialize a list.
+    with os.scandir(direct(path)) as entries:
+        while True:
+            budget(deadline, cancelled)
+            entry = next(entries, None)
+            if entry is None:
+                break
+            result.append(entry.name)
+            if len(result) > maximum:
+                fail('Observer original history entry-count bound exceeded')
+    return sorted(result)
+
+
+def load_core_csc_history(authority, deadline, cancelled):
+    # The independently admitted external literal binds the entire authority.
+    # Loading only its history inputs cannot waive the final publication gates.
+    if (authority.get('active') is not True or not CORE_CSC_HISTORY_ONLY or not DRAFT_ONLY or
+            authority['historyAdapter']['sha256'] != globals().get('__accepted_source_sha256__')):
+        fail('Observer-only captured source or literal authority missing')
+    pin = authority['observerHistory']
+    path = provenance_descriptor(pin)
+    data = bound({k: pin[k] for k in ('bytes', 'sha256')}, path, deadline, cancelled, 1048576)
+    config = decode(data, canonical=True)
+    keys(config, ('schema', 'target', 'protocol', 'wave', 'product', 'rootMarkers'))
+    if config['schema'] != 'core-csc-observer-history-inputs-v1' or config['product'] != PRODUCT:
+        fail('Observer history scope changed')
+    verify_revision(config['target'], deadline, cancelled)
+    keys(config['protocol'], ('commit', 'tree', 'gitBlob', 'bytes', 'sha256'))
+    if any(config['protocol'][k] != config['target'][k] for k in ('commit', 'tree')):
+        fail('Observer requires the current accepted protocol revision')
+    verify_blob(config['target'], PROTOCOL,
+                {k: config['protocol'][k] for k in ('gitBlob', 'bytes', 'sha256')}, deadline, cancelled)
+    verify_blob(config['target'], 'docs/delivery-wave.md', config['wave'], deadline, cancelled)
+    evidence, raw = {}, {}
+    for role, fixed in CORE_CSC_INPUTS.items():
+        raw[role] = bound({k: fixed[k] for k in ('bytes', 'sha256')},
+                          Path(fixed['path']), deadline, cancelled, 1048576)
+        evidence[role] = decode(raw[role], canonical=role != 'artifactAcceptance')
+    guard_review = evidence['guardAcceptance']
+    guard = guard_review['acceptedGuard']
+    verify_guard(guard)
+    if guard_review != {'schema': 'final-publish-guard-acceptance-v1', 'accepted': True,
+                         'acceptedGuard': guard, 'originalPairedCompletionAccepted': True,
+                         'managedGuardArtifactAccepted': True, 'finalNoKillModeAccepted': True}:
+        fail('Original guard acceptance changed')
+    envelope = dict(config, acceptedGuard=guard)
+    for role in ('handoff', 'guardAcceptance'):
+        envelope[role] = {k: CORE_CSC_INPUTS[role][k] for k in ('bytes', 'sha256')}
+    keys(config['rootMarkers'], ('linuxOwnerSha256', 'windowsOwnerSha256'))
+    for root, key in ((LINUX, 'linuxOwnerSha256'), (PROJECTION, 'windowsOwnerSha256')):
+        marker = read(root / 'owner.json', deadline, cancelled, 4096)
+        if sha(marker) != digest(config['rootMarkers'][key]) or decode(marker) != ROOT_MARKER:
+            fail('Observer original root ownership changed')
+    assert_target_current(envelope, deadline, cancelled)
+    return {'envelope': envelope, 'evidence': evidence,
+            'callerProvenance': {'successorHistory': ORIGINAL_HISTORY_JOINS,
+                                 'artifactAcceptanceBytes': raw['artifactAcceptance']},
+            'failedHistory': {'passes': 0, 'reads': 0, 'requestedBytes': 0,
+                              'metadataProbes': 0, 'remainingSeconds': 30.0,
+                              'snapshot': None, 'failed': False}}
+
+
+class CoreCscLockLease:
+    """The dispatcher owns this lease until its local finalization attempt ends."""
+    def __init__(self, fd):
+        self.fd = fd
+
+    def close(self):
+        if self.fd is not None:
+            fd, self.fd = self.fd, None
+            os.close(fd)
+
+
+def reserve_core_csc_observer(authority, original_start_ns, original_deadline_ns, cancelled):
+    global _CORE_CSC_STARTED, _CORE_CSC_CLOCK
+    if _CORE_CSC_STARTED or not CORE_CSC_HISTORY_ONLY or not DRAFT_ONLY:
+        fail('Observer reservation is disabled or already attempted')
+    _CORE_CSC_STARTED = True
+    integer(original_start_ns, 1)
+    if original_deadline_ns != original_start_ns + 180_000_000_000:
+        fail('Observer original clock changed')
+    deadline = original_deadline_ns / 1_000_000_000
+    _CORE_CSC_CLOCK = (deadline, cancelled)
+    budget(deadline, cancelled)
+    admission = load_core_csc_history(authority, deadline, cancelled)
+    fd = os.open(direct(LINUX / 'action.lock'), os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK)
+    lease = CoreCscLockLease(fd)
+    local = owned = None
+    started = None
+    returned = False
+    try:
+        if not stat.S_ISREG(os.fstat(fd).st_mode):
+            fail('Observer shared lock is not a regular file')
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        totals, manifest = refresh_history(admission, deadline, cancelled)
+        if totals != {'linux': [8, 37, 0, 0], 'windows': [7, 48, 0, 48]}:
+            fail('Observer prior allocation changed')
+        # The additional unit is dedicated to this action. Ordinary Windows
+        # capacity stays at 48; the prospective Linux ceiling becomes 79.
+        if totals['linux'][1] + totals['windows'][1] + 1 + 1 > 120:
+            fail('Observer and existing fixture exceed combined allocation')
+        number = f"{len(manifest['histories']['windows']) + 1:04d}"
+        if number != '0056':
+            fail('Original handoff changed; no observer reservation')
+        local, owned = direct(HISTORY / number), direct(PROJECTION / 'actions' / number)
+        if local.exists() or owned.exists():
+            fail('Observer slot already exists; no retry or refund')
+        endpoint = uuid.uuid4().hex
+        if endpoint in manifest['knownEndpoints']:
+            fail('Observer endpoint collision; no retry')
+        nonce = os.urandom(32).hex()
+        assert_target_current(admission['envelope'], deadline, cancelled)
+        budget(deadline, cancelled)
+        started = {'schema': 'core-csc-observer-reservation-v1', 'action': 'core-csc-observer',
+                   'number': number, 'source': PRODUCT['commit'], 'sourceTree': PRODUCT['tree'],
+                   'protocol': admission['envelope']['protocol']['commit'],
+                   'waveBlob': admission['envelope']['wave']['gitBlob'],
+                   'handoffSha256': CORE_CSC_INPUTS['handoff']['sha256'],
+                   'priorCounters': totals, 'preparationCharge': 0, 'buildTestCharge': 1,
+                   'publishCharge': 0, 'reservedProcessScenarios': 0,
+                   'originalClockStartNanoseconds': original_start_ns,
+                   'originalClockDeadlineNanoseconds': original_deadline_ns,
+                   'originalOuterLimitMilliseconds': 180000, 'clockNonce': nonce,
+                   'endpoint': endpoint, 'utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+        local.mkdir(mode=0o700)
+        raw = compact(started)
+        write_new(local / 'started.json', raw)
+        # All failures after the durable start consume the sole dedicated unit.
+        # A directory or partial start also blocks every subsequent history read.
+        owned.mkdir()
+        write_new(owned / 'started.json', raw)
+        write_new(local / 'windows-input.json', compact({'sha256': sha(raw)}))
+        budget(deadline, cancelled)
+        returned = True
+        return {'started': started, 'lockLease': lease, 'windowsActionPosix': str(owned),
+                'wslActionPath': str(local), 'admission': admission, 'cancelled': cancelled,
+                'originalValidated': False,
+                'invocation': {'actionNumber': number, 'actionPath': WINDOWS + '\\actions\\' + number,
+                               'packageRoot': WINDOWS + '\\packages', 'endpoint': endpoint,
+                               'reservationSha256': sha(raw)}}
+    except BaseException as error:
+        if local is not None and local.exists():
+            write_new(local / 'reservation-failure.json', compact({
+                'schema': 'core-csc-observer-reservation-failure-v1',
+                'failureType': type(error).__name__, 'normalCompletion': False,
+                'graphAccepted': False, 'artifactAccepted': False, 'continuation_allowed': False,
+                'safetyStop': True, 'retainedLiveWorkOrUnknown': True}))
+        raise
+    finally:
+        if not returned:
+            lease.close()
+
+
+def validate_core_csc_observer_original(authority, reservation, invocation, clock,
+                                         original_proxy_exit, original_deadline_ns):
+    """Join the completed original proxy to a provisional Windows observation."""
+    if (not CORE_CSC_HISTORY_ONLY or not DRAFT_ONLY or reservation['originalValidated'] or
+            reservation['lockLease'].fd is None or type(original_proxy_exit) is not int or
+            original_proxy_exit != 0):
+        fail('Original observer proxy is incomplete or already consumed')
+    reservation['originalValidated'] = True
+    if original_deadline_ns != reservation['started']['originalClockDeadlineNanoseconds']:
+        fail('Observer validation reset the original deadline')
+    deadline, cancelled = original_deadline_ns / 1_000_000_000, reservation['cancelled']
+    budget(deadline, cancelled)
+    number = reservation['started']['number']
+    local, owned = HISTORY / number, PROJECTION / 'actions' / number
+    if ((owned / 'cancel').exists() or (owned / 'cancel').is_symlink() or
+            invocation['reservationSha256'] != sha(compact(reservation['started']))):
+        fail('Observer cancelled or original start changed')
+    for root in (local, owned):
+        if (read(root / 'started.json', deadline, cancelled, 1048576) != compact(reservation['started']) or
+                read(root / 'invocation.json', deadline, cancelled, 1048576) != compact(invocation)):
+            fail('Observer original start or invocation pair changed')
+    ready_raw = read(owned / 'clock-ready.json', deadline, cancelled, 2048)
+    reply_raw = read(owned / 'clock-remaining.json', deadline, cancelled, 2048)
+    if sha(ready_raw) != clock['readySha256'] or sha(reply_raw) != clock['replySha256']:
+        fail('Observer original clock frames changed')
+    proof = decode(read(owned / 'windows-result.json', deadline, cancelled, 1048576))
+    fixed = {'actionKind': 'core-csc-observer', 'action': number,
+             'reservationSha256': invocation['reservationSha256'],
+             'invocationSha256': sha(compact(invocation)),
+             'normalCompletion': True, 'quiescent': True, 'captureCompleted': True,
+             'naturalJobCompletion': True, 'startAttempted': True, 'startReturned': True,
+             'stopCalled': True, 'stopReturned': True, 'disposeAttempted': True, 'disposeCompleted': True,
+             'disposeKillOnClose': True, 'disposeConfirmsQuiescence': False,
+             'expectedDiagnosticSeen': True, 'safetyStop': False, 'jobTerminationRequested': False,
+             'jobTerminationSucceeded': False,
+             'graphAccepted': False, 'artifactAccepted': False, 'continuation_allowed': False,
+             'independentObservationAccepted': False, 'captureTruncated': False,
+             'outcome': 'expected-stop-candidate-awaiting-independent-acceptance'}
+    for key, expected in fixed.items():
+        if compact(proof.get(key)) != compact(expected):
+            fail('Incomplete or mismatched original observer result')
+    if (type(proof.get('subjectExitCode')) is not int or proof['subjectExitCode'] == 0 or
+            any('Failure' in key or key == 'failureType' for key in proof)):
+        fail('Observer subject did not complete the intended failure path')
+    integer(proof.get('remainingMilliseconds'), 1, 180000)
+    integer(proof.get('windowsElapsedMilliseconds'), 0, 179999)
+    integer(proof.get('jobActive'), 0, 0)
+    integer(proof.get('stdoutBytes'), 0, 4194304)
+    integer(proof.get('stderrBytes'), 0, 4194304 - proof['stdoutBytes'])
+    absence_count = integer(len(authority['physicalAbsences']), 1, 256)
+    membership_count = integer(len(authority['physicalMembership']), 1, 32)
+    integer(proof.get('absenceChecks'), 2, 2)
+    integer(proof.get('absenceMetadataProbes'), 4 * absence_count, 9216)
+    integer(proof.get('membershipChecks'), 2, 2)
+    integer(proof.get('membershipMetadataProbes'), 4 * membership_count, 2176)
+    integer(proof.get('membershipEntries'), 0, 1024)
+    directory_count = integer(proof.get('lastDirectoryCount'), 2, 128)
+    if compact(proof.get('lastFileSample', {}).get('directoryCount')) != compact(directory_count):
+        fail('Observer final directory count differs from the completed sample')
+    if compact(proof.get('clock')) != compact(clock):
+        fail('Observer receipt clock differs from original caller clock')
+    expected_drain = {'processedRejectionThresholdBytes': 65536, 'processedBytes': 0,
+                      'observedOverflowBytes': 0, 'possibleUnobservedInFlightBytes': 0,
+                      'possibleBytesAreObserved': False, 'issuedOverflowAllowanceBytes': 8192,
+                      'maximumReadEnvelopeBytes': 73728, 'observedPlusPossibleBytes': 0,
+                      'overflowRejected': False}
+    # A successful natural completion already observed EOF on both streams
+    # before Stop. No emergency drain or unobserved pending read is consistent
+    # with this narrowly accepted original receipt.
+    if compact(proof.get('emergencyDrainReadAccounting')) != compact(expected_drain):
+        fail('Observer successful receipt has inconsistent emergency-read accounting')
+    # Capture/binlog semantic interpretation has its own independent admission.
+    # This join deliberately does not decode output or grant continuation.
+    refresh_history(reservation['admission'], deadline, cancelled, reserved=number)
+    assert_target_current(reservation['admission']['envelope'], deadline, cancelled)
+    budget(deadline, cancelled)
+    return proof
 
 
 @contextlib.contextmanager

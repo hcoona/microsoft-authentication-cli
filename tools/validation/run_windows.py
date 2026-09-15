@@ -844,6 +844,8 @@ def histories():
         else:
             result = read(action / "result.json")
             started = read(action / "started.json")
+            if started.get("action") == "core-csc-observer":
+                raise ValueError("Dedicated observer remains charged; independently accepted original outcome and handoff required")
             if any((ROOT / "actions" / action.name / "temp" / marker).exists()
                    for marker in ("owned-host-safety-stop.json", "process-safety-stop.json")):
                 raise ValueError("Owned fixture safety stop forbids continuation")

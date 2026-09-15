@@ -6779,3 +6779,330 @@ capacity was added or consumed by these review operations. All four final-public
 components remain disabled. Precompiler observation, final Native AOT publication,
 final CLI and WSL scenarios, and real account acceptance remain open under their own
 protocol and admission requirements.
+
+## One Core Csc Diagnostic Observation
+
+This supplement allocates one credential-free diagnostic build/test action for Issue
+#108. Its question is the original Core Csc task's bound inputs and command-line
+arguments in the selected CLI Publish/reference context. It stops before compilation.
+Final Csc input values, generated source and argument text are observation outputs;
+a complete final publication graph or Native AOT artifact is not a prerequisite to
+this separate action. The existing account-effects prohibition remains applicable.
+
+### Source, Invocation and Materialization
+
+Use product commit `503360753accd0829801953823b1b57a4f852440`, tree
+`8506cdd9781c8a331ea12ea8fe27a55292eec073`, SDK 10.0.401/runtime 10.0.12
+and the existing public package root. The diagnostic root is
+`C:\Temp\azureauth-windows-slice-108\observers\core-csc-5033607\source`.
+The separate planned final source root is not read, probed or materialized by this
+action. No restore, download, toolchain installation, compiler or product invocation
+is selected by this diagnostic protocol.
+
+Materialize all 34 `src`/`global.json` source inputs, totaling 150,146 bytes. Preserve
+33 Git blobs; the sole overlay adds a 110-byte unconditional fixed Import immediately
+before the closing Project element in the original 395-byte
+`src\Directory.Build.props`. The resulting 505-byte file imports the observer outside
+product source globs. Preserve the three project files and ordinary project-reference
+metadata, including library RID and SelfContained propagation. The exact source
+manifest, payloads, active observer and their projection back to product source must
+receive independent admission before materialization.
+
+Reuse the twelve accepted, unchanged restore inputs, totaling 233,709 bytes, in their
+proper per-project `obj` directories. Do not rewrite restore metadata, resolve an
+Import as a collection selector, or perform another restore. A separately admitted
+inert parser has completed its sole six-file invocation under protocol
+`e80b4134ffe20f1c5dbae0c6f845cbbc398a57f3`, with original exit zero and complete
+transport. Independent review accepted six projections with fifty XML elements from
+6,566 input bytes. The projection is 20,502 bytes, SHA-256
+`87a565311dfcd26adc8c870cfe0a6020986c91d9ae4b7f0bdcd131c9e26bfaff`.
+Core's generated props and targets contain no Import; CLI props select ILLink and
+ILCompiler, Windows props select ILLink, and CLI/Windows targets select NativeInterop.
+These are inert XML facts. Conditions, imported SDK/package effects and actual file
+selection retain their source and physical predicates. Parser capacity is exhausted.
+
+Invoke the selected muxer through its built-in `msbuild` route with the seventeen
+source-reviewed Publish properties and the additional diagnostic global property
+`MSBuildUserExtensionsPath=${ACTION_ROOT}\home\msbuild-user`, target Publish,
+`-restore:false`, one node,
+disabled node/build/compiler servers and the unchanged 35-entry replacement
+environment. Use detailed output, `-noAutoResponse`, `-tl:off` and the one binary
+logger at
+`C:\Temp\azureauth-windows-slice-108\observers\core-csc-5033607\observer.binlog`
+with `ProjectImports=None`. The exact argument vector and native encoding are fixed
+by the independently admitted proposal and caller, not reconstructed from captured
+command text. Preserve the SDK logger's three documented internal environment
+additions as differences from the final publication recipe.
+
+The user-extension property fixes the wildcard import consumers to a new ordinary,
+empty owned directory, checked before startup and after the natural diagnostic stop.
+Preserve it as a global through ordinary project references; no TreatAsLocalProperty
+or child removal/replacement is admitted. This deliberately changes the diagnostic
+import path and must remain visible in the later diagnostic-to-final projection.
+It does not suppress MSBuild's earlier initialization lookup of the Windows local
+application-data known folder. That in-process metadata lookup remains a declared SDK
+initialization effect; the diagnostic neither reads the ambient user-extension
+directory nor captures its private path.
+
+The tracked sources are [the observer](../../../tools/validation/CoreCscObserver.targets),
+[Windows controller](../../../tools/validation/Invoke-WindowsCoreCscObserver.ps1),
+[WSL dispatcher](../../../tools/validation/run_windows_core_csc_observer.py), and
+the observer-only entrypoints in
+[the existing history contracts](../../../tools/validation/final_publish_contracts.py).
+All execution gates and both target Conditions remain false in Git. Exact admission
+must bind their accepted Git revision, private activation deltas, runtime identities,
+static authority, source and restored payloads, and complete original literal call.
+The history module's observer-only activation must leave `DRAFT_ONLY = True` and
+every final-publication entry gate disabled. No SDK project, controller, adapter or
+target may be imported, parsed for execution, tested or invoked merely because this
+source proposal exists.
+
+After its durable reservation, the WSL dispatcher stages exactly 34 source payloads,
+twelve restored payloads and the independently admitted active observer in the new
+action's `observer-payloads` directory. Its `observer-support` directory receives
+the fixed controller, proposal, source manifest, materialization map, eleven review
+inputs and the static authority. Hash-bound pairs fix each Linux input and Windows
+destination. The authority remains independent of the subsequently derived reservation
+hash; the external invocation supplies that authority's exact hash. The only Windows
+bootstrap is the installed Windows PowerShell with `-NoLogo -NoProfile -NonInteractive
+-File` and this action's fixed controller. No shell interpolation or alternate helper
+is admitted.
+
+### Five Fixed SDK XML Identity Inputs
+
+Before observer activation, prepare one separately admitted inert collection of the
+five remaining reached SDK XML identities. Use the existing WSL review environment;
+do not start Windows, MSBuild, an SDK or a compiler. This is a new five-leaf collection,
+not a replay of SDK19, HOST14 or any completed parser. Each input is required content
+at its exact corresponding `/mnt/c/` path:
+
+| Slot | Exact Windows path |
+| --- | --- |
+| extensions-entry | `C:\Program Files\dotnet\sdk\10.0.401\Current\Microsoft.Common.targets\ImportAfter\Microsoft.NET.Build.Extensions.targets` |
+| test-entry | `C:\Program Files\dotnet\sdk\10.0.401\Current\Microsoft.Common.targets\ImportAfter\Microsoft.TestPlatform.ImportAfter.targets` |
+| extensions-main | `C:\Program Files\dotnet\sdk\10.0.401\Microsoft\Microsoft.NET.Build.Extensions\Microsoft.NET.Build.Extensions.targets` |
+| test-main | `C:\Program Files\dotnet\sdk\10.0.401\Microsoft.TestPlatform.targets` |
+| compiler-api | `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\Microsoft.Managed.Core.CurrentVersions.targets` |
+
+The pinned [Build.Extensions import](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Tasks/Microsoft.NET.Build.Extensions.Tasks/msbuildExtensions-ver/Microsoft.Common.targets/ImportAfter/Microsoft.NET.Build.Extensions.targets),
+[Build.Extensions main targets](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Tasks/Microsoft.NET.Build.Extensions.Tasks/msbuildExtensions/Microsoft/Microsoft.NET.Build.Extensions/Microsoft.NET.Build.Extensions.targets)
+and [TestPlatform targets](https://github.com/microsoft/vstest/blob/6f58ced50b40e074a07ffc21fb2d2eef95d31b60/src/Microsoft.TestPlatform.Build/Microsoft.TestPlatform.targets)
+explain their conditional imports and declarations. The fifth file is produced by the
+[Roslyn generator](https://github.com/dotnet/roslyn/blob/f7797ed513e3035983346552ac2d9ca2281bc2ec/src/Compilers/Core/MSBuildTask/Directory.Build.targets#L22-L31)
+from its CompilerApiVersion property. Public
+source correspondence does not supply the installed bytes or their line endings.
+Take a prospective first-capture hash once per slot; require that exact observed hash,
+length and stable identity on original continuity and private readback. Do not treat
+this first capture as authenticity, source correspondence or historical continuity.
+Missing or unreadable inputs fail; no alternate leaf, directory listing, glob,
+discovered Import, package path or fallback is selected.
+
+Retain SDK19's existing no-follow read-only `action.lock`, nonblocking exclusive
+acquisition, held/path identity checks and final release. No other original experiment
+file is accessed. Retain its no-follow regular-file and parent checks, stable original
+identity, exclusive output, sync/seal/readback, latched cancellation, complete original
+transport and normal-zero-exit requirements. Do not probe the lock, originals or output
+root while preparing or reviewing the source. No concurrent experiment or original
+observer is permitted.
+
+Use at most 32 KiB per leaf and 64 KiB aggregate original content. Normal completion
+performs sixteen content reads: five initial originals, five original continuity reads,
+five raw-copy readbacks and one canonical inventory readback. Aggregate bytes read are
+at most 212,992, including the 16 KiB inventory; new output bytes are at most 81,920.
+Count at most 1,024 path operations, use read/write chunks no larger than 32 KiB, and
+retain at most 16 KiB complete combined tool capture. Keep the original 90,000 ms
+collector clock, 95-second outer TERM deadline and nonresetting two-second KILL grace.
+The separately reviewed interpreter/loader/watchdog startup boundary remains distinct
+from these intentional data-operation counters.
+
+After all five initial reads succeed, exclusively create only
+`/tmp/windows-core-csc-sdk-five-offline-v1`, mode `0700`. Write the five slot-named
+`.bin` files and canonical `inventory.json`, initially `0600`, then sync and seal them
+`0444`, sync the held directory and read back complete bytes. An existing destination
+or partial output is a failure; preserve it without repair, replacement or retry.
+
+The collection has exactly one invocation. Record its start and remaining capacity
+before launch; a failed start, lock contention, input error, collision, interruption,
+timeout, nonzero exit or incomplete transport consumes it. Follow SDK19/HOST14's
+existing classification: this inert review copy consumes no dependency-preparation,
+build/test, publish or synthetic-process unit and resets no prior counter. Its own
+one-time consumption remains explicit. Independently admit the exact inactive source,
+activation delta, runtime/startup context, accepted Wave/protocol, output, capacity
+record and complete original literal before execution. This section alone cannot
+activate the collector or the observer.
+
+After independent acceptance of the original outcome, a separately admitted offline
+source-correspondence pass may read these five fixed copies once, at most 64 KiB total,
+under one thirty-second nonresetting deadline. Bind their accepted hashes, the pinned
+public source/generator and any explicit byte transformation. Do not follow Import
+values, inspect original paths, execute markup or infer the full effective graph. Any
+unexplained content difference keeps observer activation blocked. Preserve the original
+inventory and all false graph, artifact and continuation flags.
+
+### Reached Effects and Physical Predicates
+
+Before SDK startup, exclusively create the empty regular first-use sentinel at
+`${ACTION_ROOT}\home\.dotnet\10.0.401.dotnetFirstUseSentinel`. Both reached SDK
+Exists checks must succeed. Create the separate zero-byte claim marker at
+`C:\Temp\azureauth-windows-slice-108\observers\core-csc-5033607\first-core-compile.claim`.
+The observer's fresh exact reads, 27-byte append and exact readback enforce the
+independently reviewed at-most-one skipped Csc premise under one node, no yield,
+no competing writer and unchanged task/target ordering. Both markers are retained
+after every outcome. A marker I/O failure stops the action.
+
+Bind the actually reached imports, customization hooks, task identities and helper
+effects before activation. The minimum source predicates include the standard
+CoreCompile ordering and empty resource batching, the original Csc/ManagedCompiler/
+ToolTask implementation, no host-object or command-processor path, no shared compiler,
+no RoslynCommandLineLogFile, and no overriding compilation controls after the observer.
+The logger is constructed before SkipCompilerExecution, so the latter alone is
+insufficient to exclude its file effect. Generated Common.props imports, ancestor
+Directory.Build/customization files, wildcard imports, source-control discovery and
+editor configuration require exact current physical predicates. Earlier absences are
+not continuing evidence. The generated Managed.Core.CurrentVersions import requires
+its own correspondence; a public-source 404 is not an empty-file observation.
+
+The independently admitted static authority supplies literal `physicalAbsences` and
+`physicalMembership` lists; neither is derived from discovered file contents. Check
+both before the subject starts and after natural completion. Required absent leaves
+cover the three nearer project props, ten ancestor Directory.Build.targets, three
+project user files, ten ancestor `.git` names, twenty ancestor editor/global config
+names, the six default Custom before/after imports, and the selected entry-development
+and servicing/hostfxr slots. Additional optional SDK leaves need exact source-selected
+expansion and a declared absence or leased existing identity before admission. Do not
+read unexpected content. Reject reparse points, inaccessible paths, nondirectory
+ancestors and ambiguous failures. These checks establish metadata observations in the
+declared workstation model, not race-proof filesystem traversal.
+
+Wildcard membership checks are limited to six installed SDK hook domains, six domains
+under the owned user-extension root, six project `obj` props/targets patterns and the
+standard VisualStudioVersion props pattern. Pin the expected standard members before
+activation; do not assume installed SDK domains are empty. Every expected matching
+member must already have a leased input identity or be an exactly materialized input.
+Enumerate only the admitted top-level directory and compare matching ordinary file
+names; no recursion or discovered content selector is allowed. An absent directory is
+accepted only for an empty expected membership. Extra or missing matching members stop
+the action. This does not inspect the ambient user-extension directory.
+
+The source-selected direct host route is muxer to hostfxr 10.0.12, SDK 10.0.401,
+in-process MSBuild and framework 10.0.12. Both ProgramFiles variables select the
+owned ordinary empty `${ACTION_ROOT}\empty-program-files`; its `coreservicing`
+child must be absent. No alternate SDK/framework/store inventory or complete aggregate
+source audit is required for this route. SourceLink's no-repository branch and the
+package providers' non-git SourceRoot branches retain their explicit predicates.
+
+Permitted writes are the declared diagnostic/action files and owned intermediates:
+source and restore materialization, markers, normal generated text/cache bookkeeping,
+one binlog, captures and paired receipts. Include ordinary transactional temporary
+writes, move retries, error deletion and LockCheck/Restart Manager diagnostics where
+reached. Do not substitute Clean or suppress ordinary OnError handling. The source
+assessment must distinguish imported NativeAOT targets from actual execution: the
+ordinary Publish Build dependency encounters Core's intentional failure before ILC,
+linking or publication copying. No package/toolchain mutation is admitted.
+
+### Limits and Original Completion
+
+One nonresetting 180,000 ms caller observation/success deadline covers admission,
+reservation, staging, launch, handshake, subject, joining and finalization. The WSL
+handshake ends at the earlier of that deadline and twenty seconds after the timestamp
+captured immediately before Popen. Persist launch attempts, then recheck cancellation
+and the original deadline immediately before the actual Popen or ordinary Start.
+Windows Start keeps 20,000 ms for subject cleanup, ordinary Stop admission requires
+more than 15,000 ms, and receipt/drain work keeps 5,000 ms. No failure refunds a charge
+or authorizes another start.
+
+The unchanged guard's ordinary Start may finish its fixed CreateProcess, assignment,
+handle and resume sequence after a delayed native return, even after the caller's
+deadline. Assignment-failure recovery has a fixed 10,000 ms wait after its termination
+request. Ordinary Stop has a separate 10,000 ms accounting loop after termination,
+with up to a final 50 ms polling overshoot. Native-call latency is not bounded by
+these values. Late completion is incomplete; no new caller loop obtains fresh time.
+Record actual Stop request/result flags even on throw, and record Dispose/kill-on-close
+separately. Closing a Job does not establish observed quiescence.
+
+Retain at most 4 MiB combined stdout/stderr. Emergency drain rejects after its 64 KiB
+processed threshold, with at most 8 KiB of issued/in-flight overflow, for a 73,728-byte
+read envelope. Record processed bytes, observed overflow and possible unobserved
+in-flight capacity separately; issue no new reads after rejection. Incomplete capture
+cannot become accepted observation. Poll file effects at the reviewed cadence with
+at most 720 samples, 512 directory entries per sample, 128 new directories, 256 files,
+128 MiB aggregate new-file and 32 MiB binlog thresholds. Generated text has separate
+32-file, 1 MiB-per-file and 16 MiB aggregate acceptance limits. Count staged/preseeded
+JSON/XML as inputs and include them in new-file totals. These are stop/acceptance
+thresholds, not instantaneous filesystem quotas; retain any overshoot as failure.
+
+The directory threshold includes both new scan roots and all observed descendants,
+including staging and preseeded directories. Reject the 129th directory before
+traversing it. Keep the latest attempted directory count separately from the last
+completed file sample, so a rejecting sample retains its overflow count in the failure
+receipt. Successful original joining requires the final complete sample's directory
+count to agree with that receipt and remain between two and 128.
+
+Absence checks admit at most 256 literal leaves per checkpoint, with at most seventeen
+components below `C:\` and 1,024 characters per expanded path. They make at most
+9,216 attempted GetAttributes metadata calls across two checkpoints, stopping at the
+first missing component. Membership checks admit at most 32 domains with 32 expected
+members each, the same path limits, and at most 2,176 attempted GetAttributes calls.
+They accept at most 512 yielded entries per checkpoint, 1,024 total; one overflow
+entry may be observed solely to reject the action. These counts are separate from
+the existing cancellation metadata checks and owned-empty-directory checks. Before
+each metadata call or enumerator advance, recheck original cancellation/deadline with
+the 20,000 ms reserve. A native metadata/enumerator call may return late; it does not
+gain another deadline. Receipts retain attempted checkpoint, metadata-call and yielded
+entry counters, including failed checkpoints. Successful original joining requires
+both complete checks twice and strict integer counters within their acceptance limits.
+
+Each dispatcher/controller input reader has at most 256 reads and 256 MiB requested
+bytes, with the source's smaller per-input and buffered-input limits. The observer-only
+history adapter has a separate allowance of 4,096 reads and 256 MiB requested bytes
+across its two history checkpoints. Preserve the existing disposed-0054 verifier's
+fourteen content reads, 123,166 requested bytes, thirty seconds shared verification
+time and thirty-four metadata probes within those checkpoints. Fixed Git queries and
+public GitHub GET checks use the existing thirty-second per-helper limit inside the
+same original action deadline; they cannot invoke an SDK, compiler or Windows proxy.
+
+Successful provisional completion requires the original Windows controller exit zero,
+natural subject/Job completion, complete capture, no termination request, permitted
+file effects, the claimed marker and intentional nonzero subject exit containing
+AUTH108CSCSTOP. A later independent interpretation must establish the complete unique
+Core Csc input/argument/output sequence and binlog completion. Text matching alone
+does not establish uniqueness. Original graph, artifact, independent-observation and
+continuation flags remain false.
+
+The shared history lock stays held through the dispatcher's local finalization attempt.
+On cancellation/timeout it does not wait for the Windows proxy or Windows finally;
+that completion remains unknown. Releasing the local lease is not evidence that both
+receipts completed. A fresh original deadline/cancellation check after all local
+persistence and lock/handler finalization decides the original caller's success.
+A provisional success-looking receipt cannot override a late, nonzero, cancelled or
+uncollected original invocation. Any incomplete pair blocks subsequent work; retain
+owned partial state without speculative cleanup or a replacement receipt.
+
+### Dedicated Allocation and Later Consumers
+
+Allocate exactly one Windows build/test unit for this observer. Prospectively lower
+the Linux ceiling from 80 to 79 and raise the aggregate Windows ceiling from 48 to 49,
+while leaving ordinary Windows build/test capacity at 48. The Wave combined ceiling
+remains 120. With unchanged history, the charge produces `37 + 49 + 1 = 87/120`,
+including the existing fixture debit exactly once. Preparation remains 15/16, publish
+0/12 and synthetic processes 48/60; the twelve final CLI scenarios remain protected.
+This proposal has not consumed or reserved the new unit.
+
+Recover the original counters and derive the action number under the existing shared
+lock. Preserve the immutable 45-Linux/53-Windows prefix, disposed 0054 and accepted
+0055. The unchanged history makes the next number 0056; reject any different history.
+Record the one-unit start durably before materialization or launch. Every failure,
+including failed start, consumes the unit; a partial reservation blocks continuation.
+Use the existing paired history/handoff carrier, with no second ledger.
+
+The prospective ordinary readers fail closed when they encounter this observer,
+including a provisional successful receipt. Independent acceptance of the original
+outcome must update the existing handoff and its current consumers in the same change
+before later publication or validation. Preserve all old receipts, flags, historical
+48/80 limits and dispositions. A failed observer does not receive another unit.
+
+Before this action can execute, independently admit the complete current physical and
+source predicates, prepared inputs, exact activated source/runtime/literal and finite
+effects. No account step or human input is selected here; automated preparation and
+observation do not require desktop attendance. The separate final-publication graph,
+Native AOT artifact, final CLI/WSL scenarios and real account acceptance remain open.
