@@ -811,6 +811,9 @@ function Invoke-GuardPreparationCandidate {
     return 0
 }
 
-# There is deliberately no call to Invoke-GuardPreparationCandidate and no
-# top-level exit wrapper. Exact admission must bind that future source change.
-throw 'UNBOUND: accepted final-guard preparation entry point is absent'
+# Exact source/protocol and execution admission must bind this entry point.
+$guardPreparationExitCode = Invoke-GuardPreparationCandidate
+if ($guardPreparationExitCode -isnot [int] -or $guardPreparationExitCode -notin @(0, 1)) {
+    throw 'Invalid guard preparation exit result'
+}
+exit $guardPreparationExitCode
