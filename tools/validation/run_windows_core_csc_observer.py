@@ -223,6 +223,14 @@ def stage_authority_documents(authority, authority_bytes, invocation, owned, dea
                      ("materialization.json", authority["wslMaterialization"], authority["materialization"])]
     pairs_to_copy += [(name + ".review", authority["wslReviews"][name], authority["reviews"][name])
                       for name in REQUIRED_REVIEWS]
+    projections = authority["wslGuardProjections"]
+    if type(projections) is not dict or set(projections) != {"wslResult", "completionAcceptance"}:
+        raise ValueError("Guard evidence projection selection changed")
+    for role, name, size in (("wslResult", "guard-wsl-result.json", 967),
+                             ("completionAcceptance", "guard-completion-acceptance.json", 4068)):
+        if type(projections[role]["bytes"]) is not int or projections[role]["bytes"] != size:
+            raise ValueError("Guard evidence projection size changed")
+        pairs_to_copy.append((name, projections[role], authority["guard"][role]))
     for name, source, destination in pairs_to_copy:
         remaining(deadline)
         if cancelled():

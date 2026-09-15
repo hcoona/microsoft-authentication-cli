@@ -6862,8 +6862,18 @@ twelve restored payloads and the independently admitted active observer in the n
 action's `observer-payloads` directory. Its `observer-support` directory receives
 the fixed controller, proposal, source manifest, materialization map, eleven review
 inputs and the static authority. Hash-bound pairs fix each Linux input and Windows
-destination. The authority remains independent of the subsequently derived reservation
-hash; the external invocation supplies that authority's exact hash. The only Windows
+destination. A dedicated `wslGuardProjections` mapping stages exactly two additional
+accepted offline guard-evidence copies in that same support directory: the 967-byte
+WSL result as `guard-wsl-result.json` and the 4,068-byte completion acceptance as
+`guard-completion-acceptance.json`. Their source descriptors must match the respective
+`guard.wslResult` and `guard.completionAcceptance` byte counts and SHA-256 values;
+both guard destinations must be literal paths in the reserved action's support
+directory before the controller reads them. Charge these two reads and 5,035 payload
+bytes to the existing dispatcher limits. Keep the eleven review inputs separate and
+reuse the already accepted Windows artifact-acceptance copy. Do not read the original
+WSL result, reconstruct evidence, stage a third guard projection, or allocate another
+action for this transfer. The authority remains independent of the subsequently derived
+reservation hash; the external invocation supplies that authority's exact hash. The only Windows
 bootstrap is the installed Windows PowerShell with `-NoLogo -NoProfile -NonInteractive
 -File` and this action's fixed controller. No shell interpolation or alternate helper
 is admitted.
