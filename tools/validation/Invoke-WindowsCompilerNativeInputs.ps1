@@ -383,13 +383,20 @@ function Assert-CompilerNativeInputsMembership($Authority, $Binding, $Watch, $Cl
     $script:MembershipChecks++
     if ($script:MembershipChecks -gt 2 -or $null -eq $Authority.physicalMembership -or
         $Authority.physicalMembership.Count -lt 1 -or $Authority.physicalMembership.Count -gt 32) { throw 'Membership checkpoint bound' }
-    $seen=@{}; $checkpointEntries=0
+    $seen=@{}; $checkpointEntries=0; $hostfxrDomains=0
+    $fixedHostfxrPath='C:\Program Files\dotnet\host\fxr'
     foreach ($domain in $Authority.physicalMembership) {
         $path=Resolve-Template $domain.path $Binding
         if ($path.Length -gt 1024 -or $path -cnotmatch '^C:\\' -or
             $path -cne [IO.Path]::GetFullPath($path)) { throw 'Noncanonical membership selector' }
         if ($domain.pattern -cnotmatch '^(\*|Microsoft\.VisualStudioVersion\.v\*\.Common\.props|Authentication\.(Cli|Core|Windows)\.csproj\.\*\.(props|targets))$' -or
             $null -eq $domain.members -or $domain.members.Count -gt 32) { throw 'Unbound membership pattern or members' }
+        $isHostfxrDomain=$path -ieq $fixedHostfxrPath
+        if ($isHostfxrDomain) {
+            $hostfxrDomains++
+            if ($hostfxrDomains -ne 1 -or $path -cne $fixedHostfxrPath -or
+                $domain.pattern -cne '*' -or $domain.members.Count -ne 3) { throw 'Unbound fixed hostfxr membership domain' }
+        }
         $key=$path+'|'+$domain.pattern
         if ($seen.ContainsKey($key)) { throw 'Duplicate membership domain' }
         $seen.Add($key,$true)
@@ -398,10 +405,14 @@ function Assert-CompilerNativeInputsMembership($Authority, $Binding, $Watch, $Cl
             if ($member -isnot [string] -or $member.Length -eq 0 -or $member -in @('.','..') -or
                 $member.IndexOfAny([IO.Path]::GetInvalidFileNameChars()) -ge 0 -or
                 $member -inotlike $domain.pattern -or $expected.ContainsKey($member)) { throw 'Invalid expected member' }
+            if ($isHostfxrDomain -and $member -cnotin @('10.0.12','6.0.36','8.0.31')) { throw 'Unexpected fixed hostfxr version name' }
             $expected.Add($member,$true)
-            $memberPath=[IO.Path]::Combine($path,$member)
-            if (-not $script:PreseededInputs.ContainsKey($memberPath) -and
-                @($Authority.physicalInputs | Where-Object { $_.path -ieq $memberPath }).Count -ne 1) { throw 'Member has no leased input identity' }
+            # Only this fixed domain contains directory names rather than leased files.
+            if (-not $isHostfxrDomain) {
+                $memberPath=[IO.Path]::Combine($path,$member)
+                if (-not $script:PreseededInputs.ContainsKey($memberPath) -and
+                    @($Authority.physicalInputs | Where-Object { $_.path -ieq $memberPath }).Count -ne 1) { throw 'Member has no leased input identity' }
+            }
         }
         $parts=$path.Substring(3).Split([char]'\')
         if ($parts.Count -lt 1 -or $parts.Count -gt 17) { throw 'Membership path depth bound' }
@@ -440,12 +451,16 @@ function Assert-CompilerNativeInputsMembership($Authority, $Binding, $Watch, $Cl
                 $script:MembershipMetadataProbes++
                 if ($script:MembershipMetadataProbes -gt 2176) { throw 'Membership metadata allowance' }
                 $attributes=[IO.File]::GetAttributes($enumerator.Current)
-                if ($attributes -band ([IO.FileAttributes]::ReparsePoint -bor [IO.FileAttributes]::Directory)) { throw 'Wildcard member is not an ordinary file' }
+                if ($isHostfxrDomain) {
+                    if ($attributes -band [IO.FileAttributes]::ReparsePoint -or
+                        -not ($attributes -band [IO.FileAttributes]::Directory)) { throw 'Hostfxr member is not an ordinary directory' }
+                } elseif ($attributes -band ([IO.FileAttributes]::ReparsePoint -bor [IO.FileAttributes]::Directory)) { throw 'Wildcard member is not an ordinary file' }
                 $actual.Add($leaf,$true)
             }
         } finally { $enumerator.Dispose() }
         if ($actual.Count -ne $expected.Count) { throw 'Expected wildcard member is missing' }
     }
+    if ($hostfxrDomains -ne 1) { throw 'Required fixed hostfxr membership domain is missing' }
 }
 function Assert-EmptyDiagnosticCapture {
     Assert-Direct $script:CaptureRoot
