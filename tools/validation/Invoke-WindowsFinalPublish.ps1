@@ -480,23 +480,29 @@ function Get-FinalRenderedToolPlan($Graph, $Plan, $Recipe, $Slots) {
             throw 'Exec consumer/response does not join its static plan'
         }
         $encoding = $Plan.batchEncoding
-        $oem = [int]$encoding.oemCodePage
-        $codec = [Text.Encoding]::GetEncoding($oem, [Text.EncoderFallback]::ExceptionFallback, [Text.DecoderFallback]::ExceptionFallback)
-        $representable = $true
-        try { [void]$codec.GetBytes($command + $working) }
-        catch [Text.EncoderFallbackException] { $representable = $false }
-        $specification = $encoding.useUtf8Encoding.ToUpperInvariant()
-        $selected = $oem
-        if (@('ALWAYS', 'TRUE') -ccontains $specification -or
-            (@('', 'DETECT') -ccontains $specification -and -not $representable)) { $selected = 65001 }
-        if ($encoding.codePage -ne $selected) { throw 'Exec encoding differs from source selection' }
         $lines = @('setlocal', 'set errorlevel=dummy', 'set errorlevel=')
-        if ($selected -ne $oem) { $lines += '%SystemRoot%\System32\chcp.com ' + $selected + '>nul' }
+        if (@($encoding.PSObject.Properties.Name) -ccontains 'mode') {
+            Assert-FinalToolEqual $encoding @{ mode = 'ascii-default-detect'; useUtf8Encoding = 'Detect'; codePageTool = $null }
+            if (($command + $working) -cmatch '[^\x00-\x7f]') { throw 'Non-ASCII Exec command or working directory' }
+            $codec = [Text.Encoding]::ASCII
+        } else {
+            $oem = [int]$encoding.oemCodePage
+            $codec = [Text.Encoding]::GetEncoding($oem, [Text.EncoderFallback]::ExceptionFallback, [Text.DecoderFallback]::ExceptionFallback)
+            $representable = $true
+            try { [void]$codec.GetBytes($command + $working) }
+            catch [Text.EncoderFallbackException] { $representable = $false }
+            $specification = $encoding.useUtf8Encoding.ToUpperInvariant()
+            $selected = $oem
+            if (@('ALWAYS', 'TRUE') -ccontains $specification -or
+                (@('', 'DETECT') -ccontains $specification -and -not $representable)) { $selected = 65001 }
+            if ($encoding.codePage -ne $selected) { throw 'Exec encoding differs from source selection' }
+            if ($selected -ne $oem) { $lines += '%SystemRoot%\System32\chcp.com ' + $selected + '>nul' }
+            if ($selected -eq 65001) { $codec = $utf8 }
+        }
         $lines += @($command, 'exit %errorlevel%')
         $crlf = [string][char]13 + [char]10
         $text = ($lines -join $crlf) + $crlf
-        if ($selected -eq 65001) { $data = $utf8.GetBytes($text) }
-        else { $data = $codec.GetBytes($text) }
+        $data = $codec.GetBytes($text)
     }
     if ($data.Length -gt 8388608) { throw 'Tool response exceeds per-input bound' }
     return [pscustomobject]@{ command = $command; bytes = $data; environmentHash = (Get-FinalToolEnvironmentHash $environment) }
@@ -592,16 +598,22 @@ function Assert-FinalToolContract($Graph, $Recipe, $Slots) {
                 $plan.targetName -cne $response[0].consumer.target -or
                 $plan.producer.import.sha256 -cne $response[0].producer.sha256) { throw 'Exec/native response producer mismatch' }
             $execResponses.Add($plan.responseId)
-            Assert-FinalKeys $plan.batchEncoding @('oemCodePage', 'codePage', 'useUtf8Encoding', 'codePageTool')
-            Assert-FinalToolInteger $plan.batchEncoding.oemCodePage 1 65535
-            Assert-FinalToolInteger $plan.batchEncoding.codePage 1 65535
-            if (@('', 'Detect', 'Always', 'True', 'Never', 'System') -cnotcontains $plan.batchEncoding.useUtf8Encoding) {
-                throw 'Unreviewed Exec encoding branch'
+            $encoding = $plan.batchEncoding
+            if (@($encoding.PSObject.Properties.Name) -ccontains 'mode') {
+                Assert-FinalKeys $encoding @('mode', 'useUtf8Encoding', 'codePageTool')
+                Assert-FinalToolEqual $encoding @{ mode = 'ascii-default-detect'; useUtf8Encoding = 'Detect'; codePageTool = $null }
+            } else {
+                Assert-FinalKeys $encoding @('oemCodePage', 'codePage', 'useUtf8Encoding', 'codePageTool')
+                Assert-FinalToolInteger $encoding.oemCodePage 1 65535
+                Assert-FinalToolInteger $encoding.codePage 1 65535
+                if (@('', 'Detect', 'Always', 'True', 'Never', 'System') -cnotcontains $encoding.useUtf8Encoding) {
+                    throw 'Unreviewed Exec encoding branch'
+                }
+                if ($encoding.codePage -ne $encoding.oemCodePage) {
+                    Assert-FinalToolPin $encoding.codePageTool $Graph
+                    if ($encoding.codePageTool.path -cne 'C:\Windows\System32\chcp.com') { throw 'Wrong Exec codepage tool' }
+                } elseif ($null -ne $encoding.codePageTool) { throw 'Unused codepage tool' }
             }
-            if ($plan.batchEncoding.codePage -ne $plan.batchEncoding.oemCodePage) {
-                Assert-FinalToolPin $plan.batchEncoding.codePageTool $Graph
-                if ($plan.batchEncoding.codePageTool.path -cne 'C:\Windows\System32\chcp.com') { throw 'Wrong Exec codepage tool' }
-            } elseif ($null -ne $plan.batchEncoding.codePageTool) { throw 'Unused codepage tool' }
         }
         [void](Get-FinalRenderedToolPlan $Graph $plan $Recipe $Slots)
     }

@@ -1036,24 +1036,31 @@ def render_tool_plan(graph, plan, recipe, slots):
                 not same_path(ntpath.join(working, match[2]), resolve(response['pathTemplate'], slots))):
             fail('Exec command consumer/response path does not join its static response')
         encoding = plan['batchEncoding']
-        oem = encoding['oemCodePage']
-        codec = 'utf-8' if oem == 65001 else 'cp' + str(oem)
-        try:
-            (command + working).encode(codec, errors='strict')
-            representable = True
-        except UnicodeEncodeError:
-            representable = False
-        specification = encoding['useUtf8Encoding'].upper()
-        selected = 65001 if specification in ('ALWAYS', 'TRUE') or (
-            specification in ('', 'DETECT') and not representable) else oem
-        if encoding['codePage'] != selected:
-            fail('Exec encoding selection differs from the pinned source')
         lines = ['setlocal', 'set errorlevel=dummy', 'set errorlevel=']
-        if selected != oem:
-            lines.append('%SystemRoot%\\System32\\chcp.com ' + str(selected) + '>nul')
+        if 'mode' in encoding:
+            if encoding != {'mode': 'ascii-default-detect', 'useUtf8Encoding': 'Detect',
+                            'codePageTool': None} or not (command + working).isascii():
+                fail('Exec ASCII/default-Detect input or encoding branch differs')
+            codec = 'ascii'
+        else:
+            oem = encoding['oemCodePage']
+            codec = 'utf-8' if oem == 65001 else 'cp' + str(oem)
+            try:
+                (command + working).encode(codec, errors='strict')
+                representable = True
+            except UnicodeEncodeError:
+                representable = False
+            specification = encoding['useUtf8Encoding'].upper()
+            selected = 65001 if specification in ('ALWAYS', 'TRUE') or (
+                specification in ('', 'DETECT') and not representable) else oem
+            if encoding['codePage'] != selected:
+                fail('Exec encoding selection differs from the pinned source')
+            if selected != oem:
+                lines.append('%SystemRoot%\\System32\\chcp.com ' + str(selected) + '>nul')
+            codec = 'utf-8' if selected == 65001 else 'cp' + str(selected)
         lines.extend((command, 'exit %errorlevel%'))
         text = '\r\n'.join(lines) + '\r\n'
-        data = text.encode('utf-8' if selected == 65001 else 'cp' + str(selected), errors='strict')
+        data = text.encode(codec, errors='strict')
     if len(data) > 8388608:
         fail('Tool response exceeds the existing per-input bound')
     return command, data, tool_environment_hash(environment)
@@ -1152,17 +1159,24 @@ def validate_tool_contract(graph, recipe):
                     plan['producer']['import']['sha256'] != response['producer']['sha256']):
                 fail('Exec role differs from the selected native response producer')
             exec_responses.append(plan['responseId'])
-            keys(plan['batchEncoding'], ('oemCodePage', 'codePage', 'useUtf8Encoding', 'codePageTool'))
-            for name in ('oemCodePage', 'codePage'):
-                integer(plan['batchEncoding'][name], 1, 65535)
-            if plan['batchEncoding']['useUtf8Encoding'] not in ('', 'Detect', 'Always', 'True', 'Never', 'System'):
-                fail('Unreviewed Exec encoding selection')
-            if plan['batchEncoding']['codePage'] != plan['batchEncoding']['oemCodePage']:
-                tool_pin(plan['batchEncoding']['codePageTool'], graph)
-                if plan['batchEncoding']['codePageTool']['path'] != 'C:\\Windows\\System32\\chcp.com':
-                    fail('Exec codepage tool differs from the source command')
-            elif plan['batchEncoding']['codePageTool'] is not None:
-                fail('Unexpected unused codepage tool')
+            encoding = plan['batchEncoding']
+            if 'mode' in encoding:
+                keys(encoding, ('mode', 'useUtf8Encoding', 'codePageTool'))
+                if encoding != {'mode': 'ascii-default-detect', 'useUtf8Encoding': 'Detect',
+                                'codePageTool': None}:
+                    fail('Unreviewed Exec ASCII/default-Detect branch')
+            else:
+                keys(encoding, ('oemCodePage', 'codePage', 'useUtf8Encoding', 'codePageTool'))
+                for name in ('oemCodePage', 'codePage'):
+                    integer(encoding[name], 1, 65535)
+                if encoding['useUtf8Encoding'] not in ('', 'Detect', 'Always', 'True', 'Never', 'System'):
+                    fail('Unreviewed Exec encoding selection')
+                if encoding['codePage'] != encoding['oemCodePage']:
+                    tool_pin(encoding['codePageTool'], graph)
+                    if encoding['codePageTool']['path'] != 'C:\\Windows\\System32\\chcp.com':
+                        fail('Exec codepage tool differs from the source command')
+                elif encoding['codePageTool'] is not None:
+                    fail('Unexpected unused codepage tool')
         render_tool_plan(graph, plan, recipe, slots)
     if used_roles != set(roles) or sorted(exec_responses) != ['ilc', 'link']:
         fail('Unused directory role or incomplete/duplicate native Exec companion')
