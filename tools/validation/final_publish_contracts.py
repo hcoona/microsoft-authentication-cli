@@ -2047,7 +2047,10 @@ def load_core_csc_history(authority, deadline, cancelled, *, compiler_native_inp
     for role, fixed in inputs.items():
         raw[role] = bound({k: fixed[k] for k in ('bytes', 'sha256')},
                           Path(fixed['path']), deadline, cancelled, 1048576)
-        evidence[role] = decode(raw[role], canonical=role != 'artifactAcceptance')
+        # The compiler handoff's exact accepted bytes use indented JSON.
+        # Its hash and strict decoder bind the content without rewriting it.
+        canonical = role != 'artifactAcceptance' and not (compiler_native_inputs and role == 'handoff')
+        evidence[role] = decode(raw[role], canonical=canonical)
     guard_review = evidence['guardAcceptance']
     guard = guard_review['acceptedGuard']
     verify_guard(guard)
