@@ -7478,3 +7478,232 @@ the original 0055 authority. Passing a later current wrapper as though it were t
 historical source would fail those pins before reaching 0056; do not repair that
 mismatch by rewriting original pins, weakening the historical check or substituting
 historical-source acceptance for current-source admission.
+
+## One Compile-Through Native-Input Diagnostic
+
+The inactive implementation consists of the [fixed target](../../../tools/validation/CompilerNativeInputs.targets),
+[Windows controller](../../../tools/validation/Invoke-WindowsCompilerNativeInputs.ps1),
+[WSL dispatcher](../../../tools/validation/run_windows_compiler_native_inputs.py) and
+the existing [shared history adapter](../../../tools/validation/final_publish_contracts.py).
+These sources implement this supplement; they do not independently grant execution.
+
+This supplement allocates one new credential-free build/test action for Issue #108.
+Its bounded question is the original ordered compiler inputs for all three selected
+product projects and the native inputs available at the original
+WriteIlcRspFileForCompilation boundary. Complete the Core, Windows and CLI Csc tasks,
+capture the original ILC response and named linker-input producers, then stop
+unconditionally before ILC or linker execution. The original failed 0056 remains
+consumed and unchanged. This is a new diagnostic with a fresh root and action identity;
+it does not retry the skipped-first-Core procedure or publish an AOT artifact.
+
+### Selected Source and Reused Inputs
+
+Use unchanged product commit `503360753accd0829801953823b1b57a4f852440`, tree
+`8506cdd9781c8a331ea12ea8fe27a55292eec073`, SDK 10.0.401/runtime 10.0.12,
+MSAL/Broker 4.83.1, NativeInterop 0.20.3 and the accepted public packages/toolchain.
+The new dedicated root is
+`C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v1`;
+its source subdirectory receives the same 34 product inputs and a single independently
+bound fixed observer Import overlay. Preserve 33 Git blobs; only the original 395-byte
+src/Directory.Build.props receives a 134-byte unconditional Import before its closing
+Project element, naming compiler-native-inputs.targets immediately under the new root.
+The resulting file is 529 bytes and the complete diagnostic source is 150,170 bytes.
+Preserve all three project files and their ordinary project-reference metadata. The
+sole source overlay replaces neither an SDK target nor a compiler. Its exact bytes,
+payloads and product projection must be admitted before materialization. Reuse exactly
+twelve unchanged retained restore inputs, totaling
+233,709 bytes, under their proper per-project obj directories. No restore, download,
+installation, cache mutation or product execution is selected.
+
+Reuse the corrected no-reparse path walk, staged 34+12 input pipeline, current paired
+history, fixed public runtime inputs and completed ordinary guard 0055. Preserve the
+two accepted WSL guard projections and eleven source-review inputs as separate roles.
+No guard compilation or historical SDK/host/parser/observer invocation is authorized.
+The original 0056 authority can support unchanged identity facts only; its root,
+source activation, reservation, literal call and failed completion cannot authorize
+this diagnostic. Keep the separate planned final source root unmaterialized and
+unprobed by this action.
+
+Invoke the selected muxer through its built-in msbuild route, target Publish, with
+the existing seventeen Publish properties, `-restore:false`, one node, disabled
+node/build/compiler servers, `-noAutoResponse`, `-tl:off`, detailed output and one
+binary logger with ProjectImports=None under the fresh diagnostic root. Preserve
+the 35-entry replacement environment and the already selected
+MSBUILDPRESERVETOOLTEMPFILES=1. Fix MSBuildUserExtensionsPath to the new action's owned
+empty home/msbuild-user directory through ordinary project-reference propagation.
+The complete source-reviewed vector and exact bootstrap literal are independently
+bound before execution; a captured command string is not an invocation authority.
+Retain the binary logger's three internal environment additions as diagnostic
+context differences from the final recipe.
+
+### Actual Compilers and the Native Cutoff
+
+The exact admitted source enforces one Core net10.0 context, one Windows
+net10.0-windows context and one CLI net10.0-windows/win-x64 context, in that order.
+Require the selected Release/Publish/reference properties, no resource batching,
+original built-in Csc task/host identities, no shared or host compiler and no command
+processor. SkipCompilerExecution remains false or empty; TargetsTriggeredByCompilation
+remains empty. Set only ProvideCommandLineArgs=true to retain supplementary arguments;
+its original false/empty value and the newly reached compiler/generator effects must
+be reviewed. Preserve original response-file bytes through the existing ToolTask
+temporary-file preservation event, joined to the exact successful Csc task. Split
+CscCommandLineArgs items never substitute for that original response. The pinned
+[CoreCompile Csc task and output mapping](https://github.com/dotnet/roslyn/blob/f7797ed513e3035983346552ac2d9ca2281bc2ec/src/Compilers/Core/MSBuildTask/Microsoft.CSharp.Core.targets#L97-L189)
+passes ProvideCommandLineArgs and SkipCompilerExecution separately, maps the original
+CommandLineArgs output to CscCommandLineArgs and conditionally calls
+TargetsTriggeredByCompilation. Its in-target editor-config embedding into the binlog
+is a newly reached declared file-read/capture effect. This source finding does not
+supply current installed-file correspondence or physical continuity.
+
+One preseeded zero-byte append-only marker has seven exact CRLF lines: core-begin,
+core-complete, windows-begin, windows-complete, cli-begin, cli-complete and
+native-inputs-captured. Six compiler lines total 85 bytes; the terminal claim is
+109 bytes. Fresh exact marker reads, single-node unbatched execution, no competing
+writer and the original target ordering enforce uniqueness. Never reset a claim or
+create a substitute assembly to continue a failed compilation. The marker alone
+cannot establish successful compilers or complete native inputs.
+
+The source-bound cutoff runs after the original WriteIlcRspFileForCompilation,
+whose [pinned dependency chain](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets#L198-L331)
+includes Compile, ComputeIlcCompileInputs, SetupOSSpecificProps and PrepareForILLink. Reject multi-module/framework-library
+recursion, non-Windows/non-x64/non-Exe branches, native-library modes and alternate
+tool discovery. Capture once and unconditionally raise AUTH108NATIVEINPUTSTOP.
+BeforeTargets backstops reject BuildFrameworkLib, IlcCompile and LinkNative bodies;
+BeforeTargets=LinkNative alone would be too late. Admit no overriding target,
+competing hook, continued-error path or native OnError route that bypasses the cutoff.
+No ILC Exec, linker Exec, native object/exports generation or publish copy is admitted.
+Ordinary compiler, generator, source-control and SDK bookkeeping effects remain
+within owned intermediates and their exact source/physical predicates.
+
+### Fixed Evidence and Later Interpretation
+
+Retain three complete original successful Csc task contexts, their command/response
+text, original preserved responses and declared implementation/reference/PDB outputs.
+Bind source, reference, analyzer, generated source, editor configuration, SourceRoot,
+SourceLink and project/task/environment identities. At the cutoff retain the original
+ILC response and its WriteLinesToFile producer, ordered IlcArg and LinkerArg,
+AdditionalNativeLibraryDirectories, selected managed/framework/native-pack inputs,
+NativeObject/NativeBinary/ExportsFile and ManagedBinary path/metadata values, Windows
+branch controls and ILC environment/default controls.
+
+The hook explicitly names nine compiler item arrays per project, 33 native item arrays,
+58 native scalars and four ManagedBinary metadata values: at most 60 companion item
+files and 92 named scalar/metadata Message occurrences. Its literal item-count caps
+are rejection limits, not observations. Compiler arguments and IlcArg have at most
+8,192 items; remaining arrays retain their smaller exact source limits. The original
+complete binlog must preserve task identities, ordered item boundaries and metadata.
+Companion text files alone cannot disambiguate embedded newlines or retain metadata;
+do not reconstruct arrays from console delimiters or promote them to original RSPs.
+Keep the existing maximum 32 combined response plans and 8 MiB per response.
+
+The later Windows link response may be source-rendered from the captured ordered
+inputs using the unchanged native target: quoted NativeObject, /OUT, conditional
+/DEF, ordered /LIBPATH and ordered LinkerArg. This is an expected producer plan,
+not an observed link response or consumed native object. Derive the later ILC
+DOTNET_gcServer override from the captured value and original target branch.
+Diagnostic-to-final paths and generated values require pinned producer derivation
+and final physical predicates; string substitution does not prove SourceLink,
+SourceRoot, generated files or output identity. Missing inputs remain unresolved.
+Final graph, complete native identity closure, original response/task receipts,
+actual publication and artifact/scenario acceptance retain their separate gates.
+
+### Finite Original Execution and Failure Evidence
+
+One nonresetting 900,000 ms caller observation/success deadline covers admission,
+reservation, staging, bootstrap, handshake, subject, joining and finalization. The
+handshake ends at the earlier of that deadline and twenty seconds after the timestamp
+captured immediately before Popen. Persist each launch attempt and recheck original
+cancellation/deadline immediately before Popen or Start. Keep 20,000 ms for subject
+cleanup at Start, more than 15,000 ms for ordinary Stop admission and 5,000 ms for
+receipt/drain work. The unchanged guard's native-call latency, fixed 10,000 ms
+assignment-failure recovery, 10,000 ms ordinary Stop loop and possible final 50 ms
+polling overshoot retain their existing limits; a late native return gains no new
+caller time. Closing the Job remains distinct from observed quiescence.
+
+Retain at most 8 MiB combined stdout/stderr. Keep the existing emergency-drain
+64 KiB processed threshold plus at most 8 KiB issued/in-flight overflow, with no new
+reads after rejection. At the reviewed polling cadence allow at most 3,600 samples,
+512 entries per sample, 128 new directories, 512 files, 256 MiB aggregate new-file
+bytes and 64 MiB binlog bytes. Generated text is bounded by 96 files, 1 MiB per file
+and 32 MiB aggregate. Include staged/preseeded files in totals and both scan roots in
+the directory count; reject the 129th directory before traversing it. Retain attempted
+overflow counts separately from the last complete sample. These are stop/acceptance
+thresholds, not instantaneous filesystem quotas; overshoot is failure.
+
+Reuse both physical checkpoints and their fixed absence/membership input lists with
+the same 256-leaf, 32-domain, component/path, metadata and yielded-entry ceilings.
+Rebind only newly reached inputs and fresh-root effects before admission; earlier
+absence is not continuing evidence. Preserve cancellation/deadline checks with the
+20,000 ms reserve before each metadata/enumerator operation. Each controller and
+dispatcher input reader keeps 256 reads/256 MiB requested bytes; the history adapter
+keeps 4,096 reads/256 MiB across two checkpoints. Retain the exact disposed-0054
+verifier and the two fixed failed-0056 passes, including their shared active-time,
+identity, metadata, original-role and failure-latch limits. Do not add an inventory
+or missing-receipt probe for 0056. Public Git/GitHub helpers keep thirty-second
+limits inside the same outer clock, with no SDK or Windows proxy fallback.
+
+The new controller intentionally emits one ASCII JSON bootstrap frame of at most
+1,024 bytes with schema compiler-native-inputs-bootstrap-v1 and only stage, outcome
+and exceptionType fields. Its admitted source fixes closed stage/type vocabularies;
+unknown exception types become OtherException. A candidate frame requires
+controller-exit and null exceptionType. Intentional emission excludes exception
+messages, stacks, private paths, account details and arbitrary exception properties.
+No pre-admission owned-path receipt write or second recovery query is permitted.
+
+The dispatcher privately retains bounded original stdout/stderr before interpreting
+the frame, including unexpected invalid interpreter output. Retain at most 4,096
+combined bytes plus one returned overflow byte: at most 4,097 bytes returned by
+os.read across both pipes. At most 36,004 pump passes may reach reads, each making
+at most two nonblocking calls requesting at most 4,096 bytes. This implies at most
+72,008 calls and a conservative cumulative API-request-size ceiling of 294,944,768
+bytes, including EAGAIN, EOF and short reads. Requested sizes are distinct from
+bytes returned or retained, and from the separate descriptor-input allowance.
+Rejected pump entries can increment the attempted counter without reading. The
+same allowance covers the handshake, observation and final drain. Retain a transport
+metadata receipt of at most 4,096 bytes with separate returned-byte, read-bearing
+pump, call and requested-byte ceilings; do not claim an actual requested-byte total.
+Never display or publish these raw transport files. A valid frame requires complete
+EOF capture, empty stderr, exactly one ASCII line and the closed schema; invalid,
+missing, overflowing or incomplete transport remains failure/unknown. Preserve the
+original clock and no-wait-after-cancellation behavior during capture/finalization.
+After owned-path admission, keep ordinary failure receipts and partial state.
+
+Provisional completion requires original controller exit zero, intentional nonzero
+subject exit, the exact complete marker/stop event, complete capture/binlog and file
+checks, natural subject/Job completion and zero active processes without termination.
+Later independent interpretation must establish all three successful compiler tasks
+and the unique original native-input cutoff. Timeout, truncation, unexpected task,
+missing output, partial original completion or a survivor is failure. The shared
+history lock remains held through local finalization; on cancellation do not wait
+past the original deadline for the proxy/finally. Releasing that lease does not
+establish paired completion. Keep original graph/artifact/continuation flags false
+until the corresponding accepted evidence supplies their separate dispositions.
+
+### One Dedicated Unit and Exact Admission
+
+Transfer one unused prospective allocation: Linux ceiling 79 to 78 and aggregate
+Windows ceiling 49 to 50, leaving ordinary Windows capacity at 48 and the combined
+Wave ceiling at 120. Preserve original counters Linux [8,37,0,0] and Windows
+[7,49,0,48], all original 45 Linux/53 Windows prefix entries, disposed 0054,
+successful guard 0055 and disposed 0056. The sole new charge produces
+37 + 50 + 1 = 88/120 including the original fixture once. Preparation 15/16,
+publish 0/12, synthetic scenarios 48/60 and their protected twelve remain unchanged.
+
+Under the existing shared lock derive successor 0057 from the exact accepted handoff;
+reject a different history or an existing/partial slot. Record one build/test charge
+durably before staging or launch. Every failed start consumes it; no refund or retry
+is permitted. Keep the existing paired history/handoff carrier. Current ordinary
+readers fail closed on the new suffix until its exact original result and updated
+handoff/consumer interpretation are independently accepted. No provisional success
+or marker grants later execution. Do not alter original flags or historical limits.
+
+All new controller/dispatcher/target/history entry gates remain disabled in Git.
+The accepted protocol is a prerequisite, not sufficient source or invocation
+admission. Independently accept the complete new source, exact private activation,
+materialization maps/payloads, newly reached compiler/generator/native setup effects,
+current physical predicates, runtime/guard identities, handoff, literal invocation
+and finite result interpretation before any execution-oriented parsing, import,
+materialization or launch. Reuse accepted unchanged mechanisms without reopening
+completed unrelated SDK/runtime/provenance audits. No account operation, human input
+or desktop attendance is selected. Retain dedicated artifacts after every outcome;
+no speculative cleanup, historical replay or final-publication acceptance is granted.
