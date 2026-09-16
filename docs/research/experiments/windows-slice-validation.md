@@ -7879,6 +7879,58 @@ before-try source-admission failures unchanged. The executed original source and
 empty transport remain unchanged. All dispatcher execution gates remain inactive;
 this correction and this recovery grant do not authorize another diagnostic.
 
+### Fixed 0057 Recovery Observation
+
+The sole recovery ran under accepted protocol commit
+`05edbc54c540399b873b31276e427034874b4560`, tree
+`07bf0670fc2dff9d476fa73c2cbebf7c47b99112`. Its exact source, runtime,
+activation, literal and original completion were independently accepted. The original
+collector returned exit zero with one complete closed transport frame and no yielded
+session. It used two logical reads, four read calls, 2,294 requested bytes, 2,292
+returned bytes and 54 counted path operations, and wrote only the 1,623-byte inventory.
+
+The exact WSL action 0057 directory was absent at the initial and sole final permitted
+checks. No individual receipt leaf was observed and no original receipt content was
+copied. Independent interpretation accepted this observation after accepting the
+original transport and the bounded, exact inventory read. The recovery is consumed
+1/1; no retry, alternate query, repair or cleanup is granted.
+
+This absence alone does not establish the original diagnostic's reservation debit,
+reached effects or lifetime. The separate source finding below narrows reachability;
+it does not turn directory absence into execution evidence. The original exit-one
+failure and consumed invocation remain unchanged. The dedicated unit stays
+unavailable; no successor diagnostic, final publication, graph or artifact acceptance
+follows.
+
+### Original 0057 Handoff Format Rejection
+
+Independent source and exact-input review found a deterministic conflict in the
+original history loader at `a578b7cb7da9f80860817ca782519941ebb11395`.
+`load_core_csc_history` selects the fixed compiler handoff, verifies its 211,842-byte
+length and SHA-256
+`fe13f88846f537825049dface75869cccad84f6df3bc2a748968a466c8443ba6`,
+then requires canonical compact JSON. The pinned bytes are valid strict JSON with
+indentation; their canonical serialization has 175,202 bytes and SHA-256
+`6295feaedba883966ef0c42189916acc3a72b10d0b3b91d4c01ef9e00ef29fae`.
+These formats cannot satisfy the same exact-byte contract.
+
+Under the accepted executed-source, input and runtime bindings, missing or changed
+handoff bytes fail the descriptor check, while the exact pinned bytes fail canonical
+decoding. The loader therefore cannot return to reservation. Its later root-marker
+reads, shared-lock acquisition, durable 0057 start/debit, staging and Windows process
+launch are unreachable. This is an independently reviewed source/input proof, not an
+observation of the actual failing instruction; an earlier error remains possible.
+Up to five preceding immutable local Git queries remain a separate lifetime question:
+their failure paths do not establish completed termination. No global quiescence,
+counter refund or continuation is claimed.
+
+The dormant loader now exempts only the compiler-mode handoff from canonical-byte
+formatting. Its exact length/hash, duplicate-field and nonfinite-value rejection,
+structural checks and later semantic joins remain required. The legacy Core observer
+handoff policy and all retained input bytes remain unchanged. This correction does
+not activate a source, resolve the preceding-helper lifetime question or grant a
+replacement diagnostic.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
