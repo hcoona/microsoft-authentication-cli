@@ -25,6 +25,11 @@ ACTIVE_TARGET_SHA256 = None
 ACTIVE_TARGET_BYTES = None
 BOOTSTRAP_CAPTURE_MAX_BYTES = 4096
 BOOTSTRAP_MAX_PUMPS = 36004
+DISPATCHER_FAILURE_TYPES = frozenset((
+    "ValueError", "TypeError", "KeyError", "RuntimeError", "OSError",
+    "FileNotFoundError", "FileExistsError", "PermissionError", "TimeoutError",
+    "InterruptedError", "KeyboardInterrupt", "MemoryError",
+))
 BOOTSTRAP_STAGES = frozenset((
     "entry-gate", "bootstrap-initialization", "source-bindings", "authority-shape",
     "authority-read", "invocation-read", "source-admission", "clock-handoff",
@@ -512,6 +517,8 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
         nonlocal cancelled
         cancelled = True
 
+    failure_stage = None
+    stage = "history-reservation"
     try:
         for number in (signal.SIGINT, signal.SIGTERM):
             handlers[number] = signal.signal(number, cancel)
@@ -520,6 +527,7 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
         # It owns the shared lock, current counters, linked durable reservations,
         # unique endpoint and action number. Failure never refunds the unit.
         reservation = history.reserve_compiler_native_inputs(authority, began, deadline, lambda: cancelled)
+        stage = "invocation-binding"
         # Retain the lease through the WSL receipt attempt. Cancellation/timeout
         # does not wait for Windows finally or establish paired finalization.
         # If reserve raises before returning, that helper releases its own lease.
@@ -563,6 +571,7 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
         write_new(owned / "invocation.json", raw_invocation)
         write_new(local / "invocation.json", raw_invocation)
         result.update(action=number, reservationSha256=invocation["reservationSha256"], invocationSha256=invocation_sha)
+        stage = "materialization"
         stage_payloads(authority, plan, source_inputs, invocation, owned, deadline, lambda: cancelled)
         stage_authority_documents(authority, authority_bytes, invocation, owned, deadline, lambda: cancelled)
         # Command prefix and both authority/controller paths are exact admitted
@@ -571,6 +580,7 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
         command += ["-AuthorityPath", authority["windowsAuthorityPath"], "-AuthoritySha256", admitted_authority_sha256,
                     "-InvocationPath", invocation["actionPath"] + "\\invocation.json", "-InvocationSha256", invocation_sha]
         remaining(deadline)
+        stage = "controller-launch"
         if cancelled:
             raise InterruptedError("Cancelled before launch")
         result["launchAttempted"] = True
@@ -589,9 +599,11 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
         _retained_proxies.append(proxy)
         bootstrap = new_bootstrap_capture(proxy)
         configure_bootstrap_capture(bootstrap)
+        stage = "clock-handoff"
         clock = exchange_original_clock(owned, start, invocation, invocation_sha, proxy, bootstrap, deadline,
                                         min(deadline, launch_started_ns + 20_000_000_000), lambda: cancelled)
         result["clock"] = clock
+        stage = "controller-observation"
         while True:
             if cancelled:
                 raise InterruptedError("Observer cancellation")
@@ -609,6 +621,7 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
             time.sleep(min(0.025, remaining(deadline)))
         # The root-owned extension validates originals and exact receipt flags;
         # output/binlog interpretation remains a separate independent acceptance.
+        stage = "result-joining"
         proof = history.validate_compiler_native_inputs_original(authority, reservation, invocation, clock, code, deadline)
         for key in ("normalCompletion", "quiescent", "captureCompleted", "naturalJobCompletion"):
             if proof.get(key) is not True:
@@ -622,6 +635,7 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
         result.update(normalCompletion=True, quiescent=True, safetyStop=False, originalWindowsCompletionJoined=True,
                       outcome="expected-stop-candidate-awaiting-independent-acceptance")
     except BaseException as error:
+        failure_stage = stage
         result["failureType"] = type(error).__name__
     finally:
         # The original proxy can fail before writing clock-ready. Retain that
@@ -691,6 +705,26 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
         result["normalCompletion"] = False
         result["safetyStop"] = True
         result["outcome"] = "incomplete"
+    if not result["normalCompletion"]:
+        # This is only an original failure diagnostic. A reservation call can
+        # raise after partial effects; its stage never proves their absence.
+        failure_keys = ("failureType", "bootstrapDrainFailureType",
+                        "bootstrapRetentionOrFrameFailureType", "cancelFailureType",
+                        "finalizationFailureType", "lockReleaseFailureType",
+                        "handlerRestoreFailureType")
+        failure_type = next((result[key] for key in failure_keys if key in result), None)
+        if failure_type is not None and failure_type not in DISPATCHER_FAILURE_TYPES:
+            failure_type = "OtherException"
+        frame = encode({"schema": "compiler-native-inputs-dispatcher-failure-v1",
+                        "stage": failure_stage or "finalization-or-completion",
+                        "outcome": "incomplete", "exceptionType": failure_type})
+        # One fixed small write, no retry, owned-path write or new clock. A lost
+        # or partial frame remains failure; it cannot manufacture completion.
+        try:
+            if len(frame) <= 1024:
+                os.write(1, frame)
+        except OSError:
+            pass
     return result
 
 

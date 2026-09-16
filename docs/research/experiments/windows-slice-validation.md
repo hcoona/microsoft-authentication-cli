@@ -7734,6 +7734,151 @@ completed unrelated SDK/runtime/provenance audits. No account operation, human i
 or desktop attendance is selected. Retain dedicated artifacts after every outcome;
 no speculative cleanup, historical replay or final-publication acceptance is granted.
 
+### Original 0057 Failure and One Fixed WSL Receipt Recovery
+
+The sole compile-through diagnostic invocation returned original exit code 1 with
+complete, empty tool output and no running tool session. Its retained original
+transport is 730 bytes with SHA-256
+`d8c601fa8e9efad36048f6e2acf68ca603ce8eaa037dbb001960d375d9b23084`.
+This is a failed invocation. The original reservation, reached effects and lifetime
+remain unresolved; short elapsed time and empty output do not establish no launch,
+no persistent state, quiescence or a particular exception. The sole invocation is
+consumed, with no retry or refund. Preserve the previous accepted counters and keep
+the dedicated unit unavailable until its exact failed-history disposition is accepted.
+The normal-result copier is ineligible.
+
+The existing Wave permits one new credential-free, read-only recovery of this
+specific failure. The [inactive fixed collector](../../../tools/validation/collect_windows_compiler_native_failure.py)
+selects only these three WSL receipt names beneath the exact
+`/var/tmp/azureauth-windows-slice-108/windows-actions/0057` directory:
+
+| Role | Exact leaf | Maximum bytes |
+| --- | --- | ---: |
+| Durable reservation | `started.json` | 8,192 |
+| Reservation-helper failure | `reservation-failure.json` | 4,096 |
+| Dispatcher result | `result.json` | 65,536 |
+
+All three are optional content roles. This is the first recovery for 0057; the
+earlier prohibition on a second recovery query remains in force. Historical SDK19,
+guard and 0056 invocations remain consumed. Reuse their no-follow, bounded raw-copy
+mechanisms, not their invocation grants. No build, compiler, Windows proxy, account
+operation, process query, payload, binary, diagnostic stream, binlog or Windows-root
+observation is selected. No desktop attendance or human input is required.
+
+The existing WSL root and windows-actions parent must be ordinary directories
+reached by component-wise, descriptor-relative no-follow traversal. The exact 0057
+directory may be absent; record that observation and recheck that same leaf once.
+Do not reinterpret a missing ancestor, denied access, link, non-directory or other
+error as absence. If 0057 is present, require the opened directory and its final
+no-follow lookup to retain device, inode, mode, length, mtime and ctime. Observe each
+fixed receipt once; an absent receipt gets one final same-leaf recheck. Never list a
+directory or follow a path found inside a receipt. Nonregular, oversized, changed,
+inaccessible or incomplete inputs fail the whole recovery without repair.
+
+Reuse only the existing `/var/tmp/azureauth-windows-slice-108/action.lock`, opened
+read-only and no-follow as a regular file, with one nonblocking exclusive lock
+attempt. Compare the held and exact-path identity before and after collection. Do
+not read, create or write lock content, wait, retry contention or run a concurrent
+experiment. Release and close the lease during finalization; lease release is not
+evidence of original Windows or helper quiescence.
+
+Copy present receipts as uninterpreted bytes; never display or publish raw receipts.
+Require complete EOF, stable opened
+and final-leaf device/inode/mode/length/mtime/ctime, one subsequent original read
+with identical identity and bytes, and one exact private-copy readback. Preserve
+integer timestamps with Python integers. Parsing or interpreting receipt contents
+is a later independent acceptance of these private copies; this invocation cannot
+claim a reservation, completion, compiler graph or original lifetime disposition.
+
+Create only `/tmp/windows-compiler-native-inputs-0057-failure-offline-v1`, exclusively
+with mode 0700 after the initial observations pass. Its fixed possible files are
+`started.bin`, `reservationFailure.bin`, `result.bin` and `inventory.json`. Missing
+roles receive no raw file. Create files exclusively and no-follow with initial mode
+0600, sync their complete bytes, seal them 0444 and sync again. Sync the held output
+directory and its parent, verify final directory identity, and read back each raw
+file and the inventory. Do not enumerate output. Retain every created file and
+partial directory after all outcomes; no cleanup, alternative location or resumption
+is granted.
+
+The closed admission record is the only private content input, at the exact path
+`/tmp/windows-compiler-native-inputs-0057-failure-recovery-admission-v1.json`, bounded
+by 16,384 bytes and bound by the externally admitted literal SHA-256 argument.
+Its source-defined fields bind action 0057, the original failed transport descriptor,
+one invocation, current accepted target/protocol/Wave identities, active source and
+runtime review. The external admission must independently establish those identities;
+syntactically valid hashes are not self-authenticating. The collector neither reads
+those referenced files nor invokes Git. It does not read the original transport.
+
+| Intentional collector bound | Maximum |
+| --- | ---: |
+| Original content slots / aggregate bytes | 3 / 77,824 |
+| Private admission bytes / inventory bytes | 16,384 / 16,384 |
+| Logical content reads, including continuity and private readbacks | 11 |
+| `os.read` calls / cumulative requested bytes | 31 / 266,251 |
+| Cumulative returned bytes | 266,240 |
+| New directories / files / aggregate file bytes | 1 / 4 / 94,208 |
+| Counted no-follow path/open/metadata operations | 1,024 |
+| Maximum read/write chunk | 16,384 bytes |
+| One nonresetting source clock | 90,000 milliseconds |
+| Outer TERM deadline, including interpreter startup / KILL grace | 95 seconds / 2 seconds |
+| Complete original combined tool capture retained for acceptance | 16 KiB |
+
+For P present receipts totaling S bytes, admission A and inventory I, successful
+collection uses `3 * P + 2` logical reads, returns `3 * S + A + I` bytes, and writes
+`S + I` bytes. When each request returns all requested data, each logical read
+requests the observed exact length plus one EOF sentinel, giving
+`3 * S + A + I + 3 * P + 2` requested bytes. Short reads may increase requested
+bytes and API calls; the independent fixed cumulative ceilings above still reject
+overflow before the next read. These limits cover
+intentional collector data operations; separately reviewed interpreter, standard
+library, ELF loader and watchdog startup retain their own runtime admission.
+
+The source clock begins once in main. Preserve latched cancellation and checks
+around bounded I/O, sync, finalization and final stdout flush. Use the previously
+reviewed Linux interpreter/watchdog mechanism with separately accepted current
+source/runtime/literal bindings. Keep the checked-in ACTIVE gate false. Only the
+one-line ACTIVE activation is eligible after this amendment merges and the exact
+source, runtime, literal, capacity record and finite result interpretation are
+independently accepted. A failed start, inactive rejection, missing required ancestor,
+lock contention, output collision, interruption, timeout, nonzero exit or incomplete
+transport consumes the recovery. No second attempt is authorized.
+
+The inventory is provisional and deliberately retains false completion, graph,
+artifact, independent-observation and continuation flags. Success requires the
+original collector exit zero, complete closed transport, all final checks and
+independent acceptance of the fixed copies and inventory. A saved inventory cannot
+override a failed or late tool invocation. Unknown or absent receipts remain unknown
+evidence, and no successful collection creates a successor handoff. Preserve the
+original diagnostic failure and resolve its remaining lifetime/history gates before
+dependent execution. This amendment grants only this recovery, not another diagnostic
+or AOT publication.
+
+The collector's one closed ASCII transport frame contains schema, normalCompletion,
+stage, role, exceptionType, inventory descriptor and cumulative counters. Stage uses
+only its source literals: admission, lock, action-directory, initial-read,
+output-create, copy-write, copy-readback, original-continuity, directory-continuity,
+inventory-write, inventory-readback, output-finalization, lock-finalization and
+finalization. Role is null or started, reservationFailure or result. Exception type
+is null, a source-allowlisted Python or finalization name, or OtherException. No raw
+receipt, exception message, path, stack or input-derived diagnostic is emitted.
+The fixed stage identifies the operation being attempted, not its absence of effects.
+
+The dormant dispatcher source also corrects an independently triaged observability
+defect prospectively. A handled failure emits at most one ASCII JSON line, with a
+trailing LF and a 1,024-byte ceiling, through its existing stdout. The closed schema
+is `compiler-native-inputs-dispatcher-failure-v1`, with only stage, outcome and
+exceptionType beyond schema. Outcome is incomplete. Stage is one of
+history-reservation, invocation-binding, materialization, controller-launch,
+clock-handoff, controller-observation, result-joining or finalization-or-completion.
+Exception type is a source-allowlisted Python name, OtherException or null; no
+message, stack, path or arbitrary exception property is emitted. A stage identifies
+the failed call and never implies that the call had no partial effects. This uses
+no new clock or owned-path receipt and does not retry a short or failed output
+write. It applies only to exit-one failures, cannot generate success, and leaves
+before-try source-admission failures unchanged. The executed original source and
+empty transport remain unchanged. All dispatcher execution gates remain inactive;
+this correction and this recovery grant do not authorize another diagnostic.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
