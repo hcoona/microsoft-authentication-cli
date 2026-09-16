@@ -7638,9 +7638,29 @@ thresholds, not instantaneous filesystem quotas; overshoot is failure.
 
 Reuse both physical checkpoints and their fixed absence/membership input lists with
 the same 256-leaf, 32-domain, component/path, metadata and yielded-entry ceilings.
-Rebind only newly reached inputs and fresh-root effects before admission; earlier
-absence is not continuing evidence. Preserve cancellation/deadline checks with the
-20,000 ms reserve before each metadata/enumerator operation. Each controller and
+For this compiler/native-input diagnostic, add exactly one directory-membership
+exception to the existing ordinary-file domains: canonical
+`C:\Program Files\dotnet\host\fxr`, pattern `*`, with exactly `10.0.12`, `6.0.36`
+and `8.0.31`. Require that domain once per checkpoint, with its literal spelling,
+pattern and unique names; reject omission, duplicates, aliases or any other set.
+Require ordinary non-reparse ancestors and directory members. Reject missing,
+inaccessible, unexpected or non-directory entries without descending into them.
+Only this fixed domain bypasses the per-member leased-file requirement; retain
+ordinary-file identity checks for every other domain and the separately pinned
+`10.0.12\hostfxr.dll` physical input and source-selected app-local absences. This
+binds the native host's highest-version directory selection before framework
+roll-forward, which cannot substitute for this predicate.
+
+The additional domain raises the fixed list from 19 to 20 domains. Across the two
+successful checkpoints it adds six yielded entries and sixteen metadata probes,
+with no new content read, process, file or directory. Reuse the existing shared
+counters and ceilings. These observations establish checkpoint continuity under
+the existing no-competing-installation-change premise; they do not establish an
+atomic snapshot or exclude transient changes between checks. Rebind newly reached
+inputs, changed controller source identity/size and fresh-root effects before
+admission; earlier absence or membership is not continuing evidence. Preserve
+cancellation/deadline checks with the 20,000 ms reserve before each metadata/enumerator
+operation. Each controller and
 dispatcher input reader keeps 256 reads/256 MiB requested bytes; the history adapter
 keeps 4,096 reads/256 MiB across two checkpoints. Retain the exact disposed-0054
 verifier and the two fixed failed-0056 passes, including their shared active-time,
