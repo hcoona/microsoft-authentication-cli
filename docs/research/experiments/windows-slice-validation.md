@@ -7551,9 +7551,15 @@ CscCommandLineArgs items never substitute for that original response. The pinned
 [CoreCompile Csc task and output mapping](https://github.com/dotnet/roslyn/blob/f7797ed513e3035983346552ac2d9ca2281bc2ec/src/Compilers/Core/MSBuildTask/Microsoft.CSharp.Core.targets#L97-L189)
 passes ProvideCommandLineArgs and SkipCompilerExecution separately, maps the original
 CommandLineArgs output to CscCommandLineArgs and conditionally calls
-TargetsTriggeredByCompilation. Its in-target editor-config embedding into the binlog
-is a newly reached declared file-read/capture effect. This source finding does not
-supply current installed-file correspondence or physical continuity.
+TargetsTriggeredByCompilation. CoreCompile adds EditorConfigFiles to EmbedInBinlog.
+With the selected ProjectImports=None, the pinned
+[binary logger](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Build/Logging/BinaryLogger/BinaryLogger.cs#L380-L415)
+does not collect their contents through that route: its new
+[event writer](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Build/Logging/BinaryLogger/BuildEventArgsWriter.cs#L1041-L1072)
+has no EmbedFile subscriber. Compiler configuration reads and ordinary item/task
+metadata logging remain within the declared effects; item presence does not establish
+embedded file content. This source finding does not supply current installed-file
+correspondence or physical continuity.
 
 One preseeded zero-byte append-only marker has seven exact CRLF lines: core-begin,
 core-complete, windows-begin, windows-complete, cli-begin, cli-complete and
@@ -7707,3 +7713,208 @@ materialization or launch. Reuse accepted unchanged mechanisms without reopening
 completed unrelated SDK/runtime/provenance audits. No account operation, human input
 or desktop attendance is selected. Retain dedicated artifacts after every outcome;
 no speculative cleanup, historical replay or final-publication acceptance is granted.
+
+## Fixed Compiler and Task-Host Metadata Copy
+
+This supplement permits preparation of one separately admitted raw-data copy,
+METADATA12, for the remaining finite compiler-extension selection and NET task-host
+configuration inputs of the compile-through native-input diagnostic. Reuse the
+accepted SDK19, HOST14, restore, compiler and public-source evidence within their
+scopes. Those consumed operations cannot be replayed. This copy has ten required
+content slots and two conditional presence/content slots. It does not establish
+current compiler selection, a successful task-host launch, complete dependency closure,
+Native AOT publication or Slice acceptance.
+
+Use the existing WSL Linux review environment and public Windows SDK 10.0.401/runtime
+10.0.12 installation and dedicated public-package location. Selected DLL/EXE bytes
+remain inert data: do not load, invoke or execute them. This operation performs no
+Windows invocation, network request, dependency download, installation, SDK/MSBuild
+evaluation, restore, build, test, compilation, publish, product execution, account
+enumeration, token acquisition, WAM, UI, consent or authentication-cache operation.
+It does not materialize diagnostic/product source or rewrite restore inputs.
+
+### Twelve Literal Slots
+
+The inactive collector fixes the corresponding twelve `/mnt/c/` paths and flat output
+labels. Accept no argument-supplied path, wildcard, directory enumeration, recursive
+walk, alternate SDK or metadata-directed follow-up. Existing identity evidence for
+FrameworkList.xml and ILLink.Tasks.deps.json supplies exact initial length/hash
+predicates, not their missing contents. All other present slots receive one initial
+observed length/hash, then require its exact continuity and raw-copy readback. A first
+capture is not independent public provenance or installed-source correspondence.
+
+| Slot | Exact Windows path | Outcome required | Maximum bytes |
+| --- | --- | --- | ---: |
+| pack-01 | `C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\10.0.12\data\FrameworkList.xml` | Required content | 36,320 |
+| task-01 | `C:\Temp\azureauth-windows-slice-108\packages\microsoft.net.illink.tasks\10.0.12\tools\net\ILLink.Tasks.deps.json` | Required content | 2,451 |
+| msbuild-01 | `C:\Program Files\dotnet\sdk\10.0.401\MSBuild.runtimeconfig.json` | Required content | 65,536 |
+| msbuild-02 | `C:\Program Files\dotnet\sdk\10.0.401\MSBuild.deps.json` | Required content | 1,048,576 |
+| analyzer-01 | `C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\analyzers\Microsoft.CodeAnalysis.NetAnalyzers.dll` | Required content | 16,777,216 |
+| analyzer-02 | `C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\analyzers\Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll` | Required content | 16,777,216 |
+| msbuild-03 | `C:\Program Files\dotnet\sdk\10.0.401\MSBuild.exe` | Content or exact leaf absence | 1,048,576 |
+| msbuild-04 | `C:\Program Files\dotnet\sdk\10.0.401\MSBuild.runtimeconfig.dev.json` | Content or exact leaf absence | 65,536 |
+| config-01 | `C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\analyzers\build\Microsoft.CodeAnalysis.NetAnalyzers.props` | Required content | 1,048,576 |
+| config-02 | `C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\analyzers\build\Microsoft.CodeAnalysis.NetAnalyzers.targets` | Required content | 1,048,576 |
+| config-03 | `C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\codestyle\cs\build\Microsoft.CodeAnalysis.CSharp.CodeStyle.targets` | Required content | 1,048,576 |
+| config-04 | `C:\Program Files\dotnet\sdk\10.0.401\Sdks\Microsoft.NET.Sdk\analyzers\build\config\analysislevel_10_default.globalconfig` | Required content | 1,048,576 |
+
+The first two required slots must have their exact listed lengths and these hashes on
+the initial read:
+
+| Slot | Historical SHA-256 |
+| --- | --- |
+| pack-01 | `51955f4e8836b9d4ba57d32c0f0d0b865666bc918d6494a45d80dc65737be35b` |
+| task-01 | `518f0256eb3699c88d7c798cbb1f8cfd42845754f4cba8726b499a25d20da6eb` |
+
+For either optional slot, accept absence only at the exact leaf under an existing
+no-follow directory chain. Missing parents, inaccessible paths, symlinks, nonregular
+leaves and other errors fail the invocation. Recheck each initially absent leaf once
+after copying under its unchanged parent identity. Presence or identity change fails;
+never create a placeholder or discover an alternate path. These are bounded absence
+observations, not an atomic or continuing filesystem guarantee. Present optional
+files receive the same stable content checks as required files.
+
+FrameworkList supplies pack analyzer metadata; the two SDK analyzer copies supply
+missing selected-candidate identities. They do not by themselves prove the eventual
+ordered Csc analyzer vector. ILLink's component dependency manifest and the separate
+MSBuild application configuration/manifests supply task-host resolution inputs.
+MSBuild.exe and its development config are conditional startup discriminators. Their
+presence does not automatically admit an apphost or additional probing path. A present
+apphost requires separately accepted offline target/bundle/root interpretation before
+that branch is selected. An absent branch may retain the original diagnostic's exact
+physical-absence predicates. Do not recollect Csc, acquire ILLink.Tasks.dll, or replace
+the accepted task-runtime source inference with a broader binary inventory.
+
+The three analyzer declaration files bind the generated imports' actual bytes before
+joining their property/item producers to the prospective compiler contexts. The
+pinned SDK
+[NetAnalyzers configuration generator](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Microsoft.CodeAnalysis.NetAnalyzers/tools/GenerateDocumentationAndConfigFiles/Program.cs#L1387-L1480)
+emits the default selection formula: effective level 10.0 becomes rules version 10,
+with Default mode and no true CodeAnalysisTreatWarningsAsErrors value selecting
+analysislevel_10_default.globalconfig. Product TreatWarningsAsErrors does not itself
+set CodeAnalysisTreatWarningsAsErrors. This source inference motivates config-04;
+actual generated-declaration correspondence and selection remain separate gates.
+The selected configuration is a pre-existing SDK input, not a file newly generated by
+0057. Its descriptor is required before compiler use; no blanket audit of rule-severity
+contents is required. No alternate/category/CodeStyle configuration content slot is
+admitted by this copy. An unexpected later selector fails the proposed branch rather
+than authorizing another original read.
+
+### One Invocation and Bounded Raw I/O
+
+METADATA12 has exactly one invocation. Recover current accepted Wave/protocol and prior
+dispositions, finish active observer/source operations, and record its start before
+launch. Failed start, inactive-source rejection, lock contention, output collision,
+content/identity error, interruption, timeout, incomplete transport or nonzero exit
+consumes it. No retry, repair, resume, alternate root or expanded selection is allowed.
+Existing counters remain Linux [8,37,0,0], Windows [7,49,0,48], combined 87/120 with
+the original fixture once, preparation 15/16, publish 0/12 and synthetic 48/60.
+This review copy charges no restore/build/test/publish/synthetic action, reserves no
+0057 slot and resets no historical capacity.
+
+Retain the SDK19 mechanism for the existing
+`/var/tmp/azureauth-windows-slice-108/action.lock`: no-follow traversal, read-only
+regular-file open, nonblocking exclusive lock, held/path identity checks before and
+after collection, and release/close in finalization. Do not create the lock, read or
+write its contents, wait or retry. No concurrent experiment/observer is permitted.
+No original-root access beyond this lock and the twelve literal inputs is admitted.
+
+Each logical content read uses exactly one direct `os.read(fd, observed_size + 1)`
+after validating the file's size and applicable row bound. Reject a short read,
+overflow byte or identity/content change without refill or retry. This applies to
+initial originals, their continuity rereads, new raw copies and inventory readback.
+Charge requested bytes before the call and returned bytes afterward against separate
+cumulative limits, including a rejected call; a logical-read counter alone cannot
+bound hidden buffered refill calls. Preserve stable device/inode/length/mtime/ctime,
+regular-file and final no-follow leaf identity checks. Original continuity requires
+the first-read identity, length, hash and raw-byte equality. Final stdout reports
+the enforced path-operation counter after final lock verification and resource
+cleanup; the inventory's observedBeforeInventory counters remain preliminary.
+
+| Bound | Maximum |
+| --- | ---: |
+| Literal input slots / required present files | 12 / 10 |
+| Optional leaf observations, including absent rechecks | 4 |
+| Aggregate original content | 41,943,040 bytes (40 MiB) |
+| Logical content reads / direct content read calls | 37 / 37 |
+| Aggregate returned content bytes | 125,894,656 bytes (120 MiB + 64 KiB) |
+| Aggregate requested content bytes | 125,894,693 bytes |
+| New output bytes, including inventory | 42,008,576 bytes (40 MiB + 64 KiB) |
+| Canonical inventory bytes | 65,536 bytes |
+| Counted path operations | 4,096 |
+| Write chunk | 65,536 bytes |
+| Original collector clock | 90,000 milliseconds |
+| Outer TERM deadline, including interpreter startup | 95 seconds |
+| Nonresetting KILL grace | 2 seconds |
+| Complete original combined tool capture retained for acceptance | 16 KiB |
+
+With P present files totaling S bytes and inventory length I, successful completion
+uses `3 * P + 1` direct/logical reads, returns `3 * S + I` bytes, requests
+`3 * S + I + 3 * P + 1` bytes and writes `S + I` bytes. Row maxima sum to
+40,015,731 bytes. With twelve present slots and the full inventory allowance, maximum
+normal returned bytes are 120,112,729, requested bytes 120,112,766 and output bytes
+40,081,267, below the conservative ceilings. Missing leaves are not content reads.
+These bounds cover intentional collector data/path operations. Ordinary Linux
+interpreter, standard-library, ELF loader and watchdog startup retain their separate
+runtime review; no system-wide I/O total is claimed.
+
+Keep one monotonic clock starting in main and latched cancellation. Check both before
+and after bounded I/O, sync, output validation, resource finalization and final stdout
+flush. The watchdog includes startup and cannot make a late source result acceptable.
+These controls retain the accepted OS assumptions and do not claim protection from an
+uninterruptible kernel/filesystem stall or global process quiescence.
+
+### Source, Output and Exact Admission
+
+Create only `/tmp/windows-compiler-inputs-metadata12-offline-v1`, mode 0700, exclusively
+and without following links, after all initial content/absence checks pass. Reject an
+existing root. Use only the twelve admitted flat labels and inventory.json; absent
+leaves have inventory entries and no raw file. Do not enumerate output. Create each
+file exclusively at 0600, write/sync complete bytes, seal 0444, sync again and sync
+the held output directory. Preserve its held/final path identity. Read back every
+raw copy and the canonical ASCII, sorted-key, compact JSON inventory with one final LF.
+Retain complete or partial output and original start/transport evidence on all outcomes.
+Never delete, rewrite or accept partial transport as successful collection.
+
+The exact inactive collector, predicted one-toggle activation, procedure and runtime
+bindings must receive independent source review before materialization. Preparing
+this supplement grants no original-root read or execution. Bind the then-current
+accepted protocol and Wave separately from the source's preparation provenance.
+The prepared inactive collector is 27,278 bytes with SHA-256
+`8524388e958898a8a378ebd1c97c548370539656954011b804e26decd7abdcf7`.
+Its procedure is 22,440 bytes with SHA-256
+`f6480fe7f78542628a454ce75d7e7a50dab5325ed05115dcfbd7f4320d415973`.
+Activation may change only `ACTIVE = False` to `ACTIVE = True`, producing the
+predicted 27,277 bytes with SHA-256
+`0f6401761989c8706d6c09e3ccd893516e18a59eb97840b1638fe1ee908a74ee`
+at `/tmp/collect_windows_compiler_inputs_metadata12.accepted.py`. Preparation has
+not materialized or executed those predicted bytes.
+
+Use the same reviewed Linux bash, GNU watchdog and Python 3.14 identities as SDK19,
+with fresh identity/startup-context acceptance. The exact literal in the separately
+prepared accepted checkout `/tmp/azureauth-windows-compiler-inputs-metadata-accepted-108`
+uses nonlogin `/usr/bin/bash`, no TTY, pipeline or status wrapper, and complete original
+capture:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 95s /usr/bin/python3.14 -I -B -S /tmp/collect_windows_compiler_inputs_metadata12.accepted.py
+```
+
+Require isolated, no-bytecode, no-site, nonoptimized Python and the accepted
+shell/loader/startup-injection boundary. Do not substitute another timeout program,
+add `--foreground` or `--preserve-status`, inject code or execute candidate modules
+for testing. Independently accept exact source, runtime, literal, cwd, output and
+one-time capacity before any execution-oriented parsing, import, materialization or
+launch. No owner input or desktop attendance is selected.
+
+Independently accept the original normal zero exit, complete transport, exact copy and
+inventory bytes, optional classifications, all finite counters, continuity and
+finalization before using the raw outcome. Subsequent JSON/XML or optional PE
+interpretation requires its own exact offline source/input/lifetime admission and
+must not follow metadata into new originals. Keep graphAccepted, artifactAccepted,
+continuation_allowed and new SDK provenance/historical-continuity claims false.
+The separately admitted 0057 action still requires its finite prospective selection,
+effects, physical inputs, history, guard and literal bindings; only its own current
+checks can establish physical predicates at execution. Its successful original
+Csc/response/native evidence remains a result obligation, not a prerequisite requiring
+that diagnostic to have already succeeded.
