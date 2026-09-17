@@ -7931,6 +7931,169 @@ handoff policy and all retained input bytes remain unchanged. This correction do
 not activate a source, resolve the preceding-helper lifetime question or grant a
 replacement diagnostic.
 
+## Independent Linux Supervisor Validation
+
+This supplement evaluates the installed systemd user manager as a prospective
+supervisor for Linux validation helpers. It is independent of original 0057: it
+does not access that attempt's roots, receipts, inputs, processes or descendants,
+resolve its lifetime uncertainty, or permit the stopped diagnostic or dependent
+compiler/Native AOT work to continue. The original failed invocation, its unavailable
+unit and consumed recovery remain unchanged. Its owner risk decision remains open.
+
+The scope is development validation tooling only. It introduces no systemd or
+cgroup dependency into the Windows authentication executable, no product service,
+and no change to existing Windows Job Object or cross-host termination policy.
+Prefer the installed service manager's lifecycle mechanisms over a custom cgroup
+manager. A future verifier integration still needs its own exact source and effects
+admission; this supplement tests the mechanism, not a replacement compiler launcher.
+
+This proposal is not executable under the current capacity allocation. Before this
+batch's protocol allocation can be accepted, the repository owner must authorize
+and accept a Wave amendment raising the cumulative synthetic-process ceiling from
+60 to at least 64. Preserve the 48 consumed scenarios and twelve protected final
+CLI cases. Source-only preparation does not activate these four additional cases.
+
+### Source Basis and Admission
+
+The public systemd v259 source at
+`9ca433482f2281d71718718705ca8cd3bf562ad6` documents:
+
+- [Transient services and scopes, exec startup, pipe/wait behavior, argument expansion and collection](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/man/systemd-run.xml).
+- [Cgroup exit tracking and service startup/runtime/stop limits](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/man/systemd.service.xml).
+- [Control-group termination and final SIGKILL](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/man/systemd.kill.xml).
+- [Quiet result handling and service exit-code propagation](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/src/run/run.c#L2657-L2668).
+
+The outer watchdog is the installed uutils coreutils 0.8.0 `timeout`. Its immutable
+[source](https://github.com/uutils/coreutils/blob/c4093734e2ebe2efb7d65e216cd1444664bcf26a/src/uu/timeout/src/timeout.rs#L242-L256)
+defines group signaling outside foreground mode. The local verifier and its
+systemd-run clients retain that group; only the manager starts the fixture services.
+
+These are immutable documentation premises, not observations that this host's
+supervision works. A separate read-only development inspection found installed
+systemd package metadata `259.5-0ubuntu3.4` and an existing user bus. One bounded
+`org.freedesktop.DBus.Properties.Get` of the existing user manager's `Version`, with
+activation and interactive authorization disabled, returned that version. This
+establishes metadata and reachability only; no transient unit or test ran during
+that inspection.
+
+The exact test source is
+[`check_systemd_supervision.py`](../../../tools/validation/check_systemd_supervision.py).
+Before execution, independently accept its commit/tree and SHA-256, this protocol,
+the unchanged Wave, fixed tool identities in `TOOLS`, four fixture entry points,
+and source-only review of its subprocess and result paths. Merge the protocol and
+test source into `main-v2`, then use a clean detached checkout of that accepted
+commit. Do not import or execute a candidate during source review. AST-only syntax
+checks and ordinary repository hk/CI checks retain their existing authority.
+
+Use only the existing WSL Linux x64 environment, installed systemd 259.5 user
+manager, `/usr/bin/systemd-run`, `/usr/bin/timeout`, `/usr/bin/env` and installed
+Python 3.14. The script
+checks their fixed file hashes, including the installed manager executable; these
+checks do not establish all loaded manager/library bytes. Rely on the installed OS
+and documented service contracts within the workstation threat model. A missing,
+changed or unavailable prerequisite stops the check; no installation, manager
+startup, enablement, lingering, service configuration or host-policy repair is
+permitted. Native Windows executables, .NET, public/private network operations,
+authentication, account/store access and production installations are excluded.
+
+### One Fixed Batch
+
+The sole invocation in that accepted detached checkout is:
+
+```sh
+/usr/bin/timeout --signal=KILL 90s /usr/bin/env -i PATH=/usr/bin:/bin LC_ALL=C.UTF-8 /usr/bin/python3 -I -S tools/validation/check_systemd_supervision.py --execute
+```
+
+Independently verify the fixed watchdog hash before admission. Do not add
+`--foreground` or put a systemd-run client in a new session/process group. Timeout,
+interruption, nonzero transport status or missing final evidence cannot pass. The
+watchdog's SIGKILL bounds local work; the manager retains its separate service
+deadline. If that deadline is not observed to complete, preserve uncertainty and
+stop without speculative cleanup. The invocation exclusively creates
+`/var/tmp/azureauth-systemd-supervision-108-0001` with mode 0700. Existing or partial
+state forbids replay. Retain that root and all its files; do not read, modify or
+recover the original Windows Slice experiment roots for this check.
+
+Reserve one build/test unit and four synthetic-process units through the new root
+and its durable `started.json`
+before any test subject starts. The accepted retained construction baseline is
+combined build/test 87 plus the unavailable original 0057 invocation unit: 88/120.
+This independent batch consumes one further unit, including a failed start, leaving
+89/120. Reserve all four synthetic-process cases as consumed when the batch starts,
+including interrupted batches that do not reach every case; no refund or retry is
+permitted. Cumulative synthetic-process consumption becomes 52, preserving twelve
+protected final CLI cases under the prerequisite ceiling of at least 64. The batch
+executes no product CLI and consumes no preparation, publication or download unit.
+Before admission, confirm no intervening use and recover the existing accepted
+consumption from retained evidence. Future dependent admissions must join this
+additional reservation/result and charge; an old ledger cannot omit it. This
+supplement does not authorize a ledger rewrite or another capacity inspection.
+
+Run exactly four sequential cases, at most once each, stopping after any unexpected
+result. Each uses a unique `azureauth-supervision-108-<run-id>-<case>.service` name,
+recorded before its client starts. Each transient service uses `Type=exec`,
+`ExitType=cgroup`, `KillMode=control-group`, `SendSIGKILL=yes`, `Restart=no`,
+`TimeoutStartSec=3s`, `RuntimeMaxSec=3s` and `TimeoutStopSec=2s`. The client uses
+`--user --no-ask-password --quiet --wait --pipe --collect
+--expand-environment=no --job-mode=fail`. Do not use scope mode or a persistent unit file.
+
+The systemd client receives only PATH, a fixed locale, and the designated existing
+user-bus/runtime location. The service executes `/usr/bin/env -i` with only PATH
+and locale, then the exact Python fixture with `-I -S`. No credential, proxy,
+interop or startup-hook variable is forwarded to the fixture. This is a controlled
+fixture, not a hostile-code isolation claim.
+
+| Case | Controlled behavior | Required observation |
+| --- | --- | --- |
+| success | Root starts a leaf in a new session and exits; the leaf prints a fixed marker after 0.5 seconds. | Wait returns zero after leaf completion, output is exactly `leaf-finished` plus LF, and the owned cgroup is empty or removed. |
+| command-failure | Root exits with code 7. | Wait returns 7, output is empty, and the owned cgroup is empty or removed. |
+| descendant-timeout | Root exits; its new-session leaf ignores SIGTERM and would finish after 30 seconds. | Manager runtime/stop bounds end the leaf before its marker; wait returns 1, output is empty, and the owned cgroup is empty or removed. |
+| client-loss | After fixture membership is recorded, terminate and reap only the locally created systemd-run client through its retained subprocess object. | The manager's deadline still ends the leaf; client exit is SIGKILL, output is empty, and the owned cgroup becomes empty or removed. |
+
+The fixture records only its own PID, kernel start ticks, monotonic observation
+time and unified cgroup membership; the batch records its boot ID privately. It
+may read `/proc/self/stat`, `/proc/self/cgroup`, the boot ID, and only the observed
+unique unit's `cgroup.events` beneath `/sys/fs/cgroup`. Do not enumerate processes,
+units or unrelated cgroups. Both root and leaf must identify the same unit. A
+missing cgroup is meaningful here only after that controlled fixture recorded
+membership; it says nothing about original 0057 or unrelated work.
+
+### Limits and Result Acceptance
+
+The batch allows at most four systemd-run clients, four fixture roots and three
+fixture leaves; no retries or arbitrary commands. A case has a 15-second
+observation, local client cleanup and outcome-acceptance budget, with its last two
+seconds reserved for client reap. Check the remaining observation budget immediately
+before client startup; do not reset it after preparation. Reject a late outcome or
+failed cleanup before publishing the case result. Result publication remains under
+the whole-invocation watchdog rather than a separate per-case watchdog. Each case retains at most
+16 KiB of combined client/service output through a nonblocking pipe. Only the
+verifier writes the retained output file, never beyond that cap; one excess byte
+detects overflow and stops the batch. Success also requires original pipe EOF.
+The entire invocation has a 90-second external watchdog limit, including
+preparation and recording. The manager's startup,
+runtime and stop limits remain independent of client survival. Only the fixed
+fixture leaf's deliberate 30-second wait is allowed, and the tested manager must
+end it sooner. A failed client cleanup, expired observation, unexpected output,
+changed source, uninitialized fixture or unproved owned-cgroup completion stops
+the batch. Do not launch another case or speculate about cleanup.
+
+The script never signals a PID recovered from a file, writes to cgroup controls,
+stops a shared manager or invokes a general process-tree killer. `--collect`
+permits the manager to release completed transient units; it does not authorize
+deleting evidence or treating unavailable results as successful. Preserve state
+on uncertainty. Record each exact command, unit, local fixture identities, client
+exit, elapsed time, cgroup observation, failure classification and source hash in
+the dedicated root. The public conclusion contains only sanitized case outcomes
+and their limits; do not publish boot IDs, PIDs, user-bus/cgroup paths or raw logs.
+
+Independent acceptance must check the original invocation result and the retained
+case evidence before claiming any case passed. A successful batch supports only
+the four tested Linux supervision behaviors on this installed environment. It
+does not establish arbitrary-process containment, global quiescence, safety of
+terminating Windows interop, public build/CLI acceptance, or permission to resume
+original 0057.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
