@@ -11981,6 +11981,178 @@ added. Build/test and synthetic occupancy remains 94/120 and 52/80; this extract
 adds no debit or refund. Further discovered-name acquisition and final closure,
 publication, artifact and Slice acceptance remain separate gates.
 
+### Accepted Partial Remaining Archive Extraction
+
+The sole remaining-archive extraction completed with normal zero exit and
+independently accepted partial evidence. Its 1,867,515-byte output has SHA-256
+`5ed9fea763f676db9644f3a13ce71906ae12b3746a45495e8dab517eaaff53bc`.
+All eighteen selected descriptors matched the accepted inventory. The original
+reported twenty reads, 13,029,269 returned bytes, 13,029,289 requested bytes and
+142 charged path operations, including the sealed output readback. All counters
+remained within their accepted limits; 319 milliseconds was a pre-output observation.
+
+Slot 38 completed the supported extraction: sixty COFF objects, 39 directive
+sections, 536 directive bytes and fourteen options. Four options are recorded
+DEFAULTLIB declarations; three ALTERNATENAME, one INCLUDE and six GUARDSYM
+options remain unresolved exact text. No option application or archive member
+selection follows from these facts.
+
+Slots 21-37 remain unresolved. Fourteen stop at the combined archive-index target
+or order check; the retained diagnostic does not distinguish those predicates.
+Slots 35 and 36 stop at the shared printable-string subset, with string-start
+file offsets 10,090 and 11,113. Their string roles and offending bytes remain
+unknown. Slot 37 stops at the narrow COFF/container gate at offset 190,640; the
+actual machine value or alternative container type was not retained.
+
+The output preserves 8,530 Date exceptions containing minus one followed by ten
+ASCII spaces, 679 zero-valued alignment-byte exceptions, and all twenty prior-site
+witnesses. Slot 36 records the 309-byte member, its zero padding byte at 98,821,
+and the validated following 357-byte member beginning with a header at 98,822.
+These facts do not establish full archive conformance or invalid input libraries.
+Empty partial lists do not establish absence. Prior slots 01-20 remain separately
+accepted evidence; native closure, current resolution, graph, artifact and Slice
+acceptance remain open. This extraction, its PREPARE and its START are consumed
+and must not be replayed. No build/test or synthetic debit or refund occurred.
+
+## Remaining Native Archive Member and Directive Diagnostics
+
+After independent acceptance of the preceding partial extraction, permit one
+separately admitted diagnostic pass over only unresolved slots 21-37. Its purpose
+is to retain physical member boundaries, bounded directive evidence and explicit
+interpretation gaps needed for build-input review. Reuse accepted slots 01-20 and
+38 without reading their raw payloads again. The acquisition, decoder and
+eighteen-archive extraction, including their preparation and START phases, remain
+consumed. This successor does not retry any of those invocations.
+
+The inactive source is `/tmp/diagnose_windows_final_native17.inactive.py`,
+40,295 bytes, SHA-256
+`39e46719ef61b65e2f804cbdf8417179a44bc3229892f7d0478d74a66b5edf21`.
+Its exact source-only procedure is
+`/tmp/windows-final-native17-diagnostic-procedure-v1.md`, 30,037 bytes,
+SHA-256 `7ecc86a7a75709952609510c71248de8745697906b2d5ce3717cea0dfe6711eb`.
+The unique `ACTIVE = False` to `ACTIVE = True` replacement predicts
+`/tmp/diagnose_windows_final_native17.accepted.py`, 40,294 bytes, SHA-256
+`3ec752023d0b0c52d85fe0451419c0c64bba596ad461f9896fdbfdf28ae253d4`.
+These pins identify exact review subjects; they do not replace current-authority,
+source/procedure, activation, runtime, literal or START admission.
+
+Read only the exact accepted 39,472-byte inventory, SHA-256
+`0059d652e6ca94252889f64abee952095a24f8624d1fdfeabfc42cf38332226b`,
+and its fixed `21.bin` through `37.bin` leaves under
+`/tmp/windows-final-native38-offline-v1`. The selected raw inputs total
+8,757,710 bytes; together with the inventory they total 8,797,182 bytes.
+Preserve exact descriptor and size/hash checks, sealed ordinary files, no-follow
+parent traversal, held/named identity continuity and one observed-size-plus-one
+read per input, without refill or retry. Names, original paths and retained
+evidence references are metadata; none becomes a path to open.
+
+Construct a compact physical-member ledger using the exact archive signature,
+fixed header width, strict decimal Size, header terminator, complete member extent
+and single alignment position. Each next header follows only from those validated
+boundaries. Preserve member offsets and exact bounded identifying bytes. Refer to
+the accepted repeated Date and alignment-byte observations for unchanged inputs
+instead of reproducing their exception lists. No index target or guessed header
+may select a boundary or resynchronize traversal. A lost physical boundary stops
+that archive and leaves its coverage incomplete.
+
+Keep physical traversal separate from index and name conformance. Retain witnesses
+at the known index failures, including ordinal, encoded and decoded current and
+previous targets, table extent and target classification against the physical
+ledger. Distinguish membership and order predicates; do not infer which caused an
+old combined rejection. Both documented index order requirements remain unchanged.
+For relevant string failures, retain caller role, bounded exact bytes and containing
+extents. Do not infer an encoding or caller from the old string-start offset.
+Nonessential names may remain opaque. This pass retains raw directive bytes
+without tokenization or DLL-name extraction; it does not broaden the previously
+accepted grammars or use lossy decoding.
+
+Interpret each independently bounded ordinary member with an explicit supported
+or unsupported disposition. A member-local unsupported form leaves visible
+coverage gaps while later independently bounded members remain eligible for the
+same pass. Retain bounded identifying prefixes, supported `.drectve` locations
+and content, and dependency-bearing unknowns. Do not represent an unsupported
+member or failed internal range as successfully interpreted. An empty partial
+directive list is not evidence of absence. Identity, I/O, cancellation, lifetime,
+aggregate-budget and output failures remain global stops.
+
+Ordinary COFF long-import semantics and unsupported short-import forms remain
+explicit target-runtime coverage limitations. Import-library DLL relationships do
+not by themselves identify files that a host build tool reads. Defer full import
+reconstruction to artifact dependency acceptance unless concrete evidence shows a
+precompile file-input relationship. This diagnostic implements no linker, symbol
+selection, option application, general format validator or loader. Physical
+coverage does not establish conformance, complete directive semantics, selected
+members, native closure, current resolution, graph or artifact acceptance.
+All corresponding acceptance and continuation flags remain false.
+
+The compact ledger, prefixes, string witnesses, directive content and
+dispositions share one aggregate event budget. Never truncate required records
+silently to fit it. Preserve the 3 MiB charged-event and 4 MiB total-output
+ceilings, original 90-second monotonic source lifetime, 1,024 charged path
+operations, two million parser steps and 256 MiB scanned-byte ceiling. The
+aggregate member ceiling is 9,862; identifying prefixes are limited to 552,272
+bytes, retained strings to 65,536 bytes and witnesses to 256. Keep at most 131,072
+sections, 16,384 sections per object, 524,288 charged symbol records, 1,048,576
+strings of at most 4,096 bytes, and 1 MiB of directive content with at most
+65,536 bytes per directive section. These are joint ceilings, not a promise that
+all independent maxima fit together. The eighteen input reads and one output
+readback permit at most nineteen reads,
+12,991,486 returned bytes and 12,991,505 requested bytes, including one overflow
+allowance per read. Check complete serialization before opening the sole output.
+That output is `/tmp/windows-final-native17-diagnosed-v1.json`. Bound its creation
+to one file, at most 128 positive-progress write calls of at most 65,536 requested
+bytes each, 4 MiB written bytes and three sync operations.
+Keep exclusive 0600 creation, positive-progress bounded writes, 0444 sealing,
+file/parent sync and one exact readback. These limits cover intentional source
+operations; they are not startup I/O, RSS or whole-system syscall guarantees.
+
+Require independent source/procedure and canonical acceptance before activation.
+Fresh exact preparation and START admissions must bind the accepted purpose,
+source, runtime, startup context, cwd and sole literal. A START consumes the sole
+invocation before the call. No concurrent original or observer operation is
+permitted. Require complete original transport, normal zero exit, resolved owned
+lifetime and independent outcome acceptance before relying on new facts.
+
+Reuse the admission-helper mechanism at
+`/tmp/windows-final-native17-diagnostics-admission-helper.inert.txt`,
+16,886 bytes, SHA-256
+`458b3169e60308fdd462587834a6dfef62441135f2853f8d275dde2be5ca5cac`.
+Only six role paths, exact source pins, the literal and source-size-dependent
+byte ceilings change from the preceding helper. All function bodies and the
+tail beginning with `FIELDS` remain unchanged. Retain its complete integer
+identity fields, no-follow/exclusive mechanics, 3,072-byte retained authority
+maximum, exactly three capacity fields and 8,192-byte receipt maximum.
+PREPARE permits seven reads, 9,154,628 requested/returned bytes, 29 metadata
+queries, 37 opens, 48,486 written bytes/positive write calls, two chmods and six
+syncs. START permits six reads, 9,138,908 requested/returned bytes, 24 metadata
+queries, 30 opens, 8,192 written bytes/positive write calls, one chmod and three
+syncs. Each phase runs at most once with a 30-second source deadline, outer TERM
+at 35 seconds and KILL two seconds later. Require separate exact DATA/code/tool-map
+admission and complete original outcome acceptance for each phase.
+
+The sole prospective diagnostic literal is:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 95s /usr/bin/python3.14 -I -B -S /tmp/diagnose_windows_final_native17.accepted.py
+```
+
+Retain cwd `/tmp/azureauth-windows-final-link-inputs-accepted-108`, isolated no-site,
+no-bytecode nonoptimized Python, nonlogin noninteractive Bash and no TTY, pipeline,
+alternate command or status wrapper. The outer 95-second TERM/two-second KILL
+watchdog does not waive the source deadline. Neither preparation phase reads a
+native payload or executes the diagnostic. Current physical observations occur
+only within their separately admitted original phases.
+
+A failed start, collision, mismatch, inaccessible or short input, timeout,
+cancellation, budget/output failure or uncertain lifetime stops without retry,
+cleanup, alternate output or partial adoption. Restore owned signal handlers,
+close owned descriptors and retain all output. This step launches no Windows
+subject, copied image or build tool and performs no account, credential, network,
+cache/consent or installation operation. It adds no build/test, synthetic or
+publication debit or refund; occupancy remains 94/120 build/test and 52/80
+synthetic. Discovered-name acquisition, graph, publication, artifact and Slice
+acceptance retain their separate prerequisites.
+
 ## Fixed Final Source and Restore Materialization
 
 This supplement permits one separately admitted copy of the final publication's
