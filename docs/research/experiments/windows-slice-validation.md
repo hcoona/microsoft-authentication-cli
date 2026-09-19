@@ -8095,6 +8095,65 @@ does not establish arbitrary-process containment, global quiescence, safety of
 terminating Windows interop, public build/CLI acceptance, or permission to resume
 original 0057.
 
+### Linux Supervisor Validation Observations
+
+The sole admitted batch ran on September 19, 2026, from clean detached commit
+`2fdefd3a48b503678451e937a917c405922341f0`, tree
+`dda878ed3bd748c9b82854de1ad51d5928159368`, accepted in
+[PR #178](https://github.com/hcoona/microsoft-authentication-cli/pull/178).
+The executed script's SHA-256 was
+`2f6c56fc9a9bb71a00b28cadd8718b7008bf6971033e80b370eb5f6a991f67b2`;
+the accepted protocol's SHA-256 was
+`c3da7f8e9f71443dd68104c9ec986c454bfb65b50b9049e6a4fe045f55f6828c`.
+The accepted 80-scenario Wave and all five installed tool hashes matched their
+admission bindings, including an independent pre-execution watchdog hash check.
+
+The initiating and execution host was the existing WSL2 Linux x86_64 environment,
+kernel `6.18.33.1-microsoft-standard-WSL2`, using installed Python 3.14 and systemd
+package metadata `259.5-0ubuntu3.4`. Installed-file identity does not establish every
+loaded manager or library byte. MSAL, broker, Profile, authority, scopes and account
+state were not applicable: this fixture performed no authentication, account/cache
+operation, Windows invocation, network request, installation or UI interaction.
+No operator action was required. The exact admitted command used the protocol's
+90-second watchdog and clean environment without adding a process-group boundary.
+
+The original invocation returned exit code zero. Its summary matched the retained
+batch and per-case evidence; total recorded batch duration was 11,823 milliseconds.
+The observations were:
+
+| Case | Client exit | Retained output | Recorded duration | Owned cgroup at completion |
+| --- | ---: | --- | ---: | --- |
+| success | 0 | Exactly `leaf-finished` plus LF | 796 ms | Empty or removed |
+| command-failure | 7 | Empty | 130 ms | Empty or removed |
+| descendant-timeout | 1 | Empty | 5,337 ms | Empty or removed |
+| client-loss | -9 (SIGKILL) | Empty | 5,479 ms | Empty or removed |
+
+Every case completed with original pipe EOF within its observation/cleanup budget
+and output cap. The root and its leaf, where present, recorded membership in the
+same unique unit. For client-loss, the verifier killed and reaped only its retained
+local systemd-run subprocess; the service subsequently reached the observed empty
+or removed cgroup under the manager's separate deadline. The source hash recheck
+matched. These are runtime observations of the four controlled behaviors on this
+host, not claims about arbitrary-process containment or all manager internals.
+
+There was one batch, four cases, no retry and no speculative cleanup. All dedicated
+batch evidence was intentionally retained locally, including private fixture
+identities and raw output; those values are not published here. The batch consumes
+one build/test unit and all four reserved synthetic units. Combined build/test
+occupancy is now 89/120: 87 previously recorded units, the unavailable original 0057
+unit, and this batch. Synthetic consumption is 52/80, leaving 28, of which twelve
+remain protected for final CLI cases and sixteen remain unallocated. Preparation,
+publication and download consumption did not change. Subsequent admissions must
+include this reservation and result rather than rely on the older ledger alone.
+
+The observed mechanism is suitable evidence for preparing separately admitted
+Linux helper integration. It adds no dependency to the authentication executable
+and does not establish Windows interop termination, compiler or Native AOT success,
+product CLI acceptance, account behavior or broader platform support. Original 0057
+and its recovery remain consumed and stopped; its unresolved helper lifetime and
+separate repository-owner risk decision are unchanged. No further invocation is
+authorized by this observation.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
