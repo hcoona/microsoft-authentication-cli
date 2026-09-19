@@ -10091,6 +10091,120 @@ copy adds no build/test or synthetic action. Global occupancy remains 93/120 and
 52/80; twelve final CLI scenarios and sixteen unallocated synthetic scenarios stay
 protected. Native AOT publication and actual Slice acceptance retain their gates.
 
+### Ordinal 5 Normal Collection and Independent Copy Binding
+
+The sole ordinal 5 invocation ran under accepted commit
+`8ab6096d70291a4e9b31892fc868e52a6deac84c`, tree
+`6c5bbf3186be89003e43375c443e68ffd9b313ce`. Its complete original tool
+response ended with exit code 0 and no continuing session, wait or retry.
+The complete 1,370-byte private transport has SHA-256
+`74738be2e199519b432440c0090fb98108429c36ef97300d8ab2b9ae7e1b4376`.
+Independent original-completion acceptance preceded frame interpretation;
+independent normal-outcome acceptance preceded inventory and copy binding.
+The respective acceptance carriers are 5,771 bytes with SHA-256
+`f69f4170111d643b601260741d3d50136db32c7f7c0a9c938640f6b51a04b8ec`
+and 6,474 bytes with SHA-256
+`3a985bddfb1298e9e51d72a20515d34a5bffd8b8c8358aa007e9bd1666602933`.
+
+The 453-byte canonical frame, SHA-256
+`047ddf012fc8fba11a2836fa0f1976cae0210d9194004478f31d595da31b4d29`,
+reports `normalCompletion=true` at `finalization`, with null exception,
+rejection and binding-mismatch fields. It records 26 logical reads, 1,582 read
+calls, 25,264,894 requested bytes, 25,264,868 returned bytes, 8,425,120 output
+bytes, 519 write calls and 206 path operations, all within the allocated limits.
+The canonical inventory is 5,828 bytes with SHA-256
+`5ded3ef584969444d376fa94da18c6284e9ed3f193a0ad04e75c9ad1327fc00d`.
+
+A separate bounded pass independently bound that inventory and all eight fixed
+copies, totaling 8,419,292 copied bytes, without interpreting copied content.
+The 7,600-byte binding carrier has SHA-256
+`fedc69fb165dc5abadecc17d9f9a8d67f357ef9f9bf8e585ecb203e4aa9b21db`.
+It checked exact sizes and hashes, sealed regular-file identities, fixed names,
+directory continuity and source/counter correspondence. The inventory's own
+false acceptance flags remain its provisional pre-finalization state; the
+subsequent independent acceptance does not rewrite those historical bytes.
+
+This accepts the declared current collection and its private copies. It does
+not establish pre-open continuity, all intervening writes, the cause of earlier
+identity differences, original diagnostic lifetime or compiler success. Original
+state and earlier partial outputs remain untouched and intentionally retained.
+All five observation allocations and the original diagnostic remain consumed;
+occupancy is still 93/120 build/test actions and 52/80 synthetic scenarios, with
+twelve final CLI scenarios and sixteen unallocated synthetic scenarios protected.
+No sixth observation, diagnostic retry, cleanup or dependent execution follows.
+
+### Original 0061 Capture Failure and Historical Termination Evidence
+
+After those gates, one separately admitted bounded offline interpretation read
+only the eight pinned private copies. It completed with exit code 0, using 526
+reads, 8,419,300 requested bytes and 8,419,292 returned bytes. No original path,
+process, helper record or diagnostic-tree file was accessed. The 4,832-byte
+complete private interpreter transport has SHA-256
+`bb1ae54ae8cb3477526e7dd393611215587e2a81ba8e7db5232127e0999b1f39`;
+its 3,963-byte sanitized projection has SHA-256
+`93d9c43a9143b520751085e1c683e83e33d3794ddc254cc694ff1517fa34c73d`.
+Independent original-completion acceptance preceded result interpretation.
+The 12,187-byte independent result and finding-triage carrier has SHA-256
+`631c6f47c435c55e21d3214046afc13d40749c0a59a43d11555e1f627cfe46bd`.
+
+**Observed result:** Reservation and invocation digest comparisons agree across
+the selected records. The original WSL result reports proxy exit 1. Its original
+bootstrap transport is complete, with both EOFs, 163 stdout bytes, zero stderr
+bytes, and no truncation or read failure. The bootstrap frame and Windows result
+report `subject-observation` and a sanitized
+`System.Management.Automation.RuntimeException`. Windows reports a returned
+subject start, 8,388,608 retained stdout bytes, zero stderr bytes,
+`captureTruncated=true`, `captureCompleted=false`, and no natural completion.
+The separate emergency drain processed 7,994 bytes, with zero observed overflow,
+zero possible pending bytes and no drain-threshold rejection.
+
+**Source-bound finding:** The exact admitted recipe selected
+`--verbosity:detailed` and console parameters
+`ShowEventId;ForceNoAlign;DisableConsoleColor`, alongside a binary log. The
+original [controller's capture loop](https://github.com/hcoona/microsoft-authentication-cli/blob/db85959a2fcd91b1b927ab9e85fb85985dc6b4fc/tools/validation/Invoke-WindowsCompilerNativeInputs.ps1#L605-L632)
+sets the truncation flag when observed bytes exceed the combined 8 MiB retained
+capacity. Independent triage confirms that overflow and incomplete diagnostic
+evidence as a true positive. It does not uniquely identify the first exception:
+the emergency-drain path can also set that flag, other observation checks can
+throw, and the first exception message and transition order were not retained.
+Absent diagnostic-marker or error literals in a truncated prefix establish
+neither absence of compiler errors nor compiler/native-input completion.
+
+**Historical lifetime interpretation:** The Windows result reports Stop entered
+and returned, Job termination requested and successful, zero active processes
+out of six total, and completed disposal. The exact admitted
+[19,441-byte guard](https://github.com/hcoona/microsoft-authentication-cli/blob/8ab6096d70291a4e9b31892fc868e52a6deac84c/tools/validation/WindowsFinalPublishGuard.cs#L265-L286),
+SHA-256 `d38846b080d5ee092fae9e21c9031712b56289093b50ca048d50589cca50ff4b`,
+supplies those counts through ordinary Job accounting after termination. Joined
+with the admitted Start/controller source and original completion, this accepts
+that owned Job's historical zero-active observation and the original proxy's
+exit. Disposal alone is not the proof. The WSL result's false overall quiescence
+and completion-join flags remain unchanged; the failed dispatcher did not reach
+its success join. No current or global quiescence, natural completion, or absence
+of unrelated processes is claimed.
+
+Individual helper receipts were outside the fixed selection. Their omission is
+not evidence of failed termination. The accepted
+[history source](https://github.com/hcoona/microsoft-authentication-cli/blob/db85959a2fcd91b1b927ab9e85fb85985dc6b4fc/tools/validation/final_publish_contracts.py)
+allows the reached verifier calls to return only after the original client exits
+successfully, both streams reach EOF and the bound cgroup-empty check succeeds;
+a failure latches and prevents the later reservation/Windows launch. No new
+verifier is selected after this controller-observation failure. This supports a
+source-qualified historical inference, without independently accepting each
+helper's receipt, count, identity or present existence. Existing queued-definition
+retention and the limited 0057 risk disposition remain unchanged. This evidence
+establishes no new helper failure requiring another survey or risk exception.
+
+The original diagnostic remains failed. No binlog, response-file, compiler-task
+or native-input-cutoff success is accepted. A future proposal may reduce console
+logging while preserving the binary log, existing capture ceiling and termination
+bounds; it must validate the exact recipe and expected error visibility. This
+addresses the confirmed capacity defect, without promising to resolve every
+failure. A new accepted grant, exact protocol and source/DATA/runtime/literal
+admission remain prerequisites. No logger change, new observation, retry or
+dependent execution is authorized by this evidence update. Capacity and protected
+scenarios remain as recorded above.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
