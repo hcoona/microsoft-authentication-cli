@@ -11507,6 +11507,181 @@ protected final CLI cases and sixteen unallocated synthetic cases remain intact;
 these evidence stages add no restore/build/test/publish/synthetic debit and refund
 none. Their separate invocation and I/O allocations remain consumed.
 
+## Fixed Final LINK-Input Descriptor Collection
+
+This supplement permits one separately admitted passive collection of the missing
+final-publication library and command-processor descriptors. Reuse the accepted
+compiler 0062 evidence and finite operand mapping; none of their consumed operations
+may be replayed. The new collector selects sixteen literal library names through
+three fixed LIB directories and one fixed cmd.exe. It records identities and hashes,
+without copying, interpreting or executing payloads. This establishes neither
+complete native-input closure nor final graph, publication, artifact or Slice
+acceptance.
+
+Use the existing WSL Linux review environment and selected public Windows toolchain.
+No Windows invocation, directory enumeration, network request, dependency acquisition,
+installation, SDK/MSBuild evaluation, source materialization, restore, build, test,
+publish, product execution, account, broker, UI or authentication-cache operation is
+selected. Existing product, SDK/runtime, dependency and toolchain pins remain unchanged.
+
+### Literal Library and Command-Processor Selection
+
+Select these names in order: `advapi32.lib`, `bcrypt.lib`, `crypt32.lib`,
+`iphlpapi.lib`, `kernel32.lib`, `mswsock.lib`, `ncrypt.lib`, `normaliz.lib`,
+`ntdll.lib`, `ole32.lib`, `oleaut32.lib`, `secur32.lib`, `user32.lib`,
+`version.lib`, `ws2_32.lib`, `ucrt.lib`. The first fifteen preserve SdkNativeLibrary
+item indices 0-14. The last preserves its separate `LinkerArg /DEFAULTLIB:ucrt.lib`
+provenance and the selected non-debug branch.
+
+For each name, consider exactly these Windows directories in the recipe's LIB order,
+using the corresponding literal `/mnt/c/` paths:
+
+1. `C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\lib\x64`
+2. `C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\ucrt\x64`
+3. `C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\um\x64`
+
+The first regular present leaf wins. Only exact leaf ENOENT under an established
+parent advances to the next directory. Missing parents, other errors, linked or
+nonregular leaves, changed identity, and absence from all three directories fail the
+invocation. Do not inspect later candidates after finding a winner. Recheck each
+earlier absent leaf exactly once under its unchanged held/named parent identity.
+This is two bounded absence observations, not an atomic or continuing guarantee.
+
+The [documented LINK search order](https://learn.microsoft.com/en-us/cpp/build/reference/dot-lib-files-as-linker-input?view=msvc-170)
+searches the working directory before LIB; explicit `/LIBPATH` directories precede
+LIB. This collection establishes only the first present LIB candidate. The sixteen
+final working-directory absences and empty AdditionalNativeLibraryDirectories
+correspondence remain final materialization/admission obligations. Do not read the
+future source tree for this collection or infer final search winners from these
+installed descriptors alone. Existing COFF/default-library and non-OS build-loader
+selection obligations remain separate; this supplement grants no payload parsing or
+expanded library inventory. Actual product imports and deployment assets follow
+production under the existing artifact gate.
+
+The seventeenth required file is `C:\Windows\System32\cmd.exe`.
+Pinned MSBuild commit `b44cdcec4c79c50c67560876707d57d4f635fa3b`
+[Exec.cs lines 517-541](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Tasks/Exec.cs#L517-L541),
+[ToolTask.cs lines 519-544](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Utilities/ToolTask.cs#L519-L544), and
+[ToolLocationHelper.cs lines 1622-1627](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Utilities/ToolLocationHelper.cs#L1622-L1627)
+with [line 3622](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Utilities/ToolLocationHelper.cs#L3622)
+derive the System special folder and filename. The selected Native.targets Exec calls
+have no ToolPath, ToolExe or UseCommandProcessor override; the accepted Windows x64
+`C:\Windows` context supplies the physical path. The already pinned Exec, ToolTask
+and EncodingUtilities source, fixed ASCII command/working directory, and default
+Detect encoding branch exclude chcp. Do not acquire chcp or query another installed
+path. A changed selection branch requires refreshed correspondence before admission.
+
+### One Invocation, Descriptor Continuity and Limits
+
+Exactly one invocation is available. Recover the current accepted Wave/protocol and
+prior dispositions, finish active experiment/observer operations, and record the start
+externally before launch. Failed start, lock contention, output collision, inactive
+source rejection, any content/identity/limit error, interruption, timeout, incomplete
+transport or nonzero exit consumes it. No retry, repair, resume, alternate root,
+cleanup or capacity refund is allowed. Global occupancy remains **94/120 build/test**
+and **52/80 synthetic**; the twelve protected CLI cases and sixteen unallocated
+synthetic cases remain intact. This passive acquisition adds no dependency,
+build/test, publication or synthetic debit and does not reserve final action 0063.
+
+Retain METADATA12's no-follow traversal and existing
+`/var/tmp/azureauth-windows-slice-108/action.lock`: read-only regular-file open,
+nonblocking exclusive lock, held/path identity checks before and after collection,
+and release/close in finalization. Do not create the lock, read/write its contents,
+wait or retry. No concurrent experiment/observer is permitted. Hold the four input
+parent handles through collection and output checks; check their named/held
+identities. Accept only the 49 possible installed leaves and existing lock, with no
+original experiment-output reads, content-selected paths or directory enumeration.
+
+Each selected file receives exactly two direct content reads, each one
+`os.read(fd, observed_size + 1)` after size/regular-file validation. Reject short
+reads, growth, or changed named/held identity without refill. The second read requires
+the first size, SHA-256 and eight-field identity: device, inode, length, nanosecond
+mtime/ctime, mode, owner UID and GID. No initial original payload is retained; no
+byte-for-byte original continuity is claimed. Discard each payload after hashing.
+Charge calls/requested bytes before each syscall and returned bytes afterward,
+including rejected calls. Preserve the selected Windows/Linux paths and each earlier
+absence's directory index and parent identity in the inventory.
+
+| Bound | Maximum |
+| --- | ---: |
+| Selected files / possible installed leaves | 17 / 49 |
+| Bytes per selected file | 8,388,608 |
+| Aggregate initial content bytes | 142,606,336 |
+| Direct content reads | 35 |
+| Returned content bytes | 285,278,208 |
+| Requested content bytes | 285,278,243 |
+| Candidate/absence observations | 81 |
+| Inventory / aggregate output bytes | 65,536 / 65,536 |
+| Write chunk | 65,536 bytes |
+| Counted path operations | 4,096 |
+| Components per fixed parent walk | 16 |
+| Original monotonic collector clock | 90,000 milliseconds |
+| Outer TERM deadline, including startup | 95 seconds |
+| Nonresetting KILL grace | 2 seconds |
+| Complete original combined capture retained | 16 KiB |
+
+For seventeen files totaling S bytes and inventory I bytes, normal completion uses
+35 reads, returns `2*S+I` bytes and requests `2*S+I+35` bytes. Initial candidate
+observations are at most 49 and earlier-absence rechecks at most 32. Later named-file
+identity checks count as path operations, not repeated candidate observations.
+An original payload allocation is at most 8 MiB plus its overflow-detection byte;
+inventory serialization/readback are each at most 64 KiB. No cumulative payload
+buffer or total-process-memory claim is introduced.
+
+The path counter covers instrumented traversal/open/stat/fstat and lock acquisition;
+fixed closes, syncs, unlock and signal restoration are structurally finite. Ordinary
+interpreter, standard-library, ELF-loader and watchdog startup retain separate runtime
+review; no system-wide syscall or I/O total is claimed. Preserve latched cancellation
+and deadline checks across data, sync, finalization and stdout flush, with the accepted
+kernel/filesystem-stall limitations. A late failure cannot become successful evidence.
+
+### Exact Source, Output and Admission
+
+Reuse the accepted private-source pattern. The inactive collector is
+`/tmp/collect_windows_final_link_inputs.inactive.py`, 21,725 bytes, SHA-256
+`808051d3273ec3b03167a70b640b21cc15f4690d01c213ea7446ab7bb404e5d3`.
+Its source-delta/procedure carrier is 9,190 bytes, SHA-256
+`99bf817ff647affe0c37d84d3f90a85c6b512ffb0e10716f87ea9d21a0b8a13f`.
+The only activation change is `ACTIVE = False` to `ACTIVE = True`, yielding
+21,724 bytes, SHA-256
+`b17d154050dd727b3dcb058ccb4ceb9193c7f1559ed5fcba5ba1f563fc27f9bd`, at
+`/tmp/collect_windows_final_link_inputs.accepted.py`. Preparation has not materialized
+or run these active bytes. The source's preparation provenance is not execution
+authority; bind the then-current merged protocol and Wave separately.
+
+Exclusively create `/tmp/windows-final-link-inputs-descriptors-v1` at mode 0700
+after initial input selection. Its sole output is `inventory.json`, exclusively
+created 0600, completely written and synced, sealed 0444 and synced again. Sync the
+held output directory; check its final named identity. Read back the exact canonical
+ASCII sorted-key compact JSON with one final LF once, requiring byte equality and
+size/hash/identity continuity. Short writes fail without retry. Retain every complete
+or partial output on all outcomes. There are no raw copies or additional local
+start/terminal files. Reuse the independently recorded external start and complete
+original transport. Inventory counters named observedBeforeInventory are preliminary;
+the single final ASCII JSON line reports counters after lock verification and resource
+cleanup. Normal zero exit and complete combined transport are separately required.
+
+Independently accept the exact inactive source, one-toggle active bytes and procedure,
+current runtime/startup, literal, cwd/output and unused one-time capacity before
+execution-oriented parsing, import, materialization or launch. Use the accepted Linux
+bash, GNU watchdog and Python 3.14 runtime with fresh identity/startup correspondence,
+isolated no-bytecode/no-site/nonoptimized Python and the existing injection boundary.
+The exact command uses nonlogin `/usr/bin/bash`, no TTY, pipeline, wrapper or extra
+argument, with cwd `/tmp/azureauth-windows-final-link-inputs-accepted-108`:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 95s /usr/bin/python3.14 -I -B -S /tmp/collect_windows_final_link_inputs.accepted.py
+```
+
+Do not substitute the watchdog, add --foreground/--preserve-status, or execute candidate
+modules as tests. No desktop attendance or human input is selected. Independently accept
+normal completion, complete capture, exact inventory bytes, selection/absence,
+continuity, finalization and counters before consuming the descriptors as ordinary
+review data. The inventory does not grant follow-up original reads, establish public
+provenance or current final resolution, or activate the graph, artifact or continuation
+gates. Future physical continuity and final graph/source/runtime/literal admission
+retain their existing requirements.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
