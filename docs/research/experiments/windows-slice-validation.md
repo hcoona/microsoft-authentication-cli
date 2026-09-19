@@ -10205,6 +10205,113 @@ admission remain prerequisites. No logger change, new observation, retry or
 dependent execution is authorized by this evidence update. Capacity and protected
 scenarios remain as recorded above.
 
+## One Additional Compile-Through Diagnostic 0062
+
+This supplement implements the sole credential-free diagnostic 0062 granted by
+accepted Wave commit `a8786b771ccbd0c2cea3182aa77d6bbe814b420b`, after
+[the accepted 0061 capture and historical termination disposition](#original-0061-capture-failure-and-historical-termination-evidence).
+Inherit diagnostic 0061's selected product, three Csc contexts, native-input
+cutoff, existing Windows/WSL environments, public dependency/toolchain pins,
+physical predicates, finite effects and exact-admission requirements, with only
+the changes below. The original 0061 failure, five consumed observations and
+bounded offline interpretation remain immutable and consumed. No account action,
+human input or desktop attendance is selected.
+
+### Diagnostic Console and Evidence Channels
+
+In the new diagnostic DATA's `argumentVectorTemplate`, replace
+`--verbosity:detailed` with `--verbosity:quiet` and replace
+`-clp:ShowEventId;ForceNoAlign;DisableConsoleColor` with
+`-clp:ShowEventId;ForceNoAlign;DisableConsoleColor;ErrorsOnly`. Retain
+`-tl:off` and the dedicated `-binaryLogger:<path>;ProjectImports=None`
+argument, with the new diagnostic path binding. Keep the existing UTF-8/en-US
+setup, complete argument reconstruction/equality checks and all other compiler
+controls. Recompute the new DATA bytes/hash and every dependent source,
+materialization, authority and invocation binding; do not rewrite old DATA.
+
+The [MSBuild logger options](https://learn.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference?view=visualstudio#switches-for-loggers)
+retain errors with `ErrorsOnly`; quiet alone also includes warnings. The
+[binary logger's verbosity](https://learn.microsoft.com/dotnet/api/microsoft.build.logging.binarylogger.verbosity)
+is always diagnostic. The existing target emits `AUTH108NATIVEINPUTSTOP` as an
+MSBuild `Error`, so preserve the controller's nonzero-exit, marker-presence and
+nonempty-binlog predicates unchanged. They must be observed on the actual run;
+static logger semantics do not establish that the cutoff was reached.
+
+Quiet suppresses the diagnostic target's high-importance `Message` output.
+Console absence therefore proves neither missing compiler events nor absence
+of warnings. Original Csc/binlog events, response files and the existing bounded
+auxiliary files retain their declared evidence roles and independent acceptance
+requirements. Keep final publication's separate detailed-console/tool-response
+contracts unchanged: this diagnostic's history path does not use them.
+
+Preserve the combined 8 MiB retained console limit, emergency-drain limits and
+all failure, owned-Job termination and original-proxy completion conditions.
+Output outside the selected logger can still exceed the cap. This change
+addresses the accepted console-retention defect without uniquely attributing
+0061's first exception or promising successful compiler evidence.
+
+### Fresh Bindings and Preserved History
+
+Use diagnostic root
+`C:\Temp\azureauth-windows-slice-108\compiler-native-inputs-5033607-v6`,
+action root `C:\Temp\azureauth-windows-slice-108\actions\0062`, Linux
+helper root `/var/tmp/azureauth-compiler-verifiers-108-0062`, marker schema
+`compiler-0062-verifiers-start-v1` and unique unit names beginning
+`azureauth-compiler-0062-`. Retain the disjoint two-root sampler and pure lexical
+ordered parent closure from 0061, including all 49 destinations and fixed writes.
+Bind every new spelling consistently in the four inactive sources, source
+manifest, sole Import overlay, review-only DATA, materialization plan, support
+paths, authority and literal. Preserve all 33 product blobs and original restore
+bytes; keep the tracked execution gates disabled. Independently accept the
+writer's original completion and exact new outputs before diagnostic admission.
+
+Keep the original 211,842-byte handoff and its hash, semantic checks, shared
+parent/owner-marker/action-lock requirements and historical paired counters.
+For compiler mode only, require paired parent name sets 0001–0056 plus 0060 and
+0061 before reservation, and that set plus 0062 afterward. Retain bounded,
+unfiltered parent enumeration and exact pair/name equality. The retained 0060
+and 0061 entries are name-only: do not inspect their children, add them to the
+original handoff receipt loop, reopen their outcomes or charge them twice.
+Reject 0057, 0058 or 0059 entries and any extra, missing or unmatched name before
+reading its content. Preserve disposed-0054/0056 validation, binding the second
+disposed-0054 checkpoint to reserved 0062. Other history modes remain unchanged.
+
+### Capacity, Lifetime and Exact Admission
+
+Add `original0061FailedBuildTest: 1` to the exact `priorCapacity` projection.
+Historical paired totals stay 87 build/test and 48 synthetic, including the
+fixture once. The five failed diagnostics 0057–0061 and accepted systemd batch
+bring prior global occupancy to 93/120 and 52/80. The new helper-root first-start
+marker charges this same diagnostic when paired reservation is not reached;
+paired reservation never charges it twice. Its maximum resulting occupancy is
+94/120 and 52/80. Transfer one prospective unit from Linux ceiling 74 to 73 and
+aggregate Windows ceiling 54 to 55; ordinary Windows capacity stays exhausted
+at 48. Preserve preparation/publication/download limits, twelve protected final
+CLI scenarios and sixteen unallocated synthetic scenarios. Failed start consumes
+this invocation; no retry, synthetic startup charge or refund follows.
+
+Retain the original 900-second dispatcher clock, 30-second helper acceptance
+window, at most eight helper calls, pre-spawn reserves, twenty-second maximum
+helper runtime, two-second running-job/start/stop timers and permanent failure
+latch. Keep `JobRunningTimeoutSec=2s`, intentional retention of at most eight
+unique queued definitions/jobs, `queueTimeoutConfigured: false` and all three
+absolute expired-query checks. No queue-residence deadline or unconditional
+wall-clock termination is claimed. Keep Linux I/O bounds, Windows guard/Job,
+physical checkpoints and transport/completion joins. The historical 0057 risk
+disposition remains limited to its accepted scope; new ownership or termination
+uncertainty still stops further work. No new lifetime-risk exception is granted.
+
+Before the sole invocation, independently accept the merged protocol/current
+Wave, exact inactive/active source and DATA tuple, parent closure, runtime,
+history/capacity, materialization result, authority, review roles and captured
+literal. Reuse evidence only within its existing scope and freshness conditions.
+Accept original tool completion independently before interpreting receipts.
+Success supplies bounded compiler/native-input evidence only; graph/recipe,
+Native AOT publication, artifact and final CLI/account acceptance retain their
+separate gates. Failure grants no implicit collection or retry. Preserve partial
+state; no old-state observation/repair, cleanup, installation, authentication,
+additional publication capacity or release authority is added.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
