@@ -10569,6 +10569,175 @@ accept only the compiler/native-input obligations it actually joins; final graph
 recipe, source/K/handoff/guard admission, actual Native AOT publication, artifact,
 protected CLI and real-account scenario acceptance remain separate gates.
 
+### Consumed Stage 2 and Bounded Property Evidence Continuation
+
+Stage 1 completed and was independently accepted under protocol commit
+`88593d6da8ba843b8393a926dc4b7d29dbbff796`, tree
+`69750e6087c1fcded4d5f6dbd5455890044fb619`. Its three raw copies and inventory
+remain the only accepted original-copy inputs for this continuation. The private
+Stage 1 outcome acceptance is 12,582 bytes with SHA-256
+`768284a79cf59bdc9d7ec03a1c2256d15993f180871ab6d209d99ad87fad1a3d`.
+
+The sole Stage 2 interpreter subsequently exited 1 with complete original
+transport and rejection `project-property-evidence` at `semantic-selection`.
+Its exact inactive source was 70,096 bytes with SHA-256
+`4cb06625e94f8048eb655c183bf1e65017ed0b694c68d27c844595253ee6ec0b`;
+the one-toggle active source was 70,095 bytes with SHA-256
+`22a7bdafadd8c17411ae4af765b56a4dcc59e2eb6891f0497217079a8aeb24f9`.
+Its original transport is 5,551 bytes with SHA-256
+`3c556b4bc33718b8c857eecb64a0ce0f0d8dc914803e1f8d690cc21e55e74e40`;
+independent failure acceptance is 14,453 bytes with SHA-256
+`2a019357e91803c736674d0477fe4fcb92c35ab4066a15d1a9685112db679222`.
+
+That acceptance establishes the original nonzero process exit, complete
+transport, source-bound persisted-record descriptors and finite counters. It
+does not establish successful Stage 2 interpretation, its unexecuted final input
+continuity pass, all later finalization checks, a selection or compiler/native
+semantics. The interpreter preserved its first rejection reason even if a later
+finalization check also failed. Its observations are diagnostic candidates, not
+accepted compiler evidence. Stage 2 remains failed and permanently consumed at
+1/1. No original call, wait, parser, recovery or root may be replayed or repaired.
+
+Source review narrows the rejection to an attempted lookup of `TargetFramework`,
+`RuntimeIdentifier` or `Configuration` in a Csc-associated `ProjectStarted`
+event's `properties`: a required match was missing, duplicated after case folding,
+or null. A missing `RuntimeIdentifier` is allowed at that lookup; a mismatching
+string has a different rejection. The interpreter retained `globalProperties`
+separately and left `ProjectEvaluationFinished` opaque. These are representation
+hypotheses, not proof of the actual field, context or remedy. No failed-stage
+output has been read to support this source-only diagnosis.
+
+Within the existing Wave's credential-free source/artifact review, add precisely
+the two dependent operations below. Each has its own one-attempt limit, including
+failed start, and a new output root. Neither resets or borrows another operation's
+capacity. Build/test and synthetic occupancy remain 94/120 and 52/80; the twelve
+protected CLI cases and sixteen unallocated synthetic cases are unchanged. These
+operations add no dependency, build, test, publish, synthetic or download debit
+and refund none. All prior effects, retention and lifetime dispositions remain.
+
+**Operation A: fixed property projection.** Permit one independently admitted
+invocation of the inactive
+[property inspector](../../../tools/validation/inspect_windows_compiler_0062_properties.py).
+Its sole content input is
+`/tmp/windows-compiler-0062-success-evidence-stage2-root-v1/observations.json`,
+exactly 10,363,238 bytes with SHA-256
+`8d575cde880fbb6b981898cdfbda4869f91cdb4a8a3283eb98413d05064104d6`.
+The original Stage 2 frame identifies these bytes as the completed structural
+decoder's persisted output before semantic selection failed. A new verified
+snapshot may diagnose the interpreter without claiming that the failed Stage 2
+achieved its missing continuity or semantic obligations.
+
+Decode this one fixed JSON file as inert data. Bound JSON depth, collections and
+strings in the exact source, reject duplicate keys and unsupported shapes, and
+account retained parsing buffers/tables within 1 GiB. Project only the structural
+schema/flags, counts for record kinds 3, 7 and 15, and exactly three original Csc
+task start/finish descriptors with ordinal, complete seven-field context, project
+path and success disposition. Join each to its unique `ProjectStarted` by the
+already reviewed project context tuple. Include that event's ordinal, context
+and project path. For only `TargetFramework`, `RuntimeIdentifier` and
+`Configuration`, retain each `properties` and `globalProperties` collection's
+total row count and matching entries' original keys, value types, values and
+match counts. Preserve missing, duplicate and null cases without substitution,
+precedence, normalization into a desired value or silent truncation. Do not
+include unrelated properties, environment variables or task output. This
+projection cannot recover an opaque evaluation event's contents or accept a
+selection. Missing structural prerequisites or exceeded bounds fail the operation.
+
+Create only
+`/tmp/windows-compiler-0062-stage2-property-inspection-root-v1`, exclusively at
+0700, with at most four fixed flat output files. Bound the property projection
+to 64 KiB, start record to 4 KiB, terminal record to 8 KiB, all new file output
+to 128 KiB and the original stdout frame to 8 KiB. Retain complete original tool
+transport within 32 KiB. Use exclusive 0600 leaves, complete writes/fsync, 0400
+seals and bounded output readback; keep partial files without repair or cleanup.
+The source clock is one nonresetting 300-second deadline, including finalization
+and descriptor closure; outer TERM is 305 seconds with a 2-second KILL grace.
+Cap returned input/readback bytes at 64 MiB, requested bytes at 64 MiB plus 4,096,
+content read/write calls at 4,096, path operations at 1,024 and explicit closes
+at 128. No failed or late finalization can qualify as success; retain subsequent
+failure classifications instead of hiding them behind the first rejection.
+
+Use no-follow input traversal, held/named six-field identity checks, exact
+size/SHA-256, a second full input pass for continuity and sealed output readback.
+Failure ends input observations; only bounded owned-output finalization and
+closure may follow within the same original deadline. The manifest is this one
+literal input, read at most twice. No path comes from its contents. Admission
+DATA binds the merged protocol/Wave, inactive/one-toggle source, runtime/startup
+review, fixed input descriptor and original Stage 2 failure acceptance. Passed
+literal DATA does not authorize additional admission-file reads at runtime.
+
+**Operation B: corrected property interpretation.** Permit at most one distinct,
+independently admitted pure-data interpretation after successful original A
+completion, input/output continuity and its property projection are independently
+accepted. Independent finding triage must establish a defect in the reader's
+handling of the supported original property representation. A real configuration
+mismatch, insufficient original evidence, ambiguous unresolved provenance or a
+need for additional inputs or effects does not satisfy this condition and stops
+dependent work. Do not guess a fallback or launch B merely because A exited zero.
+
+B's complete fixed manifest is the four accepted Stage 1 leaves below, under
+`/tmp/windows-compiler-0062-success-evidence-stage1-root-v1`. No failed Stage 2
+output, A output, installed file or newly discovered path is a runtime input.
+Their accepted review descriptors and the correction are bound in literal DATA.
+
+| Leaf | Exact bytes | SHA-256 |
+| --- | ---: | --- |
+| `wsl-result.bin` | 1,971 | `0daf69f38b78153ef046a20f0ad63e8e8f1102614275b2d76a9a5511036b00c2` |
+| `windows-result.bin` | 77,368 | `7981e3bcc3d0608ed5dfd6a465837b9937c328221cd886d55e257510e1b5f0db` |
+| `binlog.bin` | 218,476 | `ab1e5263daf09b039146f7b9f95937192c77c3a7996d9e8594ba7b32da90adb8` |
+| `inventory.json` | 3,229 | `a90ea812a9887c673c6c03c0f95922249538a3152e20f46c96989b36f8376309` |
+
+The aggregate input is 301,044 bytes. Give B its own exclusive mode-0700 root,
+`/tmp/windows-compiler-0062-success-evidence-stage2-corrected-root-v1`, one
+300-second source clock, 305-second outer TERM deadline and 2-second KILL grace.
+Reuse the earlier offline interpretation's finite read/write/path/memory/binlog
+ceilings, two-pass input continuity, sealed output readback and 32 MiB/32-file
+output ceiling. Bind tighter accounting for these four fixed inputs in the exact
+source admission. Do not use a failed-stage output as a substitute for decoding
+the complete original copied binlog again in this separately admitted operation.
+
+Limit the semantic correction to the independently established property
+representation defect and its necessary event/context joins. Decoding a supported
+evaluation *log event* as inert data is permitted only after independent
+public-source review establishes every consumed field, context relationship,
+precedence rule and duplicate/conflict disposition. Executing MSBuild evaluation,
+replay or tasks remains forbidden. Never coerce conflicting or absent values to
+the expected TFM, RID or `Release`. Preserve the original required compiler/native
+checks, complete framing/EOF, three successful Csc contexts, ordered original
+parameters, response-preservation messages, native producer/cutoff and closed
+selector limits. Corrected failure finalization must also retain subsequent
+failure classifications; that reporting change cannot relax success conditions.
+No additional semantic workaround or unrelated parser expansion is admitted.
+
+Before A or B runs, independently accept its exact source and explicit sole
+activation gate, current merged authority, preceding original outcomes, DATA,
+input tuple, finite accounting, inherited runtime/startup premises, literal
+nonlogin Bash/GNU timeout/Python `-I -B -S -c` command, working directory and fresh
+output root. No TTY, helper, pipeline, status wrapper, candidate import for review
+or current runtime/process survey is selected. Record consumption before each
+single call. Require original zero exit, complete bounded transport, all counters,
+input/output continuity and finalization before downstream use. A or B failure
+consumes that operation and leaves dependent work stopped; no implicit failure
+reader, replay, new selector or extra invocation is granted.
+
+Only successful and independently accepted B may replace the failed Stage 2
+selection prerequisite for this lineage. The original Stage 2 remains failed at
+1/1. Separately accept B's exact selection and every file's necessity before the
+still-unexecuted Stage 3. Stage 3 and Stage 4 keep their existing one-attempt,
+input/effect/limit boundaries and require refreshed source, DATA, generator and
+literal bindings to B's accepted root and outcome. A private generator naming
+the failed Stage 2 selection path is not reusable unchanged. Their previous
+source/runtime reviews cover only unchanged premises; they do not automatically
+accept a successor selection or command.
+
+Neither operation reads an original Windows/WSL action root, discovers a file,
+launches Windows, .NET, MSBuild, a compiler or a product, accesses a cache/account,
+uses a credential, makes a network request, or changes the historical 0057 risk
+scope. No desktop attendance is needed. A's diagnostic projection and B's possible
+compiler/native evidence remain separate from final graph/recipe/source/handoff
+admission, Native AOT publication, artifacts, protected CLI and real-account
+scenario acceptance.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
