@@ -59,7 +59,10 @@ BOOTSTRAP_EXCEPTION_TYPES = frozenset((
 ))
 _input_read_bytes = 0
 _input_read_files = 0
-SOURCE_ROOT = r"C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v4\source"
+EXPERIMENT_ROOT = r"C:\Temp\azureauth-windows-slice-108"
+ACTION_ROOT = EXPERIMENT_ROOT + r"\actions\0061"
+DIAGNOSTIC_ROOT = EXPERIMENT_ROOT + r"\compiler-native-inputs-5033607-v5"
+SOURCE_ROOT = DIAGNOSTIC_ROOT + r"\source"
 REQUIRED_REVIEWS = ("wave", "protocol", "callerReview", "runtimeReview", "loaderReview",
                     "physicalPreflightReview", "materializationReview", "helperEffectsReview",
                     "activeTargetReview", "historyReview", "executionReview")
@@ -183,6 +186,121 @@ def resolve(value, invocation):
     if "${" in value:
         raise ValueError("Unresolved template")
     return value
+
+
+def validate_materialization_parent_closure(plan):
+    """Check the fixed write plan lexically before reservation or materialization.
+
+    Seeds describe source-order guarantees, not newly observed filesystem state:
+    reservation owns the action root; staging creates its payload/support roots.
+    Runtime direct-path checks and exclusive creation remain independently required.
+    """
+    device_names = {"con", "prn", "aux", "nul"}
+    device_names.update(prefix + str(n) for prefix in ("com", "lpt") for n in range(1, 10))
+
+    def path(value):
+        if type(value) is not str or not value.isascii() or len(value) > 1024:
+            raise ValueError("Invalid materialization path")
+        value = value.replace("${ACTION_ROOT}", ACTION_ROOT)
+        parts = value.split("\\")
+        if (len(value) > 1024 or not 2 <= len(parts) <= 18 or parts[0] != "C:" or
+                "${" in value):
+            raise ValueError("Noncanonical materialization path")
+        for part in parts[1:]:
+            if (not part or part in (".", "..") or part.endswith((".", " ")) or
+                    any(ord(c) < 32 or c in '<>:"/|?*' for c in part) or
+                    part.split(".", 1)[0].lower() in device_names):
+                raise ValueError("Aliased materialization component")
+        return value
+
+    def below(value, root):
+        return value.lower().startswith(root.lower() + "\\")
+
+    def parent(value):
+        return value.rsplit("\\", 1)[0].lower()
+
+    if (parent(DIAGNOSTIC_ROOT) != EXPERIMENT_ROOT.lower() or
+            below(DIAGNOSTIC_ROOT, ACTION_ROOT) or below(ACTION_ROOT, DIAGNOSTIC_ROOT) or
+            ACTION_ROOT.lower() == DIAGNOSTIC_ROOT.lower()):
+        raise ValueError("Diagnostic and action roots must remain disjoint")
+    staging = ACTION_ROOT + r"\compiler-inputs-payloads"
+    support = ACTION_ROOT + r"\compiler-inputs-support"
+    established = {EXPERIMENT_ROOT.lower(), ACTION_ROOT.lower(), staging.lower(), support.lower()}
+    files = set()
+
+    def leaf(value):
+        value = path(value)
+        key = value.lower()
+        if (not (below(value, ACTION_ROOT) or below(value, DIAGNOSTIC_ROOT)) or
+                parent(value) not in established or key in established or key in files):
+            raise ValueError("Missing, conflicting or duplicate fixed write parent")
+        files.add(key)
+
+    # These fixed action/support writes precede or follow the materialization
+    # loop, but every parent is established by reservation/staging alone.
+    action_leaves = ("started.json", "invocation.json", "clock-ready.json",
+                     "clock-ready.json.pending", "clock-remaining.json", "cancel",
+                     "guard-load.json", "guard-load.json.pending",
+                     "subject-start-attempt.json", "subject-start-attempt.json.pending",
+                     "stdout.bin", "stderr.bin", "windows-result.json", "windows-result.json.pending")
+    for name in action_leaves:
+        leaf(ACTION_ROOT + "\\" + name)
+    support_leaves = ("Invoke-WindowsCompilerNativeInputs.ps1", "proposal.json", "source-manifest.json",
+                      "materialization.json", "guard-wsl-result.json", "guard-completion-acceptance.json",
+                      "authority.json", *(name + ".review" for name in REQUIRED_REVIEWS))
+    for name in support_leaves:
+        leaf(support + "\\" + name)
+    for name, count in (("sourcePayloads", 34), ("restorePayloads", 12)):
+        if type(plan[name]) is not list or len(plan[name]) != count:
+            raise ValueError("Fixed materialization payload count")
+        prefix = "source" if name == "sourcePayloads" else "restore"
+        for number, entry in enumerate(plan[name], 1):
+            staged = path(entry["stagedPayloadPathTemplate"])
+            if staged != staging + f"\\{prefix}-{number:02d}.bin":
+                raise ValueError("Fixed staged payload selector changed")
+            leaf(staged)
+    leaf(staging + r"\compiler-native-inputs.targets")
+
+    planned = set()
+    for name, root in (("actionDirectoriesData", ACTION_ROOT), ("newDirectoriesData", DIAGNOSTIC_ROOT)):
+        if type(plan[name]) is not list or len(plan[name]) != 10:
+            raise ValueError("Fixed materialization directory count")
+        for value in plan[name]:
+            value = path(value)
+            key = value.lower()
+            if (not ((name == "newDirectoriesData" and value == DIAGNOSTIC_ROOT) or below(value, root)) or
+                    key in planned or key in files):
+                raise ValueError("Conflicting or duplicate materialization directory")
+            planned.add(key)
+            if value == staging:
+                continue
+            if key in established or parent(value) not in established:
+                raise ValueError("Unestablished materialization directory parent")
+            established.add(key)
+    if (staging.lower() not in planned or DIAGNOSTIC_ROOT.lower() not in planned or
+            SOURCE_ROOT.lower() not in established or
+            (DIAGNOSTIC_ROOT + r"\capture").lower() not in established):
+        raise ValueError("Missing fixed materialization root")
+
+    # The 34 source, 12 restore, target and 2 marker destinations are 49 fixed leaves.
+    for entry in (*plan["sourcePayloads"], *plan["restorePayloads"]):
+        destination = path(entry["diagnosticPath"])
+        if not below(destination, SOURCE_ROOT):
+            raise ValueError("Materialized payload escapes source root")
+        leaf(destination)
+    target = path(plan["activeCompilerNativeInputsTargetDestination"])
+    if target != DIAGNOSTIC_ROOT + r"\compiler-native-inputs.targets":
+        raise ValueError("Active target destination changed")
+    leaf(target)
+    if type(plan["markers"]) is not list or len(plan["markers"]) != 2:
+        raise ValueError("Fixed marker count")
+    markers = [path(entry["path"]) for entry in plan["markers"]]
+    if markers != [DIAGNOSTIC_ROOT + r"\compiler-sequence.claim",
+                   ACTION_ROOT + r"\home\.dotnet\10.0.401.dotnetFirstUseSentinel"]:
+        raise ValueError("Fixed marker destinations changed")
+    for marker in markers:
+        leaf(marker)
+    leaf(DIAGNOSTIC_ROOT + r"\compiler-native-inputs.binlog")
 
 
 
@@ -497,6 +615,7 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
     if (plan["sourceBytes"] != SOURCE_BYTES or plan["restoreBytes"] != 233709 or
             plan["sourceFileCount"] != 34 or plan["restoreFileCount"] != 12):
         raise ValueError("Materialization totals")
+    validate_materialization_parent_closure(plan)
     history = load_history_adapter(authority)
     cancelled = False
     handlers = {}
@@ -541,7 +660,7 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
         if invocation["packageRoot"] != plan["packageRoot"]:
             raise ValueError("Package root")
         number = invocation["actionNumber"]
-        if type(number) is not str or len(number) != 4 or not number.isascii() or not number.isdigit() or number == "0000":
+        if number != "0061":
             raise ValueError("Action number")
         if invocation["actionPath"] != "C:\\Temp\\azureauth-windows-slice-108\\actions\\" + number:
             raise ValueError("Windows action root")
