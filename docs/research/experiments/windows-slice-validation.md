@@ -11692,6 +11692,167 @@ input bytes and exact invocation. Discovered names remain data and cannot author
 follow-up acquisition.
 
 
+## Fixed Final Native Input Offline Interpretation
+
+After independent acceptance of the one NATIVE38 raw acquisition, permit one
+separately admitted offline interpretation of its exact inventory and 38 sealed
+copies. This supplies offset-bearing COFF/archive directive and static PE import
+facts for later review. It does not select archive members, apply linker options,
+resolve symbols or discovered names, establish native closure, or admit publication.
+The completed raw acquisition must not be replayed.
+
+The accepted acquisition produced 38 raw copies totaling 48,082,629 bytes and the
+39,472-byte inventory, SHA-256
+`0059d652e6ca94252889f64abee952095a24f8624d1fdfeabfc42cf38332226b`.
+All 36 historical size/hash pins matched. Both CRTs selected the first fixed MSVC
+LIB root: `libcmt.lib`, 6,610,744 bytes, SHA-256
+`b0d63342d47be1f3f5c2a5f7ee1bea1f1e81ace5adfc3ca68282a863d7c47d27`,
+and `libvcruntime.lib`, 2,364,572 bytes, SHA-256
+`2d8c0eae0b8df5f7e6a2ae9b52cdaa2812d7253a1254fa02d25de60720c48486`.
+The original returned normally at zero exit with 115 reads, 144,287,359 returned
+bytes, 144,287,474 requested bytes, 48,122,101 output bytes, 1,626 charged path
+operations and two CRT observations. Independent acceptance covers this opaque
+acquisition and its source-enforced equality checks. It establishes no current
+original-file continuity, format interpretation or final dependency resolution.
+
+The reviewed inactive, initially unbound source template is
+`/tmp/decode_windows_final_native38.v3.inactive.py`, 41,896 bytes, SHA-256
+`b91da821560c0ef2eb06787e24e3a139e2ec01b4dfbd024c88509ab7f41ce688`.
+Its reviewed source-only procedure is
+`/tmp/windows-final-native38-decoder-procedure-v3.md`, 30,064 bytes, SHA-256
+`0a3856613eb56229d6ed92ab51ad07fb75c3e18403c2e673e6835a6868776629`.
+The binding-only inactive successor is
+`/tmp/decode_windows_final_native38.bound.inactive.py`, 41,959 bytes, SHA-256
+`38899f7629247ea2090dbe1f03b8b2dc6caffade6158f73d4966808ec20252ee`.
+It changes only the inventory byte/hash pair to the accepted values above. Reuse
+v3's procedure with the binding supplement
+`/tmp/windows-final-native38-decoder-binding-supplement-v1.md`, 5,987 bytes, SHA-256
+`22c2ebb2d18f57a0d7f2a09a14d95a75ec092836c8c79ac2c6ff5156b5f9a0d9`.
+The unique `ACTIVE = False` to `ACTIVE = True` replacement predicts
+`/tmp/decode_windows_final_native38.accepted.py`, 41,958 bytes, SHA-256
+`e50d0460377a98ec94b037b364550298cafe2d8b15a5eb074861b851f2159f88`.
+These exact pins identify review subjects; they do not replace independent binding,
+activation, current authority, runtime or invocation admission.
+
+The source reads only `/tmp/windows-final-native38-offline-v1/inventory.json` and
+its literal `01.bin` through `38.bin` leaves. Original path strings in the inventory
+remain metadata and are never opened. The exact inventory size/hash must match its
+independently accepted acquisition. Require unique JSON keys and the fixed slot map;
+known slots 01-36 retain their frozen sizes/hashes, while slots 37-38 use only the
+accepted inventory's nonempty CRT sizes/hashes, each at most 8 MiB. Every input is a
+sealed ordinary file read once with no-follow parent traversal, held/named identity
+continuity, one observed-size-plus-one request and exact size/hash. No refill, retry,
+directory enumeration, original observation or content-directed acquisition follows.
+
+Interpret slots 01-12 and 21-38 as one object and 29 archives, and slots 13-20 as eight
+PE images. The supported subset is x64 ordinary COFF; exact version-2 zero-metadata
+bigobj; Microsoft archives with both structurally validated linker indexes and
+optional long names; version-0 x64 short imports with the explicitly supported name
+types; and PE32+ x64 images with normal imports or RVA-based delay imports. Preserve
+the exact public Microsoft layout references embedded in the reviewed source.
+Unsupported or malformed forms remain unresolved rather than silently empty.
+
+Walk every ordinary archive member as a conservative candidate. Retain directive
+member/section/byte offsets and exact raw option text. Directive interpretation uses
+only printable ASCII, optional UTF-8 BOM, literal-space separators and the reviewed
+narrow whole-option/whole-argument quoting subset. Record declared input options
+without applying them; other supported tokens remain unresolved exact options.
+Record short-import DLL occurrences and PE descriptor/name offsets. PE mappings must
+be uniquely file-backed, outside the header RVA region and without ambiguous section
+overlap. Reject header-overlapping nonempty section spans and requested header RVAs.
+No thunk, forwarder, dynamic loader, signature or search-resolution claim follows.
+
+A recognized format rejection stops that file's interpretation with explicit
+`status: unresolved` and `coverageComplete: false`; retained partial facts do not
+mean no other directives/imports exist. Remaining fixed files may be interpreted
+within the same cumulative budgets. Only complete supported traversal sets file
+coverage true. I/O, identity, lifetime or budget failure stops the whole invocation.
+All semantic, native-closure, current-resolution, graph, artifact and continuation
+acceptance flags remain false even when every format is parsed.
+
+The sole output is the exclusive
+`/tmp/windows-final-native38-decoded-v1.json`, created only after interpretation and
+bounded serialization. Create mode 0600 with no-follow/exclusive open, seal 0444,
+flush file and parent, then read back once and compare exact bytes. No directory,
+action lock, cache, native process, download, overwrite, repair or deletion is added.
+
+| Cumulative source effect | Maximum |
+| --- | ---: |
+| Nonresetting monotonic lifetime | 90 seconds |
+| Direct content reads | 40 |
+| Raw input bytes | 55,884,529 |
+| Inventory bytes | 65,536 |
+| Returned read bytes | 60,144,369 |
+| Requested read bytes, including overflow allowance | 60,144,409 |
+| Output bytes | 4,194,304 |
+| Variable event JSON bytes | 3,145,728 |
+| Charged path operations | 1,024 |
+| Charged parser steps | 2,000,000 |
+| Charged scanned bytes | 268,435,456 |
+| Aggregate archive members / sections / symbol records | 65,536 / 131,072 / 524,288 |
+| Null-terminated strings | 1,048,576 |
+| Aggregate directive bytes / options | 1,048,576 / 32,768 |
+| Aggregate short/PE import occurrences | 65,536 |
+| Original combined transport bytes | 16,384 |
+
+Retain the source's stricter per-container/range limits: 32,768 members per archive,
+16,384 sections per object, 96 sections per PE image, 16 standard PE directories,
+4,096 interpreted string/option bytes, 65,536 bytes per directive section,
+262,144 bytes per import directory and 8,192 examined descriptors per directory.
+Bound parent traversal to 16 non-root components and writes to 65,536 requested
+bytes per call with positive progress. Loops charge the original clock and global
+counters; scanned strings use bounded 64-byte chunks. A conservative 323 charged
+path operations fits the ceiling. Independent output accounting bounds fixed and
+event JSON together below 4 MiB; check actual serialization before opening output.
+These are intentional source-operation bounds, not interpreter-startup I/O, RSS,
+whole-system syscall or interruptible kernel-operation guarantees.
+
+After exact bound-source/procedure and canonical acceptance, independently admit
+exclusive activation, current authority, runtime/startup/cwd correspondence, finite
+preparation receipts and the original START outcome. Use the existing isolated,
+no-site, no-bytecode, nonoptimized Python and nonlogin noninteractive Bash boundary.
+For exclusive source preparation and consumed-before-call START, reuse the reviewed
+inert helper `/tmp/windows-final-native38-decoder-admission-helper.inert.txt`,
+16,870 bytes, SHA-256
+`7574b8900d610c3632281cc76c80c298b8d271ab07aaabfecc8bb1e48b790e15`.
+Only its six role paths, bound source pins, literal and byte ceilings differ from the
+preceding raw-copy helper. Each independently admitted specialization runs once with
+one original 30-second source deadline, outer TERM at 35 seconds and KILL two seconds
+later. PREPARE permits at most seven reads, 9,157,956 requested/returned bytes,
+29 metadata queries, 37 opens, 50,150 written bytes/positive write calls, two chmods
+and six syncs. START permits at most six reads, 9,140,572 requested/returned bytes,
+24 metadata queries, 30 opens, 8,192 written bytes/positive write calls, one chmod
+and three syncs. Each receipt is at most 8,192 bytes; its retained authority is at
+most 3,072 bytes and capacity has exactly the reviewed three fields. Keep all other
+startup, no-follow identity, exclusive-sealing, failure and retention mechanics.
+Separate exact DATA/code/tool-map review and complete original outcome acceptance
+remain required for both phases. Neither phase reads a raw copy or runs the decoder.
+
+The sole prospective decoder literal is:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 95s /usr/bin/python3.14 -I -B -S /tmp/decode_windows_final_native38.accepted.py
+```
+
+Use cwd `/tmp/azureauth-windows-final-link-inputs-accepted-108`, no TTY, pipeline,
+status wrapper or alternate command. One START record consumes the sole invocation
+before the call; no concurrent original or observer operation is allowed. The outer
+95-second TERM/two-second KILL watchdog does not waive the source deadline. Require
+complete original transport, normal zero exit, resolved owned lifetime and independent
+result acceptance before relying on extracted facts. Partial format coverage remains
+partial evidence even on zero exit. Every failed start, collision, mismatch, short
+read, inaccessible input, timeout, cancellation, budget/output failure or uncertain
+lifetime stops without retry, cleanup, alternate output or partial-output adoption.
+Restore owned signal handlers and close owned descriptors; retain all output.
+
+This step launches no Windows subject, copied image or build tool and performs no
+account, credential, cache/consent or network operation. It adds no build/test,
+synthetic or publication debit or refund. Discovered names are review data only;
+further acquisition requires its own accepted bounded procedure. Generated ILC
+objects remain post-producer evidence and no final artifact or Slice acceptance
+follows from this interpretation.
+
+
 ## Fixed Final Source and Restore Materialization
 
 This supplement permits one separately admitted copy of the final publication's
