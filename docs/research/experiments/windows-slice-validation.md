@@ -9524,6 +9524,146 @@ execution. Publish only sanitized findings and evidence identities. A finding
 requiring remediation retains independent triage; compiler/native-input semantics,
 final publication and scenario acceptance retain their separate gates.
 
+
+### Original 0061 Failure-Evidence Copy Outcome
+
+The one fixed 42-slot copy ran under accepted revision
+`7e763264f8b1404986f2d310c22fa0cf5fb98609`, tree
+`75ebc2a4379bc68e31e91d5ce7987f4cfabf3e7a`. Its original tool invocation
+completed with exit code 1 and no continuing tool session. Independent acceptance
+of that original completion preceded all further interpretation. The canonical
+331-byte failure frame has SHA-256
+`2d863f5dc783e4341bc952b2cbe9e7a7ae2ac17fa36de2d79fff1287381014c1`;
+the complete private 1,554-byte transport has SHA-256
+`20968d35a4d61d7da2f4d02aa2dc503fba5d70e9df7e78e40418fb9709e34908`.
+The 9,791-byte independent failed-outcome acceptance has SHA-256
+`3895fbcf57663c88b3ec5a4f3d7297b5fe641f45afada31081ccf5820d6a32d6`.
+
+The frame reports `ValueError`, stage `initial-read`, role
+`windows-action-guardLoad`, `normalCompletion=false` and no inventory. It reports
+35 file reads, 67 read calls, 23,445 requested bytes, 23,411 returned bytes,
+231 path operations, zero output bytes and zero write calls. The source had not
+reached output creation. This is not proof that the output pathname was absent,
+that no selected content was read, or that original Windows work was quiescent.
+No inventory or copied evidence was inspected or accepted.
+
+The closed failure frame does not select a particular rejected predicate. The
+collector checks regular-file type, the 16,384-byte slot cap, named/opened identity,
+read length and continuity. The producer's `Save-CompleteJson` provides a general
+1,048,576-byte receipt ceiling, without a separate guard-load byte assertion.
+That source difference does not establish that the actual guard receipt exceeded
+16,384 bytes. The original diagnostic cause, guard receipt contents and Windows
+or helper lifetime remain unestablished. Preserve the consumed diagnostic and
+copy, their full declared allocations and all dependent stops.
+
+### One Narrower 0061 Follow-Up Observation, Ordinal 2
+
+Prospectively amend the preceding copy's one-observation/no-fallback restriction
+only to allocate this exact second observation after this supplement merges and
+its exact source/runtime/DATA/literal admission is accepted. This is a new,
+narrower follow-up with overlapping content selectors, not a resumption or replay
+of the consumed 42-slot collector. Do not reuse its command, admission, output
+root or budget. No third observation or diagnostic retry is granted.
+
+The decision-relevant questions are which fixed current diagnostic error and
+finalization records can be recovered, and what type, size and identity the
+fixed guard-load leaf has at two current checkpoints. Static source and the
+original frame do not answer those questions. Later metadata cannot identify
+which historical guard-load predicate failed, and copied receipt flags alone
+cannot establish lifetime, compiler success or permission for dependent work.
+
+The [inactive narrower collector](../../../tools/validation/collect_windows_compiler_0061_narrow_failure.py)
+selects exactly eight possible regular-file content slots:
+
+| Exact parent | Fixed leaves | Collector rejection limits |
+| --- | --- | --- |
+| `/var/tmp/azureauth-windows-slice-108/windows-actions/0061` | `result.json` | 65,536 bytes |
+| Same WSL action directory | `bootstrap-stdout.bin`, `bootstrap-stderr.bin`, `bootstrap-transport.json` | 4,096 bytes each |
+| `/mnt/c/Temp/azureauth-windows-slice-108/actions/0061` | `windows-result.json` | 1,048,576 bytes |
+| Same Windows action directory | `stdout.bin`, `stderr.bin` | 8,396,800 bytes each |
+| Same Windows action directory | `subject-start-attempt.json` | 4,096 bytes |
+
+These caps total 17,924,096 bytes, in at most 1,098 chunks of 16,384 bytes.
+Retain the existing opaque-content, regular-file, no-follow, three-pass
+identity/content continuity and bounded complete-write/readback checks for these
+slots. Do not print their contents or let them select another path. Read no
+invocation, reservation, helper, diagnostic-tree, binlog, response-file, pending
+or other leaf. No directory enumeration, process/cgroup/service query, Windows
+launch, subject execution, network, account access or cleanup is selected.
+
+In addition, obtain only no-follow named metadata for the literal
+`guard-load.json` under the selected Windows action parent. Do not open or read
+its contents. Observe device, inode, mode, size and nanosecond mtime/ctime, or exact
+absence, once before content reads and once in the normal continuity phase.
+Record current type, size and comparison without inferring that a nonregular or
+changed object is a valid receipt. If failure prevents the second checkpoint,
+retain the first observation and mark the second incomplete; do not add a failure
+probe. Current metadata is neither a historical cause determination nor permanent
+writer termination evidence. An observed ownership or termination problem retains
+the ordinary stop conditions and cannot inherit the historical 0057 exception.
+
+Reuse one nonblocking lease of the existing WSL `action.lock` and component-wise,
+descriptor-relative mandatory root/action-parent opens. Only the two literal
+0061 directories and the nine selected leaves may be absent. Retain the original
+mandatory-parent and lock identity rechecks, and exact optional-directory identity
+or stable-absence checks. No original state is created, changed or repaired.
+
+Use only the new private output root
+`/tmp/windows-compiler-0061-narrow-failure-offline-root-v1`, with exclusive creation,
+mode 0700 and at most eight present-content copies plus one canonical inventory
+of at most 65,536 bytes. Copies use mode 0600 during complete writes and mode 0444
+when sealed, with file/parent synchronization and exact readback. Retain partial
+outputs on any failure; no overwrite, removal or repair is permitted. The inventory
+retains incomplete acceptance flags and the two guard metadata checkpoints.
+
+The new canonical admission DATA, at most 16,384 bytes, is
+`/tmp/windows-compiler-0061-narrow-failure-admission-root-v1.json`. Bind ordinal 2,
+the accepted target, activated inline source and independent runtime review, the
+2,852-byte original diagnostic transport and the 1,554-byte failed first-copy
+transport. Independently join the exact source/admission and complete original
+transports before interpretation. If selected records cannot be attributed with
+these inputs, retain that limitation rather than silently adding selectors.
+
+| Charged metric | Ordinal 2 maximum | Cumulative maximum including full ordinal 1 allocation |
+| --- | ---: | ---: |
+| File content reads | 26 | 154 |
+| Read calls | 3,325 | 7,280 |
+| Requested bytes | 53,854,234 | 115,536,026 |
+| Successful returned bytes / rejection threshold | 53,854,208 | 115,535,872 |
+| Output bytes | 17,989,632 | 38,588,416 |
+| Complete write calls | 1,102 | 2,380 |
+| Path operations | 4,096 | 8,192 |
+
+The 26 content reads comprise one admission read, three reads for each of eight
+present slots and one inventory readback. Metadata-only observations consume path
+operations, not content reads. Preserve the earlier requested-before-read and
+returned-after-read accounting, charged EOF/rejection probes, finite short-read
+allowance and short-write rejection. Do not refund unused ordinal 1 capacity.
+These bounds do not describe all trusted-interpreter startup or filesystem I/O.
+
+Keep the tracked source inactive. Admission permits exactly one reversible
+`ACTIVE = False` to `ACTIVE = True` substitution in the captured inline source,
+with no active source file or separate writer. Use the retained isolated/no-site/
+no-bytecode Python 3.14 and Bash/GNU timeout startup premises. The source deadline
+is one nonresetting 90 seconds; the outer TERM deadline is 95 seconds with two
+seconds of KILL grace. Across both allocated observations these are at most 180
+source-deadline seconds and 194 nominal outer-envelope seconds, not a guarantee
+against blocked kernel work. Same-session empty waits remain at most 60 seconds.
+
+The original transport is at most 8,192 bytes and includes stage, role, closed
+rejection reason, exception class, obtained guard metadata, inventory descriptor
+and counters, never receipt content. Its guard metadata block is at most 4,096
+bytes. Independently accept actual original completion before relying
+on any reported metadata, inventory or copy. A failed start consumes ordinal 2;
+no replacement observer, additional probe or third attempt follows. A normal
+collector exit permits only independent interpretation of the selected copies
+and metadata, not automatic acceptance of the diagnostic or its lifetime.
+
+Global occupancy remains 93/120 build/test actions and 52/80 synthetic scenarios;
+this passive follow-up adds neither unit. Preserve the twelve protected final CLI
+scenarios and sixteen unallocated synthetic scenarios. The diagnostic, Native AOT
+publication, graph/artifact/scenario and account-state gates remain unchanged.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
