@@ -17,6 +17,9 @@ $script:FinalOriginalLoaderHash = 'ef16811f0f8cf481ee6a54b9b7f0552c14bbd6eeeca32
 $script:FinalControllerWatch = $null
 $script:FinalRecipeHash = 'bdaddd4765dfe6e9f5b48cc839097b96be411b9a3d84b581c1987e28efac06c8'
 $script:FinalStartupSentinel = $null
+$script:FinalInstalledSelectionChecks = 0
+$script:FinalInstalledSelectionMetadataProbes = 0
+$script:FinalInstalledSelectionEntries = 0
 
 function Get-FinalHash([byte[]] $Bytes) {
     $hash = [Security.Cryptography.SHA256]::Create()
@@ -228,6 +231,96 @@ function Assert-FinalOutputAncestor([string] $Path) {
     Assert-GuardDirect $current
 }
 
+function Assert-FinalInstalledSelections {
+    # Reuse the accepted diagnostic's top-level membership checks for only these
+    # eight fixed installed domains. Discovered names never select another read.
+    Assert-FinalBudget
+    $script:FinalInstalledSelectionChecks++
+    if ($script:FinalInstalledSelectionChecks -gt 2) { throw 'Installed selection checkpoint bound' }
+    $current = 'C:\Program Files\dotnet\sdk\10.0.401\Current'
+    $hostfxr = 'C:\Program Files\dotnet\host\fxr'
+    $domains = @(
+        @{ path = "$current\Imports\Microsoft.Common.props\ImportBefore"; pattern = '*'; members = @() }
+        @{ path = "$current\Imports\Microsoft.Common.props\ImportAfter"; pattern = '*'; members = @() }
+        @{ path = "$current\Microsoft.Common.targets\ImportBefore"; pattern = '*'; members = @() }
+        @{ path = "$current\Microsoft.Common.targets\ImportAfter"; pattern = '*';
+            members = @('Microsoft.NET.Build.Extensions.targets', 'Microsoft.TestPlatform.ImportAfter.targets') }
+        @{ path = "$current\Microsoft.CSharp.targets\ImportBefore"; pattern = '*'; members = @() }
+        @{ path = "$current\Microsoft.CSharp.targets\ImportAfter"; pattern = '*'; members = @() }
+        @{ path = $current; pattern = 'Microsoft.VisualStudioVersion.v*.Common.props'; members = @() }
+        @{ path = $hostfxr; pattern = '*'; members = @('10.0.12', '6.0.36', '8.0.31') }
+    )
+    $checkpointEntries = 0
+    foreach ($domain in $domains) {
+        $path = $domain.path
+        $isHostfxrDomain = $path -ceq $hostfxr
+        $expected = @{}
+        foreach ($member in $domain.members) {
+            $expected.Add($member, $true)
+            if (-not $isHostfxrDomain) {
+                $memberPath = [IO.Path]::Combine($path, $member)
+                if (@($script:FinalGraph.protectedInputs | Where-Object { $_.path -ieq $memberPath }).Count -ne 1) {
+                    throw 'Installed import member has no unique protected input'
+                }
+            }
+        }
+        $parts = $path.Substring(3).Split([char]'\')
+        $prefix = 'C:\'; $missing = $false
+        for ($index = -1; $index -lt $parts.Count; $index++) {
+            Assert-FinalBudget
+            if ($index -ge 0) { $prefix = [IO.Path]::Combine($prefix, $parts[$index]) }
+            $script:FinalInstalledSelectionMetadataProbes++
+            if ($script:FinalInstalledSelectionMetadataProbes -gt 132) { throw 'Installed selection metadata allowance' }
+            try { $attributes = [IO.File]::GetAttributes($prefix) }
+            catch [IO.FileNotFoundException] { if ($index -lt 0) { throw }; $missing = $true; break }
+            catch [IO.DirectoryNotFoundException] { if ($index -lt 0) { throw }; $missing = $true; break }
+            if ($attributes -band [IO.FileAttributes]::ReparsePoint -or
+                -not ($attributes -band [IO.FileAttributes]::Directory)) {
+                throw 'Installed selection ancestor is not an ordinary directory'
+            }
+        }
+        Assert-FinalBudget
+        if ($missing) {
+            if ($expected.Count -ne 0) { throw 'Expected installed selection directory is missing' }
+            continue
+        }
+        $actual = @{}
+        $enumerator = [IO.Directory]::EnumerateFileSystemEntries($path).GetEnumerator()
+        try {
+            while ($true) {
+                Assert-FinalBudget
+                if (-not $enumerator.MoveNext()) { break }
+                $checkpointEntries++; $script:FinalInstalledSelectionEntries++
+                # Count unmatched entries too; one overflow entry only rejects.
+                if ($checkpointEntries -gt 512 -or $script:FinalInstalledSelectionEntries -gt 1024) {
+                    throw 'Installed selection entry allowance'
+                }
+                $leaf = [IO.Path]::GetFileName($enumerator.Current)
+                if ($leaf -inotlike $domain.pattern) { continue }
+                if (-not $expected.ContainsKey($leaf) -or $actual.ContainsKey($leaf)) {
+                    throw 'Unexpected or duplicate installed selection member'
+                }
+                Assert-FinalBudget
+                $script:FinalInstalledSelectionMetadataProbes++
+                if ($script:FinalInstalledSelectionMetadataProbes -gt 132) { throw 'Installed selection metadata allowance' }
+                $attributes = [IO.File]::GetAttributes($enumerator.Current)
+                if ($isHostfxrDomain) {
+                    if ($attributes -band [IO.FileAttributes]::ReparsePoint -or
+                        -not ($attributes -band [IO.FileAttributes]::Directory)) {
+                        throw 'Hostfxr member is not an ordinary directory'
+                    }
+                } elseif ($attributes -band ([IO.FileAttributes]::ReparsePoint -bor [IO.FileAttributes]::Directory)) {
+                    throw 'Installed import member is not an ordinary file'
+                }
+                $actual.Add($leaf, $true)
+            }
+        } finally { $enumerator.Dispose() }
+        Assert-FinalBudget
+        if ($actual.Count -ne $expected.Count) { throw 'Expected installed selection member is missing' }
+    }
+    Assert-FinalBudget
+}
+
 function Assert-FinalProtectedInputs {
     foreach ($path in $script:FinalGraph.absentInputs) {
         Assert-FinalBudget
@@ -254,6 +347,7 @@ function Assert-FinalProtectedInputs {
         } finally { $hasher.Dispose(); $file.Dispose() }
         Assert-FinalBudget
     }
+    Assert-FinalInstalledSelections
 }
 
 function Quote-FinalArgument([string] $Value) {

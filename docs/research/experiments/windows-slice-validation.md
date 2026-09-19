@@ -5837,6 +5837,49 @@ user-extension directory or capturing its private path. The fixed sentinel and
 unchanged certificate/tool-PATH/telemetry controls exclude only their reviewed
 branches under the exact source/runtime predicates.
 
+The existing Windows protected-input admission and successful-postcondition checks
+also verify eight fixed installed selection domains. Reuse the accepted diagnostic's
+nonrecursive membership checks in `Assert-FinalInstalledSelections`; keep the graph
+schema unchanged. Under `C:\Program Files\dotnet\sdk\10.0.401\Current`, require:
+
+| Relative domain | Matching rule | Expected matching members |
+| --- | --- | --- |
+| `Imports\Microsoft.Common.props\ImportBefore` | `*` | none |
+| `Imports\Microsoft.Common.props\ImportAfter` | `*` | none |
+| `Microsoft.Common.targets\ImportBefore` | `*` | none |
+| `Microsoft.Common.targets\ImportAfter` | `*` | `Microsoft.NET.Build.Extensions.targets`, `Microsoft.TestPlatform.ImportAfter.targets` |
+| `Microsoft.CSharp.targets\ImportBefore` | `*` | none |
+| `Microsoft.CSharp.targets\ImportAfter` | `*` | none |
+| `.` | `Microsoft.VisualStudioVersion.v*.Common.props` | none |
+
+The eighth domain is `C:\Program Files\dotnet\host\fxr`, matching `*`, with exactly
+the ordinary directories `10.0.12`, `6.0.36` and `8.0.31`. Match names and reject
+duplicates case-insensitively. Every traversed ancestor must be an ordinary
+non-reparse directory. Preserve missing-parent-as-empty semantics only for an
+empty expected matching set: a missing domain or intermediate ancestor satisfies
+that predicate; a missing drive root or either nonempty domain rejects. This is
+not an assertion that an existing empty directory is absent. The two expected
+import files must be ordinary non-reparse files with unique protected graph rows;
+their bytes remain covered by the existing protected-input checks. Version names
+do not authorize opening the other hostfxr binaries or following discovered paths.
+
+Run this check only at the existing Windows protected-input checkpoints, before
+SDK launch and after natural completion/drain. Across both calls, permit at most
+132 metadata queries, 512 admitted top-level entries per checkpoint and 1,024
+cumulatively, plus one overflow entry solely to reject. Count unmatched entries
+before filtering and dispose every enumerator. The eight literal paths imply at
+most 61 ancestor and five member queries per checkpoint, 16 enumerator creations
+and disposals each, and a conservative 1,041 advances: at most 1,205 installed-domain
+selection operations. The added budget checks also perform at most 1,209 existing
+cancellation `Test-Path` probes: four entry/exit checks, 132 before metadata queries,
+1,041 before advances, 16 after ancestor walks and 16 after enumerations. The combined
+conservative bound is 2,414 additional source-level filesystem-facing operations,
+not an OS-wide I/O trace or controller-global budget. Retain the original clock,
+cancellation, output and lifetime bounds; any mismatch, access error, overflow or
+late completion rejects. These two bounded checks preserve the existing workstation
+assumptions and establish no atomic snapshot or universal loader closure. They add
+no observer invocation, activation, new schema or fresh execution grant.
+
 This amendment creates no account, installation, policy, service, privilege or
 new network effect, and allocates no additional attempt. Build/test consumption
 remains 94/120 and synthetic consumption 52/80; the existing single prospective
@@ -11506,6 +11549,148 @@ Global occupancy remains **94/120 build/test** and **52/80 synthetic**. The twel
 protected final CLI cases and sixteen unallocated synthetic cases remain intact;
 these evidence stages add no restore/build/test/publish/synthetic debit and refund
 none. Their separate invocation and I/O allocations remain consumed.
+
+## Fixed Final Native Input Raw Copies
+
+Before final native dependency interpretation, permit one separately admitted opaque
+copy of exactly 38 fixed native inputs. Existing descriptors do not supply reviewable
+raw bytes. This step supplies those bytes for a later bounded offline procedure; it
+does not parse object/archive/PE data, resolve discovered names, establish native
+closure, or admit publication. The preceding LINK collection remains completed and
+must not be replayed. The final source/restore copy retains its separate invocation.
+
+The reviewed inactive source is
+`/tmp/collect_windows_final_native38.inactive.py`, 43,165 bytes, SHA-256
+`6f9c078a51b68690b9f09e62bb57e393f2f154f1d4d5d1af394d486a208a9c69`.
+Its fixed literal table owns exact original paths, Windows spellings, known sizes and
+hashes. Replace only its unique `ACTIVE = False` with `ACTIVE = True` through separately
+admitted exclusive source materialization. The predicted active source is
+`/tmp/collect_windows_final_native38.accepted.py`, 43,164 bytes, SHA-256
+`943f1b095393c9d1b520aa3df056aa58519cd9dada2ef864f1e01cb0ad6c72d3`.
+The sealed source-only procedure is
+`/tmp/windows-final-native38-collector-procedure-v1.md`, 23,544 bytes, SHA-256
+`d573596da95b382f4c4126e15d5c8e393f59ee8be7b2ce295e0c210da258f623`.
+These pins identify review subjects; their existence or an activation flag does not
+satisfy independent source, current authority, runtime, literal or start admission.
+
+The fixed slot ordering is:
+
+| Slots | Selected input leaves |
+| --- | --- |
+| 01-06 | `bootstrapper.obj`, `Runtime.WorkstationGC.lib`, `eventpipe-disabled.lib`, `Runtime.VxsortDisabled.lib`, `standalonegc-disabled.lib`, `aotminipal.lib` |
+| 07-12 | `zlibstatic.lib`, `brotlicommon.lib`, `brotlienc.lib`, `brotlidec.lib`, `System.Globalization.Native.Aot.lib`, `System.IO.Compression.Native.Aot.lib` |
+| 13-15 | `ilc.exe`, `clrjit_win_x64_x64.dll`, `jitinterface_x64.dll` |
+| 16-20 | `link.exe`, `mspdb140.dll`, `mspdbcore.dll`, `mspdbsrv.exe`, `mspdbst.dll` |
+| 21-28 | `advapi32.lib`, `bcrypt.lib`, `crypt32.lib`, `iphlpapi.lib`, `kernel32.lib`, `mswsock.lib`, `ncrypt.lib`, `normaliz.lib` |
+| 29-36 | `ntdll.lib`, `ole32.lib`, `oleaut32.lib`, `secur32.lib`, `user32.lib`, `version.lib`, `ws2_32.lib`, `ucrt.lib` |
+| 37-38 | `libcmt.lib`, `libvcruntime.lib` |
+
+Slots 01-12 are the already described NativeAOT runtime-package 10.0.12 operands;
+13-15 are the selected ILC package 10.0.12 images; 16-20 are the selected MSVC
+14.51.36231 images. Slots 21-36 use the independently accepted LINK inventory's
+exact selected paths and byte identities. Their historical earlier-candidate
+absences are not reobserved here. All 36 fixed originals must match exact lengths
+and hashes, totaling 39,107,313 bytes. No `cmd.exe` copy is added.
+
+Only the two source-established CRT names receive first-present selection through
+these three literal LIB roots, in order:
+
+1. `C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\lib\x64`
+2. `C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\ucrt\x64`
+3. `C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\um\x64`
+
+Use the fixed `/mnt/c` projections in source. All three parents must exist as ordinary
+directories. Only a missing leaf beneath its held parent permits the next candidate.
+A linked, nonregular, empty, oversized or changed leaf fails without fallback; a
+missing parent or all-absent CRT also fails. Each selected CRT is at most 8,388,608
+bytes, and its sole initial capture establishes its prospective hash while matching
+the first observation's identity and size. No `oldnames.lib`, `libcpmt.lib`, arbitrary
+DLL, content-derived name, directory recursion or OS/runtime survey is included.
+
+Reuse the accepted METADATA12 bounded no-follow raw-copy mechanism and LINK's fixed
+selection and parent checks. Hold the existing regular action lock
+`/var/tmp/azureauth-windows-slice-108/action.lock` read-only with nonblocking exclusive
+flock; contention consumes the invocation and fails. Hold the three LIB parents
+through acquisition and completion; verify their held/named identity before work,
+before inventory and after inventory. Capture every selected input before exclusive
+creation of `/tmp/windows-final-native38-offline-v1`, mode 0700. Its only leaves are
+`01.bin` through `38.bin` and `inventory.json`, initially exclusive mode 0600 and sealed
+0444 with file and directory flushes. Never reuse, overwrite or repair an output root.
+
+Read each original once, reread it once, and read back its sealed copy once. Each
+read makes one observed-size-plus-one request with stable held/named identity and
+exact length/hash; short reads and extra bytes fail without refill. Compare original
+reread and raw-copy readback byte for byte with the initial capture. Reobserve only
+the earlier absent candidates for the two CRT names. Preserve exact signed identity
+integers, rejecting representations longer than 40 characters. Record provenance,
+original/offline descriptors, CRT choices and two-observation absences in one bounded
+inventory; seal and read it back, then recheck output and parent identities.
+
+The one invocation has these cumulative source limits:
+
+| Effect | Maximum |
+| --- | ---: |
+| Monotonic data/completion lifetime | 90 seconds |
+| Content reads | 115 |
+| Initial original bytes | 55,884,529 |
+| Returned content bytes | 167,719,123 |
+| Requested content bytes, including overflow allowance | 167,719,238 |
+| Output bytes, including inventory | 55,950,065 |
+| Inventory bytes | 65,536 |
+| Charged path/identity operations | 4,096 |
+| CRT leaf observations | 10 |
+| Parent components, excluding root | 16 |
+| Requested bytes per output write | 65,536 |
+| Original combined transport | 16,384 bytes |
+
+With `S = 39,107,313 + 2 * 8,388,608` and `I = 65,536`, reads are `3 * 38 + 1`,
+returned bytes `3S + I`, requested bytes `3S + I + 115`, and output bytes `S + I`.
+The returned-byte ceiling is checked immediately after each read; the separate
+before-read request ceiling bounds a failing read too. All nine CRT selection
+combinations require at most 1,638 charged path operations. Conservative inventory
+serialization, including bounded identity integers, stays within 57,676 bytes;
+the completion frame at counter ceilings is 548 bytes. Complete writes need at most
+872 calls; positive short writes make at least one-byte progress and are bounded
+by output bytes and the nonresetting clock. No separate write-call counter or
+interpreter-startup, RSS, OS-wide syscall or blocked-kernel-I/O guarantee is claimed.
+
+Use the existing isolated/no-site/no-bytecode/nonoptimized Python runtime and
+nonlogin, noninteractive Bash startup-injection boundary. Reuse the accepted
+runtime/loading/watchdog reasoning, with fresh required source/runtime/cwd descriptor
+correspondence and exact independently admitted preparation/start maps. The exact
+collector literal, after those gates, is:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 95s /usr/bin/python3.14 -I -B -S /tmp/collect_windows_final_native38.accepted.py
+```
+
+Use cwd `/tmp/azureauth-windows-final-link-inputs-accepted-108`, no TTY, pipeline,
+status wrapper or alternate command. The outer watchdog allows 95 seconds before
+TERM and two further seconds before KILL; it does not waive the 90-second source
+deadline. One START record consumes the sole invocation before the call. No concurrent
+original or observer operation is permitted. Before execution independently accept
+the exact source/procedure, activation, current authority, runtime/startup/cwd,
+literal, finite receipt feasibility and original START outcome.
+
+Require complete original transport, normal zero exit, all counters within limits
+and independent inventory/outcome acceptance before later offline interpretation.
+A completion frame alone is insufficient. Every failed or partial start, collision,
+lock contention, mismatch, timeout, cancellation, inaccessible input, short read,
+output failure or uncertain lifetime stops without retry, alternate path, cleanup,
+refund or partial-output adoption. Release only owned descriptors/flock and restore
+signal handlers; intentionally retain all complete or partial output. No original
+content is modified. Ordinary read access-metadata effects retain the accepted
+workstation model.
+
+This acquisition launches no Windows subject, build tool or copied program, and
+performs no account, credential, cache/consent or network action. It consumes none of
+the build/test, synthetic or publication capacity; their existing totals and limits
+remain unchanged. It supplies no current final search resolution, signature/public
+provenance, graph/artifact acceptance or universal loader claim. Any later bounded
+archive/COFF/PE interpretation requires its separately accepted source, procedure,
+input bytes and exact invocation. Discovered names remain data and cannot authorize
+follow-up acquisition.
+
 
 ## Fixed Final Source and Restore Materialization
 
