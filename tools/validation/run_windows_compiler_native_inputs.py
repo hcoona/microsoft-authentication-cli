@@ -60,8 +60,8 @@ BOOTSTRAP_EXCEPTION_TYPES = frozenset((
 _input_read_bytes = 0
 _input_read_files = 0
 EXPERIMENT_ROOT = r"C:\Temp\azureauth-windows-slice-108"
-ACTION_ROOT = EXPERIMENT_ROOT + r"\actions\0061"
-DIAGNOSTIC_ROOT = EXPERIMENT_ROOT + r"\compiler-native-inputs-5033607-v5"
+ACTION_ROOT = EXPERIMENT_ROOT + r"\actions\0062"
+DIAGNOSTIC_ROOT = EXPERIMENT_ROOT + r"\compiler-native-inputs-5033607-v6"
 SOURCE_ROOT = DIAGNOSTIC_ROOT + r"\source"
 REQUIRED_REVIEWS = ("wave", "protocol", "callerReview", "runtimeReview", "loaderReview",
                     "physicalPreflightReview", "materializationReview", "helperEffectsReview",
@@ -660,7 +660,7 @@ def invoke_compiler_native_inputs_candidate(authority_path, admitted_authority_s
         if invocation["packageRoot"] != plan["packageRoot"]:
             raise ValueError("Package root")
         number = invocation["actionNumber"]
-        if number != "0061":
+        if number != "0062":
             raise ValueError("Action number")
         if invocation["actionPath"] != "C:\\Temp\\azureauth-windows-slice-108\\actions\\" + number:
             raise ValueError("Windows action root")
