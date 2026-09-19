@@ -81,6 +81,17 @@ retains the ordinary stop conditions. No quiescence, refund, repeated original
 recovery, old-process cleanup, authentication, additional publication capacity,
 release authority or broader exception is granted.
 
+**Additional compiler-input diagnostic:** Authorize at most one separately admitted
+credential-free compiler-native-inputs diagnostic numbered 0059, using the accepted
+verifier evidence correction and systemd manager-supervision interpretation. Keep
+the selected product, existing environments, public toolchain/dependency pins and
+stop-before-ILC/linker boundary. Charge one additional build/test action within the
+existing cumulative ceiling, with no separate synthetic startup scenario. Require
+an independently accepted exact protocol, fresh evidence roots and source admission
+before execution. Failed start consumes this invocation; no retry, repeated 0057
+or 0058 invocation/recovery, cleanup, authentication, new lifetime-risk exception,
+additional publication capacity or release authority is granted.
+
 **Exclusions:** no product or protocol expansion, PATs, downstream Git/package adapters,
 browser/device-code or native Linux/macOS/ARM64 authentication, daemon, serialized
 application cache, private dependency, network telemetry export, installation, signing,
