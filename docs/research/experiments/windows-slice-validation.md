@@ -9849,7 +9849,7 @@ Ordinal 3's equal metadata pair neither answers this content question nor admits
 the originals' current identity, ownership or stability. No identity predicate
 may be relaxed on the basis of that pair or a hypothesis about ordinal 2.
 
-The [inactive error-evidence collector](../../../tools/validation/collect_windows_compiler_0061_error_evidence.py)
+The [ordinal 4 collector](https://github.com/hcoona/microsoft-authentication-cli/blob/4a156957c74328ed5a768e7210a0a4ad62f9914c/tools/validation/collect_windows_compiler_0061_error_evidence.py)
 selects exactly the eight content slots and per-file limits in ordinal 2's table:
 the WSL action's `result.json`, `bootstrap-stdout.bin`, `bootstrap-stderr.bin`
 and `bootstrap-transport.json`, and the Windows action's `windows-result.json`,
@@ -9950,6 +9950,146 @@ Global occupancy remains 93/120 and 52/80, with twelve final CLI scenarios and
 sixteen unallocated synthetic scenarios protected. Native AOT publication,
 graph/artifact/scenario acceptance, cleanup and real-account work retain their
 separate gates. No result grants further sampling or execution.
+
+
+
+### Ordinal 4 Controlled Identity Rejection
+
+Ordinal 4 ran once under accepted commit
+`4a156957c74328ed5a768e7210a0a4ad62f9914c`, tree
+`258baa6d7310ddb06a00456adb339c15f3455081`. Its complete actual original tool
+response ended with exit code 1, with no continuing session, wait or retry.
+The complete 1,783-byte private transport has SHA-256
+`8cd4245f6b7f22584ce5efd79f353fd4714a3ec6610c33a9ae1bad88697e0817`.
+Independent completion acceptance was sealed before interpretation of the
+829-byte captured frame, SHA-256
+`d2625ee9cee1e78f1546d984f1a146718d988a0ba462752694da7595bfa2651e`.
+The 17,535-byte independent failed-outcome acceptance has SHA-256
+`4433452c8a07b75eb143899fa07da61b7d02c9fb86cfa80ab825bbda1eb8f59b`.
+
+The accepted frame reports `initial-read`, role
+`windows-action-subjectStartAttempt`, rejection `initial-identity`, and checkpoint
+`read-initial-opened`. Its already-obtained named and opened snapshots describe a
+105-byte regular file and differ only in nanosecond ctime; device, inode, mode,
+byte size and nanosecond mtime agree. The source rejected the comparison before
+reading that selected leaf. It reports nine logical read attempts, 526 read calls,
+8,420,235 requested bytes, 8,420,227 returned bytes and 71 charged path operations.
+Inventory is null; output bytes and write calls are zero. The output-creation
+stage was not reached. No output pathname absence was inferred or checked.
+
+This was a complete controlled rejection by the admitted collector. It introduces
+no established unresolved collector lifetime; it does not resolve the original
+0061 diagnostic's lifetime, quiescence or failure cause. The captured pair does
+not identify why ctime differed, establish a filesystem-cache defect, explain
+ordinal 2's earlier inequality or admit any selected contents. No inventory,
+copies or original paths were inspected after completion. The original diagnostic
+and all four observations remain consumed, retaining their full allocations and
+recorded outcomes. No fifth observation or dependent execution follows from this
+result. Global occupancy and protected scenarios remain 93/120 and 52/80, twelve
+final CLI scenarios and sixteen unallocated synthetic scenarios.
+
+### One Fixed 0061 Copy With an Opened-File Baseline, Ordinal 5
+
+Prospectively amend the no-fifth-observation restriction only for one separately
+allocated fixed copy after this supplement merges and its exact source, runtime,
+authority, activation, DATA and complete invocation are independently accepted.
+The original diagnostic and all four observations remain consumed with their
+recorded outcomes and full allocations. No sixth observation, diagnostic retry,
+cleanup or dependent execution is granted.
+
+The decision-relevant question and eight fixed content slots, per-file limits,
+opaque selection, mandatory root/action parents, nonblocking action lock and
+optional literal directories remain those of ordinal 4. The original error and
+finalization content remains unavailable for accepted interpretation. This
+proposal changes how a new current content observation establishes its baseline;
+it does not correct or reinterpret a failed historical comparison, assert a
+filesystem-cache cause, establish historical ownership or promise success.
+
+The [inactive collector](../../../tools/validation/collect_windows_compiler_0061_error_evidence.py)
+now fixes ordinal 5. Remove the initial selected leaf's pre-open pathname stat.
+For each present action directory, make exactly one descriptor-relative
+`O_RDONLY | O_NOFOLLOW | O_NONBLOCK` open of each fixed leaf. Only that initial
+open's `FileNotFoundError` may record current absence; no other exception or
+unperformed operation is absence, and no retry or extra absence probe follows.
+An absent action directory retains the existing directory-absent handling.
+Charge each logical read attempt before opening, including an absent leaf.
+
+For every opened logical read, first obtain the held descriptor's full six-field
+identity and require a regular file within its fixed size limit. When an earlier
+accepted identity is supplied, require exact equality with that earlier identity
+before any content read; never replace it with a newly observed baseline. Then
+obtain the leaf's no-follow named identity relative to the held parent and require
+all six fields to equal the held identity before reading. Missing named identity
+at this step is a rejected comparison, not initial absence. Hold the descriptor
+through this read and its existing post-read held/named checks, then close it.
+The later original reread keeps its one existing reopen and must match the first
+accepted identity and complete content. Apply the new pre-read named comparison
+to admission, sealed copies and inventory reads as well.
+
+The six fields remain device, inode, mode, byte size and nanosecond mtime/ctime.
+Do not omit ctime, warm up files, loop until equal or relax later content, parent,
+directory, lock, output or finalization checks. Keep the first already-obtained
+failed pair, including actual observed absence, without a failure-path probe.
+The new baseline does not attest to the interval before opening. Agreement of
+metadata and repeated content establishes only the declared observations; it is
+not an atomic snapshot, proof of all intervening writes, original quiescence or
+adversary-resistant ownership. Existing historical lifetime dispositions do not
+expand to new ownership or termination uncertainty.
+
+Exclusively create only
+`/tmp/windows-compiler-0061-opened-evidence-offline-root-v1`, mode 0700, after all
+initial observations pass. Retain the existing at-most-eight fixed sealed copies,
+one canonical inventory of at most 65,536 bytes and complete-write/fsync/readback
+procedure. No access to earlier observation outputs, repair, overwrite or deletion
+is permitted. All partial outputs remain intentionally retained and unopened.
+The new fixed admission path is
+`/tmp/windows-compiler-0061-opened-evidence-admission-root-v1.json`, at most
+16,384 bytes. Its canonical closed DATA shape binds ordinal 5, one invocation,
+the accepted target and activated source/runtime review, the original diagnostic
+transport, all four observation transports and their already accepted outcome
+boundaries. The additional ordinal 4 transport is 1,783 bytes with SHA-256
+`8cd4245f6b7f22584ce5efd79f353fd4714a3ec6610c33a9ae1bad88697e0817`.
+Independent preparation binds their accepted records; the collector does not
+reread historical transports or invoke Git or another helper.
+
+| Charged metric | Ordinal 5 maximum | Cumulative maximum across all five observations |
+| --- | ---: | ---: |
+| Logical file-read attempts | 26 | 206 |
+| Read calls | 3,325 | 13,930 |
+| Requested bytes | 53,854,234 | 223,244,494 |
+| Successful returned bytes / rejection threshold | 53,854,208 | 223,244,288 |
+| Output bytes | 17,989,632 | 74,567,680 |
+| Complete write calls | 1,102 | 4,584 |
+| Path operations | 4,096 | 16,512 |
+
+All-present normal execution uses 206 charged path operations: 26 new pre-read
+named checks replace eight initial selection snapshots in ordinal 4's 188.
+All content chunks, requested-before-read and returned-after-read accounting,
+charged EOF/rejection probes, short-read and short-write behavior retain their
+limits. Earlier unused allocations are not refunded. Counters do not describe
+all trusted-runtime startup or filesystem I/O.
+
+Keep source inactive and admit only one reversible inline ACTIVE substitution,
+with no active source file or separate writer. Retain the exact isolated/no-site/
+no-bytecode Python 3.14, Bash and GNU timeout startup premises, a nonresetting
+90-second source deadline, 95-second outer TERM and two-second KILL grace, and
+same-session empty waits of at most 60 seconds. Cumulative source and nominal
+outer envelopes become 390 and 425 seconds. A failed start consumes the sole
+invocation. These bounds do not guarantee interruption of blocked kernel work.
+
+Retain the at-most-one 8,192-byte closed original transport frame. Independently
+accept complete actual original completion and source/DATA binding before frame
+interpretation, preserving exact nanosecond integers. Failed completion permits
+only captured frame metadata interpretation; no partial inventory or copy access.
+Inventory and selected private-copy access require normal collector completion
+and independent source/inventory/copy binding before bounded offline
+interpretation. No result grants further sampling or dependent execution.
+
+No compiler, Windows process, process/cgroup/service query, directory enumeration,
+network, dependency, account or original-state write is added. This fixed opaque
+copy adds no build/test or synthetic action. Global occupancy remains 93/120 and
+52/80; twelve final CLI scenarios and sixteen unallocated synthetic scenarios stay
+protected. Native AOT publication and actual Slice acceptance retain their gates.
 
 ## Fixed Compiler and Task-Host Metadata Copy
 

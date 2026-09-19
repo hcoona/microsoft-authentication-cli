@@ -1,4 +1,4 @@
-"""Inactive ordinal-4 copy of eight fixed Windows 0061 error-evidence leaves."""
+"""Inactive ordinal-5 copy of eight fixed Windows 0061 error-evidence leaves."""
 
 ACTIVE = False
 if not ACTIVE:
@@ -18,12 +18,13 @@ from contextlib import contextmanager, ExitStack
 ROOT = Path('/var/tmp/azureauth-windows-slice-108')
 ACTION = ROOT / 'windows-actions' / '0061'
 WINDOWS_ACTION = Path('/mnt/c/Temp/azureauth-windows-slice-108/actions/0061')
-OUTPUT = Path('/tmp/windows-compiler-0061-error-evidence-offline-root-v1')
-ADMISSION = Path('/tmp/windows-compiler-0061-error-evidence-admission-root-v1.json')
+OUTPUT = Path('/tmp/windows-compiler-0061-opened-evidence-offline-root-v1')
+ADMISSION = Path('/tmp/windows-compiler-0061-opened-evidence-admission-root-v1.json')
 TRANSPORT = {'bytes': 2852, 'sha256': 'd44d45d01696f9e5c02bd80002292b1a1f662c7db0472af20ccb3c308998b9f5'}
 PRIOR_COLLECTION = {'bytes': 1554, 'sha256': '20968d35a4d61d7da2f4d02aa2dc503fba5d70e9df7e78e40418fb9709e34908'}
 PRIOR_NARROW_COLLECTION = {'bytes': 2094, 'sha256': '16423d8db8796194af410cc983980fc503f5505f6538fd6be2d5ef0e5aa1a69d'}
 PRIOR_METADATA_OBSERVATION = {'bytes': 2531, 'sha256': 'd024efcb6f90bd48c3eb871c2fc194f504fd45d0330b471f0cffcd939a41ed1e'}
+PRIOR_ERROR_COLLECTION = {'bytes': 1783, 'sha256': '8cd4245f6b7f22584ce5efd79f353fd4714a3ec6610c33a9ae1bad88697e0817'}
 IDENTITY_FIELDS = ('device', 'inode', 'mode', 'bytes', 'mtimeNanoseconds', 'ctimeNanoseconds')
 ACTION_SLOTS = (('result', 'result.json', 65536),
                 ('bootstrapStdout', 'bootstrap-stdout.bin', 4096),
@@ -145,10 +146,17 @@ def reject_identity(state, role, checkpoint, expected, observed, reason):
     fail(reason)
 
 
-def raw_read(parent, name, ceiling, state, expected=None):
+def raw_read(parent, name, ceiling, state, expected=None, allow_absent=False):
+    # Charge every logical read attempt, including an absent initial open.
     charge(state, 'fileReads')
-    fd = operation(state, os.open, name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK,
-                   dir_fd=parent)
+    try:
+        fd = operation(state, os.open, name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK,
+                       dir_fd=parent)
+    except FileNotFoundError:
+        check(state)
+        if allow_absent and expected is None:
+            return None, None
+        raise
     try:
         before = identity(operation(state, os.fstat, fd))
         if not stat.S_ISREG(before['mode']):
@@ -158,6 +166,9 @@ def raw_read(parent, name, ceiling, state, expected=None):
         role = state['role'] or ('admission' if state['stage'] == 'admission' else 'inventory')
         if expected is not None and before != expected:
             reject_identity(state, role, 'read-initial-opened', expected, before, 'initial-identity')
+        named = snapshot(parent, name, state)
+        if named != before:
+            reject_identity(state, role, 'read-initial-named', before, named, 'initial-identity')
         chunks = []
         total = 0
         while True:
@@ -225,19 +236,22 @@ def admission(state, admitted_sha):
     value = json.loads(raw.decode('ascii'), object_pairs_hook=pairs,
                        parse_constant=lambda _: fail())
     fields = {'schema', 'action', 'ordinal', 'originalTransport', 'priorCollectionTransport',
-              'priorNarrowCollectionTransport', 'priorMetadataObservationTransport', 'oneInvocation',
+              'priorNarrowCollectionTransport', 'priorMetadataObservationTransport',
+              'priorErrorCollectionTransport', 'oneInvocation',
               'acceptedTarget', 'sourceSha256', 'runtimeReviewSha256'}
     if (type(value) is not dict or set(value) != fields or encoded(value) != raw or
-            value['schema'] != 'compiler-0061-error-evidence-admission-v1' or
+            value['schema'] != 'compiler-0061-opened-evidence-admission-v1' or
             value['action'] != '0061' or value['originalTransport'] != TRANSPORT or
-            type(value['ordinal']) is not int or value['ordinal'] != 4 or
+            type(value['ordinal']) is not int or value['ordinal'] != 5 or
             value['priorCollectionTransport'] != PRIOR_COLLECTION or
             value['priorNarrowCollectionTransport'] != PRIOR_NARROW_COLLECTION or
             value['priorMetadataObservationTransport'] != PRIOR_METADATA_OBSERVATION or
+            value['priorErrorCollectionTransport'] != PRIOR_ERROR_COLLECTION or
             value['oneInvocation'] is not True):
         fail('admission-shape')
     for key in ('originalTransport', 'priorCollectionTransport',
-                'priorNarrowCollectionTransport', 'priorMetadataObservationTransport'):
+                'priorNarrowCollectionTransport', 'priorMetadataObservationTransport',
+                'priorErrorCollectionTransport'):
         item = value[key]
         if (type(item) is not dict or set(item) != {'bytes', 'sha256'} or
                 type(item['bytes']) is not int or type(item['sha256']) is not str):
@@ -254,7 +268,7 @@ def admission(state, admitted_sha):
         if type(item) is not str or len(item) != 64 or any(c not in '0123456789abcdef' for c in item):
             fail('admission-shape')
     # sourceSha256 binds the activated inline bytes through independent literal
-    # admission, which also binds the tracked source and all four prior transports.
+    # admission, which also binds the tracked source and all five prior transports.
     # No source/runtime/transport reread, Git helper or candidate is selected here.
     return value
 
@@ -316,10 +330,10 @@ def collect(state):
                     for current, role, leaf, cap in slots:
                         state.update(stage='initial-read', role=role)
                         parent = current['fd']
-                        before = snapshot(parent, leaf, state) if parent is not None else None
+                        before = None
                         raw = None
-                        if before is not None:
-                            raw, before = raw_read(parent, leaf, cap, state, before)
+                        if parent is not None:
+                            raw, before = raw_read(parent, leaf, cap, state, allow_absent=True)
                         selected.append((current, role, leaf, cap, before, raw))
                     state.update(stage='output-create', role=None)
                     with directory(OUTPUT.parent, state) as destination:
@@ -387,8 +401,8 @@ def collect(state):
                                 if current_windows_identity != windows_parent_identity:
                                     reject_identity(state, 'windows-action-parent', 'parent-final-opened',
                                                     windows_parent_identity, current_windows_identity, 'parent-continuity')
-                            report = {'schema': 'compiler-0061-error-evidence-inventory-v1',
-                                      'action': '0061', 'ordinal': 4,
+                            report = {'schema': 'compiler-0061-opened-evidence-inventory-v1',
+                                      'action': '0061', 'ordinal': 5,
                                       'admission': admitted, 'directories': directory_rows,
                                       'bindingMismatch': state['bindingMismatch'],
                                       'files': rows, 'originalOutcome': 'failed',
@@ -502,7 +516,7 @@ def main():
     allowed = {'ValueError', 'OSError', 'FileNotFoundError', 'PermissionError',
                'BlockingIOError', 'FileExistsError', 'InterruptedError', 'TimeoutError',
                'HandlerRestoreFailure', 'CancelledOrLate'}
-    frame = {'schema': 'compiler-0061-error-evidence-transport-v1', 'ordinal': 4,
+    frame = {'schema': 'compiler-0061-opened-evidence-transport-v1', 'ordinal': 5,
              'normalCompletion': error_type is None,
              'stage': state['stage'], 'role': state['role'],
              'exceptionType': error_type if error_type in allowed or error_type is None else 'OtherException',
