@@ -59,7 +59,7 @@ BOOTSTRAP_EXCEPTION_TYPES = frozenset((
 ))
 _input_read_bytes = 0
 _input_read_files = 0
-SOURCE_ROOT = r"C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\source"
+SOURCE_ROOT = r"C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\source"
 REQUIRED_REVIEWS = ("wave", "protocol", "callerReview", "runtimeReview", "loaderReview",
                     "physicalPreflightReview", "materializationReview", "helperEffectsReview",
                     "activeTargetReview", "historyReview", "executionReview")

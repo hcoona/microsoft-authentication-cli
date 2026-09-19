@@ -5,7 +5,7 @@
     All six target entry conditions are literal false. No activation property exists.
     A later independently accepted artifact must bind every exact source byte.
 
-    Proposed fresh root: C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2
+    Proposed fresh root: C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3
     It has not been created, probed, or used. The original 0056 and 0057 roots are not reused.
     Before any admitted launch, the controller must own an empty capture directory,
     preseed compiler-sequence.claim with exactly zero bytes, prohibit competing
@@ -30,7 +30,7 @@
           BeforeTargets="CoreCompile"
           Condition="'false' == 'true'">
     <Error Code="AUTH108CSCCONTEXT" Text="Only the three original project contexts are admitted."
-           Condition="!(('$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\source\src\Authentication.Core\Authentication.Core.csproj' and '$(TargetFramework)' == 'net10.0' and '$(RuntimeIdentifier)' == '') or ('$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\source\src\Authentication.Windows\Authentication.Windows.csproj' and '$(TargetFramework)' == 'net10.0-windows' and '$(RuntimeIdentifier)' == '') or ('$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\source\src\Authentication.Cli\Authentication.Cli.csproj' and '$(TargetFramework)' == 'net10.0-windows' and '$(RuntimeIdentifier)' == 'win-x64'))" />
+           Condition="!(('$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\source\src\Authentication.Core\Authentication.Core.csproj' and '$(TargetFramework)' == 'net10.0' and '$(RuntimeIdentifier)' == '') or ('$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\source\src\Authentication.Windows\Authentication.Windows.csproj' and '$(TargetFramework)' == 'net10.0-windows' and '$(RuntimeIdentifier)' == '') or ('$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\source\src\Authentication.Cli\Authentication.Cli.csproj' and '$(TargetFramework)' == 'net10.0-windows' and '$(RuntimeIdentifier)' == 'win-x64'))" />
     <Error Code="AUTH108CSCCONTEXT" Text="The original single-node Release publish context is required."
            Condition="'$(Configuration)' != 'Release' or '$(SelfContained)' != 'true' or '$(PublishAot)' != 'true' or '$(_IsPublishing)' != 'true' or '$(RuntimeFrameworkVersion)' != '10.0.12' or '$(MSBuildRuntimeType)' != 'Core' or '$(MSBuildNodeCount)' != '1'" />
     <Error Code="AUTH108CSCCONTROLS" Text="Original compiler controls must be unchanged and command output empty."
@@ -44,34 +44,34 @@
     <Error Code="AUTH108PRIVATESTATE" Text="Diagnostic-local state must not be prepopulated."
            Condition="'$(_Issue108CompilerRole)' != '' or '$(_Issue108SequenceBefore)' != '' or '$(_Issue108SequenceBegun)' != '' or '$(_Issue108SequenceComplete)' != ''" />
 
-    <PropertyGroup Condition="'$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\source\src\Authentication.Core\Authentication.Core.csproj'">
+    <PropertyGroup Condition="'$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\source\src\Authentication.Core\Authentication.Core.csproj'">
       <_Issue108CompilerRole>core</_Issue108CompilerRole>
       <_Issue108SequenceBefore></_Issue108SequenceBefore>
       <_Issue108SequenceBegun>core-begin%0D%0A</_Issue108SequenceBegun>
       <_Issue108SequenceComplete>core-begin%0D%0Acore-complete%0D%0A</_Issue108SequenceComplete>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\source\src\Authentication.Windows\Authentication.Windows.csproj'">
+    <PropertyGroup Condition="'$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\source\src\Authentication.Windows\Authentication.Windows.csproj'">
       <_Issue108CompilerRole>windows</_Issue108CompilerRole>
       <_Issue108SequenceBefore>core-begin%0D%0Acore-complete%0D%0A</_Issue108SequenceBefore>
       <_Issue108SequenceBegun>core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0A</_Issue108SequenceBegun>
       <_Issue108SequenceComplete>core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0Awindows-complete%0D%0A</_Issue108SequenceComplete>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\source\src\Authentication.Cli\Authentication.Cli.csproj'">
+    <PropertyGroup Condition="'$(MSBuildProjectFullPath)' == 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\source\src\Authentication.Cli\Authentication.Cli.csproj'">
       <_Issue108CompilerRole>cli</_Issue108CompilerRole>
       <_Issue108SequenceBefore>core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0Awindows-complete%0D%0A</_Issue108SequenceBefore>
       <_Issue108SequenceBegun>core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0Awindows-complete%0D%0Acli-begin%0D%0A</_Issue108SequenceBegun>
       <_Issue108SequenceComplete>core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0Awindows-complete%0D%0Acli-begin%0D%0Acli-complete%0D%0A</_Issue108SequenceComplete>
     </PropertyGroup>
     <Error Code="AUTH108CSCSEQUENCE" Text="The immutable prior sequence does not admit this compiler."
-           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\compiler-sequence.claim')), '$(_Issue108SequenceBefore)'))" />
+           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\compiler-sequence.claim')), '$(_Issue108SequenceBefore)'))" />
     <Message Importance="high" Text="AUTH108CSC.scalar.Project=$(MSBuildProjectFullPath)" />
     <Message Importance="high" Text="AUTH108CSC.scalar.OriginalProvideCommandLineArgs=$(ProvideCommandLineArgs)" />
     <Message Importance="high" Text="AUTH108CSC.scalar.OriginalSkipCompilerExecution=$(SkipCompilerExecution)" />
     <Message Importance="high" Text="AUTH108CSC.scalar.UseHostCompilerIfAvailable=$(UseHostCompilerIfAvailable)" />
     <Message Importance="high" Text="AUTH108CSC.scalar.TargetsTriggeredByCompilation=$(TargetsTriggeredByCompilation)" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\compiler-sequence.claim" Lines="$(_Issue108CompilerRole)-begin" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\compiler-sequence.claim" Lines="$(_Issue108CompilerRole)-begin" Overwrite="false" WriteOnlyWhenDifferent="false" />
     <Error Code="AUTH108CSCSEQUENCE" Text="The exact compiler-begin claim was not retained."
-           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\compiler-sequence.claim')), '$(_Issue108SequenceBegun)'))" />
+           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\compiler-sequence.claim')), '$(_Issue108SequenceBegun)'))" />
     <PropertyGroup>
       <ProvideCommandLineArgs>true</ProvideCommandLineArgs>
     </PropertyGroup>
@@ -83,7 +83,7 @@
           AfterTargets="CoreCompile"
           Condition="'false' == 'true'">
     <Error Code="AUTH108CSCSEQUENCE" Text="A compiler-begin claim in this project context is required."
-           Condition="'$(_Issue108CompilerRole)' == '' or !$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\compiler-sequence.claim')), '$(_Issue108SequenceBegun)'))" />
+           Condition="'$(_Issue108CompilerRole)' == '' or !$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\compiler-sequence.claim')), '$(_Issue108SequenceBegun)'))" />
     <Error Code="AUTH108CSCCONTROLS" Text="Compiler controls changed or the original task produced no command-line output."
            Condition="'$(ProvideCommandLineArgs)' != 'true' or ('$(SkipCompilerExecution)' != '' and '$(SkipCompilerExecution)' != 'false') or '$(TargetsTriggeredByCompilation)' != '' or '$(UseSharedCompilation)' != 'false' or '@(CscCommandLineArgs)' == '' or '@(_CoreCompileResourceInputs)' != ''" />
     <Error Code="AUTH108CSCOUTPUT" Text="The original implementation assembly must exist after compilation."
@@ -102,26 +102,26 @@
     <Message Importance="high" Text="AUTH108CSC.scalar.SourceLink=$(SourceLink)" />
     <Message Importance="high" Text="AUTH108CSC.scalar.PathMap=$(PathMap)" />
     <Message Importance="high" Text="AUTH108CSC.scalar.InformationalVersion=$(InformationalVersion)" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\$(_Issue108CompilerRole).CscCommandLineArgs.items" Lines="@(CscCommandLineArgs)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\$(_Issue108CompilerRole).Compile.items" Lines="@(Compile)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\$(_Issue108CompilerRole).ReferencePathWithRefAssemblies.items" Lines="@(ReferencePathWithRefAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\$(_Issue108CompilerRole).Analyzer.items" Lines="@(Analyzer)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\$(_Issue108CompilerRole).EditorConfigFiles.items" Lines="@(EditorConfigFiles)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\$(_Issue108CompilerRole).AdditionalFiles.items" Lines="@(AdditionalFiles)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\$(_Issue108CompilerRole).IntermediateAssembly.items" Lines="@(IntermediateAssembly)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\$(_Issue108CompilerRole).IntermediateRefAssembly.items" Lines="@(IntermediateRefAssembly)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\$(_Issue108CompilerRole).SourceRoot.items" Lines="@(SourceRoot)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\$(_Issue108CompilerRole).CscCommandLineArgs.items" Lines="@(CscCommandLineArgs)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\$(_Issue108CompilerRole).Compile.items" Lines="@(Compile)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\$(_Issue108CompilerRole).ReferencePathWithRefAssemblies.items" Lines="@(ReferencePathWithRefAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\$(_Issue108CompilerRole).Analyzer.items" Lines="@(Analyzer)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\$(_Issue108CompilerRole).EditorConfigFiles.items" Lines="@(EditorConfigFiles)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\$(_Issue108CompilerRole).AdditionalFiles.items" Lines="@(AdditionalFiles)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\$(_Issue108CompilerRole).IntermediateAssembly.items" Lines="@(IntermediateAssembly)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\$(_Issue108CompilerRole).IntermediateRefAssembly.items" Lines="@(IntermediateRefAssembly)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\$(_Issue108CompilerRole).SourceRoot.items" Lines="@(SourceRoot)" Overwrite="false" WriteOnlyWhenDifferent="false" />
     <!-- This marks complete capture; acceptance still requires the joined successful Csc event. -->
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\compiler-sequence.claim" Lines="$(_Issue108CompilerRole)-complete" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\compiler-sequence.claim" Lines="$(_Issue108CompilerRole)-complete" Overwrite="false" WriteOnlyWhenDifferent="false" />
     <Error Code="AUTH108CSCSEQUENCE" Text="The complete compiler sequence was not retained."
-           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\compiler-sequence.claim')), '$(_Issue108SequenceComplete)'))" />
+           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\compiler-sequence.claim')), '$(_Issue108SequenceComplete)'))" />
   </Target>
 
   <Target Name="_Issue108NativeSetupGuard5033607"
           BeforeTargets="SetupOSSpecificProps"
           Condition="'false' == 'true'">
     <Error Code="AUTH108NATIVEBRANCH" Text="Only the original CLI Windows executable branch is admitted."
-           Condition="'$(MSBuildProjectFullPath)' != 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\source\src\Authentication.Cli\Authentication.Cli.csproj' or '$(TargetFramework)' != 'net10.0-windows' or '$(RuntimeIdentifier)' != 'win-x64' or '$(_targetOS)' != 'win' or '$(_targetArchitecture)' != 'x64' or '$(NativeLib)' != '' or '$(OutputType)' != 'Exe' or '$(IlcMultiModule)' == 'true' or '$(BuildingFrameworkLibrary)' == 'true'" />
+           Condition="'$(MSBuildProjectFullPath)' != 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\source\src\Authentication.Cli\Authentication.Cli.csproj' or '$(TargetFramework)' != 'net10.0-windows' or '$(RuntimeIdentifier)' != 'win-x64' or '$(_targetOS)' != 'win' or '$(_targetArchitecture)' != 'x64' or '$(NativeLib)' != '' or '$(OutputType)' != 'Exe' or '$(IlcMultiModule)' == 'true' or '$(BuildingFrameworkLibrary)' == 'true'" />
     <Error Code="AUTH108NATIVEENV" Text="SetupOSSpecificProps must not execute tool discovery."
            Condition="'$(IlcUseEnvironmentalTools)' != 'true'" />
   </Target>
@@ -130,9 +130,9 @@
           BeforeTargets="WriteIlcRspFileForCompilation"
           Condition="'false' == 'true'">
     <Error Code="AUTH108NATIVECONTEXT" Text="One original CLI response producer is required."
-           Condition="'$(MSBuildProjectFullPath)' != 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\source\src\Authentication.Cli\Authentication.Cli.csproj' or '$(Configuration)' != 'Release' or '$(TargetFramework)' != 'net10.0-windows' or '$(RuntimeIdentifier)' != 'win-x64' or '$(MSBuildNodeCount)' != '1' or '@(ManagedBinary->Count())' != '1' or '$(_targetOS)' != 'win' or '$(NativeLib)' != '' or '$(IlcMultiModule)' == 'true' or '$(BuildingFrameworkLibrary)' == 'true' or '$(IlcUseEnvironmentalTools)' != 'true'" />
+           Condition="'$(MSBuildProjectFullPath)' != 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\source\src\Authentication.Cli\Authentication.Cli.csproj' or '$(Configuration)' != 'Release' or '$(TargetFramework)' != 'net10.0-windows' or '$(RuntimeIdentifier)' != 'win-x64' or '$(MSBuildNodeCount)' != '1' or '@(ManagedBinary->Count())' != '1' or '$(_targetOS)' != 'win' or '$(NativeLib)' != '' or '$(IlcMultiModule)' == 'true' or '$(BuildingFrameworkLibrary)' == 'true' or '$(IlcUseEnvironmentalTools)' != 'true'" />
     <Error Code="AUTH108CSCSEQUENCE" Text="All three compiler captures must precede the sole ILC response producer."
-           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\compiler-sequence.claim')), 'core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0Awindows-complete%0D%0Acli-begin%0D%0Acli-complete%0D%0A'))" />
+           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\compiler-sequence.claim')), 'core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0Awindows-complete%0D%0Acli-begin%0D%0Acli-complete%0D%0A'))" />
     <PropertyGroup>
       <_Issue108NativeRsp>@(ManagedBinary->'%(IlcRspFile)')</_Issue108NativeRsp>
     </PropertyGroup>
@@ -144,9 +144,9 @@
           AfterTargets="WriteIlcRspFileForCompilation"
           Condition="'false' == 'true'">
     <Error Code="AUTH108NATIVECONTEXT" Text="The cutoff must remain in the admitted CLI producer context."
-           Condition="'$(MSBuildProjectFullPath)' != 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\source\src\Authentication.Cli\Authentication.Cli.csproj' or '@(ManagedBinary->Count())' != '1' or '$(_targetOS)' != 'win' or '$(NativeLib)' != '' or '$(IlcMultiModule)' == 'true' or '$(BuildingFrameworkLibrary)' == 'true' or '$(IlcUseEnvironmentalTools)' != 'true' or '$(_Issue108NativeRsp)' == ''" />
+           Condition="'$(MSBuildProjectFullPath)' != 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\source\src\Authentication.Cli\Authentication.Cli.csproj' or '@(ManagedBinary->Count())' != '1' or '$(_targetOS)' != 'win' or '$(NativeLib)' != '' or '$(IlcMultiModule)' == 'true' or '$(BuildingFrameworkLibrary)' == 'true' or '$(IlcUseEnvironmentalTools)' != 'true' or '$(_Issue108NativeRsp)' == ''" />
     <Error Code="AUTH108CSCSEQUENCE" Text="The completed compiler sequence may be consumed only once."
-           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\compiler-sequence.claim')), 'core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0Awindows-complete%0D%0Acli-begin%0D%0Acli-complete%0D%0A'))" />
+           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\compiler-sequence.claim')), 'core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0Awindows-complete%0D%0Acli-begin%0D%0Acli-complete%0D%0A'))" />
     <Error Code="AUTH108NATIVERSP" Text="The original ILC response write must be present with nonempty ordered arguments."
            Condition="!Exists('$(_Issue108NativeRsp)') or '@(IlcArg)' == ''" />
     <Error Code="AUTH108INPUTLIMIT" Text="IlcArg exceeds its proposed fixed item-count ceiling." Condition="'@(IlcArg->Count())' &gt; '8192'" />
@@ -244,42 +244,42 @@
     <Message Importance="high" Text="AUTH108NATIVE.metadata.ManagedBinary.Filename=@(ManagedBinary->'%(Filename)')" />
     <Message Importance="high" Text="AUTH108NATIVE.metadata.ManagedBinary.IlcRspFile=@(ManagedBinary->'%(IlcRspFile)')" />
     <Message Importance="high" Text="AUTH108NATIVE.metadata.ManagedBinary.IlcOutputFile=@(ManagedBinary->'%(IlcOutputFile)')" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.IlcArg.items" Lines="@(IlcArg)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.LinkerArg.items" Lines="@(LinkerArg)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.AdditionalNativeLibraryDirectories.items" Lines="@(AdditionalNativeLibraryDirectories)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.ManagedBinary.items" Lines="@(ManagedBinary)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.IlcCompileInput.items" Lines="@(IlcCompileInput)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.IlcReference.items" Lines="@(IlcReference)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.IlcSatelliteAssembly.items" Lines="@(IlcSatelliteAssembly)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.PrivateSdkAssemblies.items" Lines="@(PrivateSdkAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.DefaultFrameworkAssemblies.items" Lines="@(DefaultFrameworkAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.ResolvedFileToPublish.items" Lines="@(ResolvedFileToPublish)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.RuntimePackAsset.items" Lines="@(RuntimePackAsset)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.ResolvedRuntimePack.items" Lines="@(ResolvedRuntimePack)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.ManagedAssemblyToLink.items" Lines="@(ManagedAssemblyToLink)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.TrimmerRootAssembly.items" Lines="@(TrimmerRootAssembly)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native._IlcRootedAssembliesRaw.items" Lines="@(_IlcRootedAssembliesRaw)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native._IlcConditionallyRootedAssembliesRaw.items" Lines="@(_IlcConditionallyRootedAssembliesRaw)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native._IlcTrimmedAssembliesRaw.items" Lines="@(_IlcTrimmedAssembliesRaw)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native._IlcRootedAssemblies.items" Lines="@(_IlcRootedAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native._IlcConditionallyRootedAssemblies.items" Lines="@(_IlcConditionallyRootedAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native._IlcTrimmedAssemblies.items" Lines="@(_IlcTrimmedAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native._IlcSingleWarnAssemblies.items" Lines="@(_IlcSingleWarnAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native._IlcNoSingleWarnAssemblies.items" Lines="@(_IlcNoSingleWarnAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.RuntimeHostConfigurationOption.items" Lines="@(RuntimeHostConfigurationOption)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.NativeLibrary.items" Lines="@(NativeLibrary)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.SdkNativeLibrary.items" Lines="@(SdkNativeLibrary)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.DirectPInvoke.items" Lines="@(DirectPInvoke)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.DirectPInvokeList.items" Lines="@(DirectPInvokeList)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.UnmanagedEntryPointsAssembly.items" Lines="@(UnmanagedEntryPointsAssembly)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.AutoInitializedAssemblies.items" Lines="@(AutoInitializedAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.RdXmlFile.items" Lines="@(RdXmlFile)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native.MibcFile.items" Lines="@(MibcFile)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native._IlcSingleWarnAssembliesRaw.items" Lines="@(_IlcSingleWarnAssembliesRaw)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\capture\native._IlcNoSingleWarnAssembliesRaw.items" Lines="@(_IlcNoSingleWarnAssembliesRaw)" Overwrite="false" WriteOnlyWhenDifferent="false" />
-    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\compiler-sequence.claim" Lines="native-inputs-captured" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.IlcArg.items" Lines="@(IlcArg)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.LinkerArg.items" Lines="@(LinkerArg)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.AdditionalNativeLibraryDirectories.items" Lines="@(AdditionalNativeLibraryDirectories)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.ManagedBinary.items" Lines="@(ManagedBinary)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.IlcCompileInput.items" Lines="@(IlcCompileInput)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.IlcReference.items" Lines="@(IlcReference)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.IlcSatelliteAssembly.items" Lines="@(IlcSatelliteAssembly)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.PrivateSdkAssemblies.items" Lines="@(PrivateSdkAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.DefaultFrameworkAssemblies.items" Lines="@(DefaultFrameworkAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.ResolvedFileToPublish.items" Lines="@(ResolvedFileToPublish)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.RuntimePackAsset.items" Lines="@(RuntimePackAsset)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.ResolvedRuntimePack.items" Lines="@(ResolvedRuntimePack)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.ManagedAssemblyToLink.items" Lines="@(ManagedAssemblyToLink)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.TrimmerRootAssembly.items" Lines="@(TrimmerRootAssembly)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native._IlcRootedAssembliesRaw.items" Lines="@(_IlcRootedAssembliesRaw)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native._IlcConditionallyRootedAssembliesRaw.items" Lines="@(_IlcConditionallyRootedAssembliesRaw)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native._IlcTrimmedAssembliesRaw.items" Lines="@(_IlcTrimmedAssembliesRaw)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native._IlcRootedAssemblies.items" Lines="@(_IlcRootedAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native._IlcConditionallyRootedAssemblies.items" Lines="@(_IlcConditionallyRootedAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native._IlcTrimmedAssemblies.items" Lines="@(_IlcTrimmedAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native._IlcSingleWarnAssemblies.items" Lines="@(_IlcSingleWarnAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native._IlcNoSingleWarnAssemblies.items" Lines="@(_IlcNoSingleWarnAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.RuntimeHostConfigurationOption.items" Lines="@(RuntimeHostConfigurationOption)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.NativeLibrary.items" Lines="@(NativeLibrary)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.SdkNativeLibrary.items" Lines="@(SdkNativeLibrary)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.DirectPInvoke.items" Lines="@(DirectPInvoke)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.DirectPInvokeList.items" Lines="@(DirectPInvokeList)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.UnmanagedEntryPointsAssembly.items" Lines="@(UnmanagedEntryPointsAssembly)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.AutoInitializedAssemblies.items" Lines="@(AutoInitializedAssemblies)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.RdXmlFile.items" Lines="@(RdXmlFile)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native.MibcFile.items" Lines="@(MibcFile)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native._IlcSingleWarnAssembliesRaw.items" Lines="@(_IlcSingleWarnAssembliesRaw)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\capture\native._IlcNoSingleWarnAssembliesRaw.items" Lines="@(_IlcNoSingleWarnAssembliesRaw)" Overwrite="false" WriteOnlyWhenDifferent="false" />
+    <WriteLinesToFile File="C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\compiler-sequence.claim" Lines="native-inputs-captured" Overwrite="false" WriteOnlyWhenDifferent="false" />
     <Error Code="AUTH108NATIVESEQUENCE" Text="The exact terminal capture claim was not retained."
-           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v2\compiler-sequence.claim')), 'core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0Awindows-complete%0D%0Acli-begin%0D%0Acli-complete%0D%0Anative-inputs-captured%0D%0A'))" />
+           Condition="!$([System.String]::Equals($([System.IO.File]::ReadAllText('C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v3\compiler-sequence.claim')), 'core-begin%0D%0Acore-complete%0D%0Awindows-begin%0D%0Awindows-complete%0D%0Acli-begin%0D%0Acli-complete%0D%0Anative-inputs-captured%0D%0A'))" />
     <Error Code="AUTH108NATIVEINPUTSTOP"
            Text="Intentional stop after the original ILC response write and bounded named input capture. No ILC, link, native publish, or product success is claimed." />
   </Target>
