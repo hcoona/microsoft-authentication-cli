@@ -9664,6 +9664,51 @@ this passive follow-up adds neither unit. Preserve the twelve protected final CL
 scenarios and sixteen unallocated synthetic scenarios. The diagnostic, Native AOT
 publication, graph/artifact/scenario and account-state gates remain unchanged.
 
+
+### Original 0061 Ordinal 2 Observation Outcome
+
+The sole narrower follow-up ran under accepted revision
+`9ca516e341324087791a677567ecf3d7ee129b61`, tree
+`0cbbeaca4ca9f29aa6bb79c52760fcf7e0839ca4`. Its actual original tool invocation
+completed with exit code 1 and no continuing tool session. Independent acceptance
+of that original completion preceded interpretation of its frame. The canonical
+795-byte frame has SHA-256
+`218a1c4002ba16a5a8d48472d0827ef6eaab15802f63f099eb9ba020b8dfce86`;
+the complete private 2,094-byte transport has SHA-256
+`16423d8db8796194af410cc983980fc503f5505f6538fd6be2d5ef0e5aa1a69d`.
+Its 12,575-byte independent failed-outcome acceptance has SHA-256
+`5752e9ec41b062820d44509d1afb295388a3563cf9e33df29055b34b0ffdd451`.
+
+The frame reports `ValueError`, rejection reason `initial-identity`, stage
+`initial-read` and role `windows-action-result`. It reports six file reads,
+nine read calls, 3,709 requested bytes, 3,704 returned bytes, 57 path operations,
+zero output bytes and zero write calls, with no inventory. The source had not
+reached output creation. Neither the inventory nor any copy was read or accepted.
+
+The source assigns this rejection only when the opened `windows-result.json`
+descriptor's device/inode/mode/size/mtime/ctime tuple differs from its preceding
+no-follow named snapshot. The ordinary-file and size checks had passed; this
+rejection occurred before that leaf's content read. The frame does not retain the
+two tuples or identify the differing field. It does not establish replacement,
+a live writer, loss of ownership, a WSL metadata mechanism or the original
+compiler diagnostic's cause. Do not relax an identity check on one of those
+unconfirmed explanations.
+
+After accepting the complete original failure, independent review accepted only
+the first guard metadata checkpoint already contained in the frame: the literal
+leaf was reported as a regular file of 364 bytes at that current named lookup.
+The second checkpoint was not reached and the comparison remains incomplete.
+This is not a content observation, a stable identity, evidence of the first
+collector's guard size or rejected predicate, or Windows/helper quiescence.
+
+Both observations remain consumed. Preserve their full declared cumulative
+allocations, the failed original diagnostic, retained state and dependent stops.
+No third observation, new probe, original-root reopening, retry, cleanup or
+identity-rule relaxation follows from this outcome. Global occupancy remains
+93/120 build/test actions and 52/80 synthetic scenarios, with the twelve final
+CLI scenarios and sixteen unallocated synthetic scenarios preserved. Native AOT,
+graph/artifact/scenario and real-account acceptance remain incomplete.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
