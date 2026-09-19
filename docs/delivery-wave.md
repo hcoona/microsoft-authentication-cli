@@ -82,15 +82,17 @@ recovery, old-process cleanup, authentication, additional publication capacity,
 release authority or broader exception is granted.
 
 **Additional compiler-input diagnostic:** Authorize at most one separately admitted
-credential-free compiler-native-inputs diagnostic numbered 0059, using the accepted
-verifier evidence correction and systemd manager-supervision interpretation. Keep
+credential-free compiler-native-inputs diagnostic numbered 0060, after acceptance
+of the observed 0059 startup rejection and inactive verifier correction. Require
+the corrected running-job timer, explicit queued-definition retention and existing
+absolute expired-query rejection; do not claim a queue-residence deadline. Keep
 the selected product, existing environments, public toolchain/dependency pins and
 stop-before-ILC/linker boundary. Charge one additional build/test action within the
 existing cumulative ceiling, with no separate synthetic startup scenario. Require
 an independently accepted exact protocol, fresh evidence roots and source admission
-before execution. Failed start consumes this invocation; no retry, repeated 0057
-or 0058 invocation/recovery, cleanup, authentication, new lifetime-risk exception,
-additional publication capacity or release authority is granted.
+before execution. Failed start consumes this invocation; no retry, repeated 0057,
+0058 or 0059 invocation/recovery, cleanup, authentication, new lifetime-risk
+exception, additional publication capacity or release authority is granted.
 
 **Exclusions:** no product or protocol expansion, PATs, downstream Git/package adapters,
 browser/device-code or native Linux/macOS/ARM64 authentication, daemon, serialized
