@@ -439,7 +439,7 @@ def public_read(argv, deadline, cancelled, output_limit=8388608):
 
 # This inactive compiler-only replacement is covered by the history source pin.
 # Its one-use root also preserves failed starts before paired action reservation.
-COMPILER_VERIFIER_ROOT = Path('/var/tmp/azureauth-compiler-verifiers-108-0059')
+COMPILER_VERIFIER_ROOT = Path('/var/tmp/azureauth-compiler-verifiers-108-0060')
 _COMPILER_VERIFIER_CALLS = 0
 _COMPILER_VERIFIER_FAILED = False
 COMPILER_VERIFIER_TOOLS = {
@@ -545,8 +545,8 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         finally:
             os.close(fd)
         write_new(COMPILER_VERIFIER_ROOT / 'started.json', compact({
-            'schema': 'compiler-0059-verifiers-start-v1', 'maximumCalls': 8,
-            'priorCombinedBuildTest': 90, 'priorSynthetic': 52,
+            'schema': 'compiler-0060-verifiers-start-v1', 'maximumCalls': 8,
+            'priorCombinedBuildTest': 91, 'priorSynthetic': 52,
             'diagnosticBuildTestCharge': 1, 'diagnosticSyntheticCharge': 0,
             'startedMonotonicNs': time.monotonic_ns()}))
         for path, (size, expected) in COMPILER_VERIFIER_TOOLS.items():
@@ -582,7 +582,7 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         os.fsync(fd)
     finally:
         os.close(fd)
-    unit = f'azureauth-compiler-0059-{uuid.uuid4().hex}-{number:02d}.service'
+    unit = f'azureauth-compiler-0060-{uuid.uuid4().hex}-{number:02d}.service'
     identity_path = directory / 'identity.json'
     # Queue residence is unbounded. A late bootstrap checks the original
     # absolute deadline before identity effects or query-input consumption.
@@ -1802,8 +1802,8 @@ def names(path):
     expected = [f'{i:04d}' for i in range(1, len(values) + 1)]
     if (COMPILER_NATIVE_INPUTS_HISTORY_ONLY and
             Path(path) in (HISTORY, PROJECTION / 'actions') and len(values) == 57):
-        # 0057 and failed 0058 stay consumed, never fabricated disk entries.
-        expected = [f'{i:04d}' for i in range(1, 57)] + ['0059']
+        # 0057 and failed 0058/0059 stay consumed, never fabricated disk entries.
+        expected = [f'{i:04d}' for i in range(1, 57)] + ['0060']
     if values != expected:
         fail('Incomplete or noncontiguous original action history')
     return values
@@ -2056,7 +2056,7 @@ def verify_failed_handoff(admission, deadline, cancelled, reserved):
     state = admission['failedHistory']
     expected_pass = 0 if reserved is None else 1
     if (state['failed'] or state['passes'] != expected_pass or
-            (reserved is not None and reserved != ('0059' if COMPILER_NATIVE_INPUTS_HISTORY_ONLY else '0057'))):
+            (reserved is not None and reserved != ('0060' if COMPILER_NATIVE_INPUTS_HISTORY_ONLY else '0057'))):
         fail('Failed-history checkpoint is missing, repeated or reordered')
     # Latch before I/O. An interrupted or rejected pass cannot obtain a retry.
     state['failed'] = True
@@ -2277,11 +2277,12 @@ COMPILER_NATIVE_INPUTS_PRIOR_CAPACITY = {
     'recordedCombinedBuildTest': 87, 'recordedSynthetic': 48,
     'original0057UnavailableBuildTest': 1,
     'original0058FailedBuildTest': 1,
+    'original0059FailedBuildTest': 1,
     'systemdBuildTest': 1, 'systemdSynthetic': 4,
     'systemdObservationCommit': 'a1492ce0f65f4ca0acaf04be6ffab72f445dfe20',
-    'combinedBuildTest': 90, 'synthetic': 52,
+    'combinedBuildTest': 91, 'synthetic': 52,
     'additionalDiagnosticBuildTest': 1, 'additionalDiagnosticSynthetic': 0,
-    'afterCombinedBuildTest': 91, 'afterSynthetic': 52,
+    'afterCombinedBuildTest': 92, 'afterSynthetic': 52,
 }
 
 
@@ -2425,19 +2426,19 @@ def _reserve_core_csc_observer(authority, original_start_ns, original_deadline_n
         if totals != {'linux': [8, 37, 0, 0], 'windows': prior_windows}:
             fail('Observer prior allocation changed')
         # The paired historical ledger stays at 87 including its fixture once.
-        # Originals 0057/0058 and the systemd batch add one unit each;
-        # this additional diagnostic adds a fourth. No disk history is invented.
-        linux_ceiling = 76 if compiler_native_inputs else 79
-        windows_ceiling = 52 if compiler_native_inputs else 49
-        unavailable = 2 if compiler_native_inputs else 0
+        # Originals 0057/0058/0059 and the systemd batch add one unit each;
+        # this additional diagnostic adds a fifth. No disk history is invented.
+        linux_ceiling = 75 if compiler_native_inputs else 79
+        windows_ceiling = 53 if compiler_native_inputs else 49
+        unavailable = 3 if compiler_native_inputs else 0
         external_batch = 1 if compiler_native_inputs else 0
         combined = totals['linux'][1] + totals['windows'][1] + 1 + unavailable + external_batch + 1
         if (totals['linux'][1] > linux_ceiling or
                 totals['windows'][1] + unavailable + 1 > windows_ceiling or combined > 120 or
-                (compiler_native_inputs and combined != 91)):
+                (compiler_native_inputs and combined != 92)):
             fail('Observer and existing fixture exceed combined allocation')
         number = f"{len(manifest['histories']['windows']) + unavailable + 1:04d}"
-        if number != ('0059' if compiler_native_inputs else '0056'):
+        if number != ('0060' if compiler_native_inputs else '0056'):
             fail('Original handoff changed; no observer reservation')
         local, owned = direct(HISTORY / number), direct(PROJECTION / 'actions' / number)
         if local.exists() or owned.exists():
@@ -2508,7 +2509,7 @@ def _validate_core_csc_observer_original(authority, reservation, invocation, clo
             original_deadline_ns != started['originalClockStartNanoseconds'] + limit_ms * 1_000_000 or
             started['originalOuterLimitMilliseconds'] != limit_ms or
             started['action'] != action_kind or
-            started['number'] != ('0059' if compiler_native_inputs else '0056') or
+            started['number'] != ('0060' if compiler_native_inputs else '0056') or
             started['handoffSha256'] != inputs['handoff']['sha256'] or
             invocation['actionKind'] != action_kind or
             invocation['originalOuterLimitMilliseconds'] != limit_ms):
