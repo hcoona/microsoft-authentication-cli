@@ -10738,6 +10738,109 @@ compiler/native evidence remain separate from final graph/recipe/source/handoff
 admission, Native AOT publication, artifacts, protected CLI and real-account
 scenario acceptance.
 
+### Consumed Property Interpretation and Bounded Controls Evidence
+
+The preceding A and B grants are both permanently consumed at 1/1 under accepted
+protocol commit `211190b64e1e107128036c368a272470e184f8d2`, tree
+`3cee61e644ce621f248e57350ea2f57b2896e8d3`. A completed successfully. Its independently
+accepted diagnostic projection established empty `ProjectStarted.properties`
+collections for all three Csc contexts. Independent public-source review and
+finding triage admitted B's evaluation-event property correction; this did not
+establish the actual compiler configurations or a selection in advance.
+
+B exited 1 at `semantic-selection` with `compiler-original-controls`. Its complete
+original transport is 2,651 bytes with SHA-256
+`0126e219f4270ef2cd796a53cf8aa3cafe8a9c28e41e0645a8ee1ad2ebb5f880`.
+Independent failure acceptance is 14,033 bytes with SHA-256
+`2dc2eb92a5619bc22d66a956bf4ed0d342bd53dcc7c40f659ca1d3d8dddf2662`.
+This accepts the original failure, finite counters and source-qualified output
+descriptors. No selection was generated and the final input continuity pass was
+not reached. It does not accept configuration, successful interpretation or
+current global process quiescence. Preserve original Stage 2, A and B unchanged;
+do not replay their commands, waits, roots or recovery.
+
+The rejected predicate combines the scalar-name set, completion-message count,
+project identity, original ProvideCommandLineArgs/SkipCompilerExecution values
+and TargetsTriggeredByCompilation. The source and original failure transport
+alone do not identify which condition failed. A source guard or expected SDK
+default is not a substitute for the original values. The following single operation
+stays within the existing Wave's credential-free source/artifact review. It has
+one invocation, including failed start, with a new output root. Build/test
+occupancy remains 94/120 and synthetic occupancy 52/80; preserve the twelve
+protected CLI cases and sixteen unallocated synthetic cases. It adds or refunds
+no restore, build, test, publish, synthetic or download debit. All earlier
+retention and lifetime dispositions remain unchanged.
+
+**Source-supported message interpretation.** Before admitting the new operation,
+require independent public-source review and finding triage establishing the
+reader's failure to handle a supported original message representation. In the
+fixed MSBuild source, the
+[Message task](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Tasks/Message.cs)
+uses a format string and separate Text argument. The binary writer and reader
+must be reviewed to establish precisely how that representation is retained and
+rendered. A verified source defect is grounds to correct the reader; it is not
+proof of the actual stored form or values in invocation 0062, nor a successful
+configuration or selection. No new diagnostic read of B's filtered observations
+is granted or required: it could not restore events B already discarded.
+
+Permit exactly one independently admitted pure-data interpretation of B's four
+Stage 1 inputs and their listed size/hash tuples, totaling 301,044 bytes. No
+failed Stage 2/B output, A output, installed file or discovered path is a runtime
+input. Use the new exclusive mode-0700 output root
+`/tmp/windows-compiler-0062-success-evidence-stage2-controls-corrected-root-v1`.
+Retain B's 300-second nonresetting source deadline, 305-second outer TERM and
+two-second KILL grace, four-input two-pass accounting, complete framing/EOF,
+sealed output readback, finite read/write/path/memory/binlog ceilings and
+32 MiB/32-file output ceiling. This is a separately admitted interpretation;
+original Stage 2 and B remain failed and cannot be repaired or replayed.
+
+Limit the semantic correction to the independently established representation
+of messages emitted by the original capture target's Message tasks, including
+existing `AUTH108CSC` and `AUTH108NATIVE` consumers. Preserve original message,
+arguments, ordinal and complete context alongside any derived logical text.
+Admit only source-proven literal text without formatting arguments, or exact
+`{0}` with exactly one nonnull string argument. For the latter, the argument is
+the complete logical text: do not recursively format or unescape its contents.
+Do not implement a general composite formatter or infer values from expected
+SDK defaults. An unsupported or ambiguous representation needed by a selected
+consumer fails the operation. Existing required message count, uniqueness,
+order, project/context and scalar-value checks remain mandatory.
+
+Keep the accepted evaluation correction and all original compiler/native
+conditions, ordered parameter/response/companion/generated-file checks and
+closed selector limits. Other message producers retain their original handling.
+The correction must not weaken existing rejection behavior for malformed or
+unsupported selected evidence. Split the combined compiler-original-controls
+rejection into distinct field-set, completion-count, project, original-provide,
+original-skip and targets-triggered predicates so a future failure identifies
+its condition without exposing unrelated log contents. No expected-value
+coercion, semantic workaround or unrelated parser expansion is admitted.
+
+Before the invocation, independently accept the exact source/sole activation,
+current accepted authority, preceding original outcomes, source finding and
+triage, DATA, fixed manifest, finite accounting, runtime/startup premises and
+literal nonlogin Bash/GNU timeout/Python `-I -B -S -c` command, working directory
+and fresh root. DATA binds those review descriptors without granting runtime
+reads of admission carriers. Record consumption before the sole call. Require
+original zero exit, complete bounded transport, every counter, input/output
+continuity and all finalization before downstream use. Retain subsequent
+finalization failures instead of hiding them behind the first rejection.
+
+The operation launches no helper, Windows, MSBuild, .NET, compiler or product;
+it reads no original action root, discovers no file, accesses no account/cache,
+uses no credentials and makes no network request. No desktop attendance is
+required. A real configuration mismatch, insufficient original evidence,
+ambiguous provenance or additional input/effect need remains a rejection. Failure
+consumes the operation and stops dependent work; no implicit failure reader,
+extra invocation, repair, retry or new selector is granted.
+
+Only its independently accepted successful outcome and separately accepted exact
+selection/file necessity may satisfy this lineage's Stage 2 prerequisite. Refresh
+the still-unused Stage 3/4 source, DATA, generator and literal bindings against
+that accepted lineage before their existing one-attempt operations. Their other
+boundaries are unchanged. This continuation does not establish final graph/recipe/
+source/handoff admission, publication, artifact, CLI or real-account acceptance.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
