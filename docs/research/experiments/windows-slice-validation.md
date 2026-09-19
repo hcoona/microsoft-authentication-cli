@@ -8942,6 +8942,175 @@ account access, installation or cleanup is included. Snapshot absence and copied
 provisional receipts establish neither termination nor quiescence and cannot lift
 a dependent gate or authorize another diagnostic.
 
+### Original 0060 Failed Outcome and Fixed Collection
+
+The sole invocation ran under accepted protocol/source commit
+`e3ebb57db5c7a606dbfc5075b2c74800c59ac904`, tree
+`fd632ff3c852d6607ea42e41c937eabeffd79c0f`, after independent DATA, source,
+materialization, authority and exact-literal admission. The selected product,
+existing Windows/WSL environments, SDK/runtime/package pins and credential-free
+effects boundary were unchanged. No account operation or human interaction was
+selected.
+
+The original tool completed with exit code 1 and no running session after four
+same-session continuations. Its complete dispatcher frame reported
+`controller-observation`, `RuntimeError` and `incomplete`. The private transport
+bundle retains the initial response and all four continuations: 980 bytes with
+SHA-256 `b212f5232704673f891124b64ebb13aef59c4ff6108121d599c97ac8366857f4`.
+Independent original-outcome acceptance established failure before the separately
+admitted conditional collection ran. The coarse failure stage does not identify
+the original Windows exception or establish termination or quiescence.
+
+The sole fixed collection completed with exit code 0, no running session and a
+complete normal-completion frame. Its private original transport is 535 bytes with
+SHA-256 `d6c0f6079d3c2931201c8ad9531b5f37b4ba96e52b65db484ff76e71b32f7698`.
+The collection used 74 content reads, 148 read calls, 45,460 requested bytes,
+45,386 returned bytes, 24,628 output bytes, 25 writes and 445 source-defined path
+operations. These counters do not measure interpreter or operating-system startup.
+
+Independent copy acceptance joined all 28 fixed slots, 24 copies totaling 10,046
+bytes and the 14,582-byte inventory with SHA-256
+`2036383fcfbc3fc97195258ae7c62c87097c48fe74962ada6885293f9b976a73`.
+The copies contain the WSL action start/result, helper-root start and helper
+01 through 07 start/identity/result triplets. The reservation-failure leaf and
+helper 08 directory were absent at the collection checkpoints only. No Windows
+root was inspected by this collection.
+
+The copied WSL result reports a complete original bootstrap transport and a
+Windows failure frame with stage `materialization` and exception type
+`System.Management.Automation.ItemNotFoundException`. The proxy exit was 1;
+the reported bootstrap streams reached EOF, with 164 stdout bytes, zero stderr
+bytes and no truncation. The copied action start joins the result's reservation
+hash and the original 900-second clock. Its capacity projection charges this same
+action once, from 91 to 92 build/test units; synthetic consumption remains 52.
+
+All seven helper results report client exit 0, `completed: true`,
+`groupEmpty: true`, both streams at EOF, no failure and zero stderr bytes.
+Their source-measured elapsed values range from 113 to 540 milliseconds. These
+are observations for the bound helper calls at their receipt checkpoints. The
+source accepts either an absent bound `cgroup.events` file or `populated=0` as
+empty; the results do not distinguish those cases or establish global quiescence.
+
+In the accepted Windows controller, materialization precedes guard loading,
+preflight and subject start. The failure frame therefore locates the rejected
+phase before those later stages, conditional on the accepted source bindings.
+It does not identify the missing item, exact failing instruction or extent of
+partial file creation. The WSL `quiescent: false` and incomplete join flags were
+not updated by successful Windows-result joining; they are not an observation
+of a still-running Windows subject. No Windows result or materialization-state
+snapshot was included in the fixed WSL/helper collection.
+
+The diagnostic and sole collection are consumed, with no retries or refunds.
+Capacity remains 92/120 build/test units and 52/80 synthetic scenarios. Preserve
+the twelve protected final CLI scenarios and sixteen unallocated synthetic
+scenarios. Retain all partial state and private copies. No compiler/native-input
+graph, Native AOT artifact or CLI scenario is accepted from the failed outer
+completion or successful collection alone. Further execution retains its separate
+authorization and admission requirements.
+
+### One Fixed Windows 0060 Materialization Observation
+
+Permit one separately admitted passive observation of the failed 0060 Windows
+materialization, after independent acceptance of its original failure and the
+preceding WSL/helper copy and interpretation. The decision-relevant question is
+which fixed materialization outputs and Windows receipts were retained when the
+controller reported `materialization` / `ItemNotFoundException`. This supplements
+outcome acceptance of the consumed diagnostic. It neither repeats nor expands
+the consumed WSL/helper collector, whose no-Windows-access boundary remains intact.
+
+Use the existing WSL review environment to access only the fixed Windows paths
+below through their `/mnt/c/` mapping. Do not invoke Windows, PowerShell, .NET,
+MSBuild, a compiler, the product, any installed helper, or a process/service query.
+No account, cache, network, installation, repair, cleanup or new build/scenario
+execution is included. Retain 92/120 build/test and 52/80 synthetic consumption,
+all preceding consumed observations and the protected scenario capacity. Failed
+start, timeout, cancellation, partial collection or rejection consumes this one
+observation; no retry or replacement output is permitted.
+
+The inactive [fixed collector](../../../tools/validation/collect_windows_compiler_0060_materialization.py)
+owns the complete literal selector list. Derive it once from the already accepted
+0060 materialization DATA: 40,097 bytes, SHA-256
+`90d2dccdc19b8b328a7b1edbb0355bbf3f47718fa15276a7386fcc737dfcaabc`.
+The source must contain fixed literals; runtime input or copied receipts must not
+select another path. Its only selected roots are
+`C:\Temp\azureauth-windows-slice-108\actions\0060` and
+`C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v4`.
+Shared ancestors are traversal infrastructure, not additional observation roots.
+
+| Fixed selector group | Count | Permitted observation |
+| --- | ---: | --- |
+| Action root | 1 | Directory metadata |
+| Materialization action/new directories, including the already staged payload directory | 20 | Directory metadata |
+| Staged source, restore and active-target leaves | 47 | File metadata only |
+| Destination source, restore, active-target and two marker leaves | 49 | File metadata only |
+| Action `guard-load.json`, `subject-start-attempt.json`, `stdout.bin`, `stderr.bin` and `cancel` | 5 | File metadata only |
+| Action `started.json`, `invocation.json` and `windows-result.json` | 3 | Metadata and bounded opaque content |
+
+There are 125 fixed selectors. Bound the three optional content leaves to 8,192,
+16,384 and 32,768 bytes respectively, at most 57,344 bytes in total. Missing
+selected leaves or ancestors produce explicit fixed-role absence observations;
+they do not authorize discovery or an alternate path. Present content must be a
+direct regular file. Reject symbolic links, unexpected types, changed identities,
+oversized content and incomplete reads or writes. Do not read metadata-only leaf
+contents, enumerate directories, follow a receipt path or inspect other action,
+helper or observer roots.
+
+Use component-wise descriptor-relative no-follow traversal, at most sixteen
+components per walk, and retain the relevant directory descriptors during each
+operation. Take two fixed metadata checkpoints around the copies and require
+stable selected identities or the same absence disposition. Bind held/current
+parent and leaf identities as implemented by the reviewed source. These are
+finite checkpoint observations, not an atomic snapshot, current process query,
+proof of permanent absence or a filesystem isolation claim. Preserve integer
+nanosecond timestamps without floating-point conversion.
+
+Open only the existing WSL `action.lock` beneath the dedicated experiment root,
+without creation, truncation or content access, and acquire it once with a
+nonblocking exclusive lock. Keep it through collection and final identity checks.
+Do not inspect WSL action/helper contents. Create exclusively
+`/tmp/windows-compiler-0060-materialization-offline-root-v1`, mode `0700`, containing
+at most three flat opaque copies and one inventory of at most 131,072 bytes.
+Write new files as `0600`, synchronize, seal `0444` and read them back. Reread each
+present original content leaf once for equality. Preserve every partial output
+and all original state; never reuse or delete the output root.
+
+Use at most 11 content reads, 32 read calls, 319,499 requested bytes, 319,488
+returned bytes, 188,416 output bytes, 12 complete writes and 8,192 source-defined
+path operations. The totals include one admission read of at most 16,384 bytes,
+three passes over the three content slots (original, copy readback, original
+reread), one inventory readback and each one-byte EOF probe. Use 16,384-byte
+chunks. Short writes reject rather than retry. These are rejection ceilings,
+not additional observations or budgets borrowed from a consumed collector.
+
+All admission, traversal, locking, copying, synchronization and finalization share
+one 90-second monotonic source deadline with latched cancellation. Use the
+independently admitted isolated Python runtime and GNU timeout with 95 seconds
+before TERM and two seconds before KILL. Same-session empty waits may be at most
+60 seconds and cannot restart the invocation or its deadline. Retain the complete
+original tool transport. A closed normal-completion frame alone is provisional;
+independently accept the final original zero exit without a running session before
+accepting the fixed inventory/copies, then interpret only those accepted copies.
+
+Before execution, independently accept this merged protocol, the exact inactive
+source and literal selector derivation, source/runtime and finite effects, the
+accepted original failure/copy/interpretation and reservation/invocation bindings,
+current consumption, admission DATA and exact tool arguments. Activate only the
+single captured inline literal; no activated source-file writer or imported
+candidate is needed. Admission DATA may carry only the reviewed bindings; it
+cannot add selectors or effects. Unchanged runtime evidence may be reused within
+its established scope, with current exact admission retaining its freshness
+conditions.
+
+The accepted source orders materialization before guard construction and subject
+start, and the original proxy exit/EOF evidence precedes the reported failure.
+Within those exact bindings and ordinary platform contracts, this supports a
+pre-subject failure inference without a new lifetime-risk exception. It is not
+observed global quiescence or proof that no files were written. Any new actual
+ownership or termination uncertainty retains the ordinary stop conditions; do
+not extend the historical 0057 exception. A successful observation may refine the
+failed-materialization diagnosis only. It cannot accept compilation, a native
+graph, an artifact, a scenario, a source repair or another diagnostic invocation.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
