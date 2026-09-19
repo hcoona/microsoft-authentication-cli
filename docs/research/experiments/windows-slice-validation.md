@@ -8184,6 +8184,141 @@ and its recovery remain consumed and stopped; its helper lifetime remains
 unresolved. The later case-specific disposition above applies the accepted Wave
 risk decision. No further invocation is authorized by this observation.
 
+## One Corrected Compile-Through Diagnostic
+
+This supplement implements the accepted original 0057 prior-helper disposition for
+one additional compiler-native-inputs invocation, numbered 0058. It is a new charged
+invocation, including a failed start, and cannot be retried. Original 0057, its
+unavailable unit and consumed receipt recovery remain unchanged. The current Wave,
+case-specific experiment-safety exception and complete independent exact admission
+must all be accepted before execution. This supplement grants no old-process cleanup,
+new authentication effect, graph/artifact acceptance or dependent publication.
+
+### Source, Roots and Historical Capacity
+
+Use the four existing inactive compiler-native-inputs sources after this correction.
+Keep all execution gates disabled in tracked templates. Exact activation and source
+materialization retain their existing independent admission, original-result and
+finite effects requirements. The new observer root is the same fixed Windows path
+with final component `compiler-native-inputs-5033607-v2`. The additional paired action
+is 0058. Replace the old observer-root spelling consistently in the dispatcher,
+controller, target, source manifest, sole required Import overlay, materialization
+plan, support paths, authority and literal. This same-length path substitution changes
+no compiler control, project metadata, selected product source or restore bytes. The
+33 original product blobs remain unchanged; the sole Import remains mandatory.
+Keep the accepted product commit/tree, SDK/runtime/package pins, three Csc contexts,
+Windows guard/Job Object, physical predicates and stop-before-ILC/linker boundary.
+
+The original indented 211,842-byte handoff retains its exact hash, strict JSON and
+semantic checks. Do not rewrite it or fabricate an absent 0057 receipt/directory.
+For compiler mode only, the two Windows action-directory lists must equal 0001–0056
+before reservation and 0001–0056 plus 0058 at the second checkpoint. Any 0057 entry,
+extra entry, missing entry or unmatched pair rejects continuation before its content
+is read. Preserve the existing fixed historical reads and disposed-0054/0056 checks;
+the second disposed-0054 checkpoint binds reserved 0058. This grants no 0057 leaf,
+old observer-root or old-process inspection. Other history modes are unchanged.
+
+The existing history-input authority uses compiler schema v2 and binds its exact
+`priorCapacity` projection. The paired history still yields 87 build/test units,
+including the existing fixture once, and 48 synthetic scenarios. Add original 0057's
+unavailable unit and the independently accepted systemd batch's one build/test and
+four synthetic units: current global occupancy is 89/120 and 52/80. Reference the
+accepted systemd reservation/result and PR #180 observations during exact admission.
+The additional diagnostic consumes one more build/test unit: 90/120 and 52/80.
+Transfer one prospective unit from Linux ceiling 78 to 77 and aggregate Windows
+ceiling 50 to 51; ordinary Windows capacity remains exhausted at 48. Retain the global
+120 ceiling, preparation/publication/download limits and twelve protected final CLI
+cases. `started.json` and original-result validation bind the additional capacity
+projection without changing historical `priorCounters` or inventing old events.
+
+### Linux Verification Helpers
+
+Only compiler-mode `public_read` uses the installed systemd user manager. The complete
+admitted caller makes five immutable local Git queries and three exact fork-ref GETs;
+the latter occur after initial history binding, immediately before reservation and
+after the original-result/history join. Permit at most eight calls in that sequence,
+with a permanent failure latch and no retry. Do not supervise the dispatcher, Windows
+proxy, controller, compiler or Job Object within these Linux units.
+
+Bind the installed systemd-run, env, Python and manager file hashes to the accepted
+supervision batch and the new source's exact sizes. These installed-byte checks do
+not identify every loaded manager/library byte. Retain the existing pinned GitHub
+CLI verification. Use a minimal client/bootstrap environment, user bus and unique
+unit names, with no installation, manager repair, host configuration or service
+persistence. Each transient service retains `--no-ask-password`, `--quiet`, `--wait`,
+`--pipe`, `--collect`, `--expand-environment=no`, `--job-mode=fail`, Type=exec,
+ExitType=cgroup, KillMode=control-group, SendSIGKILL=yes and Restart=no.
+
+A fixed, uninterpolated Python leaf string is part of the exact history source.
+Invoke it with the pinned Python and `-I -B -S -c`, passing identity path/unit as
+separate arguments. Inspect its decoded AST without executing it during review.
+Its source is public code, never an environment or credential carrier. It publishes
+its own PID, start ticks and unique-unit cgroup identity before reading a bounded
+stdin payload. The payload contains only the fixed query vector, the existing
+filtered child environment and an absolute latest-exec time. It is at most 128 KiB,
+is sent nonblockingly alongside output observation and is never retained, hashed,
+printed, or placed in argv or unit properties. Restore the previous cwd/environment
+semantics; before execve, replace stdin with /dev/null and restore the subprocess
+signal defaults. No shell or additional worker process is used.
+
+Each call shares `E = min(original outer deadline, call start + 30 seconds)` across
+hashing, preparation, handoff, output, observation and final acceptance. Keep the sole
+original 900-second dispatcher clock. Select runtime at most twenty seconds from the
+remaining budget after a nine-second reserve; job/start/stop limits are two seconds
+each. Immediately before Popen, require at least runtime plus eight seconds remaining.
+The leaf checks `E - runtime - four seconds` immediately before execve, rejecting late
+Git/GET starts. JobTimeoutSec limits the queued job; it does not stop an already-started
+unit. The source basis is the same immutable systemd v259 documentation plus
+[unit job timeouts](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/man/systemd.unit.xml#L1140-L1160).
+
+The thirty-second boundary is the call's acceptance and observation deadline. Manager
+limits are separate finite fallback supervision, not proof that scheduler, manager
+or filesystem delay cannot outlive that boundary. If required exit evidence is
+unavailable by E, preserve uncertainty and stop all later helpers and dependent work.
+Do not extend the original clock, retry the helper, signal a recovered PID, or issue
+manager cleanup commands. Only the retained local systemd-run Popen may be killed and
+reaped; its unit retains independent manager termination limits after client loss.
+
+Keep stdout byte-for-byte and stderr separate with the original combined 8 MiB
+ceiling. At most one returned overflow byte is inspected; overflow closes output
+pipes and fails the invocation. Success requires the original client exit zero,
+complete payload transfer, both pipe EOFs, and the bound unique cgroup observed empty
+or removed. Neither EOF, client exit, job timeout nor a historical test alone proves
+completion. Cancellation and all failures retain the permanent failure latch.
+
+### Additional Local Effects and Result Acceptance
+
+The fixed Linux helper root is
+`/var/tmp/azureauth-compiler-verifiers-108-0058`. Create it exclusively, retain it,
+and reject reuse. Its first durable marker records the same diagnostic's one charge;
+it is not a second charge beyond the paired action or a replacement historical
+ledger. A failure before paired reservation still consumes the additional diagnostic.
+The root has one marker and at most eight numbered call directories. Each call has
+started, identity and provisional result files; the identity writer briefly owns a
+pending name and exchanges it by hard link before removing only that pending name.
+At most nine directories, twenty-five retained files and eight temporary names are
+created. No original experiment root is used for helper evidence. Preserve all new
+state, including partial failed starts; no retry or speculative cleanup follows.
+
+Each call permits at most 1,200 pump iterations, each with at most one stdin write
+and two output reads. Each write/read request is at most 8 KiB; actual output bytes
+remain bounded by the combined limit plus the one overflow byte. Identity content is
+read once per call with a 4 KiB cap. Cgroup status is at most 4 KiB plus one rejection
+byte per pump; presence checks and observations share the same iteration and absolute
+time limits. Exact admission must join these finite additions to the existing input,
+history, materialization, bootstrap and Windows evidence budgets without resetting
+any allowance. Original fixed metadata copies and recoveries remain consumed.
+
+Call result files are provisional observations. Their elapsed field excludes their
+own final persistence, and a later cancellation/deadline check can reject the caller.
+Accept neither these files nor a paired Windows receipt without the original outer
+tool completion and the existing independent source, authority, literal, original
+transport, history, Windows completion and semantic-observation joins. Refresh all
+changed descriptors/review roles and actual source-materialization acceptance before
+execution. A successful corrected diagnostic only supplies its bounded compiler/native
+input evidence; dependent compilation and final CLI scenarios keep separate exact
+admissions. Any new ownership or termination uncertainty stops further execution.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
