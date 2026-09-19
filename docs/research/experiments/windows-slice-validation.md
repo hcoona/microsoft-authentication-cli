@@ -11023,6 +11023,98 @@ successful outcome and exact selection/file necessity may open the still-unused
 Stage 3/4 operations after their bindings are refreshed. Final graph, recipe,
 source/handoff, publication, artifact, CLI and real-account acceptance remain separate.
 
+### Consumed Metadata Interpretation and Bounded Cardinality Projection
+
+The metadata-corrected interpretation under accepted protocol commit
+`f5e7244575b1deb15453f17182baab28da13cad8`, tree
+`a63f48977e4a0e0fb2aedfd99995406b7f574b31`, exited 1 at
+`semantic-selection` with `managed-binary-rsp-join`. Its original transport is
+2,098 bytes with SHA-256
+`ff8636eb33582e7a67b319deee63f749213bbe99a15961b21868a8938f274131`.
+Independent complete-failure acceptance is 19,822 bytes with SHA-256
+`fa23869b9ea1bd93e3bef39bfacfdbfd030a72487d36b7bc1121f16fc5ec2212`.
+Preserve the metadata interpretation permanently consumed at 1/1. Bind that
+accepted complete original failure before the diagnostic below. No native deferral discharge, selection or final input continuity is
+accepted, and the unused Stage 3/4 operations remain blocked.
+
+The source-qualified failure branch is the predicate requiring exactly one
+case-insensitive `IlcRspFile` entry on the sole captured `ManagedBinary` item.
+The preceding and current retained-allocation counters are equal. An equality
+failure after the new helper would necessarily add its positive entry/string
+charges; even the preceding path helper's possible raw-value charge cannot offset
+that increase. Independent source review must bind this conclusion to the complete
+original frames and unchanged pre-cardinality baseline. This identifies neither
+the actual count nor a metadata value. A missing entry, duplicate case variants,
+and the effective logging state must not be inferred from the shared reason.
+
+The [fixed task host](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Build/BackEnd/TaskExecutionHost/TaskExecutionHost.cs#L1336)
+can suppress item metadata while retaining the parameter's item identities. The
+writer then records a zero metadata reference, which the decoder preserves as an
+empty list. This is a supported source alternative, not an attribution to the
+failed run. Evaluation-time property evidence cannot by itself establish the value
+cached when the task host initializes its parameter metadata.
+
+Permit one separately admitted, read-only diagnostic projection of only the
+metadata interpretation's sealed `observations.json`: 10,873,305 bytes with
+SHA-256 `e542639a389c30f47448260ad4eea09bdecf5b6fa2489fd9fd7cf3e499380576`.
+Its sole input root is
+`/tmp/windows-compiler-0062-success-evidence-stage2-metadata-corrected-root-v1`.
+Create only the fresh exclusive output root
+`/tmp/windows-compiler-0062-native-metadata-cardinality-root-v1`.
+Independently accept the original descriptor and source-qualified finalized
+observation before opening it. Do not read other failed-output leaves, any
+Stage 1 input, original action root, installed file, binary log or process state.
+Do not import, execute or replay any preceding decoder or selector.
+
+Bind the unique fixed native `ManagedBinary` companion capture by its exact
+`WriteLinesToFile` File selector, successful task, source/assembly, project and
+target context, lifecycle order and sole Lines parameter. Preserve source and
+context evidence, task/target/project keys, start/finish/Lines ordinals, item count,
+sole-item metadata-pair count, case-insensitive `IlcRspFile` match count and the
+matching indices and exact names. Do not project metadata values. Missing or
+ambiguous capture association rejects the projection; zero or multiple matching
+metadata entries are diagnostic results rather than relaxed selection predicates.
+
+The projection may additionally retain only these two exact case-insensitive
+property matches in uniquely associated project global/evaluation records:
+`DisableLogTaskParameter_WriteLinesToFile_Lines` and
+`DisableLogTaskParameterItemMetadata_WriteLinesToFile_Lines`.
+Preserve record type, source/context/evaluation association, field position and
+value for each match, including duplicate occurrences. Record absence or unavailable
+association explicitly. Do not choose a winning value, treat a missing property as
+false, or claim an evaluation/global value proves task-initialization-time state.
+No other property or metadata value is selected. This diagnostic accepts no
+compiler/native graph, response path, file selection, recipe, artifact or remedy.
+
+Use an independently reviewed inactive reader and sole activation with the existing
+source-qualified Python/runtime startup premises, 300-second source deadline,
+305-second outer TERM deadline and two-second KILL grace. Require two complete
+identity/hash-bound input passes, strict bounded JSON parsing, descriptor-relative
+no-follow ownership, sealed output readback and complete original transport. Bound
+input-returned bytes to 24 MiB, total-returned bytes to 64 MiB, total-requested bytes
+to 64 MiB plus 4 KiB, retained-allocation accounting to 1 GiB, I/O/read calls to
+4,096 each, path operations to 1,024, closes to 16, writes to 16, output files to four,
+the diagnostic projection to 256 KiB and aggregate output to 512 KiB. The final
+review must account every new allocation, I/O, output and failure path before entry.
+These are accounting ceilings, not an observed RSS or filesystem-isolation claim.
+
+Before the sole call, independently accept current merged protocol/Wave, complete
+original failure and observation descriptor, source/runtime, DATA, exact literal,
+working directory, fresh output root and unused 0/1 allowance. Charge before entry;
+failed start consumes it. Accept only the complete original zero-exit transport and
+all continuity/counter/finalization evidence before using the projection. Failure
+is retained and stops dependent work. No implicit follow-up reader, repair, retry,
+new interpretation, missing-metadata fallback or changed selector is granted.
+A source finding and independent triage based on accepted diagnostic evidence may
+support a later separately accepted amendment; this diagnostic grants none of those
+execution effects.
+
+No Windows process, helper, build, compiler or product is launched; no account,
+cache, credential, network, UI or human-input effects are added. Build/test occupancy
+stays 94/120 and synthetic occupancy 52/80, preserving twelve protected CLI cases
+and sixteen unallocated cases. No earlier allowance is reused or refunded, and
+final Slice acceptance remains open.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
