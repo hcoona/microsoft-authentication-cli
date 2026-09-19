@@ -10942,6 +10942,87 @@ open the still-unused Stage 3/4 operations after refreshing their bindings. Fina
 graph, recipe, source/handoff, publication, artifact, CLI and real-account
 acceptance remain separate.
 
+### Consumed Path Interpretation and Bounded Lazy Metadata Evidence
+
+The path-corrected interpretation under accepted protocol commit
+`f2bf45266056fc55070a327aa0fb1c000f033cb9`, tree
+`862c2ca3a0781930c5a3e6406566d6f7e8069d4f`, exited 1 at
+`semantic-selection` with `managed-binary-rsp-join`. Its complete original
+transport is 2,217 bytes with SHA-256
+`34969ba878f9702c47e0f65f14654aabb95e394f91786abd1831ae0e8ee2b6b7`.
+Independent failure acceptance is 14,966 bytes with SHA-256
+`af07df4b60e782949d92685b68f8e05d6f149062bc7e03501026e9b924c92c0f`.
+Preserve this operation permanently failed at 1/1. No native deferral discharge,
+completed selection or final input continuity was accepted. The reason does not
+distinguish the metadata-count predicate from the derived-path equality predicate;
+the actual failed branch, raw value and sampled path remain unknown.
+
+Fixed public MSBuild source distinguishes metadata enumeration from a metadata
+getter. Item-definition evaluation preserves built-in references, task-item copying
+retains the backing definitions, and binary logging enumerates their values.
+The [fixed getter](https://github.com/dotnet/msbuild/blob/b44cdcec4c79c50c67560876707d57d4f635fa3b/src/Build/Instance/ProjectItemInstance.cs#L1435)
+instead expands built-in metadata. Thus the fixed native producer's enumerated
+`IlcRspFile` can retain `%(Filename)` while its consumer receives an expanded
+filename. The preceding reader treated that enumeration as a concrete path.
+Require independent review and triage of the complete producer, copy, enumeration,
+getter and capture-Message source chain. This establishes a supported representation
+defect, not the actual failed run's value or successful selection. No failed-output
+diagnostic read is granted or required to establish the source defect.
+
+Permit one separately admitted pure-data interpretation of the same four accepted
+Stage 1 inputs, with unchanged size/hash tuples and aggregate 301,044 bytes.
+Create only the fresh exclusive output root
+`/tmp/windows-compiler-0062-success-evidence-stage2-metadata-corrected-root-v1`.
+Retain the preceding interpretation's 300-second source clock, 305-second outer
+TERM deadline, two-second KILL grace, runtime/startup premises, two-pass input
+continuity, framing/EOF, finite I/O/path/memory limits, sealed output readback,
+32 MiB/32-file output ceiling and complete original transport requirements.
+No preceding operation, source literal, session, output root or capacity is reused.
+
+Keep exactly one `IlcRspFile` metadata entry on the sole captured `ManagedBinary`
+item. Use only the already-required, fixed-source `Identity`, `Filename` and
+expanded `IlcRspFile` capture Messages to qualify that entry. Require unique
+Message evidence in the same capture project/target as the `ManagedBinary` Lines
+producer, with successful fixed Message producers, admitted source/assembly,
+order and item association. Join `Identity` exactly to the captured
+item. For the source-supported template form, replace only the one literal
+`%(Filename)` immediately before the final `.ilc.rsp` suffix with the qualified
+single-component `Filename` value. Require the derived spelling to equal the
+expanded `IlcRspFile` Message before the existing metadata path helper and original
+`File`/canonical-sample join. An already-expanded metadata value must likewise
+agree with that Message. Preserve raw enumeration, item/metadata positions, all
+Message/task/source/context/ordinal evidence, exact replacement offset and value,
+and every intermediate derivation. Bound and account new strings before allocation.
+
+Do not evaluate general MSBuild expressions, expand other tokens, substitute a
+Message for missing metadata, infer an item association, or relax any canonical
+path/selector predicate. Scalar collection may move within native validation only
+as needed for these joins; all existing scalar predicates remain mandatory. Keep
+only the two accepted native path-helper consumers, the single doubled-separator
+rule, identity-bound companion deferral and complete mandatory discharge, all
+other writer candidate scans, ambiguity/collision rejection, ordered arrays,
+compiler/native controls, lifecycle checks and file-necessity obligations.
+Fixed rejection reasons may distinguish metadata count, template qualification,
+Message consistency and canonical equality without exposing raw values.
+
+Before the sole call, independently accept current merged protocol/Wave, all
+preceding original outcomes and source-qualified corrections, the new finding and
+independent triage, exact inactive source and sole activation, DATA and fixed
+manifest, finite accounting, runtime/startup, literal command, working directory,
+fresh root and unused 0/1 capacity. Record consumption before invocation; a failed
+start consumes it. Require original zero exit, complete bounded transport, all
+counters, continuity and finalization before downstream use. Failure is retained
+and stops dependent work; no implicit reader, repair, retry or extra selector follows.
+
+No Windows process, helper, build, compiler or product is launched; no original
+action root or installed file is read. Account, cache, credential, network, UI and
+human-input effects remain absent. Build/test occupancy stays 94/120 and synthetic
+occupancy 52/80, preserving twelve protected CLI cases and sixteen unallocated
+cases, with no debit or refund in those categories. Only an independently accepted
+successful outcome and exact selection/file necessity may open the still-unused
+Stage 3/4 operations after their bindings are refreshed. Final graph, recipe,
+source/handoff, publication, artifact, CLI and real-account acceptance remain separate.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
