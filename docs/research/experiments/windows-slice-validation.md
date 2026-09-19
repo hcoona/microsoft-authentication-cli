@@ -10841,6 +10841,107 @@ that accepted lineage before their existing one-attempt operations. Their other
 boundaries are unchanged. This continuation does not establish final graph/recipe/
 source/handoff admission, publication, artifact, CLI or real-account acceptance.
 
+### Consumed Controls Interpretation and Bounded Native Path Evidence
+
+The controls-corrected interpretation under accepted protocol commit
+`a1e84d92918d1473024a5523c1f14f41a2d3d88d`, tree
+`d1c1a8eedf60a134aec0d9d8c67c3e51882361b3`, exited 1 at
+`semantic-selection` with `windows-path-alias`. Its complete original transport
+is 2,320 bytes with SHA-256
+`b2969db236ad91dba551d348887ed811e74c5bc8e3f05d861046a7e627d31ea6`.
+Independent failure acceptance is 14,777 bytes with SHA-256
+`fc7a536585cb311a5a09b76ac933f76c92a7896510dac74b2d8384a5579187a8`.
+It accepts the original failure, finite counters and source-qualified output
+finalization. No selection was generated and the final input continuity pass was
+not reached. Preserve this operation permanently failed at 1/1, alongside all
+previous consumed operations. The actual rejected path, call site and component
+predicate remain unknown; the reason alone cannot establish them.
+
+The [fixed Native AOT source](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets#L117)
+constructs `ManagedBinary.IlcRspFile` by appending a separator to
+`NativeIntermediateOutputPath`, whose default already ends with a separator,
+then passes that metadata to `WriteLinesToFile.File`. The fixed NET file-writing
+and move implementations ultimately normalize ordinary Windows paths through
+`Path.GetFullPath` and `GetFullPathNameW`. Microsoft's
+[fixed path-format documentation](https://github.com/dotnet/docs/blob/8a189e07f74e50fa0e49551857c3b88d69a7630b/docs/standard/io/file-path-formats.md#canonicalize-separators)
+describes collapsing interior separator runs. These source facts can establish
+a supported representation the strict reader rejects; they do not establish the
+actual failing value, original file identity or successful selection. Require
+independent review and triage of both the producer finding and normalization
+source chain before admitting the correction. No failed-output diagnostic read
+is granted or required to establish this source defect.
+
+Independent source review also establishes that companion candidate discovery
+examines the native writer's `File` before native response validation. Require
+independent triage of this additional consumer finding. During companion discovery,
+permit deferral only of the original native writer positively identified by the
+CLI project/target context and fixed task/target source and assembly evidence.
+Retain each deferred task identity as an obligation: mandatory native validation
+must discharge that exact identity through its complete unique-writer, source,
+context, success, order, mode, parameter/metadata, sample and selector checks.
+Missing, multiple, changed or unvalidated native identities reject. Keep every
+other eligible writer's scalar/path candidate scan and unique-candidate checks,
+and reject any derived native response path colliding with a companion path.
+Do not substitute a generic capture-source whitelist or add a third spelling
+helper consumer. This deferral establishes no actual failing input or call site.
+
+Permit one separately admitted pure-data interpretation of the same four accepted
+Stage 1 inputs, with unchanged size/hash tuples and aggregate 301,044 bytes.
+Create only the new exclusive output root
+`/tmp/windows-compiler-0062-success-evidence-stage2-path-corrected-root-v1`.
+Keep the preceding interpretation's 300-second source clock, 305-second outer
+TERM deadline, two-second KILL grace, runtime/startup premises, two-pass input
+continuity, framing/EOF, finite I/O/path/memory limits, sealed output readback,
+32 MiB/32-file output ceiling and complete original transport requirements.
+No previous operation, source literal, session, output root or capacity is reused.
+
+Limit path interpretation to the original native response producer's `File`
+parameter and the corresponding `ManagedBinary.IlcRspFile` metadata join. A
+dedicated helper may remove only the single extra separator immediately before
+the final `.ilc.rsp` filename, after the already supported slash-convention
+conversion and explicit project-directory binding. This is the doubled boundary
+introduced by the fixed producer; every other repeated run remains unsupported.
+Retain the ordinary drive-absolute or project-relative domain, reject extra
+leading/root or trailing separators, and preserve raw strings, producer/metadata
+context and ordinals alongside the exact removed offset and canonical derivation.
+Do not resolve dot/parent components, trim characters, expand short names, admit
+UNC/device paths or alternate streams, use ambient directories, or call an OS
+path resolver. This is source-qualified lexical interpretation, not permission
+to discover or open the interpreted path.
+
+Keep the canonical sampled and selected path validators, unique sample/selector
+joins, containment in the two existing roots, exact sample sizes and every file's
+necessity obligations. The derived spelling must join one canonical sampled
+path; ambiguous, missing, duplicate or otherwise unsupported evidence rejects.
+Apart from that identity-bound native-writer deferral, all other path consumers
+retain their existing acceptance predicates. Fixed
+consumer-location labels and separate empty-component, dot-component,
+trailing-character and forbidden-character rejection reasons may identify a
+later failure without exposing raw paths or extra log contents; preserve the
+original predicate order and meaning. Keep all accepted evaluation/message
+corrections, compiler/native controls, ordered response/companion/generated-file
+joins, lifecycle checks and selection limits unchanged.
+
+Before the sole call, independently accept the merged protocol/Wave, preceding
+original outcomes, producer/normalization and companion-consumer findings and
+independent triage, exact inactive
+source and sole activation, DATA and fixed manifest, finite accounting,
+runtime/startup, literal command, working directory, fresh root and unused 0/1
+capacity. Record consumption before invocation; a failed start consumes it.
+Require original zero exit, complete bounded transport, all counters, continuity
+and finalization before downstream use. Failure remains retained and stops
+dependent work, with no implicit reader, repair, retry or extra selector.
+
+This operation launches no Windows process, helper, build, compiler or product;
+it reads no original action root or installed file and adds no account, cache,
+credential, network, UI or human-input effect. Build/test occupancy stays 94/120
+and synthetic occupancy 52/80, preserving twelve protected CLI cases and sixteen
+unallocated cases. No debit is added or refunded in those categories. Only an
+independently accepted successful outcome and exact selection/file necessity can
+open the still-unused Stage 3/4 operations after refreshing their bindings. Final
+graph, recipe, source/handoff, publication, artifact, CLI and real-account
+acceptance remain separate.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
