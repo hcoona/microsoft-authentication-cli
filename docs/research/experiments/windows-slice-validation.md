@@ -9709,6 +9709,100 @@ identity-rule relaxation follows from this outcome. Global occupancy remains
 CLI scenarios and sixteen unallocated synthetic scenarios preserved. Native AOT,
 graph/artifact/scenario and real-account acceptance remain incomplete.
 
+### One Current 0061 Metadata Comparison, Ordinal 3
+
+Prospectively amend the preceding no-third-observation restriction only for this
+single metadata comparison after this supplement merges and its exact source,
+runtime, authority, activation and complete invocation are independently accepted.
+The original diagnostic and both preceding collectors remain failed and consumed;
+none is resumed or replayed. No fourth observation, content-copy replacement,
+compiler retry or dependent execution is granted.
+
+The decision-relevant question is which of the six current named/opened metadata
+fields differ for the fixed `windows-result.json` leaf, if a discrepancy recurs.
+The accepted ordinal 2 frame establishes inequality but retains neither tuple.
+A later observation cannot recover that historical difference or establish its
+cause. Independent triage rejected the inference that tuple inequality alone
+proves an ownership or termination problem requiring a new risk exception for
+this zero-content observation. Retain ordinary ownership and termination stops;
+do not apply or extend the historical 0057 exception.
+
+The [inactive metadata observer](../../../tools/validation/observe_windows_compiler_0061_metadata.py)
+selects only
+`/mnt/c/Temp/azureauth-windows-slice-108/actions/0061/windows-result.json`.
+Acquire the existing WSL `action.lock` lease nonblockingly and use component-wise,
+descriptor-relative no-follow opens. Before sampling, establish the fixed mandatory
+root/action-parent and lock bindings. Do not enumerate directories or create,
+repair, remove or change permissions on original state.
+
+Take one no-follow named metadata snapshot. Only if that snapshot is a regular
+file, open the same literal leaf once with read-only, no-follow, nonblocking flags
+and take one descriptor metadata snapshot. Retain device, inode, mode, byte size,
+and nanosecond mtime/ctime as exact integers, plus the names of differing fields.
+Retain all six fields; do not ignore or tolerate ctime/mtime differences. This is
+a diagnostic comparison, not admission of the file's ownership, stable identity,
+contents or receipt semantics. A mismatch, absence, nonregular object, exception,
+cancellation or expired deadline stops sampling. No final named lookup, retry,
+failure-path probe or later original-state observation is allowed. Finalization
+only closes owned descriptors, releases the lease and emits the captured frame.
+
+Do not read, mmap, parse, hash or copy original file content. Read no helper,
+guard, bootstrap, reservation, diagnostic-tree, binlog, response-file or other
+leaf. No Windows launch, process/cgroup/service query, network, account access,
+dependency operation, compiler or subject execution is selected. Ordinary stat,
+open and lease operations retain their kernel, filesystem and temporary locking
+effects; zero explicit writes is not a claim of no physical side effects.
+
+Pass at most 16,384 bytes of strict canonical ASCII admission DATA and its SHA-256
+as literal arguments; read no admission file. Bind ordinal 3, one invocation, the
+accepted target, activated inline source and independent runtime review, and the
+2,094-byte ordinal 2 original transport with SHA-256
+`16423d8db8796194af410cc983980fc503f5505f6538fd6be2d5ef0e5aa1a69d`.
+Existing accepted records retain the original diagnostic and ordinal 1 history;
+this observation does not reopen or recopy their paths.
+
+Use at most 128 charged path operations, zero selected file-content reads and zero
+output file writes. The counters cover observer-selected operations, including the
+lease acquisition; descriptor closes and trusted interpreter startup are outside
+that charged count. This is not a complete filesystem-I/O trace. Emit at most one
+canonical 16,384-byte JSON frame through the original
+tool transport, containing only closed status/stage/exception fields, obtained
+metadata, field comparisons and counters. Create no output directory or file.
+Metadata from a failed observation remains provisional until independent review
+accepts the complete actual original tool transport and its source binding.
+For the first failed directory/lock identity comparison only, the frame may also
+retain a fixed role/checkpoint, both already obtained six-field tuples and their
+differing fields, at most one set and within the same frame limit. Preserve the
+original short-circuit order: do not perform another stat/open/fstat to populate
+this field. Missing objects, type rejection or an operation exception gain no
+additional probe or fabricated comparison. Preserve any obtained mismatch through
+cleanup errors. This diagnostic field does not establish ownership or permit
+continuation; no dynamic path or directory listing is emitted.
+
+Keep the tracked source inactive. Admit exactly one reversible `ACTIVE = False`
+to `ACTIVE = True` substitution in the captured inline source, with no active
+source file or separate writer. Use the retained isolated/no-site/no-bytecode
+Python 3.14 and the existing Bash/GNU timeout startup premises. The source deadline
+is one nonresetting 30 seconds; the outer TERM deadline is 35 seconds with two
+seconds of KILL grace. Same-session empty waits remain at most 60 seconds. These
+limits do not guarantee interruption of blocked kernel work. A failed start
+consumes the sole invocation, with no retry or fallback.
+
+Preserve both earlier full allocations without refund. The three observations
+allocate at most 8,320 path operations, 210 source-deadline seconds and 231 nominal
+outer-envelope seconds. The prior content-read and output-file allocations are
+unchanged. Global occupancy remains 93/120 build/test actions and 52/80 synthetic
+scenarios; preserve the twelve final CLI scenarios and sixteen unallocated
+synthetic scenarios. This observation adds neither execution unit.
+
+Independent interpretation may use only this captured frame, the previously
+accepted complete original transports and the accepted source/admission records.
+Agreement or absence does not explain the historical failure; a discrepancy
+identifies only this current comparison's differing fields. No result establishes
+quiescence or automatically permits Native AOT publication, graph/artifact/scenario
+acceptance, cleanup, a new diagnostic or real-account work. Any proposed correction
+retains independent finding triage and its ordinary authorization prerequisites.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
