@@ -133,6 +133,14 @@ def charge(state, key, amount=1):
         fail('counter-limit')
 
 
+def returned(state, amount):
+    # Account bytes already returned by the syscall before a stop check can fail.
+    state['returnedBytes'] += amount
+    if state['returnedBytes'] > LIMITS['returnedBytes']:
+        fail('counter-limit')
+    check(state)
+
+
 def operation(state, function, *args, **kwargs):
     charge(state, 'pathOperations')
     value = function(*args, **kwargs)
@@ -275,7 +283,7 @@ def read_pass(state, fd, size, destination=None):
         charge(state, 'readCalls')
         charge(state, 'requestedBytes', requested)
         raw = os.read(fd, requested)
-        charge(state, 'returnedBytes', len(raw))
+        returned(state, len(raw))
         if len(raw) != requested:
             fail('content-length')
         result.update(raw)
@@ -286,7 +294,7 @@ def read_pass(state, fd, size, destination=None):
     charge(state, 'readCalls')
     charge(state, 'requestedBytes', 1)
     extra = os.read(fd, 1)
-    charge(state, 'returnedBytes', len(extra))
+    returned(state, len(extra))
     if extra:
         fail('content-length')
     return result.hexdigest(), first_chunks
@@ -307,7 +315,7 @@ def compare_passes(state, source, target, size, original_sha, first_chunks):
             charge(state, 'readCalls')
             charge(state, 'requestedBytes', requested)
             raw = os.read(fd, requested)
-            charge(state, 'returnedBytes', len(raw))
+            returned(state, len(raw))
             if len(raw) != requested:
                 fail('content-length')
             chunks.append(raw)
@@ -321,7 +329,7 @@ def compare_passes(state, source, target, size, original_sha, first_chunks):
         charge(state, 'readCalls')
         charge(state, 'requestedBytes', 1)
         extra = os.read(fd, 1)
-        charge(state, 'returnedBytes', len(extra))
+        returned(state, len(extra))
         if extra:
             fail('content-length')
     if (index != len(first_chunks) or source_sha.hexdigest() != original_sha or
@@ -428,6 +436,7 @@ def collect(state):
         same(state, leaf, 'final-named', before, named(state, output, leaf), 'output-identity')
     continuity(state, state['outputParents'] + [state['outputComponent']])
     check(state)
+    state['copies'] = [dict(role=row['role'], **row['copy']) for row in rows]
 
 
 def classify(error):
@@ -448,7 +457,7 @@ def main():
                  cancelled=False, terminalOnly=False, stage='admission', role=None,
                  held=[], sources=[], outputs=[], sourceDirectories=[], outputParents=[],
                  outputComponent=None, admissionSha256=None, bindingMismatch=None,
-                 start=None, inventory=None)
+                 start=None, inventory=None, copies=[])
     handlers = {}
     reason = None
     terminal = None
@@ -482,8 +491,12 @@ def main():
             }, TERMINAL_LIMIT)
         except BaseException as error:
             reason = reason or classify(error)
-    # Every owned descriptor is closed once, including when post-open checks fail.
+    # Attempt each owned close once, only within the original hard deadline.
+    # Any remaining descriptors rely on OS cleanup at bounded process exit.
     for fd in reversed(state['held']):
+        if time.monotonic_ns() >= state['hardDeadline']:
+            reason = reason or 'deadline'
+            break
         state['descriptorCloses'] += 1
         try:
             if state['descriptorCloses'] > LIMITS['descriptorCloses']:
@@ -491,6 +504,9 @@ def main():
             os.close(fd)
         except BaseException:
             reason = reason or 'descriptor-close'
+        if time.monotonic_ns() >= state['hardDeadline']:
+            reason = reason or 'deadline'
+            break
     for number, handler in handlers.items():
         try:
             signal.signal(number, handler)
@@ -502,7 +518,7 @@ def main():
              'action': '0062', 'ordinal': 1, 'normalCompletion': reason is None,
              'stage': state['stage'], 'role': state['role'], 'rejectionReason': reason,
              'admissionSha256': state['admissionSha256'], 'start': state['start'],
-             'inventory': state['inventory'], 'terminal': terminal,
+             'inventory': state['inventory'], 'terminal': terminal, 'copies': state['copies'],
              'bindingMismatch': state['bindingMismatch'],
              'counters': {key: state[key] for key in LIMITS},
              'graphAccepted': False, 'artifactAccepted': False, 'continuation_allowed': False}

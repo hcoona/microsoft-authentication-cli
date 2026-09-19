@@ -10418,7 +10418,9 @@ one one-byte EOF probe per file. Reads request `3 * S + 9` bytes when all probes
 return EOF. Writes contain the original content once plus bounded records. Reject
 short reads/writes or a nonempty EOF probe without retry. Enforce separate counters
 before each request and after each return, including rejected calls. Stdout is one
-frame of at most 8 KiB and is accounted separately from file output.
+frame of at most 8 KiB and is accounted separately from file output. Its three
+fixed copy descriptors project the already retained role, flat filename, size and
+SHA-256, so the next exact input tuple needs no additional inventory probe.
 
 The 120-second clock starts in main and never resets. After a failure or cancellation,
 only the bounded terminal record and descriptor closure are allowed, ending no later
