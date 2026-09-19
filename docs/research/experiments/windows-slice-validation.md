@@ -8828,6 +8828,120 @@ accepted Wave/protocol grant, fresh roots and refreshed source, runtime, DATA,
 materialization, capacity, authority and exact-literal admission. The original 0059
 command and its earlier timer settings remain its historical execution identity.
 
+## One Additional Compile-Through Diagnostic 0060
+
+This supplement implements the accepted Wave's one additional credential-free
+compiler-input diagnostic, numbered 0060. It follows the accepted 0059 failure and
+inactive verifier correction above. Inherit the preceding compile-through protocols'
+selected product, three Csc contexts, native-input cutoff, finite effects, original
+completion and independent exact-admission requirements, with the changes below.
+Original 0057, 0058 and 0059 and their recoveries remain failed or consumed; none
+may be replayed. This supplement neither accepts new lifetime risk nor establishes
+that the corrected manager setting works on the designated host.
+
+### Fresh Bindings and Preserved Consumption
+
+Use the same four inactive sources, with Windows observer root ending
+`compiler-native-inputs-5033607-v4` and Linux helper root
+`/var/tmp/azureauth-compiler-verifiers-108-0060`. Bind these spellings in the sources,
+sole required Import overlay, DATA, source manifest, materialization plan, support
+paths, authority and literal. The paired action is 0060, helper marker schema is
+`compiler-0060-verifiers-start-v1`, and unique service names begin
+`azureauth-compiler-0060-`. Creation remains exclusive; retain all partial state.
+Keep every tracked execution gate disabled. Independently accept exact activation,
+materialization and its original outcome before admitting the diagnostic.
+
+Preserve the 33 product blobs, original restore bytes, selected product commit/tree,
+SDK/runtime/package and installed-helper pins, compiler controls, Windows guard/Job
+Object, physical predicates and stop before ILC/linker execution. The same-length
+Import-path substitution changes no product or project-reference semantics. The
+original indented 211,842-byte handoff, its exact hash and semantic checks, fixed
+historical reads and paired counters remain unchanged.
+
+Compiler-mode action lists must equal 0001–0056 before reservation and 0001–0056
+plus 0060 after original completion. Any 0057, 0058 or 0059 entry, extra entry,
+missing entry or unmatched pair rejects before its content is read. The second
+disposed-0054 checkpoint binds reserved 0060. Preserve disposed-0054/0056 validation
+and the shared parent, owner-marker and action-lock requirements. Do not inspect
+original 0057/0058/0059 action/helper leaves or old observer roots. Other history
+modes remain unchanged.
+
+Add `original0059FailedBuildTest: 1` to the exact `priorCapacity` projection.
+Historical paired counters remain 87 build/test and 48 synthetic, including the
+fixture once. Original 0057, failed 0058, failed 0059 and the accepted systemd batch
+add one build/test unit each; the batch also adds four synthetic units. Prior global
+occupancy is 91/120 and 52/80. The helper-root first-start marker binds these totals
+and charges this same diagnostic if paired reservation is never reached; paired
+reservation does not charge it twice. The new unit produces at most 92/120 and
+52/80. Transfer one prospective unit from Linux ceiling 76 to 75 and aggregate
+Windows ceiling 52 to 53; ordinary Windows capacity stays exhausted at 48. Preserve
+all other preparation/publication/download limits, the twelve protected final CLI
+cases and sixteen unallocated synthetic cases. Failed start consumes this sole
+invocation; no retry, separate startup scenario or refund is granted.
+
+### Corrected Timer and Queued-Work Retention
+
+Use the accepted `JobRunningTimeoutSec=2s` correction and initial absolute-deadline
+check, not the failed original's `JobTimeoutSec` setting. Carry the single existing
+`latest_exec` integer in bootstrap argv and require equality with the stdin payload.
+After importing only `sys` and `time`, an expired bootstrap exits 125 before identity
+reads/writes or query-input consumption. Preserve the post-payload and immediate
+pre-`execve` checks, 30-second acceptance window, original 900-second dispatcher
+clock, pre-spawn reserves, runtime at most 20 seconds, two-second running-job/start/
+stop timers, at most eight calls, permanent failure latch and no retries.
+
+The start receipt binds `jobRunningMilliseconds: 2000` and
+`queueTimeoutConfigured: false`. Explicitly retain up to eight unique transient
+definitions/jobs if still queued. There is no queue-residence deadline. A late
+bootstrap may undergo ordinary executable/interpreter startup, but rejects expired
+query work before query-specific effects. This bounded-count retention is neither
+zero future effects nor unconditional wall-clock termination. Preserve independent
+manager supervision, all original success evidence and stop conditions; new actual
+ownership or termination uncertainty stops further work. No manager command,
+cleanup, installation, host upgrade or broader risk exception is authorized.
+
+All remaining helper I/O, 32 KiB provisional result slots, stderr completeness
+fields, nullable `groupEmpty`, fixed query order and finite source bounds are
+unchanged. Require refreshed source, DATA, runtime, history, capacity, authority,
+materialization, review-role and exact-literal admission against the accepted
+protocol/Wave. Accept original tool completion independently before interpreting
+receipts. Success supplies only bounded compiler/native-input evidence; final AOT
+publication, artifact validation and CLI scenarios retain separate admissions.
+
+### Conditional Fixed 0060 Failure-Receipt Collection
+
+Only after independent acceptance of the original 0060 tool outcome as failed,
+permit one separately admitted fixed receipt collection. Inherit all finite limits,
+28 fixed roles, file/parent/lock identity checks, no-follow traversal, sealed copies,
+original completion and interpretation requirements of the conditional 0059
+collection above. Retain 92/120 build/test and 52/80 synthetic consumption; this
+read-only collection adds no subject execution or separate scenario charge.
+
+Derive the captured inline source directly from the unchanged 19,604-byte inactive
+0058 collector template with SHA-256
+`0274f8f0e0d08d5cf26af73f506815bdc30ff1f362fdb185ca7f5f5970eb070d`.
+Apply the preceding collection's five exact transformations, except replace the
+ten ASCII `0058` occurrences with `0060` and bind the unique `TRANSPORT` assignment
+to the independently accepted original 0060 transport's byte count and SHA-256.
+The helper-result limit remains 32,768 bytes and the same finite `LIMITS` assignment
+applies. Independently bind reverse recovery, decoded AST, exact source/runtime,
+accepted target, original failed transport and invocation before execution. Activate
+only the captured inline literal; create no active source file or writer invocation.
+
+The selected roots are only action 0060 and helper root 0060. Create only
+`/tmp/windows-compiler-0060-failure-offline-root-v1`, exclusively, with the existing
+at-most-29-file bound. The admission input is
+`/tmp/windows-compiler-0060-failure-recovery-admission-root-v1.json`, at most 16,384
+bytes. Preserve all partial output; never reuse a consumed collector or inspect an
+old action/helper root. The existing 90-second source deadline, 95-second external
+timeout, two-second KILL grace and at-most-60-second same-session waits remain.
+An unresolved or successful original invocation makes this collection ineligible.
+Any failed start, timeout, cancellation or incomplete collection consumes it. No
+retry, process/cgroup query, manager operation, Windows-root access, network call,
+account access, installation or cleanup is included. Snapshot absence and copied
+provisional receipts establish neither termination nor quiescence and cannot lift
+a dependent gate or authorize another diagnostic.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
