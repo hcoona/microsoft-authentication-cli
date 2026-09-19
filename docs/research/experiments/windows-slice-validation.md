@@ -8450,6 +8450,81 @@ cleanup. This read-only copy adds no build/test or synthetic execution; retain
 does not itself establish a failure cause, quiescence, graph/artifact acceptance
 or authority for later execution.
 
+### Accepted 0058 Failure-Receipt Recovery Outcome
+
+The sole fixed recovery ran under accepted protocol/source revision
+`c4380fc1c3e559d9039afffd0891c47672ce8c5d`, tree
+`7327cf1b8428ab6f780fa1d5d5022ed51d41b076`. Independent admission bound the
+inactive collector to its exact inline activation, retained runtime identities,
+closed admission data and complete original command. The original tool returned
+normal exit 0, complete output and no running session. Its canonical 389-byte
+transport frame has SHA-256
+`23000dec78e27cd22b8e169677eb0afe3371075df52cf27e063946bba7fcdbf4`;
+the complete private original transport is 23,892 bytes with SHA-256
+`116403a2a00e3b03b96ab128046c6cc5771eaed25d85d2fcf66aa7b994bdbe96`.
+
+The sealed 7,533-byte inventory has SHA-256
+`877841dad845cfb21cd79a51e08b9d9270b611076254983dab1ca3a70dbc6a3b`.
+It binds three copied receipts totaling 702 bytes: the helper-root start marker
+and helper 01's start and result. The action 0058 directory, helper directories
+02 through 08, and helper 01's identity leaf were absent at the selected initial
+and final checkpoints. These are fixed checkpoint observations, not evidence
+of permanent absence or an atomic snapshot. No Windows-root observation was made.
+
+Independent original-outcome and opaque-copy acceptance passed before receipt
+interpretation. Its 11,030-byte carrier has SHA-256
+`5a9fe1ec54b5494eb4c5ee4e7f988e3658442ededfa8725cf6326b6276b77059`.
+All seven reported counters reconcile with the exact selection: 11 content reads,
+22 read calls, 10,317 requested bytes, 10,306 returned bytes, 8,235 output bytes,
+four complete writes and 130 source-defined path operations. These counters do
+not measure every interpreter or operating-system startup operation.
+
+The helper-root marker records prior capacity 89 build/test and 52 synthetic
+units, with the same original diagnostic charge of one build/test and zero
+synthetic units. It does not add another diagnostic charge. Helper 01's start
+selects 20,000 milliseconds of runtime and 2,000 milliseconds each for job,
+start and stop bounds. Its result records:
+
+| Field | Recorded value | Evidence limit |
+| --- | --- | --- |
+| Client exit | `1` | The verifier's client exited unsuccessfully; this is not a service-completion observation. |
+| Standard-output and standard-error EOF | Both `true` | The original client pipes reached EOF; neither field supplies their content. |
+| Failure | `IdentityUnavailable` | No acceptable helper identity was available when the source selected this failure. |
+| Completed | `false` | The helper's complete acceptance condition was not established. |
+| Group empty | `false` | The source initializes this field to false and checks the group only after obtaining identity; this is not an observation of a populated group. |
+| Elapsed milliseconds | `65` | A source measurement before result persistence, not an outer completion or lifetime bound. |
+
+Independent offline interpretation uses the accepted private copies and the
+original accepted inactive source. Its 6,870-byte carrier has SHA-256
+`8cb6e7acc28532fa5613ed912c07f5d83f0df86124aadff44eb44a6e56b542d9`.
+Source review of `compiler_verifier_read`, `load_core_csc_history` and
+`verify_revision` in the [history adapter](../../../tools/validation/final_publish_contracts.py)
+joins `IdentityUnavailable` to the branch where the client has
+exited, both pipes have reached EOF and the identity remains unavailable. The
+subsequent failure gate refuses to return verifier output or enable another
+helper. This is consistent with the original dispatcher's
+`history-reservation` / `ValueError` failure. Conditional on the accepted source
+and input bindings, call 01 is the first immutable Git query for the accepted
+commit's tree. The receipts do not independently record its argument vector or
+establish that the query executed or completed.
+
+The underlying startup error remains unknown. The accepted helper counts any
+standard-error bytes against its combined output limit but does not retain them;
+the result records no separate standard-error content or length. EOF therefore
+does not establish that standard error was nonempty. No specific systemd
+rejection, service-never-started conclusion, original first-exception instruction,
+absence of partial Windows effects or process quiescence follows from these data.
+All raw receipts and local identities remain private.
+
+This recovery is consumed, with no retry, replacement copy or cleanup. Capacity
+remains 90/120 build/test and 52/80 synthetic units; preserve the twelve protected
+final CLI scenarios and sixteen unallocated synthetic scenarios. The original
+0058 diagnostic remains failed, and its new lifetime uncertainty is not covered
+by the historical 0057 risk decision. Keep dependent diagnostics, compilation,
+graph, artifact and scenario acceptance stopped. A future proposal may improve
+bounded startup-error retention, but this outcome grants no new invocation,
+process query or owner risk acceptance.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
