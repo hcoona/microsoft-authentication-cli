@@ -5395,8 +5395,8 @@ contract, and verifies equality to the corresponding accepted Git blobs.
 | Inactive component | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [`run_windows_final_publish.py`](../../../tools/validation/run_windows_final_publish.py) | 7611 | `bccf09306d92b1aa0f7e341c28414d9fa9bb64ce4cd556a243372c7fb64f0d69` |
-| [`final_publish_contracts.py`](../../../tools/validation/final_publish_contracts.py) | 120176 | `e56e09b5616cf7b2ace5e6bd12fda1fa558c3986a383e2383b46adb7a8a4a444` |
-| [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | 86205 | `9ec02f16468d06869052e956f9a471fa79fb7da6f3cd67d0f404795d6b4f96c4` |
+| [`final_publish_contracts.py`](../../../tools/validation/final_publish_contracts.py) | 176484 | `e42d5262908d09d32c5b0437094e91c4b0892304a30e58fed5ced9b8452b575c` |
+| [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | 89205 | `fc21a07949d35f7b1c23441b43a0944c8438ba9c79f4774daf1e79ed1d7f8dd8` |
 | [`Start-WindowsFinalPublish.ps1`](../../../tools/validation/Start-WindowsFinalPublish.ps1) | 12107 | `7ce257e4e23fbc1cdc3e97602a002f1d518fcaf98513fc5c5b0064ba1647d362` |
 
 #### Selected Product, Recipe and Effects
@@ -5412,7 +5412,10 @@ rewritten, assumed unused or treated as a complete final graph. This procedure
 allocates no restore, fetch, tool installation, guard compilation, fixture or
 synthetic process case.
 
-The existing sealed recipe carrier is exactly 5,223 bytes, SHA-256
+The current sealed recipe carrier is exactly 5,745 bytes, SHA-256
+`bdaddd4765dfe6e9f5b48cc839097b96be411b9a3d84b581c1987e28efac06c8`,
+as specified by [the ordinary-MSBuild startup amendment](#ordinary-msbuild-final-startup).
+It replaces the unexecuted 5,223-byte `dotnet publish` recipe
 `2fcf2e7e265b91e1103b0c91e240079e04d87dfd505d633c281a4abe53e900c2`.
 Its single external descriptor remains part of source, graph, K and execution
 acceptance. The source reads those exact bytes from the existing private package
@@ -5422,16 +5425,16 @@ recipe into the owned action preserves its identity and creates no new recipe.
 
 Launch only the nominated `C:\Program Files\dotnet\dotnet.exe` in the admitted
 source root to publish `src\Authentication.Cli\Authentication.Cli.csproj` for
-Release, win-x64, self-contained Native AOT and runtime 10.0.12. The fixed vector
-retains `--no-restore`, `--disable-build-servers`, `UseSharedCompilation=false`,
+Release, win-x64, self-contained Native AOT and runtime 10.0.12. The fixed
+ordinary `msbuild` vector selects `--target:Publish`, `-restore:false`,
+`/nodeReuse:false`, `UseRazorBuildServer=false`, `UseSharedCompilation=false`,
 `IlcUseEnvironmentalTools=true`, the recipe's exact `CppLinker`, `-m:1`,
 `-nr:false` and `-noAutoResponse`; compilation remains included. Preserve trim
 and compiler diagnostics, warnings-as-errors and ordinary symbols. No blanket
 warning suppression, symbol stripping, provider override or extra response input
 is allowed.
 
-The env35 recipe makes exactly its existing four changes to the prior retained
-recipe: `MSBUILDPRESERVETOOLTEMPFILES=1`, detailed verbosity, `-tl:off`, and
+The env35 recipe retains the four earlier diagnostic-capture changes: `MSBUILDPRESERVETOOLTEMPFILES=1`, detailed verbosity, `-tl:off`, and
 `-clp:ShowEventId;ForceNoAlign;DisableConsoleColor`. It has exactly 35 replacement
 root environment entries. Resolve only the existing action, source and package
 root slots and once-reserved endpoint. Retain the exact PATH, LIB, INCLUDE,
@@ -5704,6 +5707,143 @@ literal execution admission remain distinct. The twelve reserved final CLI
 synthetic cases, actual WSL caller lifetime, real WAM/account journey, release and
 whole-Slice acceptance retain their own gates. No authentication, account/cache/
 consent effect, resource request, deployment or support commitment is admitted.
+
+#### Ordinary-MSBuild Final Startup
+
+The final caller selects the ordinary built-in `dotnet msbuild` dispatch to full
+`Publish`. This resolves the independently triaged
+`SDK-STARTUP-WORKLOAD-PRE-SUPPRESSION-01` finding: the earlier `dotnet publish`
+route constructs `RestoringCommand` and its workload-advertising/updater state
+before the later no-restore/disable controls. The ordinary dispatch avoids that
+construction; retaining the old flags on the old route was insufficient.
+This is a source finding about the named paths, not a claim that all SDK
+initialization is effect-free or that a final publication has run.
+
+The public source basis is SDK commit
+`32593ca81f8aae7b0d41c1a7198529c3365106b8`:
+
+- [MSBuildCommand.cs, lines 11–50](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/dotnet/Commands/MSBuild/MSBuildCommand.cs#L11-L50)
+  selects `MSBuildForwardingApp` without `PublishCommand` or `RestoringCommand`.
+- [Program.cs, lines 150–231 and 390–427](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/dotnet/Program.cs#L150-L231),
+  [DotnetFirstTimeUseConfigurer.cs, lines 20–109](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/Microsoft.DotNet.Configurer/DotnetFirstTimeUseConfigurer.cs#L20-L109),
+  and [FirstTimeUseNoticeSentinel.cs, lines 11–41](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/Microsoft.DotNet.Configurer/FirstTimeUseNoticeSentinel.cs#L11-L41)
+  supply the two notice-sentinel existence checks and their named first-use,
+  migration and workload-integrity branches.
+- [Product.cs](https://github.com/dotnet/sdk/blob/32593ca81f8aae7b0d41c1a7198529c3365106b8/src/Cli/Microsoft.DotNet.Cli.CoreUtils/Product.cs)
+  selects the parsed `.version` BuildNumber, then only on null the product-version
+  fallback. Preserve the exact reached source/runtime, containing-assembly path,
+  `.version` parsing or applicable fallback, and resulting `10.0.401` binding.
+  The SDK directory name alone does not establish the sentinel filename.
+
+The current recipe's sole change from the old env35 carrier is its ordered argument
+vector. The executable, working directory, all 35 root environment entries,
+selected native-tool pins, override absences, fresh-process requirements, limits
+and still-unresolved native-byte fields remain unchanged. Its exact 30 arguments
+are below; the 18 global-property arguments preserve the accepted diagnostic DATA
+order, including the explicit action-owned user-extension directory. The recipe
+retains the existing schema and external descriptor slot.
+
+```json
+[
+  "msbuild",
+  "--property:PublishAot=true",
+  "--property:RuntimeFrameworkVersion=10.0.12",
+  "--property:IlcUseEnvironmentalTools=true",
+  "--property:CppLinker=C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\link.exe",
+  "--property:UseSharedCompilation=false",
+  "--property:TrimmerSingleWarn=false",
+  "--property:PublishDir=${ACTION_ROOT}\\publish",
+  "--property:_CommandLineDefinedOutputPath=true",
+  "--property:SelfContained=true",
+  "--property:_CommandLineDefinedSelfContained=true",
+  "--property:Configuration=Release",
+  "--property:NuGetInteractive=false",
+  "--property:RuntimeIdentifier=win-x64",
+  "--property:_CommandLineDefinedRuntimeIdentifier=true",
+  "--property:UseRazorBuildServer=false",
+  "--property:_IsPublishing=true",
+  "--property:DOTNET_CLI_DISABLE_PUBLISH_AND_PACK_RELEASE=true",
+  "--property:MSBuildUserExtensionsPath=${ACTION_ROOT}\\home\\msbuild-user",
+  "--target:Publish",
+  "--verbosity:detailed",
+  "--nologo",
+  "-restore:false",
+  "/nodeReuse:false",
+  "src\\Authentication.Cli\\Authentication.Cli.csproj",
+  "-m:1",
+  "-nr:false",
+  "-noAutoResponse",
+  "-tl:off",
+  "-clp:ShowEventId;ForceNoAlign;DisableConsoleColor"
+]
+```
+
+`PublishDir` keeps its no-trailing-slash value; `NuGetInteractive=false` retains the
+source-bound redirected-output decision. Normal root Publish includes Build and
+normal project-reference negotiation. Do not add `NoBuild`, publish the two
+libraries separately, or copy the diagnostic's observer import, native cutoff,
+binary logger or its three environment additions into the final graph. The global
+`MSBuildUserExtensionsPath` must survive ordinary references: no
+`TreatAsLocalProperty`, removal or replacement is admitted. The CppLinker graph
+check uses the recipe's selected `link.exe` path, with the whole-recipe pin binding
+its agreement with argv; it no longer depends on an argument's numeric position.
+
+Only after the original irrevocable final reservation/start record, exclusively
+create two additional ordinary directories under the admitted action:
+`home\.dotnet` and `home\msbuild-user`. Exclusively create the ordinary file
+`home\.dotnet\10.0.401.dotnetFirstUseSentinel` with exactly zero bytes, SHA-256
+`e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
+Reject preexisting entries or uncertain ownership, linked/reparse ancestry or the
+wrong file/directory shape. Derive these paths only from the admitted action root.
+Do not probe the ambient user profile, discover a version at materialization time,
+add another sentinel, or change a reusable machine-level file. Retain both
+directories and the empty file with the action evidence, including on failure.
+
+These are fixed startup inputs in the existing source, outside `generatedPaths`
+(which must initially be absent) and pre-allocation `protectedInputs` (which are
+checked before this action exists). No new manifest or graph schema is introduced.
+Check their ordinary shape and fixed parent closure, sentinel zero length and
+user-extension emptiness at four points: Python after materialization and before
+reservation yield; Windows exact admission; Windows successful postconditions
+after natural root exit and Job quiescence; and Python original completion before
+accepting success. The Python projection also checks current-user ownership of
+the fixed action/home directories and sentinel. For the empty directory, each
+check uses a disposed iterator requesting at most one entry, not a directory
+survey. Zero length establishes the exact empty contents without a payload read.
+
+Windows exact admission opens the sentinel once with `FileMode.Open`,
+`FileAccess.Read`, `FileShare.Read` and retains that same FileStream through subject
+execution and successful postcondition checking. The retained stream must remain
+readable and length zero, and the named ordinary file and no-reparse parent closure
+must pass at both ends. The sharing mode excludes ordinary write/delete opens while
+allowing the SDK's existence checks. The stream reference is the retained handle;
+its `Name` is not asserted to be native file identity. This uses the existing
+workstation assumptions; no new file-ID, ancestor-handle or hostile-replacement
+framework is required.
+
+Dispose the retained stream in the controller's existing `finally` after subject
+lifetime accounting. An open, continuity, postcondition or disposal failure keeps
+the action failed. If work remains live or its lifetime is unknown, closing this
+stream does not prove continuity through that unknown later lifetime. Preserve the
+existing failure/retention disposition, without another wait, forced termination,
+retry or recovery operation. All work remains inside the original 700-second
+outer and 600-second subject clocks and their existing cancellation/failure rules.
+
+The owned empty MSBuild directory fixes the wildcard-import consumers. It does
+not suppress the earlier in-process Windows local-application-data known-folder
+metadata lookup already declared for diagnostic 0062; that lookup remains an
+initialization effect. The protocol still prohibits reading the ambient
+user-extension directory or capturing its private path. The fixed sentinel and
+unchanged certificate/tool-PATH/telemetry controls exclude only their reviewed
+branches under the exact source/runtime predicates.
+
+This amendment creates no account, installation, policy, service, privilege or
+new network effect, and allocates no additional attempt. Build/test consumption
+remains 94/120 and synthetic consumption 52/80; the existing single prospective
+publication charge and protected CLI cases are unchanged. All four activation
+gates stay disabled. Current whole-source, graph, recipe, K, handoff, runtime and
+literal-launch admission remain required before publication; original publication,
+artifact, CLI, WSL and real-account acceptance remain separate.
 
 ### Prospective Final-Caller Successor History
 
