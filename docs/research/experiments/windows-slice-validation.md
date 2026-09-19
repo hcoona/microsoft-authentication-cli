@@ -7931,6 +7931,34 @@ handoff policy and all retained input bytes remain unchanged. This correction do
 not activate a source, resolve the preceding-helper lifetime question or grant a
 replacement diagnostic.
 
+**Case-specific prior-helper disposition:** The accepted Wave decision and
+experiment-safety exception dispose of the unresolved lifetime of the original
+invocation's preceding immutable Git verifiers and possible descendants for
+credential-free Windows Slice validation within the Wave scope and cumulative
+ceilings accepted with that decision. Preserve the source/input proof
+that original 0057 could not reach its later root-marker reads, reservation lock,
+durable start/debit, staging or Windows launch. Do not infer its actual first
+exception or global quiescence.
+
+The original diagnostic remains failed and consumed; its dedicated unit is not
+refunded or made available. Its receipt recovery is consumed 1/1. At most one
+additional corrected compiler-native-inputs diagnostic is permitted, including a
+failed start. It must have a distinct admission, an additional charged build/test unit
+within unchanged cumulative ceilings, and a separately accepted complete exact
+protocol. That protocol must correct the handoff-format conflict, repair future
+verifier process ownership/termination, preserve prior accounting without
+manufacturing absent history, define its exact action locations and retained
+outputs, and independently bind source, runtime, literal, limits and result
+acceptance before execution. Existing dependent Native AOT compilation and the
+twelve remaining CLI/WSL synthetic scenarios retain their ordinary prerequisites
+and separate exact admissions. The single diagnostic limit does not terminate
+this historical disposition, and the disposition satisfies no build, graph,
+artifact, source, capacity or result prerequisite. It admits no command by itself.
+Any new ownership or termination uncertainty stops further execution; no further
+diagnostic attempt follows from this exception. The disposition ends when the
+current Wave grant closes and neither transfers to a successor grant nor expands
+through later boundary changes.
+
 ## Independent Linux Supervisor Validation
 
 This supplement evaluates the installed systemd user manager as a prospective
@@ -7938,7 +7966,9 @@ supervisor for Linux validation helpers. It is independent of original 0057: it
 does not access that attempt's roots, receipts, inputs, processes or descendants,
 resolve its lifetime uncertainty, or permit the stopped diagnostic or dependent
 compiler/Native AOT work to continue. The original failed invocation, its unavailable
-unit and consumed recovery remain unchanged. Its owner risk decision remains open.
+unit and consumed recovery remain unchanged. At this batch's admission, its owner
+risk decision remained open; the later case-specific disposition above applies
+the accepted Wave risk decision.
 
 The scope is development validation tooling only. It introduces no systemd or
 cgroup dependency into the Windows authentication executable, no product service,
@@ -8150,9 +8180,9 @@ The observed mechanism is suitable evidence for preparing separately admitted
 Linux helper integration. It adds no dependency to the authentication executable
 and does not establish Windows interop termination, compiler or Native AOT success,
 product CLI acceptance, account behavior or broader platform support. Original 0057
-and its recovery remain consumed and stopped; its unresolved helper lifetime and
-separate repository-owner risk decision are unchanged. No further invocation is
-authorized by this observation.
+and its recovery remain consumed and stopped; its helper lifetime remains
+unresolved. The later case-specific disposition above applies the accepted Wave
+risk decision. No further invocation is authorized by this observation.
 
 ## Fixed Compiler and Task-Host Metadata Copy
 

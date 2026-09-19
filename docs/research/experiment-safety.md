@@ -150,6 +150,19 @@ stops further attempts. Record any uncertainty; if safe termination or file owne
 cannot be established, preserve the affected state and do not perform speculative cleanup
 or continue the experiment.
 
+This exception addresses only the unresolved lifetime of the preceding immutable
+Git verification helpers and possible descendants from original Issue #108
+invocation 0057. With the accepted Wave risk decision and applicable independently
+accepted exact protocols, that historical uncertainty alone need not block
+credential-free Windows Slice validation within the scope and ceilings accepted
+with that decision. The original attempt remains failed and stopped. This
+exception does not establish termination, authorize old-process cleanup or weaken
+future work's ownership, termination, evidence or capacity requirements. It does
+not apply to other unknown processes or historical Issue #1. The exception ends
+when that Wave grant closes; it does not transfer to a successor grant or expand
+through later boundary changes. All new ownership or termination uncertainty
+retains the ordinary stop conditions.
+
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
 selected-account session or secure-cache updates when the protocol declares that outcome.
 Deleting local files does not reverse provider-side authentication, consent, or session
@@ -436,7 +449,9 @@ Stop the experiment if:
 - native or cross-host execution accesses an environment not covered by the protocol;
 - remaining authorized attempts or cumulative capacity cannot be established;
 - experiment-controlled work cannot be stopped within the declared bounds, or safe
-  ownership cannot be established for cleanup;
+  ownership cannot be established for cleanup, except for the single original Issue
+  #108 invocation 0057 lifetime exception in Termination and Retention, within its
+  exact accepted scope;
 - the subject's source or artifact identity no longer matches the accepted protocol; or
 - continuing would mutate an unrelated account, installation, or remote resource.
 
