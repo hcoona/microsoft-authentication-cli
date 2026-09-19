@@ -62,6 +62,25 @@ overall Slice acceptance open until its required evidence is accepted; these gat
 not redefine the outcome as synthetic-only acceptance. Historical experiments and
 their consumed capacity remain unchanged and cannot be replayed under this entry.
 
+**Original 0057 lifetime risk decision:** The repository owner accepts the
+residual risk that preceding local Git verification helpers or their descendants
+from original compiler-native-inputs invocation 0057 may remain active and
+interfere with subsequent work. Their termination remains unresolved. Accept
+this historical uncertainty for credential-free Windows Slice validation within
+this entry's scope, effects and cumulative ceilings accepted with this decision.
+Authorize the case-specific experiment-safety and Windows-protocol amendments,
+followed by at most one separately admitted corrected compiler-native-inputs
+diagnostic after those amendments merge. Existing dependent Native AOT
+compilation and synthetic validation retain their ordinary prerequisites and
+separate exact admissions. Preserve the failed original, its unavailable
+dedicated unit and the consumed recovery; charge the additional diagnostic
+separately within the existing cumulative ceilings. This historical disposition
+ends when this grant closes and does not transfer to a successor grant or expand
+through later boundary changes. All new ownership or termination uncertainty
+retains the ordinary stop conditions. No quiescence, refund, repeated original
+recovery, old-process cleanup, authentication, additional publication capacity,
+release authority or broader exception is granted.
+
 **Exclusions:** no product or protocol expansion, PATs, downstream Git/package adapters,
 browser/device-code or native Linux/macOS/ARM64 authentication, daemon, serialized
 application cache, private dependency, network telemetry export, installation, signing,
