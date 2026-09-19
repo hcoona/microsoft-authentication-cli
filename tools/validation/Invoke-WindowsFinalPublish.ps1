@@ -15,7 +15,8 @@ $script:FinalClock = $null
 $script:FinalCallerAuthorization = $null
 $script:FinalOriginalLoaderHash = 'ef16811f0f8cf481ee6a54b9b7f0552c14bbd6eeeca32bb391c255e52d35628e'
 $script:FinalControllerWatch = $null
-$script:FinalRecipeHash = '2fcf2e7e265b91e1103b0c91e240079e04d87dfd505d633c281a4abe53e900c2'
+$script:FinalRecipeHash = 'bdaddd4765dfe6e9f5b48cc839097b96be411b9a3d84b581c1987e28efac06c8'
+$script:FinalStartupSentinel = $null
 
 function Get-FinalHash([byte[]] $Bytes) {
     $hash = [Security.Cryptography.SHA256]::Create()
@@ -1048,10 +1049,40 @@ function Receive-FinalOriginalClock($Binding, $ControllerWatch) {
     Assert-FinalBudget
 }
 
+function Assert-FinalStartupInputs($Binding, [bool] $OpenSentinel = $false) {
+    Assert-FinalBudget
+    $action = $Binding.actionPath
+    foreach ($directory in @($action, "$action\home", "$action\home\.dotnet", "$action\home\msbuild-user")) {
+        Assert-GuardDirect $directory
+        if (-not (Get-Item -LiteralPath $directory -Force).PSIsContainer) {
+            throw 'Final startup directory shape changed'
+        }
+    }
+    # Request at most one entry, retaining no complete directory inventory.
+    $entries = [IO.Directory]::EnumerateFileSystemEntries("$action\home\msbuild-user").GetEnumerator()
+    try {
+        if ($entries.MoveNext()) { throw 'Final MSBuild user-extension directory is not empty' }
+    } finally { $entries.Dispose() }
+    $path = "$action\home\.dotnet\10.0.401.dotnetFirstUseSentinel"
+    Assert-GuardDirect $path
+    $item = Get-Item -LiteralPath $path -Force
+    if ($item.PSIsContainer -or $item.Length -ne 0) { throw 'Final first-use sentinel is not an empty ordinary file' }
+    if ($OpenSentinel) {
+        if ($null -ne $script:FinalStartupSentinel) { throw 'Final first-use sentinel already opened' }
+        $script:FinalStartupSentinel = [IO.File]::Open($path, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read)
+    }
+    # Keep this same read stream through both SDK existence checks and natural
+    # completion. Its Name property is not a native file-identity assertion.
+    if ($null -eq $script:FinalStartupSentinel -or -not $script:FinalStartupSentinel.CanRead -or
+        $script:FinalStartupSentinel.Length -ne 0) { throw 'Final first-use sentinel continuity failed' }
+    Assert-FinalBudget
+}
+
 function Assert-ExactFinalPublishAdmission($Binding) {
     if ($null -eq $script:FinalClock -or $null -eq $script:FinalAuthority) { throw 'Missing original final admission' }
     [void](Assert-FinalCallerAuthorization)
     Assert-FinalBudget
+    Assert-FinalStartupInputs $Binding $true
     Assert-FinalProtectedInputs
     Assert-FinalToolContract $script:FinalGraph $script:FinalRecipe $Binding.resolvedSlots
     Assert-FinalToolInventory $script:FinalGraph $Binding.resolvedSlots @() @() $true
@@ -1072,6 +1103,7 @@ function Assert-ExactFinalPublishPostconditions($Binding, $Result) {
     if ($script:capture.disposition -cne 'complete' -or $Result.exitCode -ne 0 -or $Result.activeProcessesAtNormalExit -ne 0) {
         throw 'Original root, capture or natural drain is incomplete'
     }
+    Assert-FinalStartupInputs $Binding
     Assert-FinalProtectedInputs
     $total = $script:capture.stdout.Length + $script:capture.stderr.Length
     if ($total -gt 8388608) { throw 'Combined original diagnostic limit exceeded' }
@@ -1386,6 +1418,15 @@ function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
                 $normal = $false
                 $result.closeFailureType = $_.Exception.GetType().FullName
             }
+        }
+        # Release the startup input only after subject lifetime accounting. This
+        # does not prove continuity through any retained or unknown later work.
+        if ($null -ne $script:FinalStartupSentinel) {
+            try { $script:FinalStartupSentinel.Dispose() } catch {
+                $normal = $false
+                $result.startupInputCloseFailureType = $_.Exception.GetType().FullName
+            }
+            $script:FinalStartupSentinel = $null
         }
         # Zero after any earlier failure never erases that failure.
         $result.retainedLiveWorkOrUnknown = -not $result.quiescent

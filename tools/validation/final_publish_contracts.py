@@ -46,7 +46,8 @@ PROTOCOL = 'docs/research/experiments/windows-slice-validation.md'
 PRODUCT = {'commit': '503360753accd0829801953823b1b57a4f852440',
            'tree': '8506cdd9781c8a331ea12ea8fe27a55292eec073'}
 GUARD_SOURCE = 'd38846b080d5ee092fae9e21c9031712b56289093b50ca048d50589cca50ff4b'
-RECIPE_SHA256 = '2fcf2e7e265b91e1103b0c91e240079e04d87dfd505d633c281a4abe53e900c2'
+RECIPE_SHA256 = 'bdaddd4765dfe6e9f5b48cc839097b96be411b9a3d84b581c1987e28efac06c8'
+FINAL_FIRST_USE_SENTINEL = 'home/.dotnet/10.0.401.dotnetFirstUseSentinel'
 GUARD_FIELDS = ('actionNumber', 'sourceSha256', 'dllSha256', 'guardBuildSha256',
                 'preparationWindowsResultSha256', 'preparationWslResultSha256',
                 'preparationReservationSha256', 'invocationSha256', 'compilerReceiptSha256',
@@ -1039,7 +1040,7 @@ def validate_graph(graph, recipe):
                 'TreatWarningsAsErrors': 'true', 'IlcTreatWarningsAsErrors': 'true',
                 'TrimmerSingleWarn': 'false', 'NativeDebugSymbols': 'true',
                 'UseSharedCompilation': 'false', 'IlcUseEnvironmentalTools': 'true',
-                'CppLinker': recipe['invocation']['argumentVectorTemplate'][17].split('=', 1)[1]}
+                'CppLinker': recipe['selectedToolPins']['link.exe']['path']}
     if graph['effectiveProperties'] != expected:
         fail('Effective build/symbol/warning policy differs from fixed recipe')
     values = graph['protectedInputs']
@@ -2745,6 +2746,24 @@ def validate_compiler_native_inputs_original(authority, reservation, invocation,
                                                compiler_native_inputs=True)
 
 
+def final_startup_inputs(owned, deadline, cancelled):
+    """Check the fixed inputs created only after the final durable reservation."""
+    budget(deadline, cancelled)
+    for path in (owned, owned / 'home', owned / 'home/.dotnet', owned / 'home/msbuild-user'):
+        info = direct(path).lstat()
+        if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid():
+            fail('Final startup directory shape or ownership changed')
+    # Do not materialize a directory listing: one entry is enough to reject it.
+    with os.scandir(owned / 'home/msbuild-user') as entries:
+        if next(entries, None) is not None:
+            fail('Final MSBuild user-extension directory is not empty')
+    sentinel = direct(owned / FINAL_FIRST_USE_SENTINEL).lstat()
+    if (not stat.S_ISREG(sentinel.st_mode) or sentinel.st_size != 0 or
+            sentinel.st_uid != os.getuid()):
+        fail('Final first-use sentinel shape, ownership or empty contents changed')
+    budget(deadline, cancelled)
+
+
 @contextlib.contextmanager
 def admitted_reservation(deadline, began, cancelled):
     admission = load_admission(deadline, cancelled)
@@ -2807,9 +2826,12 @@ def admitted_reservation(deadline, began, cancelled):
             owned.mkdir()
             write_new(owned / 'started.json', compact(start))
             write_new(local / 'windows-input.json', compact({'sha256': sha(compact(start))}))
-            for name in ('home', 'home/roaming', 'home/local', 'home/http', 'home/plugins',
+            for name in ('home', 'home/.dotnet', 'home/msbuild-user',
+                         'home/roaming', 'home/local', 'home/http', 'home/plugins',
                          'temp', 'empty-program-files', 'controller', 'publish'):
+                budget(deadline, cancelled)
                 direct(owned / name).mkdir()
+            write_new(owned / FINAL_FIRST_USE_SENTINEL, b'')
             slots = {'ACTION_ROOT': WINDOWS + '\\actions\\' + number,
                      'SOURCE_ROOT': graph['sourceRoot'], 'PACKAGE_ROOT': graph['packageRoot'], 'ENDPOINT': endpoint}
             recipe = admission['recipe']
@@ -2849,6 +2871,7 @@ def admitted_reservation(deadline, began, cancelled):
                 if path.exists() or path.is_symlink():
                     fail('Stale generated artifact or response input')
             tool_inventory(graph, slots, [], [], lambda: budget(deadline, cancelled), before=True)
+            final_startup_inputs(owned, deadline, cancelled)
             budget(deadline, cancelled)
             yield binding
         except BaseException as error:
@@ -3004,6 +3027,7 @@ def original_completion(binding, proxy_exit, deadline, cancelled):
         if read(projection(observed['path']), deadline, cancelled) != snapshot:
             fail('Original tool input changed after natural completion')
     # No subject-output access happens before actual original completion above.
+    final_startup_inputs(owned, deadline, cancelled)
     for item in binding['admission']['evidence']['graph']['protectedInputs']:
         hash_protected(item, deadline, cancelled)
     for path in graph['absentInputs']:
