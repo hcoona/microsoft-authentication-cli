@@ -8319,6 +8319,137 @@ execution. A successful corrected diagnostic only supplies its bounded compiler/
 input evidence; dependent compilation and final CLI scenarios keep separate exact
 admissions. Any new ownership or termination uncertainty stops further execution.
 
+### Original 0058 Failed Outcome
+
+The sole corrected invocation ran under accepted protocol/source revision
+`3fbcea11f2f675b7a86ce43104c2a58158043370`, tree
+`42eace86a48e208c713666e362e3ea0fb577fb0c`. It used the independently accepted
+four-file materialization, completed authority and exact original literal. The
+selected product remained commit `503360753accd0829801953823b1b57a4f852440`,
+with the existing SDK, runtime and dependency pins. This observation changes none
+of those identities or the existing credential-free WSL/Windows effects boundary.
+
+The original tool returned exit code 1, complete output and no running session.
+Its sole intentional dispatcher frame used schema
+`compiler-native-inputs-dispatcher-failure-v1`, stage `history-reservation`,
+exception type `ValueError` and outcome `incomplete`. The canonical frame is
+140 bytes with SHA-256
+`3f01147d48a157c7cc10b54942d6a178a19a1ed189eb2b91264c2aeb050f8c1c`.
+The complete private original transport is 1,070 bytes with SHA-256
+`4e445f551d2c602e96b53782c49e6338019653170b25088ad217fa5780c20eb6`.
+Independent failed-outcome acceptance binds that transport to the admitted literal;
+its 9,232-byte carrier has SHA-256
+`1517bd9ced5bd1791b6da9a02b9032029ca54a95dd7fc25ec8606d43a4d9fb08`.
+Only the sanitized classification and evidence identities are public.
+
+This is a runtime failure observation at a coarse dispatcher stage. The specific
+first failing check, reached reservation effects, helper launches and completion,
+Windows launch, persistent partial state and quiescence remain unestablished.
+Short elapsed time is not evidence that no work started. Static review of the
+frozen authority/history configuration found no mismatch in the checked canonical
+JSON, source descriptors, schema, product, prior capacity or accepted revision
+bindings; that source/data finding does not identify the actual exception site.
+No compiler, native-input, graph, artifact or scenario success follows from this
+invocation. No account operation or human interaction was selected by its protocol.
+
+The additional diagnostic is consumed, including its failed start. Current global
+occupancy is 90/120 build/test units and 52/80 synthetic scenarios. Keep the twelve
+protected final CLI scenarios and sixteen unallocated synthetic scenarios; no unit
+is refunded. Preserve the original result and any partial state without cleanup.
+The normal-result collector is ineligible, the old 0057 recovery remains consumed,
+and no retry, additional diagnostic, new recovery or dependent execution is admitted
+by this failed-outcome record. The accepted historical 0057 risk disposition does
+not establish or waive any new 0058 lifetime uncertainty.
+
+### One Fixed 0058 Failure-Receipt Recovery
+
+Within the existing credential-free evidence boundary, permit one separately
+admitted read-only collection of fixed receipts from the failed 0058 invocation.
+This is evidence recovery only. It does not repeat a compiler diagnostic, reuse
+the consumed 0057 recovery, accept new lifetime risk or lift any dependent stop.
+No Windows-root access, process or cgroup query, manager operation, installation,
+account access, network call, subject launch or cleanup is selected.
+
+The [inactive collector](../../../tools/validation/collect_windows_compiler_0058_failure.py)
+selects only these 28 possible regular files:
+
+| Exact parent | Fixed leaves | Collector rejection limits |
+| --- | --- | --- |
+| `/var/tmp/azureauth-windows-slice-108/windows-actions/0058` | `started.json`, `reservation-failure.json`, `result.json` | 8,192; 4,096; 65,536 bytes respectively |
+| `/var/tmp/azureauth-compiler-verifiers-108-0058` | `started.json` | 4,096 bytes |
+| Each literal child `01` through `08` of that helper root | `started.json`, `identity.json`, `result.json` | 4,096; 4,096; 8,192 bytes respectively |
+
+These are new collector rejection limits, not claims that every original producer
+enforced those sizes. Content totals at most 212,992 bytes. Never enumerate a
+directory, follow a path from receipt content, read a pending name or inspect an
+unlisted leaf. Receipt bytes remain uninterpreted private evidence during copying;
+later independent interpretation must distinguish provisional helper files from
+original completion. Presence and absence do not establish helper termination or
+quiescence, and a partial snapshot cannot authorize another diagnostic.
+
+Reach the existing WSL root and windows-actions parent through component-wise,
+descriptor-relative no-follow directory opens. Keep the original root and parent
+mandatory; an error there is not absence. The exact 0058 action directory, helper
+root, eight fixed helper children and each receipt may be absent. Record absence
+only from the corresponding no-follow lookup, then recheck that same leaf once.
+When the helper root is absent, record its eight children as ancestor-absent
+without probing them. Missing, linked, inaccessible, non-directory, nonregular,
+oversized or changing inputs otherwise fail closed. Compare opened and named file
+and selected-directory identities using device, inode, mode, size and nanosecond
+mtime/ctime. Bind the mandatory parent directory identities again at finalization;
+unrelated `/var/tmp` entries may change, so its continuity uses device/inode/mode.
+These are checkpoint observations under the existing cooperating-filesystem
+premise, not a snapshot lease or evidence that a writer has permanently stopped.
+
+Open only the existing `/var/tmp/azureauth-windows-slice-108/action.lock`, read-only
+and no-follow as a regular file, and attempt its exclusive lock once nonblockingly.
+Do not read, create or change lock content. Bind the held and named lock before
+and after collection, and release it during finalization. No contention retry,
+concurrent experiment, signaling or process-lifetime claim follows from this lease.
+
+After all initial observations pass, create only
+`/tmp/windows-compiler-0058-failure-offline-root-v1`, exclusively at mode 0700.
+Copy present leaves into the 28 statically derived flat role names in the source,
+with initial mode 0600 and final mode 0444. Use complete bounded writes, fsync,
+exact copy readback and one later identical original-content/identity reread.
+Missing leaves get no file. Retain at most 29 files, including one canonical
+ASCII compact-JSON inventory of at most 65,536 bytes. Fsync the output directory
+and parent, verify held/named output identity, and preserve all partial outputs
+on failure. There is no overwrite, repair, deletion or second attempt.
+
+The exact admission input is at most 16,384 bytes and binds the accepted target,
+source/runtime review and the failed original transport. Its one content read,
+the 28 possible original reads, 28 continuity rereads, 28 private-copy readbacks
+and one inventory readback total at most 86 content reads. Use at most 184 read
+calls, 720,982 requested bytes, 720,896 returned bytes, 278,528 written bytes,
+35 complete write calls and 4,096 path operations. Each content chunk is at most
+16,384 bytes; each read includes its charged one-byte EOF/rejection probe.
+Counters are distinct, finite rejection bounds; short reads or writes gain no
+retry or expanded allowance. Trusted interpreter startup is not a complete
+system-I/O trace within those counters.
+
+Use one nonresetting 90-second source deadline with cancellation checks around
+reads, path operations, writes, seals, syncs and finalization. The separately
+accepted exact literal uses the retained Python 3.14 isolated/no-site/no-bytecode
+runtime and GNU timeout at 95 seconds with a two-second KILL grace. Its closed
+transport frame reports only completion, stage/role, exception class, inventory
+descriptor and counters. Preserve the original tool transport and normal final
+exit; any same-session empty wait remains at most 60 seconds. The frame and
+inventory are provisional until that original outcome is independently accepted.
+
+Keep the tracked source inactive. After this protocol merges, independently
+accept exact source activation, materialization, runtime, authority and literal
+before the sole invocation. Materialize the sole `ACTIVE = False` to
+`ACTIVE = True` substitution in the captured inline Python source of that literal;
+bind its exact UTF-8 bytes/hash and reverse recovery to the accepted tracked bytes.
+Create no activated source file or extra writer invocation. Accept its original result before interpreting copied
+receipts. Any failed start, timeout, cancellation, input change or incomplete
+original collection consumes this recovery and stops further collection without
+cleanup. This read-only copy adds no build/test or synthetic execution; retain
+90/120 and 52/80, including the consumed failed diagnostic. A successful recovery
+does not itself establish a failure cause, quiescence, graph/artifact acceptance
+or authority for later execution.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
