@@ -11507,6 +11507,144 @@ protected final CLI cases and sixteen unallocated synthetic cases remain intact;
 these evidence stages add no restore/build/test/publish/synthetic debit and refund
 none. Their separate invocation and I/O allocations remain consumed.
 
+## Fixed Final Source and Restore Materialization
+
+This supplement permits one separately admitted copy of the final publication's
+immutable product source and already accepted restore bytes. The existing final
+caller verifies a materialized source root before reserving action 0063; it does not
+create that root. This copy supplies that prerequisite without repeating restore,
+evaluating MSBuild, applying the diagnostic overlay, or launching Windows work.
+Final graph, invocation, publication, artifact and Slice acceptance remain separate.
+
+Use the existing WSL Linux review environment and dedicated Windows experiment root.
+The exact product is commit `503360753accd0829801953823b1b57a4f852440`, tree
+`8506cdd9781c8a331ea12ea8fe27a55292eec073`. Copy exactly 34 source files totaling
+150,036 bytes and 12 unchanged restore files totaling 233,709 bytes: 46 files and
+383,745 bytes. All relative destinations, retained input paths, lengths, SHA-256
+digests and source Git blob IDs are literal rows in the separately pinned source.
+Do not discover inputs, enumerate directories, resolve dependencies or follow paths
+from restore metadata.
+
+Thirty-three source files reuse the accepted retained source payloads. The remaining
+`src/Directory.Build.props` uses the original 395-byte Git blob
+`aefa040436b4c51ff3a44291be4197507e2b080b`, SHA-256
+`5ab00d0e55069350a8f1b395607595af749adde9597b993f012b5ff9f13be47f`.
+Its private retained file is
+`/tmp/windows-final-source-restore-original-props-lifetime-v1.bin`.
+Exclude the 519-byte diagnostic overlay. The twelve restore inputs are the accepted
+offline restore copies; copying their bytes does not establish that their historical
+absolute paths are the final physical selectors. Final source/import/restore
+correspondence remains required.
+
+The only final root is
+`C:\Temp\azureauth-windows-slice-108\sources\final-503360753accd0829801953823b1b57a4f852440`,
+accessed through its literal `/mnt/c/` projection. Under the established ordinary
+workstation direct-path contract, check the existing experiment root and each ancestor
+as an ordinary directory. Reuse an existing ordinary `sources` directory solely as a
+namespace container, or exclusively create exactly that one parent if absent. Do not
+enumerate or modify its other contents. A linked or non-directory ancestor is fatal.
+Always create the final root exclusively; existing final content cannot be adopted,
+repaired, overwritten, resumed or removed.
+
+Create exactly these eight directories in parent-before-child order: `.`, `src`,
+`src/Authentication.Cli`, `src/Authentication.Core`, `src/Authentication.Windows`,
+`src/Authentication.Cli/obj`, `src/Authentication.Core/obj`, and
+`src/Authentication.Windows/obj`. Require pure lexical parent closure and unique
+case-insensitive file destinations before any payload or experiment-root operation.
+No action tree, home, first-use sentinel, cache, observer or controller is staged.
+
+### Sole Copy, Bounds and Retention
+
+Exactly one invocation is available. Recover current accepted authority and unused
+capacity externally, with no concurrent experiment or observer. Exclusively create
+`/tmp/windows-final-source-restore-materialization-original-attempt-v1.txt` before
+reading retained payloads or touching the Windows experiment root. Failed start,
+collision, partial creation, identity/content error, exhausted limit, cancellation,
+timeout, incomplete transport or nonzero exit consumes the invocation. No retry,
+alternate root, repair, cleanup or refund is allowed. This passive preparation does
+not debit restore/build/test/publication/synthetic capacity or reserve action 0063;
+global counts remain **94/120 build/test** and **52/80 synthetic**.
+
+Read all 46 fixed inputs before creating final directories. Require ordinary held
+and named file identity, exact size and SHA-256; verify each source's Git blob ID
+from its captured bytes without invoking Git. Retained payload content totals at
+most 383,745 bytes. Exclusively create each final leaf, write and flush completely,
+and compare exact held readback with the source bytes. Verify held/named identity
+and sync the containing directory. Charge finite positive short-read/write loops;
+no input selector can expand through content or an error.
+
+| Bound | Maximum |
+| --- | ---: |
+| Data phase / entire source operation | 45 / 50 seconds |
+| Completion phase | At most 5 further seconds |
+| Data reads / charged bytes / read calls | 96 / 900,000 / 256 |
+| Data writes / bytes / write calls | 48 / 450,000 / 256 |
+| Metadata queries / file and directory opens | 4,096 / 192 |
+| Created directories, including optional parent | 9 |
+| Completion receipt | 65,536 bytes |
+| Outer TERM deadline / nonresetting KILL grace | 55 / 2 seconds |
+| Complete original combined capture retained | 16 KiB |
+
+The 48 writes cover the 46 final files, attempt and result. Normal success requires
+94 reads, including attempt/result readback. Charge one overflow-detection byte per
+read. The complete source counters include receipt operations; receipt fields named
+`countersBeforeReceipt` intentionally precede those operations. These are intentional
+data-operation bounds, not whole-process memory or system-wide syscall claims.
+
+Monotonic checks and Python alarms bound the data and completion phases; the outer
+watchdog also covers interpreter startup. Retain the accepted ordinary filesystem
+and watchdog limitations: this is not a hostile-filesystem or Windows reparse-point
+proof, and a blocked kernel syscall is not promised to become interruptible.
+
+The sole result is
+`/tmp/windows-final-source-restore-materialization-original-result-v1.json`, created
+exclusively within the remaining completion phase. It records product/root, actual
+parent branch, copied relative paths, outcome/failure type, elapsed time and
+pre-receipt counters. It contains no payload or arbitrary exception text. If attempt
+creation/readback fails, do not fabricate a result. Retain every complete or partial
+file and created directory on every outcome. A completed field alone does not prove
+success: require normal zero exit, complete transport and independent acceptance of
+the exact result and current output/parent correspondence before final use.
+
+### Exact Source and Invocation Admission
+
+The inactive source is
+`/tmp/windows-final-source-restore-materialization-inactive-lifetime-v2.py`,
+23,299 bytes, SHA-256
+`17179b856eb3466d49bf4173753666bb93808ee4bdbaedf3ee52208003e29cfc`.
+Its procedure is 11,747 bytes, SHA-256
+`7c026f397edec9b2c980b542900163105075899c47937bc74273ebbad155a7a4`;
+the exact activation/literal note is 7,860 bytes, SHA-256
+`5abfa39db0d4d2d40a788e57ab9cd40955353e791eb6702d1f11e41833aae93e`.
+The reviewed correction makes every caught data-phase exception set a failed
+outcome and rejects any recorded failure in the final success guard.
+
+Activation replaces exactly the one complete guard line
+`raise SystemExit("INACTIVE: final 46-file materialization has not been admitted")`
+with `# Exact reviewed activation: final 46-file copy is admitted.`, retaining its
+LF, then appends exactly a blank line and `proposed_copy()` with final LF. No other
+byte change is permitted. The predicted separately sealed active file is
+`/tmp/windows-final-source-restore-materialization.accepted.py`, 23,295 bytes,
+SHA-256 `312aa135ea2e80fd2ea24ee5b2d1e6941eb317297f1189f8c7fac91df190b43b`.
+This source binding does not claim active materialization or execution occurred.
+
+The exact invocation uses cwd
+`/tmp/azureauth-windows-final-link-inputs-accepted-108`:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 55s /usr/bin/python3.14 -I -B -S /tmp/windows-final-source-restore-materialization.accepted.py
+```
+
+Use the already accepted Linux shell/watchdog/interpreter reasoning with fresh
+identity/startup correspondence: nonlogin `/usr/bin/bash`, pinned
+`/usr/bin/gnutimeout`, `/usr/bin/python3.14 -I -B -S`, no TTY, pipeline or status
+wrapper. Keep the accepted startup-injection exclusions. Independently accept exact
+source, activation, retained inputs, runtime, cwd, literal and unused capacity before
+materialization or execution. Do not execute the inactive guard as a test.
+No desktop attendance, account operation, network request, installation, Windows
+launch, build, publication or product execution is selected by this copy.
+
+
 ## Fixed Final LINK-Input Descriptor Collection
 
 This supplement permits one separately admitted passive collection of the missing
