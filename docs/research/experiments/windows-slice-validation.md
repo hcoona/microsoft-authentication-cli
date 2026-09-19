@@ -11115,6 +11115,100 @@ stays 94/120 and synthetic occupancy 52/80, preserving twelve protected CLI case
 and sixteen unallocated cases. No earlier allowance is reused or refunded, and
 final Slice acceptance remains open.
 
+### Accepted Cardinality Diagnosis and Bounded Expanded-Message Proof
+
+The sole cardinality diagnostic under accepted protocol commit
+`ca9ce94be18a8e95580bf5e0c5290a8e22305e42`, tree
+`5f0dbfbed59d2b80748ff79214f73e4746160dbf`, completed with original exit 0.
+Its original transport carrier is 2,092 bytes with SHA-256
+`7b1c5e8d28f7f62e696993f477095c41b4c3d8da9256306dab5c0a082e2ae799`;
+independent original-outcome acceptance is 16,372 bytes with SHA-256
+`5205c5032b475ea1e7e39a2d70259b4c345b8b7d40e80110b2a649c41c17bbac`.
+The one subsequently verified projection is 5,688 bytes with SHA-256
+`8c729f571cb505057ba5bcbabe514c4d5b518b9d6161f33ac94cd61e26c3da1d`.
+Bind its complete original outcome, exact projection-content acceptance and
+independent finding triage before the new interpretation below. Preserve the
+diagnostic and every preceding interpretation permanently consumed at 1/1.
+
+The qualified successful `WriteLinesToFile` capture contains one `ManagedBinary`
+item with zero logged metadata pairs and zero `IlcRspFile` matches. The preceding
+exact-one predicate therefore rejected absent logged metadata. Its uniquely
+associated evaluation properties contain one string `true` for
+`DisableLogTaskParameterItemMetadata_WriteLinesToFile_Lines`. That historical
+property observation does not establish the effective value cached at task
+initialization, nor does an empty logged metadata list prove that the underlying
+item lacks metadata. No metadata value or successful response-path selection was
+obtained from this diagnostic.
+
+The [fixed capture source](https://github.com/hcoona/microsoft-authentication-cli/blob/ca9ce94be18a8e95580bf5e0c5290a8e22305e42/tools/validation/CompilerNativeInputs.targets#L243)
+separately emits `Identity`, `Filename` and expanded `IlcRspFile` Message values
+before capturing the sole item's identity. Require independent source review
+and triage of the transform/getter chain, the unchanged item between those tasks,
+and the original native writer/capture order. The existing reader already
+qualifies these three Message producers before its template derivation, but
+the consumed operation stopped before reaching that helper. Source sufficiency
+does not establish actual Message values or successful runtime joins.
+
+Permit one separately admitted pure-data interpretation of the same four accepted
+Stage 1 inputs, with unchanged size/hash tuples and aggregate 301,044 bytes.
+Create only the fresh exclusive output root
+`/tmp/windows-compiler-0062-success-evidence-stage2-message-proven-root-v1`.
+Retain the preceding interpretation's 300-second source clock, 305-second outer
+TERM deadline, two-second KILL grace, runtime/startup premises, two-pass input
+continuity, framing/EOF, finite I/O/path/memory limits, sealed output readback,
+32 MiB/32-file output ceiling and complete original transport requirements.
+No preceding invocation, root, source literal, session or capacity is reused.
+
+For this fixed input only, require the sole captured `ManagedBinary` item's
+metadata list to remain exactly empty, matching the accepted diagnostic. Replace
+the consumed operation's enumerated-entry/template proof with the independently
+qualified expanded-Message proof. Require unique `Identity`, `Filename` and
+`IlcRspFile` Message evidence, successful fixed Message producers, exact Text and
+high Importance parameters, admitted source/assembly, and the same capture
+project/target as the sole `ManagedBinary` Lines producer. Retain the existing
+strict producer/parameter/message order after the original native writer and
+before the companion capture and intentional cutoff. Join `Identity` exactly to
+the captured item; retain the bounded single-component Filename checks.
+
+Use the qualified expanded `IlcRspFile` value only after that complete same-item
+proof. Reject unsupported expression markers, missing, duplicate, conflicting,
+empty or oversized evidence. Pass that value through the unchanged native
+response-path helper and original writer File/canonical-sample join. Preserve
+the raw empty metadata list, item position, all three Message/task/parameter/
+source/context/ordinal records and every path derivation. Explicitly identify
+the expanded Message as the value's source; do not fabricate an enumerated
+metadata value, metadata index, token replacement or effective logging state.
+Bound and account every new string and evidence container before allocation.
+
+This new operation changes only that source of response-path evidence. Retain
+the original native writer's success, source, File/Lines and write-mode checks,
+all scalar completeness and context predicates, ordered arrays, compiler/native
+controls, source-qualified companion deferral and complete mandatory discharge,
+canonical path and sample identity, ambiguity/collision rejection, lifecycle
+checks and exact file-necessity obligations. `IlcOutputFile` remains in scalar
+completeness; it is not an additional response-path premise. Nonempty metadata
+does not activate a fallback. No logging switch, capture source, Windows build,
+original experiment or product behavior changes.
+
+Before the sole call, independently accept current merged protocol/Wave, all
+preceding original outcomes and corrections, diagnostic content and both finding
+triages, exact inactive source and sole activation, DATA and fixed manifest,
+finite accounting, runtime/startup, literal command, working directory, fresh
+root and unused 0/1 capacity. Charge before entry; failed start consumes it.
+Require original zero exit, complete bounded transport, all counters, continuity
+and finalization before downstream use. Failure remains retained and stops
+dependent work; no implicit reader, repair, retry or extra selector follows.
+
+No Windows process, helper, build, compiler or product is launched; no original
+action root or installed file is read. Account, cache, credential, network, UI and
+human-input effects remain absent. Build/test occupancy stays 94/120 and synthetic
+occupancy 52/80, preserving twelve protected CLI cases and sixteen unallocated
+cases. No earlier allowance is reused or refunded. Only an independently accepted
+successful interpretation and exact selection/file necessity may open the unused
+Stage 3/4 operations after their bindings are refreshed. Final Slice acceptance
+and its remaining graph, recipe, source/handoff, publication, artifact, CLI and
+real-account evidence remain open.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
