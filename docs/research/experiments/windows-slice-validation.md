@@ -8598,6 +8598,132 @@ capacity, and separate exact admission under an accepted execution grant. It mus
 not reuse the consumed 0058 root or its earlier source/capacity bindings. No additional
 startup error, cause or successful platform behavior has been observed by this edit.
 
+## One Additional Compile-Through Diagnostic 0059
+
+This supplement implements the current Wave's additional compiler-input diagnostic
+as one credential-free invocation numbered 0059. It inherits the selected source,
+three Csc contexts, native-input cutoff, finite execution, original-result and
+independent admission requirements of the two preceding compile-through supplements,
+with only the changes below. Original 0057, original 0058 and their recoveries remain
+failed or consumed as recorded. The accepted manager-supervision reassessment is a
+contract inference, not observed quiescence or a new lifetime-risk exception.
+
+### Fresh Source, History and Capacity
+
+Use the four existing inactive sources with a fresh Windows observer root ending
+`compiler-native-inputs-5033607-v3` and Linux helper root
+`/var/tmp/azureauth-compiler-verifiers-108-0059`. Bind the new root spellings in every
+source, Import overlay, DATA descriptor, materialization plan, authority and literal.
+Use helper marker schema `compiler-0059-verifiers-start-v1` and unique service names
+beginning `azureauth-compiler-0059-`. Root creation remains exclusive and all partial
+state is retained. Keep all tracked execution gates disabled; source activation and
+materialization still need their separate independent exact admission.
+
+The 33 product payloads, original restore bytes, selected product commit/tree,
+SDK/runtime/packages, installed helper pins and required Import semantics do not
+change. Neither do compiler controls, Windows guard/Job Object, physical predicates,
+output/evidence limits or the stop before ILC and the linker. Preserve the original
+900-second dispatcher clock, at most eight verification calls with permanent failure
+latch, each call's 30-second acceptance window, at most 20-second manager runtime,
+two-second job/start/stop limits, minimal environments and exact command sequence.
+The previously accepted stderr-prefix correction and nullable `groupEmpty` field
+apply to the new 32 KiB provisional helper-result slots, without extra reads or an
+increase to the combined 8 MiB helper-output limit.
+
+Keep the exact indented 211,842-byte handoff unchanged. Compiler-mode action lists
+must equal 0001–0056 before reservation and 0001–0056 plus 0059 after original
+completion; 0057 or 0058 entries, missing or extra entries reject before their
+contents are read. The second disposed-0054 checkpoint binds reserved 0059.
+Preserve existing fixed historical reads and disposed-0054/0056 validation, without
+reading any original 0057/0058 action/helper leaf or old observer root. Other history
+modes are unchanged. The existing shared parents, owner markers and action lock
+remain covered by the preceding history/reservation requirements.
+
+The exact `priorCapacity` projection now adds `original0058FailedBuildTest: 1`.
+Historical paired counters remain 87 build/test and 48 synthetic, including their
+fixture once. Original 0057 adds one unavailable build/test unit, failed original
+0058 adds one, and the accepted systemd batch adds one build/test and four synthetic.
+Prior occupancy is therefore 90/120 and 52/80. The helper-root first-start marker
+binds those totals and charges this same single diagnostic even if paired reservation
+is never reached. Successful paired reservation does not charge it twice.
+The additional unit produces at most 91/120 and 52/80. Transfer one prospective
+unit from Linux ceiling 77 to 76 and aggregate Windows ceiling 51 to 52; ordinary
+Windows capacity remains exhausted at 48. Keep preparation, publication and download
+limits and the twelve protected final CLI cases plus sixteen unallocated synthetic
+cases. No startup scenario, retry or refund is granted.
+
+Require current target/protocol/Wave bindings and refreshed exact DATA, source,
+runtime, materialization, history, capacity, authority and invocation reviews before
+execution. Preserve the unchanged selected product, guard and other evidence only
+within their original review scopes. Original tool completion and independent
+outcome acceptance remain required before any receipt is interpreted. A successful
+0059 supplies only its accepted compiler/native-input observations; final Native AOT
+publication, artifact validation and scenario execution retain separate admission.
+
+### Conditional Fixed 0059 Failure-Receipt Collection
+
+If and only if the original 0059 tool outcome is independently accepted as failed,
+permit at most one separately admitted fixed receipt collection. This is part of
+accepting that diagnostic's outcome, with no new build/test or synthetic charge.
+Do not use it after a successful or unresolved original invocation. A failed start,
+timeout, cancellation or incomplete collection consumes this sole collection.
+No retry, subject launch, process/cgroup query, manager operation, Windows-root
+access, network call, installation, account access or cleanup is included.
+
+Reuse the existing inactive
+[0058 collector template](../../../tools/validation/collect_windows_compiler_0058_failure.py),
+19,604 bytes with SHA-256
+`0274f8f0e0d08d5cf26af73f506815bdc30ff1f362fdb185ca7f5f5970eb070d`.
+Keep that tracked historical template unchanged. Independently review these exact
+transformations in a captured inline literal after the failed outcome is accepted:
+
+- Replace exactly ten ASCII `0058` occurrences with `0059`; these bind the fixed
+  action/helper roots, output/admission paths, role/schema labels and docstring.
+- Replace only the unique helper tuple `('result', 'result.json', 8192)` with
+  `('result', 'result.json', 32768)`. The action-start slot stays 8,192 bytes.
+- Replace the unique `TRANSPORT` assignment with the independently accepted
+  original 0059 transport's exact byte count and SHA-256.
+- Replace the unique `LIMITS` assignment with the finite bounds below.
+- Change the sole `ACTIVE = False` to `ACTIVE = True` only in the captured literal.
+
+Bind the accepted template, every exact substitution, derived source bytes/hash,
+reverse recovery and decoded AST, isolated runtime, actual original transport and
+exact literal. Create no activated source file, duplicate collector or extra writer.
+The collector validates admission shape and transport equality; external independent
+admission must bind the actual source/runtime/accepted target artifacts. Its fixed
+`originalOutcome: failed` remains unchanged, which is why this is failure-only.
+
+The same 28 fixed slots now select only the 0059 action and helper roots. The action
+slots retain limits 8,192, 4,096 and 65,536 bytes; the helper-root start slot remains
+4,096; each of eight fixed children has start/identity/result limits 4,096, 4,096 and
+32,768. Selected content totals at most 409,600 bytes. The v2 helper JSON is copied
+as opaque private bytes, including base64 stderr; encoding is not sanitization.
+Do not inspect original 0057/0058 roots, follow receipt-selected paths, enumerate
+unlisted leaves or interpret copied output before original collection acceptance.
+
+Retain the preceding fixed collector's component-wise descriptor-relative no-follow
+opens, mandatory shared WSL root and windows-actions parent, identity/absence
+checkpoints, read-only existing `action.lock` and one nonblocking exclusive lock,
+fixed flat roles, private modes, complete writes, fsyncs, copy readbacks and later
+original rereads. Do not read or mutate lock content. Create only
+`/tmp/windows-compiler-0059-failure-offline-root-v1` exclusively, with at most 29
+files including a 65,536-byte inventory, and intentionally retain partial output.
+The admission input is
+`/tmp/windows-compiler-0059-failure-recovery-admission-root-v1.json`, at most 16,384
+bytes. Parent access does not authorize another action directory or old helper root.
+
+Use at most 86 content reads, 208 read calls, 1,310,806 requested bytes, 1,310,720
+returned bytes, 475,136 output bytes, 43 write calls and 4,096 path operations.
+The 16,384-byte chunks, charged EOF probes, separate counters and fail-closed
+short-read/write behavior stay unchanged. These are rejection ceilings, not extra
+retry allowances. Keep the nonresetting 90-second source deadline and isolated
+Python 3.14 runtime, with GNU timeout at 95 seconds and two-second KILL grace.
+The closed transport frame, final original exit, at most 60-second same-session
+waits and independent outcome/interpretation requirements remain unchanged.
+Neither a copied provisional receipt nor absence proves termination or quiescence.
+Any new ownership or termination uncertainty retains ordinary stop conditions;
+this collection cannot authorize another diagnostic or dependent execution.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
