@@ -10312,6 +10312,263 @@ separate gates. Failure grants no implicit collection or retry. Preserve partial
 state; no old-state observation/repair, cleanup, installation, authentication,
 additional publication capacity or release authority is added.
 
+## Original 0062 Completion and Success-Evidence Interpretation
+
+The sole diagnostic 0062 completed under accepted protocol commit
+`c2a620b3713de09332692cddd9e30f8bece7a1c3`, tree
+`cac9fd8b212f78940a3820137c241f2ea94147a7`. Its original caller returned
+zero with complete empty outer output and no remaining tool session. The admitted
+success branch intentionally emits no outer frame. Independent source-qualified
+review joined that original completion to the persisted Windows candidate,
+original proxy exit, complete bounded capture, natural owned-Job completion,
+original clock/history checks and finalization. No Job termination was requested.
+This is acceptance of the original completion, with provisional outcome
+`expected-stop-candidate-awaiting-independent-acceptance`; it does not establish
+three successful Csc contexts, valid binlog EOF, original responses, graph, AOT
+publication, artifacts or CLI scenarios. Historical owned-Job completion is not
+current/global quiescence. The confined original 0057 risk disposition is unchanged.
+
+The private original transport is 1,882 bytes with SHA-256
+`94e0b366303545115199ce67490ab4d0b7510f7d7a93b3e37fcf57f50e58f338`;
+its independent completion acceptance is 18,085 bytes with SHA-256
+`751129179c9fc62af104e3a7764bea374a5d70b170d1d96ee18c9e87f1cbecef`.
+Those carriers bind the exact admitted source/DATA/runtime/literal and preserve
+the limits above. They are prerequisites, not permission to rerun the diagnostic
+or inspect its retained tree without the bounded procedure below.
+
+### Closed Evidence Stages and Effects
+
+Within the existing Wave's first-Slice source/artifact review, permit these four
+sequential, separately admitted stages. Each has one invocation, including a
+failed start. A downstream stage requires independent acceptance of the preceding
+stage's original completion, complete transport, exact outputs and continuity.
+Source preparation and public-source desk review may proceed before those gates;
+no dependent content read or execution may do so.
+
+1. Copy the three fixed receipt/binlog slots below, using the inactive
+   [0062 success-evidence copier](../../../tools/validation/copy_windows_compiler_0062_success_evidence.py).
+2. Interpret only those accepted private copies and a closed list of already
+   accepted source/admission carriers. Decode the binlog as inert data, recover
+   the original task contexts and freeze an exact, bounded second-copy selection.
+3. Copy exactly that independently accepted selection from the two 0062 Windows
+   roots. No path may be discovered or added during this copy.
+4. Interpret the accepted copies to join original response bytes, ordered
+   compiler/native producers and selected generated inputs/outputs. Report
+   missing or unsupported evidence explicitly; do not obtain extra originals.
+
+These stages use the existing WSL Linux review environment. They launch no Windows
+process, SDK, MSBuild, compiler, product, helper service or process survey. They
+make no network request, dependency acquisition, installation, account, token,
+WAM, UI, consent or authentication-cache change. Selected PE bytes are inert data
+and must not be loaded or invoked. No desktop attendance or human input is selected.
+Do not inspect 0057–0061 roots, enumerate directories, follow an arbitrary recorded
+path, read installed/cache files, repair old state or execute a consumed collector
+or interpreter. This supplement does not authorize a new diagnostic or publication.
+
+Global occupancy remains 94/120 build/test and 52/80 synthetic after consumed 0062.
+These four evidence operations have separate one-attempt and I/O accounting; they
+add no restore/build/test/publish/synthetic debit and refund none. Keep the twelve
+protected final CLI cases and sixteen unallocated synthetic cases, preparation,
+publication and download ceilings unchanged. A later operation that actually builds,
+tests or acquires dependencies needs its applicable envelope and exact protocol.
+
+### First Copy: Three Literal Slots
+
+All three inputs are required regular files. These are the only original content
+selectors for stage 1; the shared action lock below is metadata/lease-only.
+
+| Slot | Exact WSL path | Maximum bytes |
+| --- | --- | ---: |
+| wsl-result | `/var/tmp/azureauth-windows-slice-108/windows-actions/0062/result.json` | 1,048,576 |
+| windows-result | `/mnt/c/Temp/azureauth-windows-slice-108/actions/0062/windows-result.json` | 1,048,576 |
+| binlog | `/mnt/c/Temp/azureauth-windows-slice-108/compiler-native-inputs-5033607-v6/compiler-native-inputs.binlog` | 67,108,864 |
+
+The maximum original content is 69,206,016 bytes. Copy whole bytes without JSON,
+gzip, binlog, text, metadata or path interpretation. Require no-follow directory
+traversal, regular leaves, stable opened/named identity, size, raw bytes and SHA-256
+across the original first read and continuity reread, and exact private-copy readback.
+Reject missing/inaccessible/linked/nonregular/changing inputs and any bound violation.
+Do not substitute absence evidence, discover an alternate or weaken identity checks.
+
+Create only `/tmp/windows-compiler-0062-success-evidence-stage1-root-v1` exclusively
+at mode 0700, with fixed flat copy labels, start and inventory/failure records.
+Use exclusive 0600 files, complete bounded writes and fsync, seal completed evidence
+0400 and sync the held directory. Verify held/named output identity. Preserve all
+partial and complete output. Do not enumerate, overwrite, delete or reuse the root.
+A failed start still consumes stage 1 even if no start record could be created.
+The three raw copies receive bounded readback. The start, inventory and sole terminal
+record are bounded write-only records; their source-bound bytes/hash descriptors
+and original complete transport precede separately admitted offline reads.
+
+| First-copy bound | Maximum |
+| --- | ---: |
+| Original content / aggregate new output | 69,206,016 / 69,234,688 bytes |
+| Logical content reads / direct content read calls | 9 / 3,177 |
+| Returned / requested content bytes | 207,618,048 / 207,618,057 bytes |
+| Content chunk / counted writes | 65,536 bytes / 1,059 |
+| Start / inventory / sole complete-or-failure record | 4,096 / 16,384 / 8,192 bytes |
+| Counted path operations / descriptor closes | 1,024 / 96 |
+| Original work clock / failure-finalization allowance | 120 / 2 seconds |
+| Outer TERM deadline / nonresetting KILL grace | 125 / 2 seconds |
+| Original combined transport retained for acceptance | 16 KiB |
+
+With three present files totaling S bytes, three passes return `3 * S` bytes;
+first-pass originals, original continuity rereads and private readback each include
+one one-byte EOF probe per file. Reads request `3 * S + 9` bytes when all probes
+return EOF. Writes contain the original content once plus bounded records. Reject
+short reads/writes or a nonempty EOF probe without retry. Enforce separate counters
+before each request and after each return, including rejected calls. Stdout is one
+frame of at most 8 KiB and is accounted separately from file output. Its three
+fixed copy descriptors project the already retained role, flat filename, size and
+SHA-256, so the next exact input tuple needs no additional inventory probe.
+
+The 120-second clock starts in main and never resets. After a failure or cancellation,
+only the bounded terminal record and descriptor closure are allowed, ending no later
+than original start plus 122 seconds; no original content/path/lock observation may
+continue. A late, cancelled or incompletely finalized invocation cannot succeed.
+The outer 125-second watchdog includes interpreter startup and preserves its original
+exit status. These are finite acceptance/termination procedures under the existing
+OS assumptions, not a promise against uninterruptible kernel/filesystem stalls.
+
+Stage 1's canonical ASCII JSON DATA, at most 16 KiB, is passed literally with its
+SHA-256. It binds the merged target commit/tree, protocol/Wave hashes, tracked and
+one-toggle active source hashes, independent runtime acceptance and the exact
+original transport/completion acceptance above. The copier validates its closed
+shape and byte hash; external independent admission verifies the stated bindings.
+It opens no DATA, source, runtime or review file. Execute only the accepted source
+literal through `python3.14 -I -B -S -c`, with the sole change `ACTIVE = False` to
+`ACTIVE = True`, under the independently bound nonlogin Bash/GNU timeout literal.
+Do not add imports, source substitutions, wrappers or dynamic path selectors.
+
+Use the existing `/var/tmp/azureauth-windows-slice-108/action.lock` only through
+no-follow read-only regular-file open, nonblocking exclusive lock and held/named
+identity checks before and after collection. Do not read/write its contents,
+create it, wait or retry. No concurrent experiment or observer is admitted.
+The lock does not establish current or historical machine-wide quiescence.
+
+Each first-capture hash describes the observed copy snapshot. The Windows receipt's
+`lastFileSample.files` supplies path and byte count, not file hashes. Its final
+sample precedes stdout/stderr persistence and the Windows receipt itself; it is
+not a final complete action inventory. No missing historical hash may be invented.
+The WSL and Windows receipts do not have a common top-level schema or independently
+sufficient action identifier. Join them through the exact literal slots, accepted
+original admission and original source-qualified completion; never accept missing
+fields by comparing missing with missing.
+
+### Offline Selection and Exact Second Copy
+
+Stage 2 uses a separately source-reviewed, inactive, pure offline reader. Its exact
+source and runtime must be accepted before activation or execution; merely naming
+public MSBuild sources does not admit a reader library or .NET runtime. Use the
+pinned public binary-log producer/reader format to justify a supported decoder
+subset. Do not invoke MSBuild evaluation or replay task execution. A replay API,
+if later proposed, cannot run under this pure-data protocol without amendment.
+
+Require bounded decompression, record/string/item framing, references and terminal
+EOF for the supported version. Reject truncated or unsupported structural records,
+invalid indexes, duplicate JSON keys, incomplete compressed input and trailing data.
+Preserve every relevant event's ordinal and project/target/task context and ordered
+item/metadata boundary. Unrelated events may remain opaque only when their complete
+framing is checked and exact bytes remain available in the accepted binlog copy.
+Do not infer success from the marker, console text, expected counts or file names.
+
+Recover the three original Csc task starts/finishes, successful results, original
+command/response events, preserved-response locations and relevant input/output
+identities. For Csc temporary responses, join the original ToolTask preservation
+Message to its task context; a ResponseFileUsed path event alone proves neither
+temporary-file retention nor response contents. Recover the original ILC response's
+WriteLinesToFile producer, ordered
+IlcArg/LinkerArg and other declared native arrays/scalars, and the unconditional
+cutoff. Check the absence of ILC/linker execution from complete context/event
+coverage. An unsupported required event leaves that evidence unaccepted and stops
+dependent selection; it is not permission for an alternate reader invocation.
+
+The selector may propose at most 32 combined response plans, each at most 8 MiB,
+and at most 96 other necessary generated-input/declared-output/companion files.
+Every proposed original must be a unique, exact absolute path strictly beneath
+`C:\Temp\azureauth-windows-slice-108\compiler-native-inputs-5033607-v6` or
+`C:\Temp\azureauth-windows-slice-108\actions\0062`, with its unique sample entry,
+expected byte count, evidence role and binlog producer/consumer join. Reject path
+aliases, dot/parent components, alternate streams, duplicates, ambiguous joins,
+uncorroborated locations and paths outside those two roots. Preseeded source,
+restore, toolchain and package inputs retain their existing evidence; do not copy
+them again. References to external inputs are obligations for later graph admission,
+not selectors authorizing new access. Do not include the two receipts or binlog again.
+
+The stage-3 ceiling is 128 exact content slots, 256 MiB aggregate original bytes
+and 64 MiB per nonresponse binary. Generated text retains its 1 MiB per-file and
+32 MiB aggregate ceiling; response limits above remain separate. The independent
+selection acceptance must justify every file's necessity and freeze its exact
+normalized Windows/WSL spelling, flat private output label and byte ceiling. The
+source must reject undeclared slots before I/O. Copy no content named only by a
+nested response, XML include, dependency manifest, metadata or command line.
+
+Stage 3 uses the same no-follow, shared-lock, stable-identity, original reread and
+raw-copy readback requirements as stage 1, under its own exact admitted source,
+DATA and literal. Compare original size to the selected sample size; an unexpected
+size or identity/content change stops the copy. Retain the first observed content
+hash as a snapshot and preserve the distinction from a historical runtime hash.
+Do not relax this distinction because the original owned Job completed naturally.
+Fresh output is exclusively
+`/tmp/windows-compiler-0062-success-evidence-stage3-root-v1`. Partial state is
+retained without retry, repair, alternate selectors or extra original reads.
+
+### Finite Offline Envelopes and Exact Admissions
+
+Stages 2 and 4 each get one pure-data interpretation invocation, with a 300-second
+nonresetting source clock, 305-second outer TERM deadline and 2-second KILL grace.
+Use separate exclusive mode-0700 output roots
+`/tmp/windows-compiler-0062-success-evidence-stage2-root-v1` and
+`/tmp/windows-compiler-0062-success-evidence-stage4-root-v1`. Inputs are a frozen
+manifest of accepted copies and necessary already accepted local source/admission
+carriers, at most 160 files and 384 MiB per stage, read at most twice for continuity.
+No input path may come from interpreting another input. Bound each stage to 800 MiB
+of returned input/readback bytes, 32 MiB of new output, at most 32 output files,
+4,096 path operations and 120,000 content read/write calls. Account requested bytes
+separately, with a ceiling of 800 MiB plus 120,000 bytes. These ceilings bound
+intentional reader I/O, not every operation by its trusted interpreter/loader.
+
+For binlog decoding, admit at most 64 MiB compressed input, 512 MiB decompressed
+bytes, 2,000,000 records, 1,000,000 interned strings, 8 MiB per string and 256 MiB
+aggregate retained string bytes. Apply finite item/metadata counts and bounded
+nesting in the exact reader; keep the original maximum 8,192 compiler/IlcArg
+items and smaller source-defined array bounds. Bound decoder memory to 1 GiB of
+accounted retained buffers/tables and reject expansion before allocating beyond
+these limits. This is an algorithmic allocation budget, not a claim about the
+operating system's complete memory accounting. A gzip CRC/EOF or framing success
+alone cannot prove task success or compiler-input completeness.
+
+Stage 3 has a 180-second source clock, 185-second outer TERM deadline and 2-second
+KILL grace. Including originals, continuity rereads, readback, admission and
+inventory, cap returned bytes at 800 MiB, requested bytes at 800 MiB plus 120,000,
+new output at 257 MiB, path operations at 8,192 and content read/write calls at
+120,000. Freeze tighter exact accounting against the selected slots before admission.
+No stage may borrow another stage's attempts, I/O budget or time. Use one monotonic
+clock per stage, latched cancellation, checks before/after bounded I/O and finalization,
+and the existing trusted Linux runtime/watchdog boundary. Timeout does not establish
+termination of unrelated or historical processes; kernel/filesystem stalls retain
+the existing OS assumption.
+
+Before each invocation, independently accept the current merged protocol/Wave,
+original 0062 completion, preceding accepted stages, exact inactive/active source
+and DATA, finite counters, interpreter/watchdog/startup context, literal command,
+working directory, fresh outputs and consumed/remaining stage capacity. Preserve
+source/DATA versions; activation may change only explicitly reviewed inert gates.
+Never import or execute a candidate to validate its source. Use isolated,
+no-bytecode, no-site, nonoptimized Python under nonlogin Bash, no TTY, pipeline or
+status wrapper, and complete bounded original transport. No original-root probe
+is part of source review or materialization. Record the start before invocation.
+
+After each invocation, independently accept original normal zero exit, complete
+transport, exact outputs, all finite counters, continuity and finalization before
+any downstream use. Incomplete transport, nonzero exit, bound violation or ambiguous
+completion consumes that stage and stops dependent work. No replay or implicit
+failure collection is granted. Final interpretation must distinguish copied
+snapshot evidence, source inference and actual original runtime events. It may
+accept only the compiler/native-input obligations it actually joins; final graph,
+recipe, source/K/handoff/guard admission, actual Native AOT publication, artifact,
+protected CLI and real-account scenario acceptance remain separate gates.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
