@@ -36,7 +36,7 @@ $script:ActiveTargetBytes = $null
 $script:BootstrapStage = 'bootstrap-initialization'
 $script:BootstrapFailureStage = $null
 $script:BootstrapFailureType = $null
-$script:DiagnosticRoot = 'C:\Temp\azureauth-windows-slice-108\observers\compiler-native-inputs-5033607-v4'
+$script:DiagnosticRoot = 'C:\Temp\azureauth-windows-slice-108\compiler-native-inputs-5033607-v5'
 $script:SourceRoot = $script:DiagnosticRoot + '\source'
 $script:CaptureRoot = $script:DiagnosticRoot + '\capture'
 $script:Marker = $script:DiagnosticRoot + '\compiler-sequence.claim'
@@ -222,7 +222,7 @@ function Assert-ExactCompilerNativeInputsAdmission($Authority, $Binding) {
         if ($null -eq $Authority.reviews.$name) { throw ('Missing review: ' + $name) }
         Read-Bound $Authority.reviews.$name
     }
-    if ($Binding.actionNumber -cnotmatch '^[0-9]{4}$' -or $Binding.actionNumber -ceq '0000' -or
+    if ($Binding.actionNumber -cne '0061' -or
         $Binding.actionPath -cne ('C:\Temp\azureauth-windows-slice-108\actions\' + $Binding.actionNumber) -or
         $Binding.actionKind -cne 'compiler-native-inputs' -or $Binding.originalOuterLimitMilliseconds -ne 900000 -or
         $Binding.clockHandshakeLimitMilliseconds -ne 20000 -or $Binding.clockNonce -cnotmatch '^[0-9a-f]{64}$' -or

@@ -9232,6 +9232,160 @@ Any new actual ownership or termination uncertainty retains the ordinary stop
 conditions. This observation may refine the materialization diagnosis only; it
 accepts no graph, Native AOT artifact, scenario, source repair or further diagnostic.
 
+### Accepted Metadata Observation and Missing-Parent Finding
+
+Observation ordinal 2 ran once under accepted revision
+`547751469c8ad03cd3115fea40e2541834606350`, tree
+`88b1a8d280b4c0a2483423810005b7517d219827`. Its inactive collector was
+39,022 bytes with SHA-256
+`8f2df66f0ae7a2438b504d4ce36f0a6cce67265269119d116ae046f4f1e1b7f8`.
+Independent exact source, runtime, DATA and literal admission preceded execution.
+The sole inline activation completed with exit code 0, no running session and a
+normal-completion frame. Its original private transport was 632 bytes with SHA-256
+`26be50b4be280aaf9502810c14a821ccc2f7a8a1b9bc4c7cab2f4cf26d030327`.
+Independent original-completion acceptance preceded inventory acceptance and
+interpretation.
+
+The collector reported two logical reads, seven read calls, 55,976 requested bytes,
+55,974 returned bytes, 54,533 output bytes, four writes and 286 source-defined path
+operations. Only the admission DATA and inventory were content-read. The accepted
+inventory is 54,533 bytes with SHA-256
+`5efb668caf2976bce52cbbb3fa67983aa133b2c2ace7553f9a75d4e86ef0c607`.
+All 125 fixed bindings joined: 62 were present, 58 had an absent ancestor and five
+were absent, with equal retained dispositions at the two checkpoints.
+
+The action root, all ten planned action directories and all 47 staged payloads
+were present. The staged lengths matched the DATA: 34 source files totaling
+150,170 bytes, twelve restore files totaling 233,709 bytes and the 39,253-byte
+active target. These are length comparisons, not content-identity observations.
+All ten planned diagnostic directories, 47 destination leaves and the claim
+marker shared the absent ancestor
+`C:\Temp\azureauth-windows-slice-108\observers`. The remaining five absences were
+the first-use sentinel, guard-load receipt, subject-start-attempt receipt and
+stdout/stderr leaves. The cancel marker was present with length zero.
+The Windows result was a regular 1,400-byte file at these later checkpoints;
+neither its content nor its state during the first observation was established.
+
+Independent source/DATA interpretation and finding triage confirmed a concrete
+unestablished-parent prerequisite: neither planned directory list establishes
+`observers`, while the accepted controller requires each directory's immediate
+parent through `Assert-Direct` before `New-Item`. All 49 destination-leaf parents
+otherwise close over the planned directory set. The retained pattern is
+consistent with the reported materialization `ItemNotFoundException` and failure
+before diagnostic-directory creation. Attribution to that exact historical
+instruction remains conditional on the later metadata reflecting the state
+encountered by the original controller. This is not proof of a unique historical
+cause, uninterrupted filesystem state, permanent absence or global quiescence.
+It also does not resolve the first observer's pre-read rejection alternatives.
+
+Both observations and the original diagnostic remain consumed. Capacity remains
+92/120 build/test and 52/80 synthetic, with no refund, third observation or old-root
+repair. Retain all partial state and the accepted private evidence. No graph,
+artifact or scenario is accepted from this diagnosis.
+
+## One Additional Compile-Through Diagnostic 0061
+
+This supplement implements the accepted Wave's sole additional credential-free
+diagnostic 0061 after the accepted 0060 outcome, metadata interpretation and
+independently triaged directory defect. Inherit the preceding compile-through
+protocols' selected product, three Csc contexts, native-input cutoff, existing
+Windows/WSL environments, dependency/toolchain pins, physical predicates, finite
+effects and independent exact-admission requirements, with the changes below.
+Original 0057 through 0060 and all their recoveries and observations remain
+consumed. No account operation, human input or desktop attendance is selected.
+
+### Fresh Roots and Parent Closure
+
+Use the fresh diagnostic root
+`C:\Temp\azureauth-windows-slice-108\compiler-native-inputs-5033607-v5`, directly
+beneath the existing dedicated experiment root, and the new action root
+`C:\Temp\azureauth-windows-slice-108\actions\0061`. These trees must be disjoint;
+neither may contain the other. Preserve the existing two-root sampler, including
+its shared entry, directory, byte and time limits. Do not create or adopt the old
+`observers` parent, nest the diagnostic tree inside the action tree, repair old
+state or inspect an old action/helper/diagnostic root.
+
+Bind the new spellings consistently in the four inactive controller, dispatcher,
+target and history sources; source manifest; sole required Import overlay;
+materialization plan; source and restore destinations; capture/claim paths;
+working directory; compiler/native arguments; support paths; authority and
+literal. The shorter Import path changes its length and hash; recompute all
+dependent byte/hash bindings. Preserve the 33 unchanged product blobs and original
+restore bytes, selected product commit/tree, compiler controls, guard/Job Object
+and stop before ILC/linker execution. Keep all tracked execution gates disabled.
+
+Before materialization, apply a pure lexical ordered parent-closure check to the
+bound plan. Its only seed directories are those guaranteed by the admitted source:
+the existing experiment root, the newly reserved action root and the fixed
+dispatcher-created staging/support directories. In the fixed action-directory
+then diagnostic-directory order, require each immediate parent to be established
+before adding the directory. The staged-payload directory is the sole permitted
+planned reuse of an already established directory. Require canonical absolute
+paths, reject duplicates, conflicting file/directory roles and paths outside the
+two bound trees, and validate the parents of all 49 destination leaves and other
+fixed write locations. Reject overlapping sampler roots. This check performs no
+filesystem existence/stat query or enumeration and establishes plan consistency
+only. Keep all runtime no-reparse, identity, freshness and exclusive-create checks.
+
+Use fresh Linux helper root `/var/tmp/azureauth-compiler-verifiers-108-0061`,
+marker schema `compiler-0061-verifiers-start-v1` and unique service names beginning
+`azureauth-compiler-0061-`. Require new review-only DATA and independently admitted
+source activation/materialization with exclusive output roots. Independently
+accept the writer's original completion and exact outputs before admitting the
+diagnostic. No consumed writer or captured invocation may be replayed.
+
+### History, Capacity and Preserved Lifetime Bounds
+
+Keep the original indented 211,842-byte handoff, its exact hash and semantic
+checks, shared parent/owner-marker/action-lock requirements and historical paired
+counters. The accepted 0060 outcome and metadata establish its retained paired
+action-directory names. Independent finding triage confirmed that the preceding
+exact-name checks would reject that retained state before reserving 0061.
+For compiler mode only, the paired parent-directory name sets must therefore
+equal 0001–0056 plus 0060 before reservation, and the same set plus 0061 afterward.
+Keep the bounded parent enumeration unfiltered. This is an exact name-only
+retention rule: do not enumerate, stat or read 0060 children, add it to the original
+handoff's receipt loop, reopen its disposition or charge it twice. Reject any
+0057, 0058 or 0059 entry, extra/missing entry or unmatched pair before reading its
+content. Preserve disposed-0054/0056 validation; bind the second disposed-0054
+checkpoint to reserved 0061. Other history modes remain unchanged.
+
+Add `original0060FailedBuildTest: 1` to the exact `priorCapacity` projection.
+Historical paired counters remain 87 build/test and 48 synthetic, including the
+fixture once. The failed 0057 through 0060 diagnostics and accepted systemd batch
+contribute five additional build/test units; that batch adds four synthetic units.
+Prior global occupancy is 92/120 and 52/80. The fresh helper-root first-start marker
+charges this same diagnostic if paired reservation is not reached; paired
+reservation never charges it twice. This sole invocation produces at most 93/120
+and 52/80. Transfer one prospective unit from Linux ceiling 75 to 74 and aggregate
+Windows ceiling 53 to 54; ordinary Windows capacity stays exhausted at 48. Preserve
+all preparation/publication/download limits, twelve protected final CLI cases and
+sixteen unallocated synthetic cases. Failed start consumes this invocation; no
+retry, separate startup scenario or refund is granted.
+
+Retain the original 900-second dispatcher clock, 30-second helper acceptance
+window, at most eight helper calls, pre-spawn reserves, runtime at most twenty
+seconds, two-second running-job/start/stop timers and permanent failure latch.
+Keep `JobRunningTimeoutSec=2s`, explicit retention of at most eight unique queued
+definitions/jobs, `queueTimeoutConfigured: false` and all three absolute
+expired-query checks, including rejection before identity or payload operations.
+No queue-residence deadline or unconditional wall-clock termination is claimed.
+Keep the accepted Linux helper I/O/result bounds, Windows guard/Job Object,
+sampler/physical checkpoints and original transport/completion joins unchanged.
+The historical 0057 risk disposition remains limited to its accepted scope; any
+new ownership or termination uncertainty stops further work.
+
+Before the sole invocation, independently accept the merged protocol and current
+Wave, exact inactive/active source and DATA tuple, parent closure, runtime,
+history/capacity, materialization outcome, authority, review roles and captured
+literal. Reuse unchanged evidence only within its admitted scope and freshness
+conditions. Accept original tool completion independently before interpreting
+receipts. Success supplies bounded compiler/native-input evidence only; final
+graph/recipe admission, Native AOT publication, artifact validation and CLI
+scenarios remain separate. A failure consumes this diagnostic without an implied
+follow-up collection or retry. Retain partial state; no new observation, cleanup,
+installation, authentication or lifetime-risk exception is included.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
