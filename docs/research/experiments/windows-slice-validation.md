@@ -9803,6 +9803,154 @@ quiescence or automatically permits Native AOT publication, graph/artifact/scena
 acceptance, cleanup, a new diagnostic or real-account work. Any proposed correction
 retains independent finding triage and its ordinary authorization prerequisites.
 
+### Original 0061 Ordinal 3 Metadata Outcome
+
+The sole metadata comparison ran under accepted revision
+`d843896028fede0c99c17bc8b01ddfdec6775f5f`, tree
+`a88a7c809b0a524f3e6dd4614466f8223943521d`. Its complete actual original tool
+invocation ended with exit code 0 and no continuing session, wait or retry.
+Independent acceptance of the original completion preceded interpretation of
+the frame. The canonical 996-byte frame has SHA-256
+`81d622c5ab4afaa0da7928e1d402399cecfa67f14409121472908c0bdb10224c`;
+the complete private 2,531-byte transport has SHA-256
+`d024efcb6f90bd48c3eb871c2fc194f504fd45d0330b471f0cffcd939a41ed1e`.
+The 13,775-byte independent original-outcome acceptance has SHA-256
+`afc884ef1008b3e73a97216ef8ca19cdf20932ecde785f6b15eef2d56e9a66d8`.
+
+The frame reports normal completion at `sample-complete`. The current named and
+opened snapshots report a regular file of 27,664 bytes and equal device, inode,
+mode, byte size and nanosecond mtime/ctime fields. `differentFields` is empty and
+`bindingMismatch` is null. The observer performed 60 charged path operations,
+including one selected named stat, one selected open and one selected fstat.
+It read no selected file content and wrote no output file.
+
+This comparison did not reproduce ordinal 2's inequality. It does not identify
+that historical difference, explain the original diagnostic failure, establish
+stable identity, ownership or quiescence, or accept any file's contents. No
+identity check was relaxed. The original diagnostic and preceding observations
+retain their failed outcomes; ordinal 3 is also consumed, with all three full
+allocations retained. No fourth observation, original-state access, compiler
+retry, cleanup or dependent execution follows from this result. Global occupancy
+remains 93/120 build/test actions and 52/80 synthetic scenarios; the twelve final
+CLI scenarios and sixteen unallocated synthetic scenarios remain protected.
+
+### One Fixed 0061 Error-Evidence Copy, Ordinal 4
+
+Prospectively amend the preceding no-fourth-observation restriction only for one
+fixed error-evidence copy after this supplement merges and its exact source,
+runtime, authority, activation and complete invocation are independently
+accepted. Keep the original diagnostic and all three observations consumed.
+This is a separately allocated current observation, not a replay, resumption or
+refund. No fifth observation, diagnostic retry or dependent execution is granted.
+
+The decision-relevant question is what the existing controller, subject-start,
+error and finalization records can establish about the failed original 0061.
+Ordinal 3's equal metadata pair neither answers this content question nor admits
+the originals' current identity, ownership or stability. No identity predicate
+may be relaxed on the basis of that pair or a hypothesis about ordinal 2.
+
+The [inactive error-evidence collector](../../../tools/validation/collect_windows_compiler_0061_error_evidence.py)
+selects exactly the eight content slots and per-file limits in ordinal 2's table:
+the WSL action's `result.json`, `bootstrap-stdout.bin`, `bootstrap-stderr.bin`
+and `bootstrap-transport.json`, and the Windows action's `windows-result.json`,
+`stdout.bin`, `stderr.bin` and `subject-start-attempt.json`. The WSL records
+permit offline examination of the original controller exit, captured bootstrap
+frame and transport completion. The Windows result and start marker constrain
+the subject-start and finalization interpretation; stdout and stderr retain the
+compiler-error source if the subject ran. Omitting those two output streams
+would lose that possible error evidence. Keep collection opaque and fixed rather
+than allowing receipt content to select additional paths.
+
+Do not select `guard-load.json`, helper records, invocation or reservation
+files, the diagnostic tree, binlogs, response files or any other leaf. Perform no
+directory enumeration, process/cgroup/service query, Windows launch, compiler,
+dependency operation, network, account access, original-state write or cleanup.
+The existing nonblocking WSL `action.lock` lease, mandatory root/action-parent
+bindings, component-wise descriptor-relative no-follow opens, optional literal
+0061 directories and exact absence handling remain required. A missing mandatory
+parent fails. Ordinary filesystem and temporary locking effects remain; read-only
+original access is not a claim of no physical side effects.
+
+For each selected present regular file, retain the full device/inode/mode/size/
+nanosecond mtime/ctime checks around the initial original read, exact sealed-copy
+readback and later identical original-content and identity reread. Preserve the
+original parent, optional-directory, root, lock and output continuity checks and
+their short-circuit order. Any rejected identity remains a failed observation.
+For the first failed identity comparison only, the transport may retain a fixed
+role/checkpoint and both already obtained identities: each is a six-field tuple
+or an absence already observed by the original lookup. Record differing-field
+names only when both tuples are present; otherwise use null for that comparison.
+An unperformed or interrupted lookup is not an observed absence. Do not add a
+lookup, open, fstat, reread or failure-path probe to populate that field. Missing
+objects, type/size rejection and operation exceptions gain no speculative
+comparison. Do not emit dynamic paths or file content.
+
+Exclusively create only
+`/tmp/windows-compiler-0061-error-evidence-offline-root-v1`, mode 0700, after the
+initial selected observations pass. Retain at most eight fixed-name copies and
+one canonical inventory of at most 65,536 bytes. Use the preceding complete-write,
+fsync, mode 0600-to-0444 sealing, copy-readback and output-finalization procedure.
+Retain partial output on failure; no overwrite, repair, deletion or fallback.
+No guard metadata observation is included.
+
+The canonical admission DATA at
+`/tmp/windows-compiler-0061-error-evidence-admission-root-v1.json` is at most
+16,384 bytes and binds ordinal 4, one invocation, the accepted target, activated
+source and independent runtime review. Bind the complete original diagnostic
+transport and all three observation transports with the byte counts and SHA-256
+values recorded above. Previous acceptance remains limited to its declared
+outcome; no old inventory, copied content or original path is reopened through
+this admission preparation.
+
+| Charged metric | Ordinal 4 maximum | Cumulative maximum across all four observations |
+| --- | ---: | ---: |
+| File content reads | 26 | 180 |
+| Read calls | 3,325 | 10,605 |
+| Requested bytes | 53,854,234 | 169,390,260 |
+| Successful returned bytes / rejection threshold | 53,854,208 | 169,390,080 |
+| Output bytes | 17,989,632 | 56,578,048 |
+| Complete write calls | 1,102 | 3,482 |
+| Path operations | 4,096 | 12,416 |
+
+The 26 reads comprise one admission read, three reads for each of eight present
+slots and one inventory readback. Retain at most 16,384 bytes per content chunk,
+requested-before-read and returned-after-read accounting, the charged one-byte
+EOF/rejection probe and finite call ceilings. A returned rejection byte may cross
+the successful-content threshold; the requested-byte ceiling bounds requests.
+Short reads gain no extra allowance, and short writes fail. Removing the guard
+probes does not refund any earlier allocation. These counters do not describe
+all trusted-runtime startup or filesystem I/O.
+
+Keep the tracked source inactive; admit exactly one reversible inline
+`ACTIVE = False` to `ACTIVE = True` substitution, with no active source file or
+separate writer. Retain the isolated/no-site/no-bytecode Python 3.14 and existing
+Bash/GNU timeout startup premises. Use one nonresetting 90-second source deadline,
+95-second outer TERM deadline and two-second KILL grace. Across all four
+observations, retain 300 source-deadline seconds and 328 nominal outer-envelope
+seconds. Same-session empty waits remain at most 60 seconds. These bounds do not
+guarantee interruption of blocked kernel work. A failed start consumes the only
+invocation.
+
+Emit at most one closed 8,192-byte frame through the original tool transport,
+including status/stage/role, closed rejection and exception fields, the first
+obtained failed identity comparison, inventory descriptor and counters. First
+independently accept the complete actual original completion and source/admission
+binding. After an accepted failure, interpretation is limited to the already
+captured frame metadata; partial outputs remain retained without being opened or
+interpreted. Inventory and selected private-copy access require normal collector
+completion and independent source/inventory/copy binding. Preserve exact
+nanosecond integers. Join only the accepted complete original
+transports, selected copies and accepted source/admission records. Receipt flags
+or a successful copy alone do not establish original lifetime, compiler success,
+quiescence or permission for dependent work. Any proposed correction retains
+independent finding triage and its ordinary authorization prerequisites.
+
+This bounded copy adds neither a build/test action nor a synthetic scenario.
+Global occupancy remains 93/120 and 52/80, with twelve final CLI scenarios and
+sixteen unallocated synthetic scenarios protected. Native AOT publication,
+graph/artifact/scenario acceptance, cleanup and real-account work retain their
+separate gates. No result grants further sampling or execution.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
