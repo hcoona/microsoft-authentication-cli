@@ -382,6 +382,8 @@ def verify_github_cli(deadline, cancelled):
 
 def public_read(argv, deadline, cancelled, output_limit=8388608):
     """Bounded Git/GET verification only; never an interop or subject process."""
+    if COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
+        return compiler_verifier_read(argv, deadline, cancelled, output_limit)
     if argv[0] not in ('/usr/bin/git', GITHUB_CLI_PATH):
         fail('Not an immutable Git or public GET query')
     end = min(deadline, time.monotonic() + 30.0)
@@ -432,6 +434,270 @@ def public_read(argv, deadline, cancelled, output_limit=8388608):
                     process.wait(timeout=left)
                 except subprocess.TimeoutExpired:
                     pass
+
+
+# This inactive compiler-only replacement is covered by the history source pin.
+# Its one-use root also preserves failed starts before paired action reservation.
+COMPILER_VERIFIER_ROOT = Path('/var/tmp/azureauth-compiler-verifiers-108-0058')
+_COMPILER_VERIFIER_CALLS = 0
+_COMPILER_VERIFIER_FAILED = False
+COMPILER_VERIFIER_TOOLS = {
+    '/usr/bin/systemd-run': (97272, '03a68bafb0ebc0f5eff41cbdf3cbbdf126a3bb87e21140f9147bf78edce36d88'),
+    '/usr/bin/env': (11352352, '48893b0fb21436b54619db80486e83ef39dfccaf1aefe83dfa00c02d6146e8c0'),
+    '/usr/bin/python3': (7477160, '52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41'),
+    '/usr/lib/systemd/systemd': (141776, '3c4b78ddb68e29e23da0465dd273f1ee82f5b9439ebfcec9798b395c05a2c1e3'),
+}
+COMPILER_VERIFIER_LEAF = r'''
+import json, os, signal, sys, time
+from pathlib import Path
+path, unit = Path(sys.argv[1]), sys.argv[2]
+groups = [line[3:] for line in Path('/proc/self/cgroup').read_text().splitlines()
+          if line.startswith('0::')]
+if len(groups) != 1 or Path(groups[0]).name != unit:
+    raise SystemExit(125)
+fields = Path('/proc/self/stat').read_text().rsplit(')', 1)[1].split()
+identity = {'pid': os.getpid(), 'startTicks': int(fields[19]),
+            'cgroup': groups[0], 'unit': unit, 'observedMonotonicNs': time.monotonic_ns()}
+raw = (json.dumps(identity, sort_keys=True, separators=(',', ':')) + '\n').encode()
+pending = path.with_name(path.name + '.pending')
+fd = os.open(pending, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+try:
+    if os.write(fd, raw) != len(raw):
+        raise SystemExit(125)
+    os.fsync(fd)
+finally:
+    os.close(fd)
+os.link(pending, path)
+pending.unlink()
+fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+try:
+    os.fsync(fd)
+finally:
+    os.close(fd)
+payload = bytearray()
+while True:
+    block = os.read(0, min(8192, 131073 - len(payload)))
+    if not block:
+        break
+    payload.extend(block)
+    if len(payload) > 131072:
+        raise SystemExit(125)
+value = json.loads(payload)
+if (set(value) != {'argv', 'environment', 'deadlineNs'} or
+        type(value['deadlineNs']) is not int or
+        time.monotonic_ns() >= value['deadlineNs']):
+    raise SystemExit(125)
+fd = os.open('/dev/null', os.O_RDONLY)
+os.dup2(fd, 0)
+if fd != 0:
+    os.close(fd)
+for name in ('SIGPIPE', 'SIGXFZ', 'SIGXFSZ'):
+    number = getattr(signal, name, None)
+    if number is not None:
+        signal.signal(number, signal.SIG_DFL)
+if time.monotonic_ns() >= value['deadlineNs']:
+    raise SystemExit(125)
+os.execve(value['argv'][0], value['argv'], value['environment'])
+'''
+
+
+def compiler_verifier_group_empty(identity, unit):
+    group = identity['cgroup']
+    if (type(group) is not str or not group.startswith('/') or
+            '..' in Path(group).parts or Path(group).name != unit or identity['unit'] != unit):
+        fail('Verifier cgroup does not bind its unique unit')
+    events = Path('/sys/fs/cgroup') / group.lstrip('/') / 'cgroup.events'
+    try:
+        with events.open('rb') as stream:
+            raw = stream.read(4097)
+    except FileNotFoundError:
+        return True
+    if len(raw) > 4096:
+        fail('Verifier cgroup status exceeded its bound')
+    return dict(line.split() for line in raw.decode('ascii').splitlines()).get('populated') == '0'
+
+
+def compiler_verifier_read(argv, deadline, cancelled, output_limit):
+    """One of eight Linux verifiers; failure permanently disables this caller."""
+    global _COMPILER_VERIFIER_CALLS, _COMPILER_VERIFIER_FAILED
+    began = time.monotonic()
+    end = min(deadline, began + 30.0)
+    if (_COMPILER_VERIFIER_FAILED or _COMPILER_VERIFIER_CALLS >= 8 or
+            not DRAFT_ONLY or not COMPILER_NATIVE_INPUTS_HISTORY_ONLY or CORE_CSC_HISTORY_ONLY or
+            argv[0] not in ('/usr/bin/git', GITHUB_CLI_PATH) or
+            type(output_limit) is not int or not 1 <= output_limit <= 8388608):
+        fail('Unadmitted, repeated or failed compiler verifier')
+    _COMPILER_VERIFIER_FAILED = True
+    _COMPILER_VERIFIER_CALLS += 1
+    number = _COMPILER_VERIFIER_CALLS
+    budget(end, cancelled)
+    if number == 1:
+        COMPILER_VERIFIER_ROOT.mkdir(mode=0o700)
+        fd = os.open(COMPILER_VERIFIER_ROOT.parent, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+        write_new(COMPILER_VERIFIER_ROOT / 'started.json', compact({
+            'schema': 'compiler-0058-verifiers-start-v1', 'maximumCalls': 8,
+            'priorCombinedBuildTest': 89, 'priorSynthetic': 52,
+            'diagnosticBuildTestCharge': 1, 'diagnosticSyntheticCharge': 0,
+            'startedMonotonicNs': time.monotonic_ns()}))
+        for path, (size, expected) in COMPILER_VERIFIER_TOOLS.items():
+            budget(end, cancelled)
+            # Installed OS symlinks are permitted; exact resolved file bytes bind
+            # the same trusted toolchain used by the accepted supervision batch.
+            with open(path, 'rb') as stream:
+                data = stream.read(size + 1)
+            if len(data) != size or sha(data) != expected:
+                fail('Installed verifier supervision tool changed')
+    if argv[0] == GITHUB_CLI_PATH:
+        verify_github_cli(end, cancelled)
+    environment = {k: v for k, v in os.environ.items() if not k.startswith(('GIT_', 'GH_'))}
+    environment.update(PATH='/usr/bin:/bin', GIT_CONFIG_NOSYSTEM='1', GIT_CONFIG_GLOBAL='/dev/null',
+                       GIT_TERMINAL_PROMPT='0', GH_PROMPT_DISABLED='1', GH_PAGER='cat', GIT_PAGER='cat')
+    if 'GH_TOKEN' in os.environ:
+        environment['GH_TOKEN'] = os.environ['GH_TOKEN']
+    # Leave one preparation second plus job/start, stop and local observation
+    # reserves. Recheck the complete remaining envelope immediately before spawn.
+    runtime_ms = min(20000, int((budget(end, cancelled) - 9.0) * 1000))
+    if runtime_ms < 1000:
+        fail('Insufficient original verifier time for bounded completion')
+    latest_exec = end - runtime_ms / 1000 - 4.0
+    payload = compact({'argv': argv, 'environment': environment,
+                       'deadlineNs': int(latest_exec * 1_000_000_000)})
+    if len(payload) > 131072 or len(COMPILER_VERIFIER_LEAF.encode()) > 8192:
+        fail('Verifier input or bootstrap source exceeded its bound')
+    directory = COMPILER_VERIFIER_ROOT / f'{number:02d}'
+    directory.mkdir(mode=0o700)
+    fd = os.open(COMPILER_VERIFIER_ROOT, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    unit = f'azureauth-compiler-0058-{uuid.uuid4().hex}-{number:02d}.service'
+    identity_path = directory / 'identity.json'
+    command = [
+        '/usr/bin/systemd-run', '--user', '--no-ask-password', '--quiet', '--wait', '--pipe',
+        '--collect', '--expand-environment=no', '--job-mode=fail', '--unit=' + unit,
+        '--service-type=exec', '--property=ExitType=cgroup', '--property=KillMode=control-group',
+        '--property=SendSIGKILL=yes', '--property=Restart=no', '--property=JobTimeoutSec=2s',
+        '--property=TimeoutStartSec=2s', '--property=RuntimeMaxSec=' + str(runtime_ms) + 'ms',
+        '--property=TimeoutStopSec=2s', '--working-directory=' + os.getcwd(), '--',
+        '/usr/bin/env', '-i', 'PATH=/usr/bin:/bin', 'LC_ALL=C.UTF-8',
+        '/usr/bin/python3', '-I', '-B', '-S', '-c', COMPILER_VERIFIER_LEAF,
+        str(identity_path), unit,
+    ]
+    runtime = '/run/user/' + str(os.getuid())
+    client_environment = {'PATH': '/usr/bin:/bin', 'LC_ALL': 'C.UTF-8',
+                          'XDG_RUNTIME_DIR': runtime,
+                          'DBUS_SESSION_BUS_ADDRESS': 'unix:path=' + runtime + '/bus'}
+    write_new(directory / 'started.json', compact({'unit': unit, 'call': number,
+        'startedMonotonicNs': time.monotonic_ns(), 'deadlineMonotonicNs': int(end * 1_000_000_000),
+        'runtimeMilliseconds': runtime_ms, 'jobMilliseconds': 2000,
+        'startMilliseconds': 2000, 'stopMilliseconds': 2000}))
+    process = None
+    selector = selectors.DefaultSelector()
+    identity = None
+    captured = bytearray()
+    total = sent = 0
+    eof = set()
+    failure = None
+    group_empty = False
+    completed = False
+    try:
+        # Keep the client in the admitted outer watchdog group. Only its service
+        # runs separately; no Windows interop or subject is placed in that unit.
+        if budget(end, cancelled) < runtime_ms / 1000 + 8.0:
+            fail('Verifier preparation used its required lifetime reserve')
+        process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE, env=client_environment)
+        for stream, event in ((process.stdin, selectors.EVENT_WRITE),
+                              (process.stdout, selectors.EVENT_READ),
+                              (process.stderr, selectors.EVENT_READ)):
+            os.set_blocking(stream.fileno(), False)
+            selector.register(stream, event)
+        for _ in range(1200):
+            if time.monotonic() >= end - 0.25:
+                failure = failure or 'Deadline'
+                break
+            if cancelled():
+                failure = failure or 'Cancelled'
+            if failure and process.stdin in [key.fileobj for key in selector.get_map().values()]:
+                selector.unregister(process.stdin)
+                process.stdin.close()
+            for key, _event in selector.select(min(0.025, max(0, end - 0.25 - time.monotonic()))):
+                stream = key.fileobj
+                if stream is process.stdin:
+                    try:
+                        sent += os.write(stream.fileno(), payload[sent:sent + 8192])
+                    except (BrokenPipeError, BlockingIOError):
+                        failure = failure or 'InputHandoff'
+                    if sent == len(payload) or failure:
+                        selector.unregister(stream)
+                        stream.close()
+                else:
+                    try:
+                        chunk = os.read(stream.fileno(), min(8192, output_limit - total + 1))
+                    except BlockingIOError:
+                        continue
+                    if not chunk:
+                        eof.add('stdout' if stream is process.stdout else 'stderr')
+                        selector.unregister(stream)
+                    else:
+                        total += len(chunk)
+                        if total > output_limit:
+                            failure = failure or 'OutputLimit'
+                            for output in (process.stdout, process.stderr):
+                                if output in [item.fileobj for item in selector.get_map().values()]:
+                                    selector.unregister(output)
+                                output.close()
+                            break
+                        if stream is process.stdout:
+                            captured.extend(chunk)
+            if identity is None and identity_path.exists():
+                identity = decode(read(identity_path, end, lambda: False, 4096), canonical=True)
+                keys(identity, ('pid', 'startTicks', 'cgroup', 'unit', 'observedMonotonicNs'))
+                integer(identity['pid'], 1)
+                integer(identity['startTicks'], 1)
+                integer(identity['observedMonotonicNs'], 1, int(end * 1_000_000_000))
+            if identity is not None and process.poll() is not None:
+                group_empty = compiler_verifier_group_empty(identity, unit)
+                if group_empty and (eof == {'stdout', 'stderr'} or failure):
+                    completed = True
+                    break
+            if process.poll() is not None and eof == {'stdout', 'stderr'} and identity is None:
+                failure = failure or 'IdentityUnavailable'
+                break
+            # A writable input can make select return immediately; count all
+            # polls and keep the same absolute deadline instead of resetting it.
+        if not completed or sent != len(payload) or process.returncode != 0:
+            failure = failure or 'IncompleteVerifier'
+    except BaseException as error:
+        failure = failure or type(error).__name__
+    finally:
+        selector.close()
+        if process is not None:
+            if process.poll() is None:
+                process.kill()
+                try:
+                    process.wait(timeout=max(0.001, end - time.monotonic()))
+                except subprocess.TimeoutExpired:
+                    failure = failure or 'ClientReapTimeout'
+            for stream in (process.stdin, process.stdout, process.stderr):
+                stream.close()
+        if time.monotonic() >= end:
+            failure = failure or 'Deadline'
+        write_new(directory / 'result.json', compact({'call': number, 'unit': unit,
+            'clientExit': None if process is None else process.returncode,
+            'stdoutEof': 'stdout' in eof, 'stderrEof': 'stderr' in eof,
+            'groupEmpty': group_empty, 'completed': completed, 'failure': failure,
+            'elapsedMilliseconds': int((time.monotonic() - began) * 1000)}))
+    budget(end, cancelled)
+    if failure is not None:
+        fail('Compiler verifier failed; no subsequent helper or diagnostic continuation')
+    _COMPILER_VERIFIER_FAILED = False
+    return bytes(captured)
 
 
 def verify_public_review(pin, expected, deadline, cancelled):
@@ -1512,7 +1778,12 @@ def names(path):
         values = core_csc_names(path, 100)
     else:
         values = sorted(p.name for p in direct(path).iterdir())
-    if values != [f'{i:04d}' for i in range(1, len(values) + 1)]:
+    expected = [f'{i:04d}' for i in range(1, len(values) + 1)]
+    if (COMPILER_NATIVE_INPUTS_HISTORY_ONLY and
+            Path(path) in (HISTORY, PROJECTION / 'actions') and len(values) == 57):
+        # 0057 is an unavailable consumed unit, never a fabricated disk entry.
+        expected = [f'{i:04d}' for i in range(1, 57)] + ['0058']
+    if values != expected:
         fail('Incomplete or noncontiguous original action history')
     return values
 
@@ -1764,7 +2035,7 @@ def verify_failed_handoff(admission, deadline, cancelled, reserved):
     state = admission['failedHistory']
     expected_pass = 0 if reserved is None else 1
     if (state['failed'] or state['passes'] != expected_pass or
-            (reserved is not None and reserved != '0057')):
+            (reserved is not None and reserved != ('0058' if COMPILER_NATIVE_INPUTS_HISTORY_ONLY else '0057'))):
         fail('Failed-history checkpoint is missing, repeated or reordered')
     # Latch before I/O. An interrupted or rejected pass cannot obtain a retry.
     state['failed'] = True
@@ -1979,6 +2250,18 @@ COMPILER_NATIVE_INPUTS_INPUTS = {
     'artifactAcceptance': CORE_CSC_INPUTS['artifactAcceptance'],
 }
 
+# These additions are independently accepted outside the historical paired
+# ledger. Keep the original handoff bytes and its counters unchanged.
+COMPILER_NATIVE_INPUTS_PRIOR_CAPACITY = {
+    'recordedCombinedBuildTest': 87, 'recordedSynthetic': 48,
+    'original0057UnavailableBuildTest': 1,
+    'systemdBuildTest': 1, 'systemdSynthetic': 4,
+    'systemdObservationCommit': 'a1492ce0f65f4ca0acaf04be6ffab72f445dfe20',
+    'combinedBuildTest': 89, 'synthetic': 52,
+    'additionalDiagnosticBuildTest': 1, 'additionalDiagnosticSynthetic': 0,
+    'afterCombinedBuildTest': 90, 'afterSynthetic': 52,
+}
+
 
 def _observer_history_inputs(compiler_native_inputs):
     """Select exactly one admitted history mode; this does not activate either."""
@@ -2031,8 +2314,11 @@ def load_core_csc_history(authority, deadline, cancelled, *, compiler_native_inp
     path = provenance_descriptor(pin)
     data = bound({k: pin[k] for k in ('bytes', 'sha256')}, path, deadline, cancelled, 1048576)
     config = decode(data, canonical=True)
-    keys(config, ('schema', 'target', 'protocol', 'wave', 'product', 'rootMarkers'))
-    schema = ('compiler-native-inputs-history-inputs-v1' if compiler_native_inputs
+    fields = ('schema', 'target', 'protocol', 'wave', 'product', 'rootMarkers')
+    keys(config, (*fields, 'priorCapacity') if compiler_native_inputs else fields)
+    if compiler_native_inputs and compact(config['priorCapacity']) != compact(COMPILER_NATIVE_INPUTS_PRIOR_CAPACITY):
+        fail('Original unavailable unit or separately accepted systemd consumption changed')
+    schema = ('compiler-native-inputs-history-inputs-v2' if compiler_native_inputs
               else 'core-csc-observer-history-inputs-v1')
     if config['schema'] != schema or config['product'] != PRODUCT:
         fail('Observer history scope changed')
@@ -2116,18 +2402,20 @@ def _reserve_core_csc_observer(authority, original_start_ns, original_deadline_n
         prior_windows = [7, 49, 0, 48] if compiler_native_inputs else [7, 48, 0, 48]
         if totals != {'linux': [8, 37, 0, 0], 'windows': prior_windows}:
             fail('Observer prior allocation changed')
-        # Each diagnostic consumes one dedicated buildTest unit. The existing
-        # fixture is counted once; ordinary Windows capacity stays at 48.
-        # New mode reaches 88/120, Windows aggregate 50, and Linux ceiling 78.
-        linux_ceiling = 78 if compiler_native_inputs else 79
-        windows_ceiling = 50 if compiler_native_inputs else 49
-        combined = totals['linux'][1] + totals['windows'][1] + 1 + 1
+        # The paired historical ledger stays at 87 including its fixture once.
+        # Original 0057 and the independent systemd batch add one unit each;
+        # this additional diagnostic adds a third. No disk history is invented.
+        linux_ceiling = 77 if compiler_native_inputs else 79
+        windows_ceiling = 51 if compiler_native_inputs else 49
+        unavailable = 1 if compiler_native_inputs else 0
+        external_batch = 1 if compiler_native_inputs else 0
+        combined = totals['linux'][1] + totals['windows'][1] + 1 + unavailable + external_batch + 1
         if (totals['linux'][1] > linux_ceiling or
-                totals['windows'][1] + 1 > windows_ceiling or combined > 120 or
-                (compiler_native_inputs and combined != 88)):
+                totals['windows'][1] + unavailable + 1 > windows_ceiling or combined > 120 or
+                (compiler_native_inputs and combined != 90)):
             fail('Observer and existing fixture exceed combined allocation')
-        number = f"{len(manifest['histories']['windows']) + 1:04d}"
-        if number != ('0057' if compiler_native_inputs else '0056'):
+        number = f"{len(manifest['histories']['windows']) + unavailable + 1:04d}"
+        if number != ('0058' if compiler_native_inputs else '0056'):
             fail('Original handoff changed; no observer reservation')
         local, owned = direct(HISTORY / number), direct(PROJECTION / 'actions' / number)
         if local.exists() or owned.exists():
@@ -2149,6 +2437,8 @@ def _reserve_core_csc_observer(authority, original_start_ns, original_deadline_n
                    'originalClockDeadlineNanoseconds': original_deadline_ns,
                    'originalOuterLimitMilliseconds': limit_ms, 'clockNonce': nonce,
                    'endpoint': endpoint, 'utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+        if compiler_native_inputs:
+            started['priorCapacity'] = COMPILER_NATIVE_INPUTS_PRIOR_CAPACITY
         local.mkdir(mode=0o700)
         raw = compact(started)
         write_new(local / 'started.json', raw)
@@ -2196,11 +2486,13 @@ def _validate_core_csc_observer_original(authority, reservation, invocation, clo
             original_deadline_ns != started['originalClockStartNanoseconds'] + limit_ms * 1_000_000 or
             started['originalOuterLimitMilliseconds'] != limit_ms or
             started['action'] != action_kind or
-            started['number'] != ('0057' if compiler_native_inputs else '0056') or
+            started['number'] != ('0058' if compiler_native_inputs else '0056') or
             started['handoffSha256'] != inputs['handoff']['sha256'] or
             invocation['actionKind'] != action_kind or
             invocation['originalOuterLimitMilliseconds'] != limit_ms):
         fail('Observer validation reset the original deadline or changed history mode')
+    if compiler_native_inputs and compact(started.get('priorCapacity')) != compact(COMPILER_NATIVE_INPUTS_PRIOR_CAPACITY):
+        fail('Observer lost the original unavailable unit or external batch consumption')
     deadline, cancelled = original_deadline_ns / 1_000_000_000, reservation['cancelled']
     budget(deadline, cancelled)
     number = reservation['started']['number']
