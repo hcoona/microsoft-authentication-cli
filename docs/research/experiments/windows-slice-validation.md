@@ -7947,11 +7947,12 @@ Prefer the installed service manager's lifecycle mechanisms over a custom cgroup
 manager. A future verifier integration still needs its own exact source and effects
 admission; this supplement tests the mechanism, not a replacement compiler launcher.
 
-This proposal is not executable under the current capacity allocation. Before this
-batch's protocol allocation can be accepted, the repository owner must authorize
-and accept a Wave amendment raising the cumulative synthetic-process ceiling from
-60 to at least 64. Preserve the 48 consumed scenarios and twelve protected final
-CLI cases. Source-only preparation does not activate these four additional cases.
+This batch requires the accepted Wave's cumulative ceiling of 80 synthetic-process
+scenarios. Allocate exactly four of those scenarios here, preserving the 48 consumed
+scenarios and twelve protected final CLI cases. Existing narrower product-history
+allocations remain unchanged. The remaining sixteen scenarios beyond these allocations
+are not assigned by this supplement. Protocol acceptance and exact source admission
+remain prerequisites to execution.
 
 ### Source Basis and Admission
 
@@ -7979,7 +7980,7 @@ that inspection.
 The exact test source is
 [`check_systemd_supervision.py`](../../../tools/validation/check_systemd_supervision.py).
 Before execution, independently accept its commit/tree and SHA-256, this protocol,
-the unchanged Wave, fixed tool identities in `TOOLS`, four fixture entry points,
+the accepted 80-scenario Wave, fixed tool identities in `TOOLS`, four fixture entry points,
 and source-only review of its subprocess and result paths. Merge the protocol and
 test source into `main-v2`, then use a clean detached checkout of that accepted
 commit. Do not import or execute a candidate during source review. AST-only syntax
@@ -8022,7 +8023,7 @@ This independent batch consumes one further unit, including a failed start, leav
 89/120. Reserve all four synthetic-process cases as consumed when the batch starts,
 including interrupted batches that do not reach every case; no refund or retry is
 permitted. Cumulative synthetic-process consumption becomes 52, preserving twelve
-protected final CLI cases under the prerequisite ceiling of at least 64. The batch
+protected final CLI cases under the accepted ceiling of 80. The batch
 executes no product CLI and consumes no preparation, publication or download unit.
 Before admission, confirm no intervening use and recover the existing accepted
 consumption from retained evidence. Future dependent admissions must join this
