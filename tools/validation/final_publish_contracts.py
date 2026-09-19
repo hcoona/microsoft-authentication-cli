@@ -12,6 +12,7 @@ if CORE_CSC_HISTORY_ONLY and COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
 if DRAFT_ONLY and not (CORE_CSC_HISTORY_ONLY or COMPILER_NATIVE_INPUTS_HISTORY_ONLY):
     raise RuntimeError('DRAFT_ONLY: final publication contracts are unadmitted')
 
+import base64
 import contextlib
 import datetime
 import fcntl
@@ -600,10 +601,12 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
     selector = selectors.DefaultSelector()
     identity = None
     captured = bytearray()
+    stderr_prefix = bytearray()
+    stderr_observed = 0
     total = sent = 0
     eof = set()
     failure = None
-    group_empty = False
+    group_empty = None
     completed = False
     try:
         # Keep the client in the admitted outer watchdog group. Only its service
@@ -646,6 +649,9 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
                         selector.unregister(stream)
                     else:
                         total += len(chunk)
+                        if stream is process.stderr:
+                            stderr_observed += len(chunk)
+                            stderr_prefix.extend(chunk[:max(0, 16384 - len(stderr_prefix))])
                         if total > output_limit:
                             failure = failure or 'OutputLimit'
                             for output in (process.stdout, process.stderr):
@@ -688,9 +694,15 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
                 stream.close()
         if time.monotonic() >= end:
             failure = failure or 'Deadline'
-        write_new(directory / 'result.json', compact({'call': number, 'unit': unit,
+        # Keep startup evidence private in the existing receipt, without another
+        # read, output allowance, or attempt. EOF alone does not imply completeness.
+        write_new(directory / 'result.json', compact({
+            'schema': 'compiler-verifier-result-v2', 'call': number, 'unit': unit,
             'clientExit': None if process is None else process.returncode,
             'stdoutEof': 'stdout' in eof, 'stderrEof': 'stderr' in eof,
+            'stderrBytesObserved': stderr_observed, 'stderrBytesRetained': len(stderr_prefix),
+            'stderrPrefixBase64': base64.b64encode(stderr_prefix).decode('ascii'),
+            'stderrComplete': 'stderr' in eof and stderr_observed == len(stderr_prefix),
             'groupEmpty': group_empty, 'completed': completed, 'failure': failure,
             'elapsedMilliseconds': int((time.monotonic() - began) * 1000)}))
     budget(end, cancelled)

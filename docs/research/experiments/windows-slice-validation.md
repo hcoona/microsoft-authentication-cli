@@ -8519,11 +8519,84 @@ All raw receipts and local identities remain private.
 This recovery is consumed, with no retry, replacement copy or cleanup. Capacity
 remains 90/120 build/test and 52/80 synthetic units; preserve the twelve protected
 final CLI scenarios and sixteen unallocated synthetic scenarios. The original
-0058 diagnostic remains failed, and its new lifetime uncertainty is not covered
-by the historical 0057 risk decision. Keep dependent diagnostics, compilation,
-graph, artifact and scenario acceptance stopped. A future proposal may improve
-bounded startup-error retention, but this outcome grants no new invocation,
-process query or owner risk acceptance.
+0058 diagnostic remains failed, with direct completion evidence unavailable.
+The source/contract reassessment below distinguishes that evidence gap from loss
+of manager supervision; it does not rely on the historical 0057 risk exception.
+Keep dependent diagnostics, compilation, graph, artifact and scenario acceptance
+stopped pending their separate authorization and admission. This outcome grants
+no new invocation, process query or owner risk acceptance.
+
+### 0058 Manager-Supervision Reassessment
+
+This is a source/contract inference about the original accepted launch, not a new
+runtime observation. Apply the existing experiment-safety instruction to rely on
+documented process contracts within the workstation threat model. The immutable
+systemd v259 source at `9ca433482f2281d71718718705ca8cd3bf562ad6`
+supports the following distinction:
+
+- The manager [sets transient properties before queuing the start job](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/src/core/dbus-manager.c#L1021-L1157).
+  Rejection before that queue does not start this service. After submission,
+  [client reply parsing or observation may fail](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/src/run/run.c#L2580-L2668)
+  without removing the service's manager-owned limits. Client exit 1 and missing
+  leaf identity do not identify which branch occurred.
+- The selected Type=exec service has a two-second startup limit, at most twenty
+  seconds of active runtime and a two-second stop limit, with ExitType=cgroup,
+  KillMode=control-group, SendSIGKILL=yes and Restart=no. The documented
+  [startup and stop deadlines](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/man/systemd.service.xml#L619-L674),
+  [running timer](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/src/core/service.c#L2398-L2412)
+  and [timeout transitions through forced termination](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/src/core/service.c#L4520-L4600)
+  belong to the manager. Group signaling uses the
+  [manager's own cgroup path](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/src/core/unit.c#L4962-L4976),
+  independently of the leaf's private identity file. The separate job timeout
+  bounds queuing and does not replace these service controls.
+
+Missing identity therefore does not establish a new unsupervised lifetime or,
+by itself, require a new owner risk exception. Under the accepted installed-OS
+and configured-service premises, the documented finite manager supervision and
+termination procedure still applies. This does not reattest effective host state,
+prove that the selected Git command ran, recover the startup cause, or establish
+observed quiescence. In particular, the cited stop implementation can continue
+after processes remain following SIGKILL; finite supervision is not a guarantee
+of quiescence within an exact wall-clock interval. Preserve the original failure
+and its stricter success predicate rather than retroactively accepting it.
+
+This correction adds no policy exception or execution grant. The one corrected
+diagnostic and its recovery remain consumed; capacity remains 90/120 build/test
+and 52/80 synthetic. Another diagnostic requires its own accepted authorization,
+protocol and exact admission. No query or cleanup follows from this reassessment.
+
+### Inactive Verifier Evidence Correction
+
+The current inactive [history adapter](../../../tools/validation/final_publish_contracts.py)
+uses future receipt schema `compiler-verifier-result-v2`. This is a source-only
+correction; original 0058 used its recorded earlier source and receipt shape.
+No original receipt, source binding, consumed recovery or observed result changes.
+
+Within the existing combined output limit, retain at most the first 16,384 stderr
+bytes already read by the pump. Encode that exact private prefix as base64 in the
+existing provisional `result.json`, with observed and retained byte counts.
+`stderrComplete` requires stderr EOF and equal observed/retained counts. A short
+prefix without EOF is incomplete; more observed than retained bytes means truncation.
+Count the possible single overflow byte as observed before the existing output-limit
+failure. Never make an extra read, enlarge the combined output allowance, repeat a
+helper, or expose the raw prefix in public evidence. Base64 is a byte representation,
+not sanitization; the existing private receipt permissions and retention apply.
+
+The future result is bounded to 32 KiB, including at most 21,848 base64 characters.
+This adds no file or directory to the existing twenty-five-file/nine-directory
+maximum. It does not enlarge the consumed recovery's 8 KiB helper-result slot or
+permit recollection. `groupEmpty` is null until the existing bound-group predicate
+returns a boolean; false then means that predicate did not establish emptiness.
+The original receipt's false value retains its separately recorded unobserved meaning.
+The success condition, failure latch, clocks, calls, pump limits and manager settings
+are unchanged. A provisional result still requires original outer completion and
+independent interpretation; its persistence is not included in its elapsed field.
+
+This code remains disabled and supplies no new invocation. A future proposal must
+bind its changed source and receipt shape, a fresh evidence location, then-current
+capacity, and separate exact admission under an accepted execution grant. It must
+not reuse the consumed 0058 root or its earlier source/capacity bindings. No additional
+startup error, cause or successful platform behavior has been observed by this edit.
 
 ## Fixed Compiler and Task-Host Metadata Copy
 
