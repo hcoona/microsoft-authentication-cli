@@ -449,7 +449,11 @@ COMPILER_VERIFIER_TOOLS = {
     '/usr/lib/systemd/systemd': (141776, '3c4b78ddb68e29e23da0465dd273f1ee82f5b9439ebfcec9798b395c05a2c1e3'),
 }
 COMPILER_VERIFIER_LEAF = r'''
-import json, os, signal, sys, time
+import sys, time
+deadline_ns = int(sys.argv[3])
+if deadline_ns <= 0 or time.monotonic_ns() >= deadline_ns:
+    raise SystemExit(125)
+import json, os, signal
 from pathlib import Path
 path, unit = Path(sys.argv[1]), sys.argv[2]
 groups = [line[3:] for line in Path('/proc/self/cgroup').read_text().splitlines()
@@ -486,6 +490,7 @@ while True:
 value = json.loads(payload)
 if (set(value) != {'argv', 'environment', 'deadlineNs'} or
         type(value['deadlineNs']) is not int or
+        value['deadlineNs'] != deadline_ns or
         time.monotonic_ns() >= value['deadlineNs']):
     raise SystemExit(125)
 fd = os.open('/dev/null', os.O_RDONLY)
@@ -565,8 +570,9 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
     if runtime_ms < 1000:
         fail('Insufficient original verifier time for bounded completion')
     latest_exec = end - runtime_ms / 1000 - 4.0
+    latest_exec_ns = int(latest_exec * 1_000_000_000)
     payload = compact({'argv': argv, 'environment': environment,
-                       'deadlineNs': int(latest_exec * 1_000_000_000)})
+                       'deadlineNs': latest_exec_ns})
     if len(payload) > 131072 or len(COMPILER_VERIFIER_LEAF.encode()) > 8192:
         fail('Verifier input or bootstrap source exceeded its bound')
     directory = COMPILER_VERIFIER_ROOT / f'{number:02d}'
@@ -578,16 +584,18 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         os.close(fd)
     unit = f'azureauth-compiler-0059-{uuid.uuid4().hex}-{number:02d}.service'
     identity_path = directory / 'identity.json'
+    # Queue residence is unbounded. A late bootstrap checks the original
+    # absolute deadline before identity effects or query-input consumption.
     command = [
         '/usr/bin/systemd-run', '--user', '--no-ask-password', '--quiet', '--wait', '--pipe',
         '--collect', '--expand-environment=no', '--job-mode=fail', '--unit=' + unit,
         '--service-type=exec', '--property=ExitType=cgroup', '--property=KillMode=control-group',
-        '--property=SendSIGKILL=yes', '--property=Restart=no', '--property=JobTimeoutSec=2s',
+        '--property=SendSIGKILL=yes', '--property=Restart=no', '--property=JobRunningTimeoutSec=2s',
         '--property=TimeoutStartSec=2s', '--property=RuntimeMaxSec=' + str(runtime_ms) + 'ms',
         '--property=TimeoutStopSec=2s', '--working-directory=' + os.getcwd(), '--',
         '/usr/bin/env', '-i', 'PATH=/usr/bin:/bin', 'LC_ALL=C.UTF-8',
         '/usr/bin/python3', '-I', '-B', '-S', '-c', COMPILER_VERIFIER_LEAF,
-        str(identity_path), unit,
+        str(identity_path), unit, str(latest_exec_ns),
     ]
     runtime = '/run/user/' + str(os.getuid())
     client_environment = {'PATH': '/usr/bin:/bin', 'LC_ALL': 'C.UTF-8',
@@ -595,7 +603,8 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
                           'DBUS_SESSION_BUS_ADDRESS': 'unix:path=' + runtime + '/bus'}
     write_new(directory / 'started.json', compact({'unit': unit, 'call': number,
         'startedMonotonicNs': time.monotonic_ns(), 'deadlineMonotonicNs': int(end * 1_000_000_000),
-        'runtimeMilliseconds': runtime_ms, 'jobMilliseconds': 2000,
+        'runtimeMilliseconds': runtime_ms, 'jobRunningMilliseconds': 2000,
+        'queueTimeoutConfigured': False,
         'startMilliseconds': 2000, 'stopMilliseconds': 2000}))
     process = None
     selector = selectors.DefaultSelector()
