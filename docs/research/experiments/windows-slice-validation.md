@@ -11853,6 +11853,134 @@ objects remain post-producer evidence and no final artifact or Slice acceptance
 follows from this interpretation.
 
 
+### Accepted Partial Native Input Interpretation
+
+The sole offline interpretation under the preceding procedure completed with
+normal zero exit and independently accepted partial evidence. Its 301,524-byte
+output has SHA-256
+`7f351a28f003a8ac11418a7c6f7e84f255f32e8f009ae867fe37f8b0f5a16225`.
+All 38 input descriptors matched the accepted inventory. The original reported
+40 reads, 48,423,625 returned bytes, 48,423,665 requested bytes and 282 charged
+path operations, including the exact output readback. Its 377-millisecond elapsed
+observation preceded output creation; no exact final elapsed measurement was emitted.
+All reported counters remained within their accepted bounds.
+
+Slots 01-20 completed the supported traversal: one standalone object, eleven
+archives and eight PE images. Their retained facts contain 169 directive sections,
+885 options and 129 PE imports, comprising 121 normal and eight delay imports.
+Of the options, 542 are declared input options recorded without application and
+343 remain unresolved exact options. No archive member selection, linker option
+application or loaded-image resolution follows from these facts.
+
+Slots 21-38 remain unresolved with incomplete coverage. Seventeen rejected
+`unsupported-archive-number` at offset 24; slot 36 rejected
+`invalid-archive-alignment-byte` at offset 98,821. The former offset locates the
+first member's Date field, not its Size field. The latter identifies an alignment
+byte after an already size-bounded member. Neither diagnostic records the actual
+exceptional byte values or establishes that a Microsoft library is invalid.
+Empty extraction lists for these eighteen libraries cannot establish absence of
+directives or imports. All semantic, native-closure, current-resolution, graph,
+artifact and continuation acceptance flags remain false. The original interpretation,
+its PREPARE and its START are consumed and must not be replayed.
+
+## Remaining Final Native Archive Extraction
+
+After independent acceptance of the preceding partial interpretation, permit one
+separately admitted extraction from only its eighteen unresolved archive copies,
+slots 21-38. Reuse the accepted facts for slots 01-20 without rereading their raw
+payloads. This is a new bounded extraction with a distinct source and output,
+not a replay of the consumed NATIVE38 decoder or acquisition.
+
+The inactive source is `/tmp/extract_windows_final_native18.inactive.py`,
+39,445 bytes, SHA-256 `36f91479460294e38fb467648a1e58a6c0ef0b5cc835f73671ab50f6e2862bec`. Its source-only procedure is
+`/tmp/windows-final-native18-extraction-procedure-v1.md`, 28,770 bytes,
+SHA-256 `78bd9914ec8bbb94f6d810d32092c315f301183e1fe5a31608dca0fe3f168f38`. The unique `ACTIVE = False` to `ACTIVE = True`
+replacement predicts `/tmp/extract_windows_final_native18.accepted.py`,
+39,444 bytes, SHA-256 `5e71079acac53f841c73dba0651ad1f6c0b2ef3bf495fd1bf69fbc2e12482860`. These pins require independent
+source, current-authority, activation, runtime, literal and START admission.
+
+Read only the exact previously accepted inventory and its literal `21.bin` through
+`38.bin` leaves under `/tmp/windows-final-native38-offline-v1`. Retain the inventory
+pin of 39,472 bytes and SHA-256
+`0059d652e6ca94252889f64abee952095a24f8624d1fdfeabfc42cf38332226b`.
+The eighteen raw inputs total 11,122,282 bytes. Input paths come only from the
+source's fixed allowlist; original path strings and extracted names are metadata,
+never acquisition instructions. Retain exact size/hash checks, ordinary sealed
+files, no-follow parent traversal, held/named identity continuity, one
+observed-size-plus-one read per input and no refill or retry.
+
+Date, user ID, group ID, mode and the single inter-member alignment byte do not
+determine member sizes. Preserve exceptional values with their exact field kinds,
+offsets, widths and hexadecimal bytes as charged output events. Keep decimal Size,
+the header terminator, complete member extents, even member boundaries, subsequent
+header structure, index targets and COFF/object ranges strict. Advance only by the
+validated member size and its one alignment byte; never scan for replacement
+headers or infer a size from content. Completed extraction does not assert full
+archive conformance, symbol resolution or actual member selection.
+
+Retain explicit witnesses for the prior rejection sites: the first member's
+twelve Date bytes at offset 24 for slots 21-35, 37 and 38, and slot 36's alignment
+byte at 98,821 with its preceding header offset, exact Size field, calculated
+member end and the next header at 98,822. The procedure records actual bytes;
+it does not assume their values or reinterpret a rejected file as valid.
+
+Preserve the predecessor's supported object/directive extraction subset and its
+unsupported-file disposition. Incomplete traversal remains partial evidence;
+an empty partial list cannot establish absence. Keep extraction coverage separate
+from archive conformance, and all semantic, native-closure, current-resolution,
+graph, artifact and continuation acceptance false. Any I/O, identity, lifetime,
+budget or output failure stops the whole invocation.
+
+The sole exclusive output is `/tmp/windows-final-native18-extracted-v1.json`.
+Retain the original 90-second nonresetting source lifetime, 4 MiB output and
+3 MiB charged event limits, 1,024 path operations, two million parser steps,
+256 MiB scanned bytes and the preceding stricter per-container/parser bounds.
+Permit at most twenty reads, 15,356,058 returned bytes and 15,356,078 requested
+bytes, including the one sealed-output readback. All nineteen input reads total
+11,161,754 bytes. A conservative 163 charged path operations fits the limit.
+Serialize within the limit before exclusive creation; retain
+0600 creation, positive-progress bounded writes, 0444 sealing and file/parent
+sync. These are intentional source-operation limits, not startup I/O, RSS or
+whole-system syscall guarantees.
+
+Reuse the exact admission-helper mechanism at
+`/tmp/windows-final-native18-extraction-admission-helper.inert.txt`,
+16,879 bytes, SHA-256 `26e69b720d110d7aa88ce45ecbe175b58ea40c66523b0c11da018b0397c783e0`. Only the six role paths, exact source
+pins, literal and source-size-dependent byte ceilings change. Keep the inherited
+schemas, complete integer identity fields, no-follow/exclusive mechanics,
+3,072-byte retained authority maximum, exactly three capacity fields and
+8,192-byte receipt maximum. PREPARE permits seven reads,
+9,152,928 requested/returned bytes, 29 metadata queries, 37 opens,
+47,636 written bytes/positive write calls, two chmods and six
+syncs. START permits six reads, 9,138,058 requested/returned bytes,
+24 metadata queries, 30 opens, 8,192 written bytes/positive write calls, one chmod
+and three syncs. Each phase runs at most once with a 30-second source deadline,
+outer TERM at 35 seconds and KILL two seconds later. Require separate exact
+DATA/code/tool-map admission and complete original outcome acceptance for each
+phase. Neither phase reads a raw archive or executes the extractor.
+
+The sole prospective extractor literal is:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 95s /usr/bin/python3.14 -I -B -S /tmp/extract_windows_final_native18.accepted.py
+```
+
+Retain cwd `/tmp/azureauth-windows-final-link-inputs-accepted-108`, isolated no-site,
+no-bytecode nonoptimized Python, nonlogin noninteractive Bash and no TTY, pipeline,
+alternate command or status wrapper. One accepted START consumes the sole
+invocation before the call. No concurrent original or observer operation is
+permitted. Require complete original transport, normal zero exit, resolved owned
+lifetime and independent result acceptance before relying on extracted facts.
+
+A failed start, collision, mismatch, inaccessible or short input, timeout,
+cancellation, budget/output failure or uncertain lifetime stops without retry,
+cleanup, alternate output or partial adoption. Restore owned signal handlers,
+close owned descriptors and retain all output. No Windows subject, copied image,
+build tool, account, credential, network, cache/consent or installer operation is
+added. Build/test and synthetic occupancy remains 94/120 and 52/80; this extraction
+adds no debit or refund. Further discovered-name acquisition and final closure,
+publication, artifact and Slice acceptance remain separate gates.
+
 ## Fixed Final Source and Restore Materialization
 
 This supplement permits one separately admitted copy of the final publication's
