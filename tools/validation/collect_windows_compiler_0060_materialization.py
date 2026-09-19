@@ -1,4 +1,4 @@
-"""Inactive, one-use passive Windows 0060 materialization observation.
+"""Inactive, one-use Windows 0060 metadata-only observation, ordinal 2.
 
 The fixed selectors were derived from the accepted materialization DATA, not
 from runtime receipts. Activate only an independently admitted captured inline
@@ -21,18 +21,23 @@ import time
 from contextlib import contextmanager
 
 ROOT = Path('/var/tmp/azureauth-windows-slice-108')
-OUTPUT = Path('/tmp/windows-compiler-0060-materialization-offline-root-v1')
-ADMISSION = Path('/tmp/windows-compiler-0060-materialization-admission-root-v1.json')
+OUTPUT = Path('/tmp/windows-compiler-0060-materialization-offline-root-v2')
+ADMISSION = Path('/tmp/windows-compiler-0060-materialization-admission-root-v2.json')
+OBSERVATION_ORDINAL = 2
 MATERIALIZATION = {'bytes': 40097,
                    'sha256': '90d2dccdc19b8b328a7b1edbb0355bbf3f47718fa15276a7386fcc737dfcaabc'}
-LIMITS = {'fileReads': 11, 'readCalls': 32, 'requestedBytes': 319499,
-          'returnedBytes': 319488, 'outputBytes': 188416,
-          'pathOperations': 8192, 'writeCalls': 12}
+ORIGINAL_OBSERVATION_FAILURE = {
+    'bytes': 9621,
+    'sha256': 'c015462b3d6bd1171728724516ef715596e8ba4b5d6b523ccb0673b6be85843a',
+}
+LIMITS = {'fileReads': 2, 'readCalls': 11, 'requestedBytes': 147458,
+          'returnedBytes': 147456, 'outputBytes': 131072,
+          'pathOperations': 8192, 'writeCalls': 8}
 SMALL = 16384
 INVENTORY_LIMIT = 131072
 
-# Fixed role, kind, mapped Windows path, optional content ceiling.
-# 21 directories + 101 metadata-only leaves + 3 opaque content leaves.
+# Fixed role, kind, mapped Windows path, zero original-content allowance.
+# Preserve ordinal 1's 125 paths/order: 21 directories + 104 metadata-only leaves.
 SELECTORS = (
     ('action-root', 'directory', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060', 0),
     ('directory-01', 'directory', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060/compiler-inputs-payloads', 0),
@@ -156,9 +161,9 @@ SELECTORS = (
     ('stdout', 'metadata', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060/stdout.bin', 0),
     ('stderr', 'metadata', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060/stderr.bin', 0),
     ('cancel', 'metadata', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060/cancel', 0),
-    ('started', 'content', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060/started.json', 8192),
-    ('invocation', 'content', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060/invocation.json', 16384),
-    ('windows-result', 'content', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060/windows-result.json', 32768),
+    ('started', 'metadata', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060/started.json', 0),
+    ('invocation', 'metadata', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060/invocation.json', 0),
+    ('windows-result', 'metadata', '/mnt/c/Temp/azureauth-windows-slice-108/actions/0060/windows-result.json', 0),
 )
 
 
@@ -236,14 +241,13 @@ def snapshot(parent, name, state):
         return None
 
 
-def raw_read(parent, name, ceiling, state, expected=None):
+def raw_read(parent, name, ceiling, state):
     charge(state, 'fileReads')
     fd = operation(state, os.open, name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK,
                    dir_fd=parent)
     try:
         before = identity(operation(state, os.fstat, fd))
-        if (not stat.S_ISREG(before['mode']) or not 0 <= before['bytes'] <= ceiling or
-                (expected is not None and before != expected)):
+        if not stat.S_ISREG(before['mode']) or not 0 <= before['bytes'] <= ceiling:
             fail()
         chunks = []
         total = 0
@@ -325,10 +329,14 @@ def admission(state, admitted_sha):
               'sourceSha256', 'runtimeReviewSha256', 'materializationData',
               'originalFailureAcceptance', 'originalCopyAcceptance',
               'originalInterpretationAcceptance', 'reservationSha256',
-              'invocationSha256', 'capacity'}
+              'invocationSha256', 'capacity', 'observationOrdinal',
+              'originalObservationFailureAcceptance'}
     if (type(value) is not dict or set(value) != fields or encoded(value) != raw or
-            value['schema'] != 'compiler-0060-materialization-admission-v1' or
+            value['schema'] != 'compiler-0060-materialization-admission-v2' or
             value['action'] != '0060' or value['oneInvocation'] is not True or
+            type(value['observationOrdinal']) is not int or
+            value['observationOrdinal'] != OBSERVATION_ORDINAL or
+            value['originalObservationFailureAcceptance'] != ORIGINAL_OBSERVATION_FAILURE or
             value['materializationData'] != MATERIALIZATION or
             value['capacity'] != {'buildTest': 92, 'buildTestCeiling': 120,
                                   'synthetic': 52, 'syntheticCeiling': 80}):
@@ -341,11 +349,13 @@ def admission(state, admitted_sha):
     for key in ('sourceSha256', 'runtimeReviewSha256', 'reservationSha256', 'invocationSha256'):
         hex_value(value[key])
     for key in ('originalFailureAcceptance', 'originalCopyAcceptance',
-                'originalInterpretationAcceptance'):
+                'originalInterpretationAcceptance', 'originalObservationFailureAcceptance'):
         pin_value(value[key])
     # Final independent literal review binds every DATA value to its accepted
     # original. No source, review, runtime, receipt or receipt-selected path is
     # opened here; only the exact externally admitted DATA hash grants entry.
+    # Reservation/invocation hashes retain the prior evidence join; ordinal 2
+    # reads neither original receipt and cannot revalidate their content.
     return value
 
 
@@ -402,7 +412,7 @@ def select_all(state, nodes, held):
             node = select_directory(path, state, nodes, held)
             selected.append({'role': role, 'kind': kind, 'path': path, 'cap': cap,
                              'node': node, 'before': node['before'],
-                             'missingAncestor': node['parent']['missingAncestor'], 'raw': None})
+                             'missingAncestor': node['parent']['missingAncestor']})
             continue
         parent = select_directory(path.parent, state, nodes, held)
         before = snapshot(parent['fd'], path.name, state) if parent['fd'] is not None else None
@@ -410,7 +420,7 @@ def select_all(state, nodes, held):
             fail()
         selected.append({'role': role, 'kind': kind, 'path': path, 'cap': cap,
                          'node': parent, 'before': before,
-                         'missingAncestor': parent['missingAncestor'], 'raw': None})
+                         'missingAncestor': parent['missingAncestor']})
     if len(selected) != 125 or len({row['path'] for row in selected}) != 125:
         fail()
     return selected
@@ -450,16 +460,6 @@ def collect(state):
                 nodes = {}
                 selected = select_all(state, nodes, held)
                 checkpoint_nodes(state, nodes)
-                for row in selected:
-                    if row['kind'] == 'content' and row['before'] is not None:
-                        state.update(stage='initial-read', role=row['role'])
-                        raw, _ = raw_read(row['node']['fd'], row['path'].name,
-                                          row['cap'], state, row['before'])
-                        if (row['role'] in ('started', 'invocation') and
-                                digest(raw) != admitted['reservationSha256' if row['role'] == 'started'
-                                                       else 'invocationSha256']):
-                            fail()
-                        row['raw'] = raw
                 state.update(stage='output-create', role=None)
                 with directory(OUTPUT.parent, state) as destination:
                     destination_identity = identity(operation(state, os.fstat, destination))
@@ -470,23 +470,6 @@ def collect(state):
                         output_id = identity(operation(state, os.fstat, output))
                         if output_id != snapshot(destination, OUTPUT.name, state):
                             fail()
-                        for row in selected:
-                            if row['raw'] is not None:
-                                state.update(stage='copy-write', role=row['role'])
-                                copy_name = row['role'] + '.bin'
-                                copied = write_new(output, copy_name, row['raw'], state)
-                                state.update(stage='copy-readback', role=row['role'])
-                                reread, copy_identity = raw_read(output, copy_name, row['cap'], state)
-                                if reread != row['raw'] or stat.S_IMODE(copy_identity['mode']) != 0o444:
-                                    fail()
-                                row['copy'] = dict(copied, file=copy_name, identity=copy_identity)
-                        for row in selected:
-                            if row['raw'] is not None:
-                                state.update(stage='original-continuity', role=row['role'])
-                                reread, _ = raw_read(row['node']['fd'], row['path'].name,
-                                                    row['cap'], state, row['before'])
-                                if reread != row['raw']:
-                                    fail()
                         metadata_after(state, selected)
                         state.update(stage='directory-continuity', role=None)
                         checkpoint_nodes(state, nodes)
@@ -498,11 +481,11 @@ def collect(state):
                                     'maximumContentBytes': row['cap'], 'status': status,
                                     'missingAncestor': row['missingAncestor'],
                                     'before': row['before'], 'after': row['after']}
-                            if 'copy' in row:
-                                item['copy'] = row['copy']
                             rows.append(item)
-                        report = {'schema': 'compiler-0060-materialization-inventory-v1',
+                        report = {'schema': 'compiler-0060-materialization-inventory-v2',
+                                  'observationOrdinal': OBSERVATION_ORDINAL,
                                   'action': '0060', 'admission': admitted, 'selectors': rows,
+                                  'originalWindowsContentReads': 0,
                                   'originalOutcome': 'failed', 'originalLifetime': 'unresolved',
                                   'metadataMeaning': 'Two finite checkpoints; no atomic or continuing guarantee.',
                                   'graphAccepted': False, 'artifactAccepted': False,
@@ -522,9 +505,6 @@ def collect(state):
                         check(state)
                         os.fsync(output)
                         check(state)
-                        for row in selected:
-                            if 'copy' in row and snapshot(output, row['copy']['file'], state) != row['copy']['identity']:
-                                fail()
                         if snapshot(output, 'inventory.json', state) != inventory_identity:
                             fail()
                         final_output = identity(operation(state, os.fstat, output))
@@ -588,7 +568,8 @@ def main():
     allowed = {'ValueError', 'OSError', 'FileNotFoundError', 'PermissionError',
                'BlockingIOError', 'FileExistsError', 'InterruptedError', 'TimeoutError',
                'HandlerRestoreFailure', 'CancelledOrLate'}
-    frame = {'schema': 'compiler-0060-materialization-transport-v1',
+    frame = {'schema': 'compiler-0060-materialization-transport-v2',
+             'observationOrdinal': OBSERVATION_ORDINAL,
              'normalCompletion': error_type is None,
              'stage': state['stage'], 'role': state['role'],
              'exceptionType': error_type if error_type in allowed or error_type is None else 'OtherException',

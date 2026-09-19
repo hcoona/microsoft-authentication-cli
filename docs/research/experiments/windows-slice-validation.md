@@ -9027,7 +9027,7 @@ all preceding consumed observations and the protected scenario capacity. Failed
 start, timeout, cancellation, partial collection or rejection consumes this one
 observation; no retry or replacement output is permitted.
 
-The inactive [fixed collector](../../../tools/validation/collect_windows_compiler_0060_materialization.py)
+The original inactive [fixed collector](https://github.com/hcoona/microsoft-authentication-cli/blob/20d192c2e35bee1c77e4cab01ab1e5f2e0f33c42/tools/validation/collect_windows_compiler_0060_materialization.py)
 owns the complete literal selector list. Derive it once from the already accepted
 0060 materialization DATA: 40,097 bytes, SHA-256
 `90d2dccdc19b8b328a7b1edbb0355bbf3f47718fa15276a7386fcc737dfcaabc`.
@@ -9110,6 +9110,127 @@ ownership or termination uncertainty retains the ordinary stop conditions; do
 not extend the historical 0057 exception. A successful observation may refine the
 failed-materialization diagnosis only. It cannot accept compilation, a native
 graph, an artifact, a scenario, a source repair or another diagnostic invocation.
+
+### Original Windows 0060 Materialization Observation Outcome
+
+The first passive observation ran once under accepted revision
+`20d192c2e35bee1c77e4cab01ab1e5f2e0f33c42`, after independent exact
+source, runtime, admission DATA and literal acceptance. Its inactive source was
+40,507 bytes with SHA-256
+`4d8f960f4886b3b34b842e56c918cb59f56e849f2e2e39f985e37516f0046fd1`.
+Only the single admitted inline activation changed `ACTIVE = False` to
+`ACTIVE = True`. The original tool returned exit code 1 with no running session;
+its complete failure frame reports `initial-read`, role `windows-result`,
+`ValueError`, `normalCompletion: false` and no inventory. The private complete
+transport is 532 bytes with SHA-256
+`80699f3f941f372653943d14f2802a4e8f484722f6f21dc4f623523772b9f5f9`.
+
+Independent failed-original acceptance binds that transport and the admitted
+source. Its private carrier is 9,621 bytes with SHA-256
+`c015462b3d6bd1171728724516ef715596e8ba4b5d6b523ccb0673b6be85843a`.
+The frame records four logical content reads, six read calls, 7,331 requested
+bytes, 7,328 returned bytes, 167 source-defined path operations, zero output bytes
+and zero writes. The three preceding successful admission, reservation and
+invocation reads account for all six read calls and their three EOF probes.
+Within the admitted source and ordinary API contracts, the Windows-result read
+therefore reached its pre-read validation without issuing a content read. That
+validation combines regular-file type, size within 0 through 32,768 bytes and
+identity equality with the initial metadata. The evidence does not distinguish
+those rejection alternatives or identify a filesystem cause.
+
+The source had not reached output-root creation. This is a control-flow inference,
+not an observation that an output path is absent. No inventory, copied receipt,
+materialization snapshot, source repair or subject continuation is accepted.
+Preserve the consumed first observation, its original admission and transport,
+and any retained state. Its declared effects and time envelope are not refunded.
+Build/test and synthetic consumption remain 92/120 and 52/80 respectively.
+
+### One Additional Metadata-Only Windows 0060 Observation
+
+This amendment explicitly allocates observation ordinal 2 after acceptance of the
+failed first observation. It changes the preceding observation-count limit only
+for this separately admitted, narrower observation. The first observation cannot
+be replayed or resumed, and the consumed compiler diagnostic 0060 remains closed.
+The decision-relevant question is which fixed materialization directories and
+files are present at two finite metadata checkpoints. Original Windows content
+is unnecessary for that question and must not be read.
+
+Use the same existing WSL environment, Windows mapping and exact 125 path
+selectors from the accepted 40,097-byte materialization DATA. The revised inactive
+[collector](../../../tools/validation/collect_windows_compiler_0060_materialization.py)
+owns their literal order. All 104 selected file leaves, including the three
+previously content-selected receipts, are metadata-only; the other 21 selectors
+are directories. Do not enumerate, discover a substitute path, parse an original
+receipt or follow a path supplied by one. Preserve component-wise no-follow
+traversal, retained ancestor descriptors, at most sixteen path components,
+regular-file checks, two equal metadata checkpoints or the same fixed absence
+disposition, exact integer timestamps and directory/leaf continuity checks.
+No original file leaf is opened for content or copied.
+
+Open only the same existing WSL `action.lock`, without creation, truncation or
+content access, and acquire one nonblocking exclusive lock through finalization.
+Create exclusively the fresh output root
+`/tmp/windows-compiler-0060-materialization-offline-root-v2`, mode `0700`, with
+only one inventory of at most 131,072 bytes. Create its file as `0600`, require
+complete writes, synchronize, seal `0444`, and read it back with identity and
+byte equality checks. The separate canonical admission DATA may be at most
+16,384 bytes. These are the only two content reads. Never inspect, reuse,
+replace, delete or resume the first observation's output root. Retain partial
+state on every outcome; no cleanup or repair is granted.
+
+The per-observation ceilings and cumulative declared allocation are:
+
+| Measure | Ordinal 2 maximum | Ordinals 1 and 2 combined maximum |
+| --- | ---: | ---: |
+| Logical content reads | 2 | 13 |
+| Read calls, including EOF probes | 11 | 43 |
+| Requested content bytes | 147,458 | 466,957 |
+| Returned content bytes | 147,456 | 466,944 |
+| Output bytes | 131,072 | 319,488 |
+| Complete writes | 8 | 20 |
+| Source-defined path operations | 8,192 | 16,384 |
+| Output files | 1 | 5 |
+| Source deadline seconds | 90 | 180 |
+| Outer TERM deadline seconds | 95 | 190 |
+| Additional KILL grace seconds | 2 | 4 |
+
+Use 16,384-byte read/write chunks; reject short writes without retry. The
+cumulative column adds the entire first declared envelope, irrespective of its
+smaller observed use. These are source-defined rejection ceilings and separately
+allocated original deadlines, not an exact syscall count or unconditional
+wall-clock guarantee. Retain the same isolated Python and GNU timeout runtime
+selection. Every operation shares this observation's single 90-second monotonic
+source deadline and latched cancellation, with outer TERM at 95 seconds and
+KILL two seconds later. Same-session empty waits are at most 60 seconds and do
+not reset a deadline.
+
+Require independent acceptance of the merged protocol, exact inactive source,
+unchanged literal selector derivation, runtime premises and finite accounting,
+the original diagnostic failure/copy/interpretation, the first observation's
+failed-original acceptance, reservation/invocation bindings, current capacity,
+canonical ordinal-2 admission DATA and complete captured tool arguments. Activate
+only the one captured inline literal. Admission must bind `observationOrdinal: 2`
+and the first observation's failed-original acceptance in addition to the
+preceding required bindings; it cannot change selectors, content permissions or
+limits. Reuse unchanged runtime evidence only within its admitted freshness scope.
+Do not add a runtime startup scenario or an activated source-file writer.
+
+Record this one invocation before entry. Failed start, timeout, cancellation,
+partial collection or rejected evidence consumes it. No third observation,
+replacement output or retry is granted. Preserve the complete original transport;
+independently accept final zero exit without a running session before accepting
+the fixed inventory, then interpret only that accepted inventory. An accepted
+inventory establishes finite metadata observations, not content identity, an
+atomic snapshot, permanent absence, a process query or observed global quiescence.
+
+Keep the existing Wave, 92/120 build/test and 52/80 synthetic consumption, twelve
+protected final CLI scenarios and sixteen unallocated synthetic scenarios. No
+Windows, PowerShell, product, .NET, MSBuild, compiler or helper launch, process,
+service or cgroup query, account/cache/network access, installation, repair or
+cleanup is included. Do not extend the historical 0057 lifetime exception.
+Any new actual ownership or termination uncertainty retains the ordinary stop
+conditions. This observation may refine the materialization diagnosis only; it
+accepts no graph, Native AOT artifact, scenario, source repair or further diagnostic.
 
 ## Fixed Compiler and Task-Host Metadata Copy
 
