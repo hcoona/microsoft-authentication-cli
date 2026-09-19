@@ -5552,12 +5552,100 @@ This amendment adds no query, helper, execution, capacity, current-machine codep
 observation or new runtime claim. It does not activate the disabled validators or
 complete the remaining compiler/native-input, graph, artifact or scenario gates.
 
+#### Final Publication After Diagnostic 0062
+
+The first final publication follows the accepted post-0056 handoff and the six
+consumed diagnostic allocations 0057–0062. Preserve the exact 211,842-byte
+post-0056 handoff, SHA-256
+`fe13f88846f537825049dface75869cccad84f6df3bc2a748968a466c8443ba6`, and its
+351-byte independent acceptance, SHA-256
+`8f06a719b4e2b586187fb9e5e2abc6763e2c35cb998ac7a6c976eefc4f87ed45`.
+Their historical paired counters and receipt traversal remain unchanged. Do not
+fabricate entries for unavailable 0057–0059, reopen failed 0060/0061 children,
+repair old state or repeat a diagnostic. The accepted 0057 lifetime-risk
+disposition remains historical and does not waive future helper supervision.
+
+In final mode, before reservation require paired parent name sets 0001–0056 plus
+0060, 0061 and 0062; afterward require that set plus the original reserved final
+action. Use bounded unfiltered enumeration, at most 100 entries per parent, and
+exact Windows/WSL equality. Reject any other, missing or unmatched name before
+reading its content. The three retained successor entries are excluded from the
+historical receipt traversal. Only 0062's original WSL reservation receives the
+separate endpoint-continuity read below. Bind the second disposed-0054 checkpoint
+to the derived final number. Derive that number under the existing shared lock
+from 56 historical Windows allocations plus the six charged successors plus
+one; do not precreate the reservation or endpoint. The paired reservation schema
+and its historical `priorCounters` fields remain unchanged.
+
+The fixed current capacity projection supplements those historical counters:
+86 paired build/test units plus the already-counted fixture once equals 87;
+0057–0062 add six and the accepted systemd batch adds one, yielding **94/120**.
+Historical 48 synthetic scenarios plus that batch's four yield **52/80**. Preserve
+15/16 preparation and 0/12 publication occupancy, twelve protected final CLI
+scenarios and sixteen unallocated synthetic scenarios. This first final attempt
+charges publication once, with zero preparation, build/test or synthetic charge.
+Its first helper-root marker charges that same attempt when paired reservation is
+not reached; the later pair cannot charge it twice. A failed start consumes it.
+
+Original successful 0062 evidence authenticates reservation SHA-256
+`40012f4e1fd3bd1ba0d01431c7a600b7d89516b7f3e42dfeb8960c57f4b9779c` and invocation
+SHA-256 `17556c75bcd8950a468a6a71cfcd043b48837ecc44cceb9866ad814a3b5b0027`.
+The accepted copied Windows result binds both, but does not contain the endpoint.
+To include that endpoint in the final UUID collision check, permit exactly two
+reads of `/var/tmp/azureauth-windows-slice-108/windows-actions/0062/started.json`
+inside the original final action: once during locked pre-reservation history
+validation, once during post-publication history continuity. No separate probe,
+preview read or Windows counterpart read is added. Each pass is latched before
+I/O and uses the existing component-wise no-follow parent walk, a regular-file
+no-follow open, at most 1 MiB and one direct `size + 1` read with no refill.
+The two-pass request ceiling is 2,097,154 bytes; returned content is at most
+2,097,152 bytes. Require exact reservation hash, canonical duplicate-free JSON,
+held/named six-field identity and whole-byte continuity across both passes.
+Validate original action, source, handoff, historical counters, capacity, charge
+and 900-second clock semantics; preserve its original protocol and Wave binding
+through the authenticated bytes. Require the UUIDv4 shape and include this
+endpoint with the unchanged historical endpoint set. Failure is permanent.
+Both passes share 30 seconds of active verification time within the original
+700-second clock. This allowance does not consume or expand K's separate eight
+inputs, two passes, sixteen reads and 16 MiB allowance.
+
+All final-mode local Git and public GET verification helpers use the existing
+independently accepted systemd/cgroup supervisor, with fresh root
+`/var/tmp/azureauth-final-publish-verifiers-108-post0062-v1`, marker schema
+`final-publish-post0062-verifiers-start-v1`, result schema
+`final-publish-verifier-result-v1` and unique unit prefix
+`azureauth-final-publish-post0062-`. Reject an existing root. The source-fixed
+ceiling is 98 helper calls: four revision, six protocol/Wave blob, three ancestry,
+eight component blob, six public review, two current-target, one source-inventory
+and 68 source-blob queries. Require exactly 34 product source-inventory entries.
+The history supplement adds no Git or GET query. This is a call ceiling within
+the existing 700-second outer deadline, not 98 fresh outer time allowances.
+
+Preserve each helper's 30-second acceptance window, twenty-second maximum runtime,
+pre-spawn reserves, two-second running-job/start/stop timers, exact tool/leaf
+bindings, output limits and permanent failure latch. `ExitType=cgroup`,
+`KillMode=control-group` and the original client/EOF/group-completion checks apply
+to final verification as to the diagnostic. Preserve explicit queued-definition
+retention and the leaf's original absolute expired-query rejection; no
+queue-residence deadline is claimed. Unknown ownership, completion or termination
+stops final continuation. No old helper recovery, process survey or cleanup is
+added. The Windows publication's distinct no-kill Job mode remains unchanged.
+
+These changes retain the nine external authority roles, exact graph-v2 schema,
+recipe and original guard/loader/artifact prerequisites. Keep tracked activation
+gates disabled; independently accept the whole source, canonical evidence and
+actual current authority/literal before any execution. The accepted diagnostic
+joins still require final-context source/restore/recipe correspondence and
+complete compiler/native graph acceptance. This amendment does not itself accept
+those gates or authorize CLI, account or release use of a future artifact.
+
 #### Original Lifetime, Completion and Retention
 
 The original WSL clock starts before admission and retains a 700-second outer
 bound through reservation, capture, collection and finalization. The shared lock
 covers current-history validation, original reservation and collection. Derive the
-next action only from accepted contiguous history, preserve its durable charge and
+next action only from accepted charged history and the fixed post-0062 supplement
+above, preserve its durable charge and
 create only its exact Windows pair and bridge. Any partial reservation remains
 charged and retained. No retry, replacement endpoint or capacity refund occurs.
 
@@ -11208,6 +11296,76 @@ successful interpretation and exact selection/file necessity may open the unused
 Stage 3/4 operations after their bindings are refreshed. Final Slice acceptance
 and its remaining graph, recipe, source/handoff, publication, artifact, CLI and
 real-account evidence remain open.
+
+### Accepted Four-Stage Diagnostic Evidence
+
+The four-stage evidence chain completed successfully using the message-proven
+Stage 2 continuation. Stage 1 binds accepted protocol commit
+`88593d6da8ba843b8393a926dc4b7d29dbbff796`; the successful Stage 2, Stage 3 and
+Stage 4 bind `a5ab28aa271147a8e4115b2030b9a819906addae`, tree
+`49c543bc4863bc45a72afc65b7975800ff1ca97c`. Each original invocation returned zero
+and received independent acceptance of its complete transport, finite accounting,
+source-qualified continuity and finalization. Each is permanently consumed at
+1/1. All preceding failed interpretations and diagnostic allocations remain
+consumed with their recorded outcomes; none was repaired, replayed or refunded.
+
+Stage 1 accepted the two receipts and binary-log copies, totaling 297,815 bytes.
+The successful Stage 2 decoded the accepted copies and produced the independently
+accepted 1,208,527-byte selection, SHA-256
+`ec5fc046039fb1f6677b33d22a8c3c7ce6a0db8b956f35e03b4101894bca7e7d`.
+Independent review accepted the necessity of all 82 selected files. Stage 3 copied
+exactly those files: four responses, sixty companions, twelve generated-text files
+and six binaries, totaling 586,128 bytes. Its 112,551-byte inventory has SHA-256
+`cac5d26511eacfe52c56e348416546372624d9669da568ebb6d5f747412b0c6e`.
+Stage 4 joined that inventory, selection and all 82 copies; its 686,944-byte
+`joins.json`, SHA-256
+`8d2fa6ad4653b4fab581442162ac07107214c2a26c5632b0439c31934a7a10d2`, subsequently
+received independent content acceptance.
+
+The accepted diagnostic joins cover three successful recorded Csc contexts and
+their 212/230/215 ordered arguments, with no percent-escape changes. The native
+response and `IlcArg` companion exactly reconstruct all 263 original writer items
+as 34,953 UTF-8/CRLF bytes. All sixty companions preserve ordered producer/context
+joins; sixteen zero-byte companions retain source-qualified suppressed-empty-list
+provenance, not logged empty `Lines` events. The 41 `LinkerArg` items establish
+captured companion state only. Complete recorded task/event coverage contains
+zero `Exec` contexts and the intentional `AUTH108NATIVEINPUTSTOP` cutoff; this is
+not a global process-absence or current-quiescence claim.
+
+The Stage 3 file hashes describe copy-time snapshots, not original runtime input
+hashes. Recorded task success and ordering are runtime observations; the fixed
+public-source apphost, default-encoding and fresh-file model remains a separate
+source-based inference. The twelve generated-text and six binary files have
+accepted inert path/snapshot joins only: no generated-source interpretation,
+PE/CLI/PDB metadata parsing, loading or artifact acceptance follows. Expanded
+Message evidence remains the source of `IlcRspFile`; no enumerated metadata pair
+or effective logging-state observation was invented.
+
+The private independent acceptance carriers bind this sanitized result:
+
+| Acceptance | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Stage 1 original outcome | 12,582 | `768284a79cf59bdc9d7ec03a1c2256d15993f180871ab6d209d99ad87fad1a3d` |
+| Message-proven Stage 2 original outcome | 18,731 | `072cac45aa72fb99a98e058098d1bfb8cecd635ec7ab0a16fb4e0dadc17d8fe4` |
+| Stage 2 selection and file necessity | 64,362 | `b26f5cefd6cd354eef27c152d95cc7bdf41347741954b00b20fbfd8a409d077a` |
+| Stage 3 original outcome | 10,444 | `c6f04224708350d7e848e91893efd265b6749e1d4bd597320b5a3e259c74078c` |
+| Stage 4 original outcome | 10,366 | `49454fc5ec0dcb65f9c7d37874ff03224afc1519d3101db2167fc336e44376ff` |
+| Stage 4 diagnostic joins content | 31,515 | `771eabfa71d738d45d4ea9701488d148ea03101a84b4af8da9882581f62ce122` |
+
+All 29 unselected existing-input obligations remain open: 26 source-item
+occurrences and three SDK globalconfig occurrences across 27 unique paths. Their
+contents and final-context source/restore consumption or unchanged-input evidence
+were not accepted here. Diagnostic paths, logging, overlays and captured arrays
+still require final-context source/restore/recipe correspondence; a path rebase
+alone does not establish it. Full compiler/native graph, final graph, recipe,
+source/handoff, publication, artifact, CLI, real-account and overall Slice
+acceptance remain open. These joins establish neither ILC nor linker execution
+and grant no new file read, copy, interpretation or subject execution.
+
+Global occupancy remains **94/120 build/test** and **52/80 synthetic**. The twelve
+protected final CLI cases and sixteen unallocated synthetic cases remain intact;
+these evidence stages add no restore/build/test/publish/synthetic debit and refund
+none. Their separate invocation and I/O allocations remain consumed.
 
 ## Fixed Compiler and Task-Host Metadata Copy
 

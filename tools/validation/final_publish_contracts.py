@@ -199,7 +199,7 @@ COMPONENTS = {
 }
 INPUTS = ('sourceReview', 'handoff', 'handoffAcceptance', 'graph', 'graphAcceptance',
           'guardAcceptance', 'callerAuthorization', 'executionReview', 'publication')
-LIMITS = {'preparation': 16, 'buildTest': 120, 'publish': 12, 'synthetic': 60,
+LIMITS = {'preparation': 16, 'buildTest': 120, 'publish': 12, 'synthetic': 80,
           'outerMilliseconds': 700000, 'actionMilliseconds': 600000,
           'drainMilliseconds': 2000, 'observationToleranceMilliseconds': 100,
           'captureBytes': 8388608, 'activeProcesses': 32,
@@ -383,7 +383,7 @@ def verify_github_cli(deadline, cancelled):
 
 def public_read(argv, deadline, cancelled, output_limit=8388608):
     """Bounded Git/GET verification only; never an interop or subject process."""
-    if COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
+    if COMPILER_NATIVE_INPUTS_HISTORY_ONLY or not DRAFT_ONLY:
         return compiler_verifier_read(argv, deadline, cancelled, output_limit)
     if argv[0] not in ('/usr/bin/git', GITHUB_CLI_PATH):
         fail('Not an immutable Git or public GET query')
@@ -440,6 +440,11 @@ def public_read(argv, deadline, cancelled, output_limit=8388608):
 # This inactive compiler-only replacement is covered by the history source pin.
 # Its one-use root also preserves failed starts before paired action reservation.
 COMPILER_VERIFIER_ROOT = Path('/var/tmp/azureauth-compiler-verifiers-108-0062')
+FINAL_VERIFIER_ROOT = Path('/var/tmp/azureauth-final-publish-verifiers-108-post0062-v1')
+FINAL_SOURCE_FILES = 34
+# Four revision, six protocol/Wave blob, three ancestry, eight component,
+# six review, two current-target, one inventory and two queries per source file.
+FINAL_VERIFIER_MAXIMUM_CALLS = 30 + 2 * FINAL_SOURCE_FILES
 _COMPILER_VERIFIER_CALLS = 0
 _COMPILER_VERIFIER_FAILED = False
 COMPILER_VERIFIER_TOOLS = {
@@ -524,12 +529,32 @@ def compiler_verifier_group_empty(identity, unit):
 
 
 def compiler_verifier_read(argv, deadline, cancelled, output_limit):
-    """One of eight Linux verifiers; failure permanently disables this caller."""
+    """Source-fixed compiler or final supervision; failure disables the caller."""
     global _COMPILER_VERIFIER_CALLS, _COMPILER_VERIFIER_FAILED
+    if DRAFT_ONLY and COMPILER_NATIVE_INPUTS_HISTORY_ONLY and not CORE_CSC_HISTORY_ONLY:
+        root = COMPILER_VERIFIER_ROOT
+        prefix = 'azureauth-compiler-0062-'
+        maximum = 8
+        start_record = {
+            'schema': 'compiler-0062-verifiers-start-v1', 'maximumCalls': maximum,
+            'priorCombinedBuildTest': 93, 'priorSynthetic': 52,
+            'diagnosticBuildTestCharge': 1, 'diagnosticSyntheticCharge': 0}
+        result_schema = 'compiler-verifier-result-v2'
+    elif not DRAFT_ONLY and not CORE_CSC_HISTORY_ONLY and not COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
+        root = FINAL_VERIFIER_ROOT
+        prefix = 'azureauth-final-publish-post0062-'
+        maximum = FINAL_VERIFIER_MAXIMUM_CALLS
+        start_record = {
+            'schema': 'final-publish-post0062-verifiers-start-v1', 'maximumCalls': maximum,
+            'priorCombinedBuildTest': 94, 'priorSynthetic': 52,
+            'preparationCharge': 0, 'buildTestCharge': 0, 'publishCharge': 1,
+            'syntheticCharge': 0, 'sameAttemptAsPairedReservation': True}
+        result_schema = 'final-publish-verifier-result-v1'
+    else:
+        fail('Verifier mode is not admitted')
     began = time.monotonic()
     end = min(deadline, began + 30.0)
-    if (_COMPILER_VERIFIER_FAILED or _COMPILER_VERIFIER_CALLS >= 8 or
-            not DRAFT_ONLY or not COMPILER_NATIVE_INPUTS_HISTORY_ONLY or CORE_CSC_HISTORY_ONLY or
+    if (_COMPILER_VERIFIER_FAILED or _COMPILER_VERIFIER_CALLS >= maximum or
             argv[0] not in ('/usr/bin/git', GITHUB_CLI_PATH) or
             type(output_limit) is not int or not 1 <= output_limit <= 8388608):
         fail('Unadmitted, repeated or failed compiler verifier')
@@ -538,17 +563,14 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
     number = _COMPILER_VERIFIER_CALLS
     budget(end, cancelled)
     if number == 1:
-        COMPILER_VERIFIER_ROOT.mkdir(mode=0o700)
-        fd = os.open(COMPILER_VERIFIER_ROOT.parent, os.O_RDONLY | os.O_DIRECTORY)
+        root.mkdir(mode=0o700)
+        fd = os.open(root.parent, os.O_RDONLY | os.O_DIRECTORY)
         try:
             os.fsync(fd)
         finally:
             os.close(fd)
-        write_new(COMPILER_VERIFIER_ROOT / 'started.json', compact({
-            'schema': 'compiler-0062-verifiers-start-v1', 'maximumCalls': 8,
-            'priorCombinedBuildTest': 93, 'priorSynthetic': 52,
-            'diagnosticBuildTestCharge': 1, 'diagnosticSyntheticCharge': 0,
-            'startedMonotonicNs': time.monotonic_ns()}))
+        write_new(root / 'started.json', compact(dict(
+            start_record, startedMonotonicNs=time.monotonic_ns())))
         for path, (size, expected) in COMPILER_VERIFIER_TOOLS.items():
             budget(end, cancelled)
             # Installed OS symlinks are permitted; exact resolved file bytes bind
@@ -575,14 +597,14 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
                        'deadlineNs': latest_exec_ns})
     if len(payload) > 131072 or len(COMPILER_VERIFIER_LEAF.encode()) > 8192:
         fail('Verifier input or bootstrap source exceeded its bound')
-    directory = COMPILER_VERIFIER_ROOT / f'{number:02d}'
+    directory = root / f'{number:02d}'
     directory.mkdir(mode=0o700)
-    fd = os.open(COMPILER_VERIFIER_ROOT, os.O_RDONLY | os.O_DIRECTORY)
+    fd = os.open(root, os.O_RDONLY | os.O_DIRECTORY)
     try:
         os.fsync(fd)
     finally:
         os.close(fd)
-    unit = f'azureauth-compiler-0062-{uuid.uuid4().hex}-{number:02d}.service'
+    unit = f'{prefix}{uuid.uuid4().hex}-{number:02d}.service'
     identity_path = directory / 'identity.json'
     # Queue residence is unbounded. A late bootstrap checks the original
     # absolute deadline before identity effects or query-input consumption.
@@ -706,7 +728,7 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         # Keep startup evidence private in the existing receipt, without another
         # read, output allowance, or attempt. EOF alone does not imply completeness.
         write_new(directory / 'result.json', compact({
-            'schema': 'compiler-verifier-result-v2', 'call': number, 'unit': unit,
+            'schema': result_schema, 'call': number, 'unit': unit,
             'clientExit': None if process is None else process.returncode,
             'stdoutEof': 'stdout' in eof, 'stderrEof': 'stderr' in eof,
             'stderrBytesObserved': stderr_observed, 'stderrBytesRetained': len(stderr_prefix),
@@ -716,7 +738,7 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
             'elapsedMilliseconds': int((time.monotonic() - began) * 1000)}))
     budget(end, cancelled)
     if failure is not None:
-        fail('Compiler verifier failed; no subsequent helper or diagnostic continuation')
+        fail('Verifier failed; no subsequent helper or caller continuation')
     _COMPILER_VERIFIER_FAILED = False
     return bytes(captured)
 
@@ -1051,7 +1073,7 @@ def validate_graph(graph, recipe):
     for executable in (recipe['invocation']['executable'], allowed_system_tools[1]):
         if len([x for x in values if same_path(x['path'], executable)]) != 1:
             fail('Original dotnet or PowerShell executable is not pinned')
-    if type(graph['sourceInventory']) is not list or not graph['sourceInventory']:
+    if type(graph['sourceInventory']) is not list or len(graph['sourceInventory']) != FINAL_SOURCE_FILES:
         fail('Missing exact immutable source inventory')
     for item in graph['sourceInventory']:
         keys(item, ('repositoryPath', 'gitBlob', 'bytes', 'sha256'))
@@ -1794,9 +1816,9 @@ def load_admission(deadline, cancelled):
                               'snapshot': None, 'failed': False}}
 
 
-def names(path):
-    if CORE_CSC_HISTORY_ONLY or COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
-        values = core_csc_names(path, 100)
+def names(path, deadline, cancelled):
+    if CORE_CSC_HISTORY_ONLY or COMPILER_NATIVE_INPUTS_HISTORY_ONLY or not DRAFT_ONLY:
+        values = core_csc_names(path, 100, deadline, cancelled)
     else:
         values = sorted(p.name for p in direct(path).iterdir())
     expected = [f'{i:04d}' for i in range(1, len(values) + 1)]
@@ -1806,6 +1828,10 @@ def names(path):
         expected = [f'{i:04d}' for i in range(1, 57)] + ['0060', '0061']
         if len(values) == 59:
             expected.append('0062')
+    elif not DRAFT_ONLY and Path(path) in (HISTORY, PROJECTION / 'actions'):
+        expected = [f'{i:04d}' for i in range(1, 57)] + list(FINAL_RETAINED_SUCCESSORS)
+        if len(values) == len(expected) + 1:
+            expected.append(final_action_number())
     if values != expected:
         fail('Incomplete or noncontiguous original action history')
     return values
@@ -2058,7 +2084,9 @@ def verify_failed_handoff(admission, deadline, cancelled, reserved):
     state = admission['failedHistory']
     expected_pass = 0 if reserved is None else 1
     if (state['failed'] or state['passes'] != expected_pass or
-            (reserved is not None and reserved != ('0062' if COMPILER_NATIVE_INPUTS_HISTORY_ONLY else '0057'))):
+            (reserved is not None and reserved != (
+                '0062' if COMPILER_NATIVE_INPUTS_HISTORY_ONLY else
+                final_action_number() if not DRAFT_ONLY else '0057'))):
         fail('Failed-history checkpoint is missing, repeated or reordered')
     # Latch before I/O. An interrupted or rejected pass cannot obtain a retry.
     state['failed'] = True
@@ -2147,16 +2175,20 @@ def refresh_history(admission, deadline, cancelled, reserved=None):
         if type(entries) is not list or not 1 <= len(entries) <= 9998:
             fail('Missing or unbounded original history')
         base = LINUX / 'actions' if platform == 'linux' else HISTORY
-        actual = names(base)
+        actual = names(base, deadline, cancelled)
         expected_numbers = [x.get('number') for x in entries]
         if platform == 'windows' and COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
             # Retained parents only: never add 0060/0061 to receipt traversal.
             expected_numbers.extend(('0060', '0061'))
+        elif platform == 'windows' and not DRAFT_ONLY:
+            # Only 0062's pinned reservation is read separately for its endpoint.
+            # Other successor children remain outside the historical receipt loop.
+            expected_numbers.extend(FINAL_RETAINED_SUCCESSORS)
         if platform == 'windows' and reserved is not None:
             expected_numbers.append(reserved)
         if actual != expected_numbers:
             fail('New or missing action requires a fresh independent handoff')
-        if platform == 'windows' and names(PROJECTION / 'actions') != actual:
+        if platform == 'windows' and names(PROJECTION / 'actions', deadline, cancelled) != actual:
             fail('Original Windows/WSL reservation directories disagree')
         for item in entries:
             budget(deadline, cancelled)
@@ -2178,7 +2210,7 @@ def refresh_history(admission, deadline, cancelled, reserved=None):
                 continue
             keys(item, ('number', 'localEntryNames', 'localFiles', 'windowsFiles', 'safetyMarkers'))
             local = base / item['number']
-            if CORE_CSC_HISTORY_ONLY or COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
+            if CORE_CSC_HISTORY_ONLY or COMPILER_NATIVE_INPUTS_HISTORY_ONLY or not DRAFT_ONLY:
                 observed_names = core_csc_names(local, len(item['localEntryNames']), deadline, cancelled)
             else:
                 observed_names = sorted(p.name for p in direct(local).iterdir())
@@ -2230,6 +2262,8 @@ def refresh_history(admission, deadline, cancelled, reserved=None):
             lp > 9 or wp != 7 or lp + wp > 16 or lb > 79 or wb > 49 or lb + wb + 1 > 120 or
             lpub != 0 or wpub != 0 or ls != 0 or ws != 48 or wpub + 1 > 12):
         fail('After-guard cumulative allocation differs from the accepted publication-only slot')
+    if not DRAFT_ONLY:
+        verify_final_successors(admission, totals, deadline, cancelled, reserved)
     # Exact original guard evidence is joined to the thirteen-field projection.
     guard = envelope['acceptedGuard']
     owned = PROJECTION / 'actions' / guard['actionNumber']
@@ -2291,6 +2325,100 @@ COMPILER_NATIVE_INPUTS_PRIOR_CAPACITY = {
     'additionalDiagnosticBuildTest': 1, 'additionalDiagnosticSynthetic': 0,
     'afterCombinedBuildTest': 94, 'afterSynthetic': 52,
 }
+
+# Fixed post-0056 dispositions supplement, rather than rewrite, the accepted
+# paired handoff. Unavailable starts stay consumed without fabricated entries.
+FINAL_CHARGED_SUCCESSORS = ('0057', '0058', '0059', '0060', '0061', '0062')
+FINAL_RETAINED_SUCCESSORS = ('0060', '0061', '0062')
+FINAL_0062_RESERVATION = {
+    'path': '/var/tmp/azureauth-windows-slice-108/windows-actions/0062/started.json',
+    'sha256': '40012f4e1fd3bd1ba0d01431c7a600b7d89516b7f3e42dfeb8960c57f4b9779c',
+}
+
+
+def final_action_number():
+    return f'{56 + len(FINAL_CHARGED_SUCCESSORS) + 1:04d}'
+
+
+def verify_final_successors(admission, totals, deadline, cancelled, reserved):
+    """Two bounded reads of the successful diagnostic's original reservation."""
+    state = admission.setdefault('finalSuccessors', {
+        'passes': 0, 'remainingSeconds': 30.0, 'snapshot': None, 'failed': False})
+    expected_pass = 0 if reserved is None else 1
+    if (DRAFT_ONLY or CORE_CSC_HISTORY_ONLY or COMPILER_NATIVE_INPUTS_HISTORY_ONLY or
+            state['failed'] or state['passes'] != expected_pass or
+            (reserved is not None and reserved != final_action_number())):
+        fail('Final successor checkpoint is missing, repeated or reordered')
+    state['failed'] = True
+    state['passes'] += 1
+    began = time.monotonic()
+    end = min(deadline, began + state['remainingSeconds'])
+    parent = fd = None
+    try:
+        for role in ('handoff', 'handoffAcceptance'):
+            pin = COMPILER_NATIVE_INPUTS_INPUTS[role]
+            raw = admission['evidenceBytes'][role]
+            if len(raw) != pin['bytes'] or sha(raw) != pin['sha256']:
+                fail('Final publication must retain the exact post-0056 handoff')
+        combined = sum(totals[p][1] for p in ('linux', 'windows')) + 1
+        combined += len(FINAL_CHARGED_SUCCESSORS) + 1  # Accepted systemd batch.
+        synthetic = sum(totals[p][3] for p in ('linux', 'windows')) + 4
+        if (combined != 94 or synthetic != 52 or combined > LIMITS['buildTest'] or
+                synthetic + 12 + 16 != LIMITS['synthetic'] or
+                sum(totals[p][0] for p in ('linux', 'windows')) != 15 or
+                sum(totals[p][2] for p in ('linux', 'windows')) != 0):
+            fail('Current final publication capacity changed')
+        parent, leaf = failed_parent(FINAL_0062_RESERVATION['path'], end, cancelled)
+        fd = os.open(leaf, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
+        before = os.fstat(fd)
+        if not stat.S_ISREG(before.st_mode) or not 1 <= before.st_size <= 1048576:
+            fail('Original 0062 reservation kind or size changed')
+        budget(end, cancelled)
+        # Exactly one size+1 request per pass: no buffered refill or retry.
+        raw = os.read(fd, before.st_size + 1)
+        after = os.fstat(fd)
+        current = os.stat(leaf, dir_fd=parent, follow_symlinks=False)
+        if (len(raw) != before.st_size or sha(raw) != FINAL_0062_RESERVATION['sha256'] or
+                failed_identity(before) != failed_identity(after) or
+                failed_identity(after) != failed_identity(current)):
+            fail('Original 0062 reservation bytes or identity changed')
+        snapshot = (failed_identity(after), raw)
+        if expected_pass == 1 and snapshot != state['snapshot']:
+            fail('Original 0062 reservation continuity changed')
+        start = decode(raw, canonical=True)
+        if (start.get('schema') != 'compiler-native-inputs-reservation-v1' or
+                start.get('action') != 'compiler-native-inputs' or start.get('number') != '0062' or
+                start.get('source') != PRODUCT['commit'] or start.get('sourceTree') != PRODUCT['tree'] or
+                start.get('handoffSha256') != COMPILER_NATIVE_INPUTS_INPUTS['handoff']['sha256'] or
+                compact(start.get('priorCounters')) != compact(totals) or
+                compact(start.get('priorCapacity')) != compact(COMPILER_NATIVE_INPUTS_PRIOR_CAPACITY) or
+                compact([start.get(k) for k in ('preparationCharge', 'buildTestCharge',
+                    'publishCharge', 'reservedProcessScenarios')]) != compact([0, 1, 0, 0]) or
+                start.get('originalOuterLimitMilliseconds') != 900000):
+            fail('Original 0062 reservation scope or charge changed')
+        first = integer(start.get('originalClockStartNanoseconds'), 1)
+        last = integer(start.get('originalClockDeadlineNanoseconds'), 1)
+        if last - first != 900000000000:
+            fail('Original 0062 clock binding changed')
+        endpoint = string(start.get('endpoint'), '[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}')
+        if endpoint in admission['evidence']['handoff']['knownEndpoints']:
+            fail('Original 0062 endpoint collides with accepted history')
+        state['snapshot'], state['endpoint'] = snapshot, endpoint
+        budget(end, cancelled)
+        state['failed'] = False
+    finally:
+        try:
+            if fd is not None:
+                os.close(fd)
+            if parent is not None:
+                os.close(parent)
+            state['remainingSeconds'] -= time.monotonic() - began
+            if state['remainingSeconds'] <= 0:
+                raise TimeoutError('Shared final successor verification time exhausted')
+            budget(deadline, cancelled)
+        except BaseException:
+            state['failed'] = True
+            raise
 
 
 def _observer_history_inputs(compiler_native_inputs):
@@ -2646,7 +2774,7 @@ def admitted_reservation(deadline, began, cancelled):
                 fail('Unexpected ambient source/import input')
         assert_target_current(admission['envelope'], deadline, cancelled)
         budget(deadline, cancelled)
-        number = f"{len(manifest['histories']['windows']) + 1:04d}"
+        number = final_action_number()
         local = direct(HISTORY / number)
         owned = direct(PROJECTION / 'actions' / number)
         if local.exists() or owned.exists():
@@ -2656,7 +2784,8 @@ def admitted_reservation(deadline, began, cancelled):
         # rejects this reservation; it does not generate a replacement nonce.
         endpoint = uuid.uuid4().hex
         string(endpoint, '[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}')
-        if endpoint == '0' * 32 or endpoint in manifest['knownEndpoints']:
+        if (endpoint == '0' * 32 or endpoint in manifest['knownEndpoints'] or
+                endpoint == admission['finalSuccessors']['endpoint']):
             fail('Endpoint collision; no retry')
         envelope = admission['envelope']
         start = {'schema': 'final-publish-reservation-v1', 'action': 'final-publish', 'number': number,
