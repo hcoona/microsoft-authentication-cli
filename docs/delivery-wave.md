@@ -82,9 +82,13 @@ recovery, old-process cleanup, authentication, additional publication capacity,
 release authority or broader exception is granted.
 
 **Additional compiler-input diagnostic:** Authorize at most one separately admitted
-credential-free compiler-native-inputs diagnostic numbered 0061, after acceptance
-of the observed 0060 materialization failure, its fixed metadata evidence and an
-inactive correction of the unestablished diagnostic-parent prerequisite. Require
+credential-free compiler-native-inputs diagnostic numbered 0062, after acceptance
+of the observed 0061 console-capture failure, its fixed copied evidence and the
+source-bound disposition of its original process lifetime. Require an independently
+reviewed reduction of console logging while preserving the binary diagnostic log,
+the existing 8 MiB console-capture ceiling and bounded failure/termination behavior.
+Keep unresolved original effects as stop conditions; no new lifetime-risk exception
+is granted. Require
 a fresh diagnostic tree beneath the existing dedicated experiment root, disjoint
 from its new action tree, with consistent source/DATA/path bindings and a pure
 parent-closure check before materialization. Retain the corrected running-job
@@ -95,7 +99,7 @@ stop-before-ILC/linker boundary. Charge one additional build/test action within 
 existing cumulative ceiling, with no separate synthetic startup scenario. Require
 an independently accepted exact protocol, fresh evidence roots and source admission
 before execution. Failed start consumes this invocation; no retry, repeated 0057,
-0058, 0059 or 0060 invocation/recovery/observation, old-state repair, cleanup,
+0058, 0059, 0060 or 0061 invocation/recovery/observation, old-state repair, cleanup,
 authentication, new lifetime-risk exception, additional publication capacity or
 release authority is granted.
 
