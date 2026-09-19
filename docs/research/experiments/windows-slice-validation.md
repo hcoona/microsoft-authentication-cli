@@ -8724,6 +8724,110 @@ Neither a copied provisional receipt nor absence proves termination or quiescenc
 Any new ownership or termination uncertainty retains ordinary stop conditions;
 this collection cannot authorize another diagnostic or dependent execution.
 
+### Original 0059 Failed Outcome and Fixed Collection
+
+The sole invocation ran under accepted protocol/source commit
+`93c1d2a1a89e71ff9ab5448b4b390b3f00e1454b`, tree
+`07899ecea196648fae8d3117f14e677382d421ac`, after independent DATA, source,
+materialization, authority and exact-literal admission. The selected product remained
+`503360753accd0829801953823b1b57a4f852440`; the existing Windows/WSL environments,
+SDK/runtime/package pins and credential-free effects boundary were unchanged.
+No account operation or human interaction was selected.
+
+The original tool completed with exit code 1 and no running session. Its complete
+dispatcher frame reported `history-reservation`, `ValueError` and `incomplete`.
+The private original transport is 284 bytes with SHA-256
+`4480305c48fd9aca66e328070975e9f85042d5f1afaea5a99f80fe5bc84de666`.
+Independent original-outcome acceptance established failure before the separately
+admitted conditional collection ran. Short execution time and the coarse failure
+stage do not establish absent partial effects or quiescence.
+
+The sole fixed collection completed with exit code 0, no running session and a
+complete normal-completion frame. Its private original transport is 553 bytes with
+SHA-256 `cf9857d84e3543f18bd570cac9445591c7b75e7f3028ab160f3ae11c24c92ee4`.
+Independent outcome/copy acceptance verified all 28 slots, the 7,542-byte inventory
+with SHA-256 `9d38709c842b2bf3aa3c381bc2bc3972e1ed406eeafb06fced8e96edbb023cb0`,
+and three copied files totaling 1,050 bytes: the helper-root marker and first helper's
+start and result. The first identity leaf was absent. The action directory and
+helper directories 02 through 08 were absent at the collection checkpoints only.
+The collector used 11 content reads, 22 read calls, 11,369 requested bytes, 11,358
+returned bytes, 8,592 output bytes, four writes and 130 path operations. No additional
+original-root inspection, manager query, Windows access or cleanup followed.
+
+The first helper result reported client exit 1, `completed: false`,
+`failure: IdentityUnavailable` and `groupEmpty: null`. Both output streams reached
+EOF; stderr observed, retained and decoded lengths were all 159 bytes, and
+`stderrComplete` was true. The complete private stderr contains this sanitized
+startup-rejection sentence:
+
+> Failed to start transient service unit: Cannot set property JobTimeoutUSec, or unknown property.
+
+This directly identifies the rejected property and explains why the helper did not
+supply an accepted identity. It does not independently establish the loaded manager's
+source revision, absence of every partial service-definition effect, termination or
+quiescence. No successful Git verification, Windows compilation, native-input graph,
+AOT artifact or CLI scenario is accepted from this attempt.
+
+The diagnostic and its sole collection are consumed, with no retries or refunds.
+Capacity is 91/120 build/test units and 52/80 synthetic scenarios; preserve the twelve
+protected final CLI scenarios and sixteen unallocated synthetic scenarios. Retain all
+partial state and private copies. Original 0057/0058 dispositions remain unchanged;
+the new stderr cannot retrospectively identify original 0058's missing stderr.
+
+### Public-Source Finding and Inactive Verifier Correction
+
+The immutable official systemd v259 source at
+`9ca433482f2281d71718718705ca8cd3bf562ad6` provides a source-level explanation
+consistent with the observed error. The [CLI property conversion](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/src/shared/bus-unit-util.c#L2771-L2772)
+maps `JobTimeoutSec` to `JobTimeoutUSec`. The [transient-property setter](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/src/core/dbus-unit.c#L2378-L2389)
+handles that property but omits `return r;`, eventually returning zero. The
+[outer property dispatcher](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/src/core/dbus-unit.c#L2673-L2682)
+then emits the observed rejection. The adjacent `JobRunningTimeoutUSec` branch
+returns its result correctly. These are public-source facts, not proof that the
+installed package or loaded user manager has identical bytes. The successful
+earlier supervision batch did not include `JobTimeoutSec`; it did not validate
+this additional property in the diagnostic command.
+
+The current inactive history adapter replaces only that timer setting with
+`JobRunningTimeoutSec=2s` and makes the existing absolute query deadline an explicit
+bootstrap argument. Its first deadline check occurs after importing only `sys` and
+`time`, before identity/proc reads, identity writes or stdin consumption. An expired
+bootstrap exits 125. The payload must carry exactly the same integer deadline;
+retain its existing post-payload and immediate pre-`execve` deadline checks. The
+deadline derives once from the existing `latest_exec` calculation, without extension
+or a new clock. Preserve the maximum eight calls, permanent failure latch, original
+30-second acceptance window, 900-second outer clock, pre-spawn reserve and source
+output/read bounds. `TimeoutStartSec=2s`, `RuntimeMaxSec` at most 20 seconds and
+`TimeoutStopSec=2s` remain unchanged.
+
+This correction deliberately changes the queue-time claim. [Official job-timeout
+semantics](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/man/systemd.unit.xml#L1140-L1160)
+and the [timer implementation](https://github.com/systemd/systemd/blob/9ca433482f2281d71718718705ca8cd3bf562ad6/src/core/job.c#L1140-L1172)
+distinguish time since queuing from time since a job starts running. The new setting
+bounds the latter only. The start receipt therefore uses `jobRunningMilliseconds`
+and `queueTimeoutConfigured: false`, replacing the ambiguous `jobMilliseconds`.
+Do not claim a two-second queue-residence bound or that all possible future bootstrap
+processes cease within the outer observation window.
+
+A future separately admitted invocation must explicitly retain up to eight unique
+transient definitions/jobs if still queued. They are pending manager work, not already
+running Git or API-query processes. If started after the absolute query deadline, the
+bootstrap rejects before query-specific effects; ordinary executable/interpreter
+startup still occurs under the declared service timers. This is bounded-count
+retention with expired-query rejection, not a bound on queue residence or proof of
+zero later effects. It requires no extra service, query, host upgrade, unit-file
+installation or cleanup. Ordinary manager-contract trust does not establish
+unconditional wall-clock termination; new actual ownership or termination uncertainty
+still triggers the existing stop conditions. No new lifetime-risk exception is added.
+
+All tracked execution gates remain inactive. This source/protocol correction records
+the failure and prepares a corrected mechanism only. It does not admit another
+diagnostic, replay a consumed supervision batch, validate the new setting at runtime,
+or lift Native AOT and scenario prerequisites. Another invocation requires its own
+accepted Wave/protocol grant, fresh roots and refreshed source, runtime, DATA,
+materialization, capacity, authority and exact-literal admission. The original 0059
+command and its earlier timer settings remain its historical execution identity.
+
 ## Fixed Compiler and Task-Host Metadata Copy
 
 This supplement permits preparation of one separately admitted raw-data copy,
