@@ -12582,6 +12582,185 @@ accepted source-bound byte ceilings, protocol and exact admission. No
 build/test, synthetic or publication debit or refund occurs; occupancy
 remains 94/120 build/test and 52/80 synthetic.
 
+### Accepted Size Observation Result
+
+The sole size observer ran under the protocol accepted at
+`999d69f55531df13bfc2e3c7e5e71a0ccccd4566`, using the exact V2 source and
+tool map above. Its attempt was reserved before launch. The original returned
+normal exit code 0 with no live tool session and one complete 944-byte frame.
+Independent outcome review accepted its 20,153-byte sealed metadata, SHA-256
+`96ae1e0d217c077c7af2ed732ac771d1d4158de9ab51f00a14ac746392ba1917`,
+as current evidence for a later bounded acquisition proposal.
+
+All twelve selected leaves were present, regular and nonempty. Fourteen
+initial observations matched fourteen reobservations. `oldnames.lib` and
+`libcpmt.lib` were selected in the first library parent. `uuid.lib` was absent
+in the first two parents and selected in the third. All nine DLLs were present
+in the fixed host-tool parent. These remain two bounded observations under
+verified parents, not continuous stability or final loader resolution.
+
+| Slot | Selected basename | Observed bytes |
+| --- | --- | ---: |
+| 01 | `oldnames.lib` | 157,422 |
+| 02 | `libcpmt.lib` | 24,294,796 |
+| 03 | `uuid.lib` | 8,940,674 |
+| 04 | `VCRUNTIME140.dll` | 178,536 |
+| 05 | `VCRUNTIME140_1.dll` | 50,032 |
+| 06 | `MSVCP140.dll` | 643,440 |
+| 07 | `MSVCP140_ATOMIC_WAIT.dll` | 57,784 |
+| 08 | `MSVCP140_1.dll` | 35,688 |
+| 09 | `tbbmalloc.dll` | 111,416 |
+| 10 | `pgodb140.dll` | 105,272 |
+| 11 | `msvcdis140.dll` | 2,143,544 |
+| 12 | `msobj140.dll` | 175,456 |
+
+The selected sizes sum to 36,894,060 bytes. `libcpmt.lib` and `uuid.lib`
+exceeded the original 8,388,608-byte per-file ceiling. This current observation
+does not identify the historical rejected leaf or establish payload hashes.
+The sum is metadata arithmetic, not an independently accepted acquisition cap.
+
+The observer made zero candidate opens, content reads, hashes or payload
+copies. Its three runtime reads and one metadata readback requested 9,077,805
+bytes and returned 9,077,801 bytes. Charged path operations were 290 at the
+pre-metadata snapshot and 370 at completion, including lock release. The
+completion counters precede their own 944-byte transport charge. All effects
+fit the admitted bounds, and the reviewed no-child source completed its
+owned cleanup before the success frame. This resolves only this original's
+owned lifetime; historical 0057 uncertainty is unchanged.
+
+The observer is consumed once, with no retry or refund. Its metadata is
+intentionally retained. The original acquisition remains failed and consumed.
+No account, cache, network, installation or product operation occurred.
+Build/test and synthetic occupancy remains 94/120 and 52/80. New acquisition
+caps and execution, dependency closure, graph, publication, artifact and Slice
+acceptance remain separate gates.
+
+## Metadata-Bound Fixed Native Frontier Acquisition
+
+This supplement prepares one separately admitted acquisition of the same twelve
+fixed native candidates, using the independently accepted size observation as
+its exact expected metadata. The consumed original acquisition and size
+observer remain closed. This is a new source-bound invocation with a fresh
+output root; it grants no replay, repair, broader search or automatic chaining.
+
+Retain the three ordered installed library parents, fixed host-tool parent,
+candidate roles and source-edge provenance. Freeze the accepted parent
+identities, first-present selections, selected sizes and full integer leaf
+identities, plus both earlier-root absences for `uuid.lib`. Compare current
+observations with that expected state before any candidate content capture.
+A changed parent, selected leaf, size or earlier-root absence stops the
+invocation. Do not skip a changed or empty first-present file or search another
+location. The size table above supplies exact per-file expectations; it does
+not authorize any other file up to the largest listed size.
+
+The accepted metadata supplies no candidate content hashes. Capture each
+selected original once, then reread it once and read back its sealed raw copy
+once. Require exact byte length, held/named identity continuity and equal
+content across those reads. Preserve the first captured hash as prospective
+evidence, rather than describing it as a previously accepted payload identity.
+Complete the initial captures before creating the new output root. Preserve
+the two bounded observations for earlier-root absences and verify the held
+parents through completion.
+
+Retain opaque payloads and a bounded inventory in the new dedicated root
+`/tmp/windows-final-native12-sized-offline-v1`. Keep complete or partial output
+on every exit. Do not inspect or reuse the old acquisition output, overwrite
+another artifact, remove output or perform speculative cleanup. This phase
+does not parse archives, COFF, PE, directives or imports, discover additional
+names, inspect the final working directory, execute payloads or invoke a
+Windows helper, compiler, linker or product.
+
+### Exact Subject and Effect Bounds
+
+The inactive source is
+`/tmp/collect_windows_final_native12_sized.v1.inactive.py`, 43,190 bytes,
+SHA-256 `c3f75fe4a3cd81259d99fc9873b7ccb49e70236706a060d2274a70e6d8173e49`.
+Exactly one `ACTIVE = False` to `ACTIVE = True` replacement yields the
+43,189-byte command body, SHA-256
+`30df3f028f4358b4cb93d068a5c7bde34a3b4d8dafe08d27a059877edfe2a952`.
+The source-bound procedure is
+`/tmp/windows-final-native12-sized-acquisition-procedure-v1.md`, 18,163 bytes,
+SHA-256 `9407fb443c7e4dd68b996e3d2af9b5c128220a623be89002dc78b53d1bf7c298`.
+The exact tool map is
+`/tmp/windows-final-native12-sized-exact-tool-call-root-v1.json`, 56,187 bytes,
+SHA-256 `83fdf69ee0ca68776d5c02528a7c411a30fa388387466741564817c14e60b247`.
+
+Use one reviewed exact invocation, with no separate PREPARE/START phase,
+active source file or internal attempt marker. Reserve its sole attempt in
+the existing sequential ledger before the tool call, including a failed
+launch. Bind the accepted protocol, inactive source, exact active command
+body, procedure and tool map. Verify the admitted runtime executables,
+startup conditions and working-directory identity before taking the existing
+nonblocking action lock or observing candidate state.
+
+The proposed content envelope follows directly from the twelve exact sizes:
+
+| Effect | Maximum |
+| --- | ---: |
+| Initial / final candidate-leaf observations | 14 / 14 |
+| Initial original captures / original rereads / sealed-copy reads | 12 / 12 / 12 |
+| Nominal bytes across those three passes | 110,682,180 |
+| Three-pass requested / possible returned bytes, including sentinels | 110,682,216 / 110,682,216 |
+| Runtime reads | 3 |
+| Runtime requested / returned bytes | 9,057,651 / 9,057,651 |
+| Inventory readback calls | 1 |
+| Inventory requested / returned bytes | 65,537 / 65,536 |
+| Total content-read calls | 40 |
+| Total requested / returned bytes | 119,805,404 / 119,805,403 |
+| Raw payload output bytes | 36,894,060 |
+| Inventory output bytes | 65,536 |
+| Combined output bytes | 36,959,596 |
+| New directories / raw files / inventory files | 1 / 12 / 1 |
+| Positive-progress output write calls | 36,959,596 |
+| Requested bytes per output write | 65,536 |
+| Charged path, identity, lock, mode and sync operations | 1,024 |
+| Parent components, excluding root | 16 |
+| Startup environment names / characters per name | 512 / 256 |
+| Complete original transport bytes | 4,096 |
+
+Each direct read requests its exact expected size plus one byte, once. A short
+or growing read fails without refill. The possible returned-byte envelope
+includes growth sentinels even on failing reads. These bounds cover explicit
+collector operations, not interpreter startup I/O, total operating-system
+syscalls, memory use or instantaneous interruption of blocked kernel I/O.
+
+The fixed successful path requires 984 charged operations, including the
+unconditional lock release. Descriptor closes and signal-handler restoration
+remain unconditional cleanup outside that charged count. Output writes require
+positive progress and stop on failure; no failed write is retried.
+
+Inert serialization accounting gives a conservative 53,285-byte inventory
+envelope. Its possible one-byte growth sentinel still fits the declared
+inventory returned-byte ceiling. Success and failure frames fit 1,042 and
+1,889 bytes respectively; a success frame followed by a late failure fits
+2,931 bytes. A late failure still fails the attempt. Inventory counters
+precede inventory writing and readback; each frame's counters precede its
+own transport charge. Outcome review must reconcile these observation points
+against the complete original transport.
+
+Report bounded failure context from already available values, including the
+fixed slot/path, operation and expected/observed size when available. Do not
+reopen failed paths to improve diagnostics. Owned cleanup remains
+unconditional; normal data work and successful completion share one
+nonresetting 90-second deadline, with outer TERM at 95 seconds and KILL two
+seconds later. Cleanup and bounded failure reporting may finish after source
+expiry within that outer lifetime. No child process is launched by the
+collector.
+
+Require complete original transport, normal zero exit, resolved owned lifetime,
+bounded counters, exact inventory/copy bindings and independent outcome
+acceptance before using the new evidence. A completion frame or existing file
+alone is insufficient. Any changed context, lock contention, output collision,
+read mismatch, exceeded bound, cancellation, timeout or uncertain lifetime
+stops without retry or refund.
+
+Acquisition acceptance establishes only the bounded retained bytes and their
+declared provenance. Offline interpretation, member inclusion, normal/delay
+host reachability, current loader resolution, native closure, graph,
+publication, artifact and Slice acceptance remain separate. No account,
+cache, network or installation operation is permitted. Build/test and
+synthetic occupancy remains 94/120 and 52/80.
+
 ## Fixed Final Source and Restore Materialization
 
 This supplement permits one separately admitted copy of the final publication's
