@@ -1,6 +1,6 @@
-# Disabled original Windows controller bootstrap. This is not the WSL proxy.
+# Original Windows controller bootstrap; requires separate fixed-literal admission.
 param([string] $ActionName, [string] $ReservationSha256, [string] $InvocationSha256, [string] $AuthoritySha256)
-$script:FinalBootstrapDraftOnly = $true
+$script:FinalBootstrapDraftOnly = $false
 if ($script:FinalBootstrapDraftOnly) { throw 'DRAFT_ONLY: final bootstrap has no accepted execution binding' }
 $bootstrapWatch = [Diagnostics.Stopwatch]::StartNew()
 $ErrorActionPreference = 'Stop'

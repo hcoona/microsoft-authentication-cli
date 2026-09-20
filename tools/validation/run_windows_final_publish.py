@@ -1,6 +1,6 @@
-"""Disabled final-publication outer collector; one original clock and reservation."""
+"""Final-publication collector; requires a separately accepted fixed literal."""
 
-DRAFT_ONLY = True
+DRAFT_ONLY = False
 if DRAFT_ONLY:
     raise RuntimeError('DRAFT_ONLY: final publish has no accepted execution binding')
 
@@ -13,8 +13,9 @@ from final_publish_contracts import admitted_reservation, budget, compact, excha
 _retained_proxies = []
 
 
-def _assert_exact_admission(deadline, began, cancelled):
-    return admitted_reservation(deadline, began, cancelled)
+def _assert_exact_admission(deadline, began, cancelled, *, reviewed_authority):
+    return admitted_reservation(deadline, began, cancelled,
+                                reviewed_authority=reviewed_authority)
 
 
 def _assert_exact_original_completion(binding, original_proxy_exit, deadline, cancelled):
@@ -35,7 +36,7 @@ def _request_retention_cancel(path):
     return 'created'
 
 
-def invoke_final_publish_candidate():
+def invoke_final_publish_candidate(*, reviewed_authority):
     if DRAFT_ONLY:
         raise RuntimeError('DRAFT_ONLY: no final-publish launch')
     began = time.monotonic()
@@ -59,7 +60,8 @@ def invoke_final_publish_candidate():
         # Admission, durable capacity, source checks, launch, collection and the
         # entire emergency path share this original 700-second absolute ceiling.
         # The original shared action lock stays held until final receipt writing.
-        with _assert_exact_admission(deadline, began, lambda: interrupted) as binding:
+        with _assert_exact_admission(deadline, began, lambda: interrupted,
+                                     reviewed_authority=reviewed_authority) as binding:
             process = None
             result['reservationSha256'] = binding['reservationSha256']
             try:

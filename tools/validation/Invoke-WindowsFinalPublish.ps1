@@ -1,12 +1,12 @@
-# PRIVATE SOURCE CANDIDATE: not a controller admitted by any accepted protocol.
+# Final controller; requires separately accepted source, authority and fixed literal.
 param([string] $ActionName, [string] $ReservationSha256, [string] $InvocationSha256, [string] $AuthoritySha256)
-$script:FinalPublishDraftOnly = $true
+$script:FinalPublishDraftOnly = $false
 if ($script:FinalPublishDraftOnly) { throw 'DRAFT_ONLY: final-publish integration and guard build are unadmitted' }
 $originalControllerWatch = [Diagnostics.Stopwatch]::StartNew()
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 
-# Source fragment inserted before the unchanged guard loader. No dynamic import.
+# Final admission precedes the unchanged original guard loader. No dynamic import.
 $script:FinalAuthority = $null
 $script:FinalInvocation = $null
 $script:FinalGraph = $null
@@ -1312,9 +1312,8 @@ function Read-FinalPublishOutput($Process, $Streams, [int] $Seconds, $Watch, $Co
     return $script:capture
 }
 
-# Inserted in the already disabled final-publish controller before its invocation.
-# All actual preparation and artifact acceptance identities remain unbound.
-# They are outputs of the still-rejecting final admission authority loader, not
+# Final admission supplies the actual preparation and artifact acceptance identities.
+# They are outputs of the exact final admission authority loader, not
 # self-referential source hash literals to insert into this same file.
 $script:AcceptedFinalGuard = @{
     actionNumber = $null; sourceSha256 = $null; dllSha256 = $null
@@ -1549,7 +1548,7 @@ function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
     return $result
 }
 
-# Only this fixed bootstrap route can reach the disabled candidate. The original
+# Only the separately admitted fixed bootstrap route may invoke this caller. The original
 # controller watch starts before all JSON/source/admission work and never resets.
 try {
     $binding = Initialize-FinalBinding $originalControllerWatch

@@ -5371,20 +5371,18 @@ are required before the copy may enter a later v2 handoff. Actual v2 handoff
 assembly, complete final source/graph/K and final publication admission remain
 separate; this operation neither runs L again nor opens those gates.
 
-### Inactive Whole Final-Caller Integration
+### Whole Final-Caller Integration
 
 The final-publication source integrates the existing env35 Csc/Exec consumers,
 original-guard provenance joins and narrow successor-history compatibility. This
-increment prepares one final Native AOT publication procedure. All four source
-entry gates remain disabled, and the reviewed literal-launch binding remains
-absent. Merging this source or protocol text does not activate a final caller,
-reserve a publication, run a metadata observer or establish an actual graph,
-handoff, K, native artifact or support claim. Separate whole-source/protocol,
-actual-input and exact invocation acceptance remain required. Any later source
-activation must itself be independently accepted as exact immutable source; no
-runtime patch or caller Boolean may bypass these gates.
+integration prepares one final Native AOT publication procedure. Its source
+activation follows the exact immutable route below. Merging source or protocol
+text supplies no execution admission, publication reservation, metadata observer,
+actual graph, handoff, K, native artifact or support claim. Separate
+whole-source/protocol, actual-input and exact invocation acceptance remain
+required. No runtime patch or caller Boolean may bypass those gates.
 
-The source files below are the complete inactive component bytes. Original guard
+The source files below are the complete final-caller component bytes. Original guard
 preparation records and their earlier disabled-loader identities remain historical
 inputs; their hashes are not replaced by this integration's current file links.
 The original guard C# source, compiled guard, readers and preparation controllers
@@ -5392,12 +5390,64 @@ are unchanged. Source integration uses these Git filenames. The later private
 materialization keeps the existing `.draft` filenames required by the component
 contract, and verifies equality to the corresponding accepted Git blobs.
 
-| Inactive component | Bytes | SHA-256 |
+| Final-caller component | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [`run_windows_final_publish.py`](../../../tools/validation/run_windows_final_publish.py) | 7611 | `bccf09306d92b1aa0f7e341c28414d9fa9bb64ce4cd556a243372c7fb64f0d69` |
-| [`final_publish_contracts.py`](../../../tools/validation/final_publish_contracts.py) | 176484 | `e42d5262908d09d32c5b0437094e91c4b0892304a30e58fed5ced9b8452b575c` |
-| [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | 94538 | `ce0fabbbd5de15a88a9f1aee572745a50062d59c04c63aafc3abcbefb48bdd2d` |
-| [`Start-WindowsFinalPublish.ps1`](../../../tools/validation/Start-WindowsFinalPublish.ps1) | 12107 | `7ce257e4e23fbc1cdc3e97602a002f1d518fcaf98513fc5c5b0064ba1647d362` |
+| [`run_windows_final_publish.py`](../../../tools/validation/run_windows_final_publish.py) | 7798 | `a8c854024774530ad3f145f0a1d23e64b190e82fd218c85420d204523ac12f1a` |
+| [`final_publish_contracts.py`](../../../tools/validation/final_publish_contracts.py) | 176696 | `45c831ac27de5626ee1f8cd82750cdf3ad72a73c06465bb89823fea443f6e809` |
+| [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | 94473 | `5d6b188999ca6d459b85ddfca72b53fec48fe3783ff0c3df4293d9522233ea92` |
+| [`Start-WindowsFinalPublish.ps1`](../../../tools/validation/Start-WindowsFinalPublish.ps1) | 12115 | `ca9772ab872ac27894913c975315d9a6b5f2679b3d289cbdbde11c954d18a6f1` |
+
+#### Immutable Final-Caller Activation
+
+The four entry-gate constants are false in these exact source bytes. Both
+history-only mode constants remain false, and direct Python dispatcher execution
+still rejects. Independently accept this complete immutable source and canonical
+protocol before any active private component materialization or runtime import.
+Copy only the accepted Git blobs to their existing private `.draft` component
+names, preserving complete bytes; the final admission still verifies that
+equality. No private gate rewrite, runtime module assignment, environment switch
+or additional entry point is permitted. This source acceptance does not itself
+admit materialization, import, the fixed literal or final execution.
+
+The separately independently accepted fixed literal supplies the required
+keyword-only `reviewed_authority` argument to `invoke_final_publish_candidate`.
+The fixed `_assert_exact_admission`, `admitted_reservation` and `load_admission`
+calls pass that same value explicitly. It contains only `bytes` and `sha256`:
+the existing `bound` validation requires an exact dictionary, an integer length
+from 1 through 8 MiB and a lowercase 64-digit hexadecimal digest before reading
+the fixed `/tmp/windows-final-publish-execution-authority.json`. There is no
+default descriptor, alternate path, embedded future authority hash or mutable
+`REVIEWED_LAUNCH` binding. Missing or malformed arguments reject; a descriptor
+alone cannot replace the existing complete authority, Git, public-review,
+source, recipe, graph, K, history or capacity checks.
+
+Finalize the accepted integration/protocol revision and complete component bytes
+first. Then bind source review, actual K and the other existing role inputs,
+execution review and their public publication bindings, followed by the complete
+external authority. The separate fixed literal is outside that component and
+authority hash dependency: it pins the completed authority descriptor and exact
+source/runtime inputs without placing its own hash into that authority. Its
+independent admission must bind the complete call, runtime/startup environment,
+working directory, finite pre-import source verification and continuity,
+output, original timing, failure and retention behavior before it may import
+the accepted private modules and invoke the fixed function. A failure must
+return nonzero without printing authority content, descriptor values, exception
+text or a traceback. No default command-line route or caller Boolean supplies
+this admission. This ordering preserves exact hashes without a source/authority
+hash cycle or a new input schema, role or authority path.
+
+The final contracts source also binds its unchanged accepted
+`CORE_CSC_FAILED_DISPOSITION_BINDING` to the exact 3,202-byte
+[0056 disposition](#exact-0056-failed-history-disposition), SHA-256
+`6a241958bfd4693de219393c5920277e18ead52f8d039cd265f412837d142525`.
+It retains the existing equality check and fixed-role verification schedule;
+binding the descriptor performs no original-history read. The controller's
+initially null guard and invocation values remain outputs of exact admission,
+not source literals to fill. All six public role bindings, complete graph and
+recipe acceptance, actual K and handoff, current runtime/history/capacity checks
+and final literal admission remain separate prerequisites. The 98-helper cap,
+two deferred 0062 START reads, existing action clocks, recipe, effects and
+cumulative capacity are unchanged.
 
 #### Selected Product, Recipe and Effects
 
@@ -5635,9 +5685,10 @@ stops final continuation. No old helper recovery, process survey or cleanup is
 added. The Windows publication's distinct no-kill Job mode remains unchanged.
 
 These changes retain the nine external authority roles, exact graph-v2 schema,
-recipe and original guard/loader/artifact prerequisites. Keep tracked activation
-gates disabled; independently accept the whole source, canonical evidence and
-actual current authority/literal before any execution. The accepted diagnostic
+recipe and original guard/loader/artifact prerequisites. Use only the
+[immutable final-caller activation](#immutable-final-caller-activation) route;
+independently accept the whole source, canonical evidence and actual current
+authority/literal before any execution. The accepted diagnostic
 joins still require final-context source/restore/recipe correspondence and
 complete compiler/native graph acceptance. This amendment does not itself accept
 those gates or authorize CLI, account or release use of a future artifact.
@@ -5883,8 +5934,10 @@ no observer invocation, activation, new schema or fresh execution grant.
 This amendment creates no account, installation, policy, service, privilege or
 new network effect, and allocates no additional attempt. Build/test consumption
 remains 94/120 and synthetic consumption 52/80; the existing single prospective
-publication charge and protected CLI cases are unchanged. All four activation
-gates stay disabled. Current whole-source, graph, recipe, K, handoff, runtime and
+publication charge and protected CLI cases are unchanged. The installed-selection
+amendment supplies no activation; current final source uses only the
+[immutable activation route](#immutable-final-caller-activation).
+Current whole-source, graph, recipe, K, handoff, runtime and
 literal-launch admission remain required before publication; original publication,
 artifact, CLI, WSL and real-account acceptance remain separate.
 
@@ -6032,8 +6085,9 @@ never rewritten. No copy or original-root observation is performed by preparing
 this source and contract proposal.
 
 This subsection defines prospective history compatibility only. Final entrypoints
-remain disabled and future actual K, v2 handoff, graph, copy and invocation
-bindings remain absent until independently accepted. A complete final protocol,
+require the separately accepted immutable source and fixed literal; actual K,
+v2 handoff, graph, copy and invocation bindings remain absent until independently
+accepted. A complete final protocol,
 exact source/environment/SDK/runtime/task/import/response graph, actual L evidence,
 public review bindings and separately reviewed final literal admission remain
 required. This subsection grants no final publication, historical retry, process
@@ -6053,7 +6107,9 @@ This supplement follows the accepted [shared default HTTP evidence](#shared-defa
 and preserves its original source and execution receipts. The immutable source admission
 for this preparation must bind the following repository files; SHA-256 values identify
 the complete source bytes, not a compiled artifact. The two final-publish entrypoints
-remain disabled and retain rejecting admission and completion hooks.
+in that historical guard-preparation snapshot remain disabled and retain rejecting
+admission and completion hooks; current final source follows the separate
+[immutable activation route](#immutable-final-caller-activation).
 
 | Component | Repository path | SHA-256 |
 | --- | --- | --- |
@@ -7683,9 +7739,12 @@ variant. Unbound, changed or incomplete required evidence rejects.
 
 The private disposition instance is 3,202 bytes, SHA-256
 `6a241958bfd4693de219393c5920277e18ead52f8d039cd265f412837d142525`.
-Each of the three current consumers retains an unbound
-`CORE_CSC_FAILED_DISPOSITION_BINDING`; separately reviewed source materialization
-must supply exactly that descriptor before use. Do not accept an alternate path,
+The two ordinary history readers retain an unbound
+`CORE_CSC_FAILED_DISPOSITION_BINDING`; their separately reviewed source
+materialization must supply exactly that descriptor before use. The final
+contracts source binds that same descriptor through its
+[immutable activation](#immutable-final-caller-activation).
+Do not accept an alternate path,
 CLI/environment override, different instance or arbitrary accepted Boolean.
 The existing enclosing source/protocol and original-history acceptance gates remain.
 
