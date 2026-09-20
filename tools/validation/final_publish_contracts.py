@@ -28,8 +28,8 @@ import subprocess
 import time
 import uuid
 
-AUTHORITY = Path('/tmp/windows-final-publish-execution-authority.json')
-EVIDENCE = Path('/tmp/windows-final-publish-authority-inputs')
+AUTHORITY = Path('/tmp/windows-final-publish0064-execution-authority.json')
+EVIDENCE = Path('/tmp/windows-final-publish0064-authority-inputs')
 PACKAGE = Path(__file__).absolute().parent.parent
 REPOSITORY = Path('/home/shuaizhang/s/github.com/hcoona/microsoft-authentication-cli')
 LINUX = Path('/var/tmp/azureauth-windows-slice-108')
@@ -200,7 +200,7 @@ COMPONENTS = {
 INPUTS = ('sourceReview', 'handoff', 'handoffAcceptance', 'graph', 'graphAcceptance',
           'guardAcceptance', 'callerAuthorization', 'executionReview', 'publication')
 LIMITS = {'preparation': 16, 'buildTest': 120, 'publish': 12, 'synthetic': 80,
-          'outerMilliseconds': 700000, 'actionMilliseconds': 600000,
+          'outerMilliseconds': 1800000, 'actionMilliseconds': 600000,
           'drainMilliseconds': 2000, 'observationToleranceMilliseconds': 100,
           'captureBytes': 8388608, 'activeProcesses': 32,
           'emergencyMillisecondsWithinOuter': 10000, 'retries': 0}
@@ -264,7 +264,7 @@ def budget(deadline, cancelled):
         raise InterruptedError('Final publication cancelled')
     remaining = deadline - time.monotonic()
     if remaining <= 0:
-        raise TimeoutError('Original 700-second outer deadline expired')
+        raise TimeoutError('Original outer deadline expired')
     return remaining
 
 
@@ -440,7 +440,7 @@ def public_read(argv, deadline, cancelled, output_limit=8388608):
 # This inactive compiler-only replacement is covered by the history source pin.
 # Its one-use root also preserves failed starts before paired action reservation.
 COMPILER_VERIFIER_ROOT = Path('/var/tmp/azureauth-compiler-verifiers-108-0062')
-FINAL_VERIFIER_ROOT = Path('/var/tmp/azureauth-final-publish-verifiers-108-post0062-v1')
+FINAL_VERIFIER_ROOT = Path('/var/tmp/azureauth-final-publish-verifiers-108-post0063-v1')
 FINAL_SOURCE_FILES = 34
 # Four revision, six protocol/Wave blob, three ancestry, eight component,
 # six review, two current-target, one inventory and two queries per source file.
@@ -542,11 +542,12 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         result_schema = 'compiler-verifier-result-v2'
     elif not DRAFT_ONLY and not CORE_CSC_HISTORY_ONLY and not COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
         root = FINAL_VERIFIER_ROOT
-        prefix = 'azureauth-final-publish-post0062-'
+        prefix = 'azureauth-final-publish-post0063-'
         maximum = FINAL_VERIFIER_MAXIMUM_CALLS
         start_record = {
-            'schema': 'final-publish-post0062-verifiers-start-v1', 'maximumCalls': maximum,
+            'schema': 'final-publish-post0063-verifiers-start-v1', 'maximumCalls': maximum,
             'priorCombinedBuildTest': 94, 'priorSynthetic': 52,
+            'priorPublication': 1,
             'preparationCharge': 0, 'buildTestCharge': 0, 'publishCharge': 1,
             'syntheticCharge': 0, 'sameAttemptAsPairedReservation': True}
         result_schema = 'final-publish-verifier-result-v1'
@@ -2189,7 +2190,7 @@ def refresh_history(admission, deadline, cancelled, reserved=None):
             # Retained parents only: never add 0060/0061 to receipt traversal.
             expected_numbers.extend(('0060', '0061'))
         elif platform == 'windows' and not DRAFT_ONLY:
-            # Only 0062's pinned reservation is read separately for its endpoint.
+            # Separate checks use 0062's reservation and the accepted 0063 copy.
             # Other successor children remain outside the historical receipt loop.
             expected_numbers.extend(FINAL_RETAINED_SUCCESSORS)
         if platform == 'windows' and reserved is not None:
@@ -2337,19 +2338,68 @@ COMPILER_NATIVE_INPUTS_PRIOR_CAPACITY = {
 # Fixed post-0056 dispositions supplement, rather than rewrite, the accepted
 # paired handoff. Unavailable starts stay consumed without fabricated entries.
 FINAL_CHARGED_SUCCESSORS = ('0057', '0058', '0059', '0060', '0061', '0062')
-FINAL_RETAINED_SUCCESSORS = ('0060', '0061', '0062')
+FINAL_FAILED_PUBLICATIONS = ('0063',)
+FINAL_RETAINED_SUCCESSORS = ('0060', '0061', '0062', '0063')
 FINAL_0062_RESERVATION = {
     'path': '/var/tmp/azureauth-windows-slice-108/windows-actions/0062/started.json',
     'sha256': '40012f4e1fd3bd1ba0d01431c7a600b7d89516b7f3e42dfeb8960c57f4b9779c',
 }
+FINAL_0063_RESERVATION_COPY = {
+    'path': '/tmp/windows-final-publish0063-failure-observation-root-v1/wsl-started.json.bin',
+    'bytes': 833,
+    'sha256': 'bfacbbf1c4b103dc95bfbe9f5335a9eec13143178bbb348585322a01674b0a52',
+}
 
 
 def final_action_number():
-    return f'{56 + len(FINAL_CHARGED_SUCCESSORS) + 1:04d}'
+    return f'{56 + len(FINAL_CHARGED_SUCCESSORS) + len(FINAL_FAILED_PUBLICATIONS) + 1:04d}'
+
+
+def read_failed_final_reservation_copy(totals, previous_endpoints, deadline, cancelled):
+    """Read only the sealed accepted copy, never original failed 0063 state."""
+    pin = FINAL_0063_RESERVATION_COPY
+    parent, leaf = failed_parent(pin['path'], deadline, cancelled)
+    fd = None
+    try:
+        fd = os.open(leaf, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
+        before = os.fstat(fd)
+        if (not stat.S_ISREG(before.st_mode) or stat.S_IMODE(before.st_mode) != 0o400 or
+                before.st_uid != os.getuid() or before.st_nlink != 1 or before.st_size != pin['bytes']):
+            fail('Accepted failed-publication copy shape changed')
+        budget(deadline, cancelled)
+        raw = os.read(fd, pin['bytes'] + 1)
+        after = os.fstat(fd)
+        current = os.stat(leaf, dir_fd=parent, follow_symlinks=False)
+        identities = [(failed_identity(info), info.st_uid, info.st_gid)
+                      for info in (before, after, current)]
+        if (len(raw) != pin['bytes'] or sha(raw) != pin['sha256'] or
+                identities[0] != identities[1] or identities[1] != identities[2]):
+            fail('Accepted failed-publication copy bytes or identity changed')
+        start = decode(raw, canonical=True)
+        if (start.get('schema') != 'final-publish-reservation-v1' or
+                start.get('action') != 'final-publish' or start.get('number') != '0063' or
+                start.get('source') != PRODUCT['commit'] or start.get('sourceTree') != PRODUCT['tree'] or
+                start.get('protocol') != '12505bde79e9db09a19a6861f7a0693747741089' or
+                start.get('authoritySha256') != '0dd69881dbce65ac3597d523101a08108553cd820ba8716dfd7878212bddfeb2' or
+                start.get('handoffSha256') != COMPILER_NATIVE_INPUTS_INPUTS['handoff']['sha256'] or
+                compact(start.get('priorCounters')) != compact(totals) or
+                compact([start.get(k) for k in ('preparationCharge', 'buildTestCharge',
+                    'publishCharge', 'reservedProcessScenarios')]) != compact([0, 0, 1, 0]) or
+                start.get('originalOuterLimitMilliseconds') != 700000):
+            fail('Accepted failed-publication reservation scope changed')
+        endpoint = string(start.get('endpoint'), '[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}')
+        if endpoint in previous_endpoints:
+            fail('Accepted failed-publication endpoint collides with prior history')
+        budget(deadline, cancelled)
+        return (identities[1], raw), endpoint
+    finally:
+        if fd is not None:
+            os.close(fd)
+        os.close(parent)
 
 
 def verify_final_successors(admission, totals, deadline, cancelled, reserved):
-    """Two bounded reads of the successful diagnostic's original reservation."""
+    """Two checks of the diagnostic reservation and sealed failed-final copy."""
     state = admission.setdefault('finalSuccessors', {
         'passes': 0, 'remainingSeconds': 30.0, 'snapshot': None, 'failed': False})
     expected_pass = 0 if reserved is None else 1
@@ -2371,10 +2421,12 @@ def verify_final_successors(admission, totals, deadline, cancelled, reserved):
         combined = sum(totals[p][1] for p in ('linux', 'windows')) + 1
         combined += len(FINAL_CHARGED_SUCCESSORS) + 1  # Accepted systemd batch.
         synthetic = sum(totals[p][3] for p in ('linux', 'windows')) + 4
+        publication = sum(totals[p][2] for p in ('linux', 'windows')) + len(FINAL_FAILED_PUBLICATIONS)
         if (combined != 94 or synthetic != 52 or combined > LIMITS['buildTest'] or
                 synthetic + 12 + 16 != LIMITS['synthetic'] or
                 sum(totals[p][0] for p in ('linux', 'windows')) != 15 or
-                sum(totals[p][2] for p in ('linux', 'windows')) != 0):
+                sum(totals[p][2] for p in ('linux', 'windows')) != 0 or
+                publication != 1 or publication + 1 > LIMITS['publish']):
             fail('Current final publication capacity changed')
         parent, leaf = failed_parent(FINAL_0062_RESERVATION['path'], end, cancelled)
         fd = os.open(leaf, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
@@ -2391,8 +2443,6 @@ def verify_final_successors(admission, totals, deadline, cancelled, reserved):
                 failed_identity(after) != failed_identity(current)):
             fail('Original 0062 reservation bytes or identity changed')
         snapshot = (failed_identity(after), raw)
-        if expected_pass == 1 and snapshot != state['snapshot']:
-            fail('Original 0062 reservation continuity changed')
         start = decode(raw, canonical=True)
         if (start.get('schema') != 'compiler-native-inputs-reservation-v1' or
                 start.get('action') != 'compiler-native-inputs' or start.get('number') != '0062' or
@@ -2411,7 +2461,12 @@ def verify_final_successors(admission, totals, deadline, cancelled, reserved):
         endpoint = string(start.get('endpoint'), '[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}')
         if endpoint in admission['evidence']['handoff']['knownEndpoints']:
             fail('Original 0062 endpoint collides with accepted history')
-        state['snapshot'], state['endpoint'] = snapshot, endpoint
+        failed_snapshot, failed_endpoint = read_failed_final_reservation_copy(
+            totals, [*admission['evidence']['handoff']['knownEndpoints'], endpoint], end, cancelled)
+        snapshot = (snapshot, failed_snapshot)
+        if expected_pass == 1 and snapshot != state['snapshot']:
+            fail('Final predecessor reservation continuity changed')
+        state['snapshot'], state['endpoints'] = snapshot, (endpoint, failed_endpoint)
         budget(end, cancelled)
         state['failed'] = False
     finally:
@@ -2811,7 +2866,7 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
         endpoint = uuid.uuid4().hex
         string(endpoint, '[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}')
         if (endpoint == '0' * 32 or endpoint in manifest['knownEndpoints'] or
-                endpoint == admission['finalSuccessors']['endpoint']):
+                endpoint in admission['finalSuccessors']['endpoints']):
             fail('Endpoint collision; no retry')
         envelope = admission['envelope']
         start = {'schema': 'final-publish-reservation-v1', 'action': 'final-publish', 'number': number,
@@ -2821,7 +2876,7 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
                  'authoritySha256': sha(admission['authorityBytes']), 'handoffSha256': envelope['handoff']['sha256'],
                  'guardAcceptanceSha256': envelope['guardAcceptance']['sha256'], 'priorCounters': totals,
                  'preparationCharge': 0, 'buildTestCharge': 0, 'publishCharge': 1, 'reservedProcessScenarios': 0,
-                 'endpoint': endpoint, 'originalOuterLimitMilliseconds': 700000}
+                 'endpoint': endpoint, 'originalOuterLimitMilliseconds': LIMITS['outerMilliseconds']}
         local.mkdir(mode=0o700)
         write_new(local / 'started.json', compact(start))
         # From this point any failure retains the original charge. Never remove,
@@ -2913,7 +2968,8 @@ def exchange_clock(binding, process, deadline, cancelled):
     integer(ready['windowsClockFrequency'], 1)
     integer(ready['controllerPid'], 1, 4294967295)
     string(ready['controllerStartUtc'], '[0-9T:.+Z-]{20,40}')
-    left = int(budget(deadline, cancelled) * 1000)
+    # Preserve the original outer deadline while retaining the Windows clock cap.
+    left = min(700000, int(budget(deadline, cancelled) * 1000))
     integer(left, 1, 700000)
     reply = {'schema': 'final-publish-clock-remaining-v1', 'action': binding['start']['number'],
              'reservationSha256': binding['reservationSha256'], 'invocationSha256': binding['invocationSha256'],

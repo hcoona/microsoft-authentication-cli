@@ -13889,3 +13889,193 @@ captures, native images, response files, source/runtime materialization destinat
 old action records including 0062 START, account/cache access, network operations and
 cleanup. No human input or desktop attendance is selected. The observation's output
 cannot grant authentication, CLI execution, release or whole-Slice acceptance.
+
+### Accepted Original 0063 Control Evidence
+
+The sole passive observation completed normally under accepted commit
+`039334f2d7816c551ff760a53e982e101343b99e`. Independent review accepted its original
+transport, then its fixed manifest, then the private copied controls against the
+admitted producer source. The manifest is 157,289 bytes with SHA-256
+`da1c2b60ed24a7d647f421c656d3a114fd6e134df3a9d6ae5a63e5f7aaf911d3`.
+Its 209 ordered slots contain 206 stable JSON copies, two missing WSL completion
+copies and one metadata-only zero-byte cancellation marker. The observation used
+206 source reads, requested 3,875,022 bytes and retained 79,645 control bytes. Its
+sole allowance is consumed; interpretation reread only its retained copies.
+
+All 98 numbered helper receipts join to their starts and record zero client exit,
+both stream EOFs, an empty owned cgroup, completed supervision and no failure.
+Their retained stderr is complete and empty. Their recorded elapsed times total
+12,727 milliseconds; this does not explain the entire elapsed prelaunch interval.
+The paired reservation bytes match. Reservation, invocation, authority, endpoint,
+clock and original controller identity joins pass.
+
+At the original clock handoff, only 593,461 milliseconds remained from the
+700-second WSL outer allowance. The Windows controller recorded an admission
+failure at source line 1440, whose explicit check requires at least 610,000
+milliseconds for the 600-second action plus its ten-second startup allowance.
+The remaining time was already 16,539 milliseconds below that requirement at
+handoff. This is a source-bound admission-budget failure, not a compiler or
+authentication failure. It does not attribute the elapsed time to any unrecorded
+individual operation.
+
+That exact failure precedes the guard factory at line 1444 and the publication
+root start at line 1454. Neither the publication Job nor its subject was created,
+and capture did not start. The bootstrap observed the same clock-bound original
+controller exit with code 1 before its deadline; the WSL caller observed its
+original proxy exit with code 1. The bootstrap rejects the nonzero controller
+exit before reading or hashing the Windows result, explaining its null result
+hash. The Windows result instead joins through the fixed original location,
+accepted producer and reservation. The two missing WSL completion copies are
+consistent with the unentered successful-completion path; absence alone does
+not establish that path.
+
+Accept only this original 0063 no-subject-created and owned-controller/proxy-exited
+disposition. Preserve the original `quiescent: false`,
+`retainedLiveWorkOrUnknown: true` and failed completion fields unchanged. Their
+conservative initialization does not contradict the narrower source-bound
+disposition. This establishes no global quiescence and changes no original 0057
+uncertainty or its accepted risk scope. The cancellation marker establishes no
+termination. No artifact was accepted, and no artifact existence or integrity
+claim follows.
+
+The paired reservation was reached after the first original 0062 START check.
+The nonzero proxy path did not enter the postcompletion check, so the second
+START read was not reached. This is an inference from the admitted source path,
+not another observation of original 0062; neither allowance becomes reusable.
+Keep original 0063 failed and publication 1/12 consumed, with preparation 15/16,
+build/test 94/120 and synthetic 52/80 unchanged. The observation and interpretation
+charge none of those units. Independent triage classified
+`FINAL0063-ADMISSION-BUDGET-001` as a true positive and accepted the narrow lifetime
+disposition. A successor retains its separate accepted protocol, source, history,
+capacity and exact execution-admission prerequisites.
+
+### Successor Publication History After Original 0063
+
+The successor is one separately admitted final publication numbered 0064. It
+preserves original 0063 as failed and charged, with no replay, repair, deletion,
+replacement endpoint or refund. Before reservation, require the paired Windows
+and WSL parent sets 0001-0056 plus 0060-0063; after reservation, add only 0064.
+The existing bounded parent enumeration and equality checks remain. Original
+0063 is excluded from the historical child-receipt traversal, as are the other
+retained post-0056 allocations. Its accepted no-subject/owned-controller-exited
+disposition supplies the historical lifetime prerequisite; it is not a new
+lifetime-risk exception.
+
+Keep the six diagnostic charges 0057-0062 separate from the one failed publication
+charge. The current projection remains preparation 15/16, build/test 94/120,
+publication 1/12 and synthetic 52/80. Derive action 0064 from 56 historical
+allocations, six charged diagnostics, one failed publication and the new action.
+The next attempt charges exactly one additional publication, whether its first
+verifier marker or paired reservation is the last reached durable record. Those
+two markers describe the same attempt and cannot charge it twice. Success or
+failure leaves publication occupancy at 2/12. Preserve the twelve protected CLI
+scenarios and sixteen unallocated synthetic scenarios.
+
+The successor uses the fresh verifier root
+`/var/tmp/azureauth-final-publish-verifiers-108-post0063-v1`, marker schema
+`final-publish-post0063-verifiers-start-v1` and unique service prefix
+`azureauth-final-publish-post0063-`. Its marker records prior publication 1 and
+the new charge 1. Preserve the existing 98-call ceiling, 30-second per-helper
+acceptance window, twenty-second maximum helper runtime, original client/EOF/
+cgroup completion checks, permanent failure latch and all queue-retention
+limitations. The consumed original verifier root is neither reopened nor reused.
+
+The successor has a new, separately admitted two-check history allowance; it
+does not reuse either original 0063 allowance. At the existing locked checks
+before reservation and after successful completion, read original 0062's fixed
+WSL START once per check under the unchanged 1 MiB limit and exact reservation
+hash. In the same checks, read only the sealed 833-byte copied 0063 reservation
+at `/tmp/windows-final-publish0063-failure-observation-root-v1/wsl-started.json.bin`,
+SHA-256 `bfacbbf1c4b103dc95bfbe9f5335a9eec13143178bbb348585322a01674b0a52`.
+This adds no read of original 0063 state. Require a current-owner, single-link,
+mode-0400 regular copy, descriptor-relative no-follow access, exact bytes/hash,
+held/named identity continuity including integer nanosecond timestamps, strict
+canonical JSON, original scope/charges and the historical counter join.
+
+Each checkpoint is latched before I/O and reads each selected leaf once with one
+oversize guard byte. Both checkpoints share the existing 30 seconds of active
+history-check time within the original successor outer clock: at most four
+content reads, 2,098,822 requested bytes and 2,098,818 returned content bytes.
+Require both original 0062 and copied 0063 bytes and identities to remain equal
+across checkpoints. Validate both UUIDv4 endpoints against each other and the
+unchanged historical endpoint set; reject a new endpoint colliding with any of
+them. Do not fabricate historical entries or rewrite the original post-0056
+handoff and its historical `priorCounters`. The current capacity projection is
+the explicit supplement above, not a mutation of those counters.
+
+This successor retains the product, recipe, graph, guard artifact, nine authority
+roles, public review bindings and current-source correspondence requirements.
+All changed source/protocol, authority, materialization and literal bindings must
+be independently accepted before execution. No original admission, copied
+component destination or reserved action directory may be reused. No account,
+cache, real WAM, CLI, release or whole-Slice acceptance follows from preparation.
+
+For 0064, the immutable activation procedure selects only the fresh component
+package `/tmp/windows-final-publish0064-activated`, evidence directory
+`/tmp/windows-final-publish0064-authority-inputs` and external authority file
+`/tmp/windows-final-publish0064-execution-authority.json`. These replace the
+original final attempt's fixed activation destinations for this successor only.
+Keep the existing four component names, recipe, nine role names, keyword-only
+authority descriptor and rejection of a direct dispatcher command. The separate
+materialization and exact literal admissions must bind the complete accepted
+bytes, fresh destinations and their finite I/O, time, output and retention bounds
+before any copy, import or invocation. Merely naming these paths does not admit
+any such operation.
+
+### Successor Timing and Complete Action Reserve
+
+For 0064 only, replace the original WSL outer and bootstrap local ceilings with
+1,800 seconds each. Keep both original start instants: the WSL clock begins
+before admission, and the bootstrap clock begins on bootstrap entry. Admission,
+all helpers, history checks, reservation, launch, capture, collection, receipt
+persistence, lock release and finalization remain inside the one WSL clock.
+This finite preparation allowance is not a guarantee of future throughput.
+
+| Clock or allowance | Successor maximum or required reserve |
+| --- | ---: |
+| Original WSL total, including finalization | 1,800,000 ms |
+| Original bootstrap local clock | 1,800,000 ms |
+| Original Windows controller local clock | 700,000 ms |
+| Ready/remaining reply value | 700,000 ms |
+| Original publication action, including capture/drain | 600,000 ms |
+| Required shared and controller-local time before guard and root creation | 610,000 ms each |
+| Original clock handshake | 20,000 ms |
+| Never-resumed-root allowance and outer emergency observation | Existing 10,000 ms bounds |
+
+The WSL reply is the smaller of 700,000 milliseconds and the floored remaining
+time on its original 1,800-second clock. Preserve the ready-counter anchor,
+integer frequency conversion and subtracted tick. The reply neither resets the
+WSL deadline nor adds a new 700 seconds to an expired or insufficient outer
+allowance. Keep the bootstrap and controller reply validators capped at 700,000
+milliseconds. Update all six bootstrap-local ceiling checks consistently,
+including the handshake's outer cap; keep its separate twenty-second duration.
+
+Let W be original WSL start, B bootstrap start, R the Windows ready instant and
+S the WSL remaining-time sample, under the existing trusted monotonic-clock
+premises. The admitted sequence gives W <= B and R <= S. The shared deadline is
+no later than R + min(700 seconds, W + 1,800 seconds - S), hence no later than
+W + 1,800 seconds, which is no later than B + 1,800 seconds. The bootstrap cannot
+be the earlier stopping clock than the shared deadline. Merely increasing WSL
+while retaining the bootstrap's old 700 seconds would not establish this order.
+Independent triage of `FINAL0063-SUCCESSOR-BOOTSTRAP-RESERVE-001` confirmed that
+prospective defect and the consistent bootstrap adjustment as its remedy.
+
+The controller's own 700-second deadline can be earlier than the shared deadline.
+At both existing pre-guard and pre-root checks, require at least 610 seconds
+under the shared counter and at least 610 seconds remaining on the original
+controller stopwatch. Never lower the reserve or restart a clock. Preserve the
+unchanged accepted guard's minimum of shared time, local controller time and the
+600-second action time, its original handle ownership, no-kill final mode and
+bounded never-resumed-root exception. No guard rebuild or new subject runtime
+is selected. Keep the existing normal-drain, diagnostic, cancellation, late
+completion and retention checks.
+
+The source authority and new reservation both record `outerMilliseconds` or
+`originalOuterLimitMilliseconds` as 1,800,000, as applicable. The independently
+accepted literal must use the same original action bound through its return
+and reporting checks, retaining its separate thirty-second pre-entry bound and
+the accepted runtime/startup supervision boundary. No literal or external
+observer may truncate the reserved action through an unchanged old total limit.
+Failure, cancellation or late finalization still consumes this one successor
+and stops continuation. An unavailable complete reserve rejects before subject
+creation; the larger outer allowance grants no automatic retry.

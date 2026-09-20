@@ -8,7 +8,7 @@ import datetime
 import signal
 import subprocess
 import time
-from final_publish_contracts import admitted_reservation, budget, compact, exchange_clock, original_completion, write_new
+from final_publish_contracts import LIMITS, admitted_reservation, budget, compact, exchange_clock, original_completion, write_new
 
 _retained_proxies = []
 
@@ -40,7 +40,7 @@ def invoke_final_publish_candidate(*, reviewed_authority):
     if DRAFT_ONLY:
         raise RuntimeError('DRAFT_ONLY: no final-publish launch')
     began = time.monotonic()
-    deadline = began + 700.0
+    deadline = began + LIMITS['outerMilliseconds'] / 1000
     interrupted = False
     old_handlers = {}
     result = {'schema': 'final-publish-wsl-result-v1', 'normalCompletion': False,
@@ -58,7 +58,7 @@ def invoke_final_publish_candidate(*, reviewed_authority):
         for number in (signal.SIGINT, signal.SIGTERM):
             old_handlers[number] = signal.signal(number, mark_cancel)
         # Admission, durable capacity, source checks, launch, collection and the
-        # entire emergency path share this original 700-second absolute ceiling.
+        # entire emergency path share this original 1800-second absolute ceiling.
         # The original shared action lock stays held until final receipt writing.
         with _assert_exact_admission(deadline, began, lambda: interrupted,
                                      reviewed_authority=reviewed_authority) as binding:
