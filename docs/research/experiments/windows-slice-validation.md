@@ -12761,6 +12761,184 @@ publication, artifact and Slice acceptance remain separate. No account,
 cache, network or installation operation is permitted. Build/test and
 synthetic occupancy remains 94/120 and 52/80.
 
+### Accepted Metadata-Bound Acquisition Result
+
+The sole sized acquisition ran under the protocol accepted at
+`25042db693785b0847839cd95f15ad008f49cde8`, with the exact source and tool map
+above. Its one attempt was reserved before launch. The original yielded one
+tool session, and its sole continuation returned normal exit code 0, no live
+session and one complete 1,033-byte success frame. Independent outcome review
+accepted the opaque acquisition and its 31,846-byte inventory, SHA-256
+`f2aff8b6e4eca54790cef23f9b4f9d4b32eea98ab161ffac4a969a2cb94098c9`.
+
+All twelve selected files matched their expected sizes and integer identities.
+Fourteen initial observations matched fourteen final observations, including
+both earlier-root absences for `uuid.lib`. The initial captures totaled
+36,894,060 bytes and preceded output creation. Each original reread and sealed
+copy readback matched the initial length, hash and bytes under the declared
+identity checks. These are source-bound acquisition observations, not a claim
+of continuous filesystem stability or future copy validity. Each later consumer
+must verify its admitted input pins.
+
+The 36 candidate reads requested 110,682,216 bytes and returned 110,682,180.
+Three runtime reads and one inventory readback brought the total to 40 reads,
+119,771,714 requested bytes and 119,771,674 returned bytes. The twelve copies
+and inventory totaled 36,925,906 output bytes. Charged path operations increased
+from 901 before inventory writing to 984 at completion; writes increased from
+567 to 568. The completion counters precede their own 1,033-byte frame charge.
+All effects fit the admitted bounds. The reviewed no-child source completed
+its owned cleanup before success, and the original session ended normally.
+This resolves this acquisition's owned lifetime; historical 0057 uncertainty
+retains its accepted scope.
+
+The new acquisition and both predecessors remain consumed, with no retry or
+refund. The opaque files and inventory are intentionally retained. Their
+descriptors may inform a separately reviewed interpretation proposal, but this
+result grants no further payload read or interpretation. It does not establish
+archive member selection, linker inclusion, host reachability, delay calls,
+current loader resolution or public provenance. Native closure, graph,
+publication, artifact and Slice acceptance remain open. No account, cache,
+network or installation operation occurred. Build/test and synthetic occupancy
+remains 94/120 and 52/80.
+
+## Fixed Native Frontier Offline Interpretation
+
+This supplement proposes one separately admitted interpretation of the twelve
+opaque files retained by the accepted metadata-bound acquisition. Bind the
+exact inventory and every selected file's acquired size and SHA-256 before
+interpretation. Read only those fixed offline inputs. No installed original,
+directory enumeration, additional candidate acquisition, final working-directory
+inspection, Windows helper or payload execution is permitted.
+
+For the three library slots, walk the physical archive members and retain
+member-local object and section observations. Keep physical boundaries,
+index/string diagnostics, supported interpretation and conformance claims
+separate. Historical known-site requirements and observed member counts do not
+apply to these new bytes. A local unsupported structure remains an explicit
+gap; it must not erase already established unrelated member observations or
+become empty successful coverage.
+
+Retain exact raw `.drectve` slices and their file offsets. Apply the supported
+narrow option tokenizer only where the declared section layout permits it,
+including the `IMAGE_SCN_LNK_INFO` predicate. Unsupported encodings, quoting or
+option forms remain explicit. Extracted declarations do not establish linker
+option application or archive member selection. Short-import DLL declarations
+concern target runtime imports; they do not automatically authorize host-tool
+dependency acquisition.
+
+For the nine host DLL slots, retain ordinary and delay import descriptors,
+names and file-offset provenance using the reviewed PE32+ interpretation
+subset. Preserve rejection of header overlap, ambiguous or unbacked RVA
+ranges, and unsupported delay attributes. Delay descriptors alone do not
+establish that a delay-load call occurs. No extracted name grants another
+filesystem search or establishes current loader resolution.
+
+Derive finite read, parser-work, retention and output budgets from the accepted
+input sizes and explicit structural minima. Repeated or aliased data still
+consumes the relevant work and retention counters. Budget exhaustion is a
+global stop, not a local format gap or successful partial completion. Finite
+capacity does not promise that every format-valid adversarial input fits.
+
+### Exact Interpretation Subject and Bounds
+
+The inactive source is
+`/tmp/interpret_windows_final_native12_sized.v1.inactive.py`, 63,741 bytes,
+SHA-256 `41bba5cab39360d87b5c26c30ba508459442502e363dd120be7de5617296efad`.
+Exactly one `ACTIVE = False` to `ACTIVE = True` replacement yields the
+63,740-byte command body, SHA-256
+`bbc3505d052be9d21b3bd0e0d3d4d198cb7ab04731c796597c82eb903540cb4c`.
+The source-bound procedure is
+`/tmp/windows-final-native12-sized-interpretation-procedure-v1.md`, 21,564
+bytes, SHA-256
+`c131295ecb4ffec187b375bde2be489d47738d54754ea4d43e87ac040d4ce24e`.
+The exact tool map is
+`/tmp/windows-final-native12-sized-interpretation-exact-tool-call-root-v1.json`,
+74,224 bytes, SHA-256
+`fba13ca66963ebdfd16a5cec47ecd74e165ddc4e023c6941ef9f35f6bf845c62`.
+
+Use one externally reserved exact invocation, including failed launch, with
+no retry, separate PREPARE/START action or active source file. Retain the
+accepted acquisition's exact runtime, working-directory and nonblocking lock
+checks. The existing trusted executor supplies its unchanged inherited
+environment; this is not a pre-Bash sanitization claim. Known or suspected
+startup drift requires refreshed admission, and the internal checks reject
+forbidden environment names before dependent input work.
+
+Read the inventory and twelve fixed offline files once each, with exact
+size-plus-one requests, no refill, regular mode-0444 checks, stable held/named
+identities and matching accepted hashes. No content-derived path is opened.
+Exclusively create only
+`/tmp/windows-final-native12-sized-interpreted-v1.json`, seal it from mode
+0600 to 0444 with fsync, and read it back once under held/named identity and
+exact-byte checks. An existing output stops without reuse or replacement.
+Retain complete or partial output on every exit.
+
+| Effect | Maximum |
+| --- | ---: |
+| Fixed offline input reads | 13 |
+| Offline requested / returned bytes, including sentinels | 36,925,919 / 36,925,919 |
+| Runtime reads | 3 |
+| Runtime requested / returned bytes, including sentinels | 9,057,651 / 9,057,651 |
+| Result readback calls | 1 |
+| Result requested / returned bytes, including sentinel | 295,218,017 / 295,218,017 |
+| Combined content reads | 17 |
+| Combined requested / returned bytes | 341,201,587 / 341,201,587 |
+| Charged event bytes | 295,152,480 |
+| Result output bytes | 295,218,016 |
+| New result files / directories | 1 / 0 |
+| Positive-progress output write calls | 295,218,016 |
+| Requested bytes per output write | 65,536 |
+| Charged path, identity, lock, mode, seek and sync operations | 256 |
+| Complete source-owned transport bytes | 8,192 |
+
+The event budget is eight times the exact 36,894,060 raw input bytes; the
+result cap adds a 65,536-byte fixed metadata allowance. Growing option and
+import collections charge events during construction. A containing token
+record charges its header with an empty option list because its children
+have already charged their serialized bytes. Raw directive retention charges
+once; extraction and token scanning remain separate processing work.
+
+| Parser dimension | Maximum |
+| --- | ---: |
+| Charged member attempts / members per file | 556,550 / 404,914 |
+| Backed sections | 835,684 |
+| Charged symbols | 18,551,606 |
+| String requests / bytes per string | 36,033,359 / 24,294,796 |
+| Retained string bytes | 36,894,060 |
+| Directive bytes / bytes per section | 33,392,892 / 24,294,796 |
+| Retained object prefix bytes | 31,166,632 |
+| Witnesses | 556,559 |
+| Narrow options | 16,696,446 |
+| Import rows | 691,689 |
+| Import directory bytes / entries | 2,143,544 / 107,177 |
+| Charged scan bytes | 2,520,497,000 |
+| Charged parser steps | 10,682,960,096 |
+
+The inert width model bounds fixed metadata at 34,622 bytes and the complete
+serialized result at 295,187,102 bytes under the event budget. It bounds
+success and failure frames at 1,321 and 1,944 bytes; their 3,265-byte sum also
+fits when a late failure follows success. A late failure still fails the
+invocation. The ordinary complete path requires 225 charged operations,
+including the unconditional unlock. Result counters precede result writing
+and readback; frame counters precede their own transport charge. Outcome
+review must reconcile these distinct observation points.
+
+Normal work and successful completion share a nonresetting 90-second source
+deadline. The unchanged outer supervisor sends TERM at 95 seconds and KILL
+two seconds later. Unconditional owned cleanup and bounded failure reporting
+may extend beyond source expiry within that outer lifetime. The interpreter
+creates no child. Preserve the complete original and every continuation,
+including final exit; any truncation, nonzero exit, late failure or new
+owned-lifetime uncertainty blocks acceptance. Do not infer total process
+lifetime from a tool's output-wait duration.
+
+Require independent acceptance of the exact result and complete outcome before
+using extracted observations. Completion does not accept archive conformance,
+dependency completeness, native closure, current final resolution, graph,
+publication, artifact or the Slice. No account, cache, network, installation,
+compiler, linker or product operation occurs. Build/test and synthetic
+occupancy remains 94/120 and 52/80.
+
 ## Fixed Final Source and Restore Materialization
 
 This supplement permits one separately admitted copy of the final publication's
