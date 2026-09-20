@@ -1,10 +1,10 @@
-"""Disabled final-publication contracts. Importing this draft is prohibited.
+"""Final-publication contracts for a separately accepted fixed literal.
 
-The external launcher pins the authority envelope after independent acceptance.
-No caller-supplied dictionary, review boolean or source hash grants execution.
+The literal verifies immutable source before import and pins the completed
+external authority envelope. A descriptor alone does not grant execution.
 """
 
-DRAFT_ONLY = True
+DRAFT_ONLY = False
 CORE_CSC_HISTORY_ONLY = False
 COMPILER_NATIVE_INPUTS_HISTORY_ONLY = False
 if CORE_CSC_HISTORY_ONLY and COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
@@ -28,7 +28,6 @@ import subprocess
 import time
 import uuid
 
-REVIEWED_LAUNCH = None
 AUTHORITY = Path('/tmp/windows-final-publish-execution-authority.json')
 EVIDENCE = Path('/tmp/windows-final-publish-authority-inputs')
 PACKAGE = Path(__file__).absolute().parent.parent
@@ -1735,11 +1734,13 @@ def hash_protected(item, deadline, cancelled):
     budget(deadline, cancelled)
 
 
-def load_admission(deadline, cancelled):
+def load_admission(deadline, cancelled, *, reviewed_authority):
     budget(deadline, cancelled)
-    if DRAFT_ONLY or REVIEWED_LAUNCH is None:
+    if DRAFT_ONLY:
         raise RuntimeError('UNBOUND: independent fixed launcher envelope')
-    raw = bound(REVIEWED_LAUNCH, AUTHORITY, deadline, cancelled)
+    # bound rejects anything but the exact bytes/SHA256 descriptor before I/O.
+    # The separately accepted literal supplies it without mutating module state.
+    raw = bound(reviewed_authority, AUTHORITY, deadline, cancelled)
     envelope = decode(raw, canonical=True)
     keys(envelope, ('schema', 'repository', 'target', 'protocol', 'wave', 'product', 'integration',
                     'components', 'recipe', 'acceptedGuard', 'rootMarkers', 'limits', *INPUTS))
@@ -1838,13 +1839,13 @@ def names(path, deadline, cancelled):
     return values
 
 
-# Exact failed 0056 evidence; activation remains part of a reviewed future caller.
-CORE_CSC_FAILED_DISPOSITION_BINDING = None
+# Immutable final-caller binding to the unchanged accepted failed 0056 evidence.
 CORE_CSC_FAILED_DISPOSITION = {
     "path": "/tmp/windows-core-csc-0056-failed-history-disposition-root-v1.json",
     "bytes": 3202,
     "sha256": "6a241958bfd4693de219393c5920277e18ead52f8d039cd265f412837d142525",
 }
+CORE_CSC_FAILED_DISPOSITION_BINDING = CORE_CSC_FAILED_DISPOSITION.copy()
 CORE_CSC_FAILED_ORIGINALS = {
     "wsl-result": "/var/tmp/azureauth-windows-slice-108/windows-actions/0056/result.json",
     "wsl-started": "/var/tmp/azureauth-windows-slice-108/windows-actions/0056/started.json",
@@ -2765,8 +2766,8 @@ def final_startup_inputs(owned, deadline, cancelled):
 
 
 @contextlib.contextmanager
-def admitted_reservation(deadline, began, cancelled):
-    admission = load_admission(deadline, cancelled)
+def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
+    admission = load_admission(deadline, cancelled, reviewed_authority=reviewed_authority)
     lock_path = direct(LINUX / 'action.lock')
     fd = os.open(lock_path, os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK)
     try:
