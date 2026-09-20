@@ -5396,7 +5396,7 @@ contract, and verifies equality to the corresponding accepted Git blobs.
 | --- | ---: | --- |
 | [`run_windows_final_publish.py`](../../../tools/validation/run_windows_final_publish.py) | 7611 | `bccf09306d92b1aa0f7e341c28414d9fa9bb64ce4cd556a243372c7fb64f0d69` |
 | [`final_publish_contracts.py`](../../../tools/validation/final_publish_contracts.py) | 176484 | `e42d5262908d09d32c5b0437094e91c4b0892304a30e58fed5ced9b8452b575c` |
-| [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | 89205 | `fc21a07949d35f7b1c23441b43a0944c8438ba9c79f4774daf1e79ed1d7f8dd8` |
+| [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | 94538 | `ce0fabbbd5de15a88a9f1aee572745a50062d59c04c63aafc3abcbefb48bdd2d` |
 | [`Start-WindowsFinalPublish.ps1`](../../../tools/validation/Start-WindowsFinalPublish.ps1) | 12107 | `7ce257e4e23fbc1cdc3e97602a002f1d518fcaf98513fc5c5b0064ba1647d362` |
 
 #### Selected Product, Recipe and Effects
@@ -12938,6 +12938,236 @@ dependency completeness, native closure, current final resolution, graph,
 publication, artifact or the Slice. No account, cache, network, installation,
 compiler, linker or product operation occurs. Build/test and synthetic
 occupancy remains 94/120 and 52/80.
+
+### Accepted Fixed-Input Interpretation Result
+
+The sole interpretation ran under the protocol accepted at
+`d8fcfc1dbdc2d0faf776d86a30d46bf3cc2c7186`, after its attempt was reserved.
+The unchanged exact tool map returned normal exit code 0 without a live
+session or continuation. Its complete transport contained one 1,251-byte
+success frame and no later failure. Independent review accepted the bounded
+observations and this invocation's owned lifetime. Historical 0057 uncertainty
+retains its existing scope.
+
+The sealed result is 493,778 bytes, SHA-256
+`e080709c4df21ebaa74679288e4ea9303cfa53aa2b96e590ed2d14376f4ed09f`.
+All twelve input size/hash/role bindings matched. Seventeen content reads
+requested 46,477,349 bytes and returned 46,477,332. Eight writes produced
+493,778 bytes. Charged path operations increased from 196 before output to
+225 after completion. The independently reconciled event total was 473,453
+bytes. Completion counters precede their own 1,251-byte transport charge;
+the 771 ms pre-output elapsed observation is not total process lifetime.
+All observed effects fit the admitted limits.
+
+The three archive physical ledgers contain 587 members and 578 ordinary
+objects. All ordinary members were considered within the declared subset.
+The result retains 348 directive sections, 347 complete narrow tokenizations,
+647 option declarations and one explicit unresolved tokenization. All 228
+ordinary `oldnames.lib` members remain unsupported-machine-or-container;
+their empty extracted directive lists do not establish absence. The
+`uuid.lib` member at offset 793,946 has an unresolved encoding/control form
+in section 196, with retained directive data at offset 842,346. Its raw
+slice and unrelated member observations remain available for bounded review.
+
+All nine PE candidates completed their declared directory walks, retaining
+75 normal import descriptors and nine zero delay directories. Original
+conditional-delay acquisition roles remain conditional even where a
+candidate's own imports are normal. These declarations do not establish
+current DLL or API-set resolution, delay calls or further acquisition.
+
+This interpretation remains consumed at one of one attempts, with no retry
+or refund. Retain its result and complete transport. Accepted observations
+may inform the existing native-input review, with the explicit format gaps
+preserved. They do not establish applied options, selected members, archive
+conformance, dependency completeness, native closure, graph acceptance,
+publication, artifact or Slice acceptance. Build/test and synthetic occupancy
+remains 94/120 and 52/80.
+
+### Retained-Metadata Filename Classification
+
+Independent review accepted a bounded classification of the interpretation's
+retained metadata, identifying one new conditional library candidate,
+`synchronization.lib`. This review did not repeat acquisition, read raw
+payloads or change the original parser statuses.
+
+All 228 retained 56-byte `oldnames.lib` member prefixes declare machine zero,
+one section, zero optional-header bytes and the complete inline section name
+`.debug$S`. Their physical member bounds hold the declared header/table extent.
+These retained declarations supply no `.drectve` section; unsupported object
+status remains unchanged. The missing final four section-characteristics bytes
+cannot change the preceding section count or complete name. This does not
+establish general object validity, member selection or absence of every
+implicit input.
+
+The complete rejected `uuid.lib` directive slice is `20 20 20 00`: three ASCII
+spaces and one zero byte. It contains no option or filename spelling. Its
+unsupported encoding/control disposition remains unresolved; do not reinterpret
+it as valid empty-directive semantics or claim that LINK accepts the zero byte.
+No further extraction is needed for this narrow filename question.
+
+The 647 retained options comprise 20 `DEFAULTLIB`, 311 `ALTERNATENAME`,
+276 `FAILIFMISMATCH` and 40 `INCLUDE` declarations. The latter three observed
+operand domains are symbol fallbacks, consistency key/value records and forced
+symbol references; they do not supply filename operands or establish actual
+member selection. Eighteen default-library declarations name already acquired
+`uuid.lib`. One names `Advapi32`, corresponding to the existing protected
+`advapi32.lib` descriptor. The remaining declaration is
+`/DEFAULTLIB:"synchronization"`, in `libcpmt.lib` member 24,228,410,
+section 1, at file offset 24,231,115. Preserve the exact operand and its
+conditional archive-member provenance when proposing `synchronization.lib`.
+
+Among the 75 retained normal host-import declarations, 17 correspond to the
+already acquired host candidates and one to the existing `mspdbcore.dll`
+descriptor. The other 57 retain platform/API-set environment obligations.
+No additional host-candidate basename is identified. Every edge preserves its
+parent's role, including inherited delay conditions for `pgodb140.dll`,
+`msvcdis140.dll` and `msobj140.dll`. Descriptor correspondence does not establish
+current physical continuity or loader resolution. Final library-search
+predicates, native-input closure, graph/recipe acceptance, generated-object
+and target-runtime artifact evidence remain separate obligations.
+
+## Fixed Synchronization Library Acquisition and Directive Diagnostics
+
+This supplement prepares one separately admitted acquisition of the conditional
+`synchronization.lib` candidate identified above, with narrow archive-member and
+directive diagnostics from the same captured memory. It does not repeat any
+NATIVE12 acquisition, size observation or interpretation. Reserve its sole
+attempt before launch in the existing sequential ledger; failed launch consumes
+it. There is no retry, adaptive ceiling increase or automatic next acquisition.
+
+Use the existing WSL review environment and exactly these installed candidate
+leaves, in order:
+
+1. `/mnt/c/Program Files/Microsoft Visual Studio/18/Enterprise/VC/Tools/MSVC/14.51.36231/lib/x64/synchronization.lib`.
+2. `/mnt/c/Program Files (x86)/Windows Kits/10/Lib/10.0.26100.0/ucrt/x64/synchronization.lib`.
+3. `/mnt/c/Program Files (x86)/Windows Kits/10/Lib/10.0.26100.0/um/x64/synchronization.lib`.
+
+Hold and verify the three exact previously observed parent identities. Stop at
+the first present regular nonempty leaf; an invalid, inaccessible, linked or
+oversized leaf fails without trying a later parent. Preserve each earlier
+absence. Reobserve only visited leaves once and require unchanged identities
+or absences. These are two bounded observations, not continuous stability.
+If all three leaves are absent, retain the conditional input gap as unresolved.
+Do not infer that the library or its declaring member is unnecessary.
+
+The prospective single-file capacity is 32 MiB. This is declared bounded
+capacity above the largest previously captured archive, approximately 24.3 MB;
+it is not an observation or prediction of this candidate's size. On selection,
+read its observed size plus one byte once, requiring the exact observed size.
+Parse only these captured bytes, then create at most one opaque copy. Re-read
+the original once and read back the sealed copy once, requiring unchanged
+original identity, exact size, digest and bytes. No refill or alternate path
+is allowed. Use the existing nonblocking read-only action-lock discipline.
+
+The diagnostic subset retains physical archive-member boundaries, ordinary
+x64 COFF and recognized bigobj section tables, exact `.drectve` bytes and narrow
+option declarations. Retain unsupported prefixes, member/section/file rejection
+locations and partial diagnostic status. Short-import markers and `.idata`
+section observations retain their deferred target-runtime meaning. No archive
+index/string-table conformance, short-import DLL-name reconstruction, symbol
+resolution, selected-member inference, option application, PE traversal or
+recursive filename acquisition is performed. A format rejection may leave
+bounded partial diagnostics; capacity exhaustion, cancellation, deadline,
+identity or I/O failure fails the complete invocation.
+
+Create only the fresh private output directory
+`/tmp/windows-final-sync1-offline-v1`, containing at most `01.bin` and
+`result.json`. Create files exclusively, seal them from mode `0600` to `0444`,
+sync them and their parent, and verify exact readback. Keep complete or partial
+output on failure; do not repair, remove, rename, adopt or reuse it. Do not
+inspect any previous acquisition output, enumerate directories, probe the
+final working directory, execute a Windows helper/compiler/linker/product,
+or access accounts, caches, network or installation state.
+
+### Exact Combined Subject and Admission
+
+The inactive source is `/tmp/acquire_windows_final_sync1.v1.inactive.py`,
+52,075 bytes, SHA-256
+`41e3dc0e23644214e562afee3003b831a1578ec939db0cc2c3a996805b7d7fa9`.
+Replacing only its unique `ACTIVE = False` with `ACTIVE = True` yields
+52,074 active command-body bytes, SHA-256
+`76020e4ca41a7cf8e3e3f3cf940ad1e1ce56224e850c4c686dad499da4dc5058`.
+The exact tool map is
+`/tmp/windows-final-sync1-exact-tool-call-preparation-v1.json`, 65,412 bytes,
+SHA-256 `37465350da58e5ddcc5a918008bfe6d61d75084ba65ee28173f0105f1e85b65b`.
+Its 59,319-byte command has SHA-256
+`e763922d6f74700d5b49cf277acc55a995aa59bc5d48db9fa5af19431cbe5501`.
+The exact procedure is
+`/tmp/windows-final-sync1-acquisition-diagnostic-procedure-v1.md`, 22,061 bytes,
+SHA-256 `d3c0675a52115c2253b3bf3ea006d912859c16d8f41382106c6aafeed507c55f`.
+No active source file is materialized. The inert limits proof is
+`/tmp/windows-final-sync1-inert-limits-proof-v1.json`, 86,975 bytes, SHA-256
+`b53c61c2bc573cd0e0d999d040c19a5c862394c5928536ec8ed7079cbbd81804`.
+
+Require independent acceptance of the complete source, procedure, finite
+bounds and exact tool map, plus this merged protocol and current exact
+admission, before execution. The map uses nonlogin Bash without a TTY or
+pipeline; it replaces that shell with GNU timeout supervising the sole
+isolated, no-site, no-bytecode, nonoptimized Python `-c` process. The subject
+creates no child. Source work shares one nonresetting 90-second deadline;
+outer TERM occurs at 95 seconds, with KILL two seconds later. Owned cleanup
+and bounded failure reporting remain unconditional within the outer watchdog.
+
+Before locking or observing candidates, verify the three exact admitted
+runtime executable identities and hashes, startup environment and working
+directory. Their reads are separate from candidate acquisition. Preserve
+exact Python integer identities, including nanosecond timestamps. Final
+working-directory and lock continuity remain source-enforced predicates.
+
+The source-enforced intentional operation limits are:
+
+| Effect | Maximum |
+| --- | ---: |
+| New basenames / initial leaf observations / reobservations | 1 / 3 / 3 |
+| Runtime content reads / requested and returned bytes | 3 / 9,057,651 |
+| Candidate and sealed-copy content reads | 3 |
+| Candidate and sealed-copy requested and returned bytes | 100,663,299 |
+| Initial captured candidate bytes | 33,554,432 |
+| Result readback calls / requested and returned bytes | 1 / 268,500,993 |
+| Total content-read calls / requested and returned bytes | 7 / 378,221,943 |
+| New directories / raw files / result files | 1 / 1 / 1 |
+| Result bytes / aggregate output bytes | 268,500,992 / 302,055,424 |
+| Positive-progress write calls / requested bytes per write | 302,055,424 / 65,536 |
+| Charged path/identity/lock/mode/sync operations | 512 |
+| Parent components, excluding root | 16 |
+| Complete original transport bytes | 8,192 |
+| Startup environment names / characters per name | 512 / 256 |
+| Physical members / sections / symbol-count units | 559,241 / 838,860 / 1,864,135 |
+| Directive bytes / retained prefix bytes | 33,554,432 / 31,317,440 |
+| Long section-name strings / per-string and retained-string bytes | 838,860 / 33,554,432 |
+| Characters per exact identity integer | 40 |
+| Parsed option declarations / charged event bytes | 16,777,216 / 268,435,456 |
+| Charged scan bytes / parser steps | 255,013,632 / 1,601,664,672 |
+
+The output directory is mode `0700`. Requested/returned read ceilings include
+one growth-sentinel byte per call, including failure paths. Each single read
+must return the exact expected size; short or extra data fails without refill.
+Write-call capacity covers the finite one-byte positive-progress worst case,
+not an expected number of writes. Event/result ceilings bound retained
+metadata expansion separately from the 32 MiB candidate capacity. These caps
+bound intentional source operations, not interpreter-startup I/O, total
+operating-system calls, peak memory or immediate interruption of blocked
+kernel I/O. Metadata counters precede their own sealing, and transport
+counters precede their own frame charge; outcome review must reconcile those
+observation points against the complete original transport.
+
+Inert source accounting gives at most 301 charged path operations on a
+successful branch. The widened fixed-metadata envelope is 53,886 bytes;
+with charged child events, the complete result upper bound is 268,489,342
+bytes. Widened success and failure frames fit 2,793 and 4,507 bytes, including
+a 7,300-byte combined late-failure case beneath the 8,192-byte transport cap.
+These are conservative source-bound capacities, not observations or promises
+that every possible archive format completes within the operational budgets.
+
+A successful frame alone is insufficient. Require the complete bounded
+original transport, normal zero exit, resolved owned lifetime, reconciled
+counters and independent outcome acceptance before using the result. A late
+failure after a success frame still fails the attempt. Preserve the explicit
+all-absent and partial-format outcomes. Acquisition and declaration evidence
+do not establish current final LINK selection, native closure, graph/recipe,
+publication, artifact or Slice acceptance. Final-cwd absence and unchanged
+response/search context remain separate final-action predicates. Build/test
+and synthetic occupancy remains 94/120 and 52/80, without debit or refund.
 
 ## Fixed Final Source and Restore Materialization
 
