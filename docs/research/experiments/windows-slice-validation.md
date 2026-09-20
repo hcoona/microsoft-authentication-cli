@@ -13762,3 +13762,130 @@ effects, physical inputs, history, guard and literal bindings; only its own curr
 checks can establish physical predicates at execution. Its successful original
 Csc/response/native evidence remains a result obligation, not a prerequisite requiring
 that diagnostic to have already succeeded.
+
+
+## Original Final Publication 0063 Failure and Fixed Control Evidence
+
+The sole original final-publication invocation under accepted protocol/source commit
+`12505bde79e9db09a19a6861f7a0693747741089`, accepted target
+`aa7bd44b2e57fe8ada55a218546673d5f7977618`, returned exit 1. Its complete
+70-byte output was `Final publication failed; retain all evidence and possibly live work.`
+with one trailing newline, SHA-256
+`0bc76c0203375b21916a82d242ae5fc9406c8bd79e10b7db83831f23a9aa36fb`.
+Independent original-transport review accepts failure and consumption only. The Linux
+tool session completed; the common failure frame does not identify the failing phase,
+dispatcher entry, helper creation, paired reservation, Windows launch, lifetime or
+artifact state. Neither original 0062 START read can be presumed unused. Preserve the
+original invocation permanently as failed, with publication 1/12 consumed and
+preparation 15/16, build/test 94/120 and synthetic 52/80 unchanged. Preserve the twelve
+protected final CLI units and sixteen still-unallocated synthetic units.
+
+The source-defined question is which fixed control records, if any, survived and what
+stage and original completion facts their contents support. Permit one separately
+admitted passive observation under the existing credential-free Wave entry. This
+supplement grants no retry, diagnostic, publication, process operation, cleanup or
+risk exception. Original 0057 uncertainty retains only its existing scope; it does not
+cover new 0063 ownership or termination uncertainty. Dependent experiment execution
+remains stopped while that uncertainty is unresolved.
+
+### Closed Source Set and Interpretation
+
+The [inactive collector](../../../tools/validation/collect_windows_final_failure.py)
+selects only the following optional JSON leaves. In this table, `V` is
+`/var/tmp/azureauth-final-publish-verifiers-108-post0062-v1`, `L` is
+`/var/tmp/azureauth-windows-slice-108/windows-actions/0063`, and `W` is
+`/mnt/c/Temp/azureauth-windows-slice-108/actions/0063`.
+
+| Exact leaves | Count | Maximum bytes per leaf |
+| --- | --- | --- |
+| `V/started.json` | 1 | 4,096 |
+| `V/01/started.json` through `V/98/started.json` | 98 | 4,096 |
+| `V/01/result.json` through `V/98/result.json` | 98 | 32,768 |
+| `L/started.json`, `L/controller-exit.json` | 2 | 16,384 |
+| `L/windows-input.json` | 1 | 4,096 |
+| `L/result.json`, `L/windows-result.json` | 2 | 65,536 |
+| `W/started.json`, `W/controller-exit.json` | 2 | 16,384 |
+| `W/invocation.json`, `W/windows-result.json` | 2 | 65,536 |
+| `W/clock-ready.json`, `W/clock-remaining.json` | 2 | 4,096 |
+
+The 208 JSON leaves permit at most 3,956,736 content bytes and 3,956,944 requested
+bytes including one oversize guard byte per read. An additional metadata-only lookup
+of exact `W/cancel` may record absence or a regular zero-byte marker. It never reads
+marker content or establishes termination. These are rejection ceilings, not claims
+about existing records. No record value selects a path or operation.
+
+Source provenance is the accepted final caller at the above source commit:
+`final_publish_contracts.py`, lines 531-744, defines the 98 helper slots and their
+private stderr prefixes; lines 2775-2892 define admission before reservation and
+reservation-failure receipts; lines 3056-3057 copy the two Windows completion records.
+`run_windows_final_publish.py`, lines 42-151, defines the outer stage, launch/proxy
+fields and retained failure. `Start-WindowsFinalPublish.ps1`, lines 65-188, defines
+bootstrap completion receipts. `Invoke-WindowsFinalPublish.ps1`, lines 1419-1564,
+defines Windows stage/failure records and initialization outside their protected
+receipt-producing function. These are source findings, not observations of 0063.
+
+Independent interpretation may join only the resulting private snapshots, original
+transport and admitted source/authority records. Join paired reservation starts by
+byte hash, `windows-input.json` and invocation/result reservation hashes, bootstrap
+hashes to the clock and Windows receipts, and helper slot/unit values across its
+start and result. The original reviewed authority is 4,218 bytes with SHA-256
+`0dd69881dbce65ac3597d523101a08108553cd820ba8716dfd7878212bddfeb2`.
+Preserve original stderr completeness limits. Do not print or publish raw helper
+stderr, invocation environments or private record contents.
+
+Presence supports only its source-defined recorded point. Absence, invalid or partial
+JSON, an unfinished helper prefix, or all-success helper receipts cannot establish
+that later work never launched or identify an unrecorded semantic admission failure.
+All 98 helper calls precede paired reservation and the dispatcher's Windows launch.
+An independently accepted original-bound helper receipt recording failure therefore
+supports that this invocation stopped before Windows launch. This inference says
+nothing about earlier work. A successful helper observation requires `failure: null`,
+`completed: true`, integer zero `clientExit`, `groupEmpty: true` and both EOF flags;
+its `groupEmpty` describes only that helper's original observation. The receipt does
+not retain stdout or prove later semantic acceptance or return after final budget checks.
+A completed-looking receipt cannot override the failed original invocation. Neither
+stable copies nor later quiescence refund consumption or establish artifact eligibility.
+Any conclusion needed for a further experiment requires its own applicable acceptance.
+
+### One Passive Observation and Retention
+
+Keep the collector inactive during preparation. Before its sole invocation, independently
+accept the exact source, accepted protocol and Wave, failed original transport, reviewed
+runtime/startup context, literal call, source set, fresh destination and output bounds.
+Use the ordinary trusted isolated/no-site/no-bytecode Python runtime; no candidate
+import, execution, platform survey or original-root preview is part of preparation.
+Record consumption before invoking the admitted collector. A failed start, timeout,
+cancellation or partial output consumes this observation with no retry or fallback.
+It adds no dependency, build/test, publication or synthetic unit.
+
+Traverse only named ancestors with descriptor-relative no-follow directory opens.
+Retain parent descriptors, check ordinary-directory and expected-owner identities,
+and reject links and nonregular leaves. Read each present leaf at most once with its
+one-byte guard, comparing named and held device/inode/mode/size and integer nanosecond
+mtime/ctime before and after. Record missing ancestors/leaves, inaccessible, oversized,
+short, invalid or changing records distinctly. A missing ancestor suppresses its child
+probes. These finite observations are not an atomic snapshot and cannot prove that
+original writers have stopped. Do not acquire or alter the original action lock.
+
+Exclusively create only `/tmp/windows-final-publish0063-failure-observation-root-v1`,
+mode 0700, with fixed private snapshot names and one bounded manifest. Retain at most
+208 snapshots plus a manifest of at most 262,144 bytes, for at most 4,218,880 output
+bytes. Never overwrite, delete, repair, reuse or inspect that destination in advance.
+All partial output is retained on failure. Seal completed files read-only; keep raw
+control bytes private. The collector prints only a bounded status and manifest
+descriptor, never record contents. Independently accept its original complete transport
+and retained manifest before using snapshots.
+
+Use one nonresetting 30-second collector deadline, checked around filesystem and
+finalization operations, with a source-owned alarm. The separately admitted literal
+also uses the reviewed GNU watchdog at 35 seconds with a two-second KILL grace;
+no Windows process or subordinate helper is created by this collector. Same-session
+waits are at most 60 seconds. Timeout or cancellation preserves incomplete status;
+these bounds do not assert that an operating-system filesystem stall is interruptible.
+
+Excluded operations include directory listings, process/cgroup/service queries,
+manager operations, Windows launches, helper identity files, pending names, raw
+captures, native images, response files, source/runtime materialization destinations,
+old action records including 0062 START, account/cache access, network operations and
+cleanup. No human input or desktop attendance is selected. The observation's output
+cannot grant authentication, CLI execution, release or whole-Slice acceptance.
