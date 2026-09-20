@@ -12153,6 +12153,278 @@ publication debit or refund; occupancy remains 94/120 build/test and 52/80
 synthetic. Discovered-name acquisition, graph, publication, artifact and Slice
 acceptance retain their separate prerequisites.
 
+### Accepted Member and Directive Diagnostic Outcome
+
+The sole seventeen-archive diagnostic completed with normal zero exit and
+independently accepted bounded evidence. Its 1,525,584-byte output has SHA-256
+`b829b49b5bcb9ead064123f7da526ad6b719942e5660b0d9dc012272fdd89797`.
+All seventeen selected descriptors matched the accepted inventory. The original
+reported nineteen reads, 10,322,766 returned bytes, 10,322,785 requested bytes,
+135 charged path operations, 24 output writes and three sync operations. All
+counters remained within their accepted limits; 461 milliseconds was an
+observation before output, not a final duration.
+
+All seventeen physical ledgers reached their exact file ends and established
+the prescribed earlier failure sites. They retain 9,862 physical members and
+9,825 ordinary-member rows: 1,149 supported x64 COFF header layouts, 8,546
+version-zero short-import markers with deferred interpretation, and 130
+unsupported headers. The unsupported rows remain kind zero and disposition two
+in this outcome. Physical coverage does not establish complete object or archive
+conformance.
+
+For slots 21-34, each known first-index target is an ordinary physical-member
+header and lower than its recorded predecessor. Both indexes report no invalid
+member targets; descending-order counts remain separate observations. These
+facts distinguish the predicates that previously caused a combined rejection;
+they do not change the public format's ordering rule or declare a library valid
+or invalid. Slots 35 and 36 establish first-index-symbol roles at offsets 10,090
+and 11,113, each beginning with byte `0x7f`. The earlier printable-string subset
+rejected these bytes. No encoding inference or previously withdrawn long-name
+localization is adopted.
+
+The diagnostic considered 7,028 sections and retained 88 directive sections with
+1,800 raw bytes: two sections and six bytes in slot 35, and 86 sections and
+1,794 bytes in slot 37. It also retains 145 possible import-section headers and
+61 exact witnesses. No section gap was reported for the inspected supported
+layouts; unsupported internals and complete target-import interpretation remain
+outside that coverage. The directive layout flag records the literal `0x200`
+information-bit and zero relocation/line-field predicate. It does not establish
+the `0x800` removal bit or full section conformance. Raw directive bytes are not
+applied linker options merely because they were retained.
+
+PREPARE, START and the diagnostic are consumed and must not be replayed. There
+was no build/test, synthetic or publication debit or refund. Further semantic
+classification, discovered-name acquisition, native closure, current resolution,
+graph, publication, artifact and Slice acceptance remain separate gates.
+
+The six previously retained slot 38 `GUARDSYM` options now have a direct public
+definition. Microsoft's [PE metadata documentation](https://learn.microsoft.com/windows/win32/secbp/pe-metadata#compiler-directives)
+defines `/guardsym:symname,S` as including a call target in the GFIDS table while
+marking it suppressed. The independently reviewed
+[immutable source](https://github.com/MicrosoftDocs/win32/blob/93c9fd36f77c3865a0d9cbd03e53a1cc5bb7385b/desktop-src/SecBP/pe-metadata.md#compiler-directives)
+is 21,105 bytes with SHA-256
+`6dd83acd24d65d17454bb4c70508036bc3f640eeff7ab9b4956f95543dbdefea`.
+These six symbol operands add no named file-acquisition candidate. Actual member
+inclusion, directive application and final-image CFG metadata remain later
+artifact and security acceptance questions; no additional experiment follows
+from this generic definition.
+
+### Accepted Retained-Metadata Directive Classification
+
+Independent review of the retained diagnostic metadata establishes a narrower
+directive classification without changing the original unsupported statuses.
+All 130 unsupported prefixes declare machine zero, one section, no optional
+header, and the complete inline section name `.debug$S`. Their retained 56-byte
+prefixes omit only the final four section-characteristics bytes from the
+60-byte header/table extent. Those missing bytes cannot change the declared
+section count or name. These tables therefore declare no `.drectve` section.
+This is not object validity, debug/PDB interpretation, member selection, or
+proof of the absence of every implicit file access.
+
+The 8,546 retained short-import prefixes match the version-zero x64 header
+form, with zero reserved bits and matching declared payload lengths. Their
+unretained strings and complete target-import interpretation remain open.
+Target DLL names do not by themselves identify host-tool dependencies.
+
+Of the 88 retained directive sections, 80 contain only whitespace. The other
+eight contain 32 exact option declarations: 17 `ALTERNATENAME`, two `MERGE`,
+four `DEFAULTLIB`, eight `DISALLOWLIB`, and one `ThrowingNew`. Together with
+the previously classified declarations, the retained total is 931. These are
+declarations, not proven applied options or selected archive members.
+
+The `kernel32.lib`, `libcmt.lib`, and `libvcruntime.lib` defaults name already
+protected inputs. The prospective link response explicitly contains
+`/NODEFAULTLIB:libucrt.lib`; Microsoft's [NODEFAULTLIB reference](https://learn.microsoft.com/cpp/build/reference/nodefaultlib-ignore-libraries)
+documents its precedence over the same-name default. This conclusion depends
+on that exact response and must be reconsidered if it changes. Microsoft's
+[ThrowingNew reference](https://learn.microsoft.com/cpp/build/reference/zc-throwingnew-assume-operator-new-throws)
+defines the argument-free conformance flag; it adds no filename operand.
+`ALTERNATENAME` and `MERGE` operate on symbols and sections, respectively.
+
+Microsoft's [LNK4098 reference](https://learn.microsoft.com/cpp/error-messages/tool-errors/linker-tools-warning-lnk4098)
+describes incompatible-runtime directives but does not define the exact
+`DISALLOWLIB` spelling. The immutable [LLVM option definition](https://github.com/llvm/llvm-project/blob/b03138a9bf86f311d6549133325ec74f102933d0/lld/COFF/Options.td#L392)
+corroborates its negative library-exclusion operand domain. This is not proof
+of identical Microsoft LINK behavior, and no independently observed positive
+dependency is removed using that corroboration.
+
+These classifications add no positive basename to the existing twelve-name
+frontier. They support preparing its finite acquisition procedure; they do
+not establish full native semantics, dependency closure, current resolution,
+graph acceptance, publication, artifact acceptance, or Slice acceptance. A
+changed response or concretely evidenced new positive dependency requires
+bounded reconsideration. The retained unsupported debug prefixes alone do
+not require another diagnostic read.
+
+## Fixed Native Dependency Frontier Acquisition
+
+This supplement prepares one separately admitted acquisition of the twelve
+basenames supported by the independently reviewed retained directive and host
+import evidence. It uses the existing WSL review environment to read only
+fixed installed-toolchain candidates and retain opaque copies. It does not
+launch a compiler, linker, copied image, Windows helper, or product process.
+The preceding NATIVE38, NATIVE18, and NATIVE17 operations remain consumed.
+
+The acquisition distinguishes these obligations:
+
+| Slots | Basenames | Evidence role |
+| --- | --- | --- |
+| 01 | `oldnames.lib` | Required default-library search |
+| 02-03 | `libcpmt.lib`, `uuid.lib` | Conditional archive-member candidates |
+| 04-09 | `VCRUNTIME140.dll`, `VCRUNTIME140_1.dll`, `MSVCP140.dll`, `MSVCP140_ATOMIC_WAIT.dll`, `MSVCP140_1.dll`, `tbbmalloc.dll` | Normal host-image import candidates |
+| 10-12 | `pgodb140.dll`, `msvcdis140.dll`, `msobj140.dll` | Conditional delay-import candidates |
+
+For each library, inspect only the following installed directories, in order,
+and select the first present regular leaf:
+
+1. `C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\lib\x64`
+2. `C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\ucrt\x64`
+3. `C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\um\x64`
+
+Do not inspect a later directory after finding a present candidate. A linked,
+nonregular, empty, oversized, or changed leaf fails the attempt; it cannot
+trigger fallback. Hold the existing directory identities and recheck each
+earlier absence once. Missing `oldnames.lib` from all three directories is a
+fatal required-obligation failure. An all-absent conditional library retains
+an explicit unresolved absence row and supplies no raw copy.
+
+The nine DLL candidates have exactly one candidate directory:
+`C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64`.
+Preserve the observed importing-parent relationships and the normal/delay
+distinction. A missing fixed candidate retains an unresolved absence row; it
+does not permit another search location or mean that the dependency is
+unnecessary. A present candidate descriptor is not proof of loader resolution.
+
+There are at most eighteen installed candidate leaves and twelve raw copies.
+The three final-working-directory absence predicates remain deferred to final
+admission. In particular, do not inspect
+`C:\Temp\azureauth-windows-slice-108\sources\final-503360753accd0829801953823b1b57a4f852440\src\Authentication.Cli`
+during this acquisition. No directory enumeration, environment expansion,
+content-derived name, runtime-path probe, OS inventory, registry query,
+fallback discovery, or recursive acquisition is permitted.
+
+### Acquisition Mechanism and Evidence Limits
+
+The inactive source is `/tmp/collect_windows_final_native12.inactive.py`,
+31,851 bytes, SHA-256
+`72d0ed0b36754d88de145698a46b0d9b66fa93dcf1ced0d97b2396739c067c38`.
+Exactly one `ACTIVE = False` to `ACTIVE = True` replacement produces
+`/tmp/collect_windows_final_native12.accepted.py`, 31,850 bytes, SHA-256
+`bb2bb0e55c99fe597e0353dbfe7ab31e1a3d4c3894e6b859a6d184dca2d99809`.
+The source freezes all twelve candidate rows, their provenance and directory
+order; it does not discover paths from another file at runtime.
+Its detailed source-bound procedure is
+`/tmp/windows-final-native12-collector-procedure-v1.md`, 23,421 bytes, SHA-256
+`1c1311a9159b7009ada1ab6f1e8011bb457cc85730f167b1652fb4669817f6f2`.
+
+The sole new output root is `/tmp/windows-final-native12-offline-v1`, created
+exclusively as mode 0700 only after every selected original has been captured.
+Its only permitted leaves are the present candidates' fixed `01.bin` through
+`12.bin` slots and `inventory.json`. Missing candidates do not get raw files.
+Seal each new leaf as mode 0444 after exclusive creation, positive-progress
+writes and file sync; sync the containing directory and verify the exact
+sealed bytes. Keep prospective original hashes and exact integer identities.
+The inventory preserves all twelve selection rows, importing-parent evidence,
+absences and unresolved slots, separate from the copied-file descriptors.
+
+Reuse the NATIVE38 collector's fixed-name selection and raw-copy mechanism:
+nofollow traversal, stable held/named identities, a retained initial capture,
+one original reread, exclusive sealed output, and one sealed-copy readback.
+Hold all three library parents and the host-tool parent through completion.
+Earlier or all-absent candidate rechecks establish two bounded observations;
+they do not establish atomic or continuous absence.
+
+Each selected file must contain between one and 8,388,608 bytes. With at most
+twelve copies, `S = 12 * 8,388,608 = 100,663,296` bounds captured original
+bytes, and `I = 65,536` bounds the inventory. The limits are:
+
+| Effect | Maximum |
+| --- | ---: |
+| Monotonic data/completion lifetime | 90 seconds |
+| Content reads | 37 |
+| Initial original bytes | 100,663,296 |
+| Returned content bytes | 302,055,424 |
+| Requested content bytes, including overflow allowance | 302,055,461 |
+| Output bytes, including inventory | 100,728,832 |
+| Inventory bytes | 65,536 |
+| Charged path/identity operations | 4,096 |
+| Candidate-leaf observations | 36 |
+| Parent components, excluding root | 16 |
+| Requested bytes per output write | 65,536 |
+| Original combined transport | 16,384 bytes |
+
+Reads are at most `3 * 12 + 1`, returned bytes `3S + I`, requested bytes
+`3S + I + 37`, and output bytes `S + I`. Each content read requests the
+observed size plus one byte exactly once; a short read or extra byte fails
+without refill. Complete writes need at most 1,537 calls. Positive short
+writes advance at least one byte and remain bounded by output bytes and the
+nonresetting clock; there is no separate write-call counter. These limits
+bound intentional source operations, not interpreter-startup I/O, process
+RSS, OS-wide syscalls, or instantaneous blocked-kernel-I/O duration.
+
+Exact source accounting gives at most 818 charged path operations on a
+successful path and at most 35 leaf observations. Conservative serialization
+of all possible copy and absence fields, including exact identity integers
+of up to 40 decimal characters, fits 38,246 inventory bytes. The completion
+frame fits 676 bytes. These are inert source-bound feasibility calculations,
+not observed acquisition results.
+
+### Separate Preparation and Original Admission
+
+Require independent source/procedure and canonical acceptance before activation.
+Use the inert helper `/tmp/windows-final-native12-admission-helper.inert.txt`,
+16,835 bytes, SHA-256
+`6671fd673a9d372631eeb18f80c8a28869eaca578a5aeeaa3187cd7b0e32ec02`.
+Only six role paths, source pins, the original literal and source-size-dependent
+byte ceilings change from the accepted NATIVE17 helper. All function bodies
+and the tail beginning with `FIELDS` remain byte-identical. Retain complete
+integer identities, nofollow/exclusive operations, the 3,072-byte retained
+authority ceiling, exactly three capacity fields and 8,192-byte receipts.
+
+PREPARE permits seven reads, 9,137,740 requested/returned bytes, 29 metadata
+queries, 37 opens, 40,042 written bytes/positive write calls, two chmods and
+six syncs. START permits six reads, 9,130,464 requested/returned bytes,
+24 metadata queries, 30 opens, 8,192 written bytes/positive write calls,
+one chmod and three syncs. Each phase runs at most once with a 30-second
+source deadline, outer TERM at 35 seconds and KILL two seconds later. Require
+separate exact DATA/code/tool-map admission and complete original outcome
+acceptance for each phase. Neither phase reads a candidate payload, the
+action lock, or the future output root.
+
+Fresh preparation and START admissions bind the accepted authority, source,
+runtime, startup context, cwd and sole original literal:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 95s /usr/bin/python3.14 -I -B -S /tmp/collect_windows_final_native12.accepted.py
+```
+
+Retain cwd `/tmp/azureauth-windows-final-link-inputs-accepted-108`, isolated
+no-site, no-bytecode, nonoptimized Python, nonlogin noninteractive Bash and
+no TTY, pipeline, alternate command or status wrapper. The source takes the
+existing action lock nonblockingly. START consumes the sole original attempt
+before its call, including a failed start. No concurrent original or observer
+operation is permitted. The 95-second TERM/two-second KILL watchdog does not
+waive the 90-second source deadline.
+
+Require complete original transport, normal zero exit, bounded counters,
+resolved owned lifetime and independent inventory/outcome acceptance before
+relying on the new evidence. A completion frame alone is insufficient.
+Collision, lock contention, changed or inaccessible input, short read,
+ceiling failure, timeout, cancellation, output failure or uncertain lifetime
+stops without retry or partial-output adoption. Restore owned signal handlers
+and release owned descriptors/flock; retain all complete or partial output.
+
+Acquire no credentials and perform no network, account, authentication,
+cache/consent, or installation mutation. All new output remains in the
+dedicated private acquisition root, intentionally retained on both success
+and failure. Originals are read only, subject to ordinary access-metadata
+effects. No cleanup, retry, repair, alternate root, or replay follows from
+failure. A successful acquisition establishes only the recorded copies and
+observations; full native semantics, final resolution, dependency closure,
+graph, publication, artifact, and Slice acceptance remain separate gates.
+There is no build/test, synthetic, or publication debit or refund; occupancy
+remains 94/120 build/test and 52/80 synthetic.
+
 ## Fixed Final Source and Restore Materialization
 
 This supplement permits one separately admitted copy of the final publication's
