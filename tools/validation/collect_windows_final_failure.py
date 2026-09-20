@@ -1,4 +1,4 @@
-"""Inactive, fixed 0063 control-record observer; requires an admitted literal.
+"""Inactive, fixed 0064 control-record observer; requires an admitted literal.
 
 The literal must load the exact retained source, bind the accepted protocol and
 Wave, and consume the one observation before calling collect_final_failure.
@@ -15,15 +15,15 @@ import stat
 import time
 
 
-DESTINATION = '/tmp/windows-final-publish0063-failure-observation-root-v1'
-VERIFIERS = '/var/tmp/azureauth-final-publish-verifiers-108-post0062-v1'
-LOCAL = '/var/tmp/azureauth-windows-slice-108/windows-actions/0063'
-WINDOWS = '/mnt/c/Temp/azureauth-windows-slice-108/actions/0063'
+DESTINATION = '/tmp/windows-final-publish0064-failure-observation-root-v1'
+VERIFIERS = '/var/tmp/azureauth-final-publish-verifiers-108-post0063-v1'
+LOCAL = '/var/tmp/azureauth-windows-slice-108/windows-actions/0064'
+WINDOWS = '/mnt/c/Temp/azureauth-windows-slice-108/actions/0064'
 SOURCE_PATH = 'tools/validation/collect_windows_final_failure.py'
 PROTOCOL_PATH = 'docs/research/experiments/windows-slice-validation.md'
 TRANSPORT = {
-    'bytes': 1309,
-    'sha256': 'b058a465019a252fa4c6f07637f470631d1a7f772168ee1e8f6da139e3400024',
+    'bytes': 999,
+    'sha256': 'b3e7ec995d95bedc552a1d3dc5098706f94d686171c66714a2da444e0008a1f3',
 }
 LIMITS = {
     'seconds': 30, 'jsonLeaves': 208, 'contentBytes': 3956736,
@@ -96,9 +96,9 @@ def _admission(value):
                 'collectorSource', 'protocol', 'wave', 'originalTransport'}
     if type(value) is not dict or set(value) != expected:
         raise ValueError('Admission shape')
-    if (value['schema'] != 'final-0063-failure-observation-admission-v1'
+    if (value['schema'] != 'final-0064-failure-observation-admission-v1'
             or value['scope'] != 'one-passive-control-record-observation'
-            or value['action'] != '0063' or value['destination'] != DESTINATION
+            or value['action'] != '0064' or value['destination'] != DESTINATION
             or _json(value['limits']) != _json(LIMITS)
             or _json(value['originalTransport']) != _json(TRANSPORT)):
         raise ValueError('Admission scope')
@@ -389,7 +389,7 @@ class _Observation:
             raise RuntimeError('Manifest already attempted')
         self.manifest_attempted = True
         value = {
-            'schema': 'final-0063-failure-observation-v1',
+            'schema': 'final-0064-failure-observation-v1',
             'observationComplete': complete, 'failureType': failure,
             'originalInvocationFailed': True, 'artifactEligible': False,
             'continuation_allowed': False, 'lifetimeEstablished': False,

@@ -13790,7 +13790,7 @@ remains stopped while that uncertainty is unresolved.
 
 ### Closed Source Set and Interpretation
 
-The [inactive collector](../../../tools/validation/collect_windows_final_failure.py)
+The [historical collector](https://github.com/hcoona/microsoft-authentication-cli/blob/039334f2d7816c551ff760a53e982e101343b99e/tools/validation/collect_windows_final_failure.py)
 selects only the following optional JSON leaves. In this table, `V` is
 `/var/tmp/azureauth-final-publish-verifiers-108-post0062-v1`, `L` is
 `/var/tmp/azureauth-windows-slice-108/windows-actions/0063`, and `W` is
@@ -14079,3 +14079,76 @@ observer may truncate the reserved action through an unchanged old total limit.
 Failure, cancellation or late finalization still consumes this one successor
 and stops continuation. An unavailable complete reserve rejects before subject
 creation; the larger outer allowance grants no automatic retry.
+
+## Original Final Publication 0064 Failure and Fixed Control Evidence
+
+The sole successor invocation used accepted target
+`4a80569f02772a871ef8cdcf73a4ccc862e9c945`, reviewed source commit
+`363a31636454af038a256d6e186d08b454485932` and tree
+`48da94eb428a74ec76e7990bd42055271cf1b188`. After its external sole-start,
+the exact admitted literal was invoked once. The original Linux tool session
+returned exit 1 after same-session empty polling, with only the same 70-byte
+fixed failure diagnostic recorded for original 0063. Its SHA-256 is
+`0bc76c0203375b21916a82d242ae5fc9406c8bd79e10b7db83831f23a9aa36fb`.
+The complete original transport is 999 bytes, SHA-256
+`b3e7ec995d95bedc552a1d3dc5098706f94d686171c66714a2da444e0008a1f3`.
+
+This establishes failed invocation and consumption, not its cause or internal
+phase. Dispatcher entry, helper completion, paired reservation, Windows launch,
+subject lifetime and artifact state remain unestablished. Neither of 0064's
+history checkpoints is presumed unused. Keep publication occupancy at **2/12**,
+with preparation **15/16**, build/test **94/120**, synthetic **52/80**, twelve
+protected final CLI scenarios and sixteen unallocated synthetic scenarios.
+Original 0063 remains failed and charged; its narrow accepted lifetime
+disposition does not transfer to 0064. The original 0057 exception remains
+unchanged and does not cover new uncertainty. Dependent execution stays stopped.
+
+Permit one separately admitted passive control-record observation of original
+0064 under the existing credential-free Wave. Reuse the exact source-set shape,
+per-leaf bounds, interpretation rules and retention procedure in
+[Closed Source Set and Interpretation](#closed-source-set-and-interpretation)
+and [One Passive Observation and Retention](#one-passive-observation-and-retention),
+with only these replacements:
+
+- `V` is `/var/tmp/azureauth-final-publish-verifiers-108-post0063-v1`.
+- `L` is `/var/tmp/azureauth-windows-slice-108/windows-actions/0064`.
+- `W` is `/mnt/c/Temp/azureauth-windows-slice-108/actions/0064`.
+- The exclusive destination is
+  `/tmp/windows-final-publish0064-failure-observation-root-v1`.
+- The admission and manifest schema names are
+  `final-0064-failure-observation-admission-v1` and
+  `final-0064-failure-observation-v1`; the action is `0064`.
+- Original transport is the 999-byte descriptor above. Original reviewed
+  authority is 4,219 bytes, SHA-256
+  `aad736e440313d431b4914edbd882c76c37b33f319816c73b9efaeba9f97eeaa`.
+- Producer source is the reviewed commit above. The same named source functions
+  own helper records, admission/reservation, original proxy/controller completion
+  and retained failure; use their actual successor timing and history semantics.
+
+The [current inactive collector](../../../tools/validation/collect_windows_final_failure.py)
+is 21,086 bytes, SHA-256
+`48d80dd923865020d89405a6b4cc6e5cb2f6ebee540009fb8785224e1194312e`.
+Only the fixed action/root/output/schema/transport bindings change from the
+consumed 0063 collector. Its collection and finalization algorithm is unchanged.
+The historical collector remains recoverable at its accepted Git revision;
+neither that source nor its consumed allowance authorizes another observation.
+
+Retain 208 optional JSON leaves plus the metadata-only cancellation marker,
+at most 3,956,736 content bytes, 3,956,944 requested bytes and 4,218,880 output
+bytes including the 262,144-byte manifest ceiling. Keep the nonresetting
+30-second collector clock, source alarm and separately admitted Linux-only
+35-second GNU watchdog with two-second KILL grace. No original lock acquisition,
+process/cgroup/service query, directory enumeration, raw capture, native image,
+response, old action, materialization-destination or account/cache read is added.
+No Windows launch, retry, cleanup, termination, risk exception or capacity refund
+is authorized. A failed observation start consumes its sole allowance.
+
+Before observation, independently accept the original failed transport, exact
+collector/source/protocol/Wave correspondence, runtime/startup, literal and full
+call, then durably record its sole start. Preparation performs no original-state
+or destination preview and no candidate import or execution. After collection,
+independently accept the complete original transport and fixed manifest before
+interpreting only their retained copies against the admitted producer. Partial,
+absent or stable records retain the earlier claim limits. The observation adds
+no experiment unit and cannot grant artifact, CLI/WSL, authentication, release
+or whole-Slice acceptance. No desktop attendance is selected.
