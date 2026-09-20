@@ -12425,6 +12425,163 @@ graph, publication, artifact, and Slice acceptance remain separate gates.
 There is no build/test, synthetic, or publication debit or refund; occupancy
 remains 94/120 build/test and 52/80 synthetic.
 
+### Original Acquisition Failure Disposition
+
+The sole NATIVE12 acquisition was invoked after independent acceptance of its
+exact source, preparation, START and literal command. It exited with code 1
+and no live tool session. Its complete retained output contains the size-guard
+exception `Selected fixed candidate is empty or oversized`, with no completion
+frame, candidate descriptor or inventory. The failure did not identify the
+candidate, selected parent, actual size, or whether the leaf was empty or
+larger than 8,388,608 bytes. Do not infer any of those facts.
+
+The reviewed control flow places this exception during candidate selection,
+before every candidate content read and acquisition output operation. The
+original therefore captured zero candidate payload bytes and created no
+acquisition output. This is a source-bound failure-path conclusion, not an
+observation that the prospective output pathname is absent. Existing lock,
+parent and candidate metadata operations occurred; their exact counters were
+not emitted. The original terminated, and the reviewed unwind releases owned
+descriptors and the lock without launching child processes.
+
+Independent review accepts this bounded failure disposition, not acquisition
+success. PREPARE, START and the original remain consumed once each. No retry,
+refund, cleanup, output adoption, larger content ceiling or alternate search
+is authorized by the failure. Build/test and synthetic occupancy remains
+94/120 and 52/80. A separately accepted diagnostic protocol is required before
+new observations; any later metadata describes that observation time and
+cannot retrospectively identify the rejected original leaf if state changed.
+
+## Fixed Native Frontier Size Observation
+
+This supplement prepares one separately admitted metadata-only observation of
+the same twelve basenames and four installed parents defined by the fixed
+native frontier acquisition. The failed acquisition's generic size rejection
+does not justify a larger content budget. This diagnostic supplies current
+file-size and identity evidence without opening or reading candidate payloads.
+It does not retry the consumed acquisition or identify its historical rejected
+leaf retrospectively.
+
+Use the existing WSL review environment, the unchanged three ordered library
+parents and fixed host-tool parent, and the same required-default, conditional
+archive-member, normal-import and delay-import roles. There are at most
+eighteen initial candidate-leaf observations. For each library, stop at its
+first regular present leaf even when that leaf is empty or exceeds 8,388,608
+bytes. Do not inspect a later root after such a leaf. Each DLL has only its
+fixed host-tool parent. Preserve earlier-root and all-absent observations;
+missing required `oldnames.lib` remains a separate unresolved condition.
+
+Record each selected leaf's exact integer size and identity, with separate
+zero-size, within-original-cap and oversized statuses. Negative size, linked,
+nonregular or inaccessible leaves fail. Hold all four existing parents and
+verify their held/named identities. Reobserve every visited leaf once: present
+identities must match, and absent leaves must remain absent. At most 36 total
+leaf observations establish only two bounded observations, not atomic or
+continuous stability. Preserve exact device, inode, mode, owner, size, mtime
+and ctime integers; each signed representation is limited to 40 characters.
+
+Candidate-content opens, reads, hashes and copies are all zero. Do not inspect
+headers, enumerate directories, discover names, expand search paths, probe
+the final working directory or access the old acquisition output. Keep the
+existing nonblocking read-only action-lock discipline. No compiler, linker,
+Windows helper, product, network, account, cache or installation operation is
+part of this diagnostic.
+
+### Single Invocation and Evidence Boundary
+
+The inactive source is
+`/tmp/observe_windows_final_native12_sizes.v2.inactive.py`, 29,784 bytes, SHA-256
+`dafdab9c9f2e4392be47c5ed561474e079c70b945f5a78f6714152ace6997d93`.
+Exactly one `ACTIVE = False` to `ACTIVE = True` replacement yields the
+29,783-byte command body, SHA-256
+`f71b77490a90aed620c746c1f5a004acb8b12416b81095a4566083145fd12d49`.
+The detailed procedure is
+`/tmp/windows-final-native12-size-observer-procedure-v2.md`, 27,038 bytes,
+SHA-256 `bf920d9bc15138acc53221f446a02cf7524710a566c78cad4e502c1fcaf77457`.
+The exact tool map is
+`/tmp/windows-final-native12-size-observer-exact-tool-call-root-v2.json`,
+37,787 bytes, SHA-256
+`f68c7e1784533aadd4a5253dafbe24d7ccf83852b54caa8e1fdbe35c7ddb0266`.
+No separate active source file is materialized.
+
+The new diagnostic uses one exact independently reviewed invocation. Its
+protocol, inactive source, source-bound procedure and exact tool map must be
+accepted before launch. The map embeds only the separately reviewed active
+bytes in isolated, no-site, no-bytecode, nonoptimized Python through `-c`,
+under nonlogin Bash without a TTY, pipeline or alternate status wrapper.
+Record the sole attempt in the existing sequential ledger before the tool
+call, including failed launches. Do not create another internal attempt file.
+The preceding acquisition's PREPARE and START helpers remain consumed and
+are not used for this new diagnostic.
+
+Before taking the lock or observing candidates, verify the exact three
+admitted runtime executables, startup environment and working-directory
+identity. Runtime reads are bounded separately from the prohibition on
+candidate-content reads. Guarded data work and successful completion share
+one nonresetting 30-second source deadline, with outer TERM at 35 seconds and
+KILL two seconds later. Unconditional owned cleanup and bounded failure
+reporting may finish after cancellation or expiry within that watchdog. No
+concurrent original or observer operation, retry or automatic chaining is
+permitted.
+
+The only diagnostic output is the fresh private file
+`/tmp/windows-final-native12-size-observation-v1.json`. Create it exclusively,
+seal it read-only, sync it and its parent, and verify one exact bounded
+readback. Retain useful fixed-candidate and operation context on failure from
+already available values, without reopening failed paths. Keep complete or
+partial new output on failure; do not repair, remove, rename or reuse it.
+
+The intentional operation envelope is:
+
+| Effect | Maximum |
+| --- | ---: |
+| Candidate initial observations / reobservations | 18 / 18 |
+| Candidate opens, content reads, hashes and payload output | 0 |
+| Runtime content reads | 3 |
+| Runtime requested / returned bytes | 9,057,651 / 9,057,651 |
+| Metadata readback calls | 1 |
+| Metadata readback requested / returned bytes | 65,537 / 65,536 |
+| Total content-read calls | 4 |
+| Total requested / returned bytes | 9,123,188 / 9,123,187 |
+| Charged path, identity, lock, mode and sync operations | 512 |
+| New directories / metadata files | 0 / 1 |
+| Metadata output bytes / positive-progress write calls | 65,536 / 65,536 |
+| Requested bytes per write | 65,536 |
+| Parent components, excluding root | 16 |
+| Startup environment names / characters per name | 512 / 256 |
+| Complete original transport bytes | 4,096 |
+
+The three runtime reads validate 1,540,520-byte Bash, 39,968-byte timeout and
+7,477,160-byte Python executables against their exact admitted identities.
+Each content read requests its fixed or observed size plus one byte once;
+short or extra data fails without refill. The runtime returned-byte envelope
+includes possible growth sentinels even on a failing read; normal runtime
+returns total 9,057,648 bytes. The counters bound intentional
+source operations, not interpreter-startup I/O, total operating-system
+syscalls, process memory or instantaneous interruption of blocked kernel I/O.
+
+Inert source accounting gives a maximum of 394 charged path operations and
+a conservative 34,197-byte metadata envelope. Success and failure frames fit
+951 and 2,382 bytes respectively; a late failure after an emitted success
+frame fits their combined 3,333 bytes. A late failure still fails the attempt.
+The metadata's counters precede its sealing, and each frame's counters precede
+its own transport-byte charge; outcome review reconciles these declared
+observation points against the complete original transport.
+
+Require the original's complete bounded transport, normal zero exit, resolved
+owned lifetime, bounded counters and independent outcome acceptance before
+using its metadata. A completion frame alone is insufficient. Changed
+identity or absence, invalid type, lock contention, output collision,
+short readback, changed context, budget failure, cancellation, timeout or
+uncertain lifetime stops without another attempt.
+
+Successful metadata does not establish payload identity, acquisition readiness,
+current loader resolution, native dependency closure, graph, publication,
+artifact or Slice acceptance. A subsequent acquisition requires its own
+accepted source-bound byte ceilings, protocol and exact admission. No
+build/test, synthetic or publication debit or refund occurs; occupancy
+remains 94/120 build/test and 52/80 synthetic.
+
 ## Fixed Final Source and Restore Materialization
 
 This supplement permits one separately admitted copy of the final publication's
