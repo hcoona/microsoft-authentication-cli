@@ -5393,7 +5393,7 @@ contract, and verifies equality to the corresponding accepted Git blobs.
 | Final-caller component | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [`run_windows_final_publish.py`](../../../tools/validation/run_windows_final_publish.py) | 7798 | `a8c854024774530ad3f145f0a1d23e64b190e82fd218c85420d204523ac12f1a` |
-| [`final_publish_contracts.py`](../../../tools/validation/final_publish_contracts.py) | 176696 | `45c831ac27de5626ee1f8cd82750cdf3ad72a73c06465bb89823fea443f6e809` |
+| [`final_publish_contracts.py`](../../../tools/validation/final_publish_contracts.py) | 177070 | `20f72648d799ea0a6bedd56250aac615562fd0492243628db9e248b487441a18` |
 | [`Invoke-WindowsFinalPublish.ps1`](../../../tools/validation/Invoke-WindowsFinalPublish.ps1) | 94473 | `5d6b188999ca6d459b85ddfca72b53fec48fe3783ff0c3df4293d9522233ea92` |
 | [`Start-WindowsFinalPublish.ps1`](../../../tools/validation/Start-WindowsFinalPublish.ps1) | 12115 | `ca9772ab872ac27894913c975315d9a6b5f2679b3d289cbdbde11c954d18a6f1` |
 
@@ -5617,6 +5617,23 @@ Their historical paired counters and receipt traversal remain unchanged. Do not
 fabricate entries for unavailable 0057–0059, reopen failed 0060/0061 children,
 repair old state or repeat a diagnostic. The accepted 0057 lifetime-risk
 disposition remains historical and does not waive future helper supervision.
+
+Before decoding any role, `load_admission` requires the handoff and acceptance
+descriptors to match those exact accepted byte/hash pairs. Only that handoff is
+exempt from canonical compact formatting: its original bytes use indented JSON,
+as recorded in [the original 0057 format finding](#original-0057-handoff-format-rejection).
+Exact length/hash checks, duplicate-field and nonfinite-value rejection, and
+the existing structural and semantic joins remain required. The other eight
+roles, external authority and recipe still require canonical compact JSON. Do
+not rewrite the historical handoff or acceptance, admit another handoff format,
+or change the shared decoder or observer-mode policies.
+
+This corrects a deterministic final-loader source/input incompatibility, not
+an observed failed final invocation. Accept the corrected source and protocol,
+then refresh dependent source reviews, public bindings, authority and separately
+admitted component materialization before execution. Existing prepared inputs
+and copied components remain retained; this correction grants no execution,
+replay, capacity, history read or other effects.
 
 In final mode, before reservation require paired parent name sets 0001–0056 plus
 0060, 0061 and 0062; afterward require that set plus the original reserved final

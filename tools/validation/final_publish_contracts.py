@@ -1771,10 +1771,16 @@ def load_admission(deadline, cancelled, *, reviewed_authority):
     if sha(recipe_raw) != RECIPE_SHA256:
         fail('The exact v4 invocation/environment/tool recipe changed')
     recipe = decode(recipe_raw, canonical=True)
+    for role in ('handoff', 'handoffAcceptance'):
+        fixed = COMPILER_NATIVE_INPUTS_INPUTS[role]
+        if envelope[role] != {key: fixed[key] for key in ('bytes', 'sha256')}:
+            fail('Final publication requires the exact accepted post-0056 handoff')
     evidence_raw = {role: bound(envelope[role], EVIDENCE / (role + '.json'), deadline, cancelled,
                                CALLER_PROVENANCE_LIMIT if role == 'callerAuthorization' else 8388608)
                     for role in INPUTS}
-    evidence = {role: decode(value, canonical=True) for role, value in evidence_raw.items()}
+    # Only the exact accepted handoff retains its original indented JSON bytes.
+    evidence = {role: decode(value, canonical=role != 'handoff')
+                for role, value in evidence_raw.items()}
     common = {k: envelope[k] for k in ('product', 'integration', 'protocol', 'components', 'recipe')}
     if evidence['sourceReview'] != {'schema': 'final-publish-source-acceptance-v1', 'accepted': True,
                                     'scope': 'publication-only', **common}:
