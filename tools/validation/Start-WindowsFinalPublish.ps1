@@ -94,7 +94,7 @@ try {
                          'windows-result.json.pending', 'clock-ready.json', 'clock-remaining.json', 'cancel')) {
         if (Test-Path -LiteralPath "$action\$name") { throw 'Prior controller output or cancellation exists' }
     }
-    if (-not [Diagnostics.Stopwatch]::IsHighResolution -or $bootstrapWatch.ElapsedMilliseconds -ge 700000) {
+    if (-not [Diagnostics.Stopwatch]::IsHighResolution -or $bootstrapWatch.ElapsedMilliseconds -ge 1800000) {
         throw 'Original bootstrap clock unavailable or expired'
     }
     $info = [Diagnostics.ProcessStartInfo]::new()
@@ -116,7 +116,7 @@ try {
     [void]$controller.Handle
     $result.controllerPid = $controller.Id
     $result.controllerStartUtc = $controller.StartTime.ToUniversalTime().ToString('o')
-    $handshakeEnd = [Math]::Min(700000L, $bootstrapWatch.ElapsedMilliseconds + 20000L)
+    $handshakeEnd = [Math]::Min(1800000L, $bootstrapWatch.ElapsedMilliseconds + 20000L)
     $readyBytes = $null
     $replyBytes = $null
     while ($null -eq $replyBytes) {
@@ -152,7 +152,7 @@ try {
     $result.readySha256 = Get-BootstrapHash $readyBytes
     $result.replySha256 = Get-BootstrapHash $replyBytes
     while (-not $controller.HasExited) {
-        if ([Diagnostics.Stopwatch]::GetTimestamp() -ge $deadlineCounter -or $bootstrapWatch.ElapsedMilliseconds -ge 700000 -or
+        if ([Diagnostics.Stopwatch]::GetTimestamp() -ge $deadlineCounter -or $bootstrapWatch.ElapsedMilliseconds -ge 1800000 -or
             (Test-Path -LiteralPath "$action\cancel")) { throw 'Original Windows controller exit not observed within its clock' }
         Start-Sleep -Milliseconds 25
     }
@@ -160,7 +160,7 @@ try {
     $result.controllerExitCode = $controller.ExitCode
     $result.observedCounter = [Diagnostics.Stopwatch]::GetTimestamp()
     if ($result.controllerExitCode -ne 0 -or $result.observedCounter -ge $deadlineCounter -or
-        $bootstrapWatch.ElapsedMilliseconds -ge 700000 -or (Test-Path -LiteralPath "$action\cancel")) { throw 'Original controller failed or exited late' }
+        $bootstrapWatch.ElapsedMilliseconds -ge 1800000 -or (Test-Path -LiteralPath "$action\cancel")) { throw 'Original controller failed or exited late' }
     $windowsBytes = Read-BootstrapBytes "$action\windows-result.json" 65536
     $windows = [Text.UTF8Encoding]::new($false, $true).GetString($windowsBytes) | ConvertFrom-Json
     if ($windows.schema -cne 'final-publish-windows-result-v1' -or $windows.reservationSha256 -cne $ReservationSha256 -or
@@ -169,7 +169,7 @@ try {
         throw 'Original Windows publication completion is incomplete'
     }
     $result.windowsResultSha256 = Get-BootstrapHash $windowsBytes
-    if ([Diagnostics.Stopwatch]::GetTimestamp() -ge $deadlineCounter -or $bootstrapWatch.ElapsedMilliseconds -ge 700000) {
+    if ([Diagnostics.Stopwatch]::GetTimestamp() -ge $deadlineCounter -or $bootstrapWatch.ElapsedMilliseconds -ge 1800000) {
         throw 'Original completion receipt arrived late'
     }
     $normal = $true
@@ -192,7 +192,7 @@ try {
 if (-not $normal -or $null -eq $deadlineCounter) { exit 1 }
 try {
     if ((Test-Path -LiteralPath "$action\cancel") -or
-        $bootstrapWatch.ElapsedMilliseconds -ge 700000 -or
+        $bootstrapWatch.ElapsedMilliseconds -ge 1800000 -or
         [Diagnostics.Stopwatch]::GetTimestamp() -ge $deadlineCounter) { exit 1 }
 } catch { exit 1 }
 exit 0

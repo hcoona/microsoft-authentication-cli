@@ -1023,7 +1023,7 @@ function Initialize-FinalBinding($ControllerWatch) {
         $start.handoffSha256 -cne $authority.handoff.sha256 -or
         $start.guardAcceptanceSha256 -cne $authority.guardAcceptance.sha256 -or
         $start.preparationCharge -ne 0 -or $start.buildTestCharge -ne 0 -or $start.publishCharge -ne 1 -or
-        $start.reservedProcessScenarios -ne 0 -or $start.originalOuterLimitMilliseconds -ne 700000 -or
+        $start.reservedProcessScenarios -ne 0 -or $start.originalOuterLimitMilliseconds -ne 1800000 -or
         $invocation.schema -cne 'final-publish-invocation-v1' -or $invocation.action -cne $ActionName -or
         $invocation.actionPath -cne $action -or $invocation.reservationSha256 -cne $ReservationSha256 -or
         $invocation.authoritySha256 -cne $AuthoritySha256 -or
@@ -1434,9 +1434,10 @@ function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
         Save-CompleteJson ($Binding.actionPath + '\guard-load.json') $loadedGuard
         Assert-FinalBudget
         # Reserve the complete 600-second action plus the existing ten-second
-        # never-resumed-root allowance within the original cross-host clock.
+        # never-resumed-root allowance within both original stopping clocks.
         $leftTicks = $script:FinalClock.deadlineCounter - [Diagnostics.Stopwatch]::GetTimestamp()
-        if ([decimal]$leftTicks * 1000 -lt [decimal]610000 * $script:FinalClock.frequency) {
+        if ([decimal]$leftTicks * 1000 -lt [decimal]610000 * $script:FinalClock.frequency -or
+            (700000L - $ControllerWatch.ElapsedMilliseconds) -lt 610000L) {
             throw 'Insufficient original time for final publication; no action launch'
         }
         if ($ControllerWatch.ElapsedMilliseconds -ge 700000) { throw 'Controller expired before guard' }
@@ -1447,7 +1448,8 @@ function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
         # This clock starts immediately before root creation and never restarts.
         Assert-FinalBudget
         $leftTicks = $script:FinalClock.deadlineCounter - [Diagnostics.Stopwatch]::GetTimestamp()
-        if ([decimal]$leftTicks * 1000 -lt [decimal]610000 * $script:FinalClock.frequency) {
+        if ([decimal]$leftTicks * 1000 -lt [decimal]610000 * $script:FinalClock.frequency -or
+            (700000L - $ControllerWatch.ElapsedMilliseconds) -lt 610000L) {
             throw 'Original action allowance expired before root creation'
         }
         $watch = [Diagnostics.Stopwatch]::StartNew()
