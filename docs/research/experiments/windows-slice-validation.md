@@ -15349,3 +15349,202 @@ failed outcome. Successful preparation does not itself authorize the fixture. It
 existing one build/test plus nine synthetic charge, exact caller/configuration/collection
 admission and independent outcome acceptance remain required. Preserve the twelve final
 CLI units, all prior consumption, account-effects boundary and overall Slice acceptance.
+
+## Original 0067 Fixture Prelaunch Failure
+
+The two v3 preparation singletons completed successfully under accepted revision
+`b314b28621f261e2b72bafead2045f7364a5577b`. The original fixture caller then ran once
+and exited with code 1, complete empty output and no pending tool session. Its exact
+18,840-byte source has SHA-256
+`002723cd9975822d2e48cfd6f32d949676177f3ddcd92d61529f2c383c9ccaf8`.
+The durable original start consumed the complete one build/test and nine synthetic
+reservation. Counters are preparation 17, build/test 95, publication 2 and synthetic 61.
+The batch is failed and spent; no fixture case or named-Job runtime behavior is accepted.
+
+One separately admitted, read-only review copied exactly the two retained Linux caller
+records into private snapshots. Its original invocation exited zero with complete
+bounded output and no pending session. It requested 131,074 bytes in two payload reads
+and saved 2,053 bytes across two snapshots and their manifest. Independent acceptance
+is 3,278 bytes, SHA-256
+`07c293c7674a81b6ca758a27807d2577d0c8a84cf52cc8505892232c426f6127`.
+These are later retained snapshots, not records authenticated by the failed caller's
+original output.
+
+The retained result reports `ValueError`, six attempted selected reads, 45,565 requested
+bytes and no command hash. Its start hash, authority and counters agree with the accepted
+source and materialization. On that exact source path, the sixth read is the first
+Windows authority input. All eight input reads precede the caller's sole subprocess
+start. Independent source-conditioned disposition is 6,462 bytes, SHA-256
+`1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf`.
+It accepts the bounded inference that this caller failed before starting the dispatcher
+or Windows fixture. This is not a process survey or a general quiescence claim.
+The requested-byte total counts requests, including possible repeated remaining-byte
+requests after short reads; it does not identify the failed predicate. The exact failed
+check and historical cause remain unknown. No new lifetime-risk waiver is needed to
+prepare a corrected batch on this evidence basis.
+
+### Current Input Comparison
+
+A separate admitted read-only operation compared only the first Windows authority
+input with its accepted materialization binding. It read the fixed retained receipt and
+that input once each, requested 68,220 bytes, emitted no raw file content, and completed
+with original exit zero and no pending session. Independent acceptance is 3,892 bytes,
+SHA-256 `234c1e7b3364d1bc9539702bc4486632a1d37e30a3f923817314dfe08f111fe4`.
+
+The observed input has the expected 1,148 bytes and SHA-256
+`fd8b1252dfc8e9c0796f51cb155b4dc0cbb570bcd6133f6308845d8ef02e60a4`.
+Device, inode, mode, owner, group, size, modification time and link count match the
+materialization record. Only change time differs from that earlier record. The four
+current named/opened/after-read observations agree in all nine fields. The caller's
+cross-invocation nine-field equality would reject this observed input on change time
+alone. This is a current comparison and source finding; it does not establish the
+original failed predicate, a benign cause or general Windows filesystem behavior.
+
+Both evidence-review singletons are spent and consume zero additional execution units.
+Retain original failures, snapshots, comparison and all input roots. No replay, refund,
+repair, cleanup or additional observation is authorized by this disposition. A future
+fixture batch needs a separately accepted protocol/allocation, independently reviewed
+source and exact call, and original outcome acceptance. The twelve final CLI units,
+historical 0057/0064 dispositions and account-effects boundary remain unchanged.
+
+## One Corrected Named-Job Fixture Batch: 0068
+
+After acceptance of the original 0067 failure above and the narrow input-handoff
+correction below, allocate one additional credential-free batch numbered 0068. It uses
+the same six cases, nine synthetic processes, original 0066 DLL, existing hosts,
+PowerShell pin, environment controls, account exclusions and containment as
+[the original fixture protocol](#one-credential-free-named-job-fixture-batch).
+It supplies no new product behavior or final-publication acceptance. No human input is
+expected. Preserve original 0067 as failed and spent; this is a fresh, separately charged
+batch, not a replay of that invocation.
+
+The current checkpoint is preparation 17, build/test 95, publication 2 and synthetic 61.
+The first durable original caller start reserves one build/test and all nine synthetic
+units, producing 17/96/2/70. Caller and dispatcher refer to that same charge. Failed starts,
+interruption and unstarted remainder cases consume the whole reservation. Remaining
+capacity would be 11 preparation, 34 build/test, 28 publication and 44 synthetic units;
+twelve synthetic units remain protected for final CLI scenarios. No concurrent experiment,
+retry, refund or extra observation follows from unused capacity.
+
+### Historical Guard and Current Allocation
+
+Retain the exact 22,595-byte original 0066 artifact-acceptance checkpoint with SHA-256
+`09240c6a14e37707be0ef772881c9fc8726d0b1b8bdf0d3de3b6850c2dcd809f`.
+Its original preparation counters remain 17/94/2/52. The new dispatcher compares that
+immutable join against explicit historical guard counters and still requires the accepted
+artifact decision. Never rewrite that record or its original execution/continuation flags.
+
+The fresh authority separately binds current counters, this accepted protocol revision,
+the one-plus-nine charge, all source hashes and the accepted 0067 failure-disposition
+SHA-256 `1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf`.
+Caller, dispatcher and Windows controller require that exact disposition pin and current
+allocation. Independent admission must authenticate the retained failure disposition and
+its evidence chain, the entire spent 0067 charge and absence of an intervening experiment
+before binding the new authority. Existing authority and guard-checkpoint reads suffice;
+no additional runtime failure-record copy, history survey or counter reset is permitted.
+
+### Exact Windows Input Handoff
+
+Independent triage is 7,107 bytes, SHA-256
+`66710a0683a044fe8613238b7aeb9294f75221e9d85cd2b06407057c15b4d1ba`.
+For this new caller's three exact Windows copied-input roles only, compare the historical
+materialization binding using device, inode, mode, owner, group, size, modification time
+and link count, together with exact payload length and SHA-256. Retain expected and
+observed change time in bounded original result evidence from already sampled operands;
+cross-invocation change-time equality is not an acceptance condition for those roles.
+
+The roles are exactly `authority.json`, `Invoke-WindowsNamedGuardFixtures.ps1` and
+`WindowsFinalPublishGuard.dll` in the new Windows root below. Require the exact ordered
+six-copy manifest, reject unknown or duplicate paths, and select these three complete
+paths explicitly. No path-prefix exception or fallback comparator is allowed. Preserve
+full nine-field equality between current named-before-open, opened descriptor,
+after-read descriptor and named-after-read observations. All Linux input and installed
+tool expected nine-field bindings, no-follow access, fixed directory joins, file-shape
+predicates, EOF and exact hashes remain unchanged. The continuous-descriptor materializer
+is unchanged apart from new names and source bindings. This rule makes no claim that
+historical ACLs or metadata history were unchanged, or that earlier failures were benign.
+
+### Fresh Preparation and Original Invocation
+
+Exclusively create the new source/input root
+`/tmp/windows-named-fixtures0068-inputs`, Windows root
+`C:\Temp\azureauth-windows-slice-108\named-fixtures-0068` and original action root
+`/var/tmp/azureauth-windows-slice-108/windows-actions/0068`. The named Linux unit is
+`azureauth-named-fixtures-108-0068.service`. Generate six fresh inner Job names with
+the `Local\azureauth-final-publish-108-0068-` prefix and the original UUID grammar.
+Never inspect, reuse, overwrite or clean any failed 0067 preparation/action root.
+
+Allocate exactly one fresh fixed-input assembly and one fresh copy operation. Assembly
+creates only `windows-named-fixtures0068-authority-source.json`,
+`windows-named-fixtures0068-materialization-manifest.json` and
+`windows-named-fixtures0068-host-bindings.json` under `/tmp`. It reads the same five
+installed-tool files and four fixed sources as v3, binds only the existing caller's
+literal interop endpoint with no probe or alternate discovery, and has at most 16 selected
+reads, 32 MiB requested bytes and 192 KiB written bytes. Copy uses the newly bound
+manifest with `materialize_windows_named_guard_fixtures.py`, the six fixed copied roles
+and `/tmp/windows-named-fixtures0068-materialized.json`; it retains the v3 limits of
+24 selected reads, 4 MiB requested bytes and 320 KiB written bytes, including the
+256 KiB copied-content ceiling and 64 KiB receipt. Each operation has its own original
+30-second clock and a 35-second outer timeout followed by five seconds to kill.
+Each singleton is spent on its first invocation, including failed start. They consume
+zero additional units in the four execution quotas and require their own durable starts,
+independent exact-call admission and original output/exit acceptance. Partial state stays
+retained; no retry or evidence-enriching failure path is allowed.
+
+The assembly template is 9,452 bytes, SHA-256
+`2ce1f868ee553a1a75bb825f837990aabf545f64d3f80d1fa9094860c6fcadfa`.
+Its sole post-merge source substitution is the accepted commit for the null commit
+constant; its detached checkout is `/tmp/azureauth-fixture0068-accepted-108`.
+The inert caller template is 19,197 bytes, SHA-256
+`36ca5325533f1562c582cc3eb0dafbbded438dfaeffb6dae50d41ae4fef4a683`.
+Bind only its null configuration using the accepted assembly/copy outputs and preserved
+Python integer identities. Independently review the exact bound source and literal call
+before execution; templates and hashes alone do not admit an invocation.
+
+Keep all original dispatcher, Windows controller, case, payload, stop, cancellation and
+output-completion clocks. The original caller retains a 520-second clock, 24 selected
+file reads, 4 MiB requested file bytes, 64 KiB per JSON output, 192 KiB total file writes
+and 16 KiB combined service-client output. Its outer timeout is 540 seconds followed by
+five seconds to kill. Keep the original cgroup properties and 450-second runtime limit.
+The one public unauthenticated accepted-ref request remains in the already charged
+dispatcher preflight; no additional network operation is introduced.
+
+The caller creates only `/tmp/windows-named-fixtures0068-original-start.json` and
+`/tmp/windows-named-fixtures0068-original-result.json` in addition to its admitted original
+action. Its failure result records a fixed source-stage label and already sampled
+Windows handoff change times, without another read or raw exception-message capture.
+When both records are successfully persisted, the complete original transport reports
+their lengths/hashes and `passed`, including on a recorded failing path. A passing result
+still requires actual original exit zero, complete output and a closed session after
+the final clock check. An authenticated failure is not fixture success or permission
+to resume dependent work. Missing transport, uncertain startup, incomplete output or
+unknown Windows lifetime retains the ordinary stop conditions.
+
+### Fixed Successful-Outcome Collection
+
+Only an independently accepted successful original caller outcome can bind one
+success-evidence copy. The inert template is 12,756 bytes, SHA-256
+`9f3e5276ba143909b4c3bc8ba95f04b44b38bf273e4339cd23ea078f424f6da7`.
+Bind its null configuration from accepted preparation descriptors and the original
+successful transport, preserving exact integers. Before submission, independently admit
+the complete bound source, configuration, exact call and singleton start. No failed
+outcome permits this collector.
+
+The collector creates only `/tmp/windows-named-fixtures0068-offline-root-v1`. Its 45
+fixed source leaves are the eleven caller/dispatcher/controller/authority/materialization/
+source/guard records and the original case-specific 34 leaves selected by the template.
+It does not enumerate directories, processes or Jobs. Require original caller counters
+17/95/2/61 to 17/96/2/70, caller/dispatcher/Windows successful completion, exact transported
+hash and directory joins, and full current file continuity. Each saved copy is created
+exclusively and read back. Retain at most 92 selected reads, 16 MiB requested bytes,
+4 MiB total writes and the original 30-second clock, with outer 35-plus-five-second
+termination bounds. The complete original output binds the final collection manifest's
+length and hash; actual exit zero and a closed session remain required after closure
+and the final clock check. Preserve partial copies on failure without retry or cleanup.
+This file-only operation consumes zero additional execution units.
+
+Independent evidence acceptance must join that original output to the saved manifest
+and exact copies before accepting the six cases. Collection does not itself accept
+the fixture, final publication, the actual Native AOT artifact or Slice scenarios.
+All new ownership or termination uncertainty retains the normal stops; historical
+0057/0064 dispositions do not extend to a new failure.

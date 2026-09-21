@@ -12,13 +12,15 @@ import time
 import urllib.request
 
 
-INPUTS = Path('/tmp/windows-named-fixtures0067-v3-inputs')
-WINDOWS = Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0067-v3')
-HISTORY = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0067')
+INPUTS = Path('/tmp/windows-named-fixtures0068-inputs')
+WINDOWS = Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0068')
+HISTORY = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0068')
 SHELL = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
-UNIT = 'azureauth-named-fixtures-108-0067.service'
-BEFORE = {'preparation': 17, 'buildTest': 94, 'publication': 2, 'synthetic': 52}
-AFTER = {'preparation': 17, 'buildTest': 95, 'publication': 2, 'synthetic': 61}
+UNIT = 'azureauth-named-fixtures-108-0068.service'
+BEFORE = {'preparation': 17, 'buildTest': 95, 'publication': 2, 'synthetic': 61}
+AFTER = {'preparation': 17, 'buildTest': 96, 'publication': 2, 'synthetic': 70}
+GUARD_COUNTERS = {'preparation': 17, 'buildTest': 94, 'publication': 2, 'synthetic': 52}
+FAILURE_DISPOSITION_SHA256 = '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf'
 CASES = ('collision', 'live', 'disposed', 'callback', 'missing', 'session')
 READ_LIMIT = 16 * 1024 * 1024
 read_requested = 0
@@ -189,9 +191,10 @@ def main():
     if sha(authority_bytes) != authority_hash:
         raise ValueError('Authority changed')
     authority = decode(authority_bytes)
-    if encode(authority) != authority_bytes or authority['schema'] != 'named-guard-fixtures-0067-v1' or \
-            authority['accepted'] is not True or authority['action'] != '0067' or \
-            authority['countsBefore'] != BEFORE or authority['buildTestCharge'] != 1 or authority['syntheticCharge'] != 9:
+    if encode(authority) != authority_bytes or authority['schema'] != 'named-guard-fixtures-0068-v1' or \
+            authority['accepted'] is not True or authority['action'] != '0068' or \
+            authority['countsBefore'] != BEFORE or authority['buildTestCharge'] != 1 or authority['syntheticCharge'] != 9 or \
+            authority['failedFixtureDispositionSha256'] != FAILURE_DISPOSITION_SHA256:
         raise ValueError('Fixture allocation not admitted')
     if sha(read(Path(__file__), 65536)) != authority['runnerSha256']:
         raise ValueError('Dispatcher changed')
@@ -203,7 +206,7 @@ def main():
     history_fd = os.open(HISTORY, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
     if created_history_identity != directory_identity(os.fstat(history_fd)):
         raise ValueError('Original history root changed during open')
-    start = {'schema': 'named-guard-fixtures-started-v1', 'action': '0067', 'countsBefore': BEFORE,
+    start = {'schema': 'named-guard-fixtures-started-v1', 'action': '0068', 'countsBefore': BEFORE,
              'countsAfter': AFTER, 'authoritySha256': authority_hash, 'cgroup': group,
              'startedMonotonicNs': time.monotonic_ns(), 'buildTestCharge': 1, 'syntheticCharge': 9}
     start_hash = write_root_json(HISTORY, history_fd, created_history_identity, 'started.json', start)
@@ -232,7 +235,8 @@ def main():
         if sha(checkpoint) != authority['checkpointSha256']:
             raise ValueError('Accepted consumption checkpoint changed')
         prior = decode(checkpoint)
-        if prior['originalPreparationJoin']['counterState'] != BEFORE or prior['decision']['artifactAccepted'] is not True:
+        # The guard retains its immutable original checkpoint; authority owns this batch's current allocation.
+        if prior['originalPreparationJoin']['counterState'] != GUARD_COUNTERS or prior['decision']['artifactAccepted'] is not True:
             raise ValueError('Accepted guard/counter prerequisite changed')
         if read(WINDOWS / 'authority.json', 65536) != authority_bytes:
             raise ValueError('Windows authority copy changed')
@@ -255,7 +259,7 @@ def main():
             raise ValueError('Original caller interop binding changed')
         signal.setitimer(signal.ITIMER_REAL, max(0.001, 420 - (time.monotonic() - began)))
         command = [SHELL, '-NoLogo', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
-                   '-File', r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0067-v3\Invoke-WindowsNamedGuardFixtures.ps1',
+                   '-File', r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0068\Invoke-WindowsNamedGuardFixtures.ps1',
                    '-Mode', 'Controller', '-AuthoritySha256', authority_hash]
         process = subprocess.Popen(command, cwd=WINDOWS, stdin=subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,

@@ -9,7 +9,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
 if ($env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Fixture startup cache control is absent' }
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0067-v3'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0068'
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $script:writtenBytes = 0
 $script:readBytes = 0
@@ -91,10 +91,11 @@ if ((Get-Hash $authorityBytes) -cne $AuthoritySha256) { throw 'Fixture authority
 $authorityText = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes)
 $authority = $authorityText | ConvertFrom-Json
 if ($authorityText -cne (($authority | ConvertTo-Json -Depth 20 -Compress) + "`n") -or
-    $authority.schema -cne 'named-guard-fixtures-0067-v1' -or
-    $authority.accepted -ne $true -or $authority.action -cne '0067' -or
-    $authority.countsBefore.preparation -ne 17 -or $authority.countsBefore.buildTest -ne 94 -or
-    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 52 -or
+    $authority.schema -cne 'named-guard-fixtures-0068-v1' -or
+    $authority.accepted -ne $true -or $authority.action -cne '0068' -or
+    $authority.countsBefore.preparation -ne 17 -or $authority.countsBefore.buildTest -ne 95 -or
+    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 61 -or
+    $authority.failedFixtureDispositionSha256 -cne '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf' -or
     $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 9) {
     throw 'Unaccepted fixture allocation'
 }
@@ -108,7 +109,7 @@ if ((Get-Hash (Read-Bytes $shell 1048576)) -cne
 $sequence = @('collision', 'live', 'disposed', 'callback', 'missing', 'session')
 if (@($authority.cases.PSObject.Properties.Name).Count -ne 6) { throw 'Fixture case allocation' }
 foreach ($selected in $sequence) {
-    if ($authority.cases.$selected -cnotmatch '^Local\\azureauth-final-publish-108-0067-[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
+    if ($authority.cases.$selected -cnotmatch '^Local\\azureauth-final-publish-108-0068-[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
         throw 'Unbound fixture Job name'
     }
 }
