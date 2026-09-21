@@ -14243,3 +14243,216 @@ call. Those require their concrete accepted protocol, allocation and exact sourc
 artifact and call admissions. Increasing the drain allowance alone is not an
 accepted remedy. Any new ownership or termination uncertainty keeps the ordinary
 stop conditions; original 0064's exception does not transfer to later failures.
+
+## One Named-Guard Preparation After Original 0064
+
+This prospective supplement implements the current Wave's named-supervision
+correction and original-0064 disposition. It permits preparation of one changed
+managed guard, not publication or execution of that guard. Original 0054/0055
+preparations and all later failures remain consumed. The old 0055 dispatcher,
+materialized inputs, artifact acceptance and authority cannot admit changed source.
+Use the new `run_windows_named_guard_prepare.py`,
+`Invoke-WindowsNamedGuardPrepare.ps1` and `named_guard_history.py` route only after
+its source, protocol, fixed evidence and concrete original launcher are
+independently accepted. No repository command-line entry is supplied.
+
+### Singleton Allocation and Effects
+
+Transfer the last unused preparation unit from Linux to Windows: Linux 8/9 becomes
+8/8, Windows 7/7 becomes 8/8, and combined preparation 15/16 becomes 16/16 on the
+sole original attempt. This expressly replaces the earlier no-third-guard rule
+only for this named-supervision preparation. Preserve ordinary Windows
+bootstrap/restore limit five and every historical debit. Build/test 94/120,
+publication 2/12 and synthetic 52/80 remain unchanged. Twelve final CLI scenarios
+remain protected. Proposed supervision scenarios have no execution allocation
+from this supplement; their concrete fixture, source, actual DLL and original
+call require a subsequent accepted supplement.
+
+The immutable launcher durably records its singleton start and one preparation
+charge before loading candidate source or invoking an experiment helper. The
+paired 0065 reservation represents that same charge, never a second debit.
+Failure before or after the paired reservation, interruption, incomplete evidence
+or failure to start consumes the original invocation and preparation unit. No
+retry, refund, alternate action number or additional preparation is granted.
+
+Use the existing WSL2 Linux review host and Windows 11 x64 host. The only subject
+is the pinned standalone Framework64 C# compiler building the single admitted
+`WindowsFinalPublishGuard.cs` source as a library. Retain the six compiler,
+configuration, framework reference and PowerShell hashes and thirty-entry cleared
+compiler environment in the existing final-guard recipe. Keep `/noconfig`,
+`/nologo`, `/target:library`, the two explicit references, implicit `mscorlib`
+reference and action-local source/output paths. There is no restore, download,
+installation, SDK/MSBuild evaluation, linker, PDB service selection, analyzer,
+generator, response file, shared compiler, `Add-Type` compilation or DLL load.
+No account, broker, cache, UI, network authentication or desktop input is selected.
+
+The new Windows controller verifies the six fixed tools before compiler start
+and after successful compiler completion. This replaces only this preparation's
+separate old preflight PowerShell process; it does not waive any tool pin. One
+PowerShell controller and its one compiler are the Windows process topology.
+This fixed compiler-only recipe retains original compiler-handle supervision;
+it creates no Windows Job. It cannot use an anonymous Job fallback.
+
+### Preparation-Only History Correspondence
+
+For this singleton only, replace the old recursive live-output history route
+with an independently accepted immutable reservation correspondence manifest.
+Other readers and later publication retain their existing obligations until
+expressly amended. No historical result, source tree, output, Job, process or
+service is re-inspected by this comparison. It establishes consumption
+correspondence, not current quiescence, artifact integrity or absence of later
+interference. Original 0057 and 0064 risk exceptions remain separate and retain
+their existing scope. New uncertainty retains ordinary stops.
+
+The retained-evidence provenance review is 42,761 bytes, SHA-256
+`db48e523ac7c7c5a04780b18ad0d07a28c78fa2cff5e893ed9e9529719e15478`.
+It derives expected names and start digests from the accepted handoff through
+0056, existing failure dispositions and admitted fixed copies through 0064.
+This is an authenticated digest basis, not a complete collection of raw starts:
+0061/0062 use the matching start digests in accepted paired result copies;
+native 0060 uses accepted source ordering plus metadata-only presence and the
+retained WSL start. Preserve those evidence levels.
+
+The derived manifest is 23,448 bytes, SHA-256
+`c52bb42bb20b8e70b416d9215fc0b2fe0896e737f9e50a4f16453a514439aaec`.
+It fixes Linux action parents 0001–0045 and both Windows-history namespaces
+0001–0056 plus 0060–0064. There are 167 physical parents, 166 present
+`started.json` leaves and the historical native-0002 absent start. Both 0056
+starts exist. Logical 0057–0059 remain charged gaps; do not fabricate parents
+or derive 0065 from the physical directory count.
+
+The accepted counters are preparation `8+7=15`, build/test
+`37+49+1+6+1=94` (including the original offline fixture, six diagnostics
+0057–0062 and systemd batch), publication `1+1=2`, synthetic `48+4=52`.
+All prefix failures and accepted suffix dispositions remain bound through the
+provenance review. An original verifier marker and its paired reservation charge
+once. A manifest hash or successful comparison alone cannot grant a disposition.
+
+Under the existing exclusive `action.lock`, compare exactly those three parent
+name sets and immutable start hashes before reservation and once after the paired
+0065 starts have been durably written. The second pass adds only 0065 in each
+Windows namespace and requires the same new start bytes. Reject an intervening,
+missing, changed or unexplained reservation before compiler startup. Never
+repair history. The first mismatch stops the singleton.
+
+The two passes share one thirty-second monotonic deadline intersected with the
+original preparation deadline. The exact manifest needs 334 regular-file reads
+including the two new starts. The source ceiling is 386 reads and 6,324,610
+requested bytes, with each start at most 16 KiB and at most 192 historical
+leaves. Use no-follow traversal, owner/type/link checks, within-read file
+identity, retained action-directory handles, before/after parent inventories,
+named-versus-held directory/leaf checks and identity continuity across passes.
+Bound each parent enumeration at 65 entries. These sequential checks are not an
+atomic filesystem snapshot and do not defend against an authorized same-user
+adversary replacing and restoring state between observations.
+
+### Exact Launcher, Clocks and Completion
+
+The next concrete launcher must bind accepted `main-v2`, source commit/tree,
+Wave/protocol hashes, all four preparation components including the guard, the
+fixed manifest and its independent acceptance, source review and execution
+admission. Materialize those exact inputs only in the new dedicated preparation
+input root; bind its literal path, Python runtime, full call and exclusive start
+and result paths before use. The private authority is evidence derived from the
+accepted protocol, not a second work-authorization ledger. A supplied hash,
+callback, Boolean or private file cannot stand in for independent admission.
+
+The Python module is import-safe. Its `prepare` entry accepts the already-running
+original launcher clock; it cannot restart the 230-second allowance after import.
+The exact admitted launcher supplies `verify_current`: a concrete finite GET of
+this fork's accepted `main-v2` reference through the previously validated named
+systemd helper supervision mechanism. Its complete source, call count, output,
+start/result, timeout, stop and cgroup-empty evidence require exact admission;
+there is no direct unsupervised Git/GET subprocess fallback. Execute that freshness
+check under the shared lock immediately before the bounded history comparison
+and reservation. A changed target or helper uncertainty stops without retry.
+
+The original 230-second clock includes input loading, source loading, authority
+verification, reservation, controller startup, compilation, evidence persistence
+and lock release. Outside the history comparator, Python permits at most 96
+regular-file reads and 64 MiB requested bytes, with 1 MiB ordinary private-input
+limits and an 8 MiB DLL limit. No original output is part of this input set.
+Source and authority bytes are checked initially and at normal completion.
+
+Before starting the sole controller, require at least 65 seconds on the original
+clock. Preserve the twenty-second ready/remaining handshake. Windows anchors its
+remaining allowance to its earlier ready counter, never the receive time; exact
+nonce/reservation/invocation/ready hashes bind the exchange. Before starting the
+compiler require 45 seconds remaining for the thirty-second compiler, ten-second
+original-handle failure stop and receipt persistence. All waits intersect the
+original deadline. Keep the compiler's original process object/handle and record
+its PID and creation time. No PID reopening or process scan is permitted.
+
+Bound combined compiler capture at 8 MiB. Normal completion requires original
+compiler exit zero, both stream EOFs, empty diagnostics, unchanged admitted
+source/tools and nonempty bounded output DLL, original Windows controller/proxy
+exit zero, exact clock/result joins and timely original WSL completion. Preserve
+`artifactAccepted:false` and `continuation_allowed:false` in both results and
+the build receipt. The actual DLL still needs independent managed PE/IL/source
+acceptance; compilation does not validate named-Job behavior.
+
+On compiler failure, terminate only through its retained original handle within
+the existing ten seconds and original remaining allowance. On outer failure after a controller start attempt,
+persist cancellation only through the retained directory handle from a successful
+action-directory creation, after matching its current named identity. Failed
+creation or replaced/unestablished identity must not write cancellation into an
+unexpected directory. Passively observe only the original proxy for at most ten seconds inside that same allowance. Never signal a guessed
+proxy, enumerate descendants, load an old guard or use old recovery code. Missing
+original-handle completion, uncertain startup, timeout or incomplete paired
+results stops dependent work. Retain all owned inputs, output and failure records;
+there is no cleanup of original 0057/0064 state. A later result cannot retroactively
+turn the consumed invocation into a success.
+
+### Prepared Guard Contract and Deferred Execution
+
+The changed guard source supplies named ordinary Jobs and exact final names of
+`Local\azureauth-final-publish-108-<action4>-<endpoint32>`, using the existing
+UUIDv4 reservation endpoint. Existing-name collision rejects before limit changes
+or assignment. A separate noninherited `QUERY|TERMINATE` reopen checks access
+without requesting termination. Final mode retains no kill-on-close and no
+breakaway, the 32-active-process ceiling and the original never-resumed-root
+cleanup exception.
+
+Before final root resume, obtain positive creation FILETIME from its original
+handle, verify membership and synchronously invoke the caller's durable identity
+callback. Callback failure follows the never-resumed cleanup path. The caller
+must bind Job name/session, root PID/creation time, reservation/invocation,
+source/DLL and authority before allowing resume. Merely writing an identity
+record is not proof that resume did not follow.
+
+The final member audit performs one fixed-32 process-list query and at most one
+noninherited limited-information process open per listed PID. Check creation
+time, membership in that exact Job and image basename only. Retain successful
+handles until the caller persists its bounded audit before disposal. Each pass
+has five seconds intersected with original enclosing deadlines; partial, raced,
+denied or expired observations remain incomplete and explicitly non-atomic.
+
+The query-only named observer validates the exact name and originating session,
+uses `OpenJobObject(QUERY)` once, keeps a thirty-second original clock and performs
+at most one five-second member pass. It distinguishes absence, access denial,
+session mismatch, failed open and observed members. Persist before closing held
+handles and include persistence/disposal in the original deadline. It cannot
+create a Job, assign processes, alter limits/ACLs, terminate work or choose a
+replacement PID/name. No keeper process is introduced.
+
+These methods and proposed 1,800-second action/1,900-second controller guard
+ceilings are prepared source, not an admitted publication, synthetic scenario
+or recovery. A later protocol must bind the complete final caller, original
+outer clock, drain/audit reserves, success/failure consumers, actual guard DLL,
+concrete synthetic fixtures and the recoverable operating controller/call before
+any dependent operation. Old publication and failed-observation invocations
+remain consumed. No real-account or whole-Slice acceptance follows.
+
+### Named Preparation Source Binding
+
+The following source bytes belong to this prospective preparation. Commit/tree,
+immutable runtime/input paths, provenance carrier, original launcher and full
+call require independent exact admission after merge; this table reports no
+compilation or guard execution.
+
+| Component under `tools/validation/` | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `WindowsFinalPublishGuard.cs` | 32,405 | `45c0d829712bac66ece76676939310d04f59af9a83709f1b1e80b8bf1f4a8501` |
+| `named_guard_history.py` | 13,104 | `21897ea423f40689715f2de88ed67d1cc119bba7c60c87429d785583ba418d75` |
+| `run_windows_named_guard_prepare.py` | 34,439 | `1cbafd10c7f714537c68a0c609dd4e9fd0cd9e2193285ed2906fbcf44e9dbb7e` |
+| `Invoke-WindowsNamedGuardPrepare.ps1` | 36,181 | `476e9483c4ee73d260a0a1bed7974cc1e3b55a289821c938ece54db043ba2d7f` |
