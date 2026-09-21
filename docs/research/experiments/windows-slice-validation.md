@@ -15548,3 +15548,112 @@ and exact copies before accepting the six cases. Collection does not itself acce
 the fixture, final publication, the actual Native AOT artifact or Slice scenarios.
 All new ownership or termination uncertainty retains the normal stops; historical
 0057/0064 dispositions do not extend to a new failure.
+
+## Original 0068 Fixture: Service-Client Failure
+
+The two fresh 0068 preparation singletons completed successfully under accepted
+revision `82b06d36bbb6188524c55fc22cf15ed251b0de06`. The sole original fixture
+caller then returned exit 1 with complete output and no pending session. Its
+21,158-byte source has SHA-256
+`2c10d85482c5ca22e8e2414e7f9a5d906bbba17f11fb214449059e5933a77d9b`.
+The durable original start consumes the full one build/test plus nine synthetic
+reservation: preparation 17, build/test 96, publication 2 and synthetic 70.
+Preserve both successful preparation singletons and the failed batch as spent;
+no retry, refund or fixture scenario acceptance follows.
+
+This caller's original failing output authenticates its 477-byte start and
+863-byte result. One independent acceptance read exactly those two Linux
+records at their transported lengths and hashes. That acceptance is 6,337 bytes,
+SHA-256 `420e87f682ea90202c562352e18495ef7590927a263ed47562c883456a168840`.
+The result reports `ValueError` at `service-output`, service-client exit 1,
+both output EOFs, 271 combined captured bytes, eight selected input reads,
+89,983 requested file bytes and 6,680 elapsed milliseconds. All three sampled
+Windows historical change times differ; their eight other expected fields,
+content hashes and full current-read continuity passed the corrected checks.
+This establishes bounded input-validation behavior, not a benign metadata cause
+or fixture success.
+
+On the exact caller source, all eight prelaunch input reads completed, the Linux
+`systemd-run` client started, and its nonzero exit failed the service-output
+predicate. The caller did not reach dispatcher transport validation, read the
+dispatcher history records or observe cgroup completion. The 271 bytes were not
+persisted in the authenticated caller records; their contents and channel split
+are unknown. No dispatcher outcome, Windows startup, Windows root exit or
+controlled-descendant quiescence is accepted. Historical 0057/0064 risk decisions
+do not excuse this new uncertainty. Preserve affected state and stop dependent
+execution, including the success-only collector and final publication.
+
+## One Later 0068 Dispatcher-Record Snapshot
+
+To determine whether retained dispatcher records support a narrower failure-phase
+conclusion, allocate one separately admitted file-only snapshot operation after
+this amendment merges. The existing credential-free Wave covers this evidence
+preparation on the existing WSL host; no subject restart, process operation,
+Windows observation or new lifetime-risk waiver is granted. This singleton adds
+zero units to the four execution quotas and leaves counters 17/96/2/70 unchanged.
+Record its durable start before the sole submission; failed start, missing input,
+timeout or incomplete output spends it without retry. Keep twelve synthetic units
+protected for final CLI scenarios.
+
+Read only the two fixed Linux leaves in the original 0068 WSL action directory:
+`/var/tmp/azureauth-windows-slice-108/windows-actions/0068/started.json`, at most
+65,536 bytes, and `result.json` in that same directory, at most 262,144 bytes.
+Open the literal directory chain without following links and retain its descriptors
+and identity joins. Require regular, single-linked, current-user-owned files;
+compare named/opened/after-read full nine-field identities and retain both opened
+files through final correspondence. Each source gets one payload read, requesting
+its maximum plus one byte: at most two selected reads and 327,682 requested bytes.
+No short-read refill, alternate path, directory enumeration, file repair or
+additional source lookup is permitted.
+
+The helper rejects missing, partial, oversized, noncanonical or raced inputs.
+Missing files are a failed observation, not evidence that an earlier process did
+not start. It copies canonical JSON objects without asserting their semantic
+coherence; independent acceptance must check schemas, authority, charge,
+start/result correspondence and the exact original dispatcher source before any
+interpretation. No current or historical process absence follows from file absence.
+
+Exclusively create `/tmp/windows-named-fixtures0068-dispatcher-snapshots-v1`
+for `start.json`, `result.json` and `observation.json`. The two snapshot payloads
+have a combined ceiling of 327,680 bytes; the manifest has an 8,192-byte ceiling,
+for at most 335,872 helper-written bytes. A separate durable singleton start is
+at most 4,096 bytes, making their combined private file-output ceiling 339,968.
+Files and directories are synchronized, output files become read-only, and all
+owned descriptors are closed once before successful transport. Retain partial
+outputs on failure without overwrite, cleanup or reuse. Do not read back or
+reopen original inputs to enrich a failure.
+
+The fixed source is 8,520 bytes, SHA-256
+`f3205fa9b2bea1799498a718a99fc7920b60bc300c8ed860bd726f3f2d83bdf1`.
+It has one original 30-second monotonic clock through closure and final output;
+the exact outer invocation uses a 35-second timeout followed by five seconds to
+kill. Selected stdout is at most 2,048 bytes, containing output lengths/hashes
+on success or a fixed failure stage/type and already sampled counters when the
+original clock permits. A timeout or interrupted closure may prevent complete
+transport; no success or additional observation is inferred. Reuse the accepted
+installed Python and timeout bindings; admit the complete exact source and literal
+call independently without another installed-tool survey. Only empty polls of
+that original pending tool session, each at most 60 seconds, may collect its
+original output and completion.
+
+This operation never invokes Windows, a fixture, `systemd-run`, `systemctl`, a
+compiler or another subject. It does not observe a cgroup, socket, process, Job,
+account, cache, network or Windows path. It neither changes nor terminates any
+possibly live original process. It may only read the two declared records and
+write its dedicated private evidence. Original Windows lifetime uncertainty
+therefore remains an ordinary stop for dependent experiments while this bounded
+read-only evidence step is prepared and performed.
+
+Success requires actual original exit zero, complete output and a closed session,
+then independent authentication of the three saved files against the original
+snapshot transport. These are later retained snapshots: the original failed
+caller did not authenticate the dispatcher's hashes or directory identity.
+Current stable identity and copied hashes do not retroactively supply that missing
+original transport. Any source-conditioned phase inference must retain this
+limitation and reject incoherent or insufficient records. In particular, the
+presence of the dispatcher's accepted-ref field alone does not prove its Windows
+`Popen` ran; a proxy exit or Linux cgroup status alone does not prove Windows
+quiescence. Do not claim general quiescence, recover discarded output, accept a
+fixture case or resume dependent work solely because this snapshot succeeds.
+Any further observation or corrected batch needs its own bounded accepted scope,
+source/allocation/call admission and ordinary outcome gates.
