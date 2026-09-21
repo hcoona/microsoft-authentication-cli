@@ -19,11 +19,12 @@ ROOTS = {
     'wsl': '/var/tmp/azureauth-windows-slice-108/windows-actions',
     'windows': '/mnt/c/Temp/azureauth-windows-slice-108/actions',
 }
-COUNTS = {'preparation': 15, 'buildTest': 94, 'publication': 2, 'synthetic': 52}
+COUNTS = {'preparation': 16, 'buildTest': 94, 'publication': 2, 'synthetic': 52}
 MAX_LEAVES = 192
 MAX_LEAF_BYTES = 16384
+MAX_HISTORICAL_WINDOWS_BYTES = 1048576
 MAX_READS = 2 * MAX_LEAVES + 2
-MAX_READ_BYTES = MAX_READS * (MAX_LEAF_BYTES + 1)
+MAX_READ_BYTES = 48 * 1024 * 1024
 
 
 def _pairs(items):
@@ -52,18 +53,21 @@ def _keys(value, names):
 class ReservationComparison:
     """One before/after-reservation comparison under the caller's existing lock."""
 
-    def __init__(self, manifest_bytes, expected_sha256, deadline_ns, cancelled):
+    def __init__(self, manifest_bytes, expected_sha256, deadline_ns, cancelled, record_stage):
         if hashlib.sha256(manifest_bytes).hexdigest() != expected_sha256:
             raise ValueError('Fixed-copy manifest hash changed')
         if not 1 <= len(manifest_bytes) <= 1048576:
             raise ValueError('Fixed-copy manifest size')
+        self.record_stage = record_stage
+        self.stage = 'history-manifest'
+        self.record_stage(self.stage, 'framing')
         self.manifest = json.loads(manifest_bytes.decode('utf-8'), object_pairs_hook=_pairs,
                                    parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Nonfinite history')))
         _keys(self.manifest, ('schema', 'scope', 'counts', 'nextAction', 'parents',
                               'reservations', 'acceptedBasis'))
         if (self.manifest['schema'] != 'named-guard-reservation-history-v1' or
-                self.manifest['scope'] != 'one-compiler-only-preparation-after0064' or
-                self.manifest['counts'] != COUNTS or self.manifest['nextAction'] != '0065'):
+                self.manifest['scope'] != 'one-compiler-only-preparation-after0065' or
+                self.manifest['counts'] != COUNTS or self.manifest['nextAction'] != '0066'):
             raise ValueError('Fixed history scope or capacity changed')
         if any(type(self.manifest['counts'][key]) is not int for key in COUNTS):
             raise ValueError('History counter type')
@@ -81,11 +85,16 @@ class ReservationComparison:
         self.observed = {}
         self.actions = {}
         self.parents = {}
+        self.record_stage(self.stage, 'slots')
         self._validate_manifest()
 
     def _budget(self):
-        if self.cancelled() or time.monotonic_ns() >= self.deadline_ns:
-            raise TimeoutError('Original reservation comparison expired or cancelled')
+        if self.cancelled():
+            self.record_stage(self.stage, 'cancelled')
+            raise InterruptedError('Original reservation comparison cancelled')
+        if time.monotonic_ns() >= self.deadline_ns:
+            self.record_stage(self.stage, 'deadline')
+            raise TimeoutError('Original reservation comparison expired')
 
     def _validate_manifest(self):
         for role, root in ROOTS.items():
@@ -95,7 +104,7 @@ class ReservationComparison:
             if (parent['path'] != root or type(names) is not list or
                     not 1 <= len(names) <= 64 or
                     any(type(name) is not str or re.fullmatch(r'(?!0000)[0-9]{4}', name) is None
-                        for name in names) or names != sorted(set(names)) or '0065' in names):
+                        for name in names) or names != sorted(set(names)) or '0066' in names):
                 raise ValueError('Exact physical history parent set changed')
         leaves = self.manifest['reservations']
         if type(leaves) is not list or not 1 <= len(leaves) <= MAX_LEAVES:
@@ -158,6 +167,7 @@ class ReservationComparison:
             raise ValueError('Intervening, missing or unexplained action')
 
     def _read_reservation(self, action, leaf):
+        self.record_stage(self.stage, 'reservation-presence')
         self._budget()
         fd = None
         try:
@@ -171,26 +181,42 @@ class ReservationComparison:
                 raise ValueError('Previously present reservation is missing') from None
             if leaf['status'] != 'present':
                 raise ValueError('Previously absent reservation now exists')
+            self.record_stage(self.stage, 'reservation-file-shape')
             before = os.fstat(fd)
+            leaf_limit = (MAX_HISTORICAL_WINDOWS_BYTES
+                          if leaf['parent'] == 'windows' and leaf['number'] != '0066'
+                          else MAX_LEAF_BYTES)
             if (not stat.S_ISREG(before.st_mode) or before.st_uid != os.getuid() or
-                    before.st_nlink != 1 or not 1 <= before.st_size <= MAX_LEAF_BYTES):
+                    before.st_nlink != 1):
                 raise ValueError('Reservation file shape')
+            self.record_stage(self.stage, 'reservation-size')
+            if not 1 <= before.st_size <= leaf_limit:
+                raise ValueError('Reservation file size')
+            self.record_stage(self.stage, 'reservation-read-count')
             self.reads += 1
-            self.requested_bytes += before.st_size + 1
-            if self.reads > MAX_READS or self.requested_bytes > MAX_READ_BYTES:
+            if self.reads > MAX_READS:
                 raise ValueError('Reservation comparison read bound')
             raw = bytearray()
             while len(raw) <= before.st_size:
                 self._budget()
-                part = os.read(fd, min(4096, before.st_size + 1 - len(raw)))
+                requested = min(4096, max(1, before.st_size - len(raw)))
+                self.record_stage(self.stage, 'reservation-byte-budget')
+                self.requested_bytes += requested
+                if self.requested_bytes > MAX_READ_BYTES:
+                    raise ValueError('Reservation comparison requested-byte bound')
+                self.record_stage(self.stage, 'reservation-read')
+                part = os.read(fd, requested)
                 if not part:
                     break
                 raw.extend(part)
+            self.record_stage(self.stage, 'reservation-identity')
             after = os.fstat(fd)
             named = os.stat('started.json', dir_fd=action, follow_symlinks=False)
-            if (_identity(before) != _identity(after) or _identity(after) != _identity(named) or
-                    len(raw) != before.st_size or hashlib.sha256(raw).hexdigest() != leaf['sha256']):
-                raise ValueError('Original reservation bytes or incarnation changed')
+            if _identity(before) != _identity(after) or _identity(after) != _identity(named):
+                raise ValueError('Original reservation incarnation changed')
+            self.record_stage(self.stage, 'reservation-hash')
+            if len(raw) != before.st_size or hashlib.sha256(raw).hexdigest() != leaf['sha256']:
+                raise ValueError('Original reservation bytes changed')
             self._budget()
             return _identity(after)
         finally:
@@ -199,6 +225,8 @@ class ReservationComparison:
 
     def compare(self, *, new_reservation_sha256=None):
         expected_pass = 0 if new_reservation_sha256 is None else 1
+        self.stage = 'history-before' if expected_pass == 0 else 'history-after'
+        self.record_stage(self.stage, 'pass-order')
         if self.failed or self.passes != expected_pass:
             raise ValueError('Repeated or reordered reservation comparison')
         if new_reservation_sha256 is not None and (type(new_reservation_sha256) is not str or
@@ -209,10 +237,11 @@ class ReservationComparison:
         actions = {}
         leaves = list(self.manifest['reservations'])
         if expected_pass:
-            leaves.extend({'parent': role, 'number': '0065', 'status': 'present',
+            leaves.extend({'parent': role, 'number': '0066', 'status': 'present',
                            'sha256': new_reservation_sha256} for role in ('wsl', 'windows'))
         wanted_sets = {}
         try:
+            self.record_stage(self.stage, 'parent-inventory')
             for role, root in ROOTS.items():
                 fd = self._open_directory(root)
                 opened[role] = fd
@@ -225,10 +254,11 @@ class ReservationComparison:
                 self.parents[role] = identity
                 wanted = list(self.manifest['parents'][role]['names'])
                 if expected_pass and role in ('wsl', 'windows'):
-                    wanted.append('0065')
+                    wanted.append('0066')
                 wanted_sets[role] = wanted
                 self._inventory(fd, wanted)
             for leaf in leaves:
+                self.record_stage(self.stage, 'action-directory')
                 key = (leaf['parent'], leaf['number'])
                 self._budget()
                 parent = opened[leaf['parent']]
@@ -236,14 +266,16 @@ class ReservationComparison:
                                  dir_fd=parent)
                 actions[key] = action
                 directory = self._check_directory(action, parent, leaf['number'])
-                if expected_pass and leaf['number'] != '0065' and self.actions.get(key) != directory:
+                if expected_pass and leaf['number'] != '0066' and self.actions.get(key) != directory:
                     raise ValueError('Action directory replaced between passes')
                 self.actions[key] = directory
                 identity = self._read_reservation(action, leaf)
+                self.record_stage(self.stage, 'action-and-leaf-continuity')
                 self._check_directory(action, parent, leaf['number'])
-                if expected_pass and leaf['number'] != '0065' and self.observed.get(key) != identity:
+                if expected_pass and leaf['number'] != '0066' and self.observed.get(key) != identity:
                     raise ValueError('Reservation identity changed between passes')
                 self.observed[key] = identity
+            self.record_stage(self.stage, 'final-continuity')
             # Recheck held action names and leaf incarnations after all reads.
             # These bounded sequential observations do not form an atomic snapshot.
             for leaf in leaves:

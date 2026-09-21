@@ -14582,3 +14582,114 @@ only a candidate explanation of the original unlocalized failure. Successful
 collection requires original tool completion inside its allowance and an
 independent source/evidence review; it grants no original-run acceptance,
 quiescence claim, capacity refund, preparation, or dependent execution.
+
+## Named-Guard Preparation: Metadata Evidence and Prospective Correction
+
+The singleton metadata-only observation completed once against accepted commit
+`dbaad29574fefb2064768aa7dd7da44356a57647`. The original tool returned exit zero
+without an active session. The report completed within the thirty-second clock;
+its pre-persistence elapsed checkpoint was 411,262,602 nanoseconds. The report is
+35,645 bytes, SHA-256
+`942062c87d157c4317a53dcae7f5725dd15f5b979a3a10a6256691eb92263a07`.
+Independent source/evidence acceptance is 24,263 bytes, SHA-256
+`1053df41e7fae61d75a5dcdebcdcb7ebd09b192ca77041ed569b7c700cb2c29e`.
+The observation allowance is consumed. No retry or further historical observation
+is granted by this supplement.
+
+All three parent inventories matched the manifest. Its 167 action-directory
+slots contained 166 present starts and the expected absent Windows 0002 start.
+Linux and WSL metadata had no recorded discrepancy. Fifty-two Windows starts,
+0001 and 0003 through 0053, exceeded the comparator's 16,384-byte limit: their
+observed sizes ranged from 211,480 to 524,897 bytes. No other checked metadata
+predicate differed. These were sequential current metadata observations, without
+historical leaf-content reads; they do not establish historical content hashes,
+an atomic snapshot, the original freshness response or the original triggering
+`ValueError`. Original 0065 remains failed with its cause unlocalized.
+
+Finding `NAMEDPREP-HISTORY-SIZE-001` was independently triaged true positive,
+blocking for a future comparison using these inputs, confidence ten. Its triage
+is 25,653 bytes, SHA-256
+`3a86b1baf503a1c3c5483e61d64b569c09620ac7da1646989e3228f7a673328a`.
+The source-level incompatibility includes the aggregate limit: the two passes'
+nominal size-plus-one requests total 45,789,588 bytes before new starts, exceeding
+the former 6,324,610-byte allowance. This finding does not identify the original
+failure gate. The separate accepted diagnostic finding
+`NAMEDPREP-FAILURE-LOCALIZATION-001` also remains applicable.
+
+### Prospective Source Only; Capacity Decision Still Required
+
+The current preparation consumption remains **16/16**, split Linux 8/8 and
+Windows 8/8. Build/test remains 94/120, publication 2/12, synthetic 52/80, and the
+twelve final CLI scenarios remain protected. This supplement accepts evidence
+and prepares corrected source. It grants no preparation, materialization,
+comparator replay, compiler execution, artifact acceptance, cleanup or dependent
+continuation. Before any such execution, obtain a repository-owner capacity
+decision, merge its Wave/allocation amendment and exact protocol, and complete
+ordinary independent source, inputs, runtime and full-call admission. A source
+file or private template does not grant that authority.
+
+The prospective route uses logical action 0066, separate authority/input and
+freshness-helper roots, and prior preparation count sixteen. It cannot reactivate
+0065. A future independently admitted manifest must retain the existing 167
+physical slots and exact original start hashes and add the accepted original
+0065 debit and failure disposition to its fixed evidence basis. Do not fabricate
+paired 0065 starts or add an absent physical directory to that manifest. Its new
+scope is `one-compiler-only-preparation-after0065`. Original inputs, receipts and
+consumed source remain retained; Git preserves their accepted source revision.
+
+For the prospective comparator only, permit at most 1 MiB for manifest-listed
+historical Windows starts. Preserve 16 KiB for Linux/WSL historical starts and
+both new starts. Use an explicit **48 MiB (50,331,648-byte)** history-only requested
+read ceiling across both ordered passes, without resetting counters. Charge each
+requested `os.read` chunk before issuance, including short-read continuations
+and EOF probes, without refunds for fewer returned bytes. Preserve the 386
+logical-file-read ceiling, 192 historical-slot ceiling, 65-name inventories,
+no-follow traversal, owner/type/single-link checks, exact admitted SHA-256 values,
+and held/named identity continuity within and between passes. The nominal
+current-metadata path plus two maximum 16 KiB new starts requests 45,822,358
+bytes; short reads consume the remaining budget and may fail closed.
+
+Keep the existing shared thirty-second comparison clock intersected with the
+original 230-second preparation clock. Keep the separate 96-read/64 MiB WSL
+non-history input ceiling: together these two WSL input budgets permit at most
+112 MiB of requested bytes, not a transferable pool. Existing Windows reader,
+output, helper, compiler, cancellation and termination limits remain unchanged.
+Recompute the complete literal call's reservation before any execution admission;
+these source-level maxima do not guarantee successful throughput or compilation.
+The guard C# source and standalone compiler recipe remain unchanged, apart from
+the separately bound action paths. Future publication still requires named Jobs,
+identity evidence and the accepted authorized operating path; no anonymous
+fallback is introduced.
+
+### Bounded Failure Localization
+
+The prospective launcher records fixed allowlisted stage and reason codes in its
+existing result, including dispatcher failures before a paired reservation exists.
+The concrete callback is part of exact source admission and grants no authority.
+Distinguish launcher/runtime/input checks, owner/lock gates, supervised freshness,
+response parsing/shape/deadline, target match, manifest validation, both history
+passes, reservation and controller/completion checks. History reasons distinguish
+presence, file shape, size, logical read count, requested-byte ceiling, read,
+hash, identity, cancellation and deadline checks. A reason names the active check
+when a failure occurs; it is not an inferred original-run root cause.
+
+Retain a SHA-256 digest of the bounded original freshness response after helper
+completion, and only a validated public `refs/heads/main-v2` commit when available.
+A later GET cannot replace this receipt. Keep exception types allowlisted, with a
+fixed fallback for unexpected types. Never persist raw exception text, tracebacks,
+environment values, credentials, full response payloads or historical leaf content
+for this diagnostic. Persistence remains within the original clock; timeout or
+interrupted persistence may still leave incomplete evidence and no acceptance.
+Neither diagnostic completeness nor a normal result grants continuation.
+
+The following identities bind this source-only correction; neither private
+template has been invoked or materialized as an execution input.
+
+| Component | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `named_guard_history.py` | 14,875 | `fd7f9753fcd5f343111fee41c6e1d55de87982c653a779ed8e5fcfde58a515e5` |
+| `run_windows_named_guard_prepare.py` | 35,582 | `3c2903376b75c034ab63d48a81c612c8e08b69466aeb40251ac7dd8c3ccdae46` |
+| `Invoke-WindowsNamedGuardPrepare.ps1` | 36,190 | `7d5324e2ad4ae72028c33ab0534e6f158c3470773c7723a2b4998cc6b8bb5229` |
+| `WindowsFinalPublishGuard.cs` | 32,405 | `45c0d829712bac66ece76676939310d04f59af9a83709f1b1e80b8bf1f4a8501` |
+| `Inert launcher template` | 14,771 | `c51933a086620c8c5af45cf806d8655d5409b721c9b07557b9d5fbf99bc0f934` |
+| `Inert freshness-verifier template` | 21,434 | `94b64dd61c56b8ace8006859865d0e25ba58665ba09ea2e7d908cf7bf56cad82` |
