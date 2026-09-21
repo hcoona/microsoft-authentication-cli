@@ -211,7 +211,7 @@ function Assert-BoundSource($OuterWatch, [string] $Action, [string] $Cancel, $St
     foreach ($role in $files.Keys) {
         $binding = $authority.components.$role
         Assert-Keys $binding @('path', 'bytes', 'sha256')
-        if ($binding.path -cne ('/tmp/windows-named-guard0066-inputs/' + $files[$role]) -or
+        if ($binding.path -cne ('/tmp/windows-named-guard0066-inputs-v2/' + $files[$role]) -or
             ($binding.bytes -isnot [int] -and $binding.bytes -isnot [long]) -or
             $binding.bytes -le 0 -or $binding.bytes -gt 1048576 -or $binding.sha256 -cnotmatch '^[0-9a-f]{64}$') {
             throw 'Named component binding'
@@ -220,7 +220,7 @@ function Assert-BoundSource($OuterWatch, [string] $Action, [string] $Cancel, $St
     foreach ($role in @('historyManifest', 'historyAcceptance', 'sourceReview', 'executionAdmission')) {
         $binding = $authority.$role
         Assert-Keys $binding @('path', 'bytes', 'sha256')
-        if ($binding.path -cne ('/tmp/windows-named-guard0066-inputs/' + $role + '.json') -or
+        if ($binding.path -cne ('/tmp/windows-named-guard0066-inputs-v2/' + $role + '.json') -or
             ($binding.bytes -isnot [int] -and $binding.bytes -isnot [long]) -or
             $binding.bytes -le 0 -or $binding.bytes -gt 1048576 -or $binding.sha256 -cnotmatch '^[0-9a-f]{64}$') {
             throw 'Named evidence binding'

@@ -28,8 +28,8 @@ POWERSHELL = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
 PROTOCOL_PATH = 'docs/research/experiments/windows-slice-validation.md'
 ROOT_MARKER = {'grant': 'a0f741b59e09f1eb95594dbfde7a6e634d962210',
                'issue': 108, 'protocol_family': PROTOCOL_PATH}
-AUTHORITY_PATH = Path('/tmp/windows-named-guard0066-authority.json')
-INPUT_ROOT = Path('/tmp/windows-named-guard0066-inputs')
+AUTHORITY_PATH = Path('/tmp/windows-named-guard0066-authority-v2.json')
+INPUT_ROOT = Path('/tmp/windows-named-guard0066-inputs-v2')
 COMPONENTS = {'dispatcher': 'run_windows_named_guard_prepare.py',
               'controller': 'Invoke-WindowsNamedGuardPrepare.ps1',
               'guard': 'WindowsFinalPublishGuard.cs',
@@ -98,13 +98,16 @@ def read_bytes(path, limit=1048576):
                 before.st_nlink != 1 or not 0 <= before.st_size <= limit):
             raise ValueError('Preparation input type, owner or size')
         _reads += 1
-        _read_bytes += before.st_size + 1
-        if _reads > 96 or _read_bytes > 67108864:
+        if _reads > 96:
             raise ValueError('Preparation input read ceiling')
         data = bytearray()
         while len(data) <= before.st_size:
             budget()
-            chunk = os.read(fd, min(65536, before.st_size + 1 - len(data)))
+            requested = min(65536, max(1, before.st_size - len(data)))
+            _read_bytes += requested
+            if _read_bytes > 67108864:
+                raise ValueError('Preparation requested-byte ceiling')
+            chunk = os.read(fd, requested)
             if not chunk:
                 break
             data.extend(chunk)
