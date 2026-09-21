@@ -107,6 +107,7 @@ def write_root_json(root, held, expected, name, value):
     os.fsync(held)
     if directory_identity(os.fstat(held)) != expected or directory_identity(root.lstat()) != expected:
         raise ValueError('Original output root changed during persistence')
+    return sha(raw)
 
 
 def group_identity():
@@ -205,7 +206,7 @@ def main():
     start = {'schema': 'named-guard-fixtures-started-v1', 'action': '0067', 'countsBefore': BEFORE,
              'countsAfter': AFTER, 'authoritySha256': authority_hash, 'cgroup': group,
              'startedMonotonicNs': time.monotonic_ns(), 'buildTestCharge': 1, 'syntheticCharge': 9}
-    write_root_json(HISTORY, history_fd, created_history_identity, 'started.json', start)
+    start_hash = write_root_json(HISTORY, history_fd, created_history_identity, 'started.json', start)
     result = {'schema': 'named-guard-fixtures-result-v1', 'passed': False, 'continuation_allowed': False,
               'authoritySha256': authority_hash, 'countsAfter': AFTER, 'proxyExit': None,
               'stdoutEof': False, 'stderrEof': False, 'windowsQuiescent': False, 'failureType': None}
@@ -313,12 +314,14 @@ def main():
         result['requestedFileBytes'] = read_requested
         result['capturedBytes'] = sum(map(len, captured))
         try:
-            write_root_json(HISTORY, history_fd, created_history_identity, 'result.json', result)
+            result_hash = write_root_json(HISTORY, history_fd, created_history_identity, 'result.json', result)
         finally:
             if windows_fd is not None:
                 os.close(windows_fd)
             os.close(history_fd)
-    print(json.dumps({'passed': result['passed'], 'continuation_allowed': False}, sort_keys=True))
+    print(json.dumps({'passed': result['passed'], 'continuation_allowed': False,
+                      'historyIdentity': created_history_identity, 'startSha256': start_hash,
+                      'resultSha256': result_hash}, sort_keys=True))
     return 0 if result['passed'] else 1
 
 

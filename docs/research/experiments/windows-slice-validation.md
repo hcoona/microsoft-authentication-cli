@@ -15000,6 +15000,14 @@ hashes, pinned PowerShell, original DLL, checkpoint and complete call must agree
 Persist the Windows start before creating any scenario host. Failed preflight
 does not license a second batch.
 
+The dispatcher's original output channel binds the created WSL history-directory
+identity and exact persisted start/result hashes. The original caller must hold
+and rejoin that directory, read both receipts relative to it, and match those
+transported hashes before using their cgroup or Windows-completion evidence.
+Its finite original completion deadline includes result persistence and a final
+post-persistence check. A saved passing assertion requires the original caller's
+successful exit; it cannot override overdue or incomplete tool completion.
+
 On cancellation, request only this Windows controller's cooperative cancellation
 and use its original outer Job stop. Preserve failure and any incomplete evidence.
 If original Windows root exit, controlled-descendant quiescence or output completion
