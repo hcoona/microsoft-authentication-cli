@@ -14863,3 +14863,157 @@ acceptance sets `artifactAccepted:true` while retaining
 caller and final publication still require their own accepted protocols and
 exact admissions. Counters remain preparation 17, build/test 94, publication 2
 and synthetic 52.
+
+## One Credential-Free Named-Job Fixture Batch
+
+After acceptance of the actual original 0066 managed guard, allocate one Windows
+build/test action, logical number 0067, and nine synthetic process units to the
+six cases below. Reserve all nine at original batch start; failed, interrupted
+or unstarted remainder cases do not refund that reservation. Start from accepted
+consumption preparation 17, build/test 94, publication 2 and synthetic 52. The
+batch produces counters 17, 95, 2 and 61 within the Wave's ceilings. Preserve the
+twelve final CLI units and all earlier charges. This allocation permits one
+batch only, with no retry or earlier invocation/recovery/observation replay.
+
+Use the existing Windows 11 x64 host and pinned Windows PowerShell, the exact
+24,576-byte original 0066 DLL with SHA-256
+`a18302e4658afc08b564be23c9b52995fba85c1a3345fba19662008efe30ae58`,
+and its accepted source/provenance/static-artifact evidence. No fixture compiler,
+restore, new installation, product, account, broker, authentication, UI, account/token-cache or
+resource operation is permitted. No human interaction is expected. Disable PowerShell's module-analysis file cache
+before every Windows process starts using the documented
+[`PSModuleAnalysisCachePath=NUL` control](https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_windows_powershell_5.1?view=powershell-5.1#module-analysis-cache).
+The original WSL dispatcher passes it unchanged through `WSLENV` with the `/w`
+flag; the fixed child environments set it directly. Each script mode rejects a
+missing or different value at entry. This is a selected startup control, not an
+observed cache-isolation claim. Each scenario
+has a fresh PowerShell host so the guard's static single-observation latch is
+never reset or bypassed. The original PowerShell controller is the batch harness;
+the six scenario hosts and three created payloads are the nine synthetic units.
+No additional observer process or subject launch is allocated.
+
+Bind the original caller's single existing `WSL_INTEROP` endpoint in the private
+exact authority, including its literal `/run/WSL/<pid>_interop` path and finite
+no-follow Unix-socket metadata. Carry it unchanged through the cleared systemd
+service and proxy environments; recheck only that exact metadata before launch.
+Reject a missing or changed binding without discovery, connection probes,
+alternate endpoints or fallback. The [WSL interop architecture](https://wsl.dev/technical-documentation/interop/#connecting-to-interop-servers)
+states that `/init` uses this variable, otherwise searching process ancestry.
+The selected service topology must not depend on that unbound fallback.
+`WSL_INTEROP` is a Linux-side transport prerequisite, not a Windows environment
+export or independent proof of the Windows session, liveness or future lifetime.
+
+| Case | Required observation | Payload starts |
+| --- | --- | --- |
+| Exact-name collision | A second final Job creation rejects the live exact name; the original remains queryable and empty. | 0 |
+| Live identity | A durable callback record precedes payload execution; named query returns the same PID, creation FILETIME and membership. | 1 |
+| Creator disposal | The creator closes its handles; exact-name query still returns the live payload; original outer containment then terminates it and reaches zero active processes. | 1 |
+| Callback failure | Intentional failure before resume has positive original-handle termination and exit confirmation; the payload-start marker is absent. | 1 created, never resumed |
+| Missing name | The exclusively generated never-created exact name returns not-found. | 0 |
+| Session mismatch | Mismatched expected session returns before opening a Job. | 0 |
+
+### Containment, Clocks and Evidence
+
+The ordinary named outer Job for each case contains only its fixed scenario host
+and any fixed payload. It has kill-on-close, no breakaway and retained original
+process handles. The inner final Job uses the accepted nonterminating disposal
+policy. This fixture-only outer termination is justified by its exclusively
+created processes; it does not authorize terminating potentially shared compiler
+workers during final publication. Record each exact outer Job name/session and
+root PID/creation time, and every inner pre-resume identity. Reject name collisions
+without anonymous fallback. Do not scan or clean old Jobs or processes.
+
+Microsoft's [nested Job documentation](https://learn.microsoft.com/windows/win32/procthread/nested-jobs)
+and [assignment contract](https://learn.microsoft.com/windows/win32/api/jobapi2/nf-jobapi2-assignprocesstojobobject)
+provide the source premise for parent containment of the inner payload. The
+fixture must establish its actual observed outcome. A name or missing marker alone
+does not prove ownership or exit. The disposal case specifically requires a live
+member before outer termination, successful termination, zero remaining active
+processes, the expected total process count and both output EOFs. The callback
+case requires the guard's original-handle success and exit flags in addition to
+zero accounting and absence of the payload marker.
+
+Use the original WSL monotonic clock for a 30-second preflight, cancellation by
+330 seconds, proxy completion by 400 seconds and a 420-second dispatcher ceiling.
+The original named systemd unit is `azureauth-named-fixtures-108-0067.service`,
+with `ExitType=cgroup`, `KillMode=control-group`, no restart, a 450-second maximum
+runtime and a five-second stop interval followed by SIGKILL. Its exact installed
+tool bindings and caller collection must be independently admitted. The retained
+unit's confirmed cgroup completion is Linux evidence only; it cannot establish
+Windows completion after an uncertain proxy outcome.
+
+The Windows controller starts cases only before its original 240-second mark,
+bounds each case root by 45 seconds and its stop/output completion by 60 seconds,
+and permits no passing assertion stage after its original 300-second mark.
+Its original 360-second completion ceiling includes final result persistence;
+a post-persistence check rejects overdue success even if the saved result
+contains passing assertions. Both the result and original controller exit must
+be accepted. Each case uses one original 45-second shared
+QPC deadline, its original controller/action clocks, and a separately started
+single named-observation clock intersected with that deadline. Payloads stop
+themselves by their original 20-second clock if not released or terminated earlier.
+The accepted ten-second ordinary Job stop and final never-resumed stop limits
+remain unchanged. Synchronous native calls retain the accepted cooperative-clock
+limitation; no arbitrary OS-stall guarantee is claimed.
+
+The dispatcher reads at most 16 MiB of requested local file bytes and captures
+at most 16 KiB total proxy output. Each Windows script mode explicitly reads at most 4 MiB and
+writes at most 256 KiB through its selected I/O functions, with individual JSON files at most 64 KiB. Ten Windows
+processes, including the original harness, therefore bound those pools to 40 MiB
+and 2.5 MiB. The original proxy and six case-host streams must be silent; unexpected bytes
+from those streams fail the batch, and success requires their actual EOF. Inner
+payload stdout/stderr are intentionally unobserved and their reader handles close
+with the final creator; no payload-output or complete payload-capture claim follows.
+The payload assertions concern identity, original exit or owned outer termination.
+These selected script-I/O pools do not bound all runtime or OS loader activity. Persist sanitized case assertions, original identity,
+query-only audits, containment, counts and final outcomes, without account or
+machine identifiers in public records. Member audits remain non-atomic.
+
+### Original Source, Checkpoint and Call Admission
+
+Use `tools/validation/Invoke-WindowsNamedGuardFixtures.ps1` and
+`tools/validation/run_windows_named_guard_fixtures.py` only after their complete
+source, exact accepted revision, original artifact, protocol and literal call
+have independent acceptance. The materialized source/input root is
+`/tmp/windows-named-fixtures0067-inputs`; the new Windows input/evidence root is
+`C:\Temp\azureauth-windows-slice-108\named-fixtures-0067`; the WSL charge/result
+root is `/var/tmp/azureauth-windows-slice-108/windows-actions/0067`. Never replace
+an existing root or output. All are dedicated retained experiment state.
+
+Before any input materialization, independently accept its finite exact copy
+procedure and complete call. Copy only the fixed accepted 0066 offline DLL and
+artifact-acceptance seal, accepted fixture sources, and newly admitted canonical
+authority bytes. The seal's accepted original preparation join supplies the
+17/94/2/52 checkpoint. This supplements the already independently accepted fixed
+history; it does not repeat the original history survey. Verify the checkpoint,
+accepted-source/DLL identities, lack of intervening action, all exclusive roots,
+exact process counts, finite aggregate read/write limits and tool bindings during
+independent admission. No concurrent experiment is permitted. Independent source
+and admission review must reject hidden process starts or expanded allocation.
+
+At execution, the first durable WSL start consumes the full batch before network
+preflight or a Windows process is invoked. One unauthenticated, bounded public
+GitHub ref request verifies that the independently accepted target has not
+changed; no Git helper or credential store is invoked. A changed or unavailable
+ref fails this already charged batch. Authority hash, controller/dispatcher
+hashes, pinned PowerShell, original DLL, checkpoint and complete call must agree.
+Persist the Windows start before creating any scenario host. Failed preflight
+does not license a second batch.
+
+The dispatcher's original output channel binds the created WSL history-directory
+identity and exact persisted start/result hashes. The original caller must hold
+and rejoin that directory, read both receipts relative to it, and match those
+transported hashes before using their cgroup or Windows-completion evidence.
+Its finite original completion deadline includes result persistence and a final
+post-persistence check. A saved passing assertion requires the original caller's
+successful exit; it cannot override overdue or incomplete tool completion.
+
+On cancellation, request only this Windows controller's cooperative cancellation
+and use its original outer Job stop. Preserve failure and any incomplete evidence.
+If original Windows root exit, controlled-descendant quiescence or output completion
+cannot be established, stop dependent work without speculative recovery or cleanup.
+The historical 0057/0064 dispositions do not cover new uncertainty. Normal
+completion requires independent evidence acceptance before any resulting claim
+or dependent operation. The six cases do not accept the future publication
+controller, same-session operating caller, Native AOT artifact or Slice scenarios;
+their separate source, artifact, protocol and exact-call gates remain.
