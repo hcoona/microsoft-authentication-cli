@@ -14456,3 +14456,129 @@ compilation or guard execution.
 | `named_guard_history.py` | 13,104 | `21897ea423f40689715f2de88ed67d1cc119bba7c60c87429d785583ba418d75` |
 | `run_windows_named_guard_prepare.py` | 34,439 | `1cbafd10c7f714537c68a0c609dd4e9fd0cd9e2193285ed2906fbcf44e9dbb7e` |
 | `Invoke-WindowsNamedGuardPrepare.ps1` | 36,181 | `476e9483c4ee73d260a0a1bed7974cc1e3b55a289821c938ece54db043ba2d7f` |
+
+## Original Named-Guard Preparation 0065: Failed Before Windows Startup
+
+The sole compiler-only preparation admitted by the preceding supplement was
+invoked once against accepted commit `2771f1240273e9da4db8c4ea72c7faf7aa70e1d5`,
+tree `dd1a514ea458667aca7d1bc399a76363f7af1b67`. The exact original-call admission
+was 31,763 bytes, SHA-256
+`0d468b15fe98c89f4d492a378aafe209156059d1bb9da82864fe0e6be66ba9be`;
+the admitted call was 15,385 bytes, SHA-256
+`31db1041e2480dd647875cc9746128cea1a6592f167a8d3067c9d378a4579ede`.
+These identities retain provenance for a consumed invocation, not another
+execution grant.
+
+### Original Outcome and Evidence Limits
+
+The original tool call completed with exit code one and no active tool session.
+Its durable start charged one preparation before candidate loading. Its joined
+result recorded `normalCompletion:false`, `failureType:ValueError`, and
+779,589,328 elapsed nanoseconds on the original clock. Both acceptance flags
+remained false. The failure is not a successful preparation or a timeout refund.
+
+| Retained observation | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Original start | 629 | `894ef57d4164829cad82a80652386e772995e4b6a404cdc286af414660a6f26a` |
+| Original result | 275 | `fc777beb9d4d2d30b8430ba79865c4bace2d62ea697416d3dcbbf6f731ea2b6f` |
+| Freshness-helper root start | 401 | `c38303d7680ab40c23b7d5f3815cd95a4c9bf6361b41e12035bd3a7fd0b7cc29` |
+| Sole helper start | 304 | `4caef9fed830394626d90eb1ee0713b1b96331fcc7c46f96bfa23db8729c0521` |
+| Sole helper result | 352 | `37276ebb0db8097377a391746d98d2dba7a64b6dde4310fe648911aea6900c27` |
+
+The helper result recorded original client exit zero, both output EOFs, zero
+stderr bytes, completed supervision, an empty or removed own cgroup, no failure, and 585 elapsed
+milliseconds. This supports the original helper's bounded completion. It does
+not preserve the GET response, prove that response validation passed, or identify
+the later failing gate. A subsequent unchanged public target observation cannot
+replace the unretained original response.
+
+Bounded metadata observations found both exact 0065 action directories absent.
+The admitted dispatcher creates and retains those directories before attempting
+the Windows controller, and no admitted path deletes them. Together with that
+source ordering and retained-path continuity, this supports failure before
+Windows startup. It is not a general process survey or evidence resolving the
+separate original 0057 or 0064 lifetime uncertainties. No named Job behavior,
+compiler output, managed DLL, or publication was accepted from 0065.
+
+The fixed manifest passes source-level framing checks. That does not establish
+whether its live comparison ran or passed. The exact triggering `ValueError`
+remains unknown; do not attribute it to a changed tool, target, reservation,
+process-lifetime defect, or compiler defect without additional evidence.
+
+The independent failure disposition is 16,728 bytes, SHA-256
+`311389c0fc5f6c96860fc537f60139154d4fcd327fcd1b2c1497c2b84fa7ce74`.
+It accepts these bounded observations and limitations, not preparation success.
+It independently classifies diagnostic finding
+`NAMEDPREP-FAILURE-LOCALIZATION-001` as a true positive, advisory, confidence nine.
+
+### Consumption and Next Preparation Prerequisite
+
+Combined preparation is now **16/16**, with Linux 8/8 and Windows 8/8. Build/test
+remains 94/120, publication 2/12, and synthetic 52/80. The original marker and
+helper-root marker represent the same preparation charge. There are no paired
+0065 reservations to fabricate or refund. The twelve final CLI scenarios remain
+protected. Preserve all original inputs, failure records, and helper evidence.
+This result grants no retry, alternate action number, cleanup, history-comparison
+replay, or dependent execution. Another preparation requires a separately
+accepted allocation within an amended Wave ceiling and an exact protocol.
+
+Source review identifies a distinct diagnostic limitation: the launcher stores
+only an exception type, while dispatcher failures before reservation can escape
+without a dispatcher result. A successful helper receipt also omits the original
+response identity. These omissions explain why the failure cannot be localized;
+they do not explain why the original check rejected.
+
+Before proposing another compilation, prepare a bounded diagnosis and update the
+future launcher's existing result to retain fixed, allowlisted stage and reason
+codes, including pre-reservation and freshness-validation failures. Retain a
+normalized public reference/commit or response hash only when it is needed to
+distinguish those gates. Do not log raw exception text, environment values,
+credentials, or full response payloads. The correction must preserve the
+original failure, all debits, termination requirements, and ordinary independent
+admission. It supplies no permission to execute the consumed 0065 route again.
+
+### Singleton Metadata-Only Failure Observation
+
+After this supplement merges, one separately source-reviewed and exactly
+admitted observation may narrow the current history-metadata discrepancy without
+rerunning the preparation or its comparator. This is a read-only evidence
+collection, not a compiler, build/test, publication, or synthetic process
+scenario; all four consumed counters remain unchanged. A failed observation is
+consumed and cannot be retried under this paragraph.
+
+Use the existing WSL host, the admitted 23,448-byte reservation manifest, and the
+6,238-byte fixed observation bundle with SHA-256
+`00537e4911e9a84b075b5fdbc8787b623368938f27fdd0dbe8ae70de4bfe1933`.
+The exact collector must verify both retained inputs and preserve their evidence
+levels. Its only historical subject paths are the manifest's three parent
+directories and 167 listed action directories with their `started.json` leaf
+metadata. Do not read start contents, past outputs, account state, process
+information, services, cgroups, or original 0064 publication artifacts.
+
+The collector uses one thirty-second original monotonic clock, including input
+reads, metadata queries, report persistence, and closure. Bind the installed
+Python runtime and full original call before execution. Use an outer watchdog
+with termination at thirty seconds and a two-second forced-stop bound. The
+collector starts no subprocess, imports no candidate module, invokes no
+experiment entry point, acquires no action lock, and changes no historical state.
+It cannot repair, reserve, compile, fetch a reference, or continue an experiment.
+
+Open fixed paths without following links. Inspect at most 65 names per parent,
+with each name at most 255 UTF-8 bytes. Inspect only manifest-listed action
+directories and, when their directory identity is established, the literal
+`started.json` metadata. Keep at most 167 action and 167 leaf observations.
+Record presence, type, owner, link count, byte size, and held-versus-named identity
+continuity; compare these with the admitted comparator's source-level predicates.
+Never follow unexpected names or read leaf content to resolve a mismatch. A
+missing or invalid parent, exceeded bound, path substitution, or expired clock
+ends collection and leaves the incomplete report explicitly unaccepted.
+
+Allow at most two input-file reads and 32 KiB of requested input bytes in total.
+Write one exclusive private report, at most 128 KiB, in a fresh path fixed by the
+exact call. Retain incomplete output on failure. Report current metadata and
+bounded differences from the retained manifest separately from original-run
+observations. There is no lock or atomic snapshot: even a current mismatch is
+only a candidate explanation of the original unlocalized failure. Successful
+collection requires original tool completion inside its allowance and an
+independent source/evidence review; it grants no original-run acceptance,
+quiescence claim, capacity refund, preparation, or dependent execution.
