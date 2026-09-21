@@ -159,8 +159,10 @@ with that decision. The original attempt remains failed and stopped. This
 exception does not establish termination, authorize old-process cleanup or weaken
 future work's ownership, termination, evidence or capacity requirements. It does
 not apply to other unknown processes or historical Issue #1. The exception ends
-when that Wave grant closes; it does not transfer to a successor grant or expand
-through later boundary changes. All new ownership or termination uncertainty
+when that Wave grant closes; it does not transfer to a successor grant. The
+finite renewed credential-free capacity described below is its sole extension
+beyond the original ceilings. Other later boundary changes do not expand it.
+All new ownership or termination uncertainty
 retains the ordinary stop conditions.
 
 Separately, the accepted Wave risk decision for original Issue #108 Windows
@@ -171,11 +173,24 @@ ceilings, after the corresponding independently accepted protocol amendment.
 Preserve the original failure, charge and evidence. This exception establishes
 neither termination nor artifact acceptance and permits no old-process cleanup,
 automatic retry or capacity refund. It ends with that Wave grant and cannot
-transfer to a successor grant or expand through later boundary changes. It does
-not extend the separate 0057 exception or cover other unknown processes. Future
+transfer to a successor grant. The finite renewed credential-free capacity below
+is its sole extension beyond the original ceilings; other later boundary changes
+do not expand it. It does not cover other unknown processes. Future
 publication supervision must meet the Wave's named-Job requirement and the exact
 protocol's identity, audit and authorized-operation rules before execution;
 all new ownership or termination uncertainty retains the ordinary stop conditions.
+
+The current Wave's renewed credential-free capacity expressly extends both
+original 0057 and 0064 dispositions to its newly specified cumulative ceilings,
+on the same hosts and within the same credential-free effects. Accept the Wave,
+this policy and the corresponding Windows protocol allocation together. Preserve
+original failures, charges and evidence; require ordinary exact source, artifact,
+protocol and call admission for each new action. This extension does not permit
+old-process cleanup, infer termination, authorize automatic retries, excuse new
+uncertainty or transfer to another grant. The Wave's future real-effects capacity
+reservation does not extend either exception to private identities, credentials,
+account/cache/consent effects or real WAM interaction. Those effects retain their
+separate concrete owner risk decision and exact protocol requirements.
 
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
 selected-account session or secure-cache updates when the protocol declares that outcome.

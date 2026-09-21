@@ -14693,3 +14693,44 @@ template has been invoked or materialized as an execution input.
 | `WindowsFinalPublishGuard.cs` | 32,405 | `45c0d829712bac66ece76676939310d04f59af9a83709f1b1e80b8bf1f4a8501` |
 | `Inert launcher template` | 14,771 | `c51933a086620c8c5af45cf806d8655d5409b721c9b07557b9d5fbf99bc0f934` |
 | `Inert freshness-verifier template` | 21,434 | `94b64dd61c56b8ace8006859865d0e25ba58665ba09ea2e7d908cf7bf56cad82` |
+
+
+## Renewed Completion Capacity and Preparation Allocation
+
+The corresponding Wave and experiment-safety amendments renew only the finite
+capacity and original 0057/0064 historical-risk scope described there. Preserve
+consumption at preparation 16, build/test 94, publication 2 and synthetic 52.
+The current Wave is the maximum-capacity authority; earlier recorded ratios are
+historical snapshots and do not reset consumption or override that authority.
+
+For preparation, retain Linux consumption/allocation at 8/8 and raise the Windows
+ceiling from 8 to 20, producing combined 16/28 before any new start. Reserve one
+Windows unit for the separately admitted corrected compiler-only preparation
+0066. Keep the other eleven remaining Windows units unallocated until their own
+exact protocols and independent admissions are accepted. A failed start consumes
+its unit, including failure before paired reservations. No automatic retry,
+refund, original 0065 replay or further metadata singleton is granted.
+
+The accepted prospective source correction remains the source basis for 0066.
+Before materializing or invoking it, independently accept its exact protocol,
+fixed historical manifest including the original 0065 debit/failure disposition,
+source/input/runtime bindings and complete literal call. This capacity amendment
+supplies none of those execution inputs or admissions. Preserve the original
+167 physical history slots; do not fabricate absent paired 0065 starts.
+
+Other historical host/action suballocations remain unchanged. Later build/test,
+publication, observer, synthetic and real-batch actions require their own finite
+allocation and exact source/artifact/protocol admission within the renewed Wave
+ceilings. Preserve the twelve final CLI units; no preparation or supervision
+fixture may silently consume them. Count actual started actions and every
+applicable process scenario, including failed or interrupted starts, without
+moving charges to another category or treating evidence collection as a hidden
+retry. Revisions and new action roots do not reset counters.
+
+The Wave's separate future real-effects reservation is not an executable batch.
+Its concrete account-state/effects decision and protocol remain necessary. The
+original 0057/0064 exceptions extend only across the newly accepted credential-free
+capacity. They establish no termination, artifact acceptance, new-uncertainty
+exception, cleanup or account effects. Future publication still requires named,
+auditable, operable Jobs and the ordinary ownership/termination stop conditions.
+No preparation, subject invocation or scenario acceptance occurred in this amendment.
