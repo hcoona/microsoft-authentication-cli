@@ -92,7 +92,7 @@ $script:RecipeJson = @'
     "compilerWorkingDirectoryTemplate": "C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\source",
     "copiedSourceTemplate": "C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\source\\WindowsValidationJob.cs",
     "guardActionFourDigits": null,
-    "onlyDynamicPathSubstitution": "GUARD_ACTION4; fixed to admitted logical successor 0065, preserving absent physical slots 0057 through 0059.",
+    "onlyDynamicPathSubstitution": "GUARD_ACTION4; fixed to admitted logical successor 0066, preserving absent physical slots 0057 through 0059 and 0065.",
     "preparationControllerDirectoryTemplate": "C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}\\final-guard\\controller",
     "sharedActionLock": "/var/tmp/azureauth-windows-slice-108/action.lock",
     "windowsActionTemplate": "C:\\Temp\\azureauth-windows-slice-108\\actions\\${GUARD_ACTION4}",
@@ -183,7 +183,7 @@ function Assert-Keys($Value, [string[]] $Names) {
 
 function Assert-BoundSource($OuterWatch, [string] $Action, [string] $Cancel, $Start, $Invocation, $Recipe) {
     Assert-PreReadyBudget $OuterWatch $Cancel
-    if ($ActionName -cne '0065' -or $Action -cne 'C:\Temp\azureauth-windows-slice-108\actions\0065' -or
+    if ($ActionName -cne '0066' -or $Action -cne 'C:\Temp\azureauth-windows-slice-108\actions\0066' -or
         $PSCommandPath -cne "$Action\final-guard\controller\Invoke-WindowsNamedGuardPrepare.ps1") {
         throw 'Unadmitted named guard preparation path'
     }
@@ -194,9 +194,9 @@ function Assert-BoundSource($OuterWatch, [string] $Action, [string] $Cancel, $St
         'components', 'historyManifest', 'historyAcceptance', 'sourceReview', 'executionAdmission',
         'rootMarkers', 'counts', 'nextAction')
     if ($text -cne (($authority | ConvertTo-Json -Depth 30 -Compress) + "`n") -or
-        $authority.schema -cne 'named-guard-authority-v1' -or $authority.nextAction -cne '0065' -or
+        $authority.schema -cne 'named-guard-authority-v1' -or $authority.nextAction -cne '0066' -or
         $authority.repository -cne 'hcoona/microsoft-authentication-cli' -or $authority.branch -cne 'main-v2' -or
-        $authority.scope -cne 'one-compiler-only-preparation-after0064') { throw 'Named authority framing or scope' }
+        $authority.scope -cne 'one-compiler-only-preparation-after0065') { throw 'Named authority framing or scope' }
     Assert-Keys $authority.source @('commit', 'tree')
     Assert-Keys $authority.protocol @('commit', 'sha256')
     Assert-Keys $authority.wave @('sha256')
@@ -211,7 +211,7 @@ function Assert-BoundSource($OuterWatch, [string] $Action, [string] $Cancel, $St
     foreach ($role in $files.Keys) {
         $binding = $authority.components.$role
         Assert-Keys $binding @('path', 'bytes', 'sha256')
-        if ($binding.path -cne ('/tmp/windows-named-guard0065-inputs/' + $files[$role]) -or
+        if ($binding.path -cne ('/tmp/windows-named-guard0066-inputs/' + $files[$role]) -or
             ($binding.bytes -isnot [int] -and $binding.bytes -isnot [long]) -or
             $binding.bytes -le 0 -or $binding.bytes -gt 1048576 -or $binding.sha256 -cnotmatch '^[0-9a-f]{64}$') {
             throw 'Named component binding'
@@ -220,14 +220,14 @@ function Assert-BoundSource($OuterWatch, [string] $Action, [string] $Cancel, $St
     foreach ($role in @('historyManifest', 'historyAcceptance', 'sourceReview', 'executionAdmission')) {
         $binding = $authority.$role
         Assert-Keys $binding @('path', 'bytes', 'sha256')
-        if ($binding.path -cne ('/tmp/windows-named-guard0065-inputs/' + $role + '.json') -or
+        if ($binding.path -cne ('/tmp/windows-named-guard0066-inputs/' + $role + '.json') -or
             ($binding.bytes -isnot [int] -and $binding.bytes -isnot [long]) -or
             $binding.bytes -le 0 -or $binding.bytes -gt 1048576 -or $binding.sha256 -cnotmatch '^[0-9a-f]{64}$') {
             throw 'Named evidence binding'
         }
     }
     Assert-Keys $authority.counts @('preparation', 'buildTest', 'publication', 'synthetic')
-    $counts = @{preparation = 15; buildTest = 94; publication = 2; synthetic = 52}
+    $counts = @{preparation = 16; buildTest = 94; publication = 2; synthetic = 52}
     foreach ($key in $counts.Keys) {
         if (($authority.counts.$key -isnot [int] -and $authority.counts.$key -isnot [long]) -or
             $authority.counts.$key -ne $counts[$key] -or $Start.priorCounters.$key -ne $counts[$key]) {
@@ -288,7 +288,7 @@ function Assert-Remaining($OuterWatch, $Clock, [string] $Cancel) {
 }
 
 function Assert-ExactOriginalClockHandoff($Invocation, $Start, $OuterWatch, [string] $Action, [string] $Cancel) {
-    if ($ActionName -cne '0065') { throw 'Only the separately admitted named guard0065 is permitted' }
+    if ($ActionName -cne '0066') { throw 'Only the separately admitted named guard0066 is permitted' }
     if ($Invocation.schema -cne 'final-guard-invocation-v1' -or $Invocation.action -cne $ActionName -or
         $Invocation.reservationSha256 -cne $ReservationSha256 -or
         $Invocation.clockNonce -cnotmatch '^[0-9a-f]{64}$' -or $Invocation.clockNonce -cne $Start.clockNonce -or
