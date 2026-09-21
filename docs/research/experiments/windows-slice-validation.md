@@ -15222,3 +15222,130 @@ input/evidence/cancellation subtree to the new Windows root, including case dire
 started/result records, and the cancellation leaf. Update the dependent input/receipt and
 Windows evidence paths and accepted source/hash bindings. No second fixture allowance, original copy replay,
 old-state ownership acceptance, new lifetime-risk exception, or account effect is granted.
+
+
+## Second Input Copy Failure and Created-File Continuity Correction
+
+The sole v2 input-copy invocation under accepted revision
+`764d66c9ade5602897a0c307760e926251f5a0a2` completed with original exit 1,
+complete failure output, and no pending session. Independent review joined that output
+to the accepted source and call. At the first Windows `authority.json` read-open check,
+only the reported change-time nanoseconds differed between the named-before-open and
+opened-descriptor operands. The other eight fields agreed. This occurred after the
+created-before-readback comparison passed and before that descriptor read its payload.
+The original counters were 10 logical reads, 125,904 requested bytes, and 41,729 written
+bytes. No fixture, Windows process, guard load, or build began. The v2 assembly and copy
+singletons are spent; cumulative execution remains 17/94/2/52.
+
+This observation establishes neither the change's cause nor benignity, content integrity,
+current ownership, or the existence or absence of an untransported receipt. Preserve both
+original and v2 partial roots and all diagnostic samples without inspection, reuse,
+replacement, repair, or cleanup. The original failure and each consumed allowance remain
+closed. The historical lifetime decisions supply no exception for these files.
+
+Independent source triage identified a distinct continuity defect: the materializer
+closed its sole exclusive-create descriptor before reopening the path, then used the
+pre-close nine-field metadata snapshot as its later created-object token. The snapshot
+contains mutable metadata; no descriptor spanned that transition.
+Microsoft's [file-time documentation](https://learn.microsoft.com/windows/win32/sysinfo/file-times)
+states that timestamps are correctly reflected when the changing handle closes. Its
+[FILE_BASIC_INFO documentation](https://learn.microsoft.com/windows/win32/api/winbase/ns-winbase-file_basic_info)
+distinguishes metadata change time from data-stream last-write time. These are public API
+semantics, not an explanation of this WSL observation or a claimed mapping to
+`st_ctime_ns`. No timestamp settling retry, rejected-snapshot refresh, or general
+identity-check exemption follows.
+
+Correct this source defect in the same fixed materializer. Keep the exclusive-create
+write-only descriptor through write, fsync, chmod and fsync. Open the no-follow read-only
+descriptor while the creator remains held. After that open, require full nine-field
+equality among the current creator, reader and named-file observations, with the
+original creator device/inode preserved. Close the writer only while the reader is held.
+After writer closure and parent fsync, establish the finalized reader baseline. Require
+regular-file kind, no write permission bits, exact expected size, one link, unchanged
+creator UID/GID, continuous device/inode, and unchanged finalized mode/owner/size/link
+properties across writer closure. Windows permission translation need not produce exact
+POSIX mode `0444`; no Windows ACL-isolation claim is made.
+
+Read the expected bytes through that same reader, without reopening or retrying. Require
+all nine fields to match the finalized baseline in the named and descriptor observations
+before and after reading, exact EOF, and byte-for-byte equality to the admitted payload.
+Retain each read-only descriptor until the operation completes. Rejoin every copied leaf
+by its held descriptor and parent-relative name after each copy and before and after
+receipt creation. Apply the same creation/overlap/readback method to the receipt. Keep
+all descriptor closure and final output within the original clock. No field is omitted
+from finalized read stability; all unexpected identity, metadata or content changes fail
+and stop dependent work. This correction establishes a prospective checking procedure;
+its success on the designated hosts is unobserved at protocol acceptance.
+
+## Fresh Input Preparation with Continuous Descriptors
+
+After this amendment merges, permit one separately admitted fixed source assembly and
+one separately admitted file-preparation invocation for the still-unstarted batch 0067.
+These are independent dedicated-file operations using the accepted source, original
+accepted 0066 offline artifact and seal, and newly admitted authority/manifest bytes.
+They have no dependency on old partial-file identities or outcomes. Neither may read,
+validate, replace, reuse, inspect or clean any preceding partial root or diagnostic sample.
+Fresh paths do not resolve old ownership or relax any stop condition.
+
+Use these exclusive outputs, intentionally retained:
+
+- Linux inputs: `/tmp/windows-named-fixtures0067-v3-inputs`.
+- Windows inputs, evidence and cancellation subtree:
+  `C:\Temp\azureauth-windows-slice-108\named-fixtures-0067-v3`, observed from WSL as
+  `/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0067-v3`.
+- Assembly authority, manifest and host bindings:
+  `/tmp/windows-named-fixtures0067-v3-authority-source.json`,
+  `/tmp/windows-named-fixtures0067-v3-materialization-manifest.json`, and
+  `/tmp/windows-named-fixtures0067-v3-host-bindings.json`.
+- Successful preparation receipt: `/tmp/windows-named-fixtures0067-v3-materialized.json`.
+
+Copy the same six admitted leaves by role. Relocate dispatcher, controller, caller and
+collector inputs and the entire Windows evidence/cancellation subtree together. Retain
+the unchanged six scenarios, Linux action-history and caller-output roots, named systemd
+unit, named Windows Jobs, guard APIs, process counts, execution clocks and exact artifact.
+Do not regenerate the 24,576-byte 0066 guard DLL whose SHA-256 is
+`a18302e4658afc08b564be23c9b52995fba85c1a3345fba19662008efe30ae58`.
+
+The assembly uses the previously reviewed fixed procedure with only the fresh output
+paths and accepted source/commit pins changed. Retain its five installed tool inputs,
+accepted source/artifact/seal inputs, original caller's literal `WSL_INTEROP` socket
+metadata observation, six distinct UUIDv4 Job names, no connection/liveness claim,
+16 logical reads, 32 MiB requested bytes, 192 KiB written content and 64 KiB per output.
+Original stdout transports all three output byte lengths and SHA-256 hashes.
+
+The copy uses the corrected continuous-descriptor procedure above. Retain the original
+24-logical-read and 4 MiB requested-byte ceilings, at most 256 KiB copied input content,
+and one 64 KiB receipt within 320 KiB total written content. Its normal path still has
+13 logical reads: one manifest, five sources, six copied leaves, and one receipt. The
+additional descriptor/name joins are metadata observations, not payload reads. Keep
+fixed no-follow paths, exclusive roots and leaves, held parent/root correspondence, exact
+source hashes, and file/directory fsync. Retain at most seven finalized file descriptors
+plus the current writer and the existing fixed directory descriptors; no unbounded file
+list, scanning, or polling is introduced.
+
+Both operations use exact pinned Python 3.14 with `-I -B -S`, one original 30-second
+monotonic clock/alarm through output and closure, and an outer 35-second timeout followed
+by a five-second kill allowance. The materializer receives only the admitted manifest
+SHA-256. Neither helper contains subprocess, Windows execution, guard load, network,
+dependency/build tool, account, broker, cache or credential operations. I/O pools concern
+selected preparation operations, not Python-loader or ordinary OS activity; synchronous
+OS calls retain the cooperative-clock limitation.
+
+Each allowance is one invocation, including failed start. Record consumption before
+submission. No concurrent experiment, retry, automatic recovery or refund is permitted.
+These fixed preparation operations consume zero additional units in the four execution
+quotas; preserve 17/94/2/52 and the unstarted 0067 reservation. A failure retains only
+already sampled comparison operands and context in at most 4 KiB of original output,
+with nonzero completion and `continuation_allowed: false`. No failure-path observation
+may enrich that evidence. Uncertain completion, output, time or ownership stops the
+operation and dependent execution without relying on historical risk dispositions.
+
+Require independent source, finite-procedure and exact-call admissions before either
+operation. Before interpreting evidence, independently join the accepted source/call,
+complete owned original output, actual exit and closed session. Success additionally
+requires original exit 0 and authentication of every output against its transported
+length and hash. Failure evidence may support only its bounded reported comparison and
+failed outcome. Successful preparation does not itself authorize the fixture. Its
+existing one build/test plus nine synthetic charge, exact caller/configuration/collection
+admission and independent outcome acceptance remain required. Preserve the twelve final
+CLI units, all prior consumption, account-effects boundary and overall Slice acceptance.

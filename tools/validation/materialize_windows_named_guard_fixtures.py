@@ -1,4 +1,4 @@
-"""Prepare fresh 0067 inputs with bounded, original-comparison failure context."""
+"""Prepare fresh 0067 inputs with continuous created-file handles and bounded failure context."""
 
 import hashlib
 import json
@@ -10,10 +10,10 @@ import sys
 import time
 
 
-MANIFEST = Path('/tmp/windows-named-fixtures0067-v2-materialization-manifest.json')
-OUTPUTS = (Path('/tmp/windows-named-fixtures0067-v2-inputs'),
-           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0067-v2'))
-RECEIPT = Path('/tmp/windows-named-fixtures0067-v2-materialized.json')
+MANIFEST = Path('/tmp/windows-named-fixtures0067-v3-materialization-manifest.json')
+OUTPUTS = (Path('/tmp/windows-named-fixtures0067-v3-inputs'),
+           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0067-v3'))
+RECEIPT = Path('/tmp/windows-named-fixtures0067-v3-materialized.json')
 READS = 0
 REQUESTED = 0
 WRITTEN = 0
@@ -46,6 +46,20 @@ def check():
         raise TimeoutError('Original materialization deadline')
 
 
+def close_owned(descriptors):
+    # Each detached descriptor gets exactly one attempt, including after failure.
+    first_error = None
+    for fd in descriptors:
+        if fd is not None:
+            try:
+                os.close(fd)
+            except BaseException as error:
+                if first_error is None:
+                    first_error = error
+    if first_error is not None:
+        raise first_error
+
+
 def identity(info):
     return [info.st_dev, info.st_ino, info.st_mode, info.st_uid, info.st_gid,
             info.st_size, info.st_mtime_ns, info.st_ctime_ns, info.st_nlink]
@@ -59,25 +73,26 @@ def parent(path):
     if not path.is_absolute() or '..' in path.parts:
         raise ValueError('Nonliteral copy path')
     fd = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    child = None
     try:
         for component in path.parts[1:-1]:
             check()
             named = os.stat(component, dir_fd=fd, follow_symlinks=False)
             child = os.open(component, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
-            try:
-                same(directory_identity(named), directory_identity(os.fstat(child)), 'parent-open')
-            except BaseException:
-                os.close(child)
-                raise
-            os.close(fd)
+            same(directory_identity(named), directory_identity(os.fstat(child)), 'parent-open')
+            closing = fd
             fd = child
+            child = None
+            os.close(closing)
         return fd
     except BaseException:
-        os.close(fd)
+        closing = (fd, child)
+        fd = child = None
+        close_owned(closing)
         raise
 
 
-def read(path, maximum, pinned=None, held_parent=None, expected_identity=None):
+def read(path, maximum, pinned=None, held_parent=None, expected_identity=None, held_file=None):
     global READS, REQUESTED
     context('read', path)
     check()
@@ -92,7 +107,8 @@ def read(path, maximum, pinned=None, held_parent=None, expected_identity=None):
             raise ValueError('Materialization source kind or size')
         if expected_identity is not None:
             same(expected_identity, identity(before), 'created-before-readback')
-        fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=pfd)
+        fd = held_file if held_file is not None else os.open(
+            path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=pfd)
         same(identity(before), identity(os.fstat(fd)), 'named-before-open-vs-opened')
         raw = bytearray()
         while len(raw) < before.st_size:
@@ -117,10 +133,10 @@ def read(path, maximum, pinned=None, held_parent=None, expected_identity=None):
         check()
         return data, identity(before)
     finally:
-        if fd is not None:
-            os.close(fd)
-        if held_parent is None:
-            os.close(pfd)
+        closing = (fd if held_file is None else None,
+                   pfd if held_parent is None else None)
+        fd = None
+        close_owned(closing)
 
 
 def encode(value):
@@ -139,7 +155,7 @@ def decode(raw):
                       parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Nonfinite copy field')))
 
 
-def write(pfd, name, raw, expected_parent, output_path):
+def write_readback(pfd, name, raw, expected_parent, output_path):
     global WRITTEN
     context('write', output_path)
     check()
@@ -149,26 +165,67 @@ def write(pfd, name, raw, expected_parent, output_path):
     WRITTEN += len(raw)
     if WRITTEN > 327680:
         raise ValueError('Materialization output bytes')
-    fd = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=pfd)
+    writer = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=pfd)
+    reader = None
     try:
+        initial = os.fstat(writer)
+        if not stat.S_ISREG(initial.st_mode) or initial.st_nlink != 1:
+            raise ValueError('Created file kind or link count')
         offset = 0
         while offset < len(raw):
             check()
-            count = os.write(fd, raw[offset:offset + 65536])
+            count = os.write(writer, raw[offset:offset + 65536])
             if count <= 0:
                 raise OSError('Materialization write made no progress')
             offset += count
-        os.fsync(fd)
-        os.fchmod(fd, 0o444)
-        os.fsync(fd)
-        created = identity(os.fstat(fd))
-        same(created, identity(os.stat(name, dir_fd=pfd, follow_symlinks=False)),
-             'created-handle-vs-named')
+        os.fsync(writer)
+        os.fchmod(writer, 0o444)
+        os.fsync(writer)
+        # Establish overlap before releasing the exclusive-create descriptor.
+        # Mutable write-stage timestamps are not a future object-identity token.
+        reader = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=pfd)
+        current = os.fstat(writer)
+        same(identity(initial)[:2], identity(current)[:2], 'creator-object-continuity')
+        same(identity(current), identity(os.fstat(reader)), 'creator-vs-overlapping-reader')
+        same(identity(current), identity(os.stat(name, dir_fd=pfd, follow_symlinks=False)),
+             'overlapping-handles-vs-named')
+        closing_writer = writer
+        writer = None
+        os.close(closing_writer)
+        os.fsync(pfd)
+        check()
+        baseline = os.fstat(reader)
+        same(identity(initial)[:2], identity(baseline)[:2], 'reader-object-continuity')
+        if (not stat.S_ISREG(baseline.st_mode) or baseline.st_mode & 0o222 or
+                baseline.st_nlink != 1 or baseline.st_size != len(raw) or
+                (baseline.st_uid, baseline.st_gid) != (initial.st_uid, initial.st_gid) or
+                (current.st_mode, current.st_uid, current.st_gid, current.st_size,
+                 current.st_nlink) != (baseline.st_mode, baseline.st_uid, baseline.st_gid,
+                                      baseline.st_size, baseline.st_nlink)):
+            raise ValueError('Final copied-file protection, ownership, size or links')
+        # The only new read baseline follows our final mutating-handle close.
+        # All nine fields must now agree with the name and remain stable.
+        actual, observed = read(output_path, len(raw), held_parent=pfd,
+                                expected_identity=identity(baseline), held_file=reader)
+        if actual != raw:
+            raise ValueError('Materialization readback mismatch')
+        check()
+        retained = reader
+        reader = None
+        return observed, retained
     finally:
-        os.close(fd)
-    os.fsync(pfd)
-    check()
-    return created
+        closing = (writer, reader)
+        writer = reader = None
+        close_owned(closing)
+
+
+def join_files(files):
+    for path, pfd, fd, original in files:
+        context('copied-file-continuity', path)
+        check()
+        same(original, identity(os.fstat(fd)), 'retained-reader')
+        same(original, identity(os.stat(path.name, dir_fd=pfd, follow_symlinks=False)),
+             'retained-reader-vs-named')
 
 
 def join_roots(held):
@@ -215,6 +272,8 @@ def materialize():
     directories = []
     copies = []
     held = []
+    files = []
+    receipt_parent = None
     try:
         for root, selected in zip(OUTPUTS, (roles, windows_roles), strict=True):
             context('create-root', root)
@@ -230,21 +289,21 @@ def materialize():
                 directories.append({'path': str(root), 'identity': original})
                 for leaf, role in selected:
                     join_roots(held)
-                    created_leaf = write(rootfd, leaf, data[role], original, root / leaf)
-                    actual, observed = read(root / leaf, 65536, held_parent=rootfd, expected_identity=created_leaf)
-                    if actual != data[role]:
-                        raise ValueError('Materialization readback mismatch')
+                    observed, reader = write_readback(rootfd, leaf, data[role], original, root / leaf)
+                    files.append((root / leaf, rootfd, reader, observed))
                     join_roots(held)
-                    copies.append({'path': str(root / leaf), 'bytes': len(actual),
-                                   'sha256': hashlib.sha256(actual).hexdigest(), 'identity': observed})
+                    join_files(files)
+                    copies.append({'path': str(root / leaf), 'bytes': len(data[role]),
+                                   'sha256': hashlib.sha256(data[role]).hexdigest(), 'identity': observed})
                 os.fsync(pfd)
             except BaseException:
                 if not any(item[1] == pfd for item in held):
-                    if rootfd is not None:
-                        os.close(rootfd)
-                    os.close(pfd)
+                    closing = (rootfd, pfd)
+                    rootfd = pfd = None
+                    close_owned(closing)
                 raise
         join_roots(held)
+        join_files(files)
         receipt = {'schema': 'named-fixtures0067-materialized-v1', 'manifestSha256': sys.argv[1],
                    'manifestIdentity': manifest_identity, 'sourceIdentities': source_identities,
                    'directories': directories, 'copies': copies,
@@ -254,25 +313,26 @@ def materialize():
         raw = encode(receipt)
         if len(raw) > 65536:
             raise ValueError('Materialization receipt bound')
-        pfd = parent(RECEIPT)
-        try:
-            receipt_identity = write(pfd, RECEIPT.name, raw, directory_identity(os.fstat(pfd)), RECEIPT)
-            join_roots(held)
-            observed, _ = read(RECEIPT, 65536, held_parent=pfd, expected_identity=receipt_identity)
-            if observed != raw:
-                raise ValueError('Materialization receipt readback')
-            join_roots(held)
-        finally:
-            os.close(pfd)
+        receipt_parent = parent(RECEIPT)
+        receipt_identity, reader = write_readback(receipt_parent, RECEIPT.name, raw,
+            directory_identity(os.fstat(receipt_parent)), RECEIPT)
+        files.append((RECEIPT, receipt_parent, reader, receipt_identity))
+        join_roots(held)
+        join_files(files)
         check()
         print(json.dumps({'complete': True, 'materialization': {'bytes': len(raw),
                          'sha256': hashlib.sha256(raw).hexdigest()},
                          'continuation_allowed': False}, sort_keys=True), flush=True)
         check()
     finally:
+        closing = [fd for _, _, fd, _ in reversed(files)]
+        closing.append(receipt_parent)
         for _, pfd, rootfd, _ in reversed(held):
-            os.close(rootfd)
-            os.close(pfd)
+            closing.extend((rootfd, pfd))
+        files.clear()
+        held.clear()
+        receipt_parent = None
+        close_owned(closing)
 
 
 def main():
