@@ -81,6 +81,28 @@ retains the ordinary stop conditions. No quiescence, refund, repeated original
 recovery, old-process cleanup, authentication, additional publication capacity,
 release authority or broader exception is granted.
 
+**Original 0064 lifetime risk decision:** The repository owner accepts the
+residual risk that processes associated with original Windows final publication
+0064 may remain active and interfere with subsequent credential-free Windows
+Slice validation. Their identity and later lifetime remain unresolved. Limit
+this disposition to original 0064 within this entry's existing environments,
+effects and cumulative ceilings accepted with this decision. Authorize the
+case-specific experiment-safety and Windows-protocol amendments and the
+corresponding future publication-supervision correction. Require those
+amendments to merge before dependent execution, with ordinary independent
+source, artifact, protocol and exact-call admissions still required.
+
+Subsequent publication validation must use an identifiable, auditable named
+Windows Job with a recoverable authorized operating path and retained identity
+records. Naming alone establishes neither exclusive process ownership nor
+quiescence. Preserve the failed original, its consumed charge, evidence and
+unaccepted artifact. This historical disposition ends when this grant closes;
+it does not transfer to a successor grant or expand through later boundary
+changes. All new ownership or termination uncertainty retains the ordinary
+stop conditions. No old-process cleanup, automatic retry, capacity refund,
+artifact acceptance, account effects, additional publication capacity, release
+authority or broader lifetime-risk exception is granted.
+
 **Additional compiler-input diagnostic:** Authorize at most one separately admitted
 credential-free compiler-native-inputs diagnostic numbered 0062, after acceptance
 of the observed 0061 console-capture failure, its fixed copied evidence and the
