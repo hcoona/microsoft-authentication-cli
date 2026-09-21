@@ -14783,3 +14783,83 @@ merged revision. Recompute all exact aggregate reservations with the final
 authority, evidence and source lengths. Prior counter-only arithmetic cannot
 establish actual requested-byte compliance. No compilation, guard behavior,
 artifact acceptance or dependent continuation is established by this correction.
+
+
+## Original Named-Guard Preparation 0066: Successful Compilation
+
+The sole corrected compiler-only preparation ran against accepted commit
+`020d70235662a72e97fcc9c18ad40e10b3f6d8ce`, tree
+`d1c9a4a8cf9587ad5b1d374192b59faed0f9ef46`. Its independent exact-call
+admission was 40,341 bytes, SHA-256
+`304cde1eefbb237027bdb0cbd8949ab096d07461ecb4f59adb993d64ff9bf869`.
+The original invocation completed normally in 10,990,763,930 nanoseconds with
+exit zero and no pending tool session. This was one original invocation, with no
+retry. Preparation consumption is now **17/28**, split Linux 8/8 and Windows
+9/20. Build/test remains 94/130, publication 2/30 and synthetic 52/114; the twelve
+final CLI scenarios remain protected.
+
+The original supervised public-ref observation matched the accepted commit. The
+paired reservation, original clock handoff and final results matched. The pinned
+standalone compiler completed with exit zero, both output streams reached EOF,
+and both retained streams were empty. No compiler termination was requested.
+The resulting managed DLL is 24,576 bytes, SHA-256
+`a18302e4658afc08b564be23c9b52995fba85c1a3345fba19662008efe30ae58`,
+compiled from the accepted 32,405-byte guard source. No guard method, Windows
+Job fixture, product, account, broker or authentication operation was executed.
+
+The separately admitted fixed success-evidence copy completed once with exit
+zero and no pending session. Its original collection used forty logical reads
+and 224,434 requested bytes within the twenty-MiB ceiling. The collection
+manifest is 9,449 bytes, SHA-256
+`31ed087f6cb642b8540270fb6bc85a8fb081165d8d7e692a512c49ac43f0a006`.
+Retain the original inputs, receipts, DLL and private copies. This collection
+consumed no additional experiment unit and grants no replay or cleanup.
+
+Independent original-outcome and fixed-copy provenance acceptance is 11,434
+bytes, SHA-256
+`fcaa06d0b96bcacef401e4d91a848511d5d220628cb4d5a6ed9f2977da88aca2`.
+It joins the admitted call, operator-retained tool returns, all twenty copied
+leaves, compiler recipe and six tool pins, original clocks, helper completion,
+hash chain and one preparation debit. Original history and non-history read
+totals were not retained; compliance rests on the independently admitted
+per-request enforcement and successful original path, not new measurements or
+a historical survey. This acceptance does not accept the DLL's semantics.
+
+Compilation and copying do not establish named-Job runtime behavior or final
+publication readiness. The original receipts retain `artifactAccepted:false`
+and `continuation_allowed:false`; subsequent source/provenance/PE/IL acceptance
+must be recorded separately from those original observations. Named-Job
+fixtures, a recoverable operating caller, final Native AOT publication and the
+remaining Slice scenarios keep their own accepted protocols and admissions.
+The historical original 0057/0064 lifetime dispositions and all new-uncertainty
+stop conditions remain unchanged.
+
+### Accepted Static Artifact Correspondence
+
+The separately admitted offline parser completed once with exit zero and no
+pending session. It read the fixed copied DLL without loading it or executing
+guard code. The complete 309,775-byte metadata/IL report has SHA-256
+`7eb51b0b85f6b2fdb7f517c00959b4858a715a2738d2410bd40658cf0d91767a`.
+The original parser reported three reads, 358,927 returned payload bytes and
+3,644,334 trace events within its accepted bounds. It consumed no further
+experiment unit.
+
+Independent contextual artifact acceptance is 22,595 bytes, SHA-256
+`09240c6a14e37707be0ef772881c9fc8726d0b1b8bdf0d3de3b6850c2dcd809f`.
+It accepts the exact DLL's correspondence to the accepted source and compiler
+recipe, including all 59 managed method bodies, 19 native declarations,
+signatures and layouts. The review covered exact named creation and collision
+rejection, the original-clock checks, identity persistence before resume,
+original-handle termination of a never-resumed root, mode-sensitive termination,
+bounded member observation, query-only reopen and handle disposal. No material
+finding remained.
+
+This is static artifact acceptance. It establishes neither Windows runtime
+behavior nor exclusive ownership or quiescence. The native calls retain their
+documented cooperative deadline limitation; the member pass remains non-atomic.
+Keep the original execution, copy and parser flags unchanged. The separate
+acceptance sets `artifactAccepted:true` while retaining
+`continuation_allowed:false`: actual loading, named-Job fixtures, the operating
+caller and final publication still require their own accepted protocols and
+exact admissions. Counters remain preparation 17, build/test 94, publication 2
+and synthetic 52.
