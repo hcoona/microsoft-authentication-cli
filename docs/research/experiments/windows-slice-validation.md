@@ -15106,3 +15106,119 @@ nor the original fixture batch to proceed: any evidence-backed correction, new e
 copy procedure, and resulting continuation retain independent triage and their applicable
 accepted protocol and source/call gates. Unresolved new ownership uncertainty retains the
 ordinary stop condition and is not covered by the historical 0057/0064 dispositions.
+
+
+## Fresh-File Metadata Diagnostic Observation
+
+The single diagnostic accepted in the preceding section completed with original exit 0,
+complete output, and no pending session. Independent output-pinned review accepted both
+fixed receipts and their correspondence to the accepted source and call. Both fresh
+samples had equal nine-field metadata immediately before and after read-only open. The
+only differences between successive recorded checkpoints were mode and change time at
+chmod, on both samples. This diagnostic did not reproduce the original rejected
+comparison. It does not identify the original failed root, leaf, field, cause, or current
+ownership; no DrvFS defect or incorrect identity predicate is established.
+
+The original result contained 2,446 bytes with SHA-256
+`bcc84ab2400d3c311b29a06a096cefc1faa14b057b14e628a7cc33b6b4efaa4d`.
+Final source accounting reconciled 40 selected metadata observations, 19 opens, and 2,745
+written bytes: 209 start-record bytes, 90 sample bytes, and 2,446 result-record bytes.
+The recorded 46 milliseconds precedes result persistence and is not a whole-call duration.
+The diagnostic singleton is spent. All new files remain intentionally retained, with no
+retry, live reread, cleanup, or original-copy continuation. Counters remain 17/94/2/52.
+
+Independent triage confirmed one information gap: the original copy failure discarded
+its comparison operands and did not identify its phase, root role, or leaf. Correct only
+that observability gap. Keep all identity predicates and fail-closed outcomes. Retain the
+already sampled comparison values in a bounded original failure message; never reopen or
+resample a failed object to explain an earlier comparison. This finding establishes no
+need to weaken ownership checks.
+
+## Independent Fresh Input Preparation for Unstarted Batch 0067
+
+Permit one separately admitted source assembly and one separately admitted dedicated-file
+preparation after this amendment merges. These are new finite operations, independent of
+the stopped original copy and its unknown partial-file identities. Neither operation
+reads, reuses, validates, replaces, or cleans either original partial root or the diagnostic
+samples. Inputs come only from the new accepted detached source, the independently
+accepted 0066 offline artifact and acceptance record, and a newly accepted authority and
+manifest. The old copy remains closed; fresh paths alone do not waive its stop condition.
+No old object identity or success claim is a prerequisite or output of these operations.
+
+Use `tools/validation/materialize_windows_named_guard_fixtures.py` for the new copy.
+Exclusively create `/tmp/windows-named-fixtures0067-v2-inputs` and
+`C:\Temp\azureauth-windows-slice-108\named-fixtures-0067-v2`; the latter's WSL spelling is
+`/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0067-v2`.
+Copy the same six inputs by role: authority, checkpoint, and dispatcher into the Linux
+root; authority, controller, and the unchanged accepted 0066 guard DLL into the Windows
+root. Bind the dispatcher, controller, caller, and collector to these new input paths.
+The dispatcher/controller changes only relocate the inputs and script path; the six
+fixture scenarios, guard API use, process supervision, and execution bounds remain
+unchanged. The artifact remains 24,576 bytes with SHA-256
+`a18302e4658afc08b564be23c9b52995fba85c1a3345fba19662008efe30ae58`.
+Do not rebuild or reaccept it based on the metadata diagnostic.
+
+The new assembly retains the previously reviewed fixed assembly procedure and limits,
+with new accepted source/commit pins and exclusively new outputs:
+`/tmp/windows-named-fixtures0067-v2-authority-source.json`,
+`/tmp/windows-named-fixtures0067-v2-materialization-manifest.json`, and
+`/tmp/windows-named-fixtures0067-v2-host-bindings.json`.
+Its source must receive independent review and exact admission before execution. It may
+read the same five pinned installed tool files, accepted source inputs, retained 0066
+artifact and acceptance record; observe only the original caller's one literal
+`WSL_INTEROP` Unix-socket metadata; and generate six distinct UUIDv4 Job names. It does not
+connect to the endpoint or establish liveness. Keep the original 30-second clock, at most
+16 logical reads, 32 MiB requested reads, and 192 KiB written content, with 64 KiB per
+output. The original flushed output transports all three exact byte lengths and hashes.
+Any failed start spends this new assembly singleton; no retry or fallback is allowed.
+
+The new copy uses the original 30-second monotonic clock and alarm, including descriptor
+closure, original failure reporting, flushed output, and final checks. Use pinned Python
+3.14 with `-I -B -S` and the exact admitted new manifest SHA-256 as the sole argument.
+Both operations have an outer 35-second timeout followed by a five-second kill allowance.
+Retain no-follow traversal, exclusive creation, held parent/root correspondence, all nine
+file-identity fields, exact input hashes, bounded byte-for-byte readback, and file/directory
+fsync. Keep 24 logical reads, 4 MiB requested bytes, at most 256 KiB copied inputs and a
+64 KiB receipt within 320 KiB written content. The normal copy path has 13 logical reads:
+one manifest, five sources, six copied leaves, and one receipt readback. Pools cover the
+selected preparation I/O, not Python-loader or ordinary OS activity. Neither helper
+contains a subprocess, Windows execution, dependency/build tool, guard load, network,
+account, broker, or credential operation.
+
+Exclusively create the success receipt at
+`/tmp/windows-named-fixtures0067-v2-materialized.json`. Original success stdout transports
+its exact byte length and SHA-256 with `complete: true` and `continuation_allowed: false`.
+For a failure before the original deadline, report at most 4 KiB of original JSON output
+containing the operation phase, fixed root role and leaf, exception type, I/O counters,
+and any already sampled failed comparison's field names, expected and observed values,
+and differing fields. Preserve nanosecond values as exact integers. Failed comparison
+operands are retained in memory only; the failure path performs no fresh metadata or
+payload observation to enrich them. Keep nonzero original completion and
+`continuation_allowed: false`. A timeout, incomplete/truncated output, closure failure,
+or unavailable diagnostic is still a failed, spent invocation. Diagnostic fields cannot
+substitute for successful copy evidence or resolve an unobserved object's ownership.
+
+Each preparation allowance is one invocation including failed start, with no concurrent
+experiment, retry, automatic recovery, or old-state access. They are fixed file preparation
+and consume no additional dependency-preparation, build/test, publication, or synthetic
+unit. Record their singleton consumption before submission and preserve counters
+17/94/2/52. They do not reset the spent original copy or diagnostic. Intentionally retain
+all new files. Any new identity, output, time, or original completion uncertainty stops
+the affected operation and dependent execution under the ordinary rules.
+
+Before interpreting either operation's evidence, independently join its exact accepted
+source/call, complete owned original output, actual original exit and closed session.
+Successful preparation requires original exit 0 and authentication of every output file
+against its original transported byte length and hash before consuming fields. An
+authenticated complete failure message can establish only the failed operation's reported
+comparison and nonzero outcome; it cannot authorize continuation or refund its singleton.
+Success prepares only the fresh inputs; the unstarted 0067 fixture batch still
+requires its existing independent exact caller, configuration, and evidence-collection
+admissions. Its original one build/test plus nine synthetic reservation remains unspent
+and unchanged until the actual sole fixture invocation, including a failed start. Keep
+its existing named systemd unit, Windows Jobs, Linux action-history root, original caller
+output roots, finite clocks, and protected final CLI allowance. Relocate the whole Windows
+input/evidence/cancellation subtree to the new Windows root, including case directories,
+started/result records, and the cancellation leaf. Update the dependent input/receipt and
+Windows evidence paths and accepted source/hash bindings. No second fixture allowance, original copy replay,
+old-state ownership acceptance, new lifetime-risk exception, or account effect is granted.
