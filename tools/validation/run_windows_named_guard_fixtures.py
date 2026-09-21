@@ -151,6 +151,24 @@ def directory_identity(info):
     return info.st_dev, info.st_ino, info.st_mode, info.st_uid, info.st_gid
 
 
+def verify_interop(authority):
+    binding = authority['wslInterop']
+    path = Path(binding['path'])
+    number = path.name.removesuffix('_interop')
+    if str(path) != binding['path'] or path.parent != Path('/run/WSL') or \
+            not path.name.endswith('_interop') or not number or len(number) > 10 or \
+            any(character not in '0123456789' for character in number) or \
+            os.environ.get('WSL_INTEROP') != str(path):
+        raise ValueError('Original caller interop endpoint is not bound')
+    # Metadata only: no connection, process discovery or alternate endpoint.
+    direct(path)
+    info = path.lstat()
+    observed = [*directory_identity(info), str(info.st_mtime_ns), str(info.st_ctime_ns)]
+    if not stat.S_ISSOCK(info.st_mode) or observed != binding['identity']:
+        raise ValueError('Original caller interop endpoint changed')
+    return str(path)
+
+
 def cancel_original_root(held, expected):
     if held is None or directory_identity(os.fstat(held)) != expected or \
             directory_identity(WINDOWS.lstat()) != expected:
@@ -203,6 +221,7 @@ def main():
     captured = [bytearray(), bytearray()]
     eof = [False, False]
     try:
+        interop = verify_interop(authority)
         direct(WINDOWS)
         windows_fd = os.open(WINDOWS, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
         windows_identity = directory_identity(os.fstat(windows_fd))
@@ -231,6 +250,8 @@ def main():
         if windows_identity != directory_identity(os.fstat(windows_fd)) or \
                 windows_identity != directory_identity(WINDOWS.lstat()):
             raise ValueError('Windows root changed before process start')
+        if verify_interop(authority) != interop:
+            raise ValueError('Original caller interop binding changed')
         signal.setitimer(signal.ITIMER_REAL, max(0.001, 420 - (time.monotonic() - began)))
         command = [SHELL, '-NoLogo', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
                    '-File', r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0067\Invoke-WindowsNamedGuardFixtures.ps1',
@@ -238,7 +259,8 @@ def main():
         process = subprocess.Popen(command, cwd=WINDOWS, stdin=subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    env={'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8',
-                                        'WSLENV': 'PSModuleAnalysisCachePath/w', 'PSModuleAnalysisCachePath': 'NUL'})
+                                        'WSLENV': 'PSModuleAnalysisCachePath/w', 'PSModuleAnalysisCachePath': 'NUL',
+                                        'WSL_INTEROP': interop})
         for stream in (process.stdout, process.stderr):
             os.set_blocking(stream.fileno(), False)
         while time.monotonic() - began < 400:

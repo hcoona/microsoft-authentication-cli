@@ -14892,6 +14892,17 @@ never reset or bypassed. The original PowerShell controller is the batch harness
 the six scenario hosts and three created payloads are the nine synthetic units.
 No additional observer process or subject launch is allocated.
 
+Bind the original caller's single existing `WSL_INTEROP` endpoint in the private
+exact authority, including its literal `/run/WSL/<pid>_interop` path and finite
+no-follow Unix-socket metadata. Carry it unchanged through the cleared systemd
+service and proxy environments; recheck only that exact metadata before launch.
+Reject a missing or changed binding without discovery, connection probes,
+alternate endpoints or fallback. The [WSL interop architecture](https://wsl.dev/technical-documentation/interop/#connecting-to-interop-servers)
+states that `/init` uses this variable, otherwise searching process ancestry.
+The selected service topology must not depend on that unbound fallback.
+`WSL_INTEROP` is a Linux-side transport prerequisite, not a Windows environment
+export or independent proof of the Windows session, liveness or future lifetime.
+
 | Case | Required observation | Payload starts |
 | --- | --- | --- |
 | Exact-name collision | A second final Job creation rejects the live exact name; the original remains queryable and empty. | 0 |
