@@ -163,6 +163,20 @@ when that Wave grant closes; it does not transfer to a successor grant or expand
 through later boundary changes. All new ownership or termination uncertainty
 retains the ordinary stop conditions.
 
+Separately, the accepted Wave risk decision for original Issue #108 Windows
+final publication 0064 permits credential-free Windows Slice validation despite
+the unresolved identity and later lifetime of that original Job's remaining
+process. Apply only that decision's existing environments, effects and cumulative
+ceilings, after the corresponding independently accepted protocol amendment.
+Preserve the original failure, charge and evidence. This exception establishes
+neither termination nor artifact acceptance and permits no old-process cleanup,
+automatic retry or capacity refund. It ends with that Wave grant and cannot
+transfer to a successor grant or expand through later boundary changes. It does
+not extend the separate 0057 exception or cover other unknown processes. Future
+publication supervision must meet the Wave's named-Job requirement and the exact
+protocol's identity, audit and authorized-operation rules before execution;
+all new ownership or termination uncertainty retains the ordinary stop conditions.
+
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
 selected-account session or secure-cache updates when the protocol declares that outcome.
 Deleting local files does not reverse provider-side authentication, consent, or session
@@ -449,9 +463,9 @@ Stop the experiment if:
 - native or cross-host execution accesses an environment not covered by the protocol;
 - remaining authorized attempts or cumulative capacity cannot be established;
 - experiment-controlled work cannot be stopped within the declared bounds, or safe
-  ownership cannot be established for cleanup, except for the single original Issue
-  #108 invocation 0057 lifetime exception in Termination and Retention, within its
-  exact accepted scope;
+  ownership cannot be established for cleanup, except for the case-specific original
+  Issue #108 invocation 0057 and publication 0064 lifetime exceptions in Termination
+  and Retention, each within its exact accepted scope;
 - the subject's source or artifact identity no longer matches the accepted protocol; or
 - continuing would mutate an unrelated account, installation, or remote resource.
 

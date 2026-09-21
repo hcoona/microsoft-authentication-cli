@@ -14093,18 +14093,19 @@ fixed failure diagnostic recorded for original 0063. Its SHA-256 is
 The complete original transport is 999 bytes, SHA-256
 `b3e7ec995d95bedc552a1d3dc5098706f94d686171c66714a2da444e0008a1f3`.
 
-This establishes failed invocation and consumption, not its cause or internal
-phase. Dispatcher entry, helper completion, paired reservation, Windows launch,
-subject lifetime and artifact state remain unestablished. Neither of 0064's
-history checkpoints is presumed unused. Keep publication occupancy at **2/12**,
+The original transport alone establishes failed invocation and consumption,
+not its cause or internal phase. The separately accepted fixed-copy
+[outcome below](#original-0064-observed-outcome-and-risk-disposition) supplies
+the later source-bound interpretation; no original state is reopened. Neither
+history checkpoint is presumed unused. Keep publication occupancy at **2/12**,
 with preparation **15/16**, build/test **94/120**, synthetic **52/80**, twelve
 protected final CLI scenarios and sixteen unallocated synthetic scenarios.
 Original 0063 remains failed and charged; its narrow accepted lifetime
 disposition does not transfer to 0064. The original 0057 exception remains
-unchanged and does not cover new uncertainty. Dependent execution stays stopped.
+unchanged; the separate 0064 disposition below owns its historical uncertainty.
 
-Permit one separately admitted passive control-record observation of original
-0064 under the existing credential-free Wave. Reuse the exact source-set shape,
+The sole separately admitted passive control-record observation of original
+0064 is consumed. Its accepted procedure used the exact source-set shape,
 per-leaf bounds, interpretation rules and retention procedure in
 [Closed Source Set and Interpretation](#closed-source-set-and-interpretation)
 and [One Passive Observation and Retention](#one-passive-observation-and-retention),
@@ -14152,3 +14153,93 @@ interpreting only their retained copies against the admitted producer. Partial,
 absent or stable records retain the earlier claim limits. The observation adds
 no experiment unit and cannot grant artifact, CLI/WSL, authentication, release
 or whole-Slice acceptance. No desktop attendance is selected.
+
+
+### Original 0064 Observed Outcome and Risk Disposition
+
+[PR #229](https://github.com/hcoona/microsoft-authentication-cli/pull/229)
+records independent acceptance of the original observation transport and manifest,
+source-bound interpretation of the retained copies, independent finding triage,
+and the repository-owner disposition. The passive observation ran once under
+accepted commit `885f15f24ca56b903c46a742c06f99ee26dbec28` and returned exit 0
+with its complete 336-byte frame. The manifest is 157,279 bytes, SHA-256
+`ed265d187480b556b4a23d6471a0d1423572f685a9d0587b096b540755537eda`.
+Its 209 ordered slots contain 206 stable JSON snapshots, two missing WSL
+completion leaves and one metadata-only zero-byte cancellation marker. Retained
+snapshot content totals 80,096 bytes; total retained output is 237,375 bytes.
+The original transport/manifest acceptance is 9,089 bytes, SHA-256
+`eb58aa00753e2b3baf8173a505167fb507bca8e8ab28ae52caabdf44cd627916`.
+These are fixed-copy observations, not a current process or filesystem survey.
+
+Independent interpretation joined all 206 snapshots and all 98 Linux helper
+start/result pairs to producer
+`363a31636454af038a256d6e186d08b454485932`. All helper pairs recorded bounded
+completion and empty cgroups. Publication root exit was 0, followed by failure
+at the controller's explicit normal-drain expiry. The original action clock
+recorded drain start at 33,690 ms and deadline at 35,690 ms. Final action elapsed
+time was 35.741 seconds; controller time was 45.854 seconds and the original
+outer transport measured 142.49 seconds. Neither the 700-second controller nor
+1,800-second outer ceiling was the recorded failure trigger.
+
+Final original Job accounting recorded one active process out of seventeen total,
+`executionMayHaveBegun:true`, `quiescent:false` and
+`retainedLiveWorkOrUnknown:true`. No root or Job termination was requested.
+Controller and proxy each exited 1; their exits do not establish the remaining
+member's later termination. Its identity, persistence reason and later/current
+lifetime remain unknown. In particular, no specific PDB service is identified.
+The final-mode anonymous Job omitted kill-on-close and its handles were released
+without termination. Those source facts explain the absence of a named recovery
+path; they do not establish a later process state.
+
+The independent interpretation seal is 19,569 bytes, SHA-256
+`8c30430c8b0635c3e9b2008cfbafa4942a2c4bdd0779b45a9bf473ddedfe0408`.
+Finding `FINAL0064-NORMAL-DRAIN-LIFETIME-001` was independently triaged as a
+blocking true positive, confidence 10. The triage seal is 7,135 bytes, SHA-256
+`b86cf12b1158da5e41adb9b608c97d16d9c66f95bea512b963e9c7941ae5072e`.
+No native artifact, diagnostic completeness, generated-response correspondence
+or protected-input postcondition was accepted. Preserve original
+`artifactEligible:false` and `continuation_allowed:false`.
+
+The owner accepts this historical residual lifetime and interference risk through
+[PR #230](https://github.com/hcoona/microsoft-authentication-cli/pull/230) and the
+current Wave's original-0064 decision. Apply only the corresponding
+[experiment-safety exception](../experiment-safety.md#termination-and-retention).
+That uncertainty alone need not block later credential-free validation after
+its required amendments and ordinary independent admissions pass. The failed
+original and sole observation remain consumed; no retry, capacity refund,
+old-process cleanup, artifact acceptance, account effects or release follows.
+Consumption stays preparation **15/16**, build/test **94/120**, publication
+**2/12**, synthetic **52/80**, with twelve protected final CLI cases and sixteen
+unallocated synthetic cases. No prior capacity or original evidence is rewritten.
+
+### Required Supervision Before Further Publication
+
+Before admitting another publication, accept the exact supervision implementation
+and protocol with an identifiable, auditable named Windows Job and a recoverable
+authorized operating path. Bind the fresh Job name and originating session to the
+action and its source/authority evidence. Reject an existing name before changing
+Job limits or assigning work; never fall back to an anonymous Job. Persist the
+original suspended root's handle-bound PID and creation time before resume, and
+retain bounded member-identity observations before closing the original Job handle.
+Specify finite observation, output, failure and retention bounds in that exact
+protocol. Changed guard source requires a separately admitted preparation and
+independent acceptance of the actual new artifact; the old guard artifact cannot
+stand in for changed source.
+
+Microsoft's documented [Job lifetime](https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects#managing-job-objects)
+and [named open API](https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-openjobobjectw)
+provide the source basis for a later same-session named recovery route: without
+kill-on-close, destruction requires both the last handle to close and all
+associated processes to exit. A name or successful access-right check alone
+proves neither exclusive service ownership nor quiescence. Preserve final-mode
+no-kill behavior and its existing never-resumed-root exception unless a separately
+accepted protocol establishes the ownership needed for a different procedure.
+A later observation must distinguish absence, denied access, partial evidence and
+confirmed membership; it cannot treat a failed open as original success.
+
+This amendment accepts the historical outcome and its bounded risk disposition.
+It admits no new preparation, publication, Job query, process operation or recovery
+call. Those require their concrete accepted protocol, allocation and exact source,
+artifact and call admissions. Increasing the drain allowance alone is not an
+accepted remedy. Any new ownership or termination uncertainty keeps the ordinary
+stop conditions; original 0064's exception does not transfer to later failures.
