@@ -9,7 +9,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
 if ($env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Fixture startup cache control is absent' }
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0067'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0067-v2'
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $script:writtenBytes = 0
 $script:readBytes = 0
