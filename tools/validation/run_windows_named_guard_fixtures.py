@@ -12,8 +12,8 @@ import time
 import urllib.request
 
 
-INPUTS = Path('/tmp/windows-named-fixtures0067-v2-inputs')
-WINDOWS = Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0067-v2')
+INPUTS = Path('/tmp/windows-named-fixtures0067-v3-inputs')
+WINDOWS = Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0067-v3')
 HISTORY = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0067')
 SHELL = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
 UNIT = 'azureauth-named-fixtures-108-0067.service'
@@ -255,7 +255,7 @@ def main():
             raise ValueError('Original caller interop binding changed')
         signal.setitimer(signal.ITIMER_REAL, max(0.001, 420 - (time.monotonic() - began)))
         command = [SHELL, '-NoLogo', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
-                   '-File', r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0067-v2\Invoke-WindowsNamedGuardFixtures.ps1',
+                   '-File', r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0067-v3\Invoke-WindowsNamedGuardFixtures.ps1',
                    '-Mode', 'Controller', '-AuthoritySha256', authority_hash]
         process = subprocess.Popen(command, cwd=WINDOWS, stdin=subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
