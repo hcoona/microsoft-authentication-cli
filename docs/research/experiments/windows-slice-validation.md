@@ -14734,3 +14734,52 @@ capacity. They establish no termination, artifact acceptance, new-uncertainty
 exception, cleanup or account effects. Future publication still requires named,
 auditable, operable Jobs and the ordinary ownership/termination stop conditions.
 No preparation, subject invocation or scenario acceptance occurred in this amendment.
+
+## Preparation 0066 Requested-Byte Accounting Correction
+
+Before the original 0066 invocation, source review identified that the dispatcher
+charged each logical file's size plus one once, then issued a refill loop without
+charging its individual requests. Short reads could therefore exceed the accepted
+64 MiB non-history requested-byte ceiling while the counter remained below it.
+This is a source finding, not an observed experiment overrun or an explanation
+of original 0065. Independent triage classified
+`NAMEDPREP-DISPATCHER-REQUEST-ACCOUNTING-001` as a true positive, blocking the
+prospective invocation, with confidence ten.
+
+Replace that accounting with a debit before every actual `os.read` request.
+Request at most 65,536 remaining payload bytes, followed by a one-byte EOF probe.
+Charge short-read continuations and EOF probes against the same cumulative
+64 MiB counter, including the launcher's pre-reserved reads and the freshness
+callback's debits. Reject a request that would cross the ceiling before issuing
+it. Preserve the separate 96-logical-file-read limit, existing per-file limits,
+identity checks, original clock, cancellation behavior and the history-only
+48 MiB pool. No counter reset, refund, pooling or larger capacity is permitted.
+With full requested payload returns, each dispatcher file now requests its size
+plus one; short reads spend additional capacity and may fail closed.
+
+The original 0066 compilation has not started. Its reserved preparation unit is
+unused; counters remain preparation 16, build/test 94, publication 2 and synthetic
+52. Retain the earlier unused input materialization and its reviews. They do not
+admit the corrected source. Materialize corrected inputs at the new dedicated
+`/tmp/windows-named-guard0066-inputs-v2` root with
+`/tmp/windows-named-guard0066-authority-v2.json`; never overwrite or reuse the
+earlier inputs. Keep logical action 0066, the original exclusive start/result
+paths, the fixed historical manifest and every prior consumed action unchanged.
+
+The corrected `tools/validation/run_windows_named_guard_prepare.py` is 35,705
+bytes, SHA-256
+`4068f8687952b255ddc71476b0d636eaca4b63e3a9a67ddda2c2a703834bc335`.
+The Windows controller's two authority-binding path checks use the same new
+input root. This resolves independently triaged finding
+`NAMEDPREP-INPUT-ROOT-CORRESPONDENCE-001`, a true positive with confidence ten
+that blocked the proposal until both consumers agreed. The corrected
+`tools/validation/Invoke-WindowsNamedGuardPrepare.ps1` is 36,196 bytes, SHA-256
+`dcdda75e75c5c0239ffcc00bf4a57a03ba0560f3348ad9d5483076e8a40ac38a`.
+The guard, history reader and inert launcher/verifier template bytes retain the
+preceding source-correction identities. Before the singleton
+can run, independently accept the corrected source and refresh the assembly,
+materialization, actual input/runtime and full-call admissions against the
+merged revision. Recompute all exact aggregate reservations with the final
+authority, evidence and source lengths. Prior counter-only arithmetic cannot
+establish actual requested-byte compliance. No compilation, guard behavior,
+artifact acceptance or dependent continuation is established by this correction.
