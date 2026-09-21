@@ -15657,3 +15657,101 @@ quiescence. Do not claim general quiescence, recover discarded output, accept a
 fixture case or resume dependent work solely because this snapshot succeeds.
 Any further observation or corrected batch needs its own bounded accepted scope,
 source/allocation/call admission and ordinary outcome gates.
+
+## Original 0068: Later Dispatcher Snapshot Outcome
+
+The sole admitted file-only dispatcher snapshot completed with exit zero, complete
+output and no pending session under accepted revision
+`984c85e77244624c85e00033e9efd7a4466c2147`. Independent acceptance authenticated
+exactly the three saved outputs against original transport, with three payload
+reads and 2,261 requested bytes. Its 11,285-byte acceptance has SHA-256
+`3f004e88f9335ab51e064e519ab1ca35984a8e892b42e3278325c089903d0db9`.
+The snapshot singleton is spent; counters remain 17/96/2/70, and the failed fixture
+remains charged and unaccepted.
+
+The coherent later dispatcher result reports `proxyExit: 1`, both output EOFs,
+401 combined captured bytes, `ValueError`, 585,794 requested file bytes and
+6,439,390,479 elapsed nanoseconds. It contains the accepted-ref digest and no
+Windows-result digest. On the exact 17,224-byte dispatcher source with SHA-256
+`9cfa10bf363df1a32096afe296695108359b61ed777d656fc21ab8c666a813af`, these proxy
+exit/EOF assignments follow a returned Windows-proxy `Popen`; its exit and output
+then reject the completion predicate before any Windows-result read. This is a
+source-conditioned inference from later snapshots, not original dispatcher
+transport authentication or direct Windows observation. The 401 captured bytes
+were not saved; their content and stream split cannot be recovered from these
+records. The preceding caller's 271-byte capture concerns a different layer.
+Windows controller startup, root exit and descendant quiescence remain unknown.
+
+## One Later 0068 Controller-Record Snapshot
+
+After this amendment merges, permit one separately admitted file-only snapshot of
+the two exact Windows controller record leaves through the existing WSL mount.
+The existing credential-free Wave covers this narrow retained-evidence step; it
+grants no process operation, restart, Windows executable, authentication or new
+lifetime-risk waiver. Record a separate durable start before the sole submission;
+failed start, missing source root, timeout or incomplete output spends the singleton
+without retry. It charges zero execution units: counters remain 17/96/2/70 and
+twelve synthetic units remain protected for final CLI scenarios.
+
+The sole source directory is
+`/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0068`. Select only
+`windows-started.json` and `windows-result.json`, each at most 65,536 bytes. Open
+the literal directory ancestry without following links; retain descriptors and
+current directory identity joins. Require the source root's current user ownership;
+do not impose Linux group/other write-bit restrictions on this exact Windows mount
+directory. This supplies current correspondence, not exclusive access or a historical
+materialization-root join. Present leaves must be regular, single-linked,
+current-user-owned files. Each receives one payload read requesting 65,537 bytes,
+with no refill: at most two reads and 131,074 requested bytes. Compare full current
+nine-field named/opened/after-read/final leaf identities, including change time;
+there is no historical change-time comparison or relaxed current-read stability.
+Require strict UTF-8 JSON objects with unique keys and finite values, including
+rejection of floating-point overflow from ordinary exponent notation. Preserve
+exact PowerShell-written bytes; do not require Python's JSON serialization order.
+Semantic/schema coherence remains an independent outcome-acceptance obligation.
+
+A `FileNotFoundError` on either exact leaf is recorded only as
+`absent-at-observation`; recheck that same leaf during the two final correspondence
+passes. It establishes neither earlier absence nor lack of process startup or
+quiescence. Any appearance, replacement, short read, malformed JSON or unstable
+identity fails the observation. A missing source directory fails without an
+absence conclusion. There is no directory enumeration, pending-file lookup,
+case-subdirectory access, alternate path, original Linux-record reread, file
+repair or diagnostic enrichment.
+
+Exclusively create `/tmp/windows-named-fixtures0068-controller-snapshots-v1`.
+Write `start.json` and/or `result.json` only for present validated inputs, plus
+`observation.json` containing both statuses and all saved pins. The payload ceiling
+is 131,072 bytes and the manifest ceiling is 8,192 bytes: at most 139,264 helper-
+written bytes. A separate durable start is at most 4,096 bytes, for at most 143,360
+combined private file-output bytes. Synchronize files and directories, make output
+files read-only, close all owned descriptors before success transport, and retain
+partials without overwrite, cleanup or reuse. At most fourteen owned descriptors
+are live. Do not reopen source leaves or read back outputs to enrich failure.
+
+The fixed helper is 9,542 bytes, SHA-256
+`70f353a7ff09367015f83f6f34b262fc1d8b07500a0f455ee29f59062258c73e`.
+Its original monotonic clock is thirty seconds through closure and final output.
+The exact outer call uses a 35-second timeout and five-second kill grace; stdout
+is at most 2,048 bytes. Reuse the accepted installed Python and timeout bindings;
+independently admit the complete unchanged source, literal call and durable start
+without a new tool survey. Only empty polls of the original pending tool session,
+each at most sixty seconds, may collect original completion. No service, process,
+cgroup, socket, named Job, network, account, cache or other Windows path is observed.
+No Windows executable is invoked and no possibly live process is changed.
+
+Success requires actual original exit zero, complete output and no pending session,
+followed by independent authentication of every saved output against that transport.
+Use the exact accepted controller source and original authority hash to interpret
+any coherent positive records. The controller writes its start only after its
+preflight and guard assembly load, before the case loop; its result belongs to
+that controller block. A positive start can support entry into that block. A result
+may identify its recorded completed-case prefix and containment; it does not alone
+supply omitted failing-case evidence or current lifetime. Missing or partial records
+cannot distinguish an early parse/preflight failure from other incomplete evidence.
+These are later snapshots without original Windows transport authentication or a
+historical root-identity join. Preserve that limitation; neither a successful copy,
+an absence status nor a proxy exit permits a quiescence or fixture-success claim.
+Keep dependent execution stopped until separately accepted evidence or the applicable
+concrete owner decision resolves the new uncertainty. Any further observation or
+corrected batch requires its own bounded accepted scope and ordinary admissions.
