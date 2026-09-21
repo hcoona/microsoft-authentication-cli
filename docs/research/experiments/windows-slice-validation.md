@@ -15017,3 +15017,92 @@ completion requires independent evidence acceptance before any resulting claim
 or dependent operation. The six cases do not accept the future publication
 controller, same-session operating caller, Native AOT artifact or Slice scenarios;
 their separate source, artifact, protocol and exact-call gates remain.
+
+## Original 0067 Input Materialization Failure
+
+The independently admitted original input-copy invocation under accepted revision
+`dcaa75fa65ab1e5ad0c96e85c562d4fd5709d7e9` exited with code 1 before
+any fixture caller, Windows process, or guard load. Its original tool session completed;
+no session remained pending. The fixed copy procedure contained no subprocess operation.
+The source-bound traceback identifies the copied-leaf readback predicate: the nine-field
+named-file metadata obtained before open differed from metadata returned for the opened
+descriptor. The check rejected that comparison before reading the copied payload.
+
+The failed helper was 10,851 bytes with SHA-256
+`23a2c4c8c630dbeb7e4017afe4799b5c6bb5232ebe2cd151ca1ef7b6f106d26a`.
+The traceback does not identify the affected root, leaf, differing field, filesystem,
+cause, or current object ownership. No successful materialization receipt was
+transported. Preserve the original partial files and failure; do not retry, reuse,
+replace, inspect, or clean those roots under the spent copy admission. No current-state
+or DrvFS-cause claim follows. Cumulative consumption remains preparation 17, build/test
+94, publication 2, and synthetic 52. The fixture batch has not started and its reserved
+charge has not been consumed; the original singleton copy allowance is spent.
+
+## One Fresh-File Preparation Metadata Diagnostic
+
+To inform the unresolved input-copy prerequisite, permit one separately admitted
+invocation of `tools/validation/inspect_fixture_file_metadata.py` after this amendment
+merges. This diagnostic creates two tiny constant files and records file metadata; it is
+not read-only. Use the existing WSL Linux filesystem and Windows experiment parent on the
+same hosts. Do not access either failed fixture input root or any old process, service,
+Job, account, broker, cache, or credential state.
+
+Exclusively create exactly these new roots, with one `sample.bin` in each:
+
+- `/tmp/windows-named-fixtures0067-metadata-diagnostic-v1`
+- `C:\Temp\azureauth-windows-slice-108\named-fixtures0067-metadata-diagnostic-v1`
+
+The WSL spelling of the second root is
+`/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures0067-metadata-diagnostic-v1`.
+Write only the source's fixed ASCII diagnostic marker to each sample. Record the nine
+fields device, inode, mode, UID, GID, size, modification nanoseconds, change nanoseconds,
+and link count at the fixed write, chmod, close, and read-open checkpoints. Preserve the
+original copy sequence's write/fsync, chmod to `0444`, close, named metadata, read-only
+open, and descriptor metadata operations. The read-only descriptor supplies metadata
+only: no sample payload, directory listing, mount configuration, unrelated path, or
+original failed state is read. Keep no-follow traversal, exclusive creation, held root
+correspondence, fixed filenames, and bounded descriptor closure.
+
+The question is whether these fresh samples exhibit a named-versus-opened metadata
+difference at the copy-relevant checkpoint and which fields differ. A complete diagnostic
+may report either equality or inequality. Equality does not establish the original
+failure's cause; inequality does not retrospectively identify its leaf or field. Metadata
+is evidence to review, not authority to weaken ownership checks or accept replaced files.
+Microsoft's [WSL permissions documentation](https://learn.microsoft.com/windows/wsl/file-permissions)
+describes Windows-permission and optional Linux-metadata translation. It does not identify
+the cause of the original failure or establish the configuration of these hosts.
+
+Allocate one diagnostic invocation, including a failed start, with no retry. Its exact
+scope launches no dependency, build tool, product, guard, Windows helper, or synthetic
+subject process. It consumes no dependency-preparation, build/test, publication, or
+synthetic unit; this is the fixed file-preparation observation allowance, not a general
+exemption for tests of nonproduct code. Keep counters 17/94/2/52 and the unstarted fixture
+reservation unchanged. No concurrent experiment is permitted.
+
+Use exact pinned Python 3.14 with `-I -B -S`, no script arguments, and an independently
+accepted literal call. The helper's one original monotonic 30-second clock and alarm
+cover its selected operations, final persistence, flushed output, and final clock check.
+An outer timeout permits 35 seconds followed by a five-second kill allowance. No
+subprocess, Windows executable, network request, dependency resolution, or guard load
+occurs in the helper. Bound selected metadata observations to 256, descriptor opens to
+64, total written content to 64 KiB, and each JSON receipt to 32 KiB. There are no file
+payload reads. Those pools exclude Python-loader and ordinary OS activity; synchronous
+OS calls retain their cooperative-clock limitation.
+
+Exclusively persist original start and result records at
+`/tmp/windows-named-fixtures0067-metadata-start-v1.json` and
+`/tmp/windows-named-fixtures0067-metadata-result-v1.json`. The original output transports
+the exact byte lengths and SHA-256 hashes of both records. Before accepting observations,
+independently join those pins to the complete owned original tool output, actual exit,
+source, call, and accepted protocol. A complete diagnostic requires original exit 0,
+fully collected output, and no pending session; saved fields cannot override a timeout
+or failed original completion. Failure consumes the singleton and preserves partial
+records and files without retry or cleanup. Never infer ownership of a later object from
+a retained name or a matching subset of metadata alone.
+
+Keep raw metadata private and publish only reviewed field-level conclusions and limits.
+Retain all new files intentionally. This amendment permits neither another materializer
+nor the original fixture batch to proceed: any evidence-backed correction, new exact
+copy procedure, and resulting continuation retain independent triage and their applicable
+accepted protocol and source/call gates. Unresolved new ownership uncertainty retains the
+ordinary stop condition and is not covered by the historical 0057/0064 dispositions.
