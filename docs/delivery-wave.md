@@ -47,8 +47,8 @@ Use only public dependencies and verified retained public caches/installed toolc
 downloads may use public NuGet.org and official .NET distribution endpoints, with no
 credentials. New experiment-owned files stay in dedicated build/test roots outside
 production installations and are intentionally retained. Maximum cumulative capacity is
-16 dependency preparation/restore actions, 120 build/test actions, 12 Native AOT publish
-actions and 80 synthetic process scenarios, with at most 4 GiB of newly downloaded public
+28 dependency preparation/restore actions, 130 build/test actions, 30 Native AOT publish
+actions and 114 synthetic process scenarios, with at most 4 GiB of newly downloaded public
 dependency content. Exact per-action time, output and termination limits and source
 admission are owned by the accepted protocol. No new toolchain installation is granted.
 
@@ -75,10 +75,11 @@ compilation and synthetic validation retain their ordinary prerequisites and
 separate exact admissions. Preserve the failed original, its unavailable
 dedicated unit and the consumed recovery; charge the additional diagnostic
 separately within the existing cumulative ceilings. This historical disposition
-ends when this grant closes and does not transfer to a successor grant or expand
-through later boundary changes. All new ownership or termination uncertainty
+ends when this grant closes and does not transfer to a successor grant. Only the
+renewed credential-free capacity below extends its original cumulative ceilings;
+other later boundary changes do not expand it. All new ownership or termination uncertainty
 retains the ordinary stop conditions. No quiescence, refund, repeated original
-recovery, old-process cleanup, authentication, additional publication capacity,
+recovery, old-process cleanup, authentication, publication outside the renewed ceilings,
 release authority or broader exception is granted.
 
 **Original 0064 lifetime risk decision:** The repository owner accepts the
@@ -97,11 +98,12 @@ Windows Job with a recoverable authorized operating path and retained identity
 records. Naming alone establishes neither exclusive process ownership nor
 quiescence. Preserve the failed original, its consumed charge, evidence and
 unaccepted artifact. This historical disposition ends when this grant closes;
-it does not transfer to a successor grant or expand through later boundary
-changes. All new ownership or termination uncertainty retains the ordinary
+it does not transfer to a successor grant. Only the renewed credential-free
+capacity below extends its original cumulative ceilings; other later boundary
+changes do not expand it. All new ownership or termination uncertainty retains the ordinary
 stop conditions. No old-process cleanup, automatic retry, capacity refund,
-artifact acceptance, account effects, additional publication capacity, release
-authority or broader lifetime-risk exception is granted.
+artifact acceptance, account effects, publication outside the renewed ceilings,
+release authority or broader lifetime-risk exception is granted.
 
 **Additional compiler-input diagnostic:** Authorize at most one separately admitted
 credential-free compiler-native-inputs diagnostic numbered 0062, after acceptance
@@ -124,6 +126,32 @@ before execution. Failed start consumes this invocation; no retry, repeated 0057
 0058, 0059, 0060 or 0061 invocation/recovery/observation, old-state repair, cleanup,
 authentication, new lifetime-risk exception, additional publication capacity or
 release authority is granted.
+
+**Renewed credential-free capacity:** The repository owner approves the execution
+ceilings above with three times the completion estimate's contingency buffer.
+Apply the original 0057 and 0064 historical lifetime/interference dispositions to
+credential-free work within these renewed ceilings on the same existing hosts.
+This is an explicit finite capacity extension of those two historical decisions;
+it does not accept any new ownership or termination uncertainty. Preserve every
+prior charge and failed result. No original failed invocation may be replayed or
+refunded. Additional attempts require their own accepted exact protocol,
+allocation and independent admission; capacity does not supply those prerequisites.
+Future publication retains the named, auditable, operable Windows Job requirement.
+The matching experiment-safety and Windows protocol amendments must be accepted
+atomically. Downloads, toolchain, environment, account and external-effects
+boundaries remain those stated above; further capacity or effects extensions
+require their applicable decision and amendment.
+
+**Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
+24 account-discovery calls, 24 eligible selected-account silent calls and 13
+permitted interactive calls for the later real-environment acceptance proposal.
+These are separate future ceilings, not synthetic units or an account-effects
+grant. No discovery, acquisition, WAM interaction or account/cache/consent change
+may execute until the account and external-effects boundary above is amended with
+the concrete owner risk decision and independently accepted exact protocol.
+The current historical-risk dispositions remain credential-free and do not extend
+to those future private/account effects. Failed starts must count when a real
+batch is eventually authorized; no additional allowance arises from batching.
 
 **Exclusions:** no product or protocol expansion, PATs, downstream Git/package adapters,
 browser/device-code or native Linux/macOS/ARM64 authentication, daemon, serialized
