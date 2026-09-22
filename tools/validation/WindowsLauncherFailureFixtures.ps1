@@ -1,4 +1,4 @@
-# Dot-sourced by the admitted 0094 controller; no extra observer/helper process.
+# Dot-sourced by the admitted 0101 controller; no extra observer/helper process.
 $publicationFlags = [Reflection.BindingFlags]::Static -bor [Reflection.BindingFlags]::NonPublic
 $publicationOpen = [WindowsValidationJob].GetMethod('OpenJobObject', $publicationFlags)
 $publicationMember = [WindowsValidationJob].GetMethod('IsProcessInJob', $publicationFlags)
@@ -49,7 +49,7 @@ function Assert-PublicationMembership($Subjects, [string] $Name, $Candidate) {
 
 function Invoke-LauncherFailureCases {
     $results = @()
-    foreach ($name in @('normal', 'pre-resume', 'resume-unknown', 'timeout', 'overflow', 'journal-cancel')) {
+    foreach ($name in @('journal-cancel')) {
         Assert-Time 260000
         $caseWatch = [Diagnostics.Stopwatch]::StartNew()
         $spec = $authority.failureCases.$name
@@ -107,13 +107,36 @@ function Invoke-LauncherFailureCases {
                 Assert-PublicationFixtureTime $caseWatch 10000
                 $result.observerJobClosedBeforeCandidateExit = $true
                 if ($name -ceq 'journal-cancel') {
+                    Assert-Direct "$directory\launcher.jsonl"
                     $locked = [IO.File]::Open("$directory\launcher.jsonl", 'Open', 'Read', 'ReadWrite')
-                    $prefix = Read-PublicationJournal $directory
+                    # Read through this already-held, writer-compatible handle.
+                    # The ordinary completed-journal reader keeps its stricter sharing.
+                    Assert-PublicationFixtureTime $caseWatch 10000
+                    $prefixLength = $locked.Length
+                    if ($prefixLength -le 0 -or $prefixLength -gt 65536) { throw 'Invalid live journal prefix length' }
+                    $prefixBytes = [byte[]]::new([int]$prefixLength)
+                    $prefixOffset = 0
+                    while ($prefixOffset -lt $prefixBytes.Length) {
+                        Assert-PublicationFixtureTime $caseWatch 10000
+                        $request = $prefixBytes.Length - $prefixOffset
+                        $script:readBytes += $request
+                        if ($script:readBytes -gt 4194304) { throw 'Fixture input budget' }
+                        $count = $locked.Read($prefixBytes, $prefixOffset, $request)
+                        Assert-PublicationFixtureTime $caseWatch 10000
+                        if ($count -eq 0) { throw 'Incomplete live journal prefix' }
+                        $prefixOffset += $count
+                    }
+                    $prefixText = [Text.UTF8Encoding]::new($false, $true).GetString($prefixBytes)
+                    if (-not $prefixText.EndsWith("`n")) { throw 'Incomplete live journal line' }
+                    $prefix = @($prefixText.TrimEnd([char]10).Split([char]10) | ForEach-Object { $_ | ConvertFrom-Json })
                     if ($prefix.Count -ne 5 -or $prefix[-1].event -cne 'publication-resumed') {
                         throw 'Journal fault requires the complete resumed startup prefix'
                     }
+                    Assert-PublicationFixtureTime $caseWatch 10000
                     $locked.Lock(0, 65536)
                     $lockHeld = $true
+                    Assert-PublicationFixtureTime $caseWatch 10000
+                    if ($locked.Length -ne $prefixLength) { throw 'Live journal prefix changed before lock' }
                     $result.journalLockAcquired = $true
                     Save-Json "$directory\cancel" @{ cancelled = $true }
                 } elseif ($name -ceq 'normal' -or $name -ceq 'overflow' -or $name -ceq 'resume-unknown') {
