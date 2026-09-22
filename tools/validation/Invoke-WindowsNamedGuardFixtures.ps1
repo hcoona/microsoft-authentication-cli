@@ -9,7 +9,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
 if ($env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Fixture startup cache control is absent' }
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0071'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0072'
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $script:writtenBytes = 0
 $script:readBytes = 0
@@ -18,7 +18,9 @@ function Assert-Direct([string] $Path) {
     $item = Get-Item -LiteralPath $Path -Force
     while ($null -ne $item) {
         if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Linked fixture path' }
-        if ($item.PSIsContainer) { $item = $item.Parent } else { $item = $item.Directory }
+        if ($item -is [IO.DirectoryInfo]) { $item = $item.Parent }
+        elseif ($item -is [IO.FileInfo]) { $item = $item.Directory }
+        else { throw 'Fixture path is not a filesystem entry' }
     }
 }
 
@@ -69,6 +71,11 @@ function Assert-Time([long] $Milliseconds) {
     }
 }
 
+function Get-FailureDetails($Record) {
+    $text = $Record.ToString() + "`n" + $Record.ScriptStackTrace
+    return $text.Substring(0, [Math]::Min(4096, $text.Length))
+}
+
 function New-Environment([string] $Working) {
     return @{
         SystemRoot = 'C:\Windows'; windir = 'C:\Windows'; SystemDrive = 'C:'
@@ -91,12 +98,12 @@ if ((Get-Hash $authorityBytes) -cne $AuthoritySha256) { throw 'Fixture authority
 $authorityText = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes)
 $authority = $authorityText | ConvertFrom-Json
 if ($authorityText -cne (($authority | ConvertTo-Json -Depth 20 -Compress) + "`n") -or
-    $authority.schema -cne 'named-guard-fixtures-0071-v1' -or
-    $authority.accepted -ne $true -or $authority.action -cne '0071' -or
-    $authority.countsBefore.preparation -ne 19 -or $authority.countsBefore.buildTest -ne 96 -or
-    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 70 -or
+    $authority.schema -cne 'named-guard-fixtures-0072-v1' -or
+    $authority.accepted -ne $true -or $authority.action -cne '0072' -or
+    $authority.countsBefore.preparation -ne 19 -or $authority.countsBefore.buildTest -ne 97 -or
+    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 80 -or
     $authority.failedFixtureDispositionSha256 -cne '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf' -or
-    $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 10) {
+    $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 21) {
     throw 'Unaccepted fixture allocation'
 }
 if ((Get-Hash (Read-Bytes $PSCommandPath 65536)) -cne $authority.controllerSha256) {
@@ -109,12 +116,25 @@ if ((Get-Hash (Read-Bytes $shell 1048576)) -cne
 $sequence = @('collision', 'live', 'disposed', 'callback', 'missing', 'session')
 if (@($authority.cases.PSObject.Properties.Name).Count -ne 6) { throw 'Fixture case allocation' }
 foreach ($selected in $sequence) {
-    if ($authority.cases.$selected -cnotmatch '^Local\\azureauth-final-publish-108-0071-[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
+    if ($authority.cases.$selected -cnotmatch '^Local\\azureauth-final-publish-108-0072-[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
         throw 'Unbound fixture Job name'
     }
 }
 if (@($sequence | ForEach-Object { $authority.cases.$_ } | Select-Object -Unique).Count -ne 6) {
     throw 'Repeated fixture Job name'
+}
+$negativeRoots = [ordered]@{ cancel = '0073'; collision = '0074'; overflow = '0075'; journal = '0076' }
+if (@($authority.failureCases.PSObject.Properties.Name).Count -ne 4 -or
+    $authority.failure0071DispositionSha256 -cne
+        '7e70e12e52e2eecd0d4fd823763cef52334da5f197fadef91950218b7b511664') {
+    throw 'Missing accepted original failure disposition or negative cases'
+}
+foreach ($entry in $negativeRoots.GetEnumerator()) {
+    $spec = $authority.failureCases.($entry.Key)
+    if ($spec.root -cne ('C:\Temp\azureauth-windows-slice-108\named-fixtures-' + $entry.Value) -or
+        $spec.suffix -cnotmatch '^[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
+        throw 'Unbound negative case root or Job suffix'
+    }
 }
 Assert-Time 10000
 
@@ -134,7 +154,7 @@ if ($Mode -eq 'Payload') {
         }
     } finally { $current.Dispose() }
     # A fixed bounded child; no output, network, account APIs or further process.
-    while ($watch.ElapsedMilliseconds -lt 20000 -and -not (Test-Path -LiteralPath "$directory\release")) {
+    while ($watch.ElapsedMilliseconds -lt 45000 -and -not (Test-Path -LiteralPath "$directory\release")) {
         Start-Sleep -Milliseconds 25
     }
     exit 0
@@ -151,7 +171,7 @@ if ($Mode -eq 'Case') {
     if ($CaseName -cnotin $sequence) { throw 'Missing fixture case' }
     $directory = "$root\$CaseName"
     $name = $authority.cases.$CaseName
-    $deadline = [Diagnostics.Stopwatch]::GetTimestamp() + 45L * [Diagnostics.Stopwatch]::Frequency
+    $deadline = [Diagnostics.Stopwatch]::GetTimestamp() + 20L * [Diagnostics.Stopwatch]::Frequency
     $current = [Diagnostics.Process]::GetCurrentProcess()
     try { $session = $current.SessionId } finally { $current.Dispose() }
     $final = $null
@@ -176,7 +196,7 @@ if ($Mode -eq 'Case') {
         if ($CaseName -cin @('live', 'disposed', 'callback')) {
             $callbackState = @{ invoked = $false }
             $beforeResume = [Action]{
-                Assert-Time 30000
+                Assert-Time 20000
                 Save-Json "$directory\before-resume.json" @{
                     jobName = $final.JobName; sessionId = $final.JobSessionId; pid = $final.Child.Id
                     creationFileTime = $final.RootCreationFileTime; resumed = $false
@@ -233,12 +253,17 @@ if ($Mode -eq 'Case') {
                 }
                 $expectedMembers = 0
                 if ($CaseName -cin @('live', 'disposed')) { $expectedMembers = 1 }
-                if ($audit['assigned'] -ne $expectedMembers -or $audit['returned'] -ne $expectedMembers) {
-                    throw 'Unexpected fixture Job membership'
-                }
+                if ($audit['assigned'] -ne $audit['returned'] -or
+                    $audit['returned'] -ne @($audit['members']).Count -or
+                    $audit['returned'] -lt $expectedMembers -or $audit['returned'] -gt 8 -or
+                    ($expectedMembers -eq 0 -and $audit['returned'] -ne 0)) { throw 'Unexpected fixture Job membership' }
                 if ($expectedMembers -eq 1) {
                     $identity = Read-Json "$directory\before-resume.json"
-                    $member = $audit['members'][0]
+                    $matches = @($audit['members'] | Where-Object {
+                        $_['pid'] -eq $identity.pid -and $_['creationFileTime'] -ceq $identity.creationFileTime
+                    })
+                    if ($matches.Count -ne 1) { throw 'Exact payload member is missing or duplicated' }
+                    $member = $matches[0]
                     if ($member['pid'] -ne $identity.pid -or $member['creationFileTime'] -cne $identity.creationFileTime -or
                         $member['inJob'] -ne $true -or $member['status'] -cne 'observed-member' -or
                         $member['imageName'] -ine 'powershell.exe') { throw 'Reopened member identity mismatch' }
@@ -249,15 +274,18 @@ if ($Mode -eq 'Case') {
         if ($CaseName -eq 'live') {
             $release = [IO.File]::Open("$directory\release", 'CreateNew', 'Write', 'Read')
             $release.Dispose()
-            while (-not $final.Child.HasExited) { Assert-Time 30000; Start-Sleep -Milliseconds 25 }
+            while (-not $final.Child.HasExited) { Assert-Time 20000; Start-Sleep -Milliseconds 25 }
             if ($final.Child.ExitCode -ne 0 -or -not $final.ObserveFinalPublishQuiescence()) {
                 throw 'Live fixture payload completion failed'
             }
             $caseResult.payloadExitObserved = $true
         }
-        Assert-Time 40000
+        Assert-Time 20000
         $caseResult.passed = $true
-    } catch { $caseResult.failureType = $_.Exception.GetType().FullName }
+    } catch {
+        $caseResult.failureType = $_.Exception.GetType().FullName
+        $caseResult.failureDetails = Get-FailureDetails $_
+    }
     finally {
         if ($null -ne $final) { $final.Dispose() }
         Save-Json "$directory\case-result.json" $caseResult
@@ -267,19 +295,19 @@ if ($Mode -eq 'Case') {
 }
 
 $result = [ordered]@{ schema = 'named-guard-fixtures-result-v1'; passed = $false; quiescent = $false
-    authoritySha256 = $AuthoritySha256; failureType = $null; cases = @() }
+    launcherFailureCases = @(); authoritySha256 = $AuthoritySha256; failureType = $null; cases = @() }
 try {
     $controller = [Diagnostics.Process]::GetCurrentProcess()
     try {
         Save-Json "$root\windows-started.json" @{
             schema = 'named-guard-fixtures-started-v1'; authoritySha256 = $AuthoritySha256
-            buildTestCharge = 1; syntheticCharge = 10; controllerPid = $PID
+            buildTestCharge = 1; syntheticCharge = 21; controllerPid = $PID
             controllerCreationFileTime = $controller.StartTime.ToUniversalTime().ToFileTimeUtc().ToString()
             controllerSession = $controller.SessionId
         }
     } finally { $controller.Dispose() }
     foreach ($selected in $sequence) {
-        Assert-Time 240000
+        Assert-Time 180000
         $directory = "$root\$selected"
         if (Test-Path -LiteralPath $directory) { throw 'Fixture case already exists' }
         [void][IO.Directory]::CreateDirectory($directory)
@@ -287,11 +315,14 @@ try {
         $completed = $false
         $stopped = $false
         $reads = $null
+        $payload = $null
         $caseWatch = [Diagnostics.Stopwatch]::StartNew()
         $containment = [ordered]@{ case = $selected; jobName = $outer.JobName; sessionId = $outer.JobSessionId
             rootExit = $false; exitCode = $null; activeBeforeStop = $null; activeAfterStop = $null
             total = $null; terminationRequested = $false; terminationSucceeded = $false; quiescent = $false
-            stdoutEof = $false; stderrEof = $false }
+            stdoutEof = $false; stderrEof = $false
+            targetIdentity = $null; targetHandleHeld = $false; targetAliveBeforeStop = $false
+            targetExitedAfterStop = $false; targetExitCode = $null; targetObservationError = $null }
         try {
             Save-Json "$directory\outer-job.json" $containment
             $outer.Start($shell, (Get-Arguments 'Case' $selected), $directory, (New-Environment $directory))
@@ -304,8 +335,8 @@ try {
             $reads = @($outer.Output.BaseStream.ReadAsync($buffers[0], 0, 4096),
                 $outer.Error.BaseStream.ReadAsync($buffers[1], 0, 4096))
             while (-not $outer.Child.HasExited) {
-                Assert-Time 300000
-                if ($caseWatch.ElapsedMilliseconds -ge 45000) { throw 'Fixture case timeout' }
+                Assert-Time 180000
+                if ($caseWatch.ElapsedMilliseconds -ge 20000) { throw 'Fixture case timeout' }
                 foreach ($read in $reads) {
                     if ($read.IsCompleted -and $read.GetAwaiter().GetResult() -ne 0) { throw 'Unexpected fixture output' }
                 }
@@ -314,20 +345,51 @@ try {
             $containment.rootExit = $true
             $containment.exitCode = $outer.Child.ExitCode
             $completed = $true
+            if ($selected -eq 'disposed' -and $containment.exitCode -eq 0) {
+                $identity = Read-Json "$directory\before-resume.json"
+                if ($identity.authoritySha256 -cne $AuthoritySha256 -or
+                    $identity.jobName -cne $authority.cases.$selected -or
+                    $identity.sessionId -ne $outer.JobSessionId -or $identity.resumed -ne $false) {
+                    throw 'Disposed target authority mismatch'
+                }
+                $payload = [Diagnostics.Process]::GetProcessById([int]$identity.pid)
+                if ($payload.Handle -eq [IntPtr]::Zero) { throw 'Disposed target handle unavailable' }
+                if ($payload.StartTime.ToUniversalTime().ToFileTimeUtc().ToString() -cne $identity.creationFileTime -or
+                    $payload.SessionId -ne $identity.sessionId) { throw 'Disposed target identity mismatch' }
+                $containment.targetIdentity = $identity
+                $containment.targetHandleHeld = $true
+            }
         } finally {
             try {
+                # Observation failure must never bypass the original outer Stop.
+                try {
+                    if ($selected -eq 'disposed') {
+                        if ($null -eq $payload -or -not $containment.targetHandleHeld) {
+                            throw 'Disposed target identity was not established'
+                        }
+                        $containment.targetAliveBeforeStop = -not $payload.HasExited
+                    }
+                } catch { $containment.targetObservationError = Get-FailureDetails $_ }
+                finally {
+                    $stopped = $outer.Stop()
+                }
                 # This Job contains only the fixed fixture host and its fixed payload.
                 # Final publication with potentially shared compiler work never uses this policy.
-                $stopped = $outer.Stop()
                 $containment.activeBeforeStop = $outer.ActiveBeforeStop
                 $containment.activeAfterStop = $outer.ActiveAfterStop
                 $containment.total = $outer.TotalAfterStop
                 $containment.terminationRequested = $outer.TerminationRequested
                 $containment.terminationSucceeded = $outer.TerminationSucceeded
                 $containment.quiescent = $stopped
+                if ($selected -eq 'disposed' -and $containment.targetHandleHeld) {
+                    try {
+                        $containment.targetExitedAfterStop = $payload.HasExited
+                        if ($containment.targetExitedAfterStop) { $containment.targetExitCode = $payload.ExitCode }
+                    } catch { $containment.targetObservationError = Get-FailureDetails $_ }
+                }
                 if ($stopped -and $null -ne $reads) {
                     while (-not ($reads[0].IsCompleted -and $reads[1].IsCompleted)) {
-                        if ($caseWatch.ElapsedMilliseconds -ge 60000 -or $watch.ElapsedMilliseconds -ge 360000) {
+                        if ($caseWatch.ElapsedMilliseconds -ge 30000 -or $watch.ElapsedMilliseconds -ge 180000) {
                             throw 'Fixture output completion unestablished'
                         }
                         Start-Sleep -Milliseconds 25
@@ -336,7 +398,10 @@ try {
                     $containment.stderrEof = $reads[1].GetAwaiter().GetResult() -eq 0
                 }
                 Save-Json "$directory\containment.json" $containment
-            } finally { $outer.Dispose() }
+            } finally {
+                try { if ($null -ne $payload) { $payload.Dispose() } }
+                finally { $outer.Dispose() }
+            }
         }
         if (-not $stopped -or -not $completed -or $containment.exitCode -ne 0 -or
             -not $containment.stdoutEof -or -not $containment.stderrEof) { throw 'Fixture containment or host failed' }
@@ -344,19 +409,34 @@ try {
         if ($caseResult.passed -ne $true -or $caseResult.case -cne $selected) { throw 'Fixture assertion failed' }
         $expectedTotal = 1
         if ($selected -cin @('live', 'disposed', 'callback')) { $expectedTotal = 2 }
-        if ($containment.total -ne $expectedTotal) { throw 'Unexpected fixture process count' }
-        if ($selected -eq 'disposed' -and ($containment.activeBeforeStop -ne 1 -or
+        if ($containment.total -lt $expectedTotal -or $containment.total -gt 8) { throw 'Fixture Job total outside its bound' }
+        if ($selected -eq 'disposed' -and ($containment.activeBeforeStop -lt 1 -or
+            $containment.activeBeforeStop -gt 8 -or $containment.activeAfterStop -ne 0 -or
+            -not $containment.targetHandleHeld -or -not $containment.targetAliveBeforeStop -or
+            -not $containment.targetExitedAfterStop -or $containment.targetExitCode -ne 1 -or
+            $null -ne $containment.targetObservationError -or
             -not $containment.terminationRequested -or -not $containment.terminationSucceeded)) {
             throw 'Post-disposal outer termination was not observed'
         }
+        if ($caseWatch.ElapsedMilliseconds -ge 30000) { throw 'Guard case completion deadline' }
         $result.cases += $containment
     }
+    Assert-Time 180000
+    if ((Get-Hash (Read-Bytes "$root\WindowsLauncherFailureFixtures.ps1" 65536)) -cne
+        $authority.failureDriverSha256) { throw 'Changed launcher failure driver' }
+    . "$root\WindowsLauncherFailureFixtures.ps1"
+    $result.launcherFailureCases = @(Invoke-LauncherFailureCases)
+    if ($result.launcherFailureCases.Count -ne 4) { throw 'Incomplete launcher failure batch' }
     Assert-Time 300000
     $result.quiescent = $true
     $result.passed = $true
-} catch { $result.failureType = $_.Exception.GetType().FullName }
+} catch {
+    $result.failureType = $_.Exception.GetType().FullName
+    $result.failureDetails = Get-FailureDetails $_
+}
 finally { Save-Json "$root\windows-result.json" $result }
-# The 300-second gate covers assertions; the original completion reserve includes persistence.
-Assert-Time 360000
+# Six guard slots use at most 180 seconds; four negative slots use at most 100.
+# The original 300-second controller clock also bounds setup and persistence.
+Assert-Time 310000
 if (-not $result.passed) { exit 1 }
 exit 0
