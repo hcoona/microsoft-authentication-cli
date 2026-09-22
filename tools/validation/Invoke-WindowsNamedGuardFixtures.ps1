@@ -9,7 +9,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
 if ($env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Fixture startup cache control is absent' }
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0068'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0071'
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $script:writtenBytes = 0
 $script:readBytes = 0
@@ -91,12 +91,12 @@ if ((Get-Hash $authorityBytes) -cne $AuthoritySha256) { throw 'Fixture authority
 $authorityText = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes)
 $authority = $authorityText | ConvertFrom-Json
 if ($authorityText -cne (($authority | ConvertTo-Json -Depth 20 -Compress) + "`n") -or
-    $authority.schema -cne 'named-guard-fixtures-0068-v1' -or
-    $authority.accepted -ne $true -or $authority.action -cne '0068' -or
-    $authority.countsBefore.preparation -ne 17 -or $authority.countsBefore.buildTest -ne 95 -or
-    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 61 -or
+    $authority.schema -cne 'named-guard-fixtures-0071-v1' -or
+    $authority.accepted -ne $true -or $authority.action -cne '0071' -or
+    $authority.countsBefore.preparation -ne 19 -or $authority.countsBefore.buildTest -ne 96 -or
+    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 70 -or
     $authority.failedFixtureDispositionSha256 -cne '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf' -or
-    $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 9) {
+    $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 10) {
     throw 'Unaccepted fixture allocation'
 }
 if ((Get-Hash (Read-Bytes $PSCommandPath 65536)) -cne $authority.controllerSha256) {
@@ -109,7 +109,7 @@ if ((Get-Hash (Read-Bytes $shell 1048576)) -cne
 $sequence = @('collision', 'live', 'disposed', 'callback', 'missing', 'session')
 if (@($authority.cases.PSObject.Properties.Name).Count -ne 6) { throw 'Fixture case allocation' }
 foreach ($selected in $sequence) {
-    if ($authority.cases.$selected -cnotmatch '^Local\\azureauth-final-publish-108-0068-[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
+    if ($authority.cases.$selected -cnotmatch '^Local\\azureauth-final-publish-108-0071-[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
         throw 'Unbound fixture Job name'
     }
 }
@@ -269,10 +269,15 @@ if ($Mode -eq 'Case') {
 $result = [ordered]@{ schema = 'named-guard-fixtures-result-v1'; passed = $false; quiescent = $false
     authoritySha256 = $AuthoritySha256; failureType = $null; cases = @() }
 try {
-    Save-Json "$root\windows-started.json" @{
-        schema = 'named-guard-fixtures-started-v1'; authoritySha256 = $AuthoritySha256
-        buildTestCharge = 1; syntheticCharge = 9; controllerPid = $PID
-    }
+    $controller = [Diagnostics.Process]::GetCurrentProcess()
+    try {
+        Save-Json "$root\windows-started.json" @{
+            schema = 'named-guard-fixtures-started-v1'; authoritySha256 = $AuthoritySha256
+            buildTestCharge = 1; syntheticCharge = 10; controllerPid = $PID
+            controllerCreationFileTime = $controller.StartTime.ToUniversalTime().ToFileTimeUtc().ToString()
+            controllerSession = $controller.SessionId
+        }
+    } finally { $controller.Dispose() }
     foreach ($selected in $sequence) {
         Assert-Time 240000
         $directory = "$root\$selected"
