@@ -28,8 +28,8 @@ import subprocess
 import time
 import uuid
 
-AUTHORITY = Path('/tmp/windows-final-publish0064-execution-authority.json')
-EVIDENCE = Path('/tmp/windows-final-publish0064-authority-inputs')
+AUTHORITY = Path('/tmp/windows-final-publish0093-execution-authority.json')
+EVIDENCE = Path('/tmp/windows-final-publish0093-authority-inputs')
 PACKAGE = Path(__file__).absolute().parent.parent
 REPOSITORY = Path('/home/shuaizhang/s/github.com/hcoona/microsoft-authentication-cli')
 LINUX = Path('/var/tmp/azureauth-windows-slice-108')
@@ -196,12 +196,16 @@ COMPONENTS = {
     'contracts': 'final_publish_contracts.py',
     'controller': 'Invoke-WindowsFinalPublish.draft.ps1',
     'bootstrap': 'Start-WindowsFinalPublish.draft.ps1',
+    'nativeLauncher': 'WindowsScriptJobLauncher.cs',
 }
 INPUTS = ('sourceReview', 'handoff', 'handoffAcceptance', 'graph', 'graphAcceptance',
           'guardAcceptance', 'callerAuthorization', 'executionReview', 'publication')
-LIMITS = {'preparation': 16, 'buildTest': 120, 'publish': 12, 'synthetic': 80,
-          'outerMilliseconds': 1800000, 'actionMilliseconds': 600000,
-          'drainMilliseconds': 2000, 'observationToleranceMilliseconds': 100,
+LIMITS = {'preparation': 28, 'buildTest': 130, 'publish': 30, 'synthetic': 180,
+          'outerMilliseconds': 2400000, 'actionMilliseconds': 1800000,
+          'controllerMilliseconds': 1900000, 'prelaunchMilliseconds': 1810000,
+          'nativeWorkMilliseconds': 2000000, 'nativeTotalMilliseconds': 2010000,
+          'nativeSpawnReserveMilliseconds': 2030000, 'finalizationMilliseconds': 10000,
+          'drainMilliseconds': 600000, 'observationToleranceMilliseconds': 0,
           'captureBytes': 8388608, 'activeProcesses': 32,
           'emergencyMillisecondsWithinOuter': 10000, 'retries': 0}
 ROOT_MARKER = {'grant': 'a0f741b59e09f1eb95594dbfde7a6e634d962210',
@@ -312,18 +316,37 @@ def bound(pin, path, deadline, cancelled, limit=8388608):
     return data
 
 
-def write_new(path, data):
+def write_new(path, data, mode=0o600, *, deadline=None):
+    def checkpoint():
+        if deadline is not None:
+            budget(deadline, lambda: False)
+    checkpoint()
     path = direct(path)
-    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
-    with os.fdopen(fd, 'wb') as stream:
-        stream.write(data)
-        stream.flush()
-        os.fsync(stream.fileno())
-    fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+    checkpoint()
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, mode)
     try:
+        offset = 0
+        while offset < len(data):
+            checkpoint()
+            count = os.write(fd, data[offset:offset + 65536])
+            checkpoint()
+            if count <= 0:
+                raise OSError('Original output made no progress')
+            offset += count
+        checkpoint()
         os.fsync(fd)
+        checkpoint()
     finally:
         os.close(fd)
+    checkpoint()
+    fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        checkpoint()
+        os.fsync(fd)
+        checkpoint()
+    finally:
+        os.close(fd)
+    checkpoint()
 
 
 def relative(value):
@@ -440,11 +463,11 @@ def public_read(argv, deadline, cancelled, output_limit=8388608):
 # This inactive compiler-only replacement is covered by the history source pin.
 # Its one-use root also preserves failed starts before paired action reservation.
 COMPILER_VERIFIER_ROOT = Path('/var/tmp/azureauth-compiler-verifiers-108-0062')
-FINAL_VERIFIER_ROOT = Path('/var/tmp/azureauth-final-publish-verifiers-108-post0063-v1')
+FINAL_VERIFIER_ROOT = Path('/var/tmp/azureauth-final-publish-verifiers-108-0093-v1')
 FINAL_SOURCE_FILES = 34
-# Four revision, six protocol/Wave blob, three ancestry, eight component,
+# Four revision, six protocol/Wave blob, three ancestry, ten component,
 # six review, two current-target, one inventory and two queries per source file.
-FINAL_VERIFIER_MAXIMUM_CALLS = 30 + 2 * FINAL_SOURCE_FILES
+FINAL_VERIFIER_MAXIMUM_CALLS = 32 + 2 * FINAL_SOURCE_FILES
 _COMPILER_VERIFIER_CALLS = 0
 _COMPILER_VERIFIER_FAILED = False
 COMPILER_VERIFIER_TOOLS = {
@@ -542,14 +565,14 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         result_schema = 'compiler-verifier-result-v2'
     elif not DRAFT_ONLY and not CORE_CSC_HISTORY_ONLY and not COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
         root = FINAL_VERIFIER_ROOT
-        prefix = 'azureauth-final-publish-post0063-'
+        prefix = 'azureauth-final-publish-0093-'
         maximum = FINAL_VERIFIER_MAXIMUM_CALLS
         start_record = {
-            'schema': 'final-publish-post0063-verifiers-start-v1', 'maximumCalls': maximum,
-            'priorCombinedBuildTest': 94, 'priorSynthetic': 52,
-            'priorPublication': 1,
+            'schema': 'final-publish-0093-verifiers-start-v1', 'maximumCalls': maximum,
+            'priorCombinedBuildTest': 103, 'priorSynthetic': 147,
+            'priorPreparation': 20, 'priorPublication': 2,
             'preparationCharge': 0, 'buildTestCharge': 0, 'publishCharge': 1,
-            'syntheticCharge': 0, 'sameAttemptAsPairedReservation': True}
+            'syntheticCharge': 1, 'sameAttemptAsPairedReservation': True}
         result_schema = 'final-publish-verifier-result-v1'
     else:
         fail('Verifier mode is not admitted')
@@ -571,7 +594,7 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         finally:
             os.close(fd)
         write_new(root / 'started.json', compact(dict(
-            start_record, startedMonotonicNs=time.monotonic_ns())))
+            start_record, startedMonotonicNs=time.monotonic_ns())), deadline=(None if DRAFT_ONLY else end))
         for path, (size, expected) in COMPILER_VERIFIER_TOOLS.items():
             budget(end, cancelled)
             # Installed OS symlinks are permitted; exact resolved file bytes bind
@@ -628,7 +651,7 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         'startedMonotonicNs': time.monotonic_ns(), 'deadlineMonotonicNs': int(end * 1_000_000_000),
         'runtimeMilliseconds': runtime_ms, 'jobRunningMilliseconds': 2000,
         'queueTimeoutConfigured': False,
-        'startMilliseconds': 2000, 'stopMilliseconds': 2000}))
+        'startMilliseconds': 2000, 'stopMilliseconds': 2000}), deadline=(None if DRAFT_ONLY else end))
     process = None
     selector = selectors.DefaultSelector()
     identity = None
@@ -736,7 +759,7 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
             'stderrPrefixBase64': base64.b64encode(stderr_prefix).decode('ascii'),
             'stderrComplete': 'stderr' in eof and stderr_observed == len(stderr_prefix),
             'groupEmpty': group_empty, 'completed': completed, 'failure': failure,
-            'elapsedMilliseconds': int((time.monotonic() - began) * 1000)}))
+            'elapsedMilliseconds': int((time.monotonic() - began) * 1000)}), deadline=(None if DRAFT_ONLY else end))
     budget(end, cancelled)
     if failure is not None:
         fail('Verifier failed; no subsequent helper or caller continuation')
@@ -1735,6 +1758,183 @@ def hash_protected(item, deadline, cancelled):
     budget(deadline, cancelled)
 
 
+# Current publication consumes accepted checkpoints, never historical runtime leaves.
+PUBLICATION_GUARD_FIELDS = ('actionNumber', 'sourceSha256', 'dllBytes', 'dllSha256',
+                            'artifactAcceptanceSha256', 'expectedAssemblyFullName')
+PUBLICATION_LAUNCHER_FIELDS = ('preparationAction', 'sourceSha256', 'exeBytes', 'exeSha256',
+                              'artifactAcceptanceSha256', 'mode')
+PUBLICATION_COUNTERS = ('preparation', 'buildTest', 'publication', 'synthetic')
+PUBLICATION_BASE = {
+    'path': '/tmp/windows-negatives0080-outcome-accounting-acceptance-budget-v1.json',
+    'bytes': 9373,
+    'sha256': 'ee9e2ca7b5635add3a231930acc8ef2c3d2851056d3f8689b239ce038c1de791',
+}
+PUBLICATION_GUARD_ACCEPTANCE = {
+    'path': '/tmp/windows-named-guard0066-actual-managed-artifact-acceptance-lifetime-v1.json',
+    'bytes': 22595,
+    'sha256': '09240c6a14e37707be0ef772881c9fc8726d0b1b8bdf0d3de3b6850c2dcd809f',
+}
+
+
+def publication_descriptor_read(pin, deadline, cancelled):
+    path = provenance_descriptor(pin, maximum=1048576)
+    raw = bound({k: pin[k] for k in ('bytes', 'sha256')}, path, deadline, cancelled)
+    return {'pin': pin, 'raw': raw, 'value': decode(raw)}
+
+
+def verify_publication_artifacts(envelope, evidence, deadline, cancelled):
+    guard = envelope['acceptedGuard']
+    keys(guard, PUBLICATION_GUARD_FIELDS)
+    expected = {
+        'actionNumber': '0066',
+        'sourceSha256': '45c0d829712bac66ece76676939310d04f59af9a83709f1b1e80b8bf1f4a8501',
+        'dllBytes': 24576,
+        'dllSha256': 'a18302e4658afc08b564be23c9b52995fba85c1a3345fba19662008efe30ae58',
+        'artifactAcceptanceSha256': PUBLICATION_GUARD_ACCEPTANCE['sha256'],
+        'expectedAssemblyFullName': 'WindowsFinalPublishGuard, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null',
+    }
+    if compact(guard) != compact(expected):
+        fail('Original 0066 named guard projection changed')
+    launcher = envelope['acceptedLauncher']
+    keys(launcher, PUBLICATION_LAUNCHER_FIELDS)
+    if (launcher['preparationAction'] != '0085' or launcher['mode'] != '--publication' or
+            launcher['sourceSha256'] != envelope['components']['nativeLauncher']['sha256']):
+        fail('Current publication launcher mode or compiled source changed')
+    integer(launcher['exeBytes'], 1, 1048576)
+    digest(launcher['exeSha256'])
+    digest(launcher['artifactAcceptanceSha256'])
+    budget(deadline, cancelled)
+
+
+def load_publication_provenance(envelope, evidence, deadline, cancelled):
+    caller = evidence['callerAuthorization']
+    joins = (*CALLER_AUTHORIZATION_JOINS, 'acceptedLauncher')
+    keys(caller, ('schema', 'accepted', 'scope', *joins, 'originalGuardEvidence',
+                  'originalLauncherEvidence', 'callerPolicy', 'noExecutionGrant'))
+    if (caller['schema'] != 'final-publish-caller-authorization-v2' or caller['accepted'] is not True or
+            caller['scope'] != 'one-supervised-final-publication' or
+            caller['callerPolicy'] != 'fixed-final-only-callers-no-generic-helper-use' or
+            caller['noExecutionGrant'] is not True):
+        fail('Current caller authorization is absent or out of scope')
+    if any(compact(caller[key]) != compact(envelope[key]) for key in joins):
+        fail('Current caller source, recipe or artifact join changed')
+    for name in ('originalGuardEvidence', 'originalLauncherEvidence'):
+        keys(caller[name], ('artifactAcceptance',))
+    guard_pin = caller['originalGuardEvidence']['artifactAcceptance']
+    if guard_pin != PUBLICATION_GUARD_ACCEPTANCE:
+        fail('Current caller must retain the exact original 0066 acceptance')
+    guard = publication_descriptor_read(guard_pin, deadline, cancelled)
+    g = guard['value']
+    if (g['schema'] != 'named-guard0066-actual-managed-artifact-acceptance-v1' or
+            any(g['decision'].get(key) is not True for key in
+                ('artifactAccepted', 'compiledSourceCorrespondenceAccepted', 'staticPeIlAccepted')) or
+            g['references']['guardSource']['sha256'] != envelope['acceptedGuard']['sourceSha256'] or
+            g['artifact']['bytes'] != envelope['acceptedGuard']['dllBytes'] or
+            g['artifact']['sha256'] != envelope['acceptedGuard']['dllSha256']):
+        fail('Original 0066 artifact acceptance does not establish this guard')
+    launcher_pin = caller['originalLauncherEvidence']['artifactAcceptance']
+    if launcher_pin['sha256'] != envelope['acceptedLauncher']['artifactAcceptanceSha256']:
+        fail('Native artifact review changed')
+    launcher = publication_descriptor_read(launcher_pin, deadline, cancelled)
+    l = launcher['value']
+    # This future actual-artifact review is produced only after the separately
+    # admitted compilation and must cover the exact nonterminating mode.
+    if (l.get('schema') != 'publication-launcher-managed-artifact-acceptance-v1' or
+            l.get('accepted') is not True or l.get('preparationAction') != '0085' or
+            l.get('sourceSha256') != envelope['acceptedLauncher']['sourceSha256'] or
+            l.get('publicationMode') != '--publication' or
+            l.get('noTerminationAfterResumeAttemptAccepted') is not True or
+            l.get('artifact', {}).get('bytes') != envelope['acceptedLauncher']['exeBytes'] or
+            l.get('artifact', {}).get('sha256') != envelope['acceptedLauncher']['exeSha256']):
+        fail('Exact native publication artifact remains unaccepted')
+    artifacts = {}
+    for role, value in (('guardArtifact', g), ('launcherArtifact', l)):
+        pin = {key: value['artifact'][key] for key in ('path', 'bytes', 'sha256')}
+        path = provenance_descriptor(pin, maximum=1048576)
+        raw = bound({key: pin[key] for key in ('bytes', 'sha256')}, path, deadline, cancelled)
+        artifacts[role] = {'pin': pin, 'raw': raw}
+    return {'guardAcceptance': guard, 'launcherAcceptance': launcher, **artifacts}
+
+
+def refresh_publication_provenance(admission, deadline, cancelled):
+    # Exactly four retained inputs, no recursive evidence traversal or old runtime reads.
+    for role in ('guardAcceptance', 'launcherAcceptance', 'guardArtifact', 'launcherArtifact'):
+        retained = admission['callerProvenance'][role]
+        pin = retained['pin']
+        raw = bound({key: pin[key] for key in ('bytes', 'sha256')},
+                    Path(pin['path']), deadline, cancelled)
+        if raw != retained['raw']:
+            fail('Current publication provenance changed before reservation')
+
+
+def refresh_publication_checkpoint(admission, deadline, cancelled, binding=None):
+    manifest = admission['evidence']['handoff']
+    keys(manifest, ('schema', 'baseAcceptance', 'baseCounters', 'stages', 'currentCounters',
+                    'ceilings', 'knownEndpoints', 'nextAction', 'historyParents'))
+    if (manifest['schema'] != 'final-publish-current-checkpoint-v1' or
+            manifest['baseAcceptance'] != PUBLICATION_BASE or manifest['nextAction'] != '0093'):
+        fail('Current publication checkpoint identity changed')
+    expected_review = {'schema': 'final-publish-handoff-acceptance-v2', 'accepted': True,
+                       'handoff': admission['envelope']['handoff'], 'originalDispositionsPreserved': True,
+                       'noHistoryReplay': True, 'noExecutionGrant': True}
+    if admission['evidence']['handoffAcceptance'] != expected_review:
+        fail('Current checkpoint independent acceptance is absent')
+    state = admission.setdefault('currentCheckpoint', {'passes': 0})
+    if state['passes'] != (0 if binding is None else 1):
+        fail('Current checkpoint repeated or reordered')
+    state['passes'] += 1
+    base = publication_descriptor_read(PUBLICATION_BASE, deadline, cancelled)['value']
+    if (base['accounting']['order'] != list(PUBLICATION_COUNTERS) or
+            base['accounting']['after'] != [19, 102, 2, 130] or
+            base['accounting']['ceilings'] != [28, 130, 30, 180] or
+            base.get('allOriginalCallsSpent') is not True):
+        fail('Original 0080 accounting checkpoint changed')
+    counters = dict(zip(PUBLICATION_COUNTERS, (19, 102, 2, 130), strict=True))
+    ceilings = dict(zip(PUBLICATION_COUNTERS, (28, 130, 30, 180), strict=True))
+    if manifest['baseCounters'] != counters or manifest['ceilings'] != ceilings:
+        fail('Current counters or ceilings were reset')
+    if type(manifest['stages']) is not list or len(manifest['stages']) != 2:
+        fail('Publication requires exactly the new compilation and six-case acceptance')
+    for stage, action, values in zip(manifest['stages'], ('0085', '0086'),
+                                     ((1, 0, 0, 0), (0, 1, 0, 17)), strict=True):
+        keys(stage, ('action', 'acceptance', 'charge', 'countersAfter'))
+        charge = dict(zip(PUBLICATION_COUNTERS, values, strict=True))
+        if stage['action'] != action or compact(stage['charge']) != compact(charge):
+            fail('Future preparation or validation charge changed')
+        receipt = publication_descriptor_read(stage['acceptance'], deadline, cancelled)['value']
+        after = {key: counters[key] + charge[key] for key in PUBLICATION_COUNTERS}
+        if (receipt.get('accounting') != {'action': action, 'before': counters, 'charge': charge, 'after': after} or
+                receipt.get('accepted') is not True or stage['countersAfter'] != after):
+            fail('Future stage lacks exact accepted accounting')
+        counters = after
+    if manifest['currentCounters'] != counters:
+        fail('Current checkpoint arithmetic changed')
+    prospective = dict(counters, publication=counters['publication'] + 1, synthetic=counters['synthetic'] + 1)
+    if any(prospective[key] > ceilings[key] for key in PUBLICATION_COUNTERS) or ceilings['synthetic'] - prospective['synthetic'] < 12:
+        fail('Publication exceeds ceilings or consumes protected CLI capacity')
+    endpoints = manifest['knownEndpoints']
+    if type(endpoints) is not list or len(endpoints) > 512 or endpoints != sorted(set(endpoints)):
+        fail('Accepted endpoint projection is incomplete or duplicated')
+    for endpoint in endpoints:
+        string(endpoint, '[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}')
+    parents = {'linuxActions': LINUX / 'actions', 'windowsActions': HISTORY,
+               'windowsProjectionActions': PROJECTION / 'actions', 'windowsProjectionRoot': PROJECTION}
+    keys(manifest['historyParents'], parents)
+    for role, path in parents.items():
+        expected = manifest['historyParents'][role]
+        if type(expected) is not list or expected != sorted(set(expected)) or len(expected) > 128:
+            fail('Invalid accepted parent membership')
+        if binding is not None and role in ('windowsActions', 'windowsProjectionActions'):
+            expected = sorted([*expected, manifest['nextAction']])
+        if core_csc_names(path, 128, deadline, cancelled) != expected:
+            fail('Parent membership changed; require a fresh accounting checkpoint')
+    if binding is not None:
+        for path in (binding['local'] / 'started.json', binding['owned'] / 'started.json'):
+            if sha(read(path, deadline, cancelled, 16384)) != binding['reservationSha256']:
+                fail('Original publication debit changed')
+    return counters, manifest
+
+
 def load_admission(deadline, cancelled, *, reviewed_authority):
     budget(deadline, cancelled)
     if DRAFT_ONLY:
@@ -1744,8 +1944,8 @@ def load_admission(deadline, cancelled, *, reviewed_authority):
     raw = bound(reviewed_authority, AUTHORITY, deadline, cancelled)
     envelope = decode(raw, canonical=True)
     keys(envelope, ('schema', 'repository', 'target', 'protocol', 'wave', 'product', 'integration',
-                    'components', 'recipe', 'acceptedGuard', 'rootMarkers', 'limits', *INPUTS))
-    if (envelope['schema'] != 'final-publish-external-authority-v2' or envelope['repository'] != FORK or
+                    'components', 'recipe', 'acceptedGuard', 'acceptedLauncher', 'rootMarkers', 'limits', *INPUTS))
+    if (envelope['schema'] != 'final-publish-external-authority-v3' or envelope['repository'] != FORK or
             envelope['product'] != PRODUCT or envelope['limits'] != LIMITS):
         fail('Authority scope or selected product changed')
     for role in ('target', 'product', 'integration'):
@@ -1772,15 +1972,11 @@ def load_admission(deadline, cancelled, *, reviewed_authority):
     if sha(recipe_raw) != RECIPE_SHA256:
         fail('The exact v4 invocation/environment/tool recipe changed')
     recipe = decode(recipe_raw, canonical=True)
-    for role in ('handoff', 'handoffAcceptance'):
-        fixed = COMPILER_NATIVE_INPUTS_INPUTS[role]
-        if envelope[role] != {key: fixed[key] for key in ('bytes', 'sha256')}:
-            fail('Final publication requires the exact accepted post-0056 handoff')
     evidence_raw = {role: bound(envelope[role], EVIDENCE / (role + '.json'), deadline, cancelled,
                                CALLER_PROVENANCE_LIMIT if role == 'callerAuthorization' else 8388608)
                     for role in INPUTS}
-    # Only the exact accepted handoff retains its original indented JSON bytes.
-    evidence = {role: decode(value, canonical=role != 'handoff')
+    # Current wrappers use canonical JSON; original sealed evidence keeps its bytes.
+    evidence = {role: decode(value, canonical=True)
                 for role, value in evidence_raw.items()}
     common = {k: envelope[k] for k in ('product', 'integration', 'protocol', 'components', 'recipe')}
     if evidence['sourceReview'] != {'schema': 'final-publish-source-acceptance-v1', 'accepted': True,
@@ -1792,10 +1988,10 @@ def load_admission(deadline, cancelled, *, reviewed_authority):
                                       'completeInputClosure': True, 'completeResponseClosure': True,
                                       'orderedProducerConsumerPlanAccepted': True}:
         fail('Independent complete graph/response acceptance missing')
-    verify_guard(envelope['acceptedGuard'])
+    verify_publication_artifacts(envelope, evidence, deadline, cancelled)
     guard_review = evidence['guardAcceptance']
-    if guard_review != {'schema': 'final-publish-guard-acceptance-v1', 'accepted': True,
-                        'acceptedGuard': envelope['acceptedGuard'], 'originalPairedCompletionAccepted': True,
+    if guard_review != {'schema': 'final-publish-guard-acceptance-v2', 'accepted': True,
+                        'acceptedGuard': envelope['acceptedGuard'], 'original0066ProvenanceAccepted': True,
                         'managedGuardArtifactAccepted': True, 'finalNoKillModeAccepted': True}:
         fail('Independent actual guard acceptance missing')
     review_subject = {key: value for key, value in envelope.items() if key not in ('executionReview', 'publication', 'schema')}
@@ -1810,7 +2006,7 @@ def load_admission(deadline, cancelled, *, reviewed_authority):
         fail('Publication binding schema changed')
     for role in review_roles:
         verify_public_review(publication[role], evidence_raw[role], deadline, cancelled)
-    caller_provenance = load_caller_provenance(envelope, evidence, evidence_raw, deadline, cancelled)
+    caller_provenance = load_publication_provenance(envelope, evidence, deadline, cancelled)
     keys(envelope['rootMarkers'], ('linuxOwnerSha256', 'windowsOwnerSha256'))
     for path, key in ((LINUX / 'owner.json', 'linuxOwnerSha256'), (PROJECTION / 'owner.json', 'windowsOwnerSha256')):
         data = read(path, deadline, cancelled, 4096)
@@ -2835,7 +3031,7 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
         if not stat.S_ISREG(os.fstat(fd).st_mode):
             fail('Original shared lock is not a regular file')
         fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        totals, manifest = refresh_history(admission, deadline, cancelled)
+        totals, manifest = refresh_publication_checkpoint(admission, deadline, cancelled)
         graph = admission['evidence']['graph']
         source_paths = git(['ls-tree', '-r', '--name-only', PRODUCT['commit'], '--', 'src', 'global.json'],
                            deadline, cancelled).decode('ascii').splitlines()
@@ -2855,30 +3051,29 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
                 fail('Unexpected ambient source/import input')
         assert_target_current(admission['envelope'], deadline, cancelled)
         budget(deadline, cancelled)
-        number = final_action_number()
+        number = manifest['nextAction']
         local = direct(HISTORY / number)
         owned = direct(PROJECTION / 'actions' / number)
         if local.exists() or owned.exists():
             fail('Final publication reservation already exists')
-        refresh_caller_provenance(admission, deadline, cancelled)
+        refresh_publication_provenance(admission, deadline, cancelled)
         # One UUIDv4 call, only here under the original shared lock. A collision
         # rejects this reservation; it does not generate a replacement nonce.
         endpoint = uuid.uuid4().hex
         string(endpoint, '[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}')
-        if (endpoint == '0' * 32 or endpoint in manifest['knownEndpoints'] or
-                endpoint in admission['finalSuccessors']['endpoints']):
+        if (endpoint == '0' * 32 or endpoint in manifest['knownEndpoints']):
             fail('Endpoint collision; no retry')
         envelope = admission['envelope']
-        start = {'schema': 'final-publish-reservation-v1', 'action': 'final-publish', 'number': number,
+        start = {'schema': 'final-publish-reservation-v2', 'action': 'final-publish', 'number': number,
                  'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
                  'source': PRODUCT['commit'], 'sourceTree': PRODUCT['tree'],
                  'protocol': envelope['protocol']['commit'], 'waveBlob': envelope['wave']['gitBlob'],
                  'authoritySha256': sha(admission['authorityBytes']), 'handoffSha256': envelope['handoff']['sha256'],
                  'guardAcceptanceSha256': envelope['guardAcceptance']['sha256'], 'priorCounters': totals,
-                 'preparationCharge': 0, 'buildTestCharge': 0, 'publishCharge': 1, 'reservedProcessScenarios': 0,
+                 'preparationCharge': 0, 'buildTestCharge': 0, 'publishCharge': 1, 'reservedProcessScenarios': 1,
                  'endpoint': endpoint, 'originalOuterLimitMilliseconds': LIMITS['outerMilliseconds']}
         local.mkdir(mode=0o700)
-        write_new(local / 'started.json', compact(start))
+        write_new(local / 'started.json', compact(start), deadline=deadline)
         # From this point any failure retains the original charge. Never remove,
         # rewrite or refund the start record; an incomplete pair blocks all work.
         binding = {'local': local, 'owned': owned, 'outerResultPath': local / 'result.json',
@@ -2886,14 +3081,14 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
                    'admission': admission, 'start': start, 'deadline': deadline, 'began': began}
         try:
             owned.mkdir()
-            write_new(owned / 'started.json', compact(start))
-            write_new(local / 'windows-input.json', compact({'sha256': sha(compact(start))}))
+            write_new(owned / 'started.json', compact(start), deadline=deadline)
+            write_new(local / 'windows-input.json', compact({'sha256': sha(compact(start))}), deadline=deadline)
             for name in ('home', 'home/.dotnet', 'home/msbuild-user',
                          'home/roaming', 'home/local', 'home/http', 'home/plugins',
                          'temp', 'empty-program-files', 'controller', 'publish'):
                 budget(deadline, cancelled)
                 direct(owned / name).mkdir()
-            write_new(owned / FINAL_FIRST_USE_SENTINEL, b'')
+            write_new(owned / FINAL_FIRST_USE_SENTINEL, b'', deadline=deadline)
             slots = {'ACTION_ROOT': WINDOWS + '\\actions\\' + number,
                      'SOURCE_ROOT': graph['sourceRoot'], 'PACKAGE_ROOT': graph['packageRoot'], 'ENDPOINT': endpoint}
             recipe = admission['recipe']
@@ -2906,7 +3101,7 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
             native = subprocess.list2cmdline(arguments)
             native_command = '"' + recipe['invocation']['executable'] + '" ' + native
             envblock = ('\0'.join(k + '=' + environment[k] for k in sorted(environment, key=str.upper)) + '\0\0').encode('utf-16le')
-            invocation = {'schema': 'final-publish-invocation-v1', 'action': number,
+            invocation = {'schema': 'final-publish-invocation-v2', 'action': number,
                           'reservationSha256': binding['reservationSha256'], 'authoritySha256': sha(admission['authorityBytes']),
                           'actionPath': slots['ACTION_ROOT'], 'workingDirectory': graph['sourceRoot'],
                           'executable': recipe['invocation']['executable'], 'argumentVector': arguments,
@@ -2915,19 +3110,32 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
                           'nativeCommandLineSha256': sha(native_command.encode('utf-16le')),
                           'environment': environment, 'environmentBlockSha256': sha(envblock),
                           'endpoint': endpoint, 'acceptedGuard': envelope['acceptedGuard'],
+                          'acceptedLauncher': envelope['acceptedLauncher'],
                           'graphSha256': envelope['graph']['sha256'], 'limits': LIMITS}
             for role in ('controller', 'bootstrap'):
-                write_new(owned / 'controller' / COMPONENTS[role], admission['components'][role])
-            write_new(owned / 'authority.json', admission['authorityBytes'])
-            write_new(owned / 'caller-authorization.json', admission['evidenceBytes']['callerAuthorization'])
-            write_new(owned / 'graph.json', admission['evidenceBytes']['graph'])
-            write_new(owned / 'recipe.json', compact(recipe))
-            write_new(owned / 'invocation.json', compact(invocation))
+                write_new(owned / 'controller' / COMPONENTS[role], admission['components'][role], deadline=deadline)
+            write_new(owned / 'authority.json', admission['authorityBytes'], deadline=deadline)
+            write_new(owned / 'caller-authorization.json', admission['evidenceBytes']['callerAuthorization'], deadline=deadline)
+            write_new(owned / 'graph.json', admission['evidenceBytes']['graph'], deadline=deadline)
+            write_new(owned / 'recipe.json', compact(recipe), deadline=deadline)
+            write_new(owned / 'invocation.json', compact(invocation), deadline=deadline)
             binding.update(invocation=invocation, invocationSha256=sha(compact(invocation)), slots=slots)
-            binding['exactControllerCommand'] = [POWERSHELL, '-NoLogo', '-NoProfile', '-NonInteractive', '-File',
-                slots['ACTION_ROOT'] + '\\controller\\' + COMPONENTS['bootstrap'], '-ActionName', number,
-                '-ReservationSha256', binding['reservationSha256'], '-InvocationSha256', binding['invocationSha256'],
-                '-AuthoritySha256', sha(admission['authorityBytes'])]
+            provenance = admission['callerProvenance']
+            for role, leaf in (('guardArtifact', 'WindowsFinalPublishGuard.dll'),
+                               ('launcherArtifact', 'WindowsScriptJobLauncher.exe'),
+                               ('guardAcceptance', 'guard-artifact-acceptance.json'),
+                               ('launcherAcceptance', 'launcher-artifact-acceptance.json')):
+                write_new(owned / 'controller' / leaf, provenance[role]['raw'],
+                          0o500 if role == 'launcherArtifact' else 0o400, deadline=deadline)
+            launcher_path = owned / 'controller' / 'WindowsScriptJobLauncher.exe'
+            launcher_info = direct(launcher_path).lstat()
+            if not stat.S_ISREG(launcher_info.st_mode) or not launcher_info.st_mode & stat.S_IXUSR:
+                fail('Copied native launcher is not executable; no repair is admitted')
+            # Invocation bytes are sealed before constructing argv: no self-hash cycle.
+            binding['exactControllerCommand'] = [str(launcher_path), '--publication',
+                slots['ACTION_ROOT'], endpoint, sha(admission['authorityBytes']),
+                envelope['components']['bootstrap']['sha256'], binding['reservationSha256'],
+                binding['invocationSha256']]
             for template in graph['generatedPaths']:
                 path = projection(resolve(template, slots))
                 if path.exists() or path.is_symlink():
@@ -2937,11 +3145,12 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
             budget(deadline, cancelled)
             yield binding
         except BaseException as error:
+            budget(deadline, lambda: False)
             if not (local / 'result.json').exists():
                 write_new(local / 'result.json', compact({'schema': 'final-publish-reservation-failure-v1',
                     'reservationSha256': binding['reservationSha256'], 'failureType': type(error).__name__,
                     'normalCompletion': False, 'safetyStop': True, 'artifactEligible': False,
-                    'continuation_allowed': False, 'retainedLiveWorkOrUnknown': True}))
+                    'continuation_allowed': False, 'retainedLiveWorkOrUnknown': True}), deadline=deadline)
             raise
     finally:
         os.close(fd)
@@ -2969,15 +3178,91 @@ def exchange_clock(binding, process, deadline, cancelled):
     integer(ready['controllerPid'], 1, 4294967295)
     string(ready['controllerStartUtc'], '[0-9T:.+Z-]{20,40}')
     # Preserve the original outer deadline while retaining the Windows clock cap.
-    left = min(700000, int(budget(deadline, cancelled) * 1000))
-    integer(left, 1, 700000)
+    left = min(LIMITS['controllerMilliseconds'], int(budget(deadline, cancelled) * 1000))
+    integer(left, 1, LIMITS['controllerMilliseconds'])
     reply = {'schema': 'final-publish-clock-remaining-v1', 'action': binding['start']['number'],
              'reservationSha256': binding['reservationSha256'], 'invocationSha256': binding['invocationSha256'],
              'endpoint': binding['start']['endpoint'], 'readySha256': sha(raw), 'remainingMilliseconds': left}
-    write_new(owned / 'clock-remaining.json', compact(reply))
+    write_new(owned / 'clock-remaining.json', compact(reply), deadline=deadline)
     budget(end, cancelled)
     binding['clock'] = {'ready': ready, 'readySha256': sha(raw), 'replySha256': sha(compact(reply)),
                         'deadlineCounter': ready['windowsReadyCounter'] + left * ready['windowsClockFrequency'] // 1000 - 1}
+
+
+def publication_native_completion(binding, completion, deadline, cancelled):
+    owned = binding['owned']
+    raw = read(owned / 'launcher.jsonl', deadline, cancelled, 65536)
+    if not raw.endswith(b'\n'):
+        fail('Incomplete native publication journal')
+    records = [decode(line) for line in raw.splitlines()]
+    events = ('publication-bootstrap', 'publication-job-ready', 'publication-root-suspended',
+              'publication-resume-attempt', 'publication-resumed', 'publication-audit',
+              'publication-capture', 'publication-capture', 'publication-retention',
+              'publication-operating-interval-end', 'publication-launcher-exit')
+    if len(records) != len(events) or tuple(record.get('event') for record in records) != events:
+        fail('Native publication did not complete its normal journal sequence')
+    previous = -1
+    for record in records:
+        observed = integer(record['elapsedMilliseconds'], 0, LIMITS['nativeTotalMilliseconds'] - 1)
+        if observed < previous:
+            fail('Native journal restarted its original clock')
+        previous = observed
+    entry, job, root, attempt, resumed, audit, stdout, stderr, retention, closed, terminal = records
+    job_name = 'Local\\azureauth-publication-108-' + binding['start']['number'] + '-' + binding['start']['endpoint']
+
+    def require(record, expected):
+        if any(key not in record or compact(record[key]) != compact(value) for key, value in expected.items()):
+            fail('Native publication identity or lifetime predicate failed')
+
+    require(entry, {'action': binding['start']['number'], 'jobName': job_name, 'fixtureCase': None,
+                    'authoritySha256': sha(binding['admission']['authorityBytes']),
+                    'bootstrapSha256': binding['admission']['envelope']['components']['bootstrap']['sha256'],
+                    'reservationSha256': binding['reservationSha256'], 'invocationSha256': binding['invocationSha256'],
+                    'workDeadlineMilliseconds': 2000000, 'totalDeadlineMilliseconds': 2010000})
+    integer(entry['pid'], 1, 4294967295)
+    integer(entry['session'], 0, 4294967295)
+    string(entry['creationFileTime'], '[1-9][0-9]{0,18}')
+    require(job, {'queryAccess': True, 'ownerOutsideJob': True, 'activeProcessLimit': 32,
+                  'killOnClose': False, 'breakaway': False})
+    require(root, {'pid': completion['bootstrapPid'], 'creationFileTime': completion['bootstrapCreationFileTime'],
+                   'session': completion['bootstrapSession'], 'inJob': True})
+    integer(root['pid'], 1, 4294967295)
+    string(root['creationFileTime'], '[1-9][0-9]{0,18}')
+    if root['session'] != entry['session'] or root['pid'] == entry['pid']:
+        fail('Native/bootstrap incarnation or session join failed')
+    require(attempt, {'resumeMayHaveRun': True})
+    require(audit, {'atomic': False, 'limit': 32, 'complete': True, 'querySucceeded': True,
+                    'assigned': 0, 'returned': 0, 'queryError': None, 'status': 'observed'})
+    start = integer(audit['startedMilliseconds'], resumed['elapsedMilliseconds'], 2009999)
+    end = integer(audit['endedMilliseconds'], start, 2009999)
+    if end - start >= 5000:
+        fail('Native same-held-Job audit exceeded five seconds')
+    for name, record in (('stdout', stdout), ('stderr', stderr)):
+        require(record, {'stream': name, 'initialized': True, 'readBytes': 0, 'confirmedFlushedBytes': 0,
+                         'eof': True, 'overflowDetected': False, 'failureStage': None, 'failureType': None,
+                         'failureHresult': None, 'failureNativeError': None, 'closeFailureType': None})
+        if read(owned / ('launcher.' + name + '.bin'), deadline, cancelled, 16384) != b'':
+            fail('Unexpected native-captured bootstrap output')
+    require(retention, {'jobName': job_name, 'originalJobHandleHeld': True, 'rootCreated': True,
+                        'resumeAttempted': True, 'resumed': True, 'neverResumedTerminationRequested': False,
+                        'neverResumedTerminationSucceeded': False, 'neverResumedTerminationError': None,
+                        'neverResumedRootExitConfirmed': False, 'rootExited': True, 'rootExitCode': 0,
+                        'activeProcesses': 0, 'lifetimeFailureType': None, 'auditComplete': True,
+                        'stdoutEof': True, 'stderrEof': True, 'retainedLiveWorkOrUnknown': False,
+                        'failureLatched': False, 'evidenceIncomplete': False, 'completionObserved': True,
+                        'failureAtFinalization': False, 'passiveEndedMilliseconds': None,
+                        'terminationAfterResumeAttempt': False, 'nameRecoveryAfterCloseGuaranteed': False})
+    integer(retention['totalProcesses'], 2)
+    final_start = integer(retention['finalizationStartedMilliseconds'], 0, 1999999)
+    final_end = integer(retention['finalDeadlineMilliseconds'], final_start + 1, 2010000)
+    if final_end != min(2010000, final_start + 10000) or terminal['elapsedMilliseconds'] >= final_end:
+        fail('Native finalization exceeded its original single window')
+    require(closed, {'jobName': job_name, 'jobHandleClosed': True, 'retainedLiveWorkOrUnknown': False,
+                     'nameRecoveryAfterCloseGuaranteed': False, 'finalDeadlineMilliseconds': final_end})
+    require(terminal, {'readyForExit': True, 'retainedLiveWorkOrUnknown': False, 'capturedBytes': 0})
+    write_new(binding['local'] / 'launcher.jsonl', raw, deadline=deadline)
+    return {'outerJobName': job_name, 'outerJobActive': 0, 'outerJobTotal': retention['totalProcesses'],
+            'outerJournalSha256': sha(raw)}
 
 
 def original_completion(binding, proxy_exit, deadline, cancelled):
@@ -2987,12 +3272,13 @@ def original_completion(binding, proxy_exit, deadline, cancelled):
     exit_raw = read(owned / 'controller-exit.json', deadline, cancelled, 16384)
     completion = decode(exit_raw)
     expected_keys = ('schema', 'reservationSha256', 'invocationSha256', 'controllerPid', 'controllerStartUtc',
+                     'bootstrapPid', 'bootstrapCreationFileTime', 'bootstrapSession',
                      'controllerExitObserved', 'controllerExitCode', 'controllerTerminationRequested',
                      'normalCompletion', 'safetyStop', 'windowsResultSha256', 'readySha256', 'replySha256',
                      'observedCounter', 'deadlineCounter', 'failureType')
     keys(completion, expected_keys)
     ready = binding['clock']['ready']
-    fixed = {'schema': 'final-publish-controller-exit-v1', 'reservationSha256': binding['reservationSha256'],
+    fixed = {'schema': 'final-publish-controller-exit-v2', 'reservationSha256': binding['reservationSha256'],
              'invocationSha256': binding['invocationSha256'], 'controllerPid': ready['controllerPid'],
              'controllerStartUtc': ready['controllerStartUtc'], 'controllerExitObserved': True,
              'controllerExitCode': 0, 'controllerTerminationRequested': False,
@@ -3003,6 +3289,7 @@ def original_completion(binding, proxy_exit, deadline, cancelled):
         fail('Actual original Windows controller completion is unestablished')
     if integer(completion['observedCounter'], 1) >= binding['clock']['deadlineCounter']:
         fail('Actual Windows controller exit was observed too late')
+    native_proof = publication_native_completion(binding, completion, deadline, cancelled)
     raw = read(owned / 'windows-result.json', deadline, cancelled, 65536)
     if sha(raw) != digest(completion['windowsResultSha256']):
         fail('Original Windows result binding changed')
@@ -3019,22 +3306,46 @@ def original_completion(binding, proxy_exit, deadline, cancelled):
     keys(result, (*required, 'neverResumedRootExitConfirmed', 'executionMayHaveBegun', 'stage',
                   'lastJobTotal', 'seconds', 'stdoutBytes', 'stderrBytes', 'stdoutSha256', 'stderrSha256',
                   'controllerSeconds', 'ended', 'postconditionsSha256', 'normalDrainStartedMilliseconds',
-                  'normalDrainDeadlineMilliseconds', 'normalDrainObservedMilliseconds'))
+                  'normalDrainDeadlineMilliseconds', 'normalDrainObservedMilliseconds', 'innerAuditSha256'))
     for key, value in required.items():
         if type(result.get(key)) is not type(value) or result[key] != value:
             fail('Original final-publish success predicate failed')
     integer(result['lastJobTotal'], 1)
+    subject = decode(read(owned / 'subject.json', deadline, cancelled, 4096))
+    inner_name = 'Local\\azureauth-final-publish-108-' + binding['start']['number'] + '-' + binding['start']['endpoint']
+    subject_expected = {'schema': 'final-publish-suspended-subject-v2', 'action': binding['start']['number'],
+                        'session': completion['bootstrapSession'], 'jobName': inner_name,
+                        'namedJobRightsVerified': True, 'reservationSha256': binding['reservationSha256'],
+                        'invocationSha256': binding['invocationSha256'],
+                        'authoritySha256': sha(binding['admission']['authorityBytes']),
+                        'guardSourceSha256': binding['invocation']['acceptedGuard']['sourceSha256'],
+                        'guardDllSha256': binding['invocation']['acceptedGuard']['dllSha256'], 'resumed': False}
+    keys(subject, (*subject_expected, 'pid', 'creationFileTime'))
+    if any(compact(subject[key]) != compact(value) for key, value in subject_expected.items()):
+        fail('Suspended compiler identity or authority join changed')
+    integer(subject['pid'], 1, 4294967295)
+    string(subject['creationFileTime'], '[1-9][0-9]{0,18}')
+    inner_raw = read(owned / 'inner-members.json', deadline, cancelled, 65536)
+    if sha(inner_raw) != digest(result['innerAuditSha256']):
+        fail('Original inner Job audit changed')
+    inner = decode(inner_raw)
+    for key, expected in {'complete': True, 'querySucceeded': True, 'atomic': False,
+                          'jobName': inner_name, 'sessionId': completion['bootstrapSession'],
+                          'assigned': 0, 'returned': 0, 'members': []}.items():
+        if key not in inner or compact(inner[key]) != compact(expected):
+            fail('Original same-held-inner-Job audit did not establish completion')
+
     if result['neverResumedRootExitConfirmed'] is not False or result['executionMayHaveBegun'] is not True or result['stage'] != 'normal-observed':
         fail('Original root lifecycle proof changed')
-    drain_start = integer(result['normalDrainStartedMilliseconds'], 0, 599999)
-    drain_end = integer(result['normalDrainDeadlineMilliseconds'], drain_start, 600000)
-    drain_observed = integer(result['normalDrainObservedMilliseconds'], drain_start, 599999)
-    if drain_end != min(600000, drain_start + 2000) or drain_observed > drain_end + 100:
+    drain_start = integer(result['normalDrainStartedMilliseconds'], 0, 1789999)
+    drain_end = integer(result['normalDrainDeadlineMilliseconds'], drain_start + 1, 1790000)
+    drain_observed = integer(result['normalDrainObservedMilliseconds'], drain_start, drain_end - 1)
+    if drain_end != min(1790000, drain_start + LIMITS['drainMilliseconds']):
         fail('Original normal drain exceeded its fixed bound')
-    if type(result['seconds']) not in (int, float) or not 0 <= result['seconds'] < 600:
-        fail('Action observation exceeded 600 seconds')
-    if type(result['controllerSeconds']) not in (int, float) or not 0 <= result['controllerSeconds'] < 700:
-        fail('Controller observation exceeded 700 seconds')
+    if type(result['seconds']) not in (int, float) or not 0 <= result['seconds'] < 1800:
+        fail('Action observation exceeded 1800 seconds')
+    if type(result['controllerSeconds']) not in (int, float) or not 0 <= result['controllerSeconds'] < 1900:
+        fail('Controller observation exceeded 1900 seconds')
     stdout = read(owned / 'stdout.bin', deadline, cancelled)
     stderr = read(owned / 'stderr.bin', deadline, cancelled)
     if len(stdout) + len(stderr) > 8388608:
@@ -3096,7 +3407,7 @@ def original_completion(binding, proxy_exit, deadline, cancelled):
     for path in graph['absentInputs']:
         if direct(projection(path)).exists():
             fail('Unexpected ambient source/import appeared')
-    refresh_history(binding['admission'], deadline, cancelled, binding['start']['number'])
+    refresh_publication_checkpoint(binding['admission'], deadline, cancelled, binding)
     if (owned / 'cancel').exists():
         fail('Late cancellation preserves failure')
     for name in ('started.json', 'invocation.json', 'authority.json', 'caller-authorization.json',
@@ -3109,6 +3420,6 @@ def original_completion(binding, proxy_exit, deadline, cancelled):
         limit = CALLER_PROVENANCE_LIMIT if name == 'caller-authorization.json' else 8388608
         if sha(read(owned / name, deadline, cancelled, limit)) != expected:
             fail('Original control evidence changed')
-    write_new(binding['local'] / 'windows-result.json', raw)
-    write_new(binding['local'] / 'controller-exit.json', exit_raw)
-    return result
+    write_new(binding['local'] / 'windows-result.json', raw, deadline=deadline)
+    write_new(binding['local'] / 'controller-exit.json', exit_raw, deadline=deadline)
+    return {**result, **native_proof}

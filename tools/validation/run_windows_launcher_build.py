@@ -16,12 +16,12 @@ import sys
 import time
 import uuid
 
-ROOT = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0070')
-CHARGE = Path('/tmp/windows-launcher0070-original-charge.json')
-FINAL = Path('/tmp/windows-launcher0070-original-result.json')
+ROOT = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0085')
+CHARGE = Path('/tmp/windows-launcher0085-original-charge.json')
+FINAL = Path('/tmp/windows-launcher0085-original-result.json')
 FRAMEWORK = Path('/mnt/c/Windows/Microsoft.NET/Framework64/v4.0.30319')
-BEFORE = [18, 96, 2, 70]
-AFTER = [19, 96, 2, 70]
+BEFORE = [19, 102, 2, 130]
+AFTER = [20, 102, 2, 130]
 FRAMEWORK_PINS = {
     'mscorlib.dll': '5bffb20e1217bad314143d7e5c4c809bf9f522e8a0a063c8e7e9b25113de26eb',
     'System.dll': '2b3c17c6208a0b4b6beb94e1a066f99ba06cdb2ea919479e99d47e8c6d96dc71',
@@ -233,7 +233,7 @@ def execute(config_path, config_hash):
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         budget(expires_ns)
         ROOT.mkdir(mode=0o700)
-        unit = 'azureauth-launcher-build-108-0070-' + uuid.uuid4().hex + '.service'
+        unit = 'azureauth-launcher-build-108-0085-' + uuid.uuid4().hex + '.service'
         config = dict(original, unit=unit)
         copied_hash = write(ROOT / 'config.json', encode(config))
         source = Path(__file__).resolve()

@@ -17354,3 +17354,310 @@ or cleanup, account/WAM/token/cache/resource effect, installation, final
 publication, release or broader platform claim is granted. Publication's usable
 Job-handle/operating-controller lifetime design and final CLI acceptance remain
 separate prerequisites and work.
+
+### Original 0080 accepted negative-scenario observations
+
+The independently accepted source was merged by PR #254 at
+`dadf9173eea339b2f855f67daa7db73ceb130889`, tree
+`957a139d9b43f729f60bf52d3154e95447dba6a5`. The original assembly,
+materializer, caller and fixed collector each completed once with exit zero.
+All four calls are spent. The sole retained snapshot contains all forty-eight
+selected leaves, with no collection errors: 90,896 bytes, SHA-256
+`c2a6ac490c889327c28cea70a049c0679dbce42f60b99a952649a655d7b3f38d`.
+Subsequent review used that copy; it did not repeat a collector or reopen the
+original runtime leaves.
+
+The independent lifetime and accounting reviews accepted these observations:
+
+| Scenario | Accepted observation | Retained limitation |
+| --- | --- | --- |
+| Cancellation 0081 | Cancellation followed root/descendant readiness; the candidate exited 1, explicit termination succeeded with native error zero, and the held-Job active count changed from 4 to 0. Captures completed. | This is controlled fixture termination, not exclusive ownership of a compiler service. |
+| Name collision 0082 | The candidate rejected the existing name at Job creation before its controller started. The original sentinel survived rejection; its original Stop subsequently succeeded, with active 0 and total 2. Streams completed. | Name reuse was rejected, not recovered or adopted. |
+| Output overflow 0083 | The exact flushed prefix was 16,384 X bytes. Output overflow triggered explicit successful termination; held-Job active count changed from 4 to 0. | Inner capture EOF remained false. Candidate, outer and original transport EOF observations are distinct and complete. |
+| Journal failure 0084 | The original lock remained held through candidate exit and held-Job active 0. The candidate exited 1 with an IOException diagnostic. | Only the exact 589-byte five-startup-record journal prefix was retained; there is no cleanup record, direct successful native termination receipt or individual root exit code. |
+
+The retained journal-failure prefix has SHA-256
+`5dd2434ac4115c9f2fda89aac7c4fe0290930ddafd58d118e5d4c7060bf84951`.
+The outer launcher retained its normal nine-record journal, exact suspended
+controller identity, root exit zero, active zero and total twenty-four. Both
+outer captures were initialized, flushed, empty and at EOF. The native launcher
+completed in 30.731 seconds, the original proxy in 31.407438118 seconds, and the
+service client in 31.794 seconds with both original transport EOFs.
+`groupEmpty=true` retains absent-or-empty semantics; it is not specifically a
+sampled populated cgroup count of zero. Operating-system totals 24, 4 and 2 are
+not the twelve charged deliberate subjects and do not identify every auxiliary
+process.
+
+Lifetime acceptance is 9,533 bytes, SHA-256
+`c084b685ae1f65d2a7b445b19bdf831b766fdee195c5240db3770b973f3bb935`;
+accounting acceptance is 9,373 bytes, SHA-256
+`ee9e2ca7b5635add3a231930acc8ef2c3d2851056d3f8689b239ce038c1de791`.
+Cumulative consumption remains **19 preparation, 102 build/test, 2 publication
+and 130 synthetic units**, against ceilings 28/130/30/180. The remaining fifty
+synthetic units comprise eighteen baseline units, including twelve protected
+final CLI units, and thirty-two reserve units. No charge is refunded.
+
+These conclusions accept only the four negative cases and their original outer
+containment, transport and accounting. They do not accept future publication,
+shared compiler-service ownership, a final CLI artifact, the complete Slice, or
+system-wide quiescence. Originals 0072 and 0078 remain failed and spent; no guard
+case was rerun. Historical 0057/0064/0068 dispositions remain distinct and do
+not waive any new ownership or lifetime uncertainty.
+
+## Finite Nonterminating Publication Supervision: 0085, 0086 and 0093
+
+### Selected Boundary and Remaining Allocation
+
+The next bounded question is whether the fixed publication can complete naturally
+while its original native owner retains an auditable named Job from before the
+first PowerShell instruction through final accounting. Preserve ordinary symbols
+and the accepted v4 compiler recipe. The accepted shared-PDB-service finding
+`F-FINAL-AOT-V3-SHARED-STOP-01` remains a true positive: a private endpoint does
+not establish exclusive ownership on every allocator failure path. Do not repeat
+that investigation, disable symbols, or terminate a potentially shared compiler
+service. These helpers remain validation infrastructure, outside the product.
+
+Select the finite nonterminating design. A timeout, cancellation, output failure,
+or uncertain resume result latches failure. After any resume attempt, neither
+explicit termination nor last-handle closure may kill work. At its original
+cutoff the owner closes handles without termination and reports retained live
+work or unknown lifetime. That result stops dependent work under the existing
+policy. This selection accepts no new residual lifetime uncertainty, promises no
+recovery by name after the original handle closes, and creates no keeper process.
+A Job name alone is neither exclusive ownership nor system-wide quiescence.
+
+Starting from the accepted 0080 checkpoint, allocate only:
+
+| Original action | Preparation | Build/test | Publication | Synthetic | Counters afterward |
+| --- | ---: | ---: | ---: | ---: | --- |
+| 0085: compile the changed validation launcher | 1 | 0 | 0 | 0 | 20/102/2/130 |
+| 0086: six publication-mode fixtures, with roots 0087–0092 | 0 | 1 | 0 | 17 | 20/103/2/147 |
+| 0093: one final publication through the accepted launcher | 0 | 0 | 1 | 1 | 20/103/3/148 |
+
+All categories retain ceilings 28/130/30/180. The final thirty-two synthetic
+units comprise twelve protected final CLI cases, two native Profile cases,
+three observer/WSL cases and fifteen shared reserve units. This is a prospective
+allocation, not reported consumption or a guarantee of successful completion.
+Each failed start consumes its full admitted charge. No automatic retry, old
+original replay, refund or alternate action number is available.
+
+### Native Owner and Original Clocks
+
+`WindowsScriptJobLauncher.cs` retains its accepted four-argument terminating
+fixture interface. Its new fixed production interface is `--publication`, the
+exact action-0093 Windows root, one UUIDv4 suffix, and the authority, bootstrap,
+reservation and invocation SHA-256 values in that order. The fixture interface
+adds only `--publication-fixture` and one of the six fixed case names below.
+The production root is `C:\Temp\azureauth-windows-slice-108\actions\0093`.
+Fixture roots are `publication-fixtures-0087` through `publication-fixtures-0092`
+beneath the same dedicated Windows parent. No caller-supplied command, arbitrary
+script path, shell expression or compiler option is accepted.
+
+The native owner remains outside its own Job. It creates the first suspended
+PowerShell with `PROC_THREAD_ATTRIBUTE_JOB_LIST`, verifies membership and records
+its PID, creation FILETIME and session before a conservative resume-attempt latch
+and `ResumeThread`. Record the latch before the native call: an unknown return
+may have executed. The Job has a fixed 32-active-process limit and neither
+kill-on-close nor breakaway. The exact original process handle may terminate
+only a proven never-resumed root. Preserve the original handle throughout that
+bounded termination observation; no PID-based reacquisition is a substitute.
+
+The outer Job is named `Local\azureauth-publication-108-NNNN-UUID`; the accepted
+0066 guard's inner Job is `Local\azureauth-final-publish-108-NNNN-UUID`.
+The nested compiler root is suspended while its exact identity, authority,
+reservation, invocation and guard pins are persisted. All bootstrap, controller
+and compiler descendants are already within the native owner's outer Job when
+they first execute. Inner and outer accounting are separate observations.
+
+| Clock or bound | Maximum and relationship |
+| --- | --- |
+| Original WSL invocation and bootstrap | 2,400 seconds; no restart during admission, failure or collection |
+| Required WSL time immediately before native creation | 2,030 seconds remaining in that original interval |
+| Native ordinary observation / absolute total | 2,000 / 2,010 seconds |
+| Native finalization | One interval ending at `min(total cutoff, finalization start + 10 seconds)` |
+| Controller and shared QPC interval | 1,900 seconds |
+| Required time before compiler creation | 1,810 seconds in both controller and shared QPC clocks |
+| Compiler action | 1,800 seconds including finalization |
+| Compiler execution/capture and ordinary drain cutoff | 1,790 seconds |
+| Natural drain after root exit and complete capture | At most 600 seconds, ending at `min(drain start + 600 seconds, 1,790 seconds)` |
+| Same-held-Job member audit | One non-atomic pass, at most 32 entries and five seconds, intersected with the owning clock |
+| Original WSL emergency observation | At most ten seconds within the original 2,400-second interval; no process termination |
+
+There is no positive observation tolerance. A late synchronous native or file
+operation cannot be preempted by a surrounding stopwatch; its late return must
+fail and must not start fresh optional I/O. Diagnostics check the same deadline
+before and after writes. Mandatory nonterminating handle release still occurs.
+Only after all owned disposals may the native process choose exit zero. Its
+`publication-launcher-exit.readyForExit` field is provisional: acceptance also
+requires the actual original process exit code zero. No journal marker alone
+establishes completed disposal or lifetime.
+
+Native combined capture is 16 KiB, with a 64 KiB journal. Compiler capture remains
+8 MiB combined. Preserve every observed complete or partial prefix and its EOF,
+flush, overflow and failure distinctions. Inherited compiler pipes can consume
+ordinary action time before the drain begins; the 600-second drain is not a new
+allowance. No evidence establishes that a PDB process must exit naturally within
+these bounds.
+
+### One Changed-Launcher Compilation: 0085
+
+Use `run_windows_launcher_build.py` from this accepted source with the fresh
+0085 paths, charge and service prefix. Preserve the existing corrected Linux
+Roslyn recipe, fixed physical SDK 10.0.401/runtime 10.0.12, seven pinned public
+compiler/runtime inputs, and the three already accepted .NET Framework reference
+hashes. This action compiles C# 5, x64, deterministic release IL without symbols;
+it does not execute or load the generated Windows executable. This helper's
+symbol setting concerns only the validation launcher, not the product's unchanged
+ordinary-symbol Native AOT recipe.
+
+Bind a clean detached accepted checkout, the exact changed C# and Python bytes,
+the same physical SDK directory and an independently accepted literal config
+before calling `--execute CONFIG_PATH CONFIG_SHA256`. Transfer one unused
+Windows preparation allocation to Linux: before this action Linux is 10/11 and
+Windows 9/17; afterward Linux is 11/11 and Windows remains 9/17. The total stays
+within 28. Retain the original
+150-second caller, 100-second worker expiry and 145-second client expiry. The
+named systemd service retains `ExitType=cgroup`, `KillMode=control-group`, no
+restart, 120-second runtime and five-second stop limits. Original config,
+source, command, worker/client start and result, finite compiler/client captures,
+and the executable remain in fresh action 0085. Source input stays at most
+65,536 bytes. Do not repair or redirect a linked SDK path.
+
+After the one original call terminates, admit at most one bounded snapshot of
+its new charge/result, copied config/source, service/worker starts, compiler
+command/result, client/compiler captures and artifact. Use the same fixed-leaf,
+stable-regular-file and original-cgroup absent-or-empty evidence requirements
+as corrected preparation 0070. Independently review actual PE/x64/CLR metadata,
+source correspondence and original compiler completion without loading the
+artifact. The acceptance must explicitly cover the nonterminating publication
+mode and contain its exact artifact descriptor, preparation action 0085, source
+hash and accounting transition. A successful compiler exit alone does not admit
+0086 or 0093.
+
+### Six Publication-Mode Fixtures: 0086
+
+The enclosing launcher is the unchanged accepted 0070 artifact: 23,040 bytes,
+SHA-256 `5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a`.
+It creates the outer controller inside its named terminating fixture Job from
+creation. That outer Job contains only the declared credential-free synthetic
+work. The controller loads the unchanged 0066 guard only for accepted native
+membership declarations; it starts no new guard test or compiler. The changed
+0085 candidate is copied separately as `WindowsPublicationJobLauncher.exe`.
+Its complete actual-artifact acceptance is a fixed input.
+
+Run these six cases sequentially, with native fixture ordinary/total clocks
+12/22 seconds, a ten-second readiness bound, a 25-second candidate transport
+bound and a 40-second complete case slot. Case persistence and owned handle
+closure share the original slot; a late completed-looking receipt does not
+permit the batch to pass. Resumed failure subjects self-expire at thirty seconds
+on their original payload clocks, without a termination request. The normal
+root and descendant exit after the fixed release handshake.
+
+| Case and root | Required original observation |
+| --- | --- |
+| `normal`, 0087 | Suspended identity joins readiness; root and descendant are contained; natural zero exits, complete empty streams, active zero and complete audit; native readiness marker plus actual exit zero. |
+| `pre-resume`, 0088 | Fault after durable suspended identity and before the latch; exact never-resumed termination succeeds, root exit is confirmed and active count is zero. The payload must not execute. |
+| `resume-unknown`, 0089 | Actual resume occurs before the injected unknown result. The fixed release handshake lets the driver retain root identity and close its membership handle first. The latch is true, accepted resume is false, candidate exits one and the root positively survives it, then self-expires with zero exit. |
+| `timeout`, 0090 | Contained root and descendant remain alive through the native ordinary cutoff. Candidate exits one without termination; both positively survive owner exit and then self-expire with zero exit. |
+| `overflow`, 0091 | A single 20,480-X write exceeds the 16,384-byte limit. Candidate retains the exact flushed prefix and latches overflow; root and descendant survive its exit and then self-expire. A broken output pipe never triggers a retry or early synthetic exit. |
+| `journal-cancel`, 0092 | Hold the exact journal byte-range lock from the complete five-record resumed prefix through candidate exit. Trigger fixed cancellation; bounded original stderr reports retained work and attempted resume. Preserve only that startup prefix, then positively observe root/descendant survival and natural exit. No missing cleanup journal is fabricated. |
+
+The driver holds original candidate and known subject process handles, joined
+by PID, creation FILETIME and session. A temporary query-only Job handle verifies
+membership, then closes before candidate exit and before release or cancellation.
+This ordering prevents the observer from masking an erroneous last-close kill.
+No observer process or later name-only recovery is used. The `resume-unknown`
+case deliberately creates no descendant; `pre-resume` creates only the suspended
+root. Four other cases each create one root and one descendant.
+
+The seventeen charged deliberate subjects are the enclosing 0070 launcher,
+six candidates, six roots and four descendants. Only the existing outer controller
+is exempt harness. Require outer normal aggregate total 17..64, active zero,
+exact suspended controller identity, the existing nine-record journal and
+complete empty outer captures. OS auxiliary processes may increase aggregate
+totals without becoming a different synthetic charge. Preserve controller
+180/300/310, outer native 330/340, dispatcher cancellation 330/polling 400/final
+420, service 450 plus five, and caller 520-second bounds with an external
+540-second TERM and five-second kill reserve. The six 40-second slots fit the
+300-second original controller budget. No clock restart or retry is permitted.
+
+Fresh authority schema is `named-guard-fixtures-0086-v1`. Bind the original
+0080 accounting acceptance, 0066 artifact acceptance, 0085 actual-artifact seal,
+all source/artifact hashes, one original WSL interop endpoint and six fixed
+case specs. Each case's started/invocation files are inert fixture inputs sealed
+before authority generation: they identify batch, case, root, suffix and payload;
+the invocation joins the started-file hash. Neither embeds the final authority
+hash. Authority binds both hashes and the native argv carries all three, avoiding
+a self-hash cycle. These fixture files are not six additional capacity debits.
+
+Materialization uses 22 source roles, 14 exclusively created directories and
+34 copies: four Linux inputs, six outer Windows inputs, three files in each of
+six inner roots and one fixed bootstrap in each nested `controller` directory.
+Keep continuous created-file handles, descriptor/name correspondence, the
+accepted original Windows ctime qualification, and no chmod repair. Bound it to
+64 reads, 4 MiB requested bytes, 1 MiB copied payload plus a 64 KiB receipt and
+thirty seconds. The intended path uses 58 logical reads including EOF probes.
+Require the original materialization receipt to establish both copied launchers'
+regular-file, owner, executable and exact artifact bindings before the caller.
+
+Assembly, materialization, original caller and sole post-termination snapshot
+retain four separately admitted original calls with isolated Python, exact
+accepted source/configuration/hash bindings, durable original start, finite
+transport and no repeated collector. Adapt only fresh 0086 helpers and roots;
+never invoke an 0080 original again. Their fixed private templates and precise
+read/write/leaf counts require independent acceptance before the first call.
+Missing, unstable, incomplete or late evidence stops dependent execution. Review
+only the retained sole snapshot after collection. Actual six-case, original
+outer, service/proxy and accounting acceptance is prerequisite to 0093.
+
+### Current Final-Publication Admission and Completion: 0093
+
+Replace current callers' obsolete 0055 provenance traversal with the immutable
+0066 actual-artifact seal and the new 0085 actual-artifact seal, preserving their
+original bytes and historical counters. No original runtime path is recursively
+read. A current handoff starts at the exact accepted 0080 accounting seal and
+contains exactly the accepted 0085 and 0086 accounting transitions above. It
+includes the independently accepted complete prior endpoint projection and only
+bounded membership lists of the four existing action/root parents. Check those
+lists before reservation and again with only the new 0093 pair added afterward;
+changed membership stops admission. No fresh history-leaf collector is implied.
+
+Current authority is `final-publish-external-authority-v3`; reservation and
+invocation use v2. Caller authorization v2 binds the source, recipe, 0066 guard,
+0085 launcher and their exact original acceptance seals. Retain the existing six
+public review roles and their independent actual input joins. Compile/fixture
+acceptance seals are evidence, not execution grants. Exact accepted target,
+protocol, source, graph, unchanged 35-variable environment, compiler argv,
+response closure and ordinary symbols remain mandatory. Use fresh 0093 verifier
+roots and named cgroups; never reuse the post-0063 verifier namespace. The five
+current component blobs require ten Git calls. With the fixed 34 product-source
+blobs, the entire admitted path permits at most 100 verifier calls: 32 authority,
+review and inventory calls plus 68 source-blob calls. Preserve each original
+30-second helper interval and the intersecting 2,400-second invocation clock;
+this ceiling does not grant extra retries or extend prelaunch time.
+
+The shared original action lock encloses the durable one-publication/one-synthetic
+debit, fresh action directories, source checks, UUIDv4 endpoint collision rejection,
+clock exchange, original completion and receipt persistence. Seal invocation
+bytes before constructing the native argv. Copy the two accepted artifacts and
+their seals action-locally; pin the native executable and reject missing execute
+permission without repair. A native argv literal cannot authorize itself.
+
+Normal acceptance requires the original native exit zero and complete empty
+transport; the native eleven-record normal journal with original suspended
+bootstrap identity; bootstrap-to-controller identity and shared QPC completion;
+compiler suspended identity and exact inner Job; natural compiler exit, complete
+bounded captures and unchanged diagnostics/input/response predicates; and both
+original held Jobs observed empty with complete bounded member audits. Keep outer
+and inner total/active counts distinct. Any failure remains latched even if a
+later count becomes zero. These observations establish only the named owned
+Jobs, not the host as a whole. Actual Native AOT artifact and final CLI scenario
+acceptance remain separate obligations after publication.
+
+All new files are intentionally retained in the dedicated validation roots.
+No human interaction is expected. No account enumeration, WAM operation, token,
+cache, consent, authenticated resource request, tool installation, signing or
+release is permitted. Historical 0057/0064/0068 exceptions remain unchanged and
+cannot excuse a new ownership or lifetime uncertainty. Required real-account
+Slice evidence remains open behind its separate concrete owner effects decision
+and accepted Wave/protocol amendment.

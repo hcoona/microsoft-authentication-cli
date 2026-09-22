@@ -5,6 +5,8 @@ if DRAFT_ONLY:
     raise RuntimeError('DRAFT_ONLY: final publish has no accepted execution binding')
 
 import datetime
+import os
+import selectors
 import signal
 import subprocess
 import time
@@ -22,18 +24,77 @@ def _assert_exact_original_completion(binding, original_proxy_exit, deadline, ca
     return original_completion(binding, original_proxy_exit, deadline, cancelled)
 
 
-def _write_new_json(path, value):
-    write_new(path, compact(value))
+def _write_new_json(path, value, deadline):
+    write_new(path, compact(value), deadline=deadline)
 
 
-def _request_retention_cancel(path):
+def _request_retention_cancel(path, deadline):
     # This marker stops observation and retains possibly executed Windows work.
     # It never addresses the historical controller's termination protocol.
     try:
-        write_new(path, b'')
+        write_new(path, b'', deadline=deadline)
     except FileExistsError:
         return 'already-present'
     return 'created'
+
+
+class _NativeTransport:
+    """Bound original launcher transport without confusing it with compiler capture."""
+
+    def __init__(self, process):
+        self.selector = selectors.DefaultSelector()
+        self.parts = {'stdout': bytearray(), 'stderr': bytearray()}
+        self.eof = set()
+        self.failed = False
+        self.streams = (process.stdout, process.stderr)
+        try:
+            for name, stream in (('stdout', process.stdout), ('stderr', process.stderr)):
+                os.set_blocking(stream.fileno(), False)
+                self.selector.register(stream, selectors.EVENT_READ, name)
+        except BaseException:
+            self.close()
+            raise
+
+    def drain(self):
+        if self.failed:
+            return
+        try:
+            for key, _events in self.selector.select(0):
+                remaining = 16384 - sum(map(len, self.parts.values()))
+                chunk = os.read(key.fileobj.fileno(), min(4096, remaining + 1))
+                if not chunk:
+                    self.eof.add(key.data)
+                    self.selector.unregister(key.fileobj)
+                elif len(chunk) > remaining:
+                    self.parts[key.data].extend(chunk[:remaining])
+                    raise RuntimeError('Original native transport exceeded 16384 bytes')
+                else:
+                    self.parts[key.data].extend(chunk)
+        except BlockingIOError:
+            return
+        except BaseException:
+            self.failed = True
+            raise
+
+    def persist(self, binding, result, deadline):
+        for name in ('stdout', 'stderr'):
+            budget(deadline, lambda: False)
+            raw = bytes(self.parts[name])
+            write_new(binding['local'] / ('launcher-transport-' + name + '.bin'), raw, deadline=deadline)
+            budget(deadline, lambda: False)
+            result[name + 'TransportBytes'] = len(raw)
+            result[name + 'TransportEof'] = name in self.eof
+        result['transportFailed'] = self.failed
+
+    def close(self):
+        failure = None
+        for owned in (self.selector, *self.streams):
+            try:
+                owned.close()
+            except BaseException as error:
+                failure = failure or error
+        if failure is not None:
+            raise failure
 
 
 def invoke_final_publish_candidate(*, reviewed_authority):
@@ -58,21 +119,25 @@ def invoke_final_publish_candidate(*, reviewed_authority):
         for number in (signal.SIGINT, signal.SIGTERM):
             old_handlers[number] = signal.signal(number, mark_cancel)
         # Admission, durable capacity, source checks, launch, collection and the
-        # entire emergency path share this original 1800-second absolute ceiling.
+        # entire emergency path share this original 2400-second absolute ceiling.
         # The original shared action lock stays held until final receipt writing.
         with _assert_exact_admission(deadline, began, lambda: interrupted,
                                      reviewed_authority=reviewed_authority) as binding:
             process = None
+            transport = None
             result['reservationSha256'] = binding['reservationSha256']
             try:
                 budget(deadline, lambda: interrupted)
                 if binding['cancelPath'].exists():
                     raise InterruptedError('Cancellation before controller creation')
+                if budget(deadline, lambda: interrupted) * 1000 < LIMITS['nativeSpawnReserveMilliseconds']:
+                    raise TimeoutError('Insufficient original time for native launcher and final collection')
                 result['launchAttempted'] = True
                 result['proxyState'] = 'creation-outcome-unknown'
                 process = subprocess.Popen(binding['exactControllerCommand'], stdin=subprocess.DEVNULL,
-                                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                                           stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                            start_new_session=True)
+                transport = _NativeTransport(process)
                 result['proxyState'] = 'observing'
                 result['stage'] = 'original-controller'
                 exchange_clock(binding, process, deadline, lambda: interrupted)
@@ -80,8 +145,9 @@ def invoke_final_publish_candidate(*, reviewed_authority):
                     left = budget(deadline, lambda: interrupted)
                     if binding['cancelPath'].exists():
                         raise InterruptedError('Final publication observation cancelled')
+                    transport.drain()
                     code = process.poll()
-                    if code is not None:
+                    if code is not None and transport.eof == {'stdout', 'stderr'}:
                         result['proxyExitCode'] = code
                         result['proxyState'] = 'exited'
                         if code != 0:
@@ -93,6 +159,8 @@ def invoke_final_publish_candidate(*, reviewed_authority):
                 result['quiescent'] = proof['quiescent']
                 result['lastJobActive'] = proof['lastJobActive']
                 result['lastJobTotal'] = proof['lastJobTotal']
+                for name in ('outerJobName', 'outerJobActive', 'outerJobTotal', 'outerJournalSha256'):
+                    result[name] = proof[name]
                 budget(deadline, lambda: interrupted)
                 if binding['cancelPath'].exists():
                     raise InterruptedError('Cancellation at final outer observation')
@@ -107,14 +175,18 @@ def invoke_final_publish_candidate(*, reviewed_authority):
                 if not result['normalCompletion']:
                     emergency_end = min(deadline, time.monotonic() + 10.0)
                     try:
-                        result['retentionCancelMarker'] = _request_retention_cancel(binding['cancelPath'])
+                        budget(emergency_end, lambda: False)
+                        result['retentionCancelMarker'] = _request_retention_cancel(binding['cancelPath'], emergency_end)
+                        budget(emergency_end, lambda: False)
                     except BaseException as error:
                         result['cancelMarkerFailureType'] = type(error).__name__
                     if process is not None:
                         while time.monotonic() < emergency_end:
                             try:
+                                if transport is not None:
+                                    transport.drain()
                                 code = process.poll()
-                                if code is not None:
+                                if code is not None and (transport is None or transport.eof == {'stdout', 'stderr'}):
                                     result['proxyExitCode'] = code
                                     result['proxyState'] = 'exited-after-failure'
                                     break
@@ -125,12 +197,22 @@ def invoke_final_publish_candidate(*, reviewed_authority):
                         if result['proxyExitCode'] is None:
                             result['proxyState'] = 'retained-live-or-unknown'
                             _retained_proxies.append(process)
+                if transport is not None:
+                    try:
+                        transport.persist(binding, result, deadline)
+                    except BaseException as error:
+                        result['normalCompletion'] = False
+                        result['safetyStop'] = True
+                        result['transportPersistenceFailureType'] = type(error).__name__
+                    finally:
+                        transport.close()
                 result['retainedLiveWorkOrUnknown'] = not result['quiescent']
                 result['artifactEligible'] = False
                 result['continuation_allowed'] = False
                 result['outerSeconds'] = round(time.monotonic() - began, 3)
                 result['utc'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
-                _write_new_json(binding['outerResultPath'], result)
+                budget(deadline, lambda: False)
+                _write_new_json(binding['outerResultPath'], result, deadline)
                 if result['normalCompletion']:
                     # Durable write/fsync may return late. Preserve that original
                     # receipt, but fail this same invocation before it can return.

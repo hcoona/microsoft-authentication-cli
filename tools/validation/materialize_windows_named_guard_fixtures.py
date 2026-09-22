@@ -1,4 +1,4 @@
-"""Prepare fresh 0080 inputs with continuous created-file handles and bounded failure context."""
+"""Prepare fresh 0086 inputs with continuous created-file handles and bounded failure context."""
 
 import hashlib
 import json
@@ -10,12 +10,14 @@ import sys
 import time
 
 
-MANIFEST = Path('/tmp/windows-named-fixtures0080-materialization-manifest.json')
-OUTPUTS = (Path('/tmp/windows-named-fixtures0080-inputs'),
-           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0080'),
-           *(Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-' + number)
-             for number in ('0081', '0082', '0083', '0084')))
-RECEIPT = Path('/tmp/windows-named-fixtures0080-materialized.json')
+MANIFEST = Path('/tmp/windows-named-fixtures0086-materialization-manifest.json')
+CASE_NUMBERS = ('0087', '0088', '0089', '0090', '0091', '0092')
+INNER_ROOTS = tuple(Path('/mnt/c/Temp/azureauth-windows-slice-108/publication-fixtures-' + number)
+                    for number in CASE_NUMBERS)
+OUTPUTS = (Path('/tmp/windows-named-fixtures0086-inputs'),
+           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0086'),
+           *INNER_ROOTS, *(root / 'controller' for root in INNER_ROOTS))
+RECEIPT = Path('/tmp/windows-named-fixtures0086-materialized.json')
 READS = 0
 REQUESTED = 0
 WRITTEN = 0
@@ -28,8 +30,7 @@ MISMATCH = None
 def context(phase, path):
     global CONTEXT
     item = Path(path)
-    role = next((label for label, root in zip(('linux-inputs', 'windows-inputs', 'cancel-inputs',
-                 'collision-inputs', 'overflow-inputs', 'journal-inputs'), OUTPUTS, strict=True)
+    role = next((str(index) for index, root in enumerate(OUTPUTS)
                  if item == root or item.parent == root), 'source-or-receipt')
     CONTEXT = {'phase': phase, 'role': role, 'leaf': item.name}
 
@@ -100,7 +101,7 @@ def read(path, maximum, pinned=None, held_parent=None, expected_identity=None, h
     context('read', path)
     check()
     READS += 1
-    if READS > 32:
+    if READS > 64:
         raise ValueError('Materialization read count')
     pfd = parent(path) if held_parent is None else held_parent
     fd = None
@@ -166,7 +167,7 @@ def write_readback(pfd, name, raw, expected_parent, output_path):
         raise ValueError('Nonliteral copy output leaf')
     same(expected_parent, directory_identity(os.fstat(pfd)), 'write-parent-handle')
     WRITTEN += len(raw)
-    if WRITTEN > 327680:
+    if WRITTEN > 1114112:
         raise ValueError('Materialization output bytes')
     writer = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=pfd)
     reader = None
@@ -252,10 +253,12 @@ def materialize():
     if hashlib.sha256(manifest_raw).hexdigest() != sys.argv[1]:
         raise ValueError('Materialization manifest changed')
     manifest = decode(manifest_raw)
+    required_roles = {'authority', 'checkpoint', 'runner', 'controller', 'guard', 'launcher',
+                      'failureDriver', 'failureController', 'candidate', 'candidateAcceptance'}
+    required_roles.update(number + '-' + leaf for number in CASE_NUMBERS for leaf in ('started', 'invocation'))
     if encode(manifest) != manifest_raw or set(manifest) != {'schema', 'acceptedCommit', 'sources'} or \
-            manifest['schema'] != 'named-fixtures0080-materialization-v1' or \
-            set(manifest['sources']) != {'authority', 'checkpoint', 'runner', 'controller', 'guard', 'launcher',
-                                        'failureDriver', 'failureController'}:
+            manifest['schema'] != 'named-fixtures0086-materialization-v1' or \
+            set(manifest['sources']) != required_roles:
         raise ValueError('Unexpected materialization scope')
     data = {}
     source_identities = {}
@@ -264,17 +267,29 @@ def materialize():
             raise ValueError('Unexpected copy binding')
         data[role], source_identities[role] = read(Path(binding['path']), 65536, binding)
     authority = decode(data['authority'])
-    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0080':
+    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0086':
         raise ValueError('Copy authority/commit mismatch')
     roles = (('authority.json', 'authority'), ('checkpoint.json', 'checkpoint'),
-             ('run_windows_named_guard_fixtures.py', 'runner'))
+             ('run_windows_named_guard_fixtures.py', 'runner'),
+             ('publication-launcher-acceptance.json', 'candidateAcceptance'))
     windows_roles = (('authority.json', 'authority'), ('Invoke-WindowsNamedGuardFixtures.ps1', 'controller'),
                      ('WindowsFinalPublishGuard.dll', 'guard'), ('WindowsScriptJobLauncher.exe', 'launcher'),
-                     ('WindowsLauncherFailureFixtures.ps1', 'failureDriver'))
-    inner_roles = (('authority.json', 'authority'), ('Invoke-WindowsNamedGuardFixtures.ps1', 'failureController'))
-    plans = (roles, windows_roles, inner_roles, inner_roles, inner_roles, inner_roles)
+                     ('WindowsLauncherFailureFixtures.ps1', 'failureDriver'),
+                     ('WindowsPublicationJobLauncher.exe', 'candidate'))
+    inner_plans = tuple((('authority.json', 'authority'), ('started.json', number + '-started'),
+                         ('invocation.json', number + '-invocation')) for number in CASE_NUMBERS)
+    controller_plans = tuple((('Start-WindowsFinalPublish.draft.ps1', 'failureController'),)
+                             for _ in CASE_NUMBERS)
+    plans = (roles, windows_roles, *inner_plans, *controller_plans)
+    for case, spec in authority['failureCases'].items():
+        number = spec['root'][-4:]
+        if number not in CASE_NUMBERS:
+            raise ValueError('Unknown fixture case allocation')
+        for leaf, field in (('started', 'reservationSha256'), ('invocation', 'invocationSha256')):
+            if hashlib.sha256(data[number + '-' + leaf]).hexdigest() != spec[field]:
+                raise ValueError('Fixture input digest mismatch')
     total_copy_bytes = sum(len(data[role]) for plan in plans for _, role in plan)
-    if total_copy_bytes > 262144:
+    if total_copy_bytes > 1048576:
         raise ValueError('Copied output allowance')
     directories = []
     copies = []
@@ -311,7 +326,7 @@ def materialize():
                 raise
         join_roots(held)
         join_files(files)
-        receipt = {'schema': 'named-fixtures0080-materialized-v1', 'manifestSha256': sys.argv[1],
+        receipt = {'schema': 'named-fixtures0086-materialized-v1', 'manifestSha256': sys.argv[1],
                    'manifestIdentity': manifest_identity, 'sourceIdentities': source_identities,
                    'directories': directories, 'copies': copies,
                    'beforeReceipt': {'reads': READS, 'requestedBytes': REQUESTED, 'writtenBytes': WRITTEN,
