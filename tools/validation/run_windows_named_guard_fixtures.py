@@ -14,19 +14,19 @@ import time
 import urllib.request
 
 
-INPUTS = Path('/tmp/windows-named-fixtures0077-inputs')
-WINDOWS = Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0077')
-HISTORY = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0077')
+INPUTS = Path('/tmp/windows-named-fixtures0078-inputs')
+WINDOWS = Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0078')
+HISTORY = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0078')
 SHELL = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
 LAUNCHER = WINDOWS / 'WindowsScriptJobLauncher.exe'
 LAUNCHER_BYTES = 23040
 LAUNCHER_SHA256 = '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a'
-UNIT = 'azureauth-named-fixtures-108-0077.service'
-BEFORE = {'preparation': 19, 'buildTest': 98, 'publication': 2, 'synthetic': 101}
-AFTER = {'preparation': 19, 'buildTest': 99, 'publication': 2, 'synthetic': 104}
+UNIT = 'azureauth-named-fixtures-108-0078.service'
+BEFORE = {'preparation': 19, 'buildTest': 99, 'publication': 2, 'synthetic': 104}
+AFTER = {'preparation': 19, 'buildTest': 100, 'publication': 2, 'synthetic': 111}
 GUARD_COUNTERS = {'preparation': 17, 'buildTest': 94, 'publication': 2, 'synthetic': 52}
 FAILURE_DISPOSITION_SHA256 = '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf'
-CASES = ('live',)
+CASES = ('disposed', 'callback', 'missing', 'session')
 READ_LIMIT = 16 * 1024 * 1024
 read_requested = 0
 
@@ -200,14 +200,14 @@ def accept_launcher_journal(raw, authority, authority_hash):
                 type(identity['session']) is not int or identity['session'] < 0 or \
                 not re.fullmatch(r'[1-9][0-9]{1,19}', identity['creationFileTime']):
             raise ValueError('Launcher process identity missing')
-    expected_name = 'Local\\azureauth-controller-108-0077-' + authority['launcherSuffix']
+    expected_name = 'Local\\azureauth-controller-108-0078-' + authority['launcherSuffix']
     if bootstrap['authoritySha256'] != authority_hash or bootstrap['jobName'] != expected_name or \
             ready['queryAndTerminateAccess'] is not True or root['inJob'] is not True or \
             root['pid'] == bootstrap['pid'] or root['session'] != bootstrap['session']:
         raise ValueError('Launcher creation-time containment mismatch')
     completed = records[5]
     if completed['rootExited'] is not True or completed['rootExitCode'] != 0 or \
-            completed['activeProcesses'] != 0 or not 3 <= completed['totalProcesses'] <= 64 or \
+            completed['activeProcesses'] != 0 or not 7 <= completed['totalProcesses'] <= 64 or \
             completed['stdoutEof'] is not True or completed['stderrEof'] is not True or \
             completed['capturedBytes'] != 0:
         raise ValueError('Launcher workload completion mismatch')
@@ -234,10 +234,11 @@ def main():
     if sha(authority_bytes) != authority_hash:
         raise ValueError('Authority changed')
     authority = decode(authority_bytes)
-    if encode(authority) != authority_bytes or authority['schema'] != 'named-guard-fixtures-0077-v1' or \
-            authority['accepted'] is not True or authority['action'] != '0077' or \
-            authority['countsBefore'] != BEFORE or authority['buildTestCharge'] != 1 or authority['syntheticCharge'] != 3 or \
+    if encode(authority) != authority_bytes or authority['schema'] != 'named-guard-fixtures-0078-v1' or \
+            authority['accepted'] is not True or authority['action'] != '0078' or \
+            authority['countsBefore'] != BEFORE or authority['buildTestCharge'] != 1 or authority['syntheticCharge'] != 7 or \
             authority['failedFixtureDispositionSha256'] != FAILURE_DISPOSITION_SHA256 or \
+            authority['live0077AcceptanceSha256'] != '0b48cb7fcf878f55344f4e4ccd82e4852c642692cdc2d7d6d4eff220b074c6d2' or \
             authority['failure0072DispositionSha256'] != \
             'a4efab71cbd10564c70251826e28195eb09d3497454982c0f314c388a2a88439':
         raise ValueError('Fixture allocation not admitted')
@@ -254,9 +255,9 @@ def main():
     history_fd = os.open(HISTORY, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
     if created_history_identity != directory_identity(os.fstat(history_fd)):
         raise ValueError('Original history root changed during open')
-    start = {'schema': 'named-guard-fixtures-started-v1', 'action': '0077', 'countsBefore': BEFORE,
+    start = {'schema': 'named-guard-fixtures-started-v1', 'action': '0078', 'countsBefore': BEFORE,
              'countsAfter': AFTER, 'authoritySha256': authority_hash, 'cgroup': group,
-             'startedMonotonicNs': time.monotonic_ns(), 'buildTestCharge': 1, 'syntheticCharge': 3}
+             'startedMonotonicNs': time.monotonic_ns(), 'buildTestCharge': 1, 'syntheticCharge': 7}
     start_hash = write_root_json(HISTORY, history_fd, created_history_identity, 'started.json', start)
     result = {'schema': 'named-guard-fixtures-result-v1', 'passed': False, 'continuation_allowed': False,
               'authoritySha256': authority_hash, 'countsAfter': AFTER, 'proxyExit': None,
@@ -310,7 +311,7 @@ def main():
         if verify_interop(authority) != interop:
             raise ValueError('Original caller interop binding changed')
         signal.setitimer(signal.ITIMER_REAL, max(0.001, 420 - (time.monotonic() - began)))
-        command = [str(LAUNCHER), r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0077',
+        command = [str(LAUNCHER), r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0078',
                    authority['launcherSuffix'], authority_hash, authority['controllerSha256']]
         process = subprocess.Popen(command, cwd=WINDOWS, stdin=subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,

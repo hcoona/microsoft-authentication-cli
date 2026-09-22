@@ -16842,3 +16842,160 @@ the ordinary stop conditions. The three historical risk dispositions remain
 limited to their accepted originals and credential-free effects. No account,
 WAM, token, cache, authenticated resource, tool installation, final publication,
 release or broader compatibility claim follows from this batch.
+
+## Corrected Live Guard Outcome and Remaining Guard Cases: 0078
+
+### Accepted Original 0077 Outcome
+
+The sole original 0077 caller completed successfully under accepted protocol
+`9118be3eac41f9ca6b27d0a4d87a2794e62c5b41` and the exact source and artifact
+pins in the preceding supplement. Its one post-termination snapshot contained
+all twenty-two selected leaves without errors: 26,418 bytes, SHA-256
+`ad9030efe36b42d0193fd1adda201bc88a611d993852ab5a6fc408ed9670b03c`.
+The original caller terminal transport joined its start and result hashes; the
+snapshot terminal transport authenticated the retained copy. Independent actual
+lifetime and accounting reviews accepted this narrow credential-free live case.
+Their seals are `0b48cb7fcf878f55344f4e4ccd82e4852c642692cdc2d7d6d4eff220b074c6d2` and
+`c8659bb519d97d8c1e4c85bb03d5d15bb287404b0ceee121418392c454c18dff`.
+No private process/session identity or raw runtime record is published here.
+
+The durable pre-resume payload identity matched the complete, non-atomic,
+query-only named membership observation. The payload exited zero, and the same
+held Job reported zero active processes and two total processes. Drain timing was
+6,393--6,410 milliseconds, with the first and only accounting sample at 6,407
+milliseconds already empty. This validates the corrected live case, but does not
+demonstrate a delayed multi-sample drain or identify original 0072's failure cause.
+The case host exited zero; its containment Job had one active process before its
+successful termination request and zero afterward, with four total processes and
+both streams complete. Do not describe every descendant as exiting naturally.
+
+The normal nine-record outer-launcher journal joined the suspended controller
+identity, root exit zero, zero active processes, six total processes, empty complete
+captures and original WSL proxy exit zero with both EOFs. The original caller's
+zero service-client exit and complete streams join the source-bound
+`--wait --pipe` / `ExitType=cgroup` service completion. Its `groupEmpty=true`
+means the accepted absent-or-empty predicate; it does not distinguish absent path
+from a sampled `populated=0`. Job totals describe observed OS accounting, not extra
+submitted subjects. The full original charge remains one build/test and three
+synthetic units: consumed 19/99/2/104 under 28/130/30/180. Remaining synthetic
+capacity is 76: 37 planned baseline, including twelve protected CLI units, plus the
+unchanged 39-unit shared buffer. All four original calls and the snapshot are spent.
+
+Original 0072 remains failed and fully charged. Its separately accepted narrow
+collision case is reused through lifetime seal
+`825aae983d4559683ed55b55dc0a3e6a44d96f92160657456ddcff7092020f93`
+and failure disposition
+`a4efab71cbd10564c70251826e28195eb09d3497454982c0f314c388a2a88439`:
+name collision was rejected, the named query found the preserved empty Job, the
+case host exited zero, and original containment ended empty with both EOFs.
+This is an explicit evidence join, not a repeat or acceptance of the failed batch.
+
+### Prospective Remaining Guard Batch
+
+After this supplement merges and the four exact calls are independently admitted,
+run only action 0078, in order `disposed`, `callback`, `missing`, `session`.
+The existing outer controller is the sole exempt harness. Durably predebit one
+build/test and seven synthetic units before the original caller: one outer
+launcher, four case hosts and two payload creations, including the never-resumed
+callback payload. The counters become 19/100/2/111, leaving 69 synthetic units,
+including twelve protected CLI units. This consumes the seven-unit planned guard
+allocation; it does not draw on the 39-unit buffer. Every failed start, assertion
+or collection retains the full charge, even when later cases are not reached.
+No live or guard-collision rerun, launcher-negative driver, final publication,
+account operation or automatic successor is selected.
+
+Reuse the unchanged accepted 0070 launcher and 0066 guard artifacts and their
+reviews and exact pins above. All changed files remain validation infrastructure;
+no native algorithm, product implementation, contract or dependency changes.
+The four selectors, authority case keys, counters and dispatcher result sequence
+must agree. Exact tracked source pins are:
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `Invoke-WindowsNamedGuardFixtures.ps1` | 25291 | `a9619c6a52062642a21bc10d05e99964bbf1b1859a97a73598f7498413188bc5` |
+| `run_windows_named_guard_fixtures.py` | 22272 | `b2156e80a17269adfde6e0ae54db00c9b217016f62ca2e2841e20a16b943c8b5` |
+| `materialize_windows_named_guard_fixtures.py` | 16008 | `00b88554c506a56e6e409fdd6494d240eb06df673745cb62060b0b8f45088c18` |
+
+Use only fresh action/root/record names 0078, a fresh UUIDv4 outer-launcher name and
+four distinct guard names. Preserve the existing same hosts, installed tool and
+public artifact pins, Windows historical-ctime handoff exception and exact integer
+identity checks. The accepted 0077 actual lifetime seal is a pinned preparation
+input and authority prerequisite; no original runtime leaf is reopened.
+
+The fixed inert assembly template is 10416 bytes, SHA-256
+`5901602f0c6678feffdebae94dbe1c1ee6298575cff1e7421ac657c74b9e0e0b`. Its sole `ACCEPTED_COMMIT` substitution must bind this accepted
+revision and clean detached checkout before its exact call is admitted. It adds
+only the pinned 0077 lifetime acceptance input to the preceding assembly's input
+set, retaining sixteen reads, 32 MiB requested bytes, 192 KiB output and the original
+thirty-second clock. It creates only authority, manifest and host bindings.
+Materialization retains six input roles, two fresh roots and seven exact copies,
+continuous created-file handles, thirty seconds, 32 reads, 4 MiB requested bytes,
+256 KiB copied payload and 320 KiB writes. Require its original successful receipt
+and the regular, admitted-owner, owner-executable copied launcher before launch;
+no corrective chmod, alternate copy or rematerialization is admitted.
+
+The inert caller template is 19762 bytes, SHA-256
+`13ca72236d25ae1728377bf9f1e6e6d1c3c9477d003e8f7471c3d0594f10f88d`. Only `CONFIG = None` may be replaced with the actual accepted tool,
+authority, manifest and materialization bindings. Preserve the preceding caller's
+24 reads, 4 MiB input, 192 KiB output and 16 KiB console limits; use its same
+systemd properties and bounded original transport with the fresh 0078 unit.
+Retain the exact public unauthenticated accepted-ref check and interop metadata
+binding; no alternate endpoint, socket probe or process survey is added.
+
+Assembly, materialization, caller and post-termination snapshot each require
+independent exact-source/call admission and one durable original start. Brief
+dependent closures may bind accepted revisions and original outputs to a reviewed
+four-call framework; they cannot change source, effects or bounds. Keep isolated
+Python `-I -B -S`, the original finite clocks and external timeout envelopes from
+0077: passive calls thirty seconds with 35-second external TERM and five-second
+kill reserve; caller 520 with external 540 plus five; service 450 plus five;
+dispatcher cancellation 330, polling 400, final 420; outer launcher 330 plus ten.
+Each guard case retains twenty seconds and its thirty-second containment/output
+slot, inside the existing controller checks at 180/300/310 seconds. All original
+absolute bounds intersect; adding cases does not restart a clock. Only empty
+polls of the original pending tool session, at most sixty seconds per poll, are
+permitted. No failed original submission or spent collector may be repeated.
+
+### Required Observations and Sole Snapshot
+
+`disposed` must establish the durable original payload PID/FILETIME, payload-start
+identity and exact query-only membership after disposing the original final-Job
+handle. The outer controller must retain a handle to that exact target, observe it
+alive before original outer containment Stop, and observe its exit code one after
+successful termination, with zero active processes and both EOFs. Disposing the
+nonterminating final Job alone must not be presented as killing the payload.
+
+`callback` retains the durable before-resume callback record, caught intentional
+callback failure, false execution-may-have-begun state, successful never-resumed
+termination and exit confirmed through the original process handle. Retain the
+absent payload-start check together with those positive observations; absence alone
+is not nonstartup evidence. The accepted LF-01b same-held-Job drain must complete
+inside the existing deadline and retain stage, counts and elapsed times.
+`missing` requires named-open status `not-found` with error two. `session` requires
+`session-mismatch` before opening/querying, with null audit and null open error.
+
+All four case results must pass and join original host exit zero, successful
+containment, zero active processes, complete empty streams and their existing
+bounded Job totals. Normal outer completion retains the nine-record journal,
+original launcher/proxy/service completion and captures, with outer total 7..64
+and zero active processes. Seven is controller plus four hosts plus two payload
+creations; the launcher itself is outside that Job. Keep observed OS auxiliary
+members distinct from the seven charged deliberate subjects and exempt controller.
+
+After original caller termination, admit only the fixed collector, 5148
+bytes, SHA-256 `6ab516eb8aaa73cd15fe18353d60c9b87e563761f78254d8ee8a32808fc5ee62`. It selects thirty-seven leaves: the same fifteen
+base records as 0077, seven disposed leaves, five callback leaves, and five each
+for missing and session. The selected callback leaves omit a named query and
+payload-start record; missing and session omit before-resume and payload-start.
+Keep thirty seconds, 2,193,957 maximum requested bytes within the 4 MiB ceiling,
+and one exclusive 6 MiB snapshot output. Preserve actual bounded JSON/JSONL/capture
+bytes. Missing or unstable selected leaves remain errors, not proof of nonstartup.
+Review only the authenticated retained snapshot after this sole collection.
+
+A failed infrastructure result stops dependent batches for cause and remaining-
+cost reassessment. New unresolved ownership or lifetime uncertainty retains the
+ordinary stop conditions; the three historical risk dispositions cover only their
+accepted originals. Dedicated files are retained. No human input is expected, and
+no account/WAM/token/cache/resource operation, new tool, final publication,
+installation, release or broader platform claim is granted. The later twelve-unit
+launcher-failure batch and publication integration retain separate prerequisites.

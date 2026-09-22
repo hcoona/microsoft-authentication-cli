@@ -1,4 +1,4 @@
-"""Prepare fresh 0077 inputs with continuous created-file handles and bounded failure context."""
+"""Prepare fresh 0078 inputs with continuous created-file handles and bounded failure context."""
 
 import hashlib
 import json
@@ -10,10 +10,10 @@ import sys
 import time
 
 
-MANIFEST = Path('/tmp/windows-named-fixtures0077-materialization-manifest.json')
-OUTPUTS = (Path('/tmp/windows-named-fixtures0077-inputs'),
-           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0077'))
-RECEIPT = Path('/tmp/windows-named-fixtures0077-materialized.json')
+MANIFEST = Path('/tmp/windows-named-fixtures0078-materialization-manifest.json')
+OUTPUTS = (Path('/tmp/windows-named-fixtures0078-inputs'),
+           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0078'))
+RECEIPT = Path('/tmp/windows-named-fixtures0078-materialized.json')
 READS = 0
 REQUESTED = 0
 WRITTEN = 0
@@ -250,7 +250,7 @@ def materialize():
         raise ValueError('Materialization manifest changed')
     manifest = decode(manifest_raw)
     if encode(manifest) != manifest_raw or set(manifest) != {'schema', 'acceptedCommit', 'sources'} or \
-            manifest['schema'] != 'named-fixtures0077-materialization-v1' or \
+            manifest['schema'] != 'named-fixtures0078-materialization-v1' or \
             set(manifest['sources']) != {'authority', 'checkpoint', 'runner', 'controller', 'guard', 'launcher'}:
         raise ValueError('Unexpected materialization scope')
     data = {}
@@ -260,7 +260,7 @@ def materialize():
             raise ValueError('Unexpected copy binding')
         data[role], source_identities[role] = read(Path(binding['path']), 65536, binding)
     authority = decode(data['authority'])
-    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0077':
+    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0078':
         raise ValueError('Copy authority/commit mismatch')
     roles = (('authority.json', 'authority'), ('checkpoint.json', 'checkpoint'),
              ('run_windows_named_guard_fixtures.py', 'runner'))
@@ -305,7 +305,7 @@ def materialize():
                 raise
         join_roots(held)
         join_files(files)
-        receipt = {'schema': 'named-fixtures0077-materialized-v1', 'manifestSha256': sys.argv[1],
+        receipt = {'schema': 'named-fixtures0078-materialized-v1', 'manifestSha256': sys.argv[1],
                    'manifestIdentity': manifest_identity, 'sourceIdentities': source_identities,
                    'directories': directories, 'copies': copies,
                    'beforeReceipt': {'reads': READS, 'requestedBytes': REQUESTED, 'writtenBytes': WRITTEN,
