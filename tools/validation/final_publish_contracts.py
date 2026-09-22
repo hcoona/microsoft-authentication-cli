@@ -1895,7 +1895,7 @@ def refresh_publication_checkpoint(admission, deadline, cancelled, binding=None)
         fail('Current counters or ceilings were reset')
     if type(manifest['stages']) is not list or len(manifest['stages']) != 2:
         fail('Publication requires exactly the new compilation and six-case acceptance')
-    for stage, action, values in zip(manifest['stages'], ('0085', '0086'),
+    for stage, action, values in zip(manifest['stages'], ('0085', '0094'),
                                      ((1, 0, 0, 0), (0, 1, 0, 17)), strict=True):
         keys(stage, ('action', 'acceptance', 'charge', 'countersAfter'))
         charge = dict(zip(PUBLICATION_COUNTERS, values, strict=True))

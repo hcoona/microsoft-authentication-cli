@@ -17674,3 +17674,81 @@ release is permitted. Historical 0057/0064/0068 exceptions remain unchanged and
 cannot excuse a new ownership or lifetime uncertainty. Required real-account
 Slice evidence remains open behind its separate concrete owner effects decision
 and accepted Wave/protocol amendment.
+
+
+## Copied Windows Timestamp Qualification and Fresh Fixture Batch 0094
+
+Original 0086 assembly completed once with exit zero. Its sole separately admitted
+materialization then exited one during a retained-reader comparison of the copied
+Windows controller. The original failure frame reports 39 logical reads, 379,771
+requested bytes and 187,795 written bytes. The eight fields for device, inode,
+mode, owner, group, size, modification time and link count matched; only change
+time differed. This observation does not establish why Windows reported the later
+change time or prove that an arbitrary metadata change is benign.
+
+Independent review accepted the original failure from its source and complete
+terminal transport. The materializer starts no child process or Windows subject.
+Neither the original 0086 caller nor its outcome collector ran. Its assembly and
+materialization are spent, all partial outputs remain retained, and no successful
+materialization receipt or fixture result is accepted. Actual counters remain
+20 preparation, 102 build/test, 2 publication and 130 synthetic. This disposition
+supplies no cleanup authority, refund, replay or new lifetime-risk exception.
+
+Source finding `MATERIALIZER0086-RETAINED-WINDOWS-CTIME-001` was independently
+triaged as a true positive reproducibility defect. The minimum correction extends
+the existing historical Windows change-time qualification only to the copier's
+retained historical identity comparisons for its thirty fixed Windows output
+leaves. Derive that exact set from the declared copy plans, never a generic
+Windows path prefix or caller-provided bypass. Keep continuous created-file
+handles, all eight other historical identity fields, complete byte-for-byte
+readback, and full nine-field equality between each current held descriptor and
+its current named leaf. Source reads, immediate created-file readback, Linux
+copies, the Linux receipt, directory identities and all other comparisons remain
+strict. Preserve actual historical change-time values in the receipt. Do not
+refresh the baseline, retry an observation, reread a copied file or repair its
+permissions to make a mismatch pass.
+
+Use one fresh batch 0094 instead of the unexecuted 0086 Windows batch, with six
+fresh case roots 0095 through 0100 in the same case order. Update the fixed
+materializer, dispatcher, controller and payload bindings atomically. Retain the
+already accepted 0085 native artifact and its original acceptance unchanged;
+its existing fixed publication-fixture interface accepts these fresh four-digit
+roots. No new launcher compilation or native implementation change is required.
+The unchanged 0070 enclosing launcher and 0066 guard retain their original
+acceptances. New source and artifact correspondence still require independent
+exact admission; prior fixture admission cannot authorize renamed inputs.
+
+The current allocation supersedes only the unexecuted fixture row of the previous
+prospective table. The original 0085 compilation remains complete and charged.
+
+| Original action | Preparation | Build/test | Publication | Synthetic | Counters afterward |
+| --- | ---: | ---: | ---: | ---: | --- |
+| 0094: six publication-mode fixtures, roots 0095–0100 | 0 | 1 | 0 | 17 | 20/103/2/147 |
+| 0093: final publication after accepted 0094 | 0 | 0 | 1 | 1 | 20/103/3/148 |
+
+The final-publication checkpoint now joins accepted stages 0085 and 0094, with the
+same exact dictionary charges and counters. Its publication number remains 0093;
+action identifiers are fixed unique names, not a claim about chronological order.
+Preserve all prior charge, protected CLI capacity, historical dispositions,
+account boundaries and ceilings 28/130/30/180. This correction adds no capacity.
+
+Fresh private assembly, caller and collector helpers use only the new batch and
+case names and accepted changed source pins. Their independently accepted literal
+substitutions must preserve the original finite mechanisms: assembly 31 reads,
+32 MiB requested bytes, fifteen exclusive outputs and 192 KiB output; materializer
+22 roles, 14 directories, 34 copies, 64 reads, 4 MiB requested bytes and 1 MiB copied
+payload plus 64 KiB receipt; caller 42 reads, 4 MiB requested bytes and the original
+520-second limit; collector 79 fixed leaves, 4 MiB requested bytes and 6 MiB output.
+Assembly, materialization and collector keep their original thirty-second clock
+and external 35-second timeout plus five-second kill reserve. The caller keeps
+its external 540-second timeout plus five-second reserve. No time or output limit
+is enlarged. All six case observations, original clocks, process accounting,
+nonterminating candidate behavior, enclosing fixture containment, single-use
+calls, sole post-termination snapshot and actual independent acceptance remain
+those of the preceding six-case protocol.
+
+Each new stage requires its exact accepted source/configuration/command, fresh
+durable original start and original terminal join. No earlier partial output is
+reopened, repaired, recopied or used to infer the state of a missing path. Failed
+starts remain spent and stop dependent work. No human interaction, account
+operation, installation, cleanup or release is introduced.
