@@ -15763,8 +15763,9 @@ interference risk, as bounded by the [current Wave](../../delivery-wave.md) and
 the matching [experiment-safety exception](../experiment-safety.md#termination-and-retention).
 After these amendments merge, that historical uncertainty alone no longer blocks
 separately admitted credential-free work on the existing WSL2 and Windows hosts.
-The decision is limited to the current cumulative ceilings of 28 preparation,
-130 build/test, 30 publication and 114 synthetic actions. It ends with the grant,
+The decision originally covered cumulative ceilings of 28 preparation,
+130 build/test, 30 publication and 114 synthetic actions; only the later
+explicit renewed-capacity decision extends that ceiling. It ends with the grant,
 does not transfer to a successor and does not automatically expand if quotas or
 effects change. The historical 0057 and 0064 dispositions remain separate.
 
@@ -16609,8 +16610,78 @@ The remaining thirteen synthetic units include twelve protected final CLI units
 and one prospective publication-launcher unit. A narrowed successor retaining
 the passed collision evidence still needs eight units for the five remaining
 guard cases, eleven for the four launcher failures and one outer launcher:
-twenty additional units. That work does not fit the accepted ceiling of 114
-while preserving those reservations. A capacity decision and accepted Wave
-amendment are required before it starts. This arithmetic neither approves extra
+twenty additional units. At acceptance of this correction, that work did not fit
+the ceiling of 114 while preserving those reservations. The later renewed-capacity
+supplement below records the separately approved extension; it grants no successor
+execution by itself. This arithmetic neither approves extra
 capacity nor resolves the separate validation basis for an adapted publication
 launcher that retains compiler work.
+
+
+## Renewed Synthetic Capacity and Staged Completion Allocation
+
+The repository owner approves the [Wave](../../delivery-wave.md) amendment from
+114 to 180 cumulative synthetic units and the matching
+[historical-risk extension](../experiment-safety.md#termination-and-retention)
+for original 0057, 0064 and 0068 on the same hosts within credential-free effects.
+Preserve consumption at 19 preparations, 98 build/test actions, two publications
+and 101 synthetic units. Preparation 28, build/test 130, publication 30, downloads,
+toolchains, dependencies and account-effects boundaries remain unchanged. Prior
+ratios are historical snapshots; they neither reset consumption nor authorize
+reuse of a spent action. No new lifetime uncertainty is accepted.
+
+The remaining synthetic planning baseline is forty units:
+
+| Remaining work | Synthetic units |
+| --- | ---: |
+| Corrected live guard case: outer launcher, case host, payload | 3 |
+| Disposed, callback, missing and session cases: outer launcher, four hosts, two payloads | 7 |
+| Four launcher failures: outer launcher plus cancel 3, collision 2, overflow 3 and journal 3 | 12 |
+| Protected final CLI cases | 12 |
+| Adapted publication launcher around a separately charged publication | 1 |
+| Final-native duplicate-field and unknown-field Profile cases | 2 |
+| Controlled observer and WSL cases | 3 |
+| Total baseline | 40 |
+
+The three fixture batches cost twenty-two units instead of the twenty-unit
+single-batch minimum because two additional outer launchers are counted. Only
+each batch's existing outer controller remains exempt harness. First accept the
+corrected live case's actual outcome before starting the other guard cases;
+accept those remaining guard prerequisites before the launcher-failure batch.
+Reuse the original 0072 guard collision result only through its exact accepted
+evidence join; the distinct launcher collision failure remains unvalidated.
+Each batch requires its own fresh accepted protocol, source/root/artifact/input
+bindings, original-call admission and full durable predebit. There is no automatic
+retry or unused-unit refund. Unexpected infrastructure failure stops dependent
+batches and requires root-cause and remaining-cost reassessment before another
+charged start. This sequencing limits the first corrected live batch's failed
+charge to three synthetic units; it is not a guarantee of success.
+
+The ceiling is 101 consumed + 40 baseline + 39 shared contingency = 180. Retain
+the earlier tripled buffer size of thirty-nine, rather than tripling it again.
+It is shared finite capacity for separately justified corrections, additional
+necessary process topology or publication-retention validation, and final CLI
+reruns. Capacity alone grants none of those actions. Preserve twelve final CLI
+units and explicitly allocate each new subject before execution. Exact topology
+and debit for the Profile and observer cases remain subject to independent
+acceptance; additional charged processes consume the shared buffer. The adapted
+publication launcher's nonterminating mode still requires its own validation
+basis and cannot inherit empirical validation from terminating fixtures.
+
+The conservative remaining build/test planning allowance is twenty-three:
+one adapted-launcher compilation, three fixture batches, two final CLI actions,
+one native Profile batch, two observer compilations, two observer/WSL actions,
+and up to twelve separately authorized real-product validation actions. This
+would bring 98 to 121, leaving nine under 130. Exact recipes determine the debit
+category; do not borrow between categories. Including prospective real-product
+actions in arithmetic does not grant account, WAM, token, cache or resource
+access. The existing separate real-effects reservation and concrete owner risk
+decision/protocol gates remain unchanged.
+
+This amendment accepts no source input package or original command, starts no
+subject, and supplies no runtime evidence. Future exact protocols must remain
+inside the new ceiling; if the concrete plan cannot fit, stop before its debit
+and obtain a new finite owner decision. The historical exceptions establish no
+termination and permit no old-process cleanup, original replay, recovery, refund,
+new uncertainty, account effects, installation, release or transfer to another
+grant. Accept this supplement, the Wave and experiment-safety amendment together.
