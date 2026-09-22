@@ -1008,7 +1008,7 @@ function Initialize-FinalBinding($ControllerWatch) {
         }
     }
     Assert-FinalKeys $start.priorCounters @('preparation', 'buildTest', 'publication', 'synthetic')
-    foreach ($entry in @{ preparation = 20; buildTest = 104; publication = 2; synthetic = 151 }.GetEnumerator()) {
+    foreach ($entry in @{ preparation = 20; buildTest = 105; publication = 2; synthetic = 155 }.GetEnumerator()) {
         if ($start.priorCounters.($entry.Key) -ne $entry.Value) { throw 'Current publication counters changed' }
     }
     Assert-GuardHash $PSCommandPath $authority.components.controller.sha256
