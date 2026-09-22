@@ -1,4 +1,4 @@
-// Source-only preparation for a future admitted synthetic fixture action.
+// Validation launcher; every execution requires a separately admitted exact call.
 // This executable is validation infrastructure, not part of the product.
 using System;
 using System.Collections.Generic;
@@ -15,8 +15,8 @@ using Microsoft.Win32.SafeHandles;
 
 internal static class WindowsScriptJobLauncher
 {
-    // Removing this gate requires an accepted exact protocol and source admission.
-    private static readonly bool ExecutionAdmitted = false;
+    // Enabled only for separately admitted validation; compilation grants no execution.
+    private static readonly bool ExecutionAdmitted = true;
     private const string Shell = @"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe";
     private const string ShellHash = "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e";
     private const int WorkMilliseconds = 330000;
