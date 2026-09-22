@@ -17523,6 +17523,19 @@ source, command, worker/client start and result, finite compiler/client captures
 and the executable remain in fresh action 0085. Source input stays at most
 65,536 bytes. Do not repair or redirect a linked SDK path.
 
+Before the original 0085 compilation, source review identified
+`LAUNCHER0085-WORKER-LATE-SUCCESS-001`: the inherited helper checked its clock
+before final persistence but could return zero after a late write or flush.
+Independently triaged as a true positive, this correction requires the worker
+to recheck its original 100-second cutoff after result persistence and owned
+file closure, and the caller to recheck its original 150-second cutoff after
+final persistence and after output flush, before choosing exit zero. A receipt
+that says passed is provisional until that actual original zero exit. Late
+completion fails without rewriting the receipt or retrying the call. Preserve
+the unchanged service backstop, compilation recipe and cumulative allocation.
+The completed sole passive SDK metadata observation remains reusable for its
+unchanged seven inputs; it is not a compilation or an additional attempt.
+
 After the one original call terminates, admit at most one bounded snapshot of
 its new charge/result, copied config/source, service/worker starts, compiler
 command/result, client/compiler captures and artifact. Use the same fixed-leaf,
