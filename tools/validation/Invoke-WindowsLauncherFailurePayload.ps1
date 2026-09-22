@@ -10,7 +10,7 @@ Set-StrictMode -Version 2
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $root = [IO.Path]::GetDirectoryName($PSScriptRoot)
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
-if ($root -cnotmatch '^C:\\Temp\\azureauth-windows-slice-108\\publication-fixtures-0102$' -or
+if ($root -cnotmatch '^C:\\Temp\\azureauth-windows-slice-108\\publication-fixtures-0104$' -or
     $root.Substring($root.Length - 4) -cne $ActionName -or $env:PSModuleAnalysisCachePath -cne 'NUL') {
     throw 'Unbound publication fixture workload'
 }

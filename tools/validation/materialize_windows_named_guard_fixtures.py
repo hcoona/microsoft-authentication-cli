@@ -1,4 +1,4 @@
-"""Prepare fresh 0101 inputs with continuous created-file handles and bounded failure context."""
+"""Prepare fresh 0103 inputs with continuous created-file handles and bounded failure context."""
 
 import hashlib
 import json
@@ -10,14 +10,14 @@ import sys
 import time
 
 
-MANIFEST = Path('/tmp/windows-named-fixtures0101-materialization-manifest.json')
-CASE_NUMBERS = ('0102',)
+MANIFEST = Path('/tmp/windows-named-fixtures0103-materialization-manifest.json')
+CASE_NUMBERS = ('0104',)
 INNER_ROOTS = tuple(Path('/mnt/c/Temp/azureauth-windows-slice-108/publication-fixtures-' + number)
                     for number in CASE_NUMBERS)
-OUTPUTS = (Path('/tmp/windows-named-fixtures0101-inputs'),
-           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0101'),
+OUTPUTS = (Path('/tmp/windows-named-fixtures0103-inputs'),
+           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0103'),
            *INNER_ROOTS, *(root / 'controller' for root in INNER_ROOTS))
-RECEIPT = Path('/tmp/windows-named-fixtures0101-materialized.json')
+RECEIPT = Path('/tmp/windows-named-fixtures0103-materialized.json')
 READS = 0
 REQUESTED = 0
 WRITTEN = 0
@@ -35,11 +35,11 @@ def context(phase, path):
     CONTEXT = {'phase': phase, 'role': role, 'leaf': item.name}
 
 
-def same(expected, observed, phase, *, historical_windows_copy=False):
+def same(expected, observed, phase, *, windows_copy=False):
     global MISMATCH
     compared = tuple(index for index in range(len(expected))
-                     if not (historical_windows_copy and index == 7))
-    if historical_windows_copy and (len(expected) != 9 or len(observed) != 9):
+                     if not (windows_copy and index == 7))
+    if windows_copy and (len(expected) != 9 or len(observed) != 9):
         raise ValueError('Invalid copied Windows identity')
     if len(expected) != len(observed) or any(expected[index] != observed[index] for index in compared):
         MISMATCH = {'phase': phase, 'fields': FIELDS[:len(expected)],
@@ -100,8 +100,11 @@ def parent(path):
         raise
 
 
-def read(path, maximum, pinned=None, held_parent=None, expected_identity=None, held_file=None):
+def read(path, maximum, pinned=None, held_parent=None, expected_identity=None, held_file=None,
+         *, windows_copy=False):
     global READS, REQUESTED
+    if windows_copy and (held_parent is None or held_file is None or expected_identity is None):
+        raise ValueError('Windows copy read requires continuous created-file ownership')
     context('read', path)
     check()
     READS += 1
@@ -114,10 +117,10 @@ def read(path, maximum, pinned=None, held_parent=None, expected_identity=None, h
         if not stat.S_ISREG(before.st_mode) or before.st_size > maximum:
             raise ValueError('Materialization source kind or size')
         if expected_identity is not None:
-            same(expected_identity, identity(before), 'created-before-readback')
+            same(expected_identity, identity(before), 'created-before-readback', windows_copy=windows_copy)
         fd = held_file if held_file is not None else os.open(
             path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=pfd)
-        same(identity(before), identity(os.fstat(fd)), 'named-before-open-vs-opened')
+        same(identity(before), identity(os.fstat(fd)), 'named-before-open-vs-opened', windows_copy=windows_copy)
         raw = bytearray()
         while len(raw) < before.st_size:
             check()
@@ -132,9 +135,9 @@ def read(path, maximum, pinned=None, held_parent=None, expected_identity=None, h
         REQUESTED += 1
         if REQUESTED > 4194304 or os.read(fd, 1):
             raise ValueError('Materialization EOF or requested bytes')
-        same(identity(before), identity(os.fstat(fd)), 'handle-after-read')
+        same(identity(before), identity(os.fstat(fd)), 'handle-after-read', windows_copy=windows_copy)
         same(identity(before), identity(os.stat(path.name, dir_fd=pfd, follow_symlinks=False)),
-             'named-after-read')
+             'named-after-read', windows_copy=windows_copy)
         data = bytes(raw)
         if pinned is not None and (len(data) != pinned['bytes'] or hashlib.sha256(data).hexdigest() != pinned['sha256']):
             raise ValueError('Unadmitted materialization bytes')
@@ -163,7 +166,7 @@ def decode(raw):
                       parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Nonfinite copy field')))
 
 
-def write_readback(pfd, name, raw, expected_parent, output_path):
+def write_readback(pfd, name, raw, expected_parent, output_path, *, windows_copy=False):
     global WRITTEN
     context('write', output_path)
     check()
@@ -194,9 +197,10 @@ def write_readback(pfd, name, raw, expected_parent, output_path):
         reader = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=pfd)
         current = os.fstat(writer)
         same(identity(initial)[:2], identity(current)[:2], 'creator-object-continuity')
-        same(identity(current), identity(os.fstat(reader)), 'creator-vs-overlapping-reader')
+        same(identity(current), identity(os.fstat(reader)), 'creator-vs-overlapping-reader',
+             windows_copy=windows_copy)
         same(identity(current), identity(os.stat(name, dir_fd=pfd, follow_symlinks=False)),
-             'overlapping-handles-vs-named')
+             'overlapping-handles-vs-named', windows_copy=windows_copy)
         closing_writer = writer
         writer = None
         os.close(closing_writer)
@@ -212,9 +216,11 @@ def write_readback(pfd, name, raw, expected_parent, output_path):
                                       baseline.st_size, baseline.st_nlink)):
             raise ValueError('Final copied-file protection, ownership, size or links')
         # The only new read baseline follows our final mutating-handle close.
-        # All nine fields must now agree with the name and remain stable.
+        # Only fixed Windows copies treat ctime as an observation. Every other
+        # identity field and the complete readback bytes must still agree.
         actual, observed = read(output_path, len(raw), held_parent=pfd,
-                                expected_identity=identity(baseline), held_file=reader)
+                                expected_identity=identity(baseline), held_file=reader,
+                                windows_copy=windows_copy)
         if actual != raw:
             raise ValueError('Materialization readback mismatch')
         check()
@@ -232,12 +238,12 @@ def join_files(files, windows_copies):
         context('copied-file-continuity', path)
         check()
         current = identity(os.fstat(fd))
-        # Only a fixed copied Windows leaf may differ from its historical ctime.
-        # Current descriptor/name observations still compare all nine fields.
+        # The same fixed Windows-copy projection applies throughout the held
+        # descriptor lifetime, including current descriptor/name comparisons.
         same(original, current, 'retained-reader',
-             historical_windows_copy=path in windows_copies)
+             windows_copy=path in windows_copies)
         same(current, identity(os.stat(path.name, dir_fd=pfd, follow_symlinks=False)),
-             'retained-reader-vs-named')
+             'retained-reader-vs-named', windows_copy=path in windows_copies)
 
 
 def join_roots(held):
@@ -265,7 +271,7 @@ def materialize():
                       'failureDriver', 'failureController', 'candidate', 'candidateAcceptance'}
     required_roles.update(number + '-' + leaf for number in CASE_NUMBERS for leaf in ('started', 'invocation'))
     if encode(manifest) != manifest_raw or set(manifest) != {'schema', 'acceptedCommit', 'sources'} or \
-            manifest['schema'] != 'named-fixtures0101-materialization-v1' or \
+            manifest['schema'] != 'named-fixtures0103-materialization-v1' or \
             set(manifest['sources']) != required_roles:
         raise ValueError('Unexpected materialization scope')
     data = {}
@@ -275,7 +281,7 @@ def materialize():
             raise ValueError('Unexpected copy binding')
         data[role], source_identities[role] = read(Path(binding['path']), 65536, binding)
     authority = decode(data['authority'])
-    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0101':
+    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0103':
         raise ValueError('Copy authority/commit mismatch')
     roles = (('authority.json', 'authority'), ('checkpoint.json', 'checkpoint'),
              ('run_windows_named_guard_fixtures.py', 'runner'),
@@ -321,7 +327,8 @@ def materialize():
                 directories.append({'path': str(root), 'identity': original})
                 for leaf, role in selected:
                     join_roots(held)
-                    observed, reader = write_readback(rootfd, leaf, data[role], original, root / leaf)
+                    observed, reader = write_readback(rootfd, leaf, data[role], original, root / leaf,
+                                                      windows_copy=root / leaf in windows_copies)
                     files.append((root / leaf, rootfd, reader, observed))
                     join_roots(held)
                     join_files(files, windows_copies)
@@ -336,7 +343,7 @@ def materialize():
                 raise
         join_roots(held)
         join_files(files, windows_copies)
-        receipt = {'schema': 'named-fixtures0101-materialized-v1', 'manifestSha256': sys.argv[1],
+        receipt = {'schema': 'named-fixtures0103-materialized-v1', 'manifestSha256': sys.argv[1],
                    'manifestIdentity': manifest_identity, 'sourceIdentities': source_identities,
                    'directories': directories, 'copies': copies,
                    'beforeReceipt': {'reads': READS, 'requestedBytes': REQUESTED, 'writtenBytes': WRITTEN,
