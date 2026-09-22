@@ -14,21 +14,19 @@ import time
 import urllib.request
 
 
-INPUTS = Path('/tmp/windows-named-fixtures0072-inputs')
-WINDOWS = Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0072')
-HISTORY = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0072')
+INPUTS = Path('/tmp/windows-named-fixtures0077-inputs')
+WINDOWS = Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0077')
+HISTORY = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0077')
 SHELL = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
 LAUNCHER = WINDOWS / 'WindowsScriptJobLauncher.exe'
 LAUNCHER_BYTES = 23040
 LAUNCHER_SHA256 = '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a'
-UNIT = 'azureauth-named-fixtures-108-0072.service'
-BEFORE = {'preparation': 19, 'buildTest': 97, 'publication': 2, 'synthetic': 80}
-AFTER = {'preparation': 19, 'buildTest': 98, 'publication': 2, 'synthetic': 101}
+UNIT = 'azureauth-named-fixtures-108-0077.service'
+BEFORE = {'preparation': 19, 'buildTest': 98, 'publication': 2, 'synthetic': 101}
+AFTER = {'preparation': 19, 'buildTest': 99, 'publication': 2, 'synthetic': 104}
 GUARD_COUNTERS = {'preparation': 17, 'buildTest': 94, 'publication': 2, 'synthetic': 52}
 FAILURE_DISPOSITION_SHA256 = '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf'
-CASES = ('collision', 'live', 'disposed', 'callback', 'missing', 'session')
-FAILURE_CASES = dict(zip(('cancel', 'collision', 'overflow', 'journal'),
-                       ('0073', '0074', '0075', '0076'), strict=True))
+CASES = ('live',)
 READ_LIMIT = 16 * 1024 * 1024
 read_requested = 0
 
@@ -202,14 +200,14 @@ def accept_launcher_journal(raw, authority, authority_hash):
                 type(identity['session']) is not int or identity['session'] < 0 or \
                 not re.fullmatch(r'[1-9][0-9]{1,19}', identity['creationFileTime']):
             raise ValueError('Launcher process identity missing')
-    expected_name = 'Local\\azureauth-controller-108-0072-' + authority['launcherSuffix']
+    expected_name = 'Local\\azureauth-controller-108-0077-' + authority['launcherSuffix']
     if bootstrap['authoritySha256'] != authority_hash or bootstrap['jobName'] != expected_name or \
             ready['queryAndTerminateAccess'] is not True or root['inJob'] is not True or \
             root['pid'] == bootstrap['pid'] or root['session'] != bootstrap['session']:
         raise ValueError('Launcher creation-time containment mismatch')
     completed = records[5]
     if completed['rootExited'] is not True or completed['rootExitCode'] != 0 or \
-            completed['activeProcesses'] != 0 or not 21 <= completed['totalProcesses'] <= 64 or \
+            completed['activeProcesses'] != 0 or not 3 <= completed['totalProcesses'] <= 64 or \
             completed['stdoutEof'] is not True or completed['stderrEof'] is not True or \
             completed['capturedBytes'] != 0:
         raise ValueError('Launcher workload completion mismatch')
@@ -236,12 +234,12 @@ def main():
     if sha(authority_bytes) != authority_hash:
         raise ValueError('Authority changed')
     authority = decode(authority_bytes)
-    if encode(authority) != authority_bytes or authority['schema'] != 'named-guard-fixtures-0072-v1' or \
-            authority['accepted'] is not True or authority['action'] != '0072' or \
-            authority['countsBefore'] != BEFORE or authority['buildTestCharge'] != 1 or authority['syntheticCharge'] != 21 or \
+    if encode(authority) != authority_bytes or authority['schema'] != 'named-guard-fixtures-0077-v1' or \
+            authority['accepted'] is not True or authority['action'] != '0077' or \
+            authority['countsBefore'] != BEFORE or authority['buildTestCharge'] != 1 or authority['syntheticCharge'] != 3 or \
             authority['failedFixtureDispositionSha256'] != FAILURE_DISPOSITION_SHA256 or \
-            authority['failure0071DispositionSha256'] != \
-            '7e70e12e52e2eecd0d4fd823763cef52334da5f197fadef91950218b7b511664':
+            authority['failure0072DispositionSha256'] != \
+            'a4efab71cbd10564c70251826e28195eb09d3497454982c0f314c388a2a88439':
         raise ValueError('Fixture allocation not admitted')
     if sha(read(Path(__file__), 65536)) != authority['runnerSha256']:
         raise ValueError('Dispatcher changed')
@@ -256,9 +254,9 @@ def main():
     history_fd = os.open(HISTORY, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
     if created_history_identity != directory_identity(os.fstat(history_fd)):
         raise ValueError('Original history root changed during open')
-    start = {'schema': 'named-guard-fixtures-started-v1', 'action': '0072', 'countsBefore': BEFORE,
+    start = {'schema': 'named-guard-fixtures-started-v1', 'action': '0077', 'countsBefore': BEFORE,
              'countsAfter': AFTER, 'authoritySha256': authority_hash, 'cgroup': group,
-             'startedMonotonicNs': time.monotonic_ns(), 'buildTestCharge': 1, 'syntheticCharge': 21}
+             'startedMonotonicNs': time.monotonic_ns(), 'buildTestCharge': 1, 'syntheticCharge': 3}
     start_hash = write_root_json(HISTORY, history_fd, created_history_identity, 'started.json', start)
     result = {'schema': 'named-guard-fixtures-result-v1', 'passed': False, 'continuation_allowed': False,
               'authoritySha256': authority_hash, 'countsAfter': AFTER, 'proxyExit': None,
@@ -292,23 +290,6 @@ def main():
             raise ValueError('Windows authority copy changed')
         if sha(read(WINDOWS / 'Invoke-WindowsNamedGuardFixtures.ps1', 65536)) != authority['controllerSha256']:
             raise ValueError('Windows fixture source changed')
-        if sha(read(WINDOWS / 'WindowsLauncherFailureFixtures.ps1', 65536)) != authority['failureDriverSha256'] or \
-                set(authority['failureCases']) != set(FAILURE_CASES):
-            raise ValueError('Unaccepted launcher failure driver or case set')
-        for name, number in FAILURE_CASES.items():
-            spec = authority['failureCases'][name]
-            expected_root = 'C:\\Temp\\azureauth-windows-slice-108\\named-fixtures-' + number
-            inner = WINDOWS.parent / ('named-fixtures-' + number)
-            if spec['root'] != expected_root or not re.fullmatch(
-                    r'[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}', spec['suffix']):
-                raise ValueError('Unbound failure root or suffix')
-            if read(inner / 'authority.json', 65536) != authority_bytes or \
-                    sha(read(inner / 'Invoke-WindowsNamedGuardFixtures.ps1', 65536)) != authority['failureControllerSha256']:
-                raise ValueError('Failure workload inputs changed')
-            if any((inner / leaf).exists() for leaf in ('launcher.jsonl', 'launcher.stdout.bin',
-                    'launcher.stderr.bin', 'root-ready.json', 'descendant-ready.json', 'case-result.json',
-                    'cancel', 'release')):
-                raise ValueError('Negative case evidence already exists')
         launcher = read(LAUNCHER, 2097152)
         if len(launcher) != LAUNCHER_BYTES or sha(launcher) != LAUNCHER_SHA256:
             raise ValueError('Accepted launcher artifact changed')
@@ -329,7 +310,7 @@ def main():
         if verify_interop(authority) != interop:
             raise ValueError('Original caller interop binding changed')
         signal.setitimer(signal.ITIMER_REAL, max(0.001, 420 - (time.monotonic() - began)))
-        command = [str(LAUNCHER), r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0072',
+        command = [str(LAUNCHER), r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0077',
                    authority['launcherSuffix'], authority_hash, authority['controllerSha256']]
         process = subprocess.Popen(command, cwd=WINDOWS, stdin=subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -385,29 +366,8 @@ def main():
                 any(item['quiescent'] is not True or item['activeAfterStop'] != 0 or
                     item['stdoutEof'] is not True or item['stderrEof'] is not True for item in windows['cases']):
             raise ValueError('Original fixture Windows outcome failed')
-        disposed = next(item for item in windows['cases'] if item['case'] == 'disposed')
-        if disposed['targetHandleHeld'] is not True or disposed['targetAliveBeforeStop'] is not True or \
-                disposed['targetExitedAfterStop'] is not True or disposed['targetExitCode'] != 1 or \
-                disposed['targetObservationError'] is not None or \
-                disposed['terminationRequested'] is not True or disposed['terminationSucceeded'] is not True or \
-                not 1 <= disposed['activeBeforeStop'] <= 8 or \
-                disposed['targetIdentity']['authoritySha256'] != authority_hash or \
-                disposed['targetIdentity']['jobName'] != authority['cases']['disposed']:
-            raise ValueError('Disposed target termination was not established')
-        negatives = windows['launcherFailureCases']
-        if tuple(item['case'] for item in negatives) != ('cancel', 'collision', 'overflow', 'journal') or \
-                any(item['passed'] is not True or item['launcherExit'] != 1 or
-                    item['stdoutEof'] is not True or item['stderrEof'] is not True for item in negatives):
-            raise ValueError('Incomplete launcher failure cases')
-        for item in negatives:
-            if item['case'] == 'collision':
-                if item['sentinelSurvived'] is not True or item['sentinelStopped'] is not True or \
-                        item['sentinelActiveAfterStop'] != 0:
-                    raise ValueError('Collision sentinel outcome failed')
-            elif item['queryHandleHeldThroughExit'] is not True or item['afterCandidate']['active'] != 0:
-                raise ValueError('Negative candidate Job did not empty')
-        if negatives[-1]['journalLockHeldThroughExitAndEmptyJob'] is not True:
-            raise ValueError('Journal fault lifetime join missing')
+        if windows['launcherFailureCases'] != []:
+            raise ValueError('Unallocated launcher failure case')
         result['windowsQuiescent'] = True
         result['passed'] = True
     except Exception as error:

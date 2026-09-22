@@ -16685,3 +16685,160 @@ and obtain a new finite owner decision. The historical exceptions establish no
 termination and permit no old-process cleanup, original replay, recovery, refund,
 new uncertainty, account effects, installation, release or transfer to another
 grant. Accept this supplement, the Wave and experiment-safety amendment together.
+
+## One Corrected Live Guard Case: 0077
+
+This is the first three-unit batch in the renewed-capacity allocation above.
+After this supplement merges and its exact inputs and original calls receive
+independent admission, run only the corrected live guard case as action 0077.
+Original 0072 remains failed, fully charged and spent. Its accepted collision
+result is retained for a later explicit evidence join; this batch neither reruns
+that case nor claims the remaining guard or launcher-failure cases. The original
+compound completion failure's cause remains unknown. Auxiliary teardown lag is
+only a hypothesis; this action tests the accepted completion correction without
+assuming that hypothesis is true.
+
+### Source, Allocation and Effects
+
+Use the unchanged 23,040-byte launcher from 0070, SHA-256
+`5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a`,
+and 24,576-byte guard from 0066, SHA-256
+`a18302e4658afc08b564be23c9b52995fba85c1a3345fba19662008efe30ae58`.
+Retain their accepted artifact reviews, installed runtime/tool bindings and
+existing Windows/WSL hosts. No compilation, new tool, account or broker operation
+is included. Only the fixed empty-output payload and its owning host are selected.
+There is no expected UI or human interaction.
+
+Before the sole original caller, durably debit one build/test action and three
+synthetic units: outer launcher, live case host and payload. Only the existing
+outer controller is exempt harness. Counters move from 19/98/2/101 to 19/99/2/104
+under the accepted 28/130/30/180 ceilings. Failed caller preflight, interrupted
+start, assertion or evidence collection retains the full charge. Passive assembly,
+materialization and the fixed snapshot charge no additional experiment unit.
+Twelve final CLI units stay protected. The remaining seven-unit guard batch and
+twelve-unit launcher-failure batch require their own accepted protocols and actual
+prerequisite outcomes; this singleton never dispatches them automatically.
+
+The controller accepts only `live` in its case selector and authority, retains
+the LF-01 correction, and removes the negative driver dispatch. Other existing
+case branches are unreachable under this allocation. The dispatcher accepts only
+a live containment result and an empty launcher-failure list. The materializer
+copies no negative driver or sibling workload. Exact tracked source pins are:
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `Invoke-WindowsNamedGuardFixtures.ps1` | 25031 | `aab0257dd029ad2eee1475ce47ea0ac5ddcbc580a1c5c265ef4a8df60b82090a` |
+| `run_windows_named_guard_fixtures.py` | 22109 | `e4d6e50abf47e91be4f3e1065c6d3841b6f466986e0aba9b88dd8ff6d4183beb` |
+| `materialize_windows_named_guard_fixtures.py` | 16008 | `76a26c31e7ed913790f9726df2cec7413194df1884cb695a28b730c8538e0548` |
+
+All three are validation infrastructure under `tools/validation`; no product
+source, contract, account behavior or support claim changes. The authority joins
+original 0072's accepted failure disposition, whose private seal SHA-256 is
+`a4efab71cbd10564c70251826e28195eb09d3497454982c0f314c388a2a88439`.
+Its independent lifetime disposition and PR #249 remain prerequisites. No old
+runtime leaf, failed caller, recovery, snapshot or cleanup is reopened.
+
+### Fresh Preparation and Original Calls
+
+Exclusively use Linux action `windows-actions/0077`, private
+`windows-named-fixtures0077-*` records and Windows
+`C:\Temp\azureauth-windows-slice-108\named-fixtures-0077`.
+Create fresh UUIDv4 names for the outer launcher and live guard Job. No 0073--0076
+root is part of this action. Keep the already accepted continuous-descriptor
+materialization, exact source/hash and current nine-field identity checks.
+Only the existing Windows handoff's historical ctime comparison is excepted;
+current-read ctime stability and every other field remain required. Preserve
+nanosecond values as Python integers and Windows creation FILETIME as strings.
+
+The fixed assembly template is 10,089 bytes, SHA-256
+`11ad7119260396e5d466f09766b8eb08a6eeb18826adc1f385efc9d5db237fd4`.
+It remains inert until its sole `ACCEPTED_COMMIT` placeholder binds this accepted
+revision and its fixed clean detached checkout. Its only outputs are the
+fresh authority, materialization manifest and host bindings. It checks the same
+five installed tool files, five source/artifact/checkpoint inputs, original 0072
+disposition and current interop endpoint metadata, with no socket connection.
+The original thirty-second, sixteen-read, 32 MiB requested-byte and 192 KiB
+output limits remain. Admit the completed source, exact call and durable start
+before its one submission; a failed call is spent without automatic retry.
+
+The materializer has six input roles and creates exactly two roots and seven
+copies: three Linux copies (authority, guard checkpoint, dispatcher) and four
+Windows copies (authority, controller, guard DLL, launcher EXE). Keep its original
+thirty-second, 32-read, 4 MiB requested-byte, 256 KiB copied-payload and 320 KiB
+write limits, exclusive receipt, continuous created-file handles and failure
+context. Before launch, independently join the receipt and unchanged artifacts;
+require the copied launcher to be regular, owned by the admitted caller and
+owner-executable. No corrective chmod, alternate copy, retry or fresh permission
+probe follows a deficient receipt.
+
+The inert original caller template is 19,632 bytes, SHA-256
+`6a8b328979f89c9514d7d42da376c72768eef21828b25b756d8877c89ed08b29`.
+After assembly/materialization acceptance, replace only its `CONFIG = None`
+placeholder with exact accepted tool, authority, manifest and materialization
+bindings. Independently accept the complete resulting bytes and literal call.
+Keep the caller's twenty-four-read, 4 MiB input, 192 KiB output and 16 KiB console
+limits. The sole systemd unit is `azureauth-named-fixtures-108-0077.service` with
+`--wait --pipe`, `ExitType=cgroup`, `KillMode=control-group` and no restart.
+The dispatcher retains its exact public unauthenticated accepted-ref check,
+interop binding and 16 MiB file-read budget. No alternate endpoint or process
+survey is authorized.
+
+Each of the four calls (assembly, materialization, caller, snapshot) needs its
+own exact source/call admission and durable start. Use the accepted isolated
+Python with `-I -B -S`; do not import or probe a candidate to prepare these calls.
+Only empty polls of the original pending tool session, each at most sixty
+seconds, collect its result. Preserve partial records on failure. No original
+call may be resubmitted or switched to another collector.
+
+### Completion, Clocks and Evidence
+
+All existing clocks remain finite and unchanged: thirty-second assembly,
+materialization and snapshot; caller 520 seconds with external 540-second timeout
+and five-second kill reserve; systemd runtime 450 seconds plus five for stopping;
+dispatcher cancellation at 330, polling through 400 and final bound 420 seconds;
+outer launcher 330 seconds plus at most ten for cleanup. The live case has the
+existing twenty-second execution bound and thirty-second containment/output slot,
+inside the unchanged 300-second controller work clock and 310-second final check.
+No unused case slot permits another subject. All earlier per-operation and
+original absolute deadlines still intersect; there is no restarted clock.
+
+The launcher creates its named Job before the first PowerShell, assigns it at
+process creation, retains suspended-root identity and durable resume intent,
+then supervises the fixed controller and descendants. Preserve all original
+failure cleanup and console-capture behavior. The normal outer Job must finish
+with zero active processes, complete empty streams and a total in 3..64. Its
+three deliberate workload processes are controller, case host and payload;
+the launcher itself remains outside that Job. Its charge and the exempt controller
+are separate from Job accounting. Preserve observed infrastructure members
+without inventing submitted subjects or an exact process-count claim. Existing
+32-active-process enforcement and live containment total 2..8 remain unchanged.
+
+The live case must retain its durable before-resume PID/FILETIME identity,
+positive exact named membership observation, release signal, payload exit zero,
+and bounded same-handle Job quiescence. The accepted LF-01 records distinguish
+payload exit from subsequent Job polling, including failure stage, last counts,
+observation count and elapsed times. Require the independently reviewed actual
+case record as well as the controller's pass flag. Original WSL proxy exit/EOF,
+launcher journal, live containment and original service completion must all join.
+An aggregate zero, journal record, absent leaf or cgroup proxy exit alone cannot
+establish Windows lifetime or success.
+
+After original caller termination, admit the one fixed collector, 5,111 bytes,
+SHA-256 `668ef4aa8773daa53abbcd21be21f7ef0f88f37c09ada69dc51e5f404717cb21`.
+It selects exactly twenty-two leaves: original caller start/result, dispatcher
+start/result, Windows start/result, authority, materialization, controller,
+dispatcher source, guard DLL, launcher EXE, launcher journal and both captures;
+plus live outer Job/root, containment, case result, named query, before-resume
+and payload-start records. Keep thirty seconds, at most 4 MiB requested bytes,
+an exclusive 6 MiB snapshot output and actual bounded JSON/JSONL/console bytes.
+Missing or unstable leaves remain errors, never proof of nonstartup. The collector
+observes no process, Job, cgroup, account or historical runtime path. Independently
+authenticate the retained snapshot against the original terminal transport before
+outcome acceptance. The snapshot alone supplies no fresh process-lifetime claim.
+
+A failed infrastructure result stops dependent batches for cause and remaining-
+cost reassessment. Any new unresolved ownership or lifetime uncertainty retains
+the ordinary stop conditions. The three historical risk dispositions remain
+limited to their accepted originals and credential-free effects. No account,
+WAM, token, cache, authenticated resource, tool installation, final publication,
+release or broader compatibility claim follows from this batch.
