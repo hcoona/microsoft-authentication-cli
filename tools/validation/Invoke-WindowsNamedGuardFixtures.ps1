@@ -8,7 +8,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
 if ($env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Fixture startup cache control is absent' }
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0086'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0094'
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $script:writtenBytes = 0
 $script:readBytes = 0
@@ -99,8 +99,8 @@ if ((Get-Hash $authorityBytes) -cne $AuthoritySha256) { throw 'Fixture authority
 $authorityText = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes)
 $authority = $authorityText | ConvertFrom-Json
 if ($authorityText -cne (($authority | ConvertTo-Json -Depth 20 -Compress) + "`n") -or
-    $authority.schema -cne 'named-guard-fixtures-0086-v1' -or
-    $authority.accepted -ne $true -or $authority.action -cne '0086' -or
+    $authority.schema -cne 'named-guard-fixtures-0094-v1' -or
+    $authority.accepted -ne $true -or $authority.action -cne '0094' -or
     $authority.countsBefore.preparation -ne 20 -or $authority.countsBefore.buildTest -ne 102 -or
     $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 130 -or
     $authority.failedFixtureDispositionSha256 -cne '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf' -or
@@ -119,8 +119,8 @@ if ($authority.negatives0080AcceptanceSha256 -cne
     throw 'Original 0080 acceptance changed'
 }
 $negativeRoots = [ordered]@{
-    normal = '0087'; 'pre-resume' = '0088'; 'resume-unknown' = '0089'
-    timeout = '0090'; overflow = '0091'; 'journal-cancel' = '0092'
+    normal = '0095'; 'pre-resume' = '0096'; 'resume-unknown' = '0097'
+    timeout = '0098'; overflow = '0099'; 'journal-cancel' = '0100'
 }
 if (@($authority.failureCases.PSObject.Properties.Name).Count -ne 6) {
     throw 'Incomplete publication fixture allocation'

@@ -1,4 +1,4 @@
-# Dot-sourced by the admitted 0086 controller; no extra observer/helper process.
+# Dot-sourced by the admitted 0094 controller; no extra observer/helper process.
 $publicationFlags = [Reflection.BindingFlags]::Static -bor [Reflection.BindingFlags]::NonPublic
 $publicationOpen = [WindowsValidationJob].GetMethod('OpenJobObject', $publicationFlags)
 $publicationMember = [WindowsValidationJob].GetMethod('IsProcessInJob', $publicationFlags)

@@ -1,4 +1,4 @@
-"""Prepare fresh 0086 inputs with continuous created-file handles and bounded failure context."""
+"""Prepare fresh 0094 inputs with continuous created-file handles and bounded failure context."""
 
 import hashlib
 import json
@@ -10,14 +10,14 @@ import sys
 import time
 
 
-MANIFEST = Path('/tmp/windows-named-fixtures0086-materialization-manifest.json')
-CASE_NUMBERS = ('0087', '0088', '0089', '0090', '0091', '0092')
+MANIFEST = Path('/tmp/windows-named-fixtures0094-materialization-manifest.json')
+CASE_NUMBERS = ('0095', '0096', '0097', '0098', '0099', '0100')
 INNER_ROOTS = tuple(Path('/mnt/c/Temp/azureauth-windows-slice-108/publication-fixtures-' + number)
                     for number in CASE_NUMBERS)
-OUTPUTS = (Path('/tmp/windows-named-fixtures0086-inputs'),
-           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0086'),
+OUTPUTS = (Path('/tmp/windows-named-fixtures0094-inputs'),
+           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0094'),
            *INNER_ROOTS, *(root / 'controller' for root in INNER_ROOTS))
-RECEIPT = Path('/tmp/windows-named-fixtures0086-materialized.json')
+RECEIPT = Path('/tmp/windows-named-fixtures0094-materialized.json')
 READS = 0
 REQUESTED = 0
 WRITTEN = 0
@@ -35,9 +35,13 @@ def context(phase, path):
     CONTEXT = {'phase': phase, 'role': role, 'leaf': item.name}
 
 
-def same(expected, observed, phase):
+def same(expected, observed, phase, *, historical_windows_copy=False):
     global MISMATCH
-    if expected != observed:
+    compared = tuple(index for index in range(len(expected))
+                     if not (historical_windows_copy and index == 7))
+    if historical_windows_copy and (len(expected) != 9 or len(observed) != 9):
+        raise ValueError('Invalid copied Windows identity')
+    if len(expected) != len(observed) or any(expected[index] != observed[index] for index in compared):
         MISMATCH = {'phase': phase, 'fields': FIELDS[:len(expected)],
                     'expected': expected, 'observed': observed,
                     'differingFields': [field for field, left, right in
@@ -223,12 +227,16 @@ def write_readback(pfd, name, raw, expected_parent, output_path):
         close_owned(closing)
 
 
-def join_files(files):
+def join_files(files, windows_copies):
     for path, pfd, fd, original in files:
         context('copied-file-continuity', path)
         check()
-        same(original, identity(os.fstat(fd)), 'retained-reader')
-        same(original, identity(os.stat(path.name, dir_fd=pfd, follow_symlinks=False)),
+        current = identity(os.fstat(fd))
+        # Only a fixed copied Windows leaf may differ from its historical ctime.
+        # Current descriptor/name observations still compare all nine fields.
+        same(original, current, 'retained-reader',
+             historical_windows_copy=path in windows_copies)
+        same(current, identity(os.stat(path.name, dir_fd=pfd, follow_symlinks=False)),
              'retained-reader-vs-named')
 
 
@@ -257,7 +265,7 @@ def materialize():
                       'failureDriver', 'failureController', 'candidate', 'candidateAcceptance'}
     required_roles.update(number + '-' + leaf for number in CASE_NUMBERS for leaf in ('started', 'invocation'))
     if encode(manifest) != manifest_raw or set(manifest) != {'schema', 'acceptedCommit', 'sources'} or \
-            manifest['schema'] != 'named-fixtures0086-materialization-v1' or \
+            manifest['schema'] != 'named-fixtures0094-materialization-v1' or \
             set(manifest['sources']) != required_roles:
         raise ValueError('Unexpected materialization scope')
     data = {}
@@ -267,7 +275,7 @@ def materialize():
             raise ValueError('Unexpected copy binding')
         data[role], source_identities[role] = read(Path(binding['path']), 65536, binding)
     authority = decode(data['authority'])
-    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0086':
+    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0094':
         raise ValueError('Copy authority/commit mismatch')
     roles = (('authority.json', 'authority'), ('checkpoint.json', 'checkpoint'),
              ('run_windows_named_guard_fixtures.py', 'runner'),
@@ -281,6 +289,8 @@ def materialize():
     controller_plans = tuple((('Start-WindowsFinalPublish.draft.ps1', 'failureController'),)
                              for _ in CASE_NUMBERS)
     plans = (roles, windows_roles, *inner_plans, *controller_plans)
+    windows_copies = frozenset(root / leaf for root, plan in zip(OUTPUTS[1:], plans[1:], strict=True)
+                               for leaf, _role in plan)
     for case, spec in authority['failureCases'].items():
         number = spec['root'][-4:]
         if number not in CASE_NUMBERS:
@@ -314,7 +324,7 @@ def materialize():
                     observed, reader = write_readback(rootfd, leaf, data[role], original, root / leaf)
                     files.append((root / leaf, rootfd, reader, observed))
                     join_roots(held)
-                    join_files(files)
+                    join_files(files, windows_copies)
                     copies.append({'path': str(root / leaf), 'bytes': len(data[role]),
                                    'sha256': hashlib.sha256(data[role]).hexdigest(), 'identity': observed})
                 os.fsync(pfd)
@@ -325,8 +335,8 @@ def materialize():
                     close_owned(closing)
                 raise
         join_roots(held)
-        join_files(files)
-        receipt = {'schema': 'named-fixtures0086-materialized-v1', 'manifestSha256': sys.argv[1],
+        join_files(files, windows_copies)
+        receipt = {'schema': 'named-fixtures0094-materialized-v1', 'manifestSha256': sys.argv[1],
                    'manifestIdentity': manifest_identity, 'sourceIdentities': source_identities,
                    'directories': directories, 'copies': copies,
                    'beforeReceipt': {'reads': READS, 'requestedBytes': REQUESTED, 'writtenBytes': WRITTEN,
@@ -340,7 +350,7 @@ def materialize():
             directory_identity(os.fstat(receipt_parent)), RECEIPT)
         files.append((RECEIPT, receipt_parent, reader, receipt_identity))
         join_roots(held)
-        join_files(files)
+        join_files(files, windows_copies)
         check()
         print(json.dumps({'complete': True, 'materialization': {'bytes': len(raw),
                          'sha256': hashlib.sha256(raw).hexdigest()},
