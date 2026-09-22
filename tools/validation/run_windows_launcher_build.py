@@ -1,4 +1,4 @@
-"""Single admitted Linux compilation of the inactive Windows launcher.
+"""Single corrected Linux compilation of the Windows validation launcher.
 
 This is a prospective helper. An accepted protocol and independent exact-call
 admission are required; invoking this file cannot grant either prerequisite.
@@ -16,12 +16,12 @@ import sys
 import time
 import uuid
 
-ROOT = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0069')
-CHARGE = Path('/tmp/windows-launcher0069-original-charge.json')
-FINAL = Path('/tmp/windows-launcher0069-original-result.json')
+ROOT = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0070')
+CHARGE = Path('/tmp/windows-launcher0070-original-charge.json')
+FINAL = Path('/tmp/windows-launcher0070-original-result.json')
 FRAMEWORK = Path('/mnt/c/Windows/Microsoft.NET/Framework64/v4.0.30319')
-BEFORE = [17, 96, 2, 70]
-AFTER = [18, 96, 2, 70]
+BEFORE = [18, 96, 2, 70]
+AFTER = [19, 96, 2, 70]
 FRAMEWORK_PINS = {
     'mscorlib.dll': '5bffb20e1217bad314143d7e5c4c809bf9f522e8a0a063c8e7e9b25113de26eb',
     'System.dll': '2b3c17c6208a0b4b6beb94e1a066f99ba06cdb2ea919479e99d47e8c6d96dc71',
@@ -152,7 +152,6 @@ def worker(config_hash, expires_ns):
     if time.monotonic_ns() >= expires_ns:
         raise TimeoutError('Queued worker expired')
     config = json.loads(read(ROOT / 'config.json', 65536, config_hash))
-    sdk = direct(Path(config['sdkRoot']))
     groups = [line[3:] for line in Path('/proc/self/cgroup').read_text().splitlines()
               if line.startswith('0::')]
     if len(groups) != 1 or Path(groups[0]).name != config['unit']:
@@ -162,6 +161,7 @@ def worker(config_hash, expires_ns):
                                              'cgroup': groups[0], 'configSha256': config_hash}))
     result = {'passed': False, 'failure': None, 'compiler': None, 'artifact': None}
     try:
+        sdk = direct(Path(config['sdkRoot']))
         for relative, pin in config['sdkPins'].items():
             budget(expires_ns)
             raw = read(sdk / relative, 33554432, pin['sha256'])
@@ -169,8 +169,8 @@ def worker(config_hash, expires_ns):
                 raise ValueError('SDK file length mismatch')
         budget(expires_ns)
         source = read(Path(config['sourcePath']), 65536, config['sourceSha256'])
-        if b'private static readonly bool ExecutionAdmitted = false;' not in source:
-            raise ValueError('Inactive source required')
+        if b'private static readonly bool ExecutionAdmitted = true;' not in source:
+            raise ValueError('Exactly admitted validation source required')
         write(ROOT / 'WindowsScriptJobLauncher.cs', source)
         for name, pin in FRAMEWORK_PINS.items():
             budget(expires_ns)
@@ -233,7 +233,7 @@ def execute(config_path, config_hash):
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         budget(expires_ns)
         ROOT.mkdir(mode=0o700)
-        unit = 'azureauth-launcher-build-108-0069-' + uuid.uuid4().hex + '.service'
+        unit = 'azureauth-launcher-build-108-0070-' + uuid.uuid4().hex + '.service'
         config = dict(original, unit=unit)
         copied_hash = write(ROOT / 'config.json', encode(config))
         source = Path(__file__).resolve()

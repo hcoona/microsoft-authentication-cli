@@ -16033,3 +16033,97 @@ correspondence independently before accepting build evidence. A successful
 compilation does not admit artifact execution: activation, fresh controller and
 dispatcher integration, scenario allocation and exact Windows calls remain
 separately reviewed prerequisites.
+
+## Launcher Compiler Path Correction
+
+### Original 0069 Disposition
+
+The single preparation admitted by the preceding supplement failed before its
+compiler started. Retain its full preparation charge: cumulative consumption is
+18/28 preparation, 96/130 build/test, 2/30 publication and 70/114 synthetic.
+Linux preparation is 9/9; Windows preparation is 9/19. No build artifact was
+produced or accepted, and no Windows process was started.
+
+The complete retained service-client output identifies rejection of a linked SDK
+path by `direct`, before the worker's startup record, result handler, installed
+file reads, source/Framework copies or compiler invocation. The exact original
+source is retained at commit `35dc9e8110e75369b88a12c984e23ecc8e4458d6`.
+The original systemd client returned exit 1 with complete EOF and no capture or
+persistence error. Its `--wait`, `--pipe` and `ExitType=cgroup` contract, joined
+to that exact pre-child source path and original transport, supports disposition
+of the failed worker's lifetime within the ordinary workstation trust boundary.
+This is source-bound inference from the original call, not a later process or
+cgroup observation. The final result's false `groupEmpty` field is its initial
+value: reading the absent startup record failed before any cgroup observation.
+It does not establish a populated cgroup, and no zero-count sample is claimed.
+
+The original failure remains failed; its success prerequisites were not met.
+Its one permitted output snapshot is spent. Do not reread its runtime paths,
+scan or operate its unit/processes, repair its files, replay its helper or refund
+its charge. This disposition grants no lifetime-risk exception and does not
+transfer the historical 0068 exception to new work.
+
+### One Corrected Preparation
+
+After independent acceptance of that disposition, admit one separately reviewed
+corrected preparation numbered 0070. The existing
+`tools/validation/run_windows_launcher_build.py` now selects only this fresh
+action and its distinct charge, result and named-service paths; Git retains the
+original 0069 recipe. Transfer one unused Windows preparation unit to Linux:
+before this attempt Linux is 9/10 and Windows is 9/18; afterward Linux is 10/10
+and Windows remains 9/18. Total preparation becomes 19/28. Other consumed
+categories remain 96/130, 2/30 and 70/114, with twelve synthetic units reserved
+for final CLI scenarios. A failed or interrupted start consumes this sole
+attempt. There is no automatic retry or alternative action number.
+
+Use the canonical physical directory of the same already installed and admitted
+Linux SDK 10.0.401/runtime 10.0.12. A version-manager alias is not an admissible
+literal input to this helper's no-link reader. The private exact configuration
+pins the physical directory and the unchanged seven compiler/runtime file
+lengths and hashes; do not weaken the no-link rule or repair the installation.
+Before the charged original invocation, independently review one bounded passive
+metadata check of that SDK directory and the seven configured files, including
+their path components. Limit it to at most 160 metadata observations, no file
+content read, subprocess, compiler invocation or recursive discovery. It must
+establish direct existing directories and regular files of the pinned lengths.
+The check is configuration preparation, not a started compilation; once the
+original helper is invoked, its failed-start charge applies regardless of where
+it fails. Execution still verifies each file's bytes against the admitted hash.
+
+The worker records its original cgroup membership, PID and start ticks before
+validating the SDK path. SDK validation is inside its existing result handler,
+so this class of failure retains both original startup and failure evidence.
+Keep the preceding recipe's single original integer clock, 150-second caller
+bound, 100-second worker expiry, 145-second client expiry, service properties,
+capture limits, exact metadata references, isolated environments and evidence
+requirements. Only the fresh action identities, cumulative counters, physical
+SDK configuration and startup-record ordering change in the Python helper.
+
+Compile the exactly reviewed launcher with its `ExecutionAdmitted` Boolean set
+to true. This replaces the planned inactive-then-active two-compilation sequence;
+original 0069 success is not a prerequisite and is not fabricated. Apart from
+that Boolean and explanatory comments, preserve the reviewed launcher behavior.
+The executable remains validation infrastructure. This compiler action never
+loads or executes it. The enabled source flag supplies no external authority:
+any Windows invocation still requires its separately accepted exact protocol,
+artifact, call, fresh root, scenario allocation and lifetime/transport review.
+
+The launcher's required creation-time/nesting and failure-path validation remains
+open. The existing six inner-guard cases alone do not cover early PowerShell
+failure, outer cancellation/timeout, outer-name collision or cleanup after
+output/logging failure. Do not claim full launcher validation or use it for
+dependent final publication before those obligations are independently accepted.
+Any future compound batch explicitly counts the added launcher under test; the
+prior controller-only harness exclusion does not silently exclude it.
+
+Before 0070, join current accepted authority, a clean detached candidate, exact
+source/configuration/input pins and the literal original call independently.
+Retain the dedicated new files and actual output. After the original call ends,
+authenticate its transport and at most one bounded snapshot of only its new
+charge/result, copied config, service/worker starts, compiler command/result,
+client/compiler output, copied source and executable. Retain each file's length,
+hash and stable regular-file identity; static PE/x64/CLR-header inspection does
+not load the artifact. Independently accept coherent original compiler/client
+completion and the recorded empty/removed original cgroup before accepting the
+artifact. Missing or inconsistent evidence stops dependent work; no read retry,
+old-state observation, new waiver, quota increase or account effect follows.
