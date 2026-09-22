@@ -15934,3 +15934,102 @@ The API basis is Microsoft's documentation for
 [nested Jobs](https://learn.microsoft.com/windows/win32/procthread/nested-jobs), and
 [Job termination](https://learn.microsoft.com/windows/win32/api/jobapi2/nf-jobapi2-terminatejobobject).
 These sources support the API design, not empirical success of this candidate.
+
+## One Linux Compilation of the Inactive Windows Launcher
+
+This supplement admits one preparation of the source-only
+`WindowsScriptJobLauncher.cs`, after the original-0068 disposition and its
+matching amendments have been accepted. It does not activate the launcher's
+`ExecutionAdmitted` gate, start a Windows process or establish Windows behavior.
+The helper is `tools/validation/run_windows_launcher_build.py`. Keep original
+0068, both spent observations, historical sources and all prior charges intact.
+
+### Allocation, Inputs and Effects
+
+Charge one preparation unit before invoking the subject: preparation 17 becomes
+18 of 28. Transfer one unused Windows preparation unit to Linux: before the
+attempt, Linux consumption/allocation becomes 8/9 and Windows becomes 9/19,
+preserving combined 17/28. The sole attempted action makes Linux 9/9 and keeps
+Windows 9/19, for combined 18/28. No host counter resets or additional total
+capacity follow from this transfer.
+Build/test 96/130, publication 2/30 and synthetic 70/114 remain unchanged;
+twelve synthetic units remain reserved for final CLI scenarios. Count any failed
+start or interrupted attempt. There is no retry or alternative action number.
+Use fresh logical action 0069 beneath the existing Linux experiment root. No
+Windows output path, account store, broker, token, consent, cache or installation
+is touched, and no network action, package resolution or new toolchain occurs.
+
+Use the already accepted installed Linux .NET SDK 10.0.401/runtime 10.0.12. Invoke
+its Roslyn `csc.dll` directly through the pinned `dotnet` host, with explicit
+`--runtimeconfig`, `--fx-version 10.0.12` and `--roll-forward Disable`. The original
+compiler runtimeconfig names one Microsoft.NETCore.App 10.0.12 framework; the
+explicit roll-forward option overrides its Major policy. Pin the original
+compiler DLL, deps, runtimeconfig, CodeAnalysis DLLs, dotnet and CoreLib using
+the independently admitted exact input inventory and accepted installed SDK
+provenance. This does not claim a complete runtime-file manifest or a fresh
+installation. No MSBuild/project evaluation, response file, analyzer, generator
+or shared compiler server is selected.
+
+Read only the exact three existing Framework64 metadata inputs at
+`C:\Windows\Microsoft.NET\Framework64\v4.0.30319`: `mscorlib.dll`, `System.dll`
+and `System.Core.dll`, with the hashes already accepted by the named-guard
+preparation recipe. Copy at most 16 MiB from each into the new Linux action root.
+These implementation assemblies are compiler metadata, not code loaded or
+executed by this preparation. Their use establishes only a build for the pinned
+existing Windows host; it is not a targeting-pack or broad Framework support
+claim. Recheck source identity after compilation.
+
+The exact candidate source remains at most 64 KiB and retains its false activation
+gate. Build only a managed x64 executable using `-noconfig`, `-nostdlib+`,
+`-target:exe`, `-platform:x64`, `-langversion:5`, `-optimize+`, `-debug-` and
+`-deterministic+`, three explicit copied metadata references, one source file and
+one fresh output path. There is no Native AOT publication or native linker.
+The replacement environment isolates HOME, temporary files and CLI home, applies
+existing telemetry/first-use/workload controls, and omits WSL interoperability,
+credentials, startup hooks, profilers, additional dependencies and compiler-server
+selection. Keep systemd manager/client IPC separate from the worker environment;
+`env -i` replaces the latter before Python starts.
+
+### Original Call and Lifetime
+
+Before the sole original call, independently join current accepted `main-v2`,
+Wave/protocol bytes, immutable candidate commit/tree, source and runner hashes,
+exact input configuration and complete command. Use a clean detached checkout.
+The runner neither grants authority nor substitutes its configuration for that
+review. Hold the existing exclusive action lock, preserve previous history, and
+durably record the new charge before preparation or subject invocation.
+
+The original caller starts a fresh named systemd user service, with service type
+exec, ExitType=cgroup, KillMode=control-group, SendSIGKILL=yes, Restart=no,
+TimeoutStartSec=10s, RuntimeMaxSec=120s and TimeoutStopSec=5s. The worker verifies and
+records its own membership, PID and start ticks before preparation. An original
+monotonic expiry prevents queued work from starting late; RuntimeMaxSec alone
+does not limit queue residence. The compiler and ordinary descendants stay in
+that service. Capture the original service-client exit separately from worker
+and cgroup evidence. No old unit, process, Job or original runtime path is read.
+
+Bound original caller work at 150 seconds, worker/compiler at the 100-second expiry derived from the original caller entry, client output at 16 KiB, compiler output at 64 KiB, source/config
+inputs at 64 KiB each and the executable output at 2 MiB. Preserve actual bounded
+output bytes and explicit failure/EOF/exit state. Capture setup and cleanup must
+preserve the first failure; a failed persistence attempt retains sampled process
+status separately, with unknown partial-file state and no claimed saved hash.
+Do not reread or retry failed diagnostic writes. OS/storage operations are
+subject to the existing workstation trust boundary; these clocks do not assert
+a hard deadline for an unreturning kernel operation. On failure, terminate the
+original directly owned client/compiler as applicable; the named service retains
+its independent whole-cgroup termination deadline. No retry or cleanup follows.
+
+Success requires original client exit zero and complete EOF, a coherent original
+worker result with compiler exit zero/EOF and no capture failure, and the
+original named unit's recorded cgroup empty or removed. The compiler must produce
+a nonempty bounded regular managed executable whose bytes and SHA-256 are
+retained. Missing startup records, incomplete output, source drift or unproved
+termination fail the attempt and stop dependent work. The historical 0068 waiver
+does not cover new uncertainty.
+
+Retain all dedicated files, including partial diagnostics and failed output.
+Authenticate the original command/result transport and saved result/artifact
+correspondence independently before accepting build evidence. A successful
+compilation does not admit artifact execution: activation, fresh controller and
+dispatcher integration, scenario allocation and exact Windows calls remain
+separately reviewed prerequisites.
