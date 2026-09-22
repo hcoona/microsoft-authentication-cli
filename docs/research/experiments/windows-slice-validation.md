@@ -16999,3 +16999,161 @@ accepted originals. Dedicated files are retained. No human input is expected, an
 no account/WAM/token/cache/resource operation, new tool, final publication,
 installation, release or broader platform claim is granted. The later twelve-unit
 launcher-failure batch and publication integration retain separate prerequisites.
+
+## Disposed Guard Name-Lifetime Correction and Remaining Cases: 0079
+
+### Original 0078 Failure and Lifetime Disposition
+
+The sole original 0078 caller failed under accepted protocol
+`d4d5eeb489c7c14bfa1747ac2bd9bbfc49c3e108`, with the exact preceding source and
+artifact pins. Its sole post-termination snapshot retained twenty-two of the
+thirty-seven selected leaves: 26,482 bytes, SHA-256
+`29238a16c637b308fb9c4ccd85a958844fba9bf626be00d7f924d55ec62d3295`.
+Fifteen later-case leaves were missing. The accepted source stops the sequence
+when the disposed case fails; missing files alone do not prove nonstartup.
+All four original calls and this collector are spent. No runtime leaf may be
+reopened, and no original invocation, recovery, or collector may be repeated.
+
+The disposed payload's startup record matched its durable before-resume identity.
+The case then disposed the final Job handle before calling the named observer.
+The same-name observation returned `not-found`, error two and a null audit. The
+fixture required `opened-query-only` and failed at that assertion. Its host exited
+one, so the outer controller's success-only exact target-handle observation did
+not run. This result does not establish exact payload survival after disposal or
+its target-handle exit code, and does not pass the disposed scenario. Callback,
+missing-name and session-mismatch scenarios have no accepted result from 0078.
+
+Independent finding GF-01 identifies a fixture assumption error, not evidence
+that disposing the nonterminating Job killed its payload. Microsoft documents
+that a temporary object's name is removed when its handle count reaches zero,
+while pointer references can keep the object alive:
+[Life Cycle of an Object](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/life-cycle-of-an-object).
+The [Job Objects](https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects#managing-job-objects)
+destruction rule is distinct from namespace discoverability. Accepted native
+source closes the constructor's temporary rights-check handle, omits
+`KILL_ON_JOB_CLOSE` for this mode, and closes the owning handle in `Dispose`.
+The actual error two is consistent with that distinction; it does not independently
+prove exact process lifetime or all circumstances of name removal.
+
+The disposed case's containment record reported successful original Stop,
+two active processes before Stop, zero afterward, four total processes and both
+streams complete. The outer launcher's ten-record failure journal joined the
+suspended controller identity, controller exit one, zero active processes and six
+total processes, followed by successful explicit cleanup and complete empty
+captures. The original WSL proxy and original service client both exited one
+with both EOFs. Source-bound `--wait --pipe` / `ExitType=cgroup` completion supports
+the original service lifetime disposition. The original caller did not reach its
+cgroup observation: `groupEmpty` remains null and must not be relabeled empty.
+These aggregate termination observations do not fill the missing exact target
+scenario evidence. Historical uncertainty for 0057, 0064 and 0068 remains separate.
+
+The independent actual lifetime seal is `c30bfbd4f71ff95922b1972c290ba271e7ebda0406358a28c9023ee87c0e27ee` and the independent
+failure, finding-triage and accounting disposition is `1ab13826f4be4308f5050b6a6feaf22ff37592cbf002482fc40f638e87ee3b82`.
+No new ownership or termination uncertainty is accepted. Preserve the failed
+result and its full one-build/test, seven-synthetic charge: 19/100/2/111 consumed
+under 28/130/30/180. There are 69 synthetic units left. Completing the unchanged
+four-case guard topology would require seven additional units beyond the other
+thirty baseline units, leaving 32 buffer units; the twelve final CLI units remain
+protected. No refund follows from the unrun later cases.
+
+### Narrow Corrected Fixture and Current Recovery Limitation
+
+For `disposed`, perform the existing complete, non-atomic query-only named audit
+and exact PID/creation-FILETIME membership match while the original final Job
+handle is held. Record `exactMemberObservedBeforeDispose`, dispose that handle,
+and record `disposalCompleted`. Do not add a keeper Job handle or require a
+post-disposal name reopen. After the successful case host exits, the outer
+controller must still acquire and retain a handle to the exact durable payload
+identity, prove it alive before original outer Stop, and prove exit code one after
+successful Stop, zero active processes and both EOFs. Both new ordering fields
+and every existing exact target proof are required. The other three case
+assertions, pre-resume failure handling and same-held-Job drain are unchanged.
+
+This corrects the preceding disposed-case requirement, not the historical 0078
+result. Independent finding GF-02 also supersedes the source inference in
+"Required Supervision Before Further Publication" that the Job-destruction rule
+provides a later named recovery route after all handles close. Its required
+recoverable operating path remains an unresolved future-publication prerequisite.
+A successful named audit requires a live handle that preserves the name;
+name-not-found after the last handle closes cannot establish an empty Job or
+process exit. Future publication supervision and its separately reviewed recovery
+path must preserve a usable Job handle across the required observation/operation
+interval, or explicitly leave lifetime unestablished. A recorded name alone does
+not satisfy that requirement. The current terminating fixture launcher retains
+its outer Job handle through accounting and cleanup. No retained compiler mode,
+final publication or new native mechanism is implemented or admitted here.
+
+### Prospective Corrected Batch
+
+After acceptance of this amendment and all source and exact-call reviews, admit
+only fresh action 0079 with `disposed`, `callback`, `missing`, `session` in that
+order. Charge one build/test and seven synthetic units before its sole original
+caller: outer launcher, four case hosts and two payload creations, including the
+never-resumed callback payload. The controller alone remains exempt. Counters
+become 19/101/2/118, leaving 62 synthetic units: thirty other baseline units,
+including twelve protected CLI units, and 32 buffer units. Any failed start or
+assertion retains the full batch charge and stops dependent work for cause and
+remaining-cost reassessment. This is a separately prepared corrected subject;
+0078 is not restarted. No guard-collision or live-case rerun, launcher-negative
+batch, automatic successor or quota extension is selected.
+
+Reuse the unchanged accepted 0070 launcher and 0066 guard artifact pins and
+reviews. The only behavior change is the disposed-case observation ordering and
+explicit completion fields. All changed helpers remain validation infrastructure;
+product implementation, native code, dependencies and public contracts do not
+change. Exact tracked source pins are:
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `Invoke-WindowsNamedGuardFixtures.ps1` | 26148 | `70ac41ce8c8cd4dbb0295a992f9c148a74868c9db4a76e2d6fe10ad471b2c9fb` |
+| `run_windows_named_guard_fixtures.py` | 22402 | `6b4bb5f865d78052cd30144409050137f9a9d15bda06f49a8081d690d1f5c0a3` |
+| `materialize_windows_named_guard_fixtures.py` | 16008 | `15e95797a7125b9509ebe9e328c4665ae5b9ab043c5bdef32a04c2ff43b6609a` |
+
+Fresh 0079 paths replace 0078 action, unit, input and output paths. Use a new
+UUIDv4 outer-launcher suffix and four distinct guard names. Keep the accepted
+0072 disposition and 0077 lifetime seal, and add the authenticated 0078 independent
+failure/accounting disposition as a preparation input and authority prerequisite.
+Never reopen the original 0078 runtime leaves. The inert assembly template is
+10719 bytes, SHA-256 `d3fcef38e9691973aa5f914bfa231c577d6aafcdec85fd3364b482d8035681f7`; substitute only `ACCEPTED_COMMIT`
+with the accepted revision in its clean detached checkout. Its one additional
+seal read remains within sixteen reads, 32 MiB requested bytes, 192 KiB writes
+and thirty seconds. Materialization retains six source roles, two roots, seven
+copies, continuous created-file handles and original thirty-second limits.
+
+The inert caller template is 19896 bytes, SHA-256 `e8afa7eaf872497f96c8fe95b0851fdcfea734a07d14191ea9a4bcde023da2bd`. Replace
+only `CONFIG = None` with the exact accepted tools, original authority, manifest
+hash and materialization receipt binding, preserving full integer identities.
+Require the original successful materialization receipt and the copied launcher's
+regular-file, admitted-owner and owner-executable fields before debit. This is a
+receipt-only check: no extra permission probe, chmod, recopy or rematerialization.
+Keep the existing historical Windows ctime handoff exception and every other
+identity check unchanged.
+
+Reuse the preceding four-call framework structure with brief independent closures
+for the exact accepted sources, original output transports and complete commands.
+Each assembly, materialization, caller and post-termination snapshot gets one
+durable original start. Retain isolated Python `-I -B -S`, all preceding read,
+write and console limits, and original intersecting clocks: passive thirty seconds
+with external 35-second TERM and five-second kill reserve; caller 520 with external
+540 plus five; service 450 plus five; dispatcher cancellation 330, polling 400,
+final 420; outer launcher 330 plus ten; cases twenty seconds with thirty-second
+containment/output slots; controller 180/300/310 seconds. Only empty original
+pending-session polls of at most sixty seconds are permitted.
+
+The fixed success-or-failure collector is 5148 bytes, SHA-256
+`deaecb82f87b09c83b8920e6f410116a51b41792454ab8465cab5f5e0bf9bbb2`. After original caller termination and independent exact-call
+admission, collect the same thirty-seven selected leaves once: fifteen base,
+seven disposed and five each for callback, missing and session. Keep thirty
+seconds, at most 2,193,957 requested bytes within 4 MiB, and one exclusive 6 MiB
+snapshot. Authenticate the original terminal transport and review only the retained
+copy. Require all four case results, exact target evidence, normal nine-record
+outer completion with active zero/total 7..64, complete empty captures and original
+proxy/service completion before accepting this batch. OS accounting totals remain
+distinct from deliberate subject charges. Missing or unstable leaves remain errors.
+
+Dedicated files are retained. New ownership/lifetime uncertainty stops work; the
+three historical dispositions do not cover a new failure. No human input is
+expected. No account/WAM/token/cache/resource operation, new toolchain, installation,
+final publication, release or broader platform claim is granted. Remaining
+launcher negatives, publication integration and actual CLI acceptance retain their
+separate prerequisites.
