@@ -16520,3 +16520,97 @@ risk dispositions remain narrow and unchanged. This supplement grants no real
 WAM, account/cache/consent/token, authenticated resource, installation, release or
 broader support claim. Final publication still requires its own exact source,
 time/root adaptation, artifact and call admission after these obligations pass.
+
+## Original 0072 Disposition and Fixture Completion Correction
+
+### Retained Observation and Limits
+
+Original 0072 executed the accepted PR #248 sources at
+`c15a477f3f59287d22b9f40a590176619812892c`. Its sole caller failed after approximately
+17.6 seconds. Preserve its complete charge of one build/test action and twenty-one
+synthetic units: cumulative consumption is 19 preparations, 98 build/test actions,
+two publications and 101 synthetic units. No unstarted remainder is refunded.
+
+The independently admitted, sole eighty-two-slot snapshot retained thirty-six
+files and forty-six missing-file observations. Missing leaves are not proof of
+nonstartup. Source control flow, the controller result and the retained case
+records show that execution stopped at the live guard case before the remaining
+four guard cases and all four launcher-failure cases. Those cases remain
+unvalidated; the batch did not pass.
+
+The collision guard case passed: the existing empty named Job rejected a second
+creation, its query-only audit was complete and empty, and its original case host
+exited zero with complete silent streams and successful outer containment cleanup.
+This narrow result may satisfy that unchanged case in a separately reviewed
+successor plan; it does not accept the entire guard or launcher.
+
+The live case reached a complete, successful, non-atomic named membership query
+containing the exact payload PID and creation FILETIME. The query also recorded
+an identified console host. After releasing the payload, the case failed at the
+compound predicate requiring both zero payload exit and an immediately empty
+Job. The case record does not retain the exit code or that predicate's active
+count. It therefore does not establish which condition failed or identify a
+process that remained afterward. Auxiliary-process teardown lag is a hypothesis,
+not the observed cause.
+
+The live case containment observed its original host exit one, requested
+successful Job termination, observed zero active processes afterward, and
+completed both silent streams. The outer creation-time launcher independently
+observed its original controller exit one, zero active Job processes, eight total
+associated processes and both EOFs; its subsequent cleanup also succeeded. Both
+capture files were empty and their completion records reported no capture or
+flush failure. The original WSL proxy exited one with both EOFs. Its retained
+result hashes join the original caller output; the exact command used systemd
+`--wait`, `--pipe` and `ExitType=cgroup` and the service client terminated one with
+both EOFs. These observations establish completion of this failed Windows batch
+and its original transport/service. The caller's separate `groupEmpty` field was
+null because its success-only branch was not reached; do not claim a direct
+empty-cgroup observation.
+
+This disposition introduces no new unresolved 0072 lifetime or interference
+claim, broad host-quiescence claim, or extension of historical 0057, 0064 or 0068
+risk decisions. The original snapshot is spent. Do not replay 0072, reread its
+original runtime leaves, run another collector, scan or clean historical state,
+or use this failed batch as final-publication acceptance.
+
+### Source-Only Completion Correction
+
+Independent finding triage accepts two source defects. The live case waits for
+the original payload to exit and then samples Job quiescence only once. The
+unexecuted callback case has the same immediate Job-zero requirement after its
+original-handle never-resumed termination confirmation. Neither source path
+provides a bounded drain interval for other already-associated processes.
+[Process.HasExited](https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.process.hasexited?view=netframework-4.8.1)
+reports the associated process; [Job active-process accounting](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_accounting_information)
+reports the Job. Their completion conditions are distinct.
+
+Correct only `Invoke-WindowsNamedGuardFixtures.ps1`. For the live case, retain
+the original payload exit observation and exit code separately and require code
+zero before waiting for Job quiescence. For the callback case, preserve all
+callback invocation, nonresume, successful original-handle termination, root
+exit and absent payload-start assertions before the drain. Retain its root exit
+code without introducing a zero-exit requirement for intentional termination.
+
+Both paths passively query the same retained Job at twenty-five-millisecond
+intervals until quiescent within the original twenty-second case clock. Check
+the clock before and after each query. Persist the completion stage, observation
+count, last active/total counts, quiescence result and drain timing in the existing
+case result, including failure. An expired clock or query error still fails the
+case and reaches the existing outer Stop. Preserve the thirty-second containment
+slot, cleanup reserve, original controller bounds and all other assertions. No
+native guard change, new process, termination right, clock restart or larger time
+allowance is introduced.
+
+This is source preparation, not a successor execution protocol. The retained
+0072 allocation and roots are spent; modified source cannot use its old source
+hashes or exact-call admission. Future execution needs a fresh reviewed protocol,
+roots, source/artifact/input joins, finite accounting and original-call admission.
+The remaining thirteen synthetic units include twelve protected final CLI units
+and one prospective publication-launcher unit. A narrowed successor retaining
+the passed collision evidence still needs eight units for the five remaining
+guard cases, eleven for the four launcher failures and one outer launcher:
+twenty additional units. That work does not fit the accepted ceiling of 114
+while preserving those reservations. A capacity decision and accepted Wave
+amendment are required before it starts. This arithmetic neither approves extra
+capacity nor resolves the separate validation basis for an adapted publication
+launcher that retains compiler work.

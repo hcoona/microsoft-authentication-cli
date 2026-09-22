@@ -76,6 +76,28 @@ function Get-FailureDetails($Record) {
     return $text.Substring(0, [Math]::Min(4096, $text.Length))
 }
 
+function Wait-FixtureJobQuiescence($Job, [Collections.IDictionary] $Observation) {
+    $Observation.jobQuiescent = $false
+    $Observation.jobObservationCount = 0
+    $Observation.jobObservedActive = $null
+    $Observation.jobObservedTotal = $null
+    $Observation.jobLastObservedMilliseconds = $null
+    $Observation.jobDrainStartedMilliseconds = $watch.ElapsedMilliseconds
+    try {
+        while ($true) {
+            Assert-Time 20000
+            $Observation.jobQuiescent = $Job.ObserveFinalPublishQuiescence()
+            $Observation.jobObservationCount = $Observation.jobObservationCount + 1
+            $Observation.jobObservedActive = $Job.FinalPublishObservedActive
+            $Observation.jobObservedTotal = $Job.FinalPublishObservedTotal
+            $Observation.jobLastObservedMilliseconds = $watch.ElapsedMilliseconds
+            Assert-Time 20000
+            if ($Observation.jobQuiescent) { return }
+            Start-Sleep -Milliseconds 25
+        }
+    } finally { $Observation.jobDrainEndedMilliseconds = $watch.ElapsedMilliseconds }
+}
+
 function New-Environment([string] $Working) {
     return @{
         SystemRoot = 'C:\Windows'; windir = 'C:\Windows'; SystemDrive = 'C:'
@@ -215,12 +237,17 @@ if ($Mode -eq 'Case') {
                 if (-not $caught -or -not $callbackState.invoked -or $final.FinalPublishExecutionMayHaveBegun -or
                     -not $final.NeverResumedRootTerminationRequested -or -not $final.NeverResumedRootTerminationSucceeded -or
                     -not $final.NeverResumedRootExitConfirmed -or -not $final.Child.HasExited -or
-                    -not $final.ObserveFinalPublishQuiescence() -or (Test-Path -LiteralPath "$directory\payload-started.json")) {
+                    (Test-Path -LiteralPath "$directory\payload-started.json")) {
                     throw 'Original-handle never-resumed exit is unestablished'
                 }
                 $caseResult.neverResumedExitConfirmed = $true
                 $caseResult.terminationRequested = $final.NeverResumedRootTerminationRequested
                 $caseResult.terminationSucceeded = $final.NeverResumedRootTerminationSucceeded
+                $caseResult.payloadExitObserved = $true
+                $caseResult.payloadExitCode = $final.Child.ExitCode
+                $caseResult.completionStage = 'wait-job-quiescence'
+                Wait-FixtureJobQuiescence $final $caseResult
+                $caseResult.completionStage = 'complete'
             } else {
                 while (-not (Test-Path -LiteralPath "$directory\payload-started.json")) {
                     Assert-Time 15000
@@ -274,11 +301,17 @@ if ($Mode -eq 'Case') {
         if ($CaseName -eq 'live') {
             $release = [IO.File]::Open("$directory\release", 'CreateNew', 'Write', 'Read')
             $release.Dispose()
+            $caseResult.completionStage = 'wait-payload-exit'
+            $caseResult.payloadExitObserved = $false
+            $caseResult.payloadExitCode = $null
             while (-not $final.Child.HasExited) { Assert-Time 20000; Start-Sleep -Milliseconds 25 }
-            if ($final.Child.ExitCode -ne 0 -or -not $final.ObserveFinalPublishQuiescence()) {
-                throw 'Live fixture payload completion failed'
-            }
             $caseResult.payloadExitObserved = $true
+            $caseResult.payloadExitCode = $final.Child.ExitCode
+            if ($caseResult.payloadExitCode -ne 0) { throw 'Live fixture payload exited unsuccessfully' }
+            # Original root completion does not establish whole-Job completion.
+            $caseResult.completionStage = 'wait-job-quiescence'
+            Wait-FixtureJobQuiescence $final $caseResult
+            $caseResult.completionStage = 'complete'
         }
         Assert-Time 20000
         $caseResult.passed = $true
