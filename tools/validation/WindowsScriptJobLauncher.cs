@@ -22,9 +22,13 @@ internal static class WindowsScriptJobLauncher
     private const int WorkMilliseconds = 330000;
     private const int CleanupMilliseconds = 10000;
     private const int OutputLimit = 16384;
+    private const int PublicationWorkMilliseconds = 2000000;
+    private const int PublicationTotalMilliseconds = 2010000;
+    private const int PublicationAuditMilliseconds = 5000;
+    private const int PublicationFinalRecordReserveMilliseconds = 1000;
     private static readonly Stopwatch Clock = Stopwatch.StartNew();
 
-    // Arguments: fresh action root, UUID suffix, authority hash, controller hash.
+    // Fixture: four args. Publication: seven; its fixed fixture adds a case selector.
     public static int Main(string[] args)
     {
         if (!ExecutionAdmitted)
@@ -32,14 +36,571 @@ internal static class WindowsScriptJobLauncher
             Console.Error.WriteLine("Source-only launcher: execution is not admitted.");
             return 125;
         }
-        try { return Run(args); }
+        try
+        {
+            return args.Length > 0 && (args[0] == "--publication" || args[0] == "--publication-fixture")
+                ? RunPublication(args) : Run(args);
+        }
         catch (Exception error)
         {
+            // Publication owns its deadline-aware diagnostics; never bypass its cutoff.
+            if (args.Length > 0 && (args[0] == "--publication" || args[0] == "--publication-fixture")) return 1;
             // Bounded fallback even if creating the local journal failed.
             Console.Error.WriteLine("Launcher failed: {0}; HRESULT={1}",
                 error.GetType().Name, error.HResult.ToString(CultureInfo.InvariantCulture));
             return 1;
         }
+    }
+
+    // After a resume attempt, observe without termination or future name-recovery promises.
+    private static int RunPublication(string[] args)
+    {
+        string fixture = null;
+        if (args.Length > 0 && args[0] == "--publication-fixture")
+        {
+            if (args.Length != 8 || (args[1] != "normal" && args[1] != "pre-resume" &&
+                args[1] != "resume-unknown" && args[1] != "timeout" && args[1] != "overflow" &&
+                args[1] != "journal-cancel"))
+                throw new ArgumentException("Unbound publication fixture case");
+            fixture = args[1];
+            var bound = new string[7];
+            bound[0] = "--publication";
+            Array.Copy(args, 2, bound, 1, 6);
+            args = bound;
+        }
+        string rootPattern = fixture == null
+            ? @"\AC:\\Temp\\azureauth-windows-slice-108\\actions\\[0-9]{4}\z"
+            : @"\AC:\\Temp\\azureauth-windows-slice-108\\publication-fixtures-[0-9]{4}\z";
+        if (args.Length != 7 || args[0] != "--publication" ||
+            !Regex.IsMatch(args[1], rootPattern) ||
+            !Regex.IsMatch(args[2], @"\A[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\z") ||
+            !IsHash(args[3]) || !IsHash(args[4]) || !IsHash(args[5]) || !IsHash(args[6]))
+            throw new ArgumentException("Unbound publication launcher input");
+        string root = args[1];
+        // Admitted fixture argv bind a fixed payload and fixed clocks.
+        int workMilliseconds = fixture == null ? PublicationWorkMilliseconds : 12000;
+        int totalMilliseconds = fixture == null ? PublicationTotalMilliseconds : 22000;
+        string action = root.Substring(root.Length - 4);
+        if (int.Parse(action, CultureInfo.InvariantCulture) <= 84)
+            throw new ArgumentException("Historical publication action cannot be reused");
+        string jobName = @"Local\azureauth-publication-108-" + action + "-" + args[2];
+        string controllerDirectory = Path.Combine(root, "controller");
+        string script = Path.Combine(controllerDirectory, "Start-WindowsFinalPublish.draft.ps1");
+        AssertDirect(root);
+        AssertDirect(controllerDirectory);
+        SafeFileHandle directory = null, scripts = null;
+        Journal journal = null;
+        Exception failure = null;
+        long finalDeadline = totalMilliseconds;
+        bool completionReady = false;
+        try
+        {
+            directory = OpenDirectory(root);
+            scripts = OpenDirectory(controllerDirectory);
+            journal = new Journal(Path.Combine(root, "launcher.jsonl"), 65536);
+            SafeFileHandle job = null;
+            SafeFileHandle process = null;
+            SafeFileHandle thread = null;
+            var inputs = new List<IDisposable>();
+            var memberHandles = new List<SafeFileHandle>();
+            Pipe output = null;
+            Pipe error = null;
+            string stage = "inputs";
+            bool rootCreated = false;
+            bool resumeAttempted = false;
+            bool resumed = false;
+            bool completed = false;
+            bool evidenceIncomplete = false;
+            bool neverResumedTerminationRequested = false;
+            bool neverResumedTerminationSucceeded = false;
+            int? neverResumedTerminationError = null;
+            int captured = 0;
+            int session = -1;
+            var lifetime = new PublicationLifetime();
+            var audit = new PublicationAudit();
+            try
+            {
+                using (Process self = Process.GetCurrentProcess())
+                {
+                    session = self.SessionId;
+                    journal.Write("publication-bootstrap", "pid", self.Id, "creationFileTime",
+                        self.StartTime.ToUniversalTime().ToFileTimeUtc().ToString(CultureInfo.InvariantCulture),
+                        "session", session, "action", action, "jobName", jobName,
+                        "fixtureCase", fixture,
+                        "authoritySha256", args[3], "bootstrapSha256", args[4],
+                        "reservationSha256", args[5], "invocationSha256", args[6],
+                        "workDeadlineMilliseconds", workMilliseconds,
+                        "totalDeadlineMilliseconds", totalMilliseconds);
+                }
+                CheckPublicationDeadline(root, workMilliseconds);
+                inputs.Add(Pin(Path.Combine(root, "authority.json"), args[3], 8388608));
+                inputs.Add(Pin(script, args[4], 65536));
+                inputs.Add(Pin(Path.Combine(root, "started.json"), args[5], 8388608));
+                inputs.Add(Pin(Path.Combine(root, "invocation.json"), args[6], 8388608));
+                inputs.Add(Pin(Shell, ShellHash, 1048576));
+                CheckPublicationDeadline(root, workMilliseconds);
+                stage = "job-create";
+                job = CreateJobObject(IntPtr.Zero, jobName);
+                int creationError = Marshal.GetLastWin32Error();
+                if (job.IsInvalid) throw new Win32Exception(creationError);
+                if (creationError == 183)
+                {
+                    job.Dispose();
+                    job = null;
+                    throw new InvalidOperationException("Publication Job name collision");
+                }
+                var limits = new ExtendedLimits();
+                limits.Basic.LimitFlags = 0x8; // ACTIVE_PROCESS only; never KILL_ON_JOB_CLOSE.
+                limits.Basic.ActiveProcessLimit = 32;
+                Check(SetInformationJobObject(job, 9, ref limits, (uint)Marshal.SizeOf(limits)));
+                // No breakaway, no inherited Job handle, and no assignment of this owner.
+                using (SafeFileHandle reopened = OpenJobObject(0x4u, false, jobName))
+                    if (reopened.IsInvalid) throw new Win32Exception();
+                using (Process self = Process.GetCurrentProcess())
+                {
+                    bool ownerInJob;
+                    Check(IsProcessInJob(self.Handle, job, out ownerInJob));
+                    if (ownerInJob) throw new InvalidOperationException("Publication owner entered its Job");
+                }
+                journal.Write("publication-job-ready", "queryAccess", true, "ownerOutsideJob", true,
+                    "activeProcessLimit", 32, "killOnClose", false, "breakaway", false);
+                stage = "capture-create";
+                output = new Pipe(Path.Combine(root, "launcher.stdout.bin"));
+                error = new Pipe(Path.Combine(root, "launcher.stderr.bin"));
+                stage = "process-create";
+                CheckPublicationDeadline(root, workMilliseconds);
+                string arguments = "-ActionName " + action + " -ReservationSha256 " + args[5] +
+                    " -InvocationSha256 " + args[6] + " -AuthoritySha256 " + args[3];
+                ProcessInformation child = StartSuspended(job, output, error, root, script, args[3], arguments);
+                rootCreated = true;
+                process = new SafeFileHandle(child.Process, true);
+                thread = new SafeFileHandle(child.Thread, true);
+                output.CloseWriter();
+                error.CloseWriter();
+                bool inJob;
+                Check(IsProcessInJob(process, job, out inJob));
+                if (!inJob) throw new InvalidOperationException("Publication creation-time assignment absent");
+                long created, exited, kernel, user;
+                Check(GetProcessTimes(process, out created, out exited, out kernel, out user));
+                uint rootSession;
+                Check(ProcessIdToSessionId(child.ProcessId, out rootSession));
+                if (created <= 0 || rootSession != session)
+                    throw new InvalidOperationException("Publication suspended identity is unestablished");
+                journal.Write("publication-root-suspended", "pid", child.ProcessId,
+                    "creationFileTime", created.ToString(CultureInfo.InvariantCulture),
+                    "session", rootSession, "inJob", true);
+                if (fixture == "pre-resume")
+                    throw new InvalidOperationException("Admitted pre-resume fixture fault");
+                stage = "resume";
+                CheckPublicationDeadline(root, workMilliseconds);
+                // Latch before both intent persistence and ResumeThread; failure forbids killing.
+                resumeAttempted = true;
+                journal.Write("publication-resume-attempt", "resumeMayHaveRun", true);
+                CheckPublicationDeadline(root, workMilliseconds);
+                uint previousSuspendCount = ResumeThread(thread);
+                if (fixture == "resume-unknown")
+                {
+                    while (!File.Exists(Path.Combine(root, "release")))
+                    {
+                        CheckPublicationDeadline(root, workMilliseconds);
+                        Thread.Sleep(25);
+                    }
+                    CheckPublicationDeadline(root, workMilliseconds);
+                    throw new InvalidOperationException("Admitted unknown-resume fixture fault");
+                }
+                if (previousSuspendCount == uint.MaxValue) throw new Win32Exception();
+                resumed = true;
+                if (previousSuspendCount != 1)
+                    throw new InvalidOperationException("Unexpected publication suspend count");
+                journal.Write("publication-resumed");
+                thread.Dispose();
+                thread = null;
+                stage = "running";
+                while (true)
+                {
+                    CheckPublicationDeadline(root, workMilliseconds);
+                    output.Drain(ref captured);
+                    error.Drain(ref captured);
+                    SamplePublicationLifetime(job, process, rootCreated, lifetime);
+                    if (lifetime.RootExited == true && lifetime.RootExitCode != 0)
+                        throw new InvalidOperationException("Publication bootstrap failed");
+                    if (lifetime.RootExited == true && lifetime.Active == 0 && output.Eof && error.Eof)
+                    {
+                        CheckPublicationDeadline(root, workMilliseconds);
+                        completed = true;
+                        break;
+                    }
+                    Thread.Sleep(25);
+                }
+            }
+            catch (Exception caught) { failure = caught; }
+
+            // One window for observation, audit, persistence and disposal; never restarted.
+            long finalizationStarted = Clock.ElapsedMilliseconds;
+            finalDeadline = Math.Min(totalMilliseconds, finalizationStarted + CleanupMilliseconds);
+            journal.DeadlineMilliseconds = finalDeadline;
+            bool failureAtFinalization = failure != null;
+            long? passiveEnded = null;
+            if (failure == null) stage = "finalization";
+            try
+            {
+                if (failure != null && rootCreated && !resumeAttempted && process != null &&
+                    Clock.ElapsedMilliseconds < finalDeadline)
+                {
+                    // Only the original, never-resumed process handle is eligible; never the Job.
+                    neverResumedTerminationRequested = true;
+                    neverResumedTerminationSucceeded = TerminateProcess(process, 1);
+                    neverResumedTerminationError = neverResumedTerminationSucceeded ? 0 : Marshal.GetLastWin32Error();
+                }
+                long passiveDeadline = finalDeadline - PublicationAuditMilliseconds -
+                    PublicationFinalRecordReserveMilliseconds;
+                if (failureAtFinalization)
+                {
+                    while (Clock.ElapsedMilliseconds < passiveDeadline)
+                    {
+                        TryPublicationDrain(output, ref captured, ref failure);
+                        if (Clock.ElapsedMilliseconds >= passiveDeadline) break;
+                        TryPublicationDrain(error, ref captured, ref failure);
+                        if (Clock.ElapsedMilliseconds >= passiveDeadline) break;
+                        TryPublicationSample(job, process, rootCreated, lifetime, ref failure);
+                        if ((!rootCreated || (lifetime.RootExited == true && lifetime.Active == 0)) &&
+                            (output == null || output.Eof || output.FailureStage != null) &&
+                            (error == null || error.Eof || error.FailureStage != null)) break;
+                        Thread.Sleep(25);
+                    }
+                    passiveEnded = Clock.ElapsedMilliseconds;
+                }
+                audit = ObservePublicationMembers(job, finalDeadline -
+                    PublicationFinalRecordReserveMilliseconds, memberHandles);
+                if (!audit.Complete && failure == null)
+                    failure = new InvalidOperationException("Publication member audit is incomplete");
+                if (Clock.ElapsedMilliseconds < finalDeadline)
+                    TryPublicationSample(job, process, rootCreated, lifetime, ref failure);
+                else if (failure == null)
+                    failure = new TimeoutException("Publication finalization expired");
+                RecordPublicationAudit(journal, audit, finalDeadline, ref failure, ref evidenceIncomplete);
+            }
+            catch (Exception caught) { if (failure == null) failure = caught; }
+            finally
+            {
+                // Hold Job/member handles through persistence. Stream closure is not exit proof.
+                if (output != null) output.Dispose();
+                if (error != null) error.Dispose();
+                if (failure == null && output != null) failure = output.CloseFailure;
+                if (failure == null && error != null) failure = error.CloseFailure;
+                foreach (IDisposable input in inputs) ClosePublicationResource(input, ref failure);
+                TryPublicationRecord(delegate { RecordCapture(journal, "stdout", output, "publication-capture"); }, finalDeadline, ref failure, ref evidenceIncomplete);
+                TryPublicationRecord(delegate { RecordCapture(journal, "stderr", error, "publication-capture"); }, finalDeadline, ref failure, ref evidenceIncomplete);
+                bool retained = PublicationLifetimeUnestablished(job, rootCreated, lifetime, audit) ||
+                    evidenceIncomplete || journal.WriteFailed || Clock.ElapsedMilliseconds >= finalDeadline;
+                TryPublicationRecord(delegate { journal.Write("publication-retention", "jobName", jobName,
+                    "originalJobHandleHeld", job != null && !job.IsInvalid, "rootCreated", rootCreated,
+                    "resumeAttempted", resumeAttempted, "resumed", resumed,
+                    "neverResumedTerminationRequested", neverResumedTerminationRequested,
+                    "neverResumedTerminationSucceeded", neverResumedTerminationSucceeded,
+                    "neverResumedTerminationError", neverResumedTerminationError,
+                    "neverResumedRootExitConfirmed", neverResumedTerminationRequested && lifetime.RootExited == true,
+                    "rootExited", lifetime.RootExited, "rootExitCode", lifetime.RootExitCode,
+                    "activeProcesses", lifetime.Active, "totalProcesses", lifetime.Total,
+                    "lastLifetimeSampleMilliseconds", lifetime.SampleMilliseconds,
+                    "lifetimeFailureType", lifetime.FailureType, "auditComplete", audit.Complete,
+                    "stdoutEof", output == null ? (object)null : output.Eof,
+                    "stderrEof", error == null ? (object)null : error.Eof,
+                    "retainedLiveWorkOrUnknown", retained, "failureLatched", failure != null,
+                    "evidenceIncomplete", evidenceIncomplete || journal.WriteFailed,
+                    "completionObserved", completed, "failureAtFinalization", failureAtFinalization,
+                    "finalizationStartedMilliseconds", finalizationStarted,
+                    "passiveEndedMilliseconds", passiveEnded,
+                    "finalDeadlineMilliseconds", finalDeadline, "terminationAfterResumeAttempt", false,
+                    "nameRecoveryAfterCloseGuaranteed", false); }, finalDeadline, ref failure, ref evidenceIncomplete);
+                foreach (SafeFileHandle handle in memberHandles) ClosePublicationResource(handle, ref failure);
+                ClosePublicationResource(thread, ref failure);
+                ClosePublicationResource(process, ref failure);
+                // End the operating interval without kill-on-close, even with survivors.
+                ClosePublicationResource(job, ref failure);
+            }
+            if (Clock.ElapsedMilliseconds >= finalDeadline && failure == null)
+                failure = new TimeoutException("Publication finalization exceeded its original bound");
+            bool liveOrUnknown = PublicationLifetimeUnestablished(job, rootCreated, lifetime, audit) ||
+                evidenceIncomplete || journal.WriteFailed || Clock.ElapsedMilliseconds >= finalDeadline;
+            TryPublicationRecord(delegate { journal.Write("publication-operating-interval-end", "jobName", jobName,
+                "jobHandleClosed", job == null || job.IsClosed, "retainedLiveWorkOrUnknown", liveOrUnknown,
+                "nameRecoveryAfterCloseGuaranteed", false, "finalDeadlineMilliseconds", finalDeadline); }, finalDeadline, ref failure, ref evidenceIncomplete);
+            if (failure != null)
+            {
+                Exception first = failure;
+                TryPublicationRecord(delegate { journal.Write("publication-failed", "stage", stage,
+                    "resumeAttempted", resumeAttempted, "failureType", first.GetType().Name,
+                    "hresult", first.HResult); }, finalDeadline, ref failure, ref evidenceIncomplete);
+            }
+            liveOrUnknown = liveOrUnknown || evidenceIncomplete || journal.WriteFailed;
+            completionReady = completed && failure == null && !liveOrUnknown;
+            TryPublicationRecord(delegate { journal.Write("publication-launcher-exit", "readyForExit", completionReady,
+                "retainedLiveWorkOrUnknown", liveOrUnknown, "capturedBytes", captured); }, finalDeadline, ref failure, ref evidenceIncomplete);
+            if (Clock.ElapsedMilliseconds >= finalDeadline && failure == null)
+                failure = new TimeoutException("Publication reporting exceeded its original bound");
+            if (failure != null)
+                TryPublicationRecord(delegate { Console.Error.WriteLine("Publication launcher failed in {0}: {1}; HRESULT={2}; retainedLiveWorkOrUnknown={3}; resumeAttempted={4}",
+                    stage, failure.GetType().Name, failure.HResult.ToString(CultureInfo.InvariantCulture),
+                    liveOrUnknown || evidenceIncomplete || journal.WriteFailed || Clock.ElapsedMilliseconds >= finalDeadline,
+                    resumeAttempted); }, finalDeadline, ref failure, ref evidenceIncomplete);
+        }
+        catch (Exception caught) { if (failure == null) failure = caught; }
+        finally
+        {
+            ClosePublicationResource(journal, ref failure);
+            ClosePublicationResource(scripts, ref failure);
+            ClosePublicationResource(directory, ref failure);
+        }
+        // A prior readyForExit record is provisional until all owned disposal finishes.
+        if (Clock.ElapsedMilliseconds >= finalDeadline && failure == null)
+            failure = new TimeoutException("Publication disposal exceeded its original bound");
+        return completionReady && failure == null ? 0 : 1;
+    }
+
+    private sealed class PublicationLifetime
+    {
+        public bool? RootExited;
+        public uint? RootExitCode, Active, Total;
+        public long? SampleMilliseconds;
+        public string FailureType;
+    }
+
+    private sealed class PublicationMember
+    {
+        public uint Pid;
+        public string CreationFileTime, ImageName;
+        public bool? InJob;
+        public string Status = "open-failed";
+        public int? NativeError;
+    }
+
+    private sealed class PublicationAudit
+    {
+        public bool Complete, QuerySucceeded;
+        public uint? Assigned, Returned, ReturnedBytes;
+        public int? QueryError;
+        public string Status = "not-attempted";
+        public long StartedMilliseconds, EndedMilliseconds;
+        public readonly List<PublicationMember> Members = new List<PublicationMember>();
+    }
+
+    private static void CheckPublicationDeadline(string root, int workMilliseconds)
+    {
+        if (Clock.ElapsedMilliseconds >= workMilliseconds)
+            throw new TimeoutException("Original publication launcher deadline expired");
+        if (File.Exists(Path.Combine(root, "cancel")))
+            throw new OperationCanceledException("Publication cancellation marker observed");
+    }
+
+    private static void SamplePublicationLifetime(SafeFileHandle job, SafeFileHandle process,
+        bool rootCreated, PublicationLifetime value)
+    {
+        // Reset stale observations before resampling.
+        value.RootExited = null; value.RootExitCode = null; value.Active = null; value.Total = null;
+        value.SampleMilliseconds = Clock.ElapsedMilliseconds; value.FailureType = null;
+        try
+        {
+            if (!rootCreated) value.RootExited = true;
+            else
+            {
+                if (process == null || process.IsInvalid)
+                    throw new InvalidOperationException("Original publication process handle unavailable");
+                value.RootExited = HasExited(process);
+                if (value.RootExited == true)
+                {
+                    uint code;
+                    Check(GetExitCodeProcess(process, out code));
+                    value.RootExitCode = code;
+                }
+            }
+            if (job != null && !job.IsInvalid)
+            {
+                Accounting accounting = Query(job);
+                value.Active = accounting.ActiveProcesses;
+                value.Total = accounting.TotalProcesses;
+            }
+            else if (rootCreated)
+                throw new InvalidOperationException("Original publication Job handle unavailable");
+        }
+        catch (Exception caught) { value.FailureType = caught.GetType().Name; throw; }
+    }
+
+    private static void TryPublicationSample(SafeFileHandle job, SafeFileHandle process,
+        bool rootCreated, PublicationLifetime value, ref Exception failure)
+    {
+        try { SamplePublicationLifetime(job, process, rootCreated, value); }
+        catch (Exception caught) { if (failure == null) failure = caught; }
+    }
+
+    private static void TryPublicationDrain(Pipe pipe, ref int captured, ref Exception failure)
+    {
+        if (pipe == null || pipe.Eof || pipe.FailureStage != null) return;
+        try { pipe.Drain(ref captured); }
+        catch (Exception caught) { if (failure == null) failure = caught; }
+    }
+
+    private static bool PublicationLifetimeUnestablished(SafeFileHandle job, bool rootCreated,
+        PublicationLifetime lifetime, PublicationAudit audit)
+    {
+        if (!rootCreated && (job == null || job.IsInvalid)) return false;
+        return lifetime.FailureType != null || lifetime.RootExited != true || lifetime.Active != 0 ||
+            !audit.Complete;
+    }
+
+    private static void ClosePublicationResource(IDisposable resource, ref Exception failure)
+    {
+        if (resource == null) return;
+        try { resource.Dispose(); }
+        catch (Exception caught) { if (failure == null) failure = caught; }
+    }
+
+    private static void TryPublicationRecord(Action record, long deadline, ref Exception failure, ref bool incomplete)
+    {
+        if (!PublicationRecordTime(deadline, ref failure, ref incomplete)) return;
+        try { record(); }
+        catch (Exception caught) { incomplete = true; if (failure == null) failure = caught; }
+        finally { PublicationRecordTime(deadline, ref failure, ref incomplete); }
+    }
+
+    private static bool PublicationRecordTime(long deadline, ref Exception failure, ref bool incomplete)
+    {
+        if (Clock.ElapsedMilliseconds < deadline) return true;
+        incomplete = true;
+        if (failure == null) failure = new TimeoutException("Publication evidence deadline");
+        return false;
+    }
+
+    // Guard's fixed-32 non-atomic pattern; retain original Job and member handles.
+    private static PublicationAudit ObservePublicationMembers(SafeFileHandle job, long outerDeadline,
+        List<SafeFileHandle> retained)
+    {
+        var result = new PublicationAudit();
+        result.StartedMilliseconds = Clock.ElapsedMilliseconds;
+        long deadline = Math.Min(outerDeadline, result.StartedMilliseconds + PublicationAuditMilliseconds);
+        Func<bool> hasTime = delegate { return Clock.ElapsedMilliseconds < deadline; };
+        IntPtr buffer = IntPtr.Zero;
+        try
+        {
+            if (!hasTime()) { result.Status = "deadline"; return result; }
+            if (job == null || job.IsInvalid)
+            {
+                result.Status = "no-created-job";
+                result.Complete = true;
+                return result;
+            }
+            buffer = Marshal.AllocHGlobal(8 + 32 * IntPtr.Size);
+            uint written;
+            bool queried = QueryInformationJobObject(job, 3, buffer, (uint)(8 + 32 * IntPtr.Size), out written);
+            int queryError = Marshal.GetLastWin32Error();
+            if (!queried)
+            {
+                result.QueryError = queryError; result.Status = "query-failed";
+                return result;
+            }
+            result.QuerySucceeded = true;
+            result.ReturnedBytes = written;
+            uint assigned = unchecked((uint)Marshal.ReadInt32(buffer, 0));
+            uint returned = unchecked((uint)Marshal.ReadInt32(buffer, 4));
+            result.Assigned = assigned; result.Returned = returned;
+            if (assigned > 32 || returned > 32 || assigned != returned ||
+                written < 8 + returned * IntPtr.Size || written > 8 + 32 * IntPtr.Size)
+            {
+                result.Status = "membership-list-incomplete";
+                return result;
+            }
+            bool complete = true;
+            var seen = new HashSet<uint>();
+            for (int index = 0; index < returned; index++)
+            {
+                if (!hasTime()) { result.Status = "deadline"; return result; }
+                ulong rawPid = unchecked((ulong)Marshal.ReadIntPtr(buffer, 8 + index * IntPtr.Size).ToInt64());
+                if (rawPid == 0 || rawPid > uint.MaxValue || !seen.Add((uint)rawPid))
+                {
+                    result.Status = "invalid-pid-list";
+                    return result;
+                }
+                var member = new PublicationMember();
+                member.Pid = (uint)rawPid;
+                result.Members.Add(member);
+                if (!hasTime()) { member.Status = "deadline"; result.Status = "deadline"; return result; }
+                SafeFileHandle handle = OpenProcess(0x1000u, false, member.Pid);
+                int openError = Marshal.GetLastWin32Error();
+                if (handle.IsInvalid)
+                {
+                    handle.Dispose(); member.NativeError = openError; complete = false; continue;
+                }
+                retained.Add(handle);
+                long creation, exited, kernel, user;
+                bool inJob;
+                if (!hasTime()) { member.Status = "deadline"; result.Status = "deadline"; return result; }
+                if (!GetProcessTimes(handle, out creation, out exited, out kernel, out user))
+                {
+                    member.NativeError = Marshal.GetLastWin32Error(); member.Status = "time-failed";
+                    complete = false; continue;
+                }
+                if (creation <= 0) { member.Status = "invalid-time"; complete = false; continue; }
+                member.CreationFileTime = creation.ToString(CultureInfo.InvariantCulture);
+                if (!hasTime()) { member.Status = "deadline"; result.Status = "deadline"; return result; }
+                if (!IsProcessInJob(handle, job, out inJob))
+                {
+                    member.NativeError = Marshal.GetLastWin32Error(); member.Status = "membership-failed";
+                    complete = false; continue;
+                }
+                member.InJob = inJob;
+                if (!inJob) { member.Status = "not-member"; complete = false; continue; }
+                var image = new StringBuilder(32768);
+                uint capacity = 32768;
+                if (!hasTime()) { member.Status = "deadline"; result.Status = "deadline"; return result; }
+                if (!QueryFullProcessImageName(handle, 0, image, ref capacity))
+                {
+                    member.NativeError = Marshal.GetLastWin32Error(); member.Status = "image-failed";
+                    complete = false; continue;
+                }
+                string basename = Path.GetFileName(image.ToString());
+                if (basename.Length == 0 || basename.Length > 260)
+                { member.Status = "image-limit"; complete = false; continue; }
+                member.ImageName = basename; member.Status = "observed-member";
+            }
+            result.Complete = complete && hasTime();
+            result.Status = result.Complete ? "observed" : hasTime() ? "member-incomplete" : "deadline";
+            return result;
+        }
+        catch (Exception caught)
+        {
+            result.Complete = false; result.Status = caught.GetType().Name;
+            return result;
+        }
+        finally
+        {
+            result.EndedMilliseconds = Clock.ElapsedMilliseconds;
+            Marshal.FreeHGlobal(buffer);
+        }
+    }
+
+    private static void RecordPublicationAudit(Journal journal, PublicationAudit audit, long deadline,
+        ref Exception failure, ref bool incomplete)
+    {
+        foreach (PublicationMember member in audit.Members)
+        {
+            if (Clock.ElapsedMilliseconds >= deadline)
+            {
+                incomplete = true;
+                if (failure == null) failure = new TimeoutException("Publication audit persistence deadline");
+                break;
+            }
+            PublicationMember observed = member;
+            TryPublicationRecord(delegate { journal.Write("publication-audit-member", "pid", observed.Pid,
+                "creationFileTime", observed.CreationFileTime, "inJob", observed.InJob,
+                "imageName", observed.ImageName, "status", observed.Status,
+                "nativeError", observed.NativeError); }, deadline, ref failure, ref incomplete);
+        }
+        TryPublicationRecord(delegate { journal.Write("publication-audit", "atomic", false, "limit", 32,
+            "complete", audit.Complete, "querySucceeded", audit.QuerySucceeded,
+            "assigned", audit.Assigned, "returned", audit.Returned, "returnedBytes", audit.ReturnedBytes,
+            "queryError", audit.QueryError, "status", audit.Status,
+            "startedMilliseconds", audit.StartedMilliseconds, "endedMilliseconds", audit.EndedMilliseconds); },
+            deadline, ref failure, ref incomplete);
     }
 
     private static int Run(string[] args)
@@ -236,10 +797,10 @@ internal static class WindowsScriptJobLauncher
         catch (Exception caught) { if (failure == null) failure = caught; }
     }
 
-    private static void RecordCapture(Journal journal, string stream, Pipe pipe)
+    private static void RecordCapture(Journal journal, string stream, Pipe pipe, string kind = "capture")
     {
-        if (pipe == null) { journal.Write("capture", "stream", stream, "initialized", false); return; }
-        journal.Write("capture", "stream", stream, "initialized", true,
+        if (pipe == null) { journal.Write(kind, "stream", stream, "initialized", false); return; }
+        journal.Write(kind, "stream", stream, "initialized", true,
             "readBytes", pipe.ReadBytes, "confirmedFlushedBytes", pipe.ConfirmedFlushedBytes,
             "eof", pipe.Eof, "overflowDetected", pipe.OverflowDetected,
             "failureStage", pipe.FailureStage, "failureType", pipe.FailureType,
@@ -249,6 +810,13 @@ internal static class WindowsScriptJobLauncher
 
     private static ProcessInformation StartSuspended(SafeFileHandle job, Pipe output, Pipe error,
         string root, string script, string authorityHash)
+    {
+        return StartSuspended(job, output, error, root, script, authorityHash,
+            "-Mode Controller -AuthoritySha256 " + authorityHash);
+    }
+
+    private static ProcessInformation StartSuspended(SafeFileHandle job, Pipe output, Pipe error,
+        string root, string script, string authorityHash, string arguments)
     {
         var security = new SecurityAttributes();
         security.Length = Marshal.SizeOf(security);
@@ -286,7 +854,7 @@ internal static class WindowsScriptJobLauncher
                 startup.Error = error.Writer.DangerousGetHandle();
                 startup.Attributes = attributes;
                 string command = "\"" + Shell + "\" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"" +
-                    script + "\" -Mode Controller -AuthoritySha256 " + authorityHash;
+                    script + "\" " + arguments;
                 ProcessInformation child;
                 // SUSPENDED | UNICODE_ENVIRONMENT | EXTENDED_STARTUPINFO_PRESENT | NO_WINDOW.
                 Check(CreateProcess(Shell, new StringBuilder(command), IntPtr.Zero, IntPtr.Zero, true,
@@ -475,17 +1043,38 @@ internal static class WindowsScriptJobLauncher
     private sealed class Journal : IDisposable
     {
         private readonly FileStream file;
-        public Journal(string path) { file = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read); }
+        private readonly int maximum;
+        public bool WriteFailed { get; private set; }
+        public long? DeadlineMilliseconds { get; set; }
+        public Journal(string path, int maximum = 16384)
+        {
+            this.maximum = maximum;
+            file = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read);
+        }
         public void Write(string kind, params object[] fields)
+        {
+            try { WriteRecord(kind, fields); }
+            catch { WriteFailed = true; throw; }
+        }
+        private void WriteRecord(string kind, object[] fields)
         {
             var text = new StringBuilder("{\"event\":").Append(Json(kind));
             text.Append(",\"elapsedMilliseconds\":").Append(Clock.ElapsedMilliseconds.ToString(CultureInfo.InvariantCulture));
             for (int index = 0; index < fields.Length; index += 2)
                 text.Append(',').Append(Json((string)fields[index])).Append(':').Append(Json(fields[index + 1]));
             byte[] bytes = Encoding.UTF8.GetBytes(text.Append("}\n").ToString());
-            if (file.Length + bytes.Length > 16384) throw new InvalidOperationException("Journal size limit");
+            CheckWriteTime();
+            if (file.Length + bytes.Length > maximum) throw new InvalidOperationException("Journal size limit");
+            CheckWriteTime();
             file.Write(bytes, 0, bytes.Length);
+            CheckWriteTime();
             file.Flush(true);
+            CheckWriteTime();
+        }
+        private void CheckWriteTime()
+        {
+            if (DeadlineMilliseconds.HasValue && Clock.ElapsedMilliseconds >= DeadlineMilliseconds.Value)
+                throw new TimeoutException("Journal deadline");
         }
         private static string Json(object value)
         {
@@ -540,9 +1129,19 @@ internal static class WindowsScriptJobLauncher
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool QueryInformationJobObject(SafeFileHandle job, int kind, out Accounting accounting, uint size, IntPtr returned);
     [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool QueryInformationJobObject(SafeFileHandle job, int kind, IntPtr information, uint size, out uint returned);
+    [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool TerminateJobObject(SafeFileHandle job, uint exitCode);
     [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool TerminateProcess(SafeFileHandle process, uint exitCode);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern SafeFileHandle OpenProcess(uint access, bool inherit, uint pid);
+    [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool IsProcessInJob(SafeFileHandle process, SafeFileHandle job, out bool inJob);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool IsProcessInJob(IntPtr process, SafeFileHandle job, out bool inJob);
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern bool QueryFullProcessImageName(SafeFileHandle process, uint flags, StringBuilder name, ref uint size);
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool InitializeProcThreadAttributeList(IntPtr list, int count, int flags, ref IntPtr size);
     [DllImport("kernel32.dll", SetLastError = true)]

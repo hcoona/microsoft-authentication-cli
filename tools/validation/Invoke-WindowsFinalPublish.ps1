@@ -6,15 +6,16 @@ $originalControllerWatch = [Diagnostics.Stopwatch]::StartNew()
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 
-# Final admission precedes the unchanged original guard loader. No dynamic import.
+# Final admission precedes the action-local accepted guard loader. No dynamic import.
 $script:FinalAuthority = $null
 $script:FinalInvocation = $null
 $script:FinalGraph = $null
 $script:FinalRecipe = $null
 $script:FinalClock = $null
 $script:FinalCallerAuthorization = $null
-$script:FinalOriginalLoaderHash = 'ef16811f0f8cf481ee6a54b9b7f0552c14bbd6eeeca32bb391c255e52d35628e'
 $script:FinalControllerWatch = $null
+$script:FinalActionWatch = $null
+$script:FinalCancelPath = $null
 $script:FinalRecipeHash = 'bdaddd4765dfe6e9f5b48cc839097b96be411b9a3d84b581c1987e28efac06c8'
 $script:FinalStartupSentinel = $null
 $script:FinalInstalledSelectionChecks = 0
@@ -36,17 +37,21 @@ function Assert-FinalKeys($Value, [string[]] $Expected) {
 }
 
 function Read-FinalBytes([string] $Path, [int] $Maximum) {
+    Assert-FinalBudget
     Assert-GuardDirect $Path
+    Assert-FinalBudget
     $file = [IO.File]::Open($Path, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read)
     try {
         if ($file.Length -gt $Maximum) { throw 'Final input size limit' }
         $bytes = [byte[]]::new([int]$file.Length)
         $offset = 0
         while ($offset -lt $bytes.Length) {
+            Assert-FinalBudget
             $count = $file.Read($bytes, $offset, $bytes.Length - $offset)
             if ($count -eq 0) { throw 'Incomplete final input' }
             $offset += $count
         }
+        Assert-FinalBudget
         return ,$bytes
     } finally { $file.Dispose() }
 }
@@ -87,63 +92,46 @@ function Assert-FinalProvenanceDescriptor($Value, [string] $ExpectedPath = '') {
 
 function Assert-FinalCallerAuthorization {
     Assert-FinalBudget
-    if ($null -eq $script:FinalAuthority -or $null -eq $script:FinalInvocation) {
-        throw 'Missing prospective caller authority'
-    }
     $authority = $script:FinalAuthority
     $invocation = $script:FinalInvocation
+    if ($null -eq $authority -or $null -eq $invocation) { throw 'Missing current caller authority' }
     Assert-FinalKeys $authority.callerAuthorization @('bytes', 'sha256')
-    if (($authority.callerAuthorization.bytes -isnot [int] -and $authority.callerAuthorization.bytes -isnot [long]) -or
-        $authority.callerAuthorization.bytes -lt 1 -or $authority.callerAuthorization.bytes -gt 1048576) {
-        throw 'Unbound prospective caller authorization length'
-    }
     $path = $invocation.actionPath + '\caller-authorization.json'
     $caller = Read-FinalJson $path $authority.callerAuthorization.sha256 1048576
     if ((Get-Item -LiteralPath $path -Force).Length -ne $authority.callerAuthorization.bytes) {
-        throw 'Prospective caller authorization length changed'
+        throw 'Current caller authorization length changed'
     }
     Assert-FinalKeys $caller @('schema', 'accepted', 'scope', 'product', 'integration', 'protocol',
-        'components', 'recipe', 'sourceReview', 'guardAcceptance', 'acceptedGuard',
-        'originalGuardEvidence', 'callerPolicy', 'noExecutionGrant')
+        'components', 'recipe', 'sourceReview', 'guardAcceptance', 'acceptedGuard', 'acceptedLauncher',
+        'originalGuardEvidence', 'originalLauncherEvidence', 'callerPolicy', 'noExecutionGrant')
     Assert-FinalCallerValue $caller
-    if ($caller.schema -cne 'final-publish-caller-authorization-v1' -or
-        $caller.accepted -isnot [bool] -or $caller.accepted -ne $true -or
-        $caller.scope -cne 'one-final-publish-use-of-original-accepted-guard' -or
+    if ($caller.schema -cne 'final-publish-caller-authorization-v2' -or
+        $caller.accepted -isnot [bool] -or -not $caller.accepted -or
+        $caller.scope -cne 'one-supervised-final-publication' -or
         $caller.callerPolicy -cne 'fixed-final-only-callers-no-generic-helper-use' -or
-        $caller.noExecutionGrant -isnot [bool] -or $caller.noExecutionGrant -ne $true) {
-        throw 'Prospective caller authorization is absent or out of scope'
+        $caller.noExecutionGrant -isnot [bool] -or -not $caller.noExecutionGrant) {
+        throw 'Current caller authorization is absent or out of scope'
     }
     foreach ($name in @('product', 'integration', 'protocol', 'components', 'recipe',
-                        'sourceReview', 'guardAcceptance', 'acceptedGuard')) {
+                        'sourceReview', 'guardAcceptance', 'acceptedGuard', 'acceptedLauncher')) {
         if (($caller.$name | ConvertTo-Json -Depth 40 -Compress) -cne
             ($authority.$name | ConvertTo-Json -Depth 40 -Compress)) {
-            throw 'Prospective caller authorization names different inputs'
+            throw 'Current caller authorization names different inputs'
         }
     }
-    Assert-FinalKeys $caller.originalGuardEvidence @('binding', 'bindingReview', 'readerLauncher', 'readerLauncherAcceptance')
-    Assert-FinalProvenanceDescriptor $caller.originalGuardEvidence.binding '/tmp/windows-final-guard-0055-history-binding.json'
-    Assert-FinalProvenanceDescriptor $caller.originalGuardEvidence.bindingReview '/tmp/windows-final-guard-0055-authority-inputs/history-binding-review.json'
-    Assert-FinalProvenanceDescriptor $caller.originalGuardEvidence.readerLauncher
-    Assert-FinalProvenanceDescriptor $caller.originalGuardEvidence.readerLauncherAcceptance
-    $guardFields = @('actionNumber', 'sourceSha256', 'dllSha256', 'guardBuildSha256',
-        'preparationWindowsResultSha256', 'preparationWslResultSha256', 'preparationReservationSha256',
-        'invocationSha256', 'compilerReceiptSha256', 'artifactAcceptancePath', 'artifactAcceptanceSha256',
-        'expectedAssemblyFullName', 'acceptedLoaderSourceSha256')
-    Assert-FinalKeys $caller.acceptedGuard $guardFields
-    Assert-FinalKeys $invocation.acceptedGuard $guardFields
-    foreach ($name in $guardFields) {
-        if ($caller.acceptedGuard.$name -isnot [string] -or
-            $caller.acceptedGuard.$name -cne $invocation.acceptedGuard.$name -or
-            $caller.acceptedGuard.$name -cne $script:AcceptedFinalGuard[$name]) {
-            throw 'Original thirteen-field guard projection changed'
-        }
+    foreach ($name in @('acceptedGuard', 'acceptedLauncher')) {
+        if (($invocation.$name | ConvertTo-Json -Depth 40 -Compress) -cne
+            ($authority.$name | ConvertTo-Json -Depth 40 -Compress)) { throw 'Current invocation artifact join changed' }
     }
-    if ($caller.acceptedGuard.actionNumber -cne '0055' -or
-        $caller.acceptedGuard.acceptedLoaderSourceSha256 -cne $script:FinalOriginalLoaderHash) {
-        throw 'Original disabled-loader provenance changed'
+    Assert-FinalKeys $caller.originalGuardEvidence @('artifactAcceptance')
+    Assert-FinalKeys $caller.originalLauncherEvidence @('artifactAcceptance')
+    Assert-FinalProvenanceDescriptor $caller.originalGuardEvidence.artifactAcceptance `
+        '/tmp/windows-named-guard0066-actual-managed-artifact-acceptance-lifetime-v1.json'
+    Assert-FinalProvenanceDescriptor $caller.originalLauncherEvidence.artifactAcceptance
+    if ($caller.originalGuardEvidence.artifactAcceptance.sha256 -cne $authority.acceptedGuard.artifactAcceptanceSha256 -or
+        $caller.originalLauncherEvidence.artifactAcceptance.sha256 -cne $authority.acceptedLauncher.artifactAcceptanceSha256) {
+        throw 'Current immutable artifact acceptance join changed'
     }
-    # The historical loader remains in G. The new controller is independently
-    # authorized through K and the exact current final authority component.
     Assert-GuardHash $PSCommandPath $caller.components.controller.sha256
     Assert-FinalBudget
     return $caller
@@ -152,57 +140,25 @@ function Assert-FinalCallerAuthorization {
 function Assert-OriginalFinalGuardArtifact {
     Assert-FinalBudget
     $guard = $script:AcceptedFinalGuard
-    $native = 'C:\Temp\azureauth-windows-slice-108\actions\' + $guard.actionNumber
-    if ($guard.artifactAcceptancePath -cne $native + '\final-guard\artifact-acceptance.json') {
-        throw 'Original artifact-acceptance destination changed'
+    $path = $script:FinalInvocation.actionPath + '\controller\guard-artifact-acceptance.json'
+    $raw = Read-FinalBytes $path 22595
+    if ($raw.Length -ne 22595 -or (Get-FinalHash $raw) -cne $guard.artifactAcceptanceSha256 -or
+        $guard.artifactAcceptanceSha256 -cne '09240c6a14e37707be0ef772881c9fc8726d0b1b8bdf0d3de3b6850c2dcd809f') {
+        throw 'Original 0066 artifact-acceptance copy changed'
     }
-    $raw = Read-FinalBytes $guard.artifactAcceptancePath 1048576
-    if ($raw.Length -lt 1 -or (Get-FinalHash $raw) -cne $guard.artifactAcceptanceSha256) {
-        throw 'Original artifact-acceptance bytes changed'
+    # Preserve the existing review's original bytes and historical counters.
+    # No original preparation/runtime path is opened or recursively followed.
+    $artifact = [Text.UTF8Encoding]::new($false, $true).GetString($raw) | ConvertFrom-Json
+    if ($artifact.schema -cne 'named-guard0066-actual-managed-artifact-acceptance-v1' -or
+        $artifact.decision.artifactAccepted -ne $true -or
+        $artifact.decision.compiledSourceCorrespondenceAccepted -ne $true -or
+        $artifact.decision.staticPeIlAccepted -ne $true -or
+        $artifact.references.guardSource.sha256 -cne $guard.sourceSha256 -or
+        $artifact.artifact.bytes -ne $guard.dllBytes -or $artifact.artifact.sha256 -cne $guard.dllSha256) {
+        throw 'Original 0066 acceptance does not establish the current guard'
     }
-    # Original raw bytes were checked by WSL's original-compatible JSON decoder.
-    # Do not impose final compact-JSON formatting on the preserved acceptance.
-    $text = [Text.UTF8Encoding]::new($false, $true).GetString($raw)
-    if ($text.Length -gt 0 -and $text[0] -eq [char]0xfeff) { $text = $text.Substring(1) }
-    $artifact = $text | ConvertFrom-Json
-    Assert-FinalKeys $artifact @('schema', 'disposition', 'scope', 'acceptedFinalGuard', 'artifact',
-        'completionAcceptance', 'managedPeAndIlReviewed', 'sourceAndCompilerBindingReviewed',
-        'noLoadOrSelfTestPerformed', 'reviewer', 'reviewedUtc')
-    if ($artifact.schema -cne 'final-guard-managed-artifact-acceptance-v1' -or
-        $artifact.disposition -cne 'accepted' -or
-        $artifact.scope -cne 'exact-managed-final-guard-source-pe-il-and-final-loader-binding') {
-        throw 'Original artifact acceptance scope changed'
-    }
-    foreach ($name in @('managedPeAndIlReviewed', 'sourceAndCompilerBindingReviewed', 'noLoadOrSelfTestPerformed')) {
-        if ($artifact.$name -isnot [bool] -or $artifact.$name -ne $true) { throw 'Original artifact acceptance flag changed' }
-    }
-    if ($artifact.reviewer -isnot [string] -or $artifact.reviewer -cnotmatch '^[A-Za-z0-9_./-]{1,160}$' -or
-        $artifact.reviewedUtc -isnot [string] -or
-        $artifact.reviewedUtc -cnotmatch '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,9})?(?:Z|\+00:00)$') {
-        throw 'Original artifact reviewer metadata changed'
-    }
-    $originalFields = @('actionNumber', 'sourceSha256', 'dllSha256', 'guardBuildSha256',
-        'preparationWindowsResultSha256', 'preparationWslResultSha256', 'preparationReservationSha256',
-        'invocationSha256', 'compilerReceiptSha256', 'expectedAssemblyFullName', 'acceptedLoaderSourceSha256')
-    Assert-FinalKeys $artifact.acceptedFinalGuard $originalFields
-    foreach ($name in $originalFields) {
-        if ($artifact.acceptedFinalGuard.$name -isnot [string] -or $artifact.acceptedFinalGuard.$name -cne $guard[$name]) {
-            throw 'Original artifact guard projection changed'
-        }
-    }
-    Assert-FinalKeys $artifact.artifact @('path', 'bytes', 'sha256')
-    $projected = '/mnt/c/Temp/azureauth-windows-slice-108/actions/' + $guard.actionNumber
-    if ($artifact.artifact.path -cne $projected + '/final-guard/WindowsFinalPublishGuard.dll' -or
-        $artifact.artifact.sha256 -cne $guard.dllSha256 -or
-        ($artifact.artifact.bytes -isnot [int] -and $artifact.artifact.bytes -isnot [long]) -or
-        $artifact.artifact.bytes -lt 1 -or $artifact.artifact.bytes -gt 8388608 -or
-        (Get-Item -LiteralPath ($native + '\final-guard\WindowsFinalPublishGuard.dll') -Force).Length -ne $artifact.artifact.bytes) {
-        throw 'Original artifact DLL descriptor changed'
-    }
-    Assert-FinalProvenanceDescriptor $artifact.completionAcceptance '/tmp/windows-final-guard-0055-authority-inputs/original-completion-acceptance.json'
     Assert-FinalBudget
 }
-
 
 function Resolve-FinalText([string] $Text, $Slots) {
     foreach ($key in $Slots.Keys) { $Text = $Text.Replace(('${' + $key + '}'), [string]$Slots[$key]) }
@@ -214,8 +170,11 @@ function Resolve-FinalText([string] $Text, $Slots) {
 
 function Assert-FinalBudget {
     if ($null -eq $script:FinalControllerWatch -or -not $script:FinalControllerWatch.IsRunning -or
-        $script:FinalControllerWatch.ElapsedMilliseconds -ge 700000) { throw 'Original Windows controller expired' }
-    if (Test-Path -LiteralPath ($script:FinalInvocation.actionPath + '\cancel')) { throw 'Caller retention cancellation' }
+        $script:FinalControllerWatch.ElapsedMilliseconds -ge 1900000) { throw 'Original Windows controller expired' }
+    if ($null -ne $script:FinalActionWatch -and $script:FinalActionWatch.ElapsedMilliseconds -ge 1800000) {
+        throw 'Original publication action expired'
+    }
+    if ($null -ne $script:FinalCancelPath -and (Test-Path -LiteralPath $script:FinalCancelPath)) { throw 'Caller retention cancellation' }
     if ($null -ne $script:FinalClock -and [Diagnostics.Stopwatch]::GetTimestamp() -ge $script:FinalClock.deadlineCounter) {
         throw 'Original cross-host outer deadline expired'
     }
@@ -996,40 +955,61 @@ function Get-FinalToolObservations($Graph, $Recipe, $Slots, [byte[]] $Stdout, [b
 
 function Initialize-FinalBinding($ControllerWatch) {
     if ($script:FinalPublishDraftOnly) { throw 'DRAFT_ONLY: final admission disabled' }
-    if ($ActionName -cnotmatch '^(?!0000)[0-9]{4}$') { throw 'Invalid original action number' }
+    if ($ActionName -cne '0093') { throw 'Invalid original action number' }
     $action = 'C:\Temp\azureauth-windows-slice-108\actions\' + $ActionName
     $script:FinalControllerWatch = $ControllerWatch
+    $script:FinalCancelPath = $action + '\cancel'
     $authority = Read-FinalJson "$action\authority.json" $AuthoritySha256
     $invocation = Read-FinalJson "$action\invocation.json" $InvocationSha256
     $start = Read-FinalJson "$action\started.json" $ReservationSha256 16384
     Assert-FinalKeys $authority @('schema', 'repository', 'target', 'protocol', 'wave', 'product', 'integration',
-        'components', 'recipe', 'acceptedGuard', 'rootMarkers', 'limits', 'sourceReview', 'handoff',
+        'components', 'recipe', 'acceptedGuard', 'acceptedLauncher', 'rootMarkers', 'limits', 'sourceReview', 'handoff',
         'handoffAcceptance', 'graph', 'graphAcceptance', 'guardAcceptance', 'callerAuthorization', 'executionReview', 'publication')
     Assert-FinalKeys $invocation @('schema', 'action', 'reservationSha256', 'authoritySha256', 'actionPath',
         'workingDirectory', 'executable', 'argumentVector', 'nativeArguments', 'nativeArgumentsSha256',
         'nativeCommandLine', 'nativeCommandLineSha256', 'environment', 'environmentBlockSha256',
-        'endpoint', 'acceptedGuard', 'graphSha256', 'limits')
+        'endpoint', 'acceptedGuard', 'acceptedLauncher', 'graphSha256', 'limits')
     Assert-FinalKeys $start @('schema', 'action', 'number', 'utc', 'source', 'sourceTree', 'protocol', 'waveBlob',
         'authoritySha256', 'handoffSha256', 'guardAcceptanceSha256', 'priorCounters', 'preparationCharge',
         'buildTestCharge', 'publishCharge', 'reservedProcessScenarios', 'endpoint', 'originalOuterLimitMilliseconds')
-    if ($authority.schema -cne 'final-publish-external-authority-v2' -or
+    if ($authority.schema -cne 'final-publish-external-authority-v3' -or
         $authority.repository -cne 'hcoona/microsoft-authentication-cli' -or
         $authority.product.commit -cne '503360753accd0829801953823b1b57a4f852440' -or
         $authority.product.tree -cne '8506cdd9781c8a331ea12ea8fe27a55292eec073' -or
-        $start.schema -cne 'final-publish-reservation-v1' -or $start.action -cne 'final-publish' -or
+        $start.schema -cne 'final-publish-reservation-v2' -or $start.action -cne 'final-publish' -or
         $start.number -cne $ActionName -or $start.source -cne $authority.product.commit -or
         $start.sourceTree -cne $authority.product.tree -or $start.protocol -cne $authority.protocol.commit -or
         $start.waveBlob -cne $authority.wave.gitBlob -or $start.authoritySha256 -cne $AuthoritySha256 -or
         $start.handoffSha256 -cne $authority.handoff.sha256 -or
         $start.guardAcceptanceSha256 -cne $authority.guardAcceptance.sha256 -or
         $start.preparationCharge -ne 0 -or $start.buildTestCharge -ne 0 -or $start.publishCharge -ne 1 -or
-        $start.reservedProcessScenarios -ne 0 -or $start.originalOuterLimitMilliseconds -ne 1800000 -or
-        $invocation.schema -cne 'final-publish-invocation-v1' -or $invocation.action -cne $ActionName -or
+        $start.reservedProcessScenarios -ne 1 -or $start.originalOuterLimitMilliseconds -ne 2400000 -or
+        $invocation.schema -cne 'final-publish-invocation-v2' -or $invocation.action -cne $ActionName -or
         $invocation.actionPath -cne $action -or $invocation.reservationSha256 -cne $ReservationSha256 -or
         $invocation.authoritySha256 -cne $AuthoritySha256 -or
         $invocation.endpoint -cnotmatch '^[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$' -or
         $start.endpoint -cne $invocation.endpoint -or $invocation.graphSha256 -cne $authority.graph.sha256) {
         throw 'Original final publication reservation or authority join changed'
+    }
+    $limits = [ordered]@{
+        preparation = 28; buildTest = 130; publish = 30; synthetic = 180
+        outerMilliseconds = 2400000; actionMilliseconds = 1800000
+        controllerMilliseconds = 1900000; prelaunchMilliseconds = 1810000
+        nativeWorkMilliseconds = 2000000; nativeTotalMilliseconds = 2010000
+        nativeSpawnReserveMilliseconds = 2030000; finalizationMilliseconds = 10000
+        drainMilliseconds = 600000; observationToleranceMilliseconds = 0
+        captureBytes = 8388608; activeProcesses = 32; emergencyMillisecondsWithinOuter = 10000; retries = 0
+    }
+    foreach ($subject in @($authority.limits, $invocation.limits)) {
+        Assert-FinalKeys $subject @($limits.Keys)
+        foreach ($name in $limits.Keys) {
+            if (($subject.$name -isnot [int] -and $subject.$name -isnot [long]) -or
+                $subject.$name -ne $limits[$name]) { throw 'Final timing or capacity contract changed' }
+        }
+    }
+    Assert-FinalKeys $start.priorCounters @('preparation', 'buildTest', 'publication', 'synthetic')
+    foreach ($entry in @{ preparation = 20; buildTest = 103; publication = 2; synthetic = 147 }.GetEnumerator()) {
+        if ($start.priorCounters.($entry.Key) -ne $entry.Value) { throw 'Current publication counters changed' }
     }
     Assert-GuardHash $PSCommandPath $authority.components.controller.sha256
     $graph = Read-FinalJson "$action\graph.json" $authority.graph.sha256
@@ -1070,28 +1050,32 @@ function Initialize-FinalBinding($ControllerWatch) {
     $entries = @($orderedNames | ForEach-Object { $_ + '=' + $environment[$_] })
     $block = [Text.Encoding]::Unicode.GetBytes(($entries -join [char]0) + [char]0 + [char]0)
     if ((Get-FinalHash $block) -cne $invocation.environmentBlockSha256) { throw 'Final native environment block changed' }
-    $guardFields = @('actionNumber', 'sourceSha256', 'dllSha256', 'guardBuildSha256',
-        'preparationWindowsResultSha256', 'preparationWslResultSha256', 'preparationReservationSha256',
-        'invocationSha256', 'compilerReceiptSha256', 'artifactAcceptancePath', 'artifactAcceptanceSha256',
-        'expectedAssemblyFullName', 'acceptedLoaderSourceSha256')
+    $guardFields = @('actionNumber', 'sourceSha256', 'dllBytes', 'dllSha256',
+        'artifactAcceptanceSha256', 'expectedAssemblyFullName')
     Assert-FinalKeys $authority.acceptedGuard $guardFields
     Assert-FinalKeys $invocation.acceptedGuard $guardFields
     foreach ($name in $guardFields) {
         $value = $authority.acceptedGuard.$name
-        if ($null -eq $value -or $value -cne $invocation.acceptedGuard.$name) { throw 'Unbound guard projection' }
+        if ($null -eq $value -or $value -cne $invocation.acceptedGuard.$name) { throw 'Unbound current guard projection' }
         $script:AcceptedFinalGuard[$name] = $value
     }
-    if ($script:AcceptedFinalGuard.sourceSha256 -cne 'd38846b080d5ee092fae9e21c9031712b56289093b50ca048d50589cca50ff4b') {
-        throw 'Final guard source changed'
-    }
+    if ($script:AcceptedFinalGuard.actionNumber -cne '0066' -or
+        $script:AcceptedFinalGuard.sourceSha256 -cne '45c0d829712bac66ece76676939310d04f59af9a83709f1b1e80b8bf1f4a8501' -or
+        $script:AcceptedFinalGuard.dllSha256 -cne 'a18302e4658afc08b564be23c9b52995fba85c1a3345fba19662008efe30ae58' -or
+        $script:AcceptedFinalGuard.dllBytes -ne 24576) { throw 'Accepted named guard changed' }
+    Assert-FinalKeys $authority.acceptedLauncher @('preparationAction', 'sourceSha256', 'exeBytes',
+        'exeSha256', 'artifactAcceptanceSha256', 'mode')
+    if ($authority.acceptedLauncher.preparationAction -cne '0085' -or
+        $authority.acceptedLauncher.mode -cne '--publication' -or
+        $authority.acceptedLauncher.sourceSha256 -cne $authority.components.nativeLauncher.sha256 -or
+        ($invocation.acceptedLauncher | ConvertTo-Json -Depth 20 -Compress) -cne
+        ($authority.acceptedLauncher | ConvertTo-Json -Depth 20 -Compress)) { throw 'Native launcher projection changed' }
     $script:FinalAuthority = $authority
     $script:FinalInvocation = $invocation
     $script:FinalGraph = $graph
     $script:FinalRecipe = $recipe
     $script:FinalCallerAuthorization = Assert-FinalCallerAuthorization
     Assert-FinalBudget
-    $invocation | Add-Member -NotePropertyName guardPreparationWslResultSha256 -NotePropertyValue $script:AcceptedFinalGuard.preparationWslResultSha256
-    $invocation | Add-Member -NotePropertyName guardArtifactAcceptanceSha256 -NotePropertyValue $script:AcceptedFinalGuard.artifactAcceptanceSha256
     $invocation | Add-Member -NotePropertyName resolvedSlots -NotePropertyValue $slots
     $invocation.environment = $environment
     return $invocation
@@ -1115,7 +1099,7 @@ function Receive-FinalOriginalClock($Binding, $ControllerWatch) {
         controllerPid = $pidValue; controllerStartUtc = $started
     })
     $readyHash = (Get-FileHash -LiteralPath "$action\clock-ready.json" -Algorithm SHA256).Hash.ToLowerInvariant()
-    $end = [Math]::Min(700000L, $ControllerWatch.ElapsedMilliseconds + 20000L)
+    $end = [Math]::Min(1900000L, $ControllerWatch.ElapsedMilliseconds + 20000L)
     $replyBytes = $null
     while ($true) {
         Assert-FinalBudget
@@ -1129,7 +1113,7 @@ function Receive-FinalOriginalClock($Binding, $ControllerWatch) {
     $replyText = [Text.UTF8Encoding]::new($false, $true).GetString($replyBytes)
     $reply = $replyText | ConvertFrom-Json
     $left = $reply.remainingMilliseconds
-    if (($left -isnot [int] -and $left -isnot [long]) -or $left -le 0 -or $left -gt 700000) { throw 'Invalid original remaining time' }
+    if (($left -isnot [int] -and $left -isnot [long]) -or $left -le 0 -or $left -gt 1900000) { throw 'Invalid original remaining time' }
     $expected = [ordered]@{ action = $ActionName; endpoint = $Binding.endpoint; invocationSha256 = $InvocationSha256
         readySha256 = $readyHash; remainingMilliseconds = $left; reservationSha256 = $ReservationSha256
         schema = 'final-publish-clock-remaining-v1' }
@@ -1257,21 +1241,36 @@ function Assert-ExactFinalPublishPostconditions($Binding, $Result) {
 
 
 function Save-Json([string] $Path, $Value) {
+    Assert-FinalBudget
     $bytes = [Text.UTF8Encoding]::new($false).GetBytes(($Value | ConvertTo-Json -Depth 20))
+    Assert-FinalBudget
     $stream = [IO.File]::Open($Path, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::Read)
-    try { $stream.Write($bytes, 0, $bytes.Length); $stream.Flush($true) }
-    finally { $stream.Dispose() }
+    try {
+        Assert-FinalBudget
+        $stream.Write($bytes, 0, $bytes.Length)
+        Assert-FinalBudget
+        $stream.Flush($true)
+    } finally { $stream.Dispose() }
+    Assert-FinalBudget
 }
 
 function Save-CompleteJson([string] $Path, $Value) {
     Save-Json ($Path + '.pending') $Value
+    Assert-FinalBudget
     [IO.File]::Move(($Path + '.pending'), $Path)
+    Assert-FinalBudget
 }
 
 function Save-Bytes([string] $Path, [byte[]] $Bytes) {
+    Assert-FinalBudget
     $stream = [IO.File]::Open($Path, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::Read)
-    try { $stream.Write($Bytes, 0, $Bytes.Length); $stream.Flush($true) }
-    finally { $stream.Dispose() }
+    try {
+        Assert-FinalBudget
+        $stream.Write($Bytes, 0, $Bytes.Length)
+        Assert-FinalBudget
+        $stream.Flush($true)
+    } finally { $stream.Dispose() }
+    Assert-FinalBudget
 }
 
 function Read-FinalPublishOutput($Process, $Streams, [int] $Seconds, $Watch, $ControllerWatch) {
@@ -1284,7 +1283,7 @@ function Read-FinalPublishOutput($Process, $Streams, [int] $Seconds, $Watch, $Co
         while (-not ($Process.HasExited -and $done[0] -and $done[1])) {
             Assert-FinalBudget
             if (Test-Path -LiteralPath "$action\cancel") { $disposition = 'cancelled'; throw 'Caller cancellation' }
-            if ($ControllerWatch.ElapsedMilliseconds -ge 700000) { $disposition = 'controller-timeout'; throw 'Controller expired' }
+            if ($ControllerWatch.ElapsedMilliseconds -ge 1900000) { $disposition = 'controller-timeout'; throw 'Controller expired' }
             if ($Watch.Elapsed.TotalSeconds -ge $Seconds) { $disposition = 'timeout'; throw 'Execution timeout' }
             for ($index = 0; $index -lt 2; $index++) {
                 if (-not $done[$index] -and $tasks[$index].IsCompleted) {
@@ -1316,19 +1315,17 @@ function Read-FinalPublishOutput($Process, $Streams, [int] $Seconds, $Watch, $Co
 # They are outputs of the exact final admission authority loader, not
 # self-referential source hash literals to insert into this same file.
 $script:AcceptedFinalGuard = @{
-    actionNumber = $null; sourceSha256 = $null; dllSha256 = $null
-    guardBuildSha256 = $null; preparationWindowsResultSha256 = $null
-    preparationWslResultSha256 = $null; preparationReservationSha256 = $null
-    invocationSha256 = $null; compilerReceiptSha256 = $null
-    artifactAcceptancePath = $null; artifactAcceptanceSha256 = $null
-    expectedAssemblyFullName = $null; acceptedLoaderSourceSha256 = $null
+    actionNumber = $null; sourceSha256 = $null; dllBytes = $null; dllSha256 = $null
+    artifactAcceptanceSha256 = $null; expectedAssemblyFullName = $null
 }
 
 function Assert-GuardDirect([string] $Path) {
     $item = Get-Item -LiteralPath $Path -Force
     while ($null -ne $item) {
         if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Reparse guard input' }
-        if ($item.PSIsContainer) { $item = $item.Parent } else { $item = $item.Directory }
+        if ($item -is [IO.DirectoryInfo]) { $item = $item.Parent }
+        elseif ($item -is [IO.FileInfo]) { $item = $item.Directory }
+        else { throw 'Unexpected filesystem input type' }
     }
 }
 
@@ -1343,52 +1340,24 @@ function Assert-GuardHash([string] $Path, [string] $Expected) {
 function Import-ExactFinalGuard($Binding, $ControllerWatch) {
     if ($script:FinalPublishDraftOnly) { throw 'DRAFT_ONLY: final guard load is not admitted' }
     foreach ($value in $script:AcceptedFinalGuard.Values) {
-        if ($null -eq $value) { throw 'UNBOUND: original preparation and artifact acceptance' }
+        if ($null -eq $value) { throw 'Unbound current guard projection' }
     }
-    if ($ControllerWatch.ElapsedMilliseconds -ge 700000) { throw 'Controller expired before loader' }
-    if ($script:AcceptedFinalGuard.actionNumber -cnotmatch '^[0-9]{4}$' -or
-        $script:AcceptedFinalGuard.actionNumber -ceq '0000') { throw 'Invalid guard preparation action' }
-    $root = 'C:\Temp\azureauth-windows-slice-108\actions\' + $script:AcceptedFinalGuard.actionNumber
-    $source = "$root\final-guard\source\WindowsValidationJob.cs"
-    $dll = "$root\final-guard\WindowsFinalPublishGuard.dll"
-    # Full final admission verifies the original WSL result and its linked original
-    # Windows reservation. This loader never treats the WSL proxy's exit as proof.
-    if ($Binding.guardPreparationWslResultSha256 -cne $script:AcceptedFinalGuard.preparationWslResultSha256 -or
-        $Binding.guardArtifactAcceptanceSha256 -cne $script:AcceptedFinalGuard.artifactAcceptanceSha256) {
-        throw 'Final admission does not bind accepted preparation'
-    }
-    if ($null -eq $script:FinalCallerAuthorization) { throw 'UNBOUND: prospective caller authorization' }
-    Assert-GuardHash $PSCommandPath $script:FinalCallerAuthorization.components.controller.sha256
-    Assert-GuardHash "$root\started.json" $script:AcceptedFinalGuard.preparationReservationSha256
-    Assert-GuardHash "$root\invocation.json" $script:AcceptedFinalGuard.invocationSha256
-    Assert-GuardHash "$root\compiler.json" $script:AcceptedFinalGuard.compilerReceiptSha256
-    Assert-GuardHash "$root\windows-result.json" $script:AcceptedFinalGuard.preparationWindowsResultSha256
-    Assert-GuardHash "$root\guard-build.json" $script:AcceptedFinalGuard.guardBuildSha256
-    Assert-GuardHash $script:AcceptedFinalGuard.artifactAcceptancePath $script:AcceptedFinalGuard.artifactAcceptanceSha256
-    Assert-GuardHash $source $script:AcceptedFinalGuard.sourceSha256
+    Assert-FinalBudget
+    if ($script:AcceptedFinalGuard.actionNumber -cne '0066') { throw 'Unaccepted guard preparation' }
+    $dll = $Binding.actionPath + '\controller\WindowsFinalPublishGuard.dll'
     Assert-GuardHash $dll $script:AcceptedFinalGuard.dllSha256
-    $build = [IO.File]::ReadAllText("$root\guard-build.json") | ConvertFrom-Json
-    if ($build.schema -cne 'final-guard-build-v1' -or
-        $build.reservationSha256 -cne $script:AcceptedFinalGuard.preparationReservationSha256 -or
-        $build.windowsResultSha256 -cne $script:AcceptedFinalGuard.preparationWindowsResultSha256 -or
-        $build.invocationSha256 -cne $script:AcceptedFinalGuard.invocationSha256 -or
-        $build.sourceSha256 -cne $script:AcceptedFinalGuard.sourceSha256 -or
-        $build.dllSha256 -cne $script:AcceptedFinalGuard.dllSha256 -or $build.dllPath -cne $dll) {
-        throw 'Compiled guard binding changed'
+    if ((Get-Item -LiteralPath $dll -Force).Length -ne $script:AcceptedFinalGuard.dllBytes) {
+        throw 'Current guard copy length changed'
     }
     Assert-OriginalFinalGuardArtifact
-    # Original guard-build stays artifactAccepted=false. A later independent review
-    # binds it without rewriting that original compiler/collector evidence.
     foreach ($assembly in [AppDomain]::CurrentDomain.GetAssemblies()) {
         if ($null -ne $assembly.GetType('WindowsValidationJob', $false)) { throw 'A guard type is already loaded' }
     }
-    if ($ControllerWatch.ElapsedMilliseconds -ge 700000) { throw 'Controller expired before assembly load' }
     $caller = Assert-FinalCallerAuthorization
     if (($caller | ConvertTo-Json -Depth 40 -Compress) -cne
         ($script:FinalCallerAuthorization | ConvertTo-Json -Depth 40 -Compress)) {
-        throw 'Prospective caller authorization changed before load'
+        throw 'Current caller authorization changed before load'
     }
-    Assert-GuardHash $PSCommandPath $caller.components.controller.sha256
     Assert-FinalBudget
     Add-Type -Path $dll -ErrorAction Stop -WarningAction Stop
     $found = @()
@@ -1401,10 +1370,10 @@ function Import-ExactFinalGuard($Binding, $ControllerWatch) {
     if (-not [string]::Equals($loaded.Location, $dll, [StringComparison]::OrdinalIgnoreCase) -or
         $loaded.FullName -cne $script:AcceptedFinalGuard.expectedAssemblyFullName) { throw 'Loaded guard identity changed' }
     Assert-GuardHash $dll $script:AcceptedFinalGuard.dllSha256
-    if ($ControllerWatch.ElapsedMilliseconds -ge 700000) { throw 'Controller expired after assembly load' }
+    Assert-FinalBudget
     return @{ path = $loaded.Location; fullName = $loaded.FullName
               dllSha256 = $script:AcceptedFinalGuard.dllSha256
-              guardBuildSha256 = $script:AcceptedFinalGuard.guardBuildSha256 }
+              artifactAcceptanceSha256 = $script:AcceptedFinalGuard.artifactAcceptanceSha256 }
 }
 
 function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
@@ -1433,48 +1402,66 @@ function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
         $loadedGuard = Import-ExactFinalGuard $Binding $ControllerWatch
         Save-CompleteJson ($Binding.actionPath + '\guard-load.json') $loadedGuard
         Assert-FinalBudget
-        # Reserve the complete 600-second action plus the existing ten-second
+        # Reserve the complete 1800-second action plus the existing ten-second
         # never-resumed-root allowance within both original stopping clocks.
         $leftTicks = $script:FinalClock.deadlineCounter - [Diagnostics.Stopwatch]::GetTimestamp()
-        if ([decimal]$leftTicks * 1000 -lt [decimal]610000 * $script:FinalClock.frequency -or
-            (700000L - $ControllerWatch.ElapsedMilliseconds) -lt 610000L) {
+        if ([decimal]$leftTicks * 1000 -lt [decimal]1810000 * $script:FinalClock.frequency -or
+            (1900000L - $ControllerWatch.ElapsedMilliseconds) -lt 1810000L) {
             throw 'Insufficient original time for final publication; no action launch'
         }
-        if ($ControllerWatch.ElapsedMilliseconds -ge 700000) { throw 'Controller expired before guard' }
+        if ($ControllerWatch.ElapsedMilliseconds -ge 1900000) { throw 'Controller expired before guard' }
         if (Test-Path -LiteralPath "$action\cancel") { throw 'Cancellation before guard' }
-        $guard = [WindowsValidationJob]::CreateFinalPublishDraft($ControllerWatch, [long]$script:FinalClock.deadlineCounter)
+        $jobName = 'Local\azureauth-final-publish-108-' + $ActionName + '-' + $Binding.endpoint
+        $guard = [WindowsValidationJob]::CreateFinalPublishDraft($ControllerWatch, [long]$script:FinalClock.deadlineCounter, $jobName)
         $result.stage = 'subject'
         if (Test-Path -LiteralPath "$action\cancel") { throw 'Cancellation before subject' }
         # This clock starts immediately before root creation and never restarts.
         Assert-FinalBudget
         $leftTicks = $script:FinalClock.deadlineCounter - [Diagnostics.Stopwatch]::GetTimestamp()
-        if ([decimal]$leftTicks * 1000 -lt [decimal]610000 * $script:FinalClock.frequency -or
-            (700000L - $ControllerWatch.ElapsedMilliseconds) -lt 610000L) {
+        if ([decimal]$leftTicks * 1000 -lt [decimal]1810000 * $script:FinalClock.frequency -or
+            (1900000L - $ControllerWatch.ElapsedMilliseconds) -lt 1810000L) {
             throw 'Original action allowance expired before root creation'
         }
         $watch = [Diagnostics.Stopwatch]::StartNew()
-        $guard.StartFinalPublishDraft($Binding.executable, $Binding.nativeArguments, $Binding.workingDirectory, $Binding.environment, $watch)
-        Save-Json "$action\subject.json" @{
-            pid = $guard.Child.Id; started = $guard.Child.StartTime.ToUniversalTime().ToString('o')
+        $script:FinalActionWatch = $watch
+        # This synchronous callback runs while the original compiler root is suspended.
+        # Persist its incarnation and every authority join before the guard attempts resume.
+        $beforeResume = [Action]{
+            Assert-FinalBudget
+            if (Test-Path -LiteralPath "$action\cancel") { throw 'Cancellation before compiler resume' }
+            Save-CompleteJson "$action\subject.json" ([ordered]@{
+                schema = 'final-publish-suspended-subject-v2'; action = $ActionName
+                pid = $guard.Child.Id; creationFileTime = $guard.RootCreationFileTime
+                session = $guard.JobSessionId; jobName = $guard.JobName
+                namedJobRightsVerified = $guard.NamedJobRightsVerified
+                reservationSha256 = $ReservationSha256; invocationSha256 = $InvocationSha256
+                authoritySha256 = $AuthoritySha256
+                guardSourceSha256 = $script:AcceptedFinalGuard.sourceSha256
+                guardDllSha256 = $script:AcceptedFinalGuard.dllSha256
+                resumed = $false
+            })
+            Assert-FinalBudget
+            if (Test-Path -LiteralPath "$action\cancel") { throw 'Cancellation after suspended identity persistence' }
         }
-        $script:capture = Read-FinalPublishOutput $guard.Child @($guard.Output.BaseStream, $guard.Error.BaseStream) 600 $watch $ControllerWatch
+        $guard.StartFinalPublishDraft($Binding.executable, $Binding.nativeArguments, $Binding.workingDirectory, $Binding.environment, $watch, $beforeResume)
+        $script:capture = Read-FinalPublishOutput $guard.Child @($guard.Output.BaseStream, $guard.Error.BaseStream) 1790 $watch $ControllerWatch
         $result.exitCode = $guard.Child.ExitCode
         if ($result.exitCode -ne 0) { throw 'Final publish root failed' }
         $result.stage = 'normal-drain'
         $result.normalDrainStartedMilliseconds = $watch.ElapsedMilliseconds
-        $drainEnd = [Math]::Min(600000L, $result.normalDrainStartedMilliseconds + 2000L)
+        $drainEnd = [Math]::Min(1790000L, $result.normalDrainStartedMilliseconds + 600000L)
         $result.normalDrainDeadlineMilliseconds = $drainEnd
         while (-not $guard.ObserveFinalPublishQuiescence()) {
             Assert-FinalBudget
             if (Test-Path -LiteralPath "$action\cancel") { throw 'Cancellation during final drain' }
-            if ($watch.ElapsedMilliseconds -ge $drainEnd -or $ControllerWatch.ElapsedMilliseconds -ge 700000) {
+            if ($watch.ElapsedMilliseconds -ge $drainEnd -or $ControllerWatch.ElapsedMilliseconds -ge 1900000) {
                 throw 'Final publish normal drain expired'
             }
             Start-Sleep -Milliseconds 25
         }
         $result.normalDrainObservedMilliseconds = $watch.ElapsedMilliseconds
-        if ($watch.ElapsedMilliseconds -gt ($drainEnd + 100) -or $watch.ElapsedMilliseconds -ge 600000 -or
-            $ControllerWatch.ElapsedMilliseconds -ge 700000) { throw 'Final publish observation exceeded original bound' }
+        if ($watch.ElapsedMilliseconds -ge $drainEnd -or $watch.ElapsedMilliseconds -ge 1800000 -or
+            $ControllerWatch.ElapsedMilliseconds -ge 1900000) { throw 'Final publish observation exceeded original bound' }
         if (Test-Path -LiteralPath "$action\cancel") { throw 'Cancellation at final observation' }
         if ($guard.TerminationRequested -or $guard.NeverResumedRootTerminationRequested) { throw 'Termination cannot establish success' }
         $result.activeProcessesAtNormalExit = $guard.FinalPublishObservedActive
@@ -1499,9 +1486,11 @@ function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
             $result.rootTerminationSucceeded = $guard.NeverResumedRootTerminationSucceeded
             $result.neverResumedRootExitConfirmed = $guard.NeverResumedRootExitConfirmed
             try {
+                Assert-FinalBudget
                 $result.quiescent = $guard.ObserveFinalPublishQuiescence()
-                if ($ControllerWatch.ElapsedMilliseconds -ge 700000 -or
-                    ($null -ne $watch -and $watch.ElapsedMilliseconds -ge 600000)) { $normal = $false }
+                Assert-FinalBudget
+                if ($ControllerWatch.ElapsedMilliseconds -ge 1900000 -or
+                    ($null -ne $watch -and $watch.ElapsedMilliseconds -ge 1800000)) { $normal = $false }
             } catch {
                 $result.quiescent = $false
                 $result.accountingFailureType = $_.Exception.GetType().FullName
@@ -1509,6 +1498,18 @@ function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
             }
             $result.lastJobActive = $guard.FinalPublishObservedActive
             $result.lastJobTotal = $guard.FinalPublishObservedTotal
+            try {
+                Assert-FinalBudget
+                $audit = $guard.ObserveFinalPublishMembers()
+                Assert-FinalBudget
+                Save-CompleteJson "$action\inner-members.json" $audit
+                $result.innerAuditSha256 = (Get-FileHash -LiteralPath "$action\inner-members.json" -Algorithm SHA256).Hash.ToLowerInvariant()
+                if (-not $audit.complete -or -not $audit.querySucceeded -or $audit.atomic -or
+                    $audit.jobName -cne $guard.JobName) { $normal = $false }
+            } catch {
+                $normal = $false
+                $result.innerAuditFailureType = $_.Exception.GetType().FullName
+            }
             try { $guard.Dispose() } catch {
                 $normal = $false
                 $result.closeFailureType = $_.Exception.GetType().FullName
@@ -1523,6 +1524,7 @@ function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
             }
             $script:FinalStartupSentinel = $null
         }
+        Assert-FinalBudget
         # Zero after any earlier failure never erases that failure.
         $result.retainedLiveWorkOrUnknown = -not $result.quiescent
         $result.normalCompletion = $normal -and $result.quiescent -and -not $result.rootTerminationRequested

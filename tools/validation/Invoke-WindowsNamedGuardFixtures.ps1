@@ -8,7 +8,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
 if ($env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Fixture startup cache control is absent' }
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0080'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0086'
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $script:writtenBytes = 0
 $script:readBytes = 0
@@ -53,15 +53,23 @@ function Read-Json([string] $Path, [int] $Maximum = 65536) {
     return ([Text.UTF8Encoding]::new($false, $true).GetString($bytes) | ConvertFrom-Json)
 }
 
-function Save-Json([string] $Path, $Value) {
+function Save-Json([string] $Path, $Value, $CaseWatch = $null) {
+    if ($null -ne $CaseWatch) { Assert-PublicationFixtureTime $CaseWatch }
     Assert-Direct ([IO.Path]::GetDirectoryName($Path))
     $bytes = [Text.UTF8Encoding]::new($false).GetBytes(($Value | ConvertTo-Json -Depth 20 -Compress) + "`n")
     $script:writtenBytes += $bytes.Length
     if ($bytes.Length -gt 65536 -or $script:writtenBytes -gt 262144) { throw 'Fixture output budget' }
+    if ($null -ne $CaseWatch) { Assert-PublicationFixtureTime $CaseWatch }
     $stream = [IO.File]::Open(($Path + '.pending'), 'CreateNew', 'Write', 'Read')
-    try { $stream.Write($bytes, 0, $bytes.Length); $stream.Flush($true) }
-    finally { $stream.Dispose() }
+    try {
+        if ($null -ne $CaseWatch) { Assert-PublicationFixtureTime $CaseWatch }
+        $stream.Write($bytes, 0, $bytes.Length)
+        if ($null -ne $CaseWatch) { Assert-PublicationFixtureTime $CaseWatch }
+        $stream.Flush($true)
+    } finally { $stream.Dispose() }
+    if ($null -ne $CaseWatch) { Assert-PublicationFixtureTime $CaseWatch }
     [IO.File]::Move(($Path + '.pending'), $Path)
+    if ($null -ne $CaseWatch) { Assert-PublicationFixtureTime $CaseWatch }
 }
 
 function Assert-Time([long] $Milliseconds) {
@@ -91,12 +99,12 @@ if ((Get-Hash $authorityBytes) -cne $AuthoritySha256) { throw 'Fixture authority
 $authorityText = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes)
 $authority = $authorityText | ConvertFrom-Json
 if ($authorityText -cne (($authority | ConvertTo-Json -Depth 20 -Compress) + "`n") -or
-    $authority.schema -cne 'named-guard-fixtures-0080-v1' -or
-    $authority.accepted -ne $true -or $authority.action -cne '0080' -or
-    $authority.countsBefore.preparation -ne 19 -or $authority.countsBefore.buildTest -ne 101 -or
-    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 118 -or
+    $authority.schema -cne 'named-guard-fixtures-0086-v1' -or
+    $authority.accepted -ne $true -or $authority.action -cne '0086' -or
+    $authority.countsBefore.preparation -ne 20 -or $authority.countsBefore.buildTest -ne 102 -or
+    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 130 -or
     $authority.failedFixtureDispositionSha256 -cne '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf' -or
-    $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 12) {
+    $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 17) {
     throw 'Unaccepted fixture allocation'
 }
 if ((Get-Hash (Read-Bytes $PSCommandPath 65536)) -cne $authority.controllerSha256) {
@@ -106,22 +114,30 @@ if ((Get-Hash (Read-Bytes $shell 1048576)) -cne
     '8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e') {
     throw 'Pinned fixture PowerShell changed'
 }
-if (@($authority.cases.PSObject.Properties).Count -ne 0 -or
-    $authority.guards0079AcceptanceSha256 -cne '86ea310102425d52e906abd870687c1a0a15d43a090f59751218806c2a7e716c') {
-    throw 'Unaccepted prior guards or allocated guard rerun'
+if ($authority.negatives0080AcceptanceSha256 -cne
+    'ee9e2ca7b5635add3a231930acc8ef2c3d2851056d3f8689b239ce038c1de791') {
+    throw 'Original 0080 acceptance changed'
 }
-$negativeRoots = [ordered]@{ cancel = '0081'; collision = '0082'; overflow = '0083'; journal = '0084' }
-if (@($authority.failureCases.PSObject.Properties.Name).Count -ne 4 -or
-    $authority.failure0071DispositionSha256 -cne
-        '7e70e12e52e2eecd0d4fd823763cef52334da5f197fadef91950218b7b511664') {
-    throw 'Missing accepted original failure disposition or negative cases'
+$negativeRoots = [ordered]@{
+    normal = '0087'; 'pre-resume' = '0088'; 'resume-unknown' = '0089'
+    timeout = '0090'; overflow = '0091'; 'journal-cancel' = '0092'
+}
+if (@($authority.failureCases.PSObject.Properties.Name).Count -ne 6) {
+    throw 'Incomplete publication fixture allocation'
 }
 foreach ($entry in $negativeRoots.GetEnumerator()) {
     $spec = $authority.failureCases.($entry.Key)
-    if ($spec.root -cne ('C:\Temp\azureauth-windows-slice-108\named-fixtures-' + $entry.Value) -or
-        $spec.suffix -cnotmatch '^[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
-        throw 'Unbound negative case root or Job suffix'
+    if ($spec.root -cne ('C:\Temp\azureauth-windows-slice-108\publication-fixtures-' + $entry.Value) -or
+        $spec.suffix -cnotmatch '^[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$' -or
+        $spec.reservationSha256 -cnotmatch '^[0-9a-f]{64}$' -or $spec.invocationSha256 -cnotmatch '^[0-9a-f]{64}$') {
+        throw 'Unbound publication fixture root or inputs'
     }
+}
+$candidate = Read-Bytes "$root\WindowsPublicationJobLauncher.exe" 65536
+if ($candidate.Length -ne $authority.publicationLauncherBytes -or
+    (Get-Hash $candidate) -cne $authority.publicationLauncherSha256 -or
+    $authority.publicationLauncherAcceptanceSha256 -cnotmatch '^[0-9a-f]{64}$') {
+    throw 'Changed admitted publication launcher artifact'
 }
 Assert-Time 10000
 
@@ -133,13 +149,13 @@ if ($dll.Length -ne 24576 -or (Get-Hash $dll) -cne
 [void][Reflection.Assembly]::Load($dll)
 
 $result = [ordered]@{ schema = 'named-guard-fixtures-result-v1'; passed = $false; quiescent = $false
-    launcherFailureCases = @(); authoritySha256 = $AuthoritySha256; failureType = $null; cases = @() }
+    launcherFailureCases = @(); authoritySha256 = $AuthoritySha256; failureType = $null }
 try {
     $controller = [Diagnostics.Process]::GetCurrentProcess()
     try {
         Save-Json "$root\windows-started.json" @{
             schema = 'named-guard-fixtures-started-v1'; authoritySha256 = $AuthoritySha256
-            buildTestCharge = 1; syntheticCharge = 12; controllerPid = $PID
+            buildTestCharge = 1; syntheticCharge = 17; controllerPid = $PID
             controllerCreationFileTime = $controller.StartTime.ToUniversalTime().ToFileTimeUtc().ToString()
             controllerSession = $controller.SessionId
         }
@@ -149,7 +165,7 @@ try {
         $authority.failureDriverSha256) { throw 'Changed launcher failure driver' }
     . "$root\WindowsLauncherFailureFixtures.ps1"
     $result.launcherFailureCases = @(Invoke-LauncherFailureCases)
-    if ($result.launcherFailureCases.Count -ne 4) { throw 'Incomplete launcher failure batch' }
+    if ($result.launcherFailureCases.Count -ne 6) { throw 'Incomplete launcher failure batch' }
     Assert-Time 300000
     $result.quiescent = $true
     $result.passed = $true
@@ -158,7 +174,7 @@ try {
     $result.failureDetails = Get-FailureDetails $_
 }
 finally { Save-Json "$root\windows-result.json" $result }
-# Four negative slots use at most 100 seconds; no guard case is rerun.
+# Six publication slots use at most 240 seconds; no historical case is rerun.
 # The original 300-second controller clock also bounds setup and persistence.
 Assert-Time 310000
 if (-not $result.passed) { exit 1 }
