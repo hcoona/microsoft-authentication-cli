@@ -1,4 +1,4 @@
-# Dot-sourced only by the admitted outer controller after its six guard cases.
+# Dot-sourced only by the admitted 0080 controller for its four launcher failure cases.
 # Reuse the accepted guard's native declarations; do not compile another helper.
 $negativeFlags = [Reflection.BindingFlags]::Static -bor [Reflection.BindingFlags]::NonPublic
 $negativeOpen = [WindowsValidationJob].GetMethod('OpenJobObject', $negativeFlags)

@@ -1,4 +1,4 @@
-"""Prepare fresh 0079 inputs with continuous created-file handles and bounded failure context."""
+"""Prepare fresh 0080 inputs with continuous created-file handles and bounded failure context."""
 
 import hashlib
 import json
@@ -10,10 +10,12 @@ import sys
 import time
 
 
-MANIFEST = Path('/tmp/windows-named-fixtures0079-materialization-manifest.json')
-OUTPUTS = (Path('/tmp/windows-named-fixtures0079-inputs'),
-           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0079'))
-RECEIPT = Path('/tmp/windows-named-fixtures0079-materialized.json')
+MANIFEST = Path('/tmp/windows-named-fixtures0080-materialization-manifest.json')
+OUTPUTS = (Path('/tmp/windows-named-fixtures0080-inputs'),
+           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0080'),
+           *(Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-' + number)
+             for number in ('0081', '0082', '0083', '0084')))
+RECEIPT = Path('/tmp/windows-named-fixtures0080-materialized.json')
 READS = 0
 REQUESTED = 0
 WRITTEN = 0
@@ -26,7 +28,8 @@ MISMATCH = None
 def context(phase, path):
     global CONTEXT
     item = Path(path)
-    role = next((label for label, root in zip(('linux-inputs', 'windows-inputs'), OUTPUTS, strict=True)
+    role = next((label for label, root in zip(('linux-inputs', 'windows-inputs', 'cancel-inputs',
+                 'collision-inputs', 'overflow-inputs', 'journal-inputs'), OUTPUTS, strict=True)
                  if item == root or item.parent == root), 'source-or-receipt')
     CONTEXT = {'phase': phase, 'role': role, 'leaf': item.name}
 
@@ -250,8 +253,9 @@ def materialize():
         raise ValueError('Materialization manifest changed')
     manifest = decode(manifest_raw)
     if encode(manifest) != manifest_raw or set(manifest) != {'schema', 'acceptedCommit', 'sources'} or \
-            manifest['schema'] != 'named-fixtures0079-materialization-v1' or \
-            set(manifest['sources']) != {'authority', 'checkpoint', 'runner', 'controller', 'guard', 'launcher'}:
+            manifest['schema'] != 'named-fixtures0080-materialization-v1' or \
+            set(manifest['sources']) != {'authority', 'checkpoint', 'runner', 'controller', 'guard', 'launcher',
+                                        'failureDriver', 'failureController'}:
         raise ValueError('Unexpected materialization scope')
     data = {}
     source_identities = {}
@@ -260,13 +264,15 @@ def materialize():
             raise ValueError('Unexpected copy binding')
         data[role], source_identities[role] = read(Path(binding['path']), 65536, binding)
     authority = decode(data['authority'])
-    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0079':
+    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0080':
         raise ValueError('Copy authority/commit mismatch')
     roles = (('authority.json', 'authority'), ('checkpoint.json', 'checkpoint'),
              ('run_windows_named_guard_fixtures.py', 'runner'))
     windows_roles = (('authority.json', 'authority'), ('Invoke-WindowsNamedGuardFixtures.ps1', 'controller'),
-                     ('WindowsFinalPublishGuard.dll', 'guard'), ('WindowsScriptJobLauncher.exe', 'launcher'))
-    plans = (roles, windows_roles)
+                     ('WindowsFinalPublishGuard.dll', 'guard'), ('WindowsScriptJobLauncher.exe', 'launcher'),
+                     ('WindowsLauncherFailureFixtures.ps1', 'failureDriver'))
+    inner_roles = (('authority.json', 'authority'), ('Invoke-WindowsNamedGuardFixtures.ps1', 'failureController'))
+    plans = (roles, windows_roles, inner_roles, inner_roles, inner_roles, inner_roles)
     total_copy_bytes = sum(len(data[role]) for plan in plans for _, role in plan)
     if total_copy_bytes > 262144:
         raise ValueError('Copied output allowance')
@@ -305,7 +311,7 @@ def materialize():
                 raise
         join_roots(held)
         join_files(files)
-        receipt = {'schema': 'named-fixtures0079-materialized-v1', 'manifestSha256': sys.argv[1],
+        receipt = {'schema': 'named-fixtures0080-materialized-v1', 'manifestSha256': sys.argv[1],
                    'manifestIdentity': manifest_identity, 'sourceIdentities': source_identities,
                    'directories': directories, 'copies': copies,
                    'beforeReceipt': {'reads': READS, 'requestedBytes': REQUESTED, 'writtenBytes': WRITTEN,

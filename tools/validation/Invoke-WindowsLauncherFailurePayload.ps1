@@ -1,4 +1,4 @@
-# Fixed credential-free workloads for the separately admitted 0072 batch.
+# Fixed credential-free workloads for the separately admitted 0080 batch.
 param(
     [ValidateSet('Controller', 'Payload')][string] $Mode = 'Controller',
     [Parameter(Mandatory = $true)][ValidatePattern('^[0-9a-f]{64}$')][string] $AuthoritySha256
@@ -9,7 +9,7 @@ Set-StrictMode -Version 2
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $root = $PSScriptRoot
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
-if ($root -cnotmatch '^C:\\Temp\\azureauth-windows-slice-108\\named-fixtures-007[3-6]$' -or
+if ($root -cnotmatch '^C:\\Temp\\azureauth-windows-slice-108\\named-fixtures-008[1-4]$' -or
     $env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Unbound negative workload' }
 
 function Read-Fixed([string] $Path, [int] $Limit) {
@@ -52,17 +52,17 @@ function Save-Ready([string] $Name, $Value) {
 $authorityBytes = Read-Fixed "$root\authority.json" 65536
 if ((Hash-Fixed $authorityBytes) -cne $AuthoritySha256) { throw 'Changed negative workload authority' }
 $authority = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes) | ConvertFrom-Json
-if ($authority.schema -cne 'named-guard-fixtures-0072-v1' -or $authority.action -cne '0072' -or
+if ($authority.schema -cne 'named-guard-fixtures-0080-v1' -or $authority.action -cne '0080' -or
     (Hash-Fixed (Read-Fixed $PSCommandPath 65536)) -cne $authority.failureControllerSha256 -or
     (Hash-Fixed (Read-Fixed $shell 1048576)) -cne
         '8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e') {
     throw 'Unaccepted negative workload source'
 }
 $caseName = switch ($root.Substring($root.Length - 4)) {
-    '0073' { 'cancel' }
-    '0074' { 'collision' }
-    '0075' { 'overflow' }
-    '0076' { 'journal' }
+    '0081' { 'cancel' }
+    '0082' { 'collision' }
+    '0083' { 'overflow' }
+    '0084' { 'journal' }
 }
 if ($authority.failureCases.$caseName.root -cne $root) { throw 'Negative workload root mismatch' }
 $self = [Diagnostics.Process]::GetCurrentProcess()
