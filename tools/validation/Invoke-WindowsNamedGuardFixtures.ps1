@@ -9,7 +9,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
 if ($env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Fixture startup cache control is absent' }
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0078'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0079'
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $script:writtenBytes = 0
 $script:readBytes = 0
@@ -120,10 +120,10 @@ if ((Get-Hash $authorityBytes) -cne $AuthoritySha256) { throw 'Fixture authority
 $authorityText = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes)
 $authority = $authorityText | ConvertFrom-Json
 if ($authorityText -cne (($authority | ConvertTo-Json -Depth 20 -Compress) + "`n") -or
-    $authority.schema -cne 'named-guard-fixtures-0078-v1' -or
-    $authority.accepted -ne $true -or $authority.action -cne '0078' -or
-    $authority.countsBefore.preparation -ne 19 -or $authority.countsBefore.buildTest -ne 99 -or
-    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 104 -or
+    $authority.schema -cne 'named-guard-fixtures-0079-v1' -or
+    $authority.accepted -ne $true -or $authority.action -cne '0079' -or
+    $authority.countsBefore.preparation -ne 19 -or $authority.countsBefore.buildTest -ne 100 -or
+    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 111 -or
     $authority.failedFixtureDispositionSha256 -cne '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf' -or
     $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 7) {
     throw 'Unaccepted fixture allocation'
@@ -138,7 +138,7 @@ if ((Get-Hash (Read-Bytes $shell 1048576)) -cne
 $sequence = @('disposed', 'callback', 'missing', 'session')
 if (@($authority.cases.PSObject.Properties.Name).Count -ne 4) { throw 'Fixture case allocation' }
 foreach ($selected in $sequence) {
-    if ($authority.cases.$selected -cnotmatch '^Local\\azureauth-final-publish-108-0078-[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
+    if ($authority.cases.$selected -cnotmatch '^Local\\azureauth-final-publish-108-0079-[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
         throw 'Unbound fixture Job name'
     }
 }
@@ -151,6 +151,9 @@ if ($authority.failure0072DispositionSha256 -cne
 }
 if ($authority.live0077AcceptanceSha256 -cne '0b48cb7fcf878f55344f4e4ccd82e4852c642692cdc2d7d6d4eff220b074c6d2') {
     throw 'Missing accepted original 0077 live outcome'
+}
+if ($authority.failure0078DispositionSha256 -cne '1ab13826f4be4308f5050b6a6feaf22ff37592cbf002482fc40f638e87ee3b82') {
+    throw 'Missing accepted original 0078 failure disposition'
 }
 Assert-Time 10000
 
@@ -248,7 +251,6 @@ if ($Mode -eq 'Case') {
                     if ($final.Child.HasExited) { throw 'Payload exited before observation' }
                     Start-Sleep -Milliseconds 25
                 }
-                if ($CaseName -eq 'disposed') { $final.Dispose(); $final = $null }
             }
         }
         if ($CaseName -ne 'callback') {
@@ -291,6 +293,17 @@ if ($Mode -eq 'Case') {
                     $caseResult.exactMemberObserved = $true
                 }
             }
+        }
+        if ($CaseName -eq 'disposed') {
+            # Observe exact membership while the owning Job handle still exists.
+            # A temporary object's name need not survive its last handle close.
+            if (-not $caseResult.exactMemberObserved) { throw 'Pre-disposal membership unestablished' }
+            $caseResult.exactMemberObservedBeforeDispose = $true
+            $final.Dispose()
+            $final = $null
+            $caseResult.disposalCompleted = $true
+            # The outer controller proves exact payload survival and termination
+            # using a process handle and its still-held containment Job.
         }
         if ($CaseName -eq 'live') {
             $release = [IO.File]::Open("$directory\release", 'CreateNew', 'Write', 'Read')
@@ -437,7 +450,8 @@ try {
         $expectedTotal = 1
         if ($selected -cin @('live', 'disposed', 'callback')) { $expectedTotal = 2 }
         if ($containment.total -lt $expectedTotal -or $containment.total -gt 8) { throw 'Fixture Job total outside its bound' }
-        if ($selected -eq 'disposed' -and ($containment.activeBeforeStop -lt 1 -or
+        if ($selected -eq 'disposed' -and ($caseResult.exactMemberObservedBeforeDispose -ne $true -or
+            $caseResult.disposalCompleted -ne $true -or $containment.activeBeforeStop -lt 1 -or
             $containment.activeBeforeStop -gt 8 -or $containment.activeAfterStop -ne 0 -or
             -not $containment.targetHandleHeld -or -not $containment.targetAliveBeforeStop -or
             -not $containment.targetExitedAfterStop -or $containment.targetExitCode -ne 1 -or
