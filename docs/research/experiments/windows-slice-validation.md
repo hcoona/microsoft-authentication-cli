@@ -15756,6 +15756,40 @@ Keep dependent execution stopped until separately accepted evidence or the appli
 concrete owner decision resolves the new uncertainty. Any further observation or
 corrected batch requires its own bounded accepted scope and ordinary admissions.
 
+## Original 0068 Historical Lifetime Disposition
+
+The repository owner accepts only original 0068's residual lifetime and
+interference risk, as bounded by the [current Wave](../../delivery-wave.md) and
+the matching [experiment-safety exception](../experiment-safety.md#termination-and-retention).
+After these amendments merge, that historical uncertainty alone no longer blocks
+separately admitted credential-free work on the existing WSL2 and Windows hosts.
+The decision is limited to the current cumulative ceilings of 28 preparation,
+130 build/test, 30 publication and 114 synthetic actions. It ends with the grant,
+does not transfer to a successor and does not automatically expand if quotas or
+effects change. The historical 0057 and 0064 dispositions remain separate.
+
+The original fixture remains failed and fully charged. Its accepted later
+dispatcher snapshot supports the source-conditioned proxy failure: Popen
+returned, proxy exit 1 and both EOFs were observed, and the dispatcher reported
+401 captured bytes whose contents were not retained. The nonzero proxy exit
+rejects completion before Windows-result validation; the byte count does not
+identify the failure cause. The separate accepted controller-record observation
+found both selected final records absent at its sampled correspondence checks
+and copied no payload. Neither observation establishes original controller exit
+or descendant quiescence. Both singleton observations remain spent; their
+later-snapshot and absent-record limitations remain unchanged.
+
+No new observation, old-state scan or cleanup, original replay or recovery,
+capacity refund, fixture/artifact acceptance or account effect follows from this
+decision. Consumption remains 17 preparation, 96 build/test, 2 publication and
+70 synthetic units, including all prior failures; preserve twelve synthetic
+units for the final CLI scenarios. Future work still requires a separate finite
+accepted protocol, source and artifact review, exact-call admission and durable
+pre-invocation charge. Before another fixture launch, correct creation-time
+controller containment and retain bounded startup/failure diagnostics, using
+named, auditable, operable Windows Jobs. Every new ownership or termination
+uncertainty retains the ordinary stop conditions.
+
 ## Controller Containment Correction: Source Preparation Only
 
 This section prepares the correction to original fixture 0068's controller
@@ -15764,8 +15798,9 @@ Windows invocation, process observation, cleanup, retry, or new experiment.
 The original failure and both spent file observations remain unchanged. Current
 consumption remains 17 preparation, 96 build/test, 2 publication, and 70 synthetic
 units; protect the existing twelve-unit final CLI scenario reserve. The existing
-Wave and experiment-safety stop for unresolved original 0068 lifetime remains in
-force. Neither this source nor its merge supplies a historical risk disposition.
+Wave and experiment-safety exception for original 0068 is recorded in the
+preceding disposition. That decision does not activate this source or admit a
+build or scenario; every new lifetime uncertainty retains the ordinary stop.
 
 ### Source Finding and Correction Boundary
 

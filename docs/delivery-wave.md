@@ -105,6 +105,27 @@ stop conditions. No old-process cleanup, automatic retry, capacity refund,
 artifact acceptance, account effects, publication outside the renewed ceilings,
 release authority or broader lifetime-risk exception is granted.
 
+**Original 0068 lifetime risk decision:** The repository owner accepts the residual
+risk that the original named-Job fixture controller or its experiment-controlled
+descendants may remain active and interfere with subsequent credential-free
+Windows Slice validation. Their termination remains unresolved. Limit this
+disposition to original 0068 on the existing WSL2 and Windows hosts, within this
+entry's credential-free effects and cumulative ceilings of 28 preparation,
+130 build/test, 30 publication and 114 synthetic actions. Authorize the matching
+case-specific experiment-safety and Windows-protocol amendments; require them
+to merge before dependent execution. Future corrected work retains independent
+source, artifact, protocol and exact-call admission. Before another fixture
+launch, correct controller containment from process creation and retain bounded
+startup and failure diagnostics, using named, auditable, operable Windows Jobs.
+
+Preserve the failed original, its full charge and both spent file observations.
+This disposition ends with this grant and does not transfer to a successor or
+automatically expand with later quota or effects changes. Historical 0057 and
+0064 decisions remain separate. Every new ownership or termination uncertainty
+retains the ordinary stop conditions. No original replay or recovery, old-state
+scan or cleanup, quota increase or refund, termination claim, fixture or artifact
+acceptance, account effects, installation or release authority is granted.
+
 **Additional compiler-input diagnostic:** Authorize at most one separately admitted
 credential-free compiler-native-inputs diagnostic numbered 0062, after acceptance
 of the observed 0061 console-capture failure, its fixed copied evidence and the
