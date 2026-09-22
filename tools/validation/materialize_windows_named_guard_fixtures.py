@@ -1,4 +1,4 @@
-"""Prepare fresh 0094 inputs with continuous created-file handles and bounded failure context."""
+"""Prepare fresh 0101 inputs with continuous created-file handles and bounded failure context."""
 
 import hashlib
 import json
@@ -10,14 +10,14 @@ import sys
 import time
 
 
-MANIFEST = Path('/tmp/windows-named-fixtures0094-materialization-manifest.json')
-CASE_NUMBERS = ('0095', '0096', '0097', '0098', '0099', '0100')
+MANIFEST = Path('/tmp/windows-named-fixtures0101-materialization-manifest.json')
+CASE_NUMBERS = ('0102',)
 INNER_ROOTS = tuple(Path('/mnt/c/Temp/azureauth-windows-slice-108/publication-fixtures-' + number)
                     for number in CASE_NUMBERS)
-OUTPUTS = (Path('/tmp/windows-named-fixtures0094-inputs'),
-           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0094'),
+OUTPUTS = (Path('/tmp/windows-named-fixtures0101-inputs'),
+           Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0101'),
            *INNER_ROOTS, *(root / 'controller' for root in INNER_ROOTS))
-RECEIPT = Path('/tmp/windows-named-fixtures0094-materialized.json')
+RECEIPT = Path('/tmp/windows-named-fixtures0101-materialized.json')
 READS = 0
 REQUESTED = 0
 WRITTEN = 0
@@ -265,7 +265,7 @@ def materialize():
                       'failureDriver', 'failureController', 'candidate', 'candidateAcceptance'}
     required_roles.update(number + '-' + leaf for number in CASE_NUMBERS for leaf in ('started', 'invocation'))
     if encode(manifest) != manifest_raw or set(manifest) != {'schema', 'acceptedCommit', 'sources'} or \
-            manifest['schema'] != 'named-fixtures0094-materialization-v1' or \
+            manifest['schema'] != 'named-fixtures0101-materialization-v1' or \
             set(manifest['sources']) != required_roles:
         raise ValueError('Unexpected materialization scope')
     data = {}
@@ -275,7 +275,7 @@ def materialize():
             raise ValueError('Unexpected copy binding')
         data[role], source_identities[role] = read(Path(binding['path']), 65536, binding)
     authority = decode(data['authority'])
-    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0094':
+    if authority['acceptedCommit'] != manifest['acceptedCommit'] or authority['action'] != '0101':
         raise ValueError('Copy authority/commit mismatch')
     roles = (('authority.json', 'authority'), ('checkpoint.json', 'checkpoint'),
              ('run_windows_named_guard_fixtures.py', 'runner'),
@@ -336,7 +336,7 @@ def materialize():
                 raise
         join_roots(held)
         join_files(files, windows_copies)
-        receipt = {'schema': 'named-fixtures0094-materialized-v1', 'manifestSha256': sys.argv[1],
+        receipt = {'schema': 'named-fixtures0101-materialized-v1', 'manifestSha256': sys.argv[1],
                    'manifestIdentity': manifest_identity, 'sourceIdentities': source_identities,
                    'directories': directories, 'copies': copies,
                    'beforeReceipt': {'reads': READS, 'requestedBytes': REQUESTED, 'writtenBytes': WRITTEN,

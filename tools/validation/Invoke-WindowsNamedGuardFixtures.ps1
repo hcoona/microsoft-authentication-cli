@@ -8,7 +8,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
 if ($env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Fixture startup cache control is absent' }
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0094'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0101'
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $script:writtenBytes = 0
 $script:readBytes = 0
@@ -99,12 +99,13 @@ if ((Get-Hash $authorityBytes) -cne $AuthoritySha256) { throw 'Fixture authority
 $authorityText = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes)
 $authority = $authorityText | ConvertFrom-Json
 if ($authorityText -cne (($authority | ConvertTo-Json -Depth 20 -Compress) + "`n") -or
-    $authority.schema -cne 'named-guard-fixtures-0094-v1' -or
-    $authority.accepted -ne $true -or $authority.action -cne '0094' -or
-    $authority.countsBefore.preparation -ne 20 -or $authority.countsBefore.buildTest -ne 102 -or
-    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 130 -or
+    $authority.schema -cne 'named-guard-fixtures-0101-v1' -or
+    $authority.accepted -ne $true -or $authority.action -cne '0101' -or
+    $authority.countsBefore.preparation -ne 20 -or $authority.countsBefore.buildTest -ne 103 -or
+    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 147 -or
+    $authority.fixture0094DispositionSha256 -cne '62bd9da67fc9f5f887909ed8c10496c052974f006f0d9e7573ab5dac9a7cecf1' -or
     $authority.failedFixtureDispositionSha256 -cne '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf' -or
-    $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 17) {
+    $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 4) {
     throw 'Unaccepted fixture allocation'
 }
 if ((Get-Hash (Read-Bytes $PSCommandPath 65536)) -cne $authority.controllerSha256) {
@@ -118,11 +119,8 @@ if ($authority.negatives0080AcceptanceSha256 -cne
     'ee9e2ca7b5635add3a231930acc8ef2c3d2851056d3f8689b239ce038c1de791') {
     throw 'Original 0080 acceptance changed'
 }
-$negativeRoots = [ordered]@{
-    normal = '0095'; 'pre-resume' = '0096'; 'resume-unknown' = '0097'
-    timeout = '0098'; overflow = '0099'; 'journal-cancel' = '0100'
-}
-if (@($authority.failureCases.PSObject.Properties.Name).Count -ne 6) {
+$negativeRoots = [ordered]@{ 'journal-cancel' = '0102' }
+if (@($authority.failureCases.PSObject.Properties.Name).Count -ne 1) {
     throw 'Incomplete publication fixture allocation'
 }
 foreach ($entry in $negativeRoots.GetEnumerator()) {
@@ -155,7 +153,7 @@ try {
     try {
         Save-Json "$root\windows-started.json" @{
             schema = 'named-guard-fixtures-started-v1'; authoritySha256 = $AuthoritySha256
-            buildTestCharge = 1; syntheticCharge = 17; controllerPid = $PID
+            buildTestCharge = 1; syntheticCharge = 4; controllerPid = $PID
             controllerCreationFileTime = $controller.StartTime.ToUniversalTime().ToFileTimeUtc().ToString()
             controllerSession = $controller.SessionId
         }
@@ -165,7 +163,7 @@ try {
         $authority.failureDriverSha256) { throw 'Changed launcher failure driver' }
     . "$root\WindowsLauncherFailureFixtures.ps1"
     $result.launcherFailureCases = @(Invoke-LauncherFailureCases)
-    if ($result.launcherFailureCases.Count -ne 6) { throw 'Incomplete launcher failure batch' }
+    if ($result.launcherFailureCases.Count -ne 1) { throw 'Incomplete launcher failure batch' }
     Assert-Time 300000
     $result.quiescent = $true
     $result.passed = $true
@@ -174,7 +172,7 @@ try {
     $result.failureDetails = Get-FailureDetails $_
 }
 finally { Save-Json "$root\windows-result.json" $result }
-# Six publication slots use at most 240 seconds; no historical case is rerun.
+# One fresh journal-cancel slot uses at most 40 seconds.
 # The original 300-second controller clock also bounds setup and persistence.
 Assert-Time 310000
 if (-not $result.passed) { exit 1 }

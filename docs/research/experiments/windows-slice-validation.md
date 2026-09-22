@@ -17752,3 +17752,164 @@ durable original start and original terminal join. No earlier partial output is
 reopened, repaired, recopied or used to infer the state of a missing path. Failed
 starts remain spent and stop dependent work. No human interaction, account
 operation, installation, cleanup or release is introduced.
+
+
+## Original 0094 Disposition and One Corrected Journal-Cancellation Case
+
+Original 0094 assembly and materialization each completed once with exit zero.
+The sole Windows batch then failed, and its sole bounded snapshot completed.
+The snapshot retains 78 of the 79 declared leaves; the cancellation file for the
+last case is absent. Do not repeat either original or its collector, reopen old
+runtime leaves, repair partial output, or refund the fully charged batch.
+
+Independent interpretation accepts these original case observations against the
+unchanged 0085 candidate, together with their original identities, captures,
+clocks, observer-handle closure and natural-exit evidence:
+
+| Original case | Accepted bounded observation |
+| --- | --- |
+| Normal | Candidate exit zero, natural subject exits, complete captures and empty held Job with complete audit. |
+| Pre-resume | Exact never-resumed root termination, confirmed exit and active zero; no payload execution. |
+| Resume-unknown | Attempt latch true, accepted resume false, candidate exit one, positive root survival after owner exit and natural root exit. |
+| Timeout | Candidate exit one after the original ordinary cutoff; root and descendant survive owner exit and then exit naturally. |
+| Overflow | Exact 16,384-byte X prefix and latched overflow; candidate exit one, positive subject survival and natural exits. |
+
+The journal-cancel case failed in its harness before cancellation injection.
+The first read-only, read/write-sharing journal handle opened, but the generic
+prefix reader attempted a second read-only-sharing open while the native writer
+still held write access. That second open failed with a sharing violation before
+byte-range locking and creation of the cancellation file. The candidate later
+followed its ordinary timeout path. Do not accept this as journal-cancellation
+behavior or claim that all six original cases passed.
+
+Finding `FIXTURE0094-LIVE-JOURNAL-SHARE-001` was independently triaged as a true
+positive. The minimum correction reads the bounded initial prefix through the
+already-held reader. Preserve direct-path rejection, the 64 KiB journal limit,
+4 MiB aggregate requested-read limit, original clock checks, strict UTF-8 and
+complete-line parsing, and the exact five-record resumed prefix. Then acquire
+the same byte-range lock and reject a changed length before creating cancellation.
+Keep the ordinary reader after candidate exit strict. Do not add a second live
+open, polling, retry, new observer process, or a general sharing relaxation.
+
+The original enclosing launcher recorded controller exit one, active zero and
+aggregate total 33, followed by successful cleanup, complete empty stdout/stderr
+and its actual failed exit. Its final journal timestamp was 146,909 milliseconds.
+The original dispatcher and service client also returned one with complete
+transport; the caller completed in 148,659 milliseconds. The caller's direct
+`groupEmpty` check was skipped after the failed service result. Original managed
+unit completion is instead source-bound to the accepted `systemd-run --wait`,
+`ExitType=cgroup`, no-restart and control-group lifetime configuration, joined
+to that original completed client and dispatcher output. This supplies the
+original owned-work disposition; it does not assert a later cgroup observation,
+current host-wide quiescence, or resolution of the historical 0057/0064/0068
+exceptions. Preserve the failed original result and its evidence limits. No new
+lifetime-risk exception is accepted.
+
+Actual counters are 20 preparation, 103 build/test, 2 publication and 147
+synthetic. Accept the original accounting transition as dictionaries with action
+`0094`, before 20/102/2/130, charge 0/1/0/17 and after 20/103/2/147. Acceptance of
+that disposition and the five listed observations is not whole-batch success.
+
+After the corrected source and this protocol merge, admit at most one fresh
+single-case batch 0101, using root `publication-fixtures-0102` for journal-cancel.
+Reuse the unchanged accepted 0070 enclosing launcher, 0066 guard and 0085
+publication candidate; no native recompilation is required. Do not rerun the five
+accepted cases. Bind the exact original 0094 disposition/acceptance seal in the
+fresh assembly and authority, alongside the existing artifact and accounting
+inputs. Missing or changed prior acceptance stops the new original before launch.
+
+Charge one build/test action and four deliberate synthetic subjects: enclosing
+launcher, candidate, root and descendant. The fixed outer controller remains
+exempt harness. Require the unchanged complete normal enclosing journal, active
+zero and aggregate total 4..64, complete empty transport, original service/client
+completion and one independently accepted journal-cancellation observation. Keep
+all original case requirements, including closing the observer Job handle before
+candidate exit, holding the journal lock through that exit, exact bounded failure
+stderr and startup-only journal, positive subject survival after owner exit,
+and natural subject exits. The corrected case has one 40-second slot; retain
+the original 10-second readiness and 25-second candidate limits and all outer
+controller/native/dispatcher/service/caller deadlines without enlargement.
+
+Preparation remains four separately admitted original calls: assembly,
+materialization, caller and sole post-termination snapshot. The fresh private
+assembly uses the existing fixed sources plus the original 0094 acceptance, two
+inert case inputs and three generated authority/manifest/host files. Its intended
+path uses 22 reads and five exclusive outputs, within the unchanged 31-read,
+32 MiB requested-byte, 192 KiB output and 30-second limits. Materialization uses
+12 source roles, four directories and fourteen copies, with 28 intended reads.
+Its fixed Windows-copy allowlist now contains ten leaves. Preserve its continuous
+handles, strict initial readback and current descriptor/name comparisons, the
+existing historical ctime qualification and no permission repair, within the
+unchanged 64-read, 4 MiB requested-byte, 1 MiB payload plus 64 KiB receipt and
+30-second limits. Both launcher executable predicates remain mandatory.
+
+The original caller keeps its 42-read, 4 MiB and 520-second limits; its intended
+path uses nineteen reads. The sole snapshot has 29 fixed leaves and retains the
+4 MiB requested-byte, 6 MiB output and 30-second ceilings. Preserve external
+35-second timeout plus five-second kill reserve for assembly, materialization
+and collection; the caller keeps 540 seconds plus five. Fresh literal helpers,
+accepted source/configuration/command pins, durable starts, finite byte/read
+arithmetic and actual outcomes require independent acceptance before their
+respective dependent calls. No automatic retry or alternate original is granted.
+
+| Prospective original | Preparation | Build/test | Publication | Synthetic | Counters afterward |
+| --- | ---: | ---: | ---: | ---: | --- |
+| 0101: corrected journal-cancel case in root 0102 | 0 | 1 | 0 | 4 | 20/104/2/151 |
+| 0093: final publication after accepted complete case coverage | 0 | 0 | 1 | 1 | 20/104/3/152 |
+
+The 0093 current checkpoint now joins exactly stages 0085, disposed 0094 and
+accepted 0101, using their exact dictionary accounting. Its independent handoff
+review must accept complete six-case coverage by the five retained 0094 cases
+and the one new 0101 case; it must not convert the failed 0094 batch to success.
+The remaining twenty-eight synthetic units comprise twelve protected final CLI,
+two native Profile, three observer/WSL and eleven shared reserve units. Ceilings
+28/130/30/180, original charges, product scope, account boundaries and historical
+risk dispositions are unchanged. No human interaction, real WAM/account effect,
+cleanup, installation or release is introduced.
+
+## Final Publication 0093: Conservative Native PDB Endpoint Projection
+
+The bounded retained-evidence recovery has not reconstructed the complete
+historical endpoint projection: some native-input diagnostics allocated UUIDv4
+values whose literal values were not found in the reviewed accepted copies.
+Do not reopen their runtime leaves, repeat a collector, invent an absent
+reservation, or assert that the host or shared compiler service is quiescent.
+
+For final publication 0093 only, qualify `knownEndpoints` as a complete
+conservative projection of prior experiment endpoints that could have reached
+the native PDB consumer. This prospectively replaces the requirement to recover
+every allocated diagnostic endpoint, including the earlier explicit 0062
+endpoint-inclusion requirement, for this new admission only. It does not change any original's actual
+input, result, charge, evidence limit, or historical lifetime disposition.
+
+Exclude an original only when its already accepted exact source and activated
+configuration, or accepted prelaunch failure, establish that no admitted
+compiler or helper branch could consume its endpoint through the selected
+native PDB consumer. Include the applicable symbol-generation source and
+configuration joins, including managed compiler paths. Missing files, a failed exit, a category name,
+or lack of observed activity do not establish that exclusion. In particular,
+the native-input diagnostic class requires its admitted unconditional cutoff,
+mandatory active import, native-target backstops, and prohibition on bypassing
+those stops. Recorded event coverage retains its original coverage limitation.
+Managed preparation and synthetic fixtures require their corresponding accepted
+source and compiler-option bindings; their labels alone are insufficient.
+
+Independently accept a finite action-to-exclusion mapping and the resulting
+projection before the 0093 handoff. Include every endpoint whose native PDB
+reachability cannot be excluded. If such an endpoint's literal value is
+unavailable, stop admission. Harmless recovered extras may remain. The mapping
+must cover all prior allocated actions while preserving the accepted accounting
+checkpoint; it is a review of retained evidence, not a new history collector.
+
+Keep the current sorted, unique UUIDv4 representation, maximum 512 values,
+fresh UUIDv4 generation, collision rejection without retry, and bounded current
+parent-membership checks. Keep the selected compiler recipe, its 35-variable
+environment, ordinary symbols, and both accepted native artifacts unchanged.
+The action-qualified named Jobs retain their separate existing-object rejection.
+
+Endpoint collision avoidance supplies neither exclusive ownership of a shared
+PDB service nor termination evidence. Preserve the accepted shared-service
+finding and nonterminating publication behavior. All original clocks, capacity,
+independent admissions, real-account gates, and stop conditions remain required.
+No execution, additional attempt, new risk exception, cleanup, installation, or
+release is authorized by this qualification.
