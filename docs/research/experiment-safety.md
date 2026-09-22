@@ -180,15 +180,15 @@ publication supervision must meet the Wave's named-Job requirement and the exact
 protocol's identity, audit and authorized-operation rules before execution;
 all new ownership or termination uncertainty retains the ordinary stop conditions.
 
-The current Wave's renewed credential-free capacity expressly extends both
-original 0057 and 0064 dispositions to its newly specified cumulative ceilings,
+The current Wave's renewed credential-free capacity expressly extends the
+original 0057, 0064 and 0068 dispositions to its newly specified cumulative ceilings,
 on the same hosts and within the same credential-free effects. Accept the Wave,
 this policy and the corresponding Windows protocol allocation together. Preserve
 original failures, charges and evidence; require ordinary exact source, artifact,
 protocol and call admission for each new action. This extension does not permit
 old-process cleanup, infer termination, authorize automatic retries, excuse new
 uncertainty or transfer to another grant. The Wave's future real-effects capacity
-reservation does not extend either exception to private identities, credentials,
+reservation does not extend these exceptions to private identities, credentials,
 account/cache/consent effects or real WAM interaction. Those effects retain their
 separate concrete owner risk decision and exact protocol requirements.
 
@@ -201,7 +201,9 @@ Preserve the original failure, full charge and both spent file observations.
 This exception supplies no termination evidence, old-state scan or cleanup,
 original replay or recovery, quota increase or refund, or fixture/artifact
 acceptance. It ends with the current grant and cannot transfer to a successor
-or automatically expand with later quota or effects changes. The 0057 and 0064
+or automatically expand with later quota or effects changes. Only the current
+Wave's renewed credential-free capacity expressly extends its prior ceiling.
+The 0057 and 0064
 exceptions remain separate. Require corrected creation-time controller
 containment, bounded startup/failure diagnostics and named, auditable, operable
 Windows Jobs before another fixture launch, with ordinary independent exact

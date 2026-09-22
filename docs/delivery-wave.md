@@ -48,7 +48,7 @@ downloads may use public NuGet.org and official .NET distribution endpoints, wit
 credentials. New experiment-owned files stay in dedicated build/test roots outside
 production installations and are intentionally retained. Maximum cumulative capacity is
 28 dependency preparation/restore actions, 130 build/test actions, 30 Native AOT publish
-actions and 114 synthetic process scenarios, with at most 4 GiB of newly downloaded public
+actions and 180 synthetic process scenarios, with at most 4 GiB of newly downloaded public
 dependency content. Exact per-action time, output and termination limits and source
 admission are owned by the accepted protocol. No new toolchain installation is granted.
 
@@ -111,7 +111,7 @@ descendants may remain active and interfere with subsequent credential-free
 Windows Slice validation. Their termination remains unresolved. Limit this
 disposition to original 0068 on the existing WSL2 and Windows hosts, within this
 entry's credential-free effects and cumulative ceilings of 28 preparation,
-130 build/test, 30 publication and 114 synthetic actions. Authorize the matching
+130 build/test, 30 publication and 180 synthetic actions. Authorize the matching
 case-specific experiment-safety and Windows-protocol amendments; require them
 to merge before dependent execution. Future corrected work retains independent
 source, artifact, protocol and exact-call admission. Before another fixture
@@ -120,7 +120,8 @@ startup and failure diagnostics, using named, auditable, operable Windows Jobs.
 
 Preserve the failed original, its full charge and both spent file observations.
 This disposition ends with this grant and does not transfer to a successor or
-automatically expand with later quota or effects changes. Historical 0057 and
+automatically expand with later quota or effects changes. Only the renewed
+credential-free capacity below explicitly extends its prior ceiling. Historical 0057 and
 0064 decisions remain separate. Every new ownership or termination uncertainty
 retains the ordinary stop conditions. No original replay or recovery, old-state
 scan or cleanup, quota increase or refund, termination claim, fixture or artifact
@@ -149,10 +150,11 @@ authentication, new lifetime-risk exception, additional publication capacity or
 release authority is granted.
 
 **Renewed credential-free capacity:** The repository owner approves the execution
-ceilings above with three times the completion estimate's contingency buffer.
-Apply the original 0057 and 0064 historical lifetime/interference dispositions to
+ceilings above, retaining the previously tripled contingency buffer for the
+remaining staged synthetic validation. Apply the original 0057, 0064 and 0068
+historical lifetime/interference dispositions to
 credential-free work within these renewed ceilings on the same existing hosts.
-This is an explicit finite capacity extension of those two historical decisions;
+This is an explicit finite capacity extension of those three historical decisions;
 it does not accept any new ownership or termination uncertainty. Preserve every
 prior charge and failed result. No original failed invocation may be replayed or
 refunded. Additional attempts require their own accepted exact protocol,
