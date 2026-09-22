@@ -16279,3 +16279,244 @@ publication, separately accept the still-open launcher early-PowerShell failure,
 outer cancellation/timeout, outer-name collision and output/logging-failure
 cleanup obligations identified by PL-01. No real WAM, token, account, consent,
 cache, authenticated resource, installation or release effect is authorized.
+
+## One Combined Corrected Guard and Launcher Failure Batch
+
+Original 0071 failed during the controller's first authority-file preflight. The
+retained diagnostic identifies a missing `PSIsContainer` property under strict
+mode. The first filesystem item came from the PowerShell provider, but its
+`Directory` or `Parent` property returned an ordinary `DirectoryInfo`. Independent
+triage accepted a type-based discriminator that retains strict mode and every
+ancestor reparse-point rejection. This finding changes validation infrastructure,
+not product authentication code.
+
+The sole original snapshot retained thirteen files and thirty-six missing-file
+errors. Missing files are not evidence of nonstartup. Original launcher evidence
+records creation-time containment, root exit one, zero active Job processes at
+completion and cleanup, successful termination, both output EOFs and all 401
+stderr bytes without capture or persistence failure. Original launcher exit one
+and the timely direct WSL proxy exit one with complete EOFs establish a completed
+failed invocation through the same accepted process-handle wait/status contract.
+The original systemd client returned one with both EOFs in 6,300 milliseconds.
+Its exact `--wait`, `--pipe`, `ExitType=cgroup` invocation supports original
+service completion. The caller rejected the failed service before sampling the
+cgroup: its `groupEmpty: null` remains unobserved, not an empty-group measurement.
+Independent outcome review accepted this original lifetime disposition without
+another observation or owner risk waiver. All original charges remain consumed.
+
+This actual early PowerShell preflight failure supplies the narrow PL-01 early
+PowerShell failure, cleanup and retained-diagnostics evidence. It does not accept
+the six guard scenarios, parser-specific behavior, a completed normal batch or
+final publication. Do not run another early-failure case solely to duplicate it.
+Cancellation, outer-name collision, output overflow and journal-write failure
+remain open and are the four negative cases below.
+
+Original Job accounting reported two total processes before any successful guard
+case record. Preserve that observation without identifying the second process.
+`CREATE_NO_WINDOW` does not promise absence of console infrastructure: immutable
+[Microsoft Terminal source](https://github.com/microsoft/terminal/blob/7c92ecd037476f957809d0813b14d8bc44bb071a/src/host/srvinit.cpp#L814)
+handles such connections inside the console server by suppressing a visible
+window. This is public source context, not identification of the original second
+process or a measurement of the installed Windows source revision.
+[Job accounting](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_accounting_information)
+counts associated processes, including some failed association attempts. Apply
+the existing distinction between deliberate scenario units and Job accounting;
+do not infer that every counted process is a separately submitted scenario.
+
+### Subject, Scope and Allocation
+
+Prepare one new action 0072 after this supplement merges and its exact sources,
+inputs, artifacts and original call are independently admitted. Use the unchanged
+0070 launcher executable and accepted guard DLL, with the hashes specified in the
+preceding supplement. No new compiler, toolchain, runtime or product artifact is
+introduced. The corrected controller tests the six guard cases and then four
+launcher failures under one outer creation-time Job. Original 0071 is failed and
+spent; this is no replay, automatic retry, recovery, cleanup or refund of it.
+
+Current consumption is 19 preparations, 97 build/test actions, two publications
+and 80 synthetic units. Before the sole caller starts, charge one build/test
+and twenty-one synthetic units: 19/98/2/101 within the accepted 28/130/30/114
+ceilings. Thirteen synthetic units remain, including the twelve reserved for
+final CLI cases. Preserve the full allocation if preparation inside the caller,
+a launch, an assertion or later evidence collection fails. Passive fixed-input
+assembly and materialization add no compiler or synthetic subject unit.
+
+| Submitted subjects | Synthetic units |
+| --- | ---: |
+| Six corrected guard hosts and three created payloads, including the never-resumed callback payload | 9 |
+| Cancel: inner launcher, PowerShell root and live descendant | 3 |
+| Collision: inner launcher and original sentinel | 2 |
+| Overflow: inner launcher, PowerShell root and live descendant | 3 |
+| Journal fault: inner launcher, PowerShell root and live descendant | 3 |
+| Outer launcher under validation | 1 |
+
+Only the existing outer PowerShell controller is exempt harness. There are
+twenty-two deliberate Windows process creations including that controller;
+framework or OS infrastructure may also appear in Job accounting. Each intended
+subject remains source-bound and counted; infrastructure is not a permission to
+start another candidate or arbitrary command. Retain every observed total and
+require the outer Job to finish with zero active processes and a total in 21..64.
+Each guard containment or negative workload Job has an acceptance total in 1..8,
+or 2..8 when it must contain a root plus payload. These ranges are acceptance
+checks, not claims of exact topology or continuous total-process enforcement.
+The unchanged Jobs enforce their existing maximum of 32 simultaneously active
+processes. No absent record or aggregate count replaces exact intended-process
+identity, original completion or EOF evidence.
+
+### Corrected Guard Assertions
+
+Replace provider-only `PSIsContainer` lookups in the controller's ancestor walk
+with `DirectoryInfo` and `FileInfo` type checks, rejecting other types. Preserve
+all six cases, exact authority and payload identities, named rights, callback
+nonresume evidence, query-only recovery, session gate, release and cleanup rules.
+Keep complete, successful, explicitly non-atomic named membership observations.
+For live/disposed queries require equal assigned, returned and retained-member
+counts in 1..8, with exactly one payload matching its durable PID and creation
+FILETIME, `observed-member` status, membership and `powershell.exe` image. Retain
+other observed members without assigning an infrastructure identity. The empty
+collision Job remains exactly zero. The unchanged guard can inspect up to 32
+members before returning; eight is only this case's acceptance bound.
+
+For the disposed case, bind and retain the exact payload Process handle before
+outer Stop, require it to be alive, and require that same process to exit with
+code one after the successful Job termination. Its normal expiry returns zero.
+Accept a positive bounded aggregate `activeBeforeStop` only together with this
+target-specific evidence, successful requested termination and zero active
+processes afterward. Merely observing an auxiliary process at Stop cannot satisfy
+the payload-termination assertion. Extend the payload's finite natural hold to
+45 seconds so it exceeds its 30-second case slot; keep all outer case clocks.
+Identity or observation failure must still execute the original outer Stop,
+and the held target handle is disposed only afterward. Do not reopen historical
+process identities.
+
+### Four Remaining Launcher Failures
+
+The driver reuses the accepted guard's existing private native declarations
+through reflection. It creates no assembly or generated executable. Native Job
+queries use the documented 48-byte basic accounting structure with QUERY access.
+Every inner candidate has a retained original Process handle, PID, creation
+FILETIME, session, bounded original console output and expected exit one.
+PowerShell roots and descendants have exact readiness records tied to the batch
+authority. No account, broker, network, UI or additional child work is permitted.
+
+1. **Cancellation:** wait for the inner PowerShell root and its one descendant to
+   report readiness, open the exact named Job query handle, verify the workload
+   is live, then create the original fixed cancel leaf once. Require candidate
+   exit one, successful Job termination, root exit, zero active processes and
+   retained diagnostics. This exercises the shared cancellation/deadline cleanup
+   path; it is not a measurement of natural 330-second expiration. Require one
+   `failed` event at stage `running`, with `resumed: true`, `TimeoutException`
+   and elapsed time below 330 seconds, joined to the recorded cancel trigger;
+   an unrelated post-readiness failure cannot pass as cancellation.
+2. **Name collision:** create the exact proposed Job using the guard's existing
+   ordinary constructor and start one fixed sentinel beneath it. Retain its
+   original handle/identity. The candidate must reject the collision at Job
+   creation, before creating a controller, and leave the sentinel alive. The
+   original owner then stops the sentinel Job, requires zero active processes
+   and completes both silent sentinel streams. Candidate completion must occur
+   before fifteen seconds; enter Stop before that cutoff and before 290 seconds
+   on the shared controller clock, reserving its full ten-second polling limit.
+   No existing unrelated Job is opened as a collision subject.
+3. **Output overflow:** after root/descendant readiness and a held Job query
+   handle, release one fixed 20 KiB ASCII write. Require the existing 16 KiB
+   capture limit to be observed, retain its flushed prefix, and require original
+   candidate exit and zero active Job processes. A capture error must not prevent
+   lifetime checks. No unbounded output producer is introduced.
+4. **Journal write failure:** after root/descendant readiness and a held query
+   handle, open the existing journal read-only with read/write sharing. On that
+   same held reader, wait within the fifteen-second trigger clock for exactly the
+   complete `bootstrap`, `job-ready`, `root-suspended`, `resume-requested`, `resumed`
+   prefix, joining the launcher and contained-root identities. Each read is at
+   most 16 KiB and debits the existing shared 4 MiB input bound; incomplete trailing
+   data may wait, but unexpected complete events or candidate exit fail the case.
+   Retain the prefix hash, then lock bytes 0..16383 using `FileStream.Lock` and
+   create the original cancel leaf. After exit and unlock, require the exact
+   retained prefix hash as well as its five-event shape.
+   Keep the lock and query handle through candidate exit and the zero-active
+   observation. Only afterward unlock and dispose them. Retain the valid
+   pre-fault journal prefix, case observations and any fixed console fallback.
+   The incomplete journal is not exit evidence and no particular secondary
+   exception must replace the original cancellation failure.
+
+For cancellation, overflow and journal failure, the independent query handle
+remains open until the candidate has exited and the Job is observed empty.
+Consequently last-handle `KILL_ON_JOB_CLOSE` cannot supply a passing result.
+Unexpected results stop remaining cases and propagate to the outer launcher;
+closing handles on that failure path is not a successful cleanup observation.
+Retain bounded error text and script position in private case/controller records
+so subsequent review can locate the failure. Do not commit those raw diagnostics.
+Public API basis includes
+[Job querying](https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-queryinformationjobobject),
+[FileStream.Lock](https://learn.microsoft.com/en-us/dotnet/api/system.io.filestream.lock?view=netframework-4.8.1)
+and [Windows file locking](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-lockfile).
+
+### Fresh Inputs and Original Bounds
+
+Use only the new Linux action root `windows-actions/0072`, private
+`windows-named-fixtures0072-*` inputs, and outer Windows
+`C:\Temp\azureauth-windows-slice-108\named-fixtures-0072`. The four fixed sibling
+roots `named-fixtures-0073`, `0074`, `0075` and `0076` belong to this same charged
+batch; they are not separately admitted action starts. They respectively contain
+cancel, collision, overflow and journal workloads. Each has its own fresh UUIDv4
+Job suffix. The unchanged launcher's fixed filename is used for each copied
+workload script. All new files remain in these dedicated experiment roots.
+
+Fixed-input assembly pins the accepted clean detached checkout, installed tools,
+current source hashes, guard checkpoint, unchanged launcher, original 0071
+failure disposition and original interop endpoint metadata. It creates only the
+authority, materialization manifest and host bindings. Preserve the original
+30-second clock, sixteen logical reads, 32 MiB requested bytes and 192 KiB output;
+no socket connection, discovery or candidate execution is admitted.
+
+The materializer has eight input roles and exclusively creates three Linux
+copies, five outer Windows copies and two copies in each of four sibling roots.
+Retain continuous created/read handles and full identity/hash checks. Its one
+30-second clock permits at most 32 logical reads, 4 MiB requested bytes, 256 KiB
+copied payload and 320 KiB writes. Preserve partial output on failure without
+retry. Before the charged caller, use the receipt to require the launcher copy's
+accepted size/hash, regular-file type, owner UID matching the admitted caller and
+owner execute permission. Revalidate copied identities in the original caller;
+the already-reviewed Windows ctime exception remains the only field exception.
+No chmod, mount change or fresh permission probe follows an inadequate receipt.
+
+Retain the original 520-second caller, 540-second external timeout plus five
+seconds kill reserve, and named systemd runtime/stop limits of 450/five seconds.
+Retain dispatcher cancellation at 330 seconds, polling through 400 and final
+bound 420. The unchanged outer launcher has 330 seconds plus at most ten for
+cleanup. The combined controller uses six 30-second guard slots, four 25-second
+negative slots and twenty seconds for setup and persistence within its original
+300-second work clock. Guard execution stops at twenty seconds to reserve at most
+ten for Stop/output completion. Negative readiness and triggering stop at fifteen
+seconds, leaving at most ten for candidate exit, query and persistence. All waits
+and case clocks intersect the original outer clock; no full per-case allowance
+is promised after that clock expires. A final persistence check is bounded by
+310 seconds, still inside the unchanged launcher. No clock restarts or new
+attendance window are introduced.
+
+### One Outcome Collection and Acceptance
+
+After original caller termination, independently admit at most one fixed snapshot
+of the original forty-nine leaves plus the failure-driver source and thirty-two
+negative-case leaves: eighty-two total. The inner collision case has no capture
+files or root-readiness leaf because its candidate must fail before creating
+those resources. Include all four copied authorities/workloads, journals, case
+results and sentinel/descendant readiness, three root-readiness leaves, six
+capture files and three original trigger leaves. Use small role-specific limits
+so total requested bytes remain below 4 MiB; retain the original thirty-second
+clock and exclusive 6 MiB output ceiling. Preserve stable regular-file identities,
+lengths, hashes and actual JSON/JSONL/console bytes, including malformed data.
+Missing or unstable leaves remain errors, not evidence of nonstartup. No process,
+Job, cgroup, account or old-state observation, alternate collector or reread is
+admitted by this snapshot.
+
+Independent outcome review joins the exact original call, charge, authority,
+materialization, all ten case outcomes, intended identities, Job observations,
+original console process completion and Linux service result. Normal outer
+success retains the nine ordered launcher records, original root exit zero,
+zero active processes, bounded aggregate total, empty complete controller output
+and no capture/persistence error, together with timely original WSL proxy exit
+zero and both EOFs. A journal or zero count alone is insufficient. All historical
+risk dispositions remain narrow and unchanged. This supplement grants no real
+WAM, account/cache/consent/token, authenticated resource, installation, release or
+broader support claim. Final publication still requires its own exact source,
+time/root adaptation, artifact and call admission after these obligations pass.
