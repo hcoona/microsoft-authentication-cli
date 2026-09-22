@@ -17157,3 +17157,200 @@ expected. No account/WAM/token/cache/resource operation, new toolchain, installa
 final publication, release or broader platform claim is granted. Remaining
 launcher negatives, publication integration and actual CLI acceptance retain their
 separate prerequisites.
+
+## Accepted Remaining Guard Results and Isolated Launcher Negatives: 0080
+
+### Original 0079 Outcome
+
+The sole original 0079 caller ran under accepted protocol
+`97c3285815011c8f86d6d5e493156dd56c3c4b52` and the preceding exact source,
+artifact, input and four-call admissions. It exited zero after approximately
+25.905 seconds. Its sole fixed collector completed successfully, retaining all
+thirty-seven selected leaves without errors: 42,168 bytes, SHA-256
+`c8bbef29da3b15151142ad30562f983f8f348709fe334d4875976368fc54383f`.
+All four original calls are spent; no original invocation, collection, runtime
+leaf read or recovery is reopened by this amendment.
+
+The disposed case joined its durable before-resume identity to the payload's
+startup and complete, non-atomic named membership audit. The audit occurred
+while the original final Job handle was held; both
+`exactMemberObservedBeforeDispose` and `disposalCompleted` were true. After
+disposal, the outer controller held the exact PID/creation-FILETIME/session
+process handle, observed that target alive before its original Stop, and
+observed target exit code one afterward. This establishes the scoped disposal
+and outer-termination scenario without a keeper Job handle or a later name reopen.
+The markers are source-bound ordering evidence, not a kernel handle-count sample.
+
+The callback case positively established the intentional before-resume failure,
+original-handle termination and target exit code one. The same-held-Job drain
+observed zero active and one total process. Its first and only sample was already
+empty; this run does not empirically demonstrate delayed, repeated drain sampling.
+Missing-name returned error two with a null audit. Session mismatch returned its
+distinct status before name opening, with no audit or open error. Missing startup
+files alone are not nonstartup evidence.
+
+Every case host exited zero. Each original outer Stop succeeded, reported zero
+active processes afterward and completed both streams. The observed case totals
+were four, three, two and two. The normal nine-record outer launcher journal
+joined its exact suspended controller, root exit zero, zero active processes,
+thirteen total processes, empty initialized/flushed/EOF captures and a passing
+terminal record. The original proxy and service client exited zero with both
+EOFs. Source-bound `--wait --pipe` and `ExitType=cgroup` completion remain part
+of the lifetime evidence. The caller's `groupEmpty=true` implements the accepted
+absent-or-empty predicate; this snapshot does not distinguish absent
+`cgroup.events` from a sampled `populated=0`. Explicit Stop cleanup is not a
+claim that every descendant exited naturally. OS accounting totals are not
+deliberate-subject charges or identities for every auxiliary process.
+
+The independent lifetime acceptance is 5,783 bytes, SHA-256
+`bac29f079e6a3df3cb91e0a1343e526f2bdc92507e5cec2f6756d50474050373`.
+The independent outcome/accounting acceptance is 7,406 bytes, SHA-256
+`86ea310102425d52e906abd870687c1a0a15d43a090f59751218806c2a7e716c`.
+Both found no material findings within the four-case and original containment
+boundary. Preserve 19/101/2/118 consumed under 28/130/30/180: 62 synthetic units
+remain, comprising thirty other planned baseline units and 32 shared reserve
+units. The twelve final CLI units remain protected. Original 0072 and 0078
+remain failed and fully charged; their accepted narrower observations and all
+0057/0064/0068 historical dispositions remain unchanged.
+
+### Separately Prepared Negative Batch
+
+After this amendment and its source and exact-call admissions are accepted,
+prepare only fresh outer action 0080. It runs the existing launcher negatives
+in order: cancellation in 0081, launcher-name collision in 0082, stdout overflow
+in 0083 and journal-write failure in 0084. These are fresh dedicated action
+roots, not reused 0073–0076 roots or a restart of any original. No guard case
+is allocated or rerun. The former combined negative implementation supplies
+reviewed source behavior; it does not supply a successful runtime result.
+
+Reuse the accepted 0070 launcher, 0066 guard and existing public toolchain pins.
+The native launcher already accepts these four-digit root identifiers. No native
+code, artifact compilation, product code, dependency or public contract changes.
+The outer native launcher still creates the controller suspended in its named
+Job before the first PowerShell instruction. Its existing Job handle remains
+held through accounting and cleanup. The dispatcher, service and original caller
+retain their accepted containment and transport mechanisms.
+
+The controller removes all guard-case execution and invokes only the existing
+negative driver. Restore the former negative input checks, driver dispatch and
+result acceptance to the current envelope. The failure workload's schema/action
+and four-root mapping change to this batch. Preserve the copied controller
+filename required by the native launcher. Keep the driver assertions unchanged:
+
+- Cancellation requires the intended cancellation failure, a resumed contained
+  root and descendant, explicit successful launcher cleanup and an empty Job.
+- Collision requires rejection at Job creation before a candidate controller is
+  created, survival of the original sentinel, and its successful original Stop
+  followed by zero active processes and complete empty streams.
+- Overflow releases one fixed 20,480-character stdout write, requires the
+  16,384-byte flushed capture prefix and overflow indication, and requires
+  explicit cleanup and an empty Job.
+- Journal failure holds the original journal byte-range lock through candidate
+  exit and the empty-Job observation. Its exact accepted five-record startup
+  prefix remains unchanged. The separately held query handle prevents
+  last-close cleanup from substituting for the tested termination behavior.
+
+For each applicable negative, retain the query handle through launcher exit and
+the zero-active observation. A name alone, a terminal marker or an absent leaf
+does not establish lifetime. Unexpected results propagate to the outer launcher;
+its original bounded cleanup remains mandatory. No new retained compiler,
+publication mode or name-only recovery path is introduced.
+
+Charge one build/test and twelve synthetic units immediately before the sole
+original caller. The subjects are the outer launcher, three candidate/root/
+descendant trios and the collision candidate plus sentinel. Only the existing
+outer controller is exempt. There are thirteen deliberate Windows creations in
+total and twelve deliberate outer-Job members; the outer launcher itself is
+outside its own Job. Require normal outer total 12..64, zero active processes,
+the complete nine-record journal and empty captures. Keep active-process limit
+32. These OS accounting bounds do not redefine the twelve charged subjects.
+
+Counters become 19/102/2/130, leaving fifty synthetic units: eighteen other
+baseline units, including twelve protected CLI units, plus 32 shared reserve
+units. Any failed start or assertion retains the full batch charge and stops
+dependent work for cause and remaining-cost reassessment. Publication handle
+retention and recovery design may change its later costs; this allocation does
+not guarantee completion or authorize that publication.
+
+### Exact Sources and Four-Call Boundary
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `Invoke-WindowsNamedGuardFixtures.ps1` | 7807 | `783fc5e861b3798344adc5eb4c25e0fbe0836fa61e726c01703bf6171ea31426` |
+| `run_windows_named_guard_fixtures.py` | 24648 | `e4dadd51d3825b9d274098d48497271fd54e55b69d36803fc02435430d9c403a` |
+| `materialize_windows_named_guard_fixtures.py` | 16570 | `e04c3bd597105866b960c9ded58f03f4112c1a3395c3407d54d52a23b9ede075` |
+| `WindowsLauncherFailureFixtures.ps1` | 18379 | `5f566d3d9137f53bd35e5778385e7a9b90dcfcbc32df8535539cb61028334cbc` |
+| `Invoke-WindowsLauncherFailurePayload.ps1` | 6196 | `168a22bd6f5fa4dde333b5f89fdddcbf3f8f89890519bad043018debce0e0d96` |
+
+The inert assembly template is 11,068 bytes, SHA-256
+`39f71f091b1f985ac18ca602d0684a8ea9a511412b58b42f27210846dbe9cf97`.
+Substitute only `ACCEPTED_COMMIT = None` with the accepted revision in the clean
+detached `/tmp/azureauth-fixture0080-accepted-108` checkout. Bind the accepted
+0071 failure disposition and the new 0079 outcome/accounting seal; do not reopen
+their original runtime leaves. This assembly restores the two negative source
+roles and replaces the preceding batch's historical preparation inputs with
+these two seals. Its seventeen logical reads comprise five tools, seven fixed
+source roles, two seals and three output readbacks. Fixed input bytes total
+30,564,123; maximum planned requests including 192 KiB output readbacks and
+seventeen EOF bytes total 30,760,748. Enforce seventeen reads, 32 MiB requested
+bytes, 192 KiB writes and the original thirty-second limit. Short reads remain
+subject to the same requested-byte ceiling.
+
+Materialization restores eight source roles, six exclusively created roots and
+sixteen copies: three Linux copies, five outer Windows copies and two copies in
+each of four negative roots. Retain continuous created-file handles, exact
+source/copy identity checks and bounded failure context. The success path uses
+twenty-six logical reads within the existing 32-read ceiling; retain 4 MiB
+requested bytes, 256 KiB copied payload, 320 KiB writes and thirty seconds.
+
+The inert caller template is 20,101 bytes, SHA-256
+`7a639839c75f789ddfeaf37ee6a81559322c387414d8b33c706670955f8d931b`.
+Replace only `CONFIG = None` with the original authenticated host tools,
+authority, manifest hash and materialization receipt binding. Preserve Python
+integer inode/timestamp fields and the accepted historical Windows ctime
+handoff qualification. Require the successful original receipt and its copied
+launcher's regular-file, UID 1000, owner-executable, 23,040-byte and exact hash
+fields before debit. No additional permission probe, chmod, copy repair or
+rematerialization is admitted. Twenty-one success-path reads remain within
+the existing 24-read, 4 MiB requested, 192 KiB write and 16 KiB console ceilings.
+
+Reuse the preceding four-call admission structure with brief independent
+closures. Assembly, materializer, caller and sole post-termination collector
+each require one durable original start and their original terminal transport.
+The complete commands use isolated `/usr/bin/python3.14 -I -B -S`,
+`login=false`, `workdir=/tmp` and `yield_time_ms=1000`:
+
+1. `/usr/bin/timeout --signal=TERM --kill-after=5s 35s /usr/bin/python3.14 -I -B -S /tmp/windows-named-fixtures0080-assemble.py`, output limit 2,000 tokens.
+2. `/usr/bin/timeout --signal=TERM --kill-after=5s 35s /usr/bin/python3.14 -I -B -S /tmp/azureauth-fixture0080-accepted-108/tools/validation/materialize_windows_named_guard_fixtures.py <MANIFEST_SHA256>`, output limit 2,000 tokens; independently bind the original manifest's literal hash before invocation.
+3. `/usr/bin/timeout --signal=TERM --kill-after=5s 540s /usr/bin/python3.14 -I -B -S /tmp/windows-named-fixtures0080-launcher.py`, output limit 4,000 tokens; independently bind the sole CONFIG substitution and immediately predebit the full batch before invocation.
+4. `/usr/bin/timeout --signal=TERM --kill-after=5s 35s /usr/bin/python3.14 -I -B -S /tmp/read-windows-named-fixtures0080-outcome.py`, output limit 2,000 tokens; independently join original caller termination first.
+
+Keep all intersecting clocks: passive thirty seconds with external 35-second
+TERM and five-second kill reserve; caller 520 with external 540 plus five;
+service 450 plus five; dispatcher cancellation 330, polling 400 and final 420;
+outer launcher 330 plus ten; controller 180/300/310. Each negative retains its
+original fifteen-second readiness/trigger bound and twenty-five-second complete
+slot, with the collision candidate completion bound fifteen seconds. Only empty
+polls of the original pending tool session, at most sixty seconds each, are
+permitted. No restarted clock, retry, alternate helper or additional probe is
+admitted.
+
+The fixed success-or-failure collector is 5,445 bytes, SHA-256
+`20c84f5da4feff94db0f64f8ec85252390798154cb4a88636ef22de004a21361`.
+It selects forty-eight leaves: the preceding fifteen base leaves, the negative
+driver, and thirty-two negative-case leaves. The collision selection deliberately
+omits candidate root-readiness and capture files because the accepted case
+rejects before creating them; that selection itself is not proof of nonstartup.
+Maximum requested bytes are 1,612,336 within 4 MiB. Retain thirty seconds and
+one exclusive 6 MiB output. Authenticate the original collector transport and
+review only the retained copy. Missing or unstable selected leaves remain errors.
+Require all four negative proofs, normal outer completion and original proxy/
+service completion before independently accepting the batch.
+
+Dedicated files remain retained. No human input is expected. New ownership or
+termination uncertainty retains the ordinary stop conditions. Historical
+0057/0064/0068 risk dispositions do not accept a new failure. No old-state scan
+or cleanup, account/WAM/token/cache/resource effect, installation, final
+publication, release or broader platform claim is granted. Publication's usable
+Job-handle/operating-controller lifetime design and final CLI acceptance remain
+separate prerequisites and work.
