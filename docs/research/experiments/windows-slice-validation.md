@@ -16127,3 +16127,155 @@ not load the artifact. Independently accept coherent original compiler/client
 completion and the recorded empty/removed original cgroup before accepting the
 artifact. Missing or inconsistent evidence stops dependent work; no read retry,
 old-state observation, new waiver, quota increase or account effect follows.
+
+## One Creation-Time-Contained Named Guard Batch
+
+This supplement prepares one new credential-free action 0071 on the existing
+Windows host, after independent acceptance of the corrected Linux preparation
+0070. Its narrow question is whether the accepted named guard's six existing
+cases work beneath the launcher's creation-time outer Job. It is not another
+0068 invocation and does not revisit any historical process, output or recovery.
+The accepted original-0068 disposition remains applicable only to that original
+attempt. The launcher's separate failure-path obligations remain open.
+
+### Exact Artifact and Allocation
+
+Preparation 0070 reported successful compilation in 1,778 milliseconds, zero
+compiler/client exit codes, complete output EOF, no output or persistence error,
+and an empty or removed original cgroup. Its one retained snapshot contains all
+eleven expected outputs without read errors. These are original observations,
+not Windows execution evidence. Independently join that snapshot, the original
+transport and accepted recipe before accepting the artifact for this batch.
+The launcher is a 23,040-byte managed x64 PE with SHA-256
+`5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a`, from
+`WindowsScriptJobLauncher.cs` SHA-256
+`32e92ca5bfd683fa4c9f3119ce0e55c353d0b092aaebbe54aac6941e01650bb6`.
+Do not rebuild it, install a runtime or infer Windows behavior from compilation.
+Use the unchanged accepted 24,576-byte named guard DLL, SHA-256
+`a18302e4658afc08b564be23c9b52995fba85c1a3345fba19662008efe30ae58`, and
+its existing immutable preparation checkpoint.
+
+Prior cumulative consumption is 19 preparations, 96 build/test actions, two
+publications and 70 synthetic units. Before any subject launch, debit this
+single attempt as one build/test action and ten synthetic units, yielding
+19/97/2/80 within the existing 28/130/30/114 ceilings. The original caller and
+dispatcher record the same debit, not two debits. There are eleven actual Windows
+processes: the launcher, controller, six case hosts and three created payloads.
+The controller remains harness; the launcher is under validation and consumes a
+unit. Count the callback payload even though it must never resume. No failed
+start, incomplete batch or earlier successful case refunds a unit. Preserve
+twelve synthetic units for final CLI scenarios. There is no retry or alternative
+action number, new quota, account effect or owner risk decision in this section.
+
+### Preparation and Invocation
+
+Refresh the existing controller, dispatcher and materializer to fresh 0071
+identities. Keep the six fixed cases: collision, live, disposed, callback,
+missing and session. Keep the pinned PowerShell executable and isolated
+credential-free environments. Add the accepted launcher as one exact input
+role; bind its bytes/hash and a fresh UUIDv4 suffix in the authority. The
+controller also records its creation FILETIME and session alongside PID, so its
+identity joins the pre-resume launcher record. No product source changes follow.
+
+Use the dedicated Linux action root `windows-actions/0071`, new private
+`windows-named-fixtures0071-*` inputs/results and Windows
+`C:\Temp\azureauth-windows-slice-108\named-fixtures-0071`. The exact private
+assembly binds a clean detached accepted checkout, current target revision,
+source pins, guard checkpoint and artifact, original WSL interop endpoint
+metadata and already installed caller tools. It may read only those named
+inputs and create the authority, materialization manifest and host-binding
+record. Retain its one original 30-second clock, at most sixteen logical reads,
+32 MiB requested bytes and 192 KiB output. It executes no subject, opens no
+socket and performs no discovery. The selected interop socket is a metadata
+binding, not a liveness observation.
+
+Run the reviewed materializer once against that exact manifest. Its six source
+roles are authority, checkpoint, runner, controller, guard and launcher. Copy
+three Linux inputs and four Windows inputs with exclusive creation, overlapping
+created-file/read handles and the existing identity/hashing checks. The actual
+small launcher fits the existing bounds: 30 seconds, twenty-four logical reads,
+4 MiB requested input, 256 KiB copied payload and 320 KiB total writes. Preserve
+partial outputs on failure; do not retry or normalize a failed identity check.
+Before invocation, independently join the original assembly/materialization
+receipts and actual inputs to the exact source, artifact and literal call. These
+passive preparation steps add no compiler or synthetic unit.
+
+The original Linux caller uses its named 0071 systemd service with
+`ExitType=cgroup`, `KillMode=control-group`, no restart or environment expansion,
+and the existing finite start/runtime/stop limits. The dispatcher invokes the
+copied console launcher directly through WSL interop, passing only the exact
+Windows root, authority UUID suffix, authority hash and controller hash. It does
+not launch PowerShell first. The launcher creates
+`Local\azureauth-controller-108-0071-<UUID>` before creating PowerShell suspended
+with the Job list attribute. It records containment and root identity before
+resume. Retain ordinary child inheritance and nested case Jobs without breakaway.
+
+Keep the caller's 520-second original clock and external 540-second timeout with
+five-second kill reserve; service runtime/stop bounds are 450/five seconds. Keep
+the dispatcher's 30-second preflight, cancellation at 330 seconds, proxy polling
+through 400 seconds and 420-second final bound. The launcher retains its own
+330-second work clock and at most ten additional cleanup seconds. These clocks
+intersect: do not promise the controller its former full 360-second reserve
+under a narrower parent. Timeouts and cancellation use the fixed original cancel
+file and owned Job policy; Linux cgroup cleanup does not establish Windows
+termination. No clock restarts, alternate interop endpoint or exploratory helper
+is admitted.
+
+### Original Completion and Evidence
+
+Normal success requires all six case results and their existing membership,
+identity, output and containment assertions. Additionally require the nine
+ordered launcher journal entries: bootstrap, Job ready, suspended root, resume
+intent, resumed, completed, stdout capture, stderr capture and launcher exit.
+Join the authority hash, named outer Job, PID/creation FILETIME/session and
+controller startup identity. Require original root exit zero, outer Job total
+ten and active zero, complete empty controller output on both streams, no
+capture/flush/close failure or overflow, and the passing terminal entry within
+its original bounds. A record of exit intent alone is not process completion.
+
+For the direct console invocation, also require the original WSL proxy's timely
+zero exit and complete stdout/stderr EOF without cancellation, capture or
+transport error. The ordinary WSL implementation waits for the Windows process
+handle, obtains its exit code and sends the exit-status message; the Linux
+interop path receives that status and drains output before returning. Public
+source basis is Microsoft WSL commit
+`56244fdb65508a4628c38865f0e2278f779b81f4`,
+[`interop.cpp`](https://github.com/microsoft/WSL/blob/56244fdb65508a4628c38865f0e2278f779b81f4/src/windows/common/interop.cpp#L419)
+and
+[`binfmt.cpp`](https://github.com/microsoft/WSL/blob/56244fdb65508a4628c38865f0e2278f779b81f4/src/linux/init/binfmt.cpp#L320).
+Use that documented implementation contract within the existing workstation trust
+boundary, joined to the exact launch and journal; this is not a measurement of
+the installed WSL source revision. It avoids another Windows waiter. Neither
+EOF alone, workload Job accounting alone nor the journal alone proves launcher
+completion. Interrupted or inconsistent transport remains failed and requires
+independent disposition before dependent execution.
+
+Retain up to 16 KiB of actual combined proxy output in the dispatcher's original
+result as base64, including a bounded prefix on overflow. The original caller
+likewise retains its sampled service output in its result. These are private
+fixed-subject diagnostics, never public account or broker records. Preserve
+actual launcher console files on failure; do not reduce them to byte counts.
+
+After the original caller terminates, independently admit at most one fixed
+snapshot of only new 0071 files, whether the batch passes or fails. Use the
+previous forty-five success-evidence leaves plus the launcher executable,
+journal and two console files: forty-nine named leaves in total. The exact
+reader has a single 30-second clock, at most 4 MiB requested bytes and a 6 MiB
+exclusive snapshot-output limit. Open only stable regular files through no-link
+paths; preserve integer identities, lengths and hashes. Retain JSON, JSONL and
+console bytes as base64 even when malformed; retain source/artifact hashes
+without loading them. Record each missing or unstable file as an error, not as
+proof a process never started. Read no process, cgroup, Job, broker or account
+state. Do not run the earlier success-only collector in addition to this snapshot.
+
+Independently join original transport, charge, authority/materialization bindings,
+Linux cgroup completion and Windows evidence from this one retained snapshot.
+Source review, a passing exit code or mechanical checks alone do not accept the
+batch. Missing or inconsistent evidence stops dependent work; retain the full
+charge and outputs without a second read, speculative cleanup or automatic
+retry. Successful evidence establishes only these six guard cases and ordinary
+creation-time/nested containment on the observed host. Before dependent final
+publication, separately accept the still-open launcher early-PowerShell failure,
+outer cancellation/timeout, outer-name collision and output/logging-failure
+cleanup obligations identified by PL-01. No real WAM, token, account, consent,
+cache, authenticated resource, installation or release effect is authorized.

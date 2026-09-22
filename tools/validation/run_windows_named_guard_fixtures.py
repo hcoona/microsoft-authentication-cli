@@ -1,9 +1,11 @@
 """One prospective credential-free named-Job fixture batch; never an automatic retry."""
 
+import base64
 import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import signal
 import stat
 import subprocess
@@ -12,13 +14,16 @@ import time
 import urllib.request
 
 
-INPUTS = Path('/tmp/windows-named-fixtures0068-inputs')
-WINDOWS = Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0068')
-HISTORY = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0068')
+INPUTS = Path('/tmp/windows-named-fixtures0071-inputs')
+WINDOWS = Path('/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0071')
+HISTORY = Path('/var/tmp/azureauth-windows-slice-108/windows-actions/0071')
 SHELL = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
-UNIT = 'azureauth-named-fixtures-108-0068.service'
-BEFORE = {'preparation': 17, 'buildTest': 95, 'publication': 2, 'synthetic': 61}
-AFTER = {'preparation': 17, 'buildTest': 96, 'publication': 2, 'synthetic': 70}
+LAUNCHER = WINDOWS / 'WindowsScriptJobLauncher.exe'
+LAUNCHER_BYTES = 23040
+LAUNCHER_SHA256 = '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a'
+UNIT = 'azureauth-named-fixtures-108-0071.service'
+BEFORE = {'preparation': 19, 'buildTest': 96, 'publication': 2, 'synthetic': 70}
+AFTER = {'preparation': 19, 'buildTest': 97, 'publication': 2, 'synthetic': 80}
 GUARD_COUNTERS = {'preparation': 17, 'buildTest': 94, 'publication': 2, 'synthetic': 52}
 FAILURE_DISPOSITION_SHA256 = '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf'
 CASES = ('collision', 'live', 'disposed', 'callback', 'missing', 'session')
@@ -180,6 +185,44 @@ def cancel_original_root(held, expected):
     write_root_json(WINDOWS, held, expected, 'cancel', {'cancelled': True})
 
 
+def accept_launcher_journal(raw, authority, authority_hash):
+    records = [decode(line) for line in raw.splitlines()]
+    expected = ('bootstrap', 'job-ready', 'root-suspended', 'resume-requested', 'resumed',
+                'completed', 'capture', 'capture', 'launcher-exit')
+    if tuple(item['event'] for item in records) != expected:
+        raise ValueError('Incomplete normal launcher journal')
+    times = [item['elapsedMilliseconds'] for item in records]
+    if any(type(value) is not int or not 0 <= value < 340000 for value in times) or times != sorted(times):
+        raise ValueError('Launcher journal clock mismatch')
+    bootstrap, ready, root = records[:3]
+    for identity in (bootstrap, root):
+        if type(identity['pid']) is not int or identity['pid'] <= 0 or \
+                type(identity['session']) is not int or identity['session'] < 0 or \
+                not re.fullmatch(r'[1-9][0-9]{1,19}', identity['creationFileTime']):
+            raise ValueError('Launcher process identity missing')
+    expected_name = 'Local\\azureauth-controller-108-0071-' + authority['launcherSuffix']
+    if bootstrap['authoritySha256'] != authority_hash or bootstrap['jobName'] != expected_name or \
+            ready['queryAndTerminateAccess'] is not True or root['inJob'] is not True or \
+            root['pid'] == bootstrap['pid'] or root['session'] != bootstrap['session']:
+        raise ValueError('Launcher creation-time containment mismatch')
+    completed = records[5]
+    if completed['rootExited'] is not True or completed['rootExitCode'] != 0 or \
+            completed['activeProcesses'] != 0 or completed['totalProcesses'] != 10 or \
+            completed['stdoutEof'] is not True or completed['stderrEof'] is not True or \
+            completed['capturedBytes'] != 0:
+        raise ValueError('Launcher workload completion mismatch')
+    for record, stream in zip(records[6:8], ('stdout', 'stderr'), strict=True):
+        if record['stream'] != stream or record['initialized'] is not True or \
+                record['readBytes'] != 0 or record['confirmedFlushedBytes'] != 0 or \
+                record['eof'] is not True or record['overflowDetected'] is not False or \
+                any(record[key] is not None for key in ('failureStage', 'failureType',
+                    'failureHresult', 'failureNativeError', 'closeFailureType')):
+            raise ValueError('Launcher output capture incomplete')
+    if records[-1]['passed'] is not True or records[-1]['capturedBytes'] != 0:
+        raise ValueError('Launcher terminal record mismatch')
+    return root
+
+
 def main():
     began = time.monotonic()
     signal.signal(signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError('Original fixture clock')))
@@ -191,13 +234,16 @@ def main():
     if sha(authority_bytes) != authority_hash:
         raise ValueError('Authority changed')
     authority = decode(authority_bytes)
-    if encode(authority) != authority_bytes or authority['schema'] != 'named-guard-fixtures-0068-v1' or \
-            authority['accepted'] is not True or authority['action'] != '0068' or \
-            authority['countsBefore'] != BEFORE or authority['buildTestCharge'] != 1 or authority['syntheticCharge'] != 9 or \
+    if encode(authority) != authority_bytes or authority['schema'] != 'named-guard-fixtures-0071-v1' or \
+            authority['accepted'] is not True or authority['action'] != '0071' or \
+            authority['countsBefore'] != BEFORE or authority['buildTestCharge'] != 1 or authority['syntheticCharge'] != 10 or \
             authority['failedFixtureDispositionSha256'] != FAILURE_DISPOSITION_SHA256:
         raise ValueError('Fixture allocation not admitted')
     if sha(read(Path(__file__), 65536)) != authority['runnerSha256']:
         raise ValueError('Dispatcher changed')
+    if not re.fullmatch(r'[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}', authority['launcherSuffix']) or \
+            authority['launcherBytes'] != LAUNCHER_BYTES or authority['launcherSha256'] != LAUNCHER_SHA256:
+        raise ValueError('Unaccepted launcher input')
     group = group_identity()
     # The singleton debit precedes network preflight and every Windows process start.
     direct(HISTORY.parent)
@@ -206,9 +252,9 @@ def main():
     history_fd = os.open(HISTORY, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
     if created_history_identity != directory_identity(os.fstat(history_fd)):
         raise ValueError('Original history root changed during open')
-    start = {'schema': 'named-guard-fixtures-started-v1', 'action': '0068', 'countsBefore': BEFORE,
+    start = {'schema': 'named-guard-fixtures-started-v1', 'action': '0071', 'countsBefore': BEFORE,
              'countsAfter': AFTER, 'authoritySha256': authority_hash, 'cgroup': group,
-             'startedMonotonicNs': time.monotonic_ns(), 'buildTestCharge': 1, 'syntheticCharge': 9}
+             'startedMonotonicNs': time.monotonic_ns(), 'buildTestCharge': 1, 'syntheticCharge': 10}
     start_hash = write_root_json(HISTORY, history_fd, created_history_identity, 'started.json', start)
     result = {'schema': 'named-guard-fixtures-result-v1', 'passed': False, 'continuation_allowed': False,
               'authoritySha256': authority_hash, 'countsAfter': AFTER, 'proxyExit': None,
@@ -242,12 +288,16 @@ def main():
             raise ValueError('Windows authority copy changed')
         if sha(read(WINDOWS / 'Invoke-WindowsNamedGuardFixtures.ps1', 65536)) != authority['controllerSha256']:
             raise ValueError('Windows fixture source changed')
+        launcher = read(LAUNCHER, 2097152)
+        if len(launcher) != LAUNCHER_BYTES or sha(launcher) != LAUNCHER_SHA256:
+            raise ValueError('Accepted launcher artifact changed')
         guard = read(WINDOWS / 'WindowsFinalPublishGuard.dll', 24576)
         if len(guard) != 24576 or sha(guard) != 'a18302e4658afc08b564be23c9b52995fba85c1a3345fba19662008efe30ae58':
             raise ValueError('Accepted guard bytes changed')
         if sha(read(Path(SHELL), 1048576)) != '8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e':
             raise ValueError('Pinned Windows shell changed')
-        if any((WINDOWS / leaf).exists() for leaf in (*CASES, 'windows-started.json', 'windows-result.json', 'cancel')):
+        if any((WINDOWS / leaf).exists() for leaf in (*CASES, 'windows-started.json', 'windows-result.json',
+                'cancel', 'launcher.jsonl', 'launcher.stdout.bin', 'launcher.stderr.bin')):
             raise ValueError('Original fixture evidence already exists')
         result['acceptedRefSha256'] = verify_public_ref(authority['acceptedCommit'])
         if cancelled[0] or time.monotonic() - began >= 30:
@@ -258,9 +308,8 @@ def main():
         if verify_interop(authority) != interop:
             raise ValueError('Original caller interop binding changed')
         signal.setitimer(signal.ITIMER_REAL, max(0.001, 420 - (time.monotonic() - began)))
-        command = [SHELL, '-NoLogo', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
-                   '-File', r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0068\Invoke-WindowsNamedGuardFixtures.ps1',
-                   '-Mode', 'Controller', '-AuthoritySha256', authority_hash]
+        command = [str(LAUNCHER), r'C:\Temp\azureauth-windows-slice-108\named-fixtures-0071',
+                   authority['launcherSuffix'], authority_hash, authority['controllerSha256']]
         process = subprocess.Popen(command, cwd=WINDOWS, stdin=subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    env={'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8',
@@ -282,9 +331,11 @@ def main():
                 if chunk == b'':
                     eof[index] = True
                 else:
-                    if sum(map(len, captured)) + len(chunk) > 16384:
+                    remaining = 16384 - sum(map(len, captured))
+                    captured[index].extend(chunk[:remaining])
+                    if len(chunk) > remaining:
+                        result['outputOverflow'] = True
                         raise ValueError('Fixture output limit')
-                    captured[index].extend(chunk)
             if process.poll() is not None and all(eof):
                 break
             time.sleep(0.025)
@@ -292,6 +343,19 @@ def main():
         result['stdoutEof'], result['stderrEof'] = eof
         if result['proxyExit'] != 0 or not all(eof) or any(captured) or cancellation_sent:
             raise ValueError('Original fixture proxy did not complete normally')
+        # WSL's original console-process exit status follows its Windows process-handle
+        # wait. Join it with the source-bound journal; the journal alone is insufficient.
+        journal = read(WINDOWS / 'launcher.jsonl', 16384, windows_fd, windows_identity)
+        root = accept_launcher_journal(journal, authority, authority_hash)
+        result['launcherJournalSha256'] = sha(journal)
+        for leaf in ('launcher.stdout.bin', 'launcher.stderr.bin'):
+            if read(WINDOWS / leaf, 16384, windows_fd, windows_identity):
+                raise ValueError('Unexpected controller output')
+        started = decode(read(WINDOWS / 'windows-started.json', 65536, windows_fd, windows_identity))
+        if started['controllerPid'] != root['pid'] or started['controllerCreationFileTime'] != root['creationFileTime'] or \
+                started['controllerSession'] != root['session'] or started['authoritySha256'] != authority_hash:
+            raise ValueError('Suspended controller identity join failed')
+        result['launcherCompletionAccepted'] = True
         windows_bytes = read(WINDOWS / 'windows-result.json', 262144, windows_fd, windows_identity)
         windows = decode(windows_bytes)
         result['windowsResultSha256'] = sha(windows_bytes)
@@ -317,6 +381,10 @@ def main():
         result['elapsedNanoseconds'] = int((time.monotonic() - began) * 1000000000)
         result['requestedFileBytes'] = read_requested
         result['capturedBytes'] = sum(map(len, captured))
+        # Preserve bounded original bytes on failure, without reopening diagnostic files.
+        result['proxyStdoutBase64'], result['proxyStderrBase64'] = (
+            base64.b64encode(bytes(value)).decode('ascii') for value in captured)
+        result['stdoutEof'], result['stderrEof'] = eof
         try:
             result_hash = write_root_json(HISTORY, history_fd, created_history_identity, 'result.json', result)
         finally:
