@@ -213,6 +213,8 @@ def worker(config_hash, expires_ns):
     except BaseException as error:
         result['failure'] = type(error).__name__
     write(ROOT / 'worker-result.json', encode(result))
+    # The receipt is provisional until persistence and its owned closes finish.
+    budget(expires_ns)
     return 0 if result['passed'] else 1
 
 
@@ -288,8 +290,10 @@ def execute(config_path, config_hash):
             result['passed'] = False
             result['failure'] = result['failure'] or 'OriginalDeadlineExpired'
         result_hash = write(FINAL, encode(result))
+    budget(began_ns + 150000000000)
     print(json.dumps({'passed': result['passed'], 'resultSha256': result_hash,
                       'countsAfter': AFTER, 'continuationAllowed': False}, sort_keys=True), flush=True)
+    budget(began_ns + 150000000000)
     return 0 if result['passed'] else 1
 
 
