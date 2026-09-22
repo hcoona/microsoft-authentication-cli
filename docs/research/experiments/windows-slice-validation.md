@@ -15755,3 +15755,147 @@ an absence status nor a proxy exit permits a quiescence or fixture-success claim
 Keep dependent execution stopped until separately accepted evidence or the applicable
 concrete owner decision resolves the new uncertainty. Any further observation or
 corrected batch requires its own bounded accepted scope and ordinary admissions.
+
+## Controller Containment Correction: Source Preparation Only
+
+This section prepares the correction to original fixture 0068's controller
+containment and diagnostic gaps. It admits no compilation, materialization,
+Windows invocation, process observation, cleanup, retry, or new experiment.
+The original failure and both spent file observations remain unchanged. Current
+consumption remains 17 preparation, 96 build/test, 2 publication, and 70 synthetic
+units; protect the existing twelve-unit final CLI scenario reserve. The existing
+Wave and experiment-safety stop for unresolved original 0068 lifetime remains in
+force. Neither this source nor its merge supplies a historical risk disposition.
+
+### Source Finding and Correction Boundary
+
+At accepted source commit `82b06d36bbb6188524c55fc22cf15ed251b0de06`,
+`run_windows_named_guard_fixtures.py` starts the Windows PowerShell controller
+directly with `subprocess.Popen`. The controller creates named Jobs inside its
+case loop. Its first controller record follows script preflight and assembly
+loading. Consequently, that source configures no outer experiment-owned Windows
+Job for the controller's startup and preflight. This is a source coverage gap,
+not evidence that a process survived or that a Windows Job malfunctioned.
+
+The dispatcher also accumulates bounded stdout/stderr bytes but saves only their
+combined length on failure. Exit 1 independently fails its completion predicate;
+the separately recorded 401 captured bytes do not identify the failure cause.
+Their discarded contents cannot be reconstructed from source. The prospective
+correction must preserve actual bounded diagnostics, including errors before the
+PowerShell script reaches its own first record.
+
+`tools/validation/WindowsScriptJobLauncher.cs` is an inert source candidate for
+this correction. Its `ExecutionAdmitted` gate remains false. It uses the existing
+pinned Windows PowerShell executable; referring to the design as launching
+PowerShell does not authorize installing or substituting PowerShell 7 `pwsh.exe`.
+This helper remains validation infrastructure and changes no product component,
+public contract, support claim, credential behavior, or shared Windows service.
+
+### Startup and Lifetime Design
+
+The future call chain is the existing Linux systemd/cgroup dispatcher, a thin
+Windows launcher, then the controlled PowerShell process and script. The launcher
+creates a fresh named outer Job before creating PowerShell. The name is bound to
+a future action number and UUID, with prefix `Local\azureauth-controller-108-`.
+An existing named object is rejected without configuration or termination. Before
+process creation, the launcher verifies reopen rights for query and termination,
+sets kill-on-last-close and an aggregate 32-process limit, and sets neither
+breakaway flags nor UI restrictions. Job handles are non-inheritable; the only
+inherited handles are the explicitly listed stdin, stdout, and stderr handles.
+
+Use `STARTUPINFOEX` with `PROC_THREAD_ATTRIBUTE_JOB_LIST` and
+`EXTENDED_STARTUPINFO_PRESENT` to assign the root at creation time. Also use
+`CREATE_SUSPENDED`, verify membership through the original returned process
+handle, and durably record its PID, creation FILETIME and session before requesting
+resume. Preserve the FILETIME as a decimal string, never a floating-point value.
+Record resume intent before `ResumeThread`; an interrupted call does not prove
+that the root remained suspended. If job-list assignment fails, do not fall back
+to an uncontained or late-assigned controller.
+
+The ordinary `CreateProcess` descendants of this root inherit the outer Job.
+Existing per-case Jobs form child Jobs below it; their own accounting and tested
+retention behavior remain separate from the outer aggregate count. The outer
+kill-on-close boundary acts on failure of the entire batch, after individual
+cases have had their bounded opportunity to record their observations. Validate
+the actual nesting rather than assuming case results from source. Processes
+created through services or WMI are not covered by this inheritance claim and
+remain outside this synthetic design. WSL Linux processes retain their separate
+cgroup boundary; shared WAM and OS services are not added to the experiment Job.
+
+The launcher itself stays outside the workload Job, creates no other helper,
+and performs no fixture work. It records its own PID, creation FILETIME and
+session at its first journal event. This is the explicit bootstrap boundary;
+the design does not recursively introduce another Windows supervisor. Startup
+or loader failure before that event must be retained through the Linux caller's
+bounded stdout/stderr capture. Neither Linux proxy exit nor Job naming alone
+proves the Windows launcher's exit. A future admitted original call must bind
+its transport, recorded identity, terminal evidence, and outstanding-session
+handling separately from the contained workload's termination evidence.
+
+### Evidence and Failure Behavior
+
+The candidate accepts only a fresh future fixture root, UUID, authority hash,
+and controller-source hash. Its command uses the fixed shell, script basename,
+controller mode and authority argument. The caller must bind those inputs and
+the launcher artifact to a separately accepted exact action; these four arguments
+are not themselves an authorization mechanism. Keep the original 0068 script,
+dispatcher, roots, and guard artifact unchanged. The candidate alone is not a
+working successor batch; a fresh source-bound controller/dispatcher integration
+is required before any later source or execution admission.
+
+Within the future dedicated owned root, exclusively create `launcher.jsonl`,
+`launcher.stdout.bin`, and `launcher.stderr.bin`. The journal is at most 16 KiB;
+the raw output streams together are at most 16 KiB. Flush records and captured
+bytes to durable storage as they are written. Retain partial files and explicit
+truncation/failure state. Per stream, record bytes read separately from the prefix
+covered by completed writes and successful flushes, EOF, observed overflow, and
+the first capture failure's stage, type, HRESULT and available native error code.
+After a write or flush failure, the remaining file tail is unknown; the confirmed
+flushed count is not an assertion of the complete file length. Obtain these
+fields from original in-memory state without diagnostic rereads. Do not publish
+raw local diagnostics. Capture resources close independently; close failures
+preserve the first per-stream and overall failure, and the fixed terminal capture,
+failure and exit records are each attempted once even if another record fails.
+The future Linux
+dispatcher must likewise retain its bounded launcher stdout/stderr bytes before
+interpreting a nonzero exit, rather than retaining only byte counts. A missing or
+incomplete journal remains a failure, not an inferred non-startup or quiescence.
+
+The candidate's original monotonic clock covers setup and at most 330 seconds
+of work, with up to ten additional seconds for failure termination observation.
+No retry or restarted clock is present. An exact future protocol must also bind
+the Linux outer timeout and its cancellation/transport behavior; local clocks
+do not establish a hard bound for a blocked OS or storage operation.
+
+Normal completion requires the root process handle to be signaled, its exit
+code to be zero, outer Job active-process accounting to be zero, and both output
+streams to reach EOF. A nonzero exit, output overflow, cancellation, timeout,
+input mismatch, or logging failure fails the batch. Once a root exists, failure
+cleanup attempts `TerminateJobObject` before fallible diagnostic recording,
+then separately observes root exit and active-process accounting. A console
+capture failure must not suppress the remaining lifetime checks. Closing the
+last Job handle provides a final termination fallback; it is not observational
+proof of quiescence. All new unresolved termination remains subject to the
+ordinary stop condition.
+
+### Required Validation Before Activation
+
+Source review and repository checks do not establish successful compilation or
+Windows behavior. After the applicable original-0068 decision and matching
+accepted amendments, prepare a separate finite protocol and exact artifact/call
+admission using existing toolchains and the current cumulative ceilings. Cover
+the launcher's creation-time containment, pre-resume recording, ordinary child
+inheritance and nested-case Job compatibility; early PowerShell parse/preflight
+failure with retained output; cancellation/timeout of a script with descendants;
+collision rejection without changing the existing Job; and cleanup after output
+or logging failure. Count every actual build and synthetic launch, including
+failed starts, before invocation. A compound fixture must not conceal additional
+launch consumption. None of these future scenarios is accepted by this section.
+
+The API basis is Microsoft's documentation for
+[process attributes](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute),
+[process creation flags](https://learn.microsoft.com/windows/win32/procthread/process-creation-flags),
+[Job Objects](https://learn.microsoft.com/windows/win32/procthread/job-objects),
+[nested Jobs](https://learn.microsoft.com/windows/win32/procthread/nested-jobs), and
+[Job termination](https://learn.microsoft.com/windows/win32/api/jobapi2/nf-jobapi2-terminatejobobject).
+These sources support the API design, not empirical success of this candidate.
