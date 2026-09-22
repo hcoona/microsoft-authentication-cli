@@ -1,7 +1,7 @@
 # Prospective singleton fixtures. Source, protocol and exact call admission are required.
 param(
     [ValidateSet('Controller', 'Case', 'Payload')][string] $Mode = 'Controller',
-    [ValidateSet('live')][string] $CaseName,
+    [ValidateSet('disposed', 'callback', 'missing', 'session')][string] $CaseName,
     [Parameter(Mandatory = $true)][ValidatePattern('^[0-9a-f]{64}$')][string] $AuthoritySha256
 )
 $ErrorActionPreference = 'Stop'
@@ -9,7 +9,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
 if ($env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Fixture startup cache control is absent' }
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0077'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0078'
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $script:writtenBytes = 0
 $script:readBytes = 0
@@ -120,12 +120,12 @@ if ((Get-Hash $authorityBytes) -cne $AuthoritySha256) { throw 'Fixture authority
 $authorityText = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes)
 $authority = $authorityText | ConvertFrom-Json
 if ($authorityText -cne (($authority | ConvertTo-Json -Depth 20 -Compress) + "`n") -or
-    $authority.schema -cne 'named-guard-fixtures-0077-v1' -or
-    $authority.accepted -ne $true -or $authority.action -cne '0077' -or
-    $authority.countsBefore.preparation -ne 19 -or $authority.countsBefore.buildTest -ne 98 -or
-    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 101 -or
+    $authority.schema -cne 'named-guard-fixtures-0078-v1' -or
+    $authority.accepted -ne $true -or $authority.action -cne '0078' -or
+    $authority.countsBefore.preparation -ne 19 -or $authority.countsBefore.buildTest -ne 99 -or
+    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 104 -or
     $authority.failedFixtureDispositionSha256 -cne '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf' -or
-    $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 3) {
+    $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 7) {
     throw 'Unaccepted fixture allocation'
 }
 if ((Get-Hash (Read-Bytes $PSCommandPath 65536)) -cne $authority.controllerSha256) {
@@ -135,24 +135,27 @@ if ((Get-Hash (Read-Bytes $shell 1048576)) -cne
     '8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e') {
     throw 'Pinned fixture PowerShell changed'
 }
-$sequence = @('live')
-if (@($authority.cases.PSObject.Properties.Name).Count -ne 1) { throw 'Fixture case allocation' }
+$sequence = @('disposed', 'callback', 'missing', 'session')
+if (@($authority.cases.PSObject.Properties.Name).Count -ne 4) { throw 'Fixture case allocation' }
 foreach ($selected in $sequence) {
-    if ($authority.cases.$selected -cnotmatch '^Local\\azureauth-final-publish-108-0077-[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
+    if ($authority.cases.$selected -cnotmatch '^Local\\azureauth-final-publish-108-0078-[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$') {
         throw 'Unbound fixture Job name'
     }
 }
-if (@($sequence | ForEach-Object { $authority.cases.$_ } | Select-Object -Unique).Count -ne 1) {
+if (@($sequence | ForEach-Object { $authority.cases.$_ } | Select-Object -Unique).Count -ne 4) {
     throw 'Repeated fixture Job name'
 }
 if ($authority.failure0072DispositionSha256 -cne
     'a4efab71cbd10564c70251826e28195eb09d3497454982c0f314c388a2a88439') {
     throw 'Missing accepted original 0072 disposition'
 }
+if ($authority.live0077AcceptanceSha256 -cne '0b48cb7fcf878f55344f4e4ccd82e4852c642692cdc2d7d6d4eff220b074c6d2') {
+    throw 'Missing accepted original 0077 live outcome'
+}
 Assert-Time 10000
 
 if ($Mode -eq 'Payload') {
-    if ($CaseName -cne 'live') { throw 'Unallocated payload' }
+    if ($CaseName -cne 'disposed') { throw 'Unallocated payload' }
     $directory = "$root\$CaseName"
     $identity = Read-Json "$directory\before-resume.json"
     $current = [Diagnostics.Process]::GetCurrentProcess()
@@ -325,7 +328,7 @@ try {
     try {
         Save-Json "$root\windows-started.json" @{
             schema = 'named-guard-fixtures-started-v1'; authoritySha256 = $AuthoritySha256
-            buildTestCharge = 1; syntheticCharge = 3; controllerPid = $PID
+            buildTestCharge = 1; syntheticCharge = 7; controllerPid = $PID
             controllerCreationFileTime = $controller.StartTime.ToUniversalTime().ToFileTimeUtc().ToString()
             controllerSession = $controller.SessionId
         }
@@ -453,7 +456,7 @@ try {
     $result.failureDetails = Get-FailureDetails $_
 }
 finally { Save-Json "$root\windows-result.json" $result }
-# Only the corrected live case is allocated; no other case or negative driver runs.
+# Only the four remaining guard cases are allocated; no live case or negative driver runs.
 # The original 300-second controller clock also bounds setup and persistence.
 Assert-Time 310000
 if (-not $result.passed) { exit 1 }
