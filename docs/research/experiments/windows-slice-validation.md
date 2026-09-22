@@ -17913,3 +17913,86 @@ finding and nonterminating publication behavior. All original clocks, capacity,
 independent admissions, real-account gates, and stop conditions remain required.
 No execution, additional attempt, new risk exception, cleanup, installation, or
 release is authorized by this qualification.
+
+## Original 0101 Materialization Disposition and Fresh Single-Case Batch 0103
+
+Original 0101 assembly completed once with exit zero and its generated inputs
+were independently accepted. Its sole materialization then returned one during
+initial readback of the newly created Windows guard DLL. The bounded terminal
+record contains twenty reads, 283,710 requested bytes and 96,738 written bytes.
+The `handle-after-read` comparison differed only in `ctime_ns`; device, inode,
+mode, owner, group, size, modification time and link count matched. The complete
+payload comparison had not yet executed. These observations establish neither
+copied-artifact integrity nor a benign cause for the metadata change.
+
+The files-only materializer started no subject. Preserve its original failure,
+partial files and exclusive roots; do not reopen, repair, recopy, clean up or
+repeat them. Batch 0101's caller and collector did not execute and must not now
+execute. No fixture predebit occurred. Actual counters remain 20 preparation,
+103 build/test, 2 publication and 147 synthetic. The materialization carries
+zero charge, no copied-artifact or executable acceptance, and no new process
+lifetime exception. This does not resolve any earlier historical exception.
+
+Finding `MATERIALIZER0101-INITIAL-WINDOWS-CTIME-001` was independently classified
+as a true positive: the required nine-field stability check rejected an observed
+ctime-only transition during owned initial copy readback. Qualifying only a
+historical comparison leaves the same unsupported timestamp invariant in the
+other comparisons within that continuous created-file lifetime.
+
+For the fresh materializer only, replace the earlier all-nine-field obligation
+for its exact fixed Windows-copy set with this consistent identity projection:
+
+- Treat `ctime_ns` as a retained observation throughout creator/reader overlap,
+  initial readback, and retained descriptor/name comparisons.
+- Require exact device, inode, mode, owner, group, size, modification time and
+  link count in every corresponding full identity comparison. Preserve the
+  existing device/inode-only creator continuity checks and final protection,
+  ownership, size and link predicates around the final mutating-handle close.
+- Derive the ten eligible leaves solely from the fixed Windows output plans.
+  Carry qualification only into those exclusively created copies. Initial
+  qualified reads require the already-held parent, already-held reader and
+  created-file baseline; no arbitrary source read gains this qualification.
+- Preserve no-follow traversal, exclusive creation, overlapping creator/reader
+  handles, read-only final protection, continuous retained readers, complete
+  byte-for-byte payload readback, accepted payload digests, finite requested-byte
+  limits and bounded diagnostic mismatch context.
+- Preserve strict nine-field source and Linux-copy comparisons, including the
+  Linux receipt. Do not add timestamp waits, polling, permission repair, retries,
+  a general filesystem exception, or a claim that the failed original's bytes
+  were unchanged.
+
+All nine observed fields remain in the new receipt. The later original caller
+retains its accepted fixed-role historical ctime qualification and strict
+current descriptor/name checks; the fresh materializer amendment does not
+relax those separate observations. Both destination launcher executable, owner,
+regular-file and exact-byte predicates remain mandatory before caller admission.
+
+After source and protocol acceptance, admit at most one fresh batch 0103 with
+only journal-cancel in `publication-fixtures-0104`. Its corrected live journal
+reader, immutable 0066/0070/0085 artifacts, process behavior and success criteria
+remain the preceding single-case protocol. No native compilation or repetition
+of the five accepted 0094 cases is needed. Bind both the exact 0094 five-case
+acceptance and the exact 0101 files-only failure disposition in fresh assembly,
+authority and prelaunch predicates. No failed 0101 output is reused.
+
+The four separately admitted original calls remain assembly, materialization,
+caller and sole post-termination snapshot. Fresh assembly now has 23 intended
+reads and five exclusive outputs: the preceding single-case inputs plus one
+fixed 0101 disposition seal. Retain its 31-read, 32 MiB requested-byte, 192 KiB
+output and 30-second ceilings. Materialization retains twelve source roles,
+four directories, fourteen copies, ten qualified Windows leaves, 28 intended
+reads, 64 maximum reads, 4 MiB requested bytes, 1 MiB payload plus 64 KiB receipt,
+and thirty seconds. Caller and collector retain the preceding nineteen-read and
+29-leaf plans and all original clocks, output limits and external timeout bounds.
+Exact private source/configuration/command admission, durable starts and actual
+outcome acceptance remain required for each dependency. Failed starts are spent.
+
+Charge 0103 once with zero preparation, one build/test, zero publication and
+four synthetic subjects, transitioning 20/103/2/147 to 20/104/2/151. Final 0093
+publication then transitions to 20/104/3/152. The final current checkpoint joins
+exactly 0085, disposed 0094 and accepted 0103; replace the preceding prospective
+0101 stage without inventing an executed 0101 fixture or refunding any action.
+Independent handoff review still joins five accepted 0094 cases with the one
+accepted new journal-cancel case. The protected CLI/Profile/observer allocation,
+remaining reserve, existing ceilings, conservative PDB endpoint qualification,
+account/effects boundaries and required real-environment gates are unchanged.
