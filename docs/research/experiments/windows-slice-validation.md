@@ -18200,3 +18200,108 @@ Limit this exception to the same hosts, existing credential-free effects and
 or expand automatically. Historical 0057/0064/0068 dispositions remain separate.
 Any new ownership or termination uncertainty stops dependent execution. Account
 effects, real-environment acceptance, installation and release gates are unchanged.
+
+## Fresh Source Preparation After Failed Publication 0093
+
+The accepted 0064 outcome records compiler-root exit zero followed by a drain
+failure. Its retained invocation and 0093 authority bind the same product,
+recipe, graph and source root. Of the graph's 269 generated paths, 266 are
+source-root-relative; changing only the action root isolates three final publish
+leaves. The final caller rejects any preexisting generated path. These source
+and retained-evidence facts identify an unestablished fresh-input premise for
+another publication; they do not establish current file presence or the exact
+0093 failure cause. No original filesystem observation was performed.
+
+Preserve both failed publications, their charges and all old files. Prepare a
+fresh exclusive source root using the existing bounded copy method, without
+reading, adopting, moving, cleaning or overwriting the old source root. The
+historical sole copy and original 0093 remain spent. This supplement allocates
+one new passive file-copy invocation only, not a final publication, restore,
+compiler, fixture or product launch. The accepted original-0093 lifetime decision
+remains a risk disposition, not evidence of quiescence.
+
+### Fixed Inputs, Destination and Single Use
+
+Retain product commit `503360753accd0829801953823b1b57a4f852440`, tree
+`8506cdd9781c8a331ea12ea8fe27a55292eec073`, and exactly the 46 immutable payload
+rows from [Fixed Final Source and Restore Materialization](#fixed-final-source-and-restore-materialization):
+34 source files totaling 150,036 bytes and twelve unchanged restore files
+totaling 233,709 bytes. Use the 395-byte original `src/Directory.Build.props`;
+exclude the diagnostic overlay. Do not derive input paths from restore contents,
+resolve dependencies, evaluate MSBuild, download packages or enumerate roots.
+
+The sole new root is
+`C:\Temp\azureauth-windows-slice-108\sources\final-503360753accd0829801953823b1b57a4f852440-0107`,
+accessed through its literal `/mnt/c/` projection. Exclusively create it and the
+same eight parent-before-child directories. Reuse the ordinary `sources` parent
+only as a namespace container; if absent, create only that parent. Retain the
+same direct-path, held/named identity, content, Git blob and lexical parent-closure
+checks. Existing destination, linked ancestor, partial creation or any failure
+consumes this invocation with no alternate path, repair, cleanup or retry.
+
+Before any retained-payload or experiment-root access, exclusively create
+`/tmp/windows-final-source0107-materialization-original-attempt-v1.txt`.
+The sole new result is
+`/tmp/windows-final-source0107-materialization-original-result-v1.json`.
+The unchanged copy algorithm reads all fixed payloads before creating the root,
+then writes, flushes, reads back and verifies every exclusive leaf. Preserve the
+original finite bounds: 45-second data / 50-second entire source interval;
+96 reads / 900,000 charged bytes / 256 read calls; 48 writes / 450,000 bytes /
+256 write calls; 4,096 metadata queries / 192 file and directory opens;
+at most nine created directories; 65,536-byte completion receipt; and 16 KiB
+complete combined transport. Completion consumes at most five seconds inside
+the original interval. These are data-operation bounds, with the same ordinary
+filesystem and watchdog limitations as the preceding accepted method.
+
+This passive copy adds no preparation, build/test, publication or synthetic unit;
+current counters remain 20/105/3/156 and ceilings remain 28/130/30/180. No Windows
+process, account or cache operation, shared-service operation, installation,
+cleanup or release is selected. No desktop attendance is required.
+
+### Source Admission and Outcome
+
+The new inactive source is
+`/tmp/windows-final-source0107-materialization-inactive-root-v1.py`, 23,309 bytes,
+SHA-256 `33b32fa517fdda2b84edffb7e61fc229c8bf760795b5450a3868615eeef30d35`.
+Only its inactive guard, new destination suffix and attempt/result paths differ
+from the previously accepted 23,299-byte copier. Its immutable payload table,
+algorithms and finite limits remain unchanged. Do not execute the inactive guard.
+
+Activation replaces exactly its complete guard line with
+`# Exact reviewed activation: successor 0107 source copy is admitted.`, retaining
+LF, then appends exactly a blank line and `proposed_copy()` with final LF. The
+predicted active file is
+`/tmp/windows-final-source0107-materialization.accepted.py`, 23,305 bytes,
+SHA-256 `994e80cab8207755558ac6293f502fabb26998f9f64ba6f66d6c519f8d892d0c`. This
+prediction establishes neither activation nor execution.
+
+The sole literal is:
+
+```sh
+exec /usr/bin/timeout --signal=TERM --kill-after=2s 55s /usr/bin/python3.14 -I -B -S /tmp/windows-final-source0107-materialization.accepted.py
+```
+
+Use nonlogin `/usr/bin/bash`, no TTY or pipeline, and cwd
+`/tmp/azureauth-source0107-copy-accepted-108`, a clean detached checkout of the
+accepted supplement. Independently pin fresh Linux runtime/startup and cwd
+identities, the active bytes and literal, unused invocation and current merged
+authority. Preserve startup-injection exclusions and the nonresetting outer
+55-second TERM timeout with two-second KILL grace. Do not activate, materialize
+or invoke before independent exact admission.
+
+Normal success requires complete original transport, zero exit and independent
+acceptance of the sole exact receipt and file correspondence. Retain complete or
+partial outputs on every outcome. Copy success alone accepts neither the new
+source/import/restore correspondence nor a final graph or executable.
+
+Before a separately allocated successor publication, refresh every affected
+absolute source-root selector, all source-root-derived response and output paths,
+any producer-derived filename, absence map, graph and review/authority binding.
+The twelve restore files retain their historical metadata; their safe use follows
+only from accepted exact consumer/import/property correspondence. No arbitrary
+restore rewrite or inferred path relocation is permitted. Reuse of unchanged
+0066 guard and 0085 launcher artifacts retains their ordinary exact joins; a
+new action number alone does not require native recompilation. Final publication
+still needs its own accepted allocation, source/protocol review, complete
+accounting and exact-call admission. No original replay or new lifetime exception
+is granted by this source-copy supplement.
