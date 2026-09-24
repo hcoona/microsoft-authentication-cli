@@ -211,6 +211,21 @@ source, artifact, protocol and call admissions. All new ownership or termination
 uncertainty retains the ordinary stop conditions. This exception does not cover
 account or credential effects, real WAM interaction, installation or release.
 
+Separately, the accepted Wave decision for original Issue #108 final publication
+0093 permits continued credential-free Windows Slice validation despite the
+unresolved launch state and lifetime of its associated WSL or Windows processes
+and descendants, and their possible interference. Apply only to original 0093
+on the same hosts within ceilings of 28 preparation, 130 build/test,
+30 publication and 180 synthetic actions, after the matching protocol amendment
+is accepted. Preserve its failed result, full charge and retained evidence;
+this exception establishes neither termination nor publication or artifact
+acceptance. It permits no original replay, further observation, process or
+shared-service operation, cleanup or refund. New actions retain their ordinary
+independent protocol, source, artifact and exact-call admissions. The exception
+ends with the current grant, does not transfer or automatically expand, and
+does not cover future uncertainty, account effects, installation or release.
+Historical 0057/0064/0068 exceptions remain separate.
+
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
 selected-account session or secure-cache updates when the protocol declares that outcome.
 Deleting local files does not reverse provider-side authentication, consent, or session
@@ -498,7 +513,7 @@ Stop the experiment if:
 - remaining authorized attempts or cumulative capacity cannot be established;
 - experiment-controlled work cannot be stopped within the declared bounds, or safe
   ownership cannot be established for cleanup, except for the case-specific original
-  Issue #108 invocation 0057, publication 0064 and fixture 0068 lifetime exceptions
+  Issue #108 invocation 0057, publications 0064 and 0093, and fixture 0068 lifetime exceptions
   in Termination and Retention, each within its exact accepted scope;
 - the subject's source or artifact identity no longer matches the accepted protocol; or
 - continuing would mutate an unrelated account, installation, or remote resource.

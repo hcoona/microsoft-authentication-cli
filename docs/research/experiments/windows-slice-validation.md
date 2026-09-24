@@ -18163,3 +18163,40 @@ Windows-leaf, compiler, artifact, process, Job, cgroup, socket, account, cache o
 network observation; no rerun, cleanup, refund or new lifetime exception; and
 no publication, artifact, global-quiescence or continuation acceptance. Any
 further observation needs its own bounded accepted protocol and admission.
+
+## Original 0093 Failure and Lifetime Disposition
+
+The sole passive Linux receipt reader completed with exit zero and complete
+transport under the preceding accepted supplement. Independent outcome review
+accepted only its bounded copy: both original leaves were present, with an
+858-byte reservation and a 294-byte failure result joined by reservation hash.
+The reservation identifies original 0093, the admitted product, protocol,
+authority and prior counters 20/105/2/155. The result records `ValueError`,
+`normalCompletion: false`, `safetyStop: true`, `artifactEligible: false`,
+`continuation_allowed: false` and `retainedLiveWorkOrUnknown: true`.
+
+This establishes neither the exact failure cause nor whether the dispatcher
+attempted Windows launch. The reservation catch spans the yielded dispatcher;
+the exception class alone cannot recover phase or launch state. A later
+handshake witness could establish a positive milestone, but neither its
+presence nor absence would establish lifetime closure. No such additional
+observation was performed. Preserve the original failure, its full charge and
+the spent passive observation. Counters remain 20/105/3/156, and
+`noExperimentLive` remains false. Keep the newly reserved endpoint in any later
+complete conservative endpoint projection without probing its process or Job.
+
+Only the matching accepted Wave risk decision and experiment-safety exception
+permit subsequent credential-free work despite this original 0093 uncertainty.
+This disposition supplies no quiescence evidence, successful publication,
+artifact eligibility, original replay, further collection, old-state operation,
+cleanup, refund or automatic next invocation. A future action needs its own
+fresh allocation, exact accepted protocol, source and artifact review, complete
+accounting and independent exact-call admission. Preserve the named, auditable
+and operable Job requirement and all ordinary failure and lifetime stops. A
+future diagnostic improvement cannot retrospectively classify original 0093.
+
+Limit this exception to the same hosts, existing credential-free effects and
+28/130/30/180 ceilings; it ends with the current Wave grant and does not transfer
+or expand automatically. Historical 0057/0064/0068 dispositions remain separate.
+Any new ownership or termination uncertainty stops dependent execution. Account
+effects, real-environment acceptance, installation and release gates are unchanged.
