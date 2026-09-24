@@ -226,6 +226,23 @@ ends with the current grant, does not transfer or automatically expand, and
 does not cover future uncertainty, account effects, installation or release.
 Historical 0057/0064/0068 exceptions remain separate.
 
+Separately, the accepted Wave decision for original Issue #108 final publication
+0107 permits credential-free Windows Slice validation despite the unresolved
+later lifetime of that original invocation's associated WSL or Windows processes
+and descendants, and their possible interference. Apply only to original 0107
+on the same hosts within ceilings of 28 preparation, 130 build/test,
+30 publication and 180 synthetic actions, after the matching protocol amendment
+is accepted. Preserve the failed result, full charge and sole spent passive
+observation. This exception establishes neither termination nor publication or
+artifact acceptance; it permits no replay, further old-state observation,
+old-process or shared-service operation, cleanup or refund. The Wave's bootstrap
+and controller pre-candidate diagnostic and clock-handoff prerequisites apply
+before successor publication;
+every new action retains independent finite allocation and exact admission.
+This exception ends with the current grant, does not transfer or automatically
+expand, and does not cover future uncertainty, account effects, installation
+or release. Historical 0057/0064/0068/0093 exceptions remain separate.
+
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
 selected-account session or secure-cache updates when the protocol declares that outcome.
 Deleting local files does not reverse provider-side authentication, consent, or session
@@ -513,7 +530,7 @@ Stop the experiment if:
 - remaining authorized attempts or cumulative capacity cannot be established;
 - experiment-controlled work cannot be stopped within the declared bounds, or safe
   ownership cannot be established for cleanup, except for the case-specific original
-  Issue #108 invocation 0057, publications 0064 and 0093, and fixture 0068 lifetime exceptions
+  Issue #108 invocation 0057, publications 0064, 0093 and 0107, and fixture 0068 lifetime exceptions
   in Termination and Retention, each within its exact accepted scope;
 - the subject's source or artifact identity no longer matches the accepted protocol; or
 - continuing would mutate an unrelated account, installation, or remote resource.
