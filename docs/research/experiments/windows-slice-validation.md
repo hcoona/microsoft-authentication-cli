@@ -18278,7 +18278,7 @@ prediction establishes neither activation nor execution.
 The sole literal is:
 
 ```sh
-exec /usr/bin/timeout --signal=TERM --kill-after=2s 55s /usr/bin/python3.14 -I -B -S /tmp/windows-final-source0107-materialization.accepted.py
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 55s /usr/bin/python3.14 -I -B -S /tmp/windows-final-source0107-materialization.accepted.py
 ```
 
 Use nonlogin `/usr/bin/bash`, no TTY or pipeline, and cwd
