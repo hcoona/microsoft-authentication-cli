@@ -18305,3 +18305,144 @@ new action number alone does not require native recompilation. Final publication
 still needs its own accepted allocation, source/protocol review, complete
 accounting and exact-call admission. No original replay or new lifetime exception
 is granted by this source-copy supplement.
+
+## One Final Publication with Fresh Source Inputs: 0107
+
+The original 0093 remains failed and spent. Its accepted lifetime disposition
+permits only the bounded continuation stated in the Wave and experiment-safety
+policy; it establishes neither launch state nor quiescence. A separately admitted
+fresh source copy addresses the reused-source-root readiness defect without
+observing or modifying old work. This supplement allocates one new final
+publication numbered 0107 after that copy and its exact input correspondence
+are independently accepted.
+
+Retain product `503360753accd0829801953823b1b57a4f852440`, the exact v4 recipe,
+ordinary native symbols, dependency/toolchain pins, 0066 managed guard and
+0085 nonterminating native launcher. The unchanged native source accepts the
+bounded dedicated action-root format for numbers greater than 0084; only its
+current admitted production binding changes to action 0107. This change requires
+neither a native rebuild nor repetition of previously accepted fixture cases.
+All source, actual-artifact and prior fixture joins remain mandatory.
+
+### Fresh Graph, Accounting and Fixed Callers
+
+Bind the newly copied source root ending `-0107` and its unchanged 34 source /
+12 restore files. The new graph changes exactly 103 absolute root references:
+one source root, 46 protected inputs, 51 absent-input paths and five tool-project
+paths. Existing source/action placeholders render against the new slots. The
+old graph's `PublishOutputs.257604d108.txt` came from normalized action-0063
+PublishDir. The current fixed action-0107 directory instead requires
+`PublishOutputs.97b6f098d1.txt`, derived from the same pinned SDK/MSBuild producer.
+Both `Authenti.ED09733F.Up2Date` and `Authenti.7823402F.Up2Date` retain their
+basenames because their producer hashes unchanged project filenames, not the
+source-root directory. These are source-derived corrections, not a diagnosis of
+0093 or evidence of current old-file contents.
+
+Independently accept the exact graph, immutable producer/consumer correspondence,
+unchanged property/import precedence and all newly rendered Csc/native response,
+command and environment bytes. Historical absolute metadata inside unchanged
+restore files is not an independent physical path selector. Do not restore or
+rewrite it as part of this publication. No old root is read, adopted, cleaned,
+repaired or overwritten. Final input predicates still reject preexisting generated
+outputs and unexpected ambient or temporary inputs.
+
+Extend the exact current checkpoint by one independently accepted failed-0093
+accounting stage after 0085, disposed 0094, disposed 0103 and accepted 0105. Its
+charge is zero preparation, zero build/test, one publication and one synthetic
+unit; failure-disposition acceptance does not accept its artifact. Before 0107,
+every current consumer must join counters 20/105/3/156. Charge 0107 once with
+zero preparation, zero build/test, one publication and one synthetic unit, giving
+20/105/4/157. A failed start consumes the full allocation. Retain ceilings
+28/130/30/180 and the remaining 23 synthetic units: twelve protected CLI, two
+Profile, three observer/WSL and six shared reserve units. No retry, alternate
+number, capacity refund or quota increase is available.
+
+The complete conservative endpoint projection now includes the failed 0093
+reservation endpoint without probing its process, Job or service. Refresh the
+bounded four-parent membership projection before admission; only the new 0107
+action pair may appear during the second check. All historical leaves and roots
+remain untouched except for separately authorized current-parent name checks.
+Use new 0107 authority, evidence, activated-source and verifier roots and named
+verifier cgroups. The verifier-start record, shared-lock reservation, handoff,
+bootstrap and controller must agree on 0107 and the same prior counters.
+
+Retain the six independent public review roles, original provenance seals,
+exact accepted target/protocol/source/artifact joins, 100-call verifier ceiling
+and ordinary named-Job requirements. Source-copy and graph-delta reviews do not
+substitute for complete current authority or exact-call admission. Materialize
+only the independently admitted fixed current components and authority inputs;
+never overwrite or reactivate the original 0093 package or caller.
+
+Allocate exactly one new passive four-parent name-only projection using
+`/tmp/windows-final-publish0107-parent-membership-template-root-v1.py`, 3,211 bytes,
+SHA-256 `1376d0f58268fbdb63996fe4d8ccca7a4695823aca757da9fecca1ad76d8c362`.
+Retain the same four literal parents, at most 128 names per parent, 30-second
+source clock and one exclusive receipt of at most 65,536 bytes at
+`/tmp/windows-final-publish0107-parent-membership-root-v1.json`. No history leaf,
+process, Job or service is read. Only the exact independently admitted activation
+may change `ADMITTED = False` to `ADMITTED = True`.
+
+Allocate exactly one new fixed sixteen-input materialization using
+`/tmp/windows-final-publish0107-materializer-template-root-v1.py`, 10,785 bytes,
+SHA-256 `3457c365541654350cdcb9d69d60cd1dba5714a651040019d727d9e80be63e27`.
+Bind the exact sixteen input descriptors and total payload size T before
+activation. Retain the 30-second source clock; 48 one-shot reads requesting
+at most 3T + 48 bytes; sixteen exclusive payload writes totaling T bytes; and
+three fresh directories for the new package and authority inputs. Terminal
+transport is at most 8,192 stdout bytes plus the fixed failure frame bounded by
+52 stderr bytes, or 8,244 combined bytes. Use the fixed 0107 package, role and
+authority paths in that template, retaining all completed or partial outputs.
+
+Both passive steps charge zero experiment units. Their original 0093 counterparts
+remain spent. Each new step requires separate exact runtime, startup, cwd,
+activation, outer-watchdog and literal admission; complete original transport,
+zero exit and independent outcome acceptance precede reliance. A failed or
+partial start consumes its sole invocation, with no retry, repair, alternate
+root, overwrite or cleanup. The final caller-v2 template is
+`/tmp/windows-final-publish0107-caller-template-root-v2.py`, 10,244 bytes,
+SHA-256 `411a5fd19fb06bdacdd9cedca12347cb840dd8ce7c19c212131a8b56fd9f1622`;
+fill only its independently admitted fixed input and authority descriptors.
+Its one publication invocation retains the finite charge and original clocks
+above and below; no unbound template may execute.
+
+### Bounded Failure Diagnostics and Original Lifetime Rules
+
+The current fixed caller supplies a new empty in-memory diagnostic dictionary.
+The dispatcher initializes only phase, monotonic launch-attempt state and nullable
+first-failure phase/category. Admission updates finite literal phases while
+checking authority, checkpoint, source, reservation, staging and prelaunch
+predicates. The dispatcher changes the launch-attempt flag to true immediately
+before native creation and never changes it back, including failed or uncertain
+creation. It records phases for transport, clock exchange, observation,
+completion, persistence and finalization. The first caught failure preserves its
+phase and one of five categories: validation, timeout, interrupted, filesystem
+or other. No exception text, path, stack trace or Windows transport content is
+added to the caller's failure report.
+
+A reservation failure uses `final-publish-reservation-failure-v2` with that
+bounded diagnostic projection. A normal or failed WSL result also retains its
+diagnostic snapshot. If the first escaping failure occurs during final signal restoration or outer
+finalization, the caller applies the same category mapping to that exception and
+current phase before reporting, without replacing an already latched failure.
+The fixed caller reports only allowlisted phase/category
+literals and true, false or unknown launch-attempt state in its bounded stderr
+failure frame. Missing or interrupted diagnostics remain unavailable. A false
+launch-attempt flag concerns this native launch only; it is not global quiescence,
+helper termination, artifact acceptance or permission to continue. Receipt-write
+or later finalization failure cannot convert a failed original into success.
+
+All original clocks, capture ceilings, creation-time outer Job containment,
+nonterminating behavior after any resume attempt, original held-Job accounting,
+source/diagnostic/response postconditions and success-only artifact gates remain
+those of the accepted publication protocol. The shared lock still spans original
+admission through result persistence. Preserve the 2,400-second outer interval,
+2,030-second native-spawn reserve, 2,000/2,010-second native intervals and all
+intersecting controller/compiler/finalization bounds. Diagnostics add no process,
+observation retry, recovery, cleanup or fresh deadline. Original zero exit,
+complete transport and independent outcome acceptance remain necessary.
+
+No desktop attendance is required. No account discovery, WAM operation, token,
+cache or consent change, authenticated resource request, tool installation,
+signing or release is permitted. Any new lifetime or ownership uncertainty
+retains the ordinary stop. Real-environment and complete Slice acceptance remain
+separate and open.

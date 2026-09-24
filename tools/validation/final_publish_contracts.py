@@ -28,8 +28,8 @@ import subprocess
 import time
 import uuid
 
-AUTHORITY = Path('/tmp/windows-final-publish0093-execution-authority.json')
-EVIDENCE = Path('/tmp/windows-final-publish0093-authority-inputs')
+AUTHORITY = Path('/tmp/windows-final-publish0107-execution-authority.json')
+EVIDENCE = Path('/tmp/windows-final-publish0107-authority-inputs')
 PACKAGE = Path(__file__).absolute().parent.parent
 REPOSITORY = Path('/home/shuaizhang/s/github.com/hcoona/microsoft-authentication-cli')
 LINUX = Path('/var/tmp/azureauth-windows-slice-108')
@@ -214,6 +214,17 @@ ROOT_MARKER = {'grant': 'a0f741b59e09f1eb95594dbfde7a6e634d962210',
 
 def fail(message):
     raise ValueError(message)
+
+
+def publication_failure_diagnostic(diagnostic, error):
+    """Retain the first bounded failure classification without exception text."""
+    if diagnostic['failureCode'] is None:
+        diagnostic['failurePhase'] = diagnostic['phase']
+        diagnostic['failureCode'] = (
+            'validation' if isinstance(error, ValueError) else
+            'timeout' if isinstance(error, TimeoutError) else
+            'interrupted' if isinstance(error, InterruptedError) else
+            'filesystem' if isinstance(error, OSError) else 'other')
 
 
 def keys(value, expected):
@@ -463,7 +474,7 @@ def public_read(argv, deadline, cancelled, output_limit=8388608):
 # This inactive compiler-only replacement is covered by the history source pin.
 # Its one-use root also preserves failed starts before paired action reservation.
 COMPILER_VERIFIER_ROOT = Path('/var/tmp/azureauth-compiler-verifiers-108-0062')
-FINAL_VERIFIER_ROOT = Path('/var/tmp/azureauth-final-publish-verifiers-108-0093-v1')
+FINAL_VERIFIER_ROOT = Path('/var/tmp/azureauth-final-publish-verifiers-108-0107-v1')
 FINAL_SOURCE_FILES = 34
 # Four revision, six protocol/Wave blob, three ancestry, ten component,
 # six review, two current-target, one inventory and two queries per source file.
@@ -565,12 +576,12 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         result_schema = 'compiler-verifier-result-v2'
     elif not DRAFT_ONLY and not CORE_CSC_HISTORY_ONLY and not COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
         root = FINAL_VERIFIER_ROOT
-        prefix = 'azureauth-final-publish-0093-'
+        prefix = 'azureauth-final-publish-0107-'
         maximum = FINAL_VERIFIER_MAXIMUM_CALLS
         start_record = {
-            'schema': 'final-publish-0093-verifiers-start-v1', 'maximumCalls': maximum,
-            'priorCombinedBuildTest': 105, 'priorSynthetic': 155,
-            'priorPreparation': 20, 'priorPublication': 2,
+            'schema': 'final-publish-0107-verifiers-start-v1', 'maximumCalls': maximum,
+            'priorCombinedBuildTest': 105, 'priorSynthetic': 156,
+            'priorPreparation': 20, 'priorPublication': 3,
             'preparationCharge': 0, 'buildTestCharge': 0, 'publishCharge': 1,
             'syntheticCharge': 1, 'sameAttemptAsPairedReservation': True}
         result_schema = 'final-publish-verifier-result-v1'
@@ -1872,7 +1883,7 @@ def refresh_publication_checkpoint(admission, deadline, cancelled, binding=None)
     keys(manifest, ('schema', 'baseAcceptance', 'baseCounters', 'stages', 'currentCounters',
                     'ceilings', 'knownEndpoints', 'nextAction', 'historyParents'))
     if (manifest['schema'] != 'final-publish-current-checkpoint-v1' or
-            manifest['baseAcceptance'] != PUBLICATION_BASE or manifest['nextAction'] != '0093'):
+            manifest['baseAcceptance'] != PUBLICATION_BASE or manifest['nextAction'] != '0107'):
         fail('Current publication checkpoint identity changed')
     expected_review = {'schema': 'final-publish-handoff-acceptance-v2', 'accepted': True,
                        'handoff': admission['envelope']['handoff'], 'originalDispositionsPreserved': True,
@@ -1893,11 +1904,11 @@ def refresh_publication_checkpoint(admission, deadline, cancelled, binding=None)
     ceilings = dict(zip(PUBLICATION_COUNTERS, (28, 130, 30, 180), strict=True))
     if manifest['baseCounters'] != counters or manifest['ceilings'] != ceilings:
         fail('Current counters or ceilings were reset')
-    if type(manifest['stages']) is not list or len(manifest['stages']) != 4:
-        fail('Publication requires compilation, both disposed batches and corrected final case')
-    for stage, action, values in zip(manifest['stages'], ('0085', '0094', '0103', '0105'),
+    if type(manifest['stages']) is not list or len(manifest['stages']) != 5:
+        fail('Publication requires compilation, disposed batches, corrected case and failed original publication')
+    for stage, action, values in zip(manifest['stages'], ('0085', '0094', '0103', '0105', '0093'),
                                      ((1, 0, 0, 0), (0, 1, 0, 17), (0, 1, 0, 4),
-                                      (0, 1, 0, 4)), strict=True):
+                                      (0, 1, 0, 4), (0, 0, 1, 1)), strict=True):
         keys(stage, ('action', 'acceptance', 'charge', 'countersAfter'))
         charge = dict(zip(PUBLICATION_COUNTERS, values, strict=True))
         if stage['action'] != action or compact(stage['charge']) != compact(charge):
@@ -3024,7 +3035,8 @@ def final_startup_inputs(owned, deadline, cancelled):
 
 
 @contextlib.contextmanager
-def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
+def admitted_reservation(deadline, began, cancelled, *, reviewed_authority, diagnostic):
+    diagnostic['phase'] = 'authority-verification'
     admission = load_admission(deadline, cancelled, reviewed_authority=reviewed_authority)
     lock_path = direct(LINUX / 'action.lock')
     fd = os.open(lock_path, os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK)
@@ -3032,7 +3044,9 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
         if not stat.S_ISREG(os.fstat(fd).st_mode):
             fail('Original shared lock is not a regular file')
         fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        diagnostic['phase'] = 'checkpoint-verification'
         totals, manifest = refresh_publication_checkpoint(admission, deadline, cancelled)
+        diagnostic['phase'] = 'source-verification'
         graph = admission['evidence']['graph']
         source_paths = git(['ls-tree', '-r', '--name-only', PRODUCT['commit'], '--', 'src', 'global.json'],
                            deadline, cancelled).decode('ascii').splitlines()
@@ -3073,6 +3087,7 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
                  'guardAcceptanceSha256': envelope['guardAcceptance']['sha256'], 'priorCounters': totals,
                  'preparationCharge': 0, 'buildTestCharge': 0, 'publishCharge': 1, 'reservedProcessScenarios': 1,
                  'endpoint': endpoint, 'originalOuterLimitMilliseconds': LIMITS['outerMilliseconds']}
+        diagnostic['phase'] = 'reservation-write'
         local.mkdir(mode=0o700)
         write_new(local / 'started.json', compact(start), deadline=deadline)
         # From this point any failure retains the original charge. Never remove,
@@ -3081,6 +3096,7 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
                    'cancelPath': owned / 'cancel', 'reservationSha256': sha(compact(start)),
                    'admission': admission, 'start': start, 'deadline': deadline, 'began': began}
         try:
+            diagnostic['phase'] = 'action-root-staging'
             owned.mkdir()
             write_new(owned / 'started.json', compact(start), deadline=deadline)
             write_new(local / 'windows-input.json', compact({'sha256': sha(compact(start))}), deadline=deadline)
@@ -3090,6 +3106,7 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
                 budget(deadline, cancelled)
                 direct(owned / name).mkdir()
             write_new(owned / FINAL_FIRST_USE_SENTINEL, b'', deadline=deadline)
+            diagnostic['phase'] = 'invocation-rendering'
             slots = {'ACTION_ROOT': WINDOWS + '\\actions\\' + number,
                      'SOURCE_ROOT': graph['sourceRoot'], 'PACKAGE_ROOT': graph['packageRoot'], 'ENDPOINT': endpoint}
             recipe = admission['recipe']
@@ -3113,6 +3130,7 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
                           'endpoint': endpoint, 'acceptedGuard': envelope['acceptedGuard'],
                           'acceptedLauncher': envelope['acceptedLauncher'],
                           'graphSha256': envelope['graph']['sha256'], 'limits': LIMITS}
+            diagnostic['phase'] = 'controller-input-staging'
             for role in ('controller', 'bootstrap'):
                 write_new(owned / 'controller' / COMPONENTS[role], admission['components'][role], deadline=deadline)
             write_new(owned / 'authority.json', admission['authorityBytes'], deadline=deadline)
@@ -3121,6 +3139,7 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
             write_new(owned / 'recipe.json', compact(recipe), deadline=deadline)
             write_new(owned / 'invocation.json', compact(invocation), deadline=deadline)
             binding.update(invocation=invocation, invocationSha256=sha(compact(invocation)), slots=slots)
+            diagnostic['phase'] = 'artifact-staging'
             provenance = admission['callerProvenance']
             for role, leaf in (('guardArtifact', 'WindowsFinalPublishGuard.dll'),
                                ('launcherArtifact', 'WindowsScriptJobLauncher.exe'),
@@ -3128,6 +3147,7 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
                                ('launcherAcceptance', 'launcher-artifact-acceptance.json')):
                 write_new(owned / 'controller' / leaf, provenance[role]['raw'],
                           0o500 if role == 'launcherArtifact' else 0o400, deadline=deadline)
+            diagnostic['phase'] = 'launcher-executable-check'
             launcher_path = owned / 'controller' / 'WindowsScriptJobLauncher.exe'
             launcher_info = direct(launcher_path).lstat()
             if not stat.S_ISREG(launcher_info.st_mode) or not launcher_info.st_mode & stat.S_IXUSR:
@@ -3137,19 +3157,25 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority):
                 slots['ACTION_ROOT'], endpoint, sha(admission['authorityBytes']),
                 envelope['components']['bootstrap']['sha256'], binding['reservationSha256'],
                 binding['invocationSha256']]
+            diagnostic['phase'] = 'generated-path-absence-check'
             for template in graph['generatedPaths']:
                 path = projection(resolve(template, slots))
                 if path.exists() or path.is_symlink():
                     fail('Stale generated artifact or response input')
+            diagnostic['phase'] = 'temporary-input-check'
             tool_inventory(graph, slots, [], [], lambda: budget(deadline, cancelled), before=True)
+            diagnostic['phase'] = 'startup-input-check'
             final_startup_inputs(owned, deadline, cancelled)
             budget(deadline, cancelled)
+            diagnostic['phase'] = 'dispatcher-entry'
             yield binding
         except BaseException as error:
+            publication_failure_diagnostic(diagnostic, error)
             budget(deadline, lambda: False)
             if not (local / 'result.json').exists():
-                write_new(local / 'result.json', compact({'schema': 'final-publish-reservation-failure-v1',
+                write_new(local / 'result.json', compact({'schema': 'final-publish-reservation-failure-v2',
                     'reservationSha256': binding['reservationSha256'], 'failureType': type(error).__name__,
+                    'diagnostic': diagnostic,
                     'normalCompletion': False, 'safetyStop': True, 'artifactEligible': False,
                     'continuation_allowed': False, 'retainedLiveWorkOrUnknown': True}), deadline=deadline)
             raise
