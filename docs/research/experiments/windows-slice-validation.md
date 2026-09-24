@@ -18071,3 +18071,95 @@ reserve units. Preserve ceilings 28/130/30/180, prior charges and the conservati
 PDB endpoint projection; extend its exact source-based coverage to 0105/0106
 before final handoff. Account effects, interaction, installation, cleanup,
 release and all remaining real-environment gates are unchanged.
+
+## One Passive Snapshot of Failed Final Publication 0093
+
+The sole admitted 0093 caller returned exit one with empty stdout and the fixed
+70-byte failure message. That original is spent. Its full charge remains zero
+preparation, zero build/test, one publication and one synthetic action; actual
+counters are 20/105/3/156 within ceilings 28/130/30/180. The message does not
+identify the failure stage or establish whether the Windows launcher started.
+No successful publication or artifact is accepted. Preserve the original
+transport, all partial files and the historical 0057/0064/0068 dispositions;
+`noExperimentLive` remains false. Dependent experiment execution remains stopped
+while new ownership or lifetime uncertainty is unresolved.
+
+After this amendment merges, the existing credential-free Wave permits one
+separately admitted passive Linux file snapshot to determine which original
+control records survived and what their source-defined fields support. This is
+a separate evidence-only interval, not a restart or extension of the original
+2,400-second invocation. It charges no execution units. Failed start, timeout,
+missing required ancestor or incomplete transport spends the observation without
+retry. Neither earlier failure collectors nor the ineligible success-only 0093
+collectors may substitute for this reader.
+
+### Exact Inputs and Bounded Observation
+
+Read only these current runtime leaves, once each if present:
+
+| Exact Linux path | Maximum payload bytes |
+| --- | ---: |
+| `/var/tmp/azureauth-windows-slice-108/windows-actions/0093/started.json` | 16,384 |
+| `/var/tmp/azureauth-windows-slice-108/windows-actions/0093/result.json` | 65,536 |
+
+First bind the original retained terminal: 387 bytes, SHA-256
+`cf4ebed8192a1fc9afd3bf7a9632b4f4579410b54e4f481688cd0364e70b6d92`,
+including exit one, closed original session and the complete fixed transport.
+Keep literal no-follow directory ancestry open. Each present input must be a
+regular single-linked file within its cap, read once with one oversize guard
+byte. Retain raw bytes and full nine-field integer identities; require current
+named/held identity correspondence and stability through finalization. Do not
+parse current receipt contents to select another path or operation.
+
+Only initial `ENOENT` for the exact action directory or either exact leaf may
+be retained as bounded absence. Confirm each absent name with one final
+no-follow metadata check. An absent action directory means its two leaves were
+not opened. Missing earlier ancestors, links, nonregular files, permission
+errors, short or oversized reads, appearance after absence, replacement or
+changed identity fail. No enumeration, polling or alternate lookup is allowed.
+
+Exclusively create the private directory
+`/tmp/windows-final-publish0093-failure-receipts-snapshot-v1` and its sole
+`snapshot.json`, at most 131,072 bytes, containing the raw receipt bytes as
+base64, identities and bounded absence statuses. Synchronize and make the file
+read-only; permit one held-descriptor readback. Including the terminal and that
+readback, allow at most four data reads and 213,383 requested bytes. Allow at
+most 32 opens/closes, 128 metadata operations, three writes totaling 133,185
+bytes including transport, one seek, four synchronizations and one directory
+creation. Stdout is at most 2,048 bytes and failure stderr at most 65 bytes.
+Retain partial output without overwrite, repair, cleanup or reuse.
+
+The independently reviewed inert reader is 9,855 bytes, SHA-256
+`aebe4d8190f9c61b32f2671d1ca6d9d441d29d17fabcb2c0d0058a4c41abc23e`.
+Activate only its exact failed-terminal admission constant. Before its sole
+submission, independently admit the complete activated source, accepted
+protocol, original terminal, trusted isolated/no-site/no-bytecode Python,
+startup context, literal call and fresh destination. Record a separate durable
+start of at most 8,192 bytes before submission. The reader has one 20-second
+monotonic interval through closure and transport; its Linux-only watchdog has
+25 seconds before TERM and five further seconds before KILL. This watchdog
+cannot target publication or Windows work. Require actual original reader exit
+zero and complete closed transport after descriptor disposal before accepting
+its snapshot. Empty polls may collect only that original session, each at most
+60 seconds. No human interaction is expected.
+
+### Offline Interpretation and Limits
+
+Interpret only the retained snapshot, original transport and admitted immutable
+source/authority records. At accepted source `e0a7e3070745ed020daf4034337960a5fd0ece80`,
+`run_windows_final_publish.py` sets `launchAttempted` immediately before its
+launcher `Popen`. A complete, original-bound `final-publish-wsl-result-v1` with
+`launchAttempted: false` and `proxyState: not-created` supports only that this
+launcher creation was not attempted; it says nothing about admission helpers or
+earlier work. The reservation context manager in `final_publish_contracts.py`
+handles failures around its yielded dispatcher as well as preparation.
+Therefore `final-publish-reservation-failure-v1` alone cannot establish prelaunch
+failure. Missing, partial, malformed or unjoined receipts cannot localize the
+stage. A proxy exit does not establish compiler completion or Job emptiness.
+
+Keep raw contents private and require independent outcome interpretation before
+any later proposal relies on them. This snapshot grants no verifier-history,
+Windows-leaf, compiler, artifact, process, Job, cgroup, socket, account, cache or
+network observation; no rerun, cleanup, refund or new lifetime exception; and
+no publication, artifact, global-quiescence or continuation acceptance. Any
+further observation needs its own bounded accepted protocol and admission.
