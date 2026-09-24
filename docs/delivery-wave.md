@@ -147,6 +147,33 @@ replay, additional observation, old-process or shared-service operation,
 cleanup, refund, publication or artifact acceptance, quota increase, account
 effect, installation or release authority is granted.
 
+**Original 0107 lifetime risk decision:** The repository owner accepts the
+residual risk that original final-publication 0107's associated WSL or Windows
+processes and descendants may remain active and interfere with subsequent
+credential-free Windows Slice validation. Limit this disposition to original
+0107 on the same existing hosts, within the current effects and cumulative
+ceilings of 28 preparation, 130 build/test, 30 publication and 180 synthetic
+actions. Require the matching experiment-safety and Windows-protocol amendments
+to merge before dependent execution.
+
+Before a successor publication, independently accept bounded bootstrap and
+controller pre-candidate failure diagnostics that preserve the first cause,
+and a separately allocated
+credential-free validation of the controller clock handoff. Resolve or explicitly
+bound its producer/consumer synchronization and failure-retention behavior before
+that validation. Every new action retains its own finite allocation and ordinary
+independent protocol, source, artifact and exact-call admissions. This decision
+allocates no execution and does not accept a hypothesized cause as established.
+
+Preserve the failed original, full charge and sole spent passive observation.
+This disposition establishes neither later process termination nor publication
+or artifact acceptance. It ends with the current grant, does not transfer to a
+successor, and does not expand with later quota or effects changes. Historical
+0057/0064/0068/0093 decisions remain separate; every future ownership or termination
+uncertainty retains ordinary stop conditions. No original replay, further old-state
+observation, old-process or shared-service operation, cleanup, refund, quota increase,
+account effect, installation or release authority is granted.
+
 **Additional compiler-input diagnostic:** Authorize at most one separately admitted
 credential-free compiler-native-inputs diagnostic numbered 0062, after acceptance
 of the observed 0061 console-capture failure, its fixed copied evidence and the

@@ -18568,3 +18568,67 @@ or safe continuation. This allocation grants no additional verifier-history,
 Windows-file, compiler-output, artifact, process, Job, cgroup, socket, account, cache or
 network observation, and no publication, cleanup, refund or lifetime-risk
 exception. Further observation or execution retains its own applicable gates.
+
+
+## Failed Final Publication 0107: Scoped Lifetime Disposition
+
+The sole admitted passive snapshot completed with original exit zero, complete
+closed transport and independent original-outcome acceptance. It copied only the
+thirteen allocated original control/capture leaves: eight were present, including
+three empty streams, and five were absent at their bounded observation. Preserve
+that private snapshot and its exact joins; the observation is spent and must not
+be repeated. No raw machine or process identities are published here.
+
+The joined Linux reservation/result and original native journal establish that
+the native launcher created its named outer Job, created and resumed its bootstrap
+inside that Job, then observed the bootstrap exit one. The bootstrap receipt
+identifies its controller start and reports a MethodInvocationException without
+recording a handshake deadline or controller exit. The final audit through the
+original held Job observed two members, a PowerShell controller and a console
+host; the final accounting sample recorded two active and three total processes.
+The launcher then closed its original Job handle without kill-on-close or a
+post-resume termination request. These observations establish containment and
+historical membership, not later termination or host-wide quiescence.
+
+The copied bootstrap capture streams are empty. The
+Windows result, subject, inner-member audit and two compiler streams were absent
+at observation; absence does not prove that a compiler never ran. No accepted
+artifact or normal publication completion follows. The WSL caller's nonzero
+proxy exit explains its bounded native-observation failure; transport completed
+without overflow. This does not identify the bootstrap's underlying exception.
+
+Source interpretation narrows the main bootstrap failure interval to after its
+controller start-time assignment and before its handshake-deadline assignment.
+Its disposal catch can also replace the recorded failure type. The retained
+receipt contains no first-failure phase, source line, inner exception or native
+error code; neither the wrapper type nor the launcher's generic HRESULT proves
+a file-sharing or other particular cause. Do not promote a source-plausible
+clock-file synchronization failure to an observed root cause.
+
+The Wave's case-specific original-0107 risk decision, accepted together with the
+matching experiment-safety amendment, permits subsequent credential-free work
+despite this original invocation's possible continuing interference. It supplies
+no termination evidence. Until that decision is accepted, dependent experiment
+execution remains stopped. Preserve noExperimentLive=false and the separate
+0057/0064/0068/0093 dispositions; do not infer a global clean host from this exception.
+
+Before another publication, correct the diagnostic gaps in the bootstrap and
+controller pre-candidate path with bounded first-failure phase, numeric source
+location and allowlisted inner error metadata, while keeping exception messages,
+stack traces and private values out of public records. Preserve the first cause
+across disposal/finalization. Independently
+review the clock reply's publication and both readers' readiness/sharing rules,
+then accept a separate finite credential-free clock-handoff validation before
+using that path in another publication. Retain creation-time named-Job containment
+and its explicit termination/retention boundary. No execution, action number or
+new diagnostic capacity is allocated by this disposition; those prerequisites
+and exact effects must be concrete in a separately accepted protocol.
+
+Counters remain 20/105/4/157 within 28/130/30/180, leaving 8 preparation,
+25 build/test, 26 publication and 23 synthetic units. Preserve every previous
+charge; neither failed publication nor successful evidence collection earns a
+refund. This exception ends with the current Wave grant and does not transfer or
+expand with later ceilings or effects. It grants no original replay, additional
+old-file or process/Job/service observation, cleanup, artifact acceptance,
+account/WAM/cache effect, installation or release. All new uncertainty retains
+the ordinary stop conditions; full Windows Slice acceptance remains open.
