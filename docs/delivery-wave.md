@@ -127,6 +127,26 @@ retains the ordinary stop conditions. No original replay or recovery, old-state
 scan or cleanup, quota increase or refund, termination claim, fixture or artifact
 acceptance, account effects, installation or release authority is granted.
 
+**Original 0093 lifetime risk decision:** The repository owner accepts the
+residual risk that original final-publication 0093's associated WSL or Windows
+processes and descendants may remain active and interfere with later
+credential-free Windows Slice validation. Its failure stage, launch state and
+later lifetime remain unresolved. Limit this disposition to original 0093 on
+the same existing hosts, within this entry's effects and cumulative ceilings of
+28 preparation, 130 build/test, 30 publication and 180 synthetic actions.
+Require the matching experiment-safety and Windows-protocol amendments to merge
+before dependent execution; every new action still requires its own finite
+allocation, accepted protocol and independent source and exact-call admissions.
+
+Preserve the failed original, full charge, retained evidence and conservative
+endpoint accounting. This disposition ends with the current grant and does not
+transfer to a successor or expand with later capacity or effects changes.
+Historical 0057/0064/0068 decisions remain separate. Every future ownership or
+termination uncertainty retains ordinary stop conditions. No original 0093
+replay, additional observation, old-process or shared-service operation,
+cleanup, refund, publication or artifact acceptance, quota increase, account
+effect, installation or release authority is granted.
+
 **Additional compiler-input diagnostic:** Authorize at most one separately admitted
 credential-free compiler-native-inputs diagnostic numbered 0062, after acceptance
 of the observed 0061 console-capture failure, its fixed copied evidence and the
