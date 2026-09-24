@@ -8,7 +8,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
 if ($env:PSModuleAnalysisCachePath -cne 'NUL') { throw 'Fixture startup cache control is absent' }
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0103'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0105'
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 $script:writtenBytes = 0
 $script:readBytes = 0
@@ -99,12 +99,13 @@ if ((Get-Hash $authorityBytes) -cne $AuthoritySha256) { throw 'Fixture authority
 $authorityText = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes)
 $authority = $authorityText | ConvertFrom-Json
 if ($authorityText -cne (($authority | ConvertTo-Json -Depth 20 -Compress) + "`n") -or
-    $authority.schema -cne 'named-guard-fixtures-0103-v1' -or
-    $authority.accepted -ne $true -or $authority.action -cne '0103' -or
-    $authority.countsBefore.preparation -ne 20 -or $authority.countsBefore.buildTest -ne 103 -or
-    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 147 -or
+    $authority.schema -cne 'named-guard-fixtures-0105-v1' -or
+    $authority.accepted -ne $true -or $authority.action -cne '0105' -or
+    $authority.countsBefore.preparation -ne 20 -or $authority.countsBefore.buildTest -ne 104 -or
+    $authority.countsBefore.publication -ne 2 -or $authority.countsBefore.synthetic -ne 151 -or
     $authority.fixture0094DispositionSha256 -cne '62bd9da67fc9f5f887909ed8c10496c052974f006f0d9e7573ab5dac9a7cecf1' -or
     $authority.materialization0101DispositionSha256 -cne '2fdaf1e209bc26bac591ff9b54aae4561054a4252e7595182c441f1b71de9a7b' -or
+    $authority.fixture0103DispositionSha256 -cne '0e445e66f810178d173e6104515baa9eaf345e547ab425c4244f1cd82dfefd0a' -or
     $authority.failedFixtureDispositionSha256 -cne '1ecb4ef1ec1c0eea1afeaa71c6e705dd3962e6998a582bc118780d983e812dcf' -or
     $authority.buildTestCharge -ne 1 -or $authority.syntheticCharge -ne 4) {
     throw 'Unaccepted fixture allocation'
@@ -120,7 +121,7 @@ if ($authority.negatives0080AcceptanceSha256 -cne
     'ee9e2ca7b5635add3a231930acc8ef2c3d2851056d3f8689b239ce038c1de791') {
     throw 'Original 0080 acceptance changed'
 }
-$negativeRoots = [ordered]@{ 'journal-cancel' = '0104' }
+$negativeRoots = [ordered]@{ 'journal-cancel' = '0106' }
 if (@($authority.failureCases.PSObject.Properties.Name).Count -ne 1) {
     throw 'Incomplete publication fixture allocation'
 }

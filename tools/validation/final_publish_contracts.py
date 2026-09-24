@@ -569,7 +569,7 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         maximum = FINAL_VERIFIER_MAXIMUM_CALLS
         start_record = {
             'schema': 'final-publish-0093-verifiers-start-v1', 'maximumCalls': maximum,
-            'priorCombinedBuildTest': 104, 'priorSynthetic': 151,
+            'priorCombinedBuildTest': 105, 'priorSynthetic': 155,
             'priorPreparation': 20, 'priorPublication': 2,
             'preparationCharge': 0, 'buildTestCharge': 0, 'publishCharge': 1,
             'syntheticCharge': 1, 'sameAttemptAsPairedReservation': True}
@@ -1893,10 +1893,11 @@ def refresh_publication_checkpoint(admission, deadline, cancelled, binding=None)
     ceilings = dict(zip(PUBLICATION_COUNTERS, (28, 130, 30, 180), strict=True))
     if manifest['baseCounters'] != counters or manifest['ceilings'] != ceilings:
         fail('Current counters or ceilings were reset')
-    if type(manifest['stages']) is not list or len(manifest['stages']) != 3:
-        fail('Publication requires compilation, disposed six-case batch and corrected final case')
-    for stage, action, values in zip(manifest['stages'], ('0085', '0094', '0103'),
-                                     ((1, 0, 0, 0), (0, 1, 0, 17), (0, 1, 0, 4)), strict=True):
+    if type(manifest['stages']) is not list or len(manifest['stages']) != 4:
+        fail('Publication requires compilation, both disposed batches and corrected final case')
+    for stage, action, values in zip(manifest['stages'], ('0085', '0094', '0103', '0105'),
+                                     ((1, 0, 0, 0), (0, 1, 0, 17), (0, 1, 0, 4),
+                                      (0, 1, 0, 4)), strict=True):
         keys(stage, ('action', 'acceptance', 'charge', 'countersAfter'))
         charge = dict(zip(PUBLICATION_COUNTERS, values, strict=True))
         if stage['action'] != action or compact(stage['charge']) != compact(charge):

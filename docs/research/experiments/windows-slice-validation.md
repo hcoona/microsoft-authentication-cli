@@ -17996,3 +17996,78 @@ Independent handoff review still joins five accepted 0094 cases with the one
 accepted new journal-cancel case. The protected CLI/Profile/observer allocation,
 remaining reserve, existing ceilings, conservative PDB endpoint qualification,
 account/effects boundaries and required real-environment gates are unchanged.
+
+## Original 0103 Disposition and Complete Single-Case Payload Binding
+
+Original 0103 assembly and materialization each completed once with exit zero.
+Independent acceptance joined the fourteen copied files, full payload bytes and
+both destination executable predicates. The sole caller then returned one, and
+its sole fixed snapshot completed with twenty-six captured leaves. The root and
+descendant readiness files and cancellation file are absent. Preserve those
+originals, their retained snapshot and all partial outputs; do not repeat their
+helpers, reopen runtime leaves, repair state or refund the charge.
+
+The actual authority identifies batch 0103 and journal-cancel root 0104. The
+exact copied workload still mapped only actions 0095 through 0100 and required
+the 0094 authority schema and action. Its first schema comparison necessarily
+rejected the new authority before readiness. The retained 469-byte stderr
+identifies that workload rejection. Finding
+`FIXTURE0103-STALE-PAYLOAD-BATCH-001` was independently classified as a true
+positive: the batch rename did not update every payload consumer. Neither
+materialization success nor passing repository checks established that semantic
+join. No journal-cancellation observation was obtained.
+
+The candidate recorded root exit one, active zero, total two, complete audit
+and capture EOF, no retained live or unknown work, and no termination after its
+resume attempt. Its enclosing launcher recorded controller exit one, active
+zero and total six, then successful cleanup and complete empty transport. The
+original dispatcher and service client returned one with complete transport;
+the caller completed in 11,321 milliseconds. As in disposed 0094, its direct
+`groupEmpty` check was skipped after the failed service result. Join original
+managed-unit completion to the accepted `systemd-run --wait`, `ExitType=cgroup`,
+no-restart and control-group lifetime source and original completed transport.
+Do not infer a later cgroup observation, host-wide quiescence or resolution of
+the historical 0057/0064/0068 exceptions. No new lifetime exception is granted.
+
+Accept only the failed original's disposition and exact dictionary accounting:
+action 0103, before 20/103/2/147, charge 0/1/0/4 and after 20/104/2/151. The
+earlier five accepted 0094 cases retain their bounded conclusions. The single
+journal-cancel case remains unaccepted.
+
+After the corrected source and this amendment merge, admit at most one fresh
+single-case batch 0105, with journal-cancel root 0106. Replace the workload's
+obsolete six-action switch with the sole exact mapping from 0106 to
+`journal-cancel`; require the exact 0105 authority schema and action. Preserve
+root, reservation, invocation, workload and shell byte/hash checks. Do not add
+a generic case selector, authority bypass, native implementation change or
+native recompilation. Update the fixed allocations in every current consumer,
+and independently join assembly, authority, outer driver, native argument
+interface and workload action/schema/case/root values before execution. Passing
+hk does not substitute for that semantic contract review.
+
+Fresh assembly additionally binds the exact accepted 0103 failure-disposition
+seal, alongside the existing 0094 disposition and 0101 files-only failure. The
+new authority, dispatcher, controller and caller must reject a changed 0103
+disposition hash before launch. Assembly has twenty-four intended reads and
+five exclusive outputs, within the unchanged 31-read, 32 MiB requested-byte,
+192 KiB output and thirty-second bounds. Materialization retains twelve roles,
+four directories, fourteen copies, ten qualified Windows leaves and twenty-eight
+intended reads. Caller and collector retain their nineteen-read and 29-leaf
+plans. Keep all existing requested-byte, output, runtime, external-timeout and
+single-use limits, separate exact admissions, durable starts and actual-outcome
+acceptance. Do not execute the spent 0103 caller or collector again.
+
+Charge 0105 once with zero preparation, one build/test, zero publication and
+four synthetic subjects, giving 20/105/2/155. Final publication 0093 then gives
+20/105/3/156. Its checkpoint joins exactly 0085, disposed 0094, disposed 0103
+and accepted 0105 with the original dictionary charges. The verifier-start
+record and Windows controller must use the same
+20/105/2/155 counters before publication. Historical diagnostic counters remain
+unchanged. Handoff acceptance
+must join five accepted 0094 cases with one accepted new journal-cancel case;
+neither failed batch becomes a success. The remaining twenty-four synthetic
+units comprise twelve protected CLI, two Profile, three observer/WSL and seven
+reserve units. Preserve ceilings 28/130/30/180, prior charges and the conservative
+PDB endpoint projection; extend its exact source-based coverage to 0105/0106
+before final handoff. Account effects, interaction, installation, cleanup,
+release and all remaining real-environment gates are unchanged.

@@ -10,7 +10,7 @@ Set-StrictMode -Version 2
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $root = [IO.Path]::GetDirectoryName($PSScriptRoot)
 $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
-if ($root -cnotmatch '^C:\\Temp\\azureauth-windows-slice-108\\publication-fixtures-0104$' -or
+if ($root -cnotmatch '^C:\\Temp\\azureauth-windows-slice-108\\publication-fixtures-0106$' -or
     $root.Substring($root.Length - 4) -cne $ActionName -or $env:PSModuleAnalysisCachePath -cne 'NUL') {
     throw 'Unbound publication fixture workload'
 }
@@ -63,11 +63,10 @@ if ((Hash-Fixed $authorityBytes) -cne $AuthoritySha256 -or
 }
 $authority = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes) | ConvertFrom-Json
 $caseName = switch ($ActionName) {
-    '0095' { 'normal' }; '0096' { 'pre-resume' }; '0097' { 'resume-unknown' }
-    '0098' { 'timeout' }; '0099' { 'overflow' }; '0100' { 'journal-cancel' }
+    '0106' { 'journal-cancel' }
 }
 $spec = $authority.failureCases.$caseName
-if ($authority.schema -cne 'named-guard-fixtures-0094-v1' -or $authority.action -cne '0094' -or
+if ($authority.schema -cne 'named-guard-fixtures-0105-v1' -or $authority.action -cne '0105' -or
     $spec.root -cne $root -or $spec.reservationSha256 -cne $ReservationSha256 -or
     $spec.invocationSha256 -cne $InvocationSha256 -or
     (Hash-Fixed (Read-Fixed $PSCommandPath 65536)) -cne $authority.failureControllerSha256 -or
