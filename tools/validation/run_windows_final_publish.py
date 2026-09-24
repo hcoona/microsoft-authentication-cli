@@ -10,14 +10,14 @@ import selectors
 import signal
 import subprocess
 import time
-from final_publish_contracts import LIMITS, admitted_reservation, budget, compact, exchange_clock, original_completion, write_new
+from final_publish_contracts import LIMITS, admitted_reservation, budget, compact, exchange_clock, original_completion, publication_failure_diagnostic, write_new
 
 _retained_proxies = []
 
 
-def _assert_exact_admission(deadline, began, cancelled, *, reviewed_authority):
+def _assert_exact_admission(deadline, began, cancelled, *, reviewed_authority, diagnostic):
     return admitted_reservation(deadline, began, cancelled,
-                                reviewed_authority=reviewed_authority)
+                                reviewed_authority=reviewed_authority, diagnostic=diagnostic)
 
 
 def _assert_exact_original_completion(binding, original_proxy_exit, deadline, cancelled):
@@ -97,9 +97,13 @@ class _NativeTransport:
             raise failure
 
 
-def invoke_final_publish_candidate(*, reviewed_authority):
+def invoke_final_publish_candidate(*, reviewed_authority, diagnostic):
     if DRAFT_ONLY:
         raise RuntimeError('DRAFT_ONLY: no final-publish launch')
+    if type(diagnostic) is not dict or diagnostic:
+        raise ValueError('A fresh empty diagnostic carrier is required')
+    diagnostic.update(phase='outer-admission', launchAttempted=False,
+                      failurePhase=None, failureCode=None)
     began = time.monotonic()
     deadline = began + LIMITS['outerMilliseconds'] / 1000
     interrupted = False
@@ -122,25 +126,32 @@ def invoke_final_publish_candidate(*, reviewed_authority):
         # entire emergency path share this original 2400-second absolute ceiling.
         # The original shared action lock stays held until final receipt writing.
         with _assert_exact_admission(deadline, began, lambda: interrupted,
-                                     reviewed_authority=reviewed_authority) as binding:
+                                     reviewed_authority=reviewed_authority,
+                                     diagnostic=diagnostic) as binding:
             process = None
             transport = None
             result['reservationSha256'] = binding['reservationSha256']
             try:
+                diagnostic['phase'] = 'prelaunch-budget-check'
                 budget(deadline, lambda: interrupted)
                 if binding['cancelPath'].exists():
                     raise InterruptedError('Cancellation before controller creation')
                 if budget(deadline, lambda: interrupted) * 1000 < LIMITS['nativeSpawnReserveMilliseconds']:
                     raise TimeoutError('Insufficient original time for native launcher and final collection')
                 result['launchAttempted'] = True
+                diagnostic['phase'] = 'native-launch-attempt'
+                diagnostic['launchAttempted'] = True
                 result['proxyState'] = 'creation-outcome-unknown'
                 process = subprocess.Popen(binding['exactControllerCommand'], stdin=subprocess.DEVNULL,
                                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                            start_new_session=True)
+                diagnostic['phase'] = 'transport-initialization'
                 transport = _NativeTransport(process)
                 result['proxyState'] = 'observing'
                 result['stage'] = 'original-controller'
+                diagnostic['phase'] = 'clock-exchange'
                 exchange_clock(binding, process, deadline, lambda: interrupted)
+                diagnostic['phase'] = 'native-observation'
                 while True:
                     left = budget(deadline, lambda: interrupted)
                     if binding['cancelPath'].exists():
@@ -155,6 +166,7 @@ def invoke_final_publish_candidate(*, reviewed_authority):
                         break
                     time.sleep(min(0.05, left))
                 result['stage'] = 'original-completion-validation'
+                diagnostic['phase'] = 'completion-validation'
                 proof = _assert_exact_original_completion(binding, result['proxyExitCode'], deadline, lambda: interrupted)
                 result['quiescent'] = proof['quiescent']
                 result['lastJobActive'] = proof['lastJobActive']
@@ -168,10 +180,12 @@ def invoke_final_publish_candidate(*, reviewed_authority):
                 result['safetyStop'] = False
                 result['stage'] = 'normal-observed-awaiting-artifact-acceptance'
             except BaseException as error:
+                publication_failure_diagnostic(diagnostic, error)
                 result['normalCompletion'] = False
                 result['safetyStop'] = True
                 result['failureType'] = type(error).__name__
             finally:
+                diagnostic['phase'] = 'failure-retention'
                 if not result['normalCompletion']:
                     emergency_end = min(deadline, time.monotonic() + 10.0)
                     try:
@@ -199,18 +213,23 @@ def invoke_final_publish_candidate(*, reviewed_authority):
                             _retained_proxies.append(process)
                 if transport is not None:
                     try:
+                        diagnostic['phase'] = 'transport-persistence'
                         transport.persist(binding, result, deadline)
                     except BaseException as error:
+                        publication_failure_diagnostic(diagnostic, error)
                         result['normalCompletion'] = False
                         result['safetyStop'] = True
                         result['transportPersistenceFailureType'] = type(error).__name__
                     finally:
+                        diagnostic['phase'] = 'transport-close'
                         transport.close()
                 result['retainedLiveWorkOrUnknown'] = not result['quiescent']
                 result['artifactEligible'] = False
                 result['continuation_allowed'] = False
                 result['outerSeconds'] = round(time.monotonic() - began, 3)
                 result['utc'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+                diagnostic['phase'] = 'result-persistence'
+                result['diagnostic'] = dict(diagnostic)
                 budget(deadline, lambda: False)
                 _write_new_json(binding['outerResultPath'], result, deadline)
                 if result['normalCompletion']:
@@ -219,10 +238,16 @@ def invoke_final_publish_candidate(*, reviewed_authority):
                     if binding['cancelPath'].exists():
                         raise InterruptedError('Cancellation during final receipt persistence')
                     budget(deadline, lambda: interrupted)
+                diagnostic['phase'] = 'context-finalization'
+    except BaseException as error:
+        publication_failure_diagnostic(diagnostic, error)
+        raise
     finally:
+        diagnostic['phase'] = 'signal-context-finalization'
         for number, handler in old_handlers.items():
             signal.signal(number, handler)
     if result['normalCompletion']:
+        diagnostic['phase'] = 'outer-finalization'
         # Includes original shared-lock release and signal-context finalization.
         # A completed-looking receipt cannot accept an unsuccessful invocation.
         if binding['cancelPath'].exists():
