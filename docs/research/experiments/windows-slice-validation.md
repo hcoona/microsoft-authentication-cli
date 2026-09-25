@@ -20038,9 +20038,10 @@ this public table records only reviewable repository source.
 
 ### Exact category reservation and ordering
 
-Cumulative ceilings are 35 preparation, 141 build/test,
-30 publication and 277 synthetic, with the existing 4 GiB public-download maximum
-unchanged. Preparation host ceilings are 18 Linux / 17 Windows. At the accepted
+Cumulative ceilings, including the [supplemental allocation](#supplemental-managed-and-controlled-caller-capacity),
+are 36 preparation, 147 build/test, 30 publication and 302 synthetic, with the
+existing 4 GiB public-download maximum unchanged. Preparation host ceilings are
+18 Linux / 18 Windows. Preserve the original reservations below separately. At the accepted
 starting checkpoint, consumption is 11 Linux / 9 Windows. Exact source, activation,
 artifact, current checkpoint, protocol and original-call reviews remain mandatory;
 this allocation alone supplies none of their acceptance.
@@ -20082,12 +20083,13 @@ The primary plus three correction sets preserves seven observer preparations,
 seven managed restores, seven managed builds, sixteen scenario batches and twelve
 later-product build/test planning slots. The single fresh-file diagnostic explicitly
 allocates the previously unallocated Windows preparation. If all declared execution
-reservations are spent, cumulative counts are 35/129/6/277, including 18 Linux /
+reservations alone are spent, cumulative counts are 35/129/6/277, including 18 Linux /
 17 Windows preparations.
 The execution reservations add 15 preparations, 23 build/test and 114 synthetic
 units. Twelve protected later-product planning slots account for the difference
-between planned build/test consumption 129 and ceiling 141. No preparation remains
-unallocated. Keep all twelve
+between original planned build/test consumption 129 and its initial ceiling 141.
+No preparation remains unallocated within those original reservations. The supplemental
+allocation below adds capacity without transferring any of them. Keep all twelve
 later-product planning slots protected at every credential-free checkpoint. Current
 batches do not consume them or grant their future real-account effects. No additional
 publication belongs to this recipe. Correction sets preserve the tripled contingency
@@ -20098,8 +20100,10 @@ Within each correction set, observer candidates A and B are compile reservations
 its single calibration. Select one final independently accepted artifact, calibrate
 that exact artifact, then use it unchanged for direct WSL. Changed observer bytes
 after calibration require another separately allocated calibration. Compiler slots
-cannot create another session. At most eight fresh ETW session-creation attempts
-are allocated: four calibration and four direct. Actual observation attempts remain
+cannot create another session. The original allocation retains eight fresh ETW
+session-creation attempts: four calibration and four direct. The supplemental allocation
+adds three distinct attempts, for an aggregate maximum of eleven. Actual observation
+attempts remain
 sequential, with independent review of the preceding original outcome before another
 original. Residual originally owned kernel sessions and buffers may overlap later
 attempts under the owner's narrow persistence disposition below. Every creation
@@ -20182,8 +20186,10 @@ calibration. An MZ check or compiler success does not accept the artifact.
 
 ### Managed restore and build recipe
 
-Each of seven managed slots has one separately admitted restore and one separately
-admitted build. Use the changed harness's actual accepted sourceCommit, while
+Each of seven original managed slots has one separately admitted restore and one
+separately admitted build. The supplemental managed slot below uses this same recipe
+with its own new restore and conditional build; it reopens no original slot.
+Use the changed harness's actual accepted sourceCommit, while
 joining unchanged product files to product 503360753accd0829801953823b1b57a4f852440.
 The four changed managed inputs must already be accepted. The exact source and
 dependency inventory includes the four-project graph, all 1,764 leaves of the
@@ -20869,7 +20875,8 @@ other evidence uncertainty remains a stop; an unresolved consumer or drain canno
 be classified as kernel persistence alone. Preserve the original bounded stop/close
 attempts and evidence without adding session adoption, repeated stop, foreign/shared-
 service operation, elevation, privilege enablement, ACL/group/registry/driver change,
-cleanup helper or automatic recovery. Keep at most eight creation attempts and
+cleanup helper or automatic recovery. Keep the original allocation's eight creation
+attempts separate from the supplemental allocation's three, at most eleven in total, and
 sequential actual observation attempts even if their residual kernel sessions overlap.
 
 Observer/controller processes use explicit replacement environments and fresh
@@ -21067,3 +21074,116 @@ finite allocation and its applicable owner capacity decision are necessary, foll
 ordinary source, input, checkpoint, artifact and exact-call reviews. This section
 prepares the correction and passive deployment only; it supplies neither that allocation
 nor account, WAM, cache, credential, network, installation or release effects.
+
+## Supplemental managed and controlled-caller capacity
+
+This supplement requires the matching repository-owner capacity and finite risk
+extension in the accepted Delivery Wave, the matching experiment-safety amendment and
+independent protocol review before execution. Proposed edits authorize no action on
+their own branch. It adds only 1/6/0/25 in preparation/build-test/publication/synthetic
+order, giving aggregate ceilings 36/147/30/302, preparation host ceilings 18 Linux and
+18 Windows, and eleven aggregate ETW creation attempts. No optional correction set is
+included. Public-download, toolchain, environment, account and external-effects
+boundaries remain unchanged.
+
+### Separate reservations and charging
+
+Preserve all original reservations and charges. In particular, the seven spent managed
+restores and their seven unused, blocked paired builds are not transferred, reopened or
+refunded. The existing protected remainder 6/35/0/107, including twelve later-product
+build/test planning slots, remains intact. The new reservations are exactly:
+
+| Supplemental reservation | Preparation | Build/test | Publication | Synthetic | ETW attempts |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Fresh managed restore | 1 | 0 | 0 | 1 | 0 |
+| Its conditional managed build | 0 | 1 | 0 | 1 | 0 |
+| Four-target caller compile phase | 0 | 1 | 0 | 1 | 0 |
+| Native controlled batch | 0 | 1 | 0 | 12 | 0 |
+| D0 observer calibration | 0 | 1 | 0 | 4 | 1 |
+| D1 direct normal completion | 0 | 1 | 0 | 3 | 1 |
+| D2 direct stdin-EOF cancellation | 0 | 1 | 0 | 3 | 1 |
+| Total | 1 | 6 | 0 | 25 | 3 |
+
+The managed pair is 1/1/0/2; the five controlled rows are separately reserved
+0/5/0/23. The four ordinary compiler invocations belong to one selected build phase;
+its normal launcher costs one synthetic unit. The native batch's twelve units are one
+normal launcher, one FixtureDriver, four N1 caller/subject processes, three N2 processes
+and three N3 processes. D0 comprises the observer supervisor, worker and two existing
+calibration subjects. D1 and D2 each comprise the observer supervisor, worker and one
+synthetic subject. The initiating Python controller is Linux infrastructure, not another
+Windows synthetic helper. The outer PowerShell exemption covers no additional helper.
+No new Windows helper kind, compiler target, publication or hidden setup/retry is included.
+
+These are finite source-planning reservations, not compiled-artifact, runtime-topology
+or scenario acceptance. Accept the exact controlled protocol and source/tool integration
+before any controlled row executes. That protocol must bind the four-target source and
+response map, fixed staging/deployment paths, native and direct roles, exact runtime
+inputs, original clocks, finite read/write/process/trace limits, failure retention and
+cleanup boundary. Each original needs its own source, artifact, current checkpoint and
+exact-call admissions. Compile success alone supplies no artifact acceptance. Independently
+accept D0 calibration for the exact final observer before D1 or D2. Changing observer
+bytes after accepted D0 requires a separately allocated calibration, which this supplement
+does not supply.
+Original outcomes require independent review before the next admitted observation.
+
+At the preserved 29/106/6/170 checkpoint, adding these reservations to the existing
+protected remainder gives proposed protected capacity 7/41/0/132. Their sum is
+36/147/6/302, preserving the unchanged publication ceiling of 30 and all twelve
+later-product build/test slots. This arithmetic neither edits the ledger nor creates a
+current checkpoint. Before every original, independently join all intervening outcomes,
+conservative charges, remaining named reservations and host counts. Do not substitute
+an old checkpoint, transfer a blocked paired build or spend a later-product slot.
+
+### Managed successor admission
+
+Use the sole new managed slot label `supplemental`, with one fresh restore identity and
+its own separately admitted conditional build. Existing slot names retain their original
+attempts and outcomes. A slot string is not authority: its accepted checkpoint and
+exact-call review must bind the new reservation, current aggregate ceilings and host
+preparation ceilings. Failed or partial start consumes the declared attempt. No retry,
+reuse of a spent action, source repair, clock renewal or alternate destination follows.
+
+Use the existing complete-cache offline restore and build recipe, accepted created-copy
+rules, fixed executable launcher projection, creation-time named Job and dedicated
+cgroup supervision. The successful new restore's independently accepted outcome must
+bind the unchanged newly restored subject/packages tree before its build is admitted.
+A failed restore leaves its conditional build blocked and refunds neither reservation;
+unresolved effects or lifetime still stop dependent work. No process remains alive
+waiting for review. The seven old blocked builds are not inputs
+or substitute capacity for this pair.
+
+The inert [managed caller](../../../tools/validation/run_windows_managed_build.py) changes
+only its prospective ceiling tuple, the two Windows host-ceiling checks and the accepted
+slot-label set. Its source is 59,435 bytes, SHA-256
+`2c10bbff8a4cbc451a33bf780126e6eec0fd220c8bfdbbd6917a990a3477b296`.
+The false execution guard, six historical unknowns, admission schema, charges, original
+clocks, failure retention and all source/input/executable-use predicates remain unchanged.
+Future activation requires separately reviewed exact bytes and ordinary source, protocol,
+artifact, current checkpoint and sole-call acceptance after the amendment is accepted.
+
+### Exact historical-risk and ETW extension
+
+The matching Wave explicitly extends each separate original 0057, 0064, 0068, 0093,
+0107 and 0110 lifetime/interference disposition only to this finite increment and its
+declared credential-free effects on the same hosts. Preserve each failed outcome,
+charge, spent observation and unresolved lifetime status, including
+`noExperimentLive=false`. No new uncertainty is accepted; no original observation,
+recovery, cleanup, replay or quiescence claim is supplied. The extensions end with the
+current grant and never transfer or expand automatically.
+
+The three new ETW creation attempts belong only to D0, D1 and D2. Preserve the original
+eight reservations and their consumption. Extend the existing bounded private-memory
+and transient unrelated-data effects and the sole-owned-session/buffer persistence
+disposition only to these three added attempts. Keep PROCESS|NO_SYSCONFIG selection,
+finite buffer/payload/callback/join limits, no ETL or raw unrelated retention, sequential
+actual observations and independent outcome review. Residual originally owned sessions
+may overlap only under that same narrow disposition. All other native-process,
+ownership, consumer, pending OVERLAPPED, cancellation, loss and evidence uncertainties
+remain stops; no repeated stop, foreign/shared-session operation, elevation or cleanup
+is added. Failed starts consume their own declared attempt and grant no automatic retry.
+
+This supplement grants no account enumeration, token acquisition, WAM interaction,
+credential, application or broker cache, consent, authenticated-resource, installation,
+signing or release effect. Existing future real-effects reservations remain reservations
+only. Controlled outcomes cannot establish real WAM, UI, reuse, account state or overall
+Slice acceptance.
