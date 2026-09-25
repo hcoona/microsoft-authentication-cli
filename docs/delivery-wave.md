@@ -174,6 +174,48 @@ uncertainty retains ordinary stop conditions. No original replay, further old-st
 observation, old-process or shared-service operation, cleanup, refund, quota increase,
 account effect, installation or release authority is granted.
 
+**Original 0110 retained-candidate risk and evidence decision:** The repository
+owner accepts the residual risk that work associated with failed final publication
+0110, including the toolchain helper recorded in its original Job audits, may
+remain active and interfere with the bounded credential-free validation below.
+Limit this disposition to original 0110 on the same existing hosts, within this
+entry's effects and unchanged cumulative ceilings.
+
+Authorize preparation and independent acceptance of the matching experiment-safety
+and Windows-protocol amendments, followed by at most one separately admitted
+finite Linux-only passive read, copy and static validation of retained 0110
+candidate outputs and their exact necessary provenance inputs. The accepted
+protocol must bind the literal files, fresh retained snapshot, operation/byte/time
+limits, source, runtime, original-call admission and failure retention. A failed
+or partial start spends this sole observation; no retry or alternate destination
+is granted. The passive recipe must receive independent zero-experiment-unit
+accounting before execution and cannot invoke a Windows executable or build tool.
+
+The repository owner approves a separate artifact-evidence basis for that new
+snapshot, conditional on independent validation of every necessary source,
+dependency, tool-invocation, response, diagnostic, artifact, required asset and
+symbol/provenance obligation. Keep historical observations distinct from current
+file correspondence. Do not reconstruct original clock or held-handle continuity,
+natural Job quiescence, unexecuted postconditions or successful publication from
+later file hashes. Missing, unstable or insufficient necessary evidence stops the
+route. Risk acceptance does not waive an evidence obligation.
+
+Preserve the failed original, full charge and spent passive observation; its
+success collector remains ineligible. Require the matching amendments to merge
+before new current-file observation or materialization. An independently accepted
+candidate may serve only the existing Slice's separately admitted credential-free
+scenarios. Their source, artifact, effects, topology and accounting gates remain;
+this decision grants no additional synthetic quota or assurance that the protected
+remaining allocation suffices. It grants no fallback publication or recompilation.
+
+This disposition establishes no later termination, artifact acceptance or support
+claim. No original recovery, replay, receipt alteration, broader old-state survey,
+process/Job/shared-service operation, cleanup, refund, capacity increase, account
+or credential effect, installation, signing or release is granted. It ends with
+this grant and does not transfer or expand automatically. Historical
+0057/0064/0068/0093/0107 decisions remain separate; every new ownership or
+termination uncertainty retains ordinary stop conditions.
+
 **Additional compiler-input diagnostic:** Authorize at most one separately admitted
 credential-free compiler-native-inputs diagnostic numbered 0062, after acceptance
 of the observed 0061 console-capture failure, its fixed copied evidence and the
