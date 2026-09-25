@@ -47,8 +47,8 @@ Use only public dependencies and verified retained public caches/installed toolc
 downloads may use public NuGet.org and official .NET distribution endpoints, with no
 credentials. New experiment-owned files stay in dedicated build/test roots outside
 production installations and are intentionally retained. Maximum cumulative capacity is
-36 dependency preparation/restore actions, 147 build/test actions, 30 Native AOT publish
-actions and 302 synthetic process scenarios, with at most 4 GiB of newly downloaded public
+39 dependency preparation/restore actions, 166 build/test actions, 30 Native AOT publish
+actions and 378 synthetic process scenarios, with at most 4 GiB of newly downloaded public
 dependency content. Exact per-action time, output and termination limits and source
 admission are owned by the accepted protocol. No new toolchain installation is granted.
 
@@ -315,9 +315,9 @@ grants no automatic retry, recovery or budget refund.
 **Supplemental managed/caller capacity:** The repository owner approves exactly one
 additional credential-free managed restore/build pair and a separate controlled-caller
 sequence on the same hosts. Together they add one preparation, six build/test and
-25 synthetic units, with no publication increase. The aggregate ceilings are
-36/147/30/302 in preparation/build-test/publication/synthetic order; preparation host
-ceilings are 18 Linux and 18 Windows. Preserve every existing charge and protected
+25 synthetic units, with no publication increase. That allocation's initial ceilings
+are 36/147/30/302 in preparation/build-test/publication/synthetic order, with 18 Linux /
+18 Windows preparations. The separate correction pool below extends those ceilings. Preserve every existing charge and protected
 reservation, including twelve later-product build/test planning slots. No spent restore
 or blocked paired build is reopened, transferred or refunded. No correction buffer or
 automatic retry is included.
@@ -357,6 +357,63 @@ WAM, credential, application or broker cache, consent, authenticated-resource, i
 signing or release effect. The reserved future real-effects capacity below remains a
 reservation only. Proposed text supplies no authority before owner acceptance and merge.
 
+
+**Managed and controlled correction pool:** The repository owner approves an additional
+3/19/0/76 in preparation/build-test/publication/synthetic order, giving aggregate
+ceilings 39/166/30/378 and preparation host ceilings 18 Linux / 21 Windows. This
+funds the missing managed build from accepted restore 0120 and three complete
+managed restore/build plus controlled-caller correction cycles. The new capacity
+is one shared pool, charged at each exact operation's protocol rate, with at most
+three restores, nineteen build/test originals, 76 synthetic units and nine new
+D0/D1/D2 ETW creation attempts. Cycle counts explain its size; they do not strand
+new capacity in conditional pairs. Preserve all earlier charges and protected
+reservations, including seven blocked builds, the existing controlled 0/5/0/23
+sequence and twelve later-product build/test slots. None transfers into this pool.
+
+Each failed or partial original stops and keeps its full charge. A separately
+numbered corrected original may use unused new-pool capacity only after independent
+cause and scoped-lifetime disposition, accepted source/protocol repair, exact input
+and artifact acceptance, current accounting and literal-call review. Preserve capacity
+for the currently accepted remaining success path. Source/protocol corrections within
+these same roles, topology and maximum effects, including the protocol's finite fresh
+stage versions, need their ordinary independent review and acceptance; they do not
+require another owner capacity decision solely because an earlier attempt failed.
+There is no blind replay, refund, clock renewal, output overwrite or automatic recovery.
+
+For the initial build, require the accepted unchanged 0120 input lineage and the
+independently disposed pre-dispatch 0121 failure. A later build that may have written
+its restored subject cannot blindly reuse that tree; the exact protocol requires
+accepted non-overwrite/input continuity or a newly charged complete-cache restore.
+All new managed operations retain the existing supplemental slot label, with separate
+operation lineage and charges; a label is never authority.
+
+Permit at most four independently admitted passive metadata attempts per immutable
+intended-operation lineage and four fixed-selection post-termination collector attempts
+per fresh spent original in this remaining managed/controlled path. This covers at most
+27 new lineages, 108 metadata passes and 108 collector passes. Changed action, nonce,
+source or inventory cannot reset a lineage's limit. Preserve each recipe's stricter
+per-pass bounds and the protocol's aggregate time/data limits, every failed/partial
+snapshot and original evidence. No historical collector, including 0120 or 0121, is
+reopened. No survey, rejected-predicate relaxation or baseline refresh is permitted.
+
+Explicitly extend each separate 0057, 0064, 0068, 0093, 0107 and 0110 historical
+lifetime/interference disposition only to this finite pool and its declared passive
+work on the same hosts. Preserve their failed outcomes, charges, spent observations
+and unresolved lifetimes, including noExperimentLive=false. No new uncertainty or
+quiescence claim is accepted; these extensions end with the grant.
+
+The nine added ETW creation attempts raise the aggregate maximum from eleven to twenty.
+Apply the same accepted bounded private-memory/transient-data and sole-owned-session/
+buffer-persistence disposition to those attempts. No fresh owner risk request is needed
+solely for that already accepted persistence case; all other lifetime/evidence stops,
+exact passing calibration, sequential observations and independent outcome review remain.
+No additional stop, cleanup, privilege or foreign/shared-session operation is authorized.
+
+Accept matching safety/protocol amendments and exact source before dependent execution.
+The pool adds no publication, helper kind, compiler target, download, toolchain, account,
+WAM, credential, application or broker cache, installation, signing or release effect.
+Exhausted capacity, a new uncertainty or an expanded effect still requires the applicable
+new owner decision. Proposed text authorizes no action before owner approval and merge.
 
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13

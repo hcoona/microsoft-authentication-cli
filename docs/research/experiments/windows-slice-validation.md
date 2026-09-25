@@ -20038,10 +20038,10 @@ this public table records only reviewable repository source.
 
 ### Exact category reservation and ordering
 
-Cumulative ceilings, including the [supplemental allocation](#supplemental-managed-and-controlled-caller-capacity),
-are 36 preparation, 147 build/test, 30 publication and 302 synthetic, with the
-existing 4 GiB public-download maximum unchanged. Preparation host ceilings are
-18 Linux / 18 Windows. Preserve the original reservations below separately. At the accepted
+Cumulative ceilings, including the [supplemental allocation](#supplemental-managed-and-controlled-caller-capacity)
+and [correction pool](#managed-and-controlled-correction-pool), are 39 preparation,
+166 build/test, 30 publication and 378 synthetic, with the existing 4 GiB public-download
+maximum unchanged. Preparation host ceilings are 18 Linux / 21 Windows. Preserve the original reservations below separately. At the accepted
 starting checkpoint, consumption is 11 Linux / 9 Windows. Exact source, activation,
 artifact, current checkpoint, protocol and original-call reviews remain mandatory;
 this allocation alone supplies none of their acceptance.
@@ -20102,7 +20102,8 @@ that exact artifact, then use it unchanged for direct WSL. Changed observer byte
 after calibration require another separately allocated calibration. Compiler slots
 cannot create another session. The original allocation retains eight fresh ETW
 session-creation attempts: four calibration and four direct. The supplemental allocation
-adds three distinct attempts, for an aggregate maximum of eleven. Actual observation
+adds three distinct attempts, for an initial aggregate maximum of eleven. The correction
+pool below adds nine, for a current aggregate maximum of twenty. Actual observation
 attempts remain
 sequential, with independent review of the preceding original outcome before another
 original. Residual originally owned kernel sessions and buffers may overlap later
@@ -20876,8 +20877,8 @@ be classified as kernel persistence alone. Preserve the original bounded stop/cl
 attempts and evidence without adding session adoption, repeated stop, foreign/shared-
 service operation, elevation, privilege enablement, ACL/group/registry/driver change,
 cleanup helper or automatic recovery. Keep the original allocation's eight creation
-attempts separate from the supplemental allocation's three, at most eleven in total, and
-sequential actual observation attempts even if their residual kernel sessions overlap.
+attempts, supplemental allocation's three and correction pool's nine separate, at most
+twenty in total. Actual observations remain sequential even if residual sessions overlap.
 
 Observer/controller processes use explicit replacement environments and fresh
 home/temp directories. Public WSL BuildEnvironment starts with inherited Windows relay
@@ -21081,8 +21082,9 @@ This supplement requires the matching repository-owner capacity and finite risk
 extension in the accepted Delivery Wave, the matching experiment-safety amendment and
 independent protocol review before execution. Proposed edits authorize no action on
 their own branch. It adds only 1/6/0/25 in preparation/build-test/publication/synthetic
-order, giving aggregate ceilings 36/147/30/302, preparation host ceilings 18 Linux and
-18 Windows, and eleven aggregate ETW creation attempts. No optional correction set is
+order, initially giving aggregate ceilings 36/147/30/302, preparation host ceilings
+18 Linux and 18 Windows, and eleven aggregate ETW creation attempts. The separate
+correction pool below extends those ceilings. No optional correction set is
 included. Public-download, toolchain, environment, account and external-effects
 boundaries remain unchanged.
 
@@ -21154,7 +21156,7 @@ or substitute capacity for this pair.
 
 The inert [managed caller](../../../tools/validation/run_windows_managed_build.py) changes
 only its prospective ceiling tuple, the two Windows host-ceiling checks and the accepted
-slot-label set. Its source is 59,435 bytes, SHA-256
+slot-label set. Its initial supplemental source is 59,435 bytes, SHA-256
 `2c10bbff8a4cbc451a33bf780126e6eec0fd220c8bfdbbd6917a990a3477b296`.
 The false execution guard, six historical unknowns, admission schema, charges, original
 clocks, failure retention and all source/input/executable-use predicates remain unchanged.
@@ -21514,3 +21516,315 @@ experiment-owned files intentionally; no deletion, old-original cleanup or new l
 risk disposition is granted. Keep 0057, 0064, 0068, 0093, 0107 and 0110 separate and
 `noExperimentLive=false`. Controlled success establishes only its declared synthetic
 property, never real WAM, UI, account/cache, reuse or overall Slice acceptance.
+
+## Managed and Controlled Correction Pool
+
+### Retained 0120 Success and 0121 Admission Failure
+
+Restore 0120 used source commit
+`14f4b3969a61ee8a95ee1215bb23198b69e79bf8` and completed its sole original with exit
+zero. Its sole 62-leaf collector retained 49 stable required leaves and 13 optional
+absences. Independent graph, deployment and accounting acceptance is bound by SHA-256
+`7de1eac0cc4cc7a0893e13428e2f6d708a54d86cd533f21b1be9d12a139e8882`; separate scoped
+lifetime acceptance is bound by
+`a8461b3226b3ffa7265c3ffc2fb287ac0571119aafd5552e4f599ca63cd5bf63`. The four project
+graphs, locks and generated imports join the admitted public cache and immutable source.
+The original 1,822 source/cache creation lineages and 370 installed descriptors remain
+the input basis; twenty generated metadata descriptors retain strict full9 identities.
+
+The sole build 0121 original exited one with `PredicateFailure`, `Admission leaf`,
+source line 345. Its final command named
+`/tmp/windows-managed-harness-0121-admission-root-v1.json`; the exact accepted caller
+requires `/tmp/windows-managed-harness-[0-9]{4}-admission\.json`, with the four-digit
+action followed immediately by `-admission.json`. The filename mismatch was a command
+preparation and exact-call review defect, not a source defect. Preserve the inaccurate
+positive final review
+`3edf86e5196397899f43899633a10e595a8acaa9669e94507c56c67bfc65dc7e` as failed review
+evidence, not an admission for another call.
+
+The complete terminal transport has SHA-256
+`3ef439cb5ff9d2d6984229baffb5cf3fb07ea60004fbead5bb76bc95570b2993`. Independent failure,
+lifetime and accounting triage is bound by
+`566a1503e9bd9fa34b436496023a8f26e653288571857c8612708daa2e5dc8bc`. The reported
+predicate is before the admission read and before dispatch to either original or worker.
+Consequently that invocation reached no harness action lock, input read, root creation,
+service, native launcher, Job or managed phase. This is an inference from the bound source
+control flow and complete terminal diagnostic, not a process or filesystem absence
+survey. No new lifetime unknown is added; all six historical unknowns and
+`noExperimentLive=false` remain. Its inert success collector is unused and ineligible.
+
+The failed start consumes the full 0/1/0/1 reservation. Totals are 30/107/6/172;
+preparation hosts remain Linux 12/18 and Windows 18/18. Protected capacity is
+6/40/0/130: the old 6/35/0/107 plus the untouched controlled-caller 0/5/0/23.
+All seven old restores are spent, all seven old paired builds remain blocked and
+untransferred, and twelve later-product build/test slots remain protected. Neither
+early rejection nor the successful restore supplies another managed-build attempt.
+
+### Shared Capacity and Remaining Critical Path
+
+This pool requires the matching owner-approved Delivery Wave and safety amendments.
+The accepted remaining baseline is one managed build from 0120 followed by the
+already protected controlled compile, native batch, D0, D1 and D2. Managed artifact
+acceptance also remains a prerequisite for the separately protected original CLI/Profile
+work; its reservations are not consumed or replaced by this pool. The three correction
+cycles below size the new allowance; they are not indivisible or paired reservations.
+
+| New-pool planning role | Count | Preparation | Build/test | Publication | Synthetic | ETW attempts |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Missing managed build from accepted 0120 | 1 | 0 | 1 | 0 | 1 | 0 |
+| Complete managed/controlled correction cycle | 3 | 3 | 18 | 0 | 75 | 9 |
+| Added total | | 3 | 19 | 0 | 76 | 9 |
+
+Each complete cycle has the following exact operation costs:
+
+| Operation | Preparation | Build/test | Publication | Synthetic | ETW attempts |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Fresh complete-cache managed restore | 1 | 0 | 0 | 1 | 0 |
+| Managed build from accepted restore | 0 | 1 | 0 | 1 | 0 |
+| Existing four-target controlled compile | 0 | 1 | 0 | 1 | 0 |
+| Existing N1/N2/N3 native batch | 0 | 1 | 0 | 12 | 0 |
+| D0 calibration | 0 | 1 | 0 | 4 | 1 |
+| D1 direct normal completion | 0 | 1 | 0 | 3 | 1 |
+| D2 direct stdin-EOF cancellation | 0 | 1 | 0 | 3 | 1 |
+| One cycle total | 1 | 6 | 0 | 25 | 3 |
+
+Aggregate ceilings become 39/166/30/378, with 18 Linux / 21 Windows preparations
+and twenty ETW creation attempts. The new pool alone allows at most three restore
+originals and nineteen build/test originals, intersected with its 76 synthetic and
+nine ETW limits. These shared category ceilings, not three hard per-operation slots,
+govern actual use. Cheap failed starts may leave usable capacity for another corrected
+original; a failed restore does not strand an independently unused new build reservation.
+Every submission, including partial/failed admission, keeps its full conservative debit.
+
+Preserve the old protected 6/40/0/130 in full. Before any new consumption, the pool
+gives protected capacity 9/59/0/206. Fully spending only the new pool would produce
+33/126/6/248; adding the unchanged old protection gives 39/166/6/378. These are forecasts,
+not a ledger edit or current checkpoint. Publication stays capped at thirty; no publication
+is allocated here. The existing controlled 0/5/0/23 rows, seven blocked old builds,
+six Linux observer preparations and twelve later-product build/test slots remain separate.
+Do not transfer old capacity into the pool or use the pool for unrelated old scenarios.
+
+Before each original, independently join all intervening outcomes and charges, exact
+new-pool balance, preparation-host and ETW counts, old protected rows and the currently
+accepted remaining success path. Its action charge plus required dependent capacity must
+fit the remaining applicable allocations. At most 22 experimental originals can spend
+the new pool; the five existing controlled originals make at most 27 in this path.
+Failed prerequisites can exhaust the pool without completing the path. Exhaustion does
+not waive a gate or imply a further allowance.
+
+Each failed original stops. A newly numbered corrected attempt requires independently
+accepted cause and scoped-lifetime disposition, the necessary source/protocol repair,
+exact input/artifact acceptance, current accounting and exact final call. It cannot resume
+the failed process, reuse its admission, refund its charge or reset its clock. A source-only
+correction within this accepted scope needs the ordinary independent review and accepted
+canonical update, not another owner capacity decision solely for the next attempt.
+
+### Initial Build and Restore Continuity
+
+Use a fresh identity, prospectively 0122 only if current and unused, with existing slot
+`supplemental`, operation `build` and `subjectAction=0120`. A new pool reservation
+does not reopen 0121. All future pooled managed operations may retain `supplemental`;
+the exact operation lineage and independent accounting, not the label, supply authority.
+New restores have their own fresh action, subject and package roots. A dependent build
+joins only its independently accepted successful restore and unchanged creation lineage.
+
+For action 0122 the exact admission leaf is
+`/tmp/windows-managed-harness-0122-admission.json`. Compare the actual final argv
+filename with the pinned source entry predicate, as well as content, hash and full9.
+No path predicate is relaxed and no action number is allocated by this example.
+
+The first build preserves restored source commit
+`14f4b3969a61ee8a95ee1215bb23198b69e79bf8`, product
+`503360753accd0829801953823b1b57a4f852440` and original 0120 absolute paths. A later
+accepted caller/control-source commit is a separate binding, not a restored-source rebase.
+Its accepted 2,212-row inventory contains 668,979,594 payload bytes, all
+`materialize=false`. The 3,441,492-byte inventory has SHA-256
+`88183b8be5cb4d5636a2b85ad0778cdf8ec8c47cfa2017dfb85217ae5f908e4c`; its 507,180-byte
+TSV has SHA-256 `54a25070a51b8c561f0abf7c155391f2e4c1cbcb226baff24557ee301eba28af`.
+Preserve 1,822 original source/cache deployment rows and complete `restoreCreation`,
+370 installed descriptors and twenty strict generated metadata descriptors. Do not
+substitute collector identities, refresh a baseline, recopy or relocate these inputs.
+
+The pre-dispatch 0121 failure permits this unchanged 0120 basis. Once a later build may
+have entered or written restored subject obj/bin, a corrected build must normally consume
+one of the three fresh restore allowances. Reuse requires independent acceptance from
+already authorized source and original evidence that exact valid inputs and permitted
+output-state semantics remain, without overwriting retained prior outputs. No new survey,
+old-output observation or inferred cleanliness can satisfy that exception. A changed
+source graph requires a newly admitted fresh restore; unchanged accepted public dependency
+versions and complete-cache/empty-feed/no-download rules remain.
+
+Each fresh restore retains the original readback and qualified created-copy rules.
+Only its exact accepted source/cache lineage qualifies; installed tools, controls and
+generated metadata stay full9-strict. Every dependent build needs new input/source,
+artifact/checkpoint/call controls. Earlier 0121 controls admit no successor, and earlier
+0120 observations/collector remain closed.
+
+### Source Corrections and Finite Fresh Stages
+
+Future narrow source/protocol corrections are within this grant only when they preserve
+the same managed recipe, four compiler targets, N1/N2/N3 and D0/D1/D2 roles, helper kinds,
+source/input/evidence predicates and maximum effects. Independently review and accept
+the exact canonical source/protocol changes before activation or dependent execution.
+The grant does not establish that any unreviewed fix is sound or that inert code supports it.
+
+The baseline controlled compile retains `confidential-checks-v7`. Permit only the
+nineteen predetermined unused successor leaves `confidential-checks-v8` through
+`confidential-checks-v26` under the same owned root for new-pool compile originals.
+Each attempted stage is single-use even after a partial start. Before each successor,
+accept exact literal correspondence across caller constants, source/response map,
+response paths, controller catalog, native input/source maps and artifact provenance.
+Preserve relative roles, ordering and exact source hashes; do not implement dynamic
+discovery or path fallback. A stage number does not allocate a compile.
+
+Direct deployment retains baseline `confidential-direct-v4`; permit the nineteen
+predetermined unused successor leaves `confidential-direct-v5` through
+`confidential-direct-v23` under the same owned root. Any successor needs exact source,
+deployment/copy lineage, native/direct catalog and call joins to its accepted compiled
+artifacts before use. Creating a fresh stage neither refunds a partial deployment nor
+adds a process, ETW attempt or artifact acceptance. The fixed stage and its selected
+public input copies must fit the existing admitted deployment recipe and per-action
+limits. No overwrite, cleanup, arbitrary alternate destination or old-tree migration
+is authorized. Exact future source changes, not this document alone, must implement
+and enforce each literal stage.
+
+Independently accept D0 for the exact final observer before D1/D2. Changed observer
+bytes require another charged D0 and ETW creation; compilation alone does not calibrate.
+Existing successful evidence can be reused only within its exact unchanged subject
+and prerequisite bindings. No generic new runner, compiler target or Windows helper
+is required or authorized by this amendment.
+
+### Future Passive Metadata and Collection
+
+The following finite exception applies only to the at most 27 new intended-operation
+lineages in this managed/controlled path after this amendment is accepted. It does not
+reopen 0120, 0121, their collectors, historical outputs or any other spent observation.
+Ordinary source-control and retained-summary review adds no experimental observation.
+
+Before the first passive admission, bind one immutable intended-operation lineage to
+its planned operation, exact fixed input selection and current capacity proof. At most
+four metadata attempts, including failed/partial submissions, belong to that lineage.
+Revised source, nonce, action number, inventory hash or destination cannot reset the
+counter or create another allowance for the same intended operation. At most 27 such
+lineages exist; a failed pre-execution lineage remains spent in this separate bound.
+A change to an inventory's selected targets requires new independent admission and
+cannot enlarge the original fixed-selection or aggregate allowance.
+
+Metadata remains passive and payload-free, limited to exact already admitted public
+cache/tool/detached-source or newly owned deployment inputs. The existing recipe's
+stricter leaf/time/record limits govern every pass, with outer maxima of 4,096 leaves,
+4 KiB retained metadata per leaf and sixty seconds. Infrastructure metadata is limited
+to those same literal admitted input paths; no directory, service, process, account,
+mount, runtime or machine survey is added. No source import, Windows execution or
+compiler query is part of this allowance. All restored/historical source and runtime
+inputs retain their original accepted lineage; this exception cannot refresh them.
+
+After a fresh original and all its transports have ended, permit at most four separately
+admitted collectors for that spent original. Collection may proceed while the original
+outcome or scoped-lifetime disposition remains unresolved, solely as the admitted passive
+reading and exclusive retention of the identical fixed outputs. It must not mutate
+original inputs or outputs, restart work, repair state, or waive any uncertainty.
+Independently accept the fresh original's scoped-lifetime disposition before any
+subsequent experiment; unresolved new lifetime or ownership uncertainty continues to
+stop experimental work.
+
+Each collector selects the identical fixed manifest and original outputs. Keep all prior
+snapshots, partial prefixes, failures, observed absences and metadata; do not replace
+them or synthesize original success. A corrected collector needs independent cause and
+source/call review and exact comparison with earlier evidence. A source or admission
+defect may be corrected; an observed content/identity/lifetime contradiction cannot be
+made acceptable by repeating the observation. No altered selection, relaxed predicate,
+new baseline, artifact repair, original replay or collector clock renewal follows.
+
+Each collector retains its existing stricter recipe/source bounds. The outer ceiling
+per pass remains 4,096 selected leaves, 128 MiB per leaf, 2 GiB aggregate collected
+payload and 300 seconds, including its original terminal reserves. These outer maxima
+do not enlarge any existing sixty-second or smaller observer/collector recipe. Use a
+fresh predetermined owned evidence destination and retain every previous destination;
+no overwrite or delete is permitted. A fourth failure stops collection for that original.
+
+| Future passive category | Maximum passes | Aggregate retained/collected payload | Aggregate original intervals |
+| --- | ---: | ---: | ---: |
+| Input metadata, four per immutable lineage | 108 | 1.6875 GiB metadata | 6,480 seconds |
+| Fixed output collector, four per fresh original | 108 | 216 GiB payload | 32,400 seconds |
+
+These cumulative maxima are limits, not expected usage or permission to select more
+leaves. The exact source/admission must bind control/evidence overhead, EOF probes,
+read/write counts, retained sizes and every stricter per-pass maximum; payload ceilings
+alone are not total-I/O proofs. Independently classify each passive attempt at
+0/0/0/0 before submission and retain its separate durable attempt count. No live work,
+process creation, copy repair or experimental action can use a passive classification.
+Exact accepted source must implement the finite attempt record, fixed selection and
+exclusive evidence destinations before the additional pass may run; no new passive
+tool is introduced here.
+
+### Current Source, Time and Outcome Bounds
+
+The inert [managed caller](../../../tools/validation/run_windows_managed_build.py) and
+[controlled caller](../../../tools/validation/controlled-callers/run_controlled_callers.py)
+change only their ceiling tuple from `[36, 147, 30, 302]` to
+`[39, 166, 30, 378]` and their two Windows preparation-ceiling checks from 18 to 21.
+Both guards remain false. Their admission schemas, supplemental slot, entry filename,
+launcher and input predicates, process topology, clocks and charging remain unchanged.
+Future path/pass corrections above are separately reviewed work, not implemented by
+these scalar changes.
+
+| Inert source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `tools/validation/run_windows_managed_build.py` | 59,435 | `13f8de1a19f0fe366a70a28e00003c104f563d51a1944089b510d7d80d14c868` |
+| `tools/validation/controlled-callers/run_controlled_callers.py` | 67,004 | `9d53fbeb9cb5ba24cc63be076d6498fd87453d2e5135528a1d29717042c54c64` |
+
+Managed restore/build and controlled compile/native retain 3,600-second original
+intervals and all existing nested service, launcher, controller, phase, capture and
+terminal limits. Direct D0/D1/D2 retain 155-second Python originals and their existing
+nested native limits. Each exact admission recalculates actual controls, inventories,
+copies, readbacks and evidence within its unchanged source-specific bounds; a generic
+maximum or stale inventory cannot prove fit. The initial 0120 build performs no new
+payload materialization. Fresh pooled restores use the already admitted complete-cache
+copy recipe and its ordinary SDK-generated output rules.
+
+The planning baseline plus three complete cycles has 27 originals and at most 55,860
+seconds (15 hours 31 minutes) of summed original work intervals. Arbitrary permitted
+pool distribution has a conservative sum-of-original-work-interval ceiling of 86,865
+seconds (24 hours 7 minutes 45 seconds), including the five existing controlled rows.
+These arithmetic limits are not total outer or wall-clock limits and add no fleet-wide
+live clock. Preserve each recipe's separate outer termination and transport allowances,
+as well as all per-original clocks. There are no parallel observations or clock resets.
+Passive work retains its separate cumulative interval caps; repository review time is
+not experimental execution time. No kernel-return guarantee or ordinary SDK disk quota
+is claimed. All selected controls, copies, generated artifacts and partial output remain
+intentionally retained under their applicable size limits.
+
+The exact final call review must cover literal entry filename and argv predicates,
+source/artifact/input hashes and full9, current accounting, enlarged control lengths
+and every operation budget before durable charge and submission. Keep creation-time
+named Job and cgroup ownership. Every original outcome and scoped lifetime needs
+independent acceptance before dependent work. Build success still requires exact
+source/graph, compiler/binlog, PE/PDB/document and artifact acceptance; neither a larger
+budget nor corrected collector changes SourceLink or evidence obligations.
+
+### Historical Risk and ETW Continuity
+
+Explicitly extend the separate 0057, 0064, 0068, 0093, 0107 and 0110 dispositions only
+to this finite pool and its declared passive work on the same hosts. Keep their failed
+outcomes, full charges, spent observations and unresolved lifetimes, including
+`noExperimentLive=false`. No new lifetime uncertainty or quiescence claim is accepted.
+
+Nine added D0/D1/D2 session-creation attempts raise the aggregate maximum to twenty;
+the existing eleven attempts and their accounting remain separate. Every attempted
+creation, even a failed start, spends its reserved slot. Retain the same accepted
+PROCESS|NO_SYSCONFIG selection, bounded private-memory/transient-data effects and
+sole-owned-session/buffer-persistence disposition. That already accepted persistence
+case alone requires no new owner risk request within this finite extension. Require
+its independent exact failure disposition; it cannot establish successful D0, drain,
+zero loss or native-process termination. All other ownership, process, consumer,
+pending OVERLAPPED, cancellation, loss and evidence uncertainty still stops work.
+
+Preserve sequential observations, fresh owned identity, one bounded owned STOP and
+CloseTrace, no ETL/raw unrelated retention and no foreign/shared-session operation,
+cleanup, privilege change or automatic recovery. No additional publication, helper,
+compiler target, toolchain, download, account, WAM, credential, application or broker
+cache, installation, signing or release effect is included. This amendment makes no
+real-provider, platform support or whole-Slice acceptance claim. Owner approval,
+independent review and merge precede any use; exhaustion or a changed boundary
+requires a new applicable decision.
