@@ -1,0 +1,478 @@
+{
+  "compileStagingRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-checks-v7",
+  "directDeploymentRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-direct-v4",
+  "directNonCompilerSources": [
+    {
+      "bytes": 81228,
+      "path": "direct/direct_wsl_caller.py",
+      "sha256": "191a341d30bd9373f0a96d3e065931cc7e7e2aeb87b7ca5136fba763661505b7"
+    },
+    {
+      "bytes": 9551,
+      "path": "direct/result_validator_source.py",
+      "sha256": "08a587ae581b47641617d57efb19d3284e346a98c5056a7a2a39083c04c39e58"
+    }
+  ],
+  "executionAdmitted": false,
+  "schema": "controlled-callers-source-response-map-v1",
+  "sourceMappings": [
+    {
+      "authoredSource": {
+        "bytes": 11772,
+        "path": "source/direct/AcceptedDirectInputs.cs",
+        "sha256": "198a7de6c2a3b984c0ac92b23787512f79318bef1f4fe308a6f7384bc4d33bcc"
+      },
+      "stagedRelativePath": "source/direct/AcceptedDirectInputs.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 7669,
+        "path": "source/direct/Admission.cs",
+        "sha256": "5e899e46ca1bbf34dc83055a783766c138c547fbbc3b991973840ebcfc8a34b3"
+      },
+      "stagedRelativePath": "source/direct/Admission.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 3923,
+        "path": "source/direct/AnchorHandshake.cs",
+        "sha256": "f049ad2451b64c3fc8d3070ee9992e1280fa9986b801c62428fb23d22725b2c4"
+      },
+      "stagedRelativePath": "source/direct/AnchorHandshake.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 989,
+        "path": "source/direct/CalibrationSubjectProgram.cs",
+        "sha256": "9d54c0e070541082c96b5ec265afdda450d245b57fd43c70805fbaee3ebbab0c"
+      },
+      "stagedRelativePath": "source/direct/CalibrationSubjectProgram.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 100,
+        "path": "source/direct/DirectBackendBindings.cs",
+        "sha256": "54a6d056a137217081bf5c36d115c0c60b3e78e464d5e6712682b166e9cad317"
+      },
+      "stagedRelativePath": "source/direct/DirectBackendBindings.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 1084,
+        "path": "source/direct/DirectFixture.cs",
+        "sha256": "18a8ed1ec90071eaa3959c3b9389f0ed4a10d0349a5db3bf7b66184e16b8f52c"
+      },
+      "stagedRelativePath": "source/direct/DirectFixture.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 35694,
+        "path": "source/direct/DirectInputCatalog.cs",
+        "sha256": "5a7a17bc24aa814c3035237dedb7951c65bda7e8d88aaad8270e33321e56cd07"
+      },
+      "stagedRelativePath": "source/direct/DirectInputCatalog.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 5197,
+        "path": "source/direct/DirectRequest.cs",
+        "sha256": "7942e5d73261d9694f2a21d832a3fa1a2060a122b504f8c5c8f9db513f26c2c0"
+      },
+      "stagedRelativePath": "source/direct/DirectRequest.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 38132,
+        "path": "source/direct/EtwObserver.cs",
+        "sha256": "3de5f0dadc535080e6970269b3e62c9d33f642aa3a31be821eb66e4b25c9428e"
+      },
+      "stagedRelativePath": "source/direct/EtwObserver.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 13815,
+        "path": "source/native/FixtureNativePins.cs",
+        "sha256": "30fcc2dcc48aa465d64a0175dd21831bc66393ea63579afb14f28d8a1a506990"
+      },
+      "stagedRelativePath": "source/direct/FixtureNativePins.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 15050,
+        "path": "source/direct/Native.cs",
+        "sha256": "bf003dc5f3d49f8615dac55eacd7cf2e86cccd832f5368fffe74fcc01825f11e"
+      },
+      "stagedRelativePath": "source/direct/Native.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 13879,
+        "path": "source/direct/ObserverProgram.cs",
+        "sha256": "bfd0213354b6dbc6f0b5e97982c107ef3abb4f09a570f35ade863ad634482947"
+      },
+      "stagedRelativePath": "source/direct/ObserverProgram.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 6095,
+        "path": "source/native/PrivateRequestRow.cs",
+        "sha256": "af45e2d16659ef59fe4517b98982121d7ded07b8b8fd0ff1805c633f5308fa77"
+      },
+      "stagedRelativePath": "source/direct/PrivateRequestRow.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 12387,
+        "path": "source/native/AcceptedFixtureInputs.cs",
+        "sha256": "59f964a3d240754b782e9dbd6dea970054b7430043e91457757724fb864b1a45"
+      },
+      "stagedRelativePath": "source/native/AcceptedFixtureInputs.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 15615,
+        "path": "source/native/ActualAdmission.cs",
+        "sha256": "9769358a94e3fed67d44995a1672b1a4c1522a1e733b178ce251ab80c87f4533"
+      },
+      "stagedRelativePath": "source/native/ActualAdmission.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 6479,
+        "path": "source/native/Admission.cs",
+        "sha256": "ad8a9d6f54e7b80f1347d7603357347ef36f8dffa34274296f8689ab3e5578c4"
+      },
+      "stagedRelativePath": "source/native/Admission.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 3299,
+        "path": "source/native/CallerRules.cs",
+        "sha256": "3c571186641b41f0b0139e5a3cf68dff67e5bc1733d33ea859dc48a573f08426"
+      },
+      "stagedRelativePath": "source/native/CallerRules.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 588,
+        "path": "source/native/CombinedSubjectProgram.cs",
+        "sha256": "f4db9aff5df641814b842c77c331ae50ad414cbc1e61798a23eb64fd6eb3a5b2"
+      },
+      "stagedRelativePath": "source/native/CombinedSubjectProgram.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 9116,
+        "path": "source/native/ControlledChecks.cs",
+        "sha256": "03b9af0471de31dd6ce1e7ed001452a7b18f618976a36b2ffbd7519a169c2f73"
+      },
+      "stagedRelativePath": "source/native/ControlledChecks.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 7007,
+        "path": "source/native/CurrentUserEnvironment.cs",
+        "sha256": "971e9ed5c31b690655bdeabb6e8f66c59300a6e31a118af0534e33fd8b211bc3"
+      },
+      "stagedRelativePath": "source/native/CurrentUserEnvironment.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 2206,
+        "path": "source/native/DirectSyntheticSubjectProgram.cs",
+        "sha256": "e57f893bc8b7934b3ecd09cf4c0a7416d083e3244e82b9f335c1e4136f292882"
+      },
+      "stagedRelativePath": "source/native/DirectSyntheticSubjectProgram.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 1803,
+        "path": "source/native/FixtureAdmission.cs",
+        "sha256": "c85297aa6b2c93dee1db381d9193d012746daab7549df94697fbcaa6d34553d4"
+      },
+      "stagedRelativePath": "source/native/FixtureAdmission.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 3703,
+        "path": "source/native/FixtureDriverProgram.cs",
+        "sha256": "8f8a91e5c8eaac724d1829a9272cd602083c6eb69f1d09f8a991f25b325cddfd"
+      },
+      "stagedRelativePath": "source/native/FixtureDriverProgram.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 35485,
+        "path": "source/native/FixtureInputCatalog.cs",
+        "sha256": "b299ee24e17102476313d4e44ca98e9c9ecc7a72e31cdac9c245c248f046fbb8"
+      },
+      "stagedRelativePath": "source/native/FixtureInputCatalog.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 13815,
+        "path": "source/native/FixtureNativePins.cs",
+        "sha256": "30fcc2dcc48aa465d64a0175dd21831bc66393ea63579afb14f28d8a1a506990"
+      },
+      "stagedRelativePath": "source/native/FixtureNativePins.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 4039,
+        "path": "source/native/FixturePins.cs",
+        "sha256": "274c3463bfc812a313a9a3a79bba30bf43a4bb56ab3c1e890a96411bdaf918b9"
+      },
+      "stagedRelativePath": "source/native/FixturePins.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 3660,
+        "path": "source/native/FixtureReceiptRules.cs",
+        "sha256": "dba98fcc41e48cd23a8d1042ad4ee38b0e5f7d46b3b572bc3887352ad0daf4fc"
+      },
+      "stagedRelativePath": "source/native/FixtureReceiptRules.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 15063,
+        "path": "source/native/Native.cs",
+        "sha256": "4596b7397431ffb759650a5a9e4da7b5835006926571a3bbd682ec4d245420f6"
+      },
+      "stagedRelativePath": "source/native/Native.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 5188,
+        "path": "source/native/PrivateRequestDocument.cs",
+        "sha256": "cda0db2d8dc4b4df0db74ad6b40bab4a55ee7bb650cbdd9fad5d4caad8d3c289"
+      },
+      "stagedRelativePath": "source/native/PrivateRequestDocument.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 6095,
+        "path": "source/native/PrivateRequestRow.cs",
+        "sha256": "af45e2d16659ef59fe4517b98982121d7ded07b8b8fd0ff1805c633f5308fa77"
+      },
+      "stagedRelativePath": "source/native/PrivateRequestRow.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 16027,
+        "path": "source/native/Program.cs",
+        "sha256": "eaf5d6fed763e603782a1fc05599c45bc739d7d6b15d6ae74b36a37c19cb3dd9"
+      },
+      "stagedRelativePath": "source/native/Program.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 7924,
+        "path": "source/native/ProtocolResult.cs",
+        "sha256": "31d9f6900919b6a808da1ab0ad9b070fc1051978be01180604b8c3b2f39e2de4"
+      },
+      "stagedRelativePath": "source/native/ProtocolResult.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 44745,
+        "path": "source/native/ProtocolVectors.cs",
+        "sha256": "5b213014b3ae86e741d89fef956fcf21e9ac80ee88400bb27f82c676c9bafa14"
+      },
+      "stagedRelativePath": "source/native/ProtocolVectors.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 3587,
+        "path": "source/native/SafeReceipt.cs",
+        "sha256": "d9b778c48dd8731de4bee391ecad219b4ba53d4d47fbd954963725a9ad5b67f6"
+      },
+      "stagedRelativePath": "source/native/SafeReceipt.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 2963,
+        "path": "source/native/SyntheticSubjectProgram.cs",
+        "sha256": "c6cc19b342e0e65ea5f9358b01708206bafa153fabe2045ad0326aab8d7199ee"
+      },
+      "stagedRelativePath": "source/native/SyntheticSubjectProgram.cs"
+    },
+    {
+      "authoredSource": {
+        "bytes": 4080,
+        "path": "source/native/Wire.cs",
+        "sha256": "27f9045754116c9926360b9ad5b9fc7b22b4fc0a7af2417c1f8b9a8c700eba57"
+      },
+      "stagedRelativePath": "source/native/Wire.cs"
+    }
+  ],
+  "sourceOnly": true,
+  "targets": [
+    {
+      "main": "ConfidentialNativeCaller.Program",
+      "metadata": [
+        {
+          "bytes": 279,
+          "path": "control/NativeCaller.deps.json",
+          "sha256": "161e18ad41fffcd4d1fcace5ebc35575463255a81eb54c4c82a32452222770f6"
+        },
+        {
+          "bytes": 126,
+          "path": "control/NativeCaller.runtimeconfig.json",
+          "sha256": "b7cb3a2e664fe814d052574cc0265d6a3c5a60d391b99ada2efc3c80cdaebdf3"
+        }
+      ],
+      "referenceCount": 167,
+      "response": {
+        "bytes": 20679,
+        "path": "control/NativeCaller.rsp",
+        "sha256": "eccca6aa2d7d27eafaaccbc1905bd3dc475e6d983f7d23f48a25b0c53891ee53"
+      },
+      "stagedSourcesInResponseOrder": [
+        "source/native/Admission.cs",
+        "source/native/ProtocolResult.cs",
+        "source/native/Wire.cs",
+        "source/native/SafeReceipt.cs",
+        "source/native/CallerRules.cs",
+        "source/native/Program.cs",
+        "source/native/Native.cs",
+        "source/native/FixtureAdmission.cs",
+        "source/native/FixturePins.cs",
+        "source/native/FixtureReceiptRules.cs",
+        "source/native/FixtureNativePins.cs",
+        "source/native/AcceptedFixtureInputs.cs",
+        "source/native/FixtureInputCatalog.cs",
+        "source/native/ActualAdmission.cs",
+        "source/native/PrivateRequestDocument.cs",
+        "source/native/PrivateRequestRow.cs",
+        "source/native/CurrentUserEnvironment.cs"
+      ],
+      "target": "NativeCaller"
+    },
+    {
+      "main": "ConfidentialWsl.ObserverProgram",
+      "metadata": [
+        {
+          "bytes": 285,
+          "path": "control/DirectObserver.deps.json",
+          "sha256": "dcb770b630a44b4c23edebdce52f8b26cd53b6e6d0701c3f53928856d1ed8f27"
+        },
+        {
+          "bytes": 126,
+          "path": "control/DirectObserver.runtimeconfig.json",
+          "sha256": "b7cb3a2e664fe814d052574cc0265d6a3c5a60d391b99ada2efc3c80cdaebdf3"
+        }
+      ],
+      "referenceCount": 167,
+      "response": {
+        "bytes": 20221,
+        "path": "control/DirectObserver.rsp",
+        "sha256": "1703a10556bf796e7d6dee9b2dd77c3419c81963be9849bb0483c8794d123b51"
+      },
+      "stagedSourcesInResponseOrder": [
+        "source/direct/Admission.cs",
+        "source/direct/Native.cs",
+        "source/direct/ObserverProgram.cs",
+        "source/direct/EtwObserver.cs",
+        "source/direct/AnchorHandshake.cs",
+        "source/direct/DirectFixture.cs",
+        "source/direct/FixtureNativePins.cs",
+        "source/direct/DirectBackendBindings.cs",
+        "source/direct/DirectInputCatalog.cs",
+        "source/direct/DirectRequest.cs",
+        "source/direct/AcceptedDirectInputs.cs",
+        "source/direct/PrivateRequestRow.cs"
+      ],
+      "target": "DirectObserver"
+    },
+    {
+      "main": "ConfidentialNativeCaller.CombinedSubjectProgram",
+      "metadata": [
+        {
+          "bytes": 291,
+          "path": "control/SyntheticSubject.deps.json",
+          "sha256": "4d24598c7fe6a1e8ecc685d3b42a1591da653eeb6b5be8491d6191466d0edfa4"
+        },
+        {
+          "bytes": 126,
+          "path": "control/SyntheticSubject.runtimeconfig.json",
+          "sha256": "b7cb3a2e664fe814d052574cc0265d6a3c5a60d391b99ada2efc3c80cdaebdf3"
+        }
+      ],
+      "referenceCount": 167,
+      "response": {
+        "bytes": 21117,
+        "path": "control/SyntheticSubject.rsp",
+        "sha256": "04ef892ef4a7c86de2f570b2bf2033f9ac419c4c3d022bf9f19f22f638cae8ac"
+      },
+      "stagedSourcesInResponseOrder": [
+        "source/native/Admission.cs",
+        "source/native/ProtocolResult.cs",
+        "source/native/Wire.cs",
+        "source/native/SafeReceipt.cs",
+        "source/native/CallerRules.cs",
+        "source/native/Program.cs",
+        "source/native/Native.cs",
+        "source/native/FixtureAdmission.cs",
+        "source/native/FixturePins.cs",
+        "source/native/FixtureReceiptRules.cs",
+        "source/native/FixtureNativePins.cs",
+        "source/native/AcceptedFixtureInputs.cs",
+        "source/native/FixtureInputCatalog.cs",
+        "source/native/SyntheticSubjectProgram.cs",
+        "source/native/DirectSyntheticSubjectProgram.cs",
+        "source/native/CombinedSubjectProgram.cs",
+        "source/direct/CalibrationSubjectProgram.cs",
+        "source/native/ActualAdmission.cs",
+        "source/native/PrivateRequestDocument.cs",
+        "source/native/PrivateRequestRow.cs",
+        "source/native/CurrentUserEnvironment.cs"
+      ],
+      "target": "SyntheticSubject"
+    },
+    {
+      "main": "ConfidentialNativeCaller.FixtureDriverProgram",
+      "metadata": [
+        {
+          "bytes": 282,
+          "path": "control/FixtureDriver.deps.json",
+          "sha256": "12a6d55246fe7d7a5756045682aa24d645c52ba03c071e873dfe8a93fa1ad016"
+        },
+        {
+          "bytes": 126,
+          "path": "control/FixtureDriver.runtimeconfig.json",
+          "sha256": "b7cb3a2e664fe814d052574cc0265d6a3c5a60d391b99ada2efc3c80cdaebdf3"
+        }
+      ],
+      "referenceCount": 167,
+      "response": {
+        "bytes": 21084,
+        "path": "control/FixtureDriver.rsp",
+        "sha256": "4c9aeaca6eb4a08d8e873ff8b53d41f775aff46b4cc0096a43037c14086cb234"
+      },
+      "stagedSourcesInResponseOrder": [
+        "source/native/Admission.cs",
+        "source/native/ProtocolResult.cs",
+        "source/native/Wire.cs",
+        "source/native/SafeReceipt.cs",
+        "source/native/CallerRules.cs",
+        "source/native/Program.cs",
+        "source/native/Native.cs",
+        "source/native/FixtureAdmission.cs",
+        "source/native/FixturePins.cs",
+        "source/native/FixtureReceiptRules.cs",
+        "source/native/FixtureNativePins.cs",
+        "source/native/AcceptedFixtureInputs.cs",
+        "source/native/FixtureInputCatalog.cs",
+        "source/native/SyntheticSubjectProgram.cs",
+        "source/native/ProtocolVectors.cs",
+        "source/native/ControlledChecks.cs",
+        "source/native/FixtureDriverProgram.cs",
+        "source/native/ActualAdmission.cs",
+        "source/native/PrivateRequestDocument.cs",
+        "source/native/PrivateRequestRow.cs",
+        "source/native/CurrentUserEnvironment.cs"
+      ],
+      "target": "FixtureDriver"
+    }
+  ]
+}

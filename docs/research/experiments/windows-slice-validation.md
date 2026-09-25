@@ -21187,3 +21187,330 @@ credential, application or broker cache, consent, authenticated-resource, instal
 signing or release effect. Existing future real-effects reservations remain reservations
 only. Controlled outcomes cannot establish real WAM, UI, reuse, account state or overall
 Slice acceptance.
+
+### Controlled-only source and original-call integration
+
+This subsection binds the five controlled reservations above to the inert
+[source package](../../../tools/validation/controlled-callers/). It adds no attempt,
+capacity, helper kind, compiler target, separate metadata operation or account effect.
+The managed pair remains separate. Source/protocol acceptance is not input,
+activated-source, artifact, checkpoint or exact-call acceptance. The synthetic-only
+first-held admission below replaces the prior requirement for independently observed
+Windows identities on these exact 202/200 staged catalog leaves. Earlier synthetic
+source/schema descriptions apply with this explicit amendment; real/private admission
+and all unrelated input predicates remain unchanged.
+
+#### Source and deployment correspondence
+
+The public [source/response map](../../../tools/validation/controlled-callers/control/source-response-map.json)
+contains no local identities or private reviews. It maps 34 canonical C# files to 36
+compiler input paths. `PrivateRequestRow.cs` and `FixtureNativePins.cs` each have one
+canonical implementation in `source/native`; the map copies those identical bytes to
+both original native/direct destinations. No second editable implementation is
+authoritative. The first-held amendment changes native/direct admission, shared pin
+output/map serialization, native batch receipt binding, direct observer argument/record
+binding, and the direct Python caller. The exact public map identifies those successor
+bytes. Apart from reviewed trailing-whitespace and final-newline cleanup, all four
+responses, eight dependency/runtime templates and the remaining source files retain
+their reviewed authored bytes. Apphost
+construction embeds the three reviewed functions in the controller, without dot-source,
+Add-Type, package restore, another compiler or another process.
+
+| Compiler target | Entry point | Source paths | Reference paths |
+| --- | --- | ---: | ---: |
+| NativeCaller | `ConfidentialNativeCaller.Program` | 17 | 167 |
+| DirectObserver | `ConfidentialWsl.ObserverProgram` | 12 | 167 |
+| SyntheticSubject | `ConfidentialNativeCaller.CombinedSubjectProgram` | 21 | 167 |
+| FixtureDriver | `ConfidentialNativeCaller.FixtureDriverProgram` | 21 | 167 |
+
+Preserve response bytes and source/reference ordering, including SyntheticSubject's
+shared direct calibration source. The fixed compile root is
+`C:\Temp\azureauth-windows-slice-108\confidential-checks-v7`; preserve all mapped
+`source\native`, `source\direct`, `control`, `reference`, `template`, `toolchain` and
+`artifact` paths. In table order, invoke the staged `toolchain\dotnet.exe` with
+`exec --fx-version 10.0.12 --roll-forward Disable`, its staged `compiler\csc.dll`,
+`/noconfig` outside the response, and the exact target response. No MSBuild, installed SDK
+selection, alternate response or retry is included. Construct four 160,768-byte apphosts
+from template SHA-256 `0649f1bebacef4f17b6694201abc6dde152c333468d2314b4f7104d34d70c7aa`,
+using only the existing DLL-name and AppRelative `..\toolchain` substitutions. Exclusively
+write the eight metadata templates. No compiled target executes during compilation.
+
+The [controller input catalog](../../../tools/validation/controlled-callers/control/controller-input-catalog.tsv)
+is 87,398 bytes, SHA-256
+`ba96e46f4c70b508605ebef73e9f674b074adfa03704732aea1781dd62da779c`. Its 615 tab-separated
+rows contain operation, relative path, exact bytes, exact SHA-256 and maximum bytes. The
+413 compile rows are 365 reviewed public toolchain/reference/template inputs, 36 source
+destinations, four responses and eight templates. Those 365 inputs total 114,948,064
+bytes; their 167 reference assemblies total 6,045,680 bytes. The 202 native rows project
+the unchanged native catalog. `-1`/`-` placeholders require later exact independently
+accepted source/artifact pins; they do not allow runtime discovery or unpinned inputs.
+Compile input acceptance binds the exact activated source map to the inventory. The
+Linux adapter compares every one of the 36 source destinations with that map's exact
+length/hash without an extra file read; changed source bytes cannot pass merely because
+the public catalog uses placeholders. The catalog and its two embedded adapter pins
+remain unchanged because no literal catalog row changes.
+
+All tracked execution guards stay closed. Activation requires a separately reviewed
+exact source map/inventory identifying each permitted guard edit and no behavioral
+change. Real-role paths in shared source authorize no account role. Only compile,
+N1/N2/N3 and D0/D1/D2 are in scope; no synthetic control may name a private request
+document, real account or product credential.
+
+#### Compile and native original callers
+
+The [inert Linux adapter](../../../tools/validation/controlled-callers/run_controlled_callers.py)
+accepts `--original <admission-path> <sha256>` and its own bound worker form. Its exact
+`windows-controlled-harness-admission-v1` document lives at
+`/tmp/windows-controlled-harness-NNNN-admission.json`, action greater than 0120, with
+operation `compile` or `native` and a fresh UUIDv4 N nonce. It binds the source commit,
+protocol, source map, catalog, inventory, controller, caller, normal launcher,
+Python/systemd inputs, selected interop socket and user runtime directory. Independent
+checkpoint, input, source and exact-call acceptances bind those exact subjects. Native
+also requires independent compile-output acceptance and the exact fixture admission.
+The checkpoint names `controlled-compile` or `controlled-native`, all four history-parent
+projections, protected capacity, host counts and the six historical unknowns. Join every
+intervening action; an old numeric checkpoint is not current evidence.
+
+Use the accepted normal launcher's exact 23,040 bytes, SHA-256
+`5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a`, through its accepted
+`normal-launcher-dispatch-v1\WindowsScriptJobLauncher.exe` projection, including the
+metadata-only executable-use recheck immediately before launch. Exclusively reserve the
+fresh Linux action root and Windows `named-fixtures-NNNN` root; retain the durable charge
+before materialization/process creation. Compile additionally creates the sole fresh
+`confidential-checks-v7` tree. A preexisting/partial destination stops the original;
+it cannot be removed, overwritten or replaced by another path. Native reuses accepted
+compile outputs and writes one fixture admission; it cannot rebuild or recopy artifacts.
+
+Pre-copy sources, existing tools, generated controls/artifacts and ordinary reads stay
+full9-strict. Only this compile's 413 exclusively materialized public input copies use
+the accepted immediate-copy qualification: exact payload, unchanged eight non-ctime
+fields, and retained write-closed, opened-readback, final-opened and named full9. Keep
+the actual named full9 as the copied descriptor. No settling read, new baseline or
+stable-ctime inference is permitted. The compile worker may qualify only those original
+copy receipts. Later native runtime rows carry `compileCreation`: earlier compile action,
+original inventory hash, original source row and complete original deployment row.
+Independent input acceptance joins that lineage to the accepted compile outcome.
+Only copied `toolchain` leaves qualify; generated `artifact` leaves have null lineage
+and stay full9-strict. Later qualified reads preserve the original baseline and exact
+content. They cannot generate or refresh Windows native identities. The restore-specific
+qualification elsewhere remains limited to its own accepted source/cache copies.
+
+Retain the existing 3,600-second Linux original and 1,200-second dedicated-service
+intervals. Startup/admission consume the clock recorded before systemd-run, with ten
+terminal seconds inside both enclosing clocks. Retain creation-time cgroup ownership,
+`ExitType=cgroup`, control-group termination, no restart, 32 tasks, 512 MiB, five-second
+service termination, 360-second native transport, 30-second worker evidence and 15-second
+original evidence reservations. Clock changes only shorten existing intervals. Each
+Linux process permits at most 2,048 reads/1 GiB requested bytes including EOF probes,
+and 512 exclusive writes/256 MiB, reserving four writes/256 KiB for terminal evidence.
+At most 64 input-tree subdirectories are created in addition to the fixed original-call
+directories. Exact admission must calculate actual source, control, copy/readback,
+worker and evidence reads within those caps. Each of the two transports retains at most
+16 KiB plus one overflow byte. Runtime bookkeeping is distinct from later collection.
+
+The [PowerShell adapter](../../../tools/validation/controlled-callers/Invoke-WindowsControlledCallers.ps1)
+is deployed as the normal launcher's existing `Invoke-WindowsNamedGuardFixtures.ps1`.
+Its only interface is `-Mode Controller -AuthoritySha256 <sha256>`. The exact
+`controlled-callers-controller-authority-v1` binds operation/action/nonce, source commit,
+protocol/checkpoint/acceptances, source map, controller, inventory and optional native
+fixture/compile-output acceptance hashes. Charges are preparation 0, build/test 1,
+synthetic 1 or 12 and one exempt outer PowerShell; account effects and
+`noExperimentLive` are false. Linux requires canonical exact authority bytes; PowerShell
+checks the field set, Boolean/integer types and bindings. Native admission binds the
+explicit first-held mode, exact 202-leaf content/provenance closure, three named case
+nonces and exact held-input content correspondence. It does not require a prior Windows
+identity for newly copied synthetic deployment objects.
+
+Finish PowerShell input work by original entry +60 seconds. Hold selected inputs with
+FileShare.Read through execution/finalization, reject reparse paths, and verify length,
+hash and EOF. Compile inputs total at most 128 MiB; native inputs at most 96 MiB.
+Including controls and second reads of construction templates, compile has at most 426
+file passes/134,760,806 payload bytes; native has at most 207 passes/101,274,982 bytes.
+Add one EOF probe per pass. The enclosing refusal is 512 passes/256 MiB; implicit
+compiler/runtime loader reads are separate from explicit input reads.
+
+All four compiler processes share entry +240 seconds, including setup/input work.
+Apphost/metadata construction ends by entry +250 seconds. Native starts only the fixed
+`FixtureDriver.exe` with the fixed fixture-admission path/hash; controller entry +310
+seconds clips its own original 300-second work plus ten-second terminal allowance.
+Successful control work ends by entry +315 seconds and persistence by entry +325
+seconds. The unchanged normal launcher owns its original 330+10 seconds and all Job
+cancellation/termination. No process remains live waiting for review.
+
+Inherit the normal launcher's bounded bootstrap environment. No new environment helper,
+current-user rewrite, optional runtime injection or machine survey is included. That
+synthetic environment is not ordinary-account environment evidence. Compiler captures
+total at most 65,536 bytes, with at most two pending 4,096-byte overflow reads. Native
+requires empty transport, with one pending detection byte per stream. Allow at most
+36 exclusive controller output reservations/2 MiB. Successful compile needs 33 leaves:
+20 phase records/captures, four apphosts, eight templates and one aggregate; failure and
+cancellation can add two. Keep distinct pending paths and failed reservations. Maximum
+prescribed controller payload is 1,200,128 bytes, separate from four DLLs at 1 MiB each
+and four PDBs at 2 MiB each. Artifact caps are acceptance limits, not a compiler disk
+quota. Aggregate write counters exclude their own single write. Preserve the first
+failure and attempt capture, cancellation and aggregate retention independently, without
+overwriting or retrying a failed output.
+
+#### Native batch and direct scenarios
+
+Retain 58 Protocol 1 vectors, 12 wire vectors and 14 controlled sequences, once each,
+under the existing ten-second pure-check deadline and at most 16 decisions per sequence.
+Preserve four historical evidence-reuse obligations without new runtime passes. N1 has
+supervisor/worker/two subjects, the public quoting vector, original 5/7-second requests,
+2.5-second holds and positive original-handle overlap. N2 has supervisor/worker/one
+subject; close its single lifetime writer after a positive live sample, requiring
+cancellation/exit 1, both EOFs and native exit within the clipped original one-second
+bound. N3 writes 1,048,577 bytes, rejects the 1 MiB capture and requires natural subject
+exit, with NCF1 only after worker exit/EOF and Job zero. Each case retains 135+10 seconds
+clipped to the batch. The driver exclusively creates batch/case directories and binds
+suspended children from original handles, without PID lookup.
+
+Native keeps 18 safe records at 4,096 bytes each: eight caller, six created-role, three
+case and one batch. One additional `native-baseline.json` is at most 262,144 bytes, so
+these native outputs total at most 335,872 bytes. Its seven admission-reading processes
+retain at most 708,673,536 explicit payload bytes plus 1,453 EOF probes, including one
+262,144-byte map readback. Adding this controller gives 809,948,518 bytes plus 1,660
+probes, excluding Linux infrastructure and implicit loader reads. The Linux worker
+adds exactly two selected evidence passes, map and batch receipt, at most 266,240
+payload bytes plus two EOF probes, inside its unchanged 2,048-read/1 GiB envelope. Synthetic charge
+is exactly twelve: normal launcher one, FixtureDriver one, N1 four, N2 three and N3
+three. PowerShell is the sole exempt Windows process. The normal Job must report exactly
+twelve descendants for native, or five for compilation, natural completion and zero
+active processes. Forced cleanup or incomplete streams never pass a scenario.
+
+Direct deployment stays at
+`C:\Temp\azureauth-windows-slice-108\confidential-direct-v4` and its `/mnt/c/Temp/`
+projection. Preserve the two Python source roles and 200 synthetic input leaves: 190
+runtime/host, four observer artifacts, two Python and four synthetic artifacts. Before
+each call, independently bind exact source/artifact/copy provenance, Linux full9,
+executable-use predicates and artifact acceptance. Bind Windows identity at the first
+successful held open through the synthetic admission below. Invoke the existing direct Python controller with `-I -B`; insert
+no normal launcher or PowerShell. Windows starts inherit the WSL relay baseline
+(`env=None`), not proven original-shell equality or the native worker's constructed
+environment.
+
+D0 uses the final observer supervisor/worker and two calibration children: four Windows
+starts, observer Job total three. D1/D2 each have supervisor/worker and one synthetic
+product outside the observer Job: three starts, observer Job total one. Python keeps
+155 seconds from original entry; native keeps 145+10 seconds, the existing five-second
+readiness and seven-second launch plus two-second allowance. D0 inputs remain at most
+257,945,750 bytes/608 EOF probes; D1/D2 at most 258,994,326 bytes/609 probes. Each adds
+one native map readback and one Linux map validation pass, at most 524,288 bytes/two
+EOF probes in total. The map's sole exclusive write is at most 262,144 bytes and is
+separate from the unchanged safe-record limits. Control and
+private-document caps stay 262,144 bytes/depth eight; these synthetic admissions require
+`privateReference=null` and `accountEffectsAdmitted=false`. D0 has no private/helper
+request. D1/D2 use public synthetic values and five-second requests, expecting exits 0
+and 1. Preserve 4,096-byte public records, 17,000 polling reads, 65,536 ETW callbacks/
+16 MiB copied event payload, 1 MiB stdout and 8 KiB stderr.
+
+Each direct slot consumes exactly one separately reserved ETW creation attempt. Observe
+sequentially; independently accept D0 for the exact final observer before D1/D2, and
+each original outcome before the next. Preserve PROCESS|NO_SYSCONFIG, no ETL/unrelated
+raw retention, loss/evidence predicates and the narrow sole-owned-session/buffer
+persistence disposition. Every other lifetime or evidence uncertainty stops. D2's anchor
+inequality does not prove causation, pending-provider state or native cancellation
+latency; unsupported source claims remain false.
+
+#### Synthetic first-held native identity and outcome boundaries
+
+Only N1/N2/N3 and D0/D1/D2 use `identityMode=synthetic-first-held-v1`. Native requires
+`confidential-fixture-admission-v2`; direct synthetic requires
+`confidential-direct-admission-v2`. Their exact pin row is `relative`, `bytes`,
+`sha256`, `linuxIdentity`. The nine integer Linux fields bind independent deployment
+provenance and are never converted into Windows identities. The native Linux inventory
+uses `windows-controlled-harness-files-v2` with the same explicit mode and rows
+`relativePath`, `descriptor`, `compileCreation`. Its existing copied-runtime lineage
+qualification and strict generated-artifact controls remain required. The direct Linux
+caller compares each admitted `linuxIdentity` to the actual opened/named full9 and
+retains its strict `same()` predicate through use. Exact direct input acceptance must
+join those identities and hashes to the original accepted source/artifact/deployment
+records before the first supervisor starts. No extra discovery, settling or implicit
+replacement baseline is permitted.
+
+The existing real direct v1 schema, its mandatory `identity` rows and private reference,
+and native `ActualAdmission` retain independently pre-admitted Windows tuples. An old
+synthetic v1 document, wrong mode, mixed row shape, missing identity in a real role,
+null identity or malformed identity cannot select first-held mode. This amendment
+includes all 190 freshly copied runtime/host files in each synthetic catalog, along
+with its fixed generated/source artifacts. Installed runtime, source, controller,
+launcher, private and unrelated files receive no general exception.
+
+`FixtureNativePins.Pin` retains its canonical path/ancestor holds, no-reparse,
+regular-file/single-link, exact length/hash/EOF, native Snapshot and named-handle
+comparisons. Only the explicit synthetic branch omits the optional expected Windows
+tuple. Successful first-held snapshots still contain `volume`, `index`, `attributes`,
+`created`, `modified`, `changed`, length and `links`, with positive index/timestamps.
+The changed guarantee is exact independently admitted path/content/provenance followed
+by native held/named identity continuity at the observed points. There is no claim of
+equality to an independently observed Windows instance before that first open. Sharing
+excludes ordinary incompatible write/delete opens; it does not freeze attributes or
+extended attributes, so complete metadata comparisons remain necessary.
+
+Each native driver/direct supervisor serializes one original-wide baseline from its
+already held catalog objects, with no second catalog payload pass or rediscovery. The
+`synthetic-native-baseline-v1` document has exactly `schema`, `identityMode`, `root`,
+`original`, `admissionSha256`, `protocolSha256`, `rows`. `original` is the native batch
+nonce or direct `D0|D1|D2-<nonce>`. Rows are ordered by ordinal relative path; each has
+`relative`, `bytes`, `sha256`, `identity`, with the seven native identity fields above.
+`Utf8JsonWriter` writes compact UTF-8 without BOM/newline, in that field order, with
+integer values (including the unsigned 64-bit file index), never floating-point
+coercion. SHA-256 binds the complete map bytes. There are exactly 202 native or 200
+direct rows and at most 262,144 bytes. Each consumer serializes once within its original
+clock; bounded row names/counts and a post-row size check bound memory work. No native
+API, compiler target, helper, process, separate metadata phase, or attempt is added.
+
+The driver completes all 202 input pins before creating a case supervisor. It writes
+`records\<batchNonce>\native-baseline.json` exclusively before any case child. Each
+existing suspended-created-role record adds `nativeBaselineSha256`; the child computes
+its own map and requires equal digest before dependent supervisor/worker work. Thus
+all seven native admission consumers compare one original-wide catalog, rather than
+inferring cross-role identity from equal content hashes. The existing batch terminal
+also binds that digest. The original driver's holds persist through the batch and the
+existing child/Job/EOF resolution. There remain six created-role records and one batch
+record under their own 4,096-byte caps; each added digest field consumes exactly 90
+serialization bytes within those caps.
+
+The direct supervisor completes all 200 pins and exclusively writes
+`records\<slot>-<nonce>\native-baseline.json` before worker creation/resume. Its existing
+worker command adds only the 64-character map digest (65 command-line characters with
+its separator); synthetic workers require that argument and compare their computed map
+before ETW, calibration or readiness. Real workers keep their six-argument form and
+mandatory prior native tuples. The synthetic readiness/final records bind the digest;
+Linux validates the one fixed map and its exact admission/catalog correspondence before
+D1/D2 intent/product launch, or before accepting D0's final record. Intent and terminal
+records carry that same digest. The single map read counts within the existing 17,000
+record-read bound. The supervisor retains its input/map handles through worker lifetime
+resolution. Later self-pins never retroactively validate the first supervisor/driver's
+loader: independently accepted external deployment checks remain its bootstrap basis.
+
+Map creation adds one exclusive output and one exact content/native readback per
+original, retaining the same creation handle identity and denying write/delete sharing
+after readback. Its 262,144-byte limit is a separate declared map limit; ordinary safe
+records still refuse more than 4,096 bytes. Partial output is retained, never retried,
+deleted or overwritten; failed creation, readback, digest handoff, readiness binding or
+map validation stops the original and follows existing bounded failure/termination
+paths. No clock resets. Missing/incomplete maps or mismatched receipts cannot support
+outcome acceptance, including when cleanup completed.
+
+The selected collector manifest must name the one exact Windows map leaf above and
+its ordinary Linux projection, cap it at 262,144 bytes, and preserve any partial map on
+failure; no glob or directory discovery can substitute for that leaf. Add one selected
+leaf and at most 262,144 collected content bytes per native/direct original inside the
+existing collector envelope. Native worker bookkeeping reads the map and batch receipt
+once; later selected collection remains a distinct operation and cannot refresh their
+runtime predicates. Accept the final changed observer bytes for D0 and retain those
+same calibrated bytes for D1/D2. Source, map, activation, artifacts, original call and
+outcome still require their independent gates; inert source does not assert runtime
+admission or scenario success.
+
+After each original and all its transports end, independently admit the sole selected
+output collector under the existing 4,096-leaf, 128 MiB-per-leaf, 2 GiB-total and
+300-second limits. Never recollect runtime receipts, retry a failed collector, repair
+an artifact or activate through collection. Preserve responses, phase/aggregate records,
+pending/partial files, source/artifact correspondence, charges and stopped outcomes.
+Independent outcome acceptance precedes dependent artifacts or observations. Retain all
+experiment-owned files intentionally; no deletion, old-original cleanup or new lifetime
+risk disposition is granted. Keep 0057, 0064, 0068, 0093, 0107 and 0110 separate and
+`noExperimentLive=false`. Controlled success establishes only its declared synthetic
+property, never real WAM, UI, account/cache, reuse or overall Slice acceptance.
