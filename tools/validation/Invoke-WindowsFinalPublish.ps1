@@ -1,6 +1,6 @@
 # Final controller; requires separately accepted source, authority and fixed literal.
 param([string] $ActionName, [string] $ReservationSha256, [string] $InvocationSha256, [string] $AuthoritySha256)
-$script:FinalPublishDraftOnly = $true
+$script:FinalPublishDraftOnly = $false
 if ($script:FinalPublishDraftOnly) { throw 'DRAFT_ONLY: final-publish integration and guard build are unadmitted' }
 $originalControllerWatch = [Diagnostics.Stopwatch]::StartNew()
 $ErrorActionPreference = 'Stop'
@@ -984,7 +984,7 @@ function Get-FinalToolObservations($Graph, $Recipe, $Slots, [byte[]] $Stdout, [b
 
 function Initialize-FinalBinding($ControllerWatch) {
     if ($script:FinalPublishDraftOnly) { throw 'DRAFT_ONLY: final admission disabled' }
-    if ($ActionName -cne '0109') { throw 'Invalid original action number' }
+    if ($ActionName -cne '0110') { throw 'Invalid original action number' }
     $action = 'C:\Temp\azureauth-windows-slice-108\actions\' + $ActionName
     $script:FinalControllerWatch = $ControllerWatch
     $script:FinalCancelPath = $action + '\cancel'
@@ -1037,7 +1037,7 @@ function Initialize-FinalBinding($ControllerWatch) {
         }
     }
     Assert-FinalKeys $start.priorCounters @('preparation', 'buildTest', 'publication', 'synthetic')
-    foreach ($entry in @{ preparation = 20; buildTest = 106; publication = 4; synthetic = 161 }.GetEnumerator()) {
+    foreach ($entry in @{ preparation = 20; buildTest = 106; publication = 5; synthetic = 162 }.GetEnumerator()) {
         if ($start.priorCounters.($entry.Key) -ne $entry.Value) { throw 'Current publication counters changed' }
     }
     Assert-GuardHash $PSCommandPath $authority.components.controller.sha256
