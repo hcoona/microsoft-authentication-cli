@@ -18930,3 +18930,249 @@ is needed for this automated credential-free batch. No account enumeration,
 WAM/token/cache/consent effect, authenticated request, compiler/publication,
 installation, signing, release, or full Slice acceptance follows. A successor
 publication and later real-account scenarios retain their separate gates.
+
+
+## Accepted Focused Clock Handoff 0108
+
+The sole invocation under [Focused Credential-Free Clock Handoff: 0108](#focused-credential-free-clock-handoff-0108)
+completed on September 25, 2026, under accepted commit
+`496c8496ccb31343b22d7c445df1ae6934975094`, tree
+`9815b73f40c00641e7c87787883f4cb3c6ea8985`. The protocol was 1,295,743 bytes,
+SHA-256 `c2a271faad4a1341d5af47a9f0bfb0173f008c241d654a96e343aa22920a7b23`.
+Independent source, preparation, exact-call and original-outcome reviews accepted
+the retained evidence. This section records that observation; it allocates no
+repeat of 0108.
+
+The existing Windows 11 x64 and WSL2 hosts, normal 0070 launcher and corrected
+extracted source were those bound by the accepted protocol. This was fully
+automated, credential-free execution: no account enumeration, WAM interaction,
+token, cache, consent, authenticated request or operator assistance occurred.
+It neither exercised the product nor changed the selected product, dependency
+or toolchain pins. The dedicated input and evidence files are intentionally
+retained. Historical lifetime uncertainties remain unresolved.
+
+Both passive preparations completed once with original exit zero and independent
+acceptance. The original caller then consumed the complete 0/1/0/4 allocation,
+advancing counters from 20/105/4/157 to 20/106/4/161. Its complete original
+transport reported exit zero after 18,300 milliseconds. Seven same-process
+producer cases passed, including exact injected-exception identity and call
+counts for the two injected OS failures. These injected cases establish their
+declared substitute behavior only.
+
+On the actual selected host, the success child and bootstrap reader consumed
+identical ready/reply hashes and the same integer deadline. The producer used
+the uninstrumented pending-file close and nonreplacing hard-link publication.
+The retained pending/final aliases had complete identical bytes, the same object
+identity and link count two. The three Windows children completed in the declared
+order with exit codes 0, 1 and 1. Both negative cases preserved the same complete
+195-byte first-cause diagnostic frame at clock-reply-validation; neither entered
+the candidate. The persistence-collision sentinel remained unchanged and its
+pending diagnostic survived the failed final publication.
+
+The sole fixed snapshot recorded all 38 selected names: 23 present and fifteen
+absent at observation, with no error or omitted entry. The normal nine-event
+launcher journal joined the originally suspended harness identity, root exit
+zero, held-Job active count zero and lifetime total eight within the accepted
+4..32 bound. That OS accounting total does not change the four charged deliberate
+subjects. Launcher, proxy and service captures were complete and empty, with no
+overflow, truncation or read error. The original caller recorded scoped cgroup
+completion. These are closure observations for 0108 only, not host-wide or
+historical quiescence.
+
+The independent original-outcome acceptance is 20,020 bytes, SHA-256
+`caa3381e0f16a07a7ae9dc8f15232bab8dfa1ea29fcef84529edf56e9b1047d3`.
+It joins the original start, complete terminal transport, caller result and five
+retained Linux receipts, including the sole 18,434-byte Windows-output snapshot
+with SHA-256 `ed520a2e3bc6c3f9091e074b2ce1310355c81ea575a86930abc9502cf95a9167`.
+No Windows output was reopened for interpretation. The result satisfies the
+Wave's focused clock/diagnostic prerequisite for preparing a successor
+publication. It does not establish original 0107's cause, accept a Native AOT
+artifact, establish real-account behavior, or complete the Windows Slice.
+
+## One Final Publication After Accepted Clock Handoff: 0109
+
+Allocate one successor publication numbered 0109, its one fresh source copy,
+one passive current-parent projection and one fixed-input materialization as
+specified below. Every step requires its separate independent exact admission
+and complete original outcome acceptance. Original 0107 and all preceding
+singletons remain spent. The existing Wave and original-0107 scoped risk decision
+apply without expansion; no new lifetime exception, quota, retry or refund is
+granted. All production entry guards remain enabled until their separately
+admitted activation.
+
+### Immutable Source Preparation and Graph
+
+Retain product commit `503360753accd0829801953823b1b57a4f852440`, tree
+`8506cdd9781c8a331ea12ea8fe27a55292eec073`, the exact v4 recipe, ordinary native
+symbols, .NET SDK 10.0.401/runtime 10.0.12, MSAL/Broker 4.83.1 and NativeInterop
+0.20.3. Reuse the accepted 0066 managed guard and 0085 nonterminating publication
+launcher with their original independent artifact and fixture joins. The normal
+0070 launcher used by 0108 is not substituted for the publication launcher.
+No rebuild or fixture replay is allocated merely for renumbering.
+
+Use exactly the 46 immutable payload rows and bounded copy method from
+[Fresh Source Preparation After Failed Publication 0093](#fresh-source-preparation-after-failed-publication-0093):
+34 source files totaling 150,036 bytes and twelve unchanged restore files
+totaling 233,709 bytes. Preserve the original 395-byte src/Directory.Build.props
+and exclude the diagnostic overlay. The sole new source root is
+`C:\Temp\azureauth-windows-slice-108\sources\final-503360753accd0829801953823b1b57a4f852440-0109`.
+Do not inspect, adopt, overwrite, repair or clean the old source roots. Do not
+restore, download, evaluate MSBuild or derive additional physical selectors from
+restore metadata during preparation.
+
+The inactive copier at
+`/tmp/windows-final-source0109-materialization-inactive-root-v1.py` is 23,309
+bytes, SHA-256 `8c5ad905cc6b4a9f673077f4f7744628b508b6e1ef87637dbbb7622f2166f3b6`.
+Relative to the accepted 0107 copier, only the four-digit successor number in
+the guard, destination and attempt/result paths changes. Its 46 payload rows,
+directory topology, algorithms and limits are identical. Activation changes
+only the complete guard line to
+`# Exact reviewed activation: successor 0109 source copy is admitted.` and
+appends a blank line followed by proposed_copy() with final LF. The predicted
+active source is 23,305 bytes, SHA-256
+`70c6f8962eee46c61c80181ccda449781f96c7c6d219edac49efb4cadbad89a5`, at
+`/tmp/windows-final-source0109-materialization.accepted.py`.
+
+Before payload or experiment-root access, the copier exclusively creates
+`/tmp/windows-final-source0109-materialization-original-attempt-v1.txt`.
+Its sole result is
+`/tmp/windows-final-source0109-materialization-original-result-v1.json`.
+Retain the 45-second data and 50-second total source interval, five-second
+completion allowance inside that interval, 96 reads/900,000 charged bytes/256
+read calls, 48 writes/450,000 bytes/256 write calls, 4,096 metadata queries,
+192 opens, at most nine created directories, 65,536-byte result and 16 KiB
+complete combined transport. Existing destination or partial failure consumes
+the invocation without repair, another root or retry.
+
+The separately admitted copy literal remains:
+
+```sh
+exec /usr/bin/gnutimeout --signal=TERM --kill-after=2s 55s /usr/bin/python3.14 -I -B -S /tmp/windows-final-source0109-materialization.accepted.py
+```
+
+Use nonlogin /usr/bin/bash, no TTY or pipeline, and clean detached accepted cwd
+`/tmp/azureauth-source0109-copy-accepted-108`. Independently bind installed
+runtime, startup environment and cwd identities before submission. The inert
+two-phase preparation helper is
+`/tmp/windows-final-source0109-admission-helper.inert.txt`, 17,072 bytes,
+SHA-256 `b0d8a0291f2a1f97f4ced9ed8928f3f9e92d442ffa7b87e9e98a1b477be03523`.
+It changes only the successor paths and predicted copier hashes from the accepted
+method. Each prepare/start phase retains its own sole exact call, thirty-second
+source clock, original operation ceilings, exclusive receipts and independent
+admission. No phase may execute an unbound template, repeat a prior call or
+observe old experiment roots. Its start record is durable before the copier.
+
+The proposed 322,158-byte graph has SHA-256
+`2bfc51f67dff97297c5075e41bff70a27c58507588d3334d077255b91863ff15`.
+Compared with the accepted 0107 graph, exactly 103 absolute source-root fields
+move to the new root: one root, 46 protected inputs, 51 absence predicates and
+five tool-project paths. The one generated leaf changes from
+PublishOutputs.97b6f098d1.txt to PublishOutputs.95e8effb9c.txt. The latter derives
+from the pinned producer's SHA-256 of the normalized action-0109 PublishDir plus
+U+2028, taking the first ten lowercase hexadecimal characters. The two Up2Date
+basenames retain their unchanged filename-based derivation.
+
+Independently accept all changed graph bytes and newly rendered response,
+command, environment and output bindings. Reuse unchanged restore bytes only
+through the existing exact consumer/import/property and sibling-reference
+correspondence. No previous graph acceptance authenticates the new bytes by
+itself; copy success alone accepts neither that correspondence nor publication.
+
+### Complete Accounting and Passive Inputs
+
+Extend the retained current checkpoint to seven ordered stages: 0085, disposed
+0094, disposed 0103, accepted 0105, failed 0093, failed 0107 and accepted 0108.
+The last two stages retain charges 0/0/1/1 and 0/1/0/4. Failed-0107 accounting
+acceptance does not accept its publication, artifact or later lifetime. Every
+current consumer must join prior counters 20/106/4/161. Charge the sole 0109
+publication 0/0/1/1 before submission, producing 20/106/5/162 within unchanged
+ceilings 28/130/30/180, including failed starts. Preserve eighteen remaining
+synthetic units: twelve CLI, two Profile, three observer/WSL and one reserve.
+Passive preparation does not add a subject charge or erase prior consumption.
+
+Extend the conservative endpoint projection with the retained failed-0107
+reservation endpoint without probing its process, Job, service or original
+files. The new parent projection must account for the completed 0108 history
+directory and fixture directory, as well as the original 0107 action pair.
+Only the new 0109 action pair may appear between publication's two parent
+checks. Existing parent-name observation authority does not authorize reading
+their historical children.
+
+Allocate one passive four-parent name-only projection from
+`/tmp/windows-final-publish0109-parent-membership-template-root-v1.py`, 3,211
+bytes, SHA-256 `59a7f3c894c34ed7c80645f5a3128666f1fd6da2f2a1d51e6242867645685ccf`.
+Only the successor output/schema changes from the accepted inactive template;
+ADMITTED remains false before its exact admission. Retain the same four literal
+parents, at most 128 names each, thirty-second source interval and one exclusive
+receipt of at most 65,536 bytes at
+`/tmp/windows-final-publish0109-parent-membership-root-v1.json`. No history leaf,
+process, Job or service observation is allocated.
+
+Allocate one sixteen-input materialization from
+`/tmp/windows-final-publish0109-materializer-template-root-v1.py`, 10,785 bytes,
+SHA-256 `2a5d21701ac76db52a32bb08573ffa0f103f3af8cc56ffd83f13139f93657022`.
+Only the successor paths change. Before activation, independently bind its exact
+sixteen descriptors and total payload size T. Retain thirty seconds, 48 one-shot
+reads requesting at most 3T+48 bytes, sixteen exclusive writes totaling T bytes,
+three fresh directories and the original 8,244-byte combined transport bound.
+All complete or partial files are retained. No overwrite, repair, alternate root
+or retry is allocated.
+
+For both passive steps, preserve the previously accepted independent runtime,
+startup, cwd, input, activation and external-watchdog admission procedure.
+Any required metadata-only control preparation is separately bound before
+execution, with its exact read/write set and finite original interval. Complete
+original transport, zero exit, source finalization and independent outcome
+acceptance precede reliance; a receipt alone is insufficient.
+
+### Current Publication Sources and Exact Call
+
+The successor changes only action/authority/verifier bindings, the seven-stage
+checkpoint and current counters in the already corrected production sources:
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| final_publish_contracts.py | 204218 | `955475d5c7e33217753921f1c8689f617395fd7b4e9983bfe1ad3fd8d7ad4ab0` |
+| Invoke-WindowsFinalPublish.ps1 | 96759 | `7e694874117d6667594dc25a0ffef33643987bc02f7a1d2a3ecc58c79ff6b771` |
+| Start-WindowsFinalPublish.ps1 | 16072 | `adac4adc0180782e6c0a71c1a3ee7f1a1b0dfc52c669140e3155f0fd86db86a0` |
+| run_windows_final_publish.py | 13104 | `c2511d3e4d12dbd6585bd6259a10f51553451deb8480d8be4b803b1eb3d3ff5f` |
+
+Retain the corrected pre-candidate bootstrap/controller failure diagnostics and
+closed-pending, nonreplacing-hard-link clock reply publication. Both retained
+clock aliases and bounded startup-failure records remain in freshness checks,
+permitted effects and evidence limits. Do not import or execute the 0108 fixture
+as publication; its extracted spans remain historical bindings to that accepted
+invocation's source revision.
+
+Use new 0109 authority, evidence, activated-package and named verifier roots,
+six independently accepted public review roles and the 100-call verifier ceiling.
+The fixed caller template is
+`/tmp/windows-final-publish0109-caller-template-root-v2.py`, 10,216 bytes,
+SHA-256 `af5ac1053faa462aef27c0c4260cff48663597111a39660b17e37aaa5d53f2a1`.
+It changes only the successor package selector and fixed cwd to the clean
+detached accepted checkout `/tmp/azureauth-final0109-accepted-108` from the
+accepted caller template. Fill only its independently accepted fixed input and
+authority descriptors. Retain the same first-failure phase/category projection;
+no raw exception, private value or additional observer is introduced.
+
+All original clocks, complete capture requirements, shared-lock coverage,
+creation-time named-Job containment and success-only artifact gates remain those
+of [One Final Publication with Fresh Source Inputs: 0107](#one-final-publication-with-fresh-source-inputs-0107),
+with the accepted clock/diagnostic correction. Preserve the 2,400-second outer
+interval, 2,030-second native-spawn reserve, 2,000/2,010-second native intervals
+and intersecting controller/compiler/finalization bounds. All external watchdogs
+and ordinary OS/storage timing limitations remain. No phase restarts the original
+clock; empty tool polls drain only the original submitted session.
+
+The shared-PDB limitation remains binding: endpoint separation prevents naming
+collisions but does not establish exclusive shared-service ownership or finite
+lifetime. Do not disable symbols, stop shared services or terminate the entire
+publication Job after a resume attempt. New ownership or lifetime uncertainty
+still stops dependent execution; previous risk decisions do not accept new
+uncertainty. Complete original zero-exit evidence and independent outcome
+acceptance remain required before accepting any artifact or running it.
+
+No desktop attendance is required for these automated credential-free steps.
+No real account, WAM, token, cache, consent, authenticated resource, installation,
+signing or release effect is granted. CLI/Profile, Windows/WSL and real-account
+scenario acceptance remain separate prerequisites to complete Slice acceptance.

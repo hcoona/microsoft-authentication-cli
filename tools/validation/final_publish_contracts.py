@@ -28,8 +28,8 @@ import subprocess
 import time
 import uuid
 
-AUTHORITY = Path('/tmp/windows-final-publish0107-execution-authority.json')
-EVIDENCE = Path('/tmp/windows-final-publish0107-authority-inputs')
+AUTHORITY = Path('/tmp/windows-final-publish0109-execution-authority.json')
+EVIDENCE = Path('/tmp/windows-final-publish0109-authority-inputs')
 PACKAGE = Path(__file__).absolute().parent.parent
 REPOSITORY = Path('/home/shuaizhang/s/github.com/hcoona/microsoft-authentication-cli')
 LINUX = Path('/var/tmp/azureauth-windows-slice-108')
@@ -474,7 +474,7 @@ def public_read(argv, deadline, cancelled, output_limit=8388608):
 # This inactive compiler-only replacement is covered by the history source pin.
 # Its one-use root also preserves failed starts before paired action reservation.
 COMPILER_VERIFIER_ROOT = Path('/var/tmp/azureauth-compiler-verifiers-108-0062')
-FINAL_VERIFIER_ROOT = Path('/var/tmp/azureauth-final-publish-verifiers-108-0107-v1')
+FINAL_VERIFIER_ROOT = Path('/var/tmp/azureauth-final-publish-verifiers-108-0109-v1')
 FINAL_SOURCE_FILES = 34
 # Four revision, six protocol/Wave blob, three ancestry, ten component,
 # six review, two current-target, one inventory and two queries per source file.
@@ -576,12 +576,12 @@ def compiler_verifier_read(argv, deadline, cancelled, output_limit):
         result_schema = 'compiler-verifier-result-v2'
     elif not DRAFT_ONLY and not CORE_CSC_HISTORY_ONLY and not COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
         root = FINAL_VERIFIER_ROOT
-        prefix = 'azureauth-final-publish-0107-'
+        prefix = 'azureauth-final-publish-0109-'
         maximum = FINAL_VERIFIER_MAXIMUM_CALLS
         start_record = {
-            'schema': 'final-publish-0107-verifiers-start-v1', 'maximumCalls': maximum,
-            'priorCombinedBuildTest': 105, 'priorSynthetic': 156,
-            'priorPreparation': 20, 'priorPublication': 3,
+            'schema': 'final-publish-0109-verifiers-start-v1', 'maximumCalls': maximum,
+            'priorCombinedBuildTest': 106, 'priorSynthetic': 161,
+            'priorPreparation': 20, 'priorPublication': 4,
             'preparationCharge': 0, 'buildTestCharge': 0, 'publishCharge': 1,
             'syntheticCharge': 1, 'sameAttemptAsPairedReservation': True}
         result_schema = 'final-publish-verifier-result-v1'
@@ -1883,7 +1883,7 @@ def refresh_publication_checkpoint(admission, deadline, cancelled, binding=None)
     keys(manifest, ('schema', 'baseAcceptance', 'baseCounters', 'stages', 'currentCounters',
                     'ceilings', 'knownEndpoints', 'nextAction', 'historyParents'))
     if (manifest['schema'] != 'final-publish-current-checkpoint-v1' or
-            manifest['baseAcceptance'] != PUBLICATION_BASE or manifest['nextAction'] != '0107'):
+            manifest['baseAcceptance'] != PUBLICATION_BASE or manifest['nextAction'] != '0109'):
         fail('Current publication checkpoint identity changed')
     expected_review = {'schema': 'final-publish-handoff-acceptance-v2', 'accepted': True,
                        'handoff': admission['envelope']['handoff'], 'originalDispositionsPreserved': True,
@@ -1904,11 +1904,11 @@ def refresh_publication_checkpoint(admission, deadline, cancelled, binding=None)
     ceilings = dict(zip(PUBLICATION_COUNTERS, (28, 130, 30, 180), strict=True))
     if manifest['baseCounters'] != counters or manifest['ceilings'] != ceilings:
         fail('Current counters or ceilings were reset')
-    if type(manifest['stages']) is not list or len(manifest['stages']) != 5:
-        fail('Publication requires compilation, disposed batches, corrected case and failed original publication')
-    for stage, action, values in zip(manifest['stages'], ('0085', '0094', '0103', '0105', '0093'),
+    if type(manifest['stages']) is not list or len(manifest['stages']) != 7:
+        fail('Publication requires retained compilation, fixture and failed-publication accounting')
+    for stage, action, values in zip(manifest['stages'], ('0085', '0094', '0103', '0105', '0093', '0107', '0108'),
                                      ((1, 0, 0, 0), (0, 1, 0, 17), (0, 1, 0, 4),
-                                      (0, 1, 0, 4), (0, 0, 1, 1)), strict=True):
+                                      (0, 1, 0, 4), (0, 0, 1, 1), (0, 0, 1, 1), (0, 1, 0, 4)), strict=True):
         keys(stage, ('action', 'acceptance', 'charge', 'countersAfter'))
         charge = dict(zip(PUBLICATION_COUNTERS, values, strict=True))
         if stage['action'] != action or compact(stage['charge']) != compact(charge):
