@@ -104,7 +104,7 @@ function Save-BootstrapJson([string] $Path, $Value) {
     Assert-BootstrapBudget
 }
 
-if ($ActionName -cne '0107') { throw 'Invalid final action number' }
+if ($ActionName -cne '0109') { throw 'Invalid final action number' }
 foreach ($hash in @($ReservationSha256, $InvocationSha256, $AuthoritySha256)) {
     if ($hash -cnotmatch '^[0-9a-f]{64}$') { throw 'Unbound bootstrap binding' }
 }

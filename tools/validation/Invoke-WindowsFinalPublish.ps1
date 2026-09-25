@@ -984,7 +984,7 @@ function Get-FinalToolObservations($Graph, $Recipe, $Slots, [byte[]] $Stdout, [b
 
 function Initialize-FinalBinding($ControllerWatch) {
     if ($script:FinalPublishDraftOnly) { throw 'DRAFT_ONLY: final admission disabled' }
-    if ($ActionName -cne '0107') { throw 'Invalid original action number' }
+    if ($ActionName -cne '0109') { throw 'Invalid original action number' }
     $action = 'C:\Temp\azureauth-windows-slice-108\actions\' + $ActionName
     $script:FinalControllerWatch = $ControllerWatch
     $script:FinalCancelPath = $action + '\cancel'
@@ -1037,7 +1037,7 @@ function Initialize-FinalBinding($ControllerWatch) {
         }
     }
     Assert-FinalKeys $start.priorCounters @('preparation', 'buildTest', 'publication', 'synthetic')
-    foreach ($entry in @{ preparation = 20; buildTest = 105; publication = 3; synthetic = 156 }.GetEnumerator()) {
+    foreach ($entry in @{ preparation = 20; buildTest = 106; publication = 4; synthetic = 161 }.GetEnumerator()) {
         if ($start.priorCounters.($entry.Key) -ne $entry.Value) { throw 'Current publication counters changed' }
     }
     Assert-GuardHash $PSCommandPath $authority.components.controller.sha256
