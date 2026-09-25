@@ -20888,3 +20888,68 @@ Every first cause and separate persistence/cancellation error remains distinguis
 Original 0110 publication stays failed/charged. NoExperimentLive remains false due to
 all six accepted historical dispositions. A green receipt is proposed evidence for
 independent outcome review only; it grants no next action or overall Slice acceptance.
+
+## Confidential caller compiler and runtime metadata
+
+The remaining real-environment protocol preparation needs the compiler-host and regular
+runtime dependency metadata for the confidential validation caller. Known file hashes
+alone do not establish that dependency closure. Within the current credential-free
+Wave, permit one separately admitted Linux-only observation of the five public files
+below. This observation does not run the caller, a compiler, a Windows executable or an
+authentication API. The caller's compilation, controlled scenarios, account effects and
+real-environment acceptance retain their separate allocation and admission gates.
+
+Use the existing WSL2 host and the pinned .NET SDK 10.0.401/runtime 10.0.12. Read the two
+compiler files beneath `C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore`, and the
+three regular-runtime package files beneath the existing dedicated public package root
+`C:\Temp\azureauth-windows-slice-108\packages\microsoft.netcore.app.runtime.win-x64\10.0.12`.
+Do not substitute Native AOT package metadata, installed shared-runtime copies or
+historical experiment destinations, even when their digests match.
+
+| Root | Relative file | Bytes | SHA-256 |
+| --- | --- | ---: | --- |
+| Compiler | `csc.deps.json` | 5981 | `b50fdc9d35fa4d9e23343a3ebafe1a9dc19a39c31701af192b1d54c16a9e1e27` |
+| Compiler | `csc.runtimeconfig.json` | 405 | `11744d1d8ad57c8906cc665166f240157ca4a62824043e5c8e3c2b48f2176b58` |
+| Regular runtime package | `data/RuntimeList.xml` | 40666 | `6395fa09954f9a4c78be52d894dbb331f0019d51ea8b03fbd5846ac4125ac73a` |
+| Regular runtime package | `runtimes/win-x64/lib/net10.0/Microsoft.NETCore.App.deps.json` | 29720 | `db6bf68420f350411629571d31aea9232f05e9464e0f48f306041efd0971615d` |
+| Regular runtime package | `runtimes/win-x64/lib/net10.0/Microsoft.NETCore.App.runtimeconfig.json` | 54 | `31c8ce517cddc0deaceb26b5dff6ba5df55ac4e06e9afd0026e51faca23dc8a4` |
+
+The exact inert observation source is
+[`observe_windows_caller_metadata.py`](../../../tools/validation/observe_windows_caller_metadata.py).
+Before activation, independently accept its source, these literal selections, Linux
+runtime binding, finite operation and byte accounting, current checkpoint and exact
+call against the accepted protocol revision. The sole permitted source activation
+changes `ADMITTED = False` to `ADMITTED = True`; source or selection changes require
+fresh review. No source import, target stat or target payload read is part of the
+non-executing preparation. Record the sole attempt durably before submission; failed
+or partial start spends it. Independent zero-experiment-unit accounting is required;
+this passive observation adds no preparation, build/test, publication or synthetic
+allocation and does not transfer any protected reservation.
+
+Exclusively create the source's single fixed Linux snapshot before observing any target.
+Resolve only the literal directory components without following symbolic links; do not
+enumerate directories. Each leaf must be a regular single-link file with the exact
+declared size. Require the named and opened full9 identity to match before its sole
+payload read; request exactly the declared length plus one growth-probe byte. Retain
+the returned prefix in the snapshot, then require exact length and SHA-256 and unchanged
+opened and named full9 identities. These new observations do not assert historical
+handle continuity or replace any prior experiment's admitted identity.
+
+There are exactly five payload reads, 76,826 successful raw bytes and at most 76,831
+requested bytes including the probes. Retain base64 bytes and their observed metadata
+in one snapshot bounded to 131,072 bytes. Use one original 30-second interval, reserving
+the last five seconds for terminal persistence; outer timeout sends TERM at 30 seconds
+and KILL three seconds later. Signals, synchronous filesystem operations and persistence
+do not provide a kernel-return guarantee. No failure restarts a clock. A short read,
+changed identity, digest mismatch, time exhaustion or persistence failure stops; preserve
+any partial snapshot and complete tool transport without retry, alternate path, second
+read, overwrite or cleanup. Emit only a bounded snapshot descriptor or fixed typed
+failure fields to tool output, never the raw target payload.
+
+After terminal transport, interpret only the retained snapshot and independently join
+the compiler/runtime dependency metadata to the proposed input and host maps. Complete
+collection alone does not accept a compiler closure, artifact, compatibility claim or
+next execution. Missing evidence leaves that dependency open. Preserve the six historical
+lifetime uncertainties and `noExperimentLive=false`; this observation creates no new
+Windows process, service, Job or ETW session and grants no account, broker/cache, credential,
+network, installation, cleanup or release effect.
