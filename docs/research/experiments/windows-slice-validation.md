@@ -20033,7 +20033,7 @@ this public table records only reviewable repository source.
 | tools/validation/WindowsWslObserver.cs | 63227 | 355ffacbd73c46228fcb0bc1db324645c5c6156aa45dd2fdaca08fa6c3d8d3c4 |
 | tools/validation/run_windows_wsl_observer_build.py | 20388 | dd8b5870f6b69ee66002948e0458506c5cc7e519c3b77aa95bc07a4bb65badaa |
 | tools/validation/Invoke-WindowsManagedBuild.ps1 | 21342 | 90d3ddd561f2f111a2b525bd7e35a41827a29d1cdf6e240f31d7b2d8f46740a8 |
-| tools/validation/run_windows_managed_build.py | 49223 | 9d1fb53521bbad2e040f66fb8a644fa0d2a961591959665b0049783354bf04bd |
+| tools/validation/run_windows_managed_build.py | 50411 | 794f8a561398af10fe6f2194ef5677ceb91296d752c41ae1d6bf58f20be70ebb |
 | tools/validation/observe_windows_fresh_file_identity.py | 9897 | 1b517844119e5815bef68c102e3235d8f31de8d2f43c0e39f5ee675be9563be6 |
 
 ### Exact category reservation and ordering
@@ -20330,12 +20330,57 @@ failed collection is repaired automatically.
 
 The managed caller retains a bounded caughtFailure object with exception type,
 numeric sourceLine and, only for its typed PredicateFailure, the literal source
-predicate label. All require labels are fixed public source strings. It retains no
-formatted traceback, filename, arbitrary exception message or rejected input value.
+predicate label. All require labels are fixed public source strings. Only the
+compound read-completion guard may also retain readObservation: the logical read
+ordinal, immediate-created-copy-readback boolean, expected and returned byte counts,
+and initial descriptor, final descriptor and named-path full9 operands. These are
+already observed numeric metadata, never payload or filenames. Preserve the guard's
+short-circuit order: a length mismatch skips both final metadata calls, and a final
+descriptor mismatch skips the named-path call. Unevaluated operands remain null;
+no later observation fills them. If a metadata call raises, retain that original
+exception without converting it into a predicate failure. The diagnostic object
+is capped at 2,048 serialized ASCII bytes, including its newline; an oversized
+object becomes only the fixed omitted=serialization-bound marker. Existing first
+failure, result and transport limits and terminal reserves remain unchanged.
+It retains no formatted traceback, filename, arbitrary exception message or
+rejected payload. This diagnostic adds no read, metadata call, retry or allocation.
 The label identifies the caught source guard; an earlier transport failure and its
 failureType remain separately retained as the first cause. Admission predicates,
 including every full9 comparison, execution, clocks, charges and retry stops remain
 unchanged. A source line is meaningful only against the exact admitted source.
+
+#### Accepted original 0113 failure
+
+Correction-slot c1-a restore 0113 used the accepted immediate-readback source at
+commit 3929e836b0628877ef33825c0548a8f884bed7a6. Its original invocation exited one
+with complete empty transport. Its sole independently admitted selected-output
+collector also exited one after visiting all 62 selected paths: eight stable
+sampled files, 44 required files absent and ten optional files absent. Collection
+was incomplete because success evidence was absent; no retry is implied.
+
+The two stable failure records agree on stage original-materialization,
+PredicateFailure and the literal Unstable descriptor/path identity guard at
+line 143 of the admitted source. That guard combines returned-length equality,
+initial/final descriptor full9 equality and named-path full9 equality. No operands
+or logical read ordinal were retained. The failed clause, leaf and readback role
+are unknown; even an identity difference is not established because length may
+short-circuit both comparisons. Do not attribute this failure to ctime or infer
+that the 0112 observation explains it.
+
+The positive stage records and exact source ordering establish failure before
+this original's service, worker or native launch. This is not a global quiescence
+observation. Preserve all six historical lifetime unknowns and the conservative
+false noExperimentLive, scopedJobQuiescent and continuationAllowed flags. No
+restore graph or dependent build is accepted. The original and sole collector are
+spent. Full counters remain 24/106/6/165, with preparation hosts 12 Linux and
+12 Windows. Primary and c1-a unused build reservations stay blocked, and all
+twelve later-product build/test slots remain protected.
+
+Independent triage accepted MANAGED-READ-FAILURE-OPERANDS-001 as an observability
+gap. The bounded readObservation above addresses that gap without weakening any
+acceptance predicate. A successor must use a distinct available correction slot
+with independently accepted source, checkpoint, inventory, activation and exact
+call. This source amendment is not an admission or a replay of 0113.
 
 ### Single fresh-file Windows-projection identity diagnostic
 
