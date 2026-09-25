@@ -19822,3 +19822,139 @@ admitted materialization. That admission must preserve candidate and required-as
 bytes through use; mutable original output paths are not approved test subjects.
 No real-account support, release, or completed Slice acceptance follows from this
 static evidence route.
+
+### Retained Snapshot and Contextual Artifact Result
+
+The sole admitted Linux collector completed with exit zero and closed original
+transport. Independent outcome review accepted its 93 retained rows, 64 fixed
+byte/hash pins, 10 retained-evidence identity pins, four copy equalities, three
+portable-PDB pairs, and two native-PDB pairs. The new manifest is 58,129 bytes,
+SHA-256 `5ae614051b512ad9d372f29cf20719e8e0e33e3329b3c4af4a4d0020b8f77413`.
+This is the separate snapshot authorized above; original publication 0110 remains
+failed, its success collector remains ineligible, and its postconditions were not
+executed. Sequential collection does not establish an atomic cross-file snapshot
+or continued currentness of the original paths.
+
+The subsequent admitted frozen metadata and two-text readers each completed once
+with exit zero and closed original transport. Their separately accepted reports
+are 272,010 bytes, SHA-256
+`7fb37e0a68d2adb59200700d359a7ada50e2d4689af03ddaaef7ffa0a917ca0f`,
+and 489,393 bytes, SHA-256
+`fe34dbad4185611f6264d378bfd3d4ce7eba02457d748d85309fc842a3c959fc`.
+Reader success alone was not artifact acceptance. Contextual review joined these
+reports to the accepted historical source, diagnostic, tool, and task evidence.
+
+The complete retained original capture contains 1,069,660 stdout bytes, empty
+stderr, 6,747 CRLF lines, 479 targets, 321 tasks with IDs 2 through 322, and 3,768
+scoped messages. Independent review accepted strict UTF-8, no NUL/ESC, zero
+warnings/errors, closed event contexts, and exactly three Csc and two Exec events.
+It joined all 34 product-source pins to the immutable product commit above, the
+521 historical protected inputs, 20 tool/consumer/import/task pins, nine host
+bindings, and five native-tool recipe pins. These are historical admission and
+execution joins under the accepted workstation model. Only the fixed source,
+restore, response, output, and asset subset has new file correspondence; there is
+no claim that all 521 inputs remain unchanged or passed final revalidation.
+The exact Task 294 and Task 299 dispositions above remain necessary.
+
+Independent managed-source review accepted all 36 portable-PDB Documents: 10
+Core, 22 Windows, and four CLI. The 35 ordinary source/generated documents match
+their unmodified SHA-256 checksums; the sole embedded 47,000-byte
+`LibraryImports.g.cs` matches its reconstructed UTF-8+BOM checksum. All 53 generated
+P/Invoke declarations correspond to all 53 source library/entrypoint declarations.
+All three actual Csc responses match the admitted renderings. Ordered reference
+counts 167/172/173, 171 unique external references, analyzers/globalconfig, and
+three downstream reference MVID/timestamp/SizeOfImage joins match the historical
+pins. The 12 generated text files and embedded source add no suppression. No
+unmatched source-document or path-map relationship remains in that scope.
+
+The complete 263-line ILC response, rendered with its exact source-root substitution
+and UTF-8/CRLF, is 34,991 bytes, SHA-256
+`cd4df449322a41ac0d1586984c5b9c1bfa2cf047221e42efd5ad73975ded8dce`.
+The 44-line LINK response, UTF-8+BOM/CRLF, is 2,726 bytes, SHA-256
+`e779fe2cb99dfb32e3768ca916a2bb2a4e78a311ed765e8379247a7ec06b62e4`.
+Both match the collected bytes. The historical producer/consumer chain joins the
+managed CLI/Core/Windows inputs through ILC Task 299, its native object, and LINK
+Task 302 with the admitted runtime/import libraries, definition, and SourceLink
+inputs. It relies on ordinary admitted compiler transformation, not a machine-code
+equivalence proof or current hashes alone.
+
+| Retained artifact role | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Native and published CLI EXE, equal copies | 8,885,248 | `02993d94c5145f32274a8763f27d632e2dcc8e6a06d257551b1501eed9689cc7` |
+| Native and published CLI PDB, equal copies | 36,966,400 | `dccfb7eff753ca3cf7eb868e4295a531a9f22ac4b515fc24fd36fdb96cb8093f` |
+| ILC object consumed by LINK | 46,453,505 | `35c24192685e5687ac0b13fd381775524d0be63e63e70f7784f364331e9cc7ae` |
+| Published `msalruntime.dll` | 2,949,656 | `9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79` |
+
+The CLI is an AMD64 PE32+ native image with no CLR header and an entrypoint in an
+executable section. Its native/published PE-PDB pairs share CodeView GUID bytes
+`6d4a6853dd078547b3e18c53c7b85dcc` and age one. These joins establish the ordinary
+symbol identity relationship, not the semantic integrity of every native-PDB
+stream. The required NativeInterop asset matches the admitted package bytes.
+
+The complete 43-byte definition is `EXPORTS\r\n   DotNetRuntimeDebugHeader DATA\r\n`,
+SHA-256 `fc7e494b95675837fa7753c8f5d48207013b0ab85d3e38130a370f6c6887ef0c`.
+The 491,306-byte SourceLink file has SHA-256
+`759c79ecf4ea616e9ae259b9e6d7d95b7e61b8dc9d69db966223db8f2ad3b9d1`.
+All 1,657 mappings join `/_/src/runtime/` keys to corresponding runtime paths in
+dotnet/dotnet commit `95017c711e6afc1085133d440e42b4bd78155701`. The immutable
+[VMR source manifest](https://github.com/dotnet/dotnet/blob/95017c711e6afc1085133d440e42b4bd78155701/src/source-manifest.json)
+maps that runtime component to the accepted dotnet/runtime commit
+`4271d88e0aebf3d04f188f1334c2220d80555ef6`. No mapped source URL was fetched or
+declared available. There are no product-source mappings in this file; the
+independently accepted product PDB/checksum joins supply product attribution.
+
+The actual Csc/ILC suppression context preserves the admitted SDK defaults:
+1701/1702/8002, plus IL2121 in Windows/CLI and ILC. The exact ILC response retains
+warnings-as-errors and detailed diagnostics for all three product assemblies,
+without `--nowarnaserr`, `--singlewarn`, `--notrimwarn`, or `--noaotwarn`.
+Product and generated sources introduce no additional suppression. LINK's
+`/IGNORE:4104` comes from
+[Microsoft.NETCore.Native.Windows.targets lines 105-106](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Windows.targets#L105-L106);
+its exact CRLF rendering matches the historically protected package producer.
+[LNK4104](https://learn.microsoft.com/cpp/error-messages/tool-errors/linker-tools-warning-lnk4104?view=msvc-170)
+concerns specified OLE/RAS exports lacking PRIVATE when creating a DLL import
+library. This definition exports only the runtime debug data symbol; the response
+selects an executable with `/NOEXP /NOIMPLIB`. These ordinary SDK suppressions are
+accepted for this bounded candidate. Zero emitted diagnostics does not prove that
+every suppressed condition or dependency annotation is absent.
+
+Static dependency review classified every regular import: 17 in the CLI and 50 in
+`msalruntime`; both delay-import lists are empty. Across those lists, named Windows
+modules are ADVAPI32, bcrypt, CRYPT32, IPHLPAPI, KERNEL32, ncrypt, ole32, Secur32,
+USER32, WS2_32, WININET, RPCRT4, OLEAUT32, SspiCli, GDI32, and SHELL32.
+The remaining names are `api-ms-win-crt-*` UCRT contracts or
+`api-ms-win-core-*`/`api-ms-win-security-*` OS contracts.
+[API-set contracts](https://learn.microsoft.com/windows/win32/apiindex/windows-apisets)
+need not name physical files; their names do not prove availability.
+The [UCRT](https://learn.microsoft.com/cpp/windows/universal-crt-deployment?view=msvc-170)
+is an OS component on Windows 10/11. These are dependency classifications, not an
+observation of installed identities, resolution, or compatibility on the host.
+
+Product LibraryImport declarations name kernel32, advapi32, secur32, wtsapi32,
+user32, and gdi32 with System32 search attributes. The source-declared wtsapi32
+and gdi32 obligations remain even though neither appears in the CLI import table.
+`WindowsLoader.RestrictSearch` calls
+[SetDefaultDllDirectories](https://learn.microsoft.com/windows/win32/api/libloaderapi/nf-libloaderapi-setdefaultdlldirectories)
+with application-directory and System32 flags and maps failure to
+`MechanismUnavailable`. This is source policy, not execution evidence.
+The accepted [NativeInterop call-boundary basis](windows-native-aot.md#public-call-boundary-basis)
+supplies the exact net9 IL's `msalruntime` import, `AppContext.BaseDirectory`,
+process-local `runtimes/native` PATH addition, and release/shutdown declarations.
+Package targets establish asset selection/copy roles. The earlier allocation probe
+does not cover this application's broker availability, discovery, acquisition,
+UI, or complete dynamically loaded native dependency closure.
+
+The bounded contextual conclusion is that this immutable retained snapshot has
+sufficient source, dependency, compilation, native-image, required-asset, and
+ordinary-symbol provenance to supply a later separately admitted credential-free
+scenario materialization. That admission must preserve the exact candidate and
+required companion bytes through use. Mutable original paths remain ineligible
+as subjects. Static eligibility grants no materialization or subject execution,
+runtime/scenario acceptance, successful original publication, release, or support
+claim. Real WAM, UI, reuse, WSL, and overall Slice acceptance remain open.
+
+All three observations charged zero experiment units. Counters remain
+20/106/6/163 against 28/130/30/180, with 17 synthetic units remaining and no
+unallocated reserve. Historical lifetime uncertainty and `noExperimentLive=false`
+remain unchanged. This result grants no retry, cleanup, fallback publication,
+capacity increase, or account effect.
