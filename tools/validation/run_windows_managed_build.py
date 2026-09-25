@@ -124,7 +124,21 @@ class Budget:
         require(not self.cancelled and time.monotonic_ns() + reserve < self.deadline,
                 'Original interval expired or cancelled')
 
-    def read(self, path, maximum, *, created_identity=None):
+    def read(self, path, maximum):
+        raw, observed, _ = self._read(path, maximum)
+        return raw, observed
+
+    def read_created_copy(self, path, maximum, created_identity, expected_payload):
+        # Only immediate readback can qualify ctime. The admitted bytes are
+        # mandatory, including an explicitly empty payload for empty cache leaves.
+        require(type(expected_payload) is bytes and type(created_identity) is list and
+                len(created_identity) == 9 and all(type(x) is int for x in created_identity),
+                'Created copy requires admitted payload and identity')
+        _, observed, read_observation = self._read(
+            path, maximum, created_identity=created_identity, expected_payload=expected_payload)
+        return observed, read_observation
+
+    def _read(self, path, maximum, *, created_identity=None, expected_payload=None):
         self.check()
         direct(path)
         fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
@@ -132,9 +146,8 @@ class Budget:
             before = os.fstat(fd)
             require(stat.S_ISREG(before.st_mode) and 0 <= before.st_size <= maximum, 'Regular bounded input')
             if created_identity is not None:
-                # Only immediate readback of a just-created source/cache copy uses
-                # the write-stage identity. Establish the strict reader baseline
-                # after open while retaining ctime as an observed transition.
+                # A fresh copy must retain its eight non-ctime fields throughout
+                # this one read. Exact admitted bytes are required before return.
                 require(before.st_nlink == 1 and all(identity(before)[i] == created_identity[i]
                         for i in (0, 1, 2, 3, 4, 5, 6, 8)), 'Created copy changed before readback')
             self.reads += 1
@@ -151,18 +164,28 @@ class Budget:
             raw = b''.join(parts)
             initial_identity = identity(before)
             final_identity = named_identity = None
+            fields = range(9) if created_identity is None else (0, 1, 2, 3, 4, 5, 6, 8)
+
+            def matches(observed):
+                return all(initial_identity[i] == observed[i] for i in fields)
+
             # Preserve the existing short-circuit observations. A length failure
             # skips both metadata calls; a descriptor mismatch skips the path call.
-            if not (len(raw) == before.st_size and initial_identity ==
-                    (final_identity := identity(os.fstat(fd))) ==
-                    (named_identity := identity(path.lstat()))):
-                require(False, 'Unstable descriptor/path identity', read_observation={
-                    'readOrdinal': self.reads, 'createdCopyReadback': created_identity is not None,
-                    'expectedBytes': before.st_size, 'returnedBytes': len(raw),
-                    'initialDescriptor': initial_identity, 'finalDescriptor': final_identity,
-                    'namedPath': named_identity})
+            stable = (len(raw) == before.st_size and
+                      matches(final_identity := identity(os.fstat(fd))) and
+                      matches(named_identity := identity(path.lstat())))
+            read_observation = {
+                'readOrdinal': self.reads, 'createdCopyReadback': created_identity is not None,
+                'expectedBytes': before.st_size, 'returnedBytes': len(raw),
+                'initialDescriptor': initial_identity, 'finalDescriptor': final_identity,
+                'namedPath': named_identity}
+            if not stable:
+                require(False, 'Unstable descriptor/path identity', read_observation=read_observation)
+            if created_identity is not None:
+                require(raw == expected_payload, 'Created copy differs from admitted payload')
             self.check()
-            return raw, identity(before)
+            return (raw, named_identity if created_identity is not None else initial_identity,
+                    read_observation)
         finally:
             os.close(fd)
 
@@ -391,9 +414,8 @@ def materialize_inputs(a, root, local, budget):
             info = destination.lstat()
             require(stat.S_ISREG(info.st_mode) and info.st_size == len(raw), 'Created deployment file')
             write_closed_identity = identity(info)
-            readback, reader_identity = budget.read(destination, 134217728,
-                                                    created_identity=write_closed_identity)
-            require(readback == raw, 'Created copy differs from admitted payload')
+            reader_identity, read_observation = budget.read_created_copy(
+                destination, 134217728, write_closed_identity, raw)
             descriptor = {'path': str(destination), 'bytes': len(raw), 'sha256': digest(raw),
                           'identity': reader_identity}
         else:
@@ -401,6 +423,7 @@ def materialize_inputs(a, root, local, budget):
         created = {'role': item['role'], 'windowsPath': item['windowsPath'], 'descriptor': descriptor}
         if write_closed_identity is not None:
             created['writeClosedIdentity'] = write_closed_identity
+            created['readbackObservation'] = read_observation
         deployed.append(created)
     evidence = encode({'schema': 'windows-managed-harness-deployment-v1',
                        'inventorySha256': a['inventory']['sha256'], 'files': deployed})

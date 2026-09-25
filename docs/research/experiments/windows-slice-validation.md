@@ -20033,7 +20033,7 @@ this public table records only reviewable repository source.
 | tools/validation/WindowsWslObserver.cs | 63227 | 355ffacbd73c46228fcb0bc1db324645c5c6156aa45dd2fdaca08fa6c3d8d3c4 |
 | tools/validation/run_windows_wsl_observer_build.py | 20388 | dd8b5870f6b69ee66002948e0458506c5cc7e519c3b77aa95bc07a4bb65badaa |
 | tools/validation/Invoke-WindowsManagedBuild.ps1 | 21342 | 90d3ddd561f2f111a2b525bd7e35a41827a29d1cdf6e240f31d7b2d8f46740a8 |
-| tools/validation/run_windows_managed_build.py | 50411 | 794f8a561398af10fe6f2194ef5677ceb91296d752c41ae1d6bf58f20be70ebb |
+| tools/validation/run_windows_managed_build.py | 51609 | 53171261abd8538d0ac97eccd22e42cc913b5bcbf51b9ef0286aa5304a8c7bc8 |
 | tools/validation/observe_windows_fresh_file_identity.py | 9897 | 1b517844119e5815bef68c102e3235d8f31de8d2f43c0e39f5ee675be9563be6 |
 
 ### Exact category reservation and ordering
@@ -20228,21 +20228,29 @@ For each source/cache leaf exclusively created by this restore, retain its named
 full9 after the final writer close and parent fsync, then perform one complete
 bounded readback before issuing its deployment descriptor. Before reading payload,
 require a regular single-link file and exact device, inode, mode, owner, group,
-size, modification time and link count against that creation observation. Only
-this immediate creation-to-reader baseline transition may differ in ctime. During
-the read, require unchanged full9 across the opened descriptor, final descriptor
-and named path, plus exact length and complete byte equality with the admitted
-source payload. Use that stable reader full9 as the deployment descriptor and
-retain the earlier writeClosedIdentity in the same deployment row. Both original
-deployment receipt copies retain these observations.
+size, modification time and link count against that creation observation. During
+this immediate readback, require those same eight fields across the opened
+descriptor, final descriptor and named path. Treat ctime as an observation only
+within this qualification. Before returning from the dedicated created-copy reader,
+require exact length and complete byte equality with the admitted source payload
+already in memory. The expected payload is mandatory; explicitly empty bytes are
+valid for an admitted empty cache leaf. Keep the ordinary reader full9-strict.
+Use the actual final named-path full9 as the deployment descriptor, never a stale
+initial or synthesized composite identity. Retain writeClosedIdentity and the
+readbackObservation's initial/final descriptor and final named-path full9 in the
+same deployment row. Both original deployment receipt copies retain these four
+observations and the logical read ordinal. This does not establish a stable ctime.
 
 This rule applies only inside the original materialization of those fresh
 source/cache copies. Existing source/cache inputs, installed tools, Linux records,
 other control files and all later deployment pin checks retain their strict full9
-rules. No general ctime exception, second baseline, wait, retry or old-file read
-is added. Any ownership, non-ctime field, payload, read-time full9, time or byte
-failure stops the original. Independent outcome review must join the retained
-creation/readback observations to the exact materialized inventory.
+rules. A later ctime change rejects against the final named baseline, even if
+content still matches. No general ctime exception, second baseline, wait, retry
+or old-file read is added. Any ownership, required non-ctime field, payload, time
+or byte failure stops the original. Independent outcome review must join all four
+retained observations and the exact-content qualification to the materialized
+inventory. Exact admission must also bind the enlarged deployment receipts within
+their existing per-receipt and aggregate read/write bounds.
 
 Readback consumes the existing original read and requested-byte budgets. The
 current 2,192-leaf source basis contains 1,822 materialized source/cache leaves,
@@ -20336,7 +20344,9 @@ ordinal, immediate-created-copy-readback boolean, expected and returned byte cou
 and initial descriptor, final descriptor and named-path full9 operands. These are
 already observed numeric metadata, never payload or filenames. Preserve the guard's
 short-circuit order: a length mismatch skips both final metadata calls, and a final
-descriptor mismatch skips the named-path call. Unevaluated operands remain null;
+descriptor mismatch on the reader's required fields skips the named-path call.
+Ordinary reads compare full9; only the immediate created-copy reader uses the
+eight-field and exact-payload qualification above. Unevaluated operands remain null;
 no later observation fills them. If a metadata call raises, retain that original
 exception without converting it into a predicate failure. The diagnostic object
 is capped at 2,048 serialized ASCII bytes, including its newline; an oversized
@@ -20346,8 +20356,9 @@ It retains no formatted traceback, filename, arbitrary exception message or
 rejected payload. This diagnostic adds no read, metadata call, retry or allocation.
 The label identifies the caught source guard; an earlier transport failure and its
 failureType remain separately retained as the first cause. Admission predicates,
-including every full9 comparison, execution, clocks, charges and retry stops remain
-unchanged. A source line is meaningful only against the exact admitted source.
+including all ordinary and later-pin full9 comparisons, execution, clocks, charges
+and retry stops remain unchanged. A source line is meaningful only against the
+exact admitted source.
 
 #### Accepted original 0113 failure
 
@@ -20381,6 +20392,47 @@ gap. The bounded readObservation above addresses that gap without weakening any
 acceptance predicate. A successor must use a distinct available correction slot
 with independently accepted source, checkpoint, inventory, activation and exact
 call. This source amendment is not an admission or a replay of 0113.
+
+#### Accepted original 0114 failure and created-copy qualification
+
+Correction-slot c1-b restore 0114 used the diagnostic source accepted at
+0a926188502e478e80daa66bc65bda1b3b1ae4b5. Its sole original exited one with complete
+empty transport. Its sole selected-output collector also exited one after visiting
+all 62 paths: eight stable sampled files, 44 required files absent and ten optional
+files absent. Both original and collector are spent; missing success evidence
+does not permit another observation or replay.
+
+The two stable failure records agree on original-materialization, PredicateFailure,
+the Unstable descriptor/path identity guard at source line 159, and logical read
+355 with createdCopyReadback true. Exact source-order and inventory mapping selects
+zero-based row 169: the newly copied win-x64 msalruntime.dll cache leaf. Expected
+and returned lengths both equal 2,949,656 bytes. Initial and final descriptor full9
+differ only in ctime, which increased by 99,593,200 ns. The named-path operand is
+null because the failed descriptor comparison short-circuited it.
+
+Complete payload equality and deployment-descriptor construction were not reached.
+The observation establishes neither copied-payload integrity nor an operating-system
+cause or harmlessness of that transition. It does not identify original 0113's
+failed clause. Positive stage evidence and the accepted source ordering establish
+failure before this original's service, worker or Windows native launch; they do
+not establish global quiescence. Preserve all six historical unknowns and all
+conservative false continuation and lifetime flags.
+
+Independent triage accepted MANAGED-CREATED-READBACK-CTIME-001 as a limitation of
+the immediate-created-copy contract. The original correctly enforced its then
+accepted full9 rule. The revised qualification above combines eight-field continuity
+with mandatory exact admitted bytes, retains all four full9 observations and uses
+the final named observation for subsequent strict pins. It requires no inferred
+platform cause, extra read, metadata call, wait, retry or new allocation. Focused
+in-memory tests cover ctime-only qualification, each other field at each stage,
+wrong or empty payload, length short-circuiting, ordinary full9 checks and later
+pin rejection. They supply rule evidence, not a Windows observation.
+
+Counters remain 25/106/6/166, with preparation hosts 12 Linux and 13 Windows.
+Primary, c1-a and c1-b unused builds remain blocked and untransferred; all twelve
+later-product build/test slots remain protected. No restore graph or build is
+accepted. A successor requires a distinct remaining slot and fresh independent
+source, checkpoint, inventory, activation, receipt-bound and exact-call acceptance.
 
 ### Single fresh-file Windows-projection identity diagnostic
 
