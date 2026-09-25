@@ -44,11 +44,22 @@ internal sealed partial class ProcessFixture : IDisposable
     internal uint BufferedOutput { get; private set; }
     internal uint DiagnosticPrefill { get; private set; }
 
-    internal unsafe ProcessFixture(string scenario)
+    internal unsafe ProcessFixture(string scenario, string? nativeCliExecutable = null)
     {
         RequireActiveSuite();
         if (!OperatingSystem.IsWindows()) throw new InvalidOperationException("Windows scenario required.");
-        if (!DefaultHttpProcessChild.Supports(scenario) && !OwnedProcessChild.Supports(scenario)
+        var nativeProfile = NativeProfileScenarios.Supports(scenario);
+        var cli = scenario is "help" or "malformed" || nativeProfile;
+        if (nativeCliExecutable is not null)
+        {
+            if (!cli) throw new InvalidOperationException("Controlled children require the managed scenario executable.");
+            RequireNativeCliExecutable(nativeCliExecutable);
+        }
+        else if (nativeProfile)
+        {
+            throw new InvalidOperationException("Native Profile cases require an explicitly bound executable.");
+        }
+        if (!nativeProfile && !DefaultHttpProcessChild.Supports(scenario) && !OwnedProcessChild.Supports(scenario)
             && scenario is not ("help" or "malformed" or "success" or "file-stdin" or "closed-stdin"
             or "close-pending" or "unused-stdin" or "data-close" or "deadline"
             or "broken-output" or "blocked-output" or "blocked-diagnostics"))
@@ -68,7 +79,8 @@ internal sealed partial class ProcessFixture : IDisposable
             Pipe(out outputRead, out outputWrite);
             Pipe(out errorRead, out errorWrite);
             var profilePath = Path.Combine(DirectoryPath, "profile.json");
-            File.WriteAllText(profilePath, ProcessChild.Profile, new UTF8Encoding(false));
+            File.WriteAllText(profilePath, nativeProfile ? NativeProfileScenarios.Profile(scenario) : ProcessChild.Profile,
+                new UTF8Encoding(false));
             if (scenario == "file-stdin")
             {
                 Close(ref inputRead);
@@ -89,13 +101,17 @@ internal sealed partial class ProcessFixture : IDisposable
                 DiagnosticPrefill = capacity;
             }
 
-            var cli = scenario is "help" or "malformed";
-            var assembly = cli
-                ? Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                    "../../../../../src/Authentication.Cli/bin/Release/net10.0-windows/win-x64/Authentication.Cli.dll"))
-                : Path.Combine(AppContext.BaseDirectory, "Authentication.Windows.Scenarios.dll");
-            var arguments = new List<string> { assembly };
-            if (!cli) arguments.AddRange(["--scenario-child", scenario]);
+            var executable = nativeCliExecutable ?? @"C:\Program Files\dotnet\dotnet.exe";
+            var arguments = new List<string>();
+            if (nativeCliExecutable is null)
+            {
+                var assembly = cli
+                    ? Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
+                        "../../../../../src/Authentication.Cli/bin/Release/net10.0-windows/win-x64/Authentication.Cli.dll"))
+                    : Path.Combine(AppContext.BaseDirectory, "Authentication.Windows.Scenarios.dll");
+                arguments.Add(assembly);
+                if (!cli) arguments.AddRange(["--scenario-child", scenario]);
+            }
             if (scenario == "help") arguments.Add("--help");
             else if (scenario == "malformed") arguments.AddRange(["authenticate", "--protocol", "SYNTHETIC_INVALID_VERSION"]);
             else
@@ -110,8 +126,9 @@ internal sealed partial class ProcessFixture : IDisposable
                     || scenario is "file-stdin" or "closed-stdin" or "close-pending" or "data-close")
                     arguments.Add("--cancel-on-stdin-close");
                 if (scenario is "success" or "blocked-diagnostics") arguments.AddRange(["--telemetry", "stderr"]);
+                if (nativeProfile) arguments.AddRange(["--telemetry", "off"]);
             }
-            Start(arguments);
+            Start(executable, arguments);
             Close(ref inputRead);
             Close(ref outputWrite);
             Close(ref errorWrite);
@@ -261,10 +278,20 @@ internal sealed partial class ProcessFixture : IDisposable
         return completion.Task;
     }
 
-    private unsafe void Start(List<string> arguments)
+    internal static string RequireNativeCliExecutable(string executable)
+    {
+        // The separately accepted controller binds artifact bytes, assets, and ownership.
+        // This lexical check does not establish provenance or authorize execution.
+        if (!OperatingSystem.IsWindows() || !Path.IsPathFullyQualified(executable)
+            || !executable.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
+            || executable.Contains('"') || executable.Contains('\0'))
+            throw new InvalidOperationException("An explicit absolute native CLI executable path is required.");
+        return executable;
+    }
+
+    private unsafe void Start(string executable, List<string> arguments)
     {
         RequireActiveSuite();
-        const string executable = @"C:\Program Files\dotnet\dotnet.exe";
         var command = (string.Join(' ', new[] { executable }.Concat(arguments).Select(Quote)) + '\0').ToCharArray();
         var environment = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
