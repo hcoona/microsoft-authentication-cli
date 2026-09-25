@@ -20033,7 +20033,7 @@ this public table records only reviewable repository source.
 | tools/validation/WindowsWslObserver.cs | 63227 | 355ffacbd73c46228fcb0bc1db324645c5c6156aa45dd2fdaca08fa6c3d8d3c4 |
 | tools/validation/run_windows_wsl_observer_build.py | 20388 | dd8b5870f6b69ee66002948e0458506c5cc7e519c3b77aa95bc07a4bb65badaa |
 | tools/validation/Invoke-WindowsManagedBuild.ps1 | 21342 | 90d3ddd561f2f111a2b525bd7e35a41827a29d1cdf6e240f31d7b2d8f46740a8 |
-| tools/validation/run_windows_managed_build.py | 48235 | 75cfedce0ed8f98d2b160c51f2da0cac150119efefee8978df04d80009a0a2dc |
+| tools/validation/run_windows_managed_build.py | 49223 | 9d1fb53521bbad2e040f66fb8a644fa0d2a961591959665b0049783354bf04bd |
 | tools/validation/observe_windows_fresh_file_identity.py | 9897 | 1b517844119e5815bef68c102e3235d8f31de8d2f43c0e39f5ee675be9563be6 |
 
 ### Exact category reservation and ordering
@@ -20224,6 +20224,35 @@ greater than 110 and earlier than its own fresh action number. Original restored
 absolute paths remain unchanged. The build may write that new subject's obj/bin;
 its own controller/home/temp/results remain in its separate fresh action root.
 
+For each source/cache leaf exclusively created by this restore, retain its named
+full9 after the final writer close and parent fsync, then perform one complete
+bounded readback before issuing its deployment descriptor. Before reading payload,
+require a regular single-link file and exact device, inode, mode, owner, group,
+size, modification time and link count against that creation observation. Only
+this immediate creation-to-reader baseline transition may differ in ctime. During
+the read, require unchanged full9 across the opened descriptor, final descriptor
+and named path, plus exact length and complete byte equality with the admitted
+source payload. Use that stable reader full9 as the deployment descriptor and
+retain the earlier writeClosedIdentity in the same deployment row. Both original
+deployment receipt copies retain these observations.
+
+This rule applies only inside the original materialization of those fresh
+source/cache copies. Existing source/cache inputs, installed tools, Linux records,
+other control files and all later deployment pin checks retain their strict full9
+rules. No general ctime exception, second baseline, wait, retry or old-file read
+is added. Any ownership, non-ctime field, payload, read-time full9, time or byte
+failure stops the original. Independent outcome review must join the retained
+creation/readback observations to the exact materialized inventory.
+
+Readback consumes the existing original read and requested-byte budgets. The
+current 2,192-leaf source basis contains 1,822 materialized source/cache leaves,
+584,880,994 bytes; their readback adds 1,822 bounded reads and 584,882,816 requested
+bytes. Original inventory payload reads plus readback total 4,014 reads and
+1,253,402,732 requested bytes before separately bounded admission/receipt overhead.
+Exact admission must calculate that overhead and any inventory delta within the
+unchanged 8,192-read and 4 GiB limits; generic inventory maxima do not prove fit.
+No preparation, build/test, publication or synthetic allocation is added.
+
 The exact command is owned by the pinned controller. Restore selects
 restore Windows.slnx --locked-mode --disable-parallel --no-http-cache, with the
 new exact config, source and packages paths. Build selects
@@ -20378,6 +20407,37 @@ completion must accompany the record before outcome acceptance. A preterminal
 complete field alone is insufficient. Storage failure may prevent any durable
 result. productionIdentityAcceptance, causeOf0111Established, continuationAllowed
 and noExperimentLive remain false; historical lifetime uncertainty is unchanged.
+
+#### Accepted original 0112 observation
+
+The original diagnostic and its sole independently admitted two-record Linux
+observation both exited zero with complete transport. Independent outcome review
+accepted the result, original start/debit/clock and retained snapshot bindings.
+The two fixed 51-byte and 43-byte public payloads matched exactly. Both samples
+retained six full9 observations: only ctime changed from the post-write closed
+named observation to the immediately opened reader, by 14,698,800 ns and
+11,228,200 ns respectively. The remaining eight fields matched, and each reader's
+subsequent descriptor/named/closed observations matched in all nine fields.
+The retained pre-persistence elapsed observation was 51,020,008 ns; it is not a
+whole-process timing claim. No Windows executable or account operation ran.
+
+The sole diagnostic preparation is spent. Cumulative counters are 23/106/6/164;
+preparation hosts are 12 Linux and 11 Windows. The two-record observation adds
+no experiment unit. Preserve all remaining reservations, including the blocked
+unused primary build, all historical lifetime uncertainties, intentional files
+and false productionIdentityAcceptance, causeOf0111Established,
+continuationAllowed and noExperimentLive flags. Original 0111 remains a spent
+worker-admission failure with its exact failed predicate unknown.
+
+Independent triage accepted MANAGED-DEPLOYMENT-WRITE-STAGE-CTIME-001: the previous
+managed materializer recorded a write-stage named full9 without readback, while
+its later deployment pin required that earlier ctime at read-open. The observed
+sample transition would fail that comparison despite matching payload. This is
+a source-bound mismatch, not proof of 0111's cause or a universal filesystem claim.
+The prospective immediate-readback baseline above addresses only that mismatch;
+its source/protocol acceptance is not an executed restore or graph acceptance.
+A fresh separately admitted correction-slot restore still requires its own
+current checkpoint, inventory, activation, exact call and independent outcome.
 
 ### Common scenario caller, controller and evidence bounds
 
