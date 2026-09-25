@@ -30,6 +30,7 @@ CEILINGS = [35, 141, 30, 277]  # Proposed ceilings; guard remains closed until a
 HISTORICAL_UNKNOWN = ['0057', '0064', '0068', '0093', '0107', '0110']
 PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
+LAUNCHER_PROJECTION = PROJECTION / 'normal-launcher-dispatch-v1' / 'WindowsScriptJobLauncher.exe'
 CHARGES = {'restore': 1, 'build': 1}
 SERVICE_SECONDS = 1200
 PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows-actions',
@@ -368,6 +369,27 @@ def acceptance(pin, schema, subjects, budget):
     require(value == {'schema': schema, 'accepted': True, 'subjects': subjects}, 'Independent acceptance binding')
 
 
+def require_executable_launcher(a, budget):
+    """Check executable use of the independently admitted fixed Windows copy."""
+    budget.check()
+    pin = a['launcher']
+    require(pin['path'] == str(LAUNCHER_PROJECTION), 'Fixed Windows launcher projection')
+    path = direct(LAUNCHER_PROJECTION)
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC)
+    try:
+        before = os.fstat(fd)
+        require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and
+                before.st_mode & 0o111 and identity(before) == pin['identity'],
+                'Admitted executable launcher identity and mode')
+        require(os.access(path, os.X_OK, effective_ids=True, follow_symlinks=False),
+                'Effective-user launcher execute access')
+        require(identity(os.fstat(fd)) == pin['identity'] == identity(path.lstat()),
+                'Executable launcher full9 unchanged')
+        budget.check()
+    finally:
+        os.close(fd)
+
+
 def verify_admission(a, budget):
     acceptance(a['checkpointAcceptance'], 'windows-managed-harness-checkpoint-acceptance-v1',
                {'checkpoint': a['checkpoint']}, budget)
@@ -392,6 +414,7 @@ def verify_admission(a, budget):
              a['systemdRun']['path'] == '/usr/bin/systemd-run', 'Original entry tools')
     require((a['launcher']['bytes'], a['launcher']['sha256']) == NORMAL_LAUNCHER,
             'Retained normal launcher artifact only')
+    require_executable_launcher(a, budget)
     interop = a['interop']
     require(set(interop) == {'path', 'identity'} and re.fullmatch(r'/run/WSL/[0-9]{1,10}_interop', interop['path']),
             'Original WSL interop selector')
@@ -808,6 +831,7 @@ def worker(a, began, deadline, service_intent, service_deadline, budget):
         # 360 transport + 30 evidence must fit the earlier work deadline; its
         # already-withheld 10 terminal seconds also fit both enclosing clocks.
         budget.check(390_000_000_000)
+        require_executable_launcher(a, budget)
         result['stage'] = 'native-launch'
         capture = transport(command, replacement_environment(a), str(root),
                             min(budget.deadline - 30_000_000_000,
