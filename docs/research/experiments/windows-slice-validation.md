@@ -19343,3 +19343,210 @@ These credential-free automated steps require no desktop attendance. No account,
 WAM, token, cache, consent, authenticated resource, installation, signing or
 release effect is granted. Complete Slice acceptance still requires the separate
 CLI/Profile, Windows/WSL and later authorized real-account evidence.
+
+## One Passive Snapshot of Failed Final Publication 0110
+
+The original 0110 call ended at receipt `553fe8` with exit one and a closed
+session. Its complete combined transport contains the fixed 130-byte failure
+frame identifying `native-observation`, category `other`, and
+`launchAttempted=true`. Preserve the failed original and its full charge:
+20 preparation, 106 build/test, 6 publication, and 163 synthetic process units,
+within ceilings 28/130/30/180. No artifact success has been accepted. The independent original-outcome and
+lifetime disposition is 18,044 bytes, SHA-256
+`89fae10ae3a6f225dcc89ad312ec202308447d0b55387fa0b01c8ee1d34b9d21`.
+It joins all fourteen original chunks to the exact admission and durable predebit.
+
+The frame follows the source's launch-attempt, transport-initialization and
+clock-exchange phases. It does not distinguish the remaining branches within
+native observation, establish compiler execution, or establish original
+Windows/process-tree closure. The original source retains failed-state
+diagnostics and denies continuation. `noExperimentLive` remains false.
+Earlier historical lifetime dispositions do not grant an exception for new
+0110 uncertainty. Keep dependent execution stopped.
+
+Only after this amendment merges and the exact independent source, authority
+and original-call admissions pass may one passive Linux file snapshot collect
+the fixed original records below. Its question is which original receipts
+survived and whether their joined fields permit narrower failure/lifetime
+interpretation. This separate evidence-only interval does not resume or extend
+the original 2,400-second invocation. It charges zero experiment units and
+requires no operator interaction. A failed or partial start consumes this sole
+observation. There is no retry, success collector, publication, cleanup, refund,
+artifact acceptance, continuation grant, or new lifetime-risk exception.
+
+### Exact nineteen-leaf observation
+
+Read only these four names below
+`/var/tmp/azureauth-windows-slice-108/windows-actions/0110`, once per present leaf:
+
+| Exact Linux leaf | Maximum payload bytes |
+| --- | ---: |
+| `started.json` | 16,384 |
+| `result.json` | 65,536 |
+| `launcher-transport-stdout.bin` | 16,384 |
+| `launcher-transport-stderr.bin` | 16,384 |
+
+Read only these fifteen names below
+`/mnt/c/Temp/azureauth-windows-slice-108/actions/0110`, once per present leaf:
+
+| Exact Windows leaf | Maximum payload bytes |
+| --- | ---: |
+| `launcher.jsonl` | 65,536 |
+| `controller-exit.json` | 16,384 |
+| `controller-exit.json.pending` | 16,384 |
+| `controller-startup-failure.json` | 4,096 |
+| `controller-startup-failure.json.pending` | 4,096 |
+| `windows-result.json` | 65,536 |
+| `windows-result.json.pending` | 65,536 |
+| `subject.json` | 4,096 |
+| `subject.json.pending` | 4,096 |
+| `inner-members.json` | 65,536 |
+| `inner-members.json.pending` | 65,536 |
+| `stdout.bin` | 8,388,608 |
+| `stderr.bin` | 8,388,608 |
+| `launcher.stdout.bin` | 16,384 |
+| `launcher.stderr.bin` | 16,384 |
+
+Retain the three existing combined capture caps independently: 16,384 bytes for
+the Linux transport pair, 8,388,608 bytes for the Windows compiler pair, and
+16,384 bytes for the Windows bootstrap pair. Individual runtime leaf caps total
+17,301,504 bytes; the combined caps reduce maximum retained runtime payload to
+8,880,128 bytes. A missing final or pending name does not authorize another
+lookup, reread, polling, or an alternate receipt.
+
+The current bootstrap completion schema is
+`final-publish-controller-exit-v3`. Its nullable `failureDiagnostic` contains
+bounded first-cause phase, numeric source line and allowlisted exception metadata.
+Its `.pending` file can retain that same diagnostic if the final move fails.
+The controller can additionally retain
+`final-publish-controller-startup-failure-v1` in
+`controller-startup-failure.json` or its pending sibling. Its separate bounded
+stderr diagnostic is already covered by `launcher.stderr.bin`; no extra
+bootstrap-diagnostic pathname is invented.
+
+The remaining completion/subject/audit pending siblings are included because
+the current producer writes those exact names before a non-replacing move to
+the final names. This is one observation of the same control/lifetime roles,
+including partial persistence, rather than an authorization to repair them.
+No pending JSON is presumed complete or valid. The reader preserves raw bytes
+and does not interpret receipt contents or traverse a path obtained from them.
+
+The Linux reservation/result join identifies the original attempt. Original
+native journal, completion, subject and audit records may support joined scoped
+interpretation; captured compiler/bootstrap streams may distinguish reported
+errors from supervision failures. No record or absence alone proves termination.
+The similarly named Linux journal/completion copies are produced by the later
+success validator, which the failed original did not reach; they are excluded.
+
+Do not read clock-ready/reply inputs, verifier-history directories, generated
+assemblies, executable images, symbols, compiler response files, source/cache
+files, or other action numbers. Do not query processes, Windows Jobs, cgroups,
+sockets, account state or the host. No directories are enumerated.
+
+### Original failed-terminal binding
+
+First read only the retained terminal at
+`/tmp/windows-final-publish0110-original-failed-terminal-root-v1.json`:
+
+- 1,154 bytes;
+- SHA-256 `6a8b9a540d8dc42616d2c2fb34c817a5ff63866f19ac58dd076b8e88c0d71faa`;
+- full9 `[61,5595249,33060,1000,1000,1154,1790304975451168173,1790304975451168173,1]`;
+- original admission SHA-256
+  `75183f8d456a7457bfcfbca1040599bdb71e441574be3dc8f4719bd9019806d0`.
+
+Require its exact pinned shape: action 0110; terminal receipt 553fe8; integer exit
+one; sessionClosed true; failurePhase native-observation; failureCode other;
+launchAttempted true; counters 20/106/6/163; artifactAccepted,
+successCollectorEligible, continuationAllowed and wholeActionQuiescenceEstablished
+all false; the exact combined failure-frame base64 and UTC value; and the exact
+aggregate transport reference.
+
+That aggregate reference identifies
+`/tmp/windows-final-publish0110-original-transport-root-v1.json`, 23,776 bytes,
+SHA-256 `9a41aa692cf957768d2d2232ff4d224c92a2d93a2b97ee9312bc50e68dab2950`,
+full9 `[61,5595248,33060,1000,1000,23776,1790304975450757970,1790304975450757970,1]`.
+The reader validates this reference as terminal data and does not open it.
+The aggregate and original source remain separately available for later review.
+
+### File, output and operation boundaries
+
+Retain the accepted 0107 reader's descriptor-relative, literal, no-follow ancestry,
+regular single-link inputs, one cap-plus-one oversize-guard read per present leaf,
+and held/named continuity through finalization. File identities use nine Python
+integers in this order: device, inode, mode, uid, gid, size, mtime-ns, ctime-ns,
+link count. Do not pass these through JavaScript numbers. Directory continuity
+uses device, inode, mode, uid and gid; it does not claim directory membership or
+timestamp stability.
+
+Only initial ENOENT for one exact action directory or one listed leaf is optional.
+A missing action directory skips only that root's listed leaf opens. Missing
+earlier ancestors, changed identity, links, nonregular files, permission errors,
+short/oversized reads or a previously absent name appearing at the single final
+no-follow check fail. No enumeration, polling, content-selected operation or
+alternate lookup is permitted. This is not an atomic snapshot across leaves.
+
+Exclusively create one new private directory
+`/tmp/windows-final-publish0110-failure-receipts-snapshot-v1`
+and its sole `snapshot.json`. Preserve raw bytes as base64, full9 identities,
+bounded named-absence statuses and fixed false success/continuation claims.
+The snapshot cap is 16,777,216 bytes, including metadata. Write once, fsync,
+chmod 0444, fsync, perform one held-descriptor readback, sync the output and parent
+directories, and require final source/name/directory continuity. Preserve partial
+output on any failure without repair, replacement, deletion or another destination.
+
+Including the terminal and snapshot readback, the source permits at most:
+
+| Operation | Limit |
+| --- | ---: |
+| Data reads | 21 |
+| Requested read bytes | 34,079,895 |
+| Opens / closes | 38 / 38 |
+| Metadata operations | 320 |
+| Writes | 3 |
+| Total written bytes including stdout and failure stderr | 16,779,329 |
+| Seeks | 1 |
+| Synchronizations | 4 |
+| Fresh output directories | 1 |
+| Stdout | 2,048 bytes |
+| Failure stderr | 65 bytes |
+
+The source interval is one 60-second monotonic deadline through descriptor
+closure and final transport. Signals only mark cancellation for bounded source
+checks. Linux file I/O can still block; the signal handler does not establish an
+interruptible syscall. The separately admitted literal must retain the Linux-only
+65-second TERM watchdog with five-second KILL grace. It may target only the
+new passive reader's Linux work, never publication, WSL/Windows subjects, shared
+Jobs or original retained work. A watchdog termination is failed observation,
+not cleanup or evidence of any original process state.
+
+### Inert source and sole-call admission
+
+The new inert source is
+`/tmp/windows-final-publish0110-failure-receipt-reader-template-v1.py`,
+13,224 bytes, SHA-256
+`d2d959188a33eb062b4a5a5296f9e290e8ba9c489079fba7cd8e21ff3309f493`.
+
+Activate only its initial ADMISSION constant with the four exact fields
+`terminalBytes`, `terminalSha256`, `terminalFull9`,
+`originalAdmissionSha256`; values must match the terminal bindings above.
+Keep the activation separately pinned and independently reviewed. The unchanged
+template, proposal or terminal does not authorize invoking it.
+
+Before sole submission, independently bind the accepted amendment, whole
+activated reader source, terminal, exact isolated/no-site/no-bytecode Python
+runtime, startup environment, cwd, Linux-only watchdog, literal tool arguments
+and fresh output destination. Persist an exclusive durable start record of at
+most 8,192 bytes before submission. No source import, compile/eval or runtime
+preflight is authorized by this amendment.
+
+Require original reader exit zero, complete closed transport and independent
+original-outcome acceptance before using the snapshot. Empty waits may observe
+only that same original tool session and last at most 60 seconds each; they do
+not submit another reader or re-open its runtime leaves.
+
+Interpret only the accepted retained snapshot, original transport and admitted
+source/authority records. Keep raw contents private. Reader success means only
+that this finite snapshot completed; it does not establish original compiler
+completion, artifact eligibility, Job emptiness, global quiescence, safe
+continuation or a new owner risk decision. Further observation or execution
+retains its separate gates.
