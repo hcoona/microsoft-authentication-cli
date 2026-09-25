@@ -21081,8 +21081,9 @@ This supplement requires the matching repository-owner capacity and finite risk
 extension in the accepted Delivery Wave, the matching experiment-safety amendment and
 independent protocol review before execution. Proposed edits authorize no action on
 their own branch. It adds only 1/6/0/25 in preparation/build-test/publication/synthetic
-order, giving aggregate ceilings 36/147/30/302, preparation host ceilings 18 Linux and
-18 Windows, and eleven aggregate ETW creation attempts. No optional correction set is
+order, initially giving aggregate ceilings 36/147/30/302, preparation host ceilings
+18 Linux and 18 Windows, and eleven aggregate ETW creation attempts. The additional
+managed-build singleton below separately extends only the build/test and synthetic ceilings. No optional correction set is
 included. Public-download, toolchain, environment, account and external-effects
 boundaries remain unchanged.
 
@@ -21154,7 +21155,7 @@ or substitute capacity for this pair.
 
 The inert [managed caller](../../../tools/validation/run_windows_managed_build.py) changes
 only its prospective ceiling tuple, the two Windows host-ceiling checks and the accepted
-slot-label set. Its source is 59,435 bytes, SHA-256
+slot-label set. Its initial supplemental source is 59,435 bytes, SHA-256
 `2c10bbff8a4cbc451a33bf780126e6eec0fd220c8bfdbbd6917a990a3477b296`.
 The false execution guard, six historical unknowns, admission schema, charges, original
 clocks, failure retention and all source/input/executable-use predicates remain unchanged.
@@ -21514,3 +21515,138 @@ experiment-owned files intentionally; no deletion, old-original cleanup or new l
 risk disposition is granted. Keep 0057, 0064, 0068, 0093, 0107 and 0110 separate and
 `noExperimentLive=false`. Controlled success establishes only its declared synthetic
 property, never real WAM, UI, account/cache, reuse or overall Slice acceptance.
+
+## One Additional Supplemental Managed Build
+
+### Retained 0120 Success and 0121 Admission Failure
+
+Restore 0120 used source commit
+`14f4b3969a61ee8a95ee1215bb23198b69e79bf8` and completed its sole original with exit
+zero. Its sole 62-leaf collector retained 49 stable required leaves and 13 optional
+absences. Independent graph, deployment and accounting acceptance is bound by SHA-256
+`7de1eac0cc4cc7a0893e13428e2f6d708a54d86cd533f21b1be9d12a139e8882`; separate scoped
+lifetime acceptance is bound by
+`a8461b3226b3ffa7265c3ffc2fb287ac0571119aafd5552e4f599ca63cd5bf63`. The four project
+graphs, locks and generated imports join the admitted public cache and immutable source.
+The original 1,822 source/cache creation lineages and 370 installed descriptors remain
+the input basis; twenty generated metadata descriptors retain strict full9 identities.
+
+The sole build 0121 original exited one with `PredicateFailure`, `Admission leaf`,
+source line 345. Its final command named
+`/tmp/windows-managed-harness-0121-admission-root-v1.json`; the exact accepted caller
+requires `/tmp/windows-managed-harness-[0-9]{4}-admission\.json`, with the four-digit
+action followed immediately by `-admission.json`. The filename mismatch was a command
+preparation and exact-call review defect, not a source defect. Preserve the inaccurate
+positive final review
+`3edf86e5196397899f43899633a10e595a8acaa9669e94507c56c67bfc65dc7e` as failed review
+evidence, not an admission for another call.
+
+The complete terminal transport has SHA-256
+`3ef439cb5ff9d2d6984229baffb5cf3fb07ea60004fbead5bb76bc95570b2993`. Independent failure,
+lifetime and accounting triage is bound by
+`566a1503e9bd9fa34b436496023a8f26e653288571857c8612708daa2e5dc8bc`. The reported
+predicate is before the admission read and before dispatch to either original or worker.
+Consequently that invocation reached no harness action lock, input read, root creation,
+service, native launcher, Job or managed phase. This is an inference from the bound source
+control flow and complete terminal diagnostic, not a process or filesystem absence
+survey. No new lifetime unknown is added; all six historical unknowns and
+`noExperimentLive=false` remain. Its inert success collector is unused and ineligible.
+
+The failed start consumes the full 0/1/0/1 reservation. Totals are 30/107/6/172;
+preparation hosts remain Linux 12/18 and Windows 18/18. Protected capacity is
+6/40/0/130: the old 6/35/0/107 plus the untouched controlled-caller 0/5/0/23.
+All seven old restores are spent, all seven old paired builds remain blocked and
+untransferred, and twelve later-product build/test slots remain protected. Neither
+early rejection nor the successful restore supplies another managed-build attempt.
+
+### Separate Singleton and Exact Input Continuity
+
+This additional attempt requires the matching owner-approved Delivery Wave and
+experiment-safety amendments. It allocates exactly one new managed build, charged
+0/1/0/1, and raises the aggregate ceilings to 36/148/30/303. The preparation host
+ceilings and eleven ETW attempts are unchanged. Before this attempt, adding its named
+reservation gives protected capacity 6/41/0/131. With no intervening consumption,
+the attempt produces 30/108/6/173 and leaves 6/40/0/130 protected; their sum is
+36/148/6/303. Derive a fresh checkpoint from retained accepted accounting rather than
+treating this forecast as a current reservation. Do not spend a controlled-caller row,
+old blocked build or later-product slot.
+
+Use a fresh original identity, prospectively 0122 only if independently current and
+unused, with existing slot `supplemental`, operation `build` and `subjectAction=0120`.
+This is a separate singleton reservation attached explicitly to the accepted 0120
+restore; it does not reopen or rename spent 0121. The slot string grants no authority.
+The new command's admission leaf must be
+`/tmp/windows-managed-harness-0122-admission.json` for action 0122. Independently
+compare the actual final argv filename with the pinned source entry predicate before
+acceptance; do not loosen that predicate or rely only on its file descriptor/hash.
+
+Retain the restored source commit
+`14f4b3969a61ee8a95ee1215bb23198b69e79bf8`, product
+`503360753accd0829801953823b1b57a4f852440`, and original 0120 absolute subject,
+package and empty-feed paths. The later accepted caller/control-source commit is
+a separate binding; it must not silently rebase the restored source or graph.
+The accepted 2,212-row inventory contains 668,979,594 payload bytes, all
+`materialize=false`. Its 3,441,492 bytes have SHA-256
+`88183b8be5cb4d5636a2b85ad0778cdf8ec8c47cfa2017dfb85217ae5f908e4c`; its 507,180-byte
+TSV has SHA-256 `54a25070a51b8c561f0abf7c155391f2e4c1cbcb226baff24557ee301eba28af`.
+Preserve the original 1,822 source/cache deployment descriptors and complete
+`restoreCreation` observations, 370 installed descriptors and twenty metadata
+descriptors in their accepted order. Do not replace a lock's original descriptor
+with its collector observation, refresh a baseline, recopy inputs, rerun restore,
+probe old outputs or move the subject/package roots.
+
+The existing single input read in each original/worker keeps qualified eight-field
+continuity only for accepted original created-copy lineages. Installed and generated
+metadata inputs remain strict full9. Failed or uncertain continuity stops the new
+attempt without repair. Derive new operation-specific acceptances; previous 0121
+source/input/checkpoint/call controls do not admit it. Bind the accepted 0120 outcome,
+scoped lifetime and the independently accepted 0121 pre-dispatch disposition.
+
+### Source and Finite Admission
+
+The only source changes are the current ceiling tuples in the inert
+[managed caller](../../../tools/validation/run_windows_managed_build.py) and
+[controlled caller](../../../tools/validation/controlled-callers/run_controlled_callers.py),
+from `[36, 147, 30, 302]` to `[36, 148, 30, 303]`. The controlled caller's update
+keeps its existing five reservations usable under the same current checkpoint;
+it adds no controlled action or topology. Both execution guards remain closed.
+Preserve all other source bytes, including admission schema, path and launcher
+predicates, source/input checks, process topology, clocks, output limits and charging.
+The amended inert source identities are recorded below.
+
+| Inert source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `tools/validation/run_windows_managed_build.py` | 59,435 | `9fc041834f0d979a0a2a7b373db032b9614c27b160f3a07d7fc120ab0589ada0` |
+| `tools/validation/controlled-callers/run_controlled_callers.py` | 67,004 | `47a04df05903a98d1814e01336764cfbb90d31d304b49e579bfe485bdfcc7f8c` |
+
+Retain the unchanged original 3,600-second clock and five-second outer kill allowance,
+1,200-second service clock, 330-second normal-launcher limit, 300-second controller
+limit and 190-second single managed phase. Keep the 8 MiB capture cap, 8,192 reads and
+4 GiB requested reads per original/worker, 8,192 writes and 3 GiB writes, four terminal
+writes/256 KiB reserve, 128 MiB input-leaf and 2 GiB aggregate-input caps. There are no
+payload copies or additional input readbacks. Fresh action-owned control/result/home
+and temporary directories use the new identity; the subject and packages stay at 0120.
+
+Independently bind the actual enlarged inventory, two prospective deployment receipts,
+TSV, all final control lengths/hashes/full9, current accounting, and every literal argv
+operand to the accepted source before the single durable predebit and submission.
+The 22-field admission adds only the exact accepted `exactCallReview` descriptor to
+its reviewed 21 subjects. Exact-call review must cover entry filename predicates as
+well as content/hash and finite-control joins. No candidate import, execution or
+runtime probe is needed for this source review.
+
+Keep the existing creation-time named Job and dedicated cgroup supervision. A failed
+or partial original spends the whole singleton, without retry, refund, transfer,
+alternate destination, clock reset or cleanup. After a completed original, any collector
+requires its own finite fixed selection/source/call admission; independently accept
+build artifacts, exact source/graph, compiler/binlog, PE/PDB/document and scoped lifetime
+evidence before dependent CLI/Profile activity. This allocation supplies no artifact
+acceptance and changes no SourceLink or other evidence obligation.
+
+The Wave explicitly extends each separate historical 0057, 0064, 0068, 0093, 0107 and
+0110 disposition only to this extra finite credential-free build on the same hosts.
+It accepts no new uncertainty and establishes no quiescence. No extra preparation,
+restore, publication, ETW attempt, helper/compiler target, toolchain, download, account,
+WAM, credential, application or broker cache, installation, signing or release effect
+is granted. Proposed text authorizes nothing before its required owner acceptance,
+independent reviews and merge.

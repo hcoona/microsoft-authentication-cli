@@ -26,7 +26,7 @@ import xml.etree.ElementTree as ET
 LINUX = Path('/var/tmp/azureauth-windows-slice-108')
 PROJECTION = Path('/mnt/c/Temp/azureauth-windows-slice-108')
 WINDOWS = r'C:\Temp\azureauth-windows-slice-108'
-CEILINGS = [36, 147, 30, 302]  # Proposed ceilings; guard remains closed until amended authority.
+CEILINGS = [36, 148, 30, 303]  # Proposed ceilings; guard remains closed until amended authority.
 HISTORICAL_UNKNOWN = ['0057', '0064', '0068', '0093', '0107', '0110']
 PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')

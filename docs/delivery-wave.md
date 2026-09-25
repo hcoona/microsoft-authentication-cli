@@ -47,8 +47,8 @@ Use only public dependencies and verified retained public caches/installed toolc
 downloads may use public NuGet.org and official .NET distribution endpoints, with no
 credentials. New experiment-owned files stay in dedicated build/test roots outside
 production installations and are intentionally retained. Maximum cumulative capacity is
-36 dependency preparation/restore actions, 147 build/test actions, 30 Native AOT publish
-actions and 302 synthetic process scenarios, with at most 4 GiB of newly downloaded public
+36 dependency preparation/restore actions, 148 build/test actions, 30 Native AOT publish
+actions and 303 synthetic process scenarios, with at most 4 GiB of newly downloaded public
 dependency content. Exact per-action time, output and termination limits and source
 admission are owned by the accepted protocol. No new toolchain installation is granted.
 
@@ -315,10 +315,11 @@ grants no automatic retry, recovery or budget refund.
 **Supplemental managed/caller capacity:** The repository owner approves exactly one
 additional credential-free managed restore/build pair and a separate controlled-caller
 sequence on the same hosts. Together they add one preparation, six build/test and
-25 synthetic units, with no publication increase. The aggregate ceilings are
-36/147/30/302 in preparation/build-test/publication/synthetic order; preparation host
-ceilings are 18 Linux and 18 Windows. Preserve every existing charge and protected
-reservation, including twelve later-product build/test planning slots. No spent restore
+25 synthetic units, with no publication increase. That allocation's initial ceilings
+are 36/147/30/302 in preparation/build-test/publication/synthetic order. The additional
+managed-build singleton below extends them. Preparation host ceilings remain 18 Linux and
+18 Windows. Preserve every existing charge and protected reservation, including twelve
+later-product build/test planning slots. No spent restore
 or blocked paired build is reopened, transferred or refunded. No correction buffer or
 automatic retry is included.
 
@@ -357,6 +358,35 @@ WAM, credential, application or broker cache, consent, authenticated-resource, i
 signing or release effect. The reserved future real-effects capacity below remains a
 reservation only. Proposed text supplies no authority before owner acceptance and merge.
 
+
+**Additional supplemental managed build:** The repository owner approves one separately
+reserved credential-free managed build using the independently accepted 0120 restore
+and its unchanged subject/package inputs. Require independent acceptance that failed
+0121 stopped before admission-file reading and harness dispatch, with no new lifetime
+uncertainty. Preserve its full charge and failed result. This singleton adds
+0/1/0/1 in preparation/build-test/publication/synthetic order, giving aggregate ceilings
+36/148/30/303. Preparation host ceilings stay 18 Linux and 18 Windows; the aggregate
+ETW creation ceiling stays eleven. Preserve every earlier charge and protected
+reservation, including all seven blocked paired builds, the separate controlled-caller
+sequence and twelve later-product build/test planning slots.
+
+Explicitly extend each separate original 0057, 0064, 0068, 0093, 0107 and 0110
+historical lifetime/interference disposition only to this additional singleton on the
+same hosts and within the same credential-free effects. Preserve their separate scopes,
+failed outcomes, full charges, spent observations and unresolved lifetime status. No new
+uncertainty is accepted, no quiescence is established, and the extension ends with this
+grant without automatic transfer.
+
+Accept the matching experiment-safety, exact Windows protocol and necessary inert
+caller-ceiling changes before execution. Bind a new original identity to the unchanged
+0120 source/graph and original creation lineage, with fresh source, input, artifact,
+current-checkpoint and exact-call admissions. The exact admission filename must satisfy
+the pinned caller's existing entry predicate. No admission-path predicate is relaxed.
+A failed or partial start spends this new singleton; no further correction attempt,
+refund, transfer, recovery, alternate destination or renewed clock follows. No new
+restore, preparation, publication, ETW attempt, helper kind, compiler target, download,
+toolchain, account, WAM, credential, application or broker cache, installation, cleanup,
+signing or release effect is included.
 
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13

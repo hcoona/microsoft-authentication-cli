@@ -315,7 +315,7 @@ included; no account, credential, application or broker cache, WAM or release ef
 is granted.
 
 The Wave's supplemental managed/caller allocation separately adds exactly
-1/6/0/25 preparation/build-test/publication/synthetic capacity, giving aggregate
+1/6/0/25 preparation/build-test/publication/synthetic capacity, initially giving aggregate
 ceilings 36/147/30/302 with preparation host ceilings 18 Linux and 18 Windows.
 It explicitly extends each separate original 0057, 0064, 0068, 0093, 0107 and 0110
 lifetime/interference disposition only to that finite increment on the same hosts
@@ -343,6 +343,19 @@ their declared attempts. Existing account and external-effects exclusions and fu
 real-effects gates remain unchanged. The historical dispositions and the ETW exception
 end with the current grant and never transfer or expand automatically.
 
+The separate additional supplemental managed-build allocation adds only 0/1/0/1,
+giving current aggregate ceilings 36/148/30/303. Preparation host ceilings remain
+18 Linux and 18 Windows, and the ETW creation ceiling remains eleven. It explicitly
+extends each separate 0057, 0064, 0068, 0093, 0107 and 0110 historical disposition
+only to this singleton's existing credential-free effects on the same hosts.
+Preserve all earlier failures, charges, observations and protected reservations.
+Require independent acceptance of 0121's pre-admission, pre-dispatch failure and of
+the unchanged successful 0120 restore inputs before the new build's ordinary gates.
+No new lifetime uncertainty is accepted. The additional build requires its matching
+owner Wave decision and exact protocol, source, artifact, input, checkpoint and call
+acceptance. Its first submission spends the whole attempt, including failed start;
+no further correction attempt, refund, transfer, old-state observation or cleanup
+follows. No preparation, restore, publication, ETW, account or broader effect is added.
 
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
 selected-account session or secure-cache updates when the protocol declares that outcome.
