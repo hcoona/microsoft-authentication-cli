@@ -38,10 +38,14 @@ PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows
 class PredicateFailure(ValueError):
     """Only require's fixed source labels are eligible for retained diagnostics."""
 
+    def __init__(self, label, read_observation=None):
+        super().__init__(label)
+        self.read_observation = read_observation
 
-def require(condition, label):
+
+def require(condition, label, *, read_observation=None):
     if not condition:
-        raise PredicateFailure(label)
+        raise PredicateFailure(label, read_observation)
 
 
 def failure_identity(error):
@@ -55,8 +59,13 @@ def failure_identity(error):
         if code.co_filename == __file__ and code.co_name != 'require':
             line = trace.tb_lineno
         trace = trace.tb_next
-    return {'type': type(error).__name__, 'sourceLine': line,
-            'predicate': str(error) if type(error) is PredicateFailure else None}
+    result = {'type': type(error).__name__, 'sourceLine': line,
+              'predicate': str(error) if type(error) is PredicateFailure else None}
+    if type(error) is PredicateFailure and error.read_observation is not None:
+        observation = error.read_observation
+        result['readObservation'] = (observation if len(encode(observation)) <= 2048 else
+                                     {'omitted': 'serialization-bound'})
+    return result
 
 
 def encode(value):
@@ -140,8 +149,18 @@ class Budget:
                 parts.append(chunk)
                 remaining -= len(chunk)
             raw = b''.join(parts)
-            require(len(raw) == before.st_size and identity(before) == identity(os.fstat(fd)) == identity(path.lstat()),
-                    'Unstable descriptor/path identity')
+            initial_identity = identity(before)
+            final_identity = named_identity = None
+            # Preserve the existing short-circuit observations. A length failure
+            # skips both metadata calls; a descriptor mismatch skips the path call.
+            if not (len(raw) == before.st_size and initial_identity ==
+                    (final_identity := identity(os.fstat(fd))) ==
+                    (named_identity := identity(path.lstat()))):
+                require(False, 'Unstable descriptor/path identity', read_observation={
+                    'readOrdinal': self.reads, 'createdCopyReadback': created_identity is not None,
+                    'expectedBytes': before.st_size, 'returnedBytes': len(raw),
+                    'initialDescriptor': initial_identity, 'finalDescriptor': final_identity,
+                    'namedPath': named_identity})
             self.check()
             return raw, identity(before)
         finally:
