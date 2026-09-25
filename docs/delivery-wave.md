@@ -276,13 +276,27 @@ its exact effects. Preserve their separate scopes, failed results, full charges
 and spent observations. None establishes quiescence. These extensions end with
 the current grant, never transfer automatically, and excuse no new uncertainty.
 
-Accept at most eight sequential fresh real-time process ETW sessions, bounded
+Accept at most eight fresh real-time process ETW session-creation attempts.
+Actual observation attempts remain sequential and individually admitted; residual
+owned kernel sessions and buffers may overlap later attempts. Retain bounded
 transient exposure of unrelated private command-line, image and user-SID payload
-data before filtering, and possible persistence of an owned session and buffers
-after failed stop/drain or forced observer exit. Require PROCESS|NO_SYSCONFIG-only
-selection, finite private memory, no ETL or raw unrelated retention, no elevation
-or shared-session operation, and ordinary stop on each new trace/gate/product
-lifetime uncertainty. Direct WSL uses the admitted inherited relay/account baseline
+data before filtering, PROCESS|NO_SYSCONFIG-only selection, finite private memory,
+no ETL or raw unrelated retention, and no elevation or shared-session operation.
+
+The repository owner accepts persistence of these originally owned sessions and
+buffers after failed stop/drain or forced observer exit as a nonblocking residual
+risk by itself. This is a risk disposition, not empirical evidence of no effect
+on business behavior. Preserve each failed original and full charge. After
+independent review establishes that such persistence is the sole remaining issue,
+subsequent bounded validation may use an existing unused allocation without another
+owner risk decision solely for that persistence. Retain original ownership/session
+identity and the failed outcome in the next checkpoint. Do not infer trace closure,
+rewrite a failure, treat a failed calibration as successful, or grant automatic
+retry, extra session creation, cleanup, repeated stop or privilege change.
+Unresolved native-process, gate, consumer, pending OVERLAPPED, event-loss or required
+evidence issues remain stops; the exception covers no unknown ownership or foreign
+session. Passing calibration and direct-observation evidence retain their exact
+source and protocol gates. Direct WSL uses the admitted inherited relay/account baseline
 with fixed fresh-directory overlays; full environment replacement and native
 precreation stdin closure are not claimed. This decision grants no account, WAM,
 token, credential, application or broker cache, consent, authenticated-resource,
@@ -292,8 +306,9 @@ public dependency-cache copy belongs only to the explicitly bounded restore reci
 Accept matching experiment-safety and exact Windows protocol amendments before
 dependent execution. Keep unchanged normal 0070 creation-time named-Job supervision.
 Independent source, exact artifact, checkpoint, call and outcome acceptance remain
-required at every step. New failure or uncertainty stops; this decision grants no
-automatic continuation, recovery or budget refund.
+required at every step. A failed original stops; later work retains those gates
+and only the narrow owned-session persistence disposition above. This decision
+grants no automatic retry, recovery or budget refund.
 
 
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,

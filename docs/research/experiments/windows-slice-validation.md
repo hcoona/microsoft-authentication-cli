@@ -19966,8 +19966,9 @@ experiment-safety amendment and this exact protocol merge into the accepted targ
 It does not execute or replenish any previous grant. Accepted retained evidence
 through b10355c64887ad3f5194ca9f0626f63f63a37db6 records counters 20/106/6/163, original
 0110 publication failure and noExperimentLive=false. Preserve historical 0057, 0064,
-0068, 0093, 0107 and 0110 uncertainty under the Wave's six explicit extensions. A new
-source, call, outcome or resource uncertainty retains ordinary stop conditions.
+0068, 0093, 0107 and 0110 uncertainty under the Wave's six explicit extensions.
+Apply the owner's separate narrow owned-ETW-session persistence disposition below;
+all other source, call, outcome or resource uncertainty retains ordinary stops.
 
 ### Subject, required prerequisites and immutable source
 
@@ -20043,7 +20044,7 @@ starting checkpoint, consumption is 11 Linux / 9 Windows. Exact source, activati
 artifact, current checkpoint, protocol and original-call reviews remain mandatory;
 this allocation alone supplies none of their acceptance.
 
-| Original reservation | Preparation | Build/test | Synthetic | Maximum ETW sessions |
+| Original reservation | Preparation | Build/test | Synthetic | Maximum ETW creation attempts |
 | --- | ---: | ---: | ---: | ---: |
 | Primary observer build, managed restore/build and four scenario batches | 2 | 5 | 27 | 2 |
 | Correction set 1: two observer candidates, two managed restore/build pairs, four batches | 4 | 6 | 29 | 2 |
@@ -20093,10 +20094,12 @@ Within each correction set, observer candidates A and B are compile reservations
 its single calibration. Select one final independently accepted artifact, calibrate
 that exact artifact, then use it unchanged for direct WSL. Changed observer bytes
 after calibration require another separately allocated calibration. Compiler slots
-cannot create another session. At most eight fresh ETW sessions can be attempted,
-sequentially: four calibration and four direct. Require independent complete
-outcome acceptance before another original; unresolved prior trace lifetime stops
-rather than leaving concurrent sessions active under this count.
+cannot create another session. At most eight fresh ETW session-creation attempts
+are allocated: four calibration and four direct. Actual observation attempts remain
+sequential, with independent review of the preceding original outcome before another
+original. Residual originally owned kernel sessions and buffers may overlap later
+attempts under the owner's narrow persistence disposition below. Every creation
+attempt spends its existing slot; retained sessions neither replenish nor add slots.
 
 Each attempt, failed start, interrupted run and partially materialized original
 keeps its full conservative debit. The shared lease spans debit, execution and
@@ -20387,12 +20390,37 @@ Public records use only sanitized public evidence under ordinary repository rule
 The observer may query only its own just-created session, attempt at most one owned
 STOP and one consumer CloseTrace; stopping a consumer alone is not session closure.
 Require successful owned-session stop, complete ProcessTrace drain and zero event/log/
-real-time loss before acceptance. Process/Job kill can leave the trace session or
-buffers alive; the owner decision covers this possible persistent machine effect,
-not permission to continue after it. Any new trace, native process, gate, pending
-OVERLAPPED or consumer uncertainty stops. Preserve evidence; no session adoption,
-foreign/shared-service operation, elevation, privilege enablement, ACL/group/registry/
-driver change, cleanup helper or automatic recovery is granted.
+real-time loss for a passing calibration or direct observation. Process/Job kill
+can leave the originally owned trace session or buffers active. The owner accepts
+that persistence alone as a nonblocking residual risk for later bounded validation;
+this is not empirical evidence that tracing has no effect on business behavior.
+Residual sessions may continue selected process-event collection in kernel buffers
+after their original consumers end. No ETL or additional consumer is authorized.
+
+The failed original remains failed and fully charged. Before a later original,
+independently review its original evidence and record an explicit failure disposition
+that identifies the originally owned session and establishes that kernel-session or
+buffer persistence is the sole remaining issue. Preserve its identity, original
+failure, charge and disposition in the accepted current checkpoint and retained
+endpoint history. No additional owner risk request is needed solely for this case.
+Use only an existing unused allocation, a fresh action/session identity and the
+ordinary exact source, checkpoint, prerequisite and call admissions. This permits
+separately admitted continuation; it does not resume the failed original, grant
+an automatic retry or change any original receipt's continuationAllowed=false.
+
+The unchanged caller still requires traceStoppedAndDrained=true in independently
+accepted calibration evidence before direct WSL, and traceStopped, consumerCompleted
+and zero loss for every passing observer result. A failure disposition cannot set
+those fields true or substitute for successful calibration. Any required successful
+calibration must still come from an admitted unused calibration slot. All original
+required event pairs, capture completeness and lifetime evidence remain necessary.
+Native-process, gate, consumer, pending OVERLAPPED, event-loss, unknown-ownership or
+other evidence uncertainty remains a stop; an unresolved consumer or drain cannot
+be classified as kernel persistence alone. Preserve the original bounded stop/close
+attempts and evidence without adding session adoption, repeated stop, foreign/shared-
+service operation, elevation, privilege enablement, ACL/group/registry/driver change,
+cleanup helper or automatic recovery. Keep at most eight creation attempts and
+sequential actual observation attempts even if their residual kernel sessions overlap.
 
 Observer/controller processes use explicit replacement environments and fresh
 home/temp directories. Public WSL BuildEnvironment starts with inherited Windows relay

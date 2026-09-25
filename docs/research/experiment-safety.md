@@ -290,11 +290,24 @@ For that allocation, apply the concrete owner decision to transient unrelated
 private command-line, image and user-SID data in the bounded private ETW consumer
 and possible persistence of its owned trace session after failed stop/drain or
 forced exit. Require fresh ownership, PROCESS|NO_SYSCONFIG selection, finite
-buffers/payload/callback/join bounds, no raw unrelated retention, at most eight
-sequential sessions and complete independent outcome acceptance before another
-attempt. Process, Job or cgroup exit alone proves neither trace closure nor
-direct-native-product termination. Each new uncertainty stops; no cleanup helper,
-privilege change, foreign-session operation or automatic recovery is implied.
+buffers/payload/callback/join bounds, no raw unrelated retention and at most eight
+session-creation attempts. Actual observation attempts remain sequential, with
+independent outcome review before another attempt; residual owned kernel sessions
+and buffers may overlap later admitted attempts.
+
+The owner's narrow disposition permits later bounded validation within existing
+unused allocations when persistence of an originally owned session or its buffers
+is the sole remaining issue. It requires no additional owner risk request solely
+for that persistence and supplies no empirical no-business-impact claim. Preserve
+original session ownership/identity, failed results, full charges and required
+evidence. An independently accepted failure disposition is not successful
+calibration or observation evidence. Exact passing-result gates, including complete
+consumer drain and zero loss, remain unchanged. Unknown ownership, native-process,
+gate, consumer, pending OVERLAPPED or other evidence uncertainty still stops work;
+no additional cleanup, repeated stop, elevation, foreign-session operation,
+automatic retry or automatic recovery is implied. Process, Job or cgroup exit alone
+proves neither trace closure nor direct-native-product termination. The exception
+ends with this finite Wave allocation and grants no additional session creation.
 Keep the explicit inherited direct Windows relay premise and the distinction
 between Linux preclosed stdin and native precreation EOF. Only the separately
 bounded fresh public dependency-cache copy and complete-cache offline restore are
@@ -589,8 +602,9 @@ Stop the experiment if:
 - remaining authorized attempts or cumulative capacity cannot be established;
 - experiment-controlled work cannot be stopped within the declared bounds, or safe
   ownership cannot be established for cleanup, except for the case-specific original
-  Issue #108 invocation 0057, publications 0064, 0093, 0107 and 0110, and fixture 0068
-  lifetime exceptions in Termination and Retention, each within its exact accepted scope;
+  Issue #108 invocation 0057, publications 0064, 0093, 0107 and 0110, fixture 0068,
+  and the retained-launcher allocation's sole-owned-ETW-persistence exception in
+  Termination and Retention, each within its exact accepted scope;
 - the subject's source or artifact identity no longer matches the accepted protocol; or
 - continuing would mutate an unrelated account, installation, or remote resource.
 
