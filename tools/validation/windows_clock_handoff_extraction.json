@@ -1,0 +1,133 @@
+{
+  "bootstrap": {
+    "bytes": 16072,
+    "repositoryPath": "tools/validation/Start-WindowsFinalPublish.ps1",
+    "sha256": "3e6f112a8d93c64462a9875b6b1a676136bb392284ced487f0ee99240aaa430e",
+    "spans": {
+      "Assert-BootstrapBudget": {
+        "bytes": 256,
+        "offset": 2279,
+        "sha256": "3fb69951b807585c4908c5bb71573a14b90c540c4b343a283cb34e05660f8422"
+      },
+      "Assert-BootstrapDirect": {
+        "bytes": 434,
+        "offset": 2537,
+        "sha256": "9fd1ab653d1ec09098fd8eee3ceb2ded619825eb988e6863ec4e1c48c7311a78"
+      },
+      "Get-BootstrapFailure": {
+        "bytes": 1776,
+        "offset": 501,
+        "sha256": "626ca8f91d1440bc7f5c1a42e6bd95337f04932d0d8a40121d233525aefb258d"
+      },
+      "Get-BootstrapHash": {
+        "bytes": 241,
+        "offset": 2973,
+        "sha256": "f2a8e56d1a6f8d5a406a739bba7ef8f339eb6ddef4e038f63c426d7b1ecfd3a3"
+      },
+      "Read-BootstrapBytes": {
+        "bytes": 785,
+        "offset": 3216,
+        "sha256": "84052f8c906a8250315d9e4535b145223a44fa2b2a2caa7db8f4c16e03afc800"
+      },
+      "Save-BootstrapJson": {
+        "bytes": 613,
+        "offset": 4537,
+        "sha256": "0d63499b8e84c8eb4c6c003bdf80b8b33fa395e29fc63bcce527adce1192e0f0"
+      },
+      "handoff": {
+        "bytes": 2880,
+        "offset": 10113,
+        "sha256": "6c4d62058b511af8eb781be1ddcae18384cbcb7f3b4e364aa23b5f25688a9507"
+      }
+    }
+  },
+  "controller": {
+    "bytes": 96759,
+    "repositoryPath": "tools/validation/Invoke-WindowsFinalPublish.ps1",
+    "sha256": "815cceec7473b760e7cb82fb3da1e6cc706965f3969bb1c796dace9527dc245d",
+    "spans": {
+      "Assert-FinalBudget": {
+        "bytes": 742,
+        "offset": 10791,
+        "sha256": "c8279ee4c87a2fb37984a8ca8dd141549112cf9bf21adc237b8916bb1cfec261"
+      },
+      "Assert-GuardDirect": {
+        "bytes": 426,
+        "offset": 80568,
+        "sha256": "94f0c85991e6d1681b8e9ca01c14b0380e9da30fcd1df886ee695584ac473ed1"
+      },
+      "Get-FinalHash": {
+        "bytes": 237,
+        "offset": 2948,
+        "sha256": "dfd0818ced66eb367938e7a5c97ee679dcf4647e736e85df8d51d4de78760e84"
+      },
+      "Get-FinalStartupFailure": {
+        "bytes": 1779,
+        "offset": 1167,
+        "sha256": "82115ac901de4e2f73f620b2f01e9127b515136e9995d6c5ecaa282244d909b1"
+      },
+      "Read-FinalBytes": {
+        "bytes": 728,
+        "offset": 3513,
+        "sha256": "319aefb13f74f50dffe806b42c43ef745a59318c57c937ad3e4a5c0d19c979e4"
+      },
+      "Receive-FinalOriginalClock": {
+        "bytes": 3485,
+        "offset": 66706,
+        "sha256": "1891d16b803f14c122cf05c0b826a55d50941a683c32a23f4e6168136588acbe"
+      },
+      "Save-Bytes": {
+        "bytes": 388,
+        "offset": 77715,
+        "sha256": "0f13340da4e2c7ff9d43221436fc32c5fad9df5a95e1b6a3c353641184f51e57"
+      },
+      "Save-CompleteJson": {
+        "bytes": 191,
+        "offset": 77522,
+        "sha256": "580c336544de524aa2fafad6f1079bc9d7209c3753e60b9b16a24c4135011c88"
+      },
+      "Save-Json": {
+        "bytes": 493,
+        "offset": 77027,
+        "sha256": "3bef5596f419e836d1f823663fcba42347836c44e40ba7ea58cd88dfd8b597a7"
+      },
+      "startup": {
+        "bytes": 2184,
+        "offset": 94575,
+        "sha256": "c584c4021c8384aa95389ddf809944417f9230e8ea811204eea287315f484593"
+      }
+    }
+  },
+  "publisher": {
+    "bytes": 204188,
+    "repositoryPath": "tools/validation/final_publish_contracts.py",
+    "sha256": "9a502cd13442b15313f657eed004cf7afda89e65b58c3cd570ef3b72d635087c",
+    "spans": {
+      "budget": {
+        "bytes": 265,
+        "offset": 15158,
+        "sha256": "294446f76f80be6540a6c7102d24dbcbab58e36605d4b6c2a5633175b80b742a"
+      },
+      "direct": {
+        "bytes": 168,
+        "offset": 15425,
+        "sha256": "192b6565cff451239e0f244cbeaa1ac2407ac431188d4ed310f0abf5d84decf5"
+      },
+      "fail": {
+        "bytes": 49,
+        "offset": 13345,
+        "sha256": "6b16671297b859ca953f5028368a50628739c2aa31a76de9231b3d0aa5fda779"
+      },
+      "publish_clock_reply": {
+        "bytes": 1056,
+        "offset": 183049,
+        "sha256": "b96fd2d94101f999436607e743f9c1131dce8112275a3b791231c83e3dd30110"
+      },
+      "write_new": {
+        "bytes": 905,
+        "offset": 16958,
+        "sha256": "449003e5d804773469d4160d1e3a4a5d58cafeae6c65fad54b2df2a292b2c47d"
+      }
+    }
+  }
+}
