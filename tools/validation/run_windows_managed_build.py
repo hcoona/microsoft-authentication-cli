@@ -115,13 +115,19 @@ class Budget:
         require(not self.cancelled and time.monotonic_ns() + reserve < self.deadline,
                 'Original interval expired or cancelled')
 
-    def read(self, path, maximum):
+    def read(self, path, maximum, *, created_identity=None):
         self.check()
         direct(path)
         fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
         try:
             before = os.fstat(fd)
             require(stat.S_ISREG(before.st_mode) and 0 <= before.st_size <= maximum, 'Regular bounded input')
+            if created_identity is not None:
+                # Only immediate readback of a just-created source/cache copy uses
+                # the write-stage identity. Establish the strict reader baseline
+                # after open while retaining ctime as an observed transition.
+                require(before.st_nlink == 1 and all(identity(before)[i] == created_identity[i]
+                        for i in (0, 1, 2, 3, 4, 5, 6, 8)), 'Created copy changed before readback')
             self.reads += 1
             self.requested += before.st_size + 1
             require(self.reads <= 8192 and self.requested <= 4 * 1024 * 1024 * 1024, 'Aggregate read budget')
@@ -350,6 +356,7 @@ def materialize_inputs(a, root, local, budget):
     for item in inventory['files']:
         raw = budget.pin(item['descriptor'], 134217728)
         destination = project(item['windowsPath'])
+        write_closed_identity = None
         if item['materialize']:
             relative = destination.relative_to(root)
             parent = root
@@ -364,11 +371,18 @@ def materialize_inputs(a, root, local, budget):
             write_new(destination, raw, budget, 134217728)
             info = destination.lstat()
             require(stat.S_ISREG(info.st_mode) and info.st_size == len(raw), 'Created deployment file')
+            write_closed_identity = identity(info)
+            readback, reader_identity = budget.read(destination, 134217728,
+                                                    created_identity=write_closed_identity)
+            require(readback == raw, 'Created copy differs from admitted payload')
             descriptor = {'path': str(destination), 'bytes': len(raw), 'sha256': digest(raw),
-                          'identity': identity(info)}
+                          'identity': reader_identity}
         else:
             descriptor = item['descriptor']
-        deployed.append({'role': item['role'], 'windowsPath': item['windowsPath'], 'descriptor': descriptor})
+        created = {'role': item['role'], 'windowsPath': item['windowsPath'], 'descriptor': descriptor}
+        if write_closed_identity is not None:
+            created['writeClosedIdentity'] = write_closed_identity
+        deployed.append(created)
     evidence = encode({'schema': 'windows-managed-harness-deployment-v1',
                        'inventorySha256': a['inventory']['sha256'], 'files': deployed})
     write_new(local / 'deployment.json', evidence, budget, 4194304)
