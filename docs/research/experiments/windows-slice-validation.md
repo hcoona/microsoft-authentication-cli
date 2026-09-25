@@ -21052,8 +21052,92 @@ result descriptor or fixed typed failure. Preserve complete original transport a
 partial state. Interpret only the retained result after terminal transport. Independent
 outcome review must accept the final descriptor before any later caller treats this
 copy as an ordinary input. Its later full9 comparisons are strict; no masked ctime,
-settling loop or descriptor replacement is permitted. Successful copy alone does not
-admit any Windows execution.
+settling loop or descriptor replacement is permitted, except for the single prospective
+artifact admission specified below from retained original 0122 evidence. Successful copy
+alone does not admit any Windows execution.
+
+### Original 0122 Failure and One Prospective Launcher Admission
+
+The sole managed build original 0122 used the caller accepted at
+`c44afa1b5c608bbcfd720d284cdd46f408c2ed1c`, with only its admitted activation guard
+changed. The actual caller has SHA-256
+`fe0cf34bb5cd2a2fa739638516cd97703bbf94f6a04b2c125481b7d3c05d071d`; its final
+admission has SHA-256
+`bc8e360535851a1aa58c166e1db3cae0abf606ce4eecd0ffb0ec5449278ce415`. Its complete
+terminal transport, SHA-256
+`707d607b6b6db7c540d7d316f2d63de00df8dad08926de700083f0e98d166ee4`, reports exit
+one with `PredicateFailure`, `Admitted descriptor changed`, at source line 230 and
+logical read eight. Independent failure, scoped-lifetime and accounting triage is bound
+by SHA-256 `d1f3e49fd30db2eb6e931efc6da573b0552c26e98469f3e35892b73527868110`.
+
+The exact source order identifies the ordinary launcher pin: admission read one,
+four acceptance reads two through five, caller six, controller seven and launcher eight.
+The launcher read returned exactly 23,040 bytes and matched its admitted SHA-256
+`5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a`.
+The ordinary reader's initial, final and named full9 comparisons passed before the
+later comparison with its admitted descriptor failed. The retained diagnostic contains
+these complete integer identities, in device/inode/mode/uid/gid/size/mtime-ns/ctime-ns/
+link-count order:
+
+| Launcher identity | Full9 |
+| --- | --- |
+| Originally admitted deployment descriptor | `[55,36873221949271824,33279,1000,1000,23040,1790347485712465400,1790347486030976300,1]` |
+| Observed by original 0122 | `[55,36873221949271824,33279,1000,1000,23040,1790347485712465400,1790360471928343100,1]` |
+
+Only ctime differs; the other eight fields, exact length and content hash agree. This
+identifies the rejected predicate. It does not establish why ctime changed, that prior
+execution caused it, continuous held-handle or file-history correspondence since
+deployment, or that any future identity will remain unchanged. The original
+correctly enforced its then accepted strict contract and remains failed. The earlier
+contract does not permit directly substituting this observed ctime into a new admission.
+
+Source control flow and the complete terminal diagnostic place the failure inside the
+first `verify_admission`, after opening the existing action lock and before the first
+checkpoint, action-root creation, input materialization, service dispatch, native launcher,
+Windows Job or managed phase. The original closed its lock in `finally` and returned
+terminally. It did not reach the restored source, cache, generated metadata or obj/bin.
+This is a source-bound scoped disposition, not a runtime absence survey or Windows Job
+quiescence observation. No new lifetime unknown is added. Preserve all six historical
+unknowns and `noExperimentLive=false`; the unexecuted success collector is ineligible.
+
+Retain the full failed charge 0/1/0/1. Counters are 30/108/6/173; preparations remain
+12/18 Linux and 18/21 Windows. The correction pool has 3/18/0/75 remaining, separate
+from unchanged old protection 6/40/0/130, giving protected remainder 9/58/0/205.
+All seven old paired builds remain blocked and untransferred, and twelve later-product
+build/test slots remain protected. No refund or repeated 0122 original follows.
+
+After this amendment is independently accepted and merged, permit exactly one prospective
+artifact admission of the observed full9 above for the same unchanged launcher at
+`C:\Temp\azureauth-windows-slice-108\normal-launcher-dispatch-v1\WindowsScriptJobLauncher.exe`,
+with its existing literal WSL projection and the exact length/hash above. This is an
+explicit, one-case exception to the original deployment-descriptor provenance rule.
+It uses only the already authorized, bounded original 0122 read and retained evidence;
+it does not treat the old contract as having allowed replacement or turn that failure
+into success. Join the original accepted deployment provenance, 0122 admission, actual
+caller, complete terminal diagnostic, both full9 tuples and independent disposition.
+No new observation is authorized to complete that join.
+
+Keep the original deployment descriptor, every prior admission and failed result
+immutable. Record any independently accepted prospective descriptor as a distinct
+future artifact admission with this exact evidence lineage. Do not mask ctime or any
+other field. Every subsequent ordinary input read, within-read stability comparison,
+cross-control descriptor comparison and metadata-only executable-use check remains
+full9-strict, with the existing regular-file, single-link, execute-access, length and
+hash requirements. All other input and evidence predicates remain unchanged.
+
+This exception permits no survey, passive metadata pass, collector, old-output read,
+new launcher deployment, alternate path, overwrite, chmod, cleanup, source execution
+change or further descriptor refresh. It neither invokes nor enlarges the additional
+passive metadata and collection allowance. A later mismatch stops its own original;
+the one prospective admission cannot be repeated with another observed identity.
+
+The unchanged accepted 0120 restored graph, input inventory, complete creation lineage
+and absolute paths remain the build basis: 0122 never reached a build or its inputs.
+Any corrected build needs a fresh number, nonce, independently accepted artifact,
+source/input/checkpoint and literal-call controls, and its own 0/1/0/1 charge from the
+existing pool while preserving the remaining success path. No automatic retry,
+new capacity, historical-risk expansion or account, publication, toolchain, installation
+or other external effect is added. This amendment itself admits no original execution.
 
 ### Managed caller executable-use correction
 
@@ -21667,6 +21751,15 @@ the same managed recipe, four compiler targets, N1/N2/N3 and D0/D1/D2 roles, hel
 source/input/evidence predicates and maximum effects. Independently review and accept
 the exact canonical source/protocol changes before activation or dependent execution.
 The grant does not establish that any unreviewed fix is sound or that inert code supports it.
+
+The sole exception to preserving the original launcher-admission descriptor is the
+[one prospective artifact admission from original 0122 evidence](#original-0122-failure-and-one-prospective-launcher-admission).
+That explicit provenance exception requires independent acceptance of its exact retained
+evidence and future artifact binding. It changes no runtime comparison or other
+source/input/evidence predicate, and supplies no authority beyond the accepted Wave's
+same-role, topology and maximum-effects correction boundary. Review this exception
+against the accepted target-branch authorities before merge; proposed text cannot waive
+an accepted scope or review obligation.
 
 The baseline controlled compile retains `confidential-checks-v7`. Permit only the
 nineteen predetermined unused successor leaves `confidential-checks-v8` through
