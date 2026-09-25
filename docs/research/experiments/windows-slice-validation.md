@@ -19958,3 +19958,483 @@ All three observations charged zero experiment units. Counters remain
 unallocated reserve. Historical lifetime uncertainty and `noExperimentLive=false`
 remain unchanged. This result grants no retry, cleanup, fallback publication,
 capacity increase, or account effect.
+
+## Retained-Launcher CLI, Profile and WSL Scenario Allocation
+
+This supplement applies only after the matching owner capacity/effects decision,
+experiment-safety amendment and this exact protocol merge into the accepted target.
+It does not execute or replenish any previous grant. Accepted retained evidence
+through b10355c64887ad3f5194ca9f0626f63f63a37db6 records counters 20/106/6/163, original
+0110 publication failure and noExperimentLive=false. Preserve historical 0057, 0064,
+0068, 0093, 0107 and 0110 uncertainty under the Wave's six explicit extensions.
+Apply the owner's separate narrow owned-ETW-session persistence disposition below;
+all other source, call, outcome or resource uncertainty retains ordinary stops.
+
+### Subject, required prerequisites and immutable source
+
+The product stays commit 503360753accd0829801953823b1b57a4f852440. Its retained 0110
+snapshot has separately accepted contextual source/dependency/compiler/native-image/
+asset/symbol provenance. That acceptance establishes eligibility for a separately
+admitted credential-free materialization, not successful original publication,
+original interval continuity, runtime support, real WAM or complete Slice acceptance.
+Only exact independently admitted snapshot copies may be materialized; mutable
+original publication paths are not eligible subjects. The native CLI is 8,885,248 bytes,
+SHA256 02993d94c5145f32274a8763f27d632e2dcc8e6a06d257551b1501eed9689cc7;
+required msalruntime.dll is 2,949,656 bytes,
+SHA256 9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79.
+Exact inventory/dependency review must preserve every required companion and the
+accepted Windows OS/API-set loader premise, not infer closure from only those hashes.
+
+The normal 0070 WindowsScriptJobLauncher remains unchanged: 23,040 bytes,
+SHA256 5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a.
+Reuse its independent 0070 build/artifact basis and accepted 0080 normal-mode
+observations. Separately compiled publication 0085 is not this launcher. Its fixed
+four arguments remain fresh root, UUIDv4 nonce, authoritySHA and controllerSHA.
+Use the creation-time named Job, original journal, 16 KiB combined outer capture,
+330 s work plus 10 s cleanup, no breakaway and 32 active-process limit. The controller
+is copied to its required Invoke-WindowsNamedGuardFixtures.ps1 filename. Nothing
+in this supplement substitutes a weaker supervisor or makes an outer cgroup proof
+of native Windows termination.
+
+The managed harness changes only ProcessFixture.cs, ProcessScenarios.cs, Program.cs
+and the added NativeProfileScenarios.cs relative to the accepted product sources.
+Program invokes exactly the public MSTest and TRX AddExtensions hooks. It does not
+invoke blanket generated self-registration; an unused generated hook file is not
+runtime registration. Accept the actual build graph, lock/generated dependency
+metadata and artifact/source joins before treating its one-runner topology as true.
+The exact baseline project/props/lock and managed build recipe remain separately
+bound in the accompanying source package; its new normal-launcher wrapper receives
+independent source/build accounting before an original call.
+
+WindowsWslObserver uses the exact independently reviewed C# 5 x64 Framework source,
+mscorlib/System/System.Core only, and no package restore. One Linux Roslyn compiler
+invocation per fresh preparation uses pinned public SDK 10.0.401 / runtime 10.0.12 and
+pinned Framework64 metadata. It never invokes Windows csc.exe or runs its output.
+Source activation changes only the closed admission constant after all gates;
+activation bytes are derived and independently pinned, never inferred from an
+inert source review. All runner/controller sources remain guarded until the
+accepted amendment, source/artifact/current checkpoint and exact-call gates close.
+
+The proposed inert source set has these exact identities. The final merged
+source commit and independently reviewed activation bytes must be joined at call
+admission. Private original-call and review receipts are retained separately;
+this public table records only reviewable repository source.
+
+| Repository source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| tools/validation/Invoke-WindowsRetainedScenarios.ps1 | 20222 | 964b6822be0b59ed23bdff33632c1786675f2559ab723b6dd6bc6fd834a1d942 |
+| tools/validation/run_windows_retained_scenarios.py | 53707 | fd613b6f5a379b9f81a1953750e8f3e7b9243914bcb1ea742059f924cdbef0e7 |
+| tests/Authentication.Windows.Scenarios/ProcessFixture.cs | 23195 | e6c69cfee71f5e3c9cf0634eefb241de19a165d0ed2b2aaeee2d941d362f05c8 |
+| tests/Authentication.Windows.Scenarios/ProcessScenarios.cs | 9682 | d8ace6ec543a2358a8f9bd68545e64925ef3cceee236a8957d256ef07a1f7598 |
+| tests/Authentication.Windows.Scenarios/Program.cs | 1721 | 950b6dc8005f7068580f6fa77e6a95310f52e1f1da48451fa97dca5873ac42af |
+| tests/Authentication.Windows.Scenarios/NativeProfileScenarios.cs | 3175 | bbb3914c5ac3d19d74303185fa2d711f29cacba0b5c242b8942702d4e2ff7740 |
+| tools/validation/Invoke-WindowsWslObservation.ps1 | 19578 | 2653582ca013a8bf96dbc8a82e1b602f3c5fe95c0f95609902fbdb597998095b |
+| tools/validation/run_windows_wsl_observation.py | 67438 | 1553ec55b1d4f28af966fc4553d27c9fc423f9392e55d868fcf2303642cadf62 |
+| tools/validation/WindowsWslObserver.cs | 63227 | 355ffacbd73c46228fcb0bc1db324645c5c6156aa45dd2fdaca08fa6c3d8d3c4 |
+| tools/validation/run_windows_wsl_observer_build.py | 20388 | dd8b5870f6b69ee66002948e0458506c5cc7e519c3b77aa95bc07a4bb65badaa |
+| tools/validation/Invoke-WindowsManagedBuild.ps1 | 21340 | ef221b5225b175205be085e75cc07d09be93f06bfdbfefaeb185da47c4b7124b |
+| tools/validation/run_windows_managed_build.py | 47231 | 713962201af1d9f7d0e6c08cb74677702e5b3d9625ad6a5ed7a5d6f4f7f5e9a5 |
+
+### Exact category reservation and ordering
+
+Cumulative ceilings are 35 preparation, 141 build/test,
+30 publication and 277 synthetic, with the existing 4 GiB public-download maximum
+unchanged. Preparation host ceilings are 18 Linux / 17 Windows. At the accepted
+starting checkpoint, consumption is 11 Linux / 9 Windows. Exact source, activation,
+artifact, current checkpoint, protocol and original-call reviews remain mandatory;
+this allocation alone supplies none of their acceptance.
+
+| Original reservation | Preparation | Build/test | Synthetic | Maximum ETW creation attempts |
+| --- | ---: | ---: | ---: | ---: |
+| Primary observer build, managed restore/build and four scenario batches | 2 | 5 | 27 | 2 |
+| Correction set 1: two observer candidates, two managed restore/build pairs, four batches | 4 | 6 | 29 | 2 |
+| Correction set 2: same bounded roles | 4 | 6 | 29 | 2 |
+| Correction set 3: same bounded roles | 4 | 6 | 29 | 2 |
+| Protected later-product planning | 0 | 12 | 0 | 0 |
+
+Primary scenario charges are CLI 14, Profile 4, calibration 4 and direct WSL 3.
+Each managed artifact uses two separately admitted normal-launcher calls. Its first
+call performs one Windows offline restore, charged as one preparation plus one
+launcher synthetic unit. Independently accept its complete original outcome before
+a separately admitted build call, charged as one build/test plus one launcher
+synthetic unit. Neither call keeps a live process waiting for that review. Ordinary
+dotnet/MSBuild/compiler work stays in the respective preparation or build category.
+The outer PowerShell exemption does not cover any additional helper.
+
+The restore receives only exact map-pinned public dependency-cache leaves copied
+passively into a fresh dedicated packages root. It retains the accepted complete-
+cache-only, sole-empty-feed locked recipe. The separately admitted build reuses the
+same unchanged, newly restored subject/packages tree and absolute paths. No old
+subject, restore-output or runtime-content read, metadata relocation, archive
+installation fallback, download, shared-cache mutation or credential effect belongs
+to this proposal. The exact map, cache-completeness admission, source, copy bounds,
+restore command, generated-output review and build prerequisite require independent
+acceptance before their dependent action.
+
+Observer compilation consumes one Linux preparation and no build/test, publication
+or synthetic unit. It starts no Windows process. Materialization is retained within
+its declared original action; it is not an uncounted fallback. Exact source review
+must confirm that neither recipe starts any additional deliberately counted helper.
+
+The primary plus three correction sets preserves seven observer preparations,
+seven managed restores, seven managed builds, sixteen scenario batches and twelve
+later-product build/test planning slots. If all declared reservations are spent,
+cumulative counts are 34/129/6/277, including 18 Linux / 16 Windows preparations.
+The execution reservations add 14 preparations, 23 build/test and 114 synthetic
+units. Twelve protected later-product planning slots account for the difference
+between planned build/test consumption 129 and ceiling 141. The ceiling
+also leaves one Windows preparation unallocated. Keep all twelve
+later-product planning slots protected at every credential-free checkpoint. Current
+batches do not consume them or grant their future real-account effects. No additional
+publication belongs to this recipe. Correction sets preserve the tripled contingency
+preference as finite named allocations; they grant no automatic retry or permission
+to continue a failed or uncertain original.
+
+Within each correction set, observer candidates A and B are compile reservations before
+its single calibration. Select one final independently accepted artifact, calibrate
+that exact artifact, then use it unchanged for direct WSL. Changed observer bytes
+after calibration require another separately allocated calibration. Compiler slots
+cannot create another session. At most eight fresh ETW session-creation attempts
+are allocated: four calibration and four direct. Actual observation attempts remain
+sequential, with independent review of the preceding original outcome before another
+original. Residual originally owned kernel sessions and buffers may overlap later
+attempts under the owner's narrow persistence disposition below. Every creation
+attempt spends its existing slot; retained sessions neither replenish nor add slots.
+
+Each attempt, failed start, interrupted run and partially materialized original
+keeps its full conservative debit. The shared lease spans debit, execution and
+original outcome retention. Each named action gets a new Linux action directory,
+fresh Windows named-fixtures-NNNN root, nonce, authority and exact original-call
+review. Never overwrite or replay an action, use the old failure reader, republish
+a candidate, repair history or claim a capacity refund.
+
+### Observer compilation recipe
+
+The observer compiler is a separate Linux-only preparation. It has seven fixed
+slots: primary, c1-a, c1-b, c2-a, c2-b, c3-a and c3-b. The primary must be the first
+charged proposed action, from counters 20/106/6/163 and preparation hosts
+11 Linux / 9 Windows. It transitions to 21/106/6/163 and 12 Linux / 9 Windows.
+Correction slots use independently accepted current counters. No source change,
+failed start or unused slot provides a second invocation of a spent slot.
+
+Use the exact accepted installed Linux SDK 10.0.401 / runtime 10.0.12 provenance
+and the physical SDK root fixed by the separately admitted compiler source. Do
+not discover another compiler or follow a version-manager alias. Verify the
+selected dotnet host, Roslyn compiler, compiler deps/runtimeconfig, two CodeAnalysis
+assemblies and runtime CoreLib against the source's seven exact length/hash pins.
+Those selected files are not a complete operating-system or runtime manifest.
+
+Copy only the independently admitted Framework64 mscorlib.dll, System.dll and
+System.Core.dll compiler metadata. Their accepted SHA-256 values are respectively
+5bffb20e1217bad314143d7e5c4c809bf9f522e8a0a063c8e7e9b25113de26eb,
+2b3c17c6208a0b4b6beb94e1a066f99ba06cdb2ea919479e99d47e8c6d96dc71 and
+fd1097aed825d392a5dc8d19384381d4bb2a43498ea1c9d917f5d80c66600e1b.
+They are metadata references, not executed Windows assemblies. This preparation
+starts no Windows process, performs no Windows write and does not run its output.
+
+The sole compilation uses the pinned Linux dotnet host with exec, the admitted
+csc.runtimeconfig.json, --fx-version 10.0.12, --roll-forward Disable and csc.dll.
+Its exact compiler options are -noconfig, -nostdlib+, -nologo, -target:exe,
+-platform:x64, -langversion:5, -optimize+, -debug- and -deterministic+, followed
+by one fresh observer.exe output, the three fresh reference copies and the one
+independently admitted activated observer source. No project/MSBuild evaluation,
+package resolution, analyzer, generator, shared compiler, publisher or linker is
+selected. The exact source binds the argument vector and replacement environment;
+it accepts no configurable SDK, compiler or reference path.
+
+Use an empty inherited worker environment with only declared PATH/locale and
+the fixed isolated home/temp/.NET settings for the compiler. The worker receives
+no WSL interop, credential, profiler, startup hook or additional-dependency input.
+The original systemd client has only its separately listed local user-bus selectors.
+Retain the accepted installed-toolchain/workstation premise and no download or
+installation boundary; missing or changed inputs fail without repair.
+
+The original compiler call has a 150-second success interval, a 145-second
+service-client capture deadline and a 100-second worker/compiler deadline,
+all derived from the same original clock so queue delay consumes the budget.
+The dedicated service has 120 seconds runtime plus 5 seconds stopping,
+TimeoutStartSec 10 seconds, ExitType=cgroup, KillMode=control-group and no restart.
+External timeout requests TERM at 150 seconds and KILL 5 seconds later; blocked
+kernel operations do not acquire a promised return precision. Compiler capture
+is 64 KiB, client capture 16 KiB, with two seconds reserved for owned termination.
+
+Source/config/runner inputs are each at most 64 KiB; each selected SDK input is
+at most 32 MiB, each Framework metadata input at most 16 MiB, and observer output
+at most 2 MiB. Own process/cgroup evidence reads are at most 4 KiB each. Use regular
+no-follow descriptors, exact length/hash, stable full9, exclusive fresh writes,
+and an exclusive nonwaiting action lease. The compiler source owns the fixed slot
+paths and names. Original zero exits, complete capture EOF, retained fresh worker
+identity and new cgroup empty/removal are mandatory; client exit alone is insufficient.
+
+Persist the original preparation debit before compiler inputs and work. A start
+that fails before local receipt persistence still spends the original reservation.
+Success remains provisional until source recheck, final persistence, owned closure
+and the respective original clock rechecks. Retain all input copies, command,
+worker/service records, captures, output and failures without overwrite or cleanup.
+Independently review static PE/x64/CLR metadata and source correspondence before
+calibration. An MZ check or compiler success does not accept the artifact.
+
+### Managed restore and build recipe
+
+Each of seven managed slots has one separately admitted restore and one separately
+admitted build. Use the changed harness's actual accepted sourceCommit, while
+joining unchanged product files to product 503360753accd0829801953823b1b57a4f852440.
+The four changed managed inputs must already be accepted. The exact source and
+dependency inventory includes the four-project graph, all 1,764 leaves of the
+28 complete public dependency-cache entries, including fourteen exact zero-byte
+cache leaves, the applicable 376-entry installed
+tool-map basis and any independently reviewed necessary input delta. Do not omit
+empty cache leaves, truncate required entries or describe that selected tool map
+as a complete Windows operating-system image manifest.
+
+The original cache leaves include every entry's existing archive, content-hash,
+completion metadata, nuspec and decoded payload. Passive exact copying preserves
+the complete-cache branch of the pinned NuGet implementation. The original
+completion metadata is not invented or rewritten. Restore uses only the new
+owned empty feed and the copied complete packages root, locked package versions,
+no audit, no inherited/additional source and no fallback folder. This is a
+warm-cache observation, not an empty-cache public restore. Missing, incomplete,
+changed or unexpected entries fail without archive installation, repair,
+signature-chain fallback, network download or shared-cache mutation. The recipe
+does not claim to control all ordinary Windows network activity.
+
+A separately admitted metadata-only pass may obtain lengths and full9 identities
+for only the exact map-listed cache/tool leaves and detached source inputs. It
+reads no binary payload, starts no Windows tool, and is limited to 4,096 leaves,
+4 KiB retained metadata per leaf, 60 seconds and one attempt per distinct action
+inventory. This is a prerequisite for exact-call admission, not permission to
+copy payloads or execute the recipe before admission. Failure stops with no
+alternate state survey. Historical subject, obj/bin, restore-output and runtime
+contents remain excluded.
+
+The restore original exclusively creates a fresh action root with subject,
+packages and empty-feed directories, copies only admitted source/cache inputs,
+and verifies pinned installed tool inputs in place. No Git directory, credentials,
+signing material or unrelated repository file is copied. The controller is placed
+at the unchanged normal launcher's fixed controller filename. Authority selects
+exactly one operation. A restore's subjectAction equals its action; the subsequent
+build refers only to that newly completed, independently accepted restore action,
+greater than 110 and earlier than its own fresh action number. Original restored
+absolute paths remain unchanged. The build may write that new subject's obj/bin;
+its own controller/home/temp/results remain in its separate fresh action root.
+
+The exact command is owned by the pinned controller. Restore selects
+restore Windows.slnx --locked-mode --disable-parallel --no-http-cache, with the
+new exact config, source and packages paths. Build selects
+build Windows.slnx -c Release --no-restore and an owned binary log with
+ProjectImports=None. Both use --disable-build-servers, minimal logging,
+UseSharedCompilation=false, one node, node reuse false, no auto-response file,
+NuGetAudit=false and explicit empty fallback/additional-source properties.
+The replacement environment clears inherited .NET, NuGet, testing, credential,
+profiler and hook inputs, selects the pinned dotnet/runtime and fresh private
+home/local/roaming/temp/http/plugins roots, disables workload resolution and
+telemetry, and uses only the new NUGET_PACKAGES root. The exact environment and
+command are retained in each original phase receipt. No test, product CLI,
+authentication, WAM, token, application or broker cache or publication target runs.
+
+The controller's aggregate result has exactly the fifteen fields admitted by the
+caller. Process-start identity, complete EOF and exit status belong to the selected
+phase's nested record and original phase receipts. Interpret that single phase's
+lifetime evidence together with the original launcher journal and cgroup evidence;
+the aggregate success flag alone cannot supply any of those observations.
+
+Disable source-control-manager queries and SourceLink generation and set
+SourceRevisionId to the admitted harness commit. This private, unreleased harness
+has no Git metadata. Following accepted build 0036's immutable-source and
+physical/generated portable-PDB basis, artifact acceptance must independently
+join original compiler/binlog/IL evidence, physical document hashes and generated
+source to that commit. Declare the empty SourceLink table; do not invent a public
+URL mapping or claim that a nonexistent historical mapping was preserved.
+Any applicable accepted obligation requiring URL mapping must be resolved before
+dependent admission; this recipe cannot silently waive it.
+
+The managed original has one 3,600-second interval including source/cache copying.
+Its dedicated service separately retains 450 seconds plus 5 seconds stopping,
+the unchanged normal launcher 330 seconds plus 10 seconds cleanup, and its worker
+360 seconds native transport, 30 seconds evidence and 10 seconds terminal reserve.
+The controller has 300 seconds total, at most 60 seconds setup, one 190-second
+managed phase and a 275-second capture cutoff. No clock resets at failure.
+External timeout uses TERM at 3,600 seconds and KILL 5 seconds later, without a
+kernel-return guarantee. This generous copy allowance is distinct from the shorter
+scenario and observer compilation intervals.
+
+Each inventory has 20..4,096 files, 4 MiB JSON, 1 MiB TSV, at most 128 MiB per
+payload and 2 GiB aggregate. Original/worker budgets are each 8,192 reads and
+4 GiB requested bytes, 8,192 writes and 3 GiB payload, with four terminal writes
+and 256 KiB reserved. At most 4,096 input directories are created. Hold controller
+input FileShare.Read handles through completion. Console capture is 8 MiB.
+Ordinary SDK writes remain in the new dedicated trees; no operating-system disk
+quota is claimed. Exact source owns the remaining finite receipt/cancel limits.
+
+Retain first cause and separate cancellation/persistence errors, all partial
+files and original evidence. Only the normal Job owns Windows termination.
+Success requires original zero root exit, complete EOF, Job activeProcesses zero,
+totalProcesses within 2..32 and new cgroup empty/removal. The process-total range
+is an outcome bound, not an exact compiler topology prediction. Proxy exit is
+insufficient. Scoped success never changes noExperimentLive=false.
+
+After all transports end, separately admit a finite selected-output collector:
+at most 4,096 leaves, 128 MiB per leaf, 2 GiB total and 300 seconds, with no loaded
+assemblies or executed outputs. Collect only this new action/subject's original
+receipts/captures, new lock/assets/generated imports, compiler binary log,
+generated source and declared PE/PDB/deps/runtimeconfig/assets. Independent restore
+acceptance must precede the build; independent compiler/source/artifact/runtime
+and asset acceptance must precede CLI/Profile use. Caller completion supplies
+neither acceptance. Changed restored inputs invalidate dependent build admission.
+No live process waits for review, original runtime receipt is recollected, or
+failed collection is repaired automatically.
+
+### Common scenario caller, controller and evidence bounds
+
+The original Linux call is 550 seconds. Its service-start intent is durably recorded
+before systemd-run; the conservative service deadline is that intent plus 450 seconds,
+including service/Python/admission startup. The service has 450 s runtime plus 5 s stopping,
+2 s start/job bound, 32 tasks and 512 MiB memory. Original and worker admission share their
+later operation counters. Immediately before native launch, reserve 360 s Windows
+transport plus 30 s worker evidence and 10 s terminal inside both enclosing clocks. The
+original reserves 15 s evidence and 10 s terminal. Every terminal phase has a ten-second
+relative cap inside its enclosing deadline and never resets aggregate counters.
+First-cause receipt precedes independently caught cancel-marker/persistence attempts;
+storage failure can prevent durable evidence and never becomes a successful result.
+
+CLI/Profile controller setup is 30 s, runner 240 s, total 300 s. Observer controller setup
+is 30 s, observer transport 40 s, total 90 s. The observer's 30 s source budget bounds explicit
+cooperative checks and waits; its last check precedes cleanup/final write, so its
+passed flag/prewrite elapsed is not a checked whole-source return bound. The
+controller separately requires observed completion below 40 s. Native/filesystem
+calls can block; the retained normal launcher provides the external hard envelope.
+No bound restarts during fallback.
+
+The Linux original/worker each admit at most 1,024 regular input reads and 768 MiB requested
+bytes, 256 writes and 544 MiB payload; four writes / 256 KiB are withheld for terminal
+attempts. Inventories have at most 128 files, each 128 MiB, aggregate 512 MiB. Fresh directory
+creation is bounded to 128 descendants and depth 8 plus fixed roots. Descriptor reads
+use O_NOFOLLOW, regular-file checks, exact length/SHA and stable descriptor/path
+full9 (dev, ino, mode, uid, gid, size, mtime_ns, ctime_ns, nlink) with integer precision.
+Reject linked ancestors, traversal, device/alternate-stream aliases and case-folded
+duplicate Windows destinations. JSON rejects duplicate members and nonfinite values.
+Existing-parent membership checks read names only, never old action contents.
+
+Managed capture is 8 MiB combined, concurrently read in 4 KiB blocks into owned files, not
+the launcher's 16 KiB pipe. Original/worker external capture is 16 KiB each. Observer
+stdout/stderr must be empty on success and share 16 KiB capture. Direct product streams
+are each 512 KiB; first LF fits 4 KiB. CLI requires exactly one TRX with a 1 MiB maximum and the exact
+22-case outcome set; Profile requires two separate native-process receipts and exact
+invalid_configuration output. Scenario capture/receipt names are fixed; each stream
+is at most 512 KiB. Bound original JSON by 64 KiB, controller JSON 32 KiB, observer authority
+16 KiB, intent/readiness/final 8 KiB each, gate 2 bytes and release marker 0 bytes.
+
+### WSL control bridge and result interpretation
+
+Calibration deliberately starts launcher, exempt outer PowerShell, observer,
+control-gated and control-fast:5 Windows starts, 4 synthetic, Job total 4. Controls are
+identical artifact bytes at distinct single-use image paths. Direct WSL starts
+launcher, exempt PowerShell, observer and one direct product:4 starts, 3 synthetic,
+observer Job total 2. The product is outside the Job. Linux proxy/cgroup completion
+never establishes its lifetime. No helper, shell, warm-up or recovery invocation is
+introduced by the file bridge.
+
+The observer authority has exactly twelve string keys:
+schema, mode, root, nonce, sessionGuid, observerSha256, productSha256, msalruntimeSha256,
+artifactAcceptanceSha256, calibrationAcceptanceSha256, inventorySha256, controllerSha256.
+Its schema is wsl-observer-authority-v1. Root is the fresh named-fixtures path; nonce
+and sessionGuid are fresh UUIDv4 values. Calibration's product/MSAL/artifact/calibration
+hashes are all-zero; direct mode binds accepted product/MSAL and retained calibration.
+The external exact-call review binds authority bytes, avoiding a review/hash cycle.
+
+Only accepted atomic readiness permits direct launch. Linux writes the exact
+wsl-product-launch-intent-v1 eight-string object before Popen: schema, root, nonce,
+authoritySha256, readinessSha256, productPath, productCommandLine, expectedExit. Product
+argv0 is the full Windows path and executable is its Linux /mnt/c projection. Pinned
+public WSL binfmt/interop source preserves that distinct argv0 and joins the fixed
+whitespace-free tokens unquoted. Exact image/command data is an observation gate,
+not a guessed or dynamically adapted quote rule. Installed route mismatch fails.
+
+The stdin pipe writer closes before Linux Popen. This proves Linux ordering only;
+do not claim native precreation writer closure. Keep separate controlled native
+initially-closed-pipe evidence. The fixed native invocation uses protocol 1,
+gate-product.json containing {}, synthetic wsl-synthetic@example.invalid and
+https://example.invalid/wsl-cancel, non-interactive-only, timeout 4, cancel-on-stdin-close,
+and telemetry off. At first stdout LF, release.marker is attempted immediately, before
+response validation, EOF, exit, ETW END or held-break observation. Error/deadline also
+attempts release. Do not wait for native exit while retaining a blocking gate.
+
+Original product transport must complete within 6 s with exactly the LF-terminated
+compact JSON {"protocol":1,"outcome":"cancelled","reason":"cancelled"}, empty
+stderr, proxy exit 1 and complete streams. A granted gate with no held break before
+cancellation is valid. The observer must report one complete exact matching
+START/END pair with native exit 1; if a process handle was acquired it must independently
+match and be signaled. No forced termination can pass the behavioral observation.
+Fast control checks event-only association against separately retained creation-handle
+ground truth; it does not claim an empirical OpenProcess failure or PID reuse.
+
+### ETW, environment, termination and intentional retention
+
+Every admitted observer creates at most one fresh named private real-time session:
+AzureAuthSliceWsl-NNNN-MODE-NONCE with a fresh nonzero GUID. Select PROCESS|NO_SYSCONFIG
+0x10000001 only, QPC, real-time/system-logger/no-per-processor-buffering mode 0x12000100,
+and event-record/raw-timestamp consumer mode 0x10001100. Request 64 KiB buffers, 4..8;
+returned properties must fit the declared 2..8 bounds. Admit process event versions 3/4,
+x64 payload identity rules, bounded strings/SID walk and exact target path/command.
+A supported version mismatch or loss fails, without another provider/version attempt.
+
+Selected process payloads can transiently contain unrelated private command-line,
+image and user-SID data before filtering in private memory. The owner risk decision
+explicitly covers this boundary. No ETL, stack, network, registry, account/broker
+query, token/credential extraction or raw unrelated-payload retention is intended.
+Bound accepted callback count 65,536, copied process payload 16 MiB, unmatched END joins 256,
+trace buffers and native allocations as the exact observer source specifies.
+Discard unrelated decoded strings; retain target fields/hashes and aggregate loss.
+Public records use only sanitized public evidence under ordinary repository rules.
+
+The observer may query only its own just-created session, attempt at most one owned
+STOP and one consumer CloseTrace; stopping a consumer alone is not session closure.
+Require successful owned-session stop, complete ProcessTrace drain and zero event/log/
+real-time loss for a passing calibration or direct observation. Process/Job kill
+can leave the originally owned trace session or buffers active. The owner accepts
+that persistence alone as a nonblocking residual risk for later bounded validation;
+this is not empirical evidence that tracing has no effect on business behavior.
+Residual sessions may continue selected process-event collection in kernel buffers
+after their original consumers end. No ETL or additional consumer is authorized.
+
+The failed original remains failed and fully charged. Before a later original,
+independently review its original evidence and record an explicit failure disposition
+that identifies the originally owned session and establishes that kernel-session or
+buffer persistence is the sole remaining issue. Preserve its identity, original
+failure, charge and disposition in the accepted current checkpoint and retained
+endpoint history. No additional owner risk request is needed solely for this case.
+Use only an existing unused allocation, a fresh action/session identity and the
+ordinary exact source, checkpoint, prerequisite and call admissions. This permits
+separately admitted continuation; it does not resume the failed original, grant
+an automatic retry or change any original receipt's continuationAllowed=false.
+
+The unchanged caller still requires traceStoppedAndDrained=true in independently
+accepted calibration evidence before direct WSL, and traceStopped, consumerCompleted
+and zero loss for every passing observer result. A failure disposition cannot set
+those fields true or substitute for successful calibration. Any required successful
+calibration must still come from an admitted unused calibration slot. All original
+required event pairs, capture completeness and lifetime evidence remain necessary.
+Native-process, gate, consumer, pending OVERLAPPED, event-loss, unknown-ownership or
+other evidence uncertainty remains a stop; an unresolved consumer or drain cannot
+be classified as kernel persistence alone. Preserve the original bounded stop/close
+attempts and evidence without adding session adoption, repeated stop, foreign/shared-
+service operation, elevation, privilege enablement, ACL/group/registry/driver change,
+cleanup helper or automatic recovery. Keep at most eight creation attempts and
+sequential actual observation attempts even if their residual kernel sessions overlap.
+
+Observer/controller processes use explicit replacement environments and fresh
+home/temp directories. Public WSL BuildEnvironment starts with inherited Windows relay
+state and overlays transferred Linux values. Direct product therefore retains the
+ordinary admitted account/relay baseline plus listed system/fresh-directory overlays
+through WSLENV /w; it is not a full Windows environment replacement or a new account
+survey. Paths already use Windows form, so no /p translation is requested. Fixed invalid
+Profile and cancellation-first arguments do not authorize real-account enumeration,
+WAM, token acquisition, application or broker cache access, consent, authenticated
+resources, credential dependencies, installation, signing, release or support claims.
+
+All fresh source/deployment, compiler/build, transport, controller, observer and
+scenario evidence remains intentionally retained without overwrite or cleanup.
+Every first cause and separate persistence/cancellation error remains distinguishable.
+Original 0110 publication stays failed/charged. NoExperimentLive remains false due to
+all six accepted historical dispositions. A green receipt is proposed evidence for
+independent outcome review only; it grants no next action or overall Slice acceptance.

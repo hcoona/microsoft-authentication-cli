@@ -159,9 +159,10 @@ with that decision. The original attempt remains failed and stopped. This
 exception does not establish termination, authorize old-process cleanup or weaken
 future work's ownership, termination, evidence or capacity requirements. It does
 not apply to other unknown processes or historical Issue #1. The exception ends
-when that Wave grant closes; it does not transfer to a successor grant. The
-finite renewed credential-free capacity described below is its sole extension
-beyond the original ceilings. Other later boundary changes do not expand it.
+when that Wave grant closes; it does not transfer to a successor grant. The finite renewed credential-free capacity and the separately stated
+retained-launcher scenario allocation below are its explicit extensions beyond
+the original ceilings and effects. Other later boundary changes do not
+automatically expand it.
 All new ownership or termination uncertainty
 retains the ordinary stop conditions.
 
@@ -173,15 +174,17 @@ ceilings, after the corresponding independently accepted protocol amendment.
 Preserve the original failure, charge and evidence. This exception establishes
 neither termination nor artifact acceptance and permits no old-process cleanup,
 automatic retry or capacity refund. It ends with that Wave grant and cannot
-transfer to a successor grant. The finite renewed credential-free capacity below
-is its sole extension beyond the original ceilings; other later boundary changes
-do not expand it. It does not cover other unknown processes. Future
+transfer to a successor grant. The finite renewed credential-free capacity and the separately stated
+retained-launcher scenario allocation below are its explicit extensions beyond
+the original ceilings and effects. Other later boundary changes do not
+automatically expand it. It does not cover other unknown processes. Future
 publication supervision must meet the Wave's named-Job requirement and the exact
 protocol's identity, audit and authorized-operation rules before execution;
 all new ownership or termination uncertainty retains the ordinary stop conditions.
 
 The current Wave's renewed credential-free capacity expressly extends the
-original 0057, 0064 and 0068 dispositions to its newly specified cumulative ceilings,
+original 0057, 0064 and 0068 dispositions to that finite allocation's cumulative
+ceilings of 28/130/30/180,
 on the same hosts and within the same credential-free effects. Accept the Wave,
 this policy and the corresponding Windows protocol allocation together. Preserve
 original failures, charges and evidence; require ordinary exact source, artifact,
@@ -201,8 +204,9 @@ Preserve the original failure, full charge and both spent file observations.
 This exception supplies no termination evidence, old-state scan or cleanup,
 original replay or recovery, quota increase or refund, or fixture/artifact
 acceptance. It ends with the current grant and cannot transfer to a successor
-or automatically expand with later quota or effects changes. Only the current
-Wave's renewed credential-free capacity expressly extends its prior ceiling.
+or automatically expand with later quota or effects changes. Only the current Wave's renewed credential-free capacity and its separately stated
+retained-launcher scenario allocation expressly extend its prior ceiling and
+exact effects.
 The 0057 and 0064
 exceptions remain separate. Require corrected creation-time controller
 containment, bounded startup/failure diagnostics and named, auditable, operable
@@ -271,6 +275,44 @@ operation, cleanup, refund, account effect, installation, signing, or release is
 permitted by this exception. It ends with the current grant and cannot transfer or
 expand automatically. Historical exceptions remain separate; every new ownership
 or termination uncertainty retains ordinary stop conditions.
+
+
+The current Wave's retained-launcher allocation explicitly extends the distinct
+original Issue #108 0057, 0064, 0068, 0093, 0107 and 0110 historical lifetime and
+interference dispositions to credential-free work on the same hosts within
+35/141/30/277 and its exact accepted effects. This finite explicit extension is
+not an automatic expansion. Preserve failures, charges, spent observations and
+`noExperimentLive=false`. It grants no termination claim, old-state survey/cleanup,
+replay, refund or real-account effect, ends with the grant and excuses no new
+uncertainty.
+
+For that allocation, apply the concrete owner decision to transient unrelated
+private command-line, image and user-SID data in the bounded private ETW consumer
+and possible persistence of its owned trace session after failed stop/drain or
+forced exit. Require fresh ownership, PROCESS|NO_SYSCONFIG selection, finite
+buffers/payload/callback/join bounds, no raw unrelated retention and at most eight
+session-creation attempts. Actual observation attempts remain sequential, with
+independent outcome review before another attempt; residual owned kernel sessions
+and buffers may overlap later admitted attempts.
+
+The owner's narrow disposition permits later bounded validation within existing
+unused allocations when persistence of an originally owned session or its buffers
+is the sole remaining issue. It requires no additional owner risk request solely
+for that persistence and supplies no empirical no-business-impact claim. Preserve
+original session ownership/identity, failed results, full charges and required
+evidence. An independently accepted failure disposition is not successful
+calibration or observation evidence. Exact passing-result gates, including complete
+consumer drain and zero loss, remain unchanged. Unknown ownership, native-process,
+gate, consumer, pending OVERLAPPED or other evidence uncertainty still stops work;
+no additional cleanup, repeated stop, elevation, foreign-session operation,
+automatic retry or automatic recovery is implied. Process, Job or cgroup exit alone
+proves neither trace closure nor direct-native-product termination. The exception
+ends with this finite Wave allocation and grants no additional session creation.
+Keep the explicit inherited direct Windows relay premise and the distinction
+between Linux preclosed stdin and native precreation EOF. Only the separately
+bounded fresh public dependency-cache copy and complete-cache offline restore are
+included; no account, credential, application or broker cache, WAM or release effect
+is granted.
 
 
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
@@ -560,8 +602,9 @@ Stop the experiment if:
 - remaining authorized attempts or cumulative capacity cannot be established;
 - experiment-controlled work cannot be stopped within the declared bounds, or safe
   ownership cannot be established for cleanup, except for the case-specific original
-  Issue #108 invocation 0057, publications 0064, 0093, 0107 and 0110, and fixture 0068
-  lifetime exceptions in Termination and Retention, each within its exact accepted scope;
+  Issue #108 invocation 0057, publications 0064, 0093, 0107 and 0110, fixture 0068,
+  and the retained-launcher allocation's sole-owned-ETW-persistence exception in
+  Termination and Retention, each within its exact accepted scope;
 - the subject's source or artifact identity no longer matches the accepted protocol; or
 - continuing would mutate an unrelated account, installation, or remote resource.
 

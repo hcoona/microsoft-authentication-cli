@@ -47,8 +47,8 @@ Use only public dependencies and verified retained public caches/installed toolc
 downloads may use public NuGet.org and official .NET distribution endpoints, with no
 credentials. New experiment-owned files stay in dedicated build/test roots outside
 production installations and are intentionally retained. Maximum cumulative capacity is
-28 dependency preparation/restore actions, 130 build/test actions, 30 Native AOT publish
-actions and 180 synthetic process scenarios, with at most 4 GiB of newly downloaded public
+35 dependency preparation/restore actions, 141 build/test actions, 30 Native AOT publish
+actions and 277 synthetic process scenarios, with at most 4 GiB of newly downloaded public
 dependency content. Exact per-action time, output and termination limits and source
 admission are owned by the accepted protocol. No new toolchain installation is granted.
 
@@ -75,9 +75,10 @@ compilation and synthetic validation retain their ordinary prerequisites and
 separate exact admissions. Preserve the failed original, its unavailable
 dedicated unit and the consumed recovery; charge the additional diagnostic
 separately within the existing cumulative ceilings. This historical disposition
-ends when this grant closes and does not transfer to a successor grant. Only the
-renewed credential-free capacity below extends its original cumulative ceilings;
-other later boundary changes do not expand it. All new ownership or termination uncertainty
+ends when this grant closes and does not transfer to a successor grant. Only the renewed credential-free capacity and the separately stated
+retained-launcher scenario allocation below explicitly extend its original
+cumulative ceilings and exact effects. Other later boundary changes do not
+automatically expand it. All new ownership or termination uncertainty
 retains the ordinary stop conditions. No quiescence, refund, repeated original
 recovery, old-process cleanup, authentication, publication outside the renewed ceilings,
 release authority or broader exception is granted.
@@ -98,9 +99,10 @@ Windows Job with a recoverable authorized operating path and retained identity
 records. Naming alone establishes neither exclusive process ownership nor
 quiescence. Preserve the failed original, its consumed charge, evidence and
 unaccepted artifact. This historical disposition ends when this grant closes;
-it does not transfer to a successor grant. Only the renewed credential-free
-capacity below extends its original cumulative ceilings; other later boundary
-changes do not expand it. All new ownership or termination uncertainty retains the ordinary
+it does not transfer to a successor grant. Only the renewed credential-free capacity and the separately stated
+retained-launcher scenario allocation below explicitly extend its original
+cumulative ceilings and exact effects. Other later boundary changes do not
+automatically expand it. All new ownership or termination uncertainty retains the ordinary
 stop conditions. No old-process cleanup, automatic retry, capacity refund,
 artifact acceptance, account effects, publication outside the renewed ceilings,
 release authority or broader lifetime-risk exception is granted.
@@ -120,8 +122,9 @@ startup and failure diagnostics, using named, auditable, operable Windows Jobs.
 
 Preserve the failed original, its full charge and both spent file observations.
 This disposition ends with this grant and does not transfer to a successor or
-automatically expand with later quota or effects changes. Only the renewed
-credential-free capacity below explicitly extends its prior ceiling. Historical 0057 and
+automatically expand with later quota or effects changes. Only the renewed credential-free capacity and the separately stated
+retained-launcher scenario allocation below explicitly extend its prior ceiling
+and exact effects. Historical 0057 and
 0064 decisions remain separate. Every new ownership or termination uncertainty
 retains the ordinary stop conditions. No original replay or recovery, old-state
 scan or cleanup, quota increase or refund, termination claim, fixture or artifact
@@ -140,7 +143,7 @@ allocation, accepted protocol and independent source and exact-call admissions.
 
 Preserve the failed original, full charge, retained evidence and conservative
 endpoint accounting. This disposition ends with the current grant and does not
-transfer to a successor or expand with later capacity or effects changes.
+transfer to a successor or automatically expand with later capacity or effects changes.
 Historical 0057/0064/0068 decisions remain separate. Every future ownership or
 termination uncertainty retains ordinary stop conditions. No original 0093
 replay, additional observation, old-process or shared-service operation,
@@ -168,7 +171,7 @@ allocates no execution and does not accept a hypothesized cause as established.
 Preserve the failed original, full charge and sole spent passive observation.
 This disposition establishes neither later process termination nor publication
 or artifact acceptance. It ends with the current grant, does not transfer to a
-successor, and does not expand with later quota or effects changes. Historical
+successor, and does not automatically expand with later quota or effects changes. Historical
 0057/0064/0068/0093 decisions remain separate; every future ownership or termination
 uncertainty retains ordinary stop conditions. No original replay, further old-state
 observation, old-process or shared-service operation, cleanup, refund, quota increase,
@@ -238,9 +241,11 @@ before execution. Failed start consumes this invocation; no retry, repeated 0057
 authentication, new lifetime-risk exception, additional publication capacity or
 release authority is granted.
 
-**Renewed credential-free capacity:** The repository owner approves the execution
-ceilings above, retaining the previously tripled contingency buffer for the
-remaining staged synthetic validation. Apply the original 0057, 0064 and 0068
+**Renewed credential-free capacity:** The preceding finite renewed allocation
+has ceilings of 28 preparations, 130 build/test, 30 publications and 180 synthetic
+actions, retaining the previously tripled contingency buffer for the remaining
+staged synthetic validation. The separately stated retained-launcher allocation
+below explicitly extends that capacity and its declared effects. Apply the original 0057, 0064 and 0068
 historical lifetime/interference dispositions to
 credential-free work within these renewed ceilings on the same existing hosts.
 This is an explicit finite capacity extension of those three historical decisions;
@@ -253,6 +258,58 @@ The matching experiment-safety and Windows protocol amendments must be accepted
 atomically. Downloads, toolchain, environment, account and external-effects
 boundaries remain those stated above; further capacity or effects extensions
 require their applicable decision and amendment.
+
+**Retained-launcher scenario capacity and effects:** The repository owner approves
+one primary credential-free sequence and three individually admitted correction sets
+within cumulative ceilings of 35 preparations, 141 build/test, 30 publications and
+277 synthetic units. Retain twelve later-product build/test planning slots and the
+existing 4 GiB public-download maximum. Preparation host ceilings are 18 Linux and
+17 Windows. The exact protocol reserves seven Linux observer compiles, seven
+Windows complete-cache offline restores, seven separately admitted managed builds
+and sixteen scenario batches. Restore outcome acceptance precedes each build;
+no live process waits for review. Every failed or interrupted original consumes
+its declared category. Capacity is not retry or source/artifact/call acceptance.
+
+Explicitly extend each original 0057, 0064, 0068, 0093, 0107 and 0110 historical
+lifetime/interference disposition to this finite allocation on the same hosts and
+its exact effects. Preserve their separate scopes, failed results, full charges
+and spent observations. None establishes quiescence. These extensions end with
+the current grant, never transfer automatically, and excuse no new uncertainty.
+
+Accept at most eight fresh real-time process ETW session-creation attempts.
+Actual observation attempts remain sequential and individually admitted; residual
+owned kernel sessions and buffers may overlap later attempts. Retain bounded
+transient exposure of unrelated private command-line, image and user-SID payload
+data before filtering, PROCESS|NO_SYSCONFIG-only selection, finite private memory,
+no ETL or raw unrelated retention, and no elevation or shared-session operation.
+
+The repository owner accepts persistence of these originally owned sessions and
+buffers after failed stop/drain or forced observer exit as a nonblocking residual
+risk by itself. This is a risk disposition, not empirical evidence of no effect
+on business behavior. Preserve each failed original and full charge. After
+independent review establishes that such persistence is the sole remaining issue,
+subsequent bounded validation may use an existing unused allocation without another
+owner risk decision solely for that persistence. Retain original ownership/session
+identity and the failed outcome in the next checkpoint. Do not infer trace closure,
+rewrite a failure, treat a failed calibration as successful, or grant automatic
+retry, extra session creation, cleanup, repeated stop or privilege change.
+Unresolved native-process, gate, consumer, pending OVERLAPPED, event-loss or required
+evidence issues remain stops; the exception covers no unknown ownership or foreign
+session. Passing calibration and direct-observation evidence retain their exact
+source and protocol gates. Direct WSL uses the admitted inherited relay/account baseline
+with fixed fresh-directory overlays; full environment replacement and native
+precreation stdin closure are not claimed. This decision grants no account, WAM,
+token, credential, application or broker cache, consent, authenticated-resource,
+installation, cleanup, signing, release or broader support effect. A fresh pinned
+public dependency-cache copy belongs only to the explicitly bounded restore recipe.
+
+Accept matching experiment-safety and exact Windows protocol amendments before
+dependent execution. Keep unchanged normal 0070 creation-time named-Job supervision.
+Independent source, exact artifact, checkpoint, call and outcome acceptance remain
+required at every step. A failed original stops; later work retains those gates
+and only the narrow owned-session persistence disposition above. This decision
+grants no automatic retry, recovery or budget refund.
+
 
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13

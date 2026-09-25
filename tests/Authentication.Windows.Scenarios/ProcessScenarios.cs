@@ -11,7 +11,7 @@ public sealed class ProcessScenarios
     [TestMethod]
     public async Task RootHelpCompletesWithoutAuthentication()
     {
-        using var child = new ProcessFixture("help");
+        using var child = new ProcessFixture("help", Program.NativeCliExecutable);
         await child.FinishAsync();
         AssertNormalExit(child, 0);
         var text = Encoding.UTF8.GetString(child.Output);
@@ -23,7 +23,7 @@ public sealed class ProcessScenarios
     [TestMethod]
     public async Task MalformedAuthenticationReturnsTheBootstrapFailure()
     {
-        using var child = new ProcessFixture("malformed");
+        using var child = new ProcessFixture("malformed", Program.NativeCliExecutable);
         await child.FinishAsync();
         AssertFailure(child, "invalid_request");
         Assert.IsFalse(Encoding.UTF8.GetString(child.Output).Contains("SYNTHETIC_INVALID_VERSION", StringComparison.Ordinal));
