@@ -18698,3 +18698,235 @@ for that focused validation. Future publication retains its separate source,
 artifact, protocol and exact-call gates. This source preparation consumes no
 experiment capacity and grants no account/WAM/cache, installation or release
 effects; full Windows Slice scenario acceptance remains open.
+
+
+## Focused Credential-Free Clock Handoff: 0108
+
+After the original-0107 risk disposition and unbound source correction, allocate
+one focused clock-handoff batch, numbered 0108. This validates the corrected
+reply publication on the existing DrvFS/Windows host and the two original reader
+paths before any successor publication depends on them. It does not establish
+original0107's cause. Preserve its sole spent observation, full charge,
+noExperimentLive=false, and the distinct historical lifetime dispositions.
+Do not reopen its original runtime leaves, replay its reader, or operate its
+processes, Jobs or services.
+
+### Allocation and Exact Subjects
+
+Before the sole original caller starts, durably charge 0 preparation, 1 build/test,
+0 publication and 4 synthetic units, including failed starts and unreached cases.
+Counters advance from 20/105/4/157 to 20/106/4/161 within 28/130/30/180. Remaining
+capacity is 8 preparation, 24 build/test, 26 publication and 19 synthetic units.
+Preserve twelve synthetic units for CLI scenarios, two for Profile scenarios,
+three for observer/WSL evidence and two as remaining reserve. No refund, retry,
+additional child, automatic successor or larger quota is allocated.
+
+Use one unchanged normal named-Job launcher, one outer PowerShell harness and
+three sequential PowerShell children, in order success, diagnostic, persistence.
+These are five actual Windows process starts. The outer harness alone retains
+the explicit harness exemption used by 0071/0078. The four charged subjects are
+the native launcher and three children. No child inherits that exemption. The
+launcher itself is outside its Job; the four deliberate Job members are the
+harness and three children. At most two PowerShell subjects run concurrently.
+OS lifetime accounting may include auxiliaries and failed associations:
+4..32 is the separately required observed total bound, not an exact inventory or
+authorization for additional deliberate subjects. ActiveProcessLimit32 alone
+does not establish that lifetime total.
+
+Reuse only the accepted 0070 normal launcher: 23,040 bytes, SHA-256
+5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a, from its
+accepted retained artifact and original build acceptance. Its enabled source
+was 31,580 bytes, SHA-256
+32e92ca5bfd683fa4c9f3119ce0e55c353d0b092aaebbe54aac6941e01650bb6. Do not rebuild it,
+select the publication-mode artifact, load the guard DLL, inspect compiler
+caches, or invoke a compiler. The normal launcher creates the named auditable
+Job before its suspended harness, uses creation-time containment and
+kill-on-close, and retains its original query/termination access and journal.
+Its actual bounds remain 330 seconds plus ten seconds for cleanup.
+
+The fixed source family is in tools/validation. Its extraction manifest pins
+exact ASCII byte spans from the accepted corrected bootstrap, controller and
+Python contracts. Evaluate only the five listed Python function definitions,
+the listed PowerShell functions, the contiguous bootstrap handshake block, and
+the controller startup tail. Verify whole-source and span hashes and parse each
+function as the one expected definition. Never import the full Python contracts
+or execute either full publication script. Their entry guards remain enabled.
+The synthetic binding and forbidden candidate stub are explicit substitutes;
+the candidate stub must never be reached.
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `Invoke-WindowsClockHandoff.ps1` | 13897 | `b4515ce29fd8d7fd35bf1eb038bf897c34ae145543a0640ac3d12549c824b2dd` |
+| `clock_handoff_cases.py` | 7636 | `9c1ef6e31bccafb54ba02a2ddd65d3c515986e12a8554d68988629bfa0a09728` |
+| `run_windows_clock_handoff.py` | 25267 | `26c9e3cb985372b8979525d90e38a893d3e156c2d825f5c78f36ecf40dc9b7f4` |
+| `call_windows_clock_handoff.py` | 23531 | `b5e15f4cd56a1ab42c7e89760eee35fcb56f7bb2738804adb596184c44d32ad1` |
+| `materialize_windows_clock_handoff.py` | 18403 | `db38bbd0d1f751e6b878ad0e4578a2b763e78d8f1f2e36e017cb671ec4d17441` |
+| `assemble_windows_clock_handoff.py` | 12195 | `db687c9fe4dcbd0c3ca6e021a2fc40782ad2bbe76adba2c751dffb27ab0e6682` |
+| `windows_clock_handoff_extraction.json` | 4338 | `db7852f3664659bb7958614badb78cf5321b97f3358a3f8cf33c11623a6b16d6` |
+
+### Finite Preparation and Original Call
+
+Before each separately admitted assembly, materialization and original caller,
+retain one exclusive durable call-start and independently bind complete source,
+accepted protocol/commit/tree, fixed installed runtime/tools, source/evidence
+inputs, exact command, replacement environment and fresh outputs. Use a clean
+detached accepted checkout. Failed or partial submission spends that call;
+all partial files are retained without repair or an alternate root. Preparation
+and materialization are not subject execution and do not add another charged
+attempt. They also do not erase the caller's full failed-start charge.
+
+The assembler may replace only ACCEPTED_COMMIT=None with the accepted revision.
+Its exact input set is five already installed Linux tools, seven pinned source
+files, the retained normal launcher and its accepted build seal. Observe only the
+inherited WSL_INTEROP path's grammar and no-follow socket metadata, without a
+connection or liveness claim. Generate one UUIDv4 suffix and fixed synthetic
+reservation/invocation objects, whose canonical hashes bind all clock cases.
+Do not treat them as a publication reservation. The five exclusive outputs are
+the fixture-only active worker and harness copies, authority, copy manifest and
+host bindings. Only the worker's DRAFT_ONLY Boolean and the harness's
+ClockFixtureDraftOnly Boolean change in those copies; no production guard changes.
+Retain thirty seconds, 31 data reads, 32 MiB requested bytes, 64 KiB per output and
+192 KiB total output, including readbacks. No network request or subprocess occurs.
+
+Materialization changes only its own DRAFT_ONLY Boolean in an independently
+admitted copy. Its sole manifest selects eight roles and nine copies: four Linux
+inputs (authority, worker, same-process cases and publisher source) and five
+Windows inputs (authority, harness, retained launcher, bootstrap source and
+controller source). Create only the fresh Linux input directory,
+C:\Temp\azureauth-windows-slice-108\named-fixtures-0108, and its three empty case
+directories. The harness copy must be named Invoke-WindowsNamedGuardFixtures.ps1
+for the unchanged native interface. All copies use exclusive creation,
+continuous created-file handles, synchronization and exact readbacks. Preserve
+the accepted Windows-copy-only ctime qualification: the other eight identity
+fields and current byte/hash continuity still agree. No Linux/source/receipt
+identity is relaxed. Require the copied launcher to be regular, owned by the
+admitted user and owner-executable; no corrective chmod or second copy is allowed.
+The normal path has nineteen reads, five fresh directories, nine copies and one
+receipt. Ceilings remain thirty seconds, 64 reads, 4 MiB requested bytes, 1 MiB
+copied payload, 1,088 KiB writes and a 64 KiB receipt. The original receipt and
+complete transport must be independently accepted before the caller.
+
+Only the caller's CONFIG=None may be replaced with exact accepted tool, authority,
+manifest and materialization bindings. Its durable call-start and the same-attempt
+history/started.json debit bind the complete 0/1/0/4 charge. The latter precedes
+currentness and systemd submission. Hold the existing action.lock exclusively.
+Perform one public unauthenticated main-v2 ref check, without proxy, redirect,
+Git helper, credentials or retry; the response is at most 64 KiB and ten seconds.
+A scoped Python signal deadline covers opening, reading and closing that response,
+intersects the original twenty-second prelaunch deadline, and rejects an already
+active timer before arming. An absolute check precedes acceptance; the timer is
+disarmed and the previous handler restored without retry. This retains the
+external watchdog and ordinary OS-operation timing limits. Any changed accepted
+target stops this attempt for refreshed admission.
+
+The caller's original monotonic interval is 430 seconds. Launch must begin within
+twenty seconds; the queued bootstrap rejects worker entry after the original
+thirty-second cutoff. Use the dedicated azureauth-clock-handoff-108-0108.service
+with --wait --pipe, service type exec, ExitType=cgroup, KillMode=control-group,
+SendSIGKILL=yes, Restart=no, JobRunningTimeoutSec=5s, TimeoutStartSec=5s,
+RuntimeMaxSec=390s and TimeoutStopSec=5s. Retain the unit rather than collecting it.
+A replacement env -i isolates the worker from the manager/client IPC environment;
+only the pinned inherited WSL endpoint is passed for the admitted native launch.
+The worker records its own exact cgroup before native execution. No previous
+service is queried, reset, stopped or cleaned up.
+
+The worker deadline derives from the original debit. It allows at most thirty
+seconds before the native call, with producer checks limited to twenty-five.
+Its work deadline is the earlier of entry plus 330 seconds and original expiry
+minus sixty; failure draining is at most forty seconds and stops by original
+expiry minus ten. Snapshot/result work stops by original expiry minus five.
+The harness has 180 seconds, each original clock exchange retains its extracted
+bounds, and each child transport/acknowledgment has the stated finite interval
+inside the harness clock. These shorter clocks do not shorten the native
+launcher's 330+10 lifetime. The caller drains normally by second420, permits only
+original failure completion through second425, and performs bounded final
+receipt retention before second430. All deadlines intersect; no phase restarts
+the original interval. Unreturning OS/storage operations retain the existing
+workstation trust boundary, not a hard real-time guarantee.
+
+Use isolated/no-site/no-bytecode Python -I -B -S. Passive calls retain external
+35-second TERM and five-second KILL envelopes. The original caller retains an
+external 440-second TERM and five-second KILL envelope. Those Linux watchdogs
+are not Windows termination evidence. Empty polls may await only the original
+pending tool session, at most sixty seconds per poll. No resubmission follows.
+
+### Required Scenarios and Evidence
+
+The same-process producer table has seven fresh directories: partial-pending,
+pending-collision, final-collision, link-failure, cancelled, expired and
+post-link-sync-failure. The partial-write seam observes the final name absent
+while the pending file is incomplete. Existing names retain exact sentinels;
+there is no overwrite or publication retry. Injected link and post-link fsync
+failures must be the exact injected exception object, with respectively one
+link/two fsync calls and one link/three fsync calls. Incidental errors cannot
+satisfy those oracles. Cancellation and expiry create no reply. Retain complete
+pending aliases and explicit injected labels. This table does not add a process.
+
+The success child runs the exact controller Receive-FinalOriginalClock function.
+The outer harness runs the exact bootstrap handshake block with its actual held
+child Process. The Linux producer uses uninstrumented OS calls to publish one
+fully written, synchronized and closed pending file by one nonoverwriting hard
+link. Both readers must consume the same ready/reply hashes and integer QPC
+deadline. The child stays alive until a bounded acknowledgment after both reader
+receipts; accept original child exit zero and complete empty transport. The
+retained pending/final aliases must have identical complete bytes and one inode
+with link count two. This actual case supplies the selected-host visibility
+observation; the injected table alone cannot establish it.
+
+Both negative children receive a complete but binding-invalid reply and execute
+the extracted controller startup tail. Require exit one, no candidate entry,
+first phase clock-reply-validation, bounded allowlisted exception metadata and
+complete captured stderr. For diagnostic, join the final failure receipt with
+its original stderr frame. For persistence, create the fixed final diagnostic
+collision sentinel only after clock-ready, so the original freshness check
+passes. Require the sentinel unchanged, the new pending diagnostic retained,
+and the same first-cause frame despite failed final publication. Each child
+capture is at most 4,096 bytes; each diagnostic frame is at most 2,048 UTF-8 bytes
+plus its newline. No exception message, stack trace or private value is a public
+result. Unexpected human interaction follows the stop procedure.
+
+The worker retains at most 8 MiB of requested input/evidence reads. Its native
+proxy capture and the caller's service capture each retain at most 16 KiB, with
+at most 1 MiB observed before further reading stops. Preserve fitting prefixes,
+per-stream observed/retained bytes, EOF, sticky overflow, truncation and read
+errors. EOF alone never makes a truncated capture complete. Guard transport,
+snapshot and final-result persistence separately; retain the first failure and
+at most eight bounded secondary errors, without a fresh recovery clock.
+
+The worker makes one fixed snapshot of only the new action's launcher journal,
+launcher captures, windows-started/result records and pending names, cancel,
+and the ready/reply/failure/transport names and pending names for three cases;
+the success case additionally includes reader, bootstrap-reader and release
+names and pending names. Caps are 16 KiB per launcher leaf, 128 bytes for cancel
+and 8 KiB per other leaf. Snapshot metadata records present, absent-at-observation,
+error or not-attempted-under-original-limit for every selected name. One local
+leaf failure cannot suppress later permitted observations. The snapshot and each
+worker output are at most 512 KiB. Do not reopen these Windows leaves later.
+
+The original caller observes only five new Linux receipts once: worker-entered,
+producer-cases, proxy-transport, snapshot and worker-result. It binds their
+complete bytes/hashes in its own retained result and authenticates that result
+through the original terminal transport. Its ceilings are forty data reads,
+4 MiB requested input, 64 KiB per written record and 192 KiB total writes. The
+single cgroup check is scoped to the worker's original recorded unit and accepts
+only empty or removed. Missing/unstable/error evidence remains failure, not
+proof of nonstartup, termination or absent effects. Interpret later only the
+retained snapshot, receipts, source and complete original transport.
+
+Success requires all producer and Windows cases, original child identities,
+normal nine-event launcher journal, original harness identity match, root exit
+zero, held-Job active count zero, total4..32, complete empty launcher/proxy/service
+captures, successful worker/caller results and scoped cgroup completion. Require
+independent original-outcome acceptance before using this focused result. These
+observations establish only the new scoped invocation's outcome; they do not
+establish host-wide quiescence or end any historical lifetime uncertainty.
+
+On failure, cancel only through the fresh owned root and let the original
+launcher perform its declared cleanup. Terminate only the directly retained
+Linux service client if required; the service retains its independent cgroup
+limit. Retain every partial file and original output. New ownership or lifetime
+uncertainty stops dependent experiments under ordinary policy. No owner attendance
+is needed for this automated credential-free batch. No account enumeration,
+WAM/token/cache/consent effect, authenticated request, compiler/publication,
+installation, signing, release, or full Slice acceptance follows. A successor
+publication and later real-account scenarios retain their separate gates.
