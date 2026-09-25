@@ -33,9 +33,30 @@ NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531d
 CHARGES = {'restore': 1, 'build': 1}
 PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows-actions',
            'windowsProjectionActions': PROJECTION / 'actions', 'windowsProjectionRoot': PROJECTION}
+
+
+class PredicateFailure(ValueError):
+    """Only require's fixed source labels are eligible for retained diagnostics."""
+
+
 def require(condition, label):
     if not condition:
-        raise ValueError(label)
+        raise PredicateFailure(label)
+
+
+def failure_identity(error):
+    # Inspect numeric locations in this source only, without formatting traceback
+    # text, filenames, arbitrary exception messages, or rejected input payloads.
+    line, trace = None, error.__traceback__
+    for _ in range(64):
+        if trace is None:
+            break
+        code = trace.tb_frame.f_code
+        if code.co_filename == __file__ and code.co_name != 'require':
+            line = trace.tb_lineno
+        trace = trace.tb_next
+    return {'type': type(error).__name__, 'sourceLine': line,
+            'predicate': str(error) if type(error) is PredicateFailure else None}
 
 
 def encode(value):
@@ -427,6 +448,7 @@ def transport(argv, environment, cwd, deadline, budget):
             os.set_blocking(stream.fileno(), False)
             selection.register(stream, selectors.EVENT_READ, name)
         error = None
+        caught_failure = None
         cancel_error = None
         try:
             while process.poll() is None or len(eof) != 2:
@@ -443,6 +465,7 @@ def transport(argv, environment, cwd, deadline, budget):
                         require(len(block) <= remaining, 'Complete transport output bound')
         except BaseException as caught:
             error = type(caught).__name__
+            caught_failure = failure_identity(caught)
             # Return the original cause before cancellation. The owner persists
             # its first-failure receipt, then attempts cancellation independently.
         finally:
@@ -450,7 +473,7 @@ def transport(argv, environment, cwd, deadline, budget):
             for stream in (process.stdout, process.stderr):
                 stream.close()
         return {'pid': process.pid, 'exitCode': process.poll(), 'eof': sorted(eof), 'failure': error,
-                'cancelFailure': cancel_error,
+                'cancelFailure': cancel_error, 'caughtFailure': caught_failure,
                 'stdout': base64.b64encode(parts['stdout']).decode('ascii'),
                 'stderr': base64.b64encode(parts['stderr']).decode('ascii')}
 
@@ -561,7 +584,7 @@ def retain_failure(local, root, budget, result, prefix, result_leaf):
     budget.enter_terminal()
     result['passed'] = False
     result['scopedJobQuiescent'] = False
-    first = {key: result[key] for key in ('schema', 'stage', 'failureType')}
+    first = {key: result[key] for key in ('schema', 'stage', 'failureType', 'caughtFailure')}
     first.update(noExperimentLive=False, continuationAllowed=False, capacityRefundAllowed=False)
     # Persistence may itself fail. Preserve the in-memory first cause and expose
     # each independent failure rather than promising storage cannot fail.
@@ -650,6 +673,7 @@ def worker(a, began, deadline, service_intent, service_deadline, budget):
         return 0
     except BaseException as error:
         result.setdefault('failureType', type(error).__name__)
+        result['caughtFailure'] = failure_identity(error)
         return retain_failure(local, root, budget, result, 'worker', 'worker-result.json')
 
 
@@ -761,6 +785,7 @@ def original(a, began, deadline, budget):
             result = {'schema': 'windows-managed-harness-original-failure-v1',
                       'action': a['action'], 'admissionSha256': digest(a['_raw']),
                       'stage': stage, 'failureType': type(error).__name__, 'complete': False,
+                      'caughtFailure': failure_identity(error),
                       'noExperimentLive': False, 'retainedLiveWorkOrUnknown': True,
                       'historicalLifetimeUnknown': HISTORICAL_UNKNOWN,
                       'continuationAllowed': False, 'capacityRefundAllowed': False}
@@ -812,5 +837,5 @@ if __name__ == '__main__':
     except Exception as error:
         # Complete transport retains this fixed sanitized failure, never arbitrary
         # provider, subprocess or environment text. No exception starts a retry.
-        sys.stderr.write('Retained scenario original failed: ' + type(error).__name__ + '\n')
+        sys.stderr.write(encode({'failure': failure_identity(error)}).decode('ascii'))
         sys.exit(1)
