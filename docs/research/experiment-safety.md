@@ -160,8 +160,8 @@ exception does not establish termination, authorize old-process cleanup or weake
 future work's ownership, termination, evidence or capacity requirements. It does
 not apply to other unknown processes or historical Issue #1. The exception ends
 when that Wave grant closes; it does not transfer to a successor grant. The finite renewed credential-free capacity and the separately stated
-retained-launcher scenario allocation below are its explicit extensions beyond
-the original ceilings and effects. Other later boundary changes do not
+retained-launcher and supplemental managed/caller allocations below are its explicit
+extensions beyond the original ceilings and effects. Other later boundary changes do not
 automatically expand it.
 All new ownership or termination uncertainty
 retains the ordinary stop conditions.
@@ -175,8 +175,8 @@ Preserve the original failure, charge and evidence. This exception establishes
 neither termination nor artifact acceptance and permits no old-process cleanup,
 automatic retry or capacity refund. It ends with that Wave grant and cannot
 transfer to a successor grant. The finite renewed credential-free capacity and the separately stated
-retained-launcher scenario allocation below are its explicit extensions beyond
-the original ceilings and effects. Other later boundary changes do not
+retained-launcher and supplemental managed/caller allocations below are its explicit
+extensions beyond the original ceilings and effects. Other later boundary changes do not
 automatically expand it. It does not cover other unknown processes. Future
 publication supervision must meet the Wave's named-Job requirement and the exact
 protocol's identity, audit and authorized-operation rules before execution;
@@ -205,8 +205,8 @@ This exception supplies no termination evidence, old-state scan or cleanup,
 original replay or recovery, quota increase or refund, or fixture/artifact
 acceptance. It ends with the current grant and cannot transfer to a successor
 or automatically expand with later quota or effects changes. Only the current Wave's renewed credential-free capacity and its separately stated
-retained-launcher scenario allocation expressly extend its prior ceiling and
-exact effects.
+retained-launcher and supplemental managed/caller allocations expressly extend its
+prior ceiling and exact effects.
 The 0057 and 0064
 exceptions remain separate. Require corrected creation-time controller
 containment, bounded startup/failure diagnostics and named, auditable, operable
@@ -313,6 +313,35 @@ between Linux preclosed stdin and native precreation EOF. Only the separately
 bounded fresh public dependency-cache copy and complete-cache offline restore are
 included; no account, credential, application or broker cache, WAM or release effect
 is granted.
+
+The Wave's supplemental managed/caller allocation separately adds exactly
+1/6/0/25 preparation/build-test/publication/synthetic capacity, giving aggregate
+ceilings 36/147/30/302 with preparation host ceilings 18 Linux and 18 Windows.
+It explicitly extends each separate original 0057, 0064, 0068, 0093, 0107 and 0110
+lifetime/interference disposition only to that finite increment on the same hosts
+and within the same credential-free effects. Preserve every prior failure, charge,
+spent observation, protected reservation and unresolved lifetime status. No old
+restore/build slot is reopened or transferred; all twelve later-product build/test
+planning slots remain protected. The increment supplies no correction buffer,
+automatic retry, refund, old-state recovery, quiescence claim or broader exception.
+
+The three added D0/D1/D2 ETW creation attempts raise the aggregate maximum to eleven
+without changing the original eight reservations or consumption. Extend the bounded
+private-memory/transient-data effects and the sole-owned-session/buffer persistence
+disposition above only to these three attempts. Actual observations remain sequential,
+with independent outcome review; all other process, ownership, consumer, cancellation,
+loss and evidence stop conditions remain. Preserve passing calibration and exact-source
+correspondence before a dependent direct observation. No new helper kind, foreign
+session operation, repeated stop, cleanup or elevation is permitted.
+
+This finite extension requires the matching owner decision in the accepted Wave and
+the independently accepted protocol amendment before execution. Each reserved row still
+requires its exact protocol, source/artifact/current-input/checkpoint/call admission
+and outcome review; the controlled caller rows cannot execute before their exact
+protocol and source/tool integration are accepted. Failed or partial starts consume
+their declared attempts. Existing account and external-effects exclusions and future
+real-effects gates remain unchanged. The historical dispositions and the ETW exception
+end with the current grant and never transfer or expand automatically.
 
 
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal

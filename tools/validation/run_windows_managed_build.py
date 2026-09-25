@@ -26,7 +26,7 @@ import xml.etree.ElementTree as ET
 LINUX = Path('/var/tmp/azureauth-windows-slice-108')
 PROJECTION = Path('/mnt/c/Temp/azureauth-windows-slice-108')
 WINDOWS = r'C:\Temp\azureauth-windows-slice-108'
-CEILINGS = [35, 141, 30, 277]  # Proposed ceilings; guard remains closed until amended authority.
+CEILINGS = [36, 147, 30, 302]  # Proposed ceilings; guard remains closed until amended authority.
 HISTORICAL_UNKNOWN = ['0057', '0064', '0068', '0093', '0107', '0110']
 PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
@@ -356,7 +356,7 @@ def load_admission(path, expected, budget):
             value['suite'] in ('restore', 'build') and
             re.fullmatch(r'[0-9a-f]{40}', value['sourceCommit']) and
             re.fullmatch(r'[0-9]{4}', value['subjectAction']) and int(value['subjectAction']) > 110 and
-            value['slot'] in ('primary', 'c1-a', 'c1-b', 'c2-a', 'c2-b', 'c3-a', 'c3-b') and
+            value['slot'] in ('primary', 'c1-a', 'c1-b', 'c2-a', 'c2-b', 'c3-a', 'c3-b', 'supplemental') and
             ((value['suite'] == 'restore' and value['subjectAction'] == value['action']) or
              (value['suite'] == 'build' and int(value['subjectAction']) < int(value['action']))) and
             re.fullmatch(r'[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}', value['nonce']), 'Admission identity')
@@ -592,12 +592,12 @@ def checkpoint(a, budget, reserved=False):
     after = [x + y for x, y in zip(before, charge, strict=True)]
     hosts = c['hostPreparations']
     require(type(hosts) is dict and set(hosts) == {'linux', 'windows'}, 'Preparation host allocation')
-    for name, ceiling in (('linux', 18), ('windows', 17)):
+    for name, ceiling in (('linux', 18), ('windows', 18)):
         v = hosts[name]
         require(type(v) is list and len(v) == 2 and all(type(n) is int for n in v) and
                 v[1] == ceiling and 0 <= v[0] <= ceiling, 'Host preparation ceiling')
     require(hosts['linux'][0] + hosts['windows'][0] == before[0] and
-            hosts['windows'][0] + charge[0] <= 17, 'Windows preparation debit')
+            hosts['windows'][0] + charge[0] <= 18, 'Windows preparation debit')
     protected = c['protectedAfter']
     require(type(protected) is list and len(protected) == 4 and
             all(type(x) is int and x >= 0 for x in protected) and protected[1] >= 12 and
