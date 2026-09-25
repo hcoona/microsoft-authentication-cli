@@ -20033,7 +20033,8 @@ this public table records only reviewable repository source.
 | tools/validation/WindowsWslObserver.cs | 63227 | 355ffacbd73c46228fcb0bc1db324645c5c6156aa45dd2fdaca08fa6c3d8d3c4 |
 | tools/validation/run_windows_wsl_observer_build.py | 20388 | dd8b5870f6b69ee66002948e0458506c5cc7e519c3b77aa95bc07a4bb65badaa |
 | tools/validation/Invoke-WindowsManagedBuild.ps1 | 21342 | 90d3ddd561f2f111a2b525bd7e35a41827a29d1cdf6e240f31d7b2d8f46740a8 |
-| tools/validation/run_windows_managed_build.py | 47233 | 4aa153410f2823eb49ae5772bd7dc5efb6fc8e70a5d969f341ccbece63f30660 |
+| tools/validation/run_windows_managed_build.py | 48235 | 75cfedce0ed8f98d2b160c51f2da0cac150119efefee8978df04d80009a0a2dc |
+| tools/validation/observe_windows_fresh_file_identity.py | 9897 | 1b517844119e5815bef68c102e3235d8f31de8d2f43c0e39f5ee675be9563be6 |
 
 ### Exact category reservation and ordering
 
@@ -20050,6 +20051,7 @@ this allocation alone supplies none of their acceptance.
 | Correction set 1: two observer candidates, two managed restore/build pairs, four batches | 4 | 6 | 29 | 2 |
 | Correction set 2: same bounded roles | 4 | 6 | 29 | 2 |
 | Correction set 3: same bounded roles | 4 | 6 | 29 | 2 |
+| Single fresh-file Windows-projection identity diagnostic | 1 | 0 | 0 | 0 |
 | Protected later-product planning | 0 | 12 | 0 | 0 |
 
 Primary scenario charges are CLI 14, Profile 4, calibration 4 and direct WSL 3.
@@ -20078,12 +20080,14 @@ must confirm that neither recipe starts any additional deliberately counted help
 
 The primary plus three correction sets preserves seven observer preparations,
 seven managed restores, seven managed builds, sixteen scenario batches and twelve
-later-product build/test planning slots. If all declared reservations are spent,
-cumulative counts are 34/129/6/277, including 18 Linux / 16 Windows preparations.
-The execution reservations add 14 preparations, 23 build/test and 114 synthetic
+later-product build/test planning slots. The single fresh-file diagnostic explicitly
+allocates the previously unallocated Windows preparation. If all declared execution
+reservations are spent, cumulative counts are 35/129/6/277, including 18 Linux /
+17 Windows preparations.
+The execution reservations add 15 preparations, 23 build/test and 114 synthetic
 units. Twelve protected later-product planning slots account for the difference
-between planned build/test consumption 129 and ceiling 141. The ceiling
-also leaves one Windows preparation unallocated. Keep all twelve
+between planned build/test consumption 129 and ceiling 141. No preparation remains
+unallocated. Keep all twelve
 later-product planning slots protected at every credential-free checkpoint. Current
 batches do not consume them or grant their future real-account effects. No additional
 publication belongs to this recipe. Correction sets preserve the tripled contingency
@@ -20105,7 +20109,9 @@ Each attempt, failed start, interrupted run and partially materialized original
 keeps its full conservative debit. The shared lease spans debit, execution and
 original outcome retention. Each named action gets a new Linux action directory,
 fresh Windows named-fixtures-NNNN root, nonce, authority and exact original-call
-review. Never overwrite or replay an action, use the old failure reader, republish
+review. The single diagnostic instead uses its fixed metadata-identity-0112 root
+and externally bound exact source/checkpoint/call admission below. Never overwrite
+or replay an action, use the old failure reader, republish
 a candidate, repair history or claim a capacity refund.
 
 ### Observer compilation recipe
@@ -20292,6 +20298,86 @@ and asset acceptance must precede CLI/Profile use. Caller completion supplies
 neither acceptance. Changed restored inputs invalidate dependent build admission.
 No live process waits for review, original runtime receipt is recollected, or
 failed collection is repaired automatically.
+
+The managed caller retains a bounded caughtFailure object with exception type,
+numeric sourceLine and, only for its typed PredicateFailure, the literal source
+predicate label. All require labels are fixed public source strings. It retains no
+formatted traceback, filename, arbitrary exception message or rejected input value.
+The label identifies the caught source guard; an earlier transport failure and its
+failureType remain separately retained as the first cause. Admission predicates,
+including every full9 comparison, execution, clocks, charges and retry stops remain
+unchanged. A source line is meaningful only against the exact admitted source.
+
+### Single fresh-file Windows-projection identity diagnostic
+
+This one Windows-filesystem preparation uses action 0112 and one bounded Linux
+Python invocation. Its fixed subjects are only packages.lock.json and plain.txt
+under the fresh metadata-identity-0112 directory. Each contains fixed public
+synthetic bytes; their combined payload is below 1 KiB. It launches no subprocess,
+Windows executable, launcher, PowerShell, dotnet or authentication operation and
+observes no account, cache, installed-tool or binary payload. It neither reads 0111 runtime
+outputs nor surveys parent membership, processes, Jobs or cgroups. The original
+0111 worker admission failure remains causally unresolved; this observation cannot
+identify its exact predicate or establish that it shared a collector failure.
+
+Admit only the exact merged inert source, independently pinned activation changing
+ADMITTED from False to True, current checkpoint and exact outer call. The helper
+accepts no alternate paths or arguments. Its fixed Linux action directory is
+/var/tmp/azureauth-windows-slice-108/windows-actions/0112; its fixed Windows projection
+is /mnt/c/Temp/azureauth-windows-slice-108/metadata-identity-0112. It takes the existing
+shared action.lock lease exclusively without waiting, then exclusively creates the
+Linux action directory and persists its original debit before any Windows write.
+It reserves its result file before creating the fresh Windows directory.
+
+The exact debit is [1,0,0,0]: counters [22,106,6,164] become [23,106,6,164], with
+Linux preparations 12 of 18 and Windows preparations 11 of 17. Preserve
+protectedAfter=[12,35,0,113], including all remaining named reservations and twelve
+later-product build/test slots. This fills the ceiling at [35,141,6,277] when those
+protected reservations are included. It consumes no synthetic unit because it
+deliberately starts no Windows process or helper. Every original invocation,
+failed reservation, interrupted write or partial observation spends this sole
+allocation; persistence failure supplies neither a refund nor a retry.
+
+For each fixed filename, traverse ancestors with no-follow directory descriptors,
+create the file exclusively, write its fixed payload once, fsync the file, record
+writer-fd full9 and close, then fsync its parent. Record named full9 after close,
+then open with
+O_RDONLY|O_NOFOLLOW|O_NONBLOCK and retain immediate opened-fd full9 and differing
+field names before the read. Check regular type, single link, fixed length and
+unchanged dev/ino/mode/uid/gid/size/nlink against the just-created file. Only this
+fresh synthetic sample may then receive exactly one read of payload length plus
+one byte. Retain length/hash and expected-payload equality, fd and named full9
+after the read, and named full9 after closing. Retain all six tuples and their
+compared field names, including any observations acquired before a failure.
+
+Timestamp equality is the observation under study, not production input acceptance.
+This narrowly bounded read of a newly owned public sample does not relax the
+full9 rules for source, deployments, production inputs, receipts or collectors.
+Timestamp differences are retained as diagnostic results. Changed ownership,
+type, link count, length, contents or time/output bounds stops without another
+read or replacement. Equality also supplies no production eligibility or claim
+about 0111. No result authorizes a restore/build retry, weakening a comparison,
+accepting a restore graph or proceeding to the dependent build.
+
+The single original has a 25-second monotonic interval, including a 5-second
+terminal persistence reserve; cooperative work checks therefore stop at 20 seconds.
+Its alarm does not restart. The outer original call requests TERM at 30 seconds
+and KILL 5 seconds later, with at most 4 KiB combined tool capture. These bounds
+do not promise kernel-call return precision. The shared lease spans debit, fixed
+observations and the sole result persistence attempt. No process remains waiting
+for review. Retain created files without cleanup or overwrite.
+
+Persist started.json within 4 KiB and result.json within 32 KiB directly in the
+fresh Linux action directory. The result contains compared tuples, bounded static
+failure labels and a complete/disposition field; stdout identifies its exact
+length, SHA-256 and held-fd full9. A later independently admitted direct observation
+may read only those retained control records with the ordinary no-follow,
+regular-file, exact-length/hash and stable full9 rules; this amendment creates no
+general collector. Successful original exit, final clock and original transport
+completion must accompany the record before outcome acceptance. A preterminal
+complete field alone is insufficient. Storage failure may prevent any durable
+result. productionIdentityAcceptance, causeOf0111Established, continuationAllowed
+and noExperimentLive remain false; historical lifetime uncertainty is unchanged.
 
 ### Common scenario caller, controller and evidence bounds
 
