@@ -20953,3 +20953,117 @@ next execution. Missing evidence leaves that dependency open. Preserve the six h
 lifetime uncertainties and `noExperimentLive=false`; this observation creates no new
 Windows process, service, Job or ETW session and grants no account, broker/cache, credential,
 network, installation, cleanup or release effect.
+
+## Managed 0118 disposition and retained launcher dispatch
+
+Managed restore original 0118 (`c3-b`) completed unsuccessfully. Its complete original
+transport and the sole subsequent collector both returned exit 1. The retained collector
+snapshot contains 20 stable files, 33 required absences and nine optional absences among
+62 selected paths. All 2,192 deployment joins passed: 1,822 copied source/cache leaves
+and 370 installed-input descriptors, with all four source locks matching. Those joins
+establish the bounded deployment checks, not a successful restore.
+
+The worker recorded `PermissionError` at its sole native `subprocess.Popen` call.
+Its admitted launcher was the immutable Linux evidence copy under action 0070, with
+regular-file mode `0664` and no execute bits. The caller used that path directly as
+`argv[0]` without an executable-use admission predicate. This is a confirmed source and
+admission defect consistent with the failure. The retained diagnostic lacks the errno
+and rejected OS object, so it does not establish an exclusive operating-system diagnosis.
+The outer nonzero-transport diagnostic is secondary to the worker failure.
+
+Independent disposition accepts completion of this failed scope. The sole native Popen
+failed before returning; no successfully started Windows launcher/controller/restore
+chain was established. Positive worker terminal records, the exact Linux service with
+`--wait --pipe`, `ExitType=cgroup` and `Restart=no`, and complete empty exit-1 transport
+establish completion of this failed Linux service scope. This is source-bound evidence,
+not observed Windows Job quiescence or a later cgroup probe. Preserve the original
+`scopedJobQuiescent=false`, `retainedLiveWorkOrUnknown=true`, the six historical lifetime
+unknowns and `noExperimentLive=false`. No new historical lifetime risk is introduced by
+this disposition.
+
+Original 0118 and its collector are spent; neither may be retried or observed again.
+Restore remains unaccepted, and paired build 0119 remains ineligible, unreserved and
+unadmitted. Totals remain 29 preparations, 106 build/test, six publications and 170
+synthetic units. Linux preparation is 12/18 and Windows preparation is 17/17. All seven
+managed-restore reservations are spent. The seven blocked paired builds remain unused
+and untransferred; the protected remainder is `[6,35,0,107]`, including twelve later-product
+build/test slots. This correction grants no new restore, build, retry, refund or transfer.
+
+### One passive executable deployment
+
+Within the existing credential-free preparation boundary, permit one separately admitted
+Linux-only passive deployment of the unchanged normal 0070 launcher. Its sole input is
+`/var/tmp/azureauth-windows-slice-108/windows-actions/0070/WindowsScriptJobLauncher.exe`,
+exactly 23,040 bytes with SHA-256
+`5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a`.
+The inert [deployment source](../../../tools/validation/deploy_windows_launcher.py) binds
+the retained full9 identity literally. Treat that file as read-only evidence; do not
+chmod, rewrite, execute, replace or refresh its accepted identity.
+
+The only Windows writes are an exclusively created directory
+`C:\Temp\azureauth-windows-slice-108\normal-launcher-dispatch-v1` and its exclusive leaf
+`WindowsScriptJobLauncher.exe`, both requested with mode `0700`. Its exact WSL projection
+is `/mnt/c/Temp/azureauth-windows-slice-108/normal-launcher-dispatch-v1/WindowsScriptJobLauncher.exe`.
+No target or parent enumeration, alternate destination, overwrite, later chmod, cleanup,
+process, helper, compiler, installer, Job, service or ETW session is authorized. A collision
+or failed predicate spends the sole attempt and retains partial output without repair.
+The requested creation mode is not an assertion about the mode Windows actually exposes.
+
+Before activation, independently accept the exact source, zero-experiment-unit
+classification, current checkpoint, Linux runtime, accepted protocol revision and exact
+call. The sole activation changes `ADMITTED = False` to `ADMITTED = True`. Record the
+single attempt durably before any source/destination observation; bound that local start
+record to 4,096 bytes. This passive operation adds `[0,0,0,0]` only after independent
+classification. It cannot reopen a consumed restore reservation or borrow another slot.
+
+Use one original 55-second interval with 50 seconds for work and five for terminal
+persistence. The outer timeout sends TERM at 55 seconds and KILL three seconds later;
+no failure renews a clock. Signals and synchronous filesystem calls do not guarantee
+kernel-return or persistence timing. The source exclusively creates
+`/tmp/windows-normal-launcher-deployment-result-root-v1.json` before target access.
+Resolve literal directory components without following symlinks. Require source regular,
+single-link shape and the exact admitted full9 before and after its one payload read,
+with exact length and hash. Read at most 23,041 source bytes, write exactly 23,040 bytes
+once, flush the owned file/directory, and read back at most 23,041 bytes once from the new
+leaf. Maximum payload read requests are 46,082 bytes; executable payload writes are
+23,040 bytes. No second payload read repairs a short read or failed digest.
+
+Keep the writer, write-closed, opened-readback, final-opened and named identities. Only
+this freshly created copy may use the existing created-copy qualification: device,
+inode, mode, uid, gid, length, mtime and link count must remain equal, while every ctime
+observation is retained separately. Require final opened and named full9 equality.
+Require actual execute bits and effective-user `X_OK` on that same held/named leaf, then
+recheck its exact full9. These are necessary executable-use predicates, not proof of WSL
+dispatch, Windows ACL behavior, image loading or launch success. Preserve the held/named
+identity of the exclusively created destination directory. No mount, binfmt or process
+survey is authorized to make a predicate pass.
+
+Retain one result bounded to 16,384 bytes, with exact safe identity, digest, copy and
+failure fields; do not embed raw executable bytes. Tool output contains only a bounded
+result descriptor or fixed typed failure. Preserve complete original transport and all
+partial state. Interpret only the retained result after terminal transport. Independent
+outcome review must accept the final descriptor before any later caller treats this
+copy as an ordinary input. Its later full9 comparisons are strict; no masked ctime,
+settling loop or descriptor replacement is permitted. Successful copy alone does not
+admit any Windows execution.
+
+### Managed caller executable-use correction
+
+The [managed caller](../../../tools/validation/run_windows_managed_build.py) retains its
+22-field admission schema and exact normal-launcher bytes. Its `launcher` descriptor now
+must name the fixed Windows projection above, independently accepted as an ordinary
+executable input. Alongside the existing content/hash/full9 checks, require regular
+single-link shape, actual execute bits, effective-user execute access and unchanged
+held/named full9. Repeat that metadata-only executable-use refusal at the worker's
+existing native launch boundary, inside its original clock.
+
+The existing sole argv construction, controller, normal launcher's creation-time named
+Job, cgroup supervision, transports, clocks and charging remain unchanged. No native
+launcher recompilation or behavioral change is needed: its entry receives the existing
+explicit root/nonce/authority/controller arguments. `unchangedNormalLauncher` means exact
+accepted bytes, not the old nonexecutable evidence path. A failed original recheck still
+spends its original allocation. Before another restore can run, a separately accepted
+finite allocation and its applicable owner capacity decision are necessary, followed by
+ordinary source, input, checkpoint, artifact and exact-call reviews. This section
+prepares the correction and passive deployment only; it supplies neither that allocation
+nor account, WAM, cache, credential, network, installation or release effects.
