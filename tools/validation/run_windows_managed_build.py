@@ -38,14 +38,15 @@ PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows
 class PredicateFailure(ValueError):
     """Only require's fixed source labels are eligible for retained diagnostics."""
 
-    def __init__(self, label, read_observation=None):
+    def __init__(self, label, read_observation=None, pin_observation=None):
         super().__init__(label)
         self.read_observation = read_observation
+        self.pin_observation = pin_observation
 
 
-def require(condition, label, *, read_observation=None):
+def require(condition, label, *, read_observation=None, pin_observation=None):
     if not condition:
-        raise PredicateFailure(label, read_observation)
+        raise PredicateFailure(label, read_observation, pin_observation)
 
 
 def failure_identity(error):
@@ -65,6 +66,10 @@ def failure_identity(error):
         observation = error.read_observation
         result['readObservation'] = (observation if len(encode(observation)) <= 2048 else
                                      {'omitted': 'serialization-bound'})
+    if type(error) is PredicateFailure and error.pin_observation is not None:
+        observation = error.pin_observation
+        result['pinObservation'] = (observation if len(encode(observation)) <= 2048 else
+                                    {'omitted': 'serialization-bound'})
     return result
 
 
@@ -192,8 +197,25 @@ class Budget:
     def pin(self, value, maximum):
         require(set(value) == {'path', 'bytes', 'sha256', 'identity'}, 'Exact descriptor fields')
         raw, observed = self.read(Path(value['path']), maximum)
-        require(len(raw) == value['bytes'] and digest(raw) == value['sha256'] and observed == value['identity'],
-                'Admitted descriptor changed')
+        length_matches = len(raw) == value['bytes']
+        digest_matches = digest(raw) == value['sha256'] if length_matches else None
+        identity_matches = observed == value['identity'] if digest_matches else None
+        if identity_matches is not True:
+            # Only already observed operands are retained. Preserve short-circuit
+            # comparisons and omit malformed/unbounded descriptor values entirely.
+            def bounded_integer(item):
+                return type(item) is int and -(1 << 127) <= item < (1 << 127)
+
+            expected_identity = value['identity']
+            numeric_identity = (type(expected_identity) is list and len(expected_identity) == 9 and
+                                all(bounded_integer(item) for item in expected_identity))
+            require(False, 'Admitted descriptor changed', pin_observation={
+                'readOrdinal': self.reads,
+                'expectedBytes': value['bytes'] if bounded_integer(value['bytes']) else None,
+                'returnedBytes': len(raw), 'lengthMatches': length_matches,
+                'digestMatches': digest_matches, 'identityMatches': identity_matches,
+                'expectedIdentity': expected_identity if numeric_identity else None,
+                'observedIdentity': observed})
         return raw
 
 

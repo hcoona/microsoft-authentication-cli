@@ -20033,7 +20033,7 @@ this public table records only reviewable repository source.
 | tools/validation/WindowsWslObserver.cs | 63227 | 355ffacbd73c46228fcb0bc1db324645c5c6156aa45dd2fdaca08fa6c3d8d3c4 |
 | tools/validation/run_windows_wsl_observer_build.py | 20388 | dd8b5870f6b69ee66002948e0458506c5cc7e519c3b77aa95bc07a4bb65badaa |
 | tools/validation/Invoke-WindowsManagedBuild.ps1 | 21342 | 90d3ddd561f2f111a2b525bd7e35a41827a29d1cdf6e240f31d7b2d8f46740a8 |
-| tools/validation/run_windows_managed_build.py | 51609 | 53171261abd8538d0ac97eccd22e42cc913b5bcbf51b9ef0286aa5304a8c7bc8 |
+| tools/validation/run_windows_managed_build.py | 53132 | e085bd03bec5020f1039dbf55c246eb2b565ab92af901bec8cf9780af36c8aad |
 | tools/validation/observe_windows_fresh_file_identity.py | 9897 | 1b517844119e5815bef68c102e3235d8f31de8d2f43c0e39f5ee675be9563be6 |
 
 ### Exact category reservation and ordering
@@ -20360,6 +20360,19 @@ including all ordinary and later-pin full9 comparisons, execution, clocks, charg
 and retry stops remain unchanged. A source line is meaningful only against the
 exact admitted source.
 
+The separate Admitted descriptor changed guard may retain pinObservation on
+failure: logical read ordinal, expected and returned byte counts, length equality,
+digest equality, identity equality, and expected and observed full9 operands.
+Preserve the existing short-circuit order: a length mismatch leaves digest and
+identity equality null; a digest mismatch leaves identity equality null. These
+operands were already available after the ordinary strict read. Do not add a
+read, metadata call, digest calculation on a skipped branch, path, digest value,
+payload, or arbitrary descriptor value. Expected counts and full9 fields are
+projected only as signed 128-bit integers; malformed or larger expected values
+become null. The observation retains the existing 2,048-byte serialization bound
+and fixed omission marker. This diagnosis does not weaken a length, digest,
+full9, clock, operation, or capacity predicate and does not authorize a retry.
+
 #### Accepted original 0113 failure
 
 Correction-slot c1-a restore 0113 used the accepted immediate-readback source at
@@ -20433,6 +20446,44 @@ Primary, c1-a and c1-b unused builds remain blocked and untransferred; all twelv
 later-product build/test slots remain protected. No restore graph or build is
 accepted. A successor requires a distinct remaining slot and fresh independent
 source, checkpoint, inventory, activation, receipt-bound and exact-call acceptance.
+
+#### Accepted original 0115 failure and pin diagnostics
+
+Correction-slot c2-a restore 0115 used the created-copy qualification accepted at
+56e2b2d24ffe80047109ee52bde3acceb0b6d26f. Its sole original exited one with complete
+empty transport. Its sole selected-output collector exited one after visiting all
+62 paths: 19 stable sampled files, 34 required files absent and nine optional files
+absent. The original and collector are spent; absent success evidence permits
+neither another observation nor replay.
+
+The two retained worker failure records agree on worker-admission, PredicateFailure,
+and Admitted descriptor changed at source line 195. This guard combines admitted
+length, digest and full9 equality after an ordinary stable read. No pin operands
+or logical read ordinal were retained. The failed clause, file and cause remain
+unknown; neither a ctime transition nor changed bytes are established. This is
+distinct from the earlier immediate-created-copy failure in 0114.
+
+Both deployment receipts were retained, but a completed materialization does not
+accept the later worker pins or a restore. The worker's positive failure stage
+and exact source ordering precede this original's native launcher. The original
+then rejected the service transport's exit one despite complete empty EOF.
+No restore graph, Windows Job outcome, build, historical termination or global
+quiescence is established. Preserve the six historical unknowns and the false
+noExperimentLive, scopedJobQuiescent and continuationAllowed flags.
+
+Independent triage accepted MANAGED-PIN-FAILURE-OPERANDS-001 as an observability
+gap. The pinObservation above distinguishes future failures using already
+available operands without weakening the comparison or acquiring more evidence.
+In-memory tests cover each guard clause, skipped comparisons, ctime rejection,
+malformed diagnostic values, confidential omission, success and original read
+errors. They supply rule evidence only, not another Windows observation.
+
+Counters remain 26/106/6/167, with preparation hosts 12 Linux and 14 Windows.
+Primary, c1-a, c1-b and c2-a unused builds remain blocked and untransferred;
+all twelve later-product build/test slots remain protected. A successor requires
+a distinct remaining slot and fresh independent source, checkpoint, inventory,
+activation, receipt-bound and exact-call acceptance. This change grants no
+additional observation, allocation, lifetime-risk exception or execution.
 
 ### Single fresh-file Windows-projection identity diagnostic
 
