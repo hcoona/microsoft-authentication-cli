@@ -134,8 +134,8 @@ class Budget:
         return raw, observed
 
     def read_created_copy(self, path, maximum, created_identity, expected_payload):
-        # Only immediate readback can qualify ctime. The admitted bytes are
-        # mandatory, including an explicitly empty payload for empty cache leaves.
+        # Immediate readback requires complete admitted bytes, including an
+        # explicitly empty payload for empty cache leaves.
         require(type(expected_payload) is bytes and type(created_identity) is list and
                 len(created_identity) == 9 and all(type(x) is int for x in created_identity),
                 'Created copy requires admitted payload and identity')
@@ -143,7 +143,18 @@ class Budget:
             path, maximum, created_identity=created_identity, expected_payload=expected_payload)
         return observed, read_observation
 
-    def _read(self, path, maximum, *, created_identity=None, expected_payload=None):
+    def pin_created_copy(self, created, source, maximum):
+        # Only verify_deployment's freshly materialized restore rows reach here.
+        # The original creation lineage remains the baseline; never refresh it.
+        pin = qualified_created_descriptor(created, source)
+        raw, _, observation = self._read(Path(pin['path']), maximum,
+                                         created_identity=pin['identity'], created_copy_pin=True)
+        require(len(raw) == pin['bytes'] and digest(raw) == pin['sha256'],
+                'Created deployment differs from admitted content', read_observation=observation)
+        return raw
+
+    def _read(self, path, maximum, *, created_identity=None, expected_payload=None,
+              created_copy_pin=False):
         self.check()
         direct(path)
         fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
@@ -151,10 +162,12 @@ class Budget:
             before = os.fstat(fd)
             require(stat.S_ISREG(before.st_mode) and 0 <= before.st_size <= maximum, 'Regular bounded input')
             if created_identity is not None:
-                # A fresh copy must retain its eight non-ctime fields throughout
-                # this one read. Exact admitted bytes are required before return.
+                # Every qualified copy read retains the original eight fields.
+                # Its caller also requires exact admitted bytes or their digest.
                 require(before.st_nlink == 1 and all(identity(before)[i] == created_identity[i]
-                        for i in (0, 1, 2, 3, 4, 5, 6, 8)), 'Created copy changed before readback')
+                        for i in (0, 1, 2, 3, 4, 5, 6, 8)),
+                        'Created deployment changed before pin' if created_copy_pin else
+                        'Created copy changed before readback')
             self.reads += 1
             self.requested += before.st_size + 1
             require(self.reads <= 8192 and self.requested <= 4 * 1024 * 1024 * 1024, 'Aggregate read budget')
@@ -180,13 +193,16 @@ class Budget:
                       matches(final_identity := identity(os.fstat(fd))) and
                       matches(named_identity := identity(path.lstat())))
             read_observation = {
-                'readOrdinal': self.reads, 'createdCopyReadback': created_identity is not None,
+                'readOrdinal': self.reads,
+                'createdCopyReadback': created_identity is not None and not created_copy_pin,
                 'expectedBytes': before.st_size, 'returnedBytes': len(raw),
                 'initialDescriptor': initial_identity, 'finalDescriptor': final_identity,
                 'namedPath': named_identity}
+            if created_copy_pin:
+                read_observation['createdCopyPin'] = True
             if not stable:
                 require(False, 'Unstable descriptor/path identity', read_observation=read_observation)
-            if created_identity is not None:
+            if created_identity is not None and not created_copy_pin:
                 require(raw == expected_payload, 'Created copy differs from admitted payload')
             self.check()
             return (raw, named_identity if created_identity is not None else initial_identity,
@@ -217,6 +233,32 @@ class Budget:
                 'expectedIdentity': expected_identity if numeric_identity else None,
                 'observedIdentity': observed})
         return raw
+
+
+def qualified_created_descriptor(created, source):
+    """Validate retained immediate-copy lineage without observing any file."""
+    require(source['materialize'] is True and source['role'] in ('source', 'cache') and
+            set(created) == {'role', 'windowsPath', 'descriptor', 'writeClosedIdentity', 'readbackObservation'} and
+            created['role'] == source['role'] and created['windowsPath'] == source['windowsPath'],
+            'Created deployment lineage role')
+    pin, observation = created['descriptor'], created['readbackObservation']
+    require(set(pin) == {'path', 'bytes', 'sha256', 'identity'} and
+            pin['bytes'] == source['descriptor']['bytes'] and pin['sha256'] == source['descriptor']['sha256'] and
+            set(observation) == {'readOrdinal', 'createdCopyReadback', 'expectedBytes', 'returnedBytes',
+                                 'initialDescriptor', 'finalDescriptor', 'namedPath'} and
+            observation['createdCopyReadback'] is True and
+            type(observation['readOrdinal']) is int and 1 <= observation['readOrdinal'] <= 8192 and
+            observation['expectedBytes'] == observation['returnedBytes'] == pin['bytes'],
+            'Created deployment lineage content')
+    identities = [created['writeClosedIdentity'], observation['initialDescriptor'],
+                  observation['finalDescriptor'], observation['namedPath'], pin['identity']]
+    require(all(type(value) is list and len(value) == 9 and all(type(x) is int for x in value)
+                for value in identities), 'Created deployment lineage identities')
+    baseline = identities[0]
+    require(stat.S_ISREG(baseline[2]) and baseline[5] == pin['bytes'] and baseline[8] == 1 and
+            all(all(value[i] == baseline[i] for i in (0, 1, 2, 3, 4, 5, 6, 8)) for value in identities[1:]) and
+            pin['identity'] == observation['namedPath'], 'Created deployment lineage continuity')
+    return pin
 
 
 def write_new(path, raw, budget, maximum=65536):
@@ -467,7 +509,14 @@ def verify_deployment(a, root, local, budget):
                 Path(pin['path']) == project(source['windowsPath']) and
                 pin['bytes'] == source['descriptor']['bytes'] and
                 pin['sha256'] == source['descriptor']['sha256'], 'Bound source/deployment correspondence')
-        budget.pin(pin, 134217728)
+        if source['materialize']:
+            require(a['suite'] == 'restore' and a['subjectAction'] == a['action'] and
+                    Path(pin['path']).is_relative_to(root / ('subject' if source['role'] == 'source' else 'packages')),
+                    'Only this restore created the qualified deployment')
+            budget.pin_created_copy(created, source, 134217728)
+        else:
+            require(pin == source['descriptor'], 'Uncopied deployment retains admitted descriptor')
+            budget.pin(pin, 134217728)
 
 
 def checkpoint(a, budget, reserved=False):
