@@ -1,6 +1,7 @@
 """In-memory invariant checks; never activate the caller or access Windows files."""
 
 import ast
+import copy
 import hashlib
 import json
 import os
@@ -13,7 +14,8 @@ from unittest.mock import Mock, patch
 
 
 SOURCE = Path(__file__).resolve().parents[1] / 'run_windows_managed_build.py'
-DEFINITIONS = {'PredicateFailure', 'require', 'failure_identity', 'encode', 'identity', 'Budget'}
+DEFINITIONS = {'PredicateFailure', 'require', 'failure_identity', 'encode', 'decode', 'identity',
+               'Budget', 'qualified_created_descriptor', 'verify_deployment'}
 tree = ast.parse(SOURCE.read_text(), filename=str(SOURCE))
 selected = ast.Module(body=[node for node in tree.body
                            if isinstance(node, (ast.FunctionDef, ast.ClassDef)) and
@@ -40,7 +42,7 @@ class ReadbackTests(unittest.TestCase):
         self.named = self.closed.copy()
         self.initial[7], self.final[7], self.named[7] = 110, 120, 130
 
-    def execute(self, *, created=True, returned=None, expected=None, pin=None):
+    def execute(self, *, created=True, returned=None, expected=None, pin=None, deployment=None):
         actual = self.payload if returned is None else returned
         path = Mock()
         path.lstat.return_value = info(self.named)
@@ -53,6 +55,8 @@ class ReadbackTests(unittest.TestCase):
         budget = NS['Budget'](now, now + 60_000_000_000, now + 70_000_000_000)
         self.ops, self.path, self.budget = ops, path, budget
         with patch.dict(NS, {'os': ops, 'Path': lambda _: path}):
+            if deployment is not None:
+                return budget.pin_created_copy(*deployment, 1024)
             if pin is not None:
                 return budget.pin(pin, 1024)
             if created:
@@ -128,6 +132,112 @@ class ReadbackTests(unittest.TestCase):
         for identity, payload in ((None, b'abc'), (self.closed, None)):
             with self.subTest(identity=identity, payload=payload), self.assertRaises(Failure):
                 budget.read_created_copy(None, 1024, identity, payload)
+
+    def deployment(self):
+        pin = {'path': '/owned/packages/leaf', 'bytes': len(self.payload),
+               'sha256': hashlib.sha256(self.payload).hexdigest(), 'identity': self.named.copy()}
+        source = {'role': 'cache', 'windowsPath': 'owned-leaf', 'descriptor': copy.deepcopy(pin),
+                  'materialize': True}
+        created = {'role': 'cache', 'windowsPath': 'owned-leaf', 'descriptor': pin,
+                   'writeClosedIdentity': self.closed.copy(), 'readbackObservation': {
+                       'createdCopyReadback': True, 'readOrdinal': 21,
+                       'expectedBytes': len(self.payload), 'returnedBytes': len(self.payload),
+                       'initialDescriptor': self.initial.copy(), 'finalDescriptor': self.final.copy(),
+                       'namedPath': self.named.copy()}}
+        return created, source
+
+    def test_qualified_later_pin_accepts_ctime_without_rebaselining(self):
+        deployment = self.deployment()
+        retained = copy.deepcopy(deployment)
+        self.initial[7], self.final[7], self.named[7] = 210, 220, 230
+        self.assertEqual(self.execute(deployment=deployment), self.payload)
+        self.assertEqual(deployment, retained)
+        self.assertEqual((self.budget.reads, self.budget.requested), (1, 4))
+        self.assertEqual(self.ops.fstat.call_count, 2)
+        self.path.lstat.assert_called_once_with()
+
+    def test_qualified_later_pin_rejects_each_non_ctime_change(self):
+        for stage in ('initial', 'final', 'named'):
+            for index in (0, 1, 2, 3, 4, 5, 6, 8):
+                with self.subTest(stage=stage, field=FIELDS[index]):
+                    self.setUp()
+                    deployment = self.deployment()
+                    getattr(self, stage)[index] += 1
+                    with self.assertRaises(Failure):
+                        self.execute(deployment=deployment)
+
+    def test_qualified_later_pin_requires_content_including_empty(self):
+        with self.assertRaisesRegex(Failure, 'Created deployment differs from admitted content') as caught:
+            self.execute(deployment=self.deployment(), returned=b'abd')
+        observation = NS['failure_identity'](caught.exception)['readObservation']
+        self.assertTrue(observation['createdCopyPin'])
+        self.assertFalse(observation['createdCopyReadback'])
+        self.assertEqual(observation['namedPath'], self.named)
+        self.payload = b''
+        for value in (self.closed, self.initial, self.final, self.named):
+            value[5] = 0
+        self.assertEqual(self.execute(deployment=self.deployment()), b'')
+        self.assertEqual((self.budget.reads, self.budget.requested), (1, 1))
+
+    def test_qualified_later_pin_rejects_invalid_lineage_before_io(self):
+        mutations = (
+            lambda c, s: s.update(materialize=False),
+            lambda c, s: s.update(role='tool'),
+            lambda c, s: c.update(windowsPath='another-leaf'),
+            lambda c, s: c.pop('writeClosedIdentity'),
+            lambda c, s: c['descriptor'].update(sha256='0' * 64),
+            lambda c, s: c['readbackObservation'].update(createdCopyReadback=False),
+            lambda c, s: c['readbackObservation'].update(returnedBytes=2),
+            lambda c, s: c['readbackObservation'].update(readOrdinal=True),
+            lambda c, s: c['readbackObservation']['namedPath'].__setitem__(7, 999),
+            lambda c, s: c['writeClosedIdentity'].__setitem__(1, 999),
+            lambda c, s: c['readbackObservation']['finalDescriptor'].__setitem__(8, 2),
+        )
+        for index, mutate in enumerate(mutations):
+            with self.subTest(mutation=index):
+                created, source = self.deployment()
+                mutate(created, source)
+                with self.assertRaises(Failure):
+                    self.execute(deployment=(created, source))
+                self.ops.open.assert_not_called()
+
+    def test_qualified_later_pin_preserves_length_short_circuit(self):
+        with self.assertRaises(Failure) as caught:
+            self.execute(deployment=self.deployment(), returned=b'ab')
+        observation = caught.exception.read_observation
+        self.assertTrue(observation['createdCopyPin'])
+        self.assertIsNone(observation['finalDescriptor'])
+        self.assertIsNone(observation['namedPath'])
+        self.assertEqual(self.ops.fstat.call_count, 1)
+        self.path.lstat.assert_not_called()
+
+    def test_only_current_restore_materialized_rows_use_qualified_pin(self):
+        for materialize, suite, changed in ((True, 'restore', False), (False, 'build', False),
+                                            (True, 'build', False), (False, 'build', True)):
+            with self.subTest(materialize=materialize, suite=suite, changed=changed):
+                created, source = self.deployment()
+                source['materialize'] = materialize
+                if not materialize:
+                    created = {k: created[k] for k in ('role', 'windowsPath', 'descriptor')}
+                if changed:
+                    created['descriptor']['identity'][7] += 1
+                inventory = {'files': [source]}
+                raw = NS['encode']({'schema': 'windows-managed-harness-deployment-v1',
+                                    'inventorySha256': 'inventory-hash', 'files': [created]})
+                budget = Mock()
+                budget.read.return_value = (raw, None)
+                budget.pin.side_effect = [NS['encode'](inventory), self.payload]
+                admission = {'inventory': {'sha256': 'inventory-hash'}, 'suite': suite,
+                             'action': '0117', 'subjectAction': '0117'}
+                with patch.dict(NS, {'project': lambda _: Path('/owned/packages/leaf')}):
+                    if changed or (materialize and suite != 'restore'):
+                        with self.assertRaises(Failure):
+                            NS['verify_deployment'](admission, Path('/owned'), Path('/local'), budget)
+                        budget.pin_created_copy.assert_not_called()
+                    else:
+                        NS['verify_deployment'](admission, Path('/owned'), Path('/local'), budget)
+                        self.assertEqual(budget.pin_created_copy.call_count, int(materialize))
+                        self.assertEqual(budget.pin.call_count, 1 if materialize else 2)
 
 
 class PinDiagnosticTests(unittest.TestCase):

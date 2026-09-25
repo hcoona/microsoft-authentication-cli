@@ -20241,13 +20241,25 @@ readbackObservation's initial/final descriptor and final named-path full9 in the
 same deployment row. Both original deployment receipt copies retain these four
 observations and the logical read ordinal. This does not establish a stable ctime.
 
-This rule applies only inside the original materialization of those fresh
-source/cache copies. Existing source/cache inputs, installed tools, Linux records,
-other control files and all later deployment pin checks retain their strict full9
-rules. A later ctime change rejects against the final named baseline, even if
-content still matches. No general ctime exception, second baseline, wait, retry
-or old-file read is added. Any ownership, required non-ctime field, payload, time
-or byte failure stops the original. Independent outcome review must join all four
+The worker's separate created-copy pin may qualify ctime only for this same
+restore's materialize=true source/cache rows under its exact owned subject/packages
+paths. It must first join the admitted inventory's role, path, length and digest
+to the deployment and validate the retained immediate-readback lineage: the four
+full9 observations, regular single-link type, eight-field continuity, complete
+expected/returned lengths, positive bounded read ordinal and exact final named
+descriptor. No replaced or synthesized baseline is permitted. During its one
+existing bounded read, require the original eight non-ctime fields before reading
+and at the final descriptor and named path, then exact admitted length and SHA-256.
+An admitted empty cache leaf retains these same requirements. Ctime is an
+observation rather than an acceptance field only on this qualified path, both
+between and within reads. The ordinary reader and Budget.pin remain full9-strict.
+
+Existing source/cache inputs, installed tools, Linux records, control files and
+all build inputs retain strict full9 rules. An unmaterialized deployment descriptor
+must equal the admitted input descriptor in full. No general ctime exception,
+second baseline, wait, retry or old-file read is added. Any ownership, required
+non-ctime field, payload, time or byte failure stops the original. Independent
+outcome review must join all four
 retained observations and the exact-content qualification to the materialized
 inventory. Exact admission must also bind the enlarged deployment receipts within
 their existing per-receipt and aggregate read/write bounds.
@@ -20338,15 +20350,17 @@ failed collection is repaired automatically.
 
 The managed caller retains a bounded caughtFailure object with exception type,
 numeric sourceLine and, only for its typed PredicateFailure, the literal source
-predicate label. All require labels are fixed public source strings. Only the
+predicate label. All require labels are fixed public source strings. The
 compound read-completion guard may also retain readObservation: the logical read
 ordinal, immediate-created-copy-readback boolean, expected and returned byte counts,
 and initial descriptor, final descriptor and named-path full9 operands. These are
 already observed numeric metadata, never payload or filenames. Preserve the guard's
 short-circuit order: a length mismatch skips both final metadata calls, and a final
 descriptor mismatch on the reader's required fields skips the named-path call.
-Ordinary reads compare full9; only the immediate created-copy reader uses the
-eight-field and exact-payload qualification above. Unevaluated operands remain null;
+Ordinary reads compare full9. Immediate created-copy readback and the separately
+qualified later created-copy pin use the eight-field rules above. The latter sets
+createdCopyReadback false and adds createdCopyPin true; its content-mismatch guard
+may retain the same already available readObservation. Unevaluated operands remain null;
 no later observation fills them. If a metadata call raises, retain that original
 exception without converting it into a predicate failure. The diagnostic object
 is capped at 2,048 serialized ASCII bytes, including its newline; an oversized
@@ -20356,7 +20370,7 @@ It retains no formatted traceback, filename, arbitrary exception message or
 rejected payload. This diagnostic adds no read, metadata call, retry or allocation.
 The label identifies the caught source guard; an earlier transport failure and its
 failureType remain separately retained as the first cause. Admission predicates,
-including all ordinary and later-pin full9 comparisons, execution, clocks, charges
+including all ordinary full9 comparisons, execution, clocks, charges
 and retry stops remain unchanged. A source line is meaningful only against the
 exact admitted source.
 
@@ -20484,6 +20498,48 @@ all twelve later-product build/test slots remain protected. A successor requires
 a distinct remaining slot and fresh independent source, checkpoint, inventory,
 activation, receipt-bound and exact-call acceptance. This change grants no
 additional observation, allocation, lifetime-risk exception or execution.
+
+#### Accepted original 0116 failure and later created-copy qualification
+
+Correction-slot c2-b restore 0116 used the pin-diagnostic source accepted at
+1346a6fab594708fc69f0b38cc224d14f0c6db7e. Its sole original exited one with complete
+empty transport. Its sole selected-output collector also exited one after visiting
+all 62 paths: 19 stable sampled files, 34 required files absent and nine optional
+files absent. Both attempts are spent; collection remains incomplete.
+
+The two retained worker failure records agree on worker-admission, PredicateFailure,
+Admitted descriptor changed at source line 212 and logical read 24. Exact source
+ordering and inventory/deployment joins identify the third deployed row: the newly
+copied microsoft.applicationinsights/2.23.0/icon.png cache leaf. Expected and returned
+lengths are 1,322 bytes and the SHA-256 comparison succeeds. The ordinary read's
+internal full9 stability checks pass. Only the later comparison against the retained
+deployment descriptor differs: ctime increased by 1,148,949,300 ns. Both deployment
+receipt copies agree, including this leaf's immediate exact-content qualification.
+This identifies the rejected predicate, not its operating-system cause, and does
+not explain the unresolved clause in original 0115.
+
+The positive worker stage and source ordering place this failure before checkpoint,
+worker-started retention and the sole native launch. The original subsequently
+rejects the service transport's exit one despite complete empty EOF. Review accepts
+this bounded failed outcome, with no new historical lifetime unknown; it establishes
+no successful restore, Windows Job outcome, build or global quiescence. Preserve the
+six historical unknowns and false noExperimentLive, scopedJobQuiescent and
+continuationAllowed flags.
+
+Independent triage confirmed MANAGED-CREATED-COPY-LATER-PIN-CTIME-001 as a bounded
+blocker warranting the prospective, narrowly qualified created-copy pin above.
+Original 0116 correctly enforced its then accepted strict contract and remains
+failed. The correction adds no file read, metadata call, expected-baseline refresh,
+retry or allocation. Focused in-memory checks cover ctime qualification, all other
+fields at each observation, changed/empty content, invalid lineage, short-circuit
+observations and ordinary/build routing. These are rule evidence only.
+
+Counters remain 27/106/6/168, with preparation hosts 12 Linux and 15 Windows.
+Primary, c1-a, c1-b, c2-a and c2-b builds remain blocked, unused and untransferred;
+all twelve later-product build/test slots remain protected. A successor requires
+a distinct remaining slot and fresh independent source, checkpoint, inventory,
+activation, receipt-bound and exact-call acceptance. No further observation of
+0116 or execution is admitted by this amendment.
 
 ### Single fresh-file Windows-projection identity diagnostic
 
