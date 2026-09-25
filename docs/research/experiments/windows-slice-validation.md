@@ -20254,9 +20254,38 @@ An admitted empty cache leaf retains these same requirements. Ctime is an
 observation rather than an acceptance field only on this qualified path, both
 between and within reads. The ordinary reader and Budget.pin remain full9-strict.
 
-Existing source/cache inputs, installed tools, Linux records, control files and
-all build inputs retain strict full9 rules. An unmaterialized deployment descriptor
-must equal the admitted input descriptor in full. No general ctime exception,
+For the single separately admitted build paired with an independently accepted
+successful restore, preserve this qualification only for that restore's exact
+source/cache copies. Each such build inventory row remains `materialize=false`
+and adds `restoreCreation`, containing the restore `action`, its unchanged `slot`
+and the complete original `deployment` row. Independent input acceptance must
+join each carried row one-to-one to the accepted restore admission, inventory,
+deployment and successful outcome. The restore action equals `subjectAction`,
+precedes the build action and uses the same slot. Its original descriptor must
+equal the build input descriptor in full, and its role/path must stay under that
+restore's owned subject or packages directory. Missing, extra, malformed or
+misbound lineage is rejected; failed restores and unrelated historical copies
+are ineligible.
+
+Validate the same four original creation/readback observations, exact content
+correspondence and eight-field continuity before either process uses this rule.
+Both the build original's existing input read and the build worker's existing
+input read use the qualified predicate, including exact length/SHA-256 and empty
+cache handling. Do not recopy files, replace the original baseline, infer stable
+ctime, or reconstruct a new identity from different observations. The build's
+deployment receipts retain the exact admitted descriptors; the hash-bound
+inventory retains their creation lineage. Actual admission must recalculate the
+enlarged inventory and control reads within the unchanged 4 MiB inventory cap
+and aggregate budgets; a generic maximum or an older inventory does not prove fit.
+
+Existing pre-copy source/cache inputs, installed tools, generated restore metadata,
+Linux records, control files and all unrelated inputs retain strict full9 rules.
+An unmaterialized deployment descriptor must equal the admitted input descriptor
+in full. The sole collector's checks within a read also remain full9-strict.
+Only its cross-receipt comparison of a deployed source lock against that same
+restore's original creation descriptor may use the qualified eight fields and
+exact content after validating the complete lineage; the observation cannot
+replace the original baseline. No general ctime exception,
 second baseline, wait, retry or old-file read is added. Any ownership, required
 non-ctime field, payload, time or byte failure stops the original. Independent
 outcome review must join all four
@@ -20304,9 +20333,17 @@ Any applicable accepted obligation requiring URL mapping must be resolved before
 dependent admission; this recipe cannot silently waive it.
 
 The managed original has one 3,600-second interval including source/cache copying.
-Its dedicated service separately retains 450 seconds plus 5 seconds stopping,
+Its dedicated service separately retains 1,200 seconds plus 5 seconds stopping,
 the unchanged normal launcher 330 seconds plus 10 seconds cleanup, and its worker
 360 seconds native transport, 30 seconds evidence and 10 seconds terminal reserve.
+The service clock starts before service creation and includes worker admission.
+The worker's 390-second pre-native reservation therefore leaves at most 800 seconds
+for startup and admission. Before recording service intent, the original reserves
+1,225 seconds for service, stopping, transport slack and evidence, in addition to
+its already withheld ten terminal seconds. Service transport ends by intent plus
+1,210 seconds. These nested deadlines retain their original clock origins and
+do not reset after admission or failure; the larger admission interval is not a
+throughput or success guarantee.
 The controller has 300 seconds total, at most 60 seconds setup, one 190-second
 managed phase and a 275-second capture cutoff. No clock resets at failure.
 External timeout uses TERM at 3,600 seconds and KILL 5 seconds later, without a
@@ -20540,6 +20577,60 @@ all twelve later-product build/test slots remain protected. A successor requires
 a distinct remaining slot and fresh independent source, checkpoint, inventory,
 activation, receipt-bound and exact-call acceptance. No further observation of
 0116 or execution is admitted by this amendment.
+
+#### Accepted original 0117 failure and admission interval correction
+
+Correction-slot c3-a restore 0117 used the source accepted at
+76f27c9987a2be3c4ad8e6b77e762dd77c851c9d. Its sole original exited one with
+complete empty transport. The sole fixed collector visited all 62 paths and
+retained 20 stable files; 33 required files and nine optional files were absent.
+Collection remains incomplete and both attempts are spent.
+
+Both deployment receipts contain identical bytes. Independent review joined all
+2,192 rows, including the original creation/readback lineage of all 1,822 copied
+source/cache leaves and the unchanged 370 installed inputs. The four selected
+deployed locks retained their exact admitted content and full9. These observations
+do not establish a successful restore or eligible build inputs.
+
+The positive worker-started receipt and exact source ordering establish completion
+of deployment verification and the checkpoint. The worker's failed result remains
+at worker-admission, before assignment of the native-launch stage and its sole
+native call. Its typed failure is Original interval expired or cancelled. The
+collector's retained Linux monotonic finish is still before the bound worker work
+deadline, and the source does not set the cancellation flag. Together with the
+worker-started write ordering, these observations identify the subsequent
+390-second reservation check rather than exhaustion of the zero-reserve work
+deadline. The service transport returned exit one, both EOFs and empty captures;
+the original then rejected that nonzero transport.
+
+The former 450-second service interval withheld ten terminal seconds and reserved
+390 seconds before native launch, leaving only 50 seconds for service startup
+and complete worker admission. That partition rejected this original after its
+input verification. Independent triage accepted the prospective 1,200-second
+service interval above, retaining the 3,600-second original and unchanged native,
+Job, controller and terminal bounds. Its 800-second admission allowance supplies
+margin without claiming future throughput. The original failure, source, limits
+and charge remain unchanged.
+
+A separate source review identified the restore-to-build handoff gap: a successful
+qualified restore read need not preserve the original ctime, while the former
+build rule required every original full9 unchanged. That is a prospective
+validation-design gap, not the cause of 0117 or proof that a build failed. The
+lineage-bound paired-build rule above carries the original evidence through the
+two existing reads, retains the original descriptor and changes no ordinary input
+rule. Focused in-memory checks cover both routes, malformed bindings, each of the
+eight required fields, changed/empty content and strict ordinary inputs. They
+make no real-platform claim.
+
+The bounded failed outcome introduces no new historical lifetime unknown. It
+establishes neither a Windows Job result nor a collected cgroup-empty result or
+global quiescence. Preserve the six historical unknowns and false noExperimentLive,
+scopedJobQuiescent and continuationAllowed flags. Counters remain 28/106/6/169,
+with 12 Linux and 16 Windows preparations. The primary, c1-a, c1-b, c2-a, c2-b
+and c3-a builds remain blocked, unused and untransferred; all twelve later-product
+build/test slots remain protected. No additional observation of 0117, retry or
+allocation is granted. A distinct remaining successor still requires current
+checkpoint, source, inventory, activation, bounds and exact-call acceptance.
 
 ### Single fresh-file Windows-projection identity diagnostic
 

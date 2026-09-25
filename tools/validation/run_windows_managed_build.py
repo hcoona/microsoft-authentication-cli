@@ -31,6 +31,7 @@ HISTORICAL_UNKNOWN = ['0057', '0064', '0068', '0093', '0107', '0110']
 PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
 CHARGES = {'restore': 1, 'build': 1}
+SERVICE_SECONDS = 1200
 PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows-actions',
            'windowsProjectionActions': PROJECTION / 'actions', 'windowsProjectionRoot': PROJECTION}
 
@@ -143,10 +144,10 @@ class Budget:
             path, maximum, created_identity=created_identity, expected_payload=expected_payload)
         return observed, read_observation
 
-    def pin_created_copy(self, created, source, maximum):
-        # Only verify_deployment's freshly materialized restore rows reach here.
+    def pin_created_copy(self, created, source, maximum, *, paired_build=False):
+        # Restore copies and their explicitly bound paired build use this rule.
         # The original creation lineage remains the baseline; never refresh it.
-        pin = qualified_created_descriptor(created, source)
+        pin = qualified_created_descriptor(created, source, paired_build=paired_build)
         raw, _, observation = self._read(Path(pin['path']), maximum,
                                          created_identity=pin['identity'], created_copy_pin=True)
         require(len(raw) == pin['bytes'] and digest(raw) == pin['sha256'],
@@ -235,9 +236,10 @@ class Budget:
         return raw
 
 
-def qualified_created_descriptor(created, source):
+def qualified_created_descriptor(created, source, *, paired_build=False):
     """Validate retained immediate-copy lineage without observing any file."""
-    require(source['materialize'] is True and source['role'] in ('source', 'cache') and
+    require(type(paired_build) is bool and source['materialize'] is (not paired_build) and
+            source['role'] in ('source', 'cache') and
             set(created) == {'role', 'windowsPath', 'descriptor', 'writeClosedIdentity', 'readbackObservation'} and
             created['role'] == source['role'] and created['windowsPath'] == source['windowsPath'],
             'Created deployment lineage role')
@@ -259,6 +261,35 @@ def qualified_created_descriptor(created, source):
             all(all(value[i] == baseline[i] for i in (0, 1, 2, 3, 4, 5, 6, 8)) for value in identities[1:]) and
             pin['identity'] == observation['namedPath'], 'Created deployment lineage continuity')
     return pin
+
+
+def paired_restore_copy(a, item):
+    """Join only the accepted paired restore's original creation evidence."""
+    qualified = a['suite'] == 'build' and item['role'] in ('source', 'cache')
+    fields = {'role', 'windowsPath', 'descriptor', 'materialize'}
+    require(set(item) == fields | ({'restoreCreation'} if qualified else set()), 'Inventory fields')
+    if not qualified:
+        return None
+    lineage = item['restoreCreation']
+    require(type(lineage) is dict and set(lineage) == {'action', 'slot', 'deployment'} and
+            item['materialize'] is False and lineage['action'] == a['subjectAction'] and
+            lineage['slot'] == a['slot'] and int(a['subjectAction']) < int(a['action']),
+            'Paired restore creation binding')
+    created = lineage['deployment']
+    require(type(created) is dict and created.get('descriptor') == item['descriptor'] and
+            Path(item['descriptor']['path']) == project(item['windowsPath']) and
+            project(item['windowsPath']).is_relative_to(
+                subject_root(a) / ('subject' if item['role'] == 'source' else 'packages')),
+            'Paired restore original descriptor and destination')
+    qualified_created_descriptor(created, item, paired_build=True)
+    return created
+
+
+def pin_input(a, item, budget):
+    created = paired_restore_copy(a, item)
+    if created is not None:
+        return budget.pin_created_copy(created, item, 134217728, paired_build=True)
+    return budget.pin(item['descriptor'], 134217728)
 
 
 def write_new(path, raw, budget, maximum=65536):
@@ -375,7 +406,7 @@ def verify_admission(a, budget):
     roles, paths, tsv = {}, set(), []
     total = 0
     for item in inventory['files']:
-        require(set(item) == {'role', 'windowsPath', 'descriptor', 'materialize'}, 'Inventory fields')
+        paired_restore_copy(a, item)
         role, path, pin = item['role'], item['windowsPath'], item['descriptor']
         require(role in ('dotnet', 'tool', 'source', 'cache', 'metadata') and path.casefold() not in paths and
                 type(item['materialize']) is bool and set(pin) == {'path', 'bytes', 'sha256', 'identity'},
@@ -460,7 +491,7 @@ def materialize_inputs(a, root, local, budget):
     inventory = decode(budget.pin(a['inventory'], 4194304))
     deployed = []
     for item in inventory['files']:
-        raw = budget.pin(item['descriptor'], 134217728)
+        raw = pin_input(a, item, budget)
         destination = project(item['windowsPath'])
         write_closed_identity = None
         if item['materialize']:
@@ -516,7 +547,7 @@ def verify_deployment(a, root, local, budget):
             budget.pin_created_copy(created, source, 134217728)
         else:
             require(pin == source['descriptor'], 'Uncopied deployment retains admitted descriptor')
-            budget.pin(pin, 134217728)
+            pin_input(a, source, budget)
 
 
 def checkpoint(a, budget, reserved=False):
@@ -752,7 +783,8 @@ def worker(a, began, deadline, service_intent, service_deadline, budget):
                 'admissionSha256': digest(a['_raw']), 'originalStartNanoseconds': began,
                 'originalDeadlineNanoseconds': deadline, 'serviceIntentNanoseconds': service_intent,
                 'serviceDeadlineLowerBoundNanoseconds': service_deadline,
-                'serviceRuntimeSeconds': 450, 'workerTerminalSeconds': 10}, 'Conservative service clock binding')
+                'serviceRuntimeSeconds': SERVICE_SECONDS, 'workerTerminalSeconds': 10},
+                'Conservative service clock binding')
         roles, bindings, authority_raw = verify_admission(a, budget)
         started_raw, _ = budget.read(local / 'started.json', 65536)
         started = decode(started_raw)
@@ -844,23 +876,24 @@ def original(a, began, deadline, budget):
         stage = 'original-materialization'
         materialize_inputs(a, root, local, budget)
         checkpoint(a, budget, reserved=True)
-        # 450 service + 5 service termination + 5 transport slack + 15 original
+        # Service + 5 service termination + 5 transport slack + 15 original
         # evidence; original terminal 10 is withheld in budget.deadline already.
-        budget.check(475_000_000_000)
+        budget.check((SERVICE_SECONDS + 25) * 1_000_000_000)
         service_intent = time.monotonic_ns()
-        service_deadline = service_intent + 450_000_000_000
+        service_deadline = service_intent + SERVICE_SECONDS * 1_000_000_000
         write_new(local / 'service-intent.json', encode({
             'schema': 'windows-managed-harness-service-intent-v1',
             'admissionSha256': digest(a['_raw']), 'originalStartNanoseconds': began,
             'originalDeadlineNanoseconds': deadline, 'serviceIntentNanoseconds': service_intent,
             'serviceDeadlineLowerBoundNanoseconds': service_deadline,
-            'serviceRuntimeSeconds': 450, 'workerTerminalSeconds': 10}), budget)
+            'serviceRuntimeSeconds': SERVICE_SECONDS, 'workerTerminalSeconds': 10}), budget)
         command = [a['systemdRun']['path'], '--user', '--no-ask-password', '--quiet', '--wait', '--pipe',
                    '--collect', '--expand-environment=no', '--job-mode=fail',
                    '--unit=' + unit_name(a), '--service-type=exec', '--property=ExitType=cgroup',
                    '--property=KillMode=control-group', '--property=Restart=no',
                    '--property=JobRunningTimeoutSec=2s', '--property=TimeoutStartSec=2s',
-                   '--property=RuntimeMaxSec=450', '--property=TimeoutStopSec=5', '--property=SendSIGKILL=yes',
+                   '--property=RuntimeMaxSec=' + str(SERVICE_SECONDS),
+                   '--property=TimeoutStopSec=5', '--property=SendSIGKILL=yes',
                    '--property=TasksMax=32', '--property=MemoryMax=512M', '--working-directory=' + str(local)]
         environment = replacement_environment(a)
         command += ['--setenv=' + key + '=' + value for key, value in sorted(environment.items())]
@@ -872,7 +905,8 @@ def original(a, began, deadline, budget):
         require(time.monotonic_ns() < service_deadline - 400_000_000_000,
                 'Service launch retains complete worker reservation')
         capture = transport(command, environment, str(local),
-                            min(budget.deadline - 15_000_000_000, service_intent + 460_000_000_000), budget)
+                            min(budget.deadline - 15_000_000_000,
+                                service_intent + (SERVICE_SECONDS + 10) * 1_000_000_000), budget)
         write_new(local / 'service-transport.json', encode(capture), budget)
         exact_transport(capture)
         budget.deadline = min(budget.deadline, time.monotonic_ns() + 15_000_000_000)
@@ -940,7 +974,7 @@ def main():
         began, deadline = int(sys.argv[4]), int(sys.argv[5])
         service_intent, service_deadline = int(sys.argv[6]), int(sys.argv[7])
         require(began <= service_intent <= entered < service_deadline and
-                service_deadline - service_intent == 450_000_000_000,
+                service_deadline - service_intent == SERVICE_SECONDS * 1_000_000_000,
                 'Single conservative service clock')
         terminal_deadline = min(service_deadline, deadline - 25_000_000_000)
         budget = Budget(began, terminal_deadline - 10_000_000_000, terminal_deadline)

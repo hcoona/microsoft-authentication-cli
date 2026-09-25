@@ -15,7 +15,8 @@ from unittest.mock import Mock, patch
 
 SOURCE = Path(__file__).resolve().parents[1] / 'run_windows_managed_build.py'
 DEFINITIONS = {'PredicateFailure', 'require', 'failure_identity', 'encode', 'decode', 'identity',
-               'Budget', 'qualified_created_descriptor', 'verify_deployment'}
+               'Budget', 'qualified_created_descriptor', 'paired_restore_copy', 'pin_input',
+               'materialize_inputs', 'verify_deployment'}
 tree = ast.parse(SOURCE.read_text(), filename=str(SOURCE))
 selected = ast.Module(body=[node for node in tree.body
                            if isinstance(node, (ast.FunctionDef, ast.ClassDef)) and
@@ -42,7 +43,8 @@ class ReadbackTests(unittest.TestCase):
         self.named = self.closed.copy()
         self.initial[7], self.final[7], self.named[7] = 110, 120, 130
 
-    def execute(self, *, created=True, returned=None, expected=None, pin=None, deployment=None):
+    def execute(self, *, created=True, returned=None, expected=None, pin=None, deployment=None,
+                paired_build=False):
         actual = self.payload if returned is None else returned
         path = Mock()
         path.lstat.return_value = info(self.named)
@@ -56,7 +58,7 @@ class ReadbackTests(unittest.TestCase):
         self.ops, self.path, self.budget = ops, path, budget
         with patch.dict(NS, {'os': ops, 'Path': lambda _: path}):
             if deployment is not None:
-                return budget.pin_created_copy(*deployment, 1024)
+                return budget.pin_created_copy(*deployment, 1024, paired_build=paired_build)
             if pin is not None:
                 return budget.pin(pin, 1024)
             if created:
@@ -211,13 +213,14 @@ class ReadbackTests(unittest.TestCase):
         self.assertEqual(self.ops.fstat.call_count, 1)
         self.path.lstat.assert_not_called()
 
-    def test_only_current_restore_materialized_rows_use_qualified_pin(self):
+    def test_restore_qualification_and_unqualified_inputs_remain_distinct(self):
         for materialize, suite, changed in ((True, 'restore', False), (False, 'build', False),
                                             (True, 'build', False), (False, 'build', True)):
             with self.subTest(materialize=materialize, suite=suite, changed=changed):
                 created, source = self.deployment()
                 source['materialize'] = materialize
                 if not materialize:
+                    source['role'] = created['role'] = 'metadata'
                     created = {k: created[k] for k in ('role', 'windowsPath', 'descriptor')}
                 if changed:
                     created['descriptor']['identity'][7] += 1
@@ -238,6 +241,115 @@ class ReadbackTests(unittest.TestCase):
                         NS['verify_deployment'](admission, Path('/owned'), Path('/local'), budget)
                         self.assertEqual(budget.pin_created_copy.call_count, int(materialize))
                         self.assertEqual(budget.pin.call_count, 1 if materialize else 2)
+
+
+class BuildHandoffTests(unittest.TestCase):
+    setUp = ReadbackTests.setUp
+    execute = ReadbackTests.execute
+    deployment = ReadbackTests.deployment
+
+    def build_copy(self):
+        created, source = self.deployment()
+        source['descriptor']['path'] = created['descriptor']['path'] = '/owned/0117/packages/leaf'
+        source['materialize'] = False
+        source['restoreCreation'] = {'action': '0117', 'slot': 'c3-a', 'deployment': created}
+        return source
+
+    def admission(self):
+        return {'inventory': {'sha256': 'inventory-hash'}, 'suite': 'build',
+                'action': '0118', 'subjectAction': '0117', 'slot': 'c3-a'}
+
+    def paths(self):
+        return patch.dict(NS, {'project': lambda _: Path('/owned/0117/packages/leaf'),
+                               'subject_root': lambda _: Path('/owned/0117')})
+
+    def test_paired_copy_preserves_original_baseline_and_content_rule(self):
+        source = self.build_copy()
+        retained = copy.deepcopy(source)
+        with self.paths():
+            created = NS['paired_restore_copy'](self.admission(), source)
+        self.initial[7], self.final[7], self.named[7] = 210, 220, 230
+        self.assertEqual(self.execute(deployment=(created, source), paired_build=True), self.payload)
+        self.assertEqual(source, retained)
+        self.assertEqual((self.budget.reads, self.budget.requested), (1, 4))
+        with self.assertRaisesRegex(Failure, 'Created deployment differs from admitted content'):
+            self.execute(deployment=(created, source), paired_build=True, returned=b'abd')
+
+    def test_paired_copy_requires_all_eight_fields_at_each_read_stage(self):
+        for stage in ('initial', 'final', 'named'):
+            for index in (0, 1, 2, 3, 4, 5, 6, 8):
+                with self.subTest(stage=stage, field=FIELDS[index]):
+                    self.setUp()
+                    source = self.build_copy()
+                    getattr(self, stage)[index] += 1
+                    with self.assertRaises(Failure):
+                        self.execute(deployment=(source['restoreCreation']['deployment'], source),
+                                     paired_build=True)
+
+    def test_paired_empty_copy_keeps_exact_content_check(self):
+        self.payload = b''
+        for value in (self.closed, self.initial, self.final, self.named):
+            value[5] = 0
+        source = self.build_copy()
+        self.assertEqual(self.execute(deployment=(source['restoreCreation']['deployment'], source),
+                                      paired_build=True), b'')
+
+    def test_wrong_action_slot_role_path_or_lineage_stops_before_io(self):
+        mutations = (
+            lambda a, s: s.pop('restoreCreation'),
+            lambda a, s: s['restoreCreation'].update(action='0116'),
+            lambda a, s: s['restoreCreation'].update(slot='c2-b'),
+            lambda a, s: a.update(action='0117'),
+            lambda a, s: a.update(suite='restore'),
+            lambda a, s: s.update(materialize=True),
+            lambda a, s: s.update(role='tool'),
+            lambda a, s: s.update(role='metadata'),
+            lambda a, s: s.update(role='source'),
+            lambda a, s: s['descriptor'].update(path='/unrelated/leaf'),
+            lambda a, s: s['restoreCreation']['deployment']['descriptor']['identity'].__setitem__(7, 999),
+            lambda a, s: s['restoreCreation']['deployment']['writeClosedIdentity'].__setitem__(1, 999),
+        )
+        for index, mutate in enumerate(mutations):
+            with self.subTest(mutation=index), self.paths():
+                a, source, budget = self.admission(), self.build_copy(), Mock()
+                mutate(a, source)
+                with self.assertRaises(Failure):
+                    NS['pin_input'](a, source, budget)
+                budget.pin.assert_not_called()
+                budget.pin_created_copy.assert_not_called()
+
+    def test_original_and_worker_share_the_paired_qualification(self):
+        source, a = self.build_copy(), self.admission()
+        inventory = NS['encode']({'files': [source]})
+        deployed = {key: source[key] for key in ('role', 'windowsPath', 'descriptor')}
+        receipt = NS['encode']({'schema': 'windows-managed-harness-deployment-v1',
+                                'inventorySha256': 'inventory-hash', 'files': [deployed]})
+        for operation in ('materialize_inputs', 'verify_deployment'):
+            with self.subTest(operation=operation), self.paths():
+                budget = Mock()
+                budget.pin.return_value = inventory
+                budget.pin_created_copy.return_value = self.payload
+                budget.read.return_value = (receipt, None)
+                writer = Mock()
+                with patch.dict(NS, {'write_new': writer}):
+                    NS[operation](a, Path('/new-root'), Path('/new-local'), budget)
+                budget.pin.assert_called_once_with(a['inventory'], 4194304)
+                budget.pin_created_copy.assert_called_once_with(
+                    source['restoreCreation']['deployment'], source, 134217728, paired_build=True)
+                if operation == 'materialize_inputs':
+                    self.assertEqual(writer.call_count, 2)
+                    self.assertEqual(writer.call_args_list[0].args[1], receipt)
+
+    def test_ordinary_inputs_keep_strict_pin_route(self):
+        for suite, role in (('restore', 'source'), ('restore', 'cache'), ('restore', 'tool'),
+                            ('build', 'tool'), ('build', 'dotnet'), ('build', 'metadata')):
+            with self.subTest(suite=suite, role=role), self.paths():
+                a, source, budget = self.admission(), self.build_copy(), Mock()
+                a['suite'], source['role'] = suite, role
+                source.pop('restoreCreation')
+                NS['pin_input'](a, source, budget)
+                budget.pin.assert_called_once_with(source['descriptor'], 134217728)
+                budget.pin_created_copy.assert_not_called()
 
 
 class PinDiagnosticTests(unittest.TestCase):
