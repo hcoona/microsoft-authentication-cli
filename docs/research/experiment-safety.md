@@ -243,6 +243,36 @@ This exception ends with the current grant, does not transfer or automatically
 expand, and does not cover future uncertainty, account effects, installation
 or release. Historical 0057/0064/0068/0093 exceptions remain separate.
 
+Separately, the accepted Wave decision for original Issue #108 final publication
+0110 permits one independently admitted Linux-only passive retained-candidate
+observation and the existing separately admitted credential-free scenarios despite
+possible interference from that invocation's unresolved work. Apply only on the
+same hosts within unchanged ceilings 28/130/30/180, after the matching protocol
+is accepted. Preserve the failed publication, full charge, spent failure snapshot,
+and original success collector's ineligibility. This exception establishes no
+historical or current quiescence and does not resume the original interval.
+
+The separate artifact basis must establish the necessary source, dependency,
+tool, response, diagnostic, artifact, asset, and symbol/provenance relationships.
+Apply the ordinary workstation threat model. Current hashes cannot establish
+original clock or held-handle continuity, natural Job drain, or execution of
+skipped postconditions. Classify each original obligation against the new limited
+claim, with an independent rationale for any unnecessary historical condition;
+necessary missing, unstable, or insufficient evidence blocks artifact acceptance.
+Risk acceptance cannot supply that evidence. Freeze accepted candidate bytes in
+the new snapshot; later materialization and scenario use retain separate admission.
+
+The exact protocol owns the single observation's literal leaves, destination,
+source/runtime/call bindings, finite operations, byte and time limits, zero-unit
+accounting, and failure retention. A failed or partial start spends it. No retry,
+alternate destination, quota increase, automatic fallback publication, recompilation,
+original recovery/replay, broader old-state observation, old-process/Job/shared-service
+operation, cleanup, refund, account effect, installation, signing, or release is
+permitted by this exception. It ends with the current grant and cannot transfer or
+expand automatically. Historical exceptions remain separate; every new ownership
+or termination uncertainty retains ordinary stop conditions.
+
+
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
 selected-account session or secure-cache updates when the protocol declares that outcome.
 Deleting local files does not reverse provider-side authentication, consent, or session
@@ -530,8 +560,8 @@ Stop the experiment if:
 - remaining authorized attempts or cumulative capacity cannot be established;
 - experiment-controlled work cannot be stopped within the declared bounds, or safe
   ownership cannot be established for cleanup, except for the case-specific original
-  Issue #108 invocation 0057, publications 0064, 0093 and 0107, and fixture 0068 lifetime exceptions
-  in Termination and Retention, each within its exact accepted scope;
+  Issue #108 invocation 0057, publications 0064, 0093, 0107 and 0110, and fixture 0068
+  lifetime exceptions in Termination and Retention, each within its exact accepted scope;
 - the subject's source or artifact identity no longer matches the accepted protocol; or
 - continuing would mutate an unrelated account, installation, or remote resource.
 

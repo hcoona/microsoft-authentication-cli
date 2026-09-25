@@ -19550,3 +19550,275 @@ that this finite snapshot completed; it does not establish original compiler
 completion, artifact eligibility, Job emptiness, global quiescence, safe
 continuation or a new owner risk decision. Further observation or execution
 retains its separate gates.
+
+## One Retained-Candidate Observation for Original Publication 0110
+
+The accepted Wave decision permits this separate artifact-evidence route despite
+original 0110's unresolved lifetime and interference. The accepted source-bound
+finding `F-FINAL-0110-NATURAL-DRAIN-VCTIP-01` establishes original compiler-root
+exit zero and complete compiler capture before normal-drain expiry at controller
+line 1494. The same helper incarnation appeared in both original held-Job audits;
+the postcondition call at line 1508 was not reached. No current helper state,
+continuous membership, subsequent exit, telemetry effect, or artifact eligibility
+follows. Preserve failed terminal `553fe8`, original publication charge, and spent
+failure snapshot. Counters remain 20/106/6/163 against ceilings 28/130/30/180;
+`noExperimentLive` remains false. The old graph, `original_completion`, original
+receipts, and success collector remain unchanged and ineligible. Retain product
+commit `503360753accd0829801953823b1b57a4f852440`, tree
+`8506cdd9781c8a331ea12ea8fe27a55292eec073`, and the original admitted toolchain,
+dependency, recipe, and ordinary-symbol basis.
+
+Only after this amendment and its matching safety change are accepted, and the
+independent source, accounting, runtime, and exact-call admissions pass, may one
+Linux-only passive read/copy/static-validation invocation run. It charges 0/0/0/0;
+a failed or partial submission spends the sole observation. It grants no retry,
+Windows executable/build-tool invocation, candidate execution, publication,
+recompilation, cleanup, refund, or automatic continuation. It makes no claim that
+the existing CLI 12 / Profile 2 / observer-and-WSL 3 plans fit the remaining 17
+synthetic units. Those plans retain separate topology accounting and admission.
+
+### Fixed Inputs, Source, and New Evidence Destination
+
+Use exactly the ordered 93 `rows` in
+`/tmp/windows-final0110-retained-candidate-preparation-budget-v1/fixed-inputs-v1.json`,
+195,777 bytes, SHA-256
+`8dd8253e1d292248d46975575ac6dd68b3b3f850da75c79638830d159b1dd5b4`.
+Its literal paths, individual byte caps, exact byte/hash pins where supplied,
+retained-evidence full9 pins, five tool-message joins, and four copy equalities
+are fixed source inputs. No path is selected from observed content. This is the
+complete input list: 10 retained Linux evidence/source leaves and 83 current
+Windows leaves projected through their literal `/mnt/c` paths.
+
+The 83 current leaves comprise 46 source/restore inputs, seven exact Csc/Exec/ILC/LINK
+response or command inputs, 12 generated text inputs, five managed images, three
+portable PDBs, two managed reference images, one ILC object, one link definition,
+one Source Link document, three native images, and two native PDBs. All 93 inputs
+are required; absence does not authorize another path. Do not enumerate directories,
+read other action roots, survey shared tools or symbols, or query processes, Jobs,
+services, cgroups, sockets, networks, or account state.
+
+The inert collector is
+`/tmp/windows-final0110-retained-candidate-preparation-budget-v1/collector-template-v3.py`,
+210,815 bytes, SHA-256
+`8ec101c619d4718e5da14380c64074fcae363fe4e46dab209d8781f877cc8607`.
+Only its initial `ADMISSION = None` slot may be replaced by independently accepted
+literal values for `acceptedCommit`, `protocolSha256`, `waveSha256`, and
+`ownerDecisionSha256`; the remaining source stays byte-identical. Keep the
+activated source separately pinned. Neither this inert source nor a filled slot
+is execution authorization.
+
+Exclusively create `/tmp/windows-final0110-retained-candidate-snapshot-v1` with
+mode 0700. It contains one `<row-id>.bin` for each input and `manifest.json` only.
+Copy each raw input before its bounded static parsing. Each output uses one
+exclusive write, fsync, chmod 0444, fsync, and one held-descriptor readback;
+synchronize the new directory and `/tmp`. The manifest is limited to 1,048,576
+bytes. Retain every complete or partial output on any failure, with no repair,
+replacement, deletion, or alternate destination. Output and parent directory
+synchronization occurs only after a completed manifest; partial retention does
+not establish crash durability.
+
+Use held, descriptor-relative, literal, no-follow ancestry and regular single-link
+input leaves. File identity is full9 in the order device, inode, mode, uid, gid,
+size, mtime-ns, ctime-ns, link count, preserved as exact Python integers. Directory
+continuity uses device, inode, mode, uid, and gid. Each leaf gets one read requesting
+its observed size plus one after enforcing its individual cap. Short/oversized
+reads, links, missing leaves, type or permission errors, pin mismatch, or changed
+held/named identity fail. Retain input and output descriptors through final
+held/named continuity checks. These sequential checks establish neither an atomic
+cross-file snapshot nor continued currentness after collection.
+
+### Finite Operation and Execution Limits
+
+The maximum sum of input payload caps is 762,190,168 bytes. Source-derived
+whole-submission limits, including failure cleanup, are:
+
+| Operation or resource | Maximum |
+| --- | ---: |
+| Data reads, including all output readbacks | 187 |
+| Requested read bytes | 1,525,429,099 |
+| Data writes, including bounded transport | 96 |
+| Written bytes | 763,241,048 |
+| Opens / closes / owned open descriptors | 233 / 233 / 233 |
+| Metadata operations | 1,238 |
+| Held directories | 46 |
+| Seeks / mode changes | 94 / 94 |
+| Synchronizations | 190 |
+| Fresh directories | 1 |
+| Stdout / failure stderr | 2,048 / 256 bytes |
+| Address space | 2,147,483,648 bytes |
+| Process descriptor resource limit | 512 |
+| CPU resource limit | 300 seconds |
+
+Exception cleanup closes remaining owned descriptors and attempts one ASCII
+failure frame outside the timing/charge guards. The frame contains only a fixed
+phase, a frozen row ID or `-`, and an allowlisted reason; it includes no raw path,
+exception message, or traceback. The source-derived maximum is 135 bytes within
+the 256-byte stderr allowance. Pair joins identify the fixed left/image row;
+the specification identifies its counterpart. Unrecognized failures use the
+fixed unknown category. A stderr-write failure is suppressed without retry; a
+frame is not guaranteed after termination or a failed stderr write. These
+operations fit the total close/write/byte ceilings above. The counters do not
+instrument exception cleanup.
+Interpreter/standard-library startup and the separately admitted Linux watchdog
+are covered by exact runtime/call admission, outside these evidence-file syscall
+counts; they add no subject execution.
+
+One 300-second monotonic source deadline covers reads, copies, static checks,
+final continuity, descriptor closure, and transport. The separately admitted
+Linux-only watchdog sends TERM at 310 seconds and KILL after five more seconds.
+Signals mark source cancellation; file I/O is not claimed to be interruptible.
+The watchdog may target only this new Linux observation, never original work,
+Windows subjects, shared Jobs, or services. Watchdog expiry is a failed spent
+observation and supplies no old-process-state evidence.
+
+Before submission, independently bind the accepted Wave and protocol, activated
+whole-source bytes and full9, all fixed evidence pins, exact isolated/no-site/
+no-bytecode Python runtime, startup environment, cwd, watchdog, literal tool
+arguments, and fresh destination. Retain the existing finite exact-admission
+procedure; no source import, AST parsing, compilation, execution preflight, or
+runtime/artifact probe is authorized as preparation. Independently record the
+zero experiment-unit charge and sole-submission start before invocation. Require
+zero original exit, complete closed original transport, final source completion,
+and independent original-outcome acceptance before using the bundle. Empty waits
+may collect only that original session, at most 60 seconds per wait.
+
+### Exact ILC Command Correspondence
+
+`F-FINAL-0110-ILC-COMMAND-SPELLING-01` was independently triaged as a true positive.
+The public `Microsoft.NETCore.Native.targets` at runtime commit
+`4271d88e0aebf3d04f188f1334c2220d80555ef6`, lines 151 and 330, concatenates an
+`IlcToolsPath` ending in a separator with `\ilc`. Rendering that pinned source
+with explicit CRLF yields the admitted packaged producer: 33,725 bytes, SHA-256
+`22516102af0e4bdafa004795d3bbc30d617efe5bb7b809005d1ea3a00c436f6d`.
+The only admitted new-basis spelling is the original `exec-ilc`, `TaskId` 299
+command in the fixed specification's `newBasisCommand`:
+
+```text
+"C:\Temp\azureauth-windows-slice-108\packages\runtime.win-x64.microsoft.dotnet.ilcompiler\10.0.12\tools\\ilc" @"obj\Release\net10.0-windows\win-x64\native\Authentication.Cli.ilc.rsp"
+```
+
+Require the exact five-line ASCII/CRLF batch rendering, 252 bytes, SHA-256
+`eac5dbc3c4e5bee1c8bd6a060a52dc5ff4d036fbb0c3dffda1223951048b657d`,
+and all original target/task/command/preservation/environment/response joins.
+The original graph remains pinned at 322,158 bytes, SHA-256
+`99490fd0c6b1c74701c4b053f95d61bfcfeeed376617b5f6652888ae6a40a158`.
+Do not rewrite its command template, change the old collector, or normalize
+other path spellings. Reject every other discrepancy. The independent triage
+seal is 3,845 bytes, SHA-256
+`8fd9833688ce8d0065f1321f041527b2acb7de5280d634c8132772f9a4d0cf6d`.
+
+### Exact Task 294 External Host Disposition
+
+`F-FINAL-0110-EXTERNAL-TASKHOST-PREMISE-01` is independently triaged as a true
+positive. Original Task 294, `ComputeManagedAssemblies` in Target 458,
+`_ComputeManagedAssemblyToLink`, used a newly spawned external NET/x64 host,
+with node reuse and reusable-sidecar mode false. The original blanket
+`outOfProcessTaskHosts=false` premise cannot support this new basis. Keep the
+old graph, controller, failure, charge, and success-ineligible state unchanged;
+matching the five Csc/Exec contexts supplies no global in-process or logging proof.
+
+For this one branch, reuse the accepted retained TaskHost component semantic
+acceptance, 8,348 bytes, SHA-256
+`0ceeb6db587aaa694eab1a73ec41f6fc2b30aac418a4d522e8863e924abf0971`,
+and final MSBuild.exe source/H acceptance, 20,043 bytes, SHA-256
+`ee73241578c4d5a0efd1db1e738c77a64ff6bd18bc062b3ca17f5c6f9856a7a6`.
+Use that final H acceptance, not earlier structural-only or pending-H evidence.
+The source-bound branch selects the retained SDK MSBuild.exe apphost before the
+absent-image dotnet/MSBuild.dll fallback. Its adjacent managed image, runtimeconfig,
+deps, historical development-config absence, component dependency resolution,
+task environment, directory, culture, parameters, and kernel-pipe IPC remain
+necessary scoped provenance. Declared component assets do not prove that every
+assembly loaded. This reuses historical installed-toolchain evidence under the
+workstation model; it establishes no current SDK state, loaded-hostfxr identity,
+or uninterrupted historical continuity.
+
+The pinned [classifier source](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/tools/illink/src/ILLink.Tasks/ComputeManagedAssemblies.cs)
+filters `ResolvedFileToPublish` entries using read-only PE-header inspection and
+produces item metadata, with no direct file, compiler, network, or account output.
+In the observed NativeCompilationDuringPublish branch, Target 459
+[replaces all ManagedAssemblyToLink items](https://github.com/dotnet/runtime/blob/4271d88e0aebf3d04f188f1334c2220d80555ef6/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets#L122-L128)
+with DefaultFrameworkAssemblies, _ManagedResolvedAssembliesToPublish, and
+ManagedBinary before Target 460 PrepareForILLink and Target 461 response generation.
+Task 292 produces _ManagedResolvedAssembliesToPublish; it is not Task 294.
+Target 458 also derives _PDBToLink and _LinkedResolvedFileToPublishCandidate;
+their selected mutation/deletion consumers are ILLink/_RunILLink, disabled by
+this native target's RunILLink=false. These item declarations write no PDB.
+The superseded Task 294 input/output vector is therefore unnecessary to reconstruct
+the final ILC input set. Exact final response, managed/source/dependency, native
+object/LINK, and native/publish PDB correspondence remain required.
+
+Pinned MSBuild source at `b44cdcec4c79c50c67560876707d57d4f635fa3b` forwards TaskHost
+errors, warnings, command lines, messages, and custom events through the parent
+BuildEngine. Require the closed Task 294/Targets 458-459 joins and full original
+diagnostic review; five selected tool joins alone do not prove global completeness.
+The accepted ordinary pipe/wrapper branch adds no communication/helper files or
+inline-compiler/response directory, and final apphost H is zero files/directories/
+bytes in that reviewed scope. This is no machine-wide zero-effects claim.
+Successful task closure and non-reuse intent do not establish host-process exit,
+current lifetime, containment escape, quiescence, or the cause of the drain failure.
+
+The independent original-premise triage is 4,753 bytes, SHA-256
+`d18470ed4a57c5b984a877ebbaa54bda41c30dc328eaff7e3b6739e98097bbfb`.
+The exact source/effects supplement is 15,061 bytes, SHA-256
+`4994dd253168b911def666286da9ed8fb5846d0e3eff1a6763193dafbf3d7982`.
+Its contextual integration requires independent acceptance. It expands neither
+the 93-leaf collector nor its effects or capacity. Missing or contradictory
+necessary host/tool/dependency/input/output/logging correspondence blocks artifact
+acceptance; no new runtime read, survey, process/Job operation, or capacity follows.
+
+### Original Obligations and the Distinct Artifact Claim
+
+The classifications below govern the source checks at
+`Assert-ExactFinalPublishPostconditions` and `original_completion`. A current
+file equality is not historical consumption or uninterrupted continuity.
+Apply the accepted workstation model; no hostile-administrator equivalence
+proof is introduced. The independently triaged `F-FINAL-0110-TASK-COUNT-01`
+identifies 321 distinct task starts and 321 finishes, with matching IDs 2 through
+322; 322 is the maximum ID, not the count. Preserve complete event closure and
+the exact five selected Csc/Exec joins. This counting correction changes neither
+the selected inputs nor the collector's effects or limits.
+
+| Original obligation | Classification and disposition for this route |
+| --- | --- |
+| Accepted caller, source, graph, recipe, startup/tool admission, durable charge, and original invocation identity | Historical: use exact retained admission and accepted source/receipt joins. They identify what was admitted before launch; a missing necessary join blocks the new claim. |
+| Compiler root exit zero, complete original stdout/stderr capture, lengths and hashes | Historical: the accepted failed-snapshot disposition establishes these bounded facts. The supervisor and whole publication remain failed. |
+| Successful proxy/bootstrap/controller completion, zero active members, natural Job drain, no retained live work, and quiescence | Unnecessary to the new static artifact claim: they govern successful supervised termination, which this route does not claim. The owner accepted this original residual interference; no value is rewritten to success. |
+| Original caller revalidation, clock-ready/reply continuity, original deadline/current-budget checks, held startup sentinel, end-of-run startup checks, and late cancellation check | Unnecessary to the new static artifact claim: these were temporal conditions for original success. They cannot be recreated later. Original admission remains historical evidence; the new observation has its own finite exact-call and cancellation gates. |
+| All 521 protected source/restore/dependency/tool inputs | Historical prelaunch admission plus current exact equality for the 46 fixed source/lock/restore leaves and selected published native asset. Reuse accepted original admission for other fixed toolchain/package inputs under the workstation model; do not claim all 521 remain unchanged now or throughout execution. Missing hashes, contradictory provenance, or a necessary unresolved source/import/dependency/tool relationship blocks acceptance. No whole-SDK/package copy or survey is added. |
+| Generated output/response freshness and absent ambient overrides | Historical prelaunch admission only. Current generated-file existence is expected; a new absence survey cannot reproduce original freshness and is unnecessary for this fixed-byte claim. Require exact response content, copy/PE/PDB correspondence, and independent source/Native AOT provenance instead. |
+| Strict UTF-8, no NUL/ESC, complete zero-warning/error diagnostics, and acceptable suppressions | Historical retained capture is the evidence; substantive validation remains blocking until the entire capture and actual Csc/ILC suppression context pass independent review. A successful summary or the collector's exit alone is insufficient. |
+| Generated response bytes, exact template/encoding, immutable producer/consumer identities, and Csc/Exec event/environment joins | Current response equality plus historical task evidence. Require the fixed three Csc and two Exec joins, exact preserved paths/bytes and response producers/consumers, including only the Task 299 spelling disposition above. Historical consumption must be justified by these joined sources/events, not current hashes alone; an insufficient necessary link blocks acceptance. |
+| Original no-out-of-process-task-host premise and Task 294 host effects | Historical contradiction: only the exact branch and necessary source/host/configuration/dependency/input/output/logging disposition above may support this new basis. The accepted final apphost H review supplies its scoped historical helper-file conclusion; source-selected Target 459 replacement makes the superseded classifier vector unnecessary. Any remaining necessary contradiction blocks artifact acceptance. The old false premise and original failed outcome remain unchanged. |
+| Temporary role inventory and absence of additional selected tool execution | Historical complete event closure must establish exactly three Csc and two Exec occurrences with the single declared MSBuild temporary role, unique ordered contexts, closed target/task stacks, exact producer imports, ordered environments, commands, and preservation joins. Extra or ambiguous executed events block acceptance. A current temporary-directory inventory is unnecessary because it cannot recreate the original inventory and the new collector reads or executes no unselected file. The Task 294 branch is separately dispositioned above. |
+| Original response snapshots, `postconditions.json`, success flags, and old collector output copies | Unnecessary as original-success carriers for the new claim: their original production was not reached. Do not manufacture them. The new raw snapshots and manifest are different evidence; they do not set the old flags. |
+| Original late control-file equality and checkpoint refresh | Unnecessary as original-success rechecks. Preserve the accepted durable historical charge and exact original provenance; independently bind current accepted authority and remaining capacity for every new invocation. |
+| Managed/native images, required companion assets, symbols, and source-to-artifact provenance | Current static evidence with blocking acceptance obligations below. PE/PDB identity checks and matching copies are necessary observations, not by themselves proof of the complete source-to-Native-AOT relationship. |
+
+The collector checks native x64 PE shape, absence of a CLR directory, executable
+entry-point shape, regular/delayed imports, CodeView records, portable/native PDB
+identity pairs, exact pinned inputs, and declared copy equalities. It deliberately
+leaves source-document/native-symbol provenance, native dependency closure,
+artifact acceptance, product/support claims, and continuation false.
+
+Independent evidence acceptance must join the complete original target/task/
+environment events and diagnostics to the original source/dependency/tool/recipe
+admission and the new frozen files; establish managed source/PDB/checksum and
+ILC-object/LINK/native PE/PDB correspondence, including module/assembly identity,
+relevant MVIDs, portable-PDB Document/checksum and generated-document joins not
+parsed by the collector; classify every regular/delayed import and source-declared
+native load path. Pin `msalruntime.dll` to 2,949,656 bytes, SHA-256
+`9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79`.
+Review actual AOT/Csc diagnostic and suppression lists for relevant unaccepted
+suppression; ordinary admitted SDK suppressions are not required to be empty.
+No general decompilation or machine-code equivalence proof is required. Missing or
+insufficient necessary evidence blocks acceptance without automatic new reads,
+repair, or fallback publication. Real WAM, deployment, UI, reuse, WSL, and product
+scenario obligations remain separately applicable under V2-REQ-055 and the existing
+validation strategy.
+
+After independent original-observation acceptance and separate contextual artifact
+acceptance, only the accepted immutable snapshot may supply a later separately
+admitted materialization. That admission must preserve candidate and required-asset
+bytes through use; mutable original output paths are not approved test subjects.
+No real-account support, release, or completed Slice acceptance follows from this
+static evidence route.
