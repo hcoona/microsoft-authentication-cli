@@ -1,6 +1,6 @@
 # Original Windows controller bootstrap; requires separate fixed-literal admission.
 param([string] $ActionName, [string] $ReservationSha256, [string] $InvocationSha256, [string] $AuthoritySha256)
-$script:FinalBootstrapDraftOnly = $true
+$script:FinalBootstrapDraftOnly = $false
 if ($script:FinalBootstrapDraftOnly) { throw 'DRAFT_ONLY: final bootstrap has no accepted execution binding' }
 $bootstrapWatch = [Diagnostics.Stopwatch]::StartNew()
 $ErrorActionPreference = 'Stop'
@@ -104,7 +104,7 @@ function Save-BootstrapJson([string] $Path, $Value) {
     Assert-BootstrapBudget
 }
 
-if ($ActionName -cne '0109') { throw 'Invalid final action number' }
+if ($ActionName -cne '0110') { throw 'Invalid final action number' }
 foreach ($hash in @($ReservationSha256, $InvocationSha256, $AuthoritySha256)) {
     if ($hash -cnotmatch '^[0-9a-f]{64}$') { throw 'Unbound bootstrap binding' }
 }

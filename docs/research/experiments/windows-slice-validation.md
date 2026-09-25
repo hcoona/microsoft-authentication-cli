@@ -19176,3 +19176,170 @@ No desktop attendance is required for these automated credential-free steps.
 No real account, WAM, token, cache, consent, authenticated resource, installation,
 signing or release effect is granted. CLI/Profile, Windows/WSL and real-account
 scenario acceptance remain separate prerequisites to complete Slice acceptance.
+
+## Failed Pre-Entry Publication 0109 and Production Activation 0110
+
+The sole original 0109 caller completed with exit one and the complete sanitized
+frame `phase=caller-preparation; code=other; launchAttempted=unknown`. Its full
+0/0/1/1 charge remains consumed: counters are 20/106/5/162. The original start,
+complete transport and terminal records are intentionally retained. No replay,
+refund, repair of its activated package or additional original observation is
+allocated. The prepared success-only collector is ineligible and was not run.
+
+The accepted source at commit `9c23dd5b862c44ba497f4189d931d7f6bdb08f5a`
+retained three production guards: contracts DRAFT_ONLY=True, bootstrap
+FinalBootstrapDraftOnly=$true and controller FinalPublishDraftOnly=$true.
+The contracts guard throws before its imports and prevents prepare_dispatcher
+from returning to the caller's dispatcher invocation. This is a source finding;
+the retained broad failure category does not identify the earliest actual
+exception, which could have occurred in an earlier pre-entry check. Independent
+source-bound disposition establishes that this configured caller cannot create
+controlled descendants, a reservation, Windows work or a Job. It establishes
+neither filesystem absence nor historical or host-wide quiescence. Historical
+0057/0064/0068/0093/0107 uncertainty remains; noExperimentLive remains false.
+
+The independent failed-outcome disposition is 11,784 bytes, SHA-256
+`911616aec6a592347a35eb69151b93161cdb674bebfa4a4cbbd75c9192a84021`.
+Independent triage is 15,397 bytes, SHA-256
+`08d983738502505496ae1ddf454c549cdaedf48184a072555436c5d4df713438`.
+It confirms a missed production-activation prerequisite in preparation and
+review. Because contracts compares staged component bytes with accepted Git
+blobs, privately changing copied guards would invalidate the source admission.
+The correction therefore enables the three tracked production guards and
+refreshes their exact source and authority bindings in this amendment.
+
+### One Successor and Scoped Source Reuse
+
+Allocate one successor publication 0110, one new passive four-parent projection
+and one new sixteen-input materialization. Each requires separate independent
+exact admission and complete original outcome acceptance. This section supersedes
+the spent 0109 execution allocation only for the expressly listed successor
+bindings; all other publication safeguards and effects remain unchanged.
+The Wave's current credential-free grant and historical risk decisions apply
+without expansion. No new lifetime-risk exception or capacity is granted.
+
+Reuse exactly the source root
+`C:\Temp\azureauth-windows-slice-108\sources\final-503360753accd0829801953823b1b57a4f852440-0109`
+created by the accepted sole 0109 source copy: 34 source files totaling 150,036
+bytes and twelve restore files totaling 233,709 bytes. Its independent copy
+acceptance is 7,847 bytes, SHA-256
+`a887828ad289ab9d357b0c4559487e43fae209c36349f0afd68e99b2d81dc8f3`.
+The source-bound failed-caller disposition establishes no 0109 caller mutation
+of that root; it does not prove continuous absence of interference. Retain the
+ordinary future exact input-hash, generated-path-absence and import-closure
+checks during the admitted 0110 publication. No separate preview, survey,
+recopy, overwrite, repair, alternate root or cleanup is allocated.
+This is a specific reuse of the accepted 0109 copy, not permission to adopt
+other historical source roots.
+
+Retain product commit `503360753accd0829801953823b1b57a4f852440`, tree
+`8506cdd9781c8a331ea12ea8fe27a55292eec073`, the v4 recipe, ordinary native
+symbols, .NET SDK 10.0.401/runtime 10.0.12, MSAL/Broker 4.83.1 and
+NativeInterop 0.20.3. Preserve the source/restore/import/property and sibling
+reference closure, original src/Directory.Build.props and diagnostic-overlay
+exclusion. Reuse the accepted 0066 managed guard and 0085 nonterminating
+publication launcher through their unchanged artifact/fixture provenance.
+No restore, build, download or fixture replay is allocated by that reuse.
+
+The new graph is 322,158 bytes, SHA-256
+`99490fd0c6b1c74701c4b053f95d61bfcfeeed376617b5f6652888ae6a40a158`.
+All source-root fields remain unchanged. Relative to the accepted 0109 graph,
+only PublishOutputs.95e8effb9c.txt becomes PublishOutputs.a3f6b67aa8.txt,
+derived from the pinned producer's SHA-256 of normalized action-0110 PublishDir
+plus U+2028, taking the first ten lowercase hexadecimal characters. Independently
+accept the new graph and newly rendered response, command, environment and
+output bindings; unchanged graph fields retain their prior correspondence.
+
+### Accounting and Passive Preparations
+
+Extend the current checkpoint to eight ordered stages: 0085, disposed 0094,
+disposed 0103, accepted 0105, failed 0093, failed 0107, accepted 0108 and failed
+pre-entry 0109. Its last stage uses independently accepted normalized accounting
+for 0/0/1/1, retaining the failed-outcome disposition. Every current consumer
+joins prior counters 20/106/5/162. Debit the sole 0110 publication 0/0/1/1 before
+submission, including a failed start, producing 20/106/6/163 within unchanged
+ceilings 28/130/30/180. Seventeen synthetic units remain: twelve CLI, two Profile
+and three observer/WSL; no unallocated reserve remains.
+
+Preserve the five retained endpoint values. The source-bound pre-entry failure
+creates no additional 0109 endpoint or history directory to assume or require.
+Use the separately admitted fresh four-parent projection for current names;
+do not inspect historical children. Only the new 0110 action pair may appear
+between publication's two parent checks. Unexpected membership fails closed.
+
+The inert parent collector is
+`/tmp/windows-final-publish0110-parent-membership-template-root-v1.py`, 3,211
+bytes, SHA-256 `9be3167cbf8d8a569fd35bc8e6937449e72dee7593e6386aeb78e75b0bdf9da6`.
+It retains ADMITTED=False until separate exact admission. Only successor
+output/schema selectors differ from the accepted inactive 0109 template.
+Retain the same four parents, 128 names per parent, thirty-second source
+interval and sole exclusive receipt of at most 65,536 bytes at
+`/tmp/windows-final-publish0110-parent-membership-root-v1.json`.
+
+The inert sixteen-input materializer is
+`/tmp/windows-final-publish0110-materializer-template-root-v1.py`, 10,785 bytes,
+SHA-256 `fd6687be05d1376db20742e5baa83bf6356e34822a952d37453220a1999a58b0`.
+Only successor paths differ. Independently bind all sixteen descriptors and
+total payload size T before activation. Retain thirty seconds, 48 one-shot
+reads requesting at most 3T+48 bytes, sixteen exclusive writes totaling T bytes,
+three fresh directories and the 8,244-byte complete combined transport bound.
+Retain all complete or partial output; no overwrite or retry is allocated.
+
+For both passive steps, retain the previously accepted independent runtime,
+startup, cwd, input, activation and external-watchdog admission procedure.
+Necessary metadata-only control preparation has its own exact finite admission
+before execution. Allocate one metadata-only capture of the new caller cwd
+`/tmp/azureauth-final0110-accepted-108`: one directory open, no listing or content
+read, thirty-second source clock, 4,096-byte receipt, 512-byte stdout,
+51-byte stderr, and 35-second TERM/five-second kill-after outer watchdog.
+These preparations charge 0/0/0/0. Complete original transport, zero exit,
+source finalization and independent outcome acceptance precede reliance.
+
+### Exact Production Activation and Readiness
+
+Enable only the three tracked production guards identified above. The dispatcher
+already has DRAFT_ONLY=False; both contracts history-mode flags remain false.
+Retain native launcher ExecutionAdmitted=true and its accepted artifact binding.
+The corrected sources, successor selectors and eight-stage accounting are:
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| final_publish_contracts.py | 204241 | `8de645d2d78c1fca45effa7ccbc0f88fcfa243cd63b6d4adf9541f4bc0f6f172` |
+| Invoke-WindowsFinalPublish.ps1 | 96760 | `8a22324b36de689a21092763af9d9d69567ca13fd48132afd11b965fd8376c68` |
+| Start-WindowsFinalPublish.ps1 | 16073 | `f94bd067b3c66b6fd4b4a2ba753e0e76175c0404c3c367757a755aa11ad6465a` |
+| run_windows_final_publish.py | 13104 | `c2511d3e4d12dbd6585bd6259a10f51553451deb8480d8be4b803b1eb3d3ff5f` |
+
+Before the publication debit, independently verify the production entry flags,
+history flags and top-level entry path from the exact accepted source descriptors;
+compare those same descriptors with the materializer's accepted original output.
+This source-only readiness review must identify any unconditional pre-entry
+blocker without importing or executing the candidate. Record the result in the
+exact-call admission. A matching hash alone is not an importability review.
+Do not change guards in private copies: accepted Git and staged bytes must match.
+
+Use fresh 0110 authority, evidence, activated-package and named verifier roots,
+six independently accepted public review roles and the unchanged 100-call
+verifier ceiling. The fixed caller template is
+`/tmp/windows-final-publish0110-caller-template-root-v2.py`, 10,216 bytes,
+SHA-256 `0ebceedd19aece74107ebdaf7c3ae741a370642e897ff3459663dd5d48f22e11`.
+Only successor package/cwd selectors and diagnostic action label differ from
+the accepted 0109 template. Fill only its independently accepted fixed input
+and authority descriptors. Preserve the sanitized failure projection and
+complete original-session collection. The enabled tracked guards do not
+replace any authority, protocol, artifact or exact-call gate.
+
+Retain the accepted clock/diagnostic correction, all startup and pending-file
+evidence bounds, shared-lock coverage, named-Job containment from process
+creation, and the ordinary-symbol shared-PDB limitation. Preserve the
+2,400-second outer interval, 2,030-second native-spawn reserve,
+2,000/2,010-second native intervals and intersecting controller/compiler/
+finalization bounds. No phase restarts its clock. Do not terminate shared
+services or the entire publication Job after a resume attempt. Every new
+ownership or lifetime uncertainty stops dependent work. Only complete original
+zero-exit evidence and independent outcome acceptance can make an artifact
+eligible for its separate acceptance and subsequent scenarios.
+
+These credential-free automated steps require no desktop attendance. No account,
+WAM, token, cache, consent, authenticated resource, installation, signing or
+release effect is granted. Complete Slice acceptance still requires the separate
+CLI/Profile, Windows/WSL and later authorized real-account evidence.
