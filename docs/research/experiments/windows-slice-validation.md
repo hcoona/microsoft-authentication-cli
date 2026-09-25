@@ -18632,3 +18632,69 @@ expand with later ceilings or effects. It grants no original replay, additional
 old-file or process/Job/service observation, cleanup, artifact acceptance,
 account/WAM/cache effect, installation or release. All new uncertainty retains
 the ordinary stop conditions; full Windows Slice acceptance remains open.
+
+
+## Unbound Bootstrap Diagnostics and Clock Reply Correction
+
+The failed-0107 snapshot remains the only admitted observation of those original
+control files. Its accepted interpretation establishes no later lifetime closure
+and does not establish a file-sharing root cause. Source review independently
+identifies a distinct publication-order defect: the Linux clock writer exposes
+its final reply name before writing, flushing and closing it, while both Windows
+readers open that name with FileShare.Read. Waiting for a newline cannot handle
+an open/read exception during that interval.
+
+The corrected source is deliberately unbound: the final-publication contracts,
+bootstrap and controller retain enabled draft-only entry guards. No action is
+allocated, no old action or source root is reusable, and no source, process or
+host behavior is accepted merely by merging this correction. Original0107's
+unresolved lifetime still stops dependent execution until its separate applicable
+risk decision is accepted. No new lifetime exception is supplied here.
+
+Only the clock-reply writer changes. It exclusively creates the fixed sibling
+clock-remaining.json.pending, writes at most 4,096 bytes, synchronizes and closes
+the writer, then performs one no-replace hard-link publication to
+clock-remaining.json. It synchronizes the parent and retains both names,
+intentionally sharing one inode with link count two. It does not unlink the
+pending alias after readers can open the final name. Existing names, unsupported
+linking or any failure stop the invocation with partial state retained; there is
+no replace, alternate path, cleanup, fallback or retry. The common write_new
+helper and both read-only Windows sharing modes remain unchanged. The same
+absolute handshake deadline, cancellation checks, reply bytes and original
+ready-counter/remaining-time anchor still apply. Linux API semantics alone do
+not establish DrvFS support or cross-host visibility; the later clock scenario
+must verify the actual selected environment before publication relies on it.
+
+The bootstrap completion receipt advances to final-publish-controller-exit-v3
+with a nullable failureDiagnostic. On failure it records a literal operation
+phase, an optional bounded numeric source line, and at most four exception
+frames containing an allowlisted type, signed HRESULT and optional Win32 code.
+Unknown exception types become other. Truncated or incomplete projection is
+explicit; messages, stack traces, target objects and private values are omitted.
+The first failure type and diagnostic survive a later disposal failure. The
+success validator requires both failure fields to be null and still requires
+all original completion and lifetime evidence; a diagnostic is never success.
+
+The controller applies the same bounded projection to failures before entry
+into the publication candidate. It may emit a frame of at most 2,048 UTF-8 bytes
+plus its line terminator to stderr. Only after complete binding may it also
+write controller-startup-failure.json.pending, at most 4,096 bytes, close it and
+publish controller-startup-failure.json without replacement. The record binds
+action, reservation and invocation and explicitly denies normal completion and
+continuation. A pre-binding failure authorizes no action-path write. Diagnostic
+persistence retains the original clock and cancellation bounds, may itself fail,
+and cannot replace the first captured cause or permit another attempt. The
+bootstrap and controller reject these new fixed names during fresh-action
+checks. All complete or partial diagnostics and pending aliases are retained.
+
+Before any activation, independently accept a separate finite credential-free
+clock-handoff scenario that covers complete reply visibility, destination
+collision, publication failure, both reader paths, bounded first-cause metadata,
+pre-candidate failure and failed persistence without retry. Bind exact source,
+new dedicated action/source roots and endpoint, accounting, original clocks,
+all additional files and operations, named-Job lifetime/retention behavior and
+complete original transport. Do not run the full publication as a substitute
+for that focused validation. Future publication retains its separate source,
+artifact, protocol and exact-call gates. This source preparation consumes no
+experiment capacity and grants no account/WAM/cache, installation or release
+effects; full Windows Slice scenario acceptance remains open.

@@ -1,6 +1,6 @@
 # Final controller; requires separately accepted source, authority and fixed literal.
 param([string] $ActionName, [string] $ReservationSha256, [string] $InvocationSha256, [string] $AuthoritySha256)
-$script:FinalPublishDraftOnly = $false
+$script:FinalPublishDraftOnly = $true
 if ($script:FinalPublishDraftOnly) { throw 'DRAFT_ONLY: final-publish integration and guard build are unadmitted' }
 $originalControllerWatch = [Diagnostics.Stopwatch]::StartNew()
 $ErrorActionPreference = 'Stop'
@@ -21,6 +21,35 @@ $script:FinalStartupSentinel = $null
 $script:FinalInstalledSelectionChecks = 0
 $script:FinalInstalledSelectionMetadataProbes = 0
 $script:FinalInstalledSelectionEntries = 0
+$script:FinalStartupPhase = 'binding'
+
+function Get-FinalStartupFailure($ErrorRecord, [string] $Phase) {
+    # Never project exception messages, stack traces, paths, target objects or values.
+    $detail = [ordered]@{ phase = $Phase; line = $null; exceptions = @(); truncated = $false; incomplete = $false }
+    try {
+        if ($null -ne $ErrorRecord.InvocationInfo) {
+            $line = $ErrorRecord.InvocationInfo.ScriptLineNumber
+            if ($line -ge 1 -and $line -le 100000) { $detail.line = [int]$line }
+        }
+        $known = @('System.Management.Automation.MethodInvocationException',
+            'System.Management.Automation.RuntimeException', 'System.Management.Automation.PSInvalidOperationException',
+            'System.IO.IOException', 'System.IO.FileNotFoundException', 'System.IO.DirectoryNotFoundException',
+            'System.UnauthorizedAccessException', 'System.ComponentModel.Win32Exception',
+            'System.InvalidOperationException', 'System.ArgumentException', 'System.ArgumentNullException',
+            'System.TimeoutException', 'System.OverflowException', 'System.Text.DecoderFallbackException')
+        $exception = $ErrorRecord.Exception
+        for ($index = 0; $index -lt 4 -and $null -ne $exception; $index++) {
+            $kind = $exception.GetType().FullName
+            if ($known -cnotcontains $kind) { $kind = 'other' }
+            $nativeCode = $null
+            if ($exception -is [ComponentModel.Win32Exception]) { $nativeCode = [int]$exception.NativeErrorCode }
+            $detail.exceptions += [ordered]@{ kind = $kind; hresult = [int]$exception.HResult; nativeCode = $nativeCode }
+            $exception = $exception.InnerException
+        }
+        $detail.truncated = $null -ne $exception
+    } catch { $detail.incomplete = $true }
+    return $detail
+}
 
 function Get-FinalHash([byte[]] $Bytes) {
     $hash = [Security.Cryptography.SHA256]::Create()
@@ -1084,14 +1113,17 @@ function Initialize-FinalBinding($ControllerWatch) {
 function Receive-FinalOriginalClock($Binding, $ControllerWatch) {
     if (-not [Diagnostics.Stopwatch]::IsHighResolution -or -not $ControllerWatch.IsRunning) { throw 'Original monotonic clock unavailable' }
     $action = $Binding.actionPath
-    foreach ($name in @('clock-ready.json', 'clock-ready.json.pending', 'clock-remaining.json')) {
+    foreach ($name in @('clock-ready.json', 'clock-ready.json.pending', 'clock-remaining.json', 'clock-remaining.json.pending',
+                       'controller-startup-failure.json', 'controller-startup-failure.json.pending')) {
         if (Test-Path -LiteralPath "$action\$name") { throw 'Original clock handoff already exists' }
     }
+    $script:FinalStartupPhase = 'clock-identity'
     $self = [Diagnostics.Process]::GetCurrentProcess()
     try { $started = $self.StartTime.ToUniversalTime().ToString('o'); $pidValue = $self.Id }
     finally { $self.Dispose() }
     $readyCounter = [Diagnostics.Stopwatch]::GetTimestamp()
     $frequency = [Diagnostics.Stopwatch]::Frequency
+    $script:FinalStartupPhase = 'clock-ready-publish'
     Save-CompleteJson "$action\clock-ready.json" ([ordered]@{
         schema = 'final-publish-clock-ready-v1'; action = $ActionName
         reservationSha256 = $ReservationSha256; invocationSha256 = $InvocationSha256
@@ -1102,14 +1134,17 @@ function Receive-FinalOriginalClock($Binding, $ControllerWatch) {
     $end = [Math]::Min(1900000L, $ControllerWatch.ElapsedMilliseconds + 20000L)
     $replyBytes = $null
     while ($true) {
+        $script:FinalStartupPhase = 'clock-wait'
         Assert-FinalBudget
         if ($ControllerWatch.ElapsedMilliseconds -ge $end) { throw 'Clock handshake expired' }
         if (Test-Path -LiteralPath "$action\clock-remaining.json") {
+            $script:FinalStartupPhase = 'clock-reply-read'
             $replyBytes = Read-FinalBytes "$action\clock-remaining.json" 4096
             if ($replyBytes.Length -gt 0 -and $replyBytes[$replyBytes.Length - 1] -eq 10) { break }
         }
         Start-Sleep -Milliseconds 25
     }
+    $script:FinalStartupPhase = 'clock-reply-validation'
     $replyText = [Text.UTF8Encoding]::new($false, $true).GetString($replyBytes)
     $reply = $replyText | ConvertFrom-Json
     $left = $reply.remainingMilliseconds
@@ -1120,6 +1155,7 @@ function Receive-FinalOriginalClock($Binding, $ControllerWatch) {
     if ($replyText -cne (($expected | ConvertTo-Json -Compress) + "`n")) { throw 'Clock reply changed' }
     # QPC is the common Windows counter. Anchor before WSL samples remaining
     # time; subtract one tick for cross-thread ordering uncertainty, never add it.
+    $script:FinalStartupPhase = 'clock-deadline'
     $deadline = [decimal]$readyCounter + [Math]::Floor(([decimal]$left * [decimal]$frequency) / 1000) - 1
     if ($deadline -gt [long]::MaxValue) { throw 'Original clock deadline overflow' }
     $script:FinalClock = [pscustomobject]@{ deadlineCounter = [long]$deadline; frequency = $frequency
@@ -1554,15 +1590,46 @@ function Invoke-FinalPublishCandidate($Binding, $ControllerWatch) {
 
 # Only the separately admitted fixed bootstrap route may invoke this caller. The original
 # controller watch starts before all JSON/source/admission work and never resets.
+$binding = $null
+$enteredCandidate = $false
 try {
     $binding = Initialize-FinalBinding $originalControllerWatch
+    $script:FinalStartupPhase = 'clock-preparation'
     Receive-FinalOriginalClock $binding $originalControllerWatch
+    $enteredCandidate = $true
     $result = Invoke-FinalPublishCandidate $binding $originalControllerWatch
     Assert-FinalBudget
     if ($result.normalCompletion -and $result.quiescent -and -not $result.safetyStop) { exit 0 }
     exit 1
 } catch {
-    # A pre-admission failure has no subject. The bootstrap still observes this
-    # original nonzero exit, and WSL retains the already charged reservation.
+    if (-not $enteredCandidate) {
+        $failure = Get-FinalStartupFailure $_ $script:FinalStartupPhase
+        # Before successful binding, no action path is trusted for a new file.
+        # A fixed bounded frame is still useful when the caller captures stderr.
+        try {
+            $frame = $failure | ConvertTo-Json -Depth 8 -Compress
+            if ([Text.Encoding]::UTF8.GetByteCount($frame) -le 2048) { [Console]::Error.WriteLine($frame) }
+        } catch { }
+        if ($null -ne $binding) {
+            try {
+                $startupFailure = [ordered]@{
+                    schema = 'final-publish-controller-startup-failure-v1'; action = $ActionName
+                    reservationSha256 = $ReservationSha256; invocationSha256 = $InvocationSha256
+                    failureDiagnostic = $failure; enteredCandidate = $false
+                    normalCompletion = $false; continuationAllowed = $false
+                }
+                # Original clock/cancellation bounds still apply; no recovery
+                # window, alternate path, overwrite or retry is introduced.
+                $startupBytes = [Text.UTF8Encoding]::new($false).GetBytes(
+                    (($startupFailure | ConvertTo-Json -Depth 8 -Compress) + "`n"))
+                if ($startupBytes.Length -gt 4096) { throw 'Startup failure receipt exceeds bound' }
+                $startupPath = $binding.actionPath + '\controller-startup-failure.json'
+                Save-Bytes ($startupPath + '.pending') $startupBytes
+                Assert-FinalBudget
+                [IO.File]::Move(($startupPath + '.pending'), $startupPath)
+                Assert-FinalBudget
+            } catch { }
+        }
+    }
     exit 1
 }

@@ -1,11 +1,39 @@
 # Original Windows controller bootstrap; requires separate fixed-literal admission.
 param([string] $ActionName, [string] $ReservationSha256, [string] $InvocationSha256, [string] $AuthoritySha256)
-$script:FinalBootstrapDraftOnly = $false
+$script:FinalBootstrapDraftOnly = $true
 if ($script:FinalBootstrapDraftOnly) { throw 'DRAFT_ONLY: final bootstrap has no accepted execution binding' }
 $bootstrapWatch = [Diagnostics.Stopwatch]::StartNew()
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version 2
+
+function Get-BootstrapFailure($ErrorRecord, [string] $Phase) {
+    # Never project exception messages, stack traces, paths, target objects or values.
+    $detail = [ordered]@{ phase = $Phase; line = $null; exceptions = @(); truncated = $false; incomplete = $false }
+    try {
+        if ($null -ne $ErrorRecord.InvocationInfo) {
+            $line = $ErrorRecord.InvocationInfo.ScriptLineNumber
+            if ($line -ge 1 -and $line -le 100000) { $detail.line = [int]$line }
+        }
+        $known = @('System.Management.Automation.MethodInvocationException',
+            'System.Management.Automation.RuntimeException', 'System.Management.Automation.PSInvalidOperationException',
+            'System.IO.IOException', 'System.IO.FileNotFoundException', 'System.IO.DirectoryNotFoundException',
+            'System.UnauthorizedAccessException', 'System.ComponentModel.Win32Exception',
+            'System.InvalidOperationException', 'System.ArgumentException', 'System.ArgumentNullException',
+            'System.TimeoutException', 'System.OverflowException', 'System.Text.DecoderFallbackException')
+        $exception = $ErrorRecord.Exception
+        for ($index = 0; $index -lt 4 -and $null -ne $exception; $index++) {
+            $kind = $exception.GetType().FullName
+            if ($known -cnotcontains $kind) { $kind = 'other' }
+            $nativeCode = $null
+            if ($exception -is [ComponentModel.Win32Exception]) { $nativeCode = [int]$exception.NativeErrorCode }
+            $detail.exceptions += [ordered]@{ kind = $kind; hresult = [int]$exception.HResult; nativeCode = $nativeCode }
+            $exception = $exception.InnerException
+        }
+        $detail.truncated = $null -ne $exception
+    } catch { $detail.incomplete = $true }
+    return $detail
+}
 
 function Assert-BootstrapBudget {
     if ($bootstrapWatch.ElapsedMilliseconds -ge 2400000 -or
@@ -84,13 +112,14 @@ $action = 'C:\Temp\azureauth-windows-slice-108\actions\' + $ActionName
 $controller = $null
 $deadlineCounter = $null
 $normal = $false
+$bootstrapPhase = 'identity'
 $result = [ordered]@{
-    schema = 'final-publish-controller-exit-v2'; reservationSha256 = $ReservationSha256
+    schema = 'final-publish-controller-exit-v3'; reservationSha256 = $ReservationSha256
     bootstrapPid = $null; bootstrapCreationFileTime = $null; bootstrapSession = $null
     invocationSha256 = $InvocationSha256; controllerPid = $null; controllerStartUtc = $null
     controllerExitObserved = $false; controllerExitCode = $null; controllerTerminationRequested = $false
     normalCompletion = $false; safetyStop = $true; windowsResultSha256 = $null
-    readySha256 = $null; replySha256 = $null; observedCounter = $null; deadlineCounter = $null; failureType = $null
+    readySha256 = $null; replySha256 = $null; observedCounter = $null; deadlineCounter = $null; failureType = $null; failureDiagnostic = $null
 }
 try {
     $self = [Diagnostics.Process]::GetCurrentProcess()
@@ -99,6 +128,7 @@ try {
         $result.bootstrapCreationFileTime = $self.StartTime.ToUniversalTime().ToFileTimeUtc().ToString()
         $result.bootstrapSession = $self.SessionId
     } finally { $self.Dispose() }
+    $bootstrapPhase = 'bindings'
     $authority = Read-BootstrapJson "$action\authority.json" $AuthoritySha256
     $invocation = Read-BootstrapJson "$action\invocation.json" $InvocationSha256
     $start = Read-BootstrapJson "$action\started.json" $ReservationSha256
@@ -112,6 +142,7 @@ try {
         $start.preparationCharge -ne 0 -or $start.buildTestCharge -ne 0 -or $start.reservedProcessScenarios -ne 1) {
         throw 'Original bootstrap reservation join changed'
     }
+    $bootstrapPhase = 'source-validation'
     if ((Get-BootstrapHash (Read-BootstrapBytes $PSCommandPath)) -cne $authority.components.bootstrap.sha256) {
         throw 'Original bootstrap source changed'
     }
@@ -119,13 +150,17 @@ try {
     if ((Get-BootstrapHash (Read-BootstrapBytes $controllerPath)) -cne $authority.components.controller.sha256) {
         throw 'Original controller source changed'
     }
+    $bootstrapPhase = 'prior-output'
     foreach ($name in @('controller-exit.json', 'controller-exit.json.pending', 'windows-result.json',
-                         'windows-result.json.pending', 'clock-ready.json', 'clock-remaining.json', 'cancel')) {
+                         'windows-result.json.pending', 'controller-startup-failure.json',
+                         'controller-startup-failure.json.pending', 'clock-ready.json',
+                         'clock-remaining.json', 'clock-remaining.json.pending', 'cancel')) {
         if (Test-Path -LiteralPath "$action\$name") { throw 'Prior controller output or cancellation exists' }
     }
     if (-not [Diagnostics.Stopwatch]::IsHighResolution -or $bootstrapWatch.ElapsedMilliseconds -ge 2400000) {
         throw 'Original bootstrap clock unavailable or expired'
     }
+    $bootstrapPhase = 'controller-setup'
     $info = [Diagnostics.ProcessStartInfo]::new()
     $info.FileName = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
     $info.Arguments = '-NoLogo -NoProfile -NonInteractive -File "' + $controllerPath + '" -ActionName ' + $ActionName +
@@ -142,7 +177,9 @@ try {
     $controller = [Diagnostics.Process]::new()
     $controller.StartInfo = $info
     Assert-BootstrapBudget
+    $bootstrapPhase = 'controller-create'
     if (-not $controller.Start()) { throw 'Original Windows controller creation failed' }
+    $bootstrapPhase = 'controller-identity'
     [void]$controller.Handle
     $result.controllerPid = $controller.Id
     $result.controllerStartUtc = $controller.StartTime.ToUniversalTime().ToString('o')
@@ -150,21 +187,26 @@ try {
     $readyBytes = $null
     $replyBytes = $null
     while ($null -eq $replyBytes) {
+        $bootstrapPhase = 'clock-wait'
         if ($bootstrapWatch.ElapsedMilliseconds -ge $handshakeEnd -or (Test-Path -LiteralPath "$action\cancel")) {
             throw 'Original bootstrap clock handshake failed'
         }
         if ($controller.HasExited) { throw 'Original controller exited before clock handoff' }
         if (Test-Path -LiteralPath "$action\clock-ready.json") {
+            $bootstrapPhase = 'clock-ready-read'
             $readyBytes = Read-BootstrapBytes "$action\clock-ready.json" 4096
         }
         if ($null -ne $readyBytes -and (Test-Path -LiteralPath "$action\clock-remaining.json")) {
+            $bootstrapPhase = 'clock-reply-read'
             $candidate = Read-BootstrapBytes "$action\clock-remaining.json" 4096
             if ($candidate.Length -gt 0 -and $candidate[$candidate.Length - 1] -eq 10) { $replyBytes = $candidate }
         }
         Start-Sleep -Milliseconds 25
     }
+    $bootstrapPhase = 'clock-decode'
     $ready = [Text.UTF8Encoding]::new($false, $true).GetString($readyBytes) | ConvertFrom-Json
     $reply = [Text.UTF8Encoding]::new($false, $true).GetString($replyBytes) | ConvertFrom-Json
+    $bootstrapPhase = 'clock-validation'
     if ($ready.schema -cne 'final-publish-clock-ready-v1' -or $ready.action -cne $ActionName -or
         $ready.reservationSha256 -cne $ReservationSha256 -or $ready.invocationSha256 -cne $InvocationSha256 -or
         $ready.endpoint -cne $start.endpoint -or $ready.controllerPid -ne $controller.Id -or
@@ -175,12 +217,14 @@ try {
         $reply.endpoint -cne $start.endpoint -or $reply.readySha256 -cne (Get-BootstrapHash $readyBytes) -or
         ($reply.remainingMilliseconds -isnot [int] -and $reply.remainingMilliseconds -isnot [long]) -or
         $reply.remainingMilliseconds -le 0 -or $reply.remainingMilliseconds -gt 1900000) { throw 'Original bootstrap clock binding changed' }
+    $bootstrapPhase = 'clock-deadline'
     $counter = [decimal]$ready.windowsReadyCounter + [Math]::Floor(([decimal]$reply.remainingMilliseconds * [decimal]$ready.windowsClockFrequency) / 1000) - 1
     if ($counter -gt [long]::MaxValue -or $counter -le 0) { throw 'Invalid original bootstrap deadline' }
     $deadlineCounter = [long]$counter
     $result.deadlineCounter = $deadlineCounter
     $result.readySha256 = Get-BootstrapHash $readyBytes
     $result.replySha256 = Get-BootstrapHash $replyBytes
+    $bootstrapPhase = 'controller-exit-observation'
     while (-not $controller.HasExited) {
         if ([Diagnostics.Stopwatch]::GetTimestamp() -ge $deadlineCounter -or $bootstrapWatch.ElapsedMilliseconds -ge 2400000 -or
             (Test-Path -LiteralPath "$action\cancel")) { throw 'Original Windows controller exit not observed within its clock' }
@@ -191,6 +235,7 @@ try {
     $result.observedCounter = [Diagnostics.Stopwatch]::GetTimestamp()
     if ($result.controllerExitCode -ne 0 -or $result.observedCounter -ge $deadlineCounter -or
         $bootstrapWatch.ElapsedMilliseconds -ge 2400000 -or (Test-Path -LiteralPath "$action\cancel")) { throw 'Original controller failed or exited late' }
+    $bootstrapPhase = 'completion-validation'
     $windowsBytes = Read-BootstrapBytes "$action\windows-result.json" 65536
     $windows = [Text.UTF8Encoding]::new($false, $true).GetString($windowsBytes) | ConvertFrom-Json
     if ($windows.schema -cne 'final-publish-windows-result-v1' -or $windows.reservationSha256 -cne $ReservationSha256 -or
@@ -205,12 +250,19 @@ try {
     $normal = $true
 } catch {
     $result.failureType = $_.Exception.GetType().FullName
+    $result.failureDiagnostic = Get-BootstrapFailure $_ $bootstrapPhase
     $normal = $false
 } finally {
     # A late zero exit cannot erase failure. Closing this retained Process object
     # releases local handles only; it does not terminate the controller or Job.
     if ($null -ne $controller) {
-        try { $controller.Dispose() } catch { $normal = $false; $result.failureType = $_.Exception.GetType().FullName }
+        try { $controller.Dispose() } catch {
+            $normal = $false
+            if ($null -eq $result.failureType) {
+                $result.failureType = $_.Exception.GetType().FullName
+                $result.failureDiagnostic = Get-BootstrapFailure $_ 'controller-dispose'
+            }
+        }
     }
     Assert-BootstrapBudget
     $result.normalCompletion = $normal

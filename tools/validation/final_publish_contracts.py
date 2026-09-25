@@ -4,7 +4,7 @@ The literal verifies immutable source before import and pins the completed
 external authority envelope. A descriptor alone does not grant execution.
 """
 
-DRAFT_ONLY = False
+DRAFT_ONLY = True
 CORE_CSC_HISTORY_ONLY = False
 COMPILER_NATIVE_INPUTS_HISTORY_ONLY = False
 if CORE_CSC_HISTORY_ONLY and COMPILER_NATIVE_INPUTS_HISTORY_ONLY:
@@ -3183,6 +3183,29 @@ def admitted_reservation(deadline, began, cancelled, *, reviewed_authority, diag
         os.close(fd)
 
 
+def publish_clock_reply(owned, data, deadline, cancelled):
+    """Expose the reply only after its sole writer has closed; retain both names."""
+    if not isinstance(data, bytes) or not 0 < len(data) <= 4096 or not data.endswith(b'\n'):
+        fail('Invalid bounded clock reply')
+    budget(deadline, cancelled)
+    pending = owned / 'clock-remaining.json.pending'
+    reply = owned / 'clock-remaining.json'
+    write_new(pending, data, deadline=deadline)
+    budget(deadline, cancelled)
+    # link is exclusive at the destination, unlike rename/replace on Linux.
+    # Readers can now open a complete file without overlapping its write handle.
+    # Retain the pending alias: deleting it after publication can conflict with
+    # a Windows reader's FileShare.Read handle. No fallback or retry is allowed.
+    os.link(pending, reply, follow_symlinks=False)
+    budget(deadline, cancelled)
+    fd = os.open(owned, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    budget(deadline, cancelled)
+
+
 def exchange_clock(binding, process, deadline, cancelled):
     owned = binding['owned']
     end = min(deadline, time.monotonic() + 20.0)
@@ -3210,7 +3233,7 @@ def exchange_clock(binding, process, deadline, cancelled):
     reply = {'schema': 'final-publish-clock-remaining-v1', 'action': binding['start']['number'],
              'reservationSha256': binding['reservationSha256'], 'invocationSha256': binding['invocationSha256'],
              'endpoint': binding['start']['endpoint'], 'readySha256': sha(raw), 'remainingMilliseconds': left}
-    write_new(owned / 'clock-remaining.json', compact(reply), deadline=deadline)
+    publish_clock_reply(owned, compact(reply), end, cancelled)
     budget(end, cancelled)
     binding['clock'] = {'ready': ready, 'readySha256': sha(raw), 'replySha256': sha(compact(reply)),
                         'deadlineCounter': ready['windowsReadyCounter'] + left * ready['windowsClockFrequency'] // 1000 - 1}
@@ -3302,16 +3325,16 @@ def original_completion(binding, proxy_exit, deadline, cancelled):
                      'bootstrapPid', 'bootstrapCreationFileTime', 'bootstrapSession',
                      'controllerExitObserved', 'controllerExitCode', 'controllerTerminationRequested',
                      'normalCompletion', 'safetyStop', 'windowsResultSha256', 'readySha256', 'replySha256',
-                     'observedCounter', 'deadlineCounter', 'failureType')
+                     'observedCounter', 'deadlineCounter', 'failureType', 'failureDiagnostic')
     keys(completion, expected_keys)
     ready = binding['clock']['ready']
-    fixed = {'schema': 'final-publish-controller-exit-v2', 'reservationSha256': binding['reservationSha256'],
+    fixed = {'schema': 'final-publish-controller-exit-v3', 'reservationSha256': binding['reservationSha256'],
              'invocationSha256': binding['invocationSha256'], 'controllerPid': ready['controllerPid'],
              'controllerStartUtc': ready['controllerStartUtc'], 'controllerExitObserved': True,
              'controllerExitCode': 0, 'controllerTerminationRequested': False,
              'normalCompletion': True, 'safetyStop': False, 'readySha256': binding['clock']['readySha256'],
              'replySha256': binding['clock']['replySha256'], 'deadlineCounter': binding['clock']['deadlineCounter'],
-             'failureType': None}
+             'failureType': None, 'failureDiagnostic': None}
     if any(type(completion[k]) is not type(v) or completion[k] != v for k, v in fixed.items()):
         fail('Actual original Windows controller completion is unestablished')
     if integer(completion['observedCounter'], 1) >= binding['clock']['deadlineCounter']:
