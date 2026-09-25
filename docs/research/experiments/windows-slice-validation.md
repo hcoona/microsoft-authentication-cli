@@ -20032,8 +20032,8 @@ this public table records only reviewable repository source.
 | tools/validation/run_windows_wsl_observation.py | 67438 | 1553ec55b1d4f28af966fc4553d27c9fc423f9392e55d868fcf2303642cadf62 |
 | tools/validation/WindowsWslObserver.cs | 63227 | 355ffacbd73c46228fcb0bc1db324645c5c6156aa45dd2fdaca08fa6c3d8d3c4 |
 | tools/validation/run_windows_wsl_observer_build.py | 20388 | dd8b5870f6b69ee66002948e0458506c5cc7e519c3b77aa95bc07a4bb65badaa |
-| tools/validation/Invoke-WindowsManagedBuild.ps1 | 21340 | ef221b5225b175205be085e75cc07d09be93f06bfdbfefaeb185da47c4b7124b |
-| tools/validation/run_windows_managed_build.py | 47231 | 713962201af1d9f7d0e6c08cb74677702e5b3d9625ad6a5ed7a5d6f4f7f5e9a5 |
+| tools/validation/Invoke-WindowsManagedBuild.ps1 | 21342 | 90d3ddd561f2f111a2b525bd7e35a41827a29d1cdf6e240f31d7b2d8f46740a8 |
+| tools/validation/run_windows_managed_build.py | 47233 | 4aa153410f2823eb49ae5772bd7dc5efb6fc8e70a5d969f341ccbece63f30660 |
 
 ### Exact category reservation and ordering
 
@@ -20267,7 +20267,16 @@ Ordinary SDK writes remain in the new dedicated trees; no operating-system disk
 quota is claimed. Exact source owns the remaining finite receipt/cancel limits.
 
 Retain first cause and separate cancellation/persistence errors, all partial
-files and original evidence. Only the normal Job owns Windows termination.
+files and original evidence. The phase result is `restore-result.json` or
+`build-result.json`; the aggregate controller result is `managed-result.json`.
+These are distinct exclusive outputs. The caller joins the phase receipt to the
+aggregate's single phase and validates aggregate completion separately. Exact
+output collectors must select both receipts and their distinct pending paths.
+Earlier originals retain their admitted filenames and evidence; this correction
+does not replay a restore or change its source/package inputs. A later build may
+reuse an independently accepted restore with unchanged input bytes and absolute
+paths, after refreshing its source and exact-call admissions.
+Only the normal Job owns Windows termination.
 Success requires original zero root exit, complete EOF, Job activeProcesses zero,
 totalProcesses within 2..32 and new cgroup empty/removal. The process-total range
 is an outcome bound, not an exact compiler topology prediction. Proxy exit is

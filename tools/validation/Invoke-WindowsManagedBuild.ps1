@@ -403,7 +403,7 @@ try {
         Save-PhaseCapture
         if (-not $result.passed) { Request-OriginalJobCancellation }
         $result.elapsedMilliseconds = $watch.ElapsedMilliseconds
-        Save-NewJson 'build-result.json' $result
+        Save-NewJson 'managed-result.json' $result
     } catch {
         $result.passed = $false
         $result.finalizationFailureType = $_.Exception.GetType().FullName

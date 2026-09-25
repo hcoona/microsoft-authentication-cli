@@ -491,7 +491,7 @@ def validate_journal(raw, a, stdout, stderr):
 
 
 def managed_evidence(root, a, roles, budget, controller):
-    result = decode(budget.read(root / 'build-result.json', 32768)[0])
+    result = decode(budget.read(root / 'managed-result.json', 32768)[0])
     operation = a['suite']
     require(set(result) == {'schema', 'authoritySha256', 'sourceCommit', 'operation', 'phases', 'passed',
             'cancellationRequested', 'cancellationMarkerConfirmed', 'failureType', 'failureLine',
