@@ -130,5 +130,77 @@ class ReadbackTests(unittest.TestCase):
                 budget.read_created_copy(None, 1024, identity, payload)
 
 
+class PinDiagnosticTests(unittest.TestCase):
+    def setUp(self):
+        self.payload = b'abc'
+        self.identity = [1, 2, stat.S_IFREG | 0o600, 1000, 1000, 3, 100, 100, 1]
+        self.pin = {'path': '/unretained-input-path', 'bytes': 3,
+                    'sha256': hashlib.sha256(self.payload).hexdigest(),
+                    'identity': self.identity.copy()}
+        now = time.monotonic_ns()
+        self.budget = NS['Budget'](now, now + 60_000_000_000, now + 70_000_000_000)
+        self.budget.reads = 37
+        self.budget.read = Mock(return_value=(self.payload, self.identity))
+
+    def failure(self):
+        with self.assertRaisesRegex(Failure, 'Admitted descriptor changed') as caught:
+            self.budget.pin(self.pin, 1024)
+        result = NS['failure_identity'](caught.exception)
+        self.assertLessEqual(len(NS['encode'](result)), 2048)
+        self.assertEqual(result['pinObservation']['readOrdinal'], 37)
+        self.assertNotIn('readObservation', result)
+        self.assertNotIn(self.pin['path'], NS['encode'](result).decode('ascii'))
+        self.budget.read.assert_called_once_with(Path(self.pin['path']), 1024)
+        return result['pinObservation']
+
+    def test_length_mismatch_preserves_digest_short_circuit(self):
+        self.pin['bytes'] = 2
+        with patch.dict(NS, {'digest': Mock(side_effect=AssertionError('Must not hash'))}):
+            observation = self.failure()
+        self.assertEqual((observation['expectedBytes'], observation['returnedBytes']), (2, 3))
+        self.assertFalse(observation['lengthMatches'])
+        self.assertIsNone(observation['digestMatches'])
+        self.assertIsNone(observation['identityMatches'])
+
+    def test_digest_mismatch_retains_boolean_without_hash_or_payload(self):
+        self.pin['sha256'] = '0' * 64
+        observation = self.failure()
+        self.assertTrue(observation['lengthMatches'])
+        self.assertFalse(observation['digestMatches'])
+        self.assertIsNone(observation['identityMatches'])
+        encoded = NS['encode'](observation)
+        self.assertNotIn(self.pin['sha256'].encode(), encoded)
+        self.assertNotIn(self.payload, encoded)
+
+    def test_identity_mismatch_retains_each_full9_operand(self):
+        self.pin['identity'][7] -= 1
+        observation = self.failure()
+        self.assertTrue(observation['digestMatches'])
+        self.assertFalse(observation['identityMatches'])
+        self.assertEqual(observation['expectedIdentity'], self.pin['identity'])
+        self.assertEqual(observation['observedIdentity'], self.identity)
+
+    def test_malformed_or_unbounded_expected_values_are_not_retained(self):
+        for value in ('private-descriptor-value', 1 << 128, True):
+            with self.subTest(value_type=type(value).__name__):
+                self.setUp()
+                self.pin['bytes'] = value
+                self.pin['identity'] = ['private-descriptor-value'] * 9
+                observation = self.failure()
+                self.assertIsNone(observation['expectedBytes'])
+                self.assertIsNone(observation['expectedIdentity'])
+                self.assertNotIn(b'private-descriptor-value', NS['encode'](observation))
+
+    def test_success_and_original_read_failure_are_unchanged(self):
+        self.assertEqual(self.budget.pin(self.pin, 1024), self.payload)
+        self.budget.read.assert_called_once_with(Path(self.pin['path']), 1024)
+        error = OSError('unretained-private-error')
+        self.budget.read.side_effect = error
+        with self.assertRaises(OSError) as caught:
+            self.budget.pin(self.pin, 1024)
+        self.assertIs(caught.exception, error)
+        self.assertNotIn('pinObservation', NS['failure_identity'](error))
+
+
 if __name__ == '__main__':
     unittest.main()
