@@ -343,19 +343,55 @@ their declared attempts. Existing account and external-effects exclusions and fu
 real-effects gates remain unchanged. The historical dispositions and the ETW exception
 end with the current grant and never transfer or expand automatically.
 
-The separate additional supplemental managed-build allocation adds only 0/1/0/1,
-giving current aggregate ceilings 36/148/30/303. Preparation host ceilings remain
-18 Linux and 18 Windows, and the ETW creation ceiling remains eleven. It explicitly
-extends each separate 0057, 0064, 0068, 0093, 0107 and 0110 historical disposition
-only to this singleton's existing credential-free effects on the same hosts.
-Preserve all earlier failures, charges, observations and protected reservations.
-Require independent acceptance of 0121's pre-admission, pre-dispatch failure and of
-the unchanged successful 0120 restore inputs before the new build's ordinary gates.
-No new lifetime uncertainty is accepted. The additional build requires its matching
-owner Wave decision and exact protocol, source, artifact, input, checkpoint and call
-acceptance. Its first submission spends the whole attempt, including failed start;
-no further correction attempt, refund, transfer, old-state observation or cleanup
-follows. No preparation, restore, publication, ETW, account or broader effect is added.
+The separate managed and controlled correction pool adds 3/19/0/76, giving current
+aggregate ceilings 39/166/30/378 and preparation host ceilings 18 Linux / 21 Windows.
+It provides the missing managed build plus three complete correction cycles' equivalent
+capacity, shared only among the exact managed and controlled operations in the protocol.
+At most three restores, nineteen build/test originals, 76 synthetic units and nine
+additional D0/D1/D2 ETW creation attempts belong to this new pool. Preserve every old
+charge and protected slot, including blocked paired builds, the existing controlled
+sequence and twelve later-product build/test slots. No old allocation transfers.
+
+A failed or partial original stops and remains fully charged. A separately numbered
+corrected original needs independent cause/lifetime disposition, accepted source and
+protocol repair, exact inputs/artifacts, current accounting and literal-call acceptance.
+Within this finite grant, an independently accepted correction does not by itself need
+another owner capacity approval. Preserve the accepted remaining success-path capacity;
+no blind replay, output overwrite, refund, clock reset, cleanup or new uncertainty follows.
+The first managed build retains accepted 0120 inputs and the independently disposed
+0121 pre-dispatch failure. A build that may have written obj/bin normally needs a fresh
+charged restore; any exception must establish permitted non-overwrite semantics and
+unchanged valid input lineage from already authorized evidence.
+
+Extend the six separate 0057, 0064, 0068, 0093, 0107 and 0110 dispositions only to this
+finite increment and its declared passive work on the same hosts. Preserve their original
+failures, observations and unresolved status, including noExperimentLive=false. Extend
+the same bounded private-memory/transient-data and sole-owned-session/buffer-persistence
+ETW disposition to nine added attempts, for twenty aggregate. Existing sequential
+observation, successful exact-artifact calibration, scoped outcome review and all other
+ownership, process, consumer, loss and evidence stops remain. No new owner risk request
+is required solely for the already accepted narrow persistence case.
+
+For at most 27 new intended-operation lineages, permit at most four separately admitted
+metadata passes per immutable lineage and four fixed-selection collectors per fresh
+terminated original. Source, nonce, action or inventory revisions do not reset the limit.
+The exact protocol preserves each recipe's stricter bounds and caps this at 108 metadata
+passes, 1.6875 GiB retained metadata and 6,480 seconds, and 108 collector passes,
+216 GiB collected payload and 32,400 seconds. These are cumulative maximum allowances,
+not expected usage or a replacement for per-pass arithmetic. Passive operations must
+remain independently classified at zero experiment units; no new process or tool runs.
+Retain prior and partial snapshots without overwrite, selection expansion, predicate
+weakening or baseline refresh. No historical collector or output is reopened.
+
+This grant permits independently reviewed narrow source/protocol corrections and its
+finite fresh owned stage versions within unchanged topology/effects; it creates no
+generic execution or discovery mechanism. Matching owner Wave acceptance and protocol
+review precede execution. Source-only review requires no experiment allocation. No new
+publication, helper/target, download, toolchain, account, WAM, credential, application or
+broker cache, installation, cleanup, signing or release effect is granted. Exhaustion or
+an expanded boundary requires a new decision; all dispositions end with this grant.
+
+
 
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
 selected-account session or secure-cache updates when the protocol declares that outcome.
