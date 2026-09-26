@@ -395,6 +395,8 @@ source or inventory cannot reset a lineage's limit. Preserve each recipe's stric
 per-pass bounds and the protocol's aggregate time/data limits, every failed/partial
 snapshot and original evidence. No historical collector, including 0120 or 0121, is
 reopened. No survey, rejected-predicate relaxation or baseline refresh is permitted.
+The separately stated public-cache prospective identity admission below is the sole
+additional exception; it changes no runtime comparison.
 
 Explicitly extend each separate 0057, 0064, 0068, 0093, 0107 and 0110 historical
 lifetime/interference disposition only to this finite pool and its declared passive
@@ -414,6 +416,28 @@ The pool adds no publication, helper kind, compiler target, download, toolchain,
 WAM, credential, application or broker cache, installation, signing or release effect.
 Exhausted capacity, a new uncertainty or an expanded effect still requires the applicable
 new owner decision. Proposed text authorizes no action before owner approval and merge.
+
+**Public-cache prospective identity admission after original 0124:** Authorize one
+prospective input admission for the existing fixed 1,764 public dependency-cache leaves
+used by the fresh managed restore. A separately admitted, payload-free metadata pass may
+supply their prospective ctime observations. Require each leaf's other eight identity
+fields to equal its original admitted descriptor, preserve its exact content length and
+SHA-256 expectation, and retain all original descriptors and failed observations.
+Only ctime may differ in this new admission. Its exact manifest, source, finite limits,
+result and prospective inventory require independent acceptance before a newly charged
+restore. Every later ordinary read still requires strict full9 and exact content.
+
+This is an explicit, bounded exception to the preceding baseline-refresh prohibition,
+not an acceptance of original 0124 or an explanation of the metadata change. Cover the
+whole existing cache manifest in one admission; do not expand it from later failures.
+Exclude the 58 detached-source inputs, 370 installed-tool inputs, launcher, historical
+restored trees and outputs. Use the existing immutable intended-operation lineage,
+remaining passive-pass allowance and correction pool; add no quota or new effects.
+The first independently accepted metadata snapshot fixes the sole prospective baseline;
+no later pass may replace it or supersede a contradictory observation. Preserve every
+partial or failed pass and all existing stop conditions. Accept matching safety and
+exact protocol amendments before observation or dependent execution. This exception
+ends with the current grant and does not transfer to another grant.
 
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13

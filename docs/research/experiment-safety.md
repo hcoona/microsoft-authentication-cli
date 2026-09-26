@@ -383,6 +383,24 @@ remain independently classified at zero experiment units; no new process or tool
 Retain prior and partial snapshots without overwrite, selection expansion, predicate
 weakening or baseline refresh. No historical collector or output is reopened.
 
+The Wave's separate public-cache prospective identity admission after original 0124
+permits one bounded exception to that baseline-refresh prohibition. It covers only the
+same 1,764 admitted public dependency-cache leaves for a fresh managed restore. A fixed,
+payload-free metadata pass may supply prospective ctime observations, provided every
+other identity field equals the original descriptor. Preserve the original descriptors,
+failures and content expectations; metadata alone establishes no content or restore
+success. Independently accept the exact manifest, source, finite observation and new
+prospective inventory. The first accepted snapshot fixes the sole new baseline; every
+later ordinary input read retains strict full9, exact length and SHA-256 checks.
+
+Keep this exception within the existing intended-operation lineage, passive-attempt
+limits and charged correction capacity. It adds no survey, payload read during metadata
+collection, cache repair, download, runtime-predicate relaxation or counter reset.
+Source inputs, installed tools, the launcher, historical restored trees and outputs are
+excluded. No later pass may replace the accepted baseline or supersede a contradictory
+observation. Require the owner-approved Wave and exact protocol amendment before this
+observation; all other evidence, lifetime and effects boundaries remain unchanged.
+
 This grant permits independently reviewed narrow source/protocol corrections and its
 finite fresh owned stage versions within unchanged topology/effects; it creates no
 generic execution or discovery mechanism. Matching owner Wave acceptance and protocol
