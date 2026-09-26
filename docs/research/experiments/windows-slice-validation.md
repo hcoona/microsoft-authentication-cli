@@ -21787,6 +21787,80 @@ Existing successful evidence can be reused only within its exact unchanged subje
 and prerequisite bindings. No generic new runner, compiler target or Windows helper
 is required or authorized by this amendment.
 
+### Original 0124 Cache Identity and One Prospective Admission
+
+Managed build 0123 completed successfully with an independently accepted scoped
+lifetime. Its fixed output selection omitted three required runtime DLLs. Full artifact
+acceptance remained withheld; the selected manifest cannot be expanded retrospectively.
+A fresh restore/build pair was prepared with the corrected future output selection.
+
+Original restore 0124 and its first fixed collector both returned exit one. The collector
+visited all 62 selectors, retained eight stable payloads totaling 527,638 bytes, and
+preserved missing success evidence. Its sealed snapshot is 739,546 bytes with SHA-256
+`10a3f2f208e2a690feaf23436fe1fc70434c5549a7f10e55739f7a2b98988c9e`.
+The original first-failure and final-failure receipts agree on the
+`Admitted descriptor changed` rejection during `original-materialization`.
+Read ordinal twenty joins the third admitted inventory row:
+`microsoft.applicationinsights/2.23.0/icon.png`, 1,322 bytes, SHA-256
+`90b24a7e875b276eb9b715bbb213d83046be250a4010d4b8a2b2d79f488e5295`.
+The retained observation shows matching length and digest, with only ctime differing
+from the admitted full9. It does not establish why ctime changed.
+
+Independent finding triage joined the exact source, input inventory, admission, original
+receipts and closed transports. Source ordering places this rejection before every
+subprocess-creation branch, including systemd, worker, launcher, Job and managed restore.
+No new lifetime unknown arose. Preserve the conservative failure flags, six historical
+lifetime unknowns and `noExperimentLive=false`; do not rewrite failure as success or infer
+global quiescence. The cancellation marker is a failure-handler file write, not evidence
+of a launched process. Both calls remain spent; the conditional build is blocked.
+
+The consumed restore charge is 1/0/0/1, leaving cumulative counts 31/109/6/175,
+preparations 12/18 Linux and 19/21 Windows, and new-pool capacity 2/17/0/73.
+Old protected capacity remains 6/40/0/130. The two new-pool collectors have reserved
+616,308,801 payload-cap bytes and 600 seconds; no new-pool metadata pass has run.
+These observations change neither the ceilings nor earlier charges.
+
+Under the separate owner-approved Wave and safety exception, prepare one prospective
+cache-input admission for the same intended operation. Use the exact 1,764 `cache` rows
+from original 0124's 2,192-row inventory, 1,238,471 bytes, SHA-256
+`31348e3d49ff0544e0e8e79981cb40c05201f4f5bd90f0c00b2a76608129c7ca`.
+Preserve each original path, role, length, digest and descriptor. Do not read the partial
+0124 copies, earlier restored trees or historical outputs to construct this admission.
+The 58 source and 370 installed rows remain unchanged and are not observation targets;
+the launcher remains outside this exception.
+
+Reuse the admitted payload-free, component-wise no-follow metadata mechanism. Fix all
+1,764 literal cache targets before the first pass; no discovery or selection expansion
+is permitted. Retain regular single-link type and strict identity stability during each
+observation. Before accepting a prospective descriptor, require device, inode, mode,
+owner, group, size, modification time and link count to equal that leaf's original
+descriptor. Only ctime may take the observed value. Reject missing, replaced, unstable,
+nonregular, multilink or otherwise changed inputs. Do not infer payload equality from
+metadata: the original SHA-256 remains an expectation that the future restore must
+validate in full before using or copying the input.
+
+Keep the immutable lineage `correction-pool-managed-restore-after-build0123-artifact-gap`.
+Use only its existing four-pass maximum and the global metadata allocation, without a
+new lineage or counter reset after failed original 0124. Each pass is separately
+admitted and durably consumed at zero experiment units, within 1,764 selected leaves,
+4 KiB retained metadata per leaf and sixty seconds including existing terminal reserves.
+Exact source/call admission must account for control and output framing, EOF probes,
+read/write counts, runtime bindings and all stricter mechanism limits. Preserve every
+partial snapshot at its independently admitted exclusive destination. A pass cannot
+supersede a contradictory observation. The first independently accepted snapshot fixes
+the sole prospective baseline; later passes cannot replace it.
+
+The subsequent fresh restore has a new action/root and its ordinary nonrefundable
+1/0/0/1 charge. Its inventory carries the original cache descriptor and accepted
+metadata provenance in the independent input review; the runtime descriptor has only
+the admitted prospective ctime difference. Do not change the managed caller or any
+strict full9/content predicate. All ordinary original and worker reads retain their
+existing comparisons and stop on drift. A failed or successful read grants no further
+prospective re-admission. The source, complete-cache/empty-feed recipe, dependency
+versions, fixed future output coverage, input acceptance, current checkpoint and exact
+call gates remain. No experiment or metadata pass is authorized before the matching
+Wave/safety/protocol amendment merges.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation
