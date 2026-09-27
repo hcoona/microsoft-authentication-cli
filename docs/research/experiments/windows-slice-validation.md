@@ -21957,6 +21957,121 @@ Further contradiction stops without replacement or readmission. Preserve origina
 0128 and its collector, consumed capacities and passive counters. The permitted v8
 source correction supplies neither a compile allocation nor exact execution admission.
 
+### Original 0129 Count Failure and Service Evidence Correction
+
+Original controlled compile 0129 and its sole fixed collector each returned exit one.
+The original ran once under the accepted v8 source and exact two-descriptor reuse
+admission. Its complete external transport retained seven empty chunks. The sealed
+collector snapshot is 3,513,280 bytes, SHA-256
+`4e7674ef697169bc7450c9915668afa4ccb79e67291cc80cd360298d41271eb4`.
+It visited all 88 selected paths, retaining 63 stable payloads and 25 absences without
+early termination or unstable payloads. Two required final Linux receipts were absent;
+the other 23 absences were optional. `complete=false` remains the correct collector
+outcome. Original outputs and the v8 stage are closed and intentionally retained.
+Neither call may be replayed, recollected or overwritten.
+
+All four prescribed compiler phases exited zero with complete captures. Compiler
+captures totaled 1,487 bytes, including warnings. The snapshot contains the four
+DLL/PDB pairs, four constructed apphosts, eight runtime templates and the construction
+template. These observations do not supply complete PE/PDB/source/reference/entrypoint,
+option, deployment or apphost acceptance. No artifact or dependent scenario is accepted.
+
+The normal launcher retained the exact nine-event journal, successful native transport,
+root exit zero, both EOFs, empty captures and zero active Job members. Its cumulative
+`TotalProcesses` was ten. The worker rejected the required exact value of five with
+`Original whole scenario Job completion`; it then retained its first failure and
+returned one. The Linux original rejected the nonzero service transport before its
+final cgroup check and success receipt. This explains the absent
+`service-cgroup-result.json` and `original-result.json`; neither may be reconstructed
+as a successful original outcome.
+
+Independent failure and scoped-lifetime triage has SHA-256
+`21bdae763e3a7c8a5b70d153966e97f48a896715a6da3a64746170aa77023677`.
+It accepts the original Windows named Job's observed completion. Linux owned-service
+completion is separately source/documentation-derived from the bound creation-time
+worker witness, original terminal failure, complete service-client transport and
+`systemd-run --wait --pipe`, `ExitType=cgroup`, `Restart=no` and control-group termination.
+The direct final cgroup receipt remains unavailable. This closes only 0129's owned
+lifetime question; it neither resolves the count mismatch nor proves current host-wide
+quiescence. Preserve the six historical unknowns, all original failure Booleans and
+`noExperimentLive=false`. No new lifetime-risk exception is needed or granted.
+
+The full 0/1/0/1 debit belongs to the correction pool. Cumulative counts are
+32/112/6/179, with Linux preparations 12/18 and Windows preparations 20/21. The
+correction pool retains 1/15/0/70; the existing controlled reservation retains
+0/4/0/22. Old protection including that controlled reservation remains 6/39/0/129;
+total protected capacity is 7/54/0/199, including twelve later-product build/test
+planning slots. The collector spent its separately admitted passive attempt and no
+experiment units. No failed charge is refunded or transferred.
+
+#### Source diagnosis and remaining count prerequisite
+
+Microsoft documents [TotalProcesses](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-jobobject_basic_accounting_information)
+as cumulative Job associations, including associations that fail because of a limit
+violation. It is distinct from the controller's explicit start count and the current
+`ActiveProcesses` field. The launcher's declared accounting layout matches that API.
+An active-process limit of 32 does not establish a cumulative process-creation limit.
+
+Both the retained launcher and the controller request `CREATE_NO_WINDOW` behavior.
+[Microsoft's console-host source](https://github.com/microsoft/terminal/blob/bb0541e7a972a1f9e39318c1f6b4e70347a86696/src/server/IoDispatchers.cpp#L229-L235)
+explicitly handles a connected client created with that flag by suppressing visible
+terminal handoff. This public source finding means that absence of a visible window
+is insufficient to exclude console-host activity. It is not a correspondence check
+against the installed Windows binary. Console-host activity remains a hypothesis for
+0129's additional associations: no retained identity or image establishes their actual
+roles or cause. Do not assert five console hosts, duplicate nested-Job accounting,
+antivirus activity or a structure-layout defect from the aggregate count alone.
+
+The exact-five/exact-twelve completion contract remains in force. Do not replace five
+with ten or import another recipe's range. Before another experimental original,
+independently establish a sufficient cause/disposition and accept its exact source and
+protocol remedy within the Wave's roles, topology and maximum effects. A diagnostic
+requiring new observations needs its own bounded protocol and admission. Any expanded
+helper, topology, effects or risk boundary needs the corresponding owner Wave decision.
+Source-only diagnosis does not require a new owner decision. Collected compiler outputs
+cannot by themselves admit the native batch or a direct scenario.
+
+#### Preserve original service evidence on a terminal failure
+
+The prospective inert Linux caller is 68,549 bytes, SHA-256
+`e02f39d2c35ae13c3603e59d4695eb323cf2e93c14a8d4e7c4e85608d6618a3e`.
+Its execution guard remains closed. This source correction changes only original
+service evidence retention; it does not activate a successor stage, change Windows
+source/artifacts, relax the Job predicate or admit another experiment.
+
+After the single service transport returns, preserve the first receipt/transport
+failure. A nonnegative terminal service-client exit, both EOFs and no capture or
+cancellation failure permit the existing exact worker-witness and owned-cgroup check
+even when the service returned nonzero or produced unexpected output. A negative,
+missing or incomplete termination does not permit this additional observation.
+Bind the witness to the same admission and literal unit; never survey another unit,
+process or cgroup. Read that cgroup's `cgroup.events` at most once, at the existing
+4,097-byte limit, with deadline checks before and after. Retain either observed
+`populated=0` or the original absence disposition. For a nonzero terminal exit, name
+absence `absent-after-terminal-service`; retain `absent-after-original-zero-exit` for
+zero exit. A populated, malformed, oversized or unreadable sample remains a failure.
+
+Use the existing single exclusive `service-cgroup-result.json` output and its same
+unit/cgroup/disposition fields. The original failure record may carry
+`serviceCgroupObservation`; if the sample or receipt fails, separately retain the
+bounded `serviceCgroupEvidenceFailure` identity. An observation does not promise its
+separate receipt was written. Rethrow the first service receipt/transport error after
+this evidence attempt, preserving it if evidence also fails. With no earlier error,
+evidence failure remains the original failure. Successful original acceptance still
+requires zero empty transport, the unchanged successful worker and current checkpoint.
+All failure, continuation and refund Booleans retain their conservative meanings.
+
+The evidence phase only shortens the existing deadline to at most fifteen seconds;
+it never resets the original or service clock. The successful path adds no reads or
+writes. A terminal failed service may reach the same single 65,536-byte witness read,
+single bounded cgroup sample and single 65,536-byte receipt reservation formerly
+reachable only on success. They remain inside the existing original evidence and
+2,048-read/1 GiB, 512-write/256 MiB bounds, before the separately reserved four
+terminal writes/256 KiB. There is no second sample, service operation, cleanup, retry,
+new process, passive collector or experiment debit. Exact future admission must include
+these reachable failure-path operations and original failure serialization in its
+capacity proof. This unexecuted source repair establishes no new runtime observation.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation
