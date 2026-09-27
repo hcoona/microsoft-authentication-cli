@@ -22149,6 +22149,47 @@ controlled-baseline-four-target-compile-v7 lineage and all passive-pass consumpt
 The six prior lifetime/interference decisions cover only the explicitly extended roles
 and unchanged capacity; every new uncertainty remains a stop.
 
+#### Implemented v9 compile correction
+
+The accepted compile-only console-host decision is implemented in the inert source
+below. The Python compile charge and matching PowerShell authority predicate are six;
+the compile Job completion expectation is ten. Native remains twelve for both charge
+and completion. All other result, ownership, capture, deadline and evidence predicates
+are unchanged, including the accepted original service-evidence failure repair.
+
+The next fixed stage is
+`C:\Temp\azureauth-windows-slice-108\confidential-checks-v9`.
+Rebind the caller stage constants and expected parent member, controller stage,
+four response paths and symbol maps, native `AcceptedFixtureInputs.Root`, all four
+response catalog digests, both embedded catalog pins and the source/response map
+atomically. The direct deployment remains v4. This stage is within the predetermined
+finite successor set; its source presence does not allocate or activate an original.
+
+| Source beneath `tools/validation/controlled-callers` | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `run_controlled_callers.py` | 68,550 | `cdf84cc607aab44f0bf84041216d76c32f77f92bb1b79a592a3d2c6358d24819` |
+| `Invoke-WindowsControlledCallers.ps1` | 26,462 | `16f50d30cf8756bcb96aee260eff6f3cd835870162c80476bfbe8de0cb7b7339` |
+| `source/native/AcceptedFixtureInputs.cs` | 12,387 | `3e7cc86e89bb0ded034955d9c79e3fb1e748f2742adc35d7008db0999f985410` |
+| `control/NativeCaller.rsp` | 20,679 | `7f2da568601fbd646bf14a81b53b61ab330ba61a1ad89158f30a5790908f334a` |
+| `control/DirectObserver.rsp` | 20,221 | `91e6afec30a568d3beb5152b5d2fc4e9bda08889cbcf4e93e8d81a37e361f831` |
+| `control/SyntheticSubject.rsp` | 21,117 | `281cee09e87f241b866d7dabc543155f12aeeeec36885861f1819d6966f6139e` |
+| `control/FixtureDriver.rsp` | 21,084 | `7ac278837c79e17afbb89cd840dea7b06bf93bfb9bf6d30ac337836ba6615abe` |
+| `control/controller-input-catalog.tsv` | 87,398 | `83761b4350c9dc43e4d468e5f8d2cf3feea7777d02ceaf56b9a82dfc82502860` |
+| `control/source-response-map.json` | 16,739 | `16b34dafad63bc67d32aeea3345e82fffddd61e4932c9512dfdc675972f4c7ac` |
+
+Both execution guards remain closed. Before a separately numbered compile, independently
+accept the exact source, unchanged public-input lineage and launcher artifact,
+prospective control materialization, current checkpoint, finite accounting and literal
+call. Preserve the immutable `controlled-baseline-four-target-compile-v7` lineage,
+the two already accepted cache descriptors and all consumed passive attempts. No
+current input, historical output, process or cache was observed by this source change.
+
+The source correction itself spends no experiment units. The next admitted compile
+retains the accepted 0/1/0/6 charge and protected-capacity calculation above. Preserve
+original 0129's failure, full historical 0/1/0/1 charge, spent v8 stage and collector;
+its artifacts remain unaccepted. This change makes no native/direct execution,
+artifact-provenance or real Windows acceptance claim.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation

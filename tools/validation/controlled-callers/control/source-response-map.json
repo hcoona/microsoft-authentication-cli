@@ -1,5 +1,5 @@
 {
-  "compileStagingRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-checks-v8",
+  "compileStagingRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-checks-v9",
   "directDeploymentRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-direct-v4",
   "directNonCompilerSources": [
     {
@@ -124,7 +124,7 @@
       "authoredSource": {
         "bytes": 12387,
         "path": "source/native/AcceptedFixtureInputs.cs",
-        "sha256": "f28548b91aac807029f0abfa257cedbf359c74a5a4b2ab40ac7e72c8dc7ef0fb"
+        "sha256": "3e7cc86e89bb0ded034955d9c79e3fb1e748f2742adc35d7008db0999f985410"
       },
       "stagedRelativePath": "source/native/AcceptedFixtureInputs.cs"
     },
@@ -325,7 +325,7 @@
       "response": {
         "bytes": 20679,
         "path": "control/NativeCaller.rsp",
-        "sha256": "11a559d4b968bfae4fa89e5d5eff8aed695ff2d7daef4495ed7bab68568af381"
+        "sha256": "7f2da568601fbd646bf14a81b53b61ab330ba61a1ad89158f30a5790908f334a"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",
@@ -366,7 +366,7 @@
       "response": {
         "bytes": 20221,
         "path": "control/DirectObserver.rsp",
-        "sha256": "c8a66b35469aa8ae49fe84f6676676dae842c2c48a3cb4157fab0f49741919af"
+        "sha256": "91e6afec30a568d3beb5152b5d2fc4e9bda08889cbcf4e93e8d81a37e361f831"
       },
       "stagedSourcesInResponseOrder": [
         "source/direct/Admission.cs",
@@ -402,7 +402,7 @@
       "response": {
         "bytes": 21117,
         "path": "control/SyntheticSubject.rsp",
-        "sha256": "5a142e9e652f99d99abf1b088513fef60ffb34a7f6c48d2c01d96ac4aea3cce6"
+        "sha256": "281cee09e87f241b866d7dabc543155f12aeeeec36885861f1819d6966f6139e"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",
@@ -447,7 +447,7 @@
       "response": {
         "bytes": 21084,
         "path": "control/FixtureDriver.rsp",
-        "sha256": "f40c51eb8cc2d7794a96fd1ef4dd330cc084aabf36e745fce93133d38168c8fc"
+        "sha256": "7ac278837c79e17afbb89cd840dea7b06bf93bfb9bf6d30ac337836ba6615abe"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",
