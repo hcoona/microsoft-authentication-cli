@@ -11,7 +11,7 @@ Set-StrictMode -Version 2
 
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $root = $PSScriptRoot
-$stageRoot = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v8'
+$stageRoot = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v9'
 $rootBound = $false
 $phase = 'authority'
 $child = $null
@@ -330,7 +330,7 @@ try {
         $authority.sourceCommit -cnotmatch '^[0-9a-f]{40}$' -or
         $authority.nonce -cnotmatch '^[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$' -or
         $authority.preparationCharge -ne 0 -or $authority.buildTestCharge -ne 1 -or
-        $authority.syntheticCharge -ne $(if ($authority.operation -ceq 'compile') { 1 } else { 12 }) -or
+        $authority.syntheticCharge -ne $(if ($authority.operation -ceq 'compile') { 6 } else { 12 }) -or
         $authority.exemptOuterPowerShellCount -ne 1 -or $authority.accountEffectsAdmitted -ne $false -or
         $authority.noExperimentLive -ne $false) { throw 'Unaccepted controlled authority' }
     foreach ($key in @('protocolSha256', 'checkpointSha256', 'checkpointAcceptanceSha256', 'sourceReviewSha256',
@@ -346,7 +346,7 @@ try {
     }
     $result.operation = $authority.operation; $result.sourceCommit = $authority.sourceCommit; $result.nonce = $authority.nonce
     [void](Hold-Control $PSCommandPath 65536 $authority.controllerSha256)
-    $catalogBytes = Hold-Control "$root\controller-input-catalog.tsv" 131072 '25fea4816092ef93a8bf3b65f4f5d95570c55cefd9e966dd5674c90650c0ef28'
+    $catalogBytes = Hold-Control "$root\controller-input-catalog.tsv" 131072 '83761b4350c9dc43e4d468e5f8d2cf3feea7777d02ceaf56b9a82dfc82502860'
     $catalog = [Text.UTF8Encoding]::new($false, $true).GetString($catalogBytes)
     $expected = [Collections.Generic.Dictionary[string,object]]::new([StringComparer]::Ordinal)
     $catalogLines = $catalog.TrimEnd([char]10).Split("`n")
