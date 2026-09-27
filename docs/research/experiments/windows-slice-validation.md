@@ -22072,6 +22072,83 @@ new process, passive collector or experiment debit. Exact future admission must 
 these reachable failure-path operations and original failure serialization in its
 capacity proof. This unexecuted source repair establishes no new runtime observation.
 
+### Prospective Controlled-Compile Console-Host Model
+
+This compile-only amendment requires the matching owner scope/accounting decision in
+Delivery Wave and experiment safety. It records a prospective source-based expectation,
+not an identification of original 0129's additional Job associations. Independent
+source-finding triage SHA-256
+`3137219cc18e1119ef94f63e1e05f4a8207383e0350f00fc63ba98b52e98dcbd`
+accepts this distinction and the proposal basis. Original 0129 remains failed under
+its original exact-five contract, fully charged 0/1/0/1, with its sole collector spent
+and its artifact outputs unaccepted. Its scoped-lifetime disposition is unchanged.
+
+The [Microsoft console-allocation specification](https://github.com/microsoft/terminal/blob/4e3f4406c9ba7e7f5da357852972e538e39b4b30/doc/specs/%237335%20-%20Console%20Allocation%20Policy.md#L103-L110)
+states that CREATE_NO_WINDOW does not inherit a console and spawns a new console
+host, like CREATE_NEW_CONSOLE except that the first connection requests an invisible
+window. That specification was [merged upstream](https://github.com/microsoft/terminal/pull/7337).
+The [Microsoft .NET Framework reference source](https://github.com/microsoft/referencesource/blob/ec9fa9ae770d522a5b5f0607898044b7478574a3/System/services/monitoring/system/diagnosticts/Process.cs#L2032-L2034)
+maps ProcessStartInfo.CreateNoWindow to this flag. The existing launcher uses the flag
+for PowerShell; the existing controlled adapter sets UseShellExecute=false and
+CreateNoWindow=true for each of its four sequential compiler starts.
+
+The future compile model therefore distinguishes:
+
+| Quantity | Prospective expectation | Evidence meaning |
+| --- | ---: | --- |
+| Explicit console processes | 5 | One PowerShell plus four fixed compiler starts |
+| OS-created console-host roles | 5 maximum | One per console allocation under the cited contract |
+| Successful original named-Job TotalProcesses | 10 | Aggregate expected outcome, independently reviewed |
+| ActiveProcesses at original completion | 0 | Owned Job completion observation |
+| Compile charge | 0/1/0/6 | One build/test phase, launcher plus five OS-host synthetic units |
+
+Rely on the documented process/console contracts within the existing workstation trust
+model. The cited allocation text does not itself establish named-Job association
+mechanics or individual process identities. Keep the unchanged creation-time named-Job
+binding, no breakaway, original root completion, complete capture and Linux owned-scope
+evidence. TotalProcesses remains cumulative and includes limit-violation associations;
+it does not prove the identities or successful creation of each counted process.
+An unexpected count, activity, output or other required-evidence failure remains a
+full-charge stop. The expectation cannot be adjusted from a new failed observation.
+Neither this model nor a matching total may be reported as a complete identity trace.
+No additional identity diagnostic is required solely to state this source-derived
+expectation; a stronger identity-level claim requires its own adequate evidence.
+
+This is the sole prospective exception to the earlier compile exact-five and 0/1/0/1
+rows. Native retains its existing exact-twelve and 0/1/0/12 contract; D0/D1/D2 and their
+ETW limits remain unchanged and retain all independent prerequisites. Do not infer
+native/direct helper acceptance, source correctness or runtime success from this
+compile model. It adds no new compiler target, authored helper, launcher artifact,
+creation mechanism, toolchain installation or account effect.
+
+After this scope amendment is accepted, prepare and independently accept the inert
+caller correction: compile synthetic charge six and aggregate expectation ten, retaining
+native values and all other predicates. Bind a permitted fresh unused compile stage
+across caller, controller, response files/path maps, catalogs and source map, as already
+required. Spent v8 and original 0129 remain closed. No current source is activated by
+this document; execution still requires every exact source/input/artifact/checkpoint,
+accounting, call and outcome gate. The unchanged launcher must retain its existing exact
+artifact/prospective-descriptor admission. No new observation, collector or baseline is
+performed to propose or accept this model.
+
+The current counters remain 32/112/6/179 and the correction pool remains 1/15/0/70.
+One separately admitted future compile would give 32/113/6/185 and pool 1/14/0/64.
+Old protected 6/39/0/129, including the existing native/direct 0/4/0/22 and twelve
+later-product build/test slots, remains untouched. Combined remaining capacity would
+be 7/53/0/193. This preserves one compile plus the currently allocated native/direct
+success path numerically; it does not accept those future source/effects or artifact
+prerequisites. No counter is changed by this proposal or its acceptance.
+
+At most eleven additional compile originals can fit the current 70 synthetic units
+at six each, before any other new-pool consumption or required reservation. The Wave
+also caps their new OS-host effects at 55. These are intersecting upper bounds, not
+reservations or automatic retries. Each failure stops; only a separately numbered,
+independently disposed and corrected original can consume unused capacity. Protect
+the then-current remaining path at each gate and preserve the immutable
+controlled-baseline-four-target-compile-v7 lineage and all passive-pass consumption.
+The six prior lifetime/interference decisions cover only the explicitly extended roles
+and unchanged capacity; every new uncertainty remains a stop.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation

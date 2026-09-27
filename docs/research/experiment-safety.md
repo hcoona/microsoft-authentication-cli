@@ -372,6 +372,27 @@ observation, successful exact-artifact calibration, scoped outcome review and al
 ownership, process, consumer, loss and evidence stops remain. No new owner risk request
 is required solely for the already accepted narrow persistence case.
 
+The matching compile-only owner Wave decision may explicitly include the documented
+OS console-host allocation caused by the existing CREATE_NO_WINDOW console launches.
+Limit this exception to one PowerShell and four compiler consoles, at most five
+incidental OS console hosts per separately admitted controlled compile and at most
+55 such hosts across eleven additional originals, further limited by unused correction
+capacity and the existing admission/lineage/stage bounds. Keep the unchanged normal
+launcher artifact and creation-time named Job; invoke no console host directly and
+introduce no authored helper. The source-derived ten-process expectation does not
+establish individual historical identities or a universal runtime guarantee.
+
+Each future compile spends 0/1/0/6 under the matching protocol. Preserve previous
+charges, old protected allocations, remaining-success-path capacity and every failed
+original, including 0129's unidentified associations. Extend only the six already
+accepted historical interference dispositions to these declared OS-host roles within
+unchanged ceilings; excuse no new ownership or termination uncertainty. A mismatch,
+incomplete capture or unproved owned completion stops the original. No current output
+or process is reopened, inspected or cleaned by this amendment. Native/direct scenarios,
+ETW, launcher replacement and all account, cache, credential and installation effects
+remain outside this exception. Require independent exact source/protocol and current
+input/artifact/checkpoint/call acceptance before any dependent execution.
+
 For at most 27 new intended-operation lineages, permit at most four separately admitted
 metadata passes per immutable lineage and four fixed-selection collectors per fresh
 terminated original. Source, nonce, action or inventory revisions do not reset the limit.

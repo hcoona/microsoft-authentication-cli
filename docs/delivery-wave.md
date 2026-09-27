@@ -461,6 +461,45 @@ the earlier ctime differences remains unknown. All other inputs, historical
 uncertainties and stop conditions remain unchanged. This scope ends with the
 current grant and does not transfer to another grant.
 
+**Controlled-compile console-host scope and accounting:** Authorize the existing
+four-target controlled compile to include at most five OS-created console-host
+processes per separately admitted original, one for the PowerShell console and one
+for each of the four compiler console launches. This is a compile-only exception
+to the no-additional-Windows-helper-kind and same-topology restrictions above.
+Keep the existing normal launcher artifact, creation-time named Job, creation flags,
+four compiler targets, commands, public runtime/toolchain, host/session and account
+boundary. No new authored helper or direct console-host invocation is included.
+
+Use the documented console-allocation contract as the source-derived prospective
+model: five explicit console processes and five OS console hosts, with expected
+successful named-Job aggregate total ten. This is an expectation subject to original
+outcome review, not a historical identity claim or a guarantee of platform behavior.
+Retain original completion, both EOFs, zero active Job members, Linux scoped completion
+and every ordinary mismatch, evidence and termination stop. Independently accept the
+matching safety/protocol and exact source correction before activation.
+
+Charge each future compile 0/1/0/6 in preparation/build-test/publication/synthetic
+order: one normal-launcher synthetic unit plus five OS-host units. Four compiler
+invocations remain the single build/test phase, and the sole outer PowerShell
+exemption does not extend to console hosts. Consume only unused correction-pool
+capacity, preserving all old allocations and required remaining-success-path capacity.
+Allow at most eleven additional compile originals and 55 associated OS console hosts
+under this exception, intersected with the stricter remaining pool, finite unused
+stages, lineage and exact-admission limits. This upper bound adds no attempt or quota;
+a failure still stops and requires separate cause/lifetime disposition and a reviewed
+correction before another original. No automatic retry is granted.
+
+Explicitly apply each of the six existing historical lifetime/interference decisions
+only to these bounded incidental OS-host roles within unchanged existing capacity.
+Preserve their original uncertainty and noExperimentLive=false. This accepts no new
+ownership or lifetime uncertainty. Preserve failed original 0129, its original full
+charge, unidentified additional associations, unaccepted outputs and spent collector.
+Do not retroactively identify its processes, waive its exact-five contract or reprice
+its charge. No native/direct helper or count change, launcher replacement, creation-flag
+change, ETW/identity diagnostic, old-state observation, cleanup, quota increase, account,
+cache, credential, installation, signing or release effect is included. This exception
+ends with the current grant and does not transfer to another grant.
+
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
 permitted interactive calls for the later real-environment acceptance proposal.
