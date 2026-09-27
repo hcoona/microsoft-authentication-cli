@@ -31,9 +31,9 @@ PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
 LAUNCHER_PROJECTION = PROJECTION / 'normal-launcher-dispatch-v1' / 'WindowsScriptJobLauncher.exe'
 CHARGES = {'compile': 1, 'native': 12}
-STAGE = PROJECTION / 'confidential-checks-v7'
-STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v7'
-CATALOG = (87398, 'ba96e46f4c70b508605ebef73e9f674b074adfa03704732aea1781dd62da779c')
+STAGE = PROJECTION / 'confidential-checks-v8'
+STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v8'
+CATALOG = (87398, '25fea4816092ef93a8bf3b65f4f5d95570c55cefd9e966dd5674c90650c0ef28')
 TARGETS = ('NativeCaller', 'DirectObserver', 'SyntheticSubject', 'FixtureDriver')
 SERVICE_SECONDS = 1200
 PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows-actions',
@@ -662,7 +662,7 @@ def checkpoint(a, budget, reserved=False):
             expected = sorted([*expected, a['action']])
         if reserved and role == 'windowsProjectionRoot':
             expected = sorted([*expected, 'named-fixtures-' + a['action'],
-                               *(['confidential-checks-v7'] if a['suite'] == 'compile' else [])])
+                               *(['confidential-checks-v8'] if a['suite'] == 'compile' else [])])
         require(names(path, 128, budget) == expected, 'Current parent membership changed')
     return before, charge, after
 

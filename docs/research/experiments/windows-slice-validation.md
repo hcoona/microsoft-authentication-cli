@@ -21861,6 +21861,102 @@ versions, fixed future output coverage, input acceptance, current checkpoint and
 call gates remain. No experiment or metadata pass is authorized before the matching
 Wave/safety/protocol amendment merges.
 
+### Original 0128 Failure and First Successor Compile Stage
+
+Original controlled compile 0128 failed during `original-materialization`. Its sole
+fixed collector also returned exit one, retaining all 88 selected-path observations:
+nine stable payloads, 55 required absences and 24 optional absences. The sealed snapshot
+is 274,116 bytes, SHA-256
+`0e8236660226c327451094efac3fbc61b3eb8eaa35f3b448210c59d5407761e0`.
+The original rejected input index 168 at read ordinal 357, the public runtime cache's
+`Microsoft.NETCore.App.deps.json`. Its 29,720 bytes and SHA-256
+`db6bf68420f350411629571d31aea9232f05e9464e0f48f306041efd0971615d` matched;
+only ctime differed from the admitted descriptor. This does not explain that change.
+
+Independent source-bound triage accepted this failure before every subprocess-creation
+branch, including systemd, worker, Windows launcher, PowerShell, Job and compiler.
+The triage record has SHA-256
+`fc567cbb00f16f541c926ce555f7f2fdd3ab6566fd8725cf39e16c956b638ee8`.
+It establishes no new harness-descendant lifetime unknown, not global quiescence.
+Preserve the original failure flags, all six historical unknowns and
+`noExperimentLive=false`. No compiler artifact was produced or accepted. Both calls
+are spent; their original outputs and partial stage remain closed and retained.
+
+The full 0/1/0/1 charge came from the existing controlled reservation. Cumulative
+counts are 32/111/6/178, with Linux preparations 12/18 and Windows preparations 20/21.
+The existing controlled reservation retains 0/4/0/22; the correction pool retains
+1/16/0/71. Together with old protected 6/35/0/107, total protected capacity is
+7/55/0/200. Preserve twelve later-product build/test planning slots. A successor
+compile would require its own 0/1/0/1 new-pool allocation and exact admission.
+
+The first permitted successor source fixes
+`C:\Temp\azureauth-windows-slice-108\confidential-checks-v8`. This replaces only the
+prospective compile/native stage binding above; original v7 is spent and cannot be
+reused, overwritten or cleaned. Change the Linux caller's two stage constants and
+expected parent member, the PowerShell stage constant, the four literal responses
+including their symbol path maps, and `AcceptedFixtureInputs.Root` together. Rebind
+the four response digests in the controller catalog, both embedded catalog pins and
+the public source/response map. Preserve all response ordering and relative roles.
+The direct deployment remains v4. No other compiler source, target, helper kind,
+runtime predicate, process topology or limit changes.
+
+The successor inert source bindings are:
+
+| Source beneath `tools/validation/controlled-callers` | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `run_controlled_callers.py` | 67,004 | `cf0c858568a3c68cbb0d5a2f9297fc5d8bdaa6b4fc101e97be5b2b17b2241496` |
+| `Invoke-WindowsControlledCallers.ps1` | 26,462 | `530694853b50fc3f4f96b43e05cd11db6e420cb419cf6ed3f8424185a93ec647` |
+| `source/native/AcceptedFixtureInputs.cs` | 12,387 | `f28548b91aac807029f0abfa257cedbf359c74a5a4b2ab40ac7e72c8dc7ef0fb` |
+| `control/controller-input-catalog.tsv` | 87,398 | `25fea4816092ef93a8bf3b65f4f5d95570c55cefd9e966dd5674c90650c0ef28` |
+| `control/source-response-map.json` | 16,739 | `0db47e521c4fa6d2e59b170c6d8a15486b7de843a789d057f738c68bef825748` |
+
+The exact source/input/checkpoint, source-map activation, final-call and outcome gates
+remain. This stage correction accepts no replacement cache descriptor and admits no
+successor execution. Resolve the prospective cache-input basis under the accepted
+Wave and safety policy before dependent admission. Preserve the original immutable
+`controlled-baseline-four-target-compile-v7` operation lineage and consumed passive
+attempts; a source or stage revision cannot reset them.
+
+#### Reuse of Two Already Accepted Cache Descriptors
+
+The matching Wave and safety amendments extend only consumption of the first
+after-0124 cache baseline to the existing
+`controlled-baseline-four-target-compile-v7` intended-operation lineage.
+Use exactly inputs 696/697 of accepted restore 0126 inventory
+SHA-256 `246772abf229ca649928dd8c4456617235f44e824067feb854f09ef83f10a001`,
+mapped to original 0128 controlled inventory inputs 168/169,
+SHA-256 `05e8379b55a86fb93cc46d0b2a2795ad07ac1b1de760c801ba68f36767ff7c95`.
+All input indices here are zero-based. The first accepted metadata snapshot has
+SHA-256 `1295dadf21e46c0a7112b2de72cfeb7c16a2669db2265ab3e996ea9833b7d9b6`;
+its independent acceptance has SHA-256
+`6abe93d65f904ca98ea47b0412158ebd11827032c07f862e68a39bd8386b922c`.
+Retain each original descriptor, that snapshot and its 0126 acceptance provenance.
+
+Both literal sources remain beneath the existing public-cache root's
+`microsoft.netcore.app.runtime.win-x64/10.0.12/runtimes/win-x64/lib/net10.0/`:
+
+| Leaf | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `Microsoft.NETCore.App.deps.json` | 29,720 | `db6bf68420f350411629571d31aea9232f05e9464e0f48f306041efd0971615d` |
+| `Microsoft.NETCore.App.runtimeconfig.json` | 54 | `31c8ce517cddc0deaceb26b5dff6ba5df55ac4e06e9afd0026e51faca23dc8a4` |
+
+The complete retained comparison found 358 shared paths among the 413 controlled
+inputs and 2,192 managed inputs. Only these two descriptors differ, only at ctime.
+The first matches the 0128 failed read; the second comes from the earlier accepted
+baseline and was not observed by 0128. This establishes no cause or future stability.
+
+A successor inventory may carry only these exact already accepted descriptors
+instead of the two stale descriptors. Keep original source paths, lengths, hashes
+and all eight non-ctime fields. Read no current input or original output merely to
+construct this join; no new metadata pass or baseline is needed or granted.
+Other cache, source, installed-tool, launcher, control and historical-output
+descriptors gain no substitution exception. Independently verify the complete
+inventory and provenance before accepting it. Every future original and worker
+read retains strict full9, exact length, SHA-256 and within-read stability checks.
+Further contradiction stops without replacement or readmission. Preserve original
+0128 and its collector, consumed capacities and passive counters. The permitted v8
+source correction supplies neither a compile allocation nor exact execution admission.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation
