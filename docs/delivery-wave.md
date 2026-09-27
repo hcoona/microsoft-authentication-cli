@@ -439,6 +439,28 @@ partial or failed pass and all existing stop conditions. Accept matching safety 
 exact protocol amendments before observation or dependent execution. This exception
 ends with the current grant and does not transfer to another grant.
 
+**Controlled compilation reuse of the accepted cache baseline:** Extend only
+consumption of the first independently accepted after-0124 public-cache baseline to
+the existing controlled-compile intended-operation lineage. Permit exactly the two
+same-path runtime configuration leaves, `Microsoft.NETCore.App.deps.json` and
+`Microsoft.NETCore.App.runtimeconfig.json`, mapped by the exact protocol from
+accepted restore 0126 inputs 696/697 to original controlled inputs 168/169.
+Reuse their already accepted descriptors unchanged; establish no new baseline.
+Preserve their original paths, content lengths, SHA-256 expectations, all eight
+non-ctime identity fields, and the original descriptors and failed observations.
+
+This exception extends neither the fixed cache selection nor observation authority.
+It adds no metadata pass, quota, download, effects, runtime-predicate relaxation or
+lineage reset. A separately numbered corrected original remains fully charged
+within the correction pool and requires independently accepted exact source,
+inventory, current checkpoint, permitted unused stage, call and outcome.
+All later reads require strict full9 and exact content; further contradictory
+observations stop without replacement or readmission. Preserve failed original
+0128, its full charge, spent v7 stage and scoped lifetime disposition. The cause of
+the earlier ctime differences remains unknown. All other inputs, historical
+uncertainties and stop conditions remain unchanged. This scope ends with the
+current grant and does not transfer to another grant.
+
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
 permitted interactive calls for the later real-environment acceptance proposal.

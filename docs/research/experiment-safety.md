@@ -401,6 +401,17 @@ excluded. No later pass may replace the accepted baseline or supersede a contrad
 observation. Require the owner-approved Wave and exact protocol amendment before this
 observation; all other evidence, lifetime and effects boundaries remain unchanged.
 
+The Wave's controlled-compilation reuse extension permits only the exact two
+same-path public runtime configuration descriptors already carried by accepted
+restore 0126 from that first baseline. Their exact protocol join to original
+controlled inputs 168/169 is required before successor input acceptance in the
+existing controlled-compile lineage. This reuses the sole baseline unchanged;
+it authorizes no new metadata, cache leaf, baseline, quota, effects, comparison
+relaxation or lineage reset. Preserve full9/content checks, original descriptors,
+failures and the unknown cause of the earlier ctime differences. Any further
+contradictory observation remains a stop without replacement or readmission.
+Require the matching Wave and protocol amendments before dependent admission.
+
 This grant permits independently reviewed narrow source/protocol corrections and its
 finite fresh owned stage versions within unchanged topology/effects; it creates no
 generic execution or discovery mechanism. Matching owner Wave acceptance and protocol
