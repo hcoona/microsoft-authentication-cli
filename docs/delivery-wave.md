@@ -461,44 +461,94 @@ the earlier ctime differences remains unknown. All other inputs, historical
 uncertainties and stop conditions remain unchanged. This scope ends with the
 current grant and does not transfer to another grant.
 
-**Controlled-compile console-host scope and accounting:** Authorize the existing
-four-target controlled compile to include at most five OS-created console-host
-processes per separately admitted original, one for the PowerShell console and one
-for each of the four compiler console launches. This is a compile-only exception
-to the no-additional-Windows-helper-kind and same-topology restrictions above.
-Keep the existing normal launcher artifact, creation-time named Job, creation flags,
-four compiler targets, commands, public runtime/toolchain, host/session and account
-boundary. No new authored helper or direct console-host invocation is included.
+**Controlled-path incidental console hosts:** Authorize the existing controlled
+compile, N1/N2/N3 native fixture batch, and direct D0/D1/D2 synthetic paths to
+include only the following incidental OS-created console-host roles. Preserve
+the existing normal launcher, compiled fixture artifacts, creation flags,
+authored process roles, public runtime/toolchain, host/session and account
+boundary. No authored helper or direct console-host invocation is added.
 
-Use the documented console-allocation contract as the source-derived prospective
-model: five explicit console processes and five OS console hosts, with expected
-successful named-Job aggregate total ten. This is an expectation subject to original
-outcome review, not a historical identity claim or a guarantee of platform behavior.
-Retain original completion, both EOFs, zero active Job members, Linux scoped completion
-and every ordinary mismatch, evidence and termination stop. Independently accept the
-matching safety/protocol and exact source correction before activation.
+| Existing operation | Initial WSL interop host roles outside the later experimental Job | Host roles inside the experimental Job | Expected successful Job aggregate | Full charge, preparation/build-test/publication/synthetic |
+| --- | ---: | ---: | ---: | --- |
+| Four-target controlled compile | 1 for the normal launcher | 5 for PowerShell and the four compilers | 10 | 0/1/0/7 |
+| N1/N2/N3 native fixture batch | 1 for the normal launcher | 2 for PowerShell and FixtureDriver | 14 | 0/1/0/15 |
+| Direct D0 calibration | 1 for the observer supervisor | 0 | 3 | 0/1/0/5 |
+| Direct D1 synthetic case | 2, for the observer supervisor and separately launched synthetic product | 0 | 1 | 0/1/0/5 |
+| Direct D2 synthetic case | 2, for the observer supervisor and separately launched synthetic product | 0 | 1 | 0/1/0/5 |
 
-Charge each future compile 0/1/0/6 in preparation/build-test/publication/synthetic
-order: one normal-launcher synthetic unit plus five OS-host units. Four compiler
-invocations remain the single build/test phase, and the sole outer PowerShell
-exemption does not extend to console hosts. Consume only unused correction-pool
-capacity, preserving all old allocations and required remaining-success-path capacity.
-Allow at most eleven additional compile originals and 55 associated OS console hosts
-under this exception, intersected with the stricter remaining pool, finite unused
-stages, lineage and exact-admission limits. This upper bound adds no attempt or quota;
-a failure still stops and requires separate cause/lifetime disposition and a reviewed
-correction before another original. No automatic retry is granted.
+These are source-derived prospective models using the documented console-allocation
+contract and pinned public WSL interop source, not observed individual identities
+or a claim that the installed WSL binary equals a public source revision.
+The initial interop hosts are created before the requested console application
+creates its experimental Job; do not add them to that Job's expected total.
+Keep the outer active limit 32, native nested limits 3/2/2 and direct nested
+limits 3/1/1 unchanged. The sole outer PowerShell charging exemption remains;
+every listed OS-host role consumes one synthetic unit.
 
-Explicitly apply each of the six existing historical lifetime/interference decisions
-only to these bounded incidental OS-host roles within unchanged existing capacity.
-Preserve their original uncertainty and noExperimentLive=false. This accepts no new
-ownership or lifetime uncertainty. Preserve failed original 0129, its original full
-charge, unidentified additional associations, unaccepted outputs and spent collector.
-Do not retroactively identify its processes, waive its exact-five contract or reprice
-its charge. No native/direct helper or count change, launcher replacement, creation-flag
-change, ETW/identity diagnostic, old-state observation, cleanup, quota increase, account,
-cache, credential, installation, signing or release effect is included. This exception
-ends with the current grant and does not transfer to another grant.
+Allow at most four future originals of each listed operation, intersected with
+the existing unused correction pool, protected allocations, finite unused
+stages, immutable operation lineages, ETW limits and exact admissions. This gives
+a maximum of twenty originals, 28 initial-interop host roles outside the later
+Jobs and 28 host roles inside those Jobs, before applying those stricter limits.
+The per-operation maximum leaves room for up to three corrected originals;
+it is not a jointly funded reservation for every maximum. No automatic retry,
+new compiler target or quota is granted.
+
+Fund the required remaining native/D0/D1/D2 success path from its protected
+0/4/0/22 allocation plus eight synthetic units of unused correction-pool
+capacity, for a total 0/4/0/30. Any further corrected original, including a
+controlled compile if separately needed and admitted, consumes its full listed
+charge from the unused correction pool. Preserve all other protected
+allocations and twelve later-product build/test slots. Recalculate affordability
+and the remaining required success path at every exact admission. A failed or
+partial start spends its full charge, stops work, and requires independent
+cause/lifetime disposition and a reviewed correction before another numbered
+original. No lineage, stage, passive-pass or clock reset follows.
+
+**Specific platform-host lifetime risk decision:** The repository owner accepts
+these exact, finitely bounded initial-interop console-host roles as
+platform-managed effects outside the experimental Jobs. The ordinary platform
+console lifecycle, together with the accepted WSL requested-process completion
+contract, is the permitted operating basis. Continue to prove completion of
+the explicitly launched applications, owned Jobs and Linux scope using the
+existing original evidence. That evidence does not establish each external
+console host's identity, exit time or bounded termination. Accept the residual
+possibility that only these OS-created hosts persist or interfere with later
+credential-free work in this grant. Retain that unmeasured disposition
+explicitly; no separate host survey, ETW diagnostic, containment redesign,
+foreign-service operation or cleanup is required or authorized by this decision.
+Any uncertainty about an explicitly launched application, owned Job or Linux
+scope still triggers the ordinary stop conditions. This is not a general
+exception for unowned descendants or other platform helpers.
+
+Explicitly apply each of the six existing 0057, 0064, 0068, 0093, 0107 and 0110
+historical lifetime/interference decisions only to the newly stated bounded
+OS-host roles within unchanged cumulative capacity. Preserve those separate
+uncertainties, every failed outcome and charge, every spent observation and
+noExperimentLive=false. Both these extensions and the specific platform-host
+decision end with this grant and do not transfer or expand automatically.
+
+Require matching safety/protocol amendments and independent exact source,
+artifact, input, checkpoint, finite-accounting, literal-call and outcome
+acceptance before dependent activation or execution. Preserve original clocks,
+complete capture/EOF obligations, zero active owned-Job members and Linux scoped
+completion. The control/accounting correction does not itself require a
+different C# artifact or authorize another compilation. Keep observed aggregate
+counts distinct from individual host identities, and keep the separately
+accepted evidence of earlier originals within its original limits.
+
+Preserve original 0129's failed outcome, full historical 0/1/0/1 charge, spent
+stage/collector and unaccepted outputs. Preserve original 0130's original
+0/1/0/6 charge and separately reviewed evidence without retroactive repricing,
+host identification or additional observation. This proposal does not turn
+either historical evidence or successful compilation into scenario acceptance.
+
+No launcher replacement, creation-flag or nested-limit change, authored helper,
+new diagnostic, old-state observation, cleanup, quota increase, download,
+toolchain, account, cache, credential, installation, signing or release effect
+is included. The exception covers only the listed controlled compile/native
+and direct synthetic paths; it does not grant effects for other managed builds,
+publication routes or future real-account/product acceptance.
 
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
