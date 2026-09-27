@@ -959,6 +959,8 @@ def original(a, began, deadline, budget):
     reserved_local = False
     stage = 'original-admission'
     capture = None
+    service_evidence = None
+    service_evidence_failure = None
     fd = os.open(direct(LINUX / 'action.lock'), os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK)
     try:
         require(stat.S_ISREG(os.fstat(fd).st_mode), 'Shared action lock file')
@@ -1021,28 +1023,49 @@ def original(a, began, deadline, budget):
         capture = transport(command, environment, str(local),
                             min(budget.deadline - 15_000_000_000,
                                 service_intent + (SERVICE_SECONDS + 10) * 1_000_000_000), budget)
-        write_new(local / 'service-transport.json', encode(capture), budget)
-        exact_transport(capture)
-        budget.deadline = min(budget.deadline, time.monotonic_ns() + 15_000_000_000)
-        stage = 'original-evidence'
-        witness = decode(budget.read(local / 'worker-started.json', 65536)[0])
-        require(witness['admissionSha256'] == digest(a['_raw']) and
-                witness['cgroup'].startswith('0::/') and
-                witness['cgroup'].endswith('/' + unit_name(a)), 'Original dedicated group witness')
-        group = witness['cgroup'][3:]
-        require('..' not in Path(group).parts, 'Dedicated group path')
-        events = Path('/sys/fs/cgroup') / group.lstrip('/') / 'cgroup.events'
+        service_error = None
         try:
-            with events.open('rb') as stream:
-                group_state = stream.read(4097)
-            require(len(group_state) <= 4096 and
-                    dict(line.split() for line in group_state.decode('ascii').splitlines()).get('populated') == '0',
-                    'Original dedicated group is populated')
-            group_disposition = 'observed-unpopulated'
-        except FileNotFoundError:
-            group_disposition = 'absent-after-original-zero-exit'
-        write_new(local / 'service-cgroup-result.json', encode({'unit': unit_name(a),
-                  'cgroup': group, 'disposition': group_disposition}), budget)
+            write_new(local / 'service-transport.json', encode(capture), budget)
+            exact_transport(capture)
+        except BaseException as error:
+            service_error = error
+        # A terminal failed service still needs its original scoped evidence.
+        # Incomplete transport cannot enter this path. Keep the first failure if
+        # the evidence read or its exclusive receipt write also fails.
+        try:
+            if (type(capture['exitCode']) is int and capture['exitCode'] >= 0 and
+                    capture['eof'] == ['stderr', 'stdout'] and
+                    capture['failure'] is None and capture['cancelFailure'] is None):
+                budget.deadline = min(budget.deadline, time.monotonic_ns() + 15_000_000_000)
+                if service_error is None:
+                    stage = 'original-evidence'
+                witness = decode(budget.read(local / 'worker-started.json', 65536)[0])
+                require(witness['admissionSha256'] == digest(a['_raw']) and
+                        witness['cgroup'].startswith('0::/') and
+                        witness['cgroup'].endswith('/' + unit_name(a)), 'Original dedicated group witness')
+                group = witness['cgroup'][3:]
+                require('..' not in Path(group).parts, 'Dedicated group path')
+                events = Path('/sys/fs/cgroup') / group.lstrip('/') / 'cgroup.events'
+                budget.check()
+                try:
+                    with events.open('rb') as stream:
+                        group_state = stream.read(4097)
+                    require(len(group_state) <= 4096 and
+                            dict(line.split() for line in group_state.decode('ascii').splitlines()).get('populated') == '0',
+                            'Original dedicated group is populated')
+                    group_disposition = 'observed-unpopulated'
+                except FileNotFoundError:
+                    group_disposition = ('absent-after-original-zero-exit' if capture['exitCode'] == 0 else
+                                         'absent-after-terminal-service')
+                budget.check()
+                service_evidence = {'unit': unit_name(a), 'cgroup': group, 'disposition': group_disposition}
+                write_new(local / 'service-cgroup-result.json', encode(service_evidence), budget)
+        except BaseException as error:
+            service_evidence_failure = failure_identity(error)
+            if service_error is None:
+                raise
+        if service_error is not None:
+            raise service_error
         result = decode(budget.read(local / 'worker-result.json', 65536)[0])
         require(result['passed'] is True and result['scopedJobQuiescent'] is True and
                 result['noExperimentLive'] is False, 'Original worker completion')
@@ -1064,6 +1087,10 @@ def original(a, began, deadline, budget):
                       'noExperimentLive': False, 'retainedLiveWorkOrUnknown': True,
                       'historicalLifetimeUnknown': HISTORICAL_UNKNOWN,
                       'continuationAllowed': False, 'capacityRefundAllowed': False}
+            if service_evidence is not None:
+                result['serviceCgroupObservation'] = service_evidence
+            if service_evidence_failure is not None:
+                result['serviceCgroupEvidenceFailure'] = service_evidence_failure
             if capture is not None:
                 result['transport'] = capture
                 if capture['failure'] is not None:
