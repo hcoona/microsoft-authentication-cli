@@ -20039,8 +20039,9 @@ this public table records only reviewable repository source.
 ### Exact category reservation and ordering
 
 Cumulative ceilings, including the [supplemental allocation](#supplemental-managed-and-controlled-caller-capacity)
-and [correction pool](#managed-and-controlled-correction-pool), are 39 preparation,
-166 build/test, 30 publication and 378 synthetic, with the existing 4 GiB public-download
+and [correction pool](#managed-and-controlled-correction-pool), followed by the
+[diagnostic continuation buffer](#native-diagnostic-continuation-and-finite-buffer),
+are 39 preparation, 166 build/test, 30 publication and 454 synthetic, with the existing 4 GiB public-download
 maximum unchanged. Preparation host ceilings are 18 Linux / 21 Windows. Preserve the original reservations below separately. At the accepted
 starting checkpoint, consumption is 11 Linux / 9 Windows. Exact source, activation,
 artifact, current checkpoint, protocol and original-call reviews remain mandatory;
@@ -21650,7 +21651,7 @@ Managed restore/build costs remain 1/0/0/1 and 0/1/0/1; the
 [grouped operation table](#controlled-path-console-host-accounting-and-lifetime)
 is the sole current price table for controlled operations.
 
-Aggregate ceilings become 39/166/30/378, with 18 Linux / 21 Windows preparations
+This pool initially sets aggregate ceilings 39/166/30/378, with 18 Linux / 21 Windows preparations
 and twenty ETW creation attempts. The new pool alone allows at most three restore
 originals and nineteen build/test originals, intersected with its 76 synthetic and
 nine ETW limits. These shared category ceilings, not three hard per-operation slots,
@@ -22250,7 +22251,7 @@ Starting after accepted PR #295, allow at most four originals per listed operati
 including failed or partial submissions: nominally twenty originals, 28 initial hosts
 outside Jobs and 28 hosts inside Jobs. Intersect these maxima with actual unused pools,
 protected remaining work, unused stages, immutable lineages, ETW limits and exact
-admissions. All twenty maxima would cost 0/20/0/148 and are not jointly funded.
+admissions. All twenty initial maxima would cost 0/20/0/148 and are not jointly funded.
 No automatic retry, lineage/stage/pass reset, new quota or clock renewal follows.
 
 After original 0130, cumulative counts are 32/113/6/185, Linux preparations 12/18 and
@@ -22260,7 +22261,8 @@ units. Other old protection stays 6/35/0/107, including twelve later-product bui
 slots. Combined protection remains 7/53/0/193. No cumulative charge changes.
 
 The external durable start record and independent finite-admission review must bind
-the operation, ordinal 1 through 4 since this amendment, full rate, cumulative inside
+the operation, ordinal since this amendment within its current per-operation maximum,
+full rate, cumulative inside
 and outside host-role allowances, actual pool balance, protected remaining path, and
 ETW/stage/immutable-lineage consumption. Join every intervening start through the
 existing exact checkpoint and call acceptance. Direct rates use this existing external
@@ -22628,12 +22630,77 @@ native input passes, fixed collector selection and enclosing evidence limits rem
 If initialization or final persistence fails before a batch record can be retained,
 the missing diagnostic remains an explicit limit; no fallback observation is implied.
 
-All execution guards remain closed. This change retains the occupied v11 source paths
-for review only; a future accepted finite unused stage, new compiled artifacts, exact
-admission and sufficient capacity are prerequisites to execution. No past failure is reclassified, no capacity is enlarged and no historical observation
-is reopened. Preserve all historical uncertainty, protected allocations and consumed counters. Validate this
-change with non-executing source/map/schema review and repository checks; compilation
-and real Windows behavior remain unvalidated until a separately admitted operation.
+All execution guards remain closed. The diagnostic-source acceptance retained occupied
+v11 paths for review only. The continuation below selects its prospective successor;
+new compiled artifacts, exact admission and sufficient accepted capacity remain
+prerequisites to execution. The diagnostic change itself reclassifies no past failure,
+enlarges no capacity and reopens no historical observation. Preserve historical
+uncertainty, protected allocations and consumed counters. Non-executing source/map/schema
+review and repository checks do not establish compilation or real Windows behavior.
+
+### Native Diagnostic Continuation and Finite Buffer
+
+Original 0135 remains a failed native batch. Its accepted retained evidence completed
+84 pure checks and zero native cases. An N1 supervisor identity was written, but that
+does not establish completed readback, resume or a specific inner cause. The original
+named Job and Linux scope have accepted bounded terminal dispositions; the six historical
+lifetime uncertainties and separately qualified outside-Job console hosts remain.
+No new observation or reclassification of original 0135 is needed for this continuation.
+Its outcome review has SHA-256
+`c64e07ca1fb25be616c7be8aa5c03691168becea43de582d65fc16d2934e2e3b`;
+independent diagnostic/capacity triage has SHA-256
+`0926d471f85814d322b93c0275efb90f7ea6e5695e2c660cabc7b98adc198fa2`.
+
+Use only the next permitted static compile stage `confidential-checks-v12`, with
+matching literals in both callers, all four responses, native accepted input root,
+source map and derived catalog pins. Stage v11 remains spent and retained. Direct
+deployment stays `confidential-direct-v4`. The 36 source mappings and four response
+descriptors bind the accepted first-failure diagnostics to this successor. Source
+preparation neither proves stage availability nor admits execution: exclusive creation
+and the ordinary exact gates still apply, with no survey or fallback stage selection.
+Original 0134 artifacts lack the diagnostic change and cannot substitute for compilation.
+
+At this checkpoint consumed preparation/build-test/publication/synthetic capacity is
+32/118/6/244, the correction pool is 1/10/0/12, and old protected capacity is
+6/38/0/122, including D0/D1/D2 0/3/0/15 and twelve later-product build/test slots.
+The current price table requires 0/2/0/22 for a compile/native pair, leaving a minimum
+shortfall of ten synthetic units. No protected allocation may cover that shortage.
+
+The matching owner-approved Wave and safety amendment add only 0/0/0/76, bringing
+aggregate ceilings to 39/166/30/454 and the correction pool to 1/10/0/88. The added
+units are restricted to compile/native operations. Four pairs cost 0/8/0/88: one
+necessary pair and three same-size contingency pairs. After one successful pair the
+pool would be 1/8/0/66; after all four it would be 1/2/0/0. Consumed counts after
+four pairs would be 32/126/6/332, or 32/129/6/347 after the separately protected
+successful D0/D1/D2 path. These are planning bounds, not execution reservations or
+predictions of success. Stop after sufficient evidence; do not spend unused buffer.
+
+Grouped consumption remains compile two, native three, D0/D1/D2 zero, outside-Job
+roles five and inside-Job roles sixteen. Replace only cumulative compile maximum four
+with six, native four with seven, and inside-role maximum 28 with 44. Keep total
+twenty, outside-role 28 and direct per-operation four, intersected with current funding
+and all other bounds. Four pairs would reach compile six, native seven and inside
+roles 44. Including one successful D0/D1/D2 path gives sixteen originals and eighteen
+outside roles. Maximum allowances are not all jointly funded or jointly reachable.
+
+No extra ETW or passive allowance is needed or granted. ETW consumption remains zero
+of twenty. Existing twelve collectors and two metadata passes remain spent. One
+collector per proposed original would bring collectors to twenty, before the three
+protected direct observations. Changed diagnostic content still needs exact finite
+output/collection arithmetic within the existing limits at each actual admission.
+Preserve immutable compile/native lineages and all per-lineage and per-original bounds.
+The existing finite range can cover v12 through v15; this source selects only v12.
+Every later successor still needs its exact accepted static source correspondence.
+
+Keep the named-Job/cgroup topology, normal launcher, four targets, native/direct roles,
+creation flags and successful Job totals unchanged. Only the two guarded category
+ceiling constants and the literal v12 bindings change here. The matching Wave alone
+owns extension of the existing historical and narrow OS-host risk dispositions; no
+new application, owned-Job or Linux lifetime exception follows. All execution guards
+remain closed. Use the existing combined review carrier, with compile admission/outcome
+before native admission/outcome. Each failed original stops for independent disposition
+and any supported correction. This buffer does not complete Issue #108's remaining
+product or real-account acceptance, or waive their separate evidence and effects gates.
 
 ### Future Passive Metadata and Collection
 
