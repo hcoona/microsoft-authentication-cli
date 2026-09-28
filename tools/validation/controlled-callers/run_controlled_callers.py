@@ -31,9 +31,9 @@ PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
 LAUNCHER_PROJECTION = PROJECTION / 'normal-launcher-dispatch-v1' / 'WindowsScriptJobLauncher.exe'
 CHARGES = {'compile': 7, 'native': 15}
-STAGE = PROJECTION / 'confidential-checks-v9'
-STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v9'
-CATALOG = (87398, '83761b4350c9dc43e4d468e5f8d2cf3feea7777d02ceaf56b9a82dfc82502860')
+STAGE = PROJECTION / 'confidential-checks-v10'
+STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v10'
+CATALOG = (87398, '50bbd5ab19025ec64cb340fe6d695f8442db0b83d1deefa7b8b67a751e5fd4df')
 TARGETS = ('NativeCaller', 'DirectObserver', 'SyntheticSubject', 'FixtureDriver')
 SERVICE_SECONDS = 1200
 PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows-actions',
@@ -577,7 +577,22 @@ def materialize_inputs(a, root, local, budget):
         write_new(fixture_path, raw, budget, 262144)
         closed = identity(fixture_path.lstat())
         copy, observed = budget.read(fixture_path, 262144)
-        require(copy == raw and observed == closed, 'Strict fixture-control copy')
+        content_matches = copy == raw
+        identity_matches = observed == closed if content_matches else None
+        if identity_matches is not True:
+            # Retain only the operands already held at the rejected comparison.
+            # Diagnostic construction cannot replace the original first cause.
+            observation = {'omitted': 'construction-failed'}
+            try:
+                observation = {
+                    'readOrdinal': budget.reads,
+                    'contentMatches': content_matches, 'identityMatches': identity_matches,
+                    'expectedBytes': len(raw), 'returnedBytes': len(copy),
+                    'expectedSha256': digest(raw), 'returnedSha256': digest(copy),
+                    'writeClosedIdentity': closed, 'readbackIdentity': observed}
+            except Exception:
+                pass
+            require(False, 'Strict fixture-control copy', pin_observation=observation)
         fixture = {'path': str(fixture_path), 'bytes': len(raw), 'sha256': digest(raw), 'identity': observed}
     else:
         fixture = None
@@ -662,7 +677,7 @@ def checkpoint(a, budget, reserved=False):
             expected = sorted([*expected, a['action']])
         if reserved and role == 'windowsProjectionRoot':
             expected = sorted([*expected, 'named-fixtures-' + a['action'],
-                               *(['confidential-checks-v9'] if a['suite'] == 'compile' else [])])
+                               *(['confidential-checks-v10'] if a['suite'] == 'compile' else [])])
         require(names(path, 128, budget) == expected, 'Current parent membership changed')
     return before, charge, after
 

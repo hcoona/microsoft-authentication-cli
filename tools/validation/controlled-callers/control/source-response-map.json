@@ -1,5 +1,5 @@
 {
-  "compileStagingRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-checks-v9",
+  "compileStagingRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-checks-v10",
   "directDeploymentRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-direct-v4",
   "directNonCompilerSources": [
     {
@@ -122,9 +122,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 12387,
+        "bytes": 12388,
         "path": "source/native/AcceptedFixtureInputs.cs",
-        "sha256": "3e7cc86e89bb0ded034955d9c79e3fb1e748f2742adc35d7008db0999f985410"
+        "sha256": "efe5d8bdb16000afbecdf9a45ee7b3a5435ac24c3d17382c15007b922ccdb505"
       },
       "stagedRelativePath": "source/native/AcceptedFixtureInputs.cs"
     },
@@ -323,9 +323,9 @@
       ],
       "referenceCount": 167,
       "response": {
-        "bytes": 20679,
+        "bytes": 20867,
         "path": "control/NativeCaller.rsp",
-        "sha256": "7f2da568601fbd646bf14a81b53b61ab330ba61a1ad89158f30a5790908f334a"
+        "sha256": "780bdd5584c2bcc9d7aec6e1f7c6040a46b03e9231020cb150c9bd677974efee"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",
@@ -364,9 +364,9 @@
       ],
       "referenceCount": 167,
       "response": {
-        "bytes": 20221,
+        "bytes": 20404,
         "path": "control/DirectObserver.rsp",
-        "sha256": "91e6afec30a568d3beb5152b5d2fc4e9bda08889cbcf4e93e8d81a37e361f831"
+        "sha256": "3583c013082e92c7d668f9ed61bce21f7961ab21fea7ede6bd78912bf51578a1"
       },
       "stagedSourcesInResponseOrder": [
         "source/direct/Admission.cs",
@@ -400,9 +400,9 @@
       ],
       "referenceCount": 167,
       "response": {
-        "bytes": 21117,
+        "bytes": 21309,
         "path": "control/SyntheticSubject.rsp",
-        "sha256": "281cee09e87f241b866d7dabc543155f12aeeeec36885861f1819d6966f6139e"
+        "sha256": "e88ff8ef9616a544814b3dad7eed28d931f4b5733b8ce1ef2483869d5069813a"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",
@@ -445,9 +445,9 @@
       ],
       "referenceCount": 167,
       "response": {
-        "bytes": 21084,
+        "bytes": 21276,
         "path": "control/FixtureDriver.rsp",
-        "sha256": "7ac278837c79e17afbb89cd840dea7b06bf93bfb9bf6d30ac337836ba6615abe"
+        "sha256": "fefed683f9b35f535f3a6fa97fb3452c9f7fdb30b18ceb20df574825094c8449"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",
