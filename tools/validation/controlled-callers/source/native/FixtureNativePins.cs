@@ -101,12 +101,19 @@ internal sealed class FixtureNativePins : IDisposable
         }
         catch{if(stream is not null)stream.Dispose();else handle.Dispose();throw;}
     }
-    internal byte[] Read(FixtureHeldFile file,int maximum)
+    internal byte[] Read(FixtureHeldFile file,int maximum,string? namedPath=null)
     {
         before();Need(file.Identity.Length<=maximum && Snapshot(file.Stream.SafeFileHandle)==file.Identity);
         file.Stream.Position=0;byte[] result=new byte[checked((int)file.Identity.Length)];int used=0;
         while(used<result.Length){before();int got=file.Stream.Read(result,used,result.Length-used);Need(got>0);used+=got;}
-        before();Need(file.Stream.ReadByte()==-1 && Snapshot(file.Stream.SafeFileHandle)==file.Identity);return result;
+        before();Need(file.Stream.ReadByte()==-1 && Snapshot(file.Stream.SafeFileHandle)==file.Identity);
+        if(namedPath is not null)
+        {
+            Canonical(namedPath);before();
+            using SafeFileHandle named=Open(namedPath,0x80,1,3,0x00200000);
+            RequireName(named,namedPath);Need(Snapshot(named)==file.Identity);before();
+        }
+        return result;
     }
     internal FixtureHeldFile CreatePinnedRecord(string path,byte[] bytes,Action checkTime)
         => CreatePinnedOutput(path,bytes,4096,checkTime);

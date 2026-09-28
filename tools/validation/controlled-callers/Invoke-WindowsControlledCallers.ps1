@@ -11,7 +11,7 @@ Set-StrictMode -Version 2
 
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $root = $PSScriptRoot
-$stageRoot = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v13'
+$stageRoot = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v14'
 $rootBound = $false
 $phase = 'authority'
 $child = $null
@@ -346,7 +346,7 @@ try {
     }
     $result.operation = $authority.operation; $result.sourceCommit = $authority.sourceCommit; $result.nonce = $authority.nonce
     [void](Hold-Control $PSCommandPath 65536 $authority.controllerSha256)
-    $catalogBytes = Hold-Control "$root\controller-input-catalog.tsv" 131072 '2ae8f6198bbdcf8789ec4b2f3009e519fc3f606d78a2a0bf5b85a20fcdc53e75'
+    $catalogBytes = Hold-Control "$root\controller-input-catalog.tsv" 131072 '7c42d54649a32d37c7ace9ade4df068d271bbd95f9706144d5720838075726c8'
     $catalog = [Text.UTF8Encoding]::new($false, $true).GetString($catalogBytes)
     $expected = [Collections.Generic.Dictionary[string,object]]::new([StringComparer]::Ordinal)
     $catalogLines = $catalog.TrimEnd([char]10).Split("`n")
