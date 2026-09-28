@@ -74,6 +74,11 @@ local fastSteps = new Mapping<String, Step> {
       )
     }
   }
+  ["controlled-caller-catalog-bindings"] {
+    check = new Command {
+      argv = List("uv", "run", "tools/check_controlled_caller_catalog.py")
+    }
+  }
 }
 
 local preCommitSteps = new Mapping<String, Step> {
