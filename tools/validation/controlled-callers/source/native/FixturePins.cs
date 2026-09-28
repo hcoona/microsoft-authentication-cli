@@ -124,8 +124,8 @@ internal static class FixtureDiagnostics
     internal static void Input(int ordinal){inputOrdinal=ordinal;}
     internal static void RejectBaseline(int line,int input)
     {
-        // Only the known supervisor baseline rejection reaches this failure-only path.
-        // Diagnostic read failures retain that rejection; they never become scenario evidence.
+        // A required cross-role comparison failed or could not complete.
+        // Map-read failures retain the binding location rather than inventing a differing field.
         First??=new(stage,Fault.Admission,FixtureCheckSource.Admission,line,FixturePinPhase.None,
             input,CaseOrdinal,SupervisorExit,null);
         throw new SafeFailure(Fault.Admission);
