@@ -122,6 +122,14 @@ internal static class FixtureDiagnostics
     internal static FixtureFailure? First { get; private set; }
     internal static void At(FixtureStage value,int input=-1){stage=value;inputOrdinal=input;}
     internal static void Input(int ordinal){inputOrdinal=ordinal;}
+    internal static void RejectBaseline(int line,int input)
+    {
+        // Only the known supervisor baseline rejection reaches this failure-only path.
+        // Diagnostic read failures retain that rejection; they never become scenario evidence.
+        First??=new(stage,Fault.Admission,FixtureCheckSource.Admission,line,FixturePinPhase.None,
+            input,CaseOrdinal,SupervisorExit,null);
+        throw new SafeFailure(Fault.Admission);
+    }
     internal static void Capture(Exception caught)
     {
         First??=new(stage,caught is SafeFailure safe?safe.Fault:Fault.Native,

@@ -22744,6 +22744,81 @@ metadata remains two passes and ETW zero. This source correction adds no capacit
 Accepted source/protocol and fresh exact admission precede the successor; its compile
 outcome must be accepted before dependent native execution.
 
+### Native Role-Binding Failure Localization
+
+Original 0137 compiled all four targets and its twenty artifact leaves were independently
+accepted. The compile had twelve warnings and zero errors; it was not warning-free.
+Original 0138 completed 84 pure rows and zero native cases. Its existing numeric failure
+record identifies RoleAdmission, Admission, and the compound created-role comparison in
+`AcceptedFixtureInputs.cs:109` at source `a05d60ddc9324c345e0f42ba358ed6c2feb96e1e`.
+N1 has a supervisor identity record, but no worker or completed case; N2/N3 did not run.
+
+The retained parent fields and source argument flow make a child baseline-digest mismatch
+the strongest explanation, but the child digest and native snapshots were not retained.
+No particular differing field, metadata cause, or incorrect identity algorithm has been
+established. Independent triage confirms the diagnostic gap, not a guessed behavior fix.
+The outcome review has SHA-256
+`0974840dba432def7e215906259dc562c56b8c736a3103190e577ee7165d36fe`;
+diagnostic-gap triage has SHA-256
+`6655eb67f7e0dd4e56cc969b7b9318bb51fa2687b01194e1c621119ee193767f`.
+The original named Job/root and Linux service have accepted forced-cleanup dispositions.
+This does not accept any native case or resolve the six historical or external OS-host
+qualifications. Original 0138 and its sole, incomplete collector remain spent.
+
+Separate the existing created-role predicates into individually located checks, retaining
+every comparison and its ordering. A supervisor whose computed baseline digest disagrees
+may make exactly one failure-only held payload read of its batch's already existing
+`records\<batchNonce>\native-baseline.json`. Workers keep their existing rejection and
+NCF1 behavior. Matching digests perform no added read. The diagnostic always rejects the
+scenario; it cannot substitute the parent map for the child's own admission baseline.
+
+Pin that fixed path with the existing canonical/ancestor, no-reparse, regular-file,
+single-link, length and held/named Windows identity checks, under the original clipped
+role deadline. Read at most 262,144 payload bytes plus one EOF probe; require stable held
+identity before/after and a final named-handle identity match. Authenticate the retained
+bytes against the digest in the already-held created-role record. Pin without a payload
+hash to avoid reading the map twice; the subsequent held read's SHA-256 comparison is
+mandatory. No catalog file is reopened, no baseline refreshed, and no clock renewed.
+
+Compare the authenticated parent bytes with the already computed local map in memory.
+Both JSON documents remain under the existing map cap and depth four. Compare fixed
+headers, row count and ordinal-path-ordered rows, then each row's relative path, length,
+hash and seven native identity fields. Use integer conversions, including unsigned
+64-bit file indices. Stop at the first differing field and report only its fixed source
+line through the existing Admission diagnostic and the row's original fixture-input
+ordinal (1 through 202); header differences use -1. Retain admission order explicitly,
+so sorted map position cannot be mistaken for input ordinal. No actual field value,
+arbitrary path, exception text, new enum or output member is emitted.
+
+If reading, authentication, parsing or comparison cannot complete within the original
+deadline, retain the original baseline-rejection line and ordinal -1. Secondary diagnostic
+errors cannot replace that known cause. Equal parsed fields with unequal map digests also
+retain that fallback. Existing outer timeout/termination and possibly unavailable terminal
+evidence remain limitations; diagnostics add no guaranteed evidence or success path.
+
+At most one supervisor can take this path per batch: its rejection stops the driver
+before another case. The additional maximum is one map payload read and EOF probe,
+three file opens (held and two named checks), six native identity snapshots and at most
+202 row comparisons. Parsing uses at most two 262,144-byte maps; the local map already
+exists. Preserve the supervisor's 1,024-byte stderr and batch's 4,096-byte record caps,
+all collector limits, process roles, Job/cgroup topology and original work/terminal clocks.
+This failure-only read is part of the admitted native original, not another passive pass.
+
+Select fresh `confidential-checks-v14` with matching source literals, four responses,
+source map, catalog and both catalog consumers. Keep direct deployment v4 and every
+execution guard closed. Source/protocol acceptance, fresh compilation/artifact acceptance
+and separate exact native admission are still required. Static review supplies no new
+platform result. Preserve the accepted fixture-only Linux between-read qualification;
+it does not apply to native identities or this diagnostic map read.
+
+Consumed capacity remains 32/121/6/273, ceilings 39/166/30/454, correction pool 1/7/0/59
+and old protected allocation 6/38/0/122. A separately admitted compile/native pair costs
+0/2/0/22 and would leave pool 1/5/0/37. Grouped consumption is compile four, native four,
+outside roles eight and inside roles 28; one pair would reach five, five, ten and 35.
+No capacity is added or reserved here. Preserve D0/D1/D2 and twelve later-product slots,
+fifteen spent collectors (4,500 seconds and 1,462,479,660 reserved bytes), two metadata
+passes, zero ETW uses, all historical charges and `noExperimentLive=false`.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation
