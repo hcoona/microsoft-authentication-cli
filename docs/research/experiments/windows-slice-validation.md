@@ -22651,7 +22651,7 @@ Its outcome review has SHA-256
 independent diagnostic/capacity triage has SHA-256
 `0926d471f85814d322b93c0275efb90f7ea6e5695e2c660cabc7b98adc198fa2`.
 
-Use only the next permitted static compile stage `confidential-checks-v12`, with
+The diagnostic continuation initially selected `confidential-checks-v12`, with
 matching literals in both callers, all four responses, native accepted input root,
 source map and derived catalog pins. Stage v11 remains spent and retained. Direct
 deployment stays `confidential-direct-v4`. The 36 source mappings and four response
@@ -22689,7 +22689,7 @@ collector per proposed original would bring collectors to twenty, before the thr
 protected direct observations. Changed diagnostic content still needs exact finite
 output/collection arithmetic within the existing limits at each actual admission.
 Preserve immutable compile/native lineages and all per-lineage and per-original bounds.
-The existing finite range can cover v12 through v15; this source selects only v12.
+The existing finite range can cover v12 through v15; the initial source selected v12.
 Every later successor still needs its exact accepted static source correspondence.
 
 Keep the named-Job/cgroup topology, normal launcher, four targets, native/direct roles,
@@ -22701,6 +22701,48 @@ remain closed. Use the existing combined review carrier, with compile admission/
 before native admission/outcome. Each failed original stops for independent disposition
 and any supported correction. This buffer does not complete Issue #108's remaining
 product or real-account acceptance, or waive their separate evidence and effects gates.
+
+### Controlled Catalog Binding Correction
+
+Original 0136 failed before any compiler started. The controller's third authority
+read rejected the catalog because its embedded PowerShell hash still identified the
+previous catalog, while the admitted Python caller and deployed catalog agreed on the
+new bytes. Both failure records identify the authority phase, line 93, three reads,
+114,990 payload bytes and zero starts. No new diagnostic artifact was compiled.
+Independent triage accepts this source-binding defect as a true positive.
+
+The retained launcher records successful named-Job termination, root exit, zero active
+members and complete empty captures. Both enclosing transports ended, and the dedicated
+Linux service cgroup was absent after terminal service. Accept this original's scoped
+failure cleanup while preserving its conservative failed producer fields, the six
+historical lifetime uncertainties and the existing initial-interop/OS-host qualification.
+The launcher's TimeoutException followed controller cancellation; it does not establish
+elapsed work-budget exhaustion. Original 0136, its sole collector and stage v12 remain
+spent, with no refund, replay or artifact acceptance.
+
+Select only fresh stage `confidential-checks-v13` for the corrected compilation. Update
+the existing stage literals, four responses, source map and catalog together; both
+Python and PowerShell catalog consumers must bind those exact catalog bytes. Keep
+the existing hash predicate, execution guards, normal launcher, creation-time Job/cgroup
+containment, compiler targets, direct deployment, timers and effects unchanged.
+
+The narrow `controlled-caller-catalog-bindings` hk check statically compares the catalog
+length/hash with Python's literal and its hash with PowerShell's sole catalog read.
+It reads source only and never imports or runs a caller. The observed stale consumer,
+matching consumers, independently stale Python/PowerShell literals and missing or
+duplicate consumer literals provide deterministic regression cases for this blocking
+check. It supplies no source, artifact, lifetime or execution acceptance and adds no
+contextual gate or review carrier.
+
+Consumed capacity is 32/119/6/251, the correction pool is 1/9/0/81 and old protection
+is 6/38/0/122. A fresh compile/native pair costs 0/2/0/22 and leaves pool 1/7/0/59.
+Grouped consumption is compile three, native three, outside roles six and inside roles
+21; the next pair reaches four, four, eight and 28, within existing bounds. Preserve
+all protected direct and later-product slots, ceilings and risk dispositions. Separate
+passive usage is thirteen collectors, 3,900 seconds and 1,424,721,563 reserved bytes;
+metadata remains two passes and ETW zero. This source correction adds no capacity.
+Accepted source/protocol and fresh exact admission precede the successor; its compile
+outcome must be accepted before dependent native execution.
 
 ### Future Passive Metadata and Collection
 

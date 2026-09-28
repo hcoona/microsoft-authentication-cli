@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 namespace ConfidentialNativeCaller;
 internal sealed class AcceptedFixtureInputs : IDisposable
 {
-    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-checks-v12";
+    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-checks-v13";
     private readonly string admissionPath,admissionSha,batchNonce,protocolSha,recordsRoot;
     private readonly long batchEnd,terminalEnd;
     private long accessDeadline;
