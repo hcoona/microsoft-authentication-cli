@@ -22291,7 +22291,7 @@ charge predicate 7/15. Compile total ten and every other predicate remain unchan
 Source map, catalog, responses, all C# sources, fixtures, normal launcher, direct caller
 and result helper retain their accepted bytes. No API or loader behavior changes.
 
-| Current inert source | Bytes | SHA-256 |
+| Grouped-accounting inert source | Bytes | SHA-256 |
 | --- | ---: | --- |
 | run_controlled_callers.py | 68,550 | 870eb614a104170a82854928743f77e35b9146532ea335c79eb4451c30ca131b |
 | Invoke-WindowsControlledCallers.ps1 | 26,462 | d9b4b6cf35bdb14a80d153ae7ab8b2a28cdd10e0cb8280b219a39a64faef6885 |
@@ -22336,9 +22336,10 @@ nullable analysis does not infer. No zero-warning or runtime-behavior claim foll
 | FixtureDriver.pdb | 37,952 | fe328ae2637a0ec8d33399b99a8e6111393f1f1a6956dd5e4c22f513e6d54466 |
 | FixtureDriver.exe | 160,768 | 8a65e144e332bfb9ffa4953bea098281a353bde653605e8163882565bc4ffb3c |
 
-A future native admission joins the new caller/controller/protocol revision to this
-accepted original deployment and artifact lineage; it does not replace the compiler
-revision. Current exact input, activated-source, checkpoint, finite-accounting and
+Original 0131 joined the new caller/controller/protocol revision to this accepted
+original deployment and artifact lineage; it did not replace the compiler revision.
+Its later failure and occupied fixture control are recorded below. Exact input,
+activated-source, checkpoint, finite-accounting and
 literal-call gates still apply. Direct D0/D1/D2 retain exact deployment, calibration,
 ETW and sequential outcome gates. No real-role or account effect is admitted.
 
@@ -22348,6 +22349,94 @@ failed 0/1/0/1 outcome, unaccepted artifacts and spent observations. Extend each
 retaining every uncertainty and noExperimentLive=false. The host decision and historical
 extensions end with this grant. Compilation/artifact provenance does not accept
 native/direct scenarios, real WAM/UI/reuse or the full Slice.
+
+### Original 0131 Fixture-Control Failure and Bounded Diagnostics
+
+Original 0131 ran once with PR #296 source
+`6c1aa1d7493d2271cc2df500f90b864133d3e09e`, accepted at
+`ca34bb0c9b006a499d03539656e63550a512809c`. Its complete outer transport exited one.
+Both retained original failure records identify `PredicateFailure`,
+`Strict fixture-control copy`, source line 580, at `original-materialization`.
+The rejected condition was `copy == raw and observed == closed`. The preceding
+ordinary read completed its own strict full9/length/EOF checks, but the failure
+records did not retain the two comparison results or their original operands.
+
+The sole fixed collector visited all 57 selected paths and retained a 305,246-byte
+snapshot, SHA-256
+`aa6f3bd5b88a00906772f5ae7c0ec79e70fa975e5843c6f8d021f33b88bdca28`.
+It exited one and correctly recorded `complete=false` because required success
+records were absent. Retained fixture bytes matched the admitted control at collection
+time; this later observation does not establish the earlier comparison operands.
+No content-versus-identity classification, ctime-only explanation or filesystem cause
+is established. The original, collector and occupied control remain spent and retained.
+
+Independent snapshot/failure/scoped-lifetime review has SHA-256
+`de967f9e722b0cc9853d18260a1d0dfeacdacafa0a16d1ab86ac378014f8a48a`.
+Independent triage of diagnostic finding F0131-01 has SHA-256
+`cfbf5052cd81da2a7002b6713157742a0feaf960ce1c2b06837798d4523adb7b`.
+The exact paired failure records, complete outer termination and accepted source order
+place the failure before service dispatch. No managed Linux worker, Windows launcher,
+PowerShell controller, FixtureDriver or case process/Job was created by this original.
+This is a source-bound inference, not an absence-based process survey. Preserve the
+generic failure Booleans, all six historical uncertainties and `noExperimentLive=false`;
+this original adds no downstream lifetime uncertainty. N1/N2/N3 remain unaccepted,
+and D0 cannot proceed.
+
+The full protected native charge is 0/1/0/15. Cumulative counts are 32/114/6/200;
+preparations remain Linux 12/18 and Windows 20/21. The correction pool remains
+1/14/0/56. Protected D0/D1/D2 is 0/3/0/15, other protection is 6/35/0/107, and
+combined protection is 7/52/0/178, including twelve later-product build/test slots.
+Native ordinal one of four and its conservative outside-one/inside-two host allocation
+remain consumed despite pre-dispatch rejection; no actual host identity is inferred.
+Passive collector consumption is eight passes, 2,400 reserved seconds and
+1,323,227,425 reserved payload bytes. Original 0131's first collector remains spent.
+
+#### Preserve the rejected fixture comparison
+
+The prospective caller retains the same content-first short circuit and exact
+full9 acceptance condition. On rejection only, its existing bounded `pinObservation`
+retains the read ordinal, `contentMatches`, `identityMatches` (null if not evaluated),
+expected/returned lengths and SHA-256 values, `writeClosedIdentity`, and
+`readbackIdentity`. All values come from bytes and tuples already held at the failed
+comparison. It adds no file read, metadata call, observation path or diagnostic process.
+The two in-memory hashes each process at most 262,144 bytes. Diagnostic construction
+failure retains the fixed `construction-failed` omission and the original predicate;
+the existing 2,048-byte observation limit and serialization-bound omission remain.
+First/final failure records stay inside their existing 65,536-byte per-write limits,
+original counters and reserved terminal interval. Persistence is not guaranteed under
+arbitrary storage or runtime failure. No clock, write target or retry is added.
+
+This repairs future diagnostic evidence only. It neither explains nor accepts original
+0131, ignores ctime, extends the compile-copy qualification to generated controls,
+changes input predicates, or permits overwriting/reusing the occupied v9 fixture.
+
+#### Finite fresh-stage source correspondence
+
+Select the already permitted next static stage `confidential-checks-v10` for prospective
+independently admitted compilation. Retarget only the literal stage in both callers,
+the four response paths, `AcceptedFixtureInputs.Root`, source/response map and catalog
+pins. Preserve response ordering, relative roles, templates, toolchain, four targets,
+closed execution guards, compile/native charges 7/15 and successful Job totals 10/14.
+Direct deployment remains `confidential-direct-v4`. This source selection neither
+observes stage availability nor reserves or executes a compile/native original.
+
+| Prospective inert control | Bytes | SHA-256 |
+| --- | ---: | --- |
+| run_controlled_callers.py | 69,411 | 73f0f9c5f9d6a065102e2ab3fb62e5b9755977611c2fc641eea582c4ead9510a |
+| Invoke-WindowsControlledCallers.ps1 | 26,463 | 370648727a3736910c942305305d437e1b6baf2ba16341d73bdbb7087250ab07 |
+| source-response-map.json | 16,740 | 6fa625345ea4b9f7c09b93188549eae237b2d9905eb252c682db54240654ecb5 |
+| controller-input-catalog.tsv | 87,398 | 50bbd5ab19025ec64cb340fe6d695f8442db0b83d1deefa7b8b67a751e5fd4df |
+
+A new four-target compile and conditional native original would consume 0/2/0/22
+from the correction pool, leaving 1/12/0/34 and combined protection 7/50/0/156 at
+cumulative 32/116/6/222. These are prospective arithmetic, not reservations. Each
+requires independent exact source, input, artifact, checkpoint, finite accounting,
+literal-call and collector/outcome gates, with compile outcome accepted before native.
+Retain existing immutable operation lineages and every spent stage/pass/ordinal.
+The diagnostic native outcome may distinguish the failed comparison while still
+rejecting it; it is not a promise that the mismatch is fixed. Any failure stops for
+independent disposition. A proposed predicate relaxation, occupied-control reuse,
+expanded effect or exhausted allocation needs its applicable owner decision first.
 
 ### Future Passive Metadata and Collection
 
