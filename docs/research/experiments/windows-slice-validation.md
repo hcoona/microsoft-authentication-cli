@@ -21179,6 +21179,10 @@ restores and their seven unused, blocked paired builds are not transferred, reop
 refunded. The existing protected remainder 6/35/0/107, including twelve later-product
 build/test planning slots, remains intact. The new reservations are exactly:
 
+Future controlled-operation rates and remaining-path funding use
+[the grouped console-host amendment](#controlled-path-console-host-accounting-and-lifetime);
+the table retains its original allocation.
+
 | Supplemental reservation | Preparation | Build/test | Publication | Synthetic | ETW attempts |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Fresh managed restore | 1 | 0 | 0 | 1 | 0 |
@@ -21458,11 +21462,14 @@ retain at most 708,673,536 explicit payload bytes plus 1,453 EOF probes, includi
 262,144-byte map readback. Adding this controller gives 809,948,518 bytes plus 1,660
 probes, excluding Linux infrastructure and implicit loader reads. The Linux worker
 adds exactly two selected evidence passes, map and batch receipt, at most 266,240
-payload bytes plus two EOF probes, inside its unchanged 2,048-read/1 GiB envelope. Synthetic charge
-is exactly twelve: normal launcher one, FixtureDriver one, N1 four, N2 three and N3
-three. PowerShell is the sole exempt Windows process. The normal Job must report exactly
-twelve descendants for native, or five for compilation, natural completion and zero
-active processes. Forced cleanup or incomplete streams never pass a scenario.
+payload bytes plus two EOF probes, inside its unchanged 2,048-read/1 GiB envelope.
+The twelve authored synthetic roles remain: launcher one, FixtureDriver one, N1 four,
+N2 three and N3 three. The sole outer PowerShell exemption remains. The
+[grouped amendment](#controlled-path-console-host-accounting-and-lifetime) adds native
+OS-host charges, giving fifteen units and expected Job total fourteen; compile uses
+seven units and expected Job total ten. Initial WSL hosts are outside the later Jobs.
+Natural completion and zero active owned members remain required. Forced cleanup
+or incomplete streams never pass a scenario.
 
 Direct deployment stays at
 `C:\Temp\azureauth-windows-slice-108\confidential-direct-v4` and its `/mnt/c/Temp/`
@@ -21477,8 +21484,9 @@ environment.
 
 D0 uses the final observer supervisor/worker and two calibration children: four Windows
 starts, observer Job total three. D1/D2 each have supervisor/worker and one synthetic
-product outside the observer Job: three starts, observer Job total one. Python keeps
-155 seconds from original entry; native keeps 145+10 seconds, the existing five-second
+product outside the observer Job: three authored starts, observer Job total one.
+The grouped amendment charges each direct slot five units, including one initial WSL
+host for D0 and two for D1/D2 outside the observer Job. Python keeps 155 seconds from original entry; native keeps 145+10 seconds, the existing five-second
 readiness and seven-second launch plus two-second allowance. D0 inputs remain at most
 257,945,750 bytes/608 EOF probes; D1/D2 at most 258,994,326 bytes/609 probes. Each adds
 one native map readback and one Linux map validation pass, at most 524,288 bytes/two
@@ -21659,7 +21667,10 @@ cycles below size the new allowance; they are not indivisible or paired reservat
 | Complete managed/controlled correction cycle | 3 | 3 | 18 | 0 | 75 | 9 |
 | Added total | | 3 | 19 | 0 | 76 | 9 |
 
-Each complete cycle has the following exact operation costs:
+The original complete-cycle sizing used the following operation costs.
+Future controlled-operation rates and remaining-path funding use
+[the grouped console-host amendment](#controlled-path-console-host-accounting-and-lifetime);
+the table retains its original allocation.
 
 | Operation | Preparation | Build/test | Publication | Synthetic | ETW attempts |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -22022,7 +22033,8 @@ against the installed Windows binary. Console-host activity remains a hypothesis
 roles or cause. Do not assert five console hosts, duplicate nested-Job accounting,
 antivirus activity or a structure-layout defect from the aggregate count alone.
 
-The exact-five/exact-twelve completion contract remains in force. Do not replace five
+At original 0129, the exact-five/exact-twelve completion contract remained in force.
+Later accepted amendments below do not rewrite that failed outcome. Do not replace five
 with ten or import another recipe's range. Before another experimental original,
 independently establish a sufficient cause/disposition and accept its exact source and
 protocol remedy within the Wave's roles, topology and maximum effects. A diagnostic
@@ -22072,7 +22084,11 @@ new process, passive collector or experiment debit. Exact future admission must 
 these reachable failure-path operations and original failure serialization in its
 capacity proof. This unexecuted source repair establishes no new runtime observation.
 
-### Prospective Controlled-Compile Console-Host Model
+### Original 0130 Compile-Only Console-Host Basis
+
+The following subsection retains the PR #293/294 basis used by original 0130.
+Future operation rates and host lifetime qualifications use
+[the grouped amendment](#controlled-path-console-host-accounting-and-lifetime) below.
 
 This compile-only amendment requires the matching owner scope/accounting decision in
 Delivery Wave and experiment safety. It records a prospective source-based expectation,
@@ -22149,15 +22165,15 @@ controlled-baseline-four-target-compile-v7 lineage and all passive-pass consumpt
 The six prior lifetime/interference decisions cover only the explicitly extended roles
 and unchanged capacity; every new uncertainty remains a stop.
 
-#### Implemented v9 compile correction
+#### Original 0130 v9 compile source
 
-The accepted compile-only console-host decision is implemented in the inert source
-below. The Python compile charge and matching PowerShell authority predicate are six;
+The original compile-only decision was implemented in the following inert source,
+retained here as original 0130 provenance. The Python compile charge and matching PowerShell authority predicate are six;
 the compile Job completion expectation is ten. Native remains twelve for both charge
 and completion. All other result, ownership, capture, deadline and evidence predicates
 are unchanged, including the accepted original service-evidence failure repair.
 
-The next fixed stage is
+The fixed original 0130 stage was
 `C:\Temp\azureauth-windows-slice-108\confidential-checks-v9`.
 Rebind the caller stage constants and expected parent member, controller stage,
 four response paths and symbol maps, native `AcceptedFixtureInputs.Root`, all four
@@ -22184,11 +22200,154 @@ call. Preserve the immutable `controlled-baseline-four-target-compile-v7` lineag
 the two already accepted cache descriptors and all consumed passive attempts. No
 current input, historical output, process or cache was observed by this source change.
 
-The source correction itself spends no experiment units. The next admitted compile
-retains the accepted 0/1/0/6 charge and protected-capacity calculation above. Preserve
+That source correction itself spent no experiment units. Original 0130 retained
+the accepted 0/1/0/6 charge and protected-capacity calculation above. Preserve
 original 0129's failure, full historical 0/1/0/1 charge, spent v8 stage and collector;
 its artifacts remain unaccepted. This change makes no native/direct execution,
 artifact-provenance or real Windows acceptance claim.
+
+### Controlled-Path Console-Host Accounting and Lifetime
+
+This amendment implements [PR #295](https://github.com/hcoona/microsoft-authentication-cli/pull/295).
+It replaces the earlier prospective compile/native/direct host restrictions and
+rates only for the following existing operations. Earlier allocation tables and
+originals retain their historical charges. Matching safety/protocol/source acceptance
+and every exact admission remain prerequisites; this amendment activates no source.
+
+The pinned [console-allocation specification](https://github.com/microsoft/terminal/blob/4e3f4406c9ba7e7f5da357852972e538e39b4b30/doc/specs/%237335%20-%20Console%20Allocation%20Policy.md#L103-L110)
+describes a new invisible console host for CREATE_NO_WINDOW. The existing controller
+uses this flag for FixtureDriver as well as compiler launches. Public WSL
+[binfmt source](https://github.com/microsoft/WSL/blob/91f161fa240dc355c1a88daabc8aac4273e35ba5/src/linux/init/binfmt.cpp#L668-L678)
+requires terminal standard descriptors for pseudoconsole setup; the
+[non-pseudoconsole interop branch](https://github.com/microsoft/WSL/blob/91f161fa240dc355c1a88daabc8aac4273e35ba5/src/windows/common/interop.cpp#L192-L220)
+requests CREATE_NO_WINDOW and the
+[process wrapper](https://github.com/microsoft/WSL/blob/91f161fa240dc355c1a88daabc8aac4273e35ba5/src/windows/common/SubProcess.cpp#L146-L201)
+passes those flags to process creation. The declared DEVNULL/pipe transports use
+this source-derived prospective model:
+
+| Operation | Initial hosts outside the later Job | Hosts inside that Job | Successful Job total | Preparation/build-test/publication/synthetic charge |
+| --- | ---: | ---: | ---: | --- |
+| Controlled compile | 1, normal launcher | 5, PowerShell and four compilers | 10 | 0/1/0/7 |
+| N1/N2/N3 native batch | 1, normal launcher | 2, PowerShell and FixtureDriver | 14 | 0/1/0/15 |
+| D0 | 1, observer supervisor | 0 | 3 | 0/1/0/5 |
+| D1 | 2, supervisor and separate synthetic product | 0 | 1 | 0/1/0/5 |
+| D2 | 2, supervisor and separate synthetic product | 0 | 1 | 0/1/0/5 |
+
+The initial hosts precede experimental Job creation and are excluded from those
+Jobs' totals. Preserve outer active limit 32, native nested limits 3/2/2, direct
+nested limits 3/1/1, creation flags, authored roles and the sole outer PowerShell
+charging exemption. Descendants inheriting a console add no new host in this model.
+D1/D2 retain independent product lifetime evidence outside the observer Job.
+The model establishes neither observed individual identities nor installed WSL/source
+equivalence. Matching aggregate totals do not establish a complete identity trace.
+
+Only these initial OS hosts have the accepted platform-managed outside-Job lifetime
+disposition. Ordinary platform console lifecycle and the accepted WSL requested-process
+completion contract are the operating basis. Individual host identity, exit and bounded
+termination remain unmeasured; possible persistence or interference is accepted only
+for these roles within this credential-free grant. Owned-Job zero or requested-process
+exit does not prove each external host's exit. Retain this qualification in each outcome.
+No separate survey, ETW diagnostic, containment redesign, foreign-service operation or
+cleanup is required or authorized. Explicit application completion, complete captures
+and EOFs, zero active owned-Job members, Linux scoped completion and all other ordinary
+process, consumer, loss and evidence stops remain. This is no general descendant waiver.
+
+#### Finite charging and admission
+
+Starting after accepted PR #295, allow at most four originals per listed operation,
+including failed or partial submissions: nominally twenty originals, 28 initial hosts
+outside Jobs and 28 hosts inside Jobs. Intersect these maxima with actual unused pools,
+protected remaining work, unused stages, immutable lineages, ETW limits and exact
+admissions. All twenty maxima would cost 0/20/0/148 and are not jointly funded.
+No automatic retry, lineage/stage/pass reset, new quota or clock renewal follows.
+
+After original 0130, cumulative counts are 32/113/6/185, Linux preparations 12/18 and
+Windows preparations 20/21. Pool 1/14/0/64 and protected native/D0/D1/D2 0/4/0/22
+become pool 1/14/0/56 and protected path 0/4/0/30 by earmarking eight unused synthetic
+units. Other old protection stays 6/35/0/107, including twelve later-product build/test
+slots. Combined protection remains 7/53/0/193. No cumulative charge changes.
+
+The external durable start record and independent finite-admission review must bind
+the operation, ordinal 1 through 4 since this amendment, full rate, cumulative inside
+and outside host-role allowances, actual pool balance, protected remaining path, and
+ETW/stage/immutable-lineage consumption. Join every intervening start through the
+existing exact checkpoint and call acceptance. Direct rates use this existing external
+accounting gate: its caller has no internal category ledger and needs no schema change.
+A runtime schema alone does not prove the finite external grant.
+
+The first native and three direct originals consume their revised protected rows;
+every further corrected original spends its full rate from the unused pool. A compile
+also needs a separately accepted fresh unused stage and exact source correspondence.
+Current v9 is spent for compilation and retained as the accepted native input basis;
+this correction authorizes no rebuild. Every failure stops for independent cause/lifetime
+disposition and a reviewed correction before a new numbered original. Preserve all
+passive history and limits; this amendment reopens no original/runtime/cache/process path.
+
+#### Source correction and accepted original 0130 inputs
+
+All tracked execution guards remain closed. The only code changes are Python
+compile/native charges 7/15, native successful Job total 14, and PowerShell's matching
+charge predicate 7/15. Compile total ten and every other predicate remain unchanged.
+Source map, catalog, responses, all C# sources, fixtures, normal launcher, direct caller
+and result helper retain their accepted bytes. No API or loader behavior changes.
+
+| Current inert source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| run_controlled_callers.py | 68,550 | 870eb614a104170a82854928743f77e35b9146532ea335c79eb4451c30ca131b |
+| Invoke-WindowsControlledCallers.ps1 | 26,462 | d9b4b6cf35bdb14a80d153ae7ab8b2a28cdd10e0cb8280b219a39a64faef6885 |
+
+Original 0130 ran once from PR #294 source
+`c55396df90a3c76d6c8896e2f737464d80488f96`, accepted at
+`e2e92088ec22d4621948637062f5d2ee62a92ca8`. Four compiler phases and complete Linux
+original transport exited zero. The original named Job reported ten cumulative
+associations, zero active members, root exit zero, both EOFs and launcher completion.
+The final cgroup disposition was absent after zero exit. This proves only the
+reviewed original Job/Linux scope, not host-wide or individual console-host termination.
+
+The sole fixed collector retained 61 required payloads and 27 optional absences
+without errors. Its 3,508,015-byte snapshot has SHA-256
+`4c17095e18edf4cb4a384e4cda771bbbb0e9cb2951440719795a9a0f01064caf`.
+The sole admitted offline reader exited zero. Independent snapshot/scoped-lifetime
+review has SHA-256 `464e1b57a1155f5006676efe63a3a4c6a5bd955287787715d5b2f9cd781d5038`;
+full artifact/source review has SHA-256
+`4dab46d7fb9987af7b1cd523f677aaec0cc26934782f94bf588995f02d2dfa3c`.
+
+That review accepts all 413 deployment/input joins, exact activated sources/responses,
+compiler/runtime and 167-reference correspondence, four PE/PDB pairs and their source
+checksums/options/entrypoints/imports, four apphost constructions and eight exact
+runtime templates. The already accepted first-copy qualification compares exact
+payload and eight non-ctime fields while retaining all observed full9 values. It is
+no new input/artifact relaxation. Eight CS8602 warnings remain: the affected dictionary
+dereferences follow successful removal and throwing guards whose postconditions
+nullable analysis does not infer. No zero-warning or runtime-behavior claim follows.
+
+| Accepted original 0130 leaf | Bytes | SHA-256 |
+| --- | ---: | --- |
+| NativeCaller.dll | 155,648 | 42c485ea8ef9a20a768f3c1fb95101db789b18a0c8f6397c201cf29b353b3ab6 |
+| NativeCaller.pdb | 33,316 | d9b7915e9fdb0ce1b957bb7c7f5f6a67b3bc3735068ae29714355109804af1b3 |
+| NativeCaller.exe | 160,768 | 849b397d9f7ffdd5159a2e9902d4a7e1228eec52729bbdcb65c06f24c2f9ed28 |
+| DirectObserver.dll | 139,264 | 964a5cb41c4d516944205ac78cb60fc985c167a14621e4b21ef7329f3fdcc4b9 |
+| DirectObserver.pdb | 30,976 | 99147060147b0d5a5a12f233d3089d2db77173846b0983f5efc16b0ae2bafdb0 |
+| DirectObserver.exe | 160,768 | ddcd6842f175018f3c7051366be1e7855675f99b5d22d859d0200b49cd71cdef |
+| SyntheticSubject.dll | 162,304 | b98e0b0df99f6255bb658dc4e89a1b32b89a10a6294f1886e10da251580c4301 |
+| SyntheticSubject.pdb | 34,644 | 7a36053b3663415b15aa8a3bfa049e23266b495144992b701dd79921a55a691c |
+| SyntheticSubject.exe | 160,768 | 6203af94f0e634c6a1608f105998ad8fea15ea7e7b33a226f277ef0b7e718dae |
+| FixtureDriver.dll | 229,888 | a291c7b08d700a7a9339a59d22ea0bd6f8460e93c5dacda99fa46af690170a8b |
+| FixtureDriver.pdb | 37,952 | fe328ae2637a0ec8d33399b99a8e6111393f1f1a6956dd5e4c22f513e6d54466 |
+| FixtureDriver.exe | 160,768 | 8a65e144e332bfb9ffa4953bea098281a353bde653605e8163882565bc4ffb3c |
+
+A future native admission joins the new caller/controller/protocol revision to this
+accepted original deployment and artifact lineage; it does not replace the compiler
+revision. Current exact input, activated-source, checkpoint, finite-accounting and
+literal-call gates still apply. Direct D0/D1/D2 retain exact deployment, calibration,
+ETW and sequential outcome gates. No real-role or account effect is admitted.
+
+Preserve 0130's spent 0/1/0/6 charge and single-use collector/reader. Preserve 0129's
+failed 0/1/0/1 outcome, unaccepted artifacts and spent observations. Extend each separate
+0057/0064/0068/0093/0107/0110 interference disposition only to the newly bounded hosts,
+retaining every uncertainty and noExperimentLive=false. The host decision and historical
+extensions end with this grant. Compilation/artifact provenance does not accept
+native/direct scenarios, real WAM/UI/reuse or the full Slice.
 
 ### Future Passive Metadata and Collection
 
@@ -22304,7 +22463,9 @@ budget nor corrected collector changes SourceLink or evidence obligations.
 Explicitly extend the separate 0057, 0064, 0068, 0093, 0107 and 0110 dispositions only
 to this finite pool and its declared passive work on the same hosts. Keep their failed
 outcomes, full charges, spent observations and unresolved lifetimes, including
-`noExperimentLive=false`. No new lifetime uncertainty or quiescence claim is accepted.
+`noExperimentLive=false`. Only the exact initial-host lifetime case in
+[the grouped amendment](#controlled-path-console-host-accounting-and-lifetime) adds
+a disposition; no other new uncertainty or quiescence claim is accepted.
 
 Nine added D0/D1/D2 session-creation attempts raise the aggregate maximum to twenty;
 the existing eleven attempts and their accounting remain separate. Every attempted

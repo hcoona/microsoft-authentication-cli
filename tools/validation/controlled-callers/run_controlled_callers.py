@@ -30,7 +30,7 @@ HISTORICAL_UNKNOWN = ['0057', '0064', '0068', '0093', '0107', '0110']
 PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
 LAUNCHER_PROJECTION = PROJECTION / 'normal-launcher-dispatch-v1' / 'WindowsScriptJobLauncher.exe'
-CHARGES = {'compile': 6, 'native': 12}
+CHARGES = {'compile': 7, 'native': 15}
 STAGE = PROJECTION / 'confidential-checks-v9'
 STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v9'
 CATALOG = (87398, '83761b4350c9dc43e4d468e5f8d2cf3feea7777d02ceaf56b9a82dfc82502860')
@@ -731,7 +731,7 @@ def validate_journal(raw, a, stdout, stderr):
             ready['queryAndTerminateAccess'] is True, 'Creation-time named Job binding')
     require(completed['rootExited'] is True and completed['rootExitCode'] == 0 and completed['activeProcesses'] == 0 and
             type(completed['totalProcesses']) is int and
-            completed['totalProcesses'] == (10 if a['suite'] == 'compile' else 12) and
+            completed['totalProcesses'] == (10 if a['suite'] == 'compile' else 14) and
             completed['stdoutEof'] is True and completed['stderrEof'] is True and
             completed['capturedBytes'] == len(stdout) + len(stderr), 'Original whole scenario Job completion')
     for item, name, raw_capture in zip(records[6:8], ('stdout', 'stderr'), (stdout, stderr), strict=True):
