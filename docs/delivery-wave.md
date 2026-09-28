@@ -48,7 +48,7 @@ downloads may use public NuGet.org and official .NET distribution endpoints, wit
 credentials. New experiment-owned files stay in dedicated build/test roots outside
 production installations and are intentionally retained. Maximum cumulative capacity is
 39 dependency preparation/restore actions, 166 build/test actions, 30 Native AOT publish
-actions and 378 synthetic process scenarios, with at most 4 GiB of newly downloaded public
+actions and 454 synthetic process scenarios, with at most 4 GiB of newly downloaded public
 dependency content. Exact per-action time, output and termination limits and source
 admission are owned by the accepted protocol. No new toolchain installation is granted.
 
@@ -359,8 +359,8 @@ reservation only. Proposed text supplies no authority before owner acceptance an
 
 
 **Managed and controlled correction pool:** The repository owner approves an additional
-3/19/0/76 in preparation/build-test/publication/synthetic order, giving aggregate
-ceilings 39/166/30/378 and preparation host ceilings 18 Linux / 21 Windows. This
+3/19/0/76 in preparation/build-test/publication/synthetic order, initially giving
+aggregate ceilings 39/166/30/378 and preparation host ceilings 18 Linux / 21 Windows. This
 funds the missing managed build from accepted restore 0120 and three complete
 managed restore/build plus controlled-caller correction cycles. The new capacity
 is one shared pool, charged at each exact operation's protocol rate, with at most
@@ -461,6 +461,34 @@ the earlier ctime differences remains unknown. All other inputs, historical
 uncertainties and stop conditions remain unchanged. This scope ends with the
 current grant and does not transfer to another grant.
 
+**Controlled diagnostic continuation buffer:** Add 0/0/0/76 in
+preparation/build-test/publication/synthetic order to the existing correction pool,
+giving aggregate ceilings 39/166/30/454. Restrict the added synthetic units to the
+existing four-target controlled compile and N1/N2/N3 native batch. Together with
+twelve unused pool units, this funds at most four separately admitted compile/native
+pairs: one necessary pair and three contingency pairs. Existing build/test capacity
+funds their eight originals; no other category ceiling increases.
+
+For the grouped operations below, raise cumulative compile and native maxima from
+four each to six and seven respectively, and the inside-Job console-host role maximum
+from 28 to 44. Preserve the total maximum twenty, outside-Job maximum 28 and direct
+per-operation maximum four, with all limits applied together. These are maximum
+allowances, not instructions to spend the buffer. Stop after sufficient evidence;
+every failed original still requires its ordinary independent disposition and correction.
+
+Explicitly extend each separate historical 0057, 0064, 0068, 0093, 0107 and 0110
+lifetime/interference disposition and the specific initial-interop OS-host disposition
+below only to this finite additional capacity and role envelope on the same hosts.
+Preserve their unresolved status and noExperimentLive=false. No new application,
+owned-Job or Linux lifetime uncertainty is accepted. The extension ends with this grant.
+
+Preserve every charge, protected allocation, twelve later-product build/test slots,
+existing D0/D1/D2 reservations, ETW maximum twenty, immutable lineages, passive limits
+and finite stage range. No preparation, publication, download, toolchain, account,
+WAM, cache, consent, resource, installation or release expansion follows. Matching
+safety/protocol and exact source/input/artifact/accounting/call acceptance precedes
+execution. No replay, refund, baseline refresh, clock renewal or cleanup is granted.
+
 **Controlled-path incidental console hosts:** Authorize the existing controlled
 compile, N1/N2/N3 native fixture batch, and direct D0/D1/D2 synthetic paths to
 include only the following incidental OS-created console-host roles. Preserve
@@ -485,14 +513,16 @@ Keep the outer active limit 32, native nested limits 3/2/2 and direct nested
 limits 3/1/1 unchanged. The sole outer PowerShell charging exemption remains;
 every listed OS-host role consumes one synthetic unit.
 
-Allow at most four future originals of each listed operation, intersected with
+The initial bound permits four future originals of each listed operation, intersected with
 the existing unused correction pool, protected allocations, finite unused
 stages, immutable operation lineages, ETW limits and exact admissions. This gives
 a maximum of twenty originals, 28 initial-interop host roles outside the later
 Jobs and 28 host roles inside those Jobs, before applying those stricter limits.
 The per-operation maximum leaves room for up to three corrected originals;
 it is not a jointly funded reservation for every maximum. No automatic retry,
-new compiler target or quota is granted.
+new compiler target or quota is granted by that initial bound. The separately stated
+controlled diagnostic continuation buffer replaces only its compile, native and
+inside-Job maxima; its other limits remain in force.
 
 Fund the required remaining native/D0/D1/D2 success path from its protected
 0/4/0/22 allocation plus eight synthetic units of unused correction-pool

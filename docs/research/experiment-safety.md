@@ -343,7 +343,7 @@ their declared attempts. Existing account and external-effects exclusions and fu
 real-effects gates remain unchanged. The historical dispositions and the ETW exception
 end with the current grant and never transfer or expand automatically.
 
-The separate managed and controlled correction pool adds 3/19/0/76, giving current
+The separate managed and controlled correction pool adds 3/19/0/76, initially giving
 aggregate ceilings 39/166/30/378 and preparation host ceilings 18 Linux / 21 Windows.
 It provides the missing managed build plus three complete correction cycles' equivalent
 capacity, shared only among the exact managed and controlled operations in the protocol.
@@ -390,8 +390,9 @@ complete captures, zero active owned-Job members and all ordinary stop condition
 remain required. No host survey, additional ETW diagnostic, foreign-service operation,
 containment redesign or cleanup is required or authorized by this decision.
 
-Apply the Wave's maximum four future originals per operation, twenty total originals,
-28 initial outside-Job hosts and 28 inside-Job hosts, intersected with the stricter
+Apply the Wave's grouped maxima, initially four future originals per operation,
+twenty total originals, 28 initial outside-Job hosts and 28 inside-Job hosts,
+intersected with the stricter
 remaining correction pool, protected success path, unused stages, immutable lineages,
 ETW limits and exact admissions. These are not jointly funded reservations or retries.
 The matching protocol charges compile 0/1/0/7, native 0/1/0/15 and each D0/D1/D2
@@ -409,6 +410,27 @@ with this grant. Other managed builds, publication, future real-account acceptan
 launcher replacement and account, cache, credential or installation effects remain
 outside this exception. Independently accept matching source/protocol and current
 input/artifact/checkpoint/finite-accounting/call gates before dependent execution.
+
+The Wave's controlled diagnostic continuation buffer separately adds 0/0/0/76,
+giving current aggregate ceilings 39/166/30/454. Only the existing four-target
+compile and N1/N2/N3 native operations may spend the added synthetic units. Together
+with twelve unused pool units and eight existing build/test slots, this supplies one
+compile/native pair and three contingency pairs. Preserve the existing protected
+direct path and every other reservation; stop when the needed evidence is sufficient.
+
+For the grouped bounds above, replace only the compile maximum four with six, native
+maximum four with seven, and inside-Job host-role maximum 28 with 44. Keep total
+twenty, outside-Job 28 and direct per-operation four as simultaneous stricter limits.
+Explicitly extend the six separate historical lifetime/interference dispositions and
+the narrow initial-interop OS-host disposition only to this additional finite envelope
+on the same hosts. Preserve noExperimentLive=false and all application, owned-Job and
+Linux completion requirements. These extensions end with the grant.
+
+Require the owner-approved matching Wave and independently accepted protocol before
+execution. Keep every full failed charge, exact admission, finite stage and passive
+limit, twenty-attempt ETW ceiling, and twelve later-product build/test reservations.
+No other category, helper, target, topology, account or external-effect boundary grows;
+no replay, refund, observation reset, baseline refresh, clock renewal or cleanup follows.
 
 For at most 27 new intended-operation lineages, permit at most four separately admitted
 metadata passes per immutable lineage and four fixed-selection collectors per fresh

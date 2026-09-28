@@ -11,7 +11,7 @@ Set-StrictMode -Version 2
 
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $root = $PSScriptRoot
-$stageRoot = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v11'
+$stageRoot = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v12'
 $rootBound = $false
 $phase = 'authority'
 $child = $null
