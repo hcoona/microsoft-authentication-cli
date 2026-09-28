@@ -31,6 +31,9 @@ internal static class Program
         long entry = Now;
         bool fixture = args.Length > 0 && args[0] is "--fixture-worker" or "--fixture-supervisor";
         bool worker = args.Length > 0 && args[0] is "--worker" or "--fixture-worker";
+        long diagnosticEnd=fixture && !worker?Add(entry,WorkMilliseconds+TerminalMilliseconds):0;
+        if(fixture && !worker && args.Length==7 && long.TryParse(args[6],NumberStyles.None,CultureInfo.InvariantCulture,out long bound))
+            diagnosticEnd=Math.Min(diagnosticEnd,bound);
         try
         {
             if (fixture) return FixturePins.RunRole(args, entry, worker);
@@ -38,10 +41,18 @@ internal static class Program
         }
         catch (Exception caught)
         {
+            if(fixture && !worker)FixtureDiagnostics.Capture(caught);
             // A fixed enum preserves only the first safe cause. Never format the exception.
             if (worker && !workerOutputAttempted)
                 try { WriteWorkerFrame([78, 67, 70, 49, (byte)(caught is SafeFailure safe ? safe.Fault : Fault.Native)]); } catch { }
             return 1;
+        }
+        finally
+        {
+            // Only synthetic supervisors report a bounded cause to the driver's existing pipe.
+            // Failure to report cannot change exit status, trigger a retry, or renew a deadline.
+            if(fixture && !worker && FixtureDiagnostics.First is FixtureFailure failure)
+                try { Before(diagnosticEnd);Console.OpenStandardError().Write(failure.Encode()); } catch { }
         }
     }
 
@@ -73,6 +84,7 @@ internal static class Program
             PrivateRequest.Require(workEnd > Now && finalEnd > workEnd);
         }
         string[] slots = AdmissionCatalog.Slots(group);
+        if(fixture)FixtureDiagnostics.At(FixtureStage.Reservation);
         foreach (string slot in slots) Receipt(plan, slot, nonce, true, null, false, false, false, false, false, entry, workEnd);
         SafeFileHandle? job = null;
         Child? worker = null;
@@ -90,19 +102,23 @@ internal static class Program
             try
             {
                 Before(workEnd);
+                if(fixture)FixtureDiagnostics.At(FixtureStage.CreateWorker);
                 job = Native.NewJob("Local\\azureauth-confidential-108-" + group + "-" + nonce, slots.Length);
                 output = new MemoryPipe(32); error = new MemoryPipe(1); input = new InputPipe(false);
                 using (CurrentUserEnvironment? environment = fixture ? null : CurrentUserEnvironment.Create(workEnd))
                 {
+                    if(fixture)FixtureDiagnostics.At(FixtureStage.CreateWorker);
                     Before(workEnd);
                     worker = Native.StartSuspended(plan.SelfImage,
                         fixture ? FixturePins.RoleArguments(group, "worker", workEnd) :
                         AdmissionCatalog.WorkerArguments(group, nonce, workEnd, finalEnd),
                         plan.WorkingDirectory, input, output, error, job, environment?.Block ?? IntPtr.Zero);
                 }
-                if (fixture) workerIdentity = FixturePins.BindCreated(group, "worker", worker, workEnd);
+                if (fixture){FixtureDiagnostics.At(FixtureStage.BindWorker);workerIdentity = FixturePins.BindCreated(group, "worker", worker, workEnd);}
                 else workerIdentity = AdmissionCatalog.BindWorker(group, nonce, worker, workEnd, finalEnd);
+                if(fixture)FixtureDiagnostics.At(FixtureStage.ResumeWorker);
                 Before(workEnd); worker.ResumeOnce();
+                if(fixture)FixtureDiagnostics.At(FixtureStage.WaitWorker);
                 while (true)
                 {
                     Before(workEnd);
@@ -114,12 +130,14 @@ internal static class Program
                     Thread.Sleep(10);
                 }
                 Before(workEnd);
+                if(fixture)FixtureDiagnostics.At(FixtureStage.ValidateWorker);
                 terminalEnd = Math.Min(terminalEnd, Add(Now, TerminalMilliseconds));
                 FrameDecision decision = CallerRules.DecideFrame(output.Bytes.Span, slots.Length, total, exit!.Value, error.Bytes.Length);
                 results = decision.Results; firstFault = decision.FirstFault; passed = decision.Passed;
             }
             catch (Exception caught)
             {
+                if(fixture)FixtureDiagnostics.Capture(caught);
                 passed = false;
                 firstFault ??= caught is SafeFailure safe ? safe.Fault : Fault.Native;
                 terminalEnd = Math.Min(terminalEnd, Add(Now, TerminalMilliseconds));
@@ -149,6 +167,7 @@ internal static class Program
             // Missing closure or safe EOF leaves the reservation open. Last-close Job
             // termination is only a fallback; it cannot manufacture a terminal witness.
             if (!complete || !jobZero || Now >= terminalEnd) return 1;
+            if(fixture)FixtureDiagnostics.At(FixtureStage.TerminalReceipt);
             for (int i = 0; i < slots.Length; i++)
                 Receipt(plan, slots[i], nonce, false, results?[i], CallerRules.TerminalMayPass(passed, stopAttempted),
                     true, true, stopAttempted, stopSucceeded, entry, terminalEnd, firstFault);

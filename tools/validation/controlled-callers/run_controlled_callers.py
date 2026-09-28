@@ -849,8 +849,8 @@ def native_baseline_evidence(a, rows, budget):
                 native['attributes'] & 0x410 == 0 and 0 < native['index'] < 2 ** 64 and native['links'] == 1 and
                 all(0 < native[x] < 2 ** 63 for x in ('created', 'modified', 'changed')), 'Observed native snapshot shape')
     batch = decode(budget.read(directory / 'batch.json', 4096)[0])
-    require(set(batch) == {'schema', 'passed', 'nativeBaselineSha256', 'completedPureRows', 'completedNativeCases', 'noExperimentLive'} and
-            batch['schema'] == 'synthetic-caller-batch-v1' and batch['passed'] is True and
+    require(set(batch) == {'schema', 'passed', 'nativeBaselineSha256', 'completedPureRows', 'completedNativeCases', 'firstFailure', 'noExperimentLive'} and
+            batch['schema'] == 'synthetic-caller-batch-v2' and batch['passed'] is True and batch['firstFailure'] is None and
             batch['nativeBaselineSha256'] == digest(raw) and type(batch['completedPureRows']) is int and
             batch['completedPureRows'] == 84 and type(batch['completedNativeCases']) is int and
             batch['completedNativeCases'] == 3 and batch['noExperimentLive'] is False, 'Batch terminal baseline binding')
