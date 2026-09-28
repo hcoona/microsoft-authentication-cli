@@ -31,9 +31,9 @@ PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
 LAUNCHER_PROJECTION = PROJECTION / 'normal-launcher-dispatch-v1' / 'WindowsScriptJobLauncher.exe'
 CHARGES = {'compile': 7, 'native': 15}
-STAGE = PROJECTION / 'confidential-checks-v10'
-STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v10'
-CATALOG = (87398, '50bbd5ab19025ec64cb340fe6d695f8442db0b83d1deefa7b8b67a751e5fd4df')
+STAGE = PROJECTION / 'confidential-checks-v11'
+STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v11'
+CATALOG = (87398, '1e784c096622187ecc08d902ac22f9fad4f7f1ac88100e3dbd792c1052b34e6f')
 TARGETS = ('NativeCaller', 'DirectObserver', 'SyntheticSubject', 'FixtureDriver')
 SERVICE_SECONDS = 1200
 PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows-actions',
@@ -239,6 +239,72 @@ class Budget:
                 'expectedIdentity': expected_identity if numeric_identity else None,
                 'observedIdentity': observed})
         return raw
+
+    def read_fixture(self, a, closed, expected_payload=None):
+        # This one generated role keeps strict full9 DURING every read. Only
+        # its comparison with the original write-closed ctime is qualified.
+        require(a['suite'] == 'native' and
+                (expected_payload is None or type(expected_payload) is bytes),
+                'Native fixture read role')
+        fixture_identity(closed)
+        try:
+            raw, _, readback = self._read(STAGE / 'control' / 'fixture-admission.json', 262144)
+            observed = readback['initialDescriptor']
+            observation = {
+                'writeClosedIdentity': closed, 'readObservation': readback,
+                'expectedBytes': a['fixtureAdmission']['bytes'], 'returnedBytes': len(raw),
+                'expectedSha256': a['fixtureAdmission']['sha256'], 'returnedSha256': digest(raw),
+                'contentMatches': None if expected_payload is None else raw == expected_payload,
+                'eightFieldsMatch': all(closed[i] == observed[i] for i in (0, 1, 2, 3, 4, 5, 6, 8)),
+                'crossReadCtimeMatches': closed[7] == observed[7]}
+            validate_fixture_observation(a, closed, observation, expected_payload is not None)
+            return observation
+        except PredicateFailure as error:
+            # Preserve the strict read's first cause and any already sampled
+            # descriptor/path values. No diagnostic observation is added.
+            if error.pin_observation is None:
+                error.pin_observation = {'writeClosedIdentity': closed}
+            raise
+
+
+def fixture_identity(value):
+    require(type(value) is list and len(value) == 9 and
+            all(type(x) is int and -(1 << 127) <= x < (1 << 127) for x in value),
+            'Fixture full9 integer identity')
+
+
+def validate_fixture_observation(a, closed, observation, immediate):
+    """Validate this original's retained fixture read without sampling a file."""
+    fixture_identity(closed)
+    require(a['suite'] == 'native' and type(immediate) is bool and
+            type(observation) is dict and set(observation) == {
+                'writeClosedIdentity', 'readObservation', 'expectedBytes', 'returnedBytes',
+                'expectedSha256', 'returnedSha256', 'contentMatches', 'eightFieldsMatch',
+                'crossReadCtimeMatches'} and observation['writeClosedIdentity'] == closed,
+            'Exact original fixture observation')
+    fixture_identity(observation['writeClosedIdentity'])
+    readback = observation['readObservation']
+    require(type(readback) is dict and set(readback) == {
+                'readOrdinal', 'createdCopyReadback', 'expectedBytes', 'returnedBytes',
+                'initialDescriptor', 'finalDescriptor', 'namedPath'} and
+            readback['createdCopyReadback'] is False and type(readback['readOrdinal']) is int and
+            1 <= readback['readOrdinal'] <= 2048, 'Strict fixture read observation')
+    identities = [readback[k] for k in ('initialDescriptor', 'finalDescriptor', 'namedPath')]
+    for value in identities:
+        fixture_identity(value)
+    require(len(encode(observation)) <= 2048, 'Bounded fixture observation')
+    require(stat.S_ISREG(closed[2]) and closed[8] == 1 and
+            type(a['fixtureAdmission']['bytes']) is int and 0 < a['fixtureAdmission']['bytes'] <= 262144 and
+            all(type(value) is int and value == a['fixtureAdmission']['bytes'] for value in (
+                closed[5], observation['expectedBytes'], observation['returnedBytes'],
+                readback['expectedBytes'], readback['returnedBytes'])) and
+            observation['expectedSha256'] == observation['returnedSha256'] == a['fixtureAdmission']['sha256'] and
+            observation['contentMatches'] is (True if immediate else None) and
+            identities[0] == identities[1] == identities[2] and
+            all(all(value[i] == closed[i] for i in (0, 1, 2, 3, 4, 5, 6, 8)) for value in identities) and
+            observation['eightFieldsMatch'] is True and
+            observation['crossReadCtimeMatches'] is (closed[7] == identities[0][7]),
+            'Fixture content/eight-field binding and strict within-read identity', pin_observation=observation)
 
 
 
@@ -576,28 +642,16 @@ def materialize_inputs(a, root, local, budget):
         raw = budget.pin(a['fixtureAdmission'], 262144)
         write_new(fixture_path, raw, budget, 262144)
         closed = identity(fixture_path.lstat())
-        copy, observed = budget.read(fixture_path, 262144)
-        content_matches = copy == raw
-        identity_matches = observed == closed if content_matches else None
-        if identity_matches is not True:
-            # Retain only the operands already held at the rejected comparison.
-            # Diagnostic construction cannot replace the original first cause.
-            observation = {'omitted': 'construction-failed'}
-            try:
-                observation = {
-                    'readOrdinal': budget.reads,
-                    'contentMatches': content_matches, 'identityMatches': identity_matches,
-                    'expectedBytes': len(raw), 'returnedBytes': len(copy),
-                    'expectedSha256': digest(raw), 'returnedSha256': digest(copy),
-                    'writeClosedIdentity': closed, 'readbackIdentity': observed}
-            except Exception:
-                pass
-            require(False, 'Strict fixture-control copy', pin_observation=observation)
-        fixture = {'path': str(fixture_path), 'bytes': len(raw), 'sha256': digest(raw), 'identity': observed}
+        readback = budget.read_fixture(a, closed, raw)
+        fixture = {'path': str(fixture_path), 'bytes': len(raw), 'sha256': digest(raw), 'identity': closed}
+        creation = {'action': a['action'], 'nonce': a['nonce'], 'admissionSha256': digest(a['_raw']),
+                    'sourceAdmission': a['fixtureAdmission'], 'readback': readback}
+        require(len(encode(creation)) <= 4096, 'Bounded original fixture lineage')
     else:
-        fixture = None
-    evidence = encode({'schema': 'windows-controlled-harness-deployment-v1',
-                       'inventorySha256': a['inventory']['sha256'], 'files': deployed, 'fixtureAdmission': fixture})
+        fixture = creation = None
+    evidence = encode({'schema': 'windows-controlled-harness-deployment-v2',
+                       'inventorySha256': a['inventory']['sha256'], 'files': deployed,
+                       'fixtureAdmission': fixture, 'fixtureCreation': creation})
     write_new(local / 'deployment.json', evidence, budget, 4194304)
     write_new(root / 'deployment.json', evidence, budget, 4194304)
 
@@ -607,8 +661,8 @@ def verify_deployment(a, root, local, budget):
     require(budget.read(root / 'deployment.json', 4194304)[0] == raw, 'Original deployment receipt copies')
     deployment = decode(raw)
     rows, _ = inventory_rows(a, budget)
-    require(set(deployment) == {'schema', 'inventorySha256', 'files', 'fixtureAdmission'} and
-            deployment['schema'] == 'windows-controlled-harness-deployment-v1' and
+    require(set(deployment) == {'schema', 'inventorySha256', 'files', 'fixtureAdmission', 'fixtureCreation'} and
+            deployment['schema'] == 'windows-controlled-harness-deployment-v2' and
             deployment['inventorySha256'] == a['inventory']['sha256'] and
             len(deployment['files']) == len(rows), 'Complete deployment receipt')
     for created, source in zip(deployment['files'], rows, strict=True):
@@ -625,13 +679,24 @@ def verify_deployment(a, root, local, budget):
         else:
             budget.pin_created_copy(created, source, 67108864)
     fixture = deployment['fixtureAdmission']
+    creation = deployment['fixtureCreation']
     if a['suite'] == 'compile':
-        require(fixture is None, 'Compile has no runtime admission')
+        require(fixture is None and creation is None, 'Compile has no runtime admission')
+        return None
     else:
-        require(Path(fixture['path']) == STAGE / 'control' / 'fixture-admission.json' and
+        require(type(fixture) is dict and set(fixture) == {'path', 'bytes', 'sha256', 'identity'} and
+                Path(fixture['path']) == STAGE / 'control' / 'fixture-admission.json' and
+                type(fixture['bytes']) is int and
                 fixture['bytes'] == a['fixtureAdmission']['bytes'] and
                 fixture['sha256'] == a['fixtureAdmission']['sha256'], 'Staged native admission binding')
-        budget.pin(fixture, 262144)
+        require(type(creation) is dict and set(creation) == {
+                    'action', 'nonce', 'admissionSha256', 'sourceAdmission', 'readback'} and
+                creation['action'] == a['action'] and creation['nonce'] == a['nonce'] and
+                creation['admissionSha256'] == digest(a['_raw']) and
+                encode(creation['sourceAdmission']) == encode(a['fixtureAdmission']),
+                'Original exclusive fixture lineage')
+        validate_fixture_observation(a, fixture['identity'], creation['readback'], True)
+        return budget.read_fixture(a, fixture['identity'])
 
 
 def checkpoint(a, budget, reserved=False):
@@ -677,7 +742,7 @@ def checkpoint(a, budget, reserved=False):
             expected = sorted([*expected, a['action']])
         if reserved and role == 'windowsProjectionRoot':
             expected = sorted([*expected, 'named-fixtures-' + a['action'],
-                               *(['confidential-checks-v10'] if a['suite'] == 'compile' else [])])
+                               *(['confidential-checks-v11'] if a['suite'] == 'compile' else [])])
         require(names(path, 128, budget) == expected, 'Current parent membership changed')
     return before, charge, after
 
@@ -927,7 +992,7 @@ def worker(a, began, deadline, service_intent, service_deadline, budget):
                 digest(budget.read(root / 'Invoke-WindowsNamedGuardFixtures.ps1', 65536)[0]) == a['controller']['sha256'] and
                 budget.read(root / 'controller-input-catalog.tsv', 131072)[0] == budget.pin(a['catalog'], 131072),
                 'Durable original binding')
-        verify_deployment(a, root, local, budget)
+        result['fixtureVerification'] = verify_deployment(a, root, local, budget)
         checkpoint(a, budget, reserved=True)
         command = [a['launcher']['path'], windows_root_name(a), a['nonce'],
                    a['windowsAuthority']['sha256'], a['controller']['sha256']]
