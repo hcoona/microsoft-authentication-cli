@@ -282,6 +282,7 @@ def validate_fixture_observation(a, closed, observation, immediate):
                 'expectedSha256', 'returnedSha256', 'contentMatches', 'eightFieldsMatch',
                 'crossReadCtimeMatches'} and observation['writeClosedIdentity'] == closed,
             'Exact original fixture observation')
+    fixture_identity(observation['writeClosedIdentity'])
     readback = observation['readObservation']
     require(type(readback) is dict and set(readback) == {
                 'readOrdinal', 'createdCopyReadback', 'expectedBytes', 'returnedBytes',
@@ -685,13 +686,15 @@ def verify_deployment(a, root, local, budget):
     else:
         require(type(fixture) is dict and set(fixture) == {'path', 'bytes', 'sha256', 'identity'} and
                 Path(fixture['path']) == STAGE / 'control' / 'fixture-admission.json' and
+                type(fixture['bytes']) is int and
                 fixture['bytes'] == a['fixtureAdmission']['bytes'] and
                 fixture['sha256'] == a['fixtureAdmission']['sha256'], 'Staged native admission binding')
         require(type(creation) is dict and set(creation) == {
                     'action', 'nonce', 'admissionSha256', 'sourceAdmission', 'readback'} and
                 creation['action'] == a['action'] and creation['nonce'] == a['nonce'] and
                 creation['admissionSha256'] == digest(a['_raw']) and
-                creation['sourceAdmission'] == a['fixtureAdmission'], 'Original exclusive fixture lineage')
+                encode(creation['sourceAdmission']) == encode(a['fixtureAdmission']),
+                'Original exclusive fixture lineage')
         validate_fixture_observation(a, fixture['identity'], creation['readback'], True)
         return budget.read_fixture(a, fixture['identity'])
 

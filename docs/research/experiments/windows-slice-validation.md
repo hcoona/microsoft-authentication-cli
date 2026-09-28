@@ -22513,8 +22513,8 @@ Each bounded fixture observation contains exactly `writeClosedIdentity`,
 `readObservation`, `expectedBytes`, `returnedBytes`, `expectedSha256`, `returnedSha256`,
 `contentMatches`, `eightFieldsMatch` and `crossReadCtimeMatches`. The existing read
 observation retains its exact seven fields, including initial/final/named full9,
-read ordinal and `createdCopyReadback=false`. Every identity is nine exact integers
-within signed 128-bit bounds. Immediate `contentMatches` must be true; later it is null,
+read ordinal and `createdCopyReadback=false`. Every identity, including the retained write-closed identity, is nine exact integers
+within signed 128-bit bounds. Boolean and floating-point aliases are rejected. Immediate `contentMatches` must be true; later it is null,
 with exact admitted hash/length required instead. `eightFieldsMatch` must be true and
 the ctime result must equal the actual historical comparison; it may be false.
 No masked or reconstructed identity is stored. Success evidence is validated again
@@ -22526,7 +22526,8 @@ retain `schema`, `inventorySha256`, `files`, `fixtureAdmission`, and add
 exactly `action`, `nonce`, `admissionSha256`, `sourceAdmission` and `readback`, binding
 the original invocation, original source descriptor and immediate observation. The
 worker requires both receipt copies to agree, validates all joins, and uses the original
-write-closed identity again. Existing compile-created input rows and later native
+write-closed identity again. The staged byte count is an exact integer; the source
+admission descriptor must match by canonical encoded bytes, preserving numeric types. Existing compile-created input rows and later native
 `compileCreation` lineage retain their prior shape and qualification.
 
 The existing worker result additionally retains `fixtureVerification`, null for compile
@@ -22549,7 +22550,7 @@ still apply; evidence that does not fit fails closed.
 
 Source-only validation covers cross-read ctime equality and difference, both comparison
 sites, every other identity field, malformed/Boolean identities, byte/hash/length
-differences, within-read ctime differences, receipt shape/provenance, role/path binding,
+differences, within-read ctime differences, receipt shape/provenance and numeric-type aliases, role/path binding,
 and unchanged ordinary reads and exclusive creation. Use only extracted definitions and
 synthetic in-memory file/metadata substitutes; do not import the guarded caller or
 touch an experiment path. These checks establish comparison behavior, not platform
@@ -22569,7 +22570,7 @@ No C# API, native identity logic or Windows process behavior changes.
 
 | Inert control | Bytes | SHA-256 |
 | --- | ---: | --- |
-| run_controlled_callers.py | 73,731 | 58a21f7635fe4182a625b6ecf3c87737618d6c8c8882267da99a244da3c43030 |
+| run_controlled_callers.py | 73,870 | 7ebfc821c0685412fc43157f6d71f799b25980994418b96f94f6362b92cdf274 |
 | Invoke-WindowsControlledCallers.ps1 | 26,463 | 488f16809321b325ac009040499ea66caddcc971315c5d0b273f90cb21db7c06 |
 | source-response-map.json | 16,740 | b4c946ca69f00ad111fb8b0484bf39f7b602aa54fb3fb9a4c028bd63d8ac6e16 |
 | controller-input-catalog.tsv | 87,398 | 1e784c096622187ecc08d902ac22f9fad4f7f1ac88100e3dbd792c1052b34e6f |
