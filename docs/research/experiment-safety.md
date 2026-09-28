@@ -372,26 +372,43 @@ observation, successful exact-artifact calibration, scoped outcome review and al
 ownership, process, consumer, loss and evidence stops remain. No new owner risk request
 is required solely for the already accepted narrow persistence case.
 
-The matching compile-only owner Wave decision may explicitly include the documented
-OS console-host allocation caused by the existing CREATE_NO_WINDOW console launches.
-Limit this exception to one PowerShell and four compiler consoles, at most five
-incidental OS console hosts per separately admitted controlled compile and at most
-55 such hosts across eleven additional originals, further limited by unused correction
-capacity and the existing admission/lineage/stage bounds. Keep the unchanged normal
-launcher artifact and creation-time named Job; invoke no console host directly and
-introduce no authored helper. The source-derived ten-process expectation does not
-establish individual historical identities or a universal runtime guarantee.
+The matching grouped owner Wave decision permits only the listed incidental OS
+console-host roles for the existing controlled compile, N1/N2/N3 native batch and
+D0/D1/D2 direct synthetic paths. Preserve the normal launcher, compiled fixtures,
+creation flags and nested Job limits. Invoke no console host directly and add no
+authored helper. The source-derived models do not establish individual historical
+identities, installed-source equality or universal platform behavior.
 
-Each future compile spends 0/1/0/6 under the matching protocol. Preserve previous
-charges, old protected allocations, remaining-success-path capacity and every failed
-original, including 0129's unidentified associations. Extend only the six already
-accepted historical interference dispositions to these declared OS-host roles within
-unchanged ceilings; excuse no new ownership or termination uncertainty. A mismatch,
-incomplete capture or unproved owned completion stops the original. No current output
-or process is reopened, inspected or cleaned by this amendment. Native/direct scenarios,
-ETW, launcher replacement and all account, cache, credential and installation effects
-remain outside this exception. Require independent exact source/protocol and current
-input/artifact/checkpoint/call acceptance before any dependent execution.
+Only the initial WSL interop console hosts are covered by the specific outside-Job
+lifetime decision. They precede the later experimental Jobs. Rely on ordinary
+platform console lifecycle and the accepted WSL requested-process completion basis,
+while explicitly retaining each such host's unmeasured identity, exit and bounded
+termination. The owner accepts possible persistence or interference only for these
+finite roles within this credential-free grant. This is not a general exception for
+unowned descendants. Explicitly launched application, owned-Job and Linux completion,
+complete captures, zero active owned-Job members and all ordinary stop conditions
+remain required. No host survey, additional ETW diagnostic, foreign-service operation,
+containment redesign or cleanup is required or authorized by this decision.
+
+Apply the Wave's maximum four future originals per operation, twenty total originals,
+28 initial outside-Job hosts and 28 inside-Job hosts, intersected with the stricter
+remaining correction pool, protected success path, unused stages, immutable lineages,
+ETW limits and exact admissions. These are not jointly funded reservations or retries.
+The matching protocol charges compile 0/1/0/7, native 0/1/0/15 and each D0/D1/D2
+0/1/0/5; its required remaining path uses the protected 0/4/0/22 plus eight unused
+correction-pool synthetic units. Preserve all other allocations and twelve later-product
+build/test slots. No quota increases, refunds, clock resets or new passive passes follow.
+
+Extend each of the six separate historical interference dispositions only to these
+newly bounded OS-host roles. Preserve all original uncertainty, failed outcomes,
+charges, spent observations and noExperimentLive=false, including 0129's failed
+0/1/0/1 outcome and 0130's original 0/1/0/6 charge. Do not reprice, identify hosts or
+reobserve either original. This decision does not accept a new application/Job/Linux
+lifetime uncertainty. Both the narrow host decision and historical extensions end
+with this grant. Other managed builds, publication, future real-account acceptance,
+launcher replacement and account, cache, credential or installation effects remain
+outside this exception. Independently accept matching source/protocol and current
+input/artifact/checkpoint/finite-accounting/call gates before dependent execution.
 
 For at most 27 new intended-operation lineages, permit at most four separately admitted
 metadata passes per immutable lineage and four fixed-selection collectors per fresh

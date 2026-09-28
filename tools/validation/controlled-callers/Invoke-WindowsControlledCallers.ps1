@@ -330,7 +330,7 @@ try {
         $authority.sourceCommit -cnotmatch '^[0-9a-f]{40}$' -or
         $authority.nonce -cnotmatch '^[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$' -or
         $authority.preparationCharge -ne 0 -or $authority.buildTestCharge -ne 1 -or
-        $authority.syntheticCharge -ne $(if ($authority.operation -ceq 'compile') { 6 } else { 12 }) -or
+        $authority.syntheticCharge -ne $(if ($authority.operation -ceq 'compile') { 7 } else { 15 }) -or
         $authority.exemptOuterPowerShellCount -ne 1 -or $authority.accountEffectsAdmitted -ne $false -or
         $authority.noExperimentLive -ne $false) { throw 'Unaccepted controlled authority' }
     foreach ($key in @('protocolSha256', 'checkpointSha256', 'checkpointAcceptanceSha256', 'sourceReviewSha256',
