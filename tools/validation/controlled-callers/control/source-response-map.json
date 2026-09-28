@@ -90,9 +90,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 13815,
+        "bytes": 14813,
         "path": "source/native/FixtureNativePins.cs",
-        "sha256": "30fcc2dcc48aa465d64a0175dd21831bc66393ea63579afb14f28d8a1a506990"
+        "sha256": "f4e825e587c09da53203e791a90a4abfa7b926e2298eee69f395a77cfff58d52"
       },
       "stagedRelativePath": "source/direct/FixtureNativePins.cs"
     },
@@ -122,9 +122,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 12388,
+        "bytes": 12177,
         "path": "source/native/AcceptedFixtureInputs.cs",
-        "sha256": "c062ff3482e2d3a553b125c86b7ccd9a4c4599afe21721622337ed34f30df170"
+        "sha256": "ed3d8c7897b15bea1af1fa66edeaee1a675fb3c9c99fc406fdbf98857f3f82bf"
       },
       "stagedRelativePath": "source/native/AcceptedFixtureInputs.cs"
     },
@@ -194,9 +194,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 3703,
+        "bytes": 4626,
         "path": "source/native/FixtureDriverProgram.cs",
-        "sha256": "8f8a91e5c8eaac724d1829a9272cd602083c6eb69f1d09f8a991f25b325cddfd"
+        "sha256": "2a5d5f5bb8647cd66ca190ba1e69920fee94179dec24e5a10f6909dc699a4b4e"
       },
       "stagedRelativePath": "source/native/FixtureDriverProgram.cs"
     },
@@ -210,25 +210,25 @@
     },
     {
       "authoredSource": {
-        "bytes": 13815,
+        "bytes": 14813,
         "path": "source/native/FixtureNativePins.cs",
-        "sha256": "30fcc2dcc48aa465d64a0175dd21831bc66393ea63579afb14f28d8a1a506990"
+        "sha256": "f4e825e587c09da53203e791a90a4abfa7b926e2298eee69f395a77cfff58d52"
       },
       "stagedRelativePath": "source/native/FixtureNativePins.cs"
     },
     {
       "authoredSource": {
-        "bytes": 4039,
+        "bytes": 8084,
         "path": "source/native/FixturePins.cs",
-        "sha256": "274c3463bfc812a313a9a3a79bba30bf43a4bb56ab3c1e890a96411bdaf918b9"
+        "sha256": "68592758cdccf8ff34bf1f8059940f3ae2d64cb30baaaee196d9421b40244342"
       },
       "stagedRelativePath": "source/native/FixturePins.cs"
     },
     {
       "authoredSource": {
-        "bytes": 3660,
+        "bytes": 3834,
         "path": "source/native/FixtureReceiptRules.cs",
-        "sha256": "dba98fcc41e48cd23a8d1042ad4ee38b0e5f7d46b3b572bc3887352ad0daf4fc"
+        "sha256": "5ce0e4f14dacc7195a7b68bf5b7a65f6c57e98bf3e2370642f62dae40e9e7537"
       },
       "stagedRelativePath": "source/native/FixtureReceiptRules.cs"
     },
@@ -258,9 +258,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 16027,
+        "bytes": 17461,
         "path": "source/native/Program.cs",
-        "sha256": "eaf5d6fed763e603782a1fc05599c45bc739d7d6b15d6ae74b36a37c19cb3dd9"
+        "sha256": "3827feb2dca6cccbc6fb84cab180240aaf21de1f8518dd5cce8dc9c153d90e6b"
       },
       "stagedRelativePath": "source/native/Program.cs"
     },

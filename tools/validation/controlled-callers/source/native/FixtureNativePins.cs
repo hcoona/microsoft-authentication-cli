@@ -6,11 +6,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Win32.SafeHandles;
 namespace ConfidentialNativeCaller;
+internal enum FixtureCheckSource { None, NativePins, Admission }
+internal enum FixturePinPhase { None, CreateWrite, Readback, CreatedIdentity }
 internal readonly record struct FixtureFileIdentity(uint Volume,ulong Index,uint Attributes,long Created,long Modified,
     long Changed,long Length,uint Links);
 internal sealed class FixtureHeldFile(FileStream stream,FixtureFileIdentity identity) : IDisposable
@@ -21,11 +24,22 @@ internal sealed class FixtureHeldFile(FileStream stream,FixtureFileIdentity iden
 }
 internal sealed class FixtureNativePins : IDisposable
 {
+    // Source locations identify fixed predicates in the admitted source, never exception text.
+    internal static FixtureCheckSource FailedCheckSource { get; private set; }
+    internal static int FailedCheckLine { get; private set; }
+    internal static FixturePinPhase PinPhase { get; private set; }
+    internal static int? OpenError { get; private set; }
     private readonly Dictionary<string,SafeFileHandle> directories=new(StringComparer.OrdinalIgnoreCase);
     private readonly List<IDisposable> held=[];
     private readonly Action before;
     internal FixtureNativePins(Action beforeRead){before=beforeRead;}
-    internal static void Need(bool value){if(!value)throw new SafeFailure(Fault.Admission);}
+    internal static void Need(bool value,[CallerLineNumber] int line=0)
+    { if(!value)Reject(FixtureCheckSource.NativePins,line); }
+    internal static void Reject(FixtureCheckSource source,int line)
+    {
+        if(FailedCheckSource==FixtureCheckSource.None){FailedCheckSource=source;FailedCheckLine=line;}
+        throw new SafeFailure(Fault.Admission);
+    }
     internal static void Canonical(string path)
     {
         Need(path.Length is >=3 and <=1024 && path.StartsWith(@"C:\",StringComparison.Ordinal) &&
@@ -103,6 +117,7 @@ internal sealed class FixtureNativePins : IDisposable
     }
     private FixtureHeldFile CreatePinnedOutput(string path,byte[] bytes,int maximum,Action checkTime)
     {
+        PinPhase=FixturePinPhase.CreateWrite;
         Need(bytes.Length>0 && bytes.Length<=maximum);Canonical(path);HoldDirectory(Path.GetDirectoryName(path)!);checkTime();
         FixtureFileIdentity original;
         using(SafeFileHandle handle=Open(path,0xc0000000,1,1,0x00200000))
@@ -114,9 +129,11 @@ internal sealed class FixtureNativePins : IDisposable
         // The gap after our own writer closes is checked by original native identity
         // plus exact bytes. The retained read handle then denies write/delete sharing.
         string hash=Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant();
+        PinPhase=FixturePinPhase.Readback;
         FixtureHeldFile pinned=Pin(path,hash,bytes.Length,maximum);
+        PinPhase=FixturePinPhase.CreatedIdentity;
         Need(pinned.Identity.Volume==original.Volume && pinned.Identity.Index==original.Index &&
-            pinned.Identity.Created==original.Created);checkTime();return pinned;
+            pinned.Identity.Created==original.Created);checkTime();PinPhase=FixturePinPhase.None;return pinned;
     }
     internal static FixtureFileIdentity Snapshot(SafeFileHandle file)
     {
@@ -130,7 +147,7 @@ internal sealed class FixtureNativePins : IDisposable
     private static SafeFileHandle Open(string path,uint access,uint share,uint creation,uint flags)
     {
         SafeFileHandle result=CreateFile(path,access,share,IntPtr.Zero,creation,flags,IntPtr.Zero);
-        if(result.IsInvalid){result.Dispose();throw new SafeFailure(Fault.Admission);}return result;
+        if(result.IsInvalid){OpenError??=Marshal.GetLastWin32Error();result.Dispose();Need(false);}return result;
     }
     private static void RequireName(SafeFileHandle handle,string path)
     {

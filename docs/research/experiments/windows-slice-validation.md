@@ -21179,30 +21179,13 @@ restores and their seven unused, blocked paired builds are not transferred, reop
 refunded. The existing protected remainder 6/35/0/107, including twelve later-product
 build/test planning slots, remains intact. The new reservations are exactly:
 
-Future controlled-operation rates and remaining-path funding use
-[the grouped console-host amendment](#controlled-path-console-host-accounting-and-lifetime);
-the table retains its original allocation.
-
-| Supplemental reservation | Preparation | Build/test | Publication | Synthetic | ETW attempts |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Fresh managed restore | 1 | 0 | 0 | 1 | 0 |
-| Its conditional managed build | 0 | 1 | 0 | 1 | 0 |
-| Four-target caller compile phase | 0 | 1 | 0 | 1 | 0 |
-| Native controlled batch | 0 | 1 | 0 | 12 | 0 |
-| D0 observer calibration | 0 | 1 | 0 | 4 | 1 |
-| D1 direct normal completion | 0 | 1 | 0 | 3 | 1 |
-| D2 direct stdin-EOF cancellation | 0 | 1 | 0 | 3 | 1 |
-| Total | 1 | 6 | 0 | 25 | 3 |
-
-The managed pair is 1/1/0/2; the five controlled rows are separately reserved
-0/5/0/23. The four ordinary compiler invocations belong to one selected build phase;
-its normal launcher costs one synthetic unit. The native batch's twelve units are one
-normal launcher, one FixtureDriver, four N1 caller/subject processes, three N2 processes
-and three N3 processes. D0 comprises the observer supervisor, worker and two existing
-calibration subjects. D1 and D2 each comprise the observer supervisor, worker and one
-synthetic subject. The initiating Python controller is Linux infrastructure, not another
-Windows synthetic helper. The outer PowerShell exemption covers no additional helper.
-No new Windows helper kind, compiler target, publication or hidden setup/retry is included.
+The original supplemental allocation remains 1/6/0/25, including three ETW attempts.
+Its managed restore/build pair reserved 1/1/0/2; its controlled compile, native batch,
+D0, D1 and D2 together reserved 0/5/0/23. These are retained allocation amounts, not
+current operation prices. Use only the
+[grouped operation table](#controlled-path-console-host-accounting-and-lifetime)
+for future controlled charges, process-role counts and remaining-path funding.
+Historical charges and blocked reservations remain unchanged.
 
 These are finite source-planning reservations, not compiled-artifact, runtime-topology
 or scenario acceptance. Accept the exact controlled protocol and source/tool integration
@@ -21660,30 +21643,12 @@ This pool requires the matching owner-approved Delivery Wave and safety amendmen
 The accepted remaining baseline is one managed build from 0120 followed by the
 already protected controlled compile, native batch, D0, D1 and D2. Managed artifact
 acceptance also remains a prerequisite for the separately protected original CLI/Profile
-work; its reservations are not consumed or replaced by this pool. The three correction
-cycles below size the new allowance; they are not indivisible or paired reservations.
-
-| New-pool planning role | Count | Preparation | Build/test | Publication | Synthetic | ETW attempts |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Missing managed build from accepted 0120 | 1 | 0 | 1 | 0 | 1 | 0 |
-| Complete managed/controlled correction cycle | 3 | 3 | 18 | 0 | 75 | 9 |
-| Added total | | 3 | 19 | 0 | 76 | 9 |
-
-The original complete-cycle sizing used the following operation costs.
-Future controlled-operation rates and remaining-path funding use
-[the grouped console-host amendment](#controlled-path-console-host-accounting-and-lifetime);
-the table retains its original allocation.
-
-| Operation | Preparation | Build/test | Publication | Synthetic | ETW attempts |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Fresh complete-cache managed restore | 1 | 0 | 0 | 1 | 0 |
-| Managed build from accepted restore | 0 | 1 | 0 | 1 | 0 |
-| Existing four-target controlled compile | 0 | 1 | 0 | 1 | 0 |
-| Existing N1/N2/N3 native batch | 0 | 1 | 0 | 12 | 0 |
-| D0 calibration | 0 | 1 | 0 | 4 | 1 |
-| D1 direct normal completion | 0 | 1 | 0 | 3 | 1 |
-| D2 direct stdin-EOF cancellation | 0 | 1 | 0 | 3 | 1 |
-| One cycle total | 1 | 6 | 0 | 25 | 3 |
+work; its reservations are not consumed or replaced by this pool. The correction allowance is a shared pool, originally sized for the missing managed
+build and three complete correction cycles. Cycle counts are planning rationale, not
+indivisible reservations. The added 3/19/0/76 and nine ETW attempts are unchanged.
+Managed restore/build costs remain 1/0/0/1 and 0/1/0/1; the
+[grouped operation table](#controlled-path-console-host-accounting-and-lifetime)
+is the sole current price table for controlled operations.
 
 Aggregate ceilings become 39/166/30/378, with 18 Linux / 21 Windows preparations
 and twenty ETW creation attempts. The new pool alone allows at most three restore
@@ -21715,6 +21680,31 @@ exact input/artifact acceptance, current accounting and exact final call. It can
 the failed process, reuse its admission, refund its charge or reset its clock. A source-only
 correction within this accepted scope needs the ordinary independent review and accepted
 canonical update, not another owner capacity decision solely for the next attempt.
+
+### One Review Carrier per Original
+
+Use one review carrier for each original, with pre-execution admission and terminal
+outcome sections. It may be the governing pull request or the existing local admission
+bundle referenced by that pull request. Keep source, artifact, input, accounting and
+literal-call conclusions identifiable within it. The same independent reviewer may
+cover these concerns together when their evidence is available; independence is from
+the author and implementation, not between those concerns. Keep source acceptance,
+compile outcome, dependent native admission and post-run outcome in prerequisite order.
+
+Reference accepted unchanged evidence by its exact descriptor and scope. Recheck changed
+inputs, affected prerequisites and the current accounting checkpoint; do not reproduce
+an accepted review merely to create another summary of it. Existing machine-consumed
+acceptance records and their strict bindings remain required. They may be projections
+of this combined review, without a second contextual review of the same unchanged fact.
+Material findings still receive independent triage under GOV-011. A missing or changed
+prerequisite, conflicting observation or new effect still stops the affected work.
+
+Keep one cumulative checkpoint. Present consumed capacity, protected reservations,
+correction-pool balance and the next operation's full charge together, using the current
+grouped price table. Host, passive and ETW counters remain distinct limits in that same
+checkpoint; cycle labels do not create additional pools. No counter, price, historical
+charge, protected allocation or accepted risk boundary changes with this consolidation.
+Do not add a runner, report family, generic reservation service or review framework.
 
 ### Initial Build and Restore Continuity
 
@@ -22583,6 +22573,67 @@ admission. Each keeps separate source, input, checkpoint, finite-accounting, lit
 collector and outcome gates. Preserve immutable operation lineages, all spent stages,
 ordinals and passive passes. No success, retry, baseline refresh or clock renewal is
 implied. All other stop conditions remain; the exception ends with the current grant.
+
+### Native First-Failure Diagnostics and Paused Execution
+
+The native driver previously retained only a Boolean failure and completed-case counts;
+its catch discarded the cause, and a supervisor admission exception returned only exit
+one. Source inspection establishes that an identity file is written before its held
+readback and before child resume. Its existence alone cannot identify the failed step.
+The source correction below improves the next original's diagnostics; it does not explain
+a past failure or admit another run.
+
+The existing driver batch record uses `synthetic-caller-batch-v2`, adding `firstFailure`:
+null on success, otherwise one bounded object. The Linux success consumer requires that
+new schema and a null failure along with the existing 84 pure rows, three native cases,
+exact baseline digest and false `noExperimentLive`. Old batch records retain their old
+interpretation. A diagnostic never supplies a passing case or lifetime witness.
+
+The diagnostic contains only numeric `stage`, `fault`, `checkSource`, `checkLine`,
+`pinPhase`, `inputOrdinal`, `caseOrdinal`, nullable `supervisorExit` and nullable
+`openError`. Enums and fixed predicate source lines are interpreted against the exact
+admitted source map. Input ordinals are -1 outside catalog work, 0 for the admission
+control and 1 through 202 for its public catalog order. Case ordinals are 0 before a
+case and 1 through 3 thereafter. A zero check line means no localized predicate was
+captured; do not infer a cause from it. No exception text, stack, arbitrary path,
+authentication selector or new target observation enters the object. `openError` is
+only the already available thread error immediately after a failed `CreateFileW`.
+
+Driver stages distinguish batch admission, pure checks, case preparation, suspended
+creation, identity binding, resume request, successful resume followed by waiting,
+original-handle exit observation, case validation and terminal publication. Identity
+binding separately identifies create/write, held readback and created-identity comparison.
+Supervisor stages distinguish role admission before reservations, reservation publication,
+worker creation/binding/resume/wait, validation and terminal receipt publication. Fixed
+source locations identify native-pin and admission predicates without relaxing them.
+The first captured cause survives later cleanup or receipt failures. A recorded stage
+is the operation being attempted, not proof that it completed.
+
+A synthetic supervisor may emit its one canonical diagnostic to its existing stderr
+pipe, at most 1,024 bytes, before its original clipped 145-second deadline. The driver
+keeps the existing pump/EOF and original-handle completion requirements, with this one
+capture limit raised from one byte to 1,024. It parses only the fixed numeric shape,
+requires exact canonical bytes and rejects the scenario even when a diagnostic is
+well formed. It retains the cause in the existing batch receipt. Unexpected, malformed
+or overflowing output still fails. Success and the expected N3 worker overflow keep
+empty supervisor stderr. Worker NCF1 behavior, direct observer, product protocol output
+and outer driver stdout/stderr remain unchanged. No diagnostic makes the parent wait
+past its existing deadline; synchronous emission can still fail or be terminated.
+
+Across three cases the extra permitted pipe payload is at most 3,069 bytes, with one
+existing overflow probe per stream. There is no new pipe, file, output selector, helper,
+process, timer or metadata pass. The batch stays within 4,096 bytes and all nineteen
+native files within 335,872 bytes. The outer controller's empty-transport requirement,
+native input passes, fixed collector selection and enclosing evidence limits remain.
+If initialization or final persistence fails before a batch record can be retained,
+the missing diagnostic remains an explicit limit; no fallback observation is implied.
+
+All execution guards remain closed. This change retains the occupied v11 source paths
+for review only; a future accepted finite unused stage, new compiled artifacts, exact
+admission and sufficient capacity are prerequisites to execution. No past failure is reclassified, no capacity is enlarged and no historical observation
+is reopened. Preserve all historical uncertainty, protected allocations and consumed counters. Validate this
+change with non-executing source/map/schema review and repository checks; compilation
+and real Windows behavior remain unvalidated until a separately admitted operation.
 
 ### Future Passive Metadata and Collection
 

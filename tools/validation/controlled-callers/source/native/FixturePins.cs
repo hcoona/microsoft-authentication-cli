@@ -2,6 +2,8 @@
 // Concrete admission holds only exact public synthetic files; it performs no account discovery.
 #nullable enable
 using System;
+using System.IO;
+using System.Text.Json;
 namespace ConfidentialNativeCaller;
 internal static class FixturePins
 {
@@ -17,6 +19,7 @@ internal static class FixturePins
     }
     internal static int RunRole(string[] args,long entry,bool worker)
     {
+        FixtureDiagnostics.At(FixtureStage.RoleAdmission,0);
         PrivateRequest.Require(FixtureAdmission.ExecutionAdmitted);
         PrivateRequest.Require(args.Length==7 && args[0]==(worker?"--fixture-worker":"--fixture-supervisor") &&
             Enum.TryParse(args[1],false,out Group group) && group.ToString()==args[1]);
@@ -61,5 +64,74 @@ internal static class FixturePins
         Inputs.PublishExclusive(id+"-case.json",FixtureReceiptRules.CaseRecord(id,exit,checked((int)elapsedMilliseconds)));
     }
     internal static void RecordBatch(bool passed,int pureRows,int nativeCases) =>
-        Inputs.PublishExclusive("batch.json",FixtureReceiptRules.BatchRecord(passed,pureRows,nativeCases,Inputs.NativeBaselineSha256));
+        Inputs.PublishExclusive("batch.json",FixtureReceiptRules.BatchRecord(passed,pureRows,nativeCases,Inputs.NativeBaselineSha256,FixtureDiagnostics.First));
+}
+
+internal enum FixtureStage
+{
+    BatchAdmission, PureChecks, PrepareCase, CreateSupervisor, BindSupervisor,
+    ResumeSupervisor, WaitSupervisor, SupervisorExit, ValidateCase, RoleAdmission,
+    Reservation, CreateWorker, BindWorker, ResumeWorker, WaitWorker, ValidateWorker,
+    TerminalReceipt, BatchReceipt
+}
+
+// One failure on existing synthetic channels. No exception strings, new files, or observations.
+internal sealed record FixtureFailure(FixtureStage Stage,Fault Fault,FixtureCheckSource CheckSource,
+    int CheckLine,FixturePinPhase PinPhase,int InputOrdinal,int CaseOrdinal,uint? SupervisorExit,int? OpenError)
+{
+    internal void Write(Utf8JsonWriter json)
+    {
+        json.WriteStartObject();json.WriteNumber("stage",(int)Stage);json.WriteNumber("fault",(int)Fault);
+        json.WriteNumber("checkSource",(int)CheckSource);json.WriteNumber("checkLine",CheckLine);
+        json.WriteNumber("pinPhase",(int)PinPhase);json.WriteNumber("inputOrdinal",InputOrdinal);
+        json.WriteNumber("caseOrdinal",CaseOrdinal);
+        if(SupervisorExit is uint exit)json.WriteNumber("supervisorExit",exit);else json.WriteNull("supervisorExit");
+        if(OpenError is int error)json.WriteNumber("openError",error);else json.WriteNull("openError");
+        json.WriteEndObject();
+    }
+    internal byte[] Encode()
+    {
+        using var memory=new MemoryStream();using(var json=new Utf8JsonWriter(memory)){Write(json);json.Flush();}
+        PrivateRequest.Require(memory.Length<=1024);return memory.ToArray();
+    }
+    internal static FixtureFailure Parse(ReadOnlyMemory<byte> bytes)
+    {
+        PrivateRequest.Require(bytes.Length is >0 and <=1024);
+        using JsonDocument doc=JsonDocument.Parse(bytes,new JsonDocumentOptions{MaxDepth=2});
+        JsonElement value=doc.RootElement;
+        var result=new FixtureFailure((FixtureStage)value.GetProperty("stage").GetInt32(),
+            (Fault)value.GetProperty("fault").GetInt32(),(FixtureCheckSource)value.GetProperty("checkSource").GetInt32(),
+            value.GetProperty("checkLine").GetInt32(),(FixturePinPhase)value.GetProperty("pinPhase").GetInt32(),
+            value.GetProperty("inputOrdinal").GetInt32(),value.GetProperty("caseOrdinal").GetInt32(),
+            value.GetProperty("supervisorExit").ValueKind==JsonValueKind.Null?null:value.GetProperty("supervisorExit").GetUInt32(),
+            value.GetProperty("openError").ValueKind==JsonValueKind.Null?null:value.GetProperty("openError").GetInt32());
+        PrivateRequest.Require(Enum.IsDefined(result.Stage) && Enum.IsDefined(result.Fault) &&
+            Enum.IsDefined(result.CheckSource) && Enum.IsDefined(result.PinPhase) && result.CheckLine is >=0 and <=65535 &&
+            result.InputOrdinal is >=-1 and <=202 && result.CaseOrdinal is >=0 and <=3 &&
+            bytes.Span.SequenceEqual(result.Encode()));
+        return result;
+    }
+}
+
+internal static class FixtureDiagnostics
+{
+    private static FixtureStage stage;
+    private static int inputOrdinal=-1;
+    internal static int CaseOrdinal;
+    internal static uint? SupervisorExit;
+    internal static FixtureFailure? First { get; private set; }
+    internal static void At(FixtureStage value,int input=-1){stage=value;inputOrdinal=input;}
+    internal static void Input(int ordinal){inputOrdinal=ordinal;}
+    internal static void Capture(Exception caught)
+    {
+        First??=new(stage,caught is SafeFailure safe?safe.Fault:Fault.Native,
+            FixtureNativePins.FailedCheckSource,FixtureNativePins.FailedCheckLine,FixtureNativePins.PinPhase,
+            inputOrdinal,CaseOrdinal,SupervisorExit,FixtureNativePins.OpenError);
+    }
+    internal static void RejectSupervisor(ReadOnlyMemory<byte> bytes)
+    {
+        FixtureFailure remote=FixtureFailure.Parse(bytes);
+        First??=remote with { CaseOrdinal=CaseOrdinal,SupervisorExit=SupervisorExit };
+        throw new SafeFailure(Fault.Expectation);
+    }
 }

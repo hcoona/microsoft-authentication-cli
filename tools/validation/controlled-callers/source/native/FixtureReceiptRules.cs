@@ -41,12 +41,14 @@ internal static class FixtureReceiptRules
         json.WriteString("schema","synthetic-caller-case-v1");json.WriteString("case",id);json.WriteBoolean("passed",true);
         json.WriteNumber("exit",exit);json.WriteNumber("elapsedMilliseconds",elapsed);json.WriteBoolean("noExperimentLive",false);
     });
-    internal static byte[] BatchRecord(bool passed,int rows,int cases,string nativeBaselineSha256)
+    internal static byte[] BatchRecord(bool passed,int rows,int cases,string nativeBaselineSha256,FixtureFailure? failure)
     {
-        PrivateRequest.Require(rows is >=0 and <=84 && cases is >=0 and <=3 && (!passed || rows==84 && cases==3));
-        return Record(json=>{json.WriteString("schema","synthetic-caller-batch-v1");json.WriteBoolean("passed",passed);
+        PrivateRequest.Require(rows is >=0 and <=84 && cases is >=0 and <=3 && (!passed || rows==84 && cases==3 && failure is null));
+        return Record(json=>{json.WriteString("schema","synthetic-caller-batch-v2");json.WriteBoolean("passed",passed);
             json.WriteString("nativeBaselineSha256",nativeBaselineSha256);
-            json.WriteNumber("completedPureRows",rows);json.WriteNumber("completedNativeCases",cases);json.WriteBoolean("noExperimentLive",false);});
+            json.WriteNumber("completedPureRows",rows);json.WriteNumber("completedNativeCases",cases);
+            json.WritePropertyName("firstFailure");if(failure is null)json.WriteNullValue();else failure.Write(json);
+            json.WriteBoolean("noExperimentLive",false);});
     }
     private static byte[] Record(Action<Utf8JsonWriter> content)
     {
