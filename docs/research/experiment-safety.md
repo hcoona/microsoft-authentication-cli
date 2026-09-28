@@ -450,6 +450,22 @@ failures and the unknown cause of the earlier ctime differences. Any further
 contradictory observation remains a stop without replacement or readmission.
 Require the matching Wave and protocol amendments before dependent admission.
 
+The Wave's created-native-fixture decision permits only the one exclusively created
+public synthetic fixture admission in an independently admitted remaining fresh stage
+to qualify change time between write closure and separate Linux reads. Preserve the
+original write-closed identity, exact admitted content, the other eight identity fields,
+and full9 stability within each read. Keep every sampled full9 and the precise comparison
+outcomes; do not replace a baseline or use the broader compile-copy read qualification.
+Native held Windows checks and every other ordinary control remain unchanged.
+
+This accepts only the loss of that historical change-time rejection signal, not a
+benign cause or uninterrupted metadata integrity. Apply the exact
+[fixture-control protocol](experiments/windows-slice-validation.md#created-fixture-between-read-identity-qualification)
+and independently accepted source, finite evidence bounds and ordinary exact gates.
+No additional observation, settling pass, occupied-control reuse, overwrite, cleanup,
+quota or process uncertainty is included. Preserve historical failures and charges;
+the exception ends with the current grant and cannot expand or transfer automatically.
+
 This grant permits independently reviewed narrow source/protocol corrections and its
 finite fresh owned stage versions within unchanged topology/effects; it creates no
 generic execution or discovery mechanism. Matching owner Wave acceptance and protocol

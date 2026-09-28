@@ -21372,7 +21372,9 @@ it cannot be removed, overwritten or replaced by another path. Native reuses acc
 compile outputs and writes one fixture admission; it cannot rebuild or recopy artifacts.
 
 Pre-copy sources, existing tools, generated controls/artifacts and ordinary reads stay
-full9-strict. Only this compile's 413 exclusively materialized public input copies use
+full9-strict except for the sole generated fixture role's narrower
+[between-read qualification](#created-fixture-between-read-identity-qualification).
+Only this compile's 413 exclusively materialized public input copies use
 the accepted immediate-copy qualification: exact payload, unchanged eight non-ctime
 fields, and retained write-closed, opened-readback, final-opened and named full9. Keep
 the actual named full9 as the copied descriptor. No settling read, new baseline or
@@ -22437,6 +22439,149 @@ The diagnostic native outcome may distinguish the failed comparison while still
 rejecting it; it is not a promise that the mismatch is fixed. Any failure stops for
 independent disposition. A proposed predicate relaxation, occupied-control reuse,
 expanded effect or exhausted allocation needs its applicable owner decision first.
+
+### Created Fixture Between-Read Identity Qualification
+
+#### Accepted failure and decision basis
+
+Original 0132 used PR #297 source `f8e1afa23e1db0800f686a2302e332b4288ec5bd`,
+accepted at `37301d8c1faba646163eee01b1b00d754059bcfc`, for its sole v10 compile.
+Independent full artifact review accepted its 413 input/deployment joins, four PE/PDB
+pairs, exact compiler/reference/source provenance, four apphosts and eight runtime
+templates. The review has SHA-256
+`ef12420aa8d66dbe9f700501ead8ac52d4508180edec7d7ac1b27246d95b9cac`.
+This is compile/artifact acceptance, not native, direct or real-account acceptance.
+
+Original 0133 used the same accepted source and compile lineage. Its sole original
+transport exited one at `original-materialization`, `Strict fixture-control copy`,
+source line 595, before service dispatch. Retained comparison operands show exactly
+57,966 bytes and SHA-256
+`1396ad85060869bdae900a41b20f2b8604ae575ac253e4193c26aba64ae2f10a`
+at both write closure and immediate readback. All eight non-ctime identity fields
+match; ctime differs by 38,947,500 ns. Its sole later collector retained the same
+content/eight fields and another ctime increase of 783,415,900 ns. This identifies the
+rejected comparison, not the cause or actor of the metadata changes. Both observed
+reads were internally full9-stable. No benignness or future success follows.
+
+The 306,690-byte fixed snapshot has SHA-256
+`9463659602fe91e5b2704a1f253c6aeb6781e642a627c729c7e1891f8511baf9`.
+Independent failed-outcome review has SHA-256
+`07c9cd8422eca3bfeeca4f5b917467676217024690948d30eb5e3fe4b3eaca58`.
+It accepts the source-bound pre-dispatch disposition: this original created no service
+worker, Windows launcher/controller, experimental Job, native case or initial interop
+console host. This is not an absence survey or a host-wide termination claim. Preserve
+the original generic failure flags and all six historical uncertainties. N1/N2/N3 and
+D0/D1/D2 remain unaccepted; full Slice acceptance remains open.
+
+Independent F0133-R02 triage has SHA-256
+`ff975772f2b7737ef848cfbeded75563c3db3ba8ba4778cedcdb778a60982efc`.
+The strict implementation correctly enforced its contract. The triage identified a
+prospective contract blocker, not a source violation: qualifying only the first read
+would leave the later historical comparison exposed, while the generic compile-copy
+route would also relax within-read stability. PR #298 records the owner's narrower
+between-read-only decision, accepted at `5e5241ce772cd966a479cae93e273fc2c91ebdb3`.
+The unknown cause and lost historical comparison signal remain explicit.
+
+Preserve both originals, their full 0/1/0/7 and 0/1/0/15 charges, and spent collectors;
+0132's sole artifact reader is also spent. Counts are 32/116/6/222, with preparation
+hosts Linux 12/18 and Windows 20/21. The correction pool is 1/12/0/34; protected
+D0/D1/D2 remains 0/3/0/15, other protection 6/35/0/107 and combined protection
+7/50/0/156, including twelve later-product build/test slots. Grouped compile/native
+ordinals are one/two, with three outside and nine inside console roles conservatively
+charged. Do not infer dispatch from those charges. Passive totals are ten collectors,
+3,000 reserved seconds and 1,360,985,522 reserved payload bytes; metadata remains two
+passes, 120 seconds and 7,245,824 bytes. Reapply no earmark and refund no failed start.
+
+#### Exact fixture role and comparison
+
+Only a fresh native original's exclusively created
+`control/fixture-admission.json` in the admitted stage uses `Budget.read_fixture`.
+The original source admission is still an ordinary strict input. `write_new` retains
+exclusive creation; an occupied or partial output fails without reuse or repair.
+After write closure, retain its actual full9 permanently as the fixture descriptor's
+identity. The descriptor's path, length and hash bind the exact admitted fixture.
+
+Both immediate readback and the worker's later verification use the unchanged ordinary
+`Budget._read` with no created-copy arguments. Each read requires regular, single-link,
+no-follow input and exact full9 equality across its initial descriptor, final descriptor
+and named path. Compare all eight non-ctime fields with the original write-closed
+identity at every observation. Require exact admitted bytes immediately, and exact length
+and SHA-256 at both reads. A ctime change within a read, any other field difference,
+content mismatch, malformed identity or role/provenance mismatch remains a failure.
+
+Each bounded fixture observation contains exactly `writeClosedIdentity`,
+`readObservation`, `expectedBytes`, `returnedBytes`, `expectedSha256`, `returnedSha256`,
+`contentMatches`, `eightFieldsMatch` and `crossReadCtimeMatches`. The existing read
+observation retains its exact seven fields, including initial/final/named full9,
+read ordinal and `createdCopyReadback=false`. Every identity is nine exact integers
+within signed 128-bit bounds. Immediate `contentMatches` must be true; later it is null,
+with exact admitted hash/length required instead. `eightFieldsMatch` must be true and
+the ctime result must equal the actual historical comparison; it may be false.
+No masked or reconstructed identity is stored. Success evidence is validated again
+from its typed fields before the worker reads the fixture.
+
+The existing two deployment receipts use `windows-controlled-harness-deployment-v2`:
+retain `schema`, `inventorySha256`, `files`, `fixtureAdmission`, and add
+`fixtureCreation`. Compile uses null for both fixture fields. Native creation contains
+exactly `action`, `nonce`, `admissionSha256`, `sourceAdmission` and `readback`, binding
+the original invocation, original source descriptor and immediate observation. The
+worker requires both receipt copies to agree, validates all joins, and uses the original
+write-closed identity again. Existing compile-created input rows and later native
+`compileCreation` lineage retain their prior shape and qualification.
+
+The existing worker result additionally retains `fixtureVerification`, null for compile
+or the bounded later observation for native, before launch. On a comparison failure,
+the existing `pinObservation` retains the bounded operands and outcomes. A strict read
+failure keeps its original cause and existing `readObservation`, with write-closed
+identity attached; it does not issue a diagnostic read. Existing serialization-bound
+omission, finite terminal writes and arbitrary persistence-failure limitations remain.
+
+Each fixture observation is at most 2,048 encoded bytes; the creation lineage is at
+most 4,096 encoded bytes. Each existing deployment write stays within 4 MiB and grows
+by at most 4,128 bytes; compile grows only by the null field. The worker result grows
+by at most 2,072 bytes within its existing 65,536-byte bound. The same additional
+fixture field may appear in the final worker failure receipt. First-failure diagnostics
+retain their existing per-observation bounds. Exact admission must include these bytes
+in original/worker and collector arithmetic. Add no file read, metadata call, output
+path, write, process or clock. In-memory validation/hashing handles only already bounded
+bytes. All existing aggregate read/write caps, original deadlines and terminal reserves
+still apply; evidence that does not fit fails closed.
+
+Source-only validation covers cross-read ctime equality and difference, both comparison
+sites, every other identity field, malformed/Boolean identities, byte/hash/length
+differences, within-read ctime differences, receipt shape/provenance, role/path binding,
+and unchanged ordinary reads and exclusive creation. Use only extracted definitions and
+synthetic in-memory file/metadata substitutes; do not import the guarded caller or
+touch an experiment path. These checks establish comparison behavior, not platform
+metadata semantics or successful native execution. The Windows held-input content and
+identity code, normal launcher, cgroup/named-Job topology and all other controls retain
+their existing predicates.
+
+#### Fresh source correspondence and next admission
+
+The current correction selects the already permitted next static stage
+`confidential-checks-v11`, replacing v10 only in the two callers, four response files,
+native accepted root, source map and derived catalog pins. v9 and v10 controls remain
+occupied, spent and retained; no availability survey or cleanup follows. Direct
+deployment remains `confidential-direct-v4`. Keep all execution guards closed, response
+ordering, compiler targets, toolchain, charges 7/15 and successful Job totals 10/14.
+No C# API, native identity logic or Windows process behavior changes.
+
+| Inert control | Bytes | SHA-256 |
+| --- | ---: | --- |
+| run_controlled_callers.py | 73,731 | 58a21f7635fe4182a625b6ecf3c87737618d6c8c8882267da99a244da3c43030 |
+| Invoke-WindowsControlledCallers.ps1 | 26,463 | 488f16809321b325ac009040499ea66caddcc971315c5d0b273f90cb21db7c06 |
+| source-response-map.json | 16,740 | b4c946ca69f00ad111fb8b0484bf39f7b602aa54fb3fb9a4c028bd63d8ac6e16 |
+| controller-input-catalog.tsv | 87,398 | 1e784c096622187ecc08d902ac22f9fad4f7f1ac88100e3dbd792c1052b34e6f |
+
+A separately admitted fresh compile and conditional native original would cost
+0/2/0/22 from the correction pool, reaching 32/118/6/244 and leaving 1/10/0/12.
+Combined protection would be 7/48/0/134. This is affordability arithmetic, not an
+admission or reservation. Compile outcome acceptance precedes native input/artifact
+admission. Each keeps separate source, input, checkpoint, finite-accounting, literal-call,
+collector and outcome gates. Preserve immutable operation lineages, all spent stages,
+ordinals and passive passes. No success, retry, baseline refresh or clock renewal is
+implied. All other stop conditions remain; the exception ends with the current grant.
 
 ### Future Passive Metadata and Collection
 
