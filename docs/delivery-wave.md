@@ -550,6 +550,57 @@ is included. The exception covers only the listed controlled compile/native
 and direct synthetic paths; it does not grant effects for other managed builds,
 publication routes or future real-account/product acceptance.
 
+**Created native fixture control: between-read identity qualification:** Authorize
+a prospective exception for only the one public synthetic
+`control/fixture-admission.json` exclusively created by each independently admitted
+remaining fresh native original in its separately accepted finite stage. Bind the
+original action, nonce, stage, role, exact admitted content and exclusive creation
+lineage. A preexisting or partially created destination remains a stop. This does
+not authorize reuse of the occupied v9 or v10 controls.
+
+Keep the original write-closed full9 identity permanently. Require its device,
+inode, mode, owner UID, owner GID, length, modification time and link count to
+equal every subsequent Linux fixture observation. Require exact admitted bytes
+on immediate readback and exact admitted length and SHA-256 at each later
+verification. Only change-time equality **between** write closure and separate
+Linux reads may be qualified. Within every read, all nine fields must still
+match across the initial held descriptor, final held descriptor and named path;
+a within-read change remains a failure. Preserve regular-file, single-link and
+no-follow checks. Retain every actually sampled full9 and the precise comparison
+outcomes without replacing the original baseline or synthesizing an identity.
+
+**Specific comparison-risk decision:** The repository owner accepts, within this
+one role and the existing finite credential-free grant, no longer using a
+between-read change-time difference alone as a rejection signal. Matching
+sampled content and eight identity fields do not establish the cause of a
+change-time difference or uninterrupted metadata/history integrity between
+observations. This decision neither classifies the observed changes as benign
+nor guarantees success. Preserve native held Windows identity/content checks,
+strict within-read checks and every other ordinary input, generated control,
+artifact and output predicate. Do not extend the existing compile-copy exception
+to this control; its within-read comparison remains stricter.
+
+Require matching independently accepted safety/protocol amendments and exact
+source before dependent admission or execution. The exact protocol must cover
+both immediate materialization and later Linux verification, retained provenance,
+bounded existing-read evidence, negative validation cases and unchanged failure
+handling. Add no observation, settling pass, generic comparison switch, baseline
+refresh, overwrite or cleanup. Retain the existing creation-time cgroup and named
+Job topology, finite clocks, capture/EOF and scoped-lifetime requirements.
+
+Use only the unused correction pool, finite unused stages, remaining grouped
+operation ordinals and existing passive limits. Add no quota, reservation,
+automatic retry, helper kind, toolchain or account effect. Any required fresh
+compilation and conditional native original retain their full charges and
+separate source, input, artifact, checkpoint, finite-accounting, literal-call
+and outcome gates. Preserve all failed originals, spent observations and
+protected allocations, including D0/D1/D2 and twelve later-product build/test
+slots. Preserve all six historical lifetime uncertainties and
+`noExperimentLive=false`; this comparison decision accepts no new process
+uncertainty. The exception ends with this grant and cannot transfer or expand
+automatically. Proposed text grants no predicate or execution authority before
+owner acceptance and merge.
+
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
 permitted interactive calls for the later real-environment acceptance proposal.
