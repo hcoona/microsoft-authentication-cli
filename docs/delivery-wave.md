@@ -810,6 +810,41 @@ historical lifetime uncertainties and `noExperimentLive=false`. This decision gr
 no new process uncertainty or account effect and expires with the present finite
 grant. Owner acceptance and merge precede implementation or execution.
 
+**Synthetic direct v7 completion and public donors:** Permit one separately numbered,
+fully charged completion of the fixed `confidential-direct-v7` catalog: retain its
+one accepted leaf and exclusively create the remaining 199 leaves. Reuse the accepted
+0151 DirectObserver and fixed v7 source, unchanged SyntheticSubject artifacts and
+native 0142 evidence. Preserve the failed preparation, original descriptors and all
+spent charges. The [v7 completion protocol](research/experiments/windows-slice-validation.md#direct-v7-completion-and-public-donor-history)
+owns the exact retained lineage and finite source, call and outcome obligations.
+
+For only the fixed 196 NTFS public original donors in that 200-input map, permit
+ctime-only inequality between historical expected identity and the current opened
+identity. Preserve ordered roles, literal paths, original descriptors, the other
+eight Linux identity fields and a new exact admitted length/SHA-256/EOF read.
+The 190 runtime/host and four observer donors retain strict full9 equality within
+each read, including held/final/named ctime. The two SyntheticSubject donors retain
+their already accepted within-read qualification. The four local donors, external
+controls, infrastructure and unrelated inputs remain strict. Retain both historical
+and actual observations; do not refresh a baseline or substitute a historical hash
+for the new read. This is a closed input set, not a path-pattern exception.
+
+The repository owner accepts the loss of the historical ctime-only metadata-change
+signal when these object and content checks agree. No benign cause, uninterrupted
+integrity, changed content or new process uncertainty is accepted. Apply this donor
+qualification only to the sole completion; later reads of deployed leaves retain
+their existing direct-catalog rules. The permission expires with this grant.
+
+Use one existing 0/1/0/5 correction allocation and one existing ETW reservation.
+Raise only the grouped D0 maximum from seven to eight for this original; retain the
+25 grouped-total, 28 outside-host, 62 inside-host and all aggregate ceilings.
+Preserve protected D1/D2 and twelve later-product build/test slots. No new quota,
+compile, native batch, metadata survey, helper, clock, download, overwrite or cleanup
+is included. This occupied-v7 completion is single-use; failure grants no further
+adoption. Require matching safety/protocol acceptance and independent inert source,
+input, finite-call and outcome review before dependent execution. Keep named Jobs,
+cgroups, all six historical lifetime uncertainties and `noExperimentLive=false`.
+
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
 permitted interactive calls for the later real-environment acceptance proposal.

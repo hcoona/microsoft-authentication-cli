@@ -902,3 +902,27 @@ and containment. Add no observation allowance, process role, helper, clock
 extension, cleanup, occupied-tree reuse or new process uncertainty. Existing
 per-original observations and ETW reservations remain charged. The
 qualification ends with the current grant.
+
+## Synthetic Direct v7 Completion and Public Donor History
+
+The Wave's single-use v7 completion permits one retained leaf and 199 exclusive
+creations, reusing the accepted observer without another compile. Apply the
+[exact v7 protocol](experiments/windows-slice-validation.md#direct-v7-completion-and-public-donor-history)
+only after matching record acceptance and independent source/input/call review.
+The fixed 196 NTFS public original donors may differ only in ctime between their
+historical expected and current opened identities. Require the original ordered
+role/path/descriptor, the other eight fields and a new exact length/hash/EOF read.
+For the 194 runtime/host/observer donors, retain strict full9 within each read;
+the two SyntheticSubject donors retain their separate existing qualification.
+Four local donors, external controls, infrastructure and unrelated inputs stay strict.
+
+The owner accepts loss of that historical ctime signal and reuse without continuously
+held historical handles. Matching content does not establish a benign cause or
+continuous metadata integrity. Preserve original baselines and actual observations;
+prior hashes cannot replace the new read. The donor qualification applies only to
+this completion and ends with the grant. Existing deployed-catalog rules remain.
+Use one already funded 0/1/0/5 allocation, with only D0's submaximum raised to eight;
+add no aggregate quota or observation allowance. Preserve failed charges, protected
+work, all six historical unknowns, `noExperimentLive=false`, named Jobs/cgroups and
+existing ETW dispositions. No overwrite, repair, extra survey, clock extension,
+new process uncertainty or account effect is included. Failure cannot renew adoption.
