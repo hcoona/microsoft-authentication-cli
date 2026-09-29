@@ -23628,6 +23628,100 @@ process survey, ETW observer, account effect, download, restore, AOT publication
 release authority is added. Owner acceptance, matching safety/Wave merge, independent
 source/input/artifact/call acceptance and durable full charge precede each execution.
 
+
+### Direct Catalog Cross-Role ChangeTime Qualification
+
+Original 0150 completed the accepted v6 preparation: 194 retained leaves and six
+exclusive creations, with all 200 admitted content pins accepted. Its fresh D0
+control passed the strict initial readback. The sole D0 then failed with worker
+origin 1, admission stage 2, source 1, line 171 and input ordinal 0. Exact compiler
+source `d0dc82b1bcb60711cdef5a91911e3fb113dbc7db`,
+`AcceptedDirectInputs.cs:171`, identifies the Changed-column fingerprint comparison.
+The preceding header, ordered paths, lengths, hashes, volume/file index, attributes,
+creation time, last-write time and link-count projections all matched. No individual
+changed row, worker timestamp or cause was retained; no benign cause is established.
+
+The sole eleven-leaf collector retained the reservation, failed observer final,
+200-row supervisor map, 602-row complete Linux comparison record and empty stop leaf.
+It visited every selected path but was incomplete because the required terminal was
+absent. The caller rejects a failed supervisor exit before success-terminal creation.
+The failed final positively records worker exit, Job active count zero, total count
+one and no forced observer stop. Joined to exact stage-2 source ordering and the
+ordinary ended Linux/WSL wait, this supports scoped completion and zero ETW creation
+for this original: stage 4 and both calibration-child launches were not reached.
+It does not establish global quiescence. Keep the failed outcome, full 0/1/0/5 charge,
+spent ETW reservation, both spent collectors and occupied v6 tree. D0 and D1/D2 remain
+unaccepted; no replay, recollection or further occupied-v6 adoption is implied.
+
+Microsoft's [FILE_BASIC_INFO](https://learn.microsoft.com/windows/win32/api/winbase/ns-winbase-file_basic_info)
+contract distinguishes metadata ChangeTime from data-stream LastWriteTime. That
+source distinction explains the proposed assertion boundary, not the observed cause.
+Only the Wave's specific direct-catalog decision permits the following comparison;
+the native 202-leaf and Linux ctime qualifications do not grant it.
+
+Both direct roles still independently pin and hash every one of the 200 admitted
+synthetic inputs and seal their complete local map. Preserve strict local native
+pin/read/held/named equality, including ChangeTime, and all canonical/ancestor,
+no-reparse, single-link, length, SHA-256, EOF and sharing checks. Do not change
+`FixtureNativePins`, map serialization, real admission or the Linux control predicate.
+
+Reuse the nine existing fingerprints over already captured bytes and the exact
+584-character created-worker argument. Validate all nine lowercase hashes and require
+projections 1 through 7 to match: complete header/ordered content, volume, file index,
+attributes, creation time, modification time and link count. Only cross-role equality
+of projection 8 (Changed) and projection 0 (the whole map containing Changed) is
+omitted. Every serialized field other than Changed is covered by the required
+projections; local Changed remains a positive integer and remains part of each
+unaltered complete map. A malformed argument, any required projection mismatch or
+expired deadline still rejects. This is a fixed synthetic rule, not a runtime switch.
+
+After all required comparisons succeed, keep the supervisor's original complete-map
+digest separately from the worker's local map/digest. Use the original digest in the
+worker's PublicPlan and therefore readiness, intent validation and other existing
+record bindings. Supervisor final, published native map and Linux baseline acceptance
+continue to bind that same original digest. Never replace local snapshots, copy the
+supervisor's identities into worker held inputs, or propagate the worker's different
+local digest as the original reference. The existing created-command trust boundary
+binds all nine parent fingerprints; no new map read or trust premise is introduced.
+
+Retain the existing bounded projection computation, pure fingerprint checks, numeric
+failure frame, pipe and record caps, input/open/read/snapshot counts and deadlines.
+Source review must verify equal and Changed-only maps, each required header/content
+and identity field, row order/count and a differing late row, malformed hash encodings,
+expired comparison, strict local ChangeTime rejection, and original-digest propagation
+through readiness, intent and final consumers. Use in-memory source-review cases;
+no platform observation or compilation is part of that review. Preserve the existing
+D0 pure-check workload unless a separately reviewed finite source amendment changes it.
+
+The next source proposal selects fresh compile stage `confidential-checks-v18` and
+direct root `confidential-direct-v7`, updating literal roots, four responses, source
+map, catalog and consumers together. Keep all guards closed until normal exact
+admission. Use the unchanged four-target topology, accepting the new DirectObserver
+for this route; retain native 0142 and unchanged SyntheticSubject evidence. The new
+observer needs successful independent D0 before D1/D2. This rule also covers any
+remaining separately funded direct original within the same finite grant, without
+adding a compile, D0 slot or occupied-stage reuse.
+
+Current consumed counts are 32/133/6/361, ceilings 39/173/30/497 and correction pool
+1/3/0/19. One compile/D0 pair costs 0/2/0/12, leaving pool 1/1/0/7 and consumed counts
+32/135/6/373. Grouped compile/D0 would become nine/seven, native remains six; outside
+hosts become 22 and inside hosts 59, within 28/62. Protected D1/D2 can then use their
+existing 0/2/0/10 and four outside hosts with no additional inside hosts, reaching
+26/59 within 28/62; twelve later-product build/test slots remain protected. ETW reservations rise from six to seven for that D0, with protected D1/D2
+still below twenty. Keep thirty spent collectors (9,000 seconds, 1,604,279,595 reserved
+bytes), three metadata passes and all historical charges. These are planning checks,
+not new reservations; each exact admission must revalidate remaining finite capacity.
+
+This loses only cross-observation metadata-history rejection when every required
+object/content predicate agrees. It does not accept changed content, replacement,
+within-read instability, account effects or new lifetime uncertainty. Keep the six
+historical unknowns, `noExperimentLive=false`, named Jobs/cgroups and all existing
+platform-host/sole-owned-ETW dispositions. No additional observation mechanism,
+helper, process survey, passive allowance, ETW allowance, clock, download, restore,
+cleanup or broader claim is
+included. Owner acceptance and matching Wave/safety merge precede dependent source
+implementation, compilation and execution. The qualification expires with the grant.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation
