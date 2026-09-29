@@ -42,6 +42,7 @@ internal static class ObserverProgram
             long workEnd=Add(entry,145000);
             if(worker)ObserverProgram.Need(long.TryParse(args[5],NumberStyles.None,CultureInfo.InvariantCulture,out workEnd) &&
                 workEnd>Now && workEnd<=Add(entry,145000));
+            if(slot==Slot.D0 && worker)AcceptedDirectInputs.CheckBaselineParts(workEnd);
             DirectFailure.Stage=2;
             AdmissionCatalog.Configure(args[3],args[4],slot,args[2],worker,workEnd,worker && fixture?args[6]:null);
             PublicPlan plan = AdmissionCatalog.LoadPublicPlan(slot, args[2]); AdmissionCatalog.Validate(plan);

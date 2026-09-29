@@ -1,11 +1,11 @@
 {
-  "compileStagingRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-checks-v16",
-  "directDeploymentRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-direct-v5",
+  "compileStagingRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-checks-v17",
+  "directDeploymentRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-direct-v6",
   "directNonCompilerSources": [
     {
       "bytes": 86540,
       "path": "direct/direct_wsl_caller.py",
-      "sha256": "c3b155553ccde3da450f2147745b0827ff0e647c5121a8fbf50bdf65ed6e87cc"
+      "sha256": "223b0c910aca2d103b77fb6b2c93fe742e9493fa94b16d34b3f64e4f7742638a"
     },
     {
       "bytes": 9551,
@@ -18,9 +18,9 @@
   "sourceMappings": [
     {
       "authoredSource": {
-        "bytes": 12122,
+        "bytes": 16546,
         "path": "source/direct/AcceptedDirectInputs.cs",
-        "sha256": "a00414a33048629ca50f97988391c783b62f6557c2bcbfcb66d92f63580353b3"
+        "sha256": "e27e3c3916878d6d298ad6c8b7e8ed49b3d7576d018583dfd3a8790f79339ca5"
       },
       "stagedRelativePath": "source/direct/AcceptedDirectInputs.cs"
     },
@@ -106,9 +106,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 18710,
+        "bytes": 18799,
         "path": "source/direct/ObserverProgram.cs",
-        "sha256": "236d66540742df8b09e7c04e8018b739dd22766ca7b6f5522a9f6107006b1518"
+        "sha256": "509cf9aef2521aacfa6d82965a52290f151555071d40e112ce4e5c8e58bb03e5"
       },
       "stagedRelativePath": "source/direct/ObserverProgram.cs"
     },
@@ -325,7 +325,7 @@
       "response": {
         "bytes": 20867,
         "path": "control/NativeCaller.rsp",
-        "sha256": "dfe2c4b021a1654bfd531b2322b473f0c6394d999bf63c75fd3251ab13ff9ecc"
+        "sha256": "74d3abe8957bb1989f2363a435c2983fe1e4e40eb3fb4ef1329bf28f2b1ebc3c"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",
@@ -366,7 +366,7 @@
       "response": {
         "bytes": 20404,
         "path": "control/DirectObserver.rsp",
-        "sha256": "ce7cb9f4cb29709cc9300b3816851f1cd012cd00b591d187b405450fe76b25eb"
+        "sha256": "9fe9d932ee3fdc8d9901d4735bec8632dbed66b4e1a894b39056dafac4ea63cb"
       },
       "stagedSourcesInResponseOrder": [
         "source/direct/Admission.cs",
@@ -402,7 +402,7 @@
       "response": {
         "bytes": 21309,
         "path": "control/SyntheticSubject.rsp",
-        "sha256": "6e08083c1f209b7f1b3a54418ff74449a58f8e1d6f9a206d2728dbcc8b117c35"
+        "sha256": "4fe2cf2110d8ada7030c26196c446369e2dd81c4ad2c689d7b34aeea8fa78ba9"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",
@@ -447,7 +447,7 @@
       "response": {
         "bytes": 21276,
         "path": "control/FixtureDriver.rsp",
-        "sha256": "0ce40f1d0e680863a26df46ee9b004184d513346860ae4f2ed607f8829033a6d"
+        "sha256": "f2f2c6015a4ae35ef570d962e04975f120302e88f4f54e121a27d4bc7f051d64"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",

@@ -23431,7 +23431,7 @@ Source review also exercises the Python schema with positive/negative in-memory 
 and verifies first-cause retention and worker-versus-supervisor routing. No compiler or
 Windows execution occurs as part of source review.
 
-The first concrete source binds compile stage `confidential-checks-v16` and direct root
+The first concrete source bound compile stage `confidential-checks-v16` and direct root
 `confidential-direct-v5`, with the same four targets, 36 source mappings, 413 compile
 inputs and 200 direct leaves. Update the four response files, source-response map,
 controller catalog and both literal catalog consumers together. Both inert Python
@@ -23439,6 +23439,56 @@ capacity consumers use ceilings `[39,173,30,497]`; every execution guard stays c
 The seven-field failure adds at most 160 serialized bytes within the unchanged 4,096-byte
 record cap; worker failure output is 32 bytes within the unchanged 40-byte pipe cap.
 No additional file read/open/snapshot, output path, collection pass or process is added.
+
+Original 0146 compiled and independently admitted the new DirectObserver. Original 0147
+deployed the 200 inputs to v5 and failed its sole D0 after all worker content/length
+checks: worker-originated Admission, stage 2, source 1, line 90, input ordinal 0 and
+open error -1 identify the complete parent-baseline SHA comparison. The retained
+supervisor baseline matches all admitted content pins. No worker baseline was retained,
+so the differing metadata field, input and cause remain unknown; ChangeTime is not an
+established cause. The sole fixed snapshot retained five stable files and was incomplete
+because the required terminal was absent. The caller rejects the failed supervisor exit
+before its observer validator and success-terminal publication. Preserve the failure,
+spent observations and full compile/D0 charge of 0/2/0/12. Positive worker exit and
+Job-zero evidence, with the accepted unforced waiting-service/WSL contract, establish
+the current scoped process completion. Exact stage-2 source ordering establishes zero
+ETW creation attempts for 0147; its reservation remains spent and 0145's actual count
+remains unobserved in [0,1]. No calibration or D1/D2 acceptance follows.
+
+The next concrete direct-only diagnostic source binds compile stage
+`confidential-checks-v17` and direct root `confidential-direct-v6`. From already captured
+`baseline.Bytes`, each observer role computes the original whole-baseline SHA-256 and
+eight additional fingerprints, without opening or reading a file again. The first
+projection is a JSON array containing `schema`, `identityMode`, `root`, `original`,
+`admissionSha256` and `protocolSha256`, followed by each ordered
+`[relative, bytes, sha256]` row. The remaining seven projections are JSON arrays of
+ordered `[relative, value]` rows for `volume`, `index`, `attributes`, `created`,
+`modified`, `links` and `changed`, respectively. The existing single parent-baseline
+argument carries the nine lowercase 64-character hashes in that order, separated by
+eight colons: exactly 584 characters, 520 more than the previous argument.
+
+Worker comparisons check header/content, the six non-Changed native fields, Changed,
+and finally the original whole-baseline SHA. Each comparison has a distinct fixed
+source line; the existing numeric failure frame reports the first differing column,
+with input ordinal 0 because no row is identified. Full baseline equality remains
+mandatory. A Changed failure means all earlier projections matched, not that a
+particular row or the cause of its metadata change is known. Shared native pinning,
+first-held baselines, real-role admission and all existing success predicates remain
+unchanged; no Windows identity qualification is introduced.
+
+Parsing is bounded to 262,144 captured bytes, JSON depth four and at most 200 rows.
+Each of eight projections is capped at 262,144 serialized bytes, with at most 1,600
+row visits per production call and deadline checks before parsing, each projection,
+each row and completion, all inside the existing work deadline. D0's same worker adds
+ten one-row in-memory fingerprint calls: original, deterministic repeat and eight
+single-field mutations (content length and each native field). They verify that each
+mutation changes only its column fingerprint and the complete digest, and verify the
+584-character encoding. The thirteen existing codec checks remain. These checks add
+no process, clock, file access, ETW creation, record member or collector. Retain the
+32-byte failure, 40-byte pipe and 4,096-byte final limits. Update exact response/map/
+catalog/consumer bindings together; all execution guards remain closed until the
+separate original admission. Remaining correction capacity is 1/6/0/36 after 0147,
+with three compile/D0 pairs available and all protected allocations unchanged.
 
 Retain 0142's accepted N1/N2/N3 evidence and 0141's unchanged SyntheticSubject artifacts.
 The diagnostic correction affects only direct observer behavior and its direct result

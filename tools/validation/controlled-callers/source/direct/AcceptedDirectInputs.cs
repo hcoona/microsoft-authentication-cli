@@ -5,9 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using DirectNativePins=ConfidentialNativeCaller.FixtureNativePins;
@@ -17,7 +19,7 @@ using SyntheticBaseline=ConfidentialNativeCaller.SyntheticNativeBaseline;
 namespace ConfidentialWsl;
 internal sealed class AcceptedDirectInputs : IDisposable
 {
-    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-direct-v5";
+    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-direct-v6";
     private readonly DirectNativePins pins;
     private readonly Slot slot;
     private readonly string nonce,scope;
@@ -25,6 +27,7 @@ internal sealed class AcceptedDirectInputs : IDisposable
     private readonly long workEnd;
     private DirectHeldFile? privateFile;
     private readonly SyntheticBaseline? baseline;
+    private readonly string[]? baselineParts;
     private bool held,privateRead,disposed;
     internal PublicPlan Plan {get;}
     internal string AdmissionPath {get;}
@@ -87,7 +90,9 @@ internal sealed class AcceptedDirectInputs : IDisposable
             if(fixture)
             {
                 baseline!.Seal(Root,slot+"-"+nonce,AdmissionSha,protocol,200,Before);
-                Need(worker?parentBaseline==baseline.Sha256:parentBaseline is null);
+                baselineParts=BaselineParts(baseline.Bytes,Before);
+                if(worker)CompareBaseline(parentBaseline,baselineParts);
+                else Need(parentBaseline is null);
             }
             else Need(parentBaseline is null);
             string product=fixture?@"artifact\SyntheticSubject.exe":@"product\Authentication.Cli.exe";
@@ -118,6 +123,73 @@ internal sealed class AcceptedDirectInputs : IDisposable
     }
     private static void Need(bool value,[CallerLineNumber] int line=0)
     { if(!value){DirectFailure.Remember(1,line);throw new SafeFailure(Fault.Admission);} }
+    // Only already captured synthetic bytes enter these diagnostic fingerprints.
+    // Full baseline equality remains required after every field comparison.
+    private static readonly string[] BaselineFields=["volume","index","attributes","created","modified","links","changed"];
+    private static string[] BaselineParts(byte[] raw,Action before)
+    {
+        before();Need(raw.Length is >0 and <=262144);
+        using JsonDocument document=JsonDocument.Parse(raw,new JsonDocumentOptions{MaxDepth=4});
+        JsonElement root=document.RootElement,rows=root.GetProperty("rows");
+        Need(rows.ValueKind==JsonValueKind.Array && rows.GetArrayLength() is >0 and <=200);
+        string[] parts=new string[9];parts[0]=Digest(raw);
+        for(int part=1;part<parts.Length;part++)
+        {
+            before();using var memory=new MemoryStream();
+            using(var json=new Utf8JsonWriter(memory))
+            {
+                json.WriteStartArray();
+                if(part==1)
+                    foreach(string name in new[]{"schema","identityMode","root","original","admissionSha256","protocolSha256"})
+                        root.GetProperty(name).WriteTo(json);
+                foreach(JsonElement row in rows.EnumerateArray())
+                {
+                    before();json.WriteStartArray();row.GetProperty("relative").WriteTo(json);
+                    if(part==1)
+                    { row.GetProperty("bytes").WriteTo(json);row.GetProperty("sha256").WriteTo(json); }
+                    else row.GetProperty("identity").GetProperty(BaselineFields[part-2]).WriteTo(json);
+                    json.WriteEndArray();json.Flush();Need(memory.Length<=262144);
+                }
+                json.WriteEndArray();json.Flush();Need(memory.Length<=262144);
+            }
+            parts[part]=Digest(memory.ToArray());
+        }
+        before();return parts;
+    }
+    private static string Digest(byte[] value)=>Convert.ToHexString(SHA256.HashData(value)).ToLowerInvariant();
+    private static void CompareBaseline(string? parent,string[] local)
+    {
+        Need(parent is not null && parent.Length==584);
+        string[] expected=parent!.Split(':');Need(expected.Length==9 && expected.All(Hash));
+        Need(expected[1]==local[1]); // Header, ordered paths, lengths and content hashes.
+        Need(expected[2]==local[2]); // Volume.
+        Need(expected[3]==local[3]); // File index.
+        Need(expected[4]==local[4]); // Attributes.
+        Need(expected[5]==local[5]); // Creation time.
+        Need(expected[6]==local[6]); // Modification time.
+        Need(expected[7]==local[7]); // Link count.
+        Need(expected[8]==local[8]); // ChangeTime, after every other field matched.
+        Need(expected[0]==local[0]); // Original complete-baseline digest still required.
+    }
+    internal static void CheckBaselineParts(long deadline)
+    {
+        void CheckTime()=>ObserverProgram.Before(deadline);
+        const string sample="""
+            {"schema":"synthetic-native-baseline-v1","identityMode":"synthetic-first-held-v1","root":"synthetic","original":"D0","admissionSha256":"a","protocolSha256":"b","rows":[{"relative":"one","bytes":11,"sha256":"c","identity":{"volume":1,"index":2,"attributes":3,"created":4,"modified":5,"links":1,"changed":6}}]}
+            """;
+        string[] original=BaselineParts(Encoding.UTF8.GetBytes(sample),CheckTime);
+        Need(original.SequenceEqual(BaselineParts(Encoding.UTF8.GetBytes(sample),CheckTime)));
+        (string Field,string Old,string New,int Part)[] changes=[("bytes","11","12",1),
+            ("volume","1","2",2),("index","2","3",3),("attributes","3","4",4),
+            ("created","4","5",5),("modified","5","6",6),("links","1","2",7),("changed","6","7",8)];
+        foreach(var change in changes)
+        {
+            string changed=sample.Replace("\""+change.Field+"\":"+change.Old,"\""+change.Field+"\":"+change.New);
+            string[] actual=BaselineParts(Encoding.UTF8.GetBytes(changed),CheckTime);
+            for(int part=0;part<9;part++)Need((original[part]!=actual[part])==(part==0 || part==change.Part));
+        }
+        Need(string.Join(":",original).Length==584);CheckTime();
+    }
     private void Before(){Need(!disposed);ObserverProgram.Before(workEnd);}
     internal IDisposable Hold(PublicPlan plan,Slot selected,string selectedNonce,bool workerRole)
     {
@@ -148,7 +220,7 @@ internal sealed class AcceptedDirectInputs : IDisposable
     {
         Before();Need(held && !worker && selected==slot && selectedNonce==nonce && deadline==workEnd);
         string[] arguments=["--worker",slot.ToString(),nonce,AdmissionPath,AdmissionSha,deadline.ToString(CultureInfo.InvariantCulture)];
-        return baseline is null?arguments:arguments.Append(baseline.Sha256).ToArray();
+        return baseline is null?arguments:arguments.Append(string.Join(":",baselineParts!)).ToArray();
     }
     private static DirectFileIdentity FileIdentity(JsonElement value,long bytes)
     {
