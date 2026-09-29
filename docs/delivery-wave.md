@@ -660,6 +660,44 @@ allocations, creation-time containment, all six historical lifetime uncertaintie
 and `noExperimentLive=false`. This decision accepts no new process uncertainty
 or account effect and expires with this grant without automatic transfer.
 
+**Synthetic direct deployment: Linux ctime and occupied-v4 reuse decision:** Permit
+one separately numbered corrected D0 preparation to complete the fixed 200-leaf
+`confidential-direct-v4` catalog without overwriting its 24 retained leaves. Bind
+the 23 completed copy/readbacks and failed 24th leaf to the original evidence;
+exclusively create the remaining 176 leaves and fresh action-specific controls.
+Keep accepted compiled artifacts and their embedded v4 root. The exact
+[direct comparison and reuse protocol](research/experiments/windows-slice-validation.md#direct-linux-ctime-and-occupied-v4-completion)
+owns the retained lineage, finite completion recipe and subsequent D0/D1/D2 use.
+
+For only these 200 deployed synthetic leaves, permit Linux ctime-only inequality
+within and between preparation/admission reads and held-input comparisons.
+Retain actual full9 observations and original descriptors. Preserve device/inode,
+mode, UID/GID, size, mtime, link count, no-follow/regular-file checks, exact
+admitted content/hash/EOF and held/named correspondence. Original donors, tools,
+external Linux controls, private/account inputs and unrelated files remain strict.
+Windows comparisons and compiled artifacts remain unchanged. This is a distinct
+direct decision, not a transfer of either native exception or a generic switch.
+
+The repository owner accepts the loss of ctime-only rejection for some concurrent
+metadata/history changes, and reuse without continuously held historical handles.
+Matching sampled bytes and eight identity fields does not establish a benign
+cause or uninterrupted integrity. The failed 24th leaf has retained first-read
+identity/content and a passed creation-object predicate, but no retained
+creation/write-closed full9 snapshots; accept that specific lineage limitation
+without reconstructing missing observations. Success is not guaranteed. Any
+other mismatch stops without repair, overwrite, settling or baseline replacement.
+
+Require owner acceptance and matching safety/protocol merge, followed by exact
+independently accepted inert Python corrections and focused negative validation,
+before dependent preparation or invocation. Charge the corrected D0 at 0/1/0/5
+from the existing correction pool; preserve the failed original's charge, ETW
+reservation and observations, protected D1/D2 and twelve later-product build/test
+slots. Add no quota, directory survey, cleanup, process role, clock extension,
+unreserved ETW creation, account effect or new process uncertainty. Keep the
+creation-time cgroup/named Job topology, all six historical lifetime uncertainties
+and `noExperimentLive=false`. The comparison qualification ends with this grant;
+the occupied-tree completion is single-use and cannot expand automatically.
+
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
 permitted interactive calls for the later real-environment acceptance proposal.
