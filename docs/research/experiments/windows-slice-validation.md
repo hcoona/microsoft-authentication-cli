@@ -21703,6 +21703,84 @@ execution is replayed. Preserve all six historical lifetime uncertainties and
 Owner acceptance of these documents does not by itself accept the future exact source,
 deployment, D0 calibration, D1/D2 outcomes or overall Slice.
 
+#### Direct comparison source and completion recipe
+
+The inert [direct caller](../../../tools/validation/controlled-callers/direct/direct_wsl_caller.py)
+implements the preceding accepted qualification. Authenticate the synthetic v2
+schema, mode, slot and account-effects boundary before enabling the fixed 200-path
+catalog. Bind qualification to each held descriptor opened through that catalog;
+admission documents and real/private inputs retain the strict branch. Keep the
+original admitted and first-opened identities. Compare all eight non-ctime fields
+at initial admission, within-read and later held/named checks. Rehash every later
+synthetic payload read against its original admitted digest, including the result
+validator; a matching size/mtime cannot substitute for matching bytes.
+
+After synthetic control validation, exclusively create that action's existing
+record-directory shape before catalog reads. This permits failure evidence if a
+catalog input fails; it starts no Windows process. Record the first opened full9
+before payload validation, each held/named comparison and the separate comparison
+with the original admission. Real input handling keeps its prior directory timing.
+
+The sole Linux comparison receipt has exactly `schema`, `scope`, `slot`, `nonce`,
+`admissionSha256`, `callerSha256`, `protocolSha256`, `captureComplete`, and `rows`.
+The schema is `synthetic-direct-linux-comparisons-v1`; scope is `synthetic-direct`.
+Each row has exactly `relative`, `point`, `reference`, `observed`, `nonCtimeEqual`
+and `ctimeEqual`. `reference` is the unchanged nine-integer comparison baseline;
+`observed` contains one or two actual full9 values. The Boolean results distinguish
+eight-field agreement from each ctime equality. `point` is one of `opened`, `pin`,
+`admission`, `held`, `read-before`, `read-after`, `exec-before`, or `exec-after`.
+Rows follow actual execution order and contain only fixed synthetic catalog paths.
+The healthy D0 path records 602 rows; D1/D2 each record 606. The hard ceilings remain
+4,096 rows and 2 MiB, reserving 4,096 bytes for envelope overhead during accumulation.
+
+At the existing catalog-close point, serialize once and exclusively write the receipt
+through the held record-directory descriptor, in chunks of at most 65,536 bytes,
+then fsync and close. There is no source-side readback, output overwrite, second
+attempt, separate clock or new process. Byte/row overflow marks capture incomplete;
+serialization, write or deadline failure makes the caller fail. A repeated close
+does not repeat the write. A complete receipt establishes retained comparisons only,
+never scenario success; ordinary native, transport and outcome evidence remains
+required. The collector binds its one fixed additional path before invocation.
+
+The one corrected completion uses action 0144 and the exact independently reviewed
+Linux-only inert materializer, 15,386 bytes, SHA-256
+`8093d54fbf298c168ef9c9aaece92bcd402001861c6fec5a5194356d367bb14c`.
+Its `controlled-direct-deployment-v2` plan retains the original 200 input rows,
+except the explicitly reviewed not-yet-created caller source binding. It adds
+`originalEvidence` binding 0143's action/nonce and original plan, snapshot and
+disposition hashes, plus exactly 24 ordered `retained` rows. Each retained row
+binds `relative`, `source`, `destination`, `creationIdentity`, `writeClosedIdentity`,
+`readIdentities`, and `creationObjectPassed`. The first 23 retain their complete
+saved copy rows and one saved read identity; the 24th has null creation/write-closed
+identities and its three actual first-read snapshots. No missing snapshot is inferred.
+
+All fixed v4 directories were created before 0143's copy loop; hold those literal
+directories without enumeration or recreation. Exclusively create only the fresh
+0144 Linux evidence directory in this phase. Read each retained leaf once, comparing
+its exact content and qualified identity with the old descriptors. Copy/read back
+only rows 25 through 200, retaining strict original donor checks and creation-object
+joins. A read is qualified only when its path is in the exact admitted destination
+map; donors cannot name that tree. The v2 terminal labels each row `retain` or
+`create`, preserves the old lineage and records actual opened/final/named full9,
+ctime equalities and other-field comparison results for each destination read.
+
+The successful recipe has 379 complete file passes: three controls, 24 reuse reads,
+176 donor reads and 176 readbacks. It has 178 exclusive leaf writes: start receipt,
+176 copied leaves and terminal receipt, and one new directory. Actual byte totals
+must fit the unchanged 256 MiB read, 128 MiB write and 1 MiB terminal limits before
+the exact call is accepted. Keep the false guard in tracked/inert source; bind the
+sole accepted guard activation, new nonce, plan, allocation and both phase selections
+separately. Updating the source map's noncompiler caller row does not change its
+compiler targets or the accepted 0141 artifact provenance.
+
+Source validation uses extracted selected definitions with in-memory syscall doubles,
+without importing either candidate module, entering its subject entry point, or
+touching the retained deployment. Pure positive/negative cases cover within/between
+ctime changes, the other eight fields, repeated payload hashing, role/mode/path
+exclusions, no-follow/nonregular/link checks, EOF, output exclusivity and evidence
+bounds. These cases establish source behavior under their supplied data, not platform
+behavior. Exact source review and all existing execution gates still precede 0144.
+
 #### Synthetic first-held native identity and outcome boundaries
 
 Only N1/N2/N3 and D0/D1/D2 use `identityMode=synthetic-first-held-v1`. Native requires

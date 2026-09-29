@@ -3,9 +3,9 @@
   "directDeploymentRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-direct-v4",
   "directNonCompilerSources": [
     {
-      "bytes": 81228,
+      "bytes": 85546,
       "path": "direct/direct_wsl_caller.py",
-      "sha256": "191a341d30bd9373f0a96d3e065931cc7e7e2aeb87b7ca5136fba763661505b7"
+      "sha256": "f25dae1a14c0f9724a76e7d8e7a44db19b2a5e7ba70dc0b8e033893bbec8b749"
     },
     {
       "bytes": 9551,
