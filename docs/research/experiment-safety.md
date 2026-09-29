@@ -504,9 +504,10 @@ uncertainty is granted. The qualification ends with this grant.
 The Wave's separate synthetic-direct decision permits Linux ctime-only inequality
 within and between reads and held-input comparisons for only the fixed 200 deployed
 synthetic leaves. It also permits one non-overwrite completion of the occupied v4
-tree, retaining its 194 leaves and exclusively creating the remaining six. For this
-one completion only, also qualify ctime within and between Linux reads of the four
-fixed original SyntheticSubject artifact donors. Apply the
+tree, retaining its 194 leaves and exclusively creating the remaining six. For that
+completion and the remaining already-funded direct originals expressly covered by
+the Wave, also qualify ctime within and between Linux reads of only the
+four fixed original SyntheticSubject artifact donors. Apply the
 [direct donor completion protocol](experiments/windows-slice-validation.md#direct-four-donor-and-194-leaf-completion)
 after the owner decision and matching amendments merge, and after exact source review.
 Preserve original descriptors, all actual ctime observations, exact admitted bytes and
@@ -523,6 +524,20 @@ repair. Keep both failed preparations' charges, partial tree and original observ
 add no settling pass, survey, overwrite, cleanup, quota or process uncertainty. The completion is
 single-use; comparison authority expires with the grant and cannot transfer to real
 inputs or later work automatically.
+
+The Wave's v6 completion decision separately permits one non-overwrite completion
+of the 194 leaves retained by failed preparation 0149, exclusively creating its six
+remaining leaves. Apply the [exact v6 protocol](experiments/windows-slice-validation.md#direct-v6-completion-after-0149).
+Preserve original copy/readback lineage and content; the same synthetic destination
+qualification and exact four-donor qualification apply, with every other predicate
+unchanged. Local recovered artifact copies and the two Python donors remain strict.
+The owner accepts the same limited loss of a ctime-only history signal and absence
+of continuously held historical handles. No baseline is refreshed and no benign
+cause or successful outcome is inferred. Keep the failed charge, partial tree and
+observations; one newly charged D0 allocation funds the sole completion. Existing
+compilation and native evidence may be reused without another experiment. This adds
+no capacity, process role, account effect, cleanup or lifetime exception. Further
+occupied-tree adoption is excluded; the donor qualification ends with this grant.
 
 This grant permits independently reviewed narrow source/protocol corrections and its
 finite fresh owned stage versions within unchanged topology/effects; it creates no

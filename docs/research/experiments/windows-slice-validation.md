@@ -21826,7 +21826,9 @@ inert Linux completion materializer and its exact control recipe. No recompilati
 source/content substitution, extra runner or process topology change is included.
 
 Only the following four original donors qualify for ctime inequality within and
-between their Linux reads in this one six-leaf completion. Their literal root is
+between their Linux reads in this six-leaf completion and the remaining already-funded
+direct originals explicitly covered by the Wave. The later [v6 completion](#direct-v6-completion-after-0149)
+extends the same exact donor predicates; the spent v4 completion is not reopened. Their literal root is
 `/mnt/c/Temp/azureauth-windows-slice-108/confidential-checks-v15/artifact/`.
 Bind each unchanged source descriptor, including its original full9, from 0144 plan
 rows 195 through 198 (one-based). That 118,420-byte plan has SHA-256
@@ -21839,8 +21841,8 @@ rows 195 through 198 (one-based). That 118,420-byte plan has SHA-256
 | `SyntheticSubject.deps.json` | 291 | `4d24598c7fe6a1e8ecc685d3b42a1591da653eeb6b5be8491d6191466d0edfa4` |
 | `SyntheticSubject.runtimeconfig.json` | 126 | `b7cb3a2e664fe814d052574cc0265d6a3c5a60d391b99ada2efc3c80cdaebdf3` |
 
-Eligibility requires the exact donor descriptor and destination role in this fixed
-completion; no general ignore-ctime flag or root-prefix allowance is permitted.
+Eligibility requires the exact donor descriptor and destination role in each
+admitted fixed direct preparation; no general ignore-ctime flag or root-prefix allowance is permitted.
 Preserve original identities, compile/hash lineage and actual opened/final/named
 full9 observations. Require all eight other fields at each comparison, exact
 length/hash/EOF, regular/single-link/no-follow/ancestor and held/named object checks,
@@ -21903,6 +21905,95 @@ actual creations remain zero before execution. Add no quota or observation grant
 All six historical lifetime uncertainties and `noExperimentLive=false` remain.
 Owner acceptance does not accept future source, deployment, calibration or Slice
 outcomes. Failure exhausts this successor completion and provides no blind retry.
+
+#### Direct v6 completion after 0149
+
+Preparation 0149 copied and verified 194 of 200 fixed leaves before rejecting the
+original `confidential-checks-v15/artifact/SyntheticSubject.dll` donor at
+`OriginalIdentity`. Its ctime was 1,790,642,765,317,456,800 ns instead of the original
+1,790,641,428,907,010,900 ns. The other eight fields agreed. This is exactly the
+1,336,410,445,900 ns difference already observed by 0144, not evidence of a new
+cause. Rejection preceded donor payload reading and destination creation; current
+content was not established by that failed read. Recovery preparation and exact-call
+review missed this known contradiction when selecting the original strict donor.
+Do not repeat a contradicted predicate or substitute a newer baseline to hide it.
+
+The sole fixed collector retained both deployment records completely, with no errors:
+763,810-byte snapshot SHA-256
+`9f53c9cb17e95cc752edfa5c281303352039ef50d172a4f7d38d8cb45dad9fc6`.
+The source recorded 13 directories, 392 file passes, 162,261,425 requested payload
+bytes, 195 prior writes/81,078,968 bytes, and 11.064754 seconds before its terminal
+write. The normal service exit was 1, with both streams at EOF, no overflow and no
+caught transport failure. It started no Windows process or ETW. Preserve the failed
+outcome, full 0/1/0/5 charge, reserved ETW attempt, sole collector and partial v6 tree.
+Scoped failed-service completion does not establish an independently sampled empty
+cgroup, deployment success or calibration.
+
+After the matching owner Wave decision and safety/protocol acceptance, admit one
+new D0 action/nonce to complete that exact v6 tree. Reuse accepted compile 0148
+DirectObserver artifacts, unchanged SyntheticSubject artifacts and native 0142
+scenario evidence. Keep 0149's fixed 200 source/destination rows and the exact Python
+donor contents; change only the inert Linux completion recipe and fresh controls.
+Bind 0149's original plan SHA-256
+`6d8fbb83f7c7d56d02272884a910ec243deb7b0238dbafe3418ee649b183d927`,
+the frozen snapshot above and independent failure disposition before source/input
+acceptance. No original output is reopened for that join.
+
+Rows 1 through 194 each retain their complete original creation, write-closed and
+readback evidence from 0149. Carry their original destination full9 and content,
+with compact references to the exact snapshot row; independently resolve every
+reference before execution. Read each once with the accepted synthetic destination
+ctime qualification and all other predicates. The execution plan must carry the
+actual immutable comparison operands within its existing 262,144-byte cap. Keep
+actual new opened/final/named observations separately; they do not replace the
+original baseline. Hold the existing fixed directories without enumeration or
+recreation. Exclusively create only rows 195 through 200 and one fresh Linux
+evidence directory, retaining each new leaf's creation and readback evidence.
+
+The six donor roles remain the original SyntheticSubject DLL and EXE, two exact
+locally recovered SyntheticSubject configuration files and two exact Python sources
+already selected for 0149. Only the original DLL and EXE here match the preceding
+four-original-donor exception; the four local donor objects retain strict full9.
+For any remaining separately admitted direct original, that same exception may
+apply only to the four listed original paths, accepted descriptors, content and
+destination roles. It cannot qualify a recovered local copy, another donor or a
+control. Preserve original full9, every observed ctime, all other eight fields,
+length/SHA-256/EOF, single-link/no-follow/ancestor, held/named and creation checks.
+Any non-ctime difference, content mismatch or occupied new destination stops without
+repair. Neither a matching hash nor this qualification establishes a benign cause
+or uninterrupted historical integrity.
+
+The completion has 209 complete passes: three controls, 194 retained reads, six
+donor reads and six readbacks; eight exclusive writes and one new directory.
+Retained content is 81,078,417 bytes, remaining content 430,330 bytes and the full
+catalog 81,508,747 bytes. Payload reads total 81,939,077 bytes before controls,
+at most 82,283,141 bytes with their existing caps, plus 209 EOF probes. At most
+1,495,290 bytes are written including existing start/terminal caps. Exact-call
+review binds actual control lengths and evidence overhead within unchanged
+512-pass/256 MiB, 256-write/128 MiB, 32-directory and 1 MiB terminal limits.
+Retain preparation's 300/315-second and invocation's 155/170-second clocks,
+creation-time cgroup/named Job supervision, and the two prebound phase collectors.
+No Windows process or ETW starts during preparation. Deployment acceptance must
+precede the sole invocation, and D0 calibration must precede D1/D2.
+
+Validate the inert correction with focused pure cases covering retained-row lineage,
+ctime-only changes, every other field, original versus local donor scope, changed
+content/length/EOF, exclusive creation and evidence caps. Use in-memory syscall
+doubles under the existing source-only procedure, without subject execution or
+reading the retained tree. Reuse accepted source and artifact conclusions where
+unchanged; require exact source, input, finite-accounting, call and outcome gates.
+
+Current consumption is 32/132/6/356. A newly admitted completion costs 0/1/0/5,
+leaving the correction pool at 1/3/0/19 and consumption 32/133/6/361. It spends the
+sixth grouped D0 original and sixth reserved ETW attempt; actual 0149 ETW creation
+was zero. Preserve ceilings 39/173/30/497, protected D1/D2 and twelve later-product
+build/test slots, metadata 3/180 seconds/7,262,208 reserved bytes and collectors
+28/8,400 seconds/1,600,568,606 reserved bytes. New collectors retain their separate
+predebits and per-original limits; the intended-operation lineage is unchanged.
+Preserve all six historical lifetime uncertainties and `noExperimentLive=false`.
+Add no quota, rebuild, automatic retry, output recollection, cleanup, process or
+account effect. Failure exhausts this one v6 completion; no further occupied-tree
+adoption is granted.
 
 #### Direct six-leaf completion source recipe
 
