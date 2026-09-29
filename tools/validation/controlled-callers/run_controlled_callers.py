@@ -25,15 +25,15 @@ import time
 LINUX = Path('/var/tmp/azureauth-windows-slice-108')
 PROJECTION = Path('/mnt/c/Temp/azureauth-windows-slice-108')
 WINDOWS = r'C:\Temp\azureauth-windows-slice-108'
-CEILINGS = [39, 166, 30, 454]  # Proposed ceilings; guard remains closed until amended authority.
+CEILINGS = [39, 173, 30, 497]  # Proposed ceilings; guard remains closed until amended authority.
 HISTORICAL_UNKNOWN = ['0057', '0064', '0068', '0093', '0107', '0110']
 PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
 LAUNCHER_PROJECTION = PROJECTION / 'normal-launcher-dispatch-v1' / 'WindowsScriptJobLauncher.exe'
 CHARGES = {'compile': 7, 'native': 15}
-STAGE = PROJECTION / 'confidential-checks-v15'
-STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v15'
-CATALOG = (87398, 'a23f3a3b161039e6a01385fc9f0399bd274ed82267963cad7db59d60649ab894')
+STAGE = PROJECTION / 'confidential-checks-v16'
+STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v16'
+CATALOG = (87398, '9f62f5542d3ad1fd93ad1c0cb74a2d8a509c53be4c5685b8cf5dddc55e4950b6')
 TARGETS = ('NativeCaller', 'DirectObserver', 'SyntheticSubject', 'FixtureDriver')
 SERVICE_SECONDS = 1200
 PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows-actions',
@@ -742,7 +742,7 @@ def checkpoint(a, budget, reserved=False):
             expected = sorted([*expected, a['action']])
         if reserved and role == 'windowsProjectionRoot':
             expected = sorted([*expected, 'named-fixtures-' + a['action'],
-                               *(['confidential-checks-v15'] if a['suite'] == 'compile' else [])])
+                               *(['confidential-checks-v16'] if a['suite'] == 'compile' else [])])
         require(names(path, 128, budget) == expected, 'Current parent membership changed')
     return before, charge, after
 

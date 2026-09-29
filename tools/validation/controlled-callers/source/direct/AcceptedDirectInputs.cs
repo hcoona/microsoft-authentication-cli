@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -16,7 +17,7 @@ using SyntheticBaseline=ConfidentialNativeCaller.SyntheticNativeBaseline;
 namespace ConfidentialWsl;
 internal sealed class AcceptedDirectInputs : IDisposable
 {
-    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-direct-v4";
+    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-direct-v5";
     private readonly DirectNativePins pins;
     private readonly Slot slot;
     private readonly string nonce,scope;
@@ -66,6 +67,7 @@ internal sealed class AcceptedDirectInputs : IDisposable
             var hashes=new Dictionary<string,string>(StringComparer.OrdinalIgnoreCase);long total=0;
             foreach(JsonElement item in entries.EnumerateArray())
             {
+                DirectFailure.InputOrdinal++;
                 Before();Members(item,"relative","bytes","sha256",fixture?"linuxIdentity":"identity");
                 string relative=Text(item,"relative"),hash=Text(item,"sha256");long bytes=item.GetProperty("bytes").GetInt64();
                 Need(expected.Remove(relative,out DirectCatalogEntry? exact) && Hash(hash) && !hashes.ContainsKey(relative));
@@ -80,6 +82,7 @@ internal sealed class AcceptedDirectInputs : IDisposable
                 else pins.Pin(Root+"\\"+relative,hash,bytes,exact.MaximumBytes,FileIdentity(item.GetProperty("identity"),bytes));
                 hashes.Add(relative,hash);
             }
+            DirectFailure.InputOrdinal=0;
             Need(expected.Count==0 && hashes[@"source\direct_wsl_caller.py"]==caller);
             if(fixture)
             {
@@ -107,9 +110,14 @@ internal sealed class AcceptedDirectInputs : IDisposable
             }
             Before();
         }
-        catch{pins.Dispose();throw;}
+        catch(Exception caught)
+        {
+            DirectFailure.Capture(caught is SafeFailure safe?safe.Fault:Fault.Native);
+            pins.Dispose();throw;
+        }
     }
-    private static void Need(bool value)=>PrivateExpectation.Check(value);
+    private static void Need(bool value,[CallerLineNumber] int line=0)
+    { if(!value){DirectFailure.Remember(1,line);throw new SafeFailure(Fault.Admission);} }
     private void Before(){Need(!disposed);ObserverProgram.Before(workEnd);}
     internal IDisposable Hold(PublicPlan plan,Slot selected,string selectedNonce,bool workerRole)
     {

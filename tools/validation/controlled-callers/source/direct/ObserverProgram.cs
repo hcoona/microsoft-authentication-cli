@@ -3,6 +3,7 @@ using System;
 using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.Win32.SafeHandles;
@@ -18,6 +19,8 @@ internal static class ObserverProgram
     internal static int Remaining(long deadline, int cap) => checked((int)Math.Max(0,
         Math.Min(cap, (deadline - Now) * 1000 / Stopwatch.Frequency)));
     internal static void Before(long deadline) { if (Now >= deadline) throw new SafeFailure(Fault.Deadline); }
+    internal static void Need(bool value,[CallerLineNumber] int line=0)
+    { if(!value){DirectFailure.Remember(3,line);throw new SafeFailure(Fault.Admission);} }
     internal static int Milliseconds(long start, long end) => checked((int)
         (((end - start) * 1000 + Stopwatch.Frequency - 1) / Stopwatch.Frequency));
 
@@ -25,29 +28,36 @@ internal static class ObserverProgram
     {
         if (!ExecutionAdmitted) return 125;
         long entry = Now; bool worker = args.Length > 0 && args[0] == "--worker";
+        DirectFailure.Origin=worker?1:2; DirectFailure.Stage=1;
         try
         {
-            PrivateExpectation.Check(OperatingSystem.IsWindows() && IntPtr.Size == 8 && Stopwatch.IsHighResolution &&
+            ObserverProgram.Need(OperatingSystem.IsWindows() && IntPtr.Size == 8 && Stopwatch.IsHighResolution &&
                 args.Length is 5 or 6 or 7 && Enum.TryParse(args[1], false, out Slot slot) && slot.ToString() == args[1] &&
                 Regex.IsMatch(args[2], "\\A[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\\z"));
             slot = Enum.Parse<Slot>(args[1], false);
             bool fixture=slot==Slot.D0 || DirectRoles.Fixture(slot);
-            PrivateExpectation.Check(worker ? args.Length == (fixture?7:6) : args.Length == 5 && args[0] == "--supervisor");
+            DirectFailure.Enabled=fixture;
+            if(slot==Slot.D0 && worker)FailureDetail.CheckCodec();
+            ObserverProgram.Need(worker ? args.Length == (fixture?7:6) : args.Length == 5 && args[0] == "--supervisor");
             long workEnd=Add(entry,145000);
-            if(worker)PrivateExpectation.Check(long.TryParse(args[5],NumberStyles.None,CultureInfo.InvariantCulture,out workEnd) &&
+            if(worker)ObserverProgram.Need(long.TryParse(args[5],NumberStyles.None,CultureInfo.InvariantCulture,out workEnd) &&
                 workEnd>Now && workEnd<=Add(entry,145000));
+            DirectFailure.Stage=2;
             AdmissionCatalog.Configure(args[3],args[4],slot,args[2],worker,workEnd,worker && fixture?args[6]:null);
             PublicPlan plan = AdmissionCatalog.LoadPublicPlan(slot, args[2]); AdmissionCatalog.Validate(plan);
+            DirectFailure.Stage=3;
             using IDisposable lease = AdmissionCatalog.HoldAcceptedInputs(plan, slot, args[2], worker);
             if (!worker) return Supervise(plan, slot, args[2], entry);
+            DirectFailure.Stage=4;
             Observation result = slot == Slot.D0 ? EtwObserver.RunCalibration(plan, args[2], workEnd) :
                 EtwObserver.Run(plan, slot, args[2], workEnd);
             WriteFrame(result.Encode(slot)); return result.Passed ? 0 : 1;
         }
         catch (Exception caught)
         {
+            FailureDetail detail=DirectFailure.Capture(caught is SafeFailure safe ? safe.Fault : Fault.Native);
             if (worker && !frameAttempted)
-                try { WriteFrame([79, 87, 70, 49, (byte)(caught is SafeFailure safe ? safe.Fault : Fault.Native)]); } catch { }
+                try { WriteFrame(DirectFailure.Enabled?detail.Encode():[79, 87, 70, 49, (byte)detail.Fault]); } catch { }
             return 1; // No exception text/class, argv, environment, diagnostics or raw output.
         }
         finally { try { AdmissionCatalog.Close(); } catch { } }
@@ -62,11 +72,13 @@ internal static class ObserverProgram
         MemoryPipe? output = null, error = null; InputPipe? input = null;
         bool complete = false, jobZero = false, stop = false, stopSucceeded = false;
         uint total = 0, exit = uint.MaxValue; Fault fault = Fault.None; Observation? result = null;
+        FailureDetail? failure=null;
         uint expectedTotal = slot == Slot.D0 ? 3u : 1u;
         try
         {
             try
             {
+                DirectFailure.Stage=5;
                 Before(workEnd);
                 // Real product remains outside this Job. D0 alone admits two synthetic children.
                 job = Native.NewJob(JobName(slot, nonce), slot == Slot.D0 ? 2 : 0);
@@ -75,26 +87,38 @@ internal static class ObserverProgram
                     AdmissionCatalog.WorkerArguments(slot,nonce,workEnd),
                     plan.WorkingDirectory, input, output, error, job);
                 Before(workEnd); worker.ResumeOnce();
+                DirectFailure.Stage=6;
                 for (int polls = 0; polls < 15500; polls++)
                 {
                     Before(workEnd);
                     if (output.Failed || error.Failed) throw new SafeFailure(Fault.Capture);
                     Native.Accounting count = Native.Query(job); jobZero = count.ActiveProcesses == 0; total = count.TotalProcesses;
-                    PrivateExpectation.Check(total <= expectedTotal);
+                    ObserverProgram.Need(total <= expectedTotal);
                     if (worker.Exited() && jobZero && output.Done && output.Eof && error.Done && error.Eof)
                     { complete = true; exit = worker.ExitCode(); break; }
                     Thread.Sleep(10);
                 }
-                Before(workEnd); PrivateExpectation.Check(complete && total >= 1 && total <= expectedTotal && error.Bytes.Length == 0);
+                Before(workEnd); ObserverProgram.Need(complete && total >= 1 && total <= expectedTotal && error.Bytes.Length == 0);
                 ReadOnlySpan<byte> frame = output.Bytes.Span;
+                DirectFailure.Stage=7;
                 if (frame.Length == 5 && frame[..4].SequenceEqual("OWF1"u8))
-                { PrivateExpectation.Check(frame[4] > 0 && frame[4] <= (byte)Fault.Lifetime); fault = (Fault)frame[4]; }
-                else { result = Observation.Decode(frame, slot); fault = result.FailureKind; }
+                {
+                    Need(frame[4] > 0 && frame[4] <= (byte)Fault.Lifetime); fault = (Fault)frame[4];
+                    failure=new((int)fault,1,0,0,0,0,-1);
+                }
+                else if(DirectFailure.Enabled && frame.Length>=4 && frame[..4].SequenceEqual("OWF2"u8))
+                { Need(FailureDetail.TryDecode(frame,out FailureDetail detail));failure=detail;fault=(Fault)detail.Fault; }
+                else
+                {
+                    result = Observation.Decode(frame, slot); fault = result.FailureKind;
+                    if(fault!=Fault.None)failure=new((int)fault,1,4,0,0,0,-1);
+                }
                 terminalEnd = Math.Min(terminalEnd, Add(Now, 10000));
             }
             catch (Exception caught)
             {
-                fault = caught is SafeFailure safe ? safe.Fault : Fault.Native;
+                failure = DirectFailure.Capture(caught is SafeFailure safe ? safe.Fault : Fault.Native);
+                fault = (Fault)failure.Value.Fault;
                 terminalEnd = Math.Min(terminalEnd, Add(Now, 10000));
                 if (!complete && job is not null)
                 {
@@ -115,6 +139,7 @@ internal static class ObserverProgram
                 }
             }
             if (!complete || !jobZero || Now >= terminalEnd) return 1;
+            DirectFailure.Stage=8;
             bool passed = !stop && exit == 0 && fault == Fault.None && result is { Passed: true } && total == expectedTotal &&
                 (!DirectRoles.Close(slot) || result.AnchorAckPublished && result.EndByAnchorDeadline) &&
                 result.Exit == plan.ExpectedExit && result.Callbacks <= 65536 &&
@@ -136,6 +161,8 @@ internal static class ObserverProgram
             record["endByAnchorDeadline"] = result?.EndByAnchorDeadline ?? false;
             record["anchorToEndUpperBoundMs"] = result?.AnchorUpperMs ?? -1;
             record["scenarioAccepted"] = false;
+            if(DirectFailure.Enabled)record["failure"]=passed?null!:
+                (failure??new FailureDetail((int)fault,2,8,0,0,0,-1)).Record();
             // D0 aggregates both original creation-handle/START/END/EOF joins. It
             // supplies calibration evidence only, never real-product acceptance.
             PublicRecords.Publish(plan, "observer-final.json", record);
@@ -144,6 +171,70 @@ internal static class ObserverProgram
         finally { worker?.Dispose(); job?.Dispose(); input?.Dispose(); output?.Dispose(); error?.Dispose(); }
     }
     internal static string JobName(Slot slot, string nonce) => "Local\\azureauth-confidential-wsl-108-" + slot + "-" + nonce;
+}
+
+// Fixed numeric diagnostics for synthetic roles only. No message, path or input value
+// enters this channel. The admitted source and ordinal catalog identify each location.
+internal readonly record struct FailureDetail(int Fault,int Origin,int Stage,int Source,int Line,int InputOrdinal,int OpenError)
+{
+    internal object Record()=>new {fault=Fault,origin=Origin,stage=Stage,source=Source,line=Line,
+        inputOrdinal=InputOrdinal,openError=OpenError};
+    internal byte[] Encode()
+    {
+        byte[] frame=new byte[32];"OWF2"u8.CopyTo(frame);
+        int[] values=[Fault,Origin,Stage,Source,Line,InputOrdinal,OpenError];
+        for(int i=0;i<values.Length;i++)BinaryPrimitives.WriteInt32LittleEndian(frame.AsSpan(4+4*i),values[i]);
+        return frame;
+    }
+    internal static bool TryDecode(ReadOnlySpan<byte> frame,out FailureDetail result)
+    {
+        result=default;
+        if(frame.Length!=32 || !frame[..4].SequenceEqual("OWF2"u8))return false;
+        int[] values=new int[7];
+        for(int i=0;i<values.Length;i++)values[i]=BinaryPrimitives.ReadInt32LittleEndian(frame[(4+4*i)..]);
+        var value=new FailureDetail(values[0],values[1],values[2],values[3],values[4],values[5],values[6]);
+        if(value.Fault is <1 or >10 || value.Origin!=1 || value.Stage is <1 or >4 ||
+            value.Source is <0 or >3 || (value.Source==0?value.Line!=0:value.Line is <1 or >100000) ||
+            value.InputOrdinal is <0 or >200 || value.OpenError< -1)return false;
+        result=value;return true;
+    }
+    internal static void CheckCodec()
+    {
+        // Thirteen pure checks in the existing D0 worker; no I/O or process creation.
+        static void Check(bool value){if(!value)throw new SafeFailure(ConfidentialWsl.Fault.Expectation);}
+        var known=new FailureDetail(2,1,2,1,88,200,5);
+        byte[] frame=known.Encode();Check(TryDecode(frame,out FailureDetail decoded) && decoded==known);
+        var unknown=new FailureDetail(3,1,4,0,0,0,-1);
+        Check(TryDecode(unknown.Encode(),out decoded) && decoded==unknown);
+        Check(!TryDecode(frame.AsSpan(0,31),out _));Check(!TryDecode(new byte[33],out _));
+        byte[] bad=(byte[])frame.Clone();bad[0]=0;Check(!TryDecode(bad,out _));
+        int[] invalid=[0,2,5,4,0,201,-2];
+        for(int i=0;i<invalid.Length;i++)
+        {
+            bad=(byte[])frame.Clone();BinaryPrimitives.WriteInt32LittleEndian(bad.AsSpan(4+4*i),invalid[i]);
+            Check(!TryDecode(bad,out _));
+        }
+        Check(!TryDecode((known with {Source=0}).Encode(),out _));
+    }
+}
+internal static class DirectFailure
+{
+    internal static bool Enabled;
+    internal static int Origin,Stage,InputOrdinal;
+    private static FailureDetail? first;
+    internal static void Remember(int source,int line)
+    { if(Enabled)first??=new FailureDetail((int)Fault.Admission,Origin,Stage,source,line,InputOrdinal,-1); }
+    internal static FailureDetail Capture(Fault fault)
+    {
+        if(first is FailureDetail retained)return retained;
+        bool native=ConfidentialNativeCaller.FixtureNativePins.FailedCheckSource==
+            ConfidentialNativeCaller.FixtureCheckSource.NativePins;
+        var result=new FailureDetail((int)fault,Origin,Stage,native?2:0,
+            native?ConfidentialNativeCaller.FixtureNativePins.FailedCheckLine:0,InputOrdinal,
+            ConfidentialNativeCaller.FixtureNativePins.OpenError??-1);
+        if(Enabled)first=result;
+        return result;
+    }
 }
 
 internal sealed class Observation
@@ -170,10 +261,10 @@ internal sealed class Observation
     }
     internal static Observation Decode(ReadOnlySpan<byte> frame, Slot slot)
     {
-        PrivateExpectation.Check(frame.Length == 40 && (slot == Slot.D0 ?
+        ObserverProgram.Need(frame.Length == 40 && (slot == Slot.D0 ?
             frame[..4].SequenceEqual("OWK1"u8) : frame[..4].SequenceEqual("OWS2"u8)));
         uint flags = BinaryPrimitives.ReadUInt32LittleEndian(frame[4..]);
-        PrivateExpectation.Check((flags & ~8191u) == 0);
+        ObserverProgram.Need((flags & ~8191u) == 0);
         var result = new Observation { TraceStopped = (flags & 1) != 0, TraceDrained = (flags & 2) != 0,
             ZeroLoss = (flags & 4) != 0, StartMatched = (flags & 8) != 0, EndMatched = (flags & 16) != 0,
             HandleRetained = (flags & 32) != 0, HandleExited = (flags & 64) != 0, TargetStop = (flags & 128) != 0,
@@ -184,19 +275,19 @@ internal sealed class Observation
             FailureKind = (Fault)BinaryPrimitives.ReadInt32LittleEndian(frame[32..]),
             AnchorAckPublished = (flags & 2048) != 0, EndByAnchorDeadline = (flags & 4096) != 0,
             AnchorUpperMs = BinaryPrimitives.ReadInt32LittleEndian(frame[36..]) };
-        PrivateExpectation.Check(result.Callbacks is >= 0 and <= 65537 && result.EventsLost >= -1 && result.LogLost >= -1 &&
+        ObserverProgram.Need(result.Callbacks is >= 0 and <= 65537 && result.EventsLost >= -1 && result.LogLost >= -1 &&
             result.RealTimeLost >= -1 && result.DurationMs is >= -1 and <= 155000 && Enum.IsDefined(result.FailureKind));
-        PrivateExpectation.Check(!result.ZeroLoss || result.EventsLost == 0 && result.LogLost == 0 && result.RealTimeLost == 0);
-        PrivateExpectation.Check(!result.NativeComplete || result.StartMatched && result.EndMatched && result.TraceStopped &&
+        ObserverProgram.Need(!result.ZeroLoss || result.EventsLost == 0 && result.LogLost == 0 && result.RealTimeLost == 0);
+        ObserverProgram.Need(!result.NativeComplete || result.StartMatched && result.EndMatched && result.TraceStopped &&
             result.TraceDrained && result.ZeroLoss && (!result.HandleRetained || result.HandleExited));
-        PrivateExpectation.Check(!result.HandleExited || result.HandleRetained);
-        PrivateExpectation.Check(!result.TraceDrained || result.TraceStopped);
-        PrivateExpectation.Check(!result.ExpectedExit || result.Exit is 0 or 1);
-        PrivateExpectation.Check(!result.EndByAnchorDeadline || result.AnchorAckPublished &&
+        ObserverProgram.Need(!result.HandleExited || result.HandleRetained);
+        ObserverProgram.Need(!result.TraceDrained || result.TraceStopped);
+        ObserverProgram.Need(!result.ExpectedExit || result.Exit is 0 or 1);
+        ObserverProgram.Need(!result.EndByAnchorDeadline || result.AnchorAckPublished &&
             result.NativeComplete && result.TimingValid && result.ExpectedExit && !result.TargetStop &&
             result.FailureKind == Fault.None && result.AnchorUpperMs is >= 1 and <= 1000);
-        PrivateExpectation.Check(result.EndByAnchorDeadline || result.AnchorUpperMs == -1);
-        PrivateExpectation.Check(DirectRoles.Close(slot) || !result.AnchorAckPublished &&
+        ObserverProgram.Need(result.EndByAnchorDeadline || result.AnchorUpperMs == -1);
+        ObserverProgram.Need(DirectRoles.Close(slot) || !result.AnchorAckPublished &&
             !result.EndByAnchorDeadline && result.AnchorUpperMs == -1);
         return result;
     }

@@ -47,8 +47,8 @@ Use only public dependencies and verified retained public caches/installed toolc
 downloads may use public NuGet.org and official .NET distribution endpoints, with no
 credentials. New experiment-owned files stay in dedicated build/test roots outside
 production installations and are intentionally retained. Maximum cumulative capacity is
-39 dependency preparation/restore actions, 166 build/test actions, 30 Native AOT publish
-actions and 454 synthetic process scenarios, with at most 4 GiB of newly downloaded public
+39 dependency preparation/restore actions, 173 build/test actions, 30 Native AOT publish
+actions and 497 synthetic process scenarios, with at most 4 GiB of newly downloaded public
 dependency content. Exact per-action time, output and termination limits and source
 admission are owned by the accepted protocol. No new toolchain installation is granted.
 
@@ -702,6 +702,53 @@ unreserved ETW creation, account effect or new process uncertainty. Keep the
 creation-time cgroup/named Job topology, all six historical lifetime uncertainties
 and `noExperimentLive=false`. The comparison qualification ends with this grant;
 the occupied-tree completion is single-use and cannot expand automatically.
+
+**Direct observer diagnostic continuation:** Authorize a finite direct-only correction
+allocation of four separately admitted four-target compile and D0 pairs: one necessary
+pair and three contingency pairs. Add 0/7/0/43 in preparation/build-test/publication/
+synthetic order to the existing correction pool, giving aggregate ceilings
+39/173/30/497. Each pair costs 0/2/0/12; preserve all protected allocations, including
+D1/D2 and twelve later-product build/test slots. Stop after sufficient evidence.
+A failed start consumes its complete charge; no automatic retry or refund follows.
+
+For this same increment, prospectively replace the shared-pool build/test-original
+ceiling 19 with 26, its total original maximum 22 with 29, and the total path original
+maximum 27 with 34. Preserve the three-restore ceiling and every spent count; these
+are count-limit corrections for the same seven added originals, not another allocation.
+The separate 27 immutable passive-lineage and 108-pass limits remain unchanged.
+
+Permit minimal numeric failure-location and input-ordinal diagnostics through the
+existing direct observer pipe and final record. Preserve their 40-byte and 4,096-byte
+caps, existing process roles, deadlines, input/content predicates, and success criteria.
+Do not treat a generic Admission fault as evidence of a particular failed predicate or
+ChangeTime mismatch. This allocation does not relax any Windows identity comparison.
+
+Retain independently accepted native N1/N2/N3 evidence and unchanged SyntheticSubject
+artifacts. Direct-only diagnostic changes do not require another native batch. Each
+new observer still requires independent source/artifact acceptance and successful D0
+calibration before D1/D2. New native or shared-pinning behavior is outside this specific
+allocation. The four-target compile topology remains unchanged; unused newly compiled
+native outputs do not replace earlier native evidence or acquire scenario acceptance.
+
+Raise only the grouped compile maximum to ten, D0 maximum to seven, total maximum to
+25, and inside-Job console-host maximum to 62. Keep native maximum seven, D1/D2 maxima
+four each, outside-Job maximum 28, ETW maximum twenty and all other stricter local limits.
+Permit fresh compile stages v16 through v19 and paired direct deployments v5 through
+v8 under the existing dedicated roots. Existing occupied stages/deployments remain
+retained and cannot be overwritten, repaired, or used as a renewed attempt.
+
+Explicitly extend the six separate historical lifetime/interference dispositions and
+the existing platform-host and sole-owned-ETW persistence dispositions only to this
+finite allocation on the same hosts. Preserve their unresolved status, original charges
+and noExperimentLive=false. This extension accepts no new application, owned-Job or
+Linux lifetime uncertainty. No account, WAM, credential/cache, restore, download,
+publication, installation, signing or release expansion is included.
+
+Require matching safety/protocol amendments and exact source, artifact, immutable-input,
+accounting, call and outcome acceptance before execution. Keep the existing passive
+lineage/pass limits and creation-time named Jobs/cgroups. No old-output recollection,
+metadata-baseline reset, new helper or observation system is granted. This finite
+extension ends with the current grant and does not expand automatically.
 
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13

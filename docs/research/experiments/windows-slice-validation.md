@@ -23369,6 +23369,124 @@ metadata nor accepts changed content, object replacement, within-read instabilit
 lifetime uncertainty. It expires with the current finite grant and cannot expand to
 direct, product, real-account, Linux control or unrelated input predicates.
 
+### Direct Observer Failure Diagnostics and Continuation
+
+A direct final record with fault Admission does not identify a rejected predicate.
+The existing worker failure frame carries only its fault category, and supervisor
+validation/decoding can also produce that category. A failed final therefore cannot
+establish a ChangeTime cause or prove ETW non-creation from sentinel fields alone.
+Preserve original 0145, both spent fixed snapshots, its complete 0/1/0/5 charge and
+failed calibration. Do not replay or recollect it.
+
+The prospective correction adds only fixed numeric failure stage, source location and
+input ordinal to the existing direct worker failure frame and observer-final record.
+The worker pipe stays at 40 bytes and each final record stays at 4,096 bytes. Distinguish
+worker-originated failure from supervisor frame validation so the location cannot be
+misattributed. Use an explicit unknown value when the first cause is unavailable.
+Retain the first cause, never exception text, arbitrary strings, private input, raw
+trace data or an unbounded stack. All current admission and success predicates remain.
+Exact encoding, accepted values, source bindings, schema consumers and negative cases
+must be independently reviewed before compilation. No runtime execution is admitted
+by this source-planning text.
+
+The concrete synthetic failure frame is exactly 32 bytes: ASCII `OWF2`, followed by
+seven signed little-endian Int32 values in order `fault`, `origin`, `stage`, `source`,
+`line`, `inputOrdinal`, `openError`. Fault uses the existing enum 1 through 10. Worker
+origin is 1; supervisor origin is 2 and is never accepted in a worker frame. Stages are
+1 argument validation, 2 admission, 3 held-input setup, 4 observation, 5 worker creation,
+6 worker/Job/pipe completion, 7 worker-frame decoding and 8 final aggregate evaluation.
+A worker frame accepts stages 1 through 4 only. Source is 0 unknown, 1
+`AcceptedDirectInputs.cs`, 2 shared `FixtureNativePins.cs`, or 3 `ObserverProgram.cs`.
+Unknown source requires line 0; a known source requires line 1 through 100,000 in the
+exact admitted compiler input. Input ordinal is 0 outside a catalog row or 1 through
+200 in the original admission array, reset after the array. Native open error is -1
+when unavailable or a nonnegative Int32 sampled by the existing pinning code.
+
+The synthetic `observer-final` adds one `failure` member, null on success or an object
+with exactly those seven numeric fields on failure. The final may use fault 0 and
+supervisor stage 8 when aggregate acceptance fails without a prior classified fault.
+The existing five-byte `OWF1` remains valid and yields worker origin, unknown stage 0,
+unknown source/line/ordinal and open error -1. A failed ordinary 40-byte observation
+retains its category with worker origin/stage 4 and unknown location. Invalid, truncated,
+oversized or wrong-origin OWF2 and invalid ordinary observation frames fail at supervisor
+stage 7, using the supervisor's own source location. Unknown means unavailable evidence,
+not proof of a passed check or an absent ETW session. Real-role frames and records retain
+their existing schema; diagnostics carry no private request data.
+
+The first synthetic admission/check failure is latched before outer cleanup, including
+already sampled native source/open-error fields. Later cleanup/capture errors cannot
+replace it. Constructor failure captures before disposing its held inputs. Numeric
+source lines are compiler-supplied through
+[`CallerLineNumberAttribute`](https://learn.microsoft.com/dotnet/api/system.runtime.compilerservices.callerlinenumberattribute).
+The Python consumer accepts the extra field only for D0/D1/D2, rejects unknown members,
+non-integers (including booleans), invalid ranges and inconsistent unknown locations,
+and still requires null failure plus every original success predicate for acceptance.
+
+D0's existing worker performs thirteen fixed pure codec checks before admission: two
+known/unknown round trips, short/long lengths, bad magic, seven individually invalid
+numeric fields, and unknown-source/nonzero-line rejection. They use memory only and add
+no process, input read, observation, ETW session or clock. Failure rejects the same D0;
+they do not independently establish platform behavior or excuse admission failure.
+Source review also exercises the Python schema with positive/negative in-memory vectors
+and verifies first-cause retention and worker-versus-supervisor routing. No compiler or
+Windows execution occurs as part of source review.
+
+The first concrete source binds compile stage `confidential-checks-v16` and direct root
+`confidential-direct-v5`, with the same four targets, 36 source mappings, 413 compile
+inputs and 200 direct leaves. Update the four response files, source-response map,
+controller catalog and both literal catalog consumers together. Both inert Python
+capacity consumers use ceilings `[39,173,30,497]`; every execution guard stays closed.
+The seven-field failure adds at most 160 serialized bytes within the unchanged 4,096-byte
+record cap; worker failure output is 32 bytes within the unchanged 40-byte pipe cap.
+No additional file read/open/snapshot, output path, collection pass or process is added.
+
+Retain 0142's accepted N1/N2/N3 evidence and 0141's unchanged SyntheticSubject artifacts.
+The diagnostic correction affects only direct observer behavior and its direct result
+consumer; it does not require rerunning unrelated native scenarios. Use the existing
+four-target compiler topology, accepting only the new DirectObserver for this route.
+Newly built unused native artifacts do not replace the prior native evidence. A shared
+native/pinning behavior change requires separate dependency review and is outside this
+specific direct-only allocation. New observer bytes require D0 before any D1/D2.
+
+Planning checkpoint: counts 32/128/6/332, correction pool 1/1/0/5, old protection
+6/37/0/117, D1/D2 protection 0/2/0/10 and twelve later-product build/test slots.
+Four compile/D0 pairs cost 0/8/0/48. Add 0/7/0/43, yielding pool 1/8/0/48 and aggregate
+ceilings 39/173/30/497. One necessary pair and three contingency pairs are maximum
+allowances, not instructions to spend the buffer or a guarantee of success. Preserve
+all earlier charges and protected allocations. Exact admissions recalculate the current
+checkpoint; these planning numbers are not reservations.
+
+For this same increment, replace the shared-pool build/test-original ceiling 19 with
+26, its total-original maximum 22 with 29, and the total-path maximum 27 with 34.
+These explicitly supersede the earlier original-count bounds only; they do not add
+capacity beyond the seven build/test originals above. Keep the three-restore ceiling,
+all spent charges and the separate 27 immutable passive-lineage/108-pass limits.
+
+Grouped consumption at this checkpoint is compile six, native six, D0 three, D1/D2
+zero, outside-Job host roles fifteen and inside-Job roles 42. Four compile/D0 pairs
+plus the protected D1/D2 success path fit compile ten, native six, D0 seven, D1/D2 one,
+total 25, outside roles 27 and inside roles 62. Accepted maxima become compile ten,
+D0 seven, total 25 and inside roles 62; native seven, D1/D2 four each and outside 28
+remain unchanged. ETW reservations would be at most nine including the three already
+spent reservations, below the unchanged twenty ceiling; never refund an earlier slot.
+
+Permit compile stages confidential-checks-v16 through confidential-checks-v19 and direct
+roots confidential-direct-v5 through confidential-direct-v8 only for separately admitted
+remaining pairs. Preserve existing occupied stages and v4 contents. Each concrete
+source revision binds one stage/root and exact donor lineage; fresh deployment is not
+permission to refresh original donor identities, rediscover inputs, overwrite files,
+or reuse a spent operation. Existing immutable-lineage and passive limits remain;
+exact selection/operation/byte/time fit is required before any admission.
+
+Compile/D0 preparation remains sequential; no live process waits for review. Keep the
+creation-time named Job/cgroup topology and current per-original/nested clocks, capture
+and EOF rules. All six historical lifetime uncertainties and the already accepted
+platform-host/sole-owned-ETW persistence dispositions extend only to this finite scope;
+no new application, owned-Job or Linux lifetime exception is included. No new helper,
+process survey, ETW observer, account effect, download, restore, AOT publication or
+release authority is added. Owner acceptance, matching safety/Wave merge, independent
+source/input/artifact/call acceptance and durable full charge precede each execution.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation

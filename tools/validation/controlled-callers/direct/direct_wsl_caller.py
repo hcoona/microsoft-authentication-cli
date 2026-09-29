@@ -95,8 +95,8 @@ def required_inputs(fixture):
     value.update(DIRECT_SYNTHETIC_INPUTS if fixture else DIRECT_PRODUCT_INPUTS)
     return value
 
-ROOT_WINDOWS = r"C:\Temp\azureauth-windows-slice-108\confidential-direct-v4"
-ROOT_LINUX = "/mnt/c/Temp/azureauth-windows-slice-108/confidential-direct-v4"
+ROOT_WINDOWS = r"C:\Temp\azureauth-windows-slice-108\confidential-direct-v5"
+ROOT_LINUX = "/mnt/c/Temp/azureauth-windows-slice-108/confidential-direct-v5"
 PUBLIC_FIELDS = frozenset(("schema", "scope", "slot", "nonce", "protocolSha256",
     "callerSha256", "expectedExit", "productTimeoutSeconds", "soleLaunchIdentityPremiseAccepted",
     "targetedStopPremiseAccepted", "accountEffectsAdmitted", "calibrationAccepted", "pins", "privateReference"))
@@ -718,7 +718,7 @@ class Records:
             return result
         def bad_constant(_):
             raise SafeFailure()
-        # Record caps are 4 KiB; only the exact shallow scalar schema is subsequently accepted.
+        # Record caps are 4 KiB; only the exact bounded schema is subsequently accepted.
         return json.loads(raw.decode("utf-8", "strict"), object_pairs_hook=pairs, parse_constant=bad_constant)
 
     def read_baseline(self, digest):
@@ -806,8 +806,27 @@ def match_record(value, plan, kind, extras=frozenset()):
         require(type(value[key]) is type(expected) and value[key] == expected)
 
 
+def validate_failure(value):
+    if value is None:
+        return
+    require(type(value) is dict and value.keys() == {
+        "fault", "origin", "stage", "source", "line", "inputOrdinal", "openError"})
+    require(all(type(item) is int for item in value.values()))
+    require(0 <= value["fault"] <= 10 and value["origin"] in (1, 2) and
+        0 <= value["stage"] <= 8 and 0 <= value["source"] <= 3 and
+        (value["line"] == 0 if value["source"] == 0 else 1 <= value["line"] <= 100000) and
+        0 <= value["inputOrdinal"] <= 200 and -1 <= value["openError"] <= 2147483647)
+    require(value["origin"] != 1 or value["stage"] <= 4)
+    require(value["stage"] != 0 or (value["origin"] == 1 and value["source"] == 0 and
+        value["inputOrdinal"] == 0 and value["openError"] == -1))
+
+
 def validate_observer(value, plan):
-    match_record(value, plan, "observer-final", FINAL_EXTRA)
+    synthetic = plan.slot == "D0" or plan.slot in FIXTURE_SLOTS
+    match_record(value, plan, "observer-final", FINAL_EXTRA | ({"failure"} if synthetic else set()))
+    if synthetic:
+        validate_failure(value["failure"])
+        require(value["failure"] is None)
     booleans = FINAL_EXTRA - frozenset(("observerJobTotal", "fault", "nativeEvidence", "callbacks",
         "eventsLost", "logBuffersLost", "realTimeBuffersLost", "nativeExit", "nativeDurationMs", "anchorToEndUpperBoundMs"))
     require(all(type(value[key]) is bool for key in booleans))
