@@ -21904,6 +21904,51 @@ All six historical lifetime uncertainties and `noExperimentLive=false` remain.
 Owner acceptance does not accept future source, deployment, calibration or Slice
 outcomes. Failure exhausts this successor completion and provides no blind retry.
 
+#### Direct six-leaf completion source recipe
+
+The one successor completion uses action 0145 and the independently reviewed inert
+Linux materializer, 16,906 bytes, SHA-256
+`d7b53481d9e7a41d9d40a21c9552e498f6e34a21da127b4a6fc574eb797b16d2`.
+Its false execution guard remains intact until exact source and call admission.
+Only that guard changes during activation; the direct caller, validator, compiled
+artifacts and all 200 source descriptors remain those bound by 0144.
+
+The `controlled-direct-deployment-v3` plan retains the prior nine top-level fields.
+`originalEvidence` contains `original0143` and `original0144`, each with the exact
+action, nonce and original plan/snapshot/disposition digests. Each of the 194
+ordered `retained` rows has exactly `relative`, `identity`, `originAction` and
+`originRow`. The identity is the actual original comparison baseline; the origin
+row is one-based. Rows 1 through 24 refer to 0143, including leaf 24's retained
+failed-read baseline; rows 25 through 194 refer to 0144 creation/readbacks.
+The bound 0144 snapshot also supplies the first 24 rows' later reuse observations.
+Independently join every compact row to that complete retained evidence before
+activation. No historical evidence is regenerated, discarded or read at runtime.
+
+The materializer requires the literal four donor descriptors and their fixed
+catalog rows before any destination operation. Donor qualification additionally
+requires the copy phase, exact destination role, original identity, digest and
+length bound at each read. It retains original and actual full9 comparisons and
+performs the exact payload hash/length/EOF checks. Other original donors and
+controls keep strict full9 behavior; deployed leaves retain the existing rule.
+
+Read each of the 194 retained destinations once, using the compact original
+identity and the corresponding unchanged input row's content expectations. Write
+none of them. Copy/read back only rows 195 through 200. The
+`direct-deployment-terminal-v3` retains each compact origin and actual new read
+observations. Each new row also carries `originalSource` and `donorRead` alongside
+the observed donor descriptor, creation/write-closed identity and destination
+readback. A changed donor ctime cannot replace the original source baseline.
+
+The 209-pass/eight-write recipe, one new evidence directory, 262,144-byte plan and
+1 MiB terminal limits remain unchanged. The same two prebound phase collectors and
+transports receive only action/nonce/path substitutions; no output selection is
+expanded. The exact resulting bytes and literal commands still require independent
+admission. Focused selected-definition checks use in-memory syscall and digest
+observations, without importing the materializer, running its entry point or reading
+target files. They cover fixed donor eligibility, within/between-read ctime,
+every other field, content/EOF failures, strict exclusions, compact lineage,
+exclusive writes and unchanged plan bounds; they make no platform-success claim.
+
 #### Synthetic first-held native identity and outcome boundaries
 
 Only N1/N2/N3 and D0/D1/D2 use `identityMode=synthetic-first-held-v1`. Native requires
