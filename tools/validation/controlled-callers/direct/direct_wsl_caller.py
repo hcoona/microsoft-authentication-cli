@@ -164,6 +164,13 @@ def native_identity(value, length):
     # The native observer validates this tuple before publishing readiness.
 
 
+def equal_except_ctime(left, right):
+    return (type(left) in (list, tuple) and type(right) in (list, tuple) and
+        len(left) == len(right) == 9 and
+        all(type(x) is int for x in (*left, *right)) and
+        all(left[i] == right[i] for i in (0, 1, 2, 3, 4, 5, 6, 8)))
+
+
 class AcceptedDirectInputs:
     def __init__(self, path, digest):
         self.fds = []
@@ -173,6 +180,15 @@ class AcceptedDirectInputs:
         self.private_pin = None
         self.baseline_sha256 = None
         self.public_pins = {}
+        self.synthetic_paths = {}
+        self.synthetic_pins = {}
+        self.synthetic_digests = {}
+        self.comparisons = []
+        self.comparison_bytes = 0
+        self.comparison_capture_complete = True
+        self.comparison_context = None
+        self.record_directory = None
+        self.close_ok = True
         self.active = self.closed = False
         self.original_start = time.monotonic()
         self.original_end = self.original_start + 155.0
@@ -204,6 +220,13 @@ class AcceptedDirectInputs:
                 for k in ("protocolSha256", "callerSha256")))
             expected = required_inputs(fixture)
             require(type(data["pins"]) is list and len(data["pins"]) == len(expected))
+            if fixture:
+                require(len(expected) == 200)
+                self.comparison_context = dict(slot=slot, nonce=nonce,
+                    admissionSha256=digest, callerSha256=data["callerSha256"],
+                    protocolSha256=data["protocolSha256"])
+                self.create_record_directory(slot, nonce)
+                self.synthetic_paths = {linux_path(relative): relative for relative in expected}
             total = 0
             hashes = {}
             for item in data["pins"]:
@@ -224,7 +247,8 @@ class AcceptedDirectInputs:
                 require(total <= 100663296)
                 self.files[relative] = self.pin(linux_path(relative), size, maximum, sha)
                 if fixture:
-                    require(self.files[relative][1] == tuple(admitted_identity))
+                    self.compare_synthetic(relative, "admission", admitted_identity,
+                        (self.files[relative][1],))
                 self.public_pins[relative] = (size, sha)
                 hashes[relative] = sha
             require(not expected and hashes[r"source\direct_wsl_caller.py"] == data["callerSha256"])
@@ -271,7 +295,8 @@ class AcceptedDirectInputs:
                 self.request = private_request(private_data["request"], self.plan, module)
             if slot != "D0":
                 arguments(self.plan, self.request, module)
-            self.create_record_directory()
+            if not fixture:
+                self.create_record_directory(slot, nonce)
             self.before()
         except BaseException:
             self.close()
@@ -314,14 +339,58 @@ class AcceptedDirectInputs:
         require(stat.S_ISDIR(os.fstat(fd).st_mode))
         return fd
 
-    def create_record_directory(self):
+    def create_record_directory(self, slot, nonce):
         # One fresh owned directory, never a preexisting result set or a retry target.
         parent = self.hold_directory(ROOT_LINUX + "/records")
         self.before()
-        leaf = self.plan.slot + "-" + self.plan.nonce
+        require(self.record_directory is None)
+        leaf = slot + "-" + nonce
         os.mkdir(leaf, 0o700, dir_fd=parent)
-        self.hold_directory(self.plan.record_directory)
+        path = ROOT_LINUX + "/records/" + leaf
+        self.hold_directory(path)
         self.directories_unchanged()
+        self.record_directory = path
+
+    def compare_synthetic(self, relative, point, reference, observed):
+        self.before()
+        require(self.comparison_context is not None and
+            self.synthetic_paths.get(linux_path(relative)) == relative and
+            point in ("opened", "admission", "pin", "held", "read-before", "read-after", "exec-before", "exec-after"))
+        matched = all(equal_except_ctime(reference, value) for value in observed)
+        row = dict(relative=relative, point=point, reference=list(reference),
+            observed=[list(value) for value in observed], nonCtimeEqual=matched,
+            ctimeEqual=[reference[7] == value[7] for value in observed])
+        size = len(json.dumps(row, separators=(",", ":"), allow_nan=False).encode("ascii")) + 1
+        if len(self.comparisons) >= 4096 or self.comparison_bytes + size > 2097152 - 4096:
+            self.comparison_capture_complete = False
+            raise SafeFailure()
+        self.comparison_bytes += size
+        self.comparisons.append(row)
+        require(matched)
+
+    def write_comparisons(self):
+        if self.comparison_context is None or self.record_directory is None:
+            return
+        self.before()
+        value = dict(schema="synthetic-direct-linux-comparisons-v1",
+            scope="synthetic-direct", **self.comparison_context,
+            captureComplete=self.comparison_capture_complete, rows=self.comparisons)
+        payload = (json.dumps(value, separators=(",", ":"), allow_nan=False) + "\n").encode("ascii")
+        require(len(payload) <= 2097152)
+        parent = self.directories[self.record_directory]
+        fd = os.open("linux-input-comparisons.json", os.O_WRONLY | os.O_CREAT |
+            os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600, dir_fd=parent)
+        try:
+            offset = 0
+            while offset < len(payload):
+                self.before()
+                count = os.write(fd, payload[offset:offset + 65536])
+                require(count > 0)
+                offset += count
+            os.fsync(fd)
+            self.before()
+        finally:
+            os.close(fd)
 
     def directories_unchanged(self):
         # This binds the held directory chain without equating Linux and native IDs.
@@ -346,12 +415,12 @@ class AcceptedDirectInputs:
             projection.startswith(ROOT_LINUX + "/"))
         pin = self.files[relative]
         self.directories_unchanged()
-        self.same(pin)
+        self.same(pin, "exec-before")
         require(stat.S_ISREG(pin[1][2]) and pin[1][2] & 0o111)
         # Content identity does not establish Linux exec eligibility. Check the exact
         # Windows-filesystem projection with effective-ID X_OK before each sole Popen.
         require(os.access(projection, os.X_OK, effective_ids=True, follow_symlinks=False))
-        self.same(pin)
+        self.same(pin, "exec-after")
         self.directories_unchanged()
         self.before()
         return projection
@@ -362,9 +431,13 @@ class AcceptedDirectInputs:
         fd = os.open(os.path.basename(path), os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC | os.O_NONBLOCK, dir_fd=parent)
         self.fds.append(fd)
         before = os.fstat(fd)
+        pin = (fd, full9(before), parent, os.path.basename(path))
+        if path in self.synthetic_paths:
+            self.synthetic_pins[fd] = self.synthetic_paths[path]
+            self.synthetic_digests[fd] = digest
+            self.compare_synthetic(self.synthetic_pins[fd], "opened", pin[1], (pin[1],))
         require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and 0 <= before.st_size <= maximum and
             (length < 0 or before.st_size == length))
-        pin = (fd, full9(before), parent, os.path.basename(path))
         if digest is not None:
             value = hashlib.sha256()
             remaining = before.st_size
@@ -375,18 +448,23 @@ class AcceptedDirectInputs:
                 value.update(chunk)
                 remaining -= len(chunk)
             require(os.read(fd, 1) == b"" and value.hexdigest() == digest)
-        self.same(pin)
+        self.same(pin, "pin")
         os.lseek(fd, 0, os.SEEK_SET)
         return pin
 
-    def same(self, pin):
+    def same(self, pin, point="held"):
         self.before()
         fd, identity, parent, name = pin
-        require(full9(os.fstat(fd)) == identity and
-            full9(os.stat(name, dir_fd=parent, follow_symlinks=False)) == identity)
+        if fd in self.synthetic_pins:
+            held = full9(os.fstat(fd))
+            named = full9(os.stat(name, dir_fd=parent, follow_symlinks=False))
+            self.compare_synthetic(self.synthetic_pins[fd], point, identity, (held, named))
+        else:
+            require(full9(os.fstat(fd)) == identity and
+                full9(os.stat(name, dir_fd=parent, follow_symlinks=False)) == identity)
 
     def read(self, pin, maximum):
-        self.same(pin)
+        self.same(pin, "read-before")
         fd, identity, _, _ = pin
         require(identity[5] <= maximum)
         os.lseek(fd, 0, os.SEEK_SET)
@@ -397,7 +475,9 @@ class AcceptedDirectInputs:
             require(chunk)
             data.extend(chunk)
         require(os.read(fd, 1) == b"")
-        self.same(pin)
+        self.same(pin, "read-after")
+        if fd in self.synthetic_digests:
+            require(hashlib.sha256(data).hexdigest() == self.synthetic_digests[fd])
         return bytes(data)
 
     def revalidate_private(self, plan, request, validator):
@@ -426,7 +506,11 @@ class AcceptedDirectInputs:
 
     def close(self):
         if self.closed:
-            return
+            return self.close_ok
+        try:
+            self.write_comparisons()
+        except BaseException:
+            self.close_ok = False
         self.closed = True
         for fd in reversed(self.fds):
             try:
@@ -435,6 +519,7 @@ class AcceptedDirectInputs:
                 pass
         self.fds.clear()
         # No erasure promise for Python strings/objects or kernel copies.
+        return self.close_ok
 
 
 class AdmissionCatalog:
@@ -461,7 +546,8 @@ class AdmissionCatalog:
     @staticmethod
     def close():
         if AdmissionCatalog.current is not None:
-            AdmissionCatalog.current.close()
+            return AdmissionCatalog.current.close()
+        return True
 
 PRIVATE_ROW_KEYS = frozenset(("profilePath", "tenantArgument", "exactResultTenant",
     "accountEmail", "scopes", "interactionAllowed", "timeoutSeconds", "outcome",
@@ -968,15 +1054,19 @@ def run(plan, request, validator):
 
 
 def main():
+    result = 1
     try:
         plan, request = AdmissionCatalog.load()
         if plan.slot == "D0":
-            return run_calibration(plan)
-        return run(plan, request, AdmissionCatalog.result_validator())
+            result = run_calibration(plan)
+        else:
+            result = run(plan, request, AdmissionCatalog.result_validator())
     except BaseException:
-        return 1
+        result = 1
     finally:
-        AdmissionCatalog.close()
+        if not AdmissionCatalog.close():
+            result = 1
+    return result
 
 
 if __name__ == "__main__":
