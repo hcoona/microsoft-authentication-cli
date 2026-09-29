@@ -674,8 +674,8 @@ For only these 200 deployed synthetic leaves, permit Linux ctime-only inequality
 within and between preparation/admission reads and held-input comparisons.
 Retain actual full9 observations and original descriptors. Preserve device/inode,
 mode, UID/GID, size, mtime, link count, no-follow/regular-file checks, exact
-admitted content/hash/EOF and held/named correspondence. Only for this one six-leaf
-completion, also qualify ctime within and between Linux reads of the four fixed
+admitted content/hash/EOF and held/named correspondence. For this completion and
+the remaining already-funded direct originals below, also qualify ctime within and between Linux reads of only the four fixed
 original SyntheticSubject artifact donors identified by the linked protocol. Retain
 their original descriptors and accepted compile lineage; do not substitute content
 or refresh a baseline. The two Python donors, every other original donor, tools,
@@ -735,7 +735,8 @@ Raise only the grouped compile maximum to ten, D0 maximum to seven, total maximu
 four each, outside-Job maximum 28, ETW maximum twenty and all other stricter local limits.
 Permit fresh compile stages v16 through v19 and paired direct deployments v5 through
 v8 under the existing dedicated roots. Existing occupied stages/deployments remain
-retained and cannot be overwritten, repaired, or used as a renewed attempt.
+retained and cannot be overwritten, repaired, or used as a renewed attempt, except
+for the sole non-overwrite v6 completion below.
 
 Explicitly extend the six separate historical lifetime/interference dispositions and
 the existing platform-host and sole-owned-ETW persistence dispositions only to this
@@ -749,6 +750,32 @@ accounting, call and outcome acceptance before execution. Keep the existing pass
 lineage/pass limits and creation-time named Jobs/cgroups. No old-output recollection,
 metadata-baseline reset, new helper or observation system is granted. This finite
 extension ends with the current grant and does not expand automatically.
+
+**Synthetic direct v6 completion:** Permit one separately numbered and fully charged
+D0 allocation to complete the fixed `confidential-direct-v6` catalog after failed
+preparation 0149. Read its 194 completed leaves once against their retained original
+content and identity evidence; exclusively create only the six remaining leaves.
+Retain compile 0148 observer acceptance, the unchanged SyntheticSubject artifacts,
+native 0142 evidence, and the exact two already accepted Python donors. No rebuild,
+recopy, overwrite, cleanup or new deployment root is included.
+
+Apply the preceding exact four-donor ctime qualification to this completion and to
+any remaining separately admitted direct original already funded by the diagnostic
+continuation. Keep the literal four original donor paths, original full9 descriptors,
+accepted content and destination roles; local recovered donor copies remain strict.
+This explicitly extends the same loss of a ctime-only history signal and reuse
+without continuously held historical handles. It does not accept a benign cause,
+changed content, another identity mismatch, a new donor, or process uncertainty.
+
+The [v6 completion protocol](research/experiments/windows-slice-validation.md#direct-v6-completion-after-0149)
+owns the fixed lineage, finite recipe and outcome obligations. Use one existing
+0/1/0/5 correction allocation and one existing ETW reservation, preserving 0149's
+full charge and all protected capacity. Retain the existing action, grouped-role,
+stage, passive-observation and time ceilings. Require matching safety/protocol
+acceptance and independent source, input, accounting, call and outcome review before
+execution. This occupied-v6 completion is single-use; failure grants no further
+adoption. The donor qualification expires with the present grant. Add no quota,
+account effect, helper or real-platform claim.
 
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
