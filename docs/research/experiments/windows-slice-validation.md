@@ -23722,6 +23722,87 @@ cleanup or broader claim is
 included. Owner acceptance and matching Wave/safety merge precede dependent source
 implementation, compilation and execution. The qualification expires with the grant.
 
+### Direct v7 Completion and Public Donor History
+
+Original 0151 successfully compiled and independently established the new observer's
+source/artifact correspondence. Original 0152 then stopped during v7 deployment at
+input 2, the public `Microsoft.NETCore.App.deps.json` donor. Only Linux ctime differed
+from its original descriptor; the strict identity check rejected it before reading
+payload. Its current hash was therefore not observed. Accepted 0151 copy evidence
+has the original 29,720-byte content hash, but does not replace a new donor read or
+establish the cause of the ctime difference. The sole complete 0152 snapshot records
+one created/read-back leaf, 13 created directories and 199 uncreated inputs. The
+Linux service and complete transports ended normally with the failed result; there
+were no Windows, calibration or ETW starts. Preserve the full charge and reservation.
+
+After matching Wave/safety acceptance, permit one separately numbered, fully charged
+completion of `confidential-direct-v7`. The accepted 0151 observer and direct Python
+source bind that root, so retain their bytes, artifact acceptance and source lineage;
+no recompile or native batch is necessary. Retain native 0142 and unchanged
+SyntheticSubject 0141 evidence. No D0 calibration or D1/D2 success is yet established.
+
+Bind the original 200-input plan and the sole frozen 0152 deployment snapshot.
+Check its first leaf, `toolchain\shared\Microsoft.NETCore.App\10.0.12\Microsoft.CSharp.dll`,
+once against its original creation, write-closed, readback and content lineage.
+Keep its initial destination baseline. Hold the fixed existing directories without
+enumeration or recreation. Exclusively create the remaining 199 leaves and a fresh
+Linux action-evidence directory; do not recopy, overwrite, repair or delete the first
+leaf or any old output. A new action/nonce, allocation and public D0 control are
+required. Any occupied new destination or unqualified mismatch stops the completion.
+
+The closed historical-identity qualification consists of original donor rows 1-196:
+190 public runtime/host files, four accepted 0151 DirectObserver artifacts and the
+two original SyntheticSubject DLL/EXE donors. Bind every original ordered destination
+role, literal source path, full9, length and SHA-256 from the 0152 plan. Validate a
+fixed canonical digest of that exact table before enabling the qualification; no
+directory or pattern lookup, replacement donor or baseline refresh is permitted.
+Rows 197-200 are the four local donors and remain strict.
+
+For rows 1-194, compare historical expected identity to the current opened identity
+using all full9 fields except ctime. Then require a new exact admitted length,
+SHA-256 and EOF sample, regular/single-link/no-follow predicates, and strict opened,
+final-opened and named full9 equality, including ctime. Preserve each original operand
+and actual observation. The two SyntheticSubject donors retain their existing
+historical and within-read qualification; do not widen it to the other 194 donors.
+External controls, infrastructure and unrelated inputs remain strict. The retained
+and newly deployed leaves use only the existing synthetic direct-catalog rules.
+This donor qualification applies to this one completion, not later unrelated work.
+
+Reuse the accepted retained-copy/fresh-copy methods and add only the distinct
+historical comparison. Before execution, independently review inert source and
+in-memory negative cases for exact table membership, role/path/hash/identity binding,
+ctime-only historical differences, each other field, within-read changes, changed
+content or EOF, and strict local/control inputs. No new metadata pass or platform
+test is required solely to validate those pure predicates. Keep original failure
+evidence; historical hashes do not excuse any missing new read.
+
+The completion fits the existing 300-second service and 315-second external envelope:
+three control reads, one retained read and 199 donor/readback pairs give 402 complete
+passes; 199 copies plus start/terminal give 201 writes; one new evidence directory.
+Keep the existing 512-pass/256 MiB, 256-write/128 MiB and 32-directory caps and terminal
+reserves. Calculate exact serialized control and payload overhead at call admission.
+Prebind the unchanged two-leaf deployment and eleven-leaf invocation selections;
+each sole collector follows its phase's ended transports and its own passive debit.
+Accept deployment before the sole D0 control/invocation and D0 before D1/D2.
+
+Current consumption is 32/135/6/373, with correction pool 1/1/0/7. One existing
+0/1/0/5 allocation gives 32/136/6/378 and pool 1/0/0/2; no aggregate increase or
+refund is permitted. Raise only grouped D0's maximum from seven to eight for this
+original. Compile nine, native six and D0 eight give 23 grouped originals; protected
+D1/D2 give 25. Outside/inside host reservations become 23/59, or 27/59 with D1/D2;
+ETW reservations become eight, or ten with D1/D2. Shared-pool build originals become
+26, total originals 28 and conservative total-path bound 33, within 26/29/34 limits.
+Preserve D1/D2's 0/2/0/10 and twelve later-product build/test slots. This consumes the
+remaining shared-pool build-original allowance; it is not a new compile/D0 pair.
+
+The existing owner decision accepts the lost historical ctime-only signal when
+all other object/content predicates pass, without asserting benign cause or continuous
+integrity. Keep the six separate historical lifetime dispositions,
+`noExperimentLive=false`, named Jobs/cgroups, current clocks and existing ETW rules.
+Add no process role, helper, survey, download, cleanup, account effect or new lifetime
+uncertainty. This occupied-v7 completion is single-use and expires with the current
+grant; its failure does not authorize another completion.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation
