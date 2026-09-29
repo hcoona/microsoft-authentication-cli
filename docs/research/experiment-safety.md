@@ -504,20 +504,23 @@ uncertainty is granted. The qualification ends with this grant.
 The Wave's separate synthetic-direct decision permits Linux ctime-only inequality
 within and between reads and held-input comparisons for only the fixed 200 deployed
 synthetic leaves. It also permits one non-overwrite completion of the occupied v4
-tree, retaining its 24 leaves and exclusively creating the remaining 176. Apply the
-[direct comparison and reuse protocol](experiments/windows-slice-validation.md#direct-linux-ctime-and-occupied-v4-completion)
+tree, retaining its 194 leaves and exclusively creating the remaining six. For this
+one completion only, also qualify ctime within and between Linux reads of the four
+fixed original SyntheticSubject artifact donors. Apply the
+[direct donor completion protocol](experiments/windows-slice-validation.md#direct-four-donor-and-194-leaf-completion)
 after the owner decision and matching amendments merge, and after exact source review.
 Preserve original descriptors, all actual ctime observations, exact admitted bytes and
-the other eight Linux identity fields. Donors, tools, external controls, private/account
-inputs, unrelated files and Windows predicates receive no exception.
+the other eight Linux identity fields. Retain the four donors' original compile
+lineage. The two Python donors and all other original donors, tools, external controls,
+private/account inputs, unrelated files and Windows predicates receive no exception.
 
 The owner decision accepts the lost ctime-only metadata/history signal and the lack of
 continuously held historical handles. The failed 24th leaf's original creation-object
 check passed, but only its first-read snapshots/content remain; do not reconstruct its
 missing creation/write-closed snapshots. Neither matching content nor the exception
 establishes a benign cause or uninterrupted integrity. Any other mismatch stops without
-repair. Keep the failed charge, partial tree and original observations; add no settling
-pass, survey, overwrite, cleanup, quota or process uncertainty. The completion is
+repair. Keep both failed preparations' charges, partial tree and original observations;
+add no settling pass, survey, overwrite, cleanup, quota or process uncertainty. The completion is
 single-use; comparison authority expires with the grant and cannot transfer to real
 inputs or later work automatically.
 
