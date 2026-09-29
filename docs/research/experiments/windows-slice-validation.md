@@ -21517,17 +21517,22 @@ permitted. The selected donor need not be a copy in the compile staging tree.
 
 Create only the fresh `confidential-direct-v4` tree and its fixed `toolchain`, `artifact`,
 `source`, `control` and `records` descendants, plus the exact new Linux evidence paths.
-An existing destination stops preparation. Reject linked ancestors and nonregular or
+An existing destination stops preparation except for the single
+[occupied-v4 completion](#direct-linux-ctime-and-occupied-v4-completion) below.
+Reject linked ancestors and nonregular or
 multiply linked source leaves. Create each output exclusively, write the admitted bytes,
 flush and close it, then perform its sole complete readback. Retain the creation-object
 identity and write-closed metadata. The first closed-file readback establishes the new
 destination's full9 baseline: bind it to the created device/inode, require the exact
 length/hash/EOF, and require opened, final-opened and named full9 equality within that
-read. This is initial admission of a new object, not replacement of an existing baseline.
+read, subject only to the explicit synthetic direct Linux qualification below.
+This is initial admission of a new object, not replacement of an existing baseline.
 No second settling read or correction is allowed. Independently accept each resulting
 descriptor and its original copy lineage before the first supervisor. Every later
-direct input read and `same()` comparison remains strict full9; neither the compile-copy
-qualification nor PR 304's native cross-role qualification applies to direct use.
+direct input read and `same()` comparison remains strict full9 except for the explicit
+[synthetic direct Linux qualification](#direct-linux-ctime-and-occupied-v4-completion)
+below; neither the compile-copy qualification nor PR 304's native cross-role
+qualification applies to direct use.
 
 Preparation has one 300-second original interval, including ten seconds reserved for
 terminal evidence. Limit it to 512 complete file passes, 256 MiB requested payload plus
@@ -21573,6 +21578,131 @@ calibration acceptance for the exact observer before D1/D2, each with its own un
 0/1/0/5 charge and ETW reservation. Preserve all protected capacity and historical
 uncertainty. This integration adds no quota, product claim or owner risk exception.
 
+#### Direct Linux ctime and occupied-v4 completion
+
+**Observed failure and limit.** Preparation 0143 ran once under PR 305's accepted
+protocol and stopped on the first closed-file readback of input 24,
+`toolchain\shared\Microsoft.NETCore.App\10.0.12\System.Data.Common.dll`.
+Its 2,770,728 bytes and SHA-256
+`66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc`
+matched admission. Only full9 index 7, Linux ctime, changed by 50,112,500 ns;
+the other eight fields matched and final-opened equaled named identity. The cause
+is unknown. There were 23 completed copy/readback rows, 24 created leaves and
+13 created directories. The failed leaf passed the source's creation-object check,
+but its creation/write-closed snapshots were not appended to completed rows.
+Its retained first-read snapshots and content are the available lineage.
+
+The source ended after 1.209669 seconds and its waiting service transport ended with
+exit 1 after 1.360390 seconds, complete empty streams and no timeout or overflow.
+Independent disposition accepts scoped failed Linux service completion, without an
+empty-cgroup survey or deployment/calibration success. No Windows process, direct
+invocation or ETW session started. Keep the producer's success-dependent
+`naturalManagedServiceCompletion=false`, spent 0/1/0/5 allocation, ETW reservation,
+partial tree and sole collector. The fixed output snapshot SHA-256 is
+`e220e822c0a296cb1c53e443ea0c89d464bc501712c593a50cb4d81afdf88116`;
+the independent failed-outcome disposition SHA-256 is
+`6cde5727ffc3390bfb6bd8efc0fc3ab7be7286a336fd9103557c77d0948d31f7`.
+These sanitized observations support the comparison proposal, not a benign-change
+claim or permission to replay 0143.
+
+**One completion.** After the specific Wave owner decision and matching amendments
+merge, admit one new action/nonce to complete the same v4 deployment. This replaces
+the preceding fresh-tree requirement only for that one preparation. The compiled
+`AcceptedDirectInputs.Root` embeds v4; moving to a successor path would not reuse
+the accepted compiled catalog unchanged. Reuse compile 0141's accepted artifacts
+and native 0142's accepted evidence without rebuilding or rerunning either.
+
+Before execution, independently bind a fixed 200-row manifest to original donor
+descriptors, accepted artifacts and exact reviewed Python sources. Preserve 0143's
+original manifest and source descriptors. Only the not-yet-created direct Python
+caller may receive the separately reviewed comparison/evidence correction; retain
+its old source binding and explicitly bind the new source revision and hash.
+The result-validator source retains its existing guard-only substitution. No
+other donor/content substitution or metadata refresh is permitted.
+
+Bind the first 24 destinations by literal path to 0143's retained observations.
+Read each exactly once during the new preparation; require the admitted bytes/hash,
+EOF and the qualified object comparison below against the retained identities.
+For the first 23, preserve their original creation/write-closed/readback lineage.
+For leaf 24, join all retained first-read snapshots and its passed creation-object
+predicate without inventing missing historical snapshots. Do not write any of
+these 24 leaves. A missing or mismatched retained leaf stops without repair.
+
+Use only the fixed existing directory paths, rejecting linked ancestors and requiring
+held/named directory correspondence. No enumeration or claim of a surveyed empty tree
+is permitted. Exclusively create the remaining 176 manifest leaves and only the missing
+fixed directories. An unexpected occupied leaf or new-directory destination stops;
+it does not enter the reuse set. Preserve creation/write-closed snapshots and one
+complete readback for each new leaf. Create fresh action-specific controls/evidence;
+do not reuse 0143's admissions, unit, nonce, output paths or invocation rights.
+The new admitted catalog carries both original lineage and actual new observations;
+it never replaces a historical descriptor. If completion fails, retain the partial
+tree and stop; this single-use exception provides no automatic further adoption.
+
+**Exact comparison scope.** For these 200 deployed synthetic leaves only, qualify
+ctime-only inequality within and between preparation reads, D0/D1/D2 input
+admission, `pin()`, `same()`, executable-use and held-input checks. Bind eligibility
+to the exact synthetic mode, fixed v4 catalog and admitted path/role, not to a
+caller-controlled ignore-ctime flag. Require device, inode, mode, UID, GID, length,
+mtime and link count equality at every otherwise required comparison. Keep
+regular-file, single-link, no-follow, ancestor and held/named correspondence checks,
+exact admitted bytes/hash/EOF at every payload read and executable-use predicates.
+Do not add payload reads to metadata-only held checks.
+
+Retain actual nine-field observations, including every sampled ctime and precise
+comparison outcome. Preparation uses its existing terminal evidence allowance.
+For each direct invocation, permit one exclusively created public
+`records/<slot>-<nonce>/linux-input-comparisons.json`, with at most 4,096 comparison
+rows and 2 MiB, inside the original clock. Bind exact schema, source and complete
+write accounting before execution; overflow or incomplete retention fails acceptance.
+This receipt retains already required samples, adds no reads or observer, and remains
+separate from the unchanged native safe records and native baseline. Include its one
+fixed path in the invocation's sole prebound output collection under the existing
+16 MiB selected-payload and aggregate passive ceilings; add no collector pass.
+Never synthesize a full9,
+discard a contradictory eight-field observation or refresh the original descriptor.
+Original runtime/artifact/source donors, installed tools, Linux materializer and
+transport controls, admission documents, private/account and unrelated inputs remain
+strict full9. All Windows comparisons, native maps and compiled artifacts remain
+unchanged. Native cross-role ChangeTime and fixture-control exceptions do not transfer.
+Real direct slots and their inputs receive no qualification.
+
+The owner decision accepts loss of ctime-only rejection for some concurrent
+metadata/history changes and reuse without continuously held historical handles.
+Matching sampled content and eight fields cannot establish the cause of a difference
+or uninterrupted integrity. It also explicitly accepts leaf 24's limited retained
+creation evidence. Neither discrepancy is classified as benign; success remains
+unproven. Any non-ctime predicate failure retains the ordinary stop behavior.
+
+**Finite admission and validation.** Retain the integrated preparation's 300-second
+interval, 315-second transport, 512 passes/256 MiB plus EOF probes, 256 exclusive
+writes/128 MiB, 32 newly created directories and reserved terminal capacity. Include
+the 24 reuse reads, 176 donor/readback pairs, control/provenance reads and actual
+metadata evidence in exact-call accounting. Reuse performs no donor recopy or settling
+pass. Preserve direct invocation's 155/170-second clocks, captures, existing read and
+evidence ceilings, creation-time cgroup, named Job, native lifetime and ETW obligations.
+No extra observer, process role, survey or cleanup is added.
+
+Independently accept exact inert Python completion/comparison changes before execution.
+Validate ctime-only changes within and between synthetic reads, retained-leaf adoption,
+each of the other eight fields, wrong path/role/mode, nonregular or linked inputs,
+changed bytes/hash/length/EOF, strict donor/control/real inputs, unexpected occupied
+destinations and unchanged Windows boundaries. Use focused pure negative cases under
+the existing source-only review procedure; do not probe retained deployment files as
+validation or create another experiment. Ordinary source, input, artifact-join,
+checkpoint, literal-call and outcome gates still apply.
+
+The failed original leaves consumption at 32/126/6/322. Debit the corrected D0's
+0/1/0/5 from correction pool 1/3/0/15, leaving 1/2/0/10 and consumption
+32/127/6/327 if admitted. Ceilings remain 39/166/30/454. Preserve protected D1/D2
+and twelve later-product build/test slots; reserve the new D0's ETW attempt separately
+without refunding 0143's reservation. Its two fixed phase collectors share that new
+original's existing four-pass limit and aggregate passive bounds. No collector or
+execution is replayed. Preserve all six historical lifetime uncertainties and
+`noExperimentLive=false`; this amendment accepts no new process uncertainty.
+Owner acceptance of these documents does not by itself accept the future exact source,
+deployment, D0 calibration, D1/D2 outcomes or overall Slice.
+
 #### Synthetic first-held native identity and outcome boundaries
 
 Only N1/N2/N3 and D0/D1/D2 use `identityMode=synthetic-first-held-v1`. Native requires
@@ -21584,7 +21714,9 @@ uses `windows-controlled-harness-files-v2` with the same explicit mode and rows
 `relativePath`, `descriptor`, `compileCreation`. Its existing copied-runtime lineage
 qualification and strict generated-artifact controls remain required. The direct Linux
 caller compares each admitted `linuxIdentity` to the actual opened/named full9 and
-retains its strict `same()` predicate through use. Exact direct input acceptance must
+retains its `same()` predicate through use, with only the explicit
+[synthetic direct Linux ctime qualification](#direct-linux-ctime-and-occupied-v4-completion).
+Exact direct input acceptance must
 join those identities and hashes to the original accepted source/artifact/deployment
 records before the first supervisor starts. No extra discovery, settling or implicit
 replacement baseline is permitted.
