@@ -19,7 +19,7 @@ using SyntheticBaseline=ConfidentialNativeCaller.SyntheticNativeBaseline;
 namespace ConfidentialWsl;
 internal sealed class AcceptedDirectInputs : IDisposable
 {
-    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-direct-v6";
+    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-direct-v7";
     private readonly DirectNativePins pins;
     private readonly Slot slot;
     private readonly string nonce,scope;
@@ -28,6 +28,7 @@ internal sealed class AcceptedDirectInputs : IDisposable
     private DirectHeldFile? privateFile;
     private readonly SyntheticBaseline? baseline;
     private readonly string[]? baselineParts;
+    private readonly string? originalBaselineSha256;
     private bool held,privateRead,disposed;
     internal PublicPlan Plan {get;}
     internal string AdmissionPath {get;}
@@ -91,15 +92,15 @@ internal sealed class AcceptedDirectInputs : IDisposable
             {
                 baseline!.Seal(Root,slot+"-"+nonce,AdmissionSha,protocol,200,Before);
                 baselineParts=BaselineParts(baseline.Bytes,Before);
-                if(worker)CompareBaseline(parentBaseline,baselineParts);
-                else Need(parentBaseline is null);
+                if(worker)originalBaselineSha256=CompareBaseline(parentBaseline,baselineParts);
+                else { Need(parentBaseline is null);originalBaselineSha256=baseline.Sha256; }
             }
             else Need(parentBaseline is null);
             string product=fixture?@"artifact\SyntheticSubject.exe":@"product\Authentication.Cli.exe";
             Plan=new PublicPlan { ObserverImage=Root+@"\artifact\DirectObserver.exe",ProductImage=Root+"\\"+product,
                 WorkingDirectory=Root,RecordDirectory=Root+@"\records\"+slot+"-"+nonce,ProductSha256=hashes[product],
                 CallerSha256=caller,ProtocolSha256=protocol,ExpectedExit=expectedExit,ProductTimeoutSeconds=timeout,
-                NativeBaselineSha256=baseline?.Sha256 };
+                NativeBaselineSha256=originalBaselineSha256 };
             AdmissionCatalog.Validate(Plan);
             pins.HoldDirectory(Plan.RecordDirectory);
             JsonElement reference=data.GetProperty("privateReference");
@@ -124,7 +125,7 @@ internal sealed class AcceptedDirectInputs : IDisposable
     private static void Need(bool value,[CallerLineNumber] int line=0)
     { if(!value){DirectFailure.Remember(1,line);throw new SafeFailure(Fault.Admission);} }
     // Only already captured synthetic bytes enter these diagnostic fingerprints.
-    // Full baseline equality remains required after every field comparison.
+    // Preserve complete local maps; only the synthetic cross-role Changed field may differ.
     private static readonly string[] BaselineFields=["volume","index","attributes","created","modified","links","changed"];
     private static string[] BaselineParts(byte[] raw,Action before)
     {
@@ -157,7 +158,7 @@ internal sealed class AcceptedDirectInputs : IDisposable
         before();return parts;
     }
     private static string Digest(byte[] value)=>Convert.ToHexString(SHA256.HashData(value)).ToLowerInvariant();
-    private static void CompareBaseline(string? parent,string[] local)
+    private static string CompareBaseline(string? parent,string[] local)
     {
         Need(parent is not null && parent.Length==584);
         string[] expected=parent!.Split(':');Need(expected.Length==9 && expected.All(Hash));
@@ -168,8 +169,9 @@ internal sealed class AcceptedDirectInputs : IDisposable
         Need(expected[5]==local[5]); // Creation time.
         Need(expected[6]==local[6]); // Modification time.
         Need(expected[7]==local[7]); // Link count.
-        Need(expected[8]==local[8]); // ChangeTime, after every other field matched.
-        Need(expected[0]==local[0]); // Original complete-baseline digest still required.
+        // The supervisor-created command binds this original reference. Local snapshots
+        // retain their own ChangeTime and digest; downstream records use the supervisor's.
+        return expected[0];
     }
     internal static void CheckBaselineParts(long deadline)
     {

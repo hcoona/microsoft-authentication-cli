@@ -95,8 +95,8 @@ def required_inputs(fixture):
     value.update(DIRECT_SYNTHETIC_INPUTS if fixture else DIRECT_PRODUCT_INPUTS)
     return value
 
-ROOT_WINDOWS = r"C:\Temp\azureauth-windows-slice-108\confidential-direct-v6"
-ROOT_LINUX = "/mnt/c/Temp/azureauth-windows-slice-108/confidential-direct-v6"
+ROOT_WINDOWS = r"C:\Temp\azureauth-windows-slice-108\confidential-direct-v7"
+ROOT_LINUX = "/mnt/c/Temp/azureauth-windows-slice-108/confidential-direct-v7"
 PUBLIC_FIELDS = frozenset(("schema", "scope", "slot", "nonce", "protocolSha256",
     "callerSha256", "expectedExit", "productTimeoutSeconds", "soleLaunchIdentityPremiseAccepted",
     "targetedStopPremiseAccepted", "accountEffectsAdmitted", "calibrationAccepted", "pins", "privateReference"))
