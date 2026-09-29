@@ -21492,6 +21492,87 @@ persistence disposition. Every other lifetime or evidence uncertainty stops. D2'
 inequality does not prove causation, pending-provider state or native cancellation
 latency; unsupported source claims remain false.
 
+#### Direct deployment and invocation integration
+
+The fixed direct deployment above is a preparation phase of its first D0 allocation.
+Independently accept one exact Linux-only materialization recipe before its first
+effect. Retain the complete D0 debit of 0/1/0/5 and its reserved ETW creation capacity
+before starting that phase. A failed or partial preparation spends that D0 allocation;
+it cannot be restarted, refunded or charged to passive observation or a restore slot.
+Successful preparation ends before independent deployment acceptance and the sole D0
+invocation. No process remains alive during review. The two phases share one immutable
+action/nonce, allocation and review carrier, with distinct start and terminal records;
+they are not two D0 attempts. No Windows process or trace starts during preparation.
+
+Use the already admitted Python interpreter for this fixed copy recipe. Its exact
+source and command belong to the governing admission bundle; it is existing Linux
+materialization work, not a reusable runner or an additional runtime supervisor.
+Bind all 200 literal source/destination pairs before execution: 190 accepted public
+runtime/host donors, eight accepted DirectObserver/SyntheticSubject artifacts and the
+two exact Python sources with only independently accepted guard substitutions. Reuse
+the accepted compilation, source/response, PE/PDB and apphost conclusions; copying does
+not require recompilation or another broad artifact review. Read original donors with
+their accepted full9, length, hash and EOF; no donor discovery or identity refresh is
+permitted. The selected donor need not be a copy in the compile staging tree.
+
+Create only the fresh `confidential-direct-v4` tree and its fixed `toolchain`, `artifact`,
+`source`, `control` and `records` descendants, plus the exact new Linux evidence paths.
+An existing destination stops preparation. Reject linked ancestors and nonregular or
+multiply linked source leaves. Create each output exclusively, write the admitted bytes,
+flush and close it, then perform its sole complete readback. Retain the creation-object
+identity and write-closed metadata. The first closed-file readback establishes the new
+destination's full9 baseline: bind it to the created device/inode, require the exact
+length/hash/EOF, and require opened, final-opened and named full9 equality within that
+read. This is initial admission of a new object, not replacement of an existing baseline.
+No second settling read or correction is allowed. Independently accept each resulting
+descriptor and its original copy lineage before the first supervisor. Every later
+direct input read and `same()` comparison remains strict full9; neither the compile-copy
+qualification nor PR 304's native cross-role qualification applies to direct use.
+
+Preparation has one 300-second original interval, including ten seconds reserved for
+terminal evidence. Limit it to 512 complete file passes, 256 MiB requested payload plus
+one EOF probe per pass, 256 exclusive leaf writes/128 MiB and 32 newly created
+directories. Reserve four writes/1 MiB for terminal evidence inside those limits.
+Calculate actual manifest, source, copy/readback and evidence overhead in exact-call
+review. Retain every partial file and the first failure. There is no restore, compiler,
+Windows executable, network request, account effect, target survey, repair or cleanup.
+
+Both preparation and each direct invocation use the established pinned `systemd-run`
+transient user service, with a fresh bound unit name, `--wait --pipe`, `Type=exec`,
+`ExitType=cgroup`, `KillMode=control-group`, `Restart=no`, no privilege request, at most
+32 tasks/512 MiB, two-second running-job/start limits and five-second termination with
+final SIGKILL. The preparation service has `RuntimeMaxSec=300`; direct invocation has
+`RuntimeMaxSec=155`. The external original transport begins its clock before submission
+and permits respectively 315 or 170 seconds, including startup, service termination
+and complete transport retention. Each stream is empty on success and capped at 16 KiB
+plus one overflow byte. Timeout, overflow, incomplete EOF or forced termination fails
+the phase and cannot establish successful native lifetime or calibration.
+
+After deployment acceptance, the service executes the existing staged direct Python
+controller directly with `-I -B --admission <exact-path> <sha256>` in its existing
+argument order. Bind the literal Python and source paths, admission, fresh unit name,
+current accounting and service environment, including the admitted WSL interop socket
+and user runtime directory. Do not substitute an unreviewed manager environment or
+introduce a shell, PowerShell, normal launcher or extra Python wrapper. Windows starts
+retain `env=None` and the inherited WSL relay premise. The controller retains its own
+original 155-second entry clock and all existing nested deadlines; service supervision
+can shorten them, never renew them.
+
+Accept natural, source-bound transient-service completion and complete transports as
+the Linux managed-lifetime evidence. Do not claim an independently sampled empty or
+removed cgroup without that observation. Native observer Job, application and ETW
+closure remain separate outcome obligations. For this split D0 only, bind two fixed
+output selections together before preparation: its deployment start/terminal records,
+and the direct invocation's unchanged safe records/native baseline. Admit one sole
+collector after each corresponding phase and its transports end. These spend two of
+that D0 original's existing four-pass maximum, with the existing per-pass and aggregate
+byte/time bounds; no repeated collection or selection change is included. Neither
+collector reads the other phase's outputs, repairs inputs or creates another admission.
+D0 still requires independent
+calibration acceptance for the exact observer before D1/D2, each with its own unchanged
+0/1/0/5 charge and ETW reservation. Preserve all protected capacity and historical
+uncertainty. This integration adds no quota, product claim or owner risk exception.
+
 #### Synthetic first-held native identity and outcome boundaries
 
 Only N1/N2/N3 and D0/D1/D2 use `identityMode=synthetic-first-held-v1`. Native requires
