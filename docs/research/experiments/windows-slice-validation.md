@@ -21525,7 +21525,9 @@ The changed guarantee is exact independently admitted path/content/provenance fo
 by native held/named identity continuity at the observed points. There is no claim of
 equality to an independently observed Windows instance before that first open. Sharing
 excludes ordinary incompatible write/delete opens; it does not freeze attributes or
-extended attributes, so complete metadata comparisons remain necessary.
+extended attributes, so complete within-pin/read/held/named metadata comparisons remain
+necessary. The bounded [native cross-role qualification](#native-catalog-cross-role-changetime-qualification)
+below changes only separate N1/N2/N3 admission observations; direct admission is unchanged.
 
 Each native driver/direct supervisor serializes one original-wide baseline from its
 already held catalog objects, with no second catalog payload pass or rediscovery. The
@@ -21543,7 +21545,8 @@ API, compiler target, helper, process, separate metadata phase, or attempt is ad
 The driver completes all 202 input pins before creating a case supervisor. It writes
 `records\<batchNonce>\native-baseline.json` exclusively before any case child. Each
 existing suspended-created-role record adds `nativeBaselineSha256`; the child computes
-its own map and requires equal digest before dependent supervisor/worker work. Thus
+its own map and requires equal digest, or the complete qualified comparison defined
+[below](#native-catalog-cross-role-changetime-qualification), before dependent supervisor/worker work. Thus
 all seven native admission consumers compare one original-wide catalog, rather than
 inferring cross-role identity from equal content hashes. The existing batch terminal
 also binds that digest. The original driver's holds persist through the batch and the
@@ -21755,6 +21758,8 @@ the same managed recipe, four compiler targets, N1/N2/N3 and D0/D1/D2 roles, hel
 source/input/evidence predicates and maximum effects. Independently review and accept
 the exact canonical source/protocol changes before activation or dependent execution.
 The grant does not establish that any unreviewed fix is sound or that inert code supports it.
+The separately owner-accepted [native ChangeTime qualification](#native-catalog-cross-role-changetime-qualification)
+is limited to its named cross-role predicate; it is not a general correction exception.
 
 The sole exception to preserving the original launcher-admission descriptor is the
 [one prospective artifact admission from original 0122 evidence](#original-0122-failure-and-one-prospective-launcher-admission).
@@ -22811,6 +22816,10 @@ and separate exact native admission are still required. Static review supplies n
 platform result. Preserve the accepted fixture-only Linux between-read qualification;
 it does not apply to native identities or this diagnostic map read.
 
+The following native-catalog amendment supersedes only this section's failure-only,
+supervisor-only and unconditional digest-mismatch rejection rules for future accepted
+source. This section still describes the source executed by original 0140.
+
 Consumed capacity remains 32/121/6/273, ceilings 39/166/30/454, correction pool 1/7/0/59
 and old protected allocation 6/38/0/122. A separately admitted compile/native pair costs
 0/2/0/22 and would leave pool 1/5/0/37. Grouped consumption is compile four, native four,
@@ -22818,6 +22827,88 @@ outside roles eight and inside roles 28; one pair would reach five, five, ten an
 No capacity is added or reserved here. Preserve D0/D1/D2 and twelve later-product slots,
 fifteen spent collectors (4,500 seconds and 1,462,479,660 reserved bytes), two metadata
 passes, zero ETW uses, all historical charges and `noExperimentLive=false`.
+
+### Native Catalog Cross-Role ChangeTime Qualification
+
+Original 0139 compiled all four targets and its twenty artifact leaves were independently
+accepted, with twelve warnings and zero errors. Original 0140 completed 84 pure rows and
+zero native cases. At source `637d50cb4f13a126f7f4339018ee8b4d2cf78365`, its retained
+diagnostic identifies `AcceptedFixtureInputs.cs:176`: the parent and supervisor Windows
+ChangeTime differed for input 192, `artifact\NativeCaller.dll`. The preceding fields in
+that row agreed; the subsequent link comparison and later rows were not reached. The
+child value and cause were not retained. No benign cause, all-input agreement or exact
+historical 0138 field is established. The independent failed-outcome review accepts only
+the scoped forced-cleanup disposition for this original's Job/root and Linux service.
+Original 0140, its incomplete sole collector and stage v14 remain spent; native and
+overall Slice acceptance remain open.
+
+Microsoft's [FILE_BASIC_INFO](https://learn.microsoft.com/windows/win32/api/winbase/ns-winbase-file_basic_info)
+contract distinguishes metadata ChangeTime from data-stream LastWriteTime.
+[BY_HANDLE_FILE_INFORMATION](https://learn.microsoft.com/windows/win32/api/fileapi/ns-fileapi-by_handle_file_information)
+describes volume/file-index comparison through open handles, with filesystem and
+identifier-lifetime limits. These source facts explain the selected assertions; they do
+not explain this observation or make volume/file index a universal immutable identity.
+
+Only the Wave's specific owner decision permits the following rule for the fixed
+202-leaf N1/N2/N3 synthetic catalog. All seven consumers still pin the entire catalog,
+retain complete local snapshots, compute their own complete map once, and require strict
+within-pin/read/held/named identity stability including ChangeTime. Preserve every
+canonical/ancestor, no-reparse, single-link, length, hash, EOF and sharing check.
+Do not change `FixtureNativePins`, map serialization, direct D0/D1/D2 or real admission.
+
+Each created child still authenticates its created-role record. Equal local/original
+map digests require no added read. If they differ, that supervisor or worker may read
+the existing driver's `records\<batchNonce>\native-baseline.json` exactly once through
+the existing strict Pin/Read route, capped at 262,144 payload bytes and one EOF probe.
+Authenticate those bytes against the original digest from the held created-role record.
+Retain depth four, exact member sets, integer conversions and ordinal-path row order.
+Compare all headers and all 202 rows' relative path, length, SHA-256, volume/file index,
+attributes, creation time, last-write time and link count. Both ChangeTime values remain
+positive integer observations; only their cross-role equality is omitted. A successful
+comparison requires every required field and row, not merely the observed failing row.
+
+Keep each consumer's local map and held identities unchanged. Store the authenticated
+driver digest separately only after a complete comparison; use that original digest in
+every descendant created-role record and the existing batch binding. The supervisor
+must not pass its different local digest to the worker. This preserves one original-wide
+reference while allowing the explicitly qualified field to differ. Add no map rewrite,
+new output field, local-map publication, catalog reread, baseline refresh or comparison
+switch. The existing source-line/input-ordinal diagnostic identifies a required field
+difference. Failed read, authentication, parsing, numeric validation or expired deadline
+still rejects at the original binding location; incomplete comparisons never pass.
+
+At most six child roles can take this path, each once. Relative to the original seven
+consumers' 708,673,536-byte/1,453-EOF bound, add at most 1,572,864 payload bytes, six EOF
+probes, eighteen file opens, thirty-six native identity snapshots and 1,212 row
+comparisons. The combined native-consumer bound becomes 710,246,400 bytes and 1,459 EOF
+probes; including the existing controller it is 811,521,382 bytes and 1,666 probes.
+These totals replace the previous single failure-only map-read addition, not add to it.
+At most two 262,144-byte maps are parsed per comparison, using already retained local
+bytes. All original role/batch/terminal deadlines, output and collector limits remain.
+There is no new observer, process, service, ETW session, passive pass or clock allowance.
+
+Select fresh `confidential-checks-v15` with matching source literal, four responses,
+source map, catalog and both consumers. Direct deployment stays v4. All execution guards
+remain closed until owner acceptance, merge, independent source/input admission, fresh
+compile/artifact acceptance and exact native-call admission. Source review must cover
+equal maps, ChangeTime-only differences, every required field including later rows,
+malformed/incomplete maps, failed/expired reads, and original-digest propagation through
+supervisor and worker. Static checks do not establish compilation or native success.
+
+Consumed capacity is 32/123/6/295, ceilings 39/166/30/454 and correction pool 1/5/0/37.
+One separately admitted fresh compile/native pair costs 0/2/0/22, leaving pool 1/3/0/15
+and counts 32/125/6/317. Grouped compile/native use would become six/six, with outside
+roles twelve and inside roles 42, within six/seven, 28 and 44 respectively. No unit is
+reserved or added here. Preserve seventeen spent collectors, 5,100 reserved seconds,
+1,500,237,757 reserved bytes, two metadata passes, zero ETW uses, protected D0/D1/D2 and
+twelve later-product slots. Preserve six historical lifetime uncertainties, the separate
+outside OS-host qualification and `noExperimentLive=false`.
+
+This decision loses only the cross-observation metadata-history rejection signal when
+all required object/content comparisons agree. It neither asserts continuously unchanged
+metadata nor accepts changed content, object replacement, within-read instability or new
+lifetime uncertainty. It expires with the current finite grant and cannot expand to
+direct, product, real-account, Linux control or unrelated input predicates.
 
 ### Future Passive Metadata and Collection
 

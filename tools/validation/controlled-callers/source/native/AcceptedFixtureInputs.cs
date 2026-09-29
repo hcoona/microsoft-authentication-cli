@@ -14,13 +14,14 @@ using System.Text.RegularExpressions;
 namespace ConfidentialNativeCaller;
 internal sealed class AcceptedFixtureInputs : IDisposable
 {
-    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-checks-v14";
+    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-checks-v15";
     private readonly string admissionPath,admissionSha,batchNonce,protocolSha,recordsRoot;
     private readonly long batchEnd,terminalEnd;
     private long accessDeadline;
     private readonly FixtureNativePins pins;
     private readonly SyntheticNativeBaseline baseline=new();
-    internal string NativeBaselineSha256=>baseline.Sha256;
+    private string? originalBaselineSha256;
+    internal string NativeBaselineSha256=>originalBaselineSha256??baseline.Sha256;
     private readonly Dictionary<string,string> nonces=new(StringComparer.Ordinal);
     private readonly Dictionary<string,string> hashes=new(StringComparer.OrdinalIgnoreCase);
     private readonly List<string> inputOrder=[];
@@ -113,7 +114,7 @@ internal sealed class AcceptedFixtureInputs : IDisposable
         Require(Text(data,"role")==role);
         Require(Text(data,"nonce")==nonce);
         Require(Text(data,"admissionSha256")==admissionSha);
-        RequireBaseline(Text(data,"nativeBaselineSha256"),worker);
+        RequireBaseline(Text(data,"nativeBaselineSha256"));
         Require(data.GetProperty("batchWorkEnd").GetInt64()==batchEnd);
         Require(data.GetProperty("boundEnd").GetInt64()==boundEnd);
         Require(data.GetProperty("noExperimentLive").ValueKind==JsonValueKind.False);
@@ -121,30 +122,30 @@ internal sealed class AcceptedFixtureInputs : IDisposable
         if(worker)FixtureNativePins.RequireCurrentJob("Local\\azureauth-confidential-108-"+group+"-"+nonce);
         Before();return this;
     }
-    private void RequireBaseline(string parentSha,bool worker,[CallerLineNumber] int rejectionLine=0)
+    private void RequireBaseline(string parentSha,[CallerLineNumber] int rejectionLine=0)
     {
-        if(parentSha==baseline.Sha256)return;
-        if(worker)FixtureNativePins.Reject(FixtureCheckSource.Admission,rejectionLine);
+        if(parentSha==baseline.Sha256){originalBaselineSha256=parentSha;return;}
         (int Line,int Input) failure=(rejectionLine,-1);
         try
         {
             Before();Require(Hash(parentSha));
             string path=recordsRoot+"\\native-baseline.json";
-            // One failure-only payload read; hash these bytes instead of rereading them in Pin.
+            // Authenticate the driver's original map; never replace our held local snapshots.
             FixtureHeldFile file=pins.Pin(path,null,-1,262144);
             byte[] bytes=pins.Read(file,262144,path);
             Require(Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant()==parentSha);
-            Before();failure=BaselineDifference(bytes,rejectionLine);Before();
+            Before();failure=BaselineDifference(bytes);Before();
+            if(failure.Line==0){originalBaselineSha256=parentSha;return;}
         }
         catch
         {
-            // A failed diagnostic cannot replace the known baseline rejection with a guessed cause.
+            // An incomplete qualified comparison still rejects with the original binding location.
             failure=(rejectionLine,-1);
         }
         FixtureDiagnostics.RejectBaseline(failure.Line,failure.Input);
     }
     private static (int Line,int Input) Difference(int input=-1,[CallerLineNumber] int line=0)=>(line,input);
-    private (int Line,int Input) BaselineDifference(byte[] parentBytes,int rejectionLine)
+    private (int Line,int Input) BaselineDifference(byte[] parentBytes)
     {
         using JsonDocument parent=JsonDocument.Parse(parentBytes,new JsonDocumentOptions{MaxDepth=4});
         using JsonDocument local=JsonDocument.Parse(baseline.Bytes,new JsonDocumentOptions{MaxDepth=4});
@@ -173,10 +174,12 @@ internal sealed class AcceptedFixtureInputs : IDisposable
             if(p.GetProperty("attributes").GetUInt32()!=l.GetProperty("attributes").GetUInt32())return Difference(ordinal);
             if(p.GetProperty("created").GetInt64()!=l.GetProperty("created").GetInt64())return Difference(ordinal);
             if(p.GetProperty("modified").GetInt64()!=l.GetProperty("modified").GetInt64())return Difference(ordinal);
-            if(p.GetProperty("changed").GetInt64()!=l.GetProperty("changed").GetInt64())return Difference(ordinal);
+            // Only cross-role ChangeTime equality is qualified for this fixed synthetic catalog.
+            // Pin and Read still require the complete local identity to remain stable.
+            Require(p.GetProperty("changed").GetInt64()>0);
             if(p.GetProperty("links").GetUInt32()!=l.GetProperty("links").GetUInt32())return Difference(ordinal);
         }
-        return (rejectionLine,-1);
+        return (0,-1);
     }
     internal string[] RoleArguments(Group group,string nextRole,long boundEnd)
     {
@@ -191,7 +194,7 @@ internal sealed class AcceptedFixtureInputs : IDisposable
         Require(!child.Exited() && child.ProcessId>0 && child.CreatedFileTime>0);
         string leaf=id+"/"+nextRole+"-identity.json";Require(writtenLeaves.Add(leaf));
         byte[] bytes=JsonSerializer.SerializeToUtf8Bytes(new { schema="synthetic-created-role-v1",@case=id,role=nextRole,
-            nonce=nonces[id],admissionSha256=admissionSha,nativeBaselineSha256=baseline.Sha256,
+            nonce=nonces[id],admissionSha256=admissionSha,nativeBaselineSha256=NativeBaselineSha256,
             pid=child.ProcessId,createdFileTime=child.CreatedFileTime,batchWorkEnd=batchEnd,boundEnd,noExperimentLive=false });
         // The caller has the original suspended creation handle. No PID lookup is used.
         return pins.CreatePinnedRecord(plans[id].ReceiptDirectory+"\\"+nextRole+"-identity.json",bytes,Before);

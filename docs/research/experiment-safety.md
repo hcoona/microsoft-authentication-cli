@@ -488,6 +488,19 @@ No additional observation, settling pass, occupied-control reuse, overwrite, cle
 quota or process uncertainty is included. Preserve historical failures and charges;
 the exception ends with the current grant and cannot expand or transfer automatically.
 
+The Wave's separate synthetic-native-catalog decision permits only cross-role Windows
+ChangeTime inequality for its fixed 202-leaf N1/N2/N3 catalog. Preserve strict complete
+local pin/read/held/named stability, exact admitted content, and every other cross-role
+path/object predicate. Authenticate and retain the driver's original map/digest through
+all descendant bindings; neither original nor local snapshots may be refreshed or
+replaced. This accepts the loss of an intervening metadata-change signal, not a benign
+cause or continuous metadata integrity. Apply the exact
+[native catalog protocol](experiments/windows-slice-validation.md#native-catalog-cross-role-changetime-qualification)
+only after owner acceptance and independent source/protocol review. Direct synthetic
+and real/product admission, Linux controls and unrelated inputs remain unchanged.
+No quota, process role, observer, ETW session, clock extension, cleanup or new process
+uncertainty is granted. The qualification ends with this grant.
+
 This grant permits independently reviewed narrow source/protocol corrections and its
 finite fresh owned stage versions within unchanged topology/effects; it creates no
 generic execution or discovery mechanism. Matching owner Wave acceptance and protocol

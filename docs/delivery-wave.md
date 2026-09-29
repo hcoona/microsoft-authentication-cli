@@ -631,6 +631,35 @@ uncertainty. The exception ends with this grant and cannot transfer or expand
 automatically. Proposed text grants no predicate or execution authority before
 owner acceptance and merge.
 
+**Synthetic native catalog: cross-role ChangeTime qualification:** Permit only
+Windows `ChangeTime` inequality between separate driver, supervisor and worker
+admission observations of the fixed 202-leaf N1/N2/N3 synthetic catalog in the
+remaining independently admitted fresh native originals on these same hosts.
+Preserve complete local snapshots and strict within-pin/read/held/named checks,
+including ChangeTime. Require every row's canonical path/provenance, admitted
+length and SHA-256, volume/file index, attributes, creation time, last-write time
+and link count to agree across roles. Authenticate the driver's original map and
+preserve its digest through descendant bindings; never replace a local snapshot
+or refresh the original baseline to make a comparison pass.
+
+The repository owner accepts the loss of cross-observation metadata-change
+rejection when all these other object/content predicates agree. This does not
+establish a benign cause, continuously unchanged metadata, or scenario success.
+This is separate from the preceding fixture-only Linux ctime decision. Direct
+D0/D1/D2, real/product admission, Linux controls, source/tool/launcher controls
+and unrelated artifacts retain their existing predicates.
+
+Require matching independently reviewed source, safety and protocol amendments
+and owner acceptance before merge or dependent execution. Use the existing
+finite correction pool and unused stages; add no quota, process role, helper,
+observer, metadata pass, ETW session, clock extension or automatic retry. The
+protocol may reuse the fixed parent-map read for all six native child roles,
+with exact cumulative read/open/snapshot bounds inside the existing deadlines.
+Preserve failure evidence and charges, protected D0/D1/D2 and later-product
+allocations, creation-time containment, all six historical lifetime uncertainties
+and `noExperimentLive=false`. This decision accepts no new process uncertainty
+or account effect and expires with this grant without automatic transfer.
+
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
 permitted interactive calls for the later real-environment acceptance proposal.
