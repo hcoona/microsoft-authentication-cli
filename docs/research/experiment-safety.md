@@ -862,7 +862,9 @@ passive-lineage/108-pass limits. This adds no allocation beyond 0/7/0/43.
 Retain native evidence when its source, artifacts and exercised behavior are unchanged.
 Direct diagnostics use only fixed numeric source locations and input ordinals within
 the existing pipe/final-record caps. No private values, exception text, raw traces,
-new process roles, broader identity qualification or additional telemetry is included.
+new process roles, broader identity qualification or additional telemetry is included
+in that diagnostic decision. The separate direct comparison decision below is the
+only added Windows qualification for the direct synthetic catalog.
 A new observer requires its own exact artifact acceptance and D0 calibration.
 
 Apply grouped maxima compile ten, native seven, D0 seven, D1/D2 four each, total 25,
@@ -876,3 +878,27 @@ persistence dispositions to this finite scope. Preserve noExperimentLive=false a
 historical charges and uncertainty. No new application, Job or Linux lifetime exception
 is granted. Source/control/protocol and exact-call review remain required; this section
 alone does not activate a source or authorize a retry.
+
+## Synthetic Direct Cross-Role ChangeTime Qualification
+
+The Wave's separate direct-catalog decision permits only cross-role Windows
+ChangeTime inequality between supervisor and worker for the fixed 200-leaf D0/D1/D2
+synthetic catalog. This supersedes the diagnostic continuation's full cross-role
+baseline-equality requirement only within that scope. Preserve strict complete local
+pin/read/held/named identity stability, including ChangeTime; all other header,
+ordered-path, object and exact admitted content comparisons remain mandatory.
+Retain both local baselines and use the supervisor's original digest for downstream
+record binding only after every required projection agrees. No baseline is refreshed.
+
+The owner accepts the loss of the intervening metadata-change rejection signal,
+not a benign cause, continuous metadata integrity or successful calibration.
+Apply the [direct comparison protocol](experiments/windows-slice-validation.md#direct-catalog-cross-role-changetime-qualification)
+only after the specific owner decision and matching record acceptance. Native
+pinning, real/product admission, Linux controls and unrelated inputs are unchanged;
+this exception cannot transfer automatically. Use existing finite correction capacity,
+fresh stages, independent source/artifact/call gates and new D0 acceptance for changed
+observer bytes. Preserve all failed charges, protected work, historical uncertainty
+and containment. Add no observation allowance, process role, helper, clock
+extension, cleanup, occupied-tree reuse or new process uncertainty. Existing
+per-original observations and ETW reservations remain charged. The
+qualification ends with the current grant.

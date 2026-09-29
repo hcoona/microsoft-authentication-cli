@@ -721,7 +721,8 @@ Permit minimal numeric failure-location and input-ordinal diagnostics through th
 existing direct observer pipe and final record. Preserve their 40-byte and 4,096-byte
 caps, existing process roles, deadlines, input/content predicates, and success criteria.
 Do not treat a generic Admission fault as evidence of a particular failed predicate or
-ChangeTime mismatch. This allocation does not relax any Windows identity comparison.
+ChangeTime mismatch. This diagnostic allocation does not relax Windows identity
+comparisons; the separate direct-catalog decision below owns its sole exception.
 
 Retain independently accepted native N1/N2/N3 evidence and unchanged SyntheticSubject
 artifacts. Direct-only diagnostic changes do not require another native batch. Each
@@ -776,6 +777,38 @@ acceptance and independent source, input, accounting, call and outcome review be
 execution. This occupied-v6 completion is single-use; failure grants no further
 adoption. The donor qualification expires with the present grant. Add no quota,
 account effect, helper or real-platform claim.
+
+**Synthetic direct catalog: cross-role ChangeTime qualification:** Permit only
+Windows `ChangeTime` inequality between the supervisor and worker admission
+observations of the fixed 200-leaf D0/D1/D2 synthetic catalog in remaining separately
+admitted originals funded by the direct continuation on these same hosts. This is a
+separate direct decision; the native 202-leaf exception grants no direct authority.
+Require all header, ordered-path, admitted length/SHA-256, volume/file-index,
+attribute, creation-time, last-write-time and link-count comparisons. Preserve
+complete local snapshots and strict within-pin/read/held/named checks, including
+ChangeTime, without replacing or refreshing either baseline.
+
+Keep the existing nine fingerprints and bounded parent argument. Only after all
+required projections agree may the worker bind downstream records to the original
+supervisor map digest; its own complete map and held identities remain unchanged.
+The [direct comparison protocol](research/experiments/windows-slice-validation.md#direct-catalog-cross-role-changetime-qualification)
+owns the exact comparison, reference propagation and finite validation obligations.
+The repository owner accepts the loss of cross-observation metadata-change rejection
+when those object/content checks agree. This does not establish a benign cause,
+continuously unchanged metadata, or scenario success. Real/product admission,
+shared native pinning, Linux controls and unrelated inputs retain their predicates.
+
+Use existing unused correction capacity and fresh admitted stages only. Require
+matching safety/protocol acceptance, independent inert source/input review, a newly
+charged compile with artifact acceptance, and independently accepted D0 before D1/D2.
+Retain unchanged native 0142 and SyntheticSubject evidence. Add no quota or
+observation allowance, process role, helper, clock extension or occupied-tree reuse.
+Existing per-original observations and ETW reservations remain charged. Preserve
+every failed charge and observation, protected D1/D2
+and twelve later-product build/test slots, creation-time named Jobs/cgroups, the six
+historical lifetime uncertainties and `noExperimentLive=false`. This decision grants
+no new process uncertainty or account effect and expires with the present finite
+grant. Owner acceptance and merge precede implementation or execution.
 
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
