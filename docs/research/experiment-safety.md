@@ -830,3 +830,34 @@ Stop the experiment if:
 The historical Issue #1 rules additionally retain their unconditional WSL-to-Windows
 prohibition, source-integrity checks, and proved all-exit quiescence before cleanup or
 asset access. Those specialized rules are not a general experiment framework.
+
+## Direct Observer Diagnostic Continuation
+
+The Wave's direct observer diagnostic continuation adds only 0/7/0/43, giving current
+aggregate ceilings 39/173/30/497. It funds at most four separately admitted four-target
+compile/D0 pairs, one necessary and three contingency pairs, while retaining protected
+D1/D2 and later-product work. Each pair costs 0/2/0/12. Stop after sufficient evidence;
+failed starts retain their complete charge and ordinary independent failure disposition.
+
+The same seven added build/test originals replace the pool build/test ceiling 19 with
+26, the pool original maximum 22 with 29, and the total path maximum 27 with 34.
+Preserve the three-restore ceiling, all spent counts and the separate 27 immutable
+passive-lineage/108-pass limits. This adds no allocation beyond 0/7/0/43.
+
+Retain native evidence when its source, artifacts and exercised behavior are unchanged.
+Direct diagnostics use only fixed numeric source locations and input ordinals within
+the existing pipe/final-record caps. No private values, exception text, raw traces,
+new process roles, broader identity qualification or additional telemetry is included.
+A new observer requires its own exact artifact acceptance and D0 calibration.
+
+Apply grouped maxima compile ten, native seven, D0 seven, D1/D2 four each, total 25,
+inside-Job console hosts 62 and outside hosts 28, together with all stricter limits.
+Fresh compile stages v16-v19 and direct deployments v5-v8 remain within dedicated
+experiment roots; occupied roots are retained. Passive lineage/pass, per-original
+clock, ETW twenty-session and all other effects limits remain unchanged.
+
+Extend only the same six historical and already accepted platform-host/sole-owned-ETW
+persistence dispositions to this finite scope. Preserve noExperimentLive=false and all
+historical charges and uncertainty. No new application, Job or Linux lifetime exception
+is granted. Source/control/protocol and exact-call review remain required; this section
+alone does not activate a source or authorize a retry.
