@@ -934,6 +934,49 @@ matching safety/protocol and exact source/input/artifact/accounting/call gates.
 Only this entry infrastructure may wait for review; this supersedes the earlier
 no-elevation/no-live-review provisions for that infrastructure alone.
 
+**Pre-UAC input validation and replacement entry:** Permit at most ten separately
+admitted Linux entry-compilation/noninteractive input-check pairs: one necessary
+pair and nine contingencies. Each compilation costs 1/0/0/0; each check costs
+0/1/0/2 for one native GUI executable and one possible initial outside-Job console
+host. Permit one replacement retained-entry activation at 0/1/0/6, only after a
+successful independently accepted check of its exact final artifact and launch
+inputs and a fresh owner readiness response. No readiness, attempt or privileged
+deadline carries over from the failed first activation. A failed replacement does
+not authorize another UAC prompt.
+
+Add only 10/11/0/26, giving aggregate ceilings 49/192/30/569 and Linux/Windows
+preparation ceilings 29/20. Preserve the entire preexisting correction balance
+0/4/0/23, all six protected Linux preparations, D1/D2 and later-product allocations.
+Raise only outside/inside console-host ceilings from 35/79 to 46/80 for ten checks
+and the one replacement's outside/inside roles. The new entry-specific maxima are
+eleven compilations including the first spent preparation, ten input checks and
+two activations including the failed first activation. These are separate entry
+roles; they do not enlarge controlled-observer compile, native, D0/D1/D2, shared
+managed/controlled-path original or ETW maxima. Passive lineage/pass limits remain
+unchanged and must independently fit each call.
+
+The fixed validation-only mode evaluates the same ordered pre-UAC launch-input
+predicates, then returns a finite status. It cannot request UAC, dispatch an entry,
+create a child/Job/relay, inspect accounts or start ETW. Bind the same four-file
+payload for checking and activation; keep check evidence outside that payload and
+create no entry/ready/stop marker there. Its external cap is thirty seconds,
+including termination. The [continuation protocol](research/experiments/windows-slice-validation.md#pre-uac-input-check-continuation)
+owns exact clocks, evidence, source/call gates and continuation predicates.
+Each contingency needs accepted failure/scoped completion and a concrete correction;
+no unchanged retry, refund, automatic prompt or occupied-root repair is granted.
+Stop after sufficient evidence; source-only findings do not establish runtime success.
+
+Explicitly carry the existing six historical process/interference dispositions,
+initial platform-host and sole-owned-ETW persistence dispositions into only this
+finite credential-free allocation on the same hosts. Preserve their uncertainty,
+failed charges and `noExperimentLive=false`. This adds no unknown application,
+owned-Job, Linux or elevated-relay lifetime exception, and no ETW work to an input
+check. The replacement retains the same absolute 86,400-second privileged cap and
+closure obligations. Require matching safety/protocol acceptance, reviewed inert
+source and exact artifact/input/accounting/call/outcome gates before execution.
+No account, persistent permission, download, restore, publication, installation,
+signing, release or real-product elevation expansion is included.
+
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
 permitted interactive calls for the later real-environment acceptance proposal.
