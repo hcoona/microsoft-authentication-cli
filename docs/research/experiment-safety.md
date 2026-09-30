@@ -986,3 +986,38 @@ and unused direct v8-v11 roots after the ordinary independent gates. Preserve fu
 failed charges and occupied trees. No new capacity, observation, helper, metadata
 pass, retry, overwrite or cleanup is added; this qualification expires with the
 current Wave grant.
+
+## Retained Elevation Entry for Synthetic Direct Diagnostics
+
+The matching Wave permits a single temporary administrator entry for D0/D1/D2 on
+the same designated Windows host. The owner accepts its retained privilege during
+analysis, correction and independent review. Apply the
+[entry protocol](experiments/windows-slice-validation.md#retained-elevation-entry-for-synthetic-direct-diagnostics)
+and source/artifact/call gates before execution. Complete launch and automatic
+shutdown preparation before requesting fresh readiness for the UAC/manual handoff.
+The owner can leave after the actual elevated relay and its bounded ownership are
+confirmed; watching automated work is not required.
+
+Only the entry infrastructure may remain between attempts, up to 86,400 seconds
+from successful elevated entry start, including idle/review time. No deadline
+renewal, automatic relaunch or open-ended privileged command service is permitted.
+This is the sole exception to the current synthetic allocation's no-elevation and
+no-live-process-waiting-for-review rules. Actual test processes, their owned ETW
+sessions and all observations retain their original shorter bounds and separate
+outcome gates. A failed D0 still blocks D1/D2.
+
+Require creation-time named Job ownership for the Windows entry child, a named
+Linux scope for its holder, and an actual fixed child-token check through the new
+relay. Preserve the distinction between Windows Job membership, Linux containment,
+relay lifetime and ETW closure. End the entry on completion, owner stop, deadline,
+or inability to continue within the accepted scope. Observe its owned termination;
+closing a window is insufficient. Keep shared WSL infrastructure under the existing
+workstation/platform-host premise; do not stop a shared service or the distribution.
+No new unknown application, Job, Linux or elevated-relay lifetime is accepted.
+
+Use existing correction capacity for the one compilation and activation. The
+permission covers only the fixed validation harness and credential-free synthetic
+subjects. No persistent privilege/group/ACL/policy/registry/service/task change,
+real account access, product elevation, download, installation or old-session
+cleanup follows. Retained artifacts and existing historical risk decisions remain
+unchanged; elevation success does not establish ETW or scenario success.

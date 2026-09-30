@@ -901,6 +901,39 @@ charge and occupied v19 tree. No new quota, metadata pass, process role, retry,
 baseline refresh or occupied-root adoption is granted. Require matching accepted
 safety/protocol and independent source, input, call, artifact and outcome gates.
 
+**Retained temporary elevation for synthetic direct diagnostics:** Permit one
+owner-attended elevation entry on the same Windows host for credential-free D0,
+D1 and D2. Retain only its task-scoped Windows/WSL entry infrastructure between
+independently admitted actions, including analysis and review, for at most 24 hours
+from the successful elevated entry start. Idle time counts; the deadline never
+renews. Close early after the scoped diagnosis and necessary validation, owner stop,
+or exhaustion of permitted continuation. Ordinary test processes and ETW sessions
+keep their original shorter clocks and outcome gates.
+
+The owner accepts temporary administrator execution and the retained entry within
+this scope. Use one prepared UAC/manual handoff after a fresh readiness response;
+no attendance is needed for subsequent automated synthetic work. Permit a dedicated
+validation-only entry executable and Linux holder, creation-time named Windows Job
+and named Linux scope, and one fixed child-token check through their own WSL relay.
+The entry exposes no command queue or arbitrary shell. Bind its actual elevated
+relay before use; an unrelated elevated terminal is not evidence. No persistent
+service, scheduled task, group membership, provider ACL, security-policy, registry,
+installation or account change is included. No product/real-account process runs
+with this permission.
+
+Fund one Linux-only entry compilation at 1/0/0/0 and one entry activation at
+0/1/0/6 from the remaining correction pool, with no aggregate quota increase. Reassign
+that one unused preparation from Windows to Linux: host ceilings become 19 Linux
+and 20 Windows, preserving all six protected Linux preparations.
+Failed starts retain the full charge. The activation includes the single context
+check; it is not an ETW or D0 attempt. Every later test keeps its own full charge,
+ETW reservation, finite maxima and independent admissions. Preserve protected D1/D2
+and later-product capacity, accepted native 0142/SyntheticSubject 0141/observer 0155,
+all historical dispositions and failed charges. Before execution, accept the
+matching safety/protocol and exact source/input/artifact/accounting/call gates.
+Only this entry infrastructure may wait for review; this supersedes the earlier
+no-elevation/no-live-review provisions for that infrastructure alone.
+
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
 permitted interactive calls for the later real-environment acceptance proposal.

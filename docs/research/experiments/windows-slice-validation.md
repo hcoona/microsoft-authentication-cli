@@ -23986,6 +23986,141 @@ changes. Ordinary exact input/call/artifact/outcome gates still apply. Accepted
 native 0142 and SyntheticSubject 0141 remain; D1/D2 require accepted D0. The
 existing clocks, protections and historical lifetime dispositions are unchanged.
 
+### Retained Elevation Entry for Synthetic Direct Diagnostics
+
+D0 0156 failed before successful session creation: the accepted OWF3 frame identifies
+`EtwObserver.cs:462`, `StartTraceW` status 5 (`ERROR_ACCESS_DENIED`) and traceState 1.
+Worker exit and named-Job active zero were observed; no calibration child started.
+The exact missing token/group/provider permission was not observed. Keep that
+failure and its full charge; the separate 0153 ETW disposition is unchanged.
+The [StartTraceW contract](https://learn.microsoft.com/en-us/windows/win32/api/evntrace/nf-evntrace-starttracew)
+identifies administrator access as an admitted session-control context. This is a
+basis for the corrected context, not proof that elevation alone resolves D0.
+
+#### One attended entry, retained across review
+
+After matching Wave/safety acceptance, prepare one dedicated x64 .NET Framework
+validation executable and one Linux Python holder. These are experiment helpers,
+not product code. Prefer the existing named-Job launch/pinning primitives and
+Linux-only [observer compilation recipe](#observer-compilation-recipe). The new
+entry executable uses `-target:winexe` to avoid its own console host; the existing
+three Framework references, seven Linux SDK/compiler pins, language version,
+replacement environment, input/output bounds and 150/145/100-second compilation
+clocks remain. Its single compilation is charged 1/0/0/0, not another four-target
+observer compile. No Windows compiler, restore or output execution occurs during
+that preparation. Independently accept its PE/x64/CLR/source correspondence.
+
+The owner may approve one prepared UAC `RunAs` launch or run the same fixed entry
+as administrator. Finish source/artifact/input/call and automatic shutdown
+preparation before requesting readiness. Bind one fresh entry action/nonce/root,
+not a reusable administrative shell. Record the successful elevated process's PID,
+creation time, token-elevated Boolean and absolute deadline locally. A failed or
+cancelled handoff spends the activation; it does not trigger another prompt.
+
+The entry creates a fresh named Job before launching its fixed `wsl.exe` child,
+using the existing creation-time `PROC_THREAD_ATTRIBUTE_JOB_LIST`, suspended
+creation, held process handle and resume-order method. Use kill-on-last-close,
+no breakaway, a finite active-process limit, explicit handles and bounded capture.
+Reject a preexisting Job rather than adopting it. The helper remains outside its
+Job and is identified by its original process incarnation. Its own elevated token
+is queried only for the required Boolean; no user/group/token dump is permitted.
+
+The WSL child selects the already designated distribution and Linux user and
+starts only the fixed Python holder inside a fresh named systemd user scope.
+Bind the exact `wsl.exe`, systemd-run, Python and holder inputs before launch. The
+scope inherits this newly created WSL relay, keeps a finite runtime/task/memory
+limit and has no restart. The holder records only its own PID/start time/scope,
+the inherited `WSL_INTEROP` endpoint and its no-follow socket identity, and the
+entry deadline. The existing non-elevated relay is not reused or relabeled.
+[Microsoft's WSL interop contract](https://learn.microsoft.com/en-us/windows/wsl/filesystems#run-linux-tools-from-a-windows-command-line)
+states that Linux tools launched from Windows have the calling process's Windows
+administrative rights; exact installed behavior still needs this context check.
+
+Through that exact relay, invoke the entry executable once in its fixed
+context-check mode. It queries only its own token-elevated Boolean, records its
+PID/creation time and exits. Use no ETW, authentication or account query. Require
+true, complete bounded capture and observed child exit before admitting any
+synthetic test. The context check has 15 seconds including five seconds for
+termination; failure closes the entry without an automatic check retry. The
+holder accepts only a fixed stop marker, never commands, executable paths or
+scripts. It launches no further subjects. The root agent submits separately
+admitted existing D0/D1/D2 controllers with the exact new relay bound in their
+service environments; no manager-environment substitution or broad shell endpoint
+is introduced. D0 must independently pass before D1/D2.
+
+#### Duration, evidence and shutdown
+
+The Windows entry's 86,400-second absolute interval starts on successful elevated
+entry. It includes startup, context check, analysis, review, idle time and final
+closure; reserve its last ten seconds for termination. A suspend/resume interval
+must count toward expiry. Before another test, require enough remaining time for
+that test's full transport and cleanup bounds. The entry's deadline cannot be
+extended or reset by a new request, process, review or source revision.
+
+Actual D0/D1/D2 actions retain their own 155-second service and 170-second external
+bounds, named Jobs/cgroups, individual ETW creation reservation and original
+stop/drain/evidence obligations. Only the idle entry infrastructure can survive a
+review interval. Accepted residual owned-session persistence does not convert an
+ETW session into deliberately retained entry infrastructure or authorize cleanup.
+
+Stop on the owner's request, the fixed local stop marker, completed diagnosis and
+necessary authorized validation, deadline, or inability to make a further bounded
+continuation. Stop new dispatch first. Close any active admitted test under its
+own existing procedure, then end the Linux holder/scope and Windows entry Job.
+Keep original handles through exit and named-Job active-zero observation; retain
+complete transports and a final entry record. Verify the specific recorded relay
+is no longer available without enumerating other relays. Never infer native or
+relay closure solely from Linux exit, a closed window or a bare reused PID. A
+new unresolved owned lifetime stops further execution under the ordinary policy.
+Do not stop the shared WSL service/distribution, or touch historical uncertain
+processes or ETW sessions.
+
+The entry has one dedicated fresh evidence directory on each side. Its source,
+manifest and fixed script are at most 64 KiB each, the executable at most 2 MiB,
+and each original stream at most 16 KiB plus one overflow byte. Retain at most
+1 MiB of start/context/final evidence. Stop-marker checks are at most once per
+second; they are coordination, not repeated platform observations. Bind exact
+exclusive output names and finite operation counts in the source/call review.
+The only new infrastructure admission is a single fixed metadata/content pass
+over the selected entry inputs, including the existing System32 `wsl.exe`; no
+process/account/trace/host survey or alternative-path discovery is permitted.
+Use the existing passive cumulative limits and prove remaining capacity before
+that pass. Actual context/entry observations belong to the activation, not a
+new passive allowance. Keep all files, failures and spent charges without repair,
+overwrite, automatic replay or cleanup.
+
+#### Capacity and continuation boundaries
+
+At this proposal's recovered baseline, consumption is 32/139/6/397 and remaining
+correction capacity is 1/5/0/29. One Linux compilation at 1/0/0/0 and one retained
+activation at 0/1/0/6 leave 0/4/0/23 in that pool. The recovered host split is 12 Linux /
+20 Windows preparations. Reassign the pool's one unused Windows preparation to
+Linux, changing host ceilings from 18/21 to 19/20 within the unchanged aggregate
+39. After the new compile, 13 Linux plus the six protected Linux preparations
+fit 19; Windows remains 20. Preserve all six protected preparations.
+The activation reserves four
+authored Windows roles: a non-elevated UAC launcher, the elevated entry, its WSL
+child and the one context-check child; its two console-host allowances are one
+outside and one inside the entry Job. A manual handoff still spends the full
+allocation. These are finite role allowances, not observations of actual hosts.
+Keep outside/inside ceilings 35/79 and existing protected D1/D2 reservations.
+Failed compilation or activation spends the full relevant allocation and stops.
+Another activation, compilation or deadline renewal is not granted here.
+
+The remaining pool may fund only separately admitted existing corrections/tests;
+it is not a guarantee that every combination fits all cumulative maxima. No new
+ETW attempt, aggregate capacity or later-product slot follows from keeping an
+entry alive. Native 0142, SyntheticSubject 0141 and observer 0155 remain accepted.
+For reuse of the observer's embedded v8 root, a separately accepted exact retained-
+catalog recipe must preserve every existing descriptor and historical failure and
+create fresh controls/outputs exclusively; this section does not itself adopt or
+reopen the occupied catalog. Prepare such nonexecuting continuation work while the
+entry is idle if needed. Do not recompile the observer solely because StartTrace
+returned access denied. Changed observer bytes still require their ordinary
+artifact acceptance and new successful D0. A retained entry cannot bypass source,
+artifact, accounting, exact-call or outcome review, or authorize product/real-account
+elevation, persistent host permission changes or unrelated commands.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation
