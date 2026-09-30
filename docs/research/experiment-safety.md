@@ -967,3 +967,22 @@ spent charges, `noExperimentLive=false`, creation-time named Jobs/cgroups and
 original clocks. No new application/Job/Linux lifetime exception, permission
 change, account effect, download, restore or publication follows. Ordinary exact
 source, artifact, input, call and outcome gates precede dependent execution.
+
+## Compile Public-Donor Historical ctime Qualification
+
+The matching Wave applies the existing content/ctime decision to only the closed
+365 original public compile donors: 167 references, 197 toolchain leaves and one
+apphost template. Preserve their original paths/descriptors and exact accepted
+catalog/inventory linkage. A fresh read must establish exact length, SHA-256, EOF
+and all eight non-ctime identity fields against that original descriptor. Only the
+historical ctime comparison may differ; retain both operands without refreshing
+the baseline. All nine fields must still agree within each read. This loses only
+the historical ctime-change signal and establishes no benign cause or continuous
+integrity. Generic pinning, 48 local source/control inputs, infrastructure, Windows
+held-object checks, native and real/product rules remain unchanged.
+
+Use the existing finite continuation pool, remaining fresh compile v20-v22 stages
+and unused direct v8-v11 roots after the ordinary independent gates. Preserve full
+failed charges and occupied trees. No new capacity, observation, helper, metadata
+pass, retry, overwrite or cleanup is added; this qualification expires with the
+current Wave grant.

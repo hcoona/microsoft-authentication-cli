@@ -883,6 +883,24 @@ owned-Job or Linux lifetime exception. Require matching safety/protocol and exac
 source/input/artifact/accounting/call/outcome reviews. No account, permission,
 restore, download, publication, installation or release expansion is included.
 
+**Compile public-donor historical ctime qualification:** Apply the already accepted
+content/ctime decision to the closed 365 original public compile inputs: 167
+references, 197 toolchain leaves and one apphost template. Bind their original
+paths/descriptors and exact catalog/inventory membership. At only the compile-input
+historical comparison, permit ctime inequality after fresh exact length, SHA-256
+and EOF checks and agreement of the other eight identity fields. Retain the actual
+observations and original baseline; every read remains internally full9-strict.
+The owner accepts the lost historical ctime-only signal within this closed role.
+No benign cause or continuous integrity is inferred. Keep generic pinning, the 48
+local source/control inputs, infrastructure, Windows held-object checks, native
+and real/product roles unchanged.
+
+Use remaining existing continuation capacity and exclusively fresh compile v20-v22
+stages with the still-unused direct v8-v11 roots. Preserve the failed compile's full
+charge and occupied v19 tree. No new quota, metadata pass, process role, retry,
+baseline refresh or occupied-root adoption is granted. Require matching accepted
+safety/protocol and independent source, input, call, artifact and outcome gates.
+
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
 permitted interactive calls for the later real-environment acceptance proposal.
