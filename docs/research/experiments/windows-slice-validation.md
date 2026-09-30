@@ -24159,9 +24159,14 @@ includes suspend time. No timer renews the elevated entry's 86,400-second cap.
 
 The original transport permits at most 185 seconds to publish readiness and 86,540
 seconds before final cleanup. Its finite stop/query/child-wait reserves fit the
-86,570-second service limit, five-second service stop allowance, and 86,580-second
-external transport cap. These non-elevated transport allowances do not extend the
-entry deadline. Retained loops have at most 86,400 holder or 86,550 transport
+86,570-second active service limit. The planned external envelope includes ten
+seconds for service startup, 86,570 seconds of active runtime, five seconds for
+service stop, and one shared 23-second reserve for submission, queueing, return and
+scheduling: 86,608 seconds before outer TERM, followed by two seconds before KILL,
+for an 86,610-second external transport cap. These non-elevated allowances do not
+extend the entry deadline. This configured envelope does not establish actual
+closure: require the recorded original service's empty cgroup as well as the native
+handle/Job, holder scope, stream and exact elevated-relay closure evidence. Retained loops have at most 86,400 holder or 86,550 transport
 iterations, at one-second intervals; native loops additionally check their fixed
 absolute tick deadline. Each stream retains at most 16 KiB, with one overflow-byte
 probe on the Python transports. Native combined capture is stricter at 16 KiB.
