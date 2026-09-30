@@ -95,8 +95,8 @@ def required_inputs(fixture):
     value.update(DIRECT_SYNTHETIC_INPUTS if fixture else DIRECT_PRODUCT_INPUTS)
     return value
 
-ROOT_WINDOWS = r"C:\Temp\azureauth-windows-slice-108\confidential-direct-v7"
-ROOT_LINUX = "/mnt/c/Temp/azureauth-windows-slice-108/confidential-direct-v7"
+ROOT_WINDOWS = r"C:\Temp\azureauth-windows-slice-108\confidential-direct-v8"
+ROOT_LINUX = "/mnt/c/Temp/azureauth-windows-slice-108/confidential-direct-v8"
 PUBLIC_FIELDS = frozenset(("schema", "scope", "slot", "nonce", "protocolSha256",
     "callerSha256", "expectedExit", "productTimeoutSeconds", "soleLaunchIdentityPremiseAccepted",
     "targetedStopPremiseAccepted", "accountEffectsAdmitted", "calibrationAccepted", "pins", "privateReference"))
@@ -809,16 +809,26 @@ def match_record(value, plan, kind, extras=frozenset()):
 def validate_failure(value):
     if value is None:
         return
-    require(type(value) is dict and value.keys() == {
-        "fault", "origin", "stage", "source", "line", "inputOrdinal", "openError"})
+    fields = {"fault", "origin", "stage", "source", "line", "inputOrdinal", "openError"}
+    require(type(value) is dict and value.keys() in (fields, fields | {"nativeStatus", "traceState"}))
+    extended = "nativeStatus" in value
     require(all(type(item) is int for item in value.values()))
     require(0 <= value["fault"] <= 10 and value["origin"] in (1, 2) and
-        0 <= value["stage"] <= 8 and 0 <= value["source"] <= 3 and
+        0 <= value["stage"] <= 8 and 0 <= value["source"] <= (4 if extended else 3) and
         (value["line"] == 0 if value["source"] == 0 else 1 <= value["line"] <= 100000) and
         0 <= value["inputOrdinal"] <= 200 and -1 <= value["openError"] <= 2147483647)
     require(value["origin"] != 1 or value["stage"] <= 4)
     require(value["stage"] != 0 or (value["origin"] == 1 and value["source"] == 0 and
         value["inputOrdinal"] == 0 and value["openError"] == -1))
+    if extended:
+        require(value["origin"] == 1 and value["stage"] == 4 and value["fault"] >= 1 and
+            0 <= value["nativeStatus"] <= 4294967295 and
+            (value["source"] == 4 or value["nativeStatus"] == 4294967295))
+        state = value["traceState"]
+        require(state == -1 or (0 <= state <= 31 and
+            (not state & 2 or state & 1) and (not state & 4 or state & 2) and
+            (not state & 8 or state & 4) and (not state & 16 or state & 8)))
+        require(value["source"] == 4 or value["nativeStatus"] != 4294967295 or state != -1)
 
 
 def validate_observer(value, plan):

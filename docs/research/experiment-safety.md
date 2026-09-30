@@ -926,3 +926,44 @@ add no aggregate quota or observation allowance. Preserve failed charges, protec
 work, all six historical unknowns, `noExperimentLive=false`, named Jobs/cgroups and
 existing ETW dispositions. No overwrite, repair, extra survey, clock extension,
 new process uncertainty or account effect is included. Failure cannot renew adoption.
+
+## Direct ETW Failure Diagnostics and Finite Continuation
+
+The corresponding Wave increment adds only 0/8/0/46, producing aggregate ceilings
+39/181/30/543 and, with two previously unspent synthetic units, four compile/D0
+pairs at 0/2/0/12 each. One pair supplies the instrumented observation; three are
+contingent correction capacity. Stop after sufficient evidence. Each failure
+retains its full charge and needs independent disposition and a concrete repair
+before another original. Old protected work, D1/D2 and twelve later-product slots
+cannot be transferred into this pool.
+
+For the same increment, shared build/test, shared total and path-original maxima
+become 34, 37 and 42. Grouped compile/D0/total maxima become 13/12/33; outside and
+inside console-host roles become 35/79. Native seven, D1/D2 four each, ETW twenty,
+passive 27 immutable lineages/108 passes, and stricter local limits remain. Use only
+exclusively fresh compile v19-v22 and direct v8-v11 stages. Admission must prove
+remaining lineage/pass capacity, not infer it from the larger execution allowance.
+
+Synthetic failures may preserve a numeric first-source location, UInt32 native
+status and creation/stop/drain bits within the existing 40-byte pipe and 4,096-byte
+record. Latch the first cause before cleanup, including callback-thread failures;
+keep later cleanup outcomes separate. Missing facts remain unknown. This adds no
+platform query, trace, helper, snapshot, raw payload, exception text or private
+value. Successful frames, strict acceptance and real-role diagnostics stay unchanged.
+
+Preserve accepted native and SyntheticSubject dependencies. Carry the accepted
+historical ctime/content qualification forward for the 196 fixed donor roles.
+Rows 1-190 and 195-196 retain original paths/descriptors; observer rows 191-194
+use the newly accepted corresponding compile-stage artifact descriptors. No other
+descriptor is refreshed. Fresh hashes, lengths,
+EOF and all other required identity fields remain mandatory; runtime/host/observer
+within-read full9 and local/control inputs stay strict. The two SyntheticSubject
+donors and deployed catalog retain their existing narrowly scoped qualifications.
+No occupied stage or deployment is reopened.
+
+Existing historical process and platform-host/sole-owned-ETW risk dispositions
+continue within this finite credential-free scope on the same hosts. Keep all
+spent charges, `noExperimentLive=false`, creation-time named Jobs/cgroups and
+original clocks. No new application/Job/Linux lifetime exception, permission
+change, account effect, download, restore or publication follows. Ordinary exact
+source, artifact, input, call and outcome gates precede dependent execution.

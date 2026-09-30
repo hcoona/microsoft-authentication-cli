@@ -47,8 +47,8 @@ Use only public dependencies and verified retained public caches/installed toolc
 downloads may use public NuGet.org and official .NET distribution endpoints, with no
 credentials. New experiment-owned files stay in dedicated build/test roots outside
 production installations and are intentionally retained. Maximum cumulative capacity is
-39 dependency preparation/restore actions, 173 build/test actions, 30 Native AOT publish
-actions and 497 synthetic process scenarios, with at most 4 GiB of newly downloaded public
+39 dependency preparation/restore actions, 181 build/test actions, 30 Native AOT publish
+actions and 543 synthetic process scenarios, with at most 4 GiB of newly downloaded public
 dependency content. Exact per-action time, output and termination limits and source
 admission are owned by the accepted protocol. No new toolchain installation is granted.
 
@@ -844,6 +844,44 @@ is included. This occupied-v7 completion is single-use; failure grants no furthe
 adoption. Require matching safety/protocol acceptance and independent inert source,
 input, finite-call and outcome review before dependent execution. Keep named Jobs,
 cgroups, all six historical lifetime uncertainties and `noExperimentLive=false`.
+
+**Direct ETW failure diagnostics and finite continuation:** Permit synthetic-only
+first-failure source locations, native API statuses and creation/stop outcome bits
+through the existing 40-byte worker pipe and 4,096-byte final record. Preserve ETW
+configuration, success predicates, clocks and process roles. No additional query,
+trace, helper or observation is part of the diagnostic correction.
+
+Add only 0/8/0/46 to the correction pool, giving aggregate ceilings 39/181/30/543.
+Together with its remaining two synthetic units, this funds at most four separately
+admitted compile/D0 pairs, one necessary pair and three contingency pairs, at
+0/2/0/12 each. Stop after sufficient evidence. Every failed original retains its full
+charge; another pair requires independently accepted failure/lifetime disposition
+and a concrete correction, never an unchanged retry. Preserve old protected work,
+D1/D2's 0/2/0/10 and twelve later-product build/test slots.
+
+For this same increment, raise shared build/test originals to 34, shared total
+originals to 37 and total path originals to 42. Raise grouped compile to 13, D0 to
+12, grouped total to 33, outside-Job console-host roles to 35 and inside-Job roles
+to 79. Preserve native seven, D1/D2 four each, ETW twenty, and all separate passive
+lineage/pass and per-original limits. These maxima intersect; none guarantees that
+all proposed pairs can execute without their exact remaining-capacity evidence.
+
+Permit exclusively fresh compile stages v19-v22 and direct roots v8-v11. Retain
+native 0142 and SyntheticSubject 0141 evidence; no new native batch is required by
+direct-only diagnostics. Each new observer requires artifact acceptance and D0
+before D1/D2. Carry forward the accepted historical ctime qualification for donor
+rows 1-196: rows 1-190 and 195-196 retain their original paths/descriptors; only
+observer rows 191-194 use the newly accepted corresponding compile-stage artifact
+descriptors. Require fresh length/hash/EOF checks. Keep runtime/host/observer within-read full9 strict, the
+two SyntheticSubject donors' existing qualification, deployed-catalog rules and
+strict local/control inputs. No occupied-root adoption or baseline refresh follows.
+
+The existing six historical process dispositions and platform-host/sole-owned-ETW
+persistence decisions continue for this bounded work on the same hosts. Preserve
+their unresolved status and `noExperimentLive=false`; this adds no application,
+owned-Job or Linux lifetime exception. Require matching safety/protocol and exact
+source/input/artifact/accounting/call/outcome reviews. No account, permission,
+restore, download, publication, installation or release expansion is included.
 
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
