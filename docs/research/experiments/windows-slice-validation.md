@@ -23961,6 +23961,19 @@ extend this rule to local/control/infrastructure, native, Windows held-object or
 real/product inputs. Existing created-copy and direct-deployment qualifications
 remain separate and unchanged. Every other mismatch stops the original.
 
+The inert Linux caller binds the first 365 inventory rows to this exact original
+table before qualifying a donor. Its compile-only deployment receipt uses
+`windows-controlled-harness-deployment-v3`, adding exactly `compileDonorReads`
+to the existing v2 fields. This ordered 365-entry list retains each relative path,
+fresh SHA-256 and the strict reader's existing seven-field observation, at most
+2,048 bytes per entry. The worker joins every entry to the original inventory and
+checks content, all eight historical fields and full9 equality within the read
+without rereading the donor. The two existing deployment receipt copies retain
+their 4 MiB limits and their existing read/write counts. Created-copy row shapes,
+native v2 receipts and native lineage remain unchanged; no new evidence file is
+created. The concrete source binds fresh v20 and unchanged unused direct v8, with
+all response, map and catalog consumers updated together and guards closed.
+
 Preserve 0154's full 0/1/0/7 charge, spent collector and partial v19 stage. At this
 planning point, consumption is 32/137/6/385 and the pool is 1/7/0/41. The remaining
 three compiles and four D0s cost exactly 0/7/0/41; no new quota or refund follows.
