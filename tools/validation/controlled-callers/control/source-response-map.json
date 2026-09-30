@@ -1,5 +1,5 @@
 {
-  "compileStagingRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-checks-v19",
+  "compileStagingRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-checks-v20",
   "directDeploymentRoot": "C:\\Temp\\azureauth-windows-slice-108\\confidential-direct-v8",
   "directNonCompilerSources": [
     {
@@ -325,7 +325,7 @@
       "response": {
         "bytes": 20867,
         "path": "control/NativeCaller.rsp",
-        "sha256": "e74f3dbdbad29503cdd6138b4446115d7a0a78e55c202d014ae0d374c9fff11a"
+        "sha256": "90a34c9615bca732c03bb1cfe061009d9273ea87224c53cdcb1c5c6924d4d6b5"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",
@@ -366,7 +366,7 @@
       "response": {
         "bytes": 20404,
         "path": "control/DirectObserver.rsp",
-        "sha256": "fbf67ac65f014313f6349224c814a60e76376b33f3fb1050272c22a8e57e25ca"
+        "sha256": "787296689d7bc6ea9f37e7d8b2c336a50188697779d771ad58d09643a9063d4d"
       },
       "stagedSourcesInResponseOrder": [
         "source/direct/Admission.cs",
@@ -402,7 +402,7 @@
       "response": {
         "bytes": 21309,
         "path": "control/SyntheticSubject.rsp",
-        "sha256": "4f2f692aedfc662fa1141c37dd9ac5f5e6052d96ba13cc0d8e7cc8d12ef5120e"
+        "sha256": "1f3f82ba629cdb30c4e8d9a5eec7aaefb099e6f4addbca4a53610e4837873ca8"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",
@@ -447,7 +447,7 @@
       "response": {
         "bytes": 21276,
         "path": "control/FixtureDriver.rsp",
-        "sha256": "9c32d729de50cdd950bff1615ef9b86b025978bd13e32f31851c27441dce08ca"
+        "sha256": "82c488effd915f580e36a2caa7cb3b9317fc6d0d5e6d961fd6e5b39f23b51e79"
       },
       "stagedSourcesInResponseOrder": [
         "source/native/Admission.cs",

@@ -31,9 +31,10 @@ PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
 LAUNCHER_PROJECTION = PROJECTION / 'normal-launcher-dispatch-v1' / 'WindowsScriptJobLauncher.exe'
 CHARGES = {'compile': 7, 'native': 15}
-STAGE = PROJECTION / 'confidential-checks-v19'
-STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v19'
-CATALOG = (87398, 'e9b79f3152584ee1628d1dda735404596f5bf35f161c86279cf92e4d82683b17')
+STAGE = PROJECTION / 'confidential-checks-v20'
+STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v20'
+CATALOG = (87398, '25a552ce1150bb2af78307b948c13cde95d29f1e37c749fe329464b1b0d7ba21')
+COMPILE_DONORS_SHA256 = 'ffd6b96b4216d07e1025980ea3556c6e230f6ed9fcc9e47ab745ebdeee17e1f0'
 TARGETS = ('NativeCaller', 'DirectObserver', 'SyntheticSubject', 'FixtureDriver')
 SERVICE_SECONDS = 1200
 PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows-actions',
@@ -121,6 +122,8 @@ class Budget:
         self.written = 0
         self.created_directories = 0
         self.cancelled = False
+        self.compile_donors = {}
+        self.compile_donor_reads = []
 
     def enter_terminal(self):
         # Use the reserved final interval with the SAME aggregate counters. This
@@ -347,7 +350,50 @@ def carried_compile_copy(a, item):
     return lineage
 
 
+def compile_donor_rows(rows):
+    """Bind the original closed donor table, including its historical descriptors."""
+    require(type(rows) is list and len(rows) == 365 and
+            digest(encode(rows)) == COMPILE_DONORS_SHA256, 'Original public compile donor table')
+    return {item['relativePath']: item for item in rows}
+
+
+def validate_compile_donor_observation(source, observation):
+    """Validate already sampled operands without refreshing or reading a donor."""
+    require(type(observation) is dict and set(observation) == {
+                'relativePath', 'readObservation', 'sha256'} and
+            observation['relativePath'] == source['relativePath'] and
+            len(encode(observation)) <= 2048, 'Bounded original compile donor observation')
+    readback, pin = observation['readObservation'], source['descriptor']
+    require(type(readback) is dict and set(readback) == {
+                'readOrdinal', 'createdCopyReadback', 'expectedBytes', 'returnedBytes',
+                'initialDescriptor', 'finalDescriptor', 'namedPath'} and
+            readback['createdCopyReadback'] is False and type(readback['readOrdinal']) is int and
+            1 <= readback['readOrdinal'] <= 2048, 'Strict original compile donor read')
+    identities = [readback[k] for k in ('initialDescriptor', 'finalDescriptor', 'namedPath')]
+    require(all(type(value) is list and len(value) == 9 and
+                all(type(x) is int and -(1 << 127) <= x < (1 << 127) for x in value)
+                for value in identities), 'Original compile donor full9 shapes')
+    require(all(type(readback[k]) is int and readback[k] == pin['bytes']
+                for k in ('expectedBytes', 'returnedBytes')) and
+            observation['sha256'] == pin['sha256'] and
+            identities[0] == identities[1] == identities[2] and
+            all(identities[0][i] == pin['identity'][i] for i in (0, 1, 2, 3, 4, 5, 6, 8)),
+            'Original compile donor content/eight fields and strict within-read identity',
+            read_observation=readback)
+
+
 def pin_input(a, item, budget):
+    if a['suite'] == 'compile' and budget.compile_donors.get(item['relativePath']) == item:
+        # Only exact members of the admitted original table qualify historically.
+        # The normal reader remains full9-strict throughout this new read.
+        raw, _, readback = budget._read(Path(item['descriptor']['path']), 67108864)
+        observation = {'relativePath': item['relativePath'], 'readObservation': readback,
+                       'sha256': digest(raw)}
+        validate_compile_donor_observation(item, observation)
+        require(len(raw) == item['descriptor']['bytes'], 'Original compile donor length')
+        require(len(budget.compile_donor_reads) < 365, 'Original compile donor read count')
+        budget.compile_donor_reads.append(observation)
+        return raw
     lineage = carried_compile_copy(a, item)
     if lineage is not None:
         return budget.pin_created_copy(lineage['deployment'], lineage['source'], 67108864)
@@ -501,6 +547,8 @@ def inventory_rows(a, budget):
         total += pin['bytes']
         require(total <= (134217728 if a['suite'] == 'compile' else 100663296), 'Input payload aggregate')
         tsv.append('\t'.join((relative, str(pin['bytes']), pin['sha256'])))
+    if a['suite'] == 'compile':
+        budget.compile_donors = compile_donor_rows(inventory['files'][:365])
     return inventory['files'], ('\n'.join(tsv) + '\n').encode('ascii')
 
 
@@ -649,9 +697,14 @@ def materialize_inputs(a, root, local, budget):
         require(len(encode(creation)) <= 4096, 'Bounded original fixture lineage')
     else:
         fixture = creation = None
-    evidence = encode({'schema': 'windows-controlled-harness-deployment-v2',
-                       'inventorySha256': a['inventory']['sha256'], 'files': deployed,
-                       'fixtureAdmission': fixture, 'fixtureCreation': creation})
+    receipt = {'schema': 'windows-controlled-harness-deployment-v2',
+               'inventorySha256': a['inventory']['sha256'], 'files': deployed,
+               'fixtureAdmission': fixture, 'fixtureCreation': creation}
+    if a['suite'] == 'compile':
+        require(len(budget.compile_donor_reads) == 365, 'Complete original compile donor reads')
+        receipt.update(schema='windows-controlled-harness-deployment-v3',
+                       compileDonorReads=budget.compile_donor_reads)
+    evidence = encode(receipt)
     write_new(local / 'deployment.json', evidence, budget, 4194304)
     write_new(root / 'deployment.json', evidence, budget, 4194304)
 
@@ -661,10 +714,19 @@ def verify_deployment(a, root, local, budget):
     require(budget.read(root / 'deployment.json', 4194304)[0] == raw, 'Original deployment receipt copies')
     deployment = decode(raw)
     rows, _ = inventory_rows(a, budget)
-    require(set(deployment) == {'schema', 'inventorySha256', 'files', 'fixtureAdmission', 'fixtureCreation'} and
-            deployment['schema'] == 'windows-controlled-harness-deployment-v2' and
+    fields = {'schema', 'inventorySha256', 'files', 'fixtureAdmission', 'fixtureCreation'}
+    if a['suite'] == 'compile':
+        fields.add('compileDonorReads')
+    require(set(deployment) == fields and
+            deployment['schema'] == ('windows-controlled-harness-deployment-v3' if a['suite'] == 'compile'
+                                     else 'windows-controlled-harness-deployment-v2') and
             deployment['inventorySha256'] == a['inventory']['sha256'] and
             len(deployment['files']) == len(rows), 'Complete deployment receipt')
+    if a['suite'] == 'compile':
+        require(type(deployment['compileDonorReads']) is list and
+                len(deployment['compileDonorReads']) == 365, 'Complete retained compile donor observations')
+        for source, observation in zip(budget.compile_donors.values(), deployment['compileDonorReads'], strict=True):
+            validate_compile_donor_observation(source, observation)
     for created, source in zip(deployment['files'], rows, strict=True):
         pin = created['descriptor']
         require(set(created) == ({'relativePath', 'descriptor', 'writeClosedIdentity', 'readbackObservation'}
@@ -742,7 +804,7 @@ def checkpoint(a, budget, reserved=False):
             expected = sorted([*expected, a['action']])
         if reserved and role == 'windowsProjectionRoot':
             expected = sorted([*expected, 'named-fixtures-' + a['action'],
-                               *(['confidential-checks-v19'] if a['suite'] == 'compile' else [])])
+                               *(['confidential-checks-v20'] if a['suite'] == 'compile' else [])])
         require(names(path, 128, budget) == expected, 'Current parent membership changed')
     return before, charge, after
 
