@@ -24096,9 +24096,47 @@ overwrite, automatic replay or cleanup.
 #### Fixed entry implementation
 
 The inert [native entry](../../../tools/validation/RetainedElevationEntry.cs) has
-three fixed modes in the same executable: the non-elevated `--launch` UAC caller,
-`--entry`, and the sole `--context-check` child. This avoids a separate PowerShell
+three retained-activation modes in the same executable: the non-elevated `--launch`
+UAC caller, `--entry`, and the sole `--context-check` child. The separately allocated
+`--input-check` mode below ends before any of those dispatches. This avoids a separate PowerShell
 script without changing the four reserved Windows roles or either console allowance.
+Before dispatch, the native entry reports the first rejected existing predicate
+with a fixed nonzero exit status. The original holder already retains that status
+as `proxyExit`; no additional output, native query, process or observation is added.
+The checks retain their order and exact comparisons, including case-sensitive
+image-path equality. No rejected value is emitted. These statuses distinguish a
+diagnostic branch; they do not establish its underlying cause or authorize another
+attempt. The mapping applies to a directly observed native invocation; the UAC
+caller's existing final journal retains its elevated child's status separately.
+
+| Status | Rejected check |
+| --- | --- |
+| 101 | Argument count |
+| 102 | Fixed mode |
+| 103 | Windows root syntax |
+| 104 | Nonce syntax |
+| 105 | Manifest hash syntax |
+| 110 | Manifest field count |
+| 111 | Manifest schema |
+| 112 | Manifest nonce |
+| 113 | Manifest END field |
+| 114 | Manifest trailing empty field |
+| 115 | Distribution syntax |
+| 116 | Linux user syntax |
+| 117 | Linux UID syntax |
+| 118 | WSL executable hash syntax |
+| 119 | Holder hash syntax |
+| 120 | Entry executable hash syntax |
+| 121 | Original relay syntax |
+| 122 | Linux companion root |
+| 123 | Current process handle validity |
+| 124 | Current process image-path equality |
+| 125 | Inert execution guard |
+
+Exceptions and dispatched lifecycle failures retain status 1. These diagnostic
+statuses do not relax an admission predicate or grant another attempt. The separate
+pre-UAC continuation below owns the fixed input-check mode and its finite allocation.
+
 The caller uses `ShellExecuteEx` with `runas` and `SEE_MASK_NOCLOSEPROCESS`, retains
 the returned native handle through exit, and has one 120-second UAC-request window.
 A nonce-bound permit expires on both native tick time and UTC; a late elevated
@@ -24265,6 +24303,89 @@ Source guards remain closed in Git; activation of exact local copies requires
 independent admission. A separately accepted compile uses the existing one-source,
 seven Linux SDK/compiler and three Framework input recipe, x64 C# 5 winexe,
 150/145/100-second compile clocks, no restore and no output execution.
+
+#### Fixed pre-UAC source and action correspondence
+
+The inert native implementation adds `--input-check` to the accepted fixed-mode
+predicate and returns zero after the same held manifest, executable, holder and
+self-image checks, before Launch, Context or Run. Its using scopes dispose their
+inputs on return. The fixed guard-status mapping above identifies a failed check;
+no image-path normalization, case-insensitive comparison or diagnostic input dump
+is added. Source/artifact acceptance must retain this early-return correspondence.
+
+The existing Python holder adds only a separate `--input-check` dispatch with six
+fixed operands: check slot, nonce, manifest hash, infrastructure hash, configuration
+hash and absolute boot-clock deadline. It never enters the retained transport or
+holder modes. Compile slots are the ten odd numbers 0159 through 0177; paired check
+slots are the ten even numbers 0160 through 0178. Reserve replacement activation
+0179 separately. A failed compilation can leave its paired check unused; it cannot
+reuse either slot or transfer that compile's charge. A later source revision cannot
+reset these finite arrays or the independently tracked intended-operation lineage.
+
+Each check's Windows payload root is the fresh `elevation-entry-<check-slot>` root,
+with its matching Linux companion. Its separate exclusive Linux evidence root is
+`windows-actions/retained-elevation-check-<check-slot>`. The replacement selects
+only the successful check's unchanged payload/nonce and retains its root spelling;
+0179 identifies the new activation, not a rename or second deployment of that
+payload. All failed payloads stay intact. No slot is opened before exact admission.
+
+The strict configuration binds accepted Git/protocol/source-review/artifact-review
+and holder hashes, manifest/infrastructure hashes, nonce and before/after accounting.
+For pair index i from zero through nine and c already spent checks, require
+0 <= c <= i. A compile starts only from 33+i / 140+c / 6 / 403+2c and adds exactly
+1/0/0/0; Linux/Windows preparations are 13+i / 20 within 29/20 ceilings. Its paired
+check starts from 34+i / 140+c / 6 / 403+2c and adds exactly 0/1/0/2, with outside
+host count 27+c increasing by one. Boolean counts and other deltas are rejected.
+This source ordering prohibits interleaving later D0/entry work into these pairs
+and preserves old protected capacity. Exact admission still verifies actual prior
+outcomes and the durable ledger; a configuration cannot authorize itself.
+
+The check first exclusively records its full charge, then verifies its named
+service/cgroup, held input references and the four fixed Linux executable pins.
+It reads only the fixed payload and own process records, invokes the GUI once
+with `--input-check`, and captures its exit code and both EOFs. There are at most
+2,500 capture iterations, one read per unfinished stream per iteration, with the
+existing per-stream overflow cap and a ten-millisecond interval. Unexpected
+stream bytes fail the check and are discarded; the two retained stream files are
+empty, and their observed lengths preserve the distinction from observed emptiness.
+No rejected argument or unexpected diagnostic payload is published.
+
+The outer invocation establishes one absolute `CLOCK_BOOTTIME` deadline twenty-five
+seconds ahead before service submission. The worker rejects an expired deadline or
+one more than twenty-five seconds beyond its own start. All input reads, native
+start and capture share that deadline, reserving its last three seconds for proxy
+termination and fixed evidence persistence. Forced proxy termination makes native
+lifetime unknown even if the proxy later exits. Source-corresponded normal return
+requires a known fixed exit code, complete empty streams and no forced termination
+or signal; independent outcome review still joins the exact artifact and call.
+
+Use a twenty-four-second service runtime and one-second service stop limit within
+the thirty-second external envelope: at most two seconds for admission/startup,
+twenty-four active, one stop, two return/scheduling and one outer KILL reserve.
+These configured limits do not establish observed completion. A late/expired
+submission must not launch the native subject. Missing or contradictory closure
+stops continuation without resetting clocks. Exact call review binds the absolute
+deadline handoff and proves these reserves against the actual submission recipe.
+
+The fixed check evidence is `original-charge.json`, `check-start.json`,
+`check-final.json`, `check.stdout.bin` and `check.stderr.bin`, plus its pre-admitted
+configuration and closed outer transport/collector records. Record stream lengths,
+EOFs, status, clock bounds, source-correspondence classification and any native
+uncertainty separately. Independent collection supplies the original service's
+scoped completion. No ready/stop/permit marker or Windows evidence write occurs.
+The final receipt's passed, elapsed-time, signal and deadline fields are sampled
+before its exclusive serialization/write/flush/fsync/close and remain provisional.
+After that persistence, the holder must still observe no signal and a boot-clock
+time strictly before the original deadline to return zero. Equality or lateness
+returns nonzero without rewriting the receipt. Acceptance also requires the actual
+holder/service zero return and completed outer transport/scoped closure; neither
+receipt passed nor native proxy status alone establishes check success. This gate
+detects late persistence, not preemption of a blocked fsync or an exact OS exit time.
+If proxy kill raises, retain the failure, attempt only the existing bounded wait
+and finalization, and preserve forced/native-lifetime-unknown status.
+The first compile/check pair and any later correction still require exact local
+materialization, source/call, artifact and outcome review; inert Git source alone
+admits no execution.
 
 #### Time, observation and scoped completion
 

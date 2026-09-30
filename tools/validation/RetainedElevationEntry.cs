@@ -28,22 +28,32 @@ internal static class RetainedElevationEntry
         if (!ExecutionAdmitted) return 125;
         try
         {
-            if (args.Length != 4 || (args[0] != "--launch" && args[0] != "--entry" && args[0] != "--context-check") ||
-                !Regex.IsMatch(args[1], @"\AC:\\Temp\\azureauth-windows-slice-108\\elevation-entry-[0-9]{4}\z") ||
-                !Regex.IsMatch(args[2], @"\A[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\z") || !IsHash(args[3])) return 125;
+            // Fixed first-failed-check statuses survive the existing proxyExit capture.
+            // Keep all predicates and their order; never emit rejected input values.
+            if (args.Length != 4) return 101;
+            if (args[0] != "--launch" && args[0] != "--entry" && args[0] != "--context-check" &&
+                args[0] != "--input-check") return 102;
+            if (!Regex.IsMatch(args[1], @"\AC:\\Temp\\azureauth-windows-slice-108\\elevation-entry-[0-9]{4}\z")) return 103;
+            if (!Regex.IsMatch(args[2], @"\A[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\z")) return 104;
+            if (!IsHash(args[3])) return 105;
             string root = args[1], nonce = args[2];
             using (SafeFileHandle directory = OpenDirectory(root))
             using (FileStream manifest = Pin(Path.Combine(root, "entry-inputs.txt"), args[3], 65536))
             {
                 string[] inputs = ReadText(manifest).Split('\n');
-                if (inputs.Length != 12 || inputs[0] != "azureauth-retained-elevation-v1" ||
-                    inputs[1] != nonce || inputs[10] != "END" || inputs[11] != "" ||
-                    !Regex.IsMatch(inputs[2], @"\A[A-Za-z0-9_.-]{1,64}\z") ||
-                    !Regex.IsMatch(inputs[3], @"\A[a-z_][a-z0-9_-]{0,63}\z") ||
-                    !Regex.IsMatch(inputs[4], @"\A[1-9][0-9]{0,8}\z") ||
-                    !IsHash(inputs[5]) || !IsHash(inputs[6]) || !IsHash(inputs[7]) ||
-                    !Regex.IsMatch(inputs[8], @"\A/run/WSL/[1-9][0-9]*_interop\z") ||
-                    inputs[9] != "/var/tmp/azureauth-windows-slice-108/elevation-entry-" + root.Substring(root.Length - 4)) return 125;
+                if (inputs.Length != 12) return 110;
+                if (inputs[0] != "azureauth-retained-elevation-v1") return 111;
+                if (inputs[1] != nonce) return 112;
+                if (inputs[10] != "END") return 113;
+                if (inputs[11] != "") return 114;
+                if (!Regex.IsMatch(inputs[2], @"\A[A-Za-z0-9_.-]{1,64}\z")) return 115;
+                if (!Regex.IsMatch(inputs[3], @"\A[a-z_][a-z0-9_-]{0,63}\z")) return 116;
+                if (!Regex.IsMatch(inputs[4], @"\A[1-9][0-9]{0,8}\z")) return 117;
+                if (!IsHash(inputs[5])) return 118;
+                if (!IsHash(inputs[6])) return 119;
+                if (!IsHash(inputs[7])) return 120;
+                if (!Regex.IsMatch(inputs[8], @"\A/run/WSL/[1-9][0-9]*_interop\z")) return 121;
+                if (inputs[9] != "/var/tmp/azureauth-windows-slice-108/elevation-entry-" + root.Substring(root.Length - 4)) return 122;
                 AssertDirect(root);
                 string image = Path.Combine(root, "RetainedElevationEntry.exe");
                 using (FileStream ownImage = Pin(image, inputs[7], 2097152))
@@ -53,9 +63,12 @@ internal static class RetainedElevationEntry
                     {
                         using (SafeFileHandle current = OpenProcess(0x1000u, false, (uint)self.Id))
                         {
-                            if (current.IsInvalid || ProcessImage(current) != image) return 125;
+                            if (current.IsInvalid) return 123;
+                            if (ProcessImage(current) != image) return 124;
                         }
                     }
+                    // Input validation ends before any launch, token, child or marker operation.
+                    if (args[0] == "--input-check") return 0;
                     if (args[0] == "--launch") return Launch(root, nonce, args[3]);
                     if (args[0] == "--context-check") return Context(root, nonce);
                     using (FileStream permit = OpenRead(Path.Combine(root, "launch-permit.txt"), 256))

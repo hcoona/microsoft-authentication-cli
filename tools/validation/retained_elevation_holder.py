@@ -356,6 +356,178 @@ def bounded_command(argv, seconds):
     return result
 
 
+INPUT_CHECK_SLOTS = ('0160', '0162', '0164', '0166', '0168',
+                     '0170', '0172', '0174', '0176', '0178')
+
+
+def input_check_configuration(config, slot):
+    keys = {'schema', 'slot', 'acceptedCommit', 'protocolSha256', 'sourceReviewSha256',
+            'artifactReviewSha256', 'holderSha256', 'manifestSha256', 'infrastructureSha256',
+            'nonce', 'countsBefore', 'countsAfter', 'outsideHostsBefore', 'outsideHostsAfter'}
+    if not isinstance(config, dict) or set(config) != keys or \
+            config['schema'] != 'windows-retained-entry-input-check-v1' or \
+            slot not in INPUT_CHECK_SLOTS or config['slot'] != slot:
+        raise ValueError('Input-check configuration')
+    if not isinstance(config['acceptedCommit'], str) or not re.fullmatch(r'[0-9a-f]{40}', config['acceptedCommit']):
+        raise ValueError('Input-check accepted source')
+    for key in ('protocolSha256', 'sourceReviewSha256', 'artifactReviewSha256',
+                'holderSha256', 'manifestSha256', 'infrastructureSha256'):
+        if not isinstance(config[key], str) or not re.fullmatch(r'[0-9a-f]{64}', config[key]) or \
+                config[key] == '0' * 64:
+            raise ValueError('Input-check evidence hash')
+    if not isinstance(config['nonce'], str) or not re.fullmatch(r'[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}', config['nonce']):
+        raise ValueError('Input-check nonce')
+    before, after = config['countsBefore'], config['countsAfter']
+    if any(not isinstance(v, list) or len(v) != 4 or any(type(n) is not int or n < 0 for n in v)
+           for v in (before, after)):
+        raise ValueError('Input-check counts')
+    pair_index = INPUT_CHECK_SLOTS.index(slot)
+    checks_spent = before[1] - 140
+    if not 0 <= checks_spent <= pair_index or \
+            before != [34 + pair_index, 140 + checks_spent, 6, 403 + 2 * checks_spent] or \
+            after != [before[0], before[1] + 1, before[2], before[3] + 2]:
+        raise ValueError('Input-check debit')
+    if type(config['outsideHostsBefore']) is not int or type(config['outsideHostsAfter']) is not int or \
+            config['outsideHostsBefore'] != 27 + checks_spent or \
+            config['outsideHostsAfter'] != 28 + checks_spent or config['outsideHostsAfter'] > 46:
+        raise ValueError('Input-check console debit')
+    return config
+
+
+def input_check(slot, nonce, manifest_hash, infrastructure_hash, config_hash, expires_ns):
+    # One source-corresponded normal return; a killed proxy never proves native exit.
+    began = boot()
+    if slot not in INPUT_CHECK_SLOTS or not re.fullmatch(r'[1-9][0-9]{1,19}', expires_ns):
+        raise ValueError('Input-check arguments')
+    deadline = int(expires_ns) / 1000000000
+    if not began < deadline <= began + 25:
+        raise ValueError('Input-check absolute deadline')
+    root = direct(Path(__file__).absolute().parent)
+    if str(root) != '/mnt/c/Temp/azureauth-windows-slice-108/elevation-entry-' + slot:
+        raise ValueError('Input-check fixed payload root')
+    local = direct('/var/tmp/azureauth-windows-slice-108/windows-actions/retained-elevation-check-' + slot)
+    config = input_check_configuration(json.loads(read(local / 'config.json', 65536, config_hash)), slot)
+    if (nonce, manifest_hash, infrastructure_hash) != \
+            (config['nonce'], config['manifestSha256'], config['infrastructureSha256']):
+        raise ValueError('Input-check argument binding')
+    record(local / 'original-charge.json', {'slot': slot, 'countsBefore': config['countsBefore'],
+                                           'countsAfter': config['countsAfter'], 'configSha256': config_hash,
+                                           'outsideHostsBefore': config['outsideHostsBefore'],
+                                           'outsideHostsAfter': config['outsideHostsAfter']})
+    child = None
+    streams = []
+    data = [bytearray(), bytearray()]
+    eof = [False, False]
+    failure = None
+    forced = False
+    signal_seen = False
+    returned = False
+
+    def signal_stop(_signum, _frame):
+        nonlocal signal_seen
+        signal_seen = True
+
+    def work_budget():
+        if signal_seen or boot() >= deadline - 3:
+            raise TimeoutError('Input-check work deadline')
+
+    signal.signal(signal.SIGTERM, signal_stop)
+    signal.signal(signal.SIGINT, signal_stop)
+    try:
+        work_budget()
+        read(Path(__file__), 65536, config['holderSha256'])
+        groups = [line[3:] for line in virtual('/proc/self/cgroup').splitlines() if line.startswith('0::')]
+        unit = 'azureauth-elevation-inputcheck-108-' + nonce + '.service'
+        if len(groups) != 1 or Path(groups[0]).name != unit:
+            raise ValueError('Input-check service identity')
+        fields = virtual('/proc/self/stat').rsplit(')', 1)[1].split()
+        record(local / 'check-start.json', {'slot': slot, 'nonce': nonce, 'pid': os.getpid(),
+                                           'startTicks': int(fields[19]), 'cgroup': groups[0],
+                                           'configSha256': config_hash, 'deadlineBootNs': expires_ns})
+        inputs = read(root / 'entry-inputs.txt', 65536, manifest_hash).decode('ascii').split('\n')
+        if len(inputs) != 12 or inputs[0] != 'azureauth-retained-elevation-v1' or inputs[1] != nonce or \
+                inputs[10:] != ['END', ''] or inputs[8] != os.environ.get('WSL_INTEROP') or \
+                int(inputs[4]) != os.getuid() or inputs[6] != config['holderSha256'] or \
+                inputs[9] != '/var/tmp/azureauth-windows-slice-108/' + root.name:
+            raise ValueError('Input-check manifest binding')
+        infrastructure = json.loads(read(direct(inputs[9]) / 'infrastructure.json', 65536, infrastructure_hash))
+        if set(infrastructure) != set(LINUX_EXECUTABLES):
+            raise ValueError('Input-check infrastructure selection')
+        for name, pin in infrastructure.items():
+            work_budget()
+            if linux_executable_pin(name, work_budget) != pin:
+                raise ValueError('Input-check infrastructure identity')
+        work_budget()
+        read(root / 'RetainedElevationEntry.exe', 2097152, inputs[7])
+        work_budget()
+        windows_root = 'C:\\Temp\\azureauth-windows-slice-108\\' + root.name
+        child = subprocess.Popen([str(root / 'RetainedElevationEntry.exe'), '--input-check',
+                                  windows_root, nonce, manifest_hash], stdin=subprocess.DEVNULL,
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=root,
+                                 env=dict(os.environ))
+        streams = [child.stdout, child.stderr]
+        for stream in streams:
+            os.set_blocking(stream.fileno(), False)
+        for _ in range(2500):
+            work_budget()
+            for index, stream in enumerate(streams):
+                if eof[index]:
+                    continue
+                try:
+                    chunk = os.read(stream.fileno(), min(4096, LIMIT + 1 - len(data[index])))
+                except BlockingIOError:
+                    continue
+                if not chunk:
+                    eof[index] = True
+                data[index].extend(chunk)
+                if len(data[index]) > LIMIT:
+                    raise ValueError('Input-check stream overflow')
+            if child.poll() is not None and all(eof):
+                returned = True
+                break
+            time.sleep(0.01)
+        if not returned:
+            raise TimeoutError('Input-check return incomplete')
+        if any(data):
+            raise ValueError('Unexpected input-check output')
+        if child.returncode != 0:
+            raise RuntimeError('Input-check predicate rejected')
+    except BaseException as error:
+        failure = type(error).__name__
+    finally:
+        if child is not None and child.poll() is None:
+            forced = True
+            try:
+                child.kill()
+            except BaseException as error:
+                failure = failure or type(error).__name__
+            try:
+                child.wait(timeout=min(1, max(0.001, deadline - boot())))
+            except BaseException as error:
+                failure = failure or type(error).__name__
+        for stream in streams:
+            stream.close()
+        # Unexpected stream contents are never persisted as diagnostics.
+        for name in ('check.stdout.bin', 'check.stderr.bin'):
+            write(local / name, b'')
+        code = None if child is None else child.poll()
+        normal = returned and not forced and not signal_seen and all(eof) and not any(data) and \
+            code in (0, 1, 101, 102, 103, 104, 105, 110, 111, 112, 113, 114, 115, 116,
+                     117, 118, 119, 120, 121, 122, 123, 124, 125)
+        result = {'slot': slot, 'nonce': nonce, 'configSha256': config_hash,
+                  'manifestSha256': manifest_hash, 'proxyStarted': child is not None,
+                  'proxyExit': code, 'eof': eof, 'observedBytes': [len(v) for v in data],
+                  'forcedProxyTermination': forced, 'signalReceived': signal_seen,
+                  'sourceCorrespondedNormalReturn': normal,
+                  'nativeLifetimeUnknown': child is not None and not normal,
+                  'failure': failure, 'elapsedSeconds': boot() - began,
+                  'beforeDeadline': boot() < deadline}
+        result['passed'] = normal and code == 0 and failure is None and result['beforeDeadline']
+        record(local / 'check-final.json', result)
+    # The closed receipt is provisional until persistence and the final clock/signal gate end.
+    return 0 if result['passed'] and not signal_seen and boot() < deadline else 1
+
+
 def transport(nonce, manifest_hash, infrastructure_hash):
     began = boot()
     root = direct(Path(__file__).absolute().parent)
@@ -517,6 +689,8 @@ if __name__ == '__main__':
     if not EXECUTION_ADMITTED:
         raise SystemExit('INERT: independent source and exact-call admission required.')
     try:
+        if len(sys.argv) == 8 and sys.argv[1] == '--input-check':
+            raise SystemExit(input_check(*sys.argv[2:]))
         if len(sys.argv) == 5 and sys.argv[1] == '--transport':
             raise SystemExit(transport(*sys.argv[2:]))
         if len(sys.argv) == 4:

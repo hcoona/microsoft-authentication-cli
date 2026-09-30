@@ -17,7 +17,8 @@ import time
 import uuid
 
 EXECUTION_ADMITTED = False
-SLOTS = ('0157',)
+SLOTS = ('0159', '0161', '0163', '0165', '0167',
+         '0169', '0171', '0173', '0175', '0177')
 ROOT = CHARGE = FINAL = None
 SLOT = None
 SDK_ROOT = Path('/home/shuaizhang/.local/share/mise/http-tarballs/febf8b0ab0361bac936d0b20567a85f89e667d4f4ff0067e0ed9a9f58ae45e28')
@@ -63,19 +64,23 @@ def configure(config):
     BEFORE, AFTER = config['countsBefore'], config['countsAfter']
     if not isinstance(BEFORE, list) or not isinstance(AFTER, list) or len(BEFORE) != 4 or len(AFTER) != 4 or any(type(n) is not int or n < 0 for n in BEFORE + AFTER):
         raise ValueError('Category counts')
-    if AFTER != [BEFORE[0] + 1, *BEFORE[1:]] or AFTER[0] > 39:
+    if AFTER != [BEFORE[0] + 1, *BEFORE[1:]] or AFTER[0] > 49:
         raise ValueError('Preparation debit')
     before, after = config['hostPreparationBefore'], config['hostPreparationAfter']
     if not isinstance(before, dict) or not isinstance(after, dict) or set(before) != {'linux', 'windows'} or set(after) != {'linux', 'windows'}:
         raise ValueError('Host preparation keys')
-    for host, ceiling in (('linux', 19), ('windows', 20)):
+    for host, ceiling in (('linux', 29), ('windows', 20)):
         for counts in (before[host], after[host]):
             if not isinstance(counts, list) or len(counts) != 2 or any(type(n) is not int for n in counts) or counts[1] != ceiling or not 0 <= counts[0] <= ceiling:
                 raise ValueError('Host preparation ceiling')
     if after['linux'][0] != before['linux'][0] + 1 or after['windows'] != before['windows'] or before['linux'][0] + before['windows'][0] != BEFORE[0] or after['linux'][0] + after['windows'][0] != AFTER[0]:
         raise ValueError('Host preparation debit')
-    if BEFORE != [32, 139, 6, 397] or before != {'linux': [12, 19], 'windows': [20, 20]}:
-        raise ValueError('Single entry compilation baseline')
+    pair_index = SLOTS.index(SLOT)
+    checks_spent = BEFORE[1] - 140
+    if not 0 <= checks_spent <= pair_index or \
+            BEFORE != [33 + pair_index, 140 + checks_spent, 6, 403 + 2 * checks_spent] or \
+            before != {'linux': [13 + pair_index, 29], 'windows': [20, 20]}:
+        raise ValueError('Finite entry compilation baseline')
 
 
 def digest(raw):
