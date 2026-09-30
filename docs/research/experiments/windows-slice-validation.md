@@ -21356,7 +21356,9 @@ it cannot be removed, overwritten or replaced by another path. Native reuses acc
 compile outputs and writes one fixture admission; it cannot rebuild or recopy artifacts.
 
 Pre-copy sources, existing tools, generated controls/artifacts and ordinary reads stay
-full9-strict except for the sole generated fixture role's narrower
+full9-strict except for the closed original public compile donors' later
+[historical qualification](#compile-public-donor-historical-ctime-qualification)
+and the sole generated fixture role's narrower
 [between-read qualification](#created-fixture-between-read-identity-qualification).
 Only this compile's 413 exclusively materialized public input copies use
 the accepted immediate-copy qualification: exact payload, unchanged eight non-ctime
@@ -23926,6 +23928,50 @@ continue within this finite credential-free work on the same hosts. Preserve
 No new permission, helper, observation system, restore, download, AOT publication,
 account or WAM effect is included. Matching owner capacity decision, accepted Wave/
 safety/protocol and exact source/input/artifact/call/outcome gates precede execution.
+
+### Compile Public-Donor Historical ctime Qualification
+
+Compile 0154 stopped during original materialization, before service dispatch or
+compiler launch. Its fixed snapshot has SHA-256
+`44d37435a5cbc20559b1ebb9b324403f3cbc5cab5a8e4537634c66e6f318ec5a`.
+The failing public runtime manifest had matching 29,720-byte length and SHA-256
+`db6bf68420f350411629571d31aea9232f05e9464e0f48f306041efd0971615d`,
+with only historical ctime different. The normal read's internal full9 check passed.
+Independent triage has SHA-256
+`1a1da5252698f25edf193a5d2e4211e33f41b6f2a0c5bd08b4dad90049cc182a`.
+The compile source followed its old strict rule; the direct-donor qualification
+did not cover this input role. No compiler or OWF3 behavior follows from this failure.
+
+Apply the matching Wave/safety qualification only to the original 365 public
+compile rows: 167 references, 197 toolchain leaves and one apphost template. Their
+unchanged ordered original descriptor table, canonically encoded as sorted-key,
+compact JSON plus one newline, has SHA-256
+`ffd6b96b4216d07e1025980ea3556c6e230f6ed9fcc9e47ab745ebdeee17e1f0`.
+Bind that closed table, each exact relative path and its catalog/inventory row;
+no directory pattern or arbitrary replacement descriptor qualifies. The other 48
+compile source, response and template inputs retain generic full9 pinning.
+
+At the compile-input role only, a newly read original donor may differ from its
+historical descriptor in ctime after exact length, SHA-256 and EOF checks and
+agreement of the other eight identity fields. Preserve the original descriptor
+and actual opened, final and named identities in the existing bounded deployment
+evidence. Those three actual identities remain full9-equal during each read.
+Do not relax generic `Budget.pin`, change the baseline, add a read or survey, or
+extend this rule to local/control/infrastructure, native, Windows held-object or
+real/product inputs. Existing created-copy and direct-deployment qualifications
+remain separate and unchanged. Every other mismatch stops the original.
+
+Preserve 0154's full 0/1/0/7 charge, spent collector and partial v19 stage. At this
+planning point, consumption is 32/137/6/385 and the pool is 1/7/0/41. The remaining
+three compiles and four D0s cost exactly 0/7/0/41; no new quota or refund follows.
+Use only fresh compile v20-v22 and still-unused direct v8-v11, keeping the existing
+compile-v7/D0-v4 immutable lineages and all spent passive passes. Bind the next
+source to v20/v8, updating responses, source map, catalog and both consumers
+atomically with closed guards. Independently review the scoped source and pure
+negative cases for excluded roles, other identity fields, content and within-read
+changes. Ordinary exact input/call/artifact/outcome gates still apply. Accepted
+native 0142 and SyntheticSubject 0141 remain; D1/D2 require accepted D0. The
+existing clocks, protections and historical lifetime dispositions are unchanged.
 
 ### Future Passive Metadata and Collection
 
