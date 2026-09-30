@@ -23803,6 +23803,130 @@ Add no process role, helper, survey, download, cleanup, account effect or new li
 uncertainty. This occupied-v7 completion is single-use and expires with the current
 grant; its failure does not authorize another completion.
 
+### Direct ETW Failure Diagnostics After 0153
+
+Original 0153's v7 completion passed all 200 content bindings, retaining one leaf
+and exclusively creating 199. Its sole D0 then failed with worker-originated
+Trace at observation stage 4. The fixed snapshot has SHA-256
+`c8712691e8074869ef3d77ee9d158ff14fb864ce6c0ca1777c83c9daa08ae7f0`.
+It retained the failed observer final but no success terminal. Preserve this
+failure, the two spent fixed collectors and full 0/1/0/5 charge.
+
+Independent frozen-outcome disposition has SHA-256
+`8b4751ce8a596bf1187f9e61dba9f9f475f3c659cfeb6711986a28be9ec7cd67`.
+The normal ended Linux transport, worker creation-handle exit and named Job
+zero/total-one evidence establish scoped process completion and no successfully
+created calibration child. The D0 topology label is not child-creation evidence.
+Trace creation remains unobserved within [0,1], and the stop outcome is unknown.
+Existing sole-owned-ETW persistence disposition applies; no new application, Job
+or Linux lifetime uncertainty is established. Generic Trace may include setup or
+pre-child allocation/cleanup failure; zero callbacks and unavailable loss counters
+cannot identify its cause or establish whether a session is currently active.
+
+The source loses the specific FailureException location, reduces StartTraceW and
+ControlTraceW return statuses to booleans, and reconstructs every failed ordinary
+observation with an unknown location. Independent triage of this diagnostic gap
+has SHA-256 `a90e7442c36b3d53e52118c4a7209cc986e58e88264ac58dac9a9ffebb01673a`.
+Neither a permission failure nor a trace-configuration defect is established.
+
+#### Fixed synthetic failure representation
+
+Keep OWF1/OWF2 and successful ordinary observation frames. A synthetic observation
+failure may instead emit exactly 40 bytes: ASCII OWF3, the seven OWF2 Int32 fields,
+a little-endian UInt32 `nativeStatus`, then an Int32 `traceState`. Source 4 is
+`EtwObserver.cs`, with compiler-supplied line 1 through 100,000. The frame requires
+worker origin 1, observation stage 4 and fault 1 through 10. Source 0 still requires
+line 0. The first seven fields otherwise retain their existing bounds.
+
+[`StartTraceW`](https://learn.microsoft.com/windows/win32/api/evntrace/nf-evntrace-starttracew)
+and [`ControlTraceW`](https://learn.microsoft.com/windows/win32/api/evntrace/nf-evntrace-controltracew)
+return their status directly. [`OpenTraceW`](https://learn.microsoft.com/windows/win32/api/evntrace/nf-evntrace-opentracew)
+uses last error on failure; the existing SetLastError P/Invoke declaration supplies
+the value returned by [`Marshal.GetLastPInvokeError`](https://learn.microsoft.com/dotnet/api/system.runtime.interopservices.marshal.getlastpinvokeerror).
+These contracts justify the diagnostic source, not a cause for original 0153.
+
+`nativeStatus` is the normal API's return status, or the cached P/Invoke last error
+immediately after failure of QueryDosDeviceW or OpenTraceW. UInt32.MaxValue means
+unavailable, including a managed predicate failure after an API succeeded. Only
+source 4 may carry an available native status. Retain the first source/status
+under one small lock shared with callback-thread failures; cleanup cannot replace
+it. A nonzero ProcessTrace result is recorded without changing its existing
+control flow or success predicates. No additional API call supplies diagnostics.
+
+The lifecycle mask uses bits 1 start attempted, 2 creation succeeded, 4 stop
+attempted, 8 stop succeeded, and 16 consumer drained. Each bit implies its preceding
+bit. Value -1 means no lifecycle observation; 0 means the normal source reached
+cleanup without attempting creation. Capture these facts at existing operations,
+then preserve the final mask independently of the first error. No other bits are
+valid. An extended frame must contain a source-4 location, available native status,
+or observed lifecycle mask; an all-unknown extension is rejected.
+
+The synthetic final's existing failure object adds exactly `nativeStatus` and
+`traceState` for OWF3. A failed OWF3 carries no ordinary observation, so the existing
+top-level native/trace observation defaults are unavailable; use only the explicit
+failure mask for the scoped creation/stop facts. No failure frame can supply scenario
+acceptance. Python accepts only the exact seven- or nine-field object, integer
+values excluding booleans, matching source/status rules and valid lifecycle masks.
+Real-role frames and records remain unchanged. Exception text, paths, handles,
+trace payloads and private values are never added.
+
+The D0 worker's existing pure codec check adds 21 fixed checks to its thirteen:
+40-byte size, extended round trips and unknown values, short/long frames, wrong
+stage/source, invalid masks and each valid mask. They remain memory-only within
+the same D0, with no extra process, input read, trace, snapshot or clock. Before
+compilation, review Python positive/negative schema vectors, first-cause/cleanup
+ordering, callback locking and every source/catalog binding. No runtime claim
+follows from these pure checks.
+
+#### Finite continuation and preserved dependencies
+
+Planning consumption is 32/136/6/378, with correction pool 1/0/0/2 and unchanged
+old protection 6/37/0/117. Add only 0/8/0/46, giving ceilings 39/181/30/543 and pool
+1/8/0/48. This funds at most four compile/D0 pairs at 0/2/0/12 each: one instrumented
+pair plus three contingency pairs. All four would give consumption 32/144/6/426;
+adding old protection gives 38/181/6/543, plus the one remaining preparation unit.
+These are forecasts, not ledger edits. Preserve D1/D2's 0/2/0/10 and twelve
+later-product slots. Stop after sufficient evidence; another pair requires an
+independently dispositioned failure and a concrete correction, never blind replay.
+
+Raise only the shared build/test, shared total and path-original maxima to 34/37/42;
+grouped compile/D0/total to 13/12/33; outside/inside console-host roles to 35/79.
+The latter cover 23/59 already spent, four pairs' 8/20 roles and protected D1/D2's
+4/0 roles. Preserve native seven, D1/D2 four each and ETW twenty: eight spent ETW
+reservations plus four D0s and protected D1/D2 use at most fourteen. Keep separate
+27 immutable lineages and 108-pass bounds, every spent pass and stricter original
+limits. Reuse the existing compile-v7 and D0-v4 intended-operation lineages; each
+has spent one of four metadata passes, leaving three, not four new allowances.
+The eight new originals permit at most 32 collector passes across all phases;
+34 spent plus those 32 and eight protected D1/D2 passes fit 74 of 108. Normal
+one-compile/two-D0 collection uses twelve new passes. Independently prove actual
+remaining capacity before each admission. Four pairs add at most 15,020 seconds
+of summed original compile/D0 work intervals to preceding finite allocations;
+deployment, transport and passive intervals retain their separate bounds. This
+does not enlarge any per-original clock or create a new wall-clock allowance.
+
+Fresh compile stages are v19-v22 and direct roots v8-v11. The first concrete source
+binds v19/v8, updates all four responses, the source-response map, catalog and both
+literal catalog consumers atomically, and leaves all execution guards closed.
+Carry the accepted public-donor historical ctime qualification forward only for
+rows 1-196 of the original direct donor selection. Runtime/host rows 1-190 and
+SyntheticSubject rows 195-196 retain their original paths/descriptors; observer
+rows 191-194 use the newly accepted corresponding compile-stage artifacts.
+Changed observer/local-source content requires its new
+accepted artifact descriptor; it is not a hash exception. Preserve original runtime
+and SyntheticSubject descriptors, fresh length/hash/EOF, strict runtime/host/observer
+within-read full9, existing SyntheticSubject/deployed-catalog qualifications and
+strict local/control inputs. No occupied-root reuse or baseline refresh is granted.
+
+Keep accepted native 0142 and SyntheticSubject 0141 evidence. Only the new observer
+needs artifact acceptance and D0 before D1/D2; unchanged native behavior is not rerun.
+Existing six historical process and platform-host/sole-owned-ETW risk dispositions
+continue within this finite credential-free work on the same hosts. Preserve
+`noExperimentLive=false`, named Jobs/cgroups, exact clocks and full failed charges.
+No new permission, helper, observation system, restore, download, AOT publication,
+account or WAM effect is included. Matching owner capacity decision, accepted Wave/
+safety/protocol and exact source/input/artifact/call/outcome gates precede execution.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation

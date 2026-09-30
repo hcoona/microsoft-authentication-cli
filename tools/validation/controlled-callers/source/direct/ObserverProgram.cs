@@ -52,7 +52,9 @@ internal static class ObserverProgram
             DirectFailure.Stage=4;
             Observation result = slot == Slot.D0 ? EtwObserver.RunCalibration(plan, args[2], workEnd) :
                 EtwObserver.Run(plan, slot, args[2], workEnd);
-            WriteFrame(result.Encode(slot)); return result.Passed ? 0 : 1;
+            WriteFrame(fixture && !result.Passed ?
+                DirectFailure.Capture(result.FailureKind == Fault.None ? Fault.Lifetime : result.FailureKind).Encode() :
+                result.Encode(slot)); return result.Passed ? 0 : 1;
         }
         catch (Exception caught)
         {
@@ -107,7 +109,8 @@ internal static class ObserverProgram
                     Need(frame[4] > 0 && frame[4] <= (byte)Fault.Lifetime); fault = (Fault)frame[4];
                     failure=new((int)fault,1,0,0,0,0,-1);
                 }
-                else if(DirectFailure.Enabled && frame.Length>=4 && frame[..4].SequenceEqual("OWF2"u8))
+                else if(DirectFailure.Enabled && frame.Length>=4 &&
+                    (frame[..4].SequenceEqual("OWF2"u8) || frame[..4].SequenceEqual("OWF3"u8)))
                 { Need(FailureDetail.TryDecode(frame,out FailureDetail detail));failure=detail;fault=(Fault)detail.Fault; }
                 else
                 {
@@ -176,32 +179,51 @@ internal static class ObserverProgram
 
 // Fixed numeric diagnostics for synthetic roles only. No message, path or input value
 // enters this channel. The admitted source and ordinal catalog identify each location.
-internal readonly record struct FailureDetail(int Fault,int Origin,int Stage,int Source,int Line,int InputOrdinal,int OpenError)
+internal readonly record struct FailureDetail(int Fault,int Origin,int Stage,int Source,int Line,int InputOrdinal,int OpenError,
+    uint NativeStatus=uint.MaxValue,int TraceState=-1)
 {
-    internal object Record()=>new {fault=Fault,origin=Origin,stage=Stage,source=Source,line=Line,
-        inputOrdinal=InputOrdinal,openError=OpenError};
+    private bool Extended => Source==4 || NativeStatus!=uint.MaxValue || TraceState!=-1;
+    internal object Record()=>Extended ?
+        new {fault=Fault,origin=Origin,stage=Stage,source=Source,line=Line,inputOrdinal=InputOrdinal,
+            openError=OpenError,nativeStatus=NativeStatus,traceState=TraceState} :
+        new {fault=Fault,origin=Origin,stage=Stage,source=Source,line=Line,inputOrdinal=InputOrdinal,openError=OpenError};
     internal byte[] Encode()
     {
-        byte[] frame=new byte[32];"OWF2"u8.CopyTo(frame);
+        byte[] frame=new byte[Extended?40:32];
+        if(Extended)"OWF3"u8.CopyTo(frame);else "OWF2"u8.CopyTo(frame);
         int[] values=[Fault,Origin,Stage,Source,Line,InputOrdinal,OpenError];
         for(int i=0;i<values.Length;i++)BinaryPrimitives.WriteInt32LittleEndian(frame.AsSpan(4+4*i),values[i]);
+        if(Extended)
+        {
+            BinaryPrimitives.WriteUInt32LittleEndian(frame.AsSpan(32),NativeStatus);
+            BinaryPrimitives.WriteInt32LittleEndian(frame.AsSpan(36),TraceState);
+        }
         return frame;
     }
+    internal static bool ValidTraceState(int state) => state==-1 ||
+        (state is >=0 and <=31 && ((state&2)==0 || (state&1)!=0) &&
+        ((state&4)==0 || (state&2)!=0) && ((state&8)==0 || (state&4)!=0) &&
+        ((state&16)==0 || (state&8)!=0));
     internal static bool TryDecode(ReadOnlySpan<byte> frame,out FailureDetail result)
     {
         result=default;
-        if(frame.Length!=32 || !frame[..4].SequenceEqual("OWF2"u8))return false;
+        bool extended=frame.Length==40 && frame[..4].SequenceEqual("OWF3"u8);
+        if(!extended && (frame.Length!=32 || !frame[..4].SequenceEqual("OWF2"u8)))return false;
         int[] values=new int[7];
         for(int i=0;i<values.Length;i++)values[i]=BinaryPrimitives.ReadInt32LittleEndian(frame[(4+4*i)..]);
-        var value=new FailureDetail(values[0],values[1],values[2],values[3],values[4],values[5],values[6]);
+        var value=new FailureDetail(values[0],values[1],values[2],values[3],values[4],values[5],values[6],
+            extended?BinaryPrimitives.ReadUInt32LittleEndian(frame[32..]):uint.MaxValue,
+            extended?BinaryPrimitives.ReadInt32LittleEndian(frame[36..]):-1);
         if(value.Fault is <1 or >10 || value.Origin!=1 || value.Stage is <1 or >4 ||
-            value.Source is <0 or >3 || (value.Source==0?value.Line!=0:value.Line is <1 or >100000) ||
+            value.Source<0 || value.Source>(extended?4:3) || (value.Source==0?value.Line!=0:value.Line is <1 or >100000) ||
             value.InputOrdinal is <0 or >200 || value.OpenError< -1)return false;
+        if(extended && (value.Stage!=4 || !value.Extended || !ValidTraceState(value.TraceState) ||
+            (value.Source!=4 && value.NativeStatus!=uint.MaxValue)))return false;
         result=value;return true;
     }
     internal static void CheckCodec()
     {
-        // Thirteen pure checks in the existing D0 worker; no I/O or process creation.
+        // Pure codec checks in the existing D0 worker; no I/O or process creation.
         static void Check(bool value){if(!value)throw new SafeFailure(ConfidentialWsl.Fault.Expectation);}
         var known=new FailureDetail(2,1,2,1,88,200,5);
         byte[] frame=known.Encode();Check(TryDecode(frame,out FailureDetail decoded) && decoded==known);
@@ -216,25 +238,51 @@ internal readonly record struct FailureDetail(int Fault,int Origin,int Stage,int
             Check(!TryDecode(bad,out _));
         }
         Check(!TryDecode((known with {Source=0}).Encode(),out _));
+        var trace=new FailureDetail(8,1,4,4,437,0,-1,5,1);
+        byte[] traceFrame=trace.Encode();Check(traceFrame.Length==40);
+        Check(TryDecode(traceFrame,out decoded) && decoded==trace);
+        Check(TryDecode((trace with {NativeStatus=uint.MaxValue,TraceState=31}).Encode(),out _));
+        Check(TryDecode((unknown with {TraceState=0}).Encode(),out _));
+        Check(!TryDecode(traceFrame.AsSpan(0,39),out _));Check(!TryDecode(new byte[41],out _));
+        Check(!TryDecode((trace with {Stage=3}).Encode(),out _));
+        Check(!TryDecode((trace with {Source=3}).Encode(),out _));
+        foreach(int state in new[]{-2,2,4,8,16,32})
+            Check(!TryDecode((trace with {TraceState=state}).Encode(),out _));
+        foreach(int state in new[]{-1,0,1,3,7,15,31})
+            Check(TryDecode((trace with {TraceState=state}).Encode(),out _));
     }
 }
 internal static class DirectFailure
 {
     internal static bool Enabled;
     internal static int Origin,Stage,InputOrdinal;
+    private static readonly object Sync=new();
     private static FailureDetail? first;
+    private static int traceState=-1;
     internal static void Remember(int source,int line)
-    { if(Enabled)first??=new FailureDetail((int)Fault.Admission,Origin,Stage,source,line,InputOrdinal,-1); }
+    { if(Enabled)lock(Sync)first??=new FailureDetail((int)Fault.Admission,Origin,Stage,source,line,InputOrdinal,-1); }
+    internal static void RememberTrace(int line,uint status)
+    { if(Enabled)lock(Sync)first??=new FailureDetail((int)Fault.Trace,Origin,Stage,4,line,InputOrdinal,-1,status); }
+    internal static void RememberTraceStatus(uint status,[CallerLineNumber] int line=0) => RememberTrace(line,status);
+    internal static void SetTraceState(int state)
+    { if(Enabled)lock(Sync)traceState=state; }
     internal static FailureDetail Capture(Fault fault)
     {
-        if(first is FailureDetail retained)return retained;
-        bool native=ConfidentialNativeCaller.FixtureNativePins.FailedCheckSource==
-            ConfidentialNativeCaller.FixtureCheckSource.NativePins;
-        var result=new FailureDetail((int)fault,Origin,Stage,native?2:0,
-            native?ConfidentialNativeCaller.FixtureNativePins.FailedCheckLine:0,InputOrdinal,
-            ConfidentialNativeCaller.FixtureNativePins.OpenError??-1);
-        if(Enabled)first=result;
-        return result;
+        lock(Sync)
+        {
+            if(first is not FailureDetail)
+            {
+                bool native=ConfidentialNativeCaller.FixtureNativePins.FailedCheckSource==
+                    ConfidentialNativeCaller.FixtureCheckSource.NativePins;
+                var captured=new FailureDetail((int)fault,Origin,Stage,native?2:0,
+                    native?ConfidentialNativeCaller.FixtureNativePins.FailedCheckLine:0,InputOrdinal,
+                    ConfidentialNativeCaller.FixtureNativePins.OpenError??-1);
+                if(!Enabled)return captured;
+                first=captured;
+            }
+            FailureDetail result=first.Value;
+            return result.Origin==1 && result.Stage==4 ? result with {TraceState=traceState} : result;
+        }
     }
 }
 

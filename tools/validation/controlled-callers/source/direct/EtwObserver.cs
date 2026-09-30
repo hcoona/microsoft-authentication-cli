@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -21,8 +22,20 @@ internal static class EtwObserver
     private static long WorkEnd, TerminalEnd;
     private sealed class FailureException : Exception
     { internal readonly string Code; internal FailureException(string code) { Code = code; } }
-    private static void Fail(string code) { Interlocked.CompareExchange(ref Failure, code, null); }
-    private static void Require(bool condition, string code) { if (!condition) throw new FailureException(code); }
+    private static void Fail(string code, uint status = uint.MaxValue, [CallerLineNumber] int line = 0)
+    {
+        DirectFailure.RememberTrace(line, status);
+        Interlocked.CompareExchange(ref Failure, code, null);
+    }
+    private static void Require(bool condition, string code, uint status = uint.MaxValue,
+        [CallerLineNumber] int line = 0)
+    {
+        if (!condition)
+        {
+            DirectFailure.RememberTrace(line, status);
+            throw new FailureException(code);
+        }
+    }
     private static uint Remaining(int cap) => (uint)ObserverProgram.Remaining(TerminalEnd, cap);
 
     internal static Observation Run(PublicPlan plan, Slot slot, string nonce, long workEnd)
@@ -46,8 +59,10 @@ internal static class EtwObserver
                 plan.ProductTimeoutSeconds, request.TargetedStopPremiseAccepted);
             Targets.Add(target);
             var device = new StringBuilder(1024);
-            Require(TraceNative.QueryDosDevice("C:", device, device.Capacity) > 0 &&
-                Regex.IsMatch(device.ToString(), @"\A\\Device\\HarddiskVolume[0-9]+\z"), "device-mapping");
+            uint mapping = TraceNative.QueryDosDevice("C:", device, device.Capacity);
+            uint mappingError = mapping == 0 ? unchecked((uint)Marshal.GetLastPInvokeError()) : uint.MaxValue;
+            Require(mapping > 0 && Regex.IsMatch(device.ToString(), @"\A\\Device\\HarddiskVolume[0-9]+\z"),
+                "device-mapping", mappingError);
             DevicePrefix = device.ToString();
             trace = new Trace("azureauth-confidential-wsl-108-" + slot + "-" + nonce, Guid.ParseExact(nonce, "N"));
             trace.Start(); ObserverProgram.Before(readyEnd);
@@ -98,6 +113,7 @@ internal static class EtwObserver
         catch (Exception caught)
         {
             first = caught is SafeFailure safe ? safe.Fault : Fault.Trace;
+            if (DirectFailure.Enabled) DirectFailure.Capture(first);
             TerminalEnd = Math.Min(TerminalEnd, ObserverProgram.Add(ObserverProgram.Now, 10000));
             try { target?.StopIfNeeded(TerminalEnd); } catch { ResourceUncertain = true; }
         }
@@ -110,6 +126,7 @@ internal static class EtwObserver
                         ObserverProgram.Add(ObserverProgram.Now, 9000)));
             }
             catch { if (first == Fault.None) first = Fault.Trace; ResourceUncertain = true; }
+            DirectFailure.SetTraceState(trace?.State ?? 0);
             lock (TargetLock)
             {
                 result.TraceStopped = trace != null && trace.Stopped;
@@ -168,8 +185,10 @@ internal static class EtwObserver
                 TraceNative.IsProcessInJob(TraceNative.GetCurrentProcess(), IntPtr.Zero, out bool member) && member,
                 "calibration-admission");
             var device = new StringBuilder(1024);
-            Require(TraceNative.QueryDosDevice("C:", device, device.Capacity) > 0 &&
-                Regex.IsMatch(device.ToString(), @"\A\\Device\\HarddiskVolume[0-9]+\z"), "device-mapping");
+            uint mapping = TraceNative.QueryDosDevice("C:", device, device.Capacity);
+            uint mappingError = mapping == 0 ? unchecked((uint)Marshal.GetLastPInvokeError()) : uint.MaxValue;
+            Require(mapping > 0 && Regex.IsMatch(device.ToString(), @"\A\\Device\\HarddiskVolume[0-9]+\z"),
+                "device-mapping", mappingError);
             DevicePrefix = device.ToString();
             trace = new Trace("azureauth-confidential-wsl-108-D0-" + nonce, Guid.ParseExact(nonce, "N"));
             trace.Start();
@@ -240,6 +259,7 @@ internal static class EtwObserver
         catch (Exception caught)
         {
             first = caught is SafeFailure safe ? safe.Fault : Fault.Trace;
+            if (DirectFailure.Enabled) DirectFailure.Capture(first);
             TerminalEnd = Math.Min(TerminalEnd, ObserverProgram.Add(ObserverProgram.Now, 10000));
         }
         finally
@@ -249,6 +269,7 @@ internal static class EtwObserver
             try { if (trace != null) trace.StopAndDrain(Math.Min(first == Fault.None ? WorkEnd : TerminalEnd,
                 ObserverProgram.Add(ObserverProgram.Now, 9000))); }
             catch { if (first == Fault.None) first = Fault.Trace; ResourceUncertain = true; }
+            DirectFailure.SetTraceState(trace?.State ?? 0);
             lock (TargetLock)
             {
                 result.TraceStopped = trace != null && trace.Stopped;
@@ -415,10 +436,12 @@ internal static class EtwObserver
         private Thread worker;
         private TraceNative.RecordCallback callback;
         private TraceNative.BufferCallback bufferCallback;
-        private bool owned, stopAttempted, consumerCloseAttempted, finalized;
+        private bool startAttempted, owned, stopAttempted, consumerCloseAttempted, finalized;
         private uint processResult = uint.MaxValue;
         private long copiedBytes;
         internal bool Stopped, Drained;
+        internal int State => (startAttempted ? 1 : 0) | (owned ? 2 : 0) |
+            (stopAttempted ? 4 : 0) | (Stopped ? 8 : 0) | (Drained ? 16 : 0);
         internal int Callbacks, EventsLost = -1, LogBuffersLost = -1, RealTimeBuffersLost = -1;
         internal Trace(string name, Guid guid) { this.name = name; this.guid = guid; }
         internal void Start()
@@ -434,8 +457,11 @@ internal static class EtwObserver
             Marshal.WriteInt32(properties, 68, 1); Marshal.WriteInt32(properties, 72, 0x10000001);
             Marshal.WriteInt32(properties, 116, 120);
             Marshal.Copy(nameBytes, 0, IntPtr.Add(properties, 120), nameBytes.Length);
-            Require(TraceNative.StartTrace(out session, name, properties) == 0, "trace-start"); owned = true;
-            Require(TraceNative.ControlTrace(session, name, properties, 0) == 0, "trace-query");
+            startAttempted = true;
+            uint startStatus = TraceNative.StartTrace(out session, name, properties);
+            Require(startStatus == 0, "trace-start", startStatus); owned = true;
+            uint queryStatus = TraceNative.ControlTrace(session, name, properties, 0);
+            Require(queryStatus == 0, "trace-query", queryStatus);
             int minimum = Marshal.ReadInt32(properties, 52), maximum = Marshal.ReadInt32(properties, 56);
             int allocated = Marshal.ReadInt32(properties, 80);
             Require(Marshal.ReadInt32(properties, 48) == 64 && minimum >= 2 && minimum <= 8 &&
@@ -448,12 +474,17 @@ internal static class EtwObserver
             Marshal.WriteIntPtr(logfile, 400, Marshal.GetFunctionPointerForDelegate(bufferCallback));
             Marshal.WriteIntPtr(logfile, 424, Marshal.GetFunctionPointerForDelegate(callback));
             consumer = TraceNative.OpenTrace(logfile);
-            Require(consumer != ulong.MaxValue, "trace-open");
+            uint openError = consumer == ulong.MaxValue ? unchecked((uint)Marshal.GetLastPInvokeError()) : uint.MaxValue;
+            Require(consumer != ulong.MaxValue, "trace-open", openError);
             ManualResetEvent entered = new ManualResetEvent(false);
             worker = new Thread(delegate()
             {
                 entered.Set(); ulong handle = consumer;
-                try { processResult = TraceNative.ProcessTrace(ref handle, 1, IntPtr.Zero, IntPtr.Zero); }
+                try
+                {
+                    processResult = TraceNative.ProcessTrace(ref handle, 1, IntPtr.Zero, IntPtr.Zero);
+                    if (processResult != 0) DirectFailure.RememberTraceStatus(processResult);
+                }
                 catch { processResult = uint.MaxValue; Fail("consumer-worker"); }
             }); worker.IsBackground = true; worker.Start();
             Require(entered.WaitOne((int)Remaining(1000)), "consumer-ready");
@@ -506,7 +537,7 @@ internal static class EtwObserver
                     LogBuffersLost = Marshal.ReadInt32(properties, 96);
                     RealTimeBuffersLost = Marshal.ReadInt32(properties, 100);
                 }
-                else Fail("trace-stop");
+                else Fail("trace-stop", result);
             }
             if (worker != null)
             {
@@ -529,7 +560,7 @@ internal static class EtwObserver
             if (consumer == ulong.MaxValue || consumerCloseAttempted) return;
             consumerCloseAttempted = true;
             uint result = TraceNative.CloseTrace(consumer);
-            Require(result == 0 || result == 7007, "consumer-close");
+            Require(result == 0 || result == 7007, "consumer-close", result);
         }
         private void FreeIfFinished()
         {

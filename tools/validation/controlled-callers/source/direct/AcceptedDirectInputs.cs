@@ -19,7 +19,7 @@ using SyntheticBaseline=ConfidentialNativeCaller.SyntheticNativeBaseline;
 namespace ConfidentialWsl;
 internal sealed class AcceptedDirectInputs : IDisposable
 {
-    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-direct-v7";
+    internal const string Root=@"C:\Temp\azureauth-windows-slice-108\confidential-direct-v8";
     private readonly DirectNativePins pins;
     private readonly Slot slot;
     private readonly string nonce,scope;
