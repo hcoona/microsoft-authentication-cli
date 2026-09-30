@@ -1021,3 +1021,43 @@ subjects. No persistent privilege/group/ACL/policy/registry/service/task change,
 real account access, product elevation, download, installation or old-session
 cleanup follows. Retained artifacts and existing historical risk decisions remain
 unchanged; elevation success does not establish ETW or scenario success.
+
+## Pre-UAC Input-Check Continuation
+
+The matching Wave permits ten bounded Linux compilation/native input-check pairs
+and one replacement retained entry after the failed first activation. The owner
+accepts the finite increment 10/11/0/26 and aggregate ceilings 49/192/30/569;
+Linux/Windows preparation ceilings become 29/20 and outside/inside console-host
+ceilings 46/80. Preserve the entire old correction balance 0/4/0/23 and all
+protected work. Entry-specific maxima are eleven compilations including the spent
+first one, ten input checks and two activations including the failed first one.
+Other original, grouped scenario, ETW and passive limits do not increase.
+
+Apply the [exact continuation protocol](experiments/windows-slice-validation.md#pre-uac-input-check-continuation)
+and ordinary independent gates before any compile or check. A check runs only the
+unchanged pre-UAC input-admission path with finite numeric statuses and exits before
+Launch. It has no UAC, child, Job, relay, account, credential or ETW operation. Its
+thirty-second external interval includes termination. The Linux controller and
+normal native return require scoped evidence; killing an interop proxy, complete
+streams alone or a timed-out call cannot establish native completion. Any new
+unresolved application lifetime stops continuation. The already accepted initial
+interop-host limitation remains distinct from application completion.
+
+Carry the six existing historical process/interference dispositions and the
+platform-host/sole-owned-ETW persistence decisions into only this finite allocation
+on the same hosts. Preserve unresolved status, full failed charges and
+`noExperimentLive=false`; no new application, Job, Linux or elevated-relay uncertainty
+is accepted. A check creates no ETW, and the retained entry does not itself grant a
+D0 attempt. This extension expires with the current Wave and cannot transfer.
+
+Use fresh dedicated check/compilation evidence roots. Do not reopen old outputs,
+repair occupied payloads or refresh input baselines. A successful check must bind
+the exact unchanged four-file activation payload; it writes no activation marker.
+A failed pair needs independent outcome and scoped-completion acceptance plus a
+concrete correction before another pair. Stop after sufficient evidence.
+Only after accepted actual input-check success and complete launch/shutdown
+preparation may the one replacement activation request fresh readiness. Its full
+charge is spent even on failure; no further prompt or deadline renewal follows.
+The original retained-entry 86,400-second absolute cap, owned closure, synthetic-only
+permission and all individual test clocks remain unchanged. No persistent permission
+or account changes, restore, download, installation, publication or release follow.

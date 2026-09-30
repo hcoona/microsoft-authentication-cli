@@ -24215,6 +24215,153 @@ artifact acceptance and new successful D0. A retained entry cannot bypass source
 artifact, accounting, exact-call or outcome review, or authorize product/real-account
 elevation, persistent host permission changes or unrelated commands.
 
+### Pre-UAC Input-Check Continuation
+
+The first retained-entry activation ended before the UAC dispatch. Its accepted
+source/artifact correspondence and completed native status 125 place it in the
+pre-Launch path; no elevated entry or privileged deadline began. Multiple guards
+shared that status, so the retained result alone does not identify the rejected
+predicate. Preserve the spent compilation/activation, failed result and scoped
+completion evidence. This continuation is prospective, not a replay or refund.
+
+After matching Wave and safety acceptance, permit ten compilation/input-check
+pairs, one necessary pair and nine contingencies, and one replacement activation.
+A later pair requires independent acceptance of the preceding failure and scoped
+completion plus a concrete correction. An unchanged failure may not be replayed.
+Stop when the required input evidence is sufficient; unused slots do not require
+execution. A failed replacement activation stops without another UAC prompt.
+
+#### Exact noninteractive subject and effect boundary
+
+Add only fixed `--input-check` behavior to the inert native entry, retaining its
+existing launch, entry and context-check modes. The check accepts the same root,
+nonce and manifest-hash roles as `--launch`, evaluates the same ordered argument,
+manifest, held-input and self-image predicates, and returns before Launch, Context
+or Run. Distinct finite numeric statuses may locate the first failed guard without
+printing actual paths, arguments, environment or exception text. Do not relax a
+predicate on an unobserved path-case or other hypothesis. Any concrete source fix
+requires its ordinary independent review and source/artifact correspondence.
+
+The check creates no native child, Job, token observation, relay, permit, launcher
+journal, entry marker, ready marker, stop marker, account query or ETW session.
+Reuse the same pinned four-file cross-host payload (the Windows entry executable,
+holder and manifest, plus Linux input metadata) for the successful check and
+subsequent activation;
+retain their exact accepted identities/content and original baselines. A check
+writes its bounded evidence exclusively to a separate fresh Linux action root.
+Before activation, revalidate that exact payload without overwriting or silently
+rebinding it. A source/artifact/input correction invalidates the earlier successful
+check and requires a separately charged check of the corrected payload before
+attendance. Failed payload/evidence roots remain intact; the next corrected pair
+uses fresh roots. Unrelated occupied catalogs are not adopted by this section.
+
+Use the existing fixed Python holder's narrowly separated input-check transport,
+not a new command service or arbitrary executable interface. Admit the four Linux
+executable roles, fixed original relay, runtime directory and System32 WSL role
+under the existing exact seven-input metadata selection and terminal-alias rules.
+No infrastructure survey or additional input role is authorized. The check uses
+only the original non-elevated relay and must not enter the retained-holder path.
+Source guards remain closed in Git; activation of exact local copies requires
+independent admission. A separately accepted compile uses the existing one-source,
+seven Linux SDK/compiler and three Framework input recipe, x64 C# 5 winexe,
+150/145/100-second compile clocks, no restore and no output execution.
+
+#### Time, observation and scoped completion
+
+Each check is one separately named systemd user service with creation-time Linux
+containment, no restart and one native GUI invocation. Its total external cap is
+thirty seconds, including service startup, input verification, execution, stream
+drain, termination and transport return. The source/call gate must allocate these
+reserves explicitly; no inner timer may restart or exceed the outer deadline.
+Pinning retains its existing finite file/EOF/identity rules and per-file caps.
+No new side-effecting preparation is a passive metadata check.
+
+Require empty native stdout/stderr on normal return, retaining at most sixteen KiB
+per stream plus one overflow-byte probe to detect an unexpected output. Record
+only bounded status, timing, exact admitted input references, EOFs and scoped Linux
+completion; all check evidence together is at most one MiB, with each fixed JSON
+record at most sixty-four KiB. Before dispatch, independently admit exact exclusive
+output names, length/hash/identity references, finite read/write counts, original
+charge and fixed collector. Use existing separate passive capacities and reserve
+the final entry collector before replacement activation.
+
+Accept check success only with status zero from the exact accepted check-return
+path, complete transport/empty streams and scoped Linux completion. The source and
+artifact review must establish that this path creates no native descendant or
+background worker and disposes its held inputs before normal process return.
+Classify a nonzero result using its exact source path; a bare proxy exit or absent
+output is insufficient. Forced proxy termination, timeout, missing transport or
+unknown native outcome cannot establish application completion and stops further
+experimental work under the ordinary policy. This adds no lifetime waiver. The
+possible initial interop console host retains only its already accepted unmeasured
+identity/exit/termination qualification; never apply that qualification to the GUI
+application or another owned process. Any new scoped lifetime uncertainty stops.
+
+A successful input check proves only the observed pre-UAC predicates in that
+existing environment. It does not prove UAC, retained entry, elevated relay, ETW
+or D0/D1/D2 success. Finish artifact/payload/launch and automatic-closure gates,
+then request a fresh owner readiness response for the one replacement activation.
+Earlier readiness is spent. Its privilege starts only on actual successful entry,
+with the same absolute 86,400-second interval including review/idle/suspend and
+closure reserves. No check starts or renews that interval. The original activation
+and context-check clocks, ownership and closure obligations remain unchanged.
+
+#### Finite capacity and protected continuation
+
+The recovered baseline after the failed activation is 33/140/6/403, correction
+pool 0/4/0/23, thirteen Linux plus twenty Windows preparations, outside/inside
+console-host consumption 27/70. Keep every spent charge and historical unknown.
+The following new allocation is separate from that entire old correction pool:
+
+| New entry work | Maximum originals | Preparation | Build/test | Publication | Synthetic |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Linux entry compilations | 10 | 10 | 0 | 0 | 0 |
+| Noninteractive input checks | 10 | 0 | 10 | 0 | 20 |
+| Replacement activation | 1 | 0 | 1 | 0 | 6 |
+| New total | 21 | 10 | 11 | 0 | 26 |
+
+This increment gives aggregate ceilings 49/192/30/569, correction pool 10/15/0/49
+and host-preparation ceilings 29 Linux/20 Windows. After all twenty-one new
+originals, consumption would be 43/151/6/429 and the old correction balance would
+still be 0/4/0/23. The six protected Linux preparations still fit 29. Old protected
+work remains 6/37/0/117, including existing D1/D2 and later-product reservations;
+none is transferred to the new entry work. Unspent publication capacity stays
+separate and is not a grant to publish.
+
+Raise outside/inside console maxima from 35/79 to 46/80 for exactly ten possible
+check hosts and the one replacement's outside/inside hosts. Baseline consumption
+27/70 becomes at most 38/71 after this new work, preserving all eight/nine
+preexisting unused console allowances, including four protected D1/D2 outside
+roles. Each check reserves one native GUI role and one outside host in its full
+two synthetic units even if fewer are observed. The replacement retains the full
+four Windows-role/two-console allocation of the original entry. Counts are spent
+allowances, not evidence that all possible roles were created; failures refund none.
+
+The entry-only submaxima are eleven compilations including the first spent compile,
+ten input checks, and two activations including the first failed activation: at
+most twenty-three entry originals overall. They are separate from and do not
+change the managed/controlled shared-original maxima 34/37/42, grouped
+compile/native/D0/D1/D2 maxima 13/7/12/4/4, grouped total 33 or ETW twenty. No input
+check or activation consumes or creates an ETW attempt. Every later D0 keeps its
+own remaining allocation/reservation; D1/D2 remain blocked until accepted D0.
+The 27 immutable passive-lineage and 108 metadata/collector-pass maxima and their
+cumulative byte/time limits remain. Revised source, nonce, number or destination
+cannot reset an intended-operation lineage. Prove remaining intersecting capacity
+before every call; the ten-pair allowance is not a promise that every combination
+fits its stricter local bounds.
+
+Reserve distinct, fresh numbered compile/check actions and one replacement action
+in the exact source/call gates. Bind each pair's accepted source, artifact and
+payload correspondence; no action identifier or occupied tree can be reused.
+Retain native 0142, SyntheticSubject 0141 and observer 0155 evidence. Do not rebuild
+or reopen the occupied direct catalog merely to exercise the entry. Carry all six
+historical process/interference dispositions and the platform-host/sole-owned-ETW
+persistence decisions into this finite allocation on the same hosts, retaining
+`noExperimentLive=false`. No new application, Job, Linux or elevated-relay lifetime
+exception, account effect or permanent permission change follows. All old failed
+charges, independent source/artifact/accounting/call/outcome gates and intentional
+retention remain; this grant expires with the current Wave.
+
 ### Future Passive Metadata and Collection
 
 The following finite exception applies only to the at most 27 new intended-operation
