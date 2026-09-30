@@ -24081,13 +24081,102 @@ and each original stream at most 16 KiB plus one overflow byte. Retain at most
 1 MiB of start/context/final evidence. Stop-marker checks are at most once per
 second; they are coordination, not repeated platform observations. Bind exact
 exclusive output names and finite operation counts in the source/call review.
-The only new infrastructure admission is a single fixed metadata/content pass
-over the selected entry inputs, including the existing System32 `wsl.exe`; no
-process/account/trace/host survey or alternative-path discovery is permitted.
-Use the existing passive cumulative limits and prove remaining capacity before
-that pass. Actual context/entry observations belong to the activation, not a
+The only new infrastructure admission is the fixed selection of seven entry inputs:
+the four Linux executable roles below, the existing System32 `wsl.exe`, the original
+relay socket and the selected user runtime directory. Apply the existing maximum
+of four metadata attempts per immutable intended-operation lineage, including the
+first failed terminal-alias rejection and its full spent charge. Each additional
+pass requires an accepted cause disposition, corrected source and exact-call review;
+there is no automatic retry. No process/account/trace/host survey or alternative-path
+discovery is permitted. Use the existing passive cumulative limits and prove remaining
+capacity before each admitted pass. Actual context/entry observations belong to the activation, not a
 new passive allowance. Keep all files, failures and spent charges without repair,
 overwrite, automatic replay or cleanup.
+
+#### Fixed entry implementation
+
+The inert [native entry](../../../tools/validation/RetainedElevationEntry.cs) has
+three fixed modes in the same executable: the non-elevated `--launch` UAC caller,
+`--entry`, and the sole `--context-check` child. This avoids a separate PowerShell
+script without changing the four reserved Windows roles or either console allowance.
+The caller uses `ShellExecuteEx` with `runas` and `SEE_MASK_NOCLOSEPROCESS`, retains
+the returned native handle through exit, and has one 120-second UAC-request window.
+A nonce-bound permit expires on both native tick time and UTC; a late elevated
+entry rejects it before creating the WSL child. Cancellation, failure or an
+unreturned request stops without retry. An unreturned request is explicitly an
+unknown native outcome, never evidence that no process was created.
+
+The entry establishes its named Job before creation, verifies held process identity,
+and resumes its WSL child only after Job membership is observed. The fixed context
+child writes PID/creation time and its token Boolean, then waits on a nonce-named
+event. The entry opens and validates that incarnation and image before releasing
+it, and observes native exit. A false elevation result still receives the same
+native-lifetime handling. Native startup has sixty seconds; the context proxy has
+ten seconds of work plus five seconds of cleanup within its fifteen-second cap.
+
+The [fixed Python helper](../../../tools/validation/retained_elevation_holder.py)
+provides the holder and the original non-elevated transport. The transport is a
+separately named systemd user service and binds the original relay explicitly.
+Before its only Windows start it verifies the fixed manifest, executable, helper,
+and four admitted Linux executables: `/usr/bin/env`, `/usr/bin/python3.14`,
+`/usr/bin/systemd-run` and `/usr/bin/systemctl`. These exact paths are inputs,
+not a discovery or fallback list. Its fixed metadata record supplies full identity,
+length and content pins; there is no manager-environment substitution. Only these
+four Linux roles allow up to four terminal symlink hops, with each link text and
+normalized path limited to 1,024 bytes, the complete alias metadata to 2 KiB and
+the complete per-role metadata to 4 KiB. Each resolved Linux executable has a
+32-MiB content ceiling, accommodating shared executable targets without adding an
+input role; the `wsl.exe` ceiling remains 2 MiB. Traverse ancestors without following links;
+validate raw link syntax before normalization. Reject empty/dot components and trailing
+slashes; allow relative leading `..` only within the current held parent chain, with
+at least one ordinary suffix component and no later `..`. Absolute links permit no
+up-level components or repeated initial slash. Walk every supplied suffix ancestor;
+hold each alias and the resolved regular file, binding alias identity/link text and
+resolved identity/length/SHA-256/EOF. Require strict descriptor and named-path stability
+within the read and identical mapping/content pins at transport admission. No generic
+reader, Windows input or product pinning rule is relaxed. The holder
+is launched under the newly elevated relay in its own named scope, records that
+socket and its own process/cgroup identity, makes its one context check, and then
+accepts only stop/deadline. It dispatches no other executable or script.
+
+Ready and stop markers are exclusively named directories within the fresh entry
+root. Directory creation publishes a complete marker atomically; associated JSON
+or text evidence is closed before readiness publication. The root and manifest
+bind their nonce. Stop creation is idempotent and never overwrites an output.
+Each role checks the stop marker at most once per second while retained; short
+startup loops poll only their fixed readiness marker and already-held handles.
+
+On stop, the original transport invokes `systemctl --user stop` for only the exact
+entry scope, with seven seconds including termination, before native Job fallback.
+After the original launcher has returned, one three-second `systemctl show` of that
+same scope plus its recorded cgroup and relay observations establish the scoped
+closure result. No shared WSL service or other unit is selected. Incomplete scope,
+native handle, stream or relay evidence makes the result fail; Linux proxy exit
+alone cannot establish native closure. The holder uses `CLOCK_BOOTTIME` and the
+entry's fixed UTC deadline, requesting stop twenty seconds before expiry; the
+native entry reserves at least its final ten seconds. Native `GetTickCount64`
+includes suspend time. No timer renews the elevated entry's 86,400-second cap.
+
+The original transport permits at most 185 seconds to publish readiness and 86,540
+seconds before final cleanup. Its finite stop/query/child-wait reserves fit the
+86,570-second service limit, five-second service stop allowance, and 86,580-second
+external transport cap. These non-elevated transport allowances do not extend the
+entry deadline. Retained loops have at most 86,400 holder or 86,550 transport
+iterations, at one-second intervals; native loops additionally check their fixed
+absolute tick deadline. Each stream retains at most 16 KiB, with one overflow-byte
+probe on the Python transports. Native combined capture is stricter at 16 KiB.
+Each fixed evidence record is at most 64 KiB; the declared start/context/readiness/
+final records and stream files remain below the one-MiB activation ceiling. Exact
+admission binds their exclusive names, operation counts and actual selected lengths.
+
+The inert [entry compiler](../../../tools/validation/run_retained_elevation_build.py)
+is a narrow adaptation of the accepted Linux observer recipe: one source, the same
+seven SDK/compiler and three Framework content pins, C# 5, x64, deterministic
+`winexe`, no restore and no output execution. The one `0157` preparation changes
+32/139/6/397 to 33/139/6/397 and Linux preparation consumption from twelve to thirteen
+within the accepted 19/20 host ceilings. All three sources remain inert until exact
+local activation is independently admitted; compiling or invoking repository sources
+does not grant that admission. Source acceptance establishes no runtime success.
 
 #### Capacity and continuation boundaries
 
