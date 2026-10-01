@@ -433,6 +433,14 @@ prove resource equivalence, tenant precedence, provider behavior, or lifecycle c
 | Explicit Profile file and compatibility candidate | Same parser for user-provided and eventually provisioned files; no implicit selection, hot reread, external URL, inherited configuration, or upstream cache import. Show external ownership without claiming Microsoft endorsement. | Admission scenarios, contract examples, and later bounded consent/audit/branding validation under the external Profile gate. |
 | Output and optional local telemetry | One complete result with matching 0/1 status, or recognizable transport failure. Only validated success exposes a token; stderr has no token/email/identifier/provider text. Local telemetry opt-in, overflow, or sink failure cannot alter authentication. | Contract and orchestration scenarios with synthetic secret markers; no production credential fixture. |
 
+The [native selected-account preparation](../research/experiments/windows-slice-validation.md#native-windows-selected-account-acceptance-preparation)
+defines a first real product observation for the personal-account and subsequent
+invocation rows above. Its native creation-handle/Job route does not consume the
+direct WSL observer, so ETW calibration is not a prerequisite for preparing those
+two native cases. The preparation has no account-execution authority and supplies
+no runtime result. Keep the actual WSL, work-account and other evidence obligations
+above open independently.
+
 The [local host predicates](../designs/windows-ado-authentication.md#local-windows-host-admission)
 do not prove continuing eligibility, every alternate-launch origin or WAM health.
 Controlled results establish branching and suppressed effects; historical account/AOT
