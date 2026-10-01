@@ -24102,9 +24102,9 @@ UAC caller, `--entry`, and the sole `--context-check` child. The separately allo
 script without changing the four reserved Windows roles or either console allowance.
 Before dispatch, the native entry reports the first rejected existing predicate
 with a fixed nonzero exit status. The original holder already retains that status
-as `proxyExit`; no additional output, native query, process or observation is added.
-The checks retain their order and exact comparisons, including case-sensitive
-image-path equality. No rejected value is emitted. These statuses distinguish a
+as `proxyExit`; the status capture adds no output or process. The checks retain
+their order, with the restricted self-image spelling and object gate below.
+No rejected value is emitted. These statuses distinguish a
 diagnostic branch; they do not establish its underlying cause or authorize another
 attempt. The mapping applies to a directly observed native invocation; the UAC
 caller's existing final journal retains its elevated child's status separately.
@@ -24132,15 +24132,40 @@ caller's existing final journal retains its elevated child's status separately.
 | 123 | Current process handle validity |
 | 124 | Current process image-path inequality that also fails OrdinalIgnoreCase |
 | 125 | Inert execution guard |
-| 126 | Current process image-path inequality that matches OrdinalIgnoreCase |
+| 126 | OrdinalIgnoreCase-equivalent self-image inequality rejected by the ASCII spelling or file-identity gate |
 
-Status 126 classifies a rejected self-image comparison using
-`String.Equals(actualImage, image, StringComparison.OrdinalIgnoreCase)` on the
-same single queried string. Exact ordinal equality alone permits continuation;
-both mismatch classes remain nonzero failures. This diagnostic adds no query,
-normalization, raw path output or case-insensitive acceptance. It does not establish
-file-object equivalence or the cause of an earlier rejection. Other process-image
-comparisons retain their original predicates.
+Main queries its current process image once. Exact ordinal equality retains its
+existing acceptance path, without another open or identity query. For inequality,
+`String.Equals(actualImage, image, StringComparison.OrdinalIgnoreCase)` remains
+only the first classification: false returns 124. Before any alternate open, require
+equal length, ASCII characters on both operands, and differences only between
+ASCII uppercase/lowercase equivalents. Separators, digits and punctuation must be
+identical; no Unicode folding, prefix/component substitution or normalization is
+admitted. Failure of this restriction returns 126.
+
+For that restricted spelling variant only, open one additional read-only file
+with `FileShare.Read`, under the existing direct/reparse and 2-MiB length checks.
+This adds at most five ancestor/file attribute checks and one length-property read,
+with no additional file-content read. Hold this file concurrently with the already
+hash-verified `ownImage`. Make at most two fixed
+[`GetFileInformationByHandleEx`](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getfileinformationbyhandleex)
+queries with `FileIdInfo` (18), each using the 24-byte
+[`FILE_ID_INFO`](https://learn.microsoft.com/en-us/windows/win32/api/winbase/ns-winbase-file_id_info)
+layout. Require exact equality of the 64-bit volume serial and all 128 file-ID bits.
+Reject the all-zero and all-one file-ID sentinels documented by the
+[file-ID contract](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/98860416-1caf-4c80-a9ab-8d61e1ccf5a5).
+An unequal or unusable identity returns 126; failed opens, unsupported/failed
+queries and other exceptions retain status 1. Dispose the additional handle on
+every path, before input-check success or lifecycle dispatch. All work remains
+inside the original check/startup clocks, with no retry or fallback query.
+
+Case-insensitive string equivalence alone never permits continuation. The additional
+gate establishes that concurrently held handles name the same pinned file under
+the accepted workstation/API premise; it does not verify executable memory or
+hostile concurrent mutation. It does not establish the spelling or object identity
+of earlier rejected attempts. Main alone receives this correction. Launch's
+entry-image and Run's context-image comparisons retain their original predicates
+and separate untested gates. No raw path or file-ID output is added.
 
 Exceptions and dispatched lifecycle failures retain status 1. These diagnostic
 statuses do not relax an admission predicate or grant another attempt. The separate
@@ -24318,11 +24343,12 @@ seven Linux SDK/compiler and three Framework input recipe, x64 C# 5 winexe,
 The inert native implementation adds `--input-check` to the accepted fixed-mode
 predicate and returns zero after the same held manifest, executable, holder and
 self-image checks, before Launch, Context or Run. Its using scopes dispose their
-inputs on return. The fixed guard-status mapping above identifies a failed check;
-no image-path normalization, case-insensitive acceptance or diagnostic input dump
-is added. The rejection-only OrdinalIgnoreCase classification above uses the existing
-query result and cannot turn either mismatch into success. Source/artifact acceptance
-must retain this early-return correspondence.
+inputs on return. The fixed guard-status mapping and restricted self-image
+spelling/object gate above apply identically to this check and Main's launch
+admission. No image-path normalization, string-only case-insensitive acceptance or
+diagnostic input dump is added. The extra read-only handle is disposed before this
+return. Source/artifact acceptance must retain the early-return correspondence and
+the restricted spelling, concurrent identity, finite-operation and cleanup gates.
 
 The existing Python holder adds only a separate `--input-check` dispatch with six
 fixed operands: check slot, nonce, manifest hash, infrastructure hash, configuration
