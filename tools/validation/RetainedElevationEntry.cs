@@ -29,7 +29,7 @@ internal static class RetainedElevationEntry
         try
         {
             // Fixed first-failed-check statuses survive the existing proxyExit capture.
-            // Keep all predicates and their order; never emit rejected input values.
+            // Preserve ordered input admission; never emit rejected input values.
             if (args.Length != 4) return 101;
             if (args[0] != "--launch" && args[0] != "--entry" && args[0] != "--context-check" &&
                 args[0] != "--input-check") return 102;
@@ -66,7 +66,17 @@ internal static class RetainedElevationEntry
                             if (current.IsInvalid) return 123;
                             string actualImage = ProcessImage(current);
                             if (actualImage != image)
-                                return String.Equals(actualImage, image, StringComparison.OrdinalIgnoreCase) ? 126 : 124;
+                            {
+                                if (!String.Equals(actualImage, image, StringComparison.OrdinalIgnoreCase)) return 124;
+                                if (!AsciiCaseVariant(actualImage, image)) return 126;
+                                AssertDirect(actualImage);
+                                using (FileStream actualFile = new FileStream(actualImage,
+                                    FileMode.Open, FileAccess.Read, FileShare.Read))
+                                {
+                                    if (actualFile.Length > 2097152) throw new InvalidOperationException("Input size");
+                                    if (!SameFileIdentity(ownImage, actualFile)) return 126;
+                                }
+                            }
                         }
                     }
                     // Input validation ends before any launch, token, child or marker operation.
@@ -415,6 +425,34 @@ internal static class RetainedElevationEntry
         Check(QueryFullProcessImageName(process, 0, text, ref size));
         return text.ToString();
     }
+    private static bool AsciiCaseVariant(string actual, string expected)
+    {
+        if (actual.Length != expected.Length) return false;
+        for (int index = 0; index < actual.Length; index++)
+        {
+            char left = actual[index], right = expected[index];
+            if (left > 127 || right > 127) return false;
+            if (left >= 'A' && left <= 'Z') left = (char)(left + ('a' - 'A'));
+            if (right >= 'A' && right <= 'Z') right = (char)(right + ('a' - 'A'));
+            if (left != right) return false;
+        }
+        return true;
+    }
+    private static bool SameFileIdentity(FileStream pinned, FileStream actual)
+    {
+        FileIdentity left, right;
+        Check(GetFileInformationByHandleEx(pinned.SafeFileHandle, 18, out left, 24));
+        Check(GetFileInformationByHandleEx(actual.SafeFileHandle, 18, out right, 24));
+        return ValidFileIdentity(left) && ValidFileIdentity(right) &&
+            left.VolumeSerialNumber == right.VolumeSerialNumber &&
+            left.FileIdLow == right.FileIdLow && left.FileIdHigh == right.FileIdHigh;
+    }
+    private static bool ValidFileIdentity(FileIdentity value)
+    {
+        // Unsupported or nonunique file-ID sentinels cannot establish identity.
+        return (value.FileIdLow != 0 || value.FileIdHigh != 0) &&
+            (value.FileIdLow != ulong.MaxValue || value.FileIdHigh != ulong.MaxValue);
+    }
     private static void WaitForMarker(string root, string leaf, string nonce, long deadline,
         SafeFileHandle process, Pipe output, Pipe error, ref int captured)
     {
@@ -728,6 +766,9 @@ internal static class RetainedElevationEntry
         public void Dispose() { file.Dispose(); }
     }
 
+    // FILE_ID_INFO: one 64-bit volume number followed by all 128 file-ID bits.
+    [StructLayout(LayoutKind.Sequential)] private struct FileIdentity
+    { public ulong VolumeSerialNumber, FileIdLow, FileIdHigh; }
     [StructLayout(LayoutKind.Sequential)] private struct SecurityAttributes
     { public int Length; public IntPtr Descriptor; [MarshalAs(UnmanagedType.Bool)] public bool Inherit; }
     [StructLayout(LayoutKind.Sequential)] private struct ProcessInformation
@@ -788,6 +829,8 @@ internal static class RetainedElevationEntry
     private static extern bool IsProcessInJob(IntPtr process, SafeFileHandle job, out bool inJob);
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     private static extern bool QueryFullProcessImageName(SafeFileHandle process, uint flags, StringBuilder name, ref uint size);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool GetFileInformationByHandleEx(SafeFileHandle file, int kind, out FileIdentity identity, uint size);
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool InitializeProcThreadAttributeList(IntPtr list, int count, int flags, ref IntPtr size);
     [DllImport("kernel32.dll", SetLastError = true)]

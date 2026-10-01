@@ -1035,7 +1035,7 @@ Other original, grouped scenario, ETW and passive limits do not increase.
 
 Apply the [exact continuation protocol](experiments/windows-slice-validation.md#pre-uac-input-check-continuation)
 and ordinary independent gates before any compile or check. A check runs only the
-unchanged pre-UAC input-admission path with finite numeric statuses and exits before
+same pre-UAC input-admission path used by launch, with finite numeric statuses, and exits before
 Launch. It has no UAC, child, Job, relay, account, credential or ETW operation. Its
 thirty-second external interval includes termination. The Linux controller and
 normal native return require scoped evidence; killing an interop proxy, complete
