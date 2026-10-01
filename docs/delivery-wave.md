@@ -851,6 +851,14 @@ through the existing 40-byte worker pipe and 4,096-byte final record. Preserve E
 configuration, success predicates, clocks and process roles. No additional query,
 trace, helper or observation is part of the diagnostic correction.
 
+For the post-query shape rejection, permit a specialized failure frame containing
+the six already-returned public numeric buffer/mode/flag values, with explicit
+availability and the original first-failure location/lifecycle. Keep the same
+40-byte channel and 4,096-byte record caps. No acceptance predicate, ETW configuration,
+query scope, attempt or elevation allowance changes. Inert source preparation and
+review use existing technical-continuation authority; a new artifact or execution
+still needs its ordinary exact gates, and no further entry activation is granted.
+
 Add only 0/8/0/46 to the correction pool, giving aggregate ceilings 39/181/30/543.
 Together with its remaining two synthetic units, this funds at most four separately
 admitted compile/D0 pairs, one necessary pair and three contingency pairs, at

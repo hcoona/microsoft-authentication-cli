@@ -95,8 +95,8 @@ def required_inputs(fixture):
     value.update(DIRECT_SYNTHETIC_INPUTS if fixture else DIRECT_PRODUCT_INPUTS)
     return value
 
-ROOT_WINDOWS = r"C:\Temp\azureauth-windows-slice-108\confidential-direct-v8"
-ROOT_LINUX = "/mnt/c/Temp/azureauth-windows-slice-108/confidential-direct-v8"
+ROOT_WINDOWS = r"C:\Temp\azureauth-windows-slice-108\confidential-direct-v9"
+ROOT_LINUX = "/mnt/c/Temp/azureauth-windows-slice-108/confidential-direct-v9"
 PUBLIC_FIELDS = frozenset(("schema", "scope", "slot", "nonce", "protocolSha256",
     "callerSha256", "expectedExit", "productTimeoutSeconds", "soleLaunchIdentityPremiseAccepted",
     "targetedStopPremiseAccepted", "accountEffectsAdmitted", "calibrationAccepted", "pins", "privateReference"))
@@ -810,9 +810,10 @@ def validate_failure(value):
     if value is None:
         return
     fields = {"fault", "origin", "stage", "source", "line", "inputOrdinal", "openError"}
-    require(type(value) is dict and value.keys() in (fields, fields | {"nativeStatus", "traceState"}))
+    trace_fields = fields | {"nativeStatus", "traceState"}
+    require(type(value) is dict and value.keys() in (fields, trace_fields, trace_fields | {"traceQuery"}))
     extended = "nativeStatus" in value
-    require(all(type(item) is int for item in value.values()))
+    require(all(type(item) is int for key, item in value.items() if key != "traceQuery"))
     require(0 <= value["fault"] <= 10 and value["origin"] in (1, 2) and
         0 <= value["stage"] <= 8 and 0 <= value["source"] <= (4 if extended else 3) and
         (value["line"] == 0 if value["source"] == 0 else 1 <= value["line"] <= 100000) and
@@ -829,6 +830,18 @@ def validate_failure(value):
             (not state & 2 or state & 1) and (not state & 4 or state & 2) and
             (not state & 8 or state & 4) and (not state & 16 or state & 8)))
         require(value["source"] == 4 or value["nativeStatus"] != 4294967295 or state != -1)
+    if "traceQuery" in value:
+        query = value["traceQuery"]
+        require(value["fault"] == 8 and value["origin"] == 1 and value["stage"] == 4 and
+            value["source"] == 4 and value["inputOrdinal"] == 0 and value["openError"] == -1 and
+            value["nativeStatus"] == 4294967295 and state >= 0 and state & 3 == 3)
+        require(type(query) is dict and query.keys() == {"available", "bufferSize", "minimumBuffers",
+            "maximumBuffers", "numberOfBuffers", "logFileMode", "enableFlags"})
+        require(all(type(item) is int and 0 <= item <= 4294967295 for item in query.values()) and
+            query["available"] == 1)
+        require(not (query["bufferSize"] == 64 and 2 <= query["minimumBuffers"] <= 8 and
+            query["minimumBuffers"] <= query["maximumBuffers"] <= 8 and 2 <= query["numberOfBuffers"] <= 8 and
+            query["logFileMode"] == 0x12000100 and query["enableFlags"] == 0x10000001))
 
 
 def validate_observer(value, plan):
