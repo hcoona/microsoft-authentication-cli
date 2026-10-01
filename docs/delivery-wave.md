@@ -977,6 +977,37 @@ source and exact artifact/input/accounting/call/outcome gates before execution.
 No account, persistent permission, download, restore, publication, installation,
 signing, release or real-product elevation expansion is included.
 
+**Standing historical ctime qualification:** The repository owner accepts
+historical Linux ctime drift for already admitted input roles within this finite
+credential-free grant on the designated hosts. Applying this decision to another
+admitted input does not require a new owner risk decision solely for ctime drift.
+This supersedes earlier per-input owner-decision boundaries for that historical
+signal; it does not enlarge an input set, experiment or effects boundary.
+
+Keep original descriptors and all other historical identity predicates. Require a
+fresh exact admitted length/SHA-256/EOF read and the existing within-read checks;
+this decision creates no new within-read relaxation. Retain original and actual
+observations separately. The owner accepts loss of the historical ctime-only
+signal without continuously held historical handles, not a benign cause, changed
+content or uninterrupted integrity. Exact application points and input membership
+still require matching accepted protocols and ordinary independent source, input,
+accounting, call and outcome gates. Those gates apply the standing decision rather
+than requesting it again per file.
+
+For the same successful input-check 0164 four-file payload, permit at most one new
+local-control qualification readback for replacement 0179 at 0/0/0/0 and thirty
+seconds total under the
+[closed qualification protocol](research/experiments/windows-slice-validation.md#entry-payload-historical-ctime-qualification).
+Preserve the spent strict and diagnostic admissions. Only complete qualified
+four-file success with unchanged source/artifact/payload bytes may retain the
+successful check's correspondence. Any actual source/artifact/input correction
+still requires a separately charged successful fresh check. Failure grants no
+retry, occupied repair, extra metadata pass or additional quota.
+
+Preserve all protected capacity, failed charges, uncertainty and existing
+readiness, activation, absolute 86,400-second and closure gates. This decision
+expires with the current grant and adds no account or persistent permission effect.
+
 **Reserved future real-effects capacity:** Reserve at most 24 final-product launches,
 24 account-discovery calls, 24 eligible selected-account silent calls and 13
 permitted interactive calls for the later real-environment acceptance proposal.

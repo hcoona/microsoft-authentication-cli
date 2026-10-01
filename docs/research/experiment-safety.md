@@ -1061,3 +1061,32 @@ charge is spent even on failure; no further prompt or deadline renewal follows.
 The original retained-entry 86,400-second absolute cap, owned closure, synthetic-only
 permission and all individual test clocks remain unchanged. No persistent permission
 or account changes, restore, download, installation, publication or release follow.
+
+### Standing Historical ctime Qualification
+
+The matching Wave records the owner's standing acceptance of historical Linux
+ctime drift for already admitted input roles in the current finite credential-free
+grant. Another admitted file with that same drift does not require another owner
+risk decision. This replaces per-input risk escalation for this historical signal;
+new input/effect/attempt authority still requires its ordinary accepted records.
+
+Preserve original descriptors, all other historical identity fields and fresh
+exact admitted length/SHA-256/EOF validation. Existing within-read checks retain
+their separate accepted rules; this standing decision adds no within-read
+relaxation. Retain original and actual observations without baseline replacement.
+Do not infer a benign cause, continuous integrity or current content agreement
+from a ctime mismatch alone. Exact historical comparison points remain defined
+and independently reviewed in the applicable protocol and source.
+
+For the retained-entry payload, apply the
+[closed qualification protocol](experiments/windows-slice-validation.md#entry-payload-historical-ctime-qualification)
+to the original successful check 0164's four files before replacement 0179. This
+qualifies only their historical ctime comparison in the preceding unchanged-payload
+requirement; all other correspondence and full9 within-read stability remain.
+Allow at most one separately admitted local-control qualification readback,
+0/0/0/0 and thirty seconds including termination, after accepted failure/triage
+and matching canonical/source/call gates. Failure grants no further readback or
+readiness. Actual source/artifact/input correction still requires a new charged
+successful check. No compile, metadata survey, Windows start or quota is added.
+All lifetime, evidence, readiness and closure rules remain. The standing decision
+expires with the current grant; this readback is limited to this replacement.
