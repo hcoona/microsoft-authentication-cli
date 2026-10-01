@@ -24404,7 +24404,8 @@ The controller verifies the existing four Linux executable roles using their
 accepted bounded terminal-alias/held-file recipe. Apply the standing historical
 ctime decision only to these existing role records: all historical fields except
 ctime, alias targets, length, hash, EOF and observed-read counts must match, each
-identity is single-link, and the pin routine retains strict current held/named
+identity has a positive link count equal to its original descriptor, and the pin
+routine retains strict current held/named
 full9 equality including ctime. Keep expected/observed records separately in one
 bounded infrastructure receipt with a per-role qualification flag. No fresh
 baseline, extra target read, metadata pass or new infrastructure role is added.
@@ -24429,6 +24430,90 @@ native return records completed observation separately from whether closure pass
 Unexpected streams are counted but their contents are not retained. Each stream
 is capped at 16 KiB. Named service/group completion and exact fresh-output collection
 remain separate acceptance obligations; collectors do not repeat process/relay queries.
+
+#### Pre-query reconciliation correction allowance
+
+The matching Wave/safety allowance adds at most two fresh reconciliation originals,
+using fresh Linux controller/config/evidence/service slots 0182 and, conditionally,
+0183, while retaining the native Windows input/result root closure-observer-0181.
+Preserve failed 0181, its full charge, spent collection and immutable evidence. Do not
+read its old outputs again or substitute a second collection. Source-only correction of
+the historical infrastructure comparison preserves each original positive link count,
+including multiply linked admitted executables, rather than demanding one link. Every
+non-ctime field, alias, content/EOF and strict within-read full9 rule remains mandatory.
+
+Each controller original retains the thirty-second complete interval, at most twenty
+seconds for native observation and at least five seconds for cleanup. The native
+observer artifact may be retained only with unchanged accepted source/artifact/dependency
+correspondence; this allowance funds no native compilation. Updated fixed holder/config
+slot, root, count and source/protocol bindings require independent acceptance before use.
+The exact original selector and original non-elevated invocation relay remain unchanged.
+No process/relay discovery, termination or broader query is added.
+
+Adopt only the original accepted RetainedClosureObserver.exe and selector.txt inputs
+at the fixed Windows root. Its native artifact requires that literal root; do not move
+it to a different native root or infer a recompile. Preserve every existing file,
+including the old holder, without invoking, replacing or repairing that holder. The
+only permitted new write there is one native-result.txt created by the unchanged
+native FileMode.CreateNew-before-query path. Do not add a preflight output probe,
+remove a collision or overwrite any result. Frozen absence is historical evidence
+only, not an occupancy reservation or proof of present absence.
+
+The corrected holder must separate its own fresh Linux root and code/config pins
+from the fixed native root, argv and working directory. Bind original input descriptors
+from the successful frozen deployment/readback, original selector provenance and the
+unchanged accepted source/artifact/dependencies. Within each charged original's existing
+clock and read caps, freshly validate only those two retained native inputs against
+original length/SHA-256/EOF and every non-ctime identity field. Standing historical
+ctime qualification retains its exact scope; preserve strict current full9 reads and
+original/actual observations separately. There were no continuously held historical
+handles, and matching bytes imply neither benign history nor uninterrupted integrity.
+All other old roots/outputs remain excluded. Independent exact source/input/clock and
+call gates must accept this closed input/result split before use.
+
+The second original is a contingency only after independent outcome and scoped-completion
+acceptance proves the first failed before any native observer creation or subject-relay
+sample, and a concrete supported correction is accepted. Generic errors, missing facts
+or killed proxies cannot satisfy this condition. Across both originals, there may be
+at most one native observer start and one subject-relay sample. Any observed subject,
+query failure after observation, uncertain lifetime or unresolved pre-query boundary
+stops further reconciliation without replay or inferred risk acceptance. Stop after
+sufficient evidence and do not spend unused contingency capacity.
+
+Charge each full original 0/1/0/2, including a failed start, and reserve its sole later
+collector before submission: one pass, thirty seconds, at most eight MiB including
+snapshot writes. Collect only that original's fixed fresh Linux outputs, bound
+own-service evidence and its sole newly created native result at the fixed Windows
+root after the original and all transports end. Never recollect a prior original's
+outputs. Bind native-result provenance to the sole admitted native invocation through
+the unchanged nonce/selector, fresh controller records and ended transports; ambiguous,
+missing or non-normal evidence stops closure acceptance. A native start or result
+creation, including an occupied-output rejection, disallows the contingency even if
+no process query completed. Source/input/call and subsequent
+outcome/closure review remain distinct; configured timers are not observed termination.
+
+From the post-0181 consumed 37/145/6/417 and correction pool 6/10/0/35, slot 0182 gives
+37/146/6/419 and 6/9/0/33; a permitted slot 0183 gives 37/147/6/421 and 6/8/0/31.
+Outside roles increment from 32 to 33 and, conditionally, 34; inside remains 71.
+After accepted closure, the still-planned corrected-entry compile/check/activation
+adds only 1/2/0/8. Its exact schemas and call gates must use the actual accepted
+closure predecessor's counts, never a fabricated fixed baseline or refunded attempt.
+Worst final consumption is 38/149/6/429, pool 5/6/0/23, combined remaining 11/43/0/140,
+Linux preparation 18/29, Windows 20/20, outside 36/46 and inside 72/80. Preserve old
+correction 0/4/0/23 and protection 6/37/0/117, including D1/D2 and later-product work.
+
+Complete preparatory maxima become 2/5/0/14 and seven passive passes, 270 seconds and
+48 MiB. At the original recovered baseline this gives at most 54 passive passes,
+12,060 reserved seconds and 1,774,157,996 reserved bytes, within 108/32,400/216 GiB.
+Grouped scenario, ETW, metadata, publication and all stricter per-original/lineage
+limits do not increase. Preserve all historical uncertainties and noExperimentLive=false.
+
+This bounded allowance supersedes only the original complete sequence's single-original
+reconciliation limit and its associated preparatory/pass maxima. It does not renew the
+original privileged deadline, grant another entry activation/UAC, permit dependent work
+before accepted closure or waive unresolved native/relay lifetime. Required owner scope
+acceptance applies once to this allowance; its ordinary technical steps and narrowly
+conditioned contingency require no repeated permission.
 
 #### Corrected entry and shared deadline
 

@@ -1103,6 +1103,33 @@ accepted sequence. Separate owner decisions remain necessary for actual expansio
 of its effects/capacity or disposition of uncertainty beyond the declared current
 reconciliation. Standing historical ctime acceptance remains unchanged.
 
+### Pre-Query Reconciliation Correction Allowance
+
+The matching Wave permits at most two additional bounded reconciliation controller
+originals under the [exact allowance](experiments/windows-slice-validation.md#pre-query-reconciliation-correction-allowance).
+The second requires independently accepted failure before native observer creation or
+subject-relay observation, complete scoped completion and a concrete supported correction.
+Across them, at most one native observer may start and one subject relay may be sampled.
+Unknown or observed subject state does not permit another observation. Preserve every
+failed charge, spent collector and occupied root; no replay, recollection or cleanup follows.
+Only the original accepted native executable and selector may be adopted unchanged,
+with at most one exclusive native-result creation in their fixed Windows root. The owner
+accepts reuse without continuously held historical inputs. Preserve original descriptors,
+fresh exact length/hash/EOF and all non-ctime fields; apply standing historical ctime
+qualification only at the admitted comparisons and retain strict within-read full9.
+Neither matching content nor frozen absence proves continuous integrity or present
+absence. Fresh Linux controllers must not invoke, alter or repair the old holder.
+Existing files and prior outputs remain untouched; the native CreateNew-before-query
+guard supplies occupancy rejection without a new output probe.
+
+Use only the existing correction pool, at most 0/2/0/4 and two separate thirty-second,
+eight-MiB passive passes. Complete sequence maxima become 2/5/0/14 and seven passes,
+270 seconds and 48 MiB; no aggregate ceiling, protected work, ETW or metadata limit
+increases. Accepted current closure still precedes dependent entry execution. Original
+absolute deadline, one further entry/UAC maximum and all ownership obligations remain.
+This is additional finite attempt authority, not residual-risk acceptance. Standing ctime
+and already admitted infrastructure matching require no renewed owner risk decision.
+
 ### Standing Historical ctime Qualification
 
 The matching Wave records the owner's standing acceptance of historical Linux

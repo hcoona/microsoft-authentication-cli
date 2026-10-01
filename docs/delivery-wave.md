@@ -1028,6 +1028,40 @@ reviews still apply; they are not additional owner decisions. Request actual hum
 attendance only when needed, and escalate a genuine scope/effects/budget change or
 unresolved ownership that this sequence cannot reconcile.
 
+**Pre-query reconciliation correction allowance:** For the same complete recovery,
+permit at most two additional thirty-second reconciliation controller originals from
+existing unprotected correction capacity: one corrected original and one contingency.
+The contingency requires independently accepted failure before any native observer
+creation or subject-relay observation, complete scoped closure and a supported correction.
+Across both, permit at most one native observer start and one subject-relay sample.
+If a subject was observed or the prerequisite cannot be established, no contingency
+follows. Stop after sufficient evidence. Preserve the spent original and collector;
+use fresh Linux controller/evidence roots, never replay or recollect occupied originals.
+
+Permit only the unchanged original closure payload's accepted native executable and
+selector as retained inputs, and at most one exclusively created native result in that
+fixed Windows root. The owner accepts this narrow adoption without continuously held
+historical handles. Preserve every existing file; never invoke or modify the old holder,
+overwrite an output, repair a payload, refresh a baseline or adopt unrelated state.
+Require fresh exact input validation and the native CreateNew-before-query occupancy
+guard. Historical absence is not present absence. This is the sole exception to the
+complete sequence's fresh-payload rule; query scope and native artifact stay unchanged.
+
+Fund at most 0/2/0/4 and two passive passes, each thirty seconds and eight MiB, without
+increasing aggregate ceilings or transferring the old 0/4/0/23 reserve or protected
+6/37/0/117. This replaces only the preceding complete sequence's preparatory maximum
+with 2/5/0/14 and its evidence maximum with seven passes, 270 seconds and 48 MiB.
+Outside hosts may reach at most 36/46; inside remains at most 72/80. All other scenario,
+ETW, metadata, publication, host and protected-work limits remain. The matching
+[protocol allowance](research/experiments/windows-slice-validation.md#pre-query-reconciliation-correction-allowance)
+owns exact prerequisites, accounting and fresh-slot source/input/call/outcome gates.
+
+Preserve the original absolute privileged deadline, current-closure prerequisite and
+previously approved one further entry; add no native recompile, UAC, target query type,
+termination, relay connection, shared-service action, account effect or lifetime waiver.
+This is one finite correction allowance, including its narrowly conditioned contingency;
+technical preparation and review inside it require no further owner decision.
+
 **Standing historical ctime qualification:** The repository owner accepts
 historical Linux ctime drift for already admitted input roles within this finite
 credential-free grant on the designated hosts. Applying this decision to another
