@@ -51,7 +51,8 @@ def configure(config):
     if set(config) not in (keys, keys | {'unit'}):
         raise ValueError('Configuration keys')
     if config['schema'] not in ('windows-retained-elevation-build-v1',
-                                'windows-retained-closure-build-v1'):
+                                'windows-retained-closure-build-v1',
+                                'windows-retained-elevation-build-v2'):
         raise ValueError('Configuration schema')
     select_slot(config['slot'])
     for key in ('acceptedCommit', 'candidateCommit', 'candidateTree'):
@@ -80,6 +81,11 @@ def configure(config):
         if SLOT != '0180' or BEFORE != [36, 144, 6, 415] or \
                 before != {'linux': [16, 29], 'windows': [20, 20]}:
             raise ValueError('Finite closure compilation baseline')
+        return
+    if config['schema'] == 'windows-retained-elevation-build-v2':
+        if SLOT != '0165' or BEFORE != [37, 146, 6, 419] or \
+                before != {'linux': [17, 29], 'windows': [20, 20]}:
+            raise ValueError('Corrected entry compilation baseline')
         return
     if SLOT == '0180':
         raise ValueError('Closure slot requires its dedicated schema')

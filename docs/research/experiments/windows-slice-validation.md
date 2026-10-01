@@ -24589,6 +24589,111 @@ activation grants no new prompt, retry, deadline or uncertain-lifetime exception
 Successful entry/context acceptance permits only separately admitted existing synthetic
 D0 work; D1/D2 remain blocked until accepted D0.
 
+#### Corrected image admission, ownership evidence and deadline implementation
+
+The corrected [native entry](../../../tools/validation/RetainedElevationEntry.cs),
+[holder](../../../tools/validation/retained_elevation_holder.py) and
+[compiler](../../../tools/validation/run_retained_elevation_build.py) implement the
+supported image-consistency and early-failure evidence corrections. Independent
+triage established the static guard inconsistency and missing exit observations;
+it did not establish which predicate caused original 0179 to fail. These sources
+remain inert in Git. Source-only preparation is permitted before reconciliation;
+compilation, input check and activation remain dependent on accepted current closure.
+
+Use one image-admission routine in the Main self check, Launch's directly returned
+entry-handle check and Run's context check. Preserve exact ordinal equality as the
+fast path. A spelling difference must still pass ordinal-ignore-case classification,
+same-length ASCII-only case variation, bounded no-reparse path checks and equality
+of the volume number and all 128 file-ID bits from concurrently held files. Reuse the
+already hash-pinned own-image stream. Each guard has one process-image query; only
+its restricted mismatch path adds one read/share-read alternate file open, one
+bounded length observation, at most five direct-path attribute checks and two
+24-byte file-ID queries. The alternate stream is disposed on every path, including
+length or ID failure. No path normalization, Unicode case folding, string-only
+acceptance, additional content read or retry follows. Context creation-time equality
+remains a separate mandatory condition before ownership is validated.
+
+Fixed lifecycle rejection reasons distinguish spelling class (124), ASCII restriction
+(126), held identity mismatch (129), context creation mismatch (140), Win32 API failure
+(141) and file I/O failure (142). Main maps identity reason 129 to its existing 126
+status; other established pre-UAC statuses retain their meaning. New deadline syntax
+and remaining-budget statuses are 127 and 128; the input-check transport recognizes
+these finite normal returns. Lifecycle failure still returns 1. Diagnostics include
+no raw queried path, file ID, account/token value or exception message.
+
+The launcher keeps the process handle directly returned by its sole ShellExecuteEx
+request through a bounded failure path even when image validation rejects. It requests
+only the existing task-scoped stop and attempts held-handle exit/exit-code observation
+before disposal within the remaining ten-second cleanup budget. It acquires no new
+termination right. The final record separately reports returned handle, image admission,
+nullable native exit observation, optional exit code, lifetime-known flag and rejection.
+Failure to observe exit remains explicit uncertainty; disposing a handle is not exit.
+
+The elevated entry separately records context handle acquisition, creation match,
+validated ownership, release request and nullable observed native exit/exit code.
+Only validated task ownership permits release or the existing termination fallback.
+A reused PID or rejected/unknown object does not grant termination. Final context
+sampling follows the owned WSL/Job cleanup. A bounded ownership checkpoint is attempted
+on early failure even when readiness or the ordinary final record was never produced.
+Missing/failed evidence remains unknown; neither Job-zero nor proxy exit proves the
+context or entry exited. Persistence and post-persistence transport completion remain
+independent acceptance obligations; these changes do not promise successful cleanup
+or complete evidence on every failure path.
+
+The hash-bound ASCII LF manifest now has thirteen fields. It retains existing fields
+1 through 9 after schema `azureauth-retained-elevation-v2`, places the original absolute
+privileged deadline as decimal FILETIME in field 10, then `END` and an empty final
+field. Field numbers are zero-based. Exact input admission must prove this is original
+0179's deadline from frozen entry-start/holder evidence, not a newly selected time.
+All input-check, launcher, entry, context and holder consumers use that same manifest
+hash and deadline. Launcher/entry/ready records retain its exact FILETIME and the
+transport compares entry-ready and holder-start values before accepting readiness.
+
+Main requires at least 220 seconds remaining for input check or launch, 90 for entry
+and 20 for context, with no allowance above the original 86,400-second cap. Recheck
+remaining startup time after all input/self-image work, after the launch permit read,
+and before WSL child creation. The native elapsed clock is the nondecreasing maximum
+of suspend-inclusive ticks and wall-clock elapsed time; total/work bounds are capped
+by the original deadline and retain ten seconds for cleanup. Wall-clock rollback
+cannot renew the interval. Scope RuntimeMaxSec derives from that remaining work bound,
+with the existing termination limits. No new DateTime-now-plus-24-hours deadline exists.
+
+The holder validates its deadline argument equals the manifest. The original transport
+uses both BOOTTIME and realtime deadline bounds, requires the complete startup reserve
+before launch and requests shutdown with thirty seconds remaining. Its finite terminal
+operations and the exact outer tool/service command must fit the same absolute deadline,
+including queued, review, idle and suspend time. These source clocks do not guarantee
+kernel return or historical completion timing. Insufficient time refuses admission;
+forced or incomplete termination remains uncertain and stops dependent execution.
+The final transport receipt is provisional. After its successful persistence and close,
+zero return additionally requires no received signal and both deadline comparisons still
+passing. Do not overwrite the receipt after that check. Actual normal return, completed
+transport and independently accepted scoped closure remain separate outcome obligations.
+
+On an early failure without readiness, the transport may read its fresh holder-start
+receipt once after exact scope shutdown/query. Bind nonce, manifest hash, original
+deadline, scope, cgroup shape and distinct relay before using that receipt for the
+existing exact relay-completion observation. Missing or inconsistent receipt leaves
+relay state unknown, rather than the old unobserved false default. A present relay is
+false, observed absence is true and query failure is unknown. No process/relay survey,
+alternative endpoint, removal or old-0179-output collection is added. Include the new
+ownership and infrastructure receipts in the future exact final collector's fixed list.
+
+The successor input-check and activation qualify historical ctime only for the same
+four admitted Linux infrastructure roles, using the preceding closure path's bounded
+comparison. Preserve fresh content/alias/EOF predicates and strict within-read full9
+checks. Retain expected/observed records and per-role qualification flags in separate
+bounded receipts. No baseline replacement or new per-file owner decision follows.
+
+The dedicated compiler-v2 schema selects only the unused entry compile slot 0165:
+37/146/6/419 to 38/146/6/419, Linux preparations 17 to 18 of 29, Windows unchanged
+20 of 20. Input-check-v2 selects only its paired fresh 0166 payload:
+38/146/6/419 to 38/147/6/421 and outside hosts 33 to 34. These baselines require the
+accepted primary 0182 reconciliation; old schemas or unused slots cannot bypass that
+prerequisite. The one further activation retains its separate full 0/1/0/6 charge.
+All source/artifact/input/exact-call/outcome gates, old reserve and shared ceilings
+remain; no runtime result or readiness is established by accepting these sources.
+
 #### One accounting and review envelope
 
 The maximum preparatory charge is 2/3/0/10: observer compile/invocation 1/1/0/2,

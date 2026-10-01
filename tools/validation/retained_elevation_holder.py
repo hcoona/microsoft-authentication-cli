@@ -256,12 +256,14 @@ def main(nonce, manifest_hash, deadline_filetime):
             not re.fullmatch(r'[0-9a-f]{64}', manifest_hash):
         raise ValueError('Entry arguments')
     inputs = read(root / 'entry-inputs.txt', 65536, manifest_hash).decode('ascii').split('\n')
-    if len(inputs) != 12 or inputs[0] != 'azureauth-retained-elevation-v1' or inputs[1] != nonce or \
-            inputs[10:] != ['END', ''] or int(inputs[4]) != os.getuid() or \
+    if len(inputs) != 13 or inputs[0] != 'azureauth-retained-elevation-v2' or inputs[1] != nonce or \
+            inputs[11:] != ['END', ''] or int(inputs[4]) != os.getuid() or \
             inputs[9] != '/var/tmp/azureauth-windows-slice-108/' + root.name:
         raise ValueError('Entry manifest')
     read(root / 'retained_elevation_holder.py', 65536, inputs[6])
     read(root / 'RetainedElevationEntry.exe', 2097152, inputs[7])
+    if deadline_filetime != inputs[10]:
+        raise ValueError('Original deadline binding')
     deadline_ns = (int(deadline_filetime) - EPOCH) * 100
     remaining = (deadline_ns - time.time_ns()) / 1e9
     if not 20 < remaining <= 86400:
@@ -365,7 +367,8 @@ def input_check_configuration(config, slot):
             'artifactReviewSha256', 'holderSha256', 'manifestSha256', 'infrastructureSha256',
             'nonce', 'countsBefore', 'countsAfter', 'outsideHostsBefore', 'outsideHostsAfter'}
     if not isinstance(config, dict) or set(config) != keys or \
-            config['schema'] != 'windows-retained-entry-input-check-v1' or \
+            config['schema'] not in ('windows-retained-entry-input-check-v1',
+                                     'windows-retained-entry-input-check-v2') or \
             slot not in INPUT_CHECK_SLOTS or config['slot'] != slot:
         raise ValueError('Input-check configuration')
     if not isinstance(config['acceptedCommit'], str) or not re.fullmatch(r'[0-9a-f]{40}', config['acceptedCommit']):
@@ -381,16 +384,22 @@ def input_check_configuration(config, slot):
     if any(not isinstance(v, list) or len(v) != 4 or any(type(n) is not int or n < 0 for n in v)
            for v in (before, after)):
         raise ValueError('Input-check counts')
-    pair_index = INPUT_CHECK_SLOTS.index(slot)
-    checks_spent = before[1] - 140
-    if not 0 <= checks_spent <= pair_index or \
-            before != [34 + pair_index, 140 + checks_spent, 6, 403 + 2 * checks_spent] or \
-            after != [before[0], before[1] + 1, before[2], before[3] + 2]:
-        raise ValueError('Input-check debit')
-    if type(config['outsideHostsBefore']) is not int or type(config['outsideHostsAfter']) is not int or \
-            config['outsideHostsBefore'] != 27 + checks_spent or \
-            config['outsideHostsAfter'] != 28 + checks_spent or config['outsideHostsAfter'] > 46:
-        raise ValueError('Input-check console debit')
+    if config['schema'] == 'windows-retained-entry-input-check-v2':
+        if slot != '0166' or before != [38, 146, 6, 419] or after != [38, 147, 6, 421] or \
+                type(config['outsideHostsBefore']) is not int or type(config['outsideHostsAfter']) is not int or \
+                (config['outsideHostsBefore'], config['outsideHostsAfter']) != (33, 34):
+            raise ValueError('Corrected entry exact input-check debit')
+    else:
+        pair_index = INPUT_CHECK_SLOTS.index(slot)
+        checks_spent = before[1] - 140
+        if not 0 <= checks_spent <= pair_index or \
+                before != [34 + pair_index, 140 + checks_spent, 6, 403 + 2 * checks_spent] or \
+                after != [before[0], before[1] + 1, before[2], before[3] + 2]:
+            raise ValueError('Input-check debit')
+        if type(config['outsideHostsBefore']) is not int or type(config['outsideHostsAfter']) is not int or \
+                config['outsideHostsBefore'] != 27 + checks_spent or \
+                config['outsideHostsAfter'] != 28 + checks_spent or config['outsideHostsAfter'] > 46:
+            raise ValueError('Input-check console debit')
     return config
 
 
@@ -445,18 +454,23 @@ def input_check(slot, nonce, manifest_hash, infrastructure_hash, config_hash, ex
                                            'startTicks': int(fields[19]), 'cgroup': groups[0],
                                            'configSha256': config_hash, 'deadlineBootNs': expires_ns})
         inputs = read(root / 'entry-inputs.txt', 65536, manifest_hash).decode('ascii').split('\n')
-        if len(inputs) != 12 or inputs[0] != 'azureauth-retained-elevation-v1' or inputs[1] != nonce or \
-                inputs[10:] != ['END', ''] or inputs[8] != os.environ.get('WSL_INTEROP') or \
+        if len(inputs) != 13 or inputs[0] != 'azureauth-retained-elevation-v2' or inputs[1] != nonce or \
+                inputs[11:] != ['END', ''] or inputs[8] != os.environ.get('WSL_INTEROP') or \
                 int(inputs[4]) != os.getuid() or inputs[6] != config['holderSha256'] or \
                 inputs[9] != '/var/tmp/azureauth-windows-slice-108/' + root.name:
             raise ValueError('Input-check manifest binding')
+        entry_deadline(inputs[10], 220)
         infrastructure = json.loads(read(direct(inputs[9]) / 'infrastructure.json', 65536, infrastructure_hash))
         if set(infrastructure) != set(LINUX_EXECUTABLES):
             raise ValueError('Input-check infrastructure selection')
+        input_observations = {}
         for name, pin in infrastructure.items():
             work_budget()
-            if linux_executable_pin(name, work_budget) != pin:
+            actual = linux_executable_pin(name, work_budget)
+            if not closure_infrastructure_equal(pin, actual):
                 raise ValueError('Input-check infrastructure identity')
+            input_observations[name] = {'expected': pin, 'observed': actual, 'historicalCtimeQualified': pin != actual}
+        record(local / 'input-infrastructure-observations.json', input_observations)
         work_budget()
         read(root / 'RetainedElevationEntry.exe', 2097152, inputs[7])
         work_budget()
@@ -513,7 +527,7 @@ def input_check(slot, nonce, manifest_hash, infrastructure_hash, config_hash, ex
         code = None if child is None else child.poll()
         normal = returned and not forced and not signal_seen and all(eof) and not any(data) and \
             code in (0, 1, 101, 102, 103, 104, 105, 110, 111, 112, 113, 114, 115, 116,
-                     117, 118, 119, 120, 121, 122, 123, 124, 125, 126)
+                     117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128)
         result = {'slot': slot, 'nonce': nonce, 'configSha256': config_hash,
                   'manifestSha256': manifest_hash, 'proxyStarted': child is not None,
                   'proxyExit': code, 'eof': eof, 'observedBytes': [len(v) for v in data],
@@ -528,6 +542,16 @@ def input_check(slot, nonce, manifest_hash, infrastructure_hash, config_hash, ex
     return 0 if result['passed'] and not signal_seen and boot() < deadline else 1
 
 
+def entry_deadline(filetime, minimum):
+    if not isinstance(filetime, str) or not re.fullmatch(r'[1-9][0-9]{16,18}', filetime):
+        raise ValueError('Original deadline syntax')
+    absolute = (int(filetime) - EPOCH) * 100
+    remaining = (absolute - time.time_ns()) / 1000000000
+    if not minimum <= remaining <= 86400:
+        raise ValueError('Original deadline remaining budget')
+    return absolute, boot() + remaining
+
+
 def transport(nonce, manifest_hash, infrastructure_hash):
     began = boot()
     root = direct(Path(__file__).absolute().parent)
@@ -535,10 +559,12 @@ def transport(nonce, manifest_hash, infrastructure_hash):
             not re.fullmatch(r'[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}', nonce):
         raise ValueError('Transport arguments')
     inputs = read(root / 'entry-inputs.txt', 65536, manifest_hash).decode('ascii').split('\n')
-    if len(inputs) != 12 or inputs[0] != 'azureauth-retained-elevation-v1' or inputs[1] != nonce or \
-            inputs[10:] != ['END', ''] or inputs[9] != '/var/tmp/azureauth-windows-slice-108/' + root.name or \
+    if len(inputs) != 13 or inputs[0] != 'azureauth-retained-elevation-v2' or inputs[1] != nonce or \
+            inputs[11:] != ['END', ''] or inputs[9] != '/var/tmp/azureauth-windows-slice-108/' + root.name or \
             inputs[8] != os.environ.get('WSL_INTEROP') or int(inputs[4]) != os.getuid():
         raise ValueError('Original transport manifest')
+    absolute_ns, terminal = entry_deadline(inputs[10], 220)
+    terminal = min(terminal, began + 86550)
     local = direct(inputs[9])
     group = [line[3:] for line in virtual('/proc/self/cgroup').splitlines() if line.startswith('0::')]
     unit = 'azureauth-elevation-transport-108-' + nonce + '.service'
@@ -550,9 +576,13 @@ def transport(nonce, manifest_hash, infrastructure_hash):
     def check_infrastructure_clock():
         if boot() >= began + 30:
             raise TimeoutError('Infrastructure verification deadline')
+    transport_observations = {}
     for name, pin in infrastructure.items():
-        if linux_executable_pin(name, check_infrastructure_clock) != pin:
+        actual = linux_executable_pin(name, check_infrastructure_clock)
+        if not closure_infrastructure_equal(pin, actual):
             raise ValueError('Infrastructure identity')
+        transport_observations[name] = {'expected': pin, 'observed': actual, 'historicalCtimeQualified': pin != actual}
+    record(local / 'transport-infrastructure-observations.json', transport_observations)
     read(root / 'retained_elevation_holder.py', 65536, inputs[6])
     read(root / 'RetainedElevationEntry.exe', 2097152, inputs[7])
     fields = virtual('/proc/self/stat').rsplit(')', 1)[1].split()
@@ -572,7 +602,7 @@ def transport(nonce, manifest_hash, infrastructure_hash):
     stop_control = None
     scope_control = None
     group_empty = False
-    relay_absent = False
+    relay_absent = None
     signaled = False
     def signal_stop(_signum, _frame):
         nonlocal signaled
@@ -608,6 +638,7 @@ def transport(nonce, manifest_hash, infrastructure_hash):
                 holder = json.loads(read(local / 'holder-start.json', 4096))
                 if ready_record.get('nonce') != nonce or ready_record.get('contextElevated') is not True or \
                         ready_record.get('contextNativeExited') is not True or holder.get('nonce') != nonce or \
+                        ready_record.get('deadlineFileTime') != inputs[10] or holder.get('deadlineFileTime') != inputs[10] or \
                         holder.get('scope') != scope or not re.fullmatch(r'/run/WSL/[1-9][0-9]*_interop', holder['relay']) or \
                         holder['relay'] == inputs[8] or not holder['cgroup'].startswith('/') or \
                         '..' in Path(holder['cgroup']).parts or Path(holder['cgroup']).name != scope:
@@ -620,7 +651,7 @@ def transport(nonce, manifest_hash, infrastructure_hash):
                 print('Retained entry ready; fixed child elevation and native exit observed.', flush=True)
             if not ready and now >= began + 185:
                 raise TimeoutError('Entry readiness deadline')
-            if now >= began + 86530 or signaled:
+            if now >= terminal - 30 or time.time_ns() >= absolute_ns - 30000000000 or signaled:
                 request_stop(root, nonce)
             if stop(root, nonce) and not stopping:
                 stopping = True
@@ -629,7 +660,7 @@ def transport(nonce, manifest_hash, infrastructure_hash):
                                                 'stop', scope], 7)
             if child.poll() is not None and all(eof):
                 break
-            if now >= began + 86540:
+            if now >= terminal - 5 or time.time_ns() >= absolute_ns - 5000000000:
                 raise TimeoutError('Original transport deadline')
             time.sleep(1)
         if child.poll() != 0 or not all(eof) or not ready:
@@ -644,7 +675,7 @@ def transport(nonce, manifest_hash, infrastructure_hash):
         if child is not None:
             try:
                 if child.poll() is None:
-                    child.wait(timeout=min(10, max(0.001, began + 86550 - boot())))
+                    child.wait(timeout=min(10, max(0.001, min(terminal - boot(), (absolute_ns - time.time_ns()) / 1000000000) - 3)))
             except BaseException as error:
                 failure = failure or type(error).__name__
             if child.poll() is None:
@@ -661,6 +692,19 @@ def transport(nonce, manifest_hash, infrastructure_hash):
             values = dict(line.split('=', 1) for line in scope_control['output'].splitlines() if '=' in line)
             group_empty = values.get('LoadState') == 'not-found' or \
                 values.get('ActiveState') == 'inactive' and values.get('ControlGroup') == ''
+        if holder is None:
+            try:
+                early_holder = json.loads(read(local / 'holder-start.json', 4096))
+                if early_holder.get('nonce') != nonce or early_holder.get('scope') != scope or \
+                        early_holder.get('manifestSha256') != manifest_hash or \
+                        early_holder.get('deadlineFileTime') != inputs[10] or \
+                        not re.fullmatch(r'/run/WSL/[1-9][0-9]*_interop', early_holder.get('relay', '')) or \
+                        early_holder['relay'] == inputs[8] or not early_holder.get('cgroup', '').startswith('/') or \
+                        '..' in Path(early_holder['cgroup']).parts or Path(early_holder['cgroup']).name != scope:
+                    raise ValueError('Early holder binding')
+                holder = early_holder
+            except BaseException as error:
+                failure = failure or type(error).__name__
         if holder is not None:
             path = Path('/sys/fs/cgroup') / holder['cgroup'].lstrip('/') / 'cgroup.events'
             try:
@@ -670,8 +714,12 @@ def transport(nonce, manifest_hash, infrastructure_hash):
                 pass
             try:
                 Path(holder['relay']).lstat()
+                relay_absent = False
             except FileNotFoundError:
                 relay_absent = True
+            except BaseException as error:
+                relay_absent = None
+                failure = failure or type(error).__name__
         for stream in streams:
             stream.close()
         for index, name in enumerate(('launcher.stdout.bin', 'launcher.stderr.bin')):
@@ -680,9 +728,10 @@ def transport(nonce, manifest_hash, infrastructure_hash):
                   'relayAbsent': relay_absent, 'proxyExit': None if child is None else child.poll(),
                   'eof': eof, 'observedBytes': [len(item) for item in data],
                   'stopControl': stop_control, 'scopeControl': scope_control, 'elapsedSeconds': boot() - began}
-        result['passed'] = ready and failure is None and group_empty and relay_absent and all(eof)
+        result['passed'] = ready and failure is None and group_empty and relay_absent is True and all(eof) and \
+            boot() < terminal and time.time_ns() < absolute_ns
         record(local / 'transport-final.json', result)
-    return 0 if result['passed'] else 1
+    return 0 if result['passed'] and not signaled and boot() < terminal and time.time_ns() < absolute_ns else 1
 
 
 def closure_configuration(config):

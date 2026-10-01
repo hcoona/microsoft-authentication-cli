@@ -18,10 +18,24 @@ internal static class RetainedElevationEntry
     private static readonly bool ExecutionAdmitted = false;
     private const string Wsl = @"C:\Windows\System32\wsl.exe";
     private const int OutputLimit = 16384;
-    private const long WorkMilliseconds = 86390000;
-    private const long TotalMilliseconds = 86400000;
+    private static long WorkMilliseconds;
+    private static long TotalMilliseconds;
+    private static DateTime AbsoluteDeadline;
+    private static DateTime ClockPinnedUtc;
+    private static long ClockPinnedElapsed;
+    private static long MaximumElapsed;
     private static readonly ulong Started = GetTickCount64();
-    private static long Elapsed { get { return checked((long)(GetTickCount64() - Started)); } }
+    private static long Elapsed
+    {
+        get
+        {
+            long ticks = checked((long)(GetTickCount64() - Started));
+            if (ClockPinnedUtc == default(DateTime)) return ticks;
+            long wall = ClockPinnedElapsed + (long)(DateTime.UtcNow - ClockPinnedUtc).TotalMilliseconds;
+            MaximumElapsed = Math.Max(MaximumElapsed, Math.Max(ticks, wall));
+            return MaximumElapsed; // Neither clock rollback nor suspend renews elapsed time.
+        }
+    }
 
     public static int Main(string[] args)
     {
@@ -41,11 +55,11 @@ internal static class RetainedElevationEntry
             using (FileStream manifest = Pin(Path.Combine(root, "entry-inputs.txt"), args[3], 65536))
             {
                 string[] inputs = ReadText(manifest).Split('\n');
-                if (inputs.Length != 12) return 110;
-                if (inputs[0] != "azureauth-retained-elevation-v1") return 111;
+                if (inputs.Length != 13) return 110;
+                if (inputs[0] != "azureauth-retained-elevation-v2") return 111;
                 if (inputs[1] != nonce) return 112;
-                if (inputs[10] != "END") return 113;
-                if (inputs[11] != "") return 114;
+                if (inputs[11] != "END") return 113;
+                if (inputs[12] != "") return 114;
                 if (!Regex.IsMatch(inputs[2], @"\A[A-Za-z0-9_.-]{1,64}\z")) return 115;
                 if (!Regex.IsMatch(inputs[3], @"\A[a-z_][a-z0-9_-]{0,63}\z")) return 116;
                 if (!Regex.IsMatch(inputs[4], @"\A[1-9][0-9]{0,8}\z")) return 117;
@@ -54,6 +68,15 @@ internal static class RetainedElevationEntry
                 if (!IsHash(inputs[7])) return 120;
                 if (!Regex.IsMatch(inputs[8], @"\A/run/WSL/[1-9][0-9]*_interop\z")) return 121;
                 if (inputs[9] != "/var/tmp/azureauth-windows-slice-108/elevation-entry-" + root.Substring(root.Length - 4)) return 122;
+                if (!Regex.IsMatch(inputs[10], @"\A[1-9][0-9]{16,18}\z")) return 127;
+                AbsoluteDeadline = DateTime.FromFileTimeUtc(long.Parse(inputs[10], CultureInfo.InvariantCulture));
+                ClockPinnedElapsed = checked((long)(GetTickCount64() - Started));
+                ClockPinnedUtc = DateTime.UtcNow;
+                long remaining = (long)(AbsoluteDeadline - ClockPinnedUtc).TotalMilliseconds;
+                long minimum = args[0] == "--context-check" ? 20000 : args[0] == "--entry" ? 90000 : 220000;
+                if (remaining < minimum || remaining > 86400000) return 128;
+                TotalMilliseconds = Math.Min(86400000, ClockPinnedElapsed + remaining);
+                WorkMilliseconds = TotalMilliseconds - 10000;
                 AssertDirect(root);
                 string image = Path.Combine(root, "RetainedElevationEntry.exe");
                 using (FileStream ownImage = Pin(image, inputs[7], 2097152))
@@ -64,24 +87,14 @@ internal static class RetainedElevationEntry
                         using (SafeFileHandle current = OpenProcess(0x1000u, false, (uint)self.Id))
                         {
                             if (current.IsInvalid) return 123;
-                            string actualImage = ProcessImage(current);
-                            if (actualImage != image)
-                            {
-                                if (!String.Equals(actualImage, image, StringComparison.OrdinalIgnoreCase)) return 124;
-                                if (!AsciiCaseVariant(actualImage, image)) return 126;
-                                AssertDirect(actualImage);
-                                using (FileStream actualFile = new FileStream(actualImage,
-                                    FileMode.Open, FileAccess.Read, FileShare.Read))
-                                {
-                                    if (actualFile.Length > 2097152) throw new InvalidOperationException("Input size");
-                                    if (!SameFileIdentity(ownImage, actualFile)) return 126;
-                                }
-                            }
+                            int reason = AdmitImage(current, image, ownImage);
+                            if (reason != 0) return reason == 129 ? 126 : reason;
                         }
                     }
+                    if (TotalMilliseconds - Elapsed < minimum) return 128;
                     // Input validation ends before any launch, token, child or marker operation.
                     if (args[0] == "--input-check") return 0;
-                    if (args[0] == "--launch") return Launch(root, nonce, args[3]);
+                    if (args[0] == "--launch") return Launch(root, nonce, args[3], ownImage);
                     if (args[0] == "--context-check") return Context(root, nonce);
                     using (FileStream permit = OpenRead(Path.Combine(root, "launch-permit.txt"), 256))
                     {
@@ -91,14 +104,15 @@ internal static class RetainedElevationEntry
                             DateTime.UtcNow.ToFileTimeUtc() >= long.Parse(grant[2], CultureInfo.InvariantCulture) ||
                             StopRequested(root, nonce)) return 1;
                     }
-                    return Run(root, nonce, args[3], inputs);
+                    if (TotalMilliseconds - Elapsed < 90000) return 128;
+                    return Run(root, nonce, args[3], inputs, ownImage);
                 }
             }
         }
         catch { return 1; } // No exception text, account identifiers or environment dump.
     }
 
-    private static int Launch(string root, string nonce, string manifestHash)
+    private static int Launch(string root, string nonce, string manifestHash, FileStream ownImage)
     {
         // One UAC request. The worker thread is not an extra process or command service.
         SafeFileHandle entry = null;
@@ -110,7 +124,8 @@ internal static class RetainedElevationEntry
             using (Process self = Process.GetCurrentProcess())
                 journal.Write("launcher-start", "pid", self.Id, "creationFileTime",
                     self.StartTime.ToUniversalTime().ToFileTimeUtc().ToString(CultureInfo.InvariantCulture),
-                    "nonce", nonce, "elevated", Elevated(self.Handle));
+                    "nonce", nonce, "elevated", Elevated(self.Handle),
+                    "deadlineFileTime", AbsoluteDeadline.ToFileTimeUtc().ToString(CultureInfo.InvariantCulture));
             CreateText(Path.Combine(root, "launch-permit.txt"), nonce + "\n" +
                 (GetTickCount64() + 120000UL).ToString(CultureInfo.InvariantCulture) + "\n" +
                 DateTime.UtcNow.AddSeconds(120).ToFileTimeUtc().ToString(CultureInfo.InvariantCulture) + "\n");
@@ -173,22 +188,56 @@ internal static class RetainedElevationEntry
             }
             using (entry)
             {
-                long created, exited, kernel, user;
-                Check(GetProcessTimes(entry, out created, out exited, out kernel, out user));
-                if (ProcessImage(entry) != Path.Combine(root, "RetainedElevationEntry.exe"))
-                    throw new InvalidOperationException("Launched image");
-                long entryBegan = Elapsed;
-                journal.Write("entry-handle", "creationFileTime", created.ToString(CultureInfo.InvariantCulture));
-                // The entry owns its native clock. This outer clock only bounds observation.
-                while (!HasExited(entry) && Elapsed < entryBegan + TotalMilliseconds + 5000)
-                    Thread.Sleep(1000);
-                bool nativeExited = HasExited(entry);
-                uint code;
-                Check(GetExitCodeProcess(entry, out code));
-                if (!nativeExited) RequestStop(root, nonce);
-                journal.Write("launcher-final", "entryNativeExited", nativeExited, "entryExitCode", code,
-                    "entryLifetimeKnown", nativeExited);
-                return nativeExited && code == 0 ? 0 : 1;
+                bool imageAccepted = false, nativeExited = false;
+                bool? nativeExitSample = null;
+                uint? exitCode = null;
+                Exception failure = null;
+                int rejection = 0;
+                try
+                {
+                    long created, exited, kernel, user;
+                    Check(GetProcessTimes(entry, out created, out exited, out kernel, out user));
+                    rejection = AdmitImage(entry, Path.Combine(root, "RetainedElevationEntry.exe"), ownImage);
+                    if (rejection != 0) throw new GuardFailure(rejection);
+                    imageAccepted = true;
+                    journal.Write("entry-handle", "creationFileTime", created.ToString(CultureInfo.InvariantCulture));
+                    while (!HasExited(entry) && Elapsed < WorkMilliseconds && !StopRequested(root, nonce))
+                        Thread.Sleep(1000);
+                }
+                catch (Exception caught)
+                {
+                    failure = caught;
+                    if (rejection == 0 && caught is Win32Exception) rejection = 141;
+                    if (rejection == 0 && caught is IOException) rejection = 142;
+                }
+                finally
+                {
+                    // ShellExecuteEx directly returned this task's held launch handle.
+                    // Rejected admission permits bounded observation and scoped stop, never arbitrary termination.
+                    long finalEnd = Math.Min(TotalMilliseconds, Elapsed + 10000);
+                    try { RequestStop(root, nonce); }
+                    catch (Exception caught) { if (failure == null) failure = caught; }
+                    try
+                    {
+                        while (!HasExited(entry) && Elapsed < finalEnd) Thread.Sleep(25);
+                        nativeExited = HasExited(entry);
+                        nativeExitSample = nativeExited;
+                        if (nativeExited)
+                        {
+                            uint code;
+                            Check(GetExitCodeProcess(entry, out code));
+                            exitCode = code;
+                        }
+                    }
+                    catch (Exception caught) { if (failure == null) failure = caught; }
+                    journal.DeadlineMilliseconds = TotalMilliseconds;
+                    journal.Write("launcher-final", "entryHandleReturned", true,
+                        "entryImageAccepted", imageAccepted, "entryNativeExited", nativeExitSample,
+                        "entryExitCode", exitCode, "entryLifetimeKnown", nativeExited,
+                        "rejectionReason", rejection,
+                        "failureType", failure == null ? null : failure.GetType().Name);
+                }
+                return imageAccepted && nativeExited && exitCode == 0 && failure == null ? 0 : 1;
             }
         }
     }
@@ -211,17 +260,21 @@ internal static class RetainedElevationEntry
         }
     }
 
-    private static int Run(string root, string nonce, string manifestHash, string[] inputs)
+    private static int Run(string root, string nonce, string manifestHash, string[] inputs, FileStream ownImage)
     {
         SafeFileHandle job = null, process = null, thread = null, context = null;
         Pipe output = null, error = null;
         int captured = 0;
         bool ready = false, resumeAttempted = false, clean = false, contextOwned = false;
+        bool contextAcquired = false, contextCreationMatched = false, contextReleaseRequested = false;
+        bool? contextExitObserved = null;
+        uint? contextObservedExitCode = null;
+        int rejectionReason = 0;
         Exception failure = null;
         string stage = "entry";
         long created = 0;
         uint wslPid = 0;
-        DateTime deadline = DateTime.UtcNow.AddMilliseconds(TotalMilliseconds - Elapsed);
+        DateTime deadline = AbsoluteDeadline;
         using (Journal journal = new Journal(Path.Combine(root, "entry.jsonl"), 65536))
         {
             bool newEvent;
@@ -236,7 +289,8 @@ internal static class RetainedElevationEntry
                         journal.Write("entry-start", "pid", self.Id, "creationFileTime",
                             self.StartTime.ToUniversalTime().ToFileTimeUtc().ToString(CultureInfo.InvariantCulture),
                             "elevated", elevated, "nonce", nonce, "manifestSha256", manifestHash,
-                            "deadlineUtc", deadline.ToString("O", CultureInfo.InvariantCulture), "jobName", JobName(nonce));
+                            "deadlineUtc", deadline.ToString("O", CultureInfo.InvariantCulture),
+                            "deadlineFileTime", deadline.ToFileTimeUtc().ToString(CultureInfo.InvariantCulture), "jobName", JobName(nonce));
                         if (!elevated) throw new InvalidOperationException("Entry is not elevated");
                     }
                     foreach (string leaf in new[] { "stop", "context-created.txt", "context-ready", "linux-ready", "entry-ready.json", "entry-ready" })
@@ -257,16 +311,18 @@ internal static class RetainedElevationEntry
                     error = new Pipe(Path.Combine(root, "wsl.stderr.bin"));
                     string projected = "/mnt/c/Temp/azureauth-windows-slice-108/" + Path.GetFileName(root);
                     string runtime = "/run/user/" + inputs[4];
-                    string command = "\"" + Wsl + "\" --distribution " + inputs[2] + " --user " + inputs[3] +
-                        " --cd " + projected + " --exec /usr/bin/env XDG_RUNTIME_DIR=" + runtime +
-                        " DBUS_SESSION_BUS_ADDRESS=unix:path=" + runtime + "/bus /usr/bin/systemd-run --user --no-ask-password" +
-                        " --quiet --scope --collect --unit=" + Scope(nonce) +
-                        " --property=RuntimeMaxSec=86380s --property=TimeoutStopSec=5s --property=TasksMax=32 --property=MemoryMax=512M" +
-                        " -- /usr/bin/python3.14 -I -B -S " + projected + "/retained_elevation_holder.py " +
-                        nonce + " " + manifestHash + " " + deadline.ToFileTimeUtc().ToString(CultureInfo.InvariantCulture);
                     stage = "wsl-create";
                     using (FileStream wslInput = Pin(Wsl, inputs[5], 2097152))
                     {
+                        if (TotalMilliseconds - Elapsed < 70000) throw new TimeoutException("Startup budget");
+                        string command = "\"" + Wsl + "\" --distribution " + inputs[2] + " --user " + inputs[3] +
+                            " --cd " + projected + " --exec /usr/bin/env XDG_RUNTIME_DIR=" + runtime +
+                            " DBUS_SESSION_BUS_ADDRESS=unix:path=" + runtime + "/bus /usr/bin/systemd-run --user --no-ask-password" +
+                            " --quiet --scope --collect --unit=" + Scope(nonce) +
+                            " --property=RuntimeMaxSec=" + Math.Max(1, (WorkMilliseconds - Elapsed - 10000) / 1000).ToString(CultureInfo.InvariantCulture) +
+                            "s --property=TimeoutStopSec=5s --property=TasksMax=32 --property=MemoryMax=512M" +
+                            " -- /usr/bin/python3.14 -I -B -S " + projected + "/retained_elevation_holder.py " +
+                            nonce + " " + manifestHash + " " + deadline.ToFileTimeUtc().ToString(CultureInfo.InvariantCulture);
                         ProcessInformation child = StartWsl(job, output, error, root, command);
                         process = new SafeFileHandle(child.Process, true);
                         thread = new SafeFileHandle(child.Thread, true);
@@ -296,26 +352,33 @@ internal static class RetainedElevationEntry
                         long expectedCreated = long.Parse(fields[2], CultureInfo.InvariantCulture);
                         context = OpenProcess(0x101001u, false, contextPid); // QUERY_LIMITED | SYNCHRONIZE | TERMINATE
                         if (context.IsInvalid) throw new Win32Exception();
+                        contextAcquired = true;
                         long actualCreated;
                         Check(GetProcessTimes(context, out actualCreated, out exited, out kernel, out user));
-                        if (actualCreated != expectedCreated || ProcessImage(context) != Path.Combine(root, "RetainedElevationEntry.exe"))
-                            throw new InvalidOperationException("Context incarnation");
+                        if (actualCreated != expectedCreated) throw new GuardFailure(140);
+                        contextCreationMatched = true;
+                        int contextReason = AdmitImage(context, Path.Combine(root, "RetainedElevationEntry.exe"), ownImage);
+                        if (contextReason != 0) throw new GuardFailure(contextReason);
                         contextOwned = true;
                         bool contextElevated = fields[3] == "1";
                         journal.Write("context-handle", "pid", contextPid, "creationFileTime", fields[2], "elevated", contextElevated);
+                        contextReleaseRequested = true;
                         release.Set();
                         long contextEnd = Math.Min(startupEnd, Elapsed + 5000);
                         while (!HasExited(context) && Elapsed < contextEnd) Thread.Sleep(25);
                         uint contextExit;
                         if (!HasExited(context)) throw new TimeoutException("Context exit");
                         Check(GetExitCodeProcess(context, out contextExit));
+                        contextExitObserved = true;
+                        contextObservedExitCode = contextExit;
                         journal.Write("context-exit", "nativeExited", true, "exitCode", contextExit);
                         if (contextExit != 0 || !contextElevated) throw new InvalidOperationException("Context failed");
                         WaitForMarker(root, "linux-ready", nonce, startupEnd, process, output, error, ref captured);
                         using (Journal marker = new Journal(Path.Combine(root, "entry-ready.json"), 4096))
                             marker.Write("entry-ready", "nonce", nonce, "contextElevated", true,
                                 "contextNativeExited", true, "jobName", JobName(nonce), "scope", Scope(nonce),
-                                "deadlineUtc", deadline.ToString("O", CultureInfo.InvariantCulture));
+                                "deadlineUtc", deadline.ToString("O", CultureInfo.InvariantCulture),
+                                "deadlineFileTime", deadline.ToFileTimeUtc().ToString(CultureInfo.InvariantCulture));
                         Directory.CreateDirectory(Path.Combine(root, "entry-ready"));
                         ready = true;
                         stage = "retained";
@@ -327,7 +390,14 @@ internal static class RetainedElevationEntry
                         }
                     }
                 }
-                catch (Exception caught) { failure = caught; }
+                catch (Exception caught)
+                {
+                    failure = caught;
+                    var guard = caught as GuardFailure;
+                    if (guard != null) rejectionReason = guard.Reason;
+                    else if (caught is Win32Exception) rejectionReason = 141;
+                    else if (caught is IOException) rejectionReason = 142;
+                }
                 finally
                 {
                     long finalEnd = Math.Min(TotalMilliseconds, Elapsed + 10000);
@@ -343,6 +413,7 @@ internal static class RetainedElevationEntry
                     {
                         try
                         {
+                            contextReleaseRequested = true;
                             release.Set();
                             if (!HasExited(context))
                             {
@@ -379,18 +450,49 @@ internal static class RetainedElevationEntry
                             Check(GetExitCodeProcess(process, out exitCode));
                             Accounting accounting = Query(job);
                             output.Dispose(); error.Dispose();
+                            if (contextAcquired)
+                            {
+                                try
+                                {
+                                    contextExitObserved = HasExited(context);
+                                    if (contextExitObserved == true)
+                                    {
+                                        uint contextCode;
+                                        Check(GetExitCodeProcess(context, out contextCode));
+                                        contextObservedExitCode = contextCode;
+                                    }
+                                }
+                                catch (Exception caught)
+                                {
+                                    if (failure == null) failure = caught;
+                                }
+                            }
                             clean = HasExited(process) && accounting.ActiveProcesses == 0 && output.Eof && error.Eof &&
                                 output.FailureStage == null && error.FailureStage == null && exitCode == 0 &&
-                                contextOwned && HasExited(context);
+                                contextOwned && contextExitObserved == true;
                             journal.Write("entry-final", "ready", ready, "wslExited", HasExited(process), "wslExitCode", exitCode,
                                 "activeProcesses", accounting.ActiveProcesses, "totalProcesses", accounting.TotalProcesses,
                                 "stdoutEof", output.Eof, "stderrEof", error.Eof, "capturedBytes", captured,
-                                "contextExited", contextOwned && HasExited(context),
+                                "contextHandleAcquired", contextAcquired, "contextCreationMatched", contextCreationMatched,
+                                "contextOwnershipValidated", contextOwned, "contextReleaseRequested", contextReleaseRequested,
+                                "contextExited", contextExitObserved, "contextExitCode", contextObservedExitCode,
+                                "rejectionReason", rejectionReason,
                                 "clean", clean, "failureStage", failure == null ? null : stage,
                                 "failureType", failure == null ? null : failure.GetType().Name);
                         }
                         catch (Exception caught) { if (failure == null) failure = caught; }
                     }
+                    try
+                    {
+                        journal.DeadlineMilliseconds = TotalMilliseconds;
+                        journal.Write("entry-ownership-final", "ready", ready,
+                            "contextHandleAcquired", contextAcquired, "contextCreationMatched", contextCreationMatched,
+                            "contextOwnershipValidated", contextOwned, "contextReleaseRequested", contextReleaseRequested,
+                            "contextExited", contextExitObserved, "contextExitCode", contextObservedExitCode,
+                            "rejectionReason", rejectionReason,
+                            "failureType", failure == null ? null : failure.GetType().Name);
+                    }
+                    catch (Exception caught) { if (failure == null) failure = caught; }
                     if (thread != null) thread.Dispose();
                     if (context != null) context.Dispose();
                     if (process != null) process.Dispose();
@@ -424,6 +526,25 @@ internal static class RetainedElevationEntry
         uint size = 32768;
         Check(QueryFullProcessImageName(process, 0, text, ref size));
         return text.ToString();
+    }
+    private sealed class GuardFailure : Exception
+    {
+        public readonly int Reason;
+        public GuardFailure(int reason) { Reason = reason; }
+    }
+    private static int AdmitImage(SafeFileHandle process, string expected, FileStream pinned)
+    {
+        string actual = ProcessImage(process);
+        if (actual == expected) return 0;
+        if (!String.Equals(actual, expected, StringComparison.OrdinalIgnoreCase)) return 124;
+        if (!AsciiCaseVariant(actual, expected)) return 126;
+        AssertDirect(actual);
+        using (FileStream alternate = new FileStream(actual, FileMode.Open, FileAccess.Read, FileShare.Read))
+        {
+            if (alternate.Length > 2097152) throw new InvalidOperationException("Input size");
+            if (!SameFileIdentity(pinned, alternate)) return 129;
+        }
+        return 0;
     }
     private static bool AsciiCaseVariant(string actual, string expected)
     {
