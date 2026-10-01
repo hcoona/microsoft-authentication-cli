@@ -24757,9 +24757,34 @@ subsequent activation;
 retain their exact accepted identities/content and original baselines. A check
 writes its bounded evidence exclusively to a separate fresh Linux action root.
 Before activation, revalidate that exact payload without overwriting or silently
-rebinding it. Only the separately accepted entry-payload historical ctime
-qualification below may qualify those historical comparisons; all other identity
-and content requirements remain unchanged. A source/artifact/input correction invalidates the earlier successful
+rebinding it. The entry-payload historical ctime qualification below applies only
+to the original 0164/0179 extra readback. For the complete continuation's fresh
+0166 payload, apply the standing historical ctime decision to its mandatory first
+preactivation readback after independently accepted successful 0166 input checking.
+This first readback neither inherits nor renews the spent 0164/0179 extra-call
+allowance; a failure grants no retry.
+
+Select only 0166's same four original deployment roles: the executable, holder and
+manifest under `/mnt/c/Temp/azureauth-windows-slice-108/elevation-entry-0166`, and
+`/var/tmp/azureauth-windows-slice-108/elevation-entry-0166/infrastructure.json`.
+Bind their original literal paths, lengths, SHA-256 values and full9 descriptors
+to the accepted source/artifact/check, nonce and manifest lineage. Only historical
+ctime may differ: all eight other historical fields must agree. Require a fresh
+original-length-plus-one read with exact length, hash and EOF, then strict full9
+equality of initial held, final held and named observations, including current
+ctime. Retain direct/no-follow, regular/single-link and finally-close predicates,
+original and actual observations, and per-row qualification flags. Do not refresh
+a baseline, repair a payload, infer a benign cause or extend this rule to later slots.
+
+Use the existing local-readback envelope: 0/0/0/0; one plan read capped at 16 KiB;
+one read per file within the 2-MiB executable and three 64-KiB limits; one exclusive
+8-KiB receipt; 25-second work, 28-second alarm and 30-second total termination.
+Require independent source, exact plan/projection/call/current-accounting and outcome
+acceptance, four complete passing rows, no failure and ended post-persistence zero
+return. Preserve accepted current closure, the original absolute privileged deadline,
+existing capacity and fresh readiness after complete launch/shutdown preparation.
+
+A source/artifact/input correction invalidates the earlier successful
 check and requires a separately charged check of the corrected payload before
 attendance. Failed payload/evidence roots remain intact; the next corrected pair
 uses fresh roots. Unrelated occupied catalogs are not adopted by this section.
