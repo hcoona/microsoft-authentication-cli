@@ -64,7 +64,9 @@ internal static class RetainedElevationEntry
                         using (SafeFileHandle current = OpenProcess(0x1000u, false, (uint)self.Id))
                         {
                             if (current.IsInvalid) return 123;
-                            if (ProcessImage(current) != image) return 124;
+                            string actualImage = ProcessImage(current);
+                            if (actualImage != image)
+                                return String.Equals(actualImage, image, StringComparison.OrdinalIgnoreCase) ? 126 : 124;
                         }
                     }
                     // Input validation ends before any launch, token, child or marker operation.
