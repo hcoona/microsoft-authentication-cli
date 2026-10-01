@@ -24343,6 +24343,93 @@ continuous quiescence, exact historical exit times or a diagnosed context failur
 live/present/inconsistent/inaccessible/unknown result stops dependent execution. No
 second observation, alternate tool, termination or residual-risk waiver is granted.
 
+#### Fixed closure observer implementation
+
+The inert [native observer](../../../tools/validation/RetainedClosureObserver.cs),
+[existing compiler](../../../tools/validation/run_retained_elevation_build.py) and
+[holder's closure transport](../../../tools/validation/retained_elevation_holder.py)
+implement only the reconciliation portion of this sequence. Their execution guards
+remain false in Git. Exact projections, accepted compiler artifacts, fixed input
+materialization, call and outcome gates remain prerequisites to execution.
+
+The compiler's dedicated `windows-retained-closure-build-v1` role selects slot 0180,
+only the `RetainedClosureObserver` source/artifact name, and exact consumed baseline
+36/144/6/415 with Linux preparation 16/29 and Windows 20/20. It increments only
+Linux preparation, retaining the existing seven SDK/compiler pins, three Framework
+references, x64 C# 5 winexe topology, output/read limits and 150/145/100-second clocks.
+Other compile slots keep their existing source, schema and baseline predicates.
+This dedicated observer role does not allocate an extra entry compilation/check pair.
+
+The new `--closure-check` holder path selects only the fresh
+`closure-observer-0181` Windows payload and Linux action roots. Its strict private
+configuration binds current accepted source/protocol/reviews/accounting, original
+snapshot/outcome/triage, frozen selector, two positive distinct PID/creation pairs,
+original invocation relay, separate subject relay/socket identity, infrastructure,
+observer and holder hashes. It admits only 37/144/6/415 to 37/145/6/417 and outside
+hosts 31 to 32. Exact-call admission proves these operands come from the original
+frozen evidence. They are not public machine identifiers or runtime discoveries.
+
+The native ASCII LF selector has exactly ten fields: schema
+`azureauth-retained-closure-v1`, original nonce, frozen snapshot SHA-256, first PID,
+first creation FILETIME, second PID, second creation FILETIME, observer EXE SHA-256,
+`END`, and the final empty field. Hold the direct root, hash-pinned selector and
+observer file while observing. Exclusively create the sole native result before
+any process query; an occupied output rejects without a query. The result is at
+most 4 KiB and binds nonce/selector hash, two fixed numeric rows and terminal `END`.
+Each row contains classification, native-open status, creation FILETIME, wait result,
+exit code, failure stage and native error. Sentinel `-1` means no wait/exit sample.
+No target image, token, module, account or arbitrary process information is queried.
+
+Use exactly one [NtOpenProcess](https://learn.microsoft.com/windows-hardware/drivers/ddi/ntddk/nf-ntddk-ntopenprocess)
+per selected PID with `PROCESS_QUERY_LIMITED_INFORMATION | SYNCHRONIZE`, null
+thread/name/root/security fields, no inherited handle and no additional privileges.
+This is the single process-open operation, not a fallback or second query.
+Microsoft documents `STATUS_INVALID_CID` separately from invalid access arguments
+and access denial and directs user-mode callers to `NtOpenProcess`. Only that
+status with an invalid returned handle classifies the positive PID as absent;
+all other open failures remain query failures. This source-based classification
+does not claim a target-platform result before the admitted observation.
+
+For each acquired handle, call [GetProcessTimes](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes)
+once and [WaitForSingleObject](https://learn.microsoft.com/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject)
+once with zero timeout. Call [GetExitCodeProcess](https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-getexitcodeprocess)
+only after the held process is signaled. The wait distinguishes exit from activity;
+`STILL_ACTIVE` alone cannot do so. Different creation identity is reused; matching
+identity is exited or live according to the wait. Any incomplete/API failure is
+query-failed. Numeric classes are 0 absent, 1 reused, 2 matching-exited, 3 matching-live
+and 4 query-failed. Dispose every returned handle, including on failure; no target
+termination, loop, enumeration or second open is present.
+
+The controller verifies the existing four Linux executable roles using their
+accepted bounded terminal-alias/held-file recipe. Apply the standing historical
+ctime decision only to these existing role records: all historical fields except
+ctime, alias targets, length, hash, EOF and observed-read counts must match, each
+identity is single-link, and the pin routine retains strict current held/named
+full9 equality including ctime. Keep expected/observed records separately in one
+bounded infrastructure receipt with a per-role qualification flag. No fresh
+baseline, extra target read, metadata pass or new infrastructure role is added.
+This changes only the new closure path; existing holder/input-check predicates
+are not silently relaxed.
+
+The subject relay receives exactly one no-follow leaf stat relative to the held
+no-follow `/run/WSL` directory chain. Ancestor failure is metadata-failed; only leaf
+`ENOENT` under that successfully held parent is absent. A matching socket, changed
+object and other metadata failure remain separate and never pass. Do not run the
+generic path guard on the leaf, because that would add a second metadata sample.
+Never connect to the subject relay or use it to launch the observer.
+
+The holder receives a frozen BOOTTIME deadline at most 25 seconds ahead and reserves
+five seconds for terminal work inside the complete 30-second original. The native
+observer receives at most 20 seconds, capped by remaining work time, with both
+absolute FILETIME and suspend-inclusive tick checks before/after operations and
+closed output persistence. These bounds make no kernel-return guarantee. A forced
+proxy end, incomplete streams, noncorresponding status or missing normal native
+return leaves native lifetime unknown and stops dependent execution. A normal
+native return records completed observation separately from whether closure passed.
+Unexpected streams are counted but their contents are not retained. Each stream
+is capped at 16 KiB. Named service/group completion and exact fresh-output collection
+remain separate acceptance obligations; collectors do not repeat process/relay queries.
+
 #### Corrected entry and shared deadline
 
 Source-only preparation may add finite numeric rejection reasons at existing guard

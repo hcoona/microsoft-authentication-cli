@@ -18,7 +18,7 @@ import uuid
 
 EXECUTION_ADMITTED = False
 SLOTS = ('0159', '0161', '0163', '0165', '0167',
-         '0169', '0171', '0173', '0175', '0177')
+         '0169', '0171', '0173', '0175', '0177', '0180')
 ROOT = CHARGE = FINAL = None
 SLOT = None
 SDK_ROOT = Path('/home/shuaizhang/.local/share/mise/http-tarballs/febf8b0ab0361bac936d0b20567a85f89e667d4f4ff0067e0ed9a9f58ae45e28')
@@ -50,7 +50,8 @@ def configure(config):
             'hostPreparationBefore', 'hostPreparationAfter'}
     if set(config) not in (keys, keys | {'unit'}):
         raise ValueError('Configuration keys')
-    if config['schema'] != 'windows-retained-elevation-build-v1':
+    if config['schema'] not in ('windows-retained-elevation-build-v1',
+                                'windows-retained-closure-build-v1'):
         raise ValueError('Configuration schema')
     select_slot(config['slot'])
     for key in ('acceptedCommit', 'candidateCommit', 'candidateTree'):
@@ -75,12 +76,23 @@ def configure(config):
                 raise ValueError('Host preparation ceiling')
     if after['linux'][0] != before['linux'][0] + 1 or after['windows'] != before['windows'] or before['linux'][0] + before['windows'][0] != BEFORE[0] or after['linux'][0] + after['windows'][0] != AFTER[0]:
         raise ValueError('Host preparation debit')
+    if config['schema'] == 'windows-retained-closure-build-v1':
+        if SLOT != '0180' or BEFORE != [36, 144, 6, 415] or \
+                before != {'linux': [16, 29], 'windows': [20, 20]}:
+            raise ValueError('Finite closure compilation baseline')
+        return
+    if SLOT == '0180':
+        raise ValueError('Closure slot requires its dedicated schema')
     pair_index = SLOTS.index(SLOT)
     checks_spent = BEFORE[1] - 140
     if not 0 <= checks_spent <= pair_index or \
             BEFORE != [33 + pair_index, 140 + checks_spent, 6, 403 + 2 * checks_spent] or \
             before != {'linux': [13 + pair_index, 29], 'windows': [20, 20]}:
         raise ValueError('Finite entry compilation baseline')
+
+
+def artifact_name():
+    return 'RetainedClosureObserver' if SLOT == '0180' else 'RetainedElevationEntry'
 
 
 def digest(raw):
@@ -238,7 +250,7 @@ def worker(config_hash, expires_ns):
         source = read(Path(config['sourcePath']), 65536, config['sourceSha256'])
         if source.count(b'private static readonly bool ExecutionAdmitted = true;') != 1 or b'private static readonly bool ExecutionAdmitted = false;' in source:
             raise ValueError('Exactly admitted validation source required')
-        write(ROOT / 'RetainedElevationEntry.cs', source)
+        write(ROOT / (artifact_name() + '.cs'), source)
         for name, pin in FRAMEWORK_PINS.items():
             budget(expires_ns)
             raw = read(FRAMEWORK / name, 16777216, pin)
@@ -251,9 +263,9 @@ def worker(config_hash, expires_ns):
         command = [str(sdk / 'dotnet'), 'exec', '--runtimeconfig', str(compiler / 'csc.runtimeconfig.json'),
                    '--fx-version', '10.0.12', '--roll-forward', 'Disable', str(compiler / 'csc.dll'),
                    '-noconfig', '-nostdlib+', '-nologo', '-target:winexe', '-platform:x64', '-langversion:5',
-                   '-optimize+', '-debug-', '-deterministic+', '-out:' + str(ROOT / 'RetainedElevationEntry.exe')]
+                   '-optimize+', '-debug-', '-deterministic+', '-out:' + str(ROOT / (artifact_name() + '.exe'))]
         command += ['-reference:' + str(ROOT / name) for name in FRAMEWORK_PINS]
-        command.append(str(ROOT / 'RetainedElevationEntry.cs'))
+        command.append(str(ROOT / (artifact_name() + '.cs')))
         environment = {'PATH': '/usr/bin:/bin', 'LC_ALL': 'C.UTF-8', 'HOME': str(ROOT / 'home'),
                        'TMPDIR': str(ROOT / 'temp'), 'DOTNET_ROOT': str(sdk),
                        'DOTNET_CLI_HOME': str(ROOT / 'home'), 'DOTNET_CLI_TELEMETRY_OPTOUT': '1',
@@ -270,7 +282,7 @@ def worker(config_hash, expires_ns):
         observed = result['compiler']
         if observed['exitCode'] != 0 or not observed['eof'] or observed['failure'] is not None:
             raise ValueError('Compiler did not complete')
-        raw = read(ROOT / 'RetainedElevationEntry.exe', 2097152)
+        raw = read(ROOT / (artifact_name() + '.exe'), 2097152)
         if not raw or not raw.startswith(b'MZ'):
             raise ValueError('Missing executable output')
         result['artifact'] = {'bytes': len(raw), 'sha256': digest(raw), 'executed': False}

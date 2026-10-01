@@ -685,10 +685,266 @@ def transport(nonce, manifest_hash, infrastructure_hash):
     return 0 if result['passed'] else 1
 
 
+def closure_configuration(config):
+    hashes = {'selectorSha256', 'infrastructureSha256', 'holderSha256', 'observerSha256',
+              'frozenSelectorSha256', 'protocolSha256', 'sourceReviewSha256',
+              'artifactReviewSha256', 'originSnapshotSha256', 'originOutcomeSha256',
+              'originTriageSha256', 'accountingSha256'}
+    keys = hashes | {'schema', 'nonce', 'acceptedCommit', 'invokeRelay', 'subjectRelay',
+                     'relayIdentity', 'pids', 'creationFileTimes', 'countsBefore',
+                     'countsAfter', 'outsideHostsBefore', 'outsideHostsAfter'}
+    if not isinstance(config, dict) or set(config) != keys or \
+            config['schema'] != 'windows-retained-closure-observation-v1':
+        raise ValueError('Closure configuration')
+    for key in hashes:
+        value = config[key]
+        if not isinstance(value, str) or not re.fullmatch(r'[0-9a-f]{64}', value) or value == '0' * 64:
+            raise ValueError('Closure evidence hash')
+    if not isinstance(config['acceptedCommit'], str) or not re.fullmatch(r'[0-9a-f]{40}', config['acceptedCommit']):
+        raise ValueError('Closure accepted source')
+    if not isinstance(config['nonce'], str) or not re.fullmatch(r'[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}', config['nonce']):
+        raise ValueError('Closure nonce')
+    for key in ('invokeRelay', 'subjectRelay'):
+        if not isinstance(config[key], str) or not re.fullmatch(r'/run/WSL/[1-9][0-9]*_interop', config[key]):
+            raise ValueError('Closure relay selection')
+    if config['invokeRelay'] == config['subjectRelay']:
+        raise ValueError('Subject relay cannot be used for invocation')
+    pids, creations, socket = config['pids'], config['creationFileTimes'], config['relayIdentity']
+    if not isinstance(pids, list) or len(pids) != 2 or len(set(pids)) != 2 or \
+            any(type(v) is not int or not 4 < v <= 0xffffffff for v in pids):
+        raise ValueError('Closure PID pair')
+    if not isinstance(creations, list) or len(creations) != 2 or \
+            any(not isinstance(v, str) or not re.fullmatch(r'[1-9][0-9]{16,18}', v) or
+                int(v) > 2650467743999999999 for v in creations):
+        raise ValueError('Closure creation pair')
+    if not isinstance(socket, list) or len(socket) != 9 or any(type(v) is not int or v < 0 for v in socket) or \
+            not stat.S_ISSOCK(socket[2]):
+        raise ValueError('Closure original socket identity')
+    for key, value in [('countsBefore', [37, 144, 6, 415]), ('countsAfter', [37, 145, 6, 417])]:
+        if config[key] != value or any(type(v) is not int for v in config[key]):
+            raise ValueError('Closure exact debit')
+    if type(config['outsideHostsBefore']) is not int or type(config['outsideHostsAfter']) is not int or \
+            (config['outsideHostsBefore'], config['outsideHostsAfter']) != (31, 32):
+        raise ValueError('Closure outside host debit')
+    return config
+
+
+def closure_json(raw):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError('Duplicate closure JSON key')
+            result[key] = value
+        return result
+    def invalid(_value):
+        raise ValueError('Nonfinite closure JSON number')
+    return json.loads(raw, object_pairs_hook=pairs, parse_constant=invalid)
+
+
+def closure_relay_sample(path, expected):
+    # Do not call direct(path): its is_symlink would add a second leaf sample.
+    descriptors = []
+    try:
+        parent = os.open('/', os.O_PATH | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+        descriptors.append(parent)
+        for part in ('run', 'WSL'):
+            parent = os.open(part, os.O_PATH | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=parent)
+            descriptors.append(parent)
+        try:
+            observed = identity(os.stat(Path(path).name, dir_fd=parent, follow_symlinks=False))
+        except FileNotFoundError:
+            return {'state': 'absent', 'identity': None, 'error': None}
+        return {'state': 'present-matching' if observed == expected and stat.S_ISSOCK(observed[2])
+                else 'present-changed', 'identity': observed, 'error': None}
+    except OSError as error:
+        return {'state': 'metadata-failed', 'identity': None, 'error': error.errno}
+    finally:
+        for descriptor in reversed(descriptors):
+            os.close(descriptor)
+
+
+def closure_infrastructure_equal(expected, observed):
+    # The existing pin routine proves fresh content and strict within-read full9.
+    # Qualify only historical ctime, retaining both original and observed records.
+    def comparison(value):
+        if isinstance(value, dict):
+            result = {}
+            for key, item in value.items():
+                if key == 'identity':
+                    if not isinstance(item, list) or len(item) != 9 or \
+                            any(type(n) is not int for n in item) or item[5] != 1:
+                        raise ValueError('Closure infrastructure identity shape')
+                    result[key] = item[:8]
+                else:
+                    result[key] = comparison(item)
+            return result
+        if isinstance(value, list):
+            return [comparison(item) for item in value]
+        return value
+    return comparison(expected) == comparison(observed)
+
+
+def closure_native_rows(raw, config):
+    fields = raw.decode('ascii').split('\n')
+    if len(fields) != 7 or fields[0] != 'azureauth-retained-closure-result-v1' or \
+            fields[1] != config['nonce'] or fields[2] != config['selectorSha256'] or fields[5:] != ['END', '']:
+        raise ValueError('Closure native record binding')
+    rows = []
+    for index, text in enumerate(fields[3:5]):
+        parts = text.split(',')
+        if len(parts) != 7 or any(not re.fullmatch(r'-?(?:0|[1-9][0-9]{0,18})', v) for v in parts):
+            raise ValueError('Closure native numeric record')
+        state, status, created, wait, code, stage, error = map(int, parts)
+        if state not in range(5) or not 0 <= status <= 0xffffffff or not 0 <= stage <= 4 or \
+                not -1 <= wait <= 0xffffffff or not -1 <= code <= 0xffffffff or not 0 <= error <= 0x7fffffff:
+            raise ValueError('Closure native record range')
+        expected = int(config['creationFileTimes'][index])
+        if state == 0 and (status, created, wait, code, stage, error) != (0xc000000b, 0, -1, -1, 1, 0):
+            raise ValueError('Closure absent status')
+        if state in (1, 2, 3):
+            if status != 0 or created <= 0 or stage != 0 or error != 0 or wait not in (0, 258) or \
+                    (wait == 0 and code < 0) or (wait == 258 and code != -1) or \
+                    (state == 1 and created == expected) or \
+                    (state == 2 and (created != expected or wait != 0)) or \
+                    (state == 3 and (created != expected or wait != 258)):
+                raise ValueError('Closure process classification')
+        rows.append({'state': ('absent', 'reused', 'matching-exited', 'matching-live', 'query-failed')[state],
+                     'openStatus': status, 'creationFileTime': created, 'wait': wait,
+                     'exitCode': code, 'failureStage': stage, 'nativeError': error})
+    return rows
+
+
+def closure_check(config_hash, expires_ns):
+    began = boot()
+    if not re.fullmatch(r'[0-9a-f]{64}', config_hash) or not re.fullmatch(r'[1-9][0-9]{1,19}', expires_ns):
+        raise ValueError('Closure arguments')
+    deadline = int(expires_ns) / 1000000000
+    if not began < deadline <= began + 25:
+        raise ValueError('Closure original deadline')
+    root = direct(Path(__file__).absolute().parent)
+    if str(root) != '/mnt/c/Temp/azureauth-windows-slice-108/closure-observer-0181':
+        raise ValueError('Closure payload root')
+    local = direct('/var/tmp/azureauth-windows-slice-108/windows-actions/closure-observer-0181')
+    config = closure_configuration(closure_json(read(local / 'config.json', 65536, config_hash)))
+    record(local / 'original-charge.json', {'countsBefore': config['countsBefore'], 'countsAfter': config['countsAfter'],
+                                           'outsideHostsBefore': 31, 'outsideHostsAfter': 32, 'configSha256': config_hash})
+    child = None
+    streams, data, eof = [], [bytearray(), bytearray()], [False, False]
+    failure = None
+    forced = signal_seen = returned = False
+    relay, rows = None, None
+    def signal_stop(_signum, _frame):
+        nonlocal signal_seen
+        signal_seen = True
+    def work_budget():
+        if signal_seen or boot() >= deadline - 5:
+            raise TimeoutError('Closure work deadline')
+    signal.signal(signal.SIGTERM, signal_stop)
+    signal.signal(signal.SIGINT, signal_stop)
+    try:
+        work_budget()
+        read(Path(__file__), 65536, config['holderSha256'])
+        if os.environ.get('WSL_INTEROP') != config['invokeRelay']:
+            raise ValueError('Closure original invocation relay')
+        groups = [line[3:] for line in virtual('/proc/self/cgroup').splitlines() if line.startswith('0::')]
+        unit = 'azureauth-closure-observer-108-' + config['nonce'] + '.service'
+        if len(groups) != 1 or Path(groups[0]).name != unit:
+            raise ValueError('Closure named service')
+        fields = virtual('/proc/self/stat').rsplit(')', 1)[1].split()
+        record(local / 'observer-start.json', {'nonce': config['nonce'], 'pid': os.getpid(),
+                                              'startTicks': int(fields[19]), 'cgroup': groups[0],
+                                              'configSha256': config_hash, 'deadlineBootNs': expires_ns})
+        selector = read(root / 'selector.txt', 4096, config['selectorSha256']).decode('ascii').split('\n')
+        expected = ['azureauth-retained-closure-v1', config['nonce'], config['originSnapshotSha256'],
+                    str(config['pids'][0]), config['creationFileTimes'][0], str(config['pids'][1]),
+                    config['creationFileTimes'][1], config['observerSha256'], 'END', '']
+        if selector != expected:
+            raise ValueError('Closure selector binding')
+        infrastructure = closure_json(read(local / 'infrastructure.json', 65536, config['infrastructureSha256']))
+        if set(infrastructure) != set(LINUX_EXECUTABLES):
+            raise ValueError('Closure infrastructure selection')
+        observations = {}
+        for name, pin in infrastructure.items():
+            work_budget()
+            actual = linux_executable_pin(name, work_budget)
+            if not closure_infrastructure_equal(pin, actual):
+                raise ValueError('Closure infrastructure identity')
+            observations[name] = {'expected': pin, 'observed': actual,
+                                  'historicalCtimeQualified': pin != actual}
+        record(local / 'infrastructure-observations.json', observations)
+        read(root / 'RetainedClosureObserver.exe', 2097152, config['observerSha256'])
+        work_budget()
+        # Sample only the subject relay once; never use it as a transport endpoint.
+        relay = closure_relay_sample(config['subjectRelay'], config['relayIdentity'])
+        work_budget()
+        native_seconds = min(20, deadline - 5 - boot())
+        native_expiry = EPOCH + (time.time_ns() + int(native_seconds * 1000000000)) // 100
+        child = subprocess.Popen([str(root / 'RetainedClosureObserver.exe'), '--observe',
+                                  'C:\\Temp\\azureauth-windows-slice-108\\closure-observer-0181',
+                                  config['selectorSha256'], str(native_expiry)], stdin=subprocess.DEVNULL,
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=root, env=dict(os.environ))
+        streams = [child.stdout, child.stderr]
+        for stream in streams:
+            os.set_blocking(stream.fileno(), False)
+        for _ in range(2500):
+            work_budget()
+            for index, stream in enumerate(streams):
+                if eof[index]:
+                    continue
+                try:
+                    chunk = os.read(stream.fileno(), min(4096, LIMIT + 1 - len(data[index])))
+                except BlockingIOError:
+                    continue
+                if not chunk:
+                    eof[index] = True
+                data[index].extend(chunk)
+                if len(data[index]) > LIMIT:
+                    raise ValueError('Closure stream overflow')
+            if child.poll() is not None and all(eof):
+                returned = True
+                break
+            time.sleep(0.01)
+        if not returned or any(data) or child.returncode != 0:
+            raise RuntimeError('Closure native observation incomplete')
+        work_budget()
+        rows = closure_native_rows(read(root / 'native-result.txt', 4096), config)
+    except BaseException as error:
+        failure = type(error).__name__
+    finally:
+        if child is not None and child.poll() is None:
+            forced = True
+            try:
+                child.kill()
+                child.wait(timeout=min(1, max(0.001, deadline - boot())))
+            except BaseException as error:
+                failure = failure or type(error).__name__
+        for stream in streams:
+            stream.close()
+        for name in ('observer.stdout.bin', 'observer.stderr.bin'):
+            write(local / name, b'')
+        code = None if child is None else child.poll()
+        normal = returned and not forced and not signal_seen and all(eof) and not any(data) and \
+            code in (0, 1, 101, 102, 103, 104, 125)
+        result = {'nonce': config['nonce'], 'configSha256': config_hash, 'proxyStarted': child is not None,
+                  'proxyExit': code, 'eof': eof, 'observedBytes': [len(v) for v in data],
+                  'forcedProxyTermination': forced, 'signalReceived': signal_seen,
+                  'sourceCorrespondedNormalReturn': normal,
+                  'nativeLifetimeUnknown': child is not None and not normal, 'relay': relay, 'processes': rows,
+                  'failure': failure, 'elapsedSeconds': boot() - began, 'beforeDeadline': boot() < deadline}
+        result['passed'] = normal and code == 0 and failure is None and result['beforeDeadline'] and \
+            relay is not None and relay['state'] == 'absent' and rows is not None and \
+            all(row['state'] in ('absent', 'reused', 'matching-exited') for row in rows)
+        record(local / 'observer-final.json', result)
+    return 0 if result['passed'] and not signal_seen and boot() < deadline else 1
+
+
 if __name__ == '__main__':
     if not EXECUTION_ADMITTED:
         raise SystemExit('INERT: independent source and exact-call admission required.')
     try:
+        if len(sys.argv) == 4 and sys.argv[1] == '--closure-check':
+            raise SystemExit(closure_check(*sys.argv[2:]))
         if len(sys.argv) == 8 and sys.argv[1] == '--input-check':
             raise SystemExit(input_check(*sys.argv[2:]))
         if len(sys.argv) == 5 and sys.argv[1] == '--transport':
