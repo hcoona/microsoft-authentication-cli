@@ -24322,7 +24322,9 @@ subsequent activation;
 retain their exact accepted identities/content and original baselines. A check
 writes its bounded evidence exclusively to a separate fresh Linux action root.
 Before activation, revalidate that exact payload without overwriting or silently
-rebinding it. A source/artifact/input correction invalidates the earlier successful
+rebinding it. Only the separately accepted entry-payload historical ctime
+qualification below may qualify those historical comparisons; all other identity
+and content requirements remain unchanged. A source/artifact/input correction invalidates the earlier successful
 check and requires a separately charged check of the corrected payload before
 attendance. Failed payload/evidence roots remain intact; the next corrected pair
 uses fresh roots. Unrelated occupied catalogs are not adopted by this section.
@@ -24368,6 +24370,71 @@ Source guards remain closed in Git; activation of exact local copies requires
 independent admission. A separately accepted compile uses the existing one-source,
 seven Linux SDK/compiler and three Framework input recipe, x64 C# 5 winexe,
 150/145/100-second compile clocks, no restore and no output execution.
+
+#### Entry Payload Historical ctime Qualification
+
+The matching standing Wave decision and safety amendment permit historical ctime
+drift without another owner risk decision for each admitted file. This section
+applies that decision to at most one new qualification readback of the successful
+check 0164's original four-file payload for replacement 0179. The original strict
+and additional diagnostic calls remain spent. Require accepted failed outcomes
+and independent triage, then ordinary independent source/mock, exact
+plan/projection/call/current-accounting and outcome reviews.
+
+Close this readback to the original 0164 deployment's four ordered roles: the
+entry executable, holder and manifest under
+`/mnt/c/Temp/azureauth-windows-slice-108/elevation-entry-0164`, and
+`/var/tmp/azureauth-windows-slice-108/elevation-entry-0164/infrastructure.json`.
+Bind each original literal path, length, SHA-256 and full9 descriptor, together
+with accepted source/artifact, successful check, nonce and manifest lineage.
+The executable remains 30,208 bytes with SHA-256
+`d3b2283e4423b9a31bbf839ea139839ff9f5766269b70f8d952819be8719f924`.
+No pattern, alias, new input or later artifact inherits this call admission.
+
+At each of those four initial historical comparisons, require device, inode,
+mode, UID, GID, link count, size and mtime to equal the original expected fields.
+Allow ctime inequality provisionally, never as sufficient acceptance. Require a
+fresh admitted-length-plus-one read with exact length, SHA-256 and EOF, followed
+by strict full9 equality of initial held, final held and named observations,
+including current ctime. Keep direct/no-follow, regular/single-link and
+finally-close predicates. This helper changes no generic, native or holder
+admission predicate. Other application points need their normal exact protocol
+and source acceptance, without repeating the settled ctime risk question.
+
+Retain original descriptors and newly sampled identities separately in private
+evidence with an explicit historical-ctime qualification indicator per row. Never
+replace expected ctime or refresh a baseline. Keep bounded fixed rejection
+diagnostics; no raw rejected contents, paths, identities or timestamps are emitted.
+Complete successful rows may retain their admitted original descriptors and
+sampled identities within the private receipt. Do not substitute historical hashes
+for fresh reads, infer why ctime changed or infer continuous integrity or the cause
+of an earlier generic failure.
+
+This is one corrected local input/control readback at 0/0/0/0, not a native check
+or metadata pass. Bind one plan read capped at 16 KiB, one exact-length-plus-one
+read per selected file within the existing 2-MiB executable and three 64-KiB
+limits, a fresh exclusive private receipt capped at 8 KiB, 25-second work,
+28-second alarm and a 30-second total termination envelope. Add no target
+preflight, extra observation role, survey, repair or old-output collection.
+A failed or incomplete readback stops without another readback, predicate
+relaxation or expanded membership. Every earlier failure and charge remains.
+
+Require four complete accepted rows, qualified success, no failure and ended
+post-persistence zero return before this rule can satisfy preactivation payload
+correspondence. Preserve the distinction from strict historical-full9 success.
+The accepted 0164 check may be reused only when source/artifact, every payload
+byte, nonce and all required object predicates agree, with solely the stated
+historical ctime comparisons qualified. A helper-only admission amendment does
+not itself require a new native compilation/check. Any actual source/artifact/
+input correction invalidates that reuse and requires a separately charged
+successful check of fresh corrected inputs.
+
+Independent final launch/shutdown/current-accounting/call admission and fresh
+explicit owner readiness remain mandatory before the sole replacement activation.
+Its existing full charge, separately reserved final collector, absolute
+86,400-second privileged cap and closure evidence remain unchanged. This readback
+expires with this replacement/current grant; no additional permission, account
+effect, process uncertainty or later readback is admitted.
 
 #### Fixed pre-UAC source and action correspondence
 
