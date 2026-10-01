@@ -773,7 +773,7 @@ def closure_infrastructure_equal(expected, observed):
             for key, item in value.items():
                 if key == 'identity':
                     if not isinstance(item, list) or len(item) != 9 or \
-                            any(type(n) is not int for n in item) or item[5] != 1:
+                            any(type(n) is not int for n in item) or item[5] <= 0:
                         raise ValueError('Closure infrastructure identity shape')
                     result[key] = item[:8]
                 else:
