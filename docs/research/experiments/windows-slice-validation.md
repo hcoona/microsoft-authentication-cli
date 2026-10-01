@@ -24287,6 +24287,122 @@ artifact acceptance and new successful D0. A retained entry cannot bypass source
 artifact, accounting, exact-call or outcome review, or authorize product/real-account
 elevation, persistent host permission changes or unrelated commands.
 
+### Complete Retained-Entry Recovery and Continuation
+
+This bounded sequence implements the matching Wave/safety authorization. It covers
+one closure observer, supported corrections to the entry diagnostics/ownership/evidence
+path, one corrected-entry compilation/input check, and one further retained entry.
+It does not expand product or real-account execution. Accepted original 0179 evidence,
+its consumed charges and current uncertainties remain immutable inputs. Reuse unchanged
+source/artifact/review conclusions only for the dependencies they actually establish.
+
+#### Closed reconciliation subject and classifications
+
+Prepare a private, hash-bound selector of exactly two PID/creation-FILETIME pairs
+(the recorded elevated entry and fixed context-check child) and one relay pathname
+and socket identity from original 0179's frozen final snapshot. It must bind the
+original nonce, snapshot, independent outcome/triage and current ledger. Inspect only
+that frozen evidence during preparation; never reread original outputs, enumerate
+current objects or refresh a baseline. Exact selectors remain private machine data.
+
+Compile one inert x64 .NET Framework validation observer on Linux using the already
+admitted public compiler/framework inputs, no restore or Windows compiler. Keep the
+existing 150-second total compile bound and separately accept source/PE/CLR/artifact
+correspondence. Its fixed native operation opens each literal PID at most once with
+PROCESS_QUERY_LIMITED_INFORMATION | SYNCHRONIZE. Read the held process's creation time
+once; sample its wait/exit state once. Official API/status semantics and all failure
+classifications require independent source review. No image/module/token/account
+query, additional access right, child, process survey, Job change, wait loop or kill
+is permitted. Both handles must close on every path.
+
+Represent query failure separately from: no current PID; a current process with a
+different creation identity; a matching incarnation already exited; and a matching
+incarnation still active. Access denied, unsupported status or incomplete observation
+never means absence. A reused PID establishes only that the original incarnation is
+not the current process under that PID, and does not authorize touching its replacement.
+
+The non-elevated Linux controller uses only the already admitted original relay to
+invoke this observer. Its complete transport cap is thirty seconds including cleanup;
+the native observer has at most twenty seconds, and the controller reserves at least
+five seconds for cleanup. Use the accepted input-check style finite normal-return,
+empty bounded-stream and named Linux service evidence to establish the observer's
+own completion. Forced/timed-out proxy completion does not establish native completion.
+Fresh selected output roots and exact source/input/argv/clock pins require admission.
+
+Within the same thirty-second observation, make one no-follow metadata sample of only
+the recorded elevated relay. Ancestor/link guards remain fixed and bounded. Distinguish
+absent, present matching socket, present changed object and metadata failure; do not
+connect, execute through it, remove it, poll it or select another endpoint. The original
+non-elevated invocation relay must never be confused with the subject relay.
+
+A passing reconciliation requires complete accepted observer/native/service/stream
+evidence, both original native incarnations absent/reused/exited, and the exact elevated
+relay absent. Its independent acceptance supplies a point-in-time current closure basis
+for this sequence only. Preserve original held-handle exit/timing gaps; do not claim
+continuous quiescence, exact historical exit times or a diagnosed context failure. Any
+live/present/inconsistent/inaccessible/unknown result stops dependent execution. No
+second observation, alternate tool, termination or residual-risk waiver is granted.
+
+#### Corrected entry and shared deadline
+
+Source-only preparation may add finite numeric rejection reasons at existing guard
+points, distinguish acquired handles, validated ownership and observed exit, and define
+bounded early-failure evidence even when readiness was never published. Split compound
+predicates without silently changing them. Correct actual source defects only after
+independent triage; a generic historical exception alone does not prove its cause.
+Keep raw queried paths, tokens and private identities out of public diagnostics.
+
+After accepted current reconciliation, use one unused existing entry compile/check pair
+with fresh dedicated outputs and exact artifact/manifest/holder/infrastructure pins.
+The check must validate the same final inputs and absolute deadline used by launch,
+return before UAC or child creation, and preserve its thirty-second external cap.
+No old occupied root is repaired or adopted and no spent check/readback is repeated.
+
+Bind the original 0179 absolute deadline from its frozen entry-start record as a private
+fixed input shared by pre-UAC validation, launcher, elevated entry, holder and exact
+call. The successor may start only if that unchanged deadline leaves the full startup
+and cleanup budget. Its native/holder clocks must cap lifetime at the earlier of their
+ordinary finite bounds and that deadline, count suspend/idle/review time, and never
+renew the interval. The private deadline schema and every source consumer require
+independent source/input review before compilation and exact-call admission. No source
+or runtime behavior is accepted by this protocol amendment alone.
+
+Complete shutdown/evidence preparation and independent source/artifact/check/closure
+acceptance before fresh owner readiness. Debit the full one activation before launch
+and reserve its distinct final collector. Use exact owned Job/holder/service/relay
+closure obligations and existing finite ready/stop/final triggers. Another failed
+activation grants no new prompt, retry, deadline or uncertain-lifetime exception.
+Successful entry/context acceptance permits only separately admitted existing synthetic
+D0 work; D1/D2 remain blocked until accepted D0.
+
+#### One accounting and review envelope
+
+The maximum preparatory charge is 2/3/0/10: observer compile/invocation 1/1/0/2,
+corrected-entry compile/check 1/1/0/2, and activation 0/1/0/6. From the recovered
+36/144/6/415 baseline this gives at most 38/147/6/425, correction pool 5/8/0/27 and
+combined remaining 11/45/0/144. Preserve old correction 0/4/0/23 and protection
+6/37/0/117. Linux preparations become at most 18/29, Windows remains 20/20; outside/
+inside hosts become at most 34/46 and 72/80. Entry activations total at most three.
+These dedicated reconciliation roles do not relabel controlled compile/native/D0
+originals. All existing shared, grouped, ETW and later-product maxima still apply.
+
+Charge at most five passive evidence passes, one per new original, combined at most
+210 seconds and 32 MiB including snapshot writes. Each compiler collector is at most
+sixty seconds; each observer/check/activation-final collector is at most thirty.
+Their exact file lists and per-pass byte allocations must be frozen before admission
+and fit the combined limit and ordinary per-original/lineage/cumulative constraints.
+At the recovered baseline this gives at most 52 passes, 12000 reserved seconds and
+1757380780 reserved bytes, within 108/32400/216 GiB. Activation readiness capture stays
+included in its original charge; reserve its final collector before launch and never
+charge it twice. Full failed charges persist and no capacity is refunded.
+
+Review the complete source/protocol/accounting chain at its actual dependency gates;
+batch independent reviews and reuse unchanged conclusions. Within this accepted finite
+scope, source diagnostics, supported fixes, evidence preparation, checks and review do
+not each require another owner decision. Actual attendance is separate from authority.
+A material scope/effects/remaining-budget change or unresolvable ownership condition
+stops dependent work under the existing rules, without granting speculative cleanup.
+
 ### Pre-UAC Input-Check Continuation
 
 The first retained-entry activation ended before the UAC dispatch. Its accepted
