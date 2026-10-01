@@ -24327,6 +24327,37 @@ check and requires a separately charged check of the corrected payload before
 attendance. Failed payload/evidence roots remain intact; the next corrected pair
 uses fresh roots. Unrelated occupied catalogs are not adopted by this section.
 
+For this finite continuation, permit at most one additional diagnostic readback
+after an independently accepted failure and independent triage of the mandatory
+four-file preactivation revalidation. This is a corrected local input/control
+readback at 0/0/0/0, not another native check, infrastructure survey or metadata
+pass. Require independently accepted source, exact plan/projection/call, current
+accounting and outcome gates. The original single-call admission remains spent;
+it cannot admit this additional call or an unchanged retry.
+
+Keep exactly the successful check's four payload roles and their original
+deployment length, SHA-256 and complete nine-field Linux identities: device,
+inode, mode, UID, GID, link count, size, modification time and change time.
+Retain every historical and within-read equality, regular/single-link, direct
+path, size, content and EOF predicate, finally-close and post-persistence check.
+Do not refresh a baseline, repair an occupied payload or qualify any identity
+field. No extra stat, content read, process query or candidate execution is added.
+
+The revised private receipt may add only the fixed payload ordinal (one through
+four), finite stage/reason codes for existing predicates, and nine-bit masks
+identifying changed fields in historical, held or named comparisons. Compute
+these from already acquired observations. The added diagnostics emit no raw observed
+paths, identities, timestamps, contents or exception text. Bind the precise code mapping during
+source/call review, with source/mock validation of distinct rejections, unchanged
+admission truth and short-circuit I/O. Keep one plan read capped at 16 KiB, one
+exact-length-plus-overflow read per selected file within the existing 2-MiB
+executable and three 64-KiB limits, an 8-KiB exclusive fresh private receipt,
+25-second work/28-second alarm and a 30-second total termination envelope.
+Preserve the earlier failed receipt and every spent charge. A successful revised
+readback can satisfy only the same unchanged-payload gate after independent
+outcome acceptance; it cannot explain the earlier generic failure. A failure
+grants no further readback, relaxed predicate, baseline adoption or readiness.
+
 Use the existing fixed Python holder's narrowly separated input-check transport,
 not a new command service or arbitrary executable interface. Admit the four Linux
 executable roles, fixed original relay, runtime directory and System32 WSL role
