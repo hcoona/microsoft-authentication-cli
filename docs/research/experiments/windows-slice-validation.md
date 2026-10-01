@@ -24360,14 +24360,11 @@ references, x64 C# 5 winexe topology, output/read limits and 150/145/100-second 
 Other compile slots keep their existing source, schema and baseline predicates.
 This dedicated observer role does not allocate an extra entry compilation/check pair.
 
-The new `--closure-check` holder path selects only the fresh
-`closure-observer-0181` Windows payload and Linux action roots. Its strict private
-configuration binds current accepted source/protocol/reviews/accounting, original
-snapshot/outcome/triage, frozen selector, two positive distinct PID/creation pairs,
-original invocation relay, separate subject relay/socket identity, infrastructure,
-observer and holder hashes. It admits only 37/144/6/415 to 37/145/6/417 and outside
-hosts 31 to 32. Exact-call admission proves these operands come from the original
-frozen evidence. They are not public machine identifiers or runtime discoveries.
+The current `--closure-check` holder path follows the
+[fresh controller implementation](#fresh-closure-controller-implementation) below.
+Its fixed native payload and original selector remain unchanged; spent original
+slots cannot be selected by the current holder. Exact-call admission derives the
+configuration operands from frozen evidence, not runtime discovery.
 
 The native ASCII LF selector has exactly ten fields: schema
 `azureauth-retained-closure-v1`, original nonce, frozen snapshot SHA-256, first PID,
@@ -24514,6 +24511,51 @@ original privileged deadline, grant another entry activation/UAC, permit depende
 before accepted closure or waive unresolved native/relay lifetime. Required owner scope
 acceptance applies once to this allowance; its ordinary technical steps and narrowly
 conditioned contingency require no repeated permission.
+
+#### Fresh closure controller implementation
+
+The holder's current `--closure-check` path uses the strict
+`windows-retained-closure-observation-v2` configuration and only fresh Linux
+`closure-observer-0182` or conditional `closure-observer-0183` roots. Its own source,
+config, infrastructure, original retained-input descriptors and evidence reside there;
+the fixed native argv and working directory remain at Windows `closure-observer-0181`.
+The fresh service name includes the selected slot and original selector nonce. Bind
+the accepted source/protocol/reviews, original snapshot/outcome/triage and selector,
+unchanged native artifact acceptance, actual predecessor outcome and accounting.
+Slot 0182 permits only 37/145/6/417 to 37/146/6/419 and outside 32 to 33; slot 0183
+permits only 37/146/6/419 to 37/147/6/421 and outside 33 to 34. Configuration shape
+and counters are prerequisites; independent outcome/call review must establish the
+contingency condition before selecting 0183. The original absolute FILETIME is fixed
+at 134353832183053227 and is never renewed.
+
+A hash-bound `retained-inputs.json` contains exactly the original EXE and selector
+path, length, SHA-256 and nine-field Linux identities from accepted frozen deployment.
+Within the original's clock, read each once using no-follow regular single-link
+handles, original size plus one EOF byte, exact hash/length and every original
+non-ctime field. Reject a current size mismatch before reading any content. Require
+complete current held/named full9 agreement, including
+ctime, and retain separate expected/observed receipts and qualification flags.
+The Linux infrastructure comparison retains its original positive link counts.
+Neither the old holder nor an old output is read, repaired or invoked by this path.
+
+Persist conservative relay-sample-attempted and native-start-attempted flags in fresh
+final evidence. Set each immediately before its operation; an attempted native start
+whose creation is uncertain cannot qualify for the contingency. Input/identity checks
+precede both operations. Preserve the original twenty-five-second BOOTTIME handoff,
+five-second terminal reserve and at-most-twenty-second native allowance. Work and
+final return also require the unchanged absolute deadline; pass the smaller deadline
+to the unchanged native observer. An expired original never permits a fresh interval.
+
+Only a completed empty-stream native exit zero permits the holder to read the new
+exclusive result. Its fresh final record binds that result's path, length, hash and
+strict current full9 identity separately from process classifications and whether
+closure passed. The separately reserved collector first reads only fresh Linux
+records. It may read the fixed native result only when those records establish the
+same slot/config/nonce, normal native exit zero, no forced or signaled return, and a
+matching fresh result descriptor. Otherwise withhold that read without probing the
+native result path. Compare any collected result against the fresh descriptor; a
+collision, missing or ambiguous provenance never authorizes old-output collection.
+These source rules add no native query, output probe, compilation or collector pass.
 
 #### Corrected entry and shared deadline
 
