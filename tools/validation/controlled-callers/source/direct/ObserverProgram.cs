@@ -110,7 +110,8 @@ internal static class ObserverProgram
                     failure=new((int)fault,1,0,0,0,0,-1);
                 }
                 else if(DirectFailure.Enabled && frame.Length>=4 &&
-                    (frame[..4].SequenceEqual("OWF2"u8) || frame[..4].SequenceEqual("OWF3"u8)))
+                    (frame[..4].SequenceEqual("OWF2"u8) || frame[..4].SequenceEqual("OWF3"u8) ||
+                     frame[..4].SequenceEqual("OWF4"u8)))
                 { Need(FailureDetail.TryDecode(frame,out FailureDetail detail));failure=detail;fault=(Fault)detail.Fault; }
                 else
                 {
@@ -179,16 +180,44 @@ internal static class ObserverProgram
 
 // Fixed numeric diagnostics for synthetic roles only. No message, path or input value
 // enters this channel. The admitted source and ordinal catalog identify each location.
+internal readonly record struct TraceQuery(uint BufferSize,uint MinimumBuffers,uint MaximumBuffers,
+    uint NumberOfBuffers,uint LogFileMode,uint EnableFlags)
+{
+    internal bool MatchesExpected => BufferSize==64 && MinimumBuffers is >=2 and <=8 &&
+        MaximumBuffers>=MinimumBuffers && MaximumBuffers<=8 && NumberOfBuffers is >=2 and <=8 &&
+        LogFileMode==0x12000100 && EnableFlags==0x10000001;
+    internal object Record()=>new {available=1,bufferSize=BufferSize,minimumBuffers=MinimumBuffers,
+        maximumBuffers=MaximumBuffers,numberOfBuffers=NumberOfBuffers,logFileMode=LogFileMode,enableFlags=EnableFlags};
+}
+
 internal readonly record struct FailureDetail(int Fault,int Origin,int Stage,int Source,int Line,int InputOrdinal,int OpenError,
-    uint NativeStatus=uint.MaxValue,int TraceState=-1)
+    uint NativeStatus=uint.MaxValue,int TraceState=-1,TraceQuery? Query=null)
 {
     private bool Extended => Source==4 || NativeStatus!=uint.MaxValue || TraceState!=-1;
-    internal object Record()=>Extended ?
+    private bool QueryContext => Fault==8 && Origin==1 && Stage==4 && Source==4 &&
+        Line is >=1 and <=100000 && InputOrdinal==0 && OpenError==-1 && NativeStatus==uint.MaxValue;
+    internal object Record()=>Query is TraceQuery query ?
+        new {fault=Fault,origin=Origin,stage=Stage,source=Source,line=Line,inputOrdinal=InputOrdinal,
+            openError=OpenError,nativeStatus=NativeStatus,traceState=TraceState,traceQuery=query.Record()} : Extended ?
         new {fault=Fault,origin=Origin,stage=Stage,source=Source,line=Line,inputOrdinal=InputOrdinal,
             openError=OpenError,nativeStatus=NativeStatus,traceState=TraceState} :
         new {fault=Fault,origin=Origin,stage=Stage,source=Source,line=Line,inputOrdinal=InputOrdinal,openError=OpenError};
     internal byte[] Encode()
     {
+        if(Query is TraceQuery query)
+        {
+            if(!QueryContext || TraceState<0 || !ValidTraceState(TraceState) || (TraceState&3)!=3 || query.MatchesExpected)
+                throw new SafeFailure(ConfidentialWsl.Fault.Protocol);
+            // OWF4 implies the fixed trace-shape failure context; the channel stays 40 bytes.
+            byte[] queried=new byte[40];"OWF4"u8.CopyTo(queried);
+            BinaryPrimitives.WriteInt32LittleEndian(queried.AsSpan(4),Line);
+            BinaryPrimitives.WriteInt32LittleEndian(queried.AsSpan(8),TraceState);
+            BinaryPrimitives.WriteInt32LittleEndian(queried.AsSpan(12),1);
+            uint[] queryValues=[query.BufferSize,query.MinimumBuffers,query.MaximumBuffers,
+                query.NumberOfBuffers,query.LogFileMode,query.EnableFlags];
+            for(int i=0;i<queryValues.Length;i++)BinaryPrimitives.WriteUInt32LittleEndian(queried.AsSpan(16+4*i),queryValues[i]);
+            return queried;
+        }
         byte[] frame=new byte[Extended?40:32];
         if(Extended)"OWF3"u8.CopyTo(frame);else "OWF2"u8.CopyTo(frame);
         int[] values=[Fault,Origin,Stage,Source,Line,InputOrdinal,OpenError];
@@ -207,6 +236,19 @@ internal readonly record struct FailureDetail(int Fault,int Origin,int Stage,int
     internal static bool TryDecode(ReadOnlySpan<byte> frame,out FailureDetail result)
     {
         result=default;
+        if(frame.Length==40 && frame[..4].SequenceEqual("OWF4"u8))
+        {
+            int line=BinaryPrimitives.ReadInt32LittleEndian(frame[4..]);
+            int state=BinaryPrimitives.ReadInt32LittleEndian(frame[8..]);
+            if(line is <1 or >100000 || state<0 || !ValidTraceState(state) || (state&3)!=3 ||
+                BinaryPrimitives.ReadInt32LittleEndian(frame[12..])!=1)return false;
+            var query=new TraceQuery(BinaryPrimitives.ReadUInt32LittleEndian(frame[16..]),
+                BinaryPrimitives.ReadUInt32LittleEndian(frame[20..]),BinaryPrimitives.ReadUInt32LittleEndian(frame[24..]),
+                BinaryPrimitives.ReadUInt32LittleEndian(frame[28..]),BinaryPrimitives.ReadUInt32LittleEndian(frame[32..]),
+                BinaryPrimitives.ReadUInt32LittleEndian(frame[36..]));
+            if(query.MatchesExpected)return false;
+            result=new FailureDetail(8,1,4,4,line,0,-1,uint.MaxValue,state,query);return true;
+        }
         bool extended=frame.Length==40 && frame[..4].SequenceEqual("OWF3"u8);
         if(!extended && (frame.Length!=32 || !frame[..4].SequenceEqual("OWF2"u8)))return false;
         int[] values=new int[7];
@@ -250,6 +292,37 @@ internal readonly record struct FailureDetail(int Fault,int Origin,int Stage,int
             Check(!TryDecode((trace with {TraceState=state}).Encode(),out _));
         foreach(int state in new[]{-1,0,1,3,7,15,31})
             Check(TryDecode((trace with {TraceState=state}).Encode(),out _));
+        var shape=new TraceQuery(64,4,8,4,0x12000100,0x10000001);
+        Check(shape.MatchesExpected);
+        foreach(var query in new[]{shape with {BufferSize=uint.MaxValue},shape with {MinimumBuffers=1},
+            shape with {MaximumBuffers=3},shape with {NumberOfBuffers=9},
+            shape with {LogFileMode=0},shape with {EnableFlags=0}})
+        {
+            var detail=new FailureDetail(8,1,4,4,467,0,-1,uint.MaxValue,15,query);
+            byte[] queried=detail.Encode();Check(queried.Length==40);
+            Check(TryDecode(queried,out decoded) && decoded==detail);
+            Check(!TryDecode(queried.AsSpan(0,39),out _));
+            foreach(int availability in new[]{-1,0,2})
+            {
+                bad=(byte[])queried.Clone();BinaryPrimitives.WriteInt32LittleEndian(bad.AsSpan(12),availability);
+                Check(!TryDecode(bad,out _));
+            }
+            foreach(int state in new[]{-1,0,1,2,4,8,16,32})
+            {
+                bad=(byte[])queried.Clone();BinaryPrimitives.WriteInt32LittleEndian(bad.AsSpan(8),state);
+                Check(!TryDecode(bad,out _));
+            }
+        }
+        var absent=unknown with {TraceState=15};
+        Check(TryDecode(absent.Encode(),out decoded) && decoded.Query is null);
+        byte[] successful=new FailureDetail(8,1,4,4,467,0,-1,uint.MaxValue,15,
+            shape with {BufferSize=0}).Encode();
+        BinaryPrimitives.WriteUInt32LittleEndian(successful.AsSpan(16),64);
+        Check(!TryDecode(successful,out _));
+        byte[] malformed=new FailureDetail(8,1,4,4,467,0,-1,uint.MaxValue,15,
+            shape with {BufferSize=0}).Encode();
+        BinaryPrimitives.WriteInt32LittleEndian(malformed.AsSpan(4),0);
+        Check(!TryDecode(malformed,out _));Check(!TryDecode(new byte[41],out _));
     }
 }
 internal static class DirectFailure
@@ -263,6 +336,9 @@ internal static class DirectFailure
     { if(Enabled)lock(Sync)first??=new FailureDetail((int)Fault.Admission,Origin,Stage,source,line,InputOrdinal,-1); }
     internal static void RememberTrace(int line,uint status)
     { if(Enabled)lock(Sync)first??=new FailureDetail((int)Fault.Trace,Origin,Stage,4,line,InputOrdinal,-1,status); }
+    internal static void RememberTraceQuery(int line,TraceQuery query)
+    { if(Enabled)lock(Sync)first??=new FailureDetail((int)Fault.Trace,Origin,Stage,4,line,InputOrdinal,-1,
+        uint.MaxValue,-1,query); }
     internal static void RememberTraceStatus(uint status,[CallerLineNumber] int line=0) => RememberTrace(line,status);
     internal static void SetTraceState(int state)
     { if(Enabled)lock(Sync)traceState=state; }

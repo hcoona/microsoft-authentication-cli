@@ -951,6 +951,15 @@ keep later cleanup outcomes separate. Missing facts remain unknown. This adds no
 platform query, trace, helper, snapshot, raw payload, exception text or private
 value. Successful frames, strict acceptance and real-role diagnostics stay unchanged.
 
+A synthetic post-query shape rejection may retain exactly the six public numeric
+fields already returned by its successful normal query: BufferSize, MinimumBuffers,
+MaximumBuffers, NumberOfBuffers, LogFileMode and EnableFlags. The specialized frame
+keeps the 40-byte cap, explicit availability, first-cause semantics and original
+creation/stop/drain mask; its final record keeps the 4,096-byte cap. Capture no raw
+property buffer, pointer, path or additional field. Preserve every rejection bound
+and ETW option. This diagnostic correction adds no query, experiment, activation,
+deadline or residual-lifetime disposition; subsequent execution keeps its exact gates.
+
 Preserve accepted native and SyntheticSubject dependencies. Carry the accepted
 historical ctime/content qualification forward for the 196 fixed donor roles.
 Rows 1-190 and 195-196 retain original paths/descriptors; observer rows 191-194

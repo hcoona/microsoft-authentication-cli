@@ -462,12 +462,12 @@ internal static class EtwObserver
             Require(startStatus == 0, "trace-start", startStatus); owned = true;
             uint queryStatus = TraceNative.ControlTrace(session, name, properties, 0);
             Require(queryStatus == 0, "trace-query", queryStatus);
-            int minimum = Marshal.ReadInt32(properties, 52), maximum = Marshal.ReadInt32(properties, 56);
-            int allocated = Marshal.ReadInt32(properties, 80);
-            Require(Marshal.ReadInt32(properties, 48) == 64 && minimum >= 2 && minimum <= 8 &&
-                maximum >= minimum && maximum <= 8 && allocated >= 2 && allocated <= 8 &&
-                Marshal.ReadInt32(properties, 64) == 0x12000100 && Marshal.ReadInt32(properties, 72) == 0x10000001,
-                "trace-buffer-shape");
+            // Snapshot only six public numeric fields returned by this same successful QUERY.
+            var query = new TraceQuery(unchecked((uint)Marshal.ReadInt32(properties, 48)),
+                unchecked((uint)Marshal.ReadInt32(properties, 52)), unchecked((uint)Marshal.ReadInt32(properties, 56)),
+                unchecked((uint)Marshal.ReadInt32(properties, 80)), unchecked((uint)Marshal.ReadInt32(properties, 64)),
+                unchecked((uint)Marshal.ReadInt32(properties, 72)));
+            RequireQueryShape(query);
             logfile = TraceNative.Allocate(448); namePointer = Marshal.StringToHGlobalUni(name);
             Marshal.WriteIntPtr(logfile, 8, namePointer); Marshal.WriteInt32(logfile, 28, 0x10001100);
             callback = OnRecord; bufferCallback = OnBuffer;
@@ -489,6 +489,12 @@ internal static class EtwObserver
             }); worker.IsBackground = true; worker.Start();
             Require(entered.WaitOne((int)Remaining(1000)), "consumer-ready");
             entered.Close();
+        }
+        private static void RequireQueryShape(TraceQuery query, [CallerLineNumber] int line = 0)
+        {
+            if (query.MatchesExpected) return;
+            DirectFailure.RememberTraceQuery(line, query);
+            throw new FailureException("trace-buffer-shape");
         }
         private uint OnBuffer(IntPtr data)
         {

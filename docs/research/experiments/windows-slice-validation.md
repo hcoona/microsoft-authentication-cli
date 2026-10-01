@@ -23867,7 +23867,7 @@ The synthetic final's existing failure object adds exactly `nativeStatus` and
 `traceState` for OWF3. A failed OWF3 carries no ordinary observation, so the existing
 top-level native/trace observation defaults are unavailable; use only the explicit
 failure mask for the scoped creation/stop facts. No failure frame can supply scenario
-acceptance. Python accepts only the exact seven- or nine-field object, integer
+acceptance. For OWF2/OWF3, Python accepts only the exact seven- or nine-field object, integer
 values excluding booleans, matching source/status rules and valid lifecycle masks.
 Real-role frames and records remain unchanged. Exception text, paths, handles,
 trace payloads and private values are never added.
@@ -23879,6 +23879,80 @@ the same D0, with no extra process, input read, trace, snapshot or clock. Before
 compilation, review Python positive/negative schema vectors, first-cause/cleanup
 ordering, callback locking and every source/catalog binding. No runtime claim
 follows from these pure checks.
+
+#### Post-query shape diagnostics
+
+The elevated synthetic D0 original 0185 reached the shape predicate in immutable
+observer source `c76e56a27353b378d421b6ac55c1f2112f4d14d1`,
+`EtwObserver.cs:467`. Its frozen failure has source 4, stage 4, line 467,
+nativeStatus UInt32.MaxValue and traceState 15. The latter supports owned session
+creation and successful stop, with no consumer drain. The guard precedes consumer
+startup and both calibration child creations; Job total one and held worker exit
+agree with that path. The sole fixed capture lacks required success terminal.json.
+D0 remains unsuccessful and cannot satisfy D1/D2. Its full charge and collector
+reservation remain spent; missing success output does not authorize recollection.
+
+The shape guard combines six queried values, but OWF3 retains none of their actual
+values. No specific buffer, mode or flag mismatch is established. The public
+[EVENT_TRACE_PROPERTIES contract](https://learn.microsoft.com/en-us/windows/win32/api/evntrace/ns-evntrace-event_trace_properties)
+allows adjustments to buffer parameters; that does not establish this run's values
+or justify relaxing the admitted resource bounds. This correction adds diagnostic
+evidence only, using the same successful ControlTrace QUERY and unchanged guard.
+
+Snapshot six UInt32 values before the shape predicate: BufferSize, MinimumBuffers,
+MaximumBuffers, NumberOfBuffers, LogFileMode and EnableFlags, in that order. Preserve
+all 32 bits, including UInt32.MaxValue as an actual value. Latch this snapshot only
+if this predicate rejects and no earlier failure exists. Pass it directly into the
+first-failure record; do not keep a global last-query cache or attach a snapshot to
+an unrelated later failure. Existing cleanup may update only the lifecycle mask.
+
+OWF4 occupies exactly the existing 40-byte worker channel. Bytes 0-3 are ASCII
+OWF4; offsets 4, 8 and 12 are little-endian Int32 source line, traceState and
+availability 1; offsets 16 through 36 hold the six little-endian UInt32 values.
+The tag implies fault Trace (8), worker origin 1, observation stage 4, source 4,
+inputOrdinal 0, openError -1 and unavailable native status. These fixed fields
+retain their existing meanings and are reconstructed by the decoder. Require line
+1..100,000, a valid lifecycle mask containing successful creation, availability
+exactly 1, and a tuple that fails the original shape predicate. Reject every other
+frame length, availability, context or successful tuple. Absent query evidence uses
+unchanged OWF2/OWF3; zero-valued fields cannot stand in for unavailable evidence.
+
+The synthetic failure object's OWF4 form adds only traceQuery to the OWF3 fields.
+Its exact keys are available, bufferSize, minimumBuffers, maximumBuffers,
+numberOfBuffers, logFileMode and enableFlags. All are integers excluding booleans;
+available equals 1 and each value is in 0..UInt32.MaxValue. Python validates the
+same fixed context, lifecycle and rejected tuple. Keep OWF1/OWF2/OWF3 and successful
+observation codecs, real-role diagnostics, first-error locking, 40-byte capture and
+4,096-byte publication limits. This frame cannot establish scenario acceptance.
+
+Pure checks distinguish a rejection in each operand, preserve unsigned extremes,
+reject malformed availability/lifecycle/length and successful tuples, and keep
+query absence distinct from zero. They perform no API, file or process operations.
+The source map, four response files, catalog and both catalog consumers bind the
+next fresh compile v21/direct v9 recipe atomically, with execution guards closed.
+No compilation, deployment, replay, additional collection or activation occurs as
+part of source preparation. Changed observer bytes still require independent
+artifact acceptance and successful D0 before D1/D2. The accepted three-entry
+maximum and original absolute deadline remain; stopped entry 0184 cannot be reused.
+
+The retained entry's readiness succeeded, but its final result was unsuccessful:
+the held WSL child exited with code 15, failing the existing clean predicate.
+Its separate frozen final evidence supports held entry/context/WSL exit, Job active
+zero, empty holder and transport scopes, closed streams and exact elevated-relay
+absence. Accept scoped completion separately from clean runtime success. This
+does not close historical lifetime uncertainties or change noExperimentLive=false.
+
+Private frozen D0 snapshot SHA-256 is
+`a2fd9966386bea80ef21e851f4921cca838db0aa5e5140cb9ede63565cdb2366`;
+independent failed-outcome review is
+`c4da4c5990a6ea774b4888d133baf8a24bd5f384c00fa5bad6cbef4c873b0b43`.
+Independent diagnostic-gap triage is
+`54e22ae372e24910e2a54c1958a25c3df15ad2a3f2e51cd3001a657b1ed0e1a9`.
+The retained-entry final snapshot is
+`8a0b6c624ed75c3cb3125554c878c937ec27599a3ea706a9b75bdf2e020c9ae1`;
+its independent outcome/scoped-completion review is
+`738cc367f4d28832d31fbfd11c9dc851dad05f824ca489e63a53643bc08b60a7`.
+
 
 #### Finite continuation and preserved dependencies
 
