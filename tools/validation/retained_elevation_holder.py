@@ -513,7 +513,7 @@ def input_check(slot, nonce, manifest_hash, infrastructure_hash, config_hash, ex
         code = None if child is None else child.poll()
         normal = returned and not forced and not signal_seen and all(eof) and not any(data) and \
             code in (0, 1, 101, 102, 103, 104, 105, 110, 111, 112, 113, 114, 115, 116,
-                     117, 118, 119, 120, 121, 122, 123, 124, 125)
+                     117, 118, 119, 120, 121, 122, 123, 124, 125, 126)
         result = {'slot': slot, 'nonce': nonce, 'configSha256': config_hash,
                   'manifestSha256': manifest_hash, 'proxyStarted': child is not None,
                   'proxyExit': code, 'eof': eof, 'observedBytes': [len(v) for v in data],

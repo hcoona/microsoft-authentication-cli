@@ -24130,8 +24130,17 @@ caller's existing final journal retains its elevated child's status separately.
 | 121 | Original relay syntax |
 | 122 | Linux companion root |
 | 123 | Current process handle validity |
-| 124 | Current process image-path equality |
+| 124 | Current process image-path inequality that also fails OrdinalIgnoreCase |
 | 125 | Inert execution guard |
+| 126 | Current process image-path inequality that matches OrdinalIgnoreCase |
+
+Status 126 classifies a rejected self-image comparison using
+`String.Equals(actualImage, image, StringComparison.OrdinalIgnoreCase)` on the
+same single queried string. Exact ordinal equality alone permits continuation;
+both mismatch classes remain nonzero failures. This diagnostic adds no query,
+normalization, raw path output or case-insensitive acceptance. It does not establish
+file-object equivalence or the cause of an earlier rejection. Other process-image
+comparisons retain their original predicates.
 
 Exceptions and dispatched lifecycle failures retain status 1. These diagnostic
 statuses do not relax an admission predicate or grant another attempt. The separate
@@ -24310,8 +24319,10 @@ The inert native implementation adds `--input-check` to the accepted fixed-mode
 predicate and returns zero after the same held manifest, executable, holder and
 self-image checks, before Launch, Context or Run. Its using scopes dispose their
 inputs on return. The fixed guard-status mapping above identifies a failed check;
-no image-path normalization, case-insensitive comparison or diagnostic input dump
-is added. Source/artifact acceptance must retain this early-return correspondence.
+no image-path normalization, case-insensitive acceptance or diagnostic input dump
+is added. The rejection-only OrdinalIgnoreCase classification above uses the existing
+query result and cannot turn either mismatch into success. Source/artifact acceptance
+must retain this early-return correspondence.
 
 The existing Python holder adds only a separate `--input-check` dispatch with six
 fixed operands: check slot, nonce, manifest hash, infrastructure hash, configuration
