@@ -9,6 +9,198 @@ managed scenario loop below. Windows publish, process/UI tests and real account 
 require an independently accepted supplement before execution; they remain required for
 the corresponding Slice acceptance claims.
 
+## Native Windows Selected-Account Acceptance Preparation
+
+This section prepares the first product authentication observation for Issue #108.
+It is non-executing under the current credential-free Wave. Neither merging this
+preparation nor passing its source checks authorizes account access. A concrete
+real-effects owner decision in the accepted Wave, its matching experiment-safety
+disposition, and accepted exact source/artifact/input/call evidence precede any
+activation or launch. The controller's execution guard remains false.
+
+### Product question and evidence reuse
+
+Use the current product to answer two bounded questions on the existing Windows
+desktop: can the explicitly selected personal account complete a permitted WAM
+request, and can a subsequent process complete the same request silently?
+
+Reuse the [retained product candidate](#retained-launcher-cli-profile-and-wsl-scenario-allocation)
+and its accepted source, dependency and native-image provenance. Product source is
+`503360753accd0829801953823b1b57a4f852440`; the CLI is 8,885,248 bytes with SHA-256
+`02993d94c5145f32274a8763f27d632e2dcc8e6a06d257551b1501eed9689cc7`, and its required
+`msalruntime.dll` is 2,949,656 bytes with SHA-256
+`9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79`.
+Retain the complete accepted runtime asset disposition; two matching hashes alone
+do not establish that disposition. Do not republish the product or rerun accepted
+core, host, adapter, HTTP ownership, native caller or result-parser scenarios merely
+to prepare this pair.
+
+The existing [native caller](../../../tools/validation/controlled-callers/source/native/Program.cs)
+already owns product creation handles, bounded memory capture, strict local
+[result validation](../../../tools/validation/controlled-callers/source/native/ProtocolResult.cs),
+and named-Job completion. Its native scenario results remain evidence for their
+declared controlled behavior, not evidence that its real-account admission path
+has executed. Review that path and join the exact reusable caller artifact before
+activation. The small
+[selected-account controller](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1)
+supplies the existing native admission handshake and safe outcome collection.
+It adds no observer, compiler, service, elevated entry or new dependency.
+
+The native pair has no dependency on D0/D1/D2: it observes its own product through
+creation handles and its own Job. Failed ETW calibration remains failed and still
+blocks the direct WSL observations that consume it. Native success cannot discharge
+those WSL obligations or complete the Slice.
+
+### Proposed account and effects envelope
+
+Use the owner-designated Windows 11 x64 interactive desktop and its ordinary,
+non-elevated logged-on user. Do not use a service, scheduled task, alternate identity,
+impersonation, or the retired elevated WSL relay. The outer host is the existing
+64-bit Windows PowerShell 5.1, launched with `-NoProfile` and attached to an existing
+ordinary Windows console in that interactive session. Detached or background outer
+PowerShell is excluded. Exact environment/call admission must bind this existing-console
+premise, the outer environment and the native caller's constructed current-user
+environment. Preserve ordinary console inheritance and existing strict Job counts;
+do not create an additional console or console host.
+The product's real own-logon, session, station-user and input-desktop admission
+queries are in scope for this proposed observation. An unavailable outcome does
+not authorize changing the desktop, broker, service, account or policy.
+
+Select the same existing personal-account role as the completed Windows account
+research, subject to local owner confirmation. Account presence, consent, broker
+state and correspondence to the current desktop are not assumed from that historical
+observation. Keep the actual email only in local Windows private request documents.
+Use the explicit, caller-provisioned `visual-studio-legacy-wam` Profile from the
+accepted schema, Microsoft-owned client ID
+`872cd9fa-d31f-45e0-9eab-6e460a02d1f1`, Public Cloud, multitenant policy, request
+tenant `common`, and scope `499b84ac-1321-427f-aa17-267ca6975798/.default`.
+The Profile is an experimental selection, not Profile distribution or a support claim.
+The exact source/operation association supplies the default-scope validation basis;
+do not require the returned scopes to contain the literal `/.default` string.
+
+Proposed permitted effects are the product's required in-memory broker account
+discovery; acquisition only for the selected account; ordinary WAM authentication,
+session and reusable-state updates; identity-provider network traffic; and the
+operator's permitted sign-in, MFA/unlock and user-consent interaction. Microsoft
+controls the registration and ensuing consent/audit identity. Keep administrator
+consent, registration changes, account addition/removal, cache clearing/import,
+authenticated resource requests, PATs, installation and remote resource mutation
+outside this pair. No access token, private identifier or raw provider diagnostic
+may leave Windows, be written to a result file, or enter agent output.
+
+The six historical process uncertainties for 0057/0064/0068/0093/0107/0110 and the
+separately recorded historical ETW uncertainty remain unchanged. Existing owner
+dispositions cover credential-free work only. Before account effects, the owner
+must explicitly decide whether to accept their possible interference for this
+bounded pair on the same machine; this preparation supplies no such extension,
+quiescence claim, old-process observation or cleanup authority.
+
+### Two scenarios and one finite correction allowance
+
+| Slot | Product request | Required result | Claim limit |
+| --- | --- | --- | --- |
+| R1 | Explicit personal email/Profile, `interactive-if-needed`, 120-second request, telemetry off, no lifetime-pipe option | One protocol 1 success, exit 0, exact requested email, nonempty unexpired token, valid actual-tenant/authority metadata, WAM mechanism, and natural owned completion | Either silent or interactive API route may succeed. A silent result does not establish visible interactive behavior. |
+| R6 | A new process, identical email/Profile/tenant/scope, `non-interactive-only`, otherwise the same request | One validated success, exit 0, silent API route, and natural owned completion | Establishes reuse in this existing state only; independent operator observation is needed for a no-visible-UI claim. |
+
+The private rows use the existing `confidential-native-private-requests-v1` format,
+one request per group. Require `outcome=success`, `requiredInteraction=null` for R1
+and `silent` for R6, `lifetimePipe=false`, `closeAfterMs=null`,
+`requireCloseAfterLiveSample=false`, `requirePersistenceUnconfirmed=true`, and
+`defaultAssociationIndependentlyAccepted=true`. R1 permits interaction; R6 does not.
+Independently verify the identical selection across rows without exporting their
+contents or hashes. Do not set an expected exact tenant for a `common` personal
+request or infer the actual token tenant from historical results.
+
+Propose four cumulative product-start reservations: attempts 1/2 are R1/R6; attempts
+3/4 are one corrected R1/R6 pair. Each reservation also covers two native caller
+processes and one outer PowerShell process: at most four product, eight caller and
+four controller starts in total, zero ETW starts, zero restore/build/publish actions.
+No existing synthetic charge is refunded, transferred or replayed. The real-effect
+allowance and any public-input materialization/observation allowance must be stated
+in the future Wave amendment; unused synthetic capacity is not their authority.
+
+Reserve the full selected slot before invocation. Failed starts and partial
+preparation spend the reservation. R6 requires an independently accepted successful
+R1 from the same pair, confirmed private selection equality, and unchanged product,
+Profile and caller inputs. The correction pair requires resolved failure/closure,
+reviewed correction and a fresh exact call; it is not an automatic retry. Changes
+within the accepted effects and finite budget require no renewed owner risk decision.
+Do not expand the budget or start a second tool-development track if the correction
+pair cannot answer the product question.
+
+### Controller, clocks and evidence
+
+Keep the existing root
+`C:\Temp\azureauth-windows-slice-108\confidential-native-account-v1` and existing
+194-entry native caller inventory. Admit the full runtime/host/input manifest,
+candidate companions, Profile and private-input identities before invocation;
+do not scan the host, reopen old experimental outputs or infer acceptance from a
+synthetic activation. The prepared public plan uses `ActualAdmission`'s exact schema
+and a unique UUIDv4 nonce. It contains the accepted protocol/risk/source/closure
+receipt hashes and the fixed group, input identities and effects. Bind its exact
+bytes and the activated controller hash in the original-call record. Use fresh
+`control/selected-account-plan-N.json`, `control/GROUP-NONCE.json` and
+`records/GROUP-NONCE` paths. Preserve spent fixed
+`records/selected-account-attempt-N.json` reservations.
+
+The controller opens the public plan and native caller read-only with write/delete
+sharing denied, validates their hashes, durably reserves the slot, and derives the
+existing native 30-minute batch bound from one monotonic timestamp. Its selected
+work deadline is 130 seconds and native completion deadline 140 seconds from that
+timestamp. These do not bound the complete outer invocation: admission precedes
+that timestamp, and stopping and receipt cleanup may follow native completion.
+Product requests remain 120 seconds plus the
+existing one-second ending allowance. No process waits for review or attendance.
+Complete technical preparation before requesting actual R1 attendance. R6 requires
+no renewed readiness when it is fully noninteractive and no human input is needed.
+
+The original `Process.Start` handle supplies supervisor PID/creation identity. Write
+and flush its fixed handshake to an exclusive temporary file, then publish it by
+same-directory move without replacement. The native supervisor retains its existing
+two-second readiness, worker/product handles, named Job, 1 MiB product stdout,
+8 KiB product stderr, 32-byte worker frame and 4,096-byte safe receipt bounds.
+The outer controller requests one asynchronous byte from each supervisor stream:
+only EOF passes; unexpected output is rejected without printing its contents.
+Observe original supervisor exit and both EOFs, then its safe terminal receipt.
+Accept success only with native worker/product/Job completion, strict private result
+validation, no forced stop, matching nonce/protocol and the required API route.
+
+On failure or deadline, make at most one stop through the original supervisor
+handle and a wait of at most five seconds. The future exact-call recipe must separately
+assign a finite receipt/cleanup interval and enforce a complete outer deadline from
+the original invocation timestamp, covering admission, launch, native completion,
+stopping and receipt persistence without resetting the clock between phases. Neither
+140 nor 145 seconds is a complete outer-call bound. The source-only controller does
+not yet enforce that complete bound and must remain inert until this prerequisite
+is satisfied. Its last-close Job behavior is a fallback, not proof
+of worker/product closure. Missing native terminal evidence leaves owned closure
+unknown and stops all further attempts. Never terminate a shared broker, reopen an
+old process by PID, survey ETW, recollect old evidence, or reset a deadline. A failure
+receipt records a fixed stage only; raw exceptions and provider output are omitted.
+
+Retain public controls, reservations, role identities and safe receipts in the
+dedicated experiment root. Keep private selectors and Profile there under ordinary
+owner-controlled permissions; do not commit them or copy private selectors to WSL.
+Retain normal WAM state intentionally. A single post-call collection may read only
+the fixed controller/native safe records for that nonce, at most 32 KiB/30 seconds;
+it may not read product stdout, raw diagnostics or private documents. Account UI
+observations are manually sanitized facts, never screenshots or transcript dumps.
+
+### Preparation exit criterion
+
+This preparation is ready for execution only after the concrete Wave/risk and
+experiment-safety amendments, exact caller artifact/real-path admission, public
+input materialization recipe, private selection binding, controller checks and
+original call are accepted. Do not describe source review as runtime readiness.
+Before that point, static review and deterministic source checks may proceed under
+the existing grant. This section adds no runtime or account debit.
+
+Successful R1/R6 evidence can close only the corresponding selected-account and
+reuse rows in the validation strategy. Work-account behavior, first use, concurrent
+calls, cancellation/denial, WSL lifetime, external Profile activation and overall
+Slice acceptance remain separate. Record a failure as a product-path observation
+with its actual limitation; do not replace it with another synthetic success.
+
 ## Subject and Source Admission
 
 The subject is the fork-owned .NET 10 authentication core and its controlled scenario
