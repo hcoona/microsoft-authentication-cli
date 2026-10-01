@@ -977,6 +977,57 @@ source and exact artifact/input/accounting/call/outcome gates before execution.
 No account, persistent permission, download, restore, publication, installation,
 signing, release or real-product elevation expansion is included.
 
+**Complete retained-entry recovery and continuation:** Within the existing
+credential-free allocation, authorize one complete sequence of bounded closure
+reconciliation, supported source correction and validation, and one further retained
+entry for synthetic D0 diagnostics. Its preparatory maximum is 2/3/0/10: one
+Linux-only closure-observer compilation and one non-elevated observation at 1/1/0/2;
+one corrected-entry compilation and successful pre-UAC check at 1/1/0/2; and one
+further entry activation at 0/1/0/6. Fund these from existing correction capacity,
+preserving the old 0/4/0/23 correction reserve and all protected work. Aggregate
+49/192/30/569, host preparation 29/20, outside/inside host 46/80, ETW and controlled
+scenario ceilings do not increase. Entry activations may total three including the
+two spent activations; this is the sole exception to the preceding no-further-prompt
+restriction. Unused entry compile/check capacity is not a separate activation grant.
+
+Reconciliation selects only the two exact native PID/creation identities and exact
+WSL relay recorded by original 0179, bound from its frozen evidence before execution.
+Permit one read-only, non-elevated native observer and one no-follow relay metadata
+sample, without process/relay enumeration, termination, connection, account/token
+inspection, UAC, shared-service operation or old-output recollection. Missing, reused,
+exited or live native identities and failed queries remain distinct. Present, changed,
+inaccessible or unobserved relay state is not absence. Accept independently reviewed
+point-in-time reconciliation only when it establishes that neither original native
+incarnation remains active and the exact relay is absent. Preserve the original exit
+and timing evidence gaps; this is a current closure basis, not historical proof or a
+residual-lifetime waiver. Otherwise stop dependent execution.
+
+The matching [complete continuation protocol](research/experiments/windows-slice-validation.md#complete-retained-entry-recovery-and-continuation)
+owns finite preparation, source diagnostics/corrections, observations, new outputs,
+termination, accounting and exact gates. Permit at most five separately charged
+passive evidence passes, combined 210 seconds and 32 MiB including snapshot writes,
+within unchanged cumulative and per-original limits. No extra metadata survey,
+automatic retry, refund or occupied-root repair follows. Source-only diagnostic and
+corrective preparation may proceed while closure is unresolved; only the specifically
+bounded reconciliation may execute before closure is accepted.
+
+Keep the original 0179 absolute privileged deadline, including its elapsed time;
+the next entry must end by that same deadline and receives no fresh 24-hour interval.
+A private fixed deadline input must be bound and validated before the next attended
+handoff. Accept actual closure, corrected source/artifact/input-check evidence and
+complete launch/shutdown preparation before requesting fresh UAC readiness. Failure
+spends the full charge and grants no further activation. Existing separately admitted
+D0 capacity remains protected; D1/D2 require accepted D0. No real-account, persistent
+permission, installation, publication, release or product elevation is included.
+
+This is one owner-approved continuation. Inside its accepted effects, remaining
+capacity and protocol, perform necessary preparation, source/evidence corrections,
+validation and independent reviews without renewed per-step owner approval. Reuse
+unchanged accepted review conclusions and refresh affected dependencies. Internal
+reviews still apply; they are not additional owner decisions. Request actual human
+attendance only when needed, and escalate a genuine scope/effects/budget change or
+unresolved ownership that this sequence cannot reconcile.
+
 **Standing historical ctime qualification:** The repository owner accepts
 historical Linux ctime drift for already admitted input roles within this finite
 credential-free grant on the designated hosts. Applying this decision to another

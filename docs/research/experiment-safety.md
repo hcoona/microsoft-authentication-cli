@@ -1062,6 +1062,47 @@ The original retained-entry 86,400-second absolute cap, owned closure, synthetic
 permission and all individual test clocks remain unchanged. No persistent permission
 or account changes, restore, download, installation, publication or release follow.
 
+## Complete Retained-Entry Recovery and Continuation
+
+The matching Wave authorizes one complete credential-free recovery sequence under
+[its protocol](experiments/windows-slice-validation.md#complete-retained-entry-recovery-and-continuation).
+This adds a bounded observation path for original 0179's two recorded native
+incarnations and exact relay, not permission to ignore uncertain ownership. Before
+other experimental continuation, independently accept their current closure: neither
+original native incarnation remains active and the exact relay is absent. Preserve
+unobserved original exits/timing and all historical dispositions. Current reconciliation
+does not reconstruct past completion or diagnose the failed context predicate.
+
+One fixed non-elevated observer may query each of the two literal PIDs once with
+limited-query and synchronize rights, sample creation and held-handle exit state,
+and return normally within thirty seconds including transport termination. One Linux
+no-follow metadata sample covers only the recorded relay. Distinguish PID absence,
+reuse, matching exited/live incarnation and access/query failure. A present, changed
+or inaccessible relay does not pass. No process survey, extra rights, image/token/
+account inspection, relay connection, termination, shared-service action or UAC is
+part of reconciliation. The observer's own native completion and transport scope
+must be established; timeout or killed proxy is insufficient. An unresolved result
+stops dependent execution without replay or inferred risk acceptance.
+
+Fund at most 2/3/0/10 and five passive passes totaling at most 210 seconds/32 MiB
+from existing capacity, preserving protected work and the old 0/4/0/23 reserve.
+Only the accepted reconciliation may execute while closure is unresolved; inert
+source/diagnostic/corrective preparation remains permitted. All source, artifact,
+input, exact-call and outcome gates remain. Code fixes require supported findings;
+generic failure records do not justify guessed causes or arbitrary relaxed predicates.
+
+The single additional retained entry raises only its activation submaximum to three.
+It must preserve original 0179's absolute deadline rather than restart a 24-hour clock.
+Bind that deadline before input validation and UAC; refuse admission when insufficient
+time remains for startup and bounded closure. Fresh attendance follows completed
+preparation. A failed activation consumes its full charge without another prompt.
+Apply existing ordinary D0/D1/D2 clocks, ETW controls and outcome dependencies.
+
+No additional owner approval is needed for each technical step inside this complete
+accepted sequence. Separate owner decisions remain necessary for actual expansion
+of its effects/capacity or disposition of uncertainty beyond the declared current
+reconciliation. Standing historical ctime acceptance remains unchanged.
+
 ### Standing Historical ctime Qualification
 
 The matching Wave records the owner's standing acceptance of historical Linux
