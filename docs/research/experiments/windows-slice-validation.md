@@ -173,26 +173,40 @@ strict correspondence and owned-descriptor closure are independently accepted.
 Failure and scoped OWN Linux helper/watchdog completion are separate judgments.
 
 After independent all-row content/provenance and outcome acceptance, create the
-exact `windows-controlled-compile-current-donor-acceptance-v1` interchange. Its
-subjects are the original table digest, `currentDonorsSha256` of the new ordered
-365 descriptor rows, `publicPathsContentAndProvenanceAccepted: true`,
-`strictCurrentFull9: true` and `historicalSuccessClaimed: false`. The ordinary
+exact `windows-controlled-compile-current-donor-acceptance-v2` interchange. Its
+subjects are the original table digest, `currentDonorsSha256` of the accepted ordered
+365 current descriptor rows, `publicPathsContentAndProvenanceAccepted: true`,
+`strictWithinReadFull9: true`, `currentNonCtimeFieldsPinned: true`,
+`historicalCtimeQualified: true` and `historicalSuccessClaimed: false`. The ordinary
 acceptance envelope remains `schema`, `accepted: true` and `subjects`. A source
-result cannot authorize its own acceptance.
+result cannot authorize its own acceptance. An unchanged accepted all-row acquisition
+may supply this basis; do not reacquire all donors solely to serialize this new
+acceptance contract.
 
-The new compile inventory is `windows-controlled-harness-compile-files-v3`, with
+The current compile inventory is `windows-controlled-harness-compile-files-v4`, with
 exact fields `schema`, `files`, `originalDonors` and `currentDonorAcceptance`.
-Keep the full immutable original table in `originalDonors`; join the first 365
-current `files` by exact order, relative role, public path, length and hash.
-The caller pins the acceptance descriptor and both table digests before any
-donor use. This schema selects full9 pinning against the accepted current basis;
-the original files-v1 recipe retains its historical eight-field rule. Neither
-schema exposes an arbitrary device or identity relaxation switch. The other
-48 inputs, catalog, source map, admission and typed control subjects retain their
-exact shapes. Reuse the existing deployment-v3 `compileDonorReads`: its inventory
-hash now binds the selected original or current basis and its acceptance. The
-worker validates all retained donor operands against that same basis without
-another donor read. Native receipts and created-copy lineage remain unchanged.
+Keep the full immutable original table in `originalDonors` and the accepted current
+365-row table in `files`; join their first 365 rows by exact order, relative role,
+public path, length and hash. The caller pins the acceptance descriptor and both
+table digests before any donor use. For these fixed public donor roles, apply the
+standing historical ctime qualification to comparison with the accepted current
+basis: require exact length/hash/EOF and equality of device, inode, mode, owner,
+group, size, mtime and link count. Retain all nine recorded fields and require
+initial, final and named full9 to agree within every read. A difference in the
+historical ctime field neither refreshes that baseline nor establishes its cause,
+uninterrupted history or success. This does not qualify device or any other field.
+The original files-v1 recipe retains its historical eight-field rule. Historical
+files-v3 and donor-acceptance-v1 remain bound to their original stricter source and
+failed evidence; the current caller does not reinterpret those schemas as v4/v2.
+No schema exposes an arbitrary identity-relaxation switch. The other 48 inputs,
+controls, catalog, source map, admission and their within-read comparisons remain
+strict and retain their exact shapes. Reuse the existing deployment-v3
+`compileDonorReads`: its inventory hash binds the selected basis and acceptance.
+The worker applies the same content/eight-field/within-read predicate to every
+retained donor operand without another donor read. Native receipts and created-copy
+lineage remain unchanged. A further compilation still requires accepted prior
+failure/scoped completion, a supported correction, fresh unused literal roots and
+its independently accepted exact source/input/call and nonrefundable debit.
 
 Refresh only necessary local caller/protocol/checkpoint/control consumers into
 fresh dedicated leaves; reuse unchanged accepted source copies and reviews.
