@@ -10,7 +10,7 @@ import sys
 import time
 
 ADMISSION = None
-STAGE = '/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0186'
+STAGE = '/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0189'
 LEAVES = (
     'authority.json', 'Invoke-WindowsNamedGuardFixtures.ps1',
     'SelectedAccountMaterializationPins.cs', 'caller-inventory.json',
@@ -18,7 +18,7 @@ LEAVES = (
     'Invoke-WindowsSelectedAccount.ps1', 'R1.template.json', 'R6.template.json',
 )
 RECOVERY = '/home/shuaizhang/.local/state/azureauth-108-recovery-20260929'
-SOURCE_PATHS = {name: RECOVERY + '/selected-account-public-inputs-v1/' + name for name in LEAVES}
+SOURCE_PATHS = {name: RECOVERY + '/selected-account-public-inputs-v2/' + name for name in LEAVES}
 for _name in ('Authentication.Cli.exe', 'msalruntime.dll'):
     SOURCE_PATHS[_name] = RECOVERY + '/selected-account-product-bytes-v1/' + _name
 

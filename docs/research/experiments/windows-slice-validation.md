@@ -405,13 +405,14 @@ The actual public plans bind the destination identities in `callerPins` and
 `productPins`, including the Profile. The `ActualAdmission` typed schema remains
 the consumer; do not add outer-wrapper fields to it.
 
-The concrete public preparation uses three inert supporting assets:
+The initial 0186 public preparation used these exact supporting assets. Their
+immutable bindings are historical; current successor bindings appear below:
 
 | Asset | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Linux transfer](../../../tools/validation/transfer_selected_account_public.py) | 11191 | `54de9a475c165d5af2766360b1bd144e76ac2928957adb256549c4cd78b097fd` |
-| [Windows adapter](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 9882 | `0cfadbe81fef8e80fde724eb13b305e9513420fe72398695fb6c482e7d6df890` |
-| [Native file checks](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 11600 | `a253cd2e90a69de45154ad5a2c78a342af988bc2c90a3d69a776be051719722a` |
+| [Linux transfer](https://github.com/hcoona/microsoft-authentication-cli/blob/732ac352de43c625d16af57c9df11736f04d9694/tools/validation/transfer_selected_account_public.py) | 11191 | `54de9a475c165d5af2766360b1bd144e76ac2928957adb256549c4cd78b097fd` |
+| [Windows adapter](https://github.com/hcoona/microsoft-authentication-cli/blob/732ac352de43c625d16af57c9df11736f04d9694/tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 9882 | `0cfadbe81fef8e80fde724eb13b305e9513420fe72398695fb6c482e7d6df890` |
+| [Native file checks](https://github.com/hcoona/microsoft-authentication-cli/blob/732ac352de43c625d16af57c9df11736f04d9694/tools/validation/SelectedAccountMaterializationPins.cs) | 11600 | `a253cd2e90a69de45154ad5a2c78a342af988bc2c90a3d69a776be051719722a` |
 
 The adapter is copied to the normal launcher's required
 `Invoke-WindowsNamedGuardFixtures.ps1` name in the exclusively created
@@ -593,7 +594,199 @@ and exact revised source/input/call/accounting gates. Stop after sufficient
 accepted evidence. Preserve all historical gaps and `noExperimentLive=false`;
 this finite allocation grants no new unresolved lifetime or owner risk exception.
 
+#### Diagnostic Public Materialization Successor
+
+The original 0186 public materializer failed in its broad copy phase. Independent
+review accepted its failed result, source-supported original Windows root/owned-Job/
+two-EOF completion and own Linux scoped completion. No concrete copy defect was
+established statically. Zero published rows did not identify an ordinal or prove
+zero copies. Preserve the occupied staging/account-v1 roots, their failed result,
+full spent charges, prior collector failure with UNKNOWN cause and all historical
+gaps. Do not replay, repair, overwrite, adopt or delete those originals.
+
+This current recipe supersedes only the initial 0186/public-input-v1/account-v1
+literals, source bindings and result schema for fresh public preparation. Reuse its
+accepted exact 194-entry caller inventory and unchanged product/Profile provenance,
+strict input/identity/copy/refusal/cleanup mechanisms and ordinary installed toolchain
+basis. No old descriptor is a refreshed baseline. The current first successor uses
+exclusive `named-fixtures-0189`, prepared `selected-account-public-inputs-v2` and
+`confidential-native-account-v2`. Controller, original/cutoff carriers and both null-email
+templates must consistently use account-v2 before input generation; guards remain
+false. Frozen v1 controls retain only their original derivation and cannot supply
+current control bytes. The three extra cutoff controls remain separate from the
+200-leaf materialization inventory and the existing ActualAdmission schema.
+
+The retained 194 caller entries are passive diagnostic-copy and provenance inputs
+in this batch. Their accepted ActualAdmission source fixes account-v1; copied
+original hashes cannot establish native execution at account-v2. Before any
+account-v2 private-input or caller admission, independently accept root-compatible
+caller source/build and the corresponding derived artifact/inventory descriptors.
+This precise prerequisite remains open; generic compilation or source hash
+agreement cannot discharge it. No occupied root is repaired or adopted.
+
+Before any new original, accept the supported fixed diagnostic split, exact current
+source/protocol/input/control/runtime correspondence, complete finite accounting,
+activation/original-call joins and prior scoped completion. Necessary technical
+correction and buffer allocation use the standing Wave, not a renewed owner decision.
+New artifact, kernel relevance, current console and real operating-basis gates still
+precede private creation/account work. This public batch starts no product or caller,
+performs no account/cache/store access or download and reactivates no ETW/elevation.
+
+##### First-fault numeric context
+
+The v2 public receipt adds one bounded diagnostic object to the existing receipt.
+Capture attempted copy ordinal 1–200 (zero outside an active copy), completion count
+0–200, wrapper phase, fixed native phase, held-role ordinal and error kind/code,
+with the existing native counters before disposal. Completion count advances only
+after Copy returns and its result row is inserted; it is not proof that an earlier
+partially failed copy created no file. Final held ordinals 1–400 alternate source
+and destination; interpret them with their phase. Rows still publish only after
+all copies/final checks, and success remains provisional until ordinary original,
+transport, root/Job/two-EOF, content and scoped outcome acceptance.
+
+Wrapper phases are 0 before copying, 1 copy/deadline, 2 row binding, 3 final held
+checks and 4 final deadline/result assignment. Native phases identify source pin
+100-series, destination pin 200-series, writer 300-series, final held checks
+400–404/post-loop 405, and row binding 500. Pin suffixes distinguish canonical path,
+parent hold, open, snapshot, name, stream construction, hash and return; stability
+170–174/270–274/320–324/400–404 identifies held snapshot/name and named reopen/name/
+snapshot. Writer stages distinguish target canonical/parent/create/stream/initial
+identity/name/rewind/read/write/EOF/flush, final source stability, close and creation
+join. The exact source owns the closed phase list; no arbitrary text is accepted.
+
+Error kind 0 means no recorded primary fault; it proves neither success nor cleanup.
+Kind 1 records a fixed failed predicate phase. Kind 2 captures numeric Win32 last
+error immediately on a failing SetLastError API, before disposal or another native
+call. Kind 3 records only a managed numeric HRESULT. Never emit exception text/types,
+paths, payload or private hashes. Freeze the first fault and its native context so
+later wrapper/cleanup faults cannot replace it. Cleanup flags remain separate.
+Missing/malformed/incomplete receipts or transport retain their unknown/failure status.
+
+All prior native comparisons, short-circuit/API ordering, source/destination hash,
+EOF, fresh volume/index/creation join, within-read identities, source deadlines,
+resource/I/O counters and deterministic disposal remain. Diagnostic setters add no
+file read/open, native query, child, stop or renewed clock. Bootstrap still reads
+four fixed leaves within 8 MiB/8192 calls; native limits remain 512 resources,
+128 directories, 4096 opens, 32768 metadata/read/write operations, 448 MiB requested
+reads and 128 MiB payload writes. Work/closure/receipt cutoffs remain 300/310/320s,
+launcher330+10s and original GNU365+5/400s with the existing E0/Ec/Eb joins. Exact
+current enlarged control lengths, temporary/environment and startup accounting
+must fit before dispatch. Compiler temporary 8 MiB remains an assumption, not quota.
+
+##### Finite batch and current public result collection
+
+Allocate at most four additional public materialization originals including supported
+corrections, maximum technical charge `0/4/0/16` using the existing conservative
+one PowerShell root/one compiler/at-most-two internal-host model. Initially admit
+only one. Each later original requires accepted prior failed outcome/scoped completion,
+a concrete supported correction/diagnostic need and exact revised gates. Use fresh
+exclusive literal staging/control/account roots for each; a new action number does
+not refund a charge or refresh a descriptor. Stop after sufficient accepted evidence.
+
+Per original, admit only needed separately charged fixed passes within these maxima:
+
+| Pass category | Maximum passes | Seconds per pass | Reserved bytes per pass |
+| --- | ---: | ---: | ---: |
+| Exclusive Linux public control creation and readback | 1 | 30 | 1 MiB |
+| Fixed public source/runtime/control preflight | 1 | 30 | 32 MiB |
+| Exclusive fixed transfer and readback | 1 | 180 | 32 MiB |
+| Owned Windows materialization dispatch/control work | 1 | 400 | 460 MiB |
+| New original's fixed public results | 4 | 30 | 1 MiB |
+| New original's own Linux scope witness/events | 1 | 30 | 32 KiB |
+
+These maxima total nine passes/790s/(529 MiB+32 KiB) per original, and
+36 passes/3160s/2218917888B for four originals. The combined public read reservation
+ceiling for this successor is 576 MiB including its preflight/transfer/Windows/
+result/scope requests; this explicitly supersedes the initial 512 MiB combined
+allocation for fresh successors only. Individual source limits, 96 MiB payload,
+128 MiB payload writes and exact startup/accounting gates are unchanged. The control-creation pass uses the initial reviewed eight-leaf generator with
+only its new fixed plan/input-root/schema literals and exact current payload bindings;
+retain its strict ancestry, source/readback/EOF, exclusive creation and final checks.
+Its plan/payload requests and readback must fit the 1 MiB pass; it starts no child,
+Windows executable, product or caller. Existing runtime startup remains separately
+admitted. Common Wave/passive ceilings apply; this allocation is not an
+execution/reservation grant.
+Retain full failed/partial charges without a second accounting carrier or historical
+repricing. An actual content/identity contradiction stops; no retry erases it.
+
+The new inert four-leaf result reader uses only this new original's `launcher.jsonl`,
+`materialization-result.json`, `launcher.stdout.bin` and `launcher.stderr.bin`.
+It reads the journal independently of receipt availability; validates missing leaves
+only beneath held validated ancestry; retains fresh all-nine-field/no-follow checks;
+and suppresses capture contents. Strict duplicate-free, finite-integer JSON accepts
+only the typed journal and v2 public receipt allowlists. Receipt rows may export
+current native identities and public length/hash/role only after exact ordered joins
+to a pre-admitted derived expectedRows inventory (194 unchanged caller plus six
+current public entries). Reject unexpected fields, paths, hashes, shapes and types;
+there is no arbitrary/private content channel. The derived interchange creates no
+manually maintained catalog. Do not reopen account-root payloads or original donors.
+
+Each result pass retains a fresh numbered exclusive snapshot, at most512 KiB;
+Windows leaf maxima total448 KiB, so snapshot readback plus five EOF requests fits
+its1MiB reservation. Source AS128MiB/CPU25s/work25s/512 checkpoints and admitted
+clean Python3.14 -I -S -B under GNU25+5s remain. Return only a<=2048B exact descriptor
+and request count after owned handle closure. Producer materialization/native-closure
+acceptance flags stay false until independent dispositions; current records do not
+claim original success, historical/global closure or real-account readiness.
+
+Admit only one result pass initially. Further passes require accepted ended prior
+collector/scoped Linux completion, a concrete unresolved need or accepted correction,
+fresh exact source/input/call/accounting gates and remaining common capacity. Preserve
+all old snapshots, observed absence and failed charges. Own-scope collection selects
+only this original's exact startup witness/events or source-qualified absent leaf.
+Do not add a process/service/host survey, account input or old original read.
+
+Independent acceptance must join all200 receipt rows, required source/runtime/native
+identities, exact ordinary timely original/transport/root/Job/two-EOF, owned Linux
+completion and unchanged artifact provenance before private creation. Diagnostics,
+matching hashes or empty captures alone establish none of those conjunctions. Full
+personal/work/actualWSL acceptance remains outstanding after public preparation.
+
+##### Pure projection validation
+
+Before accepting actual results, admit at most one Linux-only in-memory projection
+check original from the common test pool, charge `0/1/0/0`, with zero synthetic,
+Windows, account, network or passive-original observation. The exact test source
+selects only the collector's five pure interpretation functions and seven fixed
+allowlist constants by AST; it never imports/calls the filesystem collector main
+or changes its canonical guard. Read only the two exact reviewed repository source
+files within one combined64KiB source-request envelope. Pin the test to its exact
+reviewed bytes (at most16KiB), with a conservative32KiB startup-source allowance;
+the collector is exactly20,933B and its bounded length-plus-EOF request is20,934B.
+Their combined53,702B reservation fits64KiB; returned lengths alone do not establish
+request limits. Installed interpreter/stdlib startup retains its separate admitted
+runtime basis. Use isolated/no-site/no-bytecode Python3.14 under GNU TERM25s/KILL5s,
+at most30s; no file output or child process. Bind exact source/tool/
+current dependency and test call, reserve the full test charge before submission
+and accept terminal ordinary0/complete transport independently. Expected observations
+are12 passing test methods: exact integers above2^53; unknown/private-field and
+unapproved row hash/path/role/order rejection; strict numeric/native identity/
+provisional-success shapes; signed HRESULT and missing-context preservation;
+duplicate/nonfinite JSON rejection; capture suppression; wrong-root rejection.
+All inputs are synthetic public values. Bound combined stdout/stderr to4096B; print
+only test outcomes. A failure stops dependent collector acceptance until independently
+triaged/supported correction and fresh exact admission. This check proves pure
+projection behavior only, not runtime I/O, Windows identity, closure or authentication.
+
+##### Current successor source bindings
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 10732 | `d6f577e93c81acb9eadddd679db494096be4079f82b9c9ff06acc56b49aeee6a` |
+| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 14818 | `f8ee043f3e82a8d565aa583cfe1d0e8d451aae8d83db630cd6865200a51498da` |
+| [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 11191 | `f6445a7cce0c105904ab60d9a2ddaad3ae7ff673e2b8d54e5263e31162433d86` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 20933 | `531c225cb8a7d874ab427ace698d4ea89f1eff636728a74e82429e61fa2ca35e` |
+| [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `a871492cde058916dd6a0aa80c46cef1cca3bf256d6d080b3bb9d74adb795088` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20076 | `7bad779fb58c45876d862d111f66dfb41b6ef84f0c0483dd4c27414a857e97f1` |
+| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6159 | `8cbc18996cfa02d236980adfc192d3b012a7d2352c208057cb2f399b0da6305c` |
+| [selected-account-inputs/R1.template.json](../../../tools/validation/selected-account-inputs/R1.template.json) | 746 | `0f466d1bc6d99f57e3b9dd2470752a78c007c724c72ebae717101e782c6757ff` |
+| [selected-account-inputs/R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `5ac3fbd53a3ea779cd15658babe89d2bafc95f6bbb41155f43887d558fe6d1db` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 7203 | `1eb1059714df9c00dc99d326270b4395768f6bb00efb658bb3769d417af6c677` |
+
 #### Public Transfer Receipt and Dispatch Input Current Correspondence
+
+This subsection retains the initial 0186 correspondence recipe and its spent
+observations. It grants no current successor pass or original replay.
 
 Before public Windows dispatch, one additional Linux-only current-qualified read
 may collect the new staging root's fixed `transfer-result.json`. This is necessary
@@ -849,8 +1042,8 @@ Native personal R1/R6 does not complete work-account or actualWSL requirements.
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [Initialize-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountCutoff.ps1) | 6387 | `cddb41d758ebbc5953732af112632f7a4f258da7c1243c75f7421a3e84fad1cb` |
-| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20076 | `f4f49b259f58d9c2af4d8f993ceeea3f5f1d55c11fbbefc03fa178293569b334` |
-| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6159 | `b9b02a23e933fc406ef3cc1246a6175dc92417e16f7db3ecaa7c8a3fc7fa4bca` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20076 | `7bad779fb58c45876d862d111f66dfb41b6ef84f0c0483dd4c27414a857e97f1` |
+| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6159 | `8cbc18996cfa02d236980adfc192d3b012a7d2352c208057cb2f399b0da6305c` |
 | [SelectedAccountControllerCutoff.cs](../../../tools/validation/SelectedAccountControllerCutoff.cs) | 15346 | `302473837eb1262fd57597550bf992ad540b4f3b55a83dcfebb694663a81be40` |
 
 These source bindings identify the proposal; accepted exact compilation, artifact,
@@ -863,9 +1056,12 @@ For current real calls, the existing-console cutoff supplement above governs the
 original carrier, transferred Process ownership, same-Type lease and final cleanup.
 The base controller/native deadlines and result/EOF requirements below remain.
 
-Keep the existing root
-`C:\Temp\azureauth-windows-slice-108\confidential-native-account-v1` and existing
-194-entry native caller inventory. Admit the full runtime/host/input manifest,
+Use the current successor root
+`C:\Temp\azureauth-windows-slice-108\confidential-native-account-v2` only after
+independently accepting root-compatible caller source/build and its corresponding
+194-entry artifact/inventory descriptors. The retained original inventory alone
+supplies no executable correspondence at this root; account-v1 stays retained.
+Admit the full runtime/host/input manifest,
 candidate companions, Profile and private-input identities before invocation;
 do not scan the host, reopen old experimental outputs or infer acceptance from a
 synthetic activation. The prepared public plan uses `ActualAdmission`'s exact schema

@@ -12,18 +12,21 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$stage = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0186'
+$stage = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0189'
 $donor = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v9'
-$target = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v1'
+$target = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v2'
 $pins = $null
 $bootstrap = [Collections.Generic.List[IDisposable]]::new()
 $bootstrapReads = 0L
 $bootstrapRequestedReadBytes = 0L
+$copyOrdinal = 0
+$completedCopies = 0
+$wrapperPhase = 0
 $result = [ordered]@{
-    schema = 'selected-account-public-materialization-v1'; passed = $false
+    schema = 'selected-account-public-materialization-v2'; passed = $false
     authoritySha256 = $AuthoritySha256; target = $target; rows = @()
     failure = 'admission'; allHandlesClosed = $false; noExperimentLive = $false
-    productStarted = $false; accountAccess = $false
+    productStarted = $false; accountAccess = $false; diagnostic = $null
 }
 
 function Need([bool] $Condition) { if (-not $Condition) { throw 'Public preparation refused.' } }
@@ -72,7 +75,7 @@ try {
     $utf8 = [Text.UTF8Encoding]::new($false, $true)
     $authority = $utf8.GetString((Bootstrap-Read 'authority.json' 65536 $AuthoritySha256)) | ConvertFrom-Json
     Need ($authority.schema -ceq 'selected-account-public-preparation-authority-v1' -and
-        $authority.action -ceq '0186' -and $authority.target -ceq $target -and
+        $authority.action -ceq '0189' -and $authority.target -ceq $target -and
         $authority.donor -ceq $donor -and $authority.productContextAccepted -eq $true -and
         $authority.callerSourceCommit -ceq 'c55396df90a3c76d6c8896e2f737464d80488f96')
     $null = Bootstrap-Read 'Invoke-WindowsNamedGuardFixtures.ps1' 65536 $authority.controllerSha256
@@ -137,20 +140,32 @@ try {
     $result.failure = 'copy'
     $rows = [Collections.Generic.List[object]]::new()
     foreach ($copy in $copies) {
+        $copyOrdinal++; $wrapperPhase = 1; $pins.SetPhase(0)
         Before
         $held = $pins.Copy($copy.source, ($target + '\' + $copy.relative), $copy.bytes, $copy.sha256)
+        $wrapperPhase = 2; $pins.SetPhase(500)
         $rows.Add([pscustomobject]@{ relative = $copy.relative; bytes = $copy.bytes
             sha256 = $copy.sha256; identity = $held.identity; sourceIdentity = $held.sourceIdentity; role = $copy.role })
+        $completedCopies++
     }
-    $pins.CheckAll(); Before
+    $copyOrdinal = 0; $wrapperPhase = 3
+    $pins.CheckAll(); $wrapperPhase = 4; Before
     $result.rows = $rows.ToArray()
     $result.counts = [ordered]@{ opens = $pins.opens; metadata = $pins.metadata; reads = $pins.reads
         writes = $pins.writes; requestedReadBytes = $pins.requestedReadBytes; writtenBytes = $pins.writtenBytes
         bootstrapReads = $bootstrapReads; bootstrapRequestedReadBytes = $bootstrapRequestedReadBytes }
     $result.passed = $true; $result.failure = 'none'
 } catch {
-    # Public preparation exports a fixed phase only, never exception text or output.
+    if ($null -ne $pins) { $pins.RecordManagedFault($_.Exception.HResult) }
+    # Fixed numeric context only; no exception text, paths or payload/private data.
 } finally {
+    if ($null -ne $pins) {
+        $result.diagnostic = [ordered]@{ copyOrdinal = $copyOrdinal; completedCopies = $completedCopies
+            wrapperPhase = $wrapperPhase; nativePhase = $pins.phase; heldOrdinal = $pins.heldOrdinal
+            errorKind = $pins.errorKind; errorCode = $pins.errorCode
+            opens = $pins.opens; metadata = $pins.metadata; reads = $pins.reads; writes = $pins.writes
+            requestedReadBytes = $pins.requestedReadBytes; writtenBytes = $pins.writtenBytes }
+    }
     $closed = $true
     if ($null -ne $pins) { try { $pins.Dispose() } catch { $closed = $false } }
     while ($bootstrap.Count -gt 0) {
