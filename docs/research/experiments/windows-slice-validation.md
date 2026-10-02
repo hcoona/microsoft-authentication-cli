@@ -522,6 +522,77 @@ reopen of donor/output payloads, enumeration, private input, process survey, ETW
 broker state is included. Independently accept inventory, native identities,
 original outcome and scoped completion before private-input creation.
 
+#### Failed Public Materialization Diagnostic Collection
+
+This recipe allocates at most four additional diagnostic collection passes from
+the existing common passive pool for the ended public materialization original
+in `named-fixtures-0186`. The earlier sole post-dispatch collection and own-Linux
+scope observation remain spent. No original replay, deadline renewal, charge
+refund, donor/output-payload reopen, or new Windows process is permitted here.
+The standing outcome grant covers this necessary preparation; an in-boundary
+technical allocation does not require renewed owner approval.
+
+Before the first pass, independently accept the original failed outcome and
+bounded complete transport, the already collected own-Linux scope completion,
+and the preceding result collector's failed outcome. Preserve the UNKNOWN
+Windows failure phase and unresolved native completion. Use only the fixed
+`launcher.jsonl`, `materialization-result.json`, `launcher.stdout.bin`, and
+`launcher.stderr.bin` under that original staging root. No directory enumeration,
+input/candidate payload access, process survey, native/Job reopen, ETW, broker,
+private input, account API, or unrelated state is included.
+
+The inert
+`tools/validation/collect_selected_account_public_diagnostics.py` is the source
+recipe. Each separately admitted original binds the accepted target/protocol,
+exact source and runtime, original nonce/E0/authority hash, stage-parent and
+retention-parent identities, pass number, full reservation and current input/call
+checks. Only its sole `ADMISSION = None` assignment may change in an exclusively
+created, read-back, sealed execution copy. Canonical source stays inert.
+
+Each pass reserves 30 seconds and 1 MiB of requested reads before submission;
+the four-pass maximum is 120 seconds and 4 MiB. Source work is 25 seconds with
+AS 128 MiB, CPU 25 seconds, at most 64 owned descriptors, 32 directories and
+512 bounded source checkpoints. Use the admitted clean Linux Python 3.14
+`-I -S -B` runtime under GNU TERM 25 seconds plus KILL grace five seconds.
+Count complete requests and EOF probes before I/O, without refunds. Installed
+runtime startup retains its accepted operating basis; these counters do not
+claim to count every OS read. There is no Windows executable or synthetic/real
+process charge from this Linux-only observation.
+
+Hold and validate no-follow ancestry and the original staging-parent identity.
+A missing fixed leaf is an observation only after ENOENT under its held, existing,
+validated parent and repeated absence at final checks. A missing parent, unreadable
+leaf, wrong shape, changed identity or transport failure fails the pass. Existing
+leaves require fresh agreeing held/named full9, regular/single-link shape, bounded
+exact read/EOF and unchanged all-nine-field checks through final validation.
+This supplies current Linux file observations, not invented Windows identities.
+
+Collect the public journal independently of the materialization receipt's
+existence or success. Strict JSON rejects duplicate keys, nonfinite values and
+fractional/exponent numbers. Emit only the source's fixed event/field/type
+allowlist, exact nonce/authority joins and bounded public receipt summary.
+Malformed or unsupported public shapes retain length/hash and an explicit invalid
+interpretation, without raw text. Nonempty public captures retain only length/hash
+and an empty/nonempty Boolean; never export their contents. Do not emit exception
+messages, provider text, private identifiers, tokens or their hashes.
+
+Each pass exclusively creates and seals its numbered public snapshot under the
+admitted retention root, at most 32 KiB, and reads it back within the same 1 MiB
+reservation. Return only its exact descriptor and request count after bounded
+handle closure. Occupied or partial outputs stay retained; do not overwrite them.
+Independent outcome/content review separates complete diagnostic collection,
+original failure, current public file correspondence and any source-supported
+native completion. A missing record, producer flag or successful collector cannot
+repair the failed original or establish native/global closure or materialization
+acceptance. Dependents stay stopped until their required completion is accepted.
+
+Admit only one pass initially. Any subsequent pass consumes a new remaining slot
+only after independent acceptance of the preceding ended collector, scoped Linux
+completion, a concrete unresolved diagnostic need or triaged source correction,
+and exact revised source/input/call/accounting gates. Stop after sufficient
+accepted evidence. Preserve all historical gaps and `noExperimentLive=false`;
+this finite allocation grants no new unresolved lifetime or owner risk exception.
+
 #### Public Transfer Receipt and Dispatch Input Current Correspondence
 
 Before public Windows dispatch, one additional Linux-only current-qualified read
