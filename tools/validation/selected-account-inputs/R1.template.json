@@ -1,0 +1,24 @@
+{
+  "schema": "confidential-native-private-requests-v1",
+  "group": "R1",
+  "requests": [
+    {
+      "profilePath": "C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v1\\product\\selected-account-profile.json",
+      "tenantArgument": "common",
+      "exactResultTenant": null,
+      "accountEmail": null,
+      "scopes": [
+        "499b84ac-1321-427f-aa17-267ca6975798/.default"
+      ],
+      "interactionAllowed": true,
+      "timeoutSeconds": 120,
+      "outcome": "success",
+      "requiredInteraction": null,
+      "lifetimePipe": false,
+      "closeAfterMs": null,
+      "requireCloseAfterLiveSample": false,
+      "requirePersistenceUnconfirmed": true,
+      "defaultAssociationIndependentlyAccepted": true
+    }
+  ]
+}
