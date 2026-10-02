@@ -11,7 +11,7 @@ import time
 
 ADMISSION = None
 RECOVERY = '/home/shuaizhang/.local/state/azureauth-108-recovery-20260929'
-STAGE = '/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0189'
+STAGE = '/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0192'
 FILES = (('launcher.jsonl', 65536), ('materialization-result.json', 262144),
          ('launcher.stdout.bin', 65536), ('launcher.stderr.bin', 65536))
 EVENT_FIELDS = {
@@ -89,7 +89,7 @@ def journal_record(record):
         elif key == 'creationFileTime':
             valid = type(value) is str and value.isascii() and value.isdecimal() and 1 <= len(value) <= 20
         elif key == 'jobName':
-            valid = value == 'Local\\azureauth-controller-108-0189-' + ADMISSION['nonce']
+            valid = value == 'Local\\azureauth-controller-108-0192-' + ADMISSION['nonce']
         elif key == 'authoritySha256':
             valid = value == ADMISSION['authoritySha256']
         elif key == 'stream':

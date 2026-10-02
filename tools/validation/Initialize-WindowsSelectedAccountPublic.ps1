@@ -12,7 +12,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$stage = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0189'
+$stage = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0192'
 $donor = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v23'
 $target = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v2'
 $pins = $null
@@ -75,7 +75,7 @@ try {
     $utf8 = [Text.UTF8Encoding]::new($false, $true)
     $authority = $utf8.GetString((Bootstrap-Read 'authority.json' 65536 $AuthoritySha256)) | ConvertFrom-Json
     Need ($authority.schema -ceq 'selected-account-public-preparation-authority-v2' -and
-        $authority.action -ceq '0189' -and $authority.target -ceq $target -and
+        $authority.action -ceq '0192' -and $authority.target -ceq $target -and
         $authority.donor -ceq $donor -and $authority.productContextAccepted -eq $true -and
         $authority.callerSourceCommit -cmatch '\A[0-9a-f]{40}\z' -and
         $authority.callerRootSourceSha256 -ceq '5a5340432ddc83b454c1889442f80afccc1bf58d293a75034fa572fb2e1550f4')

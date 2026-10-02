@@ -330,8 +330,9 @@ caller source commit, all194 exact public length/hash rows and their aggregate
 byte count. The inventory and expectedRows are generated reviewable interchanges,
 not second manually maintained catalogs. A missing or incompatible row stops.
 
-For the unused first successor public materialization at named-fixtures-0189 and
+For the current public materialization successor at named-fixtures-0192 and
 account-v2, use donor v23 and `selected-account-public-preparation-authority-v2`.
+The ended 0189 Linux transfer retains its failed outcome and occupied staging root.
 This binds public preparation to the fresh root-compatible candidate; all required
 source, artifact, scoped completion and 194-row provenance gates above still
 precede its use. Preserve the earlier v22 failure, occupied root and spent charges.
@@ -344,8 +345,9 @@ The old v9 total81083019 is historical, not a new-build output expectation.
 
 The public eight-leaf control recipe/generator, transfer, dispatch authority and
 result collector must bind this same new inventory/source/build/authority and all
-200 expectedRows before activation. Their filenames, input-v2 root and plan/output
-schemas remain as accepted; only exact reviewed public payload bytes change.
+200 expectedRows before activation. Their filenames and v2 plan/output schemas remain as accepted; the current
+`selected-account-public-inputs-v3` root and action0192 literals are defined by the
+exclusive Linux transfer successor below. Bind every changed public payload byte.
 Update the native materializer's current source binding atomically below. Keep
 its guards false and reuse its unchanged diagnostic/native/I/O/cleanup checks.
 No old authority-v1 or inventory-v1 input substitutes for this v2 conjunction.
@@ -374,7 +376,7 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [DirectObserver.rsp](../../../tools/validation/controlled-callers/control/DirectObserver.rsp) | 20404 | `b4af49e38b70808369e259466a7a759339d6f422733c9b61a31f560d12159fb6` |
 | [SyntheticSubject.rsp](../../../tools/validation/controlled-callers/control/SyntheticSubject.rsp) | 21309 | `7016e29b6f8f43805786e81c8213f2dc509bfabc100d7b4b5478eee707b78325` |
 | [FixtureDriver.rsp](../../../tools/validation/controlled-callers/control/FixtureDriver.rsp) | 21276 | `aeebc66eb198c2d70f640051ad3d915164e6af124a1778679ad9bfdf63b2d01c` |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `d6fa7a12eaac2c90e3845e4ab0429789cd216fd99ab213b4d1fcda5821d25d36` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `4691ff49ff8023df80ac87f24626194cd6ad44d0083e738b62bc0396a03cb0da` |
 
 ## Retained Product Byte Acquisition Recipe
 
@@ -894,9 +896,12 @@ This current recipe supersedes only the initial 0186/public-input-v1/account-v1
 literals, source bindings and result schema for fresh public preparation. Reuse its
 accepted exact 194-entry caller inventory and unchanged product/Profile provenance,
 strict input/identity/copy/refusal/cleanup mechanisms and ordinary installed toolchain
-basis. No old descriptor is a refreshed baseline. The current first successor uses
+basis. No old descriptor is a refreshed baseline. The first successor used
 exclusive `named-fixtures-0189`, prepared `selected-account-public-inputs-v2` and
-`confidential-native-account-v2`. Controller, original/cutoff carriers and both null-email
+`confidential-native-account-v2`. Its Linux transfer ended FAILED without a result
+receipt; no Windows materialization was submitted. Preserve that staging root.
+The current exclusive transfer successor below uses action0192 and public-inputs-v3
+while retaining the unopened account-v2 target and unchanged caller provenance. Controller, original/cutoff carriers and both null-email
 templates must consistently use account-v2 before input generation; guards remain
 false. Frozen v1 controls retain only their original derivation and cannot supply
 current control bytes. The three extra cutoff controls remain separate from the
@@ -982,7 +987,8 @@ Per original, admit only needed separately charged fixed passes within these max
 
 These maxima total nine passes/790s/(529 MiB+32 KiB) per original, and
 36 passes/3160s/2218917888B for four originals. The combined public read reservation
-ceiling for this successor is 576 MiB including its preflight/transfer/Windows/
+ceiling for this successor is 640 MiB including retained failed preparation and
+the current preflight/transfer/Windows/
 result/scope requests; this explicitly supersedes the initial 512 MiB combined
 allocation for fresh successors only. Individual source limits, 96 MiB payload,
 128 MiB payload writes and exact startup/accounting gates are unchanged. The control-creation pass uses the initial reviewed eight-leaf generator with
@@ -1086,6 +1092,101 @@ The inert observer is 6548 bytes, SHA-256
 `9770a2ef73661b5f0e4176e4214f6b339080156b399fc5d62c2eb25b92b311df`. This supplement supplies no runtime observation. Preserve every
 historical uncertainty, primitive/provisional flag and `noExperimentLive=false`.
 
+##### Exclusive Linux transfer first-fault successor
+
+The ended action0189 Linux transfer and its independently accepted fixed metadata
+observation do not establish an exception or successful receipt. Admit a new
+credential-free diagnostic transfer only after their ordinary outcomes and
+separately scoped completion are accepted. Preserve all old files, full charges,
+primitive/provisional/pending fields and historical uncertainties. No original,
+collector, output or deadline is replayed, repaired or adopted.
+
+The current successor uses exclusive `named-fixtures-0192` and freshly generated
+`selected-account-public-inputs-v3`. Reuse the accepted public product pair and
+root-compatible caller194 inventory with their unchanged provenance. Retain the
+v2 authority/inventory/result schemas and account-v2 target; source byte bindings
+and authority action0192 must agree. The public initializer, derived controller,
+transfer, dispatch authority, journal mutex, result collector and expected200 rows
+must bind the same stage/action before execution. The failed0189 transfer started
+no Windows subject; it does not establish current absence or ownership of the
+account target. Keep its exclusive-create refusal and fresh native gates.
+
+Before this successor, independently admit exact current eight-leaf public control
+creation/readback, preflight and transfer inputs/calls, with one30s/1MiB creation,
+one30s/32MiB preflight and one180s/32MiB transfer allocation from the same common
+passive pool. These are new originals, not renewed old passes. Existing technical,
+real and per-pass limits remain; these three Linux passes start no Windows,
+product, caller, account or cache operation. The640MiB combined public reservation
+ceiling includes the retained failed preparation and this fresh preparation plus
+the existing bounded Windows/result/scope recipe. No remaining capacity is reset.
+Initially admit only this one transfer. Further supported corrections need their
+own accepted exact protocol/source/input/call and prior outcome/scoped-completion
+joins, within the standing common capacity; no renewed owner decision follows
+solely from their new filenames or finite allocations.
+
+The inert transfer changes no hash, EOF, short-write, exclusive creation,
+no-follow ancestry, strict full9 source/copy stability, created-reader or disposal
+predicate. In-memory numeric setters add no filesystem operation or clock.
+A caught primary run fault is frozen before disposal, with the last attempted
+operation, broad phase, public role/ordinal, numeric error classification and
+counters. A later disposal error cannot replace it. A first disposal-only fault
+uses the cleanup role. Cleanup-attempted/completed Booleans remain separate from
+the primary fault and independently accepted scoped completion.
+
+| Phase | Meaning |
+| --- | --- |
+| 0 | Before run |
+| 1 | Runtime/admission and resource limits |
+| 2 | Stage-parent ancestry and binding |
+| 3 | Exclusive stage creation |
+| 4 | Start marker |
+| 5 | Public input/copy loop |
+| 6 | Final held checks before receipt |
+| 7 | Receipt construction |
+| 8 | Receipt write/readback |
+| 9 | Final held checks after receipt |
+| 10 | Descriptor disposal |
+| 11 | Sole success stdout |
+
+Role0 is startup,1 directory ancestry,2 public source/its ancestry,3 created public
+copy,4 standard-output transport and5 unclassified descriptor cleanup. Ordinal0
+is the start marker or no active leaf,1–10 follows the fixed LEAVES order, and11
+is the result receipt. Interpret role and ordinal with phase; they are not a
+completed-copy count or an identity trace. Registered files retain their source/
+copy roles for final checks. No file descriptor, PID, path or exception text is
+exported by this diagnostic.
+
+Operation0 is unassigned;1 named stat,2 open,3 fstat,4 mkdir,5 read,6 write,7 file
+fsync,8 directory fsync,9 close,10 identity comparison,11 hash,12 JSON and13 resource
+limit. The operation identifies the most recently attempted operation, not an
+exception cause when a later unlabelled predicate fails. Kind2 captures only an
+OSError errno integer0–65535; kind1 has null errno and does not name an exception
+type. A failed full5/full9 comparison may export only its public expected/observed
+integer arrays and zero-based differing-field indices. Matching values or ctime
+alone still supply no benign-cause finding or identity relaxation.
+
+On a permitted failure, attempt at most one4096B ASCII JSON stderr frame with
+schema `selected-account-public-transfer-failure-v2`, firstFault and separate
+cleanup Booleans. If encoding or its bound fails, use only the fixed24B
+`Public transfer failed.\n` marker. Never emit raw error text, exception types,
+stack traces, paths, payloads or private hashes. Preserve the existing170s source
+work/CPU, AS128MiB,128 opens/1024 metadata/8192 read and write calls,32MiB requested
+reads and16MiB written-byte ceiling including this output. No stderr attempt after
+cancellation, source expiry or exhausted output capacity is admitted. Short or
+missing output rejects diagnostic interpretation; ordinary1 remains failure.
+Normal success retains its sole2048B stdout, receipt checks and ordinary0 gate.
+GNU175TERM+5KILL whole180s, installed runtime basis and32KiB bootstrap allowance
+remain separate; the larger numeric failure frame still fits the32MiB reservation.
+
+Accept the complete exact call/transport, actual result or safe fault, and scoped
+childless transfer/GNUenv/watchdog completion independently. A phase/mismatch can
+support the smallest next diagnosis or triaged correction; it cannot repair0189,
+prove a copy hash by metadata, establish historical continuity or activate Windows
+materialization. Actual receipt/content/provenance/current native200-row and
+ordinary Windows root/Job/two-EOF conjunctions still precede private creation.
+Personal, work and actualWSL acceptance remain outstanding. Canonical guards stay
+inert; exact activation changes only their admitted literals/guards after review.
+
 ##### Pure projection validation
 
 Before accepting actual results, admit at most one Linux-only in-memory projection
@@ -1116,10 +1217,10 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `876fe5c34b02eadc4113d17579b87fb732468f9d7bf9c9f09c4dfff916ef68f5` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `4691ff49ff8023df80ac87f24626194cd6ad44d0083e738b62bc0396a03cb0da` |
 | [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 14818 | `f8ee043f3e82a8d565aa583cfe1d0e8d451aae8d83db630cd6865200a51498da` |
-| [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 11191 | `f6445a7cce0c105904ab60d9a2ddaad3ae7ff673e2b8d54e5263e31162433d86` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 20933 | `531c225cb8a7d874ab427ace698d4ea89f1eff636728a74e82429e61fa2ca35e` |
+| [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 14402 | `2e6ac87114aca899087871c871530f3b9b3b0dc7699483279852a968473163dd` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 20933 | `80358b80965504faa10207276dadc40ef29c27b40576ddf891db635fc1bf2a8b` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `a871492cde058916dd6a0aa80c46cef1cca3bf256d6d080b3bb9d74adb795088` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `1b8ec11edfbabb492e84e80639a036595f69c2fd5b5292475959739c635e2dae` |
 | [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `34fa06aa823ab21e7c71c14105f2be5c006e0d5e9dea9f74b09d17a56f4b5a1e` |
@@ -1127,7 +1228,7 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 | [selected-account-inputs/R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `5ac3fbd53a3ea779cd15658babe89d2bafc95f6bbb41155f43887d558fe6d1db` |
 | [selected-account-inputs/R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `526c8cdded4c0266a31d47b162c31616ce00b51cb2cee81df5562038fb175660` |
 | [selected-account-inputs/R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `c6c0e4d3dd2d0e98589385d41d9d87cbbe6f2d1c67ca3fe1dde77ad72ca14b0f` |
-| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 7203 | `1eb1059714df9c00dc99d326270b4395768f6bb00efb658bb3769d417af6c677` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 7203 | `8537076e1582685df5dc5e377a0d596d644e80bc6bbfaffe43b27964985c4653` |
 
 #### Public Transfer Receipt and Dispatch Input Current Correspondence
 

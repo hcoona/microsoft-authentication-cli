@@ -10,7 +10,7 @@ import sys
 import time
 
 ADMISSION = None
-STAGE = '/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0189'
+STAGE = '/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0192'
 LEAVES = (
     'authority.json', 'Invoke-WindowsNamedGuardFixtures.ps1',
     'SelectedAccountMaterializationPins.cs', 'caller-inventory.json',
@@ -18,7 +18,7 @@ LEAVES = (
     'Invoke-WindowsSelectedAccount.ps1', 'R1.template.json', 'R6.template.json',
 )
 RECOVERY = '/home/shuaizhang/.local/state/azureauth-108-recovery-20260929'
-SOURCE_PATHS = {name: RECOVERY + '/selected-account-public-inputs-v2/' + name for name in LEAVES}
+SOURCE_PATHS = {name: RECOVERY + '/selected-account-public-inputs-v3/' + name for name in LEAVES}
 for _name in ('Authentication.Cli.exe', 'msalruntime.dll'):
     SOURCE_PATHS[_name] = RECOVERY + '/selected-account-product-bytes-v1/' + _name
 
@@ -39,8 +39,42 @@ class Transfer:
         self.owned = []
         self.directories = {}
         self.files = []
+        self.file_roles = {}
+        self.phase = 0
+        self.role = 0
+        self.ordinal = 0
+        self.operation = 0
+        self.mismatch = None
+        self.first_fault = None
+        self.cleanup_attempted = False
+        self.cleanup_completed = False
         self.counts = dict(opens=0, metadata=0, reads=0, writes=0,
                            requestedReadBytes=0, writtenBytes=0)
+
+    def native(self, operation, function, *args, **kwargs):
+        self.operation = operation
+        return function(*args, **kwargs)
+
+    def same(self, expected, observed):
+        self.operation = 10
+        if expected != observed:
+            self.mismatch = dict(expected=expected, observed=observed,
+                                 differingFields=[index for index, (left, right) in
+                                                  enumerate(zip(expected, observed)) if left != right])
+            raise ValueError('Public transfer identity mismatch')
+
+    def held(self, pfd, name, fd, expected):
+        self.files.append((pfd, name, fd, expected))
+        self.file_roles[fd] = (self.role, self.ordinal)
+
+    def capture_fault(self, error):
+        if self.first_fault is None:
+            code = error.errno if isinstance(error, OSError) else None
+            numeric = type(code) is int and 0 <= code <= 65535
+            self.first_fault = dict(phase=self.phase, role=self.role, ordinal=self.ordinal,
+                                    operation=self.operation, kind=2 if numeric else 1,
+                                    errno=code if numeric else None, mismatch=self.mismatch,
+                                    counts=dict(self.counts))
 
     def before(self):
         if self.cancelled or time.monotonic() - self.epoch >= 170:
@@ -54,17 +88,18 @@ class Transfer:
 
     def open(self, name, flags, parent=None, mode=0o600):
         self.charge('opens', 1, 128)
-        fd = os.open(name, flags, mode, dir_fd=parent)
+        fd = self.native(2, os.open, name, flags, mode, dir_fd=parent)
         self.owned.append(fd)
         return fd
 
     def close(self, fd):
         self.owned.remove(fd)
-        os.close(fd)
+        self.native(9, os.close, fd)
 
     def metadata(self, fd, name=None):
         self.charge('metadata', 1, 1024)
-        return os.fstat(fd) if name is None else os.stat(name, dir_fd=fd, follow_symlinks=False)
+        return self.native(3, os.fstat, fd) if name is None else \
+            self.native(1, os.stat, name, dir_fd=fd, follow_symlinks=False)
 
     def directory(self, path):
         if path in self.directories:
@@ -80,14 +115,13 @@ class Transfer:
             pfd = self.directory(parent or '/')
             info = self.metadata(pfd, leaf)
             fd = self.open(leaf, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, pfd)
-            if full5(self.metadata(fd)) != full5(info):
-                raise ValueError('Transfer ancestry changed')
+            self.same(full5(info), full5(self.metadata(fd)))
         self.directories[path] = (fd, full5(info))
         return fd
 
     def stable(self, pfd, name, fd, expected):
-        if full9(self.metadata(fd)) != expected or full9(self.metadata(pfd, name)) != expected:
-            raise ValueError('Transfer file changed')
+        self.same(expected, full9(self.metadata(fd)))
+        self.same(expected, full9(self.metadata(pfd, name)))
 
     def read(self, fd, length):
         data = bytearray()
@@ -95,17 +129,18 @@ class Transfer:
             count = min(65536, length - len(data))
             self.charge('reads', 1, 8192)
             self.charge('requestedReadBytes', count, 33554432)
-            block = os.read(fd, count)
+            block = self.native(5, os.read, fd, count)
             if not block:
                 raise ValueError('Incomplete public transfer')
             data.extend(block)
         self.charge('reads', 1, 8192)
         self.charge('requestedReadBytes', 1, 33554432)
-        if os.read(fd, 1):
+        if self.native(5, os.read, fd, 1):
             raise ValueError('Transfer EOF refused')
         return bytes(data)
 
     def write(self, pfd, name, raw):
+        self.role = 3
         fd = self.open(name, os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, pfd)
         initial = full9(self.metadata(fd))
         if not stat.S_ISREG(initial[2]) or initial[8] != 1 or initial[5] != 0:
@@ -115,11 +150,11 @@ class Transfer:
             block = raw[offset:offset + 65536]
             self.charge('writes', 1, 8192)
             self.charge('writtenBytes', len(block), 16777216)
-            used = os.write(fd, block)
+            used = self.native(6, os.write, fd, block)
             if used <= 0:
                 raise ValueError('Incomplete public write')
             offset += used
-        os.fsync(fd)
+        self.native(7, os.fsync, fd)
         # Close the mutating descriptor before taking the read-only baseline.
         # Created-copy ctime observations are retained; strict read continuity
         # starts at this new reader, without relaxing any source comparison.
@@ -133,46 +168,56 @@ class Transfer:
         if self.read(reader, len(raw)) != raw:
             raise ValueError('Public transfer readback refused')
         self.stable(pfd, name, reader, current)
-        self.files.append((pfd, name, reader, current))
-        os.fsync(pfd)
+        self.held(pfd, name, reader, current)
+        self.native(8, os.fsync, pfd)
+        self.operation = 11
         return dict(name=name, bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest(),
                     full9=current, createdFull9=initial)
 
     def check_all(self):
+        self.role = 1
+        self.ordinal = 0
         for path, (fd, expected) in self.directories.items():
-            if full5(self.metadata(fd)) != expected:
-                raise ValueError('Held transfer directory changed')
+            self.same(expected, full5(self.metadata(fd)))
             if path != '/':
                 parent, leaf = path.rsplit('/', 1)
-                if full5(self.metadata(self.directories[parent or '/'][0], leaf)) != expected:
-                    raise ValueError('Named transfer directory changed')
+                self.same(expected, full5(self.metadata(self.directories[parent or '/'][0], leaf)))
         for pfd, name, fd, expected in self.files:
+            self.role, self.ordinal = self.file_roles[fd]
             self.stable(pfd, name, fd, expected)
 
     def run(self):
+        self.phase = 1
         if sys.executable != '/usr/bin/python3.14' or not sys.flags.isolated or \
                 not sys.flags.no_site or not sys.flags.dont_write_bytecode or len(sys.argv) != 1:
             raise ValueError('Unadmitted transfer runtime')
         if not isinstance(ADMISSION, dict) or set(ADMISSION) != {'stageParentFull5', 'sources'} or \
                 not isinstance(ADMISSION['sources'], dict) or set(ADMISSION['sources']) != set(LEAVES):
             raise ValueError('Transfer admission absent')
-        resource.setrlimit(resource.RLIMIT_AS, (134217728, 134217728))
-        resource.setrlimit(resource.RLIMIT_CPU, (170, 170))
+        self.native(13, resource.setrlimit, resource.RLIMIT_AS, (134217728, 134217728))
+        self.native(13, resource.setrlimit, resource.RLIMIT_CPU, (170, 170))
+        self.phase = 2
+        self.role = 1
         parent, leaf = STAGE.rsplit('/', 1)
         pfd = self.directory(parent)
-        if full5(self.metadata(pfd)) != ADMISSION['stageParentFull5']:
-            raise ValueError('Transfer parent changed')
-        self.before(); os.mkdir(leaf, 0o700, dir_fd=pfd)
+        self.same(ADMISSION['stageParentFull5'], full5(self.metadata(pfd)))
+        self.phase = 3
+        self.before(); self.native(4, os.mkdir, leaf, 0o700, dir_fd=pfd)
         stage = self.directory(STAGE)
+        self.phase = 4
+        self.operation = 12
         start = (json.dumps({'schema': 'selected-account-public-transfer-start-v1',
                             'admission': ADMISSION, 'epochMonotonic': self.epoch},
                             sort_keys=True, separators=(',', ':'), allow_nan=False) + '\n').encode('ascii')
         if len(start) > 16384:
             raise ValueError('Transfer start bound')
         self.write(stage, 'transfer-started.json', start)
-        os.fsync(pfd)
+        self.native(8, os.fsync, pfd)
         rows = []
-        for name in LEAVES:
+        self.phase = 5
+        for ordinal, name in enumerate(LEAVES, 1):
+            self.role = 2
+            self.ordinal = ordinal
             row = ADMISSION['sources'][name]
             if set(row) != {'path', 'bytes', 'sha256', 'full9'} or not isinstance(row['bytes'], int) or \
                     row['path'] != SOURCE_PATHS[name] or not 0 < row['bytes'] <= 10485760 or len(row['sha256']) != 64:
@@ -180,38 +225,52 @@ class Transfer:
             source_parent, source_leaf = row['path'].rsplit('/', 1)
             source_pfd = self.directory(source_parent)
             named = full9(self.metadata(source_pfd, source_leaf))
-            if named != row['full9'] or not stat.S_ISREG(named[2]) or named[8] != 1 or named[5] != row['bytes']:
+            self.same(row['full9'], named)
+            if not stat.S_ISREG(named[2]) or named[8] != 1 or named[5] != row['bytes']:
                 raise ValueError('Public input identity changed')
             source_fd = self.open(source_leaf, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, source_pfd)
             self.stable(source_pfd, source_leaf, source_fd, named)
             raw = self.read(source_fd, row['bytes'])
             self.stable(source_pfd, source_leaf, source_fd, named)
+            self.operation = 11
             if hashlib.sha256(raw).hexdigest() != row['sha256']:
                 raise ValueError('Public input hash changed')
-            self.files.append((source_pfd, source_leaf, source_fd, named))
+            self.held(source_pfd, source_leaf, source_fd, named)
             rows.append(self.write(stage, name, raw))
+        self.phase = 6
         self.check_all()
+        self.phase = 7
+        stage_identity = full5(self.metadata(stage))
+        self.operation = 12
         receipt = (json.dumps({'schema': 'selected-account-public-transfer-v1', 'rows': rows,
-                              'stageFull5': full5(self.metadata(stage)), 'countsBeforeReceipt': self.counts,
+                              'stageFull5': stage_identity, 'countsBeforeReceipt': self.counts,
                               'productStarted': False, 'accountAccess': False},
                              sort_keys=True, separators=(',', ':'), allow_nan=False) + '\n').encode('ascii')
         if len(receipt) > 32768:
             raise ValueError('Transfer receipt bound')
+        self.phase = 8
+        self.ordinal = 11
         result = self.write(stage, 'transfer-result.json', receipt)
+        self.phase = 9
         self.check_all(); self.before()
         return result
 
     def dispose(self):
+        self.phase = 10
+        self.role = 5
+        self.ordinal = 0
+        self.cleanup_attempted = True
         failure = None
         while self.owned:
             fd = self.owned.pop()
             try:
-                os.close(fd)
+                self.native(9, os.close, fd)
             except OSError as error:
                 if failure is None:
                     failure = error
         if failure is not None:
             raise failure
+        self.cleanup_completed = True
 
 
 def main():
@@ -223,24 +282,43 @@ def main():
     try:
         try:
             result = transfer.run()
+        except Exception as error:
+            transfer.capture_fault(error)
+            raise
         finally:
             transfer.dispose()
+        transfer.phase = 11
+        transfer.role = 4
+        transfer.ordinal = 0
         transfer.before()
+        transfer.operation = 12
         raw = (json.dumps(result, sort_keys=True, separators=(',', ':')) + '\n').encode('ascii')
         if len(raw) > 2048:
             raise ValueError('Transfer frame bound')
         transfer.charge('writes', 1, 8192); transfer.charge('writtenBytes', len(raw), 16777216)
-        if os.write(1, raw) != len(raw):
+        if transfer.native(6, os.write, 1, raw) != len(raw):
             raise ValueError('Transfer frame incomplete')
         transfer.before(); return 0
-    except Exception:
-        failure = b'Public transfer failed.\n'
+    except Exception as error:
+        transfer.capture_fault(error)
+        transfer.operation = 12
+        try:
+            failure = (json.dumps(dict(schema='selected-account-public-transfer-failure-v2',
+                                      firstFault=transfer.first_fault,
+                                      cleanupAttempted=transfer.cleanup_attempted,
+                                      cleanupCompleted=transfer.cleanup_completed),
+                                  sort_keys=True, separators=(',', ':'), allow_nan=False) + '\n').encode('ascii')
+            if len(failure) > 4096:
+                failure = b'Public transfer failed.\n'
+        except Exception:
+            failure = b'Public transfer failed.\n'
         if not transfer.cancelled and time.monotonic() - transfer.epoch < 170 and \
-                transfer.counts['writes'] < 8192 and transfer.counts['writtenBytes'] <= 16777216 - len(failure):
+                len(failure) <= 4096 and transfer.counts['writes'] < 8192 and \
+                transfer.counts['writtenBytes'] <= 16777216 - len(failure):
             try:
                 transfer.charge('writes', 1, 8192)
                 transfer.charge('writtenBytes', len(failure), 16777216)
-                os.write(2, failure)
+                transfer.native(6, os.write, 2, failure)
             except Exception:
                 pass
         return 1
