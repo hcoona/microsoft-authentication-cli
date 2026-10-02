@@ -647,6 +647,99 @@ calls, cancellation/denial, WSL lifetime, external Profile activation and overal
 Slice acceptance remain separate. Record a failure as a product-path observation
 with its actual limitation; do not replace it with another synthetic success.
 
+## Selected-Account Current Kernel Clock Recipe
+
+This small public observation resolves the current relevance of the conditional
+0145/0153 kernel-buffer selector/SID capture path before account effects. It uses
+the same designated Windows host and existing installed platform as public input
+preparation. It starts no product or caller, reads no selector, broker, cache,
+trace session or buffer, and invokes no ETW, elevation, foreign-session or cleanup
+API. It is necessary technical preparation under the current outcome Wave, not
+a new observer project or owner risk grant.
+
+The accepted 0184 final snapshot retains a source-corresponded
+`GetTickCount64()` sample of 1,853,013,968 milliseconds, paired with
+`2026-10-01T19:19:20.8987843Z`, after the original 0145/0153 sequence. The sample
+comes from the original permit's counter and UTC operands after subtracting their
+120-second allowance; file birth times and Linux clocks are not substitutes.
+Before execution, independently bind that accepted snapshot, original source and
+outcome to this reference and confirm the designated host correspondence.
+
+### Fixed subject and one original
+
+Use [the inert clock adapter](../../../tools/validation/Invoke-WindowsSelectedAccountClock.ps1),
+5,485 bytes, SHA-256
+`9efb1f971109328fd7801ab34abe15b7a17cf5db7737ae88b68b59a3e19b0f0d`.
+Only its `$ClockObservationAdmitted = $false` guard may change to `$true` in an
+independently admitted private copy; the canonical source stays false. Copy it to
+the normal launcher's fixed `Invoke-WindowsNamedGuardFixtures.ps1` name in the
+exclusively created `C:\Temp\azureauth-windows-slice-108\named-fixtures-0187` root.
+The other input is public `authority.json`, with schema
+`selected-account-kernel-clock-authority-v1`, action `0187`, host role
+`designated-windows-interactive-host`, exact activated controller hash, and the
+current accepted authority and review bindings. Both fixed public inputs require
+finite creation/transfer, exact length/hash/EOF, strict held/named continuity,
+exclusive output and independent exact-call admission before use. No other
+experimental output or content-selected path becomes a donor.
+
+Reuse the exact accepted normal 0070 launcher and its four arguments, fixed
+PowerShell hash, environment, creation-time named Job, original handles, capture
+limits, finite cleanup and original 330+10-second envelope. Do not compile or
+change the launcher. Independently admit its current donor, installed Framework
+compiler/configuration and Linux dispatch/cgroup/transport operating basis.
+Reserve one validation-helper build and the source-supported maximum synthetic
+launcher/console-host roles from the common pool, plus the full reviewed passive
+creation, dispatch and collection limits, before the sole original. Failures and
+partial starts spend their complete reservations; no automatic retry follows.
+
+The adapter reads only the two fixed public controls through held read handles
+denying write/delete sharing, with exact hash/length/EOF, 65,536 bytes per leaf,
+four read calls and a shared 262,144-byte requested-read cap. It performs one
+existing Framework `Add-Type` compilation of its embedded C# 5 type with exactly
+one `kernel32.dll` import, `GetTickCount64`. It takes two uptime samples surrounding
+one adjacent UTC sample; the uptime interval must be nondecreasing and at most
+1,000 milliseconds. It reads only its own controller PID/creation/session for the
+normal launcher's original-root correspondence. There is no process survey.
+
+Work must finish before its 20-second source cutoff, owned-handle closure before
+25 seconds, and one exclusive flushed `clock-result.json` receipt and return before
+30 seconds. Its receipt is at most 8,192 bytes. Decimal strings preserve the full
+native counters in JSON; failures retain a fixed phase, never exception text or
+raw diagnostics. These cutoffs do not promise interruptible OS/Framework work or
+renew the independently admitted launcher's clock. The `passed` field is
+provisional: require the original timely ordinary return, root exit, Job zero,
+both EOFs, complete launcher transport and scoped new Linux completion.
+
+The sole later collector may read only `clock-result.json`, `launcher.jsonl` and
+the launcher's two capture files for this new root, at most 1 MiB/30 seconds.
+Do not reopen inputs, enumerate directories, query processes or trace state, or
+recollect historical outputs. Retain full and partial roots/results intentionally.
+An occupied root cannot be repaired, replaced or adopted. Missing or late original
+completion, forced stop, unclosed ownership, output overflow or invalid records
+fails this observation and stops its dependent account admission.
+
+### Bounded current relevance conclusion
+
+After independent outcome acceptance and confirmed host/source correspondence,
+an upper current sample plus a conservative 1,000-millisecond margin strictly
+below the retained 1,853,013,968-millisecond sample establishes a kernel reset
+after that witness. Microsoft's [counter contract](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-gettickcount64)
+measures elapsed system-start milliseconds; UTC adjustment does not reset it.
+The retained sources configure ordinary real-time sessions rather than
+autologgers, and [the session contract](https://learn.microsoft.com/en-us/windows/win32/api/evntrace/nf-evntrace-starttracew)
+ends those sessions on system restart. That conjunction excludes these old
+sessions and their buffers from the current kernel. It does not establish their
+historical stop, erase any process lifetime gap, or survey other Windows sessions.
+
+An equal, larger, invalid or noncorresponding sample is inconclusive. A lost
+temporary directory, logon, sleep, hibernation, asserted reboot or raw QPC value
+cannot replace the required comparable counter observation. If material private
+selector/SID buffer uncertainty remains, finish concrete preparation and obtain
+the required risk disposition before dependent account execution. Do not renew
+normal WAM/consent/cache authorization or restart ETW/elevation. Preserve every
+historical charge, failure, closure gap and `noExperimentLive=false`, even when
+the current-kernel relevance is resolved.
+
 ## Subject and Source Admission
 
 The subject is the fork-owned .NET 10 authentication core and its controlled scenario
