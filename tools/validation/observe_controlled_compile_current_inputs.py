@@ -118,7 +118,7 @@ try:
     assert actual['schema']=='private-compile-actual-local-inputs-v1' and actual['action']=='0190' and actual['sourceCommit']==COMMIT
     assert actual['originalExternalDescriptorsPreserved']==365 and actual['newLocalCompilerInputs']==48
     a=actual['admissionBase'];assert a['action']=='0190' and a['suite']=='compile' and a['sourceCommit']==COMMIT
-    original_inventory=a['inventory'] and a['sourceCommit']==COMMIT
+    original_inventory=a['inventory']
     controls={}
     for role,cap in [('inventory',1048576),('sourceMap',65536),('checkpoint',65536),('caller',2097152),('controller',2097152),('catalog',1048576),('protocol',2097152)]:
         controls[role]=read(a[role],cap,'control-'+role,retain=role in ('inventory','sourceMap','checkpoint'))

@@ -351,7 +351,7 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `83b415804b61fa8a35f10f4037114b5f6346f3cb9f9a2519affaabd2a90e4790` |
 | [controller-input-catalog.tsv](../../../tools/validation/controlled-callers/control/controller-input-catalog.tsv) | 87398 | `1bf3742530b97472bbf81aaa73ccff3fbba2dc22d2a1ee865e02ba754bfaf2bc` |
 | [run_controlled_callers.py](../../../tools/validation/controlled-callers/run_controlled_callers.py) | 80426 | `66b4d3f5c203dc1cbc5e8126e0038562b4c624fa90cfe402cdbca8f8fa705b9e` |
-| [observe_controlled_compile_current_inputs.py](../../../tools/validation/observe_controlled_compile_current_inputs.py) | 10877 | `8b739e112f24a19e168e46955c05314c37e86278e203bec3dc8eb354449b0b46` |
+| [observe_controlled_compile_current_inputs.py](../../../tools/validation/observe_controlled_compile_current_inputs.py) | 10847 | `d1fc79d9c04e41d9a9eb5176e2dbbc17a9334981256e48b0ad9c4b7dbc6587ee` |
 | [Invoke-WindowsControlledCallers.ps1](../../../tools/validation/controlled-callers/Invoke-WindowsControlledCallers.ps1) | 26463 | `53bab8dfb4802e6b541b840abcb128c6d9efb63317c91e7a63becc30c389665c` |
 | [NativeCaller.rsp](../../../tools/validation/controlled-callers/control/NativeCaller.rsp) | 20867 | `62a1b7b8cb6ba3d51535e0b4a9be7cbde8ed928fca5bba62f74b1dcb98c33e33` |
 | [DirectObserver.rsp](../../../tools/validation/controlled-callers/control/DirectObserver.rsp) | 20404 | `b4af49e38b70808369e259466a7a759339d6f422733c9b61a31f560d12159fb6` |
