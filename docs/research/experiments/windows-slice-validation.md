@@ -1028,6 +1028,64 @@ completion and unchanged artifact provenance before private creation. Diagnostic
 matching hashes or empty captures alone establish none of those conjunctions. Full
 personal/work/actualWSL acceptance remains outstanding after public preparation.
 
+##### Ended public transfer metadata diagnosis
+
+A failed exclusive Linux transfer can leave its fixed staging files partially
+created without exposing its failure location. Preserve the original failure,
+complete transport, full debit and every occupied destination. Independent
+acceptance of the ended original and its separately scoped Linux completion
+precedes this diagnostic observation. A generic failure message establishes
+neither zero copies nor a successful receipt. No Windows materialization,
+private creation or account call may depend on that failed transfer.
+
+Admit at most one separately charged metadata pass for the ended
+`named-fixtures-0189` transfer: 30 seconds and 128 KiB from the shared passive
+metadata pool, with zero technical, synthetic, Windows or real-account starts.
+The inert
+[fixed metadata observer](../../../tools/validation/observe_selected_account_transfer_metadata.py)
+selects only that stage and the twelve literal names in its source: its start
+marker, ten public transfer leaves and result receipt. It performs no enumeration,
+leaf open, payload read, content/hash validation, source-artifact reopening,
+Windows execution, account query, process survey or file mutation. Startup reads
+retain their separately admitted installed-runtime basis; zero payload reads
+refers only to explicit observation operations.
+
+Bind the exact admitted stage-parent full5 to the preceding accepted preflight.
+Hold and validate no-follow ancestry. If the stage exists, require a directory,
+hold its identity and take two agreeing named no-follow full9 observations of
+each fixed leaf, preserving absence as null. If the stage is absent, confirm that
+absence again beneath the held parent and report no child observations. Check
+held/named directory identities before disposal. These are bounded metadata
+snapshots, not leaf-handle continuity, file-content correspondence, native Windows
+identity or proof of an uninterrupted interval. A changed identity or absence
+rejects the whole observation. Do not adopt, repair, overwrite or delete the stage.
+
+Use isolated/no-site/no-bytecode Python 3.14, source work/CPU 25 seconds and AS
+128 MiB, under GNU TERM 25 seconds plus KILL grace five seconds for a whole
+30-second envelope. Retain source ceilings of 32 directory opens and 256 metadata
+calls. Close every registered descriptor before the sole at-most8192B JSON stdout
+attempt and check cancellation/deadline before and after it. A failed or short
+stdout attempt cannot pass; a permitted fixed failure marker adds at most25B to
+stderr. The 128 KiB reservation includes the conservative32KiB bootstrap-source
+allowance and all explicit output requests; installed OS/loader reads are not an
+explicit-I/O census. No clock or spent pass is renewed.
+
+Before activation, independently accept the exact source, parent/runtime/startup
+binding, current authority/protocol, full prior accounting, debit/submission and
+separate original call. Activation replaces only `ADMISSION = None` with the
+reviewed one-key `stageParentFull5` object. Keep the tracked source inert. Accept
+the actual bounded result, ordinary original return, complete transport and
+scoped childless-reader/GNUenv/watchdog completion independently afterward.
+Metadata presence, size or ordinal can narrow a diagnostic question; it cannot
+identify an exception, establish a hash, repair the original failure or authorize
+a new transfer. Any actual source correction retains independent finding triage
+and fresh accepted protocol/source/input/call gates. A new original still needs
+a fresh exclusive staging root and full charge; no retry is admitted here.
+
+The inert observer is 6548 bytes, SHA-256
+`9770a2ef73661b5f0e4176e4214f6b339080156b399fc5d62c2eb25b92b311df`. This supplement supplies no runtime observation. Preserve every
+historical uncertainty, primitive/provisional flag and `noExperimentLive=false`.
+
 ##### Pure projection validation
 
 Before accepting actual results, admit at most one Linux-only in-memory projection
