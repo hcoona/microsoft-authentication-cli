@@ -406,16 +406,17 @@ def validate_compile_donor_observation(source, observation):
 
 
 def validate_current_compile_donor_observation(source, observation):
-    """Require all nine fields of the independently accepted current basis."""
+    """Pin the current basis except for its qualified historical ctime field."""
     observed = compile_donor_observation_identity(source, observation)
-    require(observed == source['descriptor']['identity'], 'Current compile donor exact full9',
+    require(all(observed[i] == source['descriptor']['identity'][i] for i in (0, 1, 2, 3, 4, 5, 6, 8)),
+            'Current compile donor content/eight fields and strict within-read identity',
             read_observation=observation['readObservation'])
 
 
 def pin_input(a, item, budget):
     if a['suite'] == 'compile' and budget.compile_donors.get(item['relativePath']) == item:
         # The accepted inventory schema selects the original or fresh current basis.
-        # Both use the same full9-strict reader; current donors also pin all nine fields.
+        # Both retain full9-strict reads and pin every non-ctime field of their basis.
         raw, _, readback = budget._read(Path(item['descriptor']['path']), 67108864)
         observation = {'relativePath': item['relativePath'], 'readObservation': readback,
                        'sha256': digest(raw)}
@@ -533,7 +534,7 @@ def require_executable_launcher(a, budget):
 
 def inventory_rows(a, budget):
     inventory = decode(budget.pin(a['inventory'], 4194304))
-    current_donors = a['suite'] == 'compile' and inventory.get('schema') == 'windows-controlled-harness-compile-files-v3'
+    current_donors = a['suite'] == 'compile' and inventory.get('schema') == 'windows-controlled-harness-compile-files-v4'
     require(set(inventory) == ({'schema', 'files', 'originalDonors', 'currentDonorAcceptance'} if current_donors else
                               {'schema', 'files'} if a['suite'] == 'compile' else {'schema', 'identityMode', 'files'}) and
             (current_donors or inventory['schema'] == ('windows-controlled-harness-files-v1' if a['suite'] == 'compile' else
@@ -585,10 +586,12 @@ def inventory_rows(a, budget):
         budget.current_compile_donors = current_donors
         if current_donors:
             budget.compile_donors = current_compile_donor_rows(inventory['originalDonors'], inventory['files'][:365])
-            acceptance(inventory['currentDonorAcceptance'], 'windows-controlled-compile-current-donor-acceptance-v1',
+            acceptance(inventory['currentDonorAcceptance'], 'windows-controlled-compile-current-donor-acceptance-v2',
                        {'originalDonorsSha256': COMPILE_DONORS_SHA256,
                         'currentDonorsSha256': digest(encode(inventory['files'][:365])),
-                        'publicPathsContentAndProvenanceAccepted': True, 'strictCurrentFull9': True,
+                        'publicPathsContentAndProvenanceAccepted': True,
+                        'strictWithinReadFull9': True, 'currentNonCtimeFieldsPinned': True,
+                        'historicalCtimeQualified': True,
                         'historicalSuccessClaimed': False}, budget)
         else:
             budget.compile_donors = compile_donor_rows(inventory['files'][:365])
