@@ -4,9 +4,14 @@
 param(
     [Parameter(Mandatory)][string] $PlanPath,
     [Parameter(Mandatory)][string] $PlanSha256,
-    [Parameter(Mandatory)][ValidateRange(1, 4)][int] $Attempt
+    [Parameter(Mandatory)][ValidateRange(1, 4)][int] $Attempt,
+    [Parameter(Mandatory)][string] $ControllerSha256,
+    [switch] $Controller,
+    [Parameter(Mandatory)][long] $InvocationStartTicks,
+    [string] $ReservationSha256 = ''
 )
 
+$entryTicks = [Diagnostics.Stopwatch]::GetTimestamp()
 $ExecutionAdmitted = $false
 if (-not $ExecutionAdmitted) { exit 125 }
 
@@ -14,7 +19,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $root = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v1'
-$clock = [Diagnostics.Stopwatch]::StartNew()
+$frequency = [Diagnostics.Stopwatch]::Frequency
+$callStart = $InvocationStartTicks
 $child = $null
 $started = $false
 $stopped = $false
@@ -32,6 +38,11 @@ function Need([bool] $Condition) {
     if (-not $Condition) { throw 'Selected-account admission refused.' }
 }
 
+function Before([int] $Seconds) {
+    Need ($callStart -gt 0 -and $callStart -le $entryTicks -and
+        ([Diagnostics.Stopwatch]::GetTimestamp() - $callStart) / $frequency -lt $Seconds)
+}
+
 function Read-Pinned([string] $Path, [int] $Maximum, [string] $ExpectedHash) {
     $file = [IO.File]::Open($Path, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read)
     $pins.Add($file)
@@ -39,7 +50,7 @@ function Read-Pinned([string] $Path, [int] $Maximum, [string] $ExpectedHash) {
     $bytes = [byte[]]::new([int] $file.Length)
     $offset = 0
     while ($offset -lt $bytes.Length) {
-        Need ($clock.Elapsed.TotalSeconds -lt 20)
+        Before 20
         $read = $file.Read($bytes, $offset, $bytes.Length - $offset)
         Need ($read -gt 0)
         $offset += $read
@@ -72,7 +83,118 @@ function Quote-Argument([string] $Value) {
     return '"' + $Value + '"'
 }
 
+function Invoke-Outer {
+    # Run in the admitted existing console; the only new shell is the controller.
+    # Original-call admission binds this source before invocation, not just its path.
+    $process = $null
+    $launched = $false
+    $complete = $false
+    $outerReceipt = $null
+    $safe = [ordered]@{
+        schema = 'selected-account-outer-v1'; attempt = $Attempt
+        passed = $false; controllerExited = $false; streamsClosed = $false
+        stopAttempted = $false; noExperimentLive = $false; failure = 'admission'
+        invocationStartTicks = $callStart; stopwatchFrequency = $frequency
+        controllerPid = 0; controllerCreatedFileTime = 0
+    }
+    try {
+        Before 20
+        Need (-not $Controller -and $ReservationSha256 -ceq '')
+        Need ([Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop')
+        Need ($PlanPath -ceq ($root + '\control\selected-account-plan-' + $Attempt + '.json'))
+        $script = $root + '\control\Invoke-WindowsSelectedAccount.ps1'
+        Need ($PSCommandPath -ceq $script)
+        $null = Read-Pinned $script 65536 $ControllerSha256
+        $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+        $null = Read-Pinned $shell 1048576 '8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e'
+        $utf8 = [Text.UTF8Encoding]::new($false, $true)
+        $public = $utf8.GetString((Read-Pinned $PlanPath 262144 $PlanSha256)) | ConvertFrom-Json
+        $group = if ($Attempt % 2 -eq 1) { 'R1' } else { 'R6' }
+        Need ($public.schema -ceq 'confidential-native-account-admission-v1' -and
+            $public.group -ceq $group -and $public.admitted -eq $true -and
+            $public.accountEffectsAccepted -eq $true -and
+            $public.nonce -cmatch '\A[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\z')
+        $outerReceipt = $root + '\records\' + $group + '-' + $public.nonce + '\outer-terminal.json'
+        for ($prior = 1; $prior -lt $Attempt; $prior++) {
+            Need ([IO.File]::Exists($root + '\records\selected-account-attempt-' + $prior + '.json'))
+        }
+        # The complete debit precedes the new shell, including failed shell starts.
+        $reservation = Write-NewJson ($root + '\records\selected-account-attempt-' + $Attempt + '.json') ([ordered]@{
+            schema = 'selected-account-attempt-v1'; attempt = $Attempt; group = $group
+            nonce = $public.nonce; planSha256 = $PlanSha256; controllerSha256 = $ControllerSha256
+            invocationStartTicks = $callStart; productLaunchReservation = 1
+            callerProcessReservation = 2; controllerReservation = 1; outerInvocationReservation = 1
+        })
+        Before 20
+        $info = [Diagnostics.ProcessStartInfo]::new()
+        $info.FileName = $shell
+        $info.Arguments = '-NoLogo -NoProfile -NonInteractive -File ' + (Quote-Argument $script) +
+            ' -PlanPath ' + (Quote-Argument $PlanPath) + ' -PlanSha256 ' + (Quote-Argument $PlanSha256) +
+            ' -Attempt ' + $Attempt + ' -ControllerSha256 ' + (Quote-Argument $ControllerSha256) +
+            ' -Controller -InvocationStartTicks ' + $callStart.ToString([Globalization.CultureInfo]::InvariantCulture) +
+            ' -ReservationSha256 ' + (Quote-Argument $reservation)
+        $info.WorkingDirectory = $root
+        $info.UseShellExecute = $false
+        $info.CreateNoWindow = $false
+        $info.RedirectStandardOutput = $true
+        $info.RedirectStandardError = $true
+        $process = [Diagnostics.Process]::new()
+        $process.StartInfo = $info
+        $safe.failure = 'launch'
+        Need ($process.Start())
+        $launched = $true
+        $null = $process.Handle
+        $safe.controllerPid = $process.Id
+        $safe.controllerCreatedFileTime = $process.StartTime.ToUniversalTime().ToFileTimeUtc()
+        $stdout = $process.StandardOutput.BaseStream.ReadAsync([byte[]]::new(1), 0, 1)
+        $stderr = $process.StandardError.BaseStream.ReadAsync([byte[]]::new(1), 0, 1)
+        $safe.failure = 'supervision'
+        while (([Diagnostics.Stopwatch]::GetTimestamp() - $callStart) / $frequency -lt 170) {
+            if ($stdout.IsCompleted) { Need ($stdout.GetAwaiter().GetResult() -eq 0) }
+            if ($stderr.IsCompleted) { Need ($stderr.GetAwaiter().GetResult() -eq 0) }
+            if ($process.HasExited -and $stdout.IsCompleted -and $stderr.IsCompleted) {
+                $complete = $true
+                $safe.controllerExited = $true
+                $safe.streamsClosed = $true
+                break
+            }
+            [Threading.Thread]::Sleep(10)
+        }
+        Need $complete
+        Before 170
+        Need ($process.ExitCode -eq 0)
+        $safe.passed = $true
+        $safe.failure = 'none'
+    } catch {
+        # No exception, captured byte, environment or private input is exported.
+    } finally {
+        if ($launched -and -not $complete) {
+            $safe.stopAttempted = $true
+            try {
+                if (-not $process.HasExited) { $process.Kill() }
+                $remaining = [Math]::Max(0, [Math]::Min(5000,
+                    [Math]::Floor(175000 - 1000 * ([Diagnostics.Stopwatch]::GetTimestamp() - $callStart) / $frequency)))
+                $safe.controllerExited = $process.WaitForExit([int] $remaining)
+            } catch { }
+            # Controller exit does not prove native worker/product/Job completion.
+        }
+        if ($process) { $process.Dispose() }
+        foreach ($pin in $pins) { $pin.Dispose() }
+        try {
+            Before 180
+            if ($outerReceipt) { $null = Write-NewJson $outerReceipt $safe }
+            Before 180
+        } catch { $safe.passed = $false }
+    }
+    # An overrun fails even if a receipt write completed after its cutoff.
+    if ($safe.passed) { return 0 }
+    return 1
+}
+
+if (-not $Controller) { exit (Invoke-Outer) }
+
 try {
+    Before 20
     Need ([Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop')
     Need ($PlanPath -ceq ($root + '\control\selected-account-plan-' + $Attempt + '.json'))
     $encoding = [Text.UTF8Encoding]::new($false, $true)
@@ -102,20 +224,20 @@ try {
     for ($prior = 1; $prior -lt $Attempt; $prior++) {
         Need ([IO.File]::Exists($root + '\records\selected-account-attempt-' + $prior + '.json'))
     }
-    Need ($clock.Elapsed.TotalSeconds -lt 20)
-    $null = Write-NewJson $reservationPath ([ordered]@{
-        schema = 'selected-account-attempt-v1'; attempt = $Attempt; group = $group
-        nonce = $plan.nonce; planSha256 = $PlanSha256; productLaunchReservation = 1
-        callerProcessReservation = 2; controllerReservation = 1
-    })
+    $reserved = $encoding.GetString((Read-Pinned $reservationPath 4096 $ReservationSha256)) | ConvertFrom-Json
+    Need ($reserved.schema -ceq 'selected-account-attempt-v1' -and $reserved.attempt -eq $Attempt -and
+        $reserved.group -ceq $group -and $reserved.nonce -ceq $plan.nonce -and
+        $reserved.planSha256 -ceq $PlanSha256 -and $reserved.controllerSha256 -ceq $ControllerSha256 -and
+        $reserved.invocationStartTicks -eq $callStart -and $reserved.productLaunchReservation -eq 1 -and
+        $reserved.callerProcessReservation -eq 2 -and $reserved.controllerReservation -eq 1 -and
+        $reserved.outerInvocationReservation -eq 1)
+    Before 20
 
-    $frequency = [Diagnostics.Stopwatch]::Frequency
     $start = [Diagnostics.Stopwatch]::GetTimestamp()
     $plan.batchStartTicks = $start
     $plan.batchEndTicks = $start + 1800L * $frequency
     $plan.stopwatchFrequency = $frequency
-    # These are native deadlines only. Exact-call admission must separately bound
-    # the complete outer invocation, including admission, stop and receipt cleanup.
+    # Admission shares the outer epoch. Native completion is at most epoch + 160s.
     $workEnd = $start + 130L * $frequency
     $finalEnd = $workEnd + 10L * $frequency
     $controlPath = $root + '\control\' + $group + '-' + $plan.nonce + '.json'
@@ -137,6 +259,7 @@ try {
     $child = [Diagnostics.Process]::new()
     $child.StartInfo = $info
     $status.failure = 'launch'
+    Before 20
     Need ($child.Start())
     $started = $true
     $null = $child.Handle
@@ -166,6 +289,7 @@ try {
         [Threading.Thread]::Sleep(10)
     }
     Need $closed
+    Before 165
     $status.supervisorExited = $true
     $status.supervisorExitCode = $child.ExitCode
     $status.streamsClosed = $true
@@ -196,7 +320,9 @@ try {
         $status.stopAttempted = $true
         try {
             if (-not $child.HasExited) { $child.Kill() }
-            $stopped = $child.WaitForExit(5000)
+            $remaining = [Math]::Max(0, [Math]::Min(5000,
+                [Math]::Floor(165000 - 1000 * ([Diagnostics.Stopwatch]::GetTimestamp() - $callStart) / $frequency)))
+            $stopped = $child.WaitForExit([int] $remaining)
             $status.supervisorExited = $stopped
         } catch { }
         # Parent exit/last-close Job termination is not evidence that the product
@@ -205,7 +331,11 @@ try {
     if ($child) { $child.Dispose() }
     foreach ($pin in $pins) { $pin.Dispose() }
     if ($receiptRoot) {
-        try { $null = Write-NewJson ($receiptRoot + '\controller-terminal.json') $status } catch { }
+        try {
+            Before 170
+            $null = Write-NewJson ($receiptRoot + '\controller-terminal.json') $status
+            Before 170
+        } catch { $status.passed = $false }
     }
 }
 if ($status.passed) { exit 0 }

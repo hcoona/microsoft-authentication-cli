@@ -58,7 +58,10 @@ non-elevated logged-on user. Do not use a service, scheduled task, alternate ide
 impersonation, or the retired elevated WSL relay. The outer host is the existing
 64-bit Windows PowerShell 5.1, launched with `-NoProfile` and attached to an existing
 ordinary Windows console in that interactive session. Detached or background outer
-PowerShell is excluded. Exact environment/call admission must bind this existing-console
+PowerShell is excluded. The existing shell invokes the outer mode of the same script;
+that mode creates one new PowerShell controller with ordinary console inheritance.
+Do not create another outer shell, console or console host. Exact environment/call
+admission must bind this existing-console
 premise, the outer environment and the native caller's constructed current-user
 environment. Preserve ordinary console inheritance and existing strict Job counts;
 do not create an additional console or console host.
@@ -113,20 +116,95 @@ request or infer the actual token tenant from historical results.
 
 Propose four cumulative product-start reservations: attempts 1/2 are R1/R6; attempts
 3/4 are one corrected R1/R6 pair. Each reservation also covers two native caller
-processes and one outer PowerShell process: at most four product, eight caller and
-four controller starts in total, zero ETW starts, zero restore/build/publish actions.
+processes, one new PowerShell controller and one script invocation in the already
+existing outer shell: at most four product, eight caller and four controller starts,
+plus four outer invocations, zero ETW starts, zero restore/build/publish actions.
 No existing synthetic charge is refunded, transferred or replayed. The real-effect
 allowance and any public-input materialization/observation allowance must be stated
 in the future Wave amendment; unused synthetic capacity is not their authority.
 
-Reserve the full selected slot before invocation. Failed starts and partial
-preparation spend the reservation. R6 requires an independently accepted successful
+Reserve the full selected slot before creating the controller. A rejected outer
+invocation also consumes its slot in the governing original-call record, even when
+no on-disk reservation could be written; absence is never remaining capacity.
+Failed starts and partial preparation spend the reservation. R6 requires an independently accepted successful
 R1 from the same pair, confirmed private selection equality, and unchanged product,
 Profile and caller inputs. The correction pair requires resolved failure/closure,
 reviewed correction and a fresh exact call; it is not an automatic retry. Changes
 within the accepted effects and finite budget require no renewed owner risk decision.
 Do not expand the budget or start a second tool-development track if the correction
 pair cannot answer the product question.
+
+### Fixed input creation recipe
+
+This recipe remains non-executing. Propose one public materialization and one
+Windows-local private-input creation. Both require an accepted finite allowance
+and independently reviewed source and original call; this section does not spend
+synthetic capacity or authorize either operation. Stop if the accepted immutable
+product inputs cannot be recovered. Do not substitute original publication paths,
+rerun spent collectors, or accept matching executable hashes without provenance.
+
+| Role | Fixed source and destination | Admission basis |
+| --- | --- | --- |
+| Caller/runtime | Accepted original 0130 `confidential-checks-v9` donor to the same relative paths in the fixed account root | Exactly 194 entries: all non-artifact entries and `artifact\\NativeCaller.*` from the original `FixtureInputCatalog.Required()`, joined to original 0130's accepted DLL/apphost/templates; 81,083,019 bytes total. Other compiled artifact roles are excluded. |
+| Product | Published runtime rows of an accepted immutable retained snapshot to `product\\Authentication.Cli.exe` and `product\\msalruntime.dll` | Exact lengths/hashes and complete contextual source/asset disposition above. The two supplied runtime leaves preserve all declared OS-module and dynamic-load obligations; PDB/object files remain provenance evidence. |
+| Profile | [Public template](../../../tools/validation/selected-account-inputs/profile.json) to `product\\selected-account-profile.json` | 568 bytes, SHA-256 `b7b26fb3bcedeca62087dc3818e858dd9184ca37dbc9eb0abcbd310a839a2c75`, accepted Profile contract and default-scope operation association. |
+| Controller/templates | Accepted controller source to `control\\Invoke-WindowsSelectedAccount.ps1`; [R1](../../../tools/validation/selected-account-inputs/R1.template.json) and [R6](../../../tools/validation/selected-account-inputs/R6.template.json) to `control\\R1.template.json` and `control\\R6.template.json` | Exact accepted bytes; the only controller activation edit is its false guard. Null-email templates cannot be used as private requests. |
+
+The proposed public materialization covers one Linux transfer original and one
+ordinary Windows preparation invocation, 180 seconds each including finite stop
+and evidence. Its combined caps are 96 MiB of payload, 128 MiB written and
+512 MiB read including readbacks and receipts. It starts no product or native
+caller, downloads nothing, and performs no restore or product compilation. Use
+only the fixed source list, not directory enumeration, broker/account stores,
+process state or other experimental outputs. Retain complete and partial owned
+outputs; a failed root is occupied and cannot be repaired, replaced or adopted.
+
+Bind the exact accepted retained product manifest, literal source rows and frozen
+identities before copying the product pair. Preserve the strict Linux no-follow,
+held-ancestry and within-read full9 predicates. Apply only the standing historical
+ctime qualification where admitted; do not refresh baselines. Transferred public
+staging leaves in the new root require exclusive creation and exact source/content
+joins, and are not unrelated donors. No private bytes travel to Linux.
+
+Create the fixed root exclusively under the admitted ordinary owner-controlled
+base. Hold no-reparse ancestry with deletion sharing denied. For each Windows
+donor, validate its admitted descriptor and retain a read handle denying write/
+delete sharing through exact length/hash/EOF checks and copying. Exclusive writes
+need flush and held-handle readback. Observe fresh destination native volume,
+index, attributes, creation/modification/change times, length and link count;
+never translate Linux identities into those fields. Apply the existing
+`FixtureNativePins` regular-file, exact-final-name, single-link and unchanged
+within-read predicates. Preserve original creation volume/index/time across the
+writer/readback gap. Standing historical Linux ctime acceptance relaxes neither
+native identities nor within-read checks.
+
+Independently accept the materialized public inventory and scoped outcome before
+private creation. All 194 caller leaves, both product runtime leaves, the Profile
+and controller must be recovered; an incomplete source list is not runtime evidence.
+The actual public plans bind the destination identities in `callerPins` and
+`productPins`, including the Profile. The `ActualAdmission` typed schema remains
+the consumer; do not add outer-wrapper fields to it.
+
+The one proposed private step has 120 seconds including local owner input and
+closure, and runs only in the same Windows console after actual readiness.
+Obtain one full personal email locally without echo, transcription or shell
+history; expiry/cancellation does not grant another original. Create both private
+documents exclusively from that one value and the null-email templates. Locally
+validate both rows and equality of email/Profile/tenant/scopes/timeout and every
+other shared field; only group, `interactionAllowed` and `requiredInteraction`
+differ. Do not derive selection from broker enumeration, previous outputs, chat
+or historical private observations. Export only equality/validation Booleans and
+the two non-content native identities/lengths, never contents or private hashes.
+Keep ordinary permissions and retain the private files; no ACL/cache/account repair.
+
+After accepted creation outcomes, propose at most four public-control creation
+operations, each 30 seconds/1 MiB with zero product/caller starts. Each binds one
+slot's public plan, accepted authority/source/closure receipts, private identities
+and fresh nonce directory. If failed R1 prevents R6, spend the paired R6 slot as
+unrun in the governing carrier and create its fixed reservation during an admitted
+control operation before a corrected pair. This adds no attempt or success.
+Source/artifact/input/call gates remain necessary after allowance acceptance;
+they are internal execution gates, not renewed per-step owner risk decisions.
 
 ### Controller, clocks and evidence
 
@@ -143,12 +221,18 @@ bytes and the activated controller hash in the original-call record. Use fresh
 `records/GROUP-NONCE` paths. Preserve spent fixed
 `records/selected-account-attempt-N.json` reservations.
 
-The controller opens the public plan and native caller read-only with write/delete
-sharing denied, validates their hashes, durably reserves the slot, and derives the
-existing native 30-minute batch bound from one monotonic timestamp. Its selected
-work deadline is 130 seconds and native completion deadline 140 seconds from that
-timestamp. These do not bound the complete outer invocation: admission precedes
-that timestamp, and stopping and receipt cleanup may follow native completion.
+The existing outer shell takes `Stopwatch.GetTimestamp()` immediately before its
+sole script invocation and passes that value as `InvocationStartTicks`. The outer
+mode binds the exact self/script, PowerShell and public plan bytes, durably reserves
+the complete slot before creating the new controller and retains its original
+`Process.Start` handle. It passes the same invocation epoch and reservation hash
+to controller mode; direct controller invocation is excluded by exact-call admission.
+Both modes' admission must finish before epoch + 20 seconds. The controller reads
+the existing reservation without replacing it, opens the native caller read-only
+with write/delete sharing denied, and derives the existing native 30-minute batch
+bound from its selected monotonic native timestamp. Its selected work deadline is
+130 seconds and native completion deadline 140 seconds from that timestamp, no
+later than epoch + 160 seconds. These clocks never renew the outer deadline.
 Product requests remain 120 seconds plus the
 existing one-second ending allowance. No process waits for review or attendance.
 Complete technical preparation before requesting actual R1 attendance. R6 requires
@@ -165,14 +249,39 @@ Observe original supervisor exit and both EOFs, then its safe terminal receipt.
 Accept success only with native worker/product/Job completion, strict private result
 validation, no forced stop, matching nonce/protocol and the required API route.
 
-On failure or deadline, make at most one stop through the original supervisor
-handle and a wait of at most five seconds. The future exact-call recipe must separately
-assign a finite receipt/cleanup interval and enforce a complete outer deadline from
-the original invocation timestamp, covering admission, launch, native completion,
-stopping and receipt persistence without resetting the clock between phases. Neither
-140 nor 145 seconds is a complete outer-call bound. The source-only controller does
-not yet enforce that complete bound and must remain inert until this prerequisite
-is satisfied. Its last-close Job behavior is a fallback, not proof
+On failure or deadline, controller mode makes at most one stop through the original
+supervisor handle and waits at most five seconds, clipped to epoch + 165 seconds.
+It closes handles and persists its bounded receipt before epoch + 170 seconds.
+The outer mode requires original controller exit and both one-byte EOF observations
+before that same 170-second cutoff. Unexpected output is rejected without printing
+it. Otherwise it attempts one stop only through its original controller handle,
+waits at most five seconds clipped to epoch + 175 seconds, then closes handles and
+writes its safe outer receipt before epoch + 180 seconds. Check the clock again
+after receipt persistence; late writes or failed writes reject the original call.
+Each receipt's `passed` flag is provisional and computed before persistence. A
+late write may leave an immutable receipt with `passed=true` even though the
+post-write check makes the original return nonzero. The flag alone certifies
+neither timely persistence nor a successful original return. Acceptance requires
+all of: original controller exit zero and both EOF observations before epoch +
+170 seconds; original outer script return zero observed before epoch + 180 seconds;
+valid required outer/controller/native receipts with their existing bindings and
+result checks; complete native worker/product/Job closure; and no forced stop.
+The admitted original-call carrier retains the script's own `LASTEXITCODE`
+immediately on return, or an independently admitted equivalent, and that original
+return's timing. Continued interactive-shell lifetime and later receipt collection
+cannot supply missing, late or unretained original completion. Partial receipts
+cannot satisfy the conjunction.
+Neither 140 nor 145 seconds is the complete outer-call bound. There is no process
+tree scan, PID reopen, shared-process termination or new Job in the outer wrapper.
+
+These are source-enforced observation/operation cutoffs, not a promise that Windows
+I/O, `Process.Start` or termination is interruptible or completes. Exact original-call
+admission must separately bind the external 180-second cutoff and finite stop of
+the new controller when the existing outer shell cannot finish; it must not kill the
+unrelated interactive shell or infer child closure. Missing/late outer completion,
+failed stop or incomplete native closure stops the pair. Both modes remain inert
+until that exact-call gate and the accepted real-effects allowance are satisfied.
+The native last-close Job behavior is a fallback, not proof
 of worker/product closure. Missing native terminal evidence leaves owned closure
 unknown and stops all further attempts. Never terminate a shared broker, reopen an
 old process by PID, survey ETW, recollect old evidence, or reset a deadline. A failure
@@ -182,7 +291,7 @@ Retain public controls, reservations, role identities and safe receipts in the
 dedicated experiment root. Keep private selectors and Profile there under ordinary
 owner-controlled permissions; do not commit them or copy private selectors to WSL.
 Retain normal WAM state intentionally. A single post-call collection may read only
-the fixed controller/native safe records for that nonce, at most 32 KiB/30 seconds;
+the fixed outer/controller/native safe records for that nonce, at most 32 KiB/30 seconds;
 it may not read product stdout, raw diagnostics or private documents. Account UI
 observations are manually sanitized facts, never screenshots or transcript dumps.
 
