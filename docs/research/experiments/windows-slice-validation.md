@@ -1,22 +1,214 @@
 # Windows Slice Implementation Validation
 
-This protocol owns credential-free execution during [Issue #108](https://github.com/hcoona/microsoft-authentication-cli/issues/108).
+This protocol owns implementation/acceptance execution and evidence for
+[Issue #108](https://github.com/hcoona/microsoft-authentication-cli/issues/108).
 The [Windows scenario basis](../../validation/strategy.md#windows-slice-design-acceptance)
-owns required behavior and evidence selection. The current
-[Delivery Wave](../../delivery-wave.md#first-windows-authentication-slice-implementation-and-scenario-acceptance)
-owns authorization and maximum effects. This protocol initially allocates only the Linux
-managed scenario loop below. Windows publish, process/UI tests and real account work
-require an independently accepted supplement before execution; they remain required for
-the corresponding Slice acceptance claims.
+owns required behavior; the accepted
+[Wave](../../delivery-wave.md#first-windows-authentication-slice-implementation-and-scenario-acceptance)
+owns outcome authorization, maximum effects and shared capacity. The
+[experiment policy](../experiment-safety.md#windows-slice-outcome-authorization)
+owns safety. No recipe or source guard supplies independent authorization.
+
+## Outcome-Based Execution and Accounting
+
+### Current allocations and historical recipes
+
+The common Wave pools supersede the earlier operation/stage/helper-specific
+allocations, protected slot counts, original maxima, host-role maxima, finite
+stage-name ranges and per-lineage passive-pass quotas in this protocol. Retain
+those values as the historical bounds for the originals and evidence they
+describe; they no longer require a new owner grant for fresh in-boundary work.
+This includes the former single retained-candidate observation and its destination
+restriction. A new acquisition is a fresh bounded current-byte observation, not
+a renewal of the original collector or its claim.
+
+Earlier statements reserving all real effects for a future owner amendment are
+superseded by the current Wave's explicit normal account-effects boundary. This
+does not authorize an old probe, activate a guard or extend credential-free
+historical interference exceptions into account work. The current real-stage
+recipe and operating-basis gates below still precede execution.
+
+This supersession changes allocation authority, not the mechanics or safety of
+an old recipe. Exact source/input sets, per-call operation/byte/time bounds,
+identity predicates, confidentiality, ownership/stop conditions and evidence
+requirements remain effective for any recipe reused. A new batch or changed
+recipe must be independently reviewed and accepted before execution. It must
+identify the superseded technical limits explicitly, use fresh dedicated outputs,
+retain historical descriptors/consumption and fit the current outcome/effects.
+It cannot invoke an exhausted original, renew its deadline, silently reactivate
+a retired entry, overwrite failed outputs, refresh a contradicted baseline or
+claim historical success. Existing unchanged reviews may be reused for their
+actual scope; review the changed dependency and current exact call.
+
+### One accounting carrier and finite internal allocation
+
+Continue the existing sanitized cumulative attempt/accounting carrier. Recover
+all accepted prior preparation/build-test/publication/synthetic consumption and
+passive reservations before activating the new pool. Preserve any unresolved
+historical gaps conservatively rather than treating them as zero or repricing a
+past action. Allocate sufficient remaining capacity for all required acceptance
+cases; protected cases remain obligations, not immutable helper reservations.
+Record each full admitted charge before submission, including failed/partial
+starts. A public/real operation is classified by actual role and effects; a label
+or unused synthetic quota cannot authorize account access.
+
+Passive metadata and collection use common cumulative ceilings of 512 metadata
+passes / 16 GiB reserved bytes / 30,720 reserved seconds, and 512 collection passes
+/ 1 TiB reserved bytes / 153,600 reserved seconds. Include prior accepted charges
+and fresh acquisitions/readbacks. These are protocol ceilings within the Wave's
+delegated passive work, not expected usage. Each pass retains a reviewed stricter
+fixed-selection recipe and original-call/runtime/transport limits; no survey,
+payload-free metadata claim that actually reads payloads, or runtime execution
+hidden in zero-unit accounting. Count failed and partial passes. Revise technical
+pass allocations within authorized effects through ordinary accepted internal
+review; do not request owner permission merely for another source leaf or root.
+
+Real starts/discovery/silent/interaction use the separate Wave real-stage pool.
+Reserve finite scenario/correction batches without resetting consumption. The
+first native R1/R6 batch below retains four local slots and its exact safety
+mechanics. More in-boundary batches require accepted revised recipes and fresh
+inputs/output roots, not another per-pair owner scope decision. R6 still requires
+accepted same-pair R1 success and private equality of the selected request.
+
+### Failure, owner input and operating basis
+
+After failure, preserve the charge/output, independently accept failure and
+scoped completion, resolve the supported cause and accept the revised exact call
+before a further attempt. Unresolved ownership/material safety issues stop their
+dependents. Inert preparation and review do not themselves renew an original or
+need a repeated scope decision. Escalate actual new effects/risk, an unresolved
+finding requiring owner judgment, or exhaustion of the authorized common pool.
+
+The owner has accepted normal real-stage WAM/session/cache and delegated-user
+effects in the Wave. Independently accept a concrete account recipe and its
+Profile/private-input/current-host/operating-basis gates before effects. Retain
+the distinction between credential-free historical interference dispositions and
+the real-account operating basis. Request actual human input/readiness when
+needed, after completing preparation; do not re-ask approval for routine steps.
+No new ETW session or elevation-entry activation is granted by this migration.
+Keep their historical failures, consumed reservations and dependent evidence gaps.
+The native pair has no ETW prerequisite; outstanding WSL claims require a suitable
+independently accepted observation method within the authorized effects.
+
+## Retained Product Byte Acquisition Recipe
+
+This first fixed two-leaf recipe fits the current delegated artifact recovery and
+common passive pool. It is not replay or replenishment of the spent 93-row route.
+Preserve publication 0110's failed result, spent observations and historical
+uncertainties, including `noExperimentLive=false`. Before source access, accept
+source/runtime/accounting/activation and the exact original call. Its local
+single-submission bound includes failed/partial admission. A later supported
+correction needs a fresh independently accepted recipe/source/destination in the
+common pool, not another owner grant. No original process operation is included.
+
+### Literal source and retained destination
+
+Use only these fixed Linux paths recovered from public producer/action/leaf records:
+
+| Literal source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `/mnt/c/Temp/azureauth-windows-slice-108/actions/0110/publish/Authentication.Cli.exe` | 8,885,248 | `02993d94c5145f32274a8763f27d632e2dcc8e6a06d257551b1501eed9689cc7` |
+| `/mnt/c/Temp/azureauth-windows-slice-108/actions/0110/publish/msalruntime.dll` | 2,949,656 | `9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79` |
+
+Product commit `503360753accd0829801953823b1b57a4f852440` and tree
+`8506cdd9781c8a331ea12ea8fe27a55292eec073` retain the already accepted contextual
+source/dependency/compiler/native-image/required-asset/symbol basis above.
+
+Exclusively create exactly
+`/home/shuaizhang/.local/state/azureauth-108-recovery-20260929/selected-account-product-bytes-v1`.
+Its only outputs are the two named binaries, `started.json` and `manifest.json`.
+Retain complete and partial outputs intentionally; an occupied/failed root cannot
+be adopted, repaired, deleted or replaced. No directory enumeration, alternate
+file/root, content-selected input, source substitution, account/process inspection
+or automatic retry. Matching two hashes alone cannot replace contextual provenance.
+
+### Source, finite operations and stopping
+
+The inert [acquisition source](../../../tools/validation/acquire_selected_account_product.py)
+is 9,994 bytes, SHA-256 `ee84178b98575cacef900d09f22b7c934c97163057261636d25da10cde6f090d`.
+Its `ADMISSION=None` remains closed. Activate only its five-field dictionary:
+accepted wave/safety/protocol SHA-256, admitted Linux retention-parent full5 and
+`sourceAdmissionSha256`. That source-admission carrier binds template, authority,
+fixed inputs and activation values before activation; the later original-call
+carrier separately binds the exact activated hash, avoiding a circular hash join.
+No additional file input is selected by a supplied path or observed content.
+
+Hold descriptor-relative no-follow directory ancestry. Create and fsync the
+bounded start, root and parent before any original-output ancestry or payload
+access. Source leaves must be regular, single-link and exactly the accepted
+length/hash with EOF. Fresh source full9 is a new observation and must remain
+strictly unchanged across reads and final held/named checks; standing historical
+ctime qualification supplies no replacement baseline. Outputs require exclusive
+creation, complete writes, file fsync, 0444 sealing/fsync, exact held readback and
+final held/named continuity. Start has bounded producer-written bytes; its original
+call/outcome carrier remains necessary. Synchronize root and parent after sealing.
+Directory full5 establishes identity, not membership/timestamp stability or atomicity
+across the two source reads. Do not translate Linux identities into Windows pins.
+
+| Whole original submission boundary | Maximum |
+| --- | ---: |
+| Submission, including failed or partial admission |1 |
+| Original payload leaves / new payload leaves |2 /2 |
+| Data-read sequences / read syscalls |5 /10 |
+| Requested data-read bytes |23,686,197 |
+| Opens / closes / simultaneous owned descriptors |32 /32 /32 |
+| Held directories / metadata operations / seeks |16 /256 /5 |
+| Fresh directories / chmod / fsync |1 /4 /12 |
+| Writes including transport / total bytes |6 /11,861,784 |
+| Start / manifest / stdout / fixed failure stderr bytes |8,192 /16,384 /2,048 /256 |
+| Reader address space / CPU seconds |128 MiB /60 |
+| Preparation / build-test / publish / synthetic units |0 /0 /0 /0, after independent accounting |
+| Windows executables/product/ETW/elevation/network/dependency actions |0 |
+
+Five sequences are the two exact source reads, two retained payload readbacks and
+one manifest readback, each with one finite data read and one EOF read. A short read
+fails without retry. The source counters cover evidence-file/transport operations;
+exact runtime/watchdog/startup mechanics require their separate accounting admission.
+
+The reader uses one 60-second monotonic interval from constructor entry through
+closure/final transport. The separately admitted original-call watchdog starts
+before Python startup: TERM at 65 seconds and KILL grace at most 5 seconds, 70 seconds
+total. Proposed Linux-only command shape is GNU `timeout --signal=TERM
+--kill-after=5s 65s` around isolated/no-site/no-bytecode Python `-I -S -B` and the
+literal activated source. Independently pin exact tool/source/runtime, environment,
+cwd, tool arguments and new reader/watchdog scope before submission. Signals do
+not make OS I/O interruptible. Timeout, incomplete stop or late completion fails;
+only new owned Linux reader/watchdog work may be stopped. No original Windows work,
+publication, Job, distribution, unrelated shell or shared service is owned.
+
+### Outcome and contextual join
+
+Require original reader exit zero, closed complete transport within the external
+bound, durable valid safe records, final retained identities/readbacks and complete
+new reader/watchdog closure, followed by independent original-outcome acceptance.
+A manifest or fixed return frame alone cannot supply missing original completion.
+Bound a single later collection of only these four new outputs and original-call
+transport; its exact finite limits and original identity joins precede collection.
+No second reader of original Windows paths is included. Empty waits observe only
+the original admitted tool session and last at most 60 seconds each.
+
+An independent contextual reviewer must join the accepted new exact bytes to the
+already accepted unchanged source/dependency/compiler/image/asset/symbol conclusions,
+preserving all 17 CLI/50 companion import, empty delay-import, OS/API-set,
+wtsapi32/gdi32, runtime-loading and loader-search obligations. PDB/object files
+remain historical provenance evidence, not new runtime companions. Hash equality
+can transfer an accepted exact-byte basis under the workstation model; missing
+necessary provenance stops instead of being supplied by hashes or risk acceptance.
+Only after that join may these two new immutable leaves supply independently
+admitted materialization alongside the older accepted retained lineage.
+Mutable original publication paths remain byte sources for this fixed recipe,
+never executable subjects. No account effect, rebuild, ETW/elevation, successful
+original publication, global quiescence, installation, release or Slice completion
+is established. All later execution retains the current Wave boundary and exact
+acceptance gates.
 
 ## Native Windows Selected-Account Acceptance Preparation
 
 This section prepares the first product authentication observation for Issue #108.
-It is non-executing under the current credential-free Wave. Neither merging this
-preparation nor passing its source checks authorizes account access. A concrete
-real-effects owner decision in the accepted Wave, its matching experiment-safety
-disposition, and accepted exact source/artifact/input/call evidence precede any
-activation or launch. The controller's execution guard remains false.
+The accepted Wave covers normal real-stage effects; this preparation remains
+inert until the exact protocol, source/artifact/input/call, Profile/private binding
+and real-host operating basis are independently accepted. Passing source checks
+alone is not activation or account readiness. The controller's guard remains false.
 
 ### Product question and evidence reuse
 
@@ -25,7 +217,9 @@ desktop: can the explicitly selected personal account complete a permitted WAM
 request, and can a subsequent process complete the same request silently?
 
 Reuse the [retained product candidate](#retained-launcher-cli-profile-and-wsl-scenario-allocation)
-and its accepted source, dependency and native-image provenance. Product source is
+and its accepted source, dependency and native-image provenance. The
+independently accepted [new retained byte lineage](#retained-product-byte-acquisition-recipe)
+may supply donors after its outcome and contextual provenance join. Product source is
 `503360753accd0829801953823b1b57a4f852440`; the CLI is 8,885,248 bytes with SHA-256
 `02993d94c5145f32274a8763f27d632e2dcc8e6a06d257551b1501eed9689cc7`, and its required
 `msalruntime.dll` is 2,949,656 bytes with SHA-256
@@ -92,11 +286,12 @@ outside this pair. No access token, private identifier or raw provider diagnosti
 may leave Windows, be written to a result file, or enter agent output.
 
 The six historical process uncertainties for 0057/0064/0068/0093/0107/0110 and the
-separately recorded historical ETW uncertainty remain unchanged. Existing owner
-dispositions cover credential-free work only. Before account effects, the owner
-must explicitly decide whether to accept their possible interference for this
-bounded pair on the same machine; this preparation supplies no such extension,
-quiescence claim, old-process observation or cleanup authority.
+separately recorded historical ETW uncertainty remain unchanged. Existing historical
+dispositions cover credential-free work only. Before account effects, independently
+accept an adequate real-host operating basis and the relevance of those unknowns.
+A still-material unresolved interference risk requires concrete disposition; it
+is not inferred from the general goal, larger buffer or normal account-effects
+authority. This preparation supplies no quiescence claim or old-process cleanup.
 
 ### Two scenarios and one finite correction allowance
 
@@ -119,9 +314,11 @@ Propose four cumulative product-start reservations: attempts 1/2 are R1/R6; atte
 processes, one new PowerShell controller and one script invocation in the already
 existing outer shell: at most four product, eight caller and four controller starts,
 plus four outer invocations, zero ETW starts, zero restore/build/publish actions.
-No existing synthetic charge is refunded, transferred or replayed. The real-effect
-allowance and any public-input materialization/observation allowance must be stated
-in the future Wave amendment; unused synthetic capacity is not their authority.
+No existing synthetic charge is refunded, transferred or replayed. Reserve this finite batch from
+the accepted Wave real-stage pool. Public-input preparation and passive observation
+use the current delegated work and reviewed finite recipes; synthetic capacity is
+not account authority. This batch's local four-slot limit remains a source safety
+constraint, not the whole-stage owner authorization ceiling.
 
 Reserve the full selected slot before creating the controller. A rejected outer
 invocation also consumes its slot in the governing original-call record, even when
@@ -131,16 +328,19 @@ R1 from the same pair, confirmed private selection equality, and unchanged produ
 Profile and caller inputs. The correction pair requires resolved failure/closure,
 reviewed correction and a fresh exact call; it is not an automatic retry. Changes
 within the accepted effects and finite budget require no renewed owner risk decision.
-Do not expand the budget or start a second tool-development track if the correction
-pair cannot answer the product question.
+If the correction pair is insufficient, accept its failure/completion and a
+supported revised batch within the common pool. Use the smallest mechanism that
+can answer the required product question; do not start a second tool-development
+track merely to obtain another attempt.
 
 ### Fixed input creation recipe
 
 This recipe remains non-executing. Propose one public materialization and one
-Windows-local private-input creation. Both require an accepted finite allowance
-and independently reviewed source and original call; this section does not spend
-synthetic capacity or authorize either operation. Stop if the accepted immutable
-product inputs cannot be recovered. Do not substitute original publication paths,
+Windows-local private-input creation. Both require independently reviewed finite
+recipes, source and original call within the current delegated preparation and
+shared passive capacity. This section spends no capacity by itself. Missing product
+inputs stop this recipe until accepted recovery or a separately admitted reviewed
+publication provides them. Do not substitute original publication paths,
 rerun spent collectors, or accept matching executable hashes without provenance.
 
 | Role | Fixed source and destination | Admission basis |
@@ -20118,8 +20318,9 @@ scenario obligations remain separately applicable under V2-REQ-055 and the exist
 validation strategy.
 
 After independent original-observation acceptance and separate contextual artifact
-acceptance, only the accepted immutable snapshot may supply a later separately
-admitted materialization. That admission must preserve candidate and required-asset
+acceptance, only an accepted immutable retained lineage, including the
+[new byte recipe](#retained-product-byte-acquisition-recipe), may supply a later
+independently admitted materialization. That admission must preserve candidate and required-asset
 bytes through use; mutable original output paths are not approved test subjects.
 No real-account support, release, or completed Slice acceptance follows from this
 static evidence route.
@@ -20278,8 +20479,9 @@ snapshot has separately accepted contextual source/dependency/compiler/native-im
 asset/symbol provenance. That acceptance establishes eligibility for a separately
 admitted credential-free materialization, not successful original publication,
 original interval continuity, runtime support, real WAM or complete Slice acceptance.
-Only exact independently admitted snapshot copies may be materialized; mutable
-original publication paths are not eligible subjects. The native CLI is 8,885,248 bytes,
+Only exact independently admitted retained copies, including the accepted new
+byte lineage above, may be materialized; mutable original publication paths are
+not eligible subjects. The native CLI is 8,885,248 bytes,
 SHA256 02993d94c5145f32274a8763f27d632e2dcc8e6a06d257551b1501eed9689cc7;
 required msalruntime.dll is 2,949,656 bytes,
 SHA256 9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79.
