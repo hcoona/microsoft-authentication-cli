@@ -132,6 +132,83 @@ Only those donor roles retain their accepted historical-ctime qualification;
 local controls/sources, current runtime and all within-read identities remain
 strict. Preserve original descriptors and current observations separately.
 
+### Fresh current public compile donor basis
+
+A failed historical correspondence check can block use of otherwise matching
+public bytes. Preserve that failure, its full charge, the original ordered
+365-donor table and all historical descriptors. A matching first row does not
+establish the remaining rows or a benign cause. Use this fresh acquisition recipe
+to establish a separately accepted current basis for a new compilation; it does
+not waive an original identity comparison or change an earlier outcome.
+
+The inert [current-input reader](../../../tools/validation/observe_controlled_compile_current_inputs.py)
+reads the same fixed 413 compile inputs, seven controls, local input report and
+five infrastructure roles. Bind the exact accepted source commit, dedicated
+retention root, prior local-input report descriptor and fresh outcome path through
+independently reviewed literal activation values. Its inventory must retain the
+original first 365 rows and the table digest above. Acquire those donors only at
+their original public paths, with their original lengths and SHA-256 values;
+observe all 365 and preserve every difference from their historical full9.
+Historical identity equality is not an acquisition precondition. No conclusion
+about historical integrity, clock continuity, closure or success follows.
+
+Every read still requires held no-follow ancestry, a regular single-link leaf,
+exact length/hash/EOF and equality of the current initial, final and named full9.
+The remaining 48 local inputs and all controls and infrastructure keep their
+existing exact current identities. There is no directory, process, cache or
+host survey. No Windows program, compiler, restore, account operation, download
+or installation executes. Partial or failed acquisition supplies no accepted
+current donor basis. Retain its measured prefix and unused selections honestly.
+
+Allocate one fresh collection pass, at most 60 seconds and 256 MiB requested/read
+and written bytes combined. This is additional to the spent historical-input
+preflight, not a retry of that original. Use the admitted isolated Python/GNU
+watchdog basis: source work50/terminal55, outer TERM55/KILL5, 128 MiB address-space
+and CPU55 limits, 512 regular passes, 8,192 read calls, 64 held directories,
+80 owned descriptors, 2 MiB terminal reserve, 1 MiB sealed outcome and 2,048-byte
+stdout. Debit the full pass before sole submission. Sealed observations and a
+stdout descriptor remain provisional until timely ordinary zero, complete
+bounded transport, cancellation false, all 413 inputs and required controls,
+strict correspondence and owned-descriptor closure are independently accepted.
+Failure and scoped OWN Linux helper/watchdog completion are separate judgments.
+
+After independent all-row content/provenance and outcome acceptance, create the
+exact `windows-controlled-compile-current-donor-acceptance-v1` interchange. Its
+subjects are the original table digest, `currentDonorsSha256` of the new ordered
+365 descriptor rows, `publicPathsContentAndProvenanceAccepted: true`,
+`strictCurrentFull9: true` and `historicalSuccessClaimed: false`. The ordinary
+acceptance envelope remains `schema`, `accepted: true` and `subjects`. A source
+result cannot authorize its own acceptance.
+
+The new compile inventory is `windows-controlled-harness-compile-files-v3`, with
+exact fields `schema`, `files`, `originalDonors` and `currentDonorAcceptance`.
+Keep the full immutable original table in `originalDonors`; join the first 365
+current `files` by exact order, relative role, public path, length and hash.
+The caller pins the acceptance descriptor and both table digests before any
+donor use. This schema selects full9 pinning against the accepted current basis;
+the original files-v1 recipe retains its historical eight-field rule. Neither
+schema exposes an arbitrary device or identity relaxation switch. The other
+48 inputs, catalog, source map, admission and typed control subjects retain their
+exact shapes. Reuse the existing deployment-v3 `compileDonorReads`: its inventory
+hash now binds the selected original or current basis and its acceptance. The
+worker validates all retained donor operands against that same basis without
+another donor read. Native receipts and created-copy lineage remain unchanged.
+
+Refresh only necessary local caller/protocol/checkpoint/control consumers into
+fresh dedicated leaves; reuse unchanged accepted source copies and reviews.
+Permit one additional exclusive control-preparation/readback pass, 60 seconds /
+8 MiB, beyond the two local-control passes below. Bind the new source commit,
+current inventory and donor acceptance in the concrete input/source/final-call
+subjects before compilation. The complete acquisition can satisfy the fixed
+input preflight for its observed unchanged inputs; independent acceptance of
+new controls and their exact readback remains necessary. Do not reread all donors
+merely because their control carrier was serialized later. Keep the outstanding
+personal, work and actual WSL scenarios funded. The initial compilation now permits twelve collection passes / 5,400 seconds /
+3,672 MiB including these two additions; the four-compile batch permits forty-two
+passes / 21,240 seconds / 13,896 MiB. These replace only the corresponding batch
+allocation totals below and do not reset spent passes. No compile debit or
+execution follows from this recipe's acceptance alone.
+
 The current checkpoint is `windows-controlled-harness-current-checkpoint-v2`.
 Its only shape change removes `hostPreparations`, whose retired per-host
 allocation is not a current Wave limit. Historical host accounting remains in
@@ -141,7 +218,7 @@ the same cumulative carrier. Retain counters, full nonrefundable debit,
 `protectedAfter`, history-parent membership, predecessor/capacity/disposition
 acceptance, six historical unknowns and `noExperimentLive=false`. Other admission,
 authority and deployment shapes remain unchanged, including deployment-v3's
-ordered `compileDonorReads`.
+ordered `compileDonorReads` and its inventory-selected donor basis above.
 
 The current controlled caller bounds the fixed `windowsActions` history parent
 at 256 names and each of the other three history parents at 128 names. Apply the
@@ -273,7 +350,8 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `5a5340432ddc83b454c1889442f80afccc1bf58d293a75034fa572fb2e1550f4` |
 | [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `83b415804b61fa8a35f10f4037114b5f6346f3cb9f9a2519affaabd2a90e4790` |
 | [controller-input-catalog.tsv](../../../tools/validation/controlled-callers/control/controller-input-catalog.tsv) | 87398 | `1bf3742530b97472bbf81aaa73ccff3fbba2dc22d2a1ee865e02ba754bfaf2bc` |
-| [run_controlled_callers.py](../../../tools/validation/controlled-callers/run_controlled_callers.py) | 77567 | `cbe057d73f11b7fa3739c7393fc2d24759025c3b863127a5702fb50f6171b6a4` |
+| [run_controlled_callers.py](../../../tools/validation/controlled-callers/run_controlled_callers.py) | 80426 | `66b4d3f5c203dc1cbc5e8126e0038562b4c624fa90cfe402cdbca8f8fa705b9e` |
+| [observe_controlled_compile_current_inputs.py](../../../tools/validation/observe_controlled_compile_current_inputs.py) | 10847 | `d1fc79d9c04e41d9a9eb5176e2dbbc17a9334981256e48b0ad9c4b7dbc6587ee` |
 | [Invoke-WindowsControlledCallers.ps1](../../../tools/validation/controlled-callers/Invoke-WindowsControlledCallers.ps1) | 26463 | `53bab8dfb4802e6b541b840abcb128c6d9efb63317c91e7a63becc30c389665c` |
 | [NativeCaller.rsp](../../../tools/validation/controlled-callers/control/NativeCaller.rsp) | 20867 | `62a1b7b8cb6ba3d51535e0b4a9be7cbde8ed928fca5bba62f74b1dcb98c33e33` |
 | [DirectObserver.rsp](../../../tools/validation/controlled-callers/control/DirectObserver.rsp) | 20404 | `b4af49e38b70808369e259466a7a759339d6f422733c9b61a31f560d12159fb6` |
