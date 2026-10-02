@@ -522,6 +522,68 @@ reopen of donor/output payloads, enumeration, private input, process survey, ETW
 broker state is included. Independently accept inventory, native identities,
 original outcome and scoped completion before private-input creation.
 
+#### Public Transfer Receipt and Dispatch Input Current Correspondence
+
+Before public Windows dispatch, one additional Linux-only current-qualified read
+may collect the new staging root's fixed `transfer-result.json`. This is necessary
+receipt correspondence under the existing preparation grant, not a renewal of the
+original transfer or a reuse of a spent historical collector. Reserve one pass,
+30 seconds and 8,192 requested bytes from the common passive pool before the sole
+original; source work is 25 seconds, AS 128 MiB and CPU 25 seconds, with the admitted
+GNU TERM 25 seconds and KILL grace five seconds. No Windows executable, donor or
+output payload reopening, enumeration, private input, account or process survey,
+new filesystem output, overwrite, retry, or ETW action is included.
+
+Bind the immutable original transfer result descriptor and its accepted original
+ordinary return, complete transport and scoped Linux completion. For the fixed
+`named-fixtures-0186` receipt, require exactly 3,471 bytes, SHA-256
+`ea0ec4e0b3261484dc18d41e7bbe66d541db0714154f87bb93401e84577c9b7a`,
+regular mode, single link, held no-follow ancestry and the original stage-parent
+identity. Every original non-ctime field must match before content access. The
+already accepted historical Linux ctime qualification applies only to this
+cross-original comparison; preserve original ctime and the observed difference.
+It supplies no Windows ChangeTime exception or explanation for the change.
+
+Inside this admitted read, obtain agreeing fresh held/named full9 and retain it
+separately from the original descriptor. All nine current fields, including ctime,
+must remain unchanged before/after exact read and EOF and at final source/ancestry
+checks. Duplicate JSON keys, nonfinite values and fractional/exponent numeric
+tokens are rejected. Return only the exact public receipt bytes as bounded hex,
+its original and current descriptors, the qualification indicator and held stage
+identity. Close each detached owned descriptor once before the sole bounded stdout
+attempt; any close, cancellation, deadline or transport failure rejects success.
+A fixed failure frame may contain only provisional metadata/phase, never raw
+exceptions or receipt content. Preserve partial/failed evidence and full charges.
+
+Independently accept the exact source, inputs, activation, installed runtime,
+original call, finite accounting, output/timing/transport and scoped completion.
+The receipt is content evidence only after those gates. Native 200-row identity,
+Windows original root/Job/EOF/launcher completion and private/real admission remain
+separate. Do not reopen the staging receipt after this sole qualified call.
+
+The same historical Linux ctime qualification may be applied inside the existing
+bounded dispatch reads to exactly three public input roles: the fixed normal0070
+launcher, staging `authority.json` and staging
+`Invoke-WindowsNamedGuardFixtures.ps1`. Bind their immutable original descriptors
+and exact lengths/hashes from accepted preflight/transfer evidence. Require every
+non-ctime field before access and fresh agreeing held/named full9, then retain all
+nine current fields through exact read/EOF/hash and final checks. Preserve original
+and current rows separately with the qualification indicator in the bounded
+startup witness. This adds no collector, leaf, read or operation allowance and
+relaxes no other role, interop identity, within-read predicate or Windows ChangeTime.
+It establishes current bytes only, without historical continuity or scoped closure.
+
+The unchanged public controls generated from accepted commit
+`705083c0bc48aa1b93e9fb65b983fdc9160ed71a` retain that immutable derivation, including
+their original protocol hash; these fields do not assert current work authority.
+This supplement changes no materialization executable, Profile, inventory, account
+boundary, payload or original transfer source. Before dependent Windows dispatch,
+refresh the exact-call review against the current accepted target and protocol,
+join this supplemental receipt disposition to the unchanged frozen control basis,
+and verify all original source/byte/identity joins and remaining capacity. Treat
+any actual conflicting dependency as a closed gate. No original clock or failed
+charge is renewed by that review, and no proposed record authorizes itself.
+
 The one proposed private step has 120 seconds including local owner input and
 closure, and runs only in the same Windows console after actual readiness.
 Obtain one full personal email locally without echo, transcription or shell
