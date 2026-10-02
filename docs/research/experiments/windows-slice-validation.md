@@ -1028,6 +1028,64 @@ completion and unchanged artifact provenance before private creation. Diagnostic
 matching hashes or empty captures alone establish none of those conjunctions. Full
 personal/work/actualWSL acceptance remains outstanding after public preparation.
 
+##### Ended public transfer metadata diagnosis
+
+A failed exclusive Linux transfer can leave its fixed staging files partially
+created without exposing its failure location. Preserve the original failure,
+complete transport, full debit and every occupied destination. Independent
+acceptance of the ended original and its separately scoped Linux completion
+precedes this diagnostic observation. A generic failure message establishes
+neither zero copies nor a successful receipt. No Windows materialization,
+private creation or account call may depend on that failed transfer.
+
+Admit at most one separately charged metadata pass for the ended
+`named-fixtures-0189` transfer: 30 seconds and 128 KiB from the shared passive
+metadata pool, with zero technical, synthetic, Windows or real-account starts.
+The inert
+[fixed metadata observer](../../../tools/validation/observe_selected_account_transfer_metadata.py)
+selects only that stage and the twelve literal names in its source: its start
+marker, ten public transfer leaves and result receipt. It performs no enumeration,
+leaf open, payload read, content/hash validation, source-artifact reopening,
+Windows execution, account query, process survey or file mutation. Startup reads
+retain their separately admitted installed-runtime basis; zero payload reads
+refers only to explicit observation operations.
+
+Bind the exact admitted stage-parent full5 to the preceding accepted preflight.
+Hold and validate no-follow ancestry. If the stage exists, require a directory,
+hold its identity and take two agreeing named no-follow full9 observations of
+each fixed leaf, preserving absence as null. If the stage is absent, confirm that
+absence again beneath the held parent and report no child observations. Check
+held/named directory identities before disposal. These are bounded metadata
+snapshots, not leaf-handle continuity, file-content correspondence, native Windows
+identity or proof of an uninterrupted interval. A changed identity or absence
+rejects the whole observation. Do not adopt, repair, overwrite or delete the stage.
+
+Use isolated/no-site/no-bytecode Python 3.14, source work/CPU 25 seconds and AS
+128 MiB, under GNU TERM 25 seconds plus KILL grace five seconds for a whole
+30-second envelope. Retain source ceilings of 32 directory opens and 256 metadata
+calls. Close every registered descriptor before the sole at-most8192B JSON stdout
+attempt and check cancellation/deadline before and after it. A failed or short
+stdout attempt cannot pass; a permitted fixed failure marker adds at most25B to
+stderr. The 128 KiB reservation includes the conservative32KiB bootstrap-source
+allowance and all explicit output requests; installed OS/loader reads are not an
+explicit-I/O census. No clock or spent pass is renewed.
+
+Before activation, independently accept the exact source, parent/runtime/startup
+binding, current authority/protocol, full prior accounting, debit/submission and
+separate original call. Activation replaces only `ADMISSION = None` with the
+reviewed one-key `stageParentFull5` object. Keep the tracked source inert. Accept
+the actual bounded result, ordinary original return, complete transport and
+scoped childless-reader/GNUenv/watchdog completion independently afterward.
+Metadata presence, size or ordinal can narrow a diagnostic question; it cannot
+identify an exception, establish a hash, repair the original failure or authorize
+a new transfer. Any actual source correction retains independent finding triage
+and fresh accepted protocol/source/input/call gates. A new original still needs
+a fresh exclusive staging root and full charge; no retry is admitted here.
+
+The inert observer is 6548 bytes, SHA-256
+`9770a2ef73661b5f0e4176e4214f6b339080156b399fc5d62c2eb25b92b311df`. This supplement supplies no runtime observation. Preserve every
+historical uncertainty, primitive/provisional flag and `noExperimentLive=false`.
+
 ##### Pure projection validation
 
 Before accepting actual results, admit at most one Linux-only in-memory projection
@@ -1063,10 +1121,12 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 | [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 11191 | `f6445a7cce0c105904ab60d9a2ddaad3ae7ff673e2b8d54e5263e31162433d86` |
 | [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 20933 | `531c225cb8a7d874ab427ace698d4ea89f1eff636728a74e82429e61fa2ca35e` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `a871492cde058916dd6a0aa80c46cef1cca3bf256d6d080b3bb9d74adb795088` |
-| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20076 | `7bad779fb58c45876d862d111f66dfb41b6ef84f0c0483dd4c27414a857e97f1` |
-| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6159 | `8cbc18996cfa02d236980adfc192d3b012a7d2352c208057cb2f399b0da6305c` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `1b8ec11edfbabb492e84e80639a036595f69c2fd5b5292475959739c635e2dae` |
+| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `34fa06aa823ab21e7c71c14105f2be5c006e0d5e9dea9f74b09d17a56f4b5a1e` |
 | [selected-account-inputs/R1.template.json](../../../tools/validation/selected-account-inputs/R1.template.json) | 746 | `0f466d1bc6d99f57e3b9dd2470752a78c007c724c72ebae717101e782c6757ff` |
 | [selected-account-inputs/R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `5ac3fbd53a3ea779cd15658babe89d2bafc95f6bbb41155f43887d558fe6d1db` |
+| [selected-account-inputs/R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `526c8cdded4c0266a31d47b162c31616ce00b51cb2cee81df5562038fb175660` |
+| [selected-account-inputs/R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `c6c0e4d3dd2d0e98589385d41d9d87cbbe6f2d1c67ca3fe1dde77ad72ca14b0f` |
 | [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 7203 | `1eb1059714df9c00dc99d326270b4395768f6bb00efb658bb3769d417af6c677` |
 
 #### Public Transfer Receipt and Dispatch Input Current Correspondence
@@ -1154,6 +1214,86 @@ unrun in the governing carrier and create its fixed reservation during an admitt
 control operation before a corrected pair. This adds no attempt or success.
 Source/artifact/input/call gates remain necessary after allowance acceptance;
 they are internal execution gates, not renewed per-step owner risk decisions.
+
+### Work-account pair and role-isolated inputs
+
+This supplement prepares the required work-account variant under the same accepted
+Wave. It retains the personal pair, source/artifact provenance, designated Windows
+desktop, Profile, scopes, ordinary account effects and exclusions above. Neither
+pair replaces actual WSL evidence. No company repository or authenticated resource
+request is added.
+
+Reuse the accepted root-compatible native caller at account-v2. Its existing
+`R7` and `R8` groups each accept one private request through the same admission,
+result-validation, original-process and named-Job path. They need no caller source
+change or new group. The work protocol assigns those groups as follows:
+
+| Role | Initial request | New-process reuse | Private leaves | Public plan/reservation prefix |
+| --- | --- | --- | --- | --- |
+| Personal | R1, interaction permitted | R6, silent required | `private/R1.json`, `private/R6.json` | `selected-account` |
+| Work | R7, interaction permitted | R8, silent required | `private/R7.json`, `private/R8.json` | `work-account` |
+
+Use the explicit `AccountRole=Personal` or `AccountRole=Work` on the same-console
+original carrier and cutoff controller. Personal is the compatibility default;
+exact call admission still records it. The original, outer and new controller
+must bind the same canonical role, group, plan and reservation. Role values are
+public labels, not account selectors. A mismatched role/group/prefix rejects the
+call before a native caller starts. Keep the existing ActualAdmission schema;
+do not add an outer role field to it.
+
+The four numbered reservations are cumulative within each role, across readiness
+handoffs and source corrections. Work uses
+`control/work-account-plan-N.json` and `records/work-account-attempt-N.json`;
+personal keeps its existing paths. Native controls and receipts retain their
+`GROUP-NONCE` names. Both roles share the existing real-stage ledger and Wave
+ceilings. Role-local files are evidence of that ledger's reservations, not another
+capacity grant or accounting system.
+
+Allocate at most four work starts: the initial R7/R8 pair and one supported
+corrected pair. Combined with the existing four personal slots, this batch
+reserves at most eight product starts, eight discoveries, eight eligible selected
+silent calls and four permitted interactive calls from the common real pool.
+Retain all prior charges; no role switch, unrun slot or source change refunds or
+resets consumption. Admit only the next necessary original after its exact gates.
+R8 requires independently accepted R7 success from the same pair and unchanged
+private selection, product, caller and Profile. Stop after sufficient evidence.
+
+Use the same explicit experimental public-client Profile and Azure DevOps scope
+defined above. Select the designated existing work role locally; do not substitute
+the OS default, personal selector or previous research state. The work request may
+use `common`, with no exact tenant expectation, or an operator-selected admitted
+explicit resource tenant. For an explicit tenant, require the same canonical GUID
+in `tenantArgument` and `exactResultTenant` in both private rows. Keep that GUID
+Windows-local. This adds no public Account Kind postcondition or tenant/service
+access claim. External Profile and registration eligibility remain prerequisites.
+
+The new [R7](../../../tools/validation/selected-account-inputs/R7.template.json) and
+[R8](../../../tools/validation/selected-account-inputs/R8.template.json) public
+templates have null emails and otherwise use the shared private-row contract.
+They are inert. Independently admit bounded exclusive public copy/readback of
+these two additional control leaves before private creation. Retain the accepted
+200-leaf materialization as its original inventory; bind these supplemental native
+identities separately. Preserve personal inputs and all occupied/partial outputs.
+
+Admit one Windows-local private creation per role, each at most 120 seconds
+including local input and closure, with at most 1 MiB combined requests/writes.
+Each uses one locally entered full email to create its two private documents
+exclusively. Work may also accept the local tenant choice above. Validate each
+row and equality of all shared fields within its role; only group, interaction
+permission and required interaction differ. Do not require equality between the
+two roles. Export only validation/equality Booleans and non-content native
+identities/lengths, never selectors, tenants, tokens, private contents or their
+hashes. Exact source/runtime/call and current real operating-basis acceptance still
+precede either creation. Finish automated preparation before requesting input or
+readiness; no account discovery occurs during input creation.
+
+The cutoff library and original180s epoch are shared across both roles. Reuse the
+same independently accepted runtime Type in the existing ordinary console;
+switching roles cannot evade failed-lease refusal, replace the assembly or renew a
+clock. Apply the cutoff, safe-receipt, scoped-completion and finite collection
+rules below to every work original. Current controller/source/input/call review
+and independent outcome acceptance remain necessary before each dependent case.
+This supplement supplies no runtime result or whole-Slice acceptance.
 
 ### Existing-console selected-account cutoff supplement
 
@@ -1328,8 +1468,8 @@ Native personal R1/R6 does not complete work-account or actualWSL requirements.
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [Initialize-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountCutoff.ps1) | 6387 | `cddb41d758ebbc5953732af112632f7a4f258da7c1243c75f7421a3e84fad1cb` |
-| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20076 | `7bad779fb58c45876d862d111f66dfb41b6ef84f0c0483dd4c27414a857e97f1` |
-| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6159 | `8cbc18996cfa02d236980adfc192d3b012a7d2352c208057cb2f399b0da6305c` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `1b8ec11edfbabb492e84e80639a036595f69c2fd5b5292475959739c635e2dae` |
+| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `34fa06aa823ab21e7c71c14105f2be5c006e0d5e9dea9f74b09d17a56f4b5a1e` |
 | [SelectedAccountControllerCutoff.cs](../../../tools/validation/SelectedAccountControllerCutoff.cs) | 15346 | `302473837eb1262fd57597550bf992ad540b4f3b55a83dcfebb694663a81be40` |
 
 These source bindings identify the proposal; accepted exact compilation, artifact,
