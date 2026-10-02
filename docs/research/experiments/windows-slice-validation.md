@@ -90,6 +90,189 @@ Keep their historical failures, consumed reservations and dependent evidence gap
 The native pair has no ETW prerequisite; outstanding WSL claims require a suitable
 independently accepted observation method within the authorized effects.
 
+## Root-Compatible Selected-Account Caller Preparation
+
+The first native-account caller must match the public preparation and account
+controllers' fixed `confidential-native-account-v2` root. The original 0130 v9
+caller fixes account-v1; its retained 194 descriptors remain passive provenance
+inputs. They do not admit executable caller use at account-v2. This recipe is
+necessary preparation under the current outcome Wave and replaces only the
+incompatible source/build/inventory conjunction for fresh account-v2 preparation.
+Preserve the original build, old materialization failure, occupied roots, spent
+collectors, consumption and all historical uncertainties.
+
+### Compile source, environment and effects
+
+Use the existing controlled four-target compiler with the fresh literal root
+`C:\Temp\azureauth-windows-slice-108\confidential-checks-v22`. Bind this exact
+root across the Python caller and parent-membership predicate, PowerShell
+controller, four responses and path maps, source/response map, response catalog
+rows and both embedded catalog pins. Compile only; do not execute any target,
+synthetic fixture, direct observer, product or account operation. The unused
+synthetic/direct runtime roots do not admit their execution. ETW and elevation
+remain stopped.
+
+The only native account-source change is `ActualAdmission.Root` from account-v1
+to account-v2, SHA-256
+`5a5340432ddc83b454c1889442f80afccc1bf58d293a75034fa572fb2e1550f4`.
+Keep all other account selection, private-input, typed-contract, environment,
+deadline, identity, ownership and result predicates. Reuse unchanged reviewed
+Microsoft APIs and source findings; review the new source/artifact correspondence.
+Source text or matching output hashes alone cannot admit the compiled caller.
+
+Retain the four targets and entry points, 34 canonical sources mapped to 36
+compiler paths, 413 compile inputs, 167 ordered references, eight metadata
+templates and apphost construction. Use only the existing installed admitted
+SDK/runtime/compiler/reference inputs: .NET 10.0.401/10.0.12, MSAL/Broker 4.83.1
+and NativeInterop 0.20.3. No restore, dependency download, new toolchain, signing,
+installation or registration change is included. Keep the original 365-donor
+descriptor table and its SHA-256
+`ffd6b96b4216d07e1025980ea3556c6e230f6ed9fcc9e47ab745ebdeee17e1f0`.
+Only those donor roles retain their accepted historical-ctime qualification;
+local controls/sources, current runtime and all within-read identities remain
+strict. Preserve original descriptors and current observations separately.
+
+The current checkpoint is `windows-controlled-harness-current-checkpoint-v2`.
+Its only shape change removes `hostPreparations`, whose retired per-host
+allocation is not a current Wave limit. Historical host accounting remains in
+retained evidence; do not fabricate a host split to satisfy that obsolete quota.
+Bind the current shared ceilings 100/400/60/1200 and all intervening outcomes in
+the same cumulative carrier. Retain counters, full nonrefundable debit,
+`protectedAfter`, history-parent membership, predecessor/capacity/disposition
+acceptance, six historical unknowns and `noExperimentLive=false`. Other admission,
+authority and deployment shapes remain unchanged, including deployment-v3's
+ordered `compileDonorReads`.
+
+Retain the original 3600-second Linux submission, 1200-second dedicated service,
+330+10-second Windows launcher and existing nested compiler/controller cutoffs.
+No clock is restarted for admission, review, collection or correction. Retain
+creation-time owned Job/cgroup, no breakaway/restart, 32-task/512-MiB service,
+control-group stop, five-second service termination and existing terminal
+reservations. The grouped compile charge remains `0/1/0/7`, with successful
+owned-Job total ten, root exit zero, ActiveProcesses zero and both EOFs. The
+initial platform-managed console-host qualification remains separately retained;
+these observations do not prove individual external-host or global termination.
+
+### Finite preparation and correction batch
+
+Allocate at most four conditional compile originals, including failed/partial
+starts, maximum `0/4/0/28` from the common pool. Initially admit only one at v22.
+Each later original needs accepted prior outcome/scoped completion, a supported
+correction, fresh unused literal roots and an accepted exact source/recipe/input/
+call conjunction. The three unused allocations are a buffer, not blind retries
+or authority to use another stage by inference. Stop after sufficient evidence.
+Keep outstanding personal, work and actual WSL acceptance funded at each gate.
+
+Per compile, separately admit only needed fixed passes within these maxima:
+
+| Category | Maximum passes | Seconds per pass | Reserved bytes per pass |
+| --- | ---: | ---: | ---: |
+| Fixed runtime/interop/parent metadata, no payload | 1 | 60 | 64 MiB |
+| Exclusive Linux compile controls and final readback | 2 | 60 | 8 MiB |
+| Exact fixed compile-input/control current preflight | 1 | 60 | 256 MiB |
+| Owned compile original's explicit source/copy/evidence I/O | 1 | 3600 | 2304 MiB |
+| New original's fixed output/ownership collection | 4 | 300 | 128 MiB |
+| Offline source-qualified artifact interpretation | 1 | 120 | 128 MiB |
+| Derived caller inventory/current public input join | 1 | 180 | 192 MiB |
+
+Metadata uses the common metadata pool; the other rows use the existing passive
+collection carrier. Their maxima are ten collection passes/5280s/3408MiB and
+one metadata pass/60s/64MiB per compile; four use forty collection passes/21120s/
+13632MiB and four metadata passes/240s/256MiB. Reserve full actual admitted
+amounts before submission without refund. This supersedes only the earlier
+per-lineage pass and host/allocation maxima for these fresh preparations; it
+preserves all earlier charges and each reused source's stricter per-call bounds.
+No source/runtime activation or reservation follows from this allocation.
+
+The owned compile I/O row sums the unchanged 1-GiB-per-Linux-process request
+limits for original and worker and the 256-MiB explicit Windows-input ceiling.
+Installed runtime/compiler loader startup keeps its separate admitted operating
+basis; these counters are not a census of implicit OS reads. Count full requests
+and EOF probes before I/O. Existing per-process read/write/descriptor/terminal
+limits remain stricter; all actual control, deployment and output bytes must fit
+exact-call review. No concurrent mutation of the Windows root is permitted while
+its parent-membership checks or compiler original are active.
+
+Fix every metadata/read/collector selection before its original. Reuse the
+existing compile-v7 provenance lineage and fixed output collector pattern:
+new action's ten Linux receipts, Windows controller/deployment/authority/inventory/
+launcher evidence, each target's five compile receipt/capture leaves and five
+artifact leaves, apphost template and explicitly listed pending/failure leaves.
+No enumeration, old-original reread, process/host survey, payload-selected path,
+private input or runtime target execution. Initially admit one result collector;
+further slots require a concrete unresolved need or supported correction and
+accepted prior collector outcome/scoped completion. A missing required result is
+failure; an optional absence is accepted only under its validated fixed parent.
+
+Use unchanged strict no-follow ancestry, exact length/hash/EOF, full9 current and
+within-read comparisons, finite request counters, exclusive sealed snapshots and
+complete bounded transport. Artifact interpretation operates only on the accepted
+new snapshot. If interpretation invokes a separate tool/runtime, independently
+admit its source/runtime and actual charge; the offline row is no hidden execution
+exemption. Preserve failures/partial outputs; never adopt, overwrite or repair an
+occupied destination or reopen a spent collector.
+
+### Artifact, inventory and public preparation conjunction
+
+Before using outputs, independently join all 413 deployment/input rows to the
+accepted source map, four exact responses, fixed donor lineage and current
+compiler/runtime/reference basis. Accept ordinary timely original zero, complete
+transport, creation-time root/Job/two-EOF and own Linux scoped completion.
+Independently accept all four PE/PDB pairs, source checksums/options/entry points/
+imports, exact apphost construction and eight runtime templates. No target runtime
+behavior or full Slice acceptance follows from compilation. Preserve warning
+counts and limitations rather than claiming a warning-free build.
+
+Derive the caller inventory from the accepted new build and existing required
+caller closure. Preserve the original 194 ordered relative roles; replace each
+changed source/artifact descriptor only through that accepted provenance join.
+Use `selected-account-caller-materialization-v2`, the exact accepted forty-hex
+caller source commit, all194 exact public length/hash rows and their aggregate
+byte count. The inventory and expectedRows are generated reviewable interchanges,
+not second manually maintained catalogs. A missing or incompatible row stops.
+
+For the unused first successor public materialization at named-fixtures-0189 and
+account-v2, use donor v22 and `selected-account-public-preparation-authority-v2`.
+Bind its callerSourceCommit to the inventory and the accepted compiled source;
+bind callerRootSourceSha256 to the exact ActualAdmission source above. Bind
+callerInventoryTotalBytes as a positive integer equal to the complete194-row sum,
+no greater than96MiB. The combined194 caller plus six current public leaves must
+still fit96MiB; the native copier's existing fixed roles and all predicates remain.
+The old v9 total81083019 is historical, not a new-build output expectation.
+
+The public eight-leaf control recipe/generator, transfer, dispatch authority and
+result collector must bind this same new inventory/source/build/authority and all
+200 expectedRows before activation. Their filenames, input-v2 root and plan/output
+schemas remain as accepted; only exact reviewed public payload bytes change.
+Update the native materializer's current source binding atomically below. Keep
+its guards false and reuse its unchanged diagnostic/native/I/O/cleanup checks.
+No old authority-v1 or inventory-v1 input substitutes for this v2 conjunction.
+The accepted public batch's finite accounting, strict identities, original clocks
+and ordinary scoped outcome gates remain unchanged. Compatible compilation does
+not activate materialization or permit private-input creation by itself.
+
+Private creation and account effects still require accepted public materialization,
+current native identities, Profile/registration, kernel relevance/cutoff and real
+operating-basis gates, exact local request/roles/scopes/call admission and actual
+Windows-local input when needed. Normal account effects remain authorized by the
+Wave. This preparation neither waives those gates nor requests a repeated owner
+decision. Personal, work and actual WSL evidence remain required for the outcome.
+
+### Current root-compatible source bindings
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `5a5340432ddc83b454c1889442f80afccc1bf58d293a75034fa572fb2e1550f4` |
+| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `83b415804b61fa8a35f10f4037114b5f6346f3cb9f9a2519affaabd2a90e4790` |
+| [controller-input-catalog.tsv](../../../tools/validation/controlled-callers/control/controller-input-catalog.tsv) | 87398 | `1bf3742530b97472bbf81aaa73ccff3fbba2dc22d2a1ee865e02ba754bfaf2bc` |
+| [run_controlled_callers.py](../../../tools/validation/controlled-callers/run_controlled_callers.py) | 77500 | `8daec49973b23eb6636eed0a902b551601a80320147dbbdb0597eeaeb14314e3` |
+| [Invoke-WindowsControlledCallers.ps1](../../../tools/validation/controlled-callers/Invoke-WindowsControlledCallers.ps1) | 26463 | `53bab8dfb4802e6b541b840abcb128c6d9efb63317c91e7a63becc30c389665c` |
+| [NativeCaller.rsp](../../../tools/validation/controlled-callers/control/NativeCaller.rsp) | 20867 | `62a1b7b8cb6ba3d51535e0b4a9be7cbde8ed928fca5bba62f74b1dcb98c33e33` |
+| [DirectObserver.rsp](../../../tools/validation/controlled-callers/control/DirectObserver.rsp) | 20404 | `b4af49e38b70808369e259466a7a759339d6f422733c9b61a31f560d12159fb6` |
+| [SyntheticSubject.rsp](../../../tools/validation/controlled-callers/control/SyntheticSubject.rsp) | 21309 | `7016e29b6f8f43805786e81c8213f2dc509bfabc100d7b4b5478eee707b78325` |
+| [FixtureDriver.rsp](../../../tools/validation/controlled-callers/control/FixtureDriver.rsp) | 21276 | `aeebc66eb198c2d70f640051ad3d915164e6af124a1778679ad9bfdf63b2d01c` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `876fe5c34b02eadc4113d17579b87fb732468f9d7bf9c9f09c4dfff916ef68f5` |
+
 ## Retained Product Byte Acquisition Recipe
 
 This first fixed two-leaf recipe fits the current delegated artifact recovery and
@@ -716,8 +899,8 @@ only beneath held validated ancestry; retains fresh all-nine-field/no-follow che
 and suppresses capture contents. Strict duplicate-free, finite-integer JSON accepts
 only the typed journal and v2 public receipt allowlists. Receipt rows may export
 current native identities and public length/hash/role only after exact ordered joins
-to a pre-admitted derived expectedRows inventory (194 unchanged caller plus six
-current public entries). Reject unexpected fields, paths, hashes, shapes and types;
+to a pre-admitted derived expectedRows inventory (194 caller rows from the accepted
+root-compatible build plus six current public entries). Reject unexpected fields, paths, hashes, shapes and types;
 there is no arbitrary/private content channel. The derived interchange creates no
 manually maintained catalog. Do not reopen account-root payloads or original donors.
 
@@ -772,7 +955,7 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 10732 | `d6f577e93c81acb9eadddd679db494096be4079f82b9c9ff06acc56b49aeee6a` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `876fe5c34b02eadc4113d17579b87fb732468f9d7bf9c9f09c4dfff916ef68f5` |
 | [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 14818 | `f8ee043f3e82a8d565aa583cfe1d0e8d451aae8d83db630cd6865200a51498da` |
 | [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 11191 | `f6445a7cce0c105904ab60d9a2ddaad3ae7ff673e2b8d54e5263e31162433d86` |
 | [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 20933 | `531c225cb8a7d874ab427ace698d4ea89f1eff636728a74e82429e61fa2ca35e` |

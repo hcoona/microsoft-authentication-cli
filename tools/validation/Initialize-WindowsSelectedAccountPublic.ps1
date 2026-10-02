@@ -13,7 +13,7 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $stage = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0189'
-$donor = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v9'
+$donor = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v22'
 $target = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v2'
 $pins = $null
 $bootstrap = [Collections.Generic.List[IDisposable]]::new()
@@ -74,17 +74,20 @@ try {
         $PSVersionTable.PSVersion.Major -eq 5 -and $PSVersionTable.PSVersion.Minor -eq 1)
     $utf8 = [Text.UTF8Encoding]::new($false, $true)
     $authority = $utf8.GetString((Bootstrap-Read 'authority.json' 65536 $AuthoritySha256)) | ConvertFrom-Json
-    Need ($authority.schema -ceq 'selected-account-public-preparation-authority-v1' -and
+    Need ($authority.schema -ceq 'selected-account-public-preparation-authority-v2' -and
         $authority.action -ceq '0189' -and $authority.target -ceq $target -and
         $authority.donor -ceq $donor -and $authority.productContextAccepted -eq $true -and
-        $authority.callerSourceCommit -ceq 'c55396df90a3c76d6c8896e2f737464d80488f96')
+        $authority.callerSourceCommit -cmatch '\A[0-9a-f]{40}\z' -and
+        $authority.callerRootSourceSha256 -ceq '5a5340432ddc83b454c1889442f80afccc1bf58d293a75034fa572fb2e1550f4')
     $null = Bootstrap-Read 'Invoke-WindowsNamedGuardFixtures.ps1' 65536 $authority.controllerSha256
     $source = Bootstrap-Read 'SelectedAccountMaterializationPins.cs' 32768 $authority.nativeSourceSha256
     $inventoryBytes = Bootstrap-Read 'caller-inventory.json' 65536 $authority.callerInventorySha256
     $inventory = $utf8.GetString($inventoryBytes) | ConvertFrom-Json
-    Need ($inventory.schema -ceq 'selected-account-caller-materialization-v1' -and
+    Need ($inventory.schema -ceq 'selected-account-caller-materialization-v2' -and
         $inventory.sourceCommit -ceq $authority.callerSourceCommit -and $inventory.rows.Count -eq 194 -and
-        ($inventory.rows | Measure-Object -Property bytes -Sum).Sum -eq 81083019)
+        ($authority.callerInventoryTotalBytes -is [int] -or $authority.callerInventoryTotalBytes -is [long]) -and
+        $authority.callerInventoryTotalBytes -gt 0 -and $authority.callerInventoryTotalBytes -le 100663296 -and
+        ($inventory.rows | Measure-Object -Property bytes -Sum).Sum -eq $authority.callerInventoryTotalBytes)
     $result.failure = 'native-source'
     # Compile only the public Win32 preparation type. The existing launcher Job
     # owns the shell and any compiler descendants; no product or caller is started.

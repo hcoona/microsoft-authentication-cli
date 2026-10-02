@@ -25,15 +25,15 @@ import time
 LINUX = Path('/var/tmp/azureauth-windows-slice-108')
 PROJECTION = Path('/mnt/c/Temp/azureauth-windows-slice-108')
 WINDOWS = r'C:\Temp\azureauth-windows-slice-108'
-CEILINGS = [39, 181, 30, 543]  # Proposed ceilings; guard remains closed until amended authority.
+CEILINGS = [100, 400, 60, 1200]  # Accepted outcome Wave; exact execution admission remains required.
 HISTORICAL_UNKNOWN = ['0057', '0064', '0068', '0093', '0107', '0110']
 PRODUCT = '503360753accd0829801953823b1b57a4f852440'
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
 LAUNCHER_PROJECTION = PROJECTION / 'normal-launcher-dispatch-v1' / 'WindowsScriptJobLauncher.exe'
 CHARGES = {'compile': 7, 'native': 15}
-STAGE = PROJECTION / 'confidential-checks-v21'
-STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v21'
-CATALOG = (87398, '6ec2b2036301f0ff3cf0a45be2b0a3bebc3dcbe4f45f639117f6b5b0c1618f68')
+STAGE = PROJECTION / 'confidential-checks-v22'
+STAGE_WINDOWS = WINDOWS + r'\confidential-checks-v22'
+CATALOG = (87398, '1bf3742530b97472bbf81aaa73ccff3fbba2dc22d2a1ee865e02ba754bfaf2bc')
 COMPILE_DONORS_SHA256 = 'ffd6b96b4216d07e1025980ea3556c6e230f6ed9fcc9e47ab745ebdeee17e1f0'
 TARGETS = ('NativeCaller', 'DirectObserver', 'SyntheticSubject', 'FixtureDriver')
 SERVICE_SECONDS = 1200
@@ -765,10 +765,10 @@ def checkpoint(a, budget, reserved=False):
     c = decode(budget.pin(a['checkpoint'], 65536))
     require(set(c) == {'schema', 'counters', 'ceilings', 'nextAction', 'historyParents',
                       'historicalLifetimeUnknown', 'noExperimentLive', 'knownEndpoints', 'predecessorAccepted',
-                      'protectedAfter', 'capacityAmendmentAccepted', 'historicalDispositionsExtended', 'hostPreparations',
+                      'protectedAfter', 'capacityAmendmentAccepted', 'historicalDispositionsExtended',
                       'reservation'},
             'Current checkpoint fields')
-    require(c['schema'] == 'windows-controlled-harness-current-checkpoint-v1' and c['nextAction'] == a['action'] and
+    require(c['schema'] == 'windows-controlled-harness-current-checkpoint-v2' and c['nextAction'] == a['action'] and
             c['ceilings'] == CEILINGS and c['historicalLifetimeUnknown'] == HISTORICAL_UNKNOWN and
             c['noExperimentLive'] is False and c['predecessorAccepted'] is True and
             c['capacityAmendmentAccepted'] is True and
@@ -780,14 +780,8 @@ def checkpoint(a, budget, reserved=False):
             before[3] >= 163, 'Current nonrefundable accounting')
     charge = [0, 1, 0, CHARGES[a['suite']]]
     after = [x + y for x, y in zip(before, charge, strict=True)]
-    hosts = c['hostPreparations']
-    require(type(hosts) is dict and set(hosts) == {'linux', 'windows'}, 'Preparation host allocation')
-    for name, ceiling in (('linux', 18), ('windows', 21)):
-        v = hosts[name]
-        require(type(v) is list and len(v) == 2 and all(type(n) is int for n in v) and
-                v[1] == ceiling and 0 <= v[0] <= ceiling, 'Host preparation ceiling')
-    require(hosts['linux'][0] + hosts['windows'][0] == before[0] and
-            hosts['windows'][0] + charge[0] <= 21, 'Windows preparation debit')
+    # Current preparation capacity is shared; historical host allocations remain
+    # retained in accounting and do not create another current execution quota.
     protected = c['protectedAfter']
     require(type(protected) is list and len(protected) == 4 and
             all(type(x) is int and x >= 0 for x in protected) and protected[1] >= 12 and
@@ -804,7 +798,7 @@ def checkpoint(a, budget, reserved=False):
             expected = sorted([*expected, a['action']])
         if reserved and role == 'windowsProjectionRoot':
             expected = sorted([*expected, 'named-fixtures-' + a['action'],
-                               *(['confidential-checks-v21'] if a['suite'] == 'compile' else [])])
+                               *(['confidential-checks-v22'] if a['suite'] == 'compile' else [])])
         require(names(path, 128, budget) == expected, 'Current parent membership changed')
     return before, charge, after
 
