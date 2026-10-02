@@ -5,6 +5,7 @@ param(
     [Parameter(Mandatory)][string] $PlanPath,
     [Parameter(Mandatory)][string] $PlanSha256,
     [Parameter(Mandatory)][ValidateRange(1, 4)][int] $Attempt,
+    [ValidateSet('Personal', 'Work')][string] $AccountRole = 'Personal',
     [Parameter(Mandatory)][string] $ControllerSha256,
     [Parameter(Mandatory)][Type] $CutoffType
 )
@@ -16,6 +17,9 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $root = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v2'
+$accountPrefix = if ($AccountRole -ceq 'Work') { 'work-account' } else { 'selected-account' }
+$primaryGroup = if ($AccountRole -ceq 'Work') { 'R7' } else { 'R1' }
+$reuseGroup = if ($AccountRole -ceq 'Work') { 'R8' } else { 'R6' }
 $frequency = [Diagnostics.Stopwatch]::Frequency
 $lease = $null
 $invoked = $false
@@ -55,19 +59,20 @@ try {
     # Exact-call admission pins this original source, the loaded helper artifact,
     # its single retained Type, current host/user/environment and private input.
     # This script does not compile/load a replacement helper or read selectors.
-    Need ([Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop' -and
+    Need ($AccountRole -cin @('Personal', 'Work') -and
+        [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop' -and
         $CutoffType.FullName -ceq 'SelectedAccountControllerCutoff' -and
         -not $CutoffType.Assembly.IsDynamic -and $frequency -gt 0)
     $consoleMethod = $CutoffType.GetMethod('HasExistingConsoleInput',
         [Reflection.BindingFlags]'Public, Static')
     Need ($null -ne $consoleMethod -and [bool] $consoleMethod.Invoke($null, $null))
     Need ($PSCommandPath -ceq ($root + '\control\Invoke-WindowsSelectedAccountOriginal.ps1') -and
-        $PlanPath -ceq ($root + '\control\selected-account-plan-' + $Attempt + '.json'))
+        $PlanPath -ceq ($root + '\control\' + $accountPrefix + '-plan-' + $Attempt + '.json'))
     $controller = $root + '\control\Invoke-WindowsSelectedAccountCutoff.ps1'
     $null = Read-PinnedPublic $controller 65536 $ControllerSha256
     $encoding = [Text.UTF8Encoding]::new($false, $true)
     $plan = $encoding.GetString((Read-PinnedPublic $PlanPath 262144 $PlanSha256)) | ConvertFrom-Json
-    $group = if ($Attempt % 2 -eq 1) { 'R1' } else { 'R6' }
+    $group = if ($Attempt % 2 -eq 1) { $primaryGroup } else { $reuseGroup }
     Need ($plan.schema -ceq 'confidential-native-account-admission-v1' -and $plan.group -ceq $group -and
         $plan.admitted -eq $true -and $plan.accountEffectsAccepted -eq $true -and
         $plan.nonce -cmatch '\A[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\z')
@@ -81,7 +86,7 @@ try {
     $global:LASTEXITCODE = 125
     $invoked = $true
     & $controller -PlanPath $PlanPath -PlanSha256 $PlanSha256 -Attempt $Attempt `
-        -ControllerSha256 $ControllerSha256 -InvocationStartTicks $e0 -CutoffLease $lease
+        -ControllerSha256 $ControllerSha256 -AccountRole $AccountRole -InvocationStartTicks $e0 -CutoffLease $lease
     $originalExitCode = $LASTEXITCODE
     $originalReturnTicks = [Diagnostics.Stopwatch]::GetTimestamp()
     $returned = $true

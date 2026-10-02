@@ -1,10 +1,11 @@
-# Source-only controller for the native R1/R6 product acceptance pair.
+# Source-only controller for the native personal and work account acceptance pairs.
 # An accepted real-effects protocol and exact input/call review precede activation.
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string] $PlanPath,
     [Parameter(Mandatory)][string] $PlanSha256,
     [Parameter(Mandatory)][ValidateRange(1, 4)][int] $Attempt,
+    [ValidateSet('Personal', 'Work')][string] $AccountRole = 'Personal',
     [Parameter(Mandatory)][string] $ControllerSha256,
     [switch] $Controller,
     [Parameter(Mandatory)][long] $InvocationStartTicks,
@@ -20,6 +21,9 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $root = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v2'
+$accountPrefix = if ($AccountRole -ceq 'Work') { 'work-account' } else { 'selected-account' }
+$primaryGroup = if ($AccountRole -ceq 'Work') { 'R7' } else { 'R1' }
+$reuseGroup = if ($AccountRole -ceq 'Work') { 'R8' } else { 'R6' }
 $frequency = [Diagnostics.Stopwatch]::Frequency
 $callStart = $InvocationStartTicks
 $child = $null
@@ -105,13 +109,14 @@ function Invoke-Outer {
     }
     try {
         Before 20
-        Need (-not $Controller -and $ReservationSha256 -ceq '')
+        Need ($AccountRole -cin @('Personal', 'Work') -and -not $Controller -and $ReservationSha256 -ceq '')
         Need ($null -ne $CutoffLease -and $CutoffLease.GetType().FullName -ceq
             'SelectedAccountControllerCutoff' -and $CutoffLease.InvocationStartTicks -eq $callStart -and
             $CutoffLease.Armed -and -not $CutoffLease.Bound -and -not $CutoffLease.Failed -and
             -not $CutoffLease.StopClaimed -and -not $CutoffLease.CleanupComplete)
-        Need ([Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop')
-        Need ($PlanPath -ceq ($root + '\control\selected-account-plan-' + $Attempt + '.json'))
+        Need ($AccountRole -cin @('Personal', 'Work') -and
+            [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop')
+        Need ($PlanPath -ceq ($root + '\control\' + $accountPrefix + '-plan-' + $Attempt + '.json'))
         $script = $root + '\control\Invoke-WindowsSelectedAccountCutoff.ps1'
         Need ($PSCommandPath -ceq $script)
         $null = Read-Pinned $script 65536 $ControllerSha256
@@ -119,17 +124,17 @@ function Invoke-Outer {
         $null = Read-Pinned $shell 1048576 '8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e'
         $utf8 = [Text.UTF8Encoding]::new($false, $true)
         $public = $utf8.GetString((Read-Pinned $PlanPath 262144 $PlanSha256)) | ConvertFrom-Json
-        $group = if ($Attempt % 2 -eq 1) { 'R1' } else { 'R6' }
+        $group = if ($Attempt % 2 -eq 1) { $primaryGroup } else { $reuseGroup }
         Need ($public.schema -ceq 'confidential-native-account-admission-v1' -and
             $public.group -ceq $group -and $public.admitted -eq $true -and
             $public.accountEffectsAccepted -eq $true -and
             $public.nonce -cmatch '\A[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\z')
         $outerReceipt = $root + '\records\' + $group + '-' + $public.nonce + '\outer-terminal.json'
         for ($prior = 1; $prior -lt $Attempt; $prior++) {
-            Need ([IO.File]::Exists($root + '\records\selected-account-attempt-' + $prior + '.json'))
+            Need ([IO.File]::Exists($root + '\records\' + $accountPrefix + '-attempt-' + $prior + '.json'))
         }
         # The complete debit precedes the new shell, including failed shell starts.
-        $reservation = Write-NewJson ($root + '\records\selected-account-attempt-' + $Attempt + '.json') ([ordered]@{
+        $reservation = Write-NewJson ($root + '\records\' + $accountPrefix + '-attempt-' + $Attempt + '.json') ([ordered]@{
             schema = 'selected-account-attempt-v1'; attempt = $Attempt; group = $group
             nonce = $public.nonce; planSha256 = $PlanSha256; controllerSha256 = $ControllerSha256
             invocationStartTicks = $callStart; productLaunchReservation = 1
@@ -140,7 +145,7 @@ function Invoke-Outer {
         $info.FileName = $shell
         $info.Arguments = '-NoLogo -NoProfile -NonInteractive -File ' + (Quote-Argument $script) +
             ' -PlanPath ' + (Quote-Argument $PlanPath) + ' -PlanSha256 ' + (Quote-Argument $PlanSha256) +
-            ' -Attempt ' + $Attempt + ' -ControllerSha256 ' + (Quote-Argument $ControllerSha256) +
+            ' -AccountRole ' + $AccountRole + ' -Attempt ' + $Attempt + ' -ControllerSha256 ' + (Quote-Argument $ControllerSha256) +
             ' -Controller -InvocationStartTicks ' + $callStart.ToString([Globalization.CultureInfo]::InvariantCulture) +
             ' -ReservationSha256 ' + (Quote-Argument $reservation)
         $info.WorkingDirectory = $root
@@ -232,11 +237,12 @@ if (-not $Controller) { exit (Invoke-Outer) }
 
 try {
     Before 20
-    Need ([Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop')
-    Need ($PlanPath -ceq ($root + '\control\selected-account-plan-' + $Attempt + '.json'))
+    Need ($AccountRole -cin @('Personal', 'Work') -and
+        [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop')
+    Need ($PlanPath -ceq ($root + '\control\' + $accountPrefix + '-plan-' + $Attempt + '.json'))
     $encoding = [Text.UTF8Encoding]::new($false, $true)
     $plan = $encoding.GetString((Read-Pinned $PlanPath 262144 $PlanSha256)) | ConvertFrom-Json
-    $group = if ($Attempt % 2 -eq 1) { 'R1' } else { 'R6' }
+    $group = if ($Attempt % 2 -eq 1) { $primaryGroup } else { $reuseGroup }
     Need ($plan.schema -ceq 'confidential-native-account-admission-v1' -and
         $plan.group -ceq $group -and $plan.admitted -eq $true -and $plan.accountEffectsAccepted -eq $true)
     Need ($plan.environmentMode -ceq 'constructed-current-user-profile-v1' -and
@@ -255,11 +261,12 @@ try {
     $null = Read-Pinned $caller 1048576 $callerPin[0].sha256
     $receiptRoot = $root + '\records\' + $group + '-' + $plan.nonce
     Need ([IO.Directory]::Exists($receiptRoot))
-    # The four fixed reservations are cumulative across controllers, source fixes
-    # and readiness handoffs. Exact-call review also joins all previous outcomes.
-    $reservationPath = $root + '\records\selected-account-attempt-' + $Attempt + '.json'
+    # The four reservations for this role are cumulative across controllers, source
+    # fixes and readiness handoffs. Exact-call review joins the shared real pool
+    # and all previous outcomes; switching roles never resets its consumption.
+    $reservationPath = $root + '\records\' + $accountPrefix + '-attempt-' + $Attempt + '.json'
     for ($prior = 1; $prior -lt $Attempt; $prior++) {
-        Need ([IO.File]::Exists($root + '\records\selected-account-attempt-' + $prior + '.json'))
+        Need ([IO.File]::Exists($root + '\records\' + $accountPrefix + '-attempt-' + $prior + '.json'))
     }
     $reserved = $encoding.GetString((Read-Pinned $reservationPath 4096 $ReservationSha256)) | ConvertFrom-Json
     Need ($reserved.schema -ceq 'selected-account-attempt-v1' -and $reserved.attempt -eq $Attempt -and
@@ -347,7 +354,7 @@ try {
     Need ($child.ExitCode -eq 0 -and $terminal.passed -eq $true -and $terminal.outcome -ceq 'Success' -and
         $terminal.protocolValid -eq $true -and $terminal.metadataValid -eq $true -and $terminal.stopAttempted -eq $false)
     Need ($terminal.apiRoute -cin @('Silent', 'Interactive'))
-    if ($group -eq 'R6') { Need ($terminal.apiRoute -ceq 'Silent') }
+    if ($group -ceq $reuseGroup) { Need ($terminal.apiRoute -ceq 'Silent') }
     $status.passed = $true
     $status.failure = 'none'
 } catch {
