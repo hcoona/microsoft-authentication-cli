@@ -124,6 +124,7 @@ class Budget:
         self.cancelled = False
         self.compile_donors = {}
         self.compile_donor_reads = []
+        self.current_compile_donors = False
 
     def enter_terminal(self):
         # Use the reserved final interval with the SAME aggregate counters. This
@@ -357,8 +358,22 @@ def compile_donor_rows(rows):
     return {item['relativePath']: item for item in rows}
 
 
-def validate_compile_donor_observation(source, observation):
-    """Validate already sampled operands without refreshing or reading a donor."""
+def current_compile_donor_rows(original, rows):
+    """Join a new accepted current inventory to immutable public provenance."""
+    compile_donor_rows(original)
+    require(type(rows) is list and len(rows) == 365, 'Complete current compile donor table')
+    for historical, current in zip(original, rows, strict=True):
+        require(set(current) == {'relativePath', 'descriptor'} and
+                current['relativePath'] == historical['relativePath'] and
+                set(current['descriptor']) == {'path', 'bytes', 'sha256', 'identity'} and
+                all(current['descriptor'][key] == historical['descriptor'][key]
+                    for key in ('path', 'bytes', 'sha256')),
+                'Current donor preserves original ordered public path and content')
+    return {item['relativePath']: item for item in rows}
+
+
+def compile_donor_observation_identity(source, observation):
+    """Validate retained content and strict within-read operands, without I/O."""
     require(type(observation) is dict and set(observation) == {
                 'relativePath', 'readObservation', 'sha256'} and
             observation['relativePath'] == source['relativePath'] and
@@ -376,20 +391,37 @@ def validate_compile_donor_observation(source, observation):
     require(all(type(readback[k]) is int and readback[k] == pin['bytes']
                 for k in ('expectedBytes', 'returnedBytes')) and
             observation['sha256'] == pin['sha256'] and
-            identities[0] == identities[1] == identities[2] and
-            all(identities[0][i] == pin['identity'][i] for i in (0, 1, 2, 3, 4, 5, 6, 8)),
-            'Original compile donor content/eight fields and strict within-read identity',
+            identities[0] == identities[1] == identities[2],
+            'Compile donor content and strict within-read identity',
             read_observation=readback)
+    return identities[0]
+
+
+def validate_compile_donor_observation(source, observation):
+    """Retain the original recipe's historical ctime qualification."""
+    observed = compile_donor_observation_identity(source, observation)
+    require(all(observed[i] == source['descriptor']['identity'][i] for i in (0, 1, 2, 3, 4, 5, 6, 8)),
+            'Original compile donor content/eight fields and strict within-read identity',
+            read_observation=observation['readObservation'])
+
+
+def validate_current_compile_donor_observation(source, observation):
+    """Require all nine fields of the independently accepted current basis."""
+    observed = compile_donor_observation_identity(source, observation)
+    require(observed == source['descriptor']['identity'], 'Current compile donor exact full9',
+            read_observation=observation['readObservation'])
 
 
 def pin_input(a, item, budget):
     if a['suite'] == 'compile' and budget.compile_donors.get(item['relativePath']) == item:
-        # Only exact members of the admitted original table qualify historically.
-        # The normal reader remains full9-strict throughout this new read.
+        # The accepted inventory schema selects the original or fresh current basis.
+        # Both use the same full9-strict reader; current donors also pin all nine fields.
         raw, _, readback = budget._read(Path(item['descriptor']['path']), 67108864)
         observation = {'relativePath': item['relativePath'], 'readObservation': readback,
                        'sha256': digest(raw)}
-        validate_compile_donor_observation(item, observation)
+        validator = (validate_current_compile_donor_observation if budget.current_compile_donors
+                     else validate_compile_donor_observation)
+        validator(item, observation)
         require(len(raw) == item['descriptor']['bytes'], 'Original compile donor length')
         require(len(budget.compile_donor_reads) < 365, 'Original compile donor read count')
         budget.compile_donor_reads.append(observation)
@@ -501,9 +533,11 @@ def require_executable_launcher(a, budget):
 
 def inventory_rows(a, budget):
     inventory = decode(budget.pin(a['inventory'], 4194304))
-    require(set(inventory) == ({'schema', 'files'} if a['suite'] == 'compile' else {'schema', 'identityMode', 'files'}) and
-            inventory['schema'] == ('windows-controlled-harness-files-v1' if a['suite'] == 'compile' else
-                                    'windows-controlled-harness-files-v2'), 'Exact inventory schema')
+    current_donors = a['suite'] == 'compile' and inventory.get('schema') == 'windows-controlled-harness-compile-files-v3'
+    require(set(inventory) == ({'schema', 'files', 'originalDonors', 'currentDonorAcceptance'} if current_donors else
+                              {'schema', 'files'} if a['suite'] == 'compile' else {'schema', 'identityMode', 'files'}) and
+            (current_donors or inventory['schema'] == ('windows-controlled-harness-files-v1' if a['suite'] == 'compile' else
+                                                      'windows-controlled-harness-files-v2')), 'Exact inventory schema')
     if a['suite'] == 'native':
         require(inventory['identityMode'] == 'synthetic-first-held-v1', 'Explicit synthetic native admission')
     catalog_raw = budget.pin(a['catalog'], 131072)
@@ -548,7 +582,16 @@ def inventory_rows(a, budget):
         require(total <= (134217728 if a['suite'] == 'compile' else 100663296), 'Input payload aggregate')
         tsv.append('\t'.join((relative, str(pin['bytes']), pin['sha256'])))
     if a['suite'] == 'compile':
-        budget.compile_donors = compile_donor_rows(inventory['files'][:365])
+        budget.current_compile_donors = current_donors
+        if current_donors:
+            budget.compile_donors = current_compile_donor_rows(inventory['originalDonors'], inventory['files'][:365])
+            acceptance(inventory['currentDonorAcceptance'], 'windows-controlled-compile-current-donor-acceptance-v1',
+                       {'originalDonorsSha256': COMPILE_DONORS_SHA256,
+                        'currentDonorsSha256': digest(encode(inventory['files'][:365])),
+                        'publicPathsContentAndProvenanceAccepted': True, 'strictCurrentFull9': True,
+                        'historicalSuccessClaimed': False}, budget)
+        else:
+            budget.compile_donors = compile_donor_rows(inventory['files'][:365])
     return inventory['files'], ('\n'.join(tsv) + '\n').encode('ascii')
 
 
@@ -726,7 +769,9 @@ def verify_deployment(a, root, local, budget):
         require(type(deployment['compileDonorReads']) is list and
                 len(deployment['compileDonorReads']) == 365, 'Complete retained compile donor observations')
         for source, observation in zip(budget.compile_donors.values(), deployment['compileDonorReads'], strict=True):
-            validate_compile_donor_observation(source, observation)
+            validator = (validate_current_compile_donor_observation if budget.current_compile_donors
+                         else validate_compile_donor_observation)
+            validator(source, observation)
     for created, source in zip(deployment['files'], rows, strict=True):
         pin = created['descriptor']
         require(set(created) == ({'relativePath', 'descriptor', 'writeClosedIdentity', 'readbackObservation'}
