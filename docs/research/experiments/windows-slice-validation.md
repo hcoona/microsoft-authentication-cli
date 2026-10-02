@@ -331,7 +331,10 @@ byte count. The inventory and expectedRows are generated reviewable interchanges
 not second manually maintained catalogs. A missing or incompatible row stops.
 
 For the unused first successor public materialization at named-fixtures-0189 and
-account-v2, use donor v22 and `selected-account-public-preparation-authority-v2`.
+account-v2, use donor v23 and `selected-account-public-preparation-authority-v2`.
+This binds public preparation to the fresh root-compatible candidate; all required
+source, artifact, scoped completion and 194-row provenance gates above still
+precede its use. Preserve the earlier v22 failure, occupied root and spent charges.
 Bind its callerSourceCommit to the inventory and the accepted compiled source;
 bind callerRootSourceSha256 to the exact ActualAdmission source above. Bind
 callerInventoryTotalBytes as a positive integer equal to the complete194-row sum,
@@ -371,7 +374,7 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [DirectObserver.rsp](../../../tools/validation/controlled-callers/control/DirectObserver.rsp) | 20404 | `b4af49e38b70808369e259466a7a759339d6f422733c9b61a31f560d12159fb6` |
 | [SyntheticSubject.rsp](../../../tools/validation/controlled-callers/control/SyntheticSubject.rsp) | 21309 | `7016e29b6f8f43805786e81c8213f2dc509bfabc100d7b4b5478eee707b78325` |
 | [FixtureDriver.rsp](../../../tools/validation/controlled-callers/control/FixtureDriver.rsp) | 21276 | `aeebc66eb198c2d70f640051ad3d915164e6af124a1778679ad9bfdf63b2d01c` |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `876fe5c34b02eadc4113d17579b87fb732468f9d7bf9c9f09c4dfff916ef68f5` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `d6fa7a12eaac2c90e3845e4ab0429789cd216fd99ab213b4d1fcda5821d25d36` |
 
 ## Retained Product Byte Acquisition Recipe
 
