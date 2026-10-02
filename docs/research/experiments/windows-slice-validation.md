@@ -676,7 +676,192 @@ control operation before a corrected pair. This adds no attempt or success.
 Source/artifact/input/call gates remain necessary after allowance acceptance;
 they are internal execution gates, not renewed per-step owner risk decisions.
 
+### Existing-console selected-account cutoff supplement
+
+This supplement implements the existing external180s original-call obligation.
+The public product, native caller and194-leaf caller inventory retain their
+accepted provenance and limits. Frozen public materialization keeps its original
+controller input as derivation evidence. New real calls use the reviewed
+`Invoke-WindowsSelectedAccountCutoff.ps1` controller and the same-console
+`Invoke-WindowsSelectedAccountOriginal.ps1` original carrier. Do not overwrite
+or reactivate the frozen original controller copy.
+
+Before Windows-local private creation or real execution, independently accept
+the current public materialization, current-kernel relevance disposition and
+the complete selected-account real operating basis. Standing outcome/account
+effects and common buffers remain the authorization. A new filename or technical
+allocation within them is not a renewed owner-decision boundary.
+
+#### Public helper preparation and loading
+
+Independently admit one finite public compilation of the exact accepted
+`SelectedAccountControllerCutoff.cs` source with the existing Windows PowerShell
+Framework/default CodeDom provider. Retain the resulting library in a fresh
+dedicated public preparation destination, outside production and private inputs.
+No product, caller, provider, private selector or account API runs in this phase.
+Use the unchanged normal0070 launcher, creation-time Job, existing compiler and
+current Linux direct-scope operating basis; preserve its330+10s envelope and
+the original E0/Ec/Eb/latest-entry/365+5/400s joins. Reserve one build and four
+maximum synthetic roles plus independently reviewed finite public transfer,
+read/write/temporary and evidence limits before the sole compilation original.
+Actual compiler/source/artifact, native root/Job/EOF and own Linux completion
+acceptance precede library use. A matching hash alone is not compilation evidence.
+
+The initial inert compile-only source is
+[the initializer](../../../tools/validation/Initialize-WindowsSelectedAccountCutoff.ps1),
+with its guard false and fresh `named-fixtures-0188` root. The controller holds that
+root against rename/delete. Before Add-Type, set only this child process's TEMP
+and TMP to the root and require GetTempPath to equal it with a trailing separator.
+No user/machine environment or existing account shell is changed. Retain the
+accepted ordinary Framework/default-provider/reference/compiler operating basis
+and conservative 8 MiB temporary-write assumption for one small fixed source
+batch. This is an operating assumption, not an enforced compiler disk quota;
+contrary evidence stops it. Declare installed loader/reference reads separately.
+Generated DLL and final DLL each must be at most 1 MiB; control/receipt limits and
+all partial files remain retained under their declared recipe. The initializer's
+work checks are before 20 seconds, handle closure before 25, and exclusive flushed
+receipt/return checks before 30. These acceptance cutoffs do not interrupt a blocked
+API or replace the launcher's separately admitted finite stop envelope.
+
+Allocate at most four public helper compilation originals including corrections,
+maximum aggregate technical charge `0/4/0/16`, from the remaining common pool.
+Initially admit only one. Later slots require accepted prior failed outcome and
+scoped completion, a supported correction, and revised exact source/input/call
+review. Each has a fresh dedicated root; do not adopt, overwrite or repair any
+occupied root. Stop once accepted artifact evidence suffices. No helper method,
+console probe, lease or real-account start is included in this compilation batch.
+
+For each original, separately admit at most five charged preparation/evidence
+passes within the following maxima; classify actual effects, preserve full failed
+charges and bind exact fixed selection/identities/resource and I/O counts before
+submission. These are allocation ceilings, not source implementations or call
+admission. A new/corrected transfer or reader remains inert until reviewed.
+
+| Per compilation original | Passes | Seconds | Reserved bytes |
+| --- | ---: | ---: | ---: |
+| Fixed public input/source/runtime preflight | 1 | 30 | 16 MiB |
+| Exclusive fixed public control transfer and readback | 1 | 30 | 4 MiB |
+| Owned Windows compilation dispatch/control work | 1 | 400 | 64 MiB |
+| Fixed library/result/journal/two-capture collection | 1 | 30 | 4 MiB |
+| Own Linux scope startup-witness/events collection | 1 | 30 | 32 KiB |
+
+The four-original maximum is 20 passes, 2,080 reserved seconds and 369,229,824
+reserved bytes. Reserve only needed reviewed passes, not the whole unused buffer.
+Library collection selects only `cutoff.generated.dll`,
+`SelectedAccountControllerCutoff.dll`, `cutoff-compilation-result.json`,
+`launcher.jsonl` and the two launcher capture files. Scope collection uses only
+the new original's exact own startup witness and events leaf, with justified
+absence under validated ancestry; no process, service or host survey follows.
+Source readers retain strict no-follow/held/named/within-read identity checks,
+length/hash/EOF and exclusive retained evidence. All input and Windows native
+correspondence, startup, environment, compiler and transport joins remain required.
+The observed Job total is a cumulative count, not an identity trace or automatic
+charge repricing. The existing conservative one PowerShell root/one compiler/
+at-most-two internal-host model and four synthetic charge roles remain applicable.
+No global closure, hard real-time, exhaustive OS I/O or platform support claim is
+made by this preparation allocation.
+
+Use exclusive control filenames in the admitted account root:
+`SelectedAccountControllerCutoff.dll`,
+`Invoke-WindowsSelectedAccountCutoff.ps1`, and
+`Invoke-WindowsSelectedAccountOriginal.ps1`. Only the two PowerShell false
+execution guards may change in independently admitted private copies. Keep their
+canonical source guards false. Apply finite exact length/hash/EOF/native identity
+and held/named input/copy correspondence to all new public inputs. Keep the
+existing194-leaf inventory distinct from these three additional public controls;
+do not silently replace its native caller or product pins.
+
+Before E0, load the independently accepted library into the admitted existing
+ordinary Windows PowerShell process and retain its exact runtime Type strongly.
+Bind the load to the accepted library bytes, loader source/call, process/session
+and ordinary installed dependencies. Reuse the SAME Type across the pair and
+any corrections on that host process. A replacement assembly, duplicate load
+context, new shell or renewed Type cannot reset the failed-lease refusal. The
+original carrier accepts that admitted Type; its name/type checks alone do not
+establish the artifact or loading gate. Loading does not compile another helper.
+
+#### Original epoch, handle ownership and one stop claim
+
+Complete automated input/call preparation before actual account input/readiness.
+Bind the real original carrier's source and loaded Type, current existing-user
+environment and ordinary console, exact Profile/scopes/private selector and full
+technical/real accounting. Read only fixed public controls before E0. The helper's
+borrowed standard-input GetStdHandle/GetConsoleMode Boolean is one console
+correspondence observation, not a host/account/platform support claim. It reads
+no input, changes no console mode and closes no borrowed standard handle.
+
+Capture E0 with the current Windows Stopwatch immediately before creating the
+lease and invoking the controller script exactly once. Arming must succeed
+before invocation. Derive the one-shot fallback from E0+175s and all finalization
+from E0+180s; arming, binding, failure or later collection renews neither. Retain
+the script's own LASTEXITCODE and return timestamp immediately on return, before
+cleanup or receipt I/O. A missing, late, forced or nonzero original fails.
+
+The controller binds its original freshly created Process to the lease before
+identity or stream work and before E0+20s. Retain original Process ownership
+before its handle accessor; duplicate that handle at most once, noninheritable,
+with synchronization/termination rights. The callback uses only the duplicate;
+the synchronous primary may use the still-held original if duplication failed.
+No PID reopening, process-tree survey, new Job, observer shell, console, service
+or shared-shell/broker stop occurs. Primary and fallback use one atomic stop
+claim: at most one native termination attempt, including failed initiation.
+
+Preserve ordinary native/controller/EOF/receipt deadlines. The pure C# Timer
+callback can run independently of the PowerShell runspace; it never uses a
+PowerShell scriptblock, provider, receipt I/O or lock held across a blocking API.
+It initiates the sole claimed stop and observes exit for at most five seconds,
+clipped to E0+180s. Initiated termination is distinct from observed exit and
+supplies no worker/product/Job completion evidence. ThreadPool scheduling and
+Windows APIs are not a hard-real-time guarantee; late/unbound/failed observations
+remain failure rather than a successful cutoff.
+
+Drain queued callbacks with Timer.Dispose(WaitHandle) within the remaining E0+180s
+budget before closing the duplicate/events. Never close a handle while a native
+wait may use it. Incomplete draining, original-handle acquisition, duplicate close
+or other resource cleanup retains strong ownership and refuses a later lease.
+The lease disposes its transferred original Process only after callback/native-wait
+cleanup and valid timely exit, before clearing ownership and marking cleanup complete.
+Keep ownership and same-Type failed-lease refusal if disposal fails or is late.
+The outer must not repeat disposal of a transferred Process; preserve only its
+existing genuine untransferred-object cleanup. An earlier failure still rejects
+ordinary success after completed safe disposal. Never repair
+that failure by loading a new Type, retrying a stop, reopening a PID or resetting
+the clock. No historical lifetime waiver applies to a new cutoff uncertainty.
+
+#### Receipt and acceptance conjunction
+
+Retain only fixed Boolean/tick status. The additional exclusive
+`records/GROUP-NONCE/original-terminal.json` is at most4096B; write/flush/close and
+check the original180s bound both before and after persistence. Flags are
+provisional and do not replace the original return record. Add this safe record
+to the existing single32KiB/30s post-call collection; no new private/output read
+or collection replay is granted. Retain partial evidence and full failed charges.
+
+Successful acceptance still requires original outer-script zero before180s,
+controller zero/two EOFs before170s, complete bound original/outer/controller/native
+safe records, observed native worker/product/Job closure and result validity,
+and no primary/fallback stop, termination attempt or unresolved lease. Resolve
+material findings and accept scoped outcomes independently before another case.
+Native personal R1/R6 does not complete work-account or actualWSL requirements.
+
+#### Inert source bindings
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [Initialize-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountCutoff.ps1) | 6387 | `cddb41d758ebbc5953732af112632f7a4f258da7c1243c75f7421a3e84fad1cb` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20076 | `f4f49b259f58d9c2af4d8f993ceeea3f5f1d55c11fbbefc03fa178293569b334` |
+| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6159 | `b9b02a23e933fc406ef3cc1246a6175dc92417e16f7db3ecaa7c8a3fc7fa4bca` |
+| [SelectedAccountControllerCutoff.cs](../../../tools/validation/SelectedAccountControllerCutoff.cs) | 15346 | `302473837eb1262fd57597550bf992ad540b4f3b55a83dcfebb694663a81be40` |
+
+These source bindings identify the proposal; accepted exact compilation, artifact,
+loading and call evidence still precede use. All canonical PowerShell guards stay
+false. No private source, selector, token or raw provider output is introduced.
+
 ### Controller, clocks and evidence
+
+For current real calls, the existing-console cutoff supplement above governs the
+original carrier, transferred Process ownership, same-Type lease and final cleanup.
+The base controller/native deadlines and result/EOF requirements below remain.
 
 Keep the existing root
 `C:\Temp\azureauth-windows-slice-108\confidential-native-account-v1` and existing
