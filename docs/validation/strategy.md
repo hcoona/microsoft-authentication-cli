@@ -437,9 +437,10 @@ The [native selected-account preparation](../research/experiments/windows-slice-
 defines a first real product observation for the personal-account and subsequent
 invocation rows above. Its native creation-handle/Job route does not consume the
 direct WSL observer, so ETW calibration is not a prerequisite for preparing those
-two native cases. The preparation has no account-execution authority and supplies
-no runtime result. Keep the actual WSL, work-account and other evidence obligations
-above open independently.
+two native cases. The preparation remains inert and supplies no runtime result.
+The current Wave owns normal account-effects authority; exact protocol, artifact,
+private-input, call and real-host operating-basis acceptance still precede execution.
+Keep actual WSL, work-account and other evidence obligations above open independently.
 
 The [local host predicates](../designs/windows-ado-authentication.md#local-windows-host-admission)
 do not prove continuing eligibility, every alternate-launch origin or WAM health.

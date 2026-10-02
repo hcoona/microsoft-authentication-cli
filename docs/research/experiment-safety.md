@@ -150,405 +150,6 @@ stops further attempts. Record any uncertainty; if safe termination or file owne
 cannot be established, preserve the affected state and do not perform speculative cleanup
 or continue the experiment.
 
-This exception addresses only the unresolved lifetime of the preceding immutable
-Git verification helpers and possible descendants from original Issue #108
-invocation 0057. With the accepted Wave risk decision and applicable independently
-accepted exact protocols, that historical uncertainty alone need not block
-credential-free Windows Slice validation within the scope and ceilings accepted
-with that decision. The original attempt remains failed and stopped. This
-exception does not establish termination, authorize old-process cleanup or weaken
-future work's ownership, termination, evidence or capacity requirements. It does
-not apply to other unknown processes or historical Issue #1. The exception ends
-when that Wave grant closes; it does not transfer to a successor grant. The finite renewed credential-free capacity and the separately stated
-retained-launcher and supplemental managed/caller allocations below are its explicit
-extensions beyond the original ceilings and effects. Other later boundary changes do not
-automatically expand it.
-All new ownership or termination uncertainty
-retains the ordinary stop conditions.
-
-Separately, the accepted Wave risk decision for original Issue #108 Windows
-final publication 0064 permits credential-free Windows Slice validation despite
-the unresolved identity and later lifetime of that original Job's remaining
-process. Apply only that decision's existing environments, effects and cumulative
-ceilings, after the corresponding independently accepted protocol amendment.
-Preserve the original failure, charge and evidence. This exception establishes
-neither termination nor artifact acceptance and permits no old-process cleanup,
-automatic retry or capacity refund. It ends with that Wave grant and cannot
-transfer to a successor grant. The finite renewed credential-free capacity and the separately stated
-retained-launcher and supplemental managed/caller allocations below are its explicit
-extensions beyond the original ceilings and effects. Other later boundary changes do not
-automatically expand it. It does not cover other unknown processes. Future
-publication supervision must meet the Wave's named-Job requirement and the exact
-protocol's identity, audit and authorized-operation rules before execution;
-all new ownership or termination uncertainty retains the ordinary stop conditions.
-
-The current Wave's renewed credential-free capacity expressly extends the
-original 0057, 0064 and 0068 dispositions to that finite allocation's cumulative
-ceilings of 28/130/30/180,
-on the same hosts and within the same credential-free effects. Accept the Wave,
-this policy and the corresponding Windows protocol allocation together. Preserve
-original failures, charges and evidence; require ordinary exact source, artifact,
-protocol and call admission for each new action. This extension does not permit
-old-process cleanup, infer termination, authorize automatic retries, excuse new
-uncertainty or transfer to another grant. The Wave's future real-effects capacity
-reservation does not extend these exceptions to private identities, credentials,
-account/cache/consent effects or real WAM interaction. Those effects retain their
-separate concrete owner risk decision and exact protocol requirements.
-
-Separately, the accepted Wave decision for original Issue #108 named-Job fixture
-0068 permits continued credential-free Windows Slice validation despite the
-unresolved lifetime of its controller or experiment-controlled descendants and
-their possible interference. Apply only that decision's existing hosts, effects
-and fixed cumulative ceilings, after the matching protocol amendment is accepted.
-Preserve the original failure, full charge and both spent file observations.
-This exception supplies no termination evidence, old-state scan or cleanup,
-original replay or recovery, quota increase or refund, or fixture/artifact
-acceptance. It ends with the current grant and cannot transfer to a successor
-or automatically expand with later quota or effects changes. Only the current Wave's renewed credential-free capacity and its separately stated
-retained-launcher and supplemental managed/caller allocations expressly extend its
-prior ceiling and exact effects.
-The 0057 and 0064
-exceptions remain separate. Require corrected creation-time controller
-containment, bounded startup/failure diagnostics and named, auditable, operable
-Windows Jobs before another fixture launch, with ordinary independent exact
-source, artifact, protocol and call admissions. All new ownership or termination
-uncertainty retains the ordinary stop conditions. This exception does not cover
-account or credential effects, real WAM interaction, installation or release.
-
-Separately, the accepted Wave decision for original Issue #108 final publication
-0093 permits continued credential-free Windows Slice validation despite the
-unresolved launch state and lifetime of its associated WSL or Windows processes
-and descendants, and their possible interference. Apply only to original 0093
-on the same hosts within ceilings of 28 preparation, 130 build/test,
-30 publication and 180 synthetic actions, after the matching protocol amendment
-is accepted. Preserve its failed result, full charge and retained evidence;
-this exception establishes neither termination nor publication or artifact
-acceptance. It permits no original replay, further observation, process or
-shared-service operation, cleanup or refund. New actions retain their ordinary
-independent protocol, source, artifact and exact-call admissions. The exception
-ends with the current grant, does not transfer or automatically expand, and
-does not cover future uncertainty, account effects, installation or release.
-Historical 0057/0064/0068 exceptions remain separate.
-
-Separately, the accepted Wave decision for original Issue #108 final publication
-0107 permits credential-free Windows Slice validation despite the unresolved
-later lifetime of that original invocation's associated WSL or Windows processes
-and descendants, and their possible interference. Apply only to original 0107
-on the same hosts within ceilings of 28 preparation, 130 build/test,
-30 publication and 180 synthetic actions, after the matching protocol amendment
-is accepted. Preserve the failed result, full charge and sole spent passive
-observation. This exception establishes neither termination nor publication or
-artifact acceptance; it permits no replay, further old-state observation,
-old-process or shared-service operation, cleanup or refund. The Wave's bootstrap
-and controller pre-candidate diagnostic and clock-handoff prerequisites apply
-before successor publication;
-every new action retains independent finite allocation and exact admission.
-This exception ends with the current grant, does not transfer or automatically
-expand, and does not cover future uncertainty, account effects, installation
-or release. Historical 0057/0064/0068/0093 exceptions remain separate.
-
-Separately, the accepted Wave decision for original Issue #108 final publication
-0110 permits one independently admitted Linux-only passive retained-candidate
-observation and the existing separately admitted credential-free scenarios despite
-possible interference from that invocation's unresolved work. Apply only on the
-same hosts within unchanged ceilings 28/130/30/180, after the matching protocol
-is accepted. Preserve the failed publication, full charge, spent failure snapshot,
-and original success collector's ineligibility. This exception establishes no
-historical or current quiescence and does not resume the original interval.
-
-The separate artifact basis must establish the necessary source, dependency,
-tool, response, diagnostic, artifact, asset, and symbol/provenance relationships.
-Apply the ordinary workstation threat model. Current hashes cannot establish
-original clock or held-handle continuity, natural Job drain, or execution of
-skipped postconditions. Classify each original obligation against the new limited
-claim, with an independent rationale for any unnecessary historical condition;
-necessary missing, unstable, or insufficient evidence blocks artifact acceptance.
-Risk acceptance cannot supply that evidence. Freeze accepted candidate bytes in
-the new snapshot; later materialization and scenario use retain separate admission.
-
-The exact protocol owns the single observation's literal leaves, destination,
-source/runtime/call bindings, finite operations, byte and time limits, zero-unit
-accounting, and failure retention. A failed or partial start spends it. No retry,
-alternate destination, quota increase, automatic fallback publication, recompilation,
-original recovery/replay, broader old-state observation, old-process/Job/shared-service
-operation, cleanup, refund, account effect, installation, signing, or release is
-permitted by this exception. It ends with the current grant and cannot transfer or
-expand automatically. Historical exceptions remain separate; every new ownership
-or termination uncertainty retains ordinary stop conditions.
-
-
-The current Wave's retained-launcher allocation explicitly extends the distinct
-original Issue #108 0057, 0064, 0068, 0093, 0107 and 0110 historical lifetime and
-interference dispositions to credential-free work on the same hosts within
-35/141/30/277 and its exact accepted effects. This finite explicit extension is
-not an automatic expansion. Preserve failures, charges, spent observations and
-`noExperimentLive=false`. It grants no termination claim, old-state survey/cleanup,
-replay, refund or real-account effect, ends with the grant and excuses no new
-uncertainty.
-
-For that allocation, apply the concrete owner decision to transient unrelated
-private command-line, image and user-SID data in the bounded private ETW consumer
-and possible persistence of its owned trace session after failed stop/drain or
-forced exit. Require fresh ownership, PROCESS|NO_SYSCONFIG selection, finite
-buffers/payload/callback/join bounds, no raw unrelated retention and at most eight
-session-creation attempts. Actual observation attempts remain sequential, with
-independent outcome review before another attempt; residual owned kernel sessions
-and buffers may overlap later admitted attempts.
-
-The owner's narrow disposition permits later bounded validation within existing
-unused allocations when persistence of an originally owned session or its buffers
-is the sole remaining issue. It requires no additional owner risk request solely
-for that persistence and supplies no empirical no-business-impact claim. Preserve
-original session ownership/identity, failed results, full charges and required
-evidence. An independently accepted failure disposition is not successful
-calibration or observation evidence. Exact passing-result gates, including complete
-consumer drain and zero loss, remain unchanged. Unknown ownership, native-process,
-gate, consumer, pending OVERLAPPED or other evidence uncertainty still stops work;
-no additional cleanup, repeated stop, elevation, foreign-session operation,
-automatic retry or automatic recovery is implied. Process, Job or cgroup exit alone
-proves neither trace closure nor direct-native-product termination. The exception
-ends with this finite Wave allocation and grants no additional session creation.
-Keep the explicit inherited direct Windows relay premise and the distinction
-between Linux preclosed stdin and native precreation EOF. Only the separately
-bounded fresh public dependency-cache copy and complete-cache offline restore are
-included; no account, credential, application or broker cache, WAM or release effect
-is granted.
-
-The Wave's supplemental managed/caller allocation separately adds exactly
-1/6/0/25 preparation/build-test/publication/synthetic capacity, initially giving aggregate
-ceilings 36/147/30/302 with preparation host ceilings 18 Linux and 18 Windows.
-It explicitly extends each separate original 0057, 0064, 0068, 0093, 0107 and 0110
-lifetime/interference disposition only to that finite increment on the same hosts
-and within the same credential-free effects. Preserve every prior failure, charge,
-spent observation, protected reservation and unresolved lifetime status. No old
-restore/build slot is reopened or transferred; all twelve later-product build/test
-planning slots remain protected. The increment supplies no correction buffer,
-automatic retry, refund, old-state recovery, quiescence claim or broader exception.
-
-The three added D0/D1/D2 ETW creation attempts raise the aggregate maximum to eleven
-without changing the original eight reservations or consumption. Extend the bounded
-private-memory/transient-data effects and the sole-owned-session/buffer persistence
-disposition above only to these three attempts. Actual observations remain sequential,
-with independent outcome review; all other process, ownership, consumer, cancellation,
-loss and evidence stop conditions remain. Preserve passing calibration and exact-source
-correspondence before a dependent direct observation. No new helper kind, foreign
-session operation, repeated stop, cleanup or elevation is permitted.
-
-This finite extension requires the matching owner decision in the accepted Wave and
-the independently accepted protocol amendment before execution. Each reserved row still
-requires its exact protocol, source/artifact/current-input/checkpoint/call admission
-and outcome review; the controlled caller rows cannot execute before their exact
-protocol and source/tool integration are accepted. Failed or partial starts consume
-their declared attempts. Existing account and external-effects exclusions and future
-real-effects gates remain unchanged. The historical dispositions and the ETW exception
-end with the current grant and never transfer or expand automatically.
-
-The separate managed and controlled correction pool adds 3/19/0/76, initially giving
-aggregate ceilings 39/166/30/378 and preparation host ceilings 18 Linux / 21 Windows.
-It provides the missing managed build plus three complete correction cycles' equivalent
-capacity, shared only among the exact managed and controlled operations in the protocol.
-At most three restores, nineteen build/test originals, 76 synthetic units and nine
-additional D0/D1/D2 ETW creation attempts belong to this new pool. Preserve every old
-charge and protected slot, including blocked paired builds, the existing controlled
-sequence and twelve later-product build/test slots. No old allocation transfers.
-
-A failed or partial original stops and remains fully charged. A separately numbered
-corrected original needs independent cause/lifetime disposition, accepted source and
-protocol repair, exact inputs/artifacts, current accounting and literal-call acceptance.
-Within this finite grant, an independently accepted correction does not by itself need
-another owner capacity approval. Preserve the accepted remaining success-path capacity;
-no blind replay, output overwrite, refund, clock reset, cleanup or new uncertainty follows.
-The first managed build retains accepted 0120 inputs and the independently disposed
-0121 pre-dispatch failure. A build that may have written obj/bin normally needs a fresh
-charged restore; any exception must establish permitted non-overwrite semantics and
-unchanged valid input lineage from already authorized evidence.
-
-Extend the six separate 0057, 0064, 0068, 0093, 0107 and 0110 dispositions only to this
-finite increment and its declared passive work on the same hosts. Preserve their original
-failures, observations and unresolved status, including noExperimentLive=false. Extend
-the same bounded private-memory/transient-data and sole-owned-session/buffer-persistence
-ETW disposition to nine added attempts, for twenty aggregate. Existing sequential
-observation, successful exact-artifact calibration, scoped outcome review and all other
-ownership, process, consumer, loss and evidence stops remain. No new owner risk request
-is required solely for the already accepted narrow persistence case.
-
-The matching grouped owner Wave decision permits only the listed incidental OS
-console-host roles for the existing controlled compile, N1/N2/N3 native batch and
-D0/D1/D2 direct synthetic paths. Preserve the normal launcher, compiled fixtures,
-creation flags and nested Job limits. Invoke no console host directly and add no
-authored helper. The source-derived models do not establish individual historical
-identities, installed-source equality or universal platform behavior.
-
-Only the initial WSL interop console hosts are covered by the specific outside-Job
-lifetime decision. They precede the later experimental Jobs. Rely on ordinary
-platform console lifecycle and the accepted WSL requested-process completion basis,
-while explicitly retaining each such host's unmeasured identity, exit and bounded
-termination. The owner accepts possible persistence or interference only for these
-finite roles within this credential-free grant. This is not a general exception for
-unowned descendants. Explicitly launched application, owned-Job and Linux completion,
-complete captures, zero active owned-Job members and all ordinary stop conditions
-remain required. No host survey, additional ETW diagnostic, foreign-service operation,
-containment redesign or cleanup is required or authorized by this decision.
-
-Apply the Wave's grouped maxima, initially four future originals per operation,
-twenty total originals, 28 initial outside-Job hosts and 28 inside-Job hosts,
-intersected with the stricter
-remaining correction pool, protected success path, unused stages, immutable lineages,
-ETW limits and exact admissions. These are not jointly funded reservations or retries.
-The matching protocol charges compile 0/1/0/7, native 0/1/0/15 and each D0/D1/D2
-0/1/0/5; its required remaining path uses the protected 0/4/0/22 plus eight unused
-correction-pool synthetic units. Preserve all other allocations and twelve later-product
-build/test slots. No quota increases, refunds, clock resets or new passive passes follow.
-
-Extend each of the six separate historical interference dispositions only to these
-newly bounded OS-host roles. Preserve all original uncertainty, failed outcomes,
-charges, spent observations and noExperimentLive=false, including 0129's failed
-0/1/0/1 outcome and 0130's original 0/1/0/6 charge. Do not reprice, identify hosts or
-reobserve either original. This decision does not accept a new application/Job/Linux
-lifetime uncertainty. Both the narrow host decision and historical extensions end
-with this grant. Other managed builds, publication, future real-account acceptance,
-launcher replacement and account, cache, credential or installation effects remain
-outside this exception. Independently accept matching source/protocol and current
-input/artifact/checkpoint/finite-accounting/call gates before dependent execution.
-
-The Wave's controlled diagnostic continuation buffer separately adds 0/0/0/76,
-giving current aggregate ceilings 39/166/30/454. Only the existing four-target
-compile and N1/N2/N3 native operations may spend the added synthetic units. Together
-with twelve unused pool units and eight existing build/test slots, this supplies one
-compile/native pair and three contingency pairs. Preserve the existing protected
-direct path and every other reservation; stop when the needed evidence is sufficient.
-
-For the grouped bounds above, replace only the compile maximum four with six, native
-maximum four with seven, and inside-Job host-role maximum 28 with 44. Keep total
-twenty, outside-Job 28 and direct per-operation four as simultaneous stricter limits.
-Explicitly extend the six separate historical lifetime/interference dispositions and
-the narrow initial-interop OS-host disposition only to this additional finite envelope
-on the same hosts. Preserve noExperimentLive=false and all application, owned-Job and
-Linux completion requirements. These extensions end with the grant.
-
-Require the owner-approved matching Wave and independently accepted protocol before
-execution. Keep every full failed charge, exact admission, finite stage and passive
-limit, twenty-attempt ETW ceiling, and twelve later-product build/test reservations.
-No other category, helper, target, topology, account or external-effect boundary grows;
-no replay, refund, observation reset, baseline refresh, clock renewal or cleanup follows.
-
-For at most 27 new intended-operation lineages, permit at most four separately admitted
-metadata passes per immutable lineage and four fixed-selection collectors per fresh
-terminated original. Source, nonce, action or inventory revisions do not reset the limit.
-The exact protocol preserves each recipe's stricter bounds and caps this at 108 metadata
-passes, 1.6875 GiB retained metadata and 6,480 seconds, and 108 collector passes,
-216 GiB collected payload and 32,400 seconds. These are cumulative maximum allowances,
-not expected usage or a replacement for per-pass arithmetic. Passive operations must
-remain independently classified at zero experiment units; no new process or tool runs.
-Retain prior and partial snapshots without overwrite, selection expansion, predicate
-weakening or baseline refresh. No historical collector or output is reopened.
-
-The Wave's separate public-cache prospective identity admission after original 0124
-permits one bounded exception to that baseline-refresh prohibition. It covers only the
-same 1,764 admitted public dependency-cache leaves for a fresh managed restore. A fixed,
-payload-free metadata pass may supply prospective ctime observations, provided every
-other identity field equals the original descriptor. Preserve the original descriptors,
-failures and content expectations; metadata alone establishes no content or restore
-success. Independently accept the exact manifest, source, finite observation and new
-prospective inventory. The first accepted snapshot fixes the sole new baseline; every
-later ordinary input read retains strict full9, exact length and SHA-256 checks.
-
-Keep this exception within the existing intended-operation lineage, passive-attempt
-limits and charged correction capacity. It adds no survey, payload read during metadata
-collection, cache repair, download, runtime-predicate relaxation or counter reset.
-Source inputs, installed tools, the launcher, historical restored trees and outputs are
-excluded. No later pass may replace the accepted baseline or supersede a contradictory
-observation. Require the owner-approved Wave and exact protocol amendment before this
-observation; all other evidence, lifetime and effects boundaries remain unchanged.
-
-The Wave's controlled-compilation reuse extension permits only the exact two
-same-path public runtime configuration descriptors already carried by accepted
-restore 0126 from that first baseline. Their exact protocol join to original
-controlled inputs 168/169 is required before successor input acceptance in the
-existing controlled-compile lineage. This reuses the sole baseline unchanged;
-it authorizes no new metadata, cache leaf, baseline, quota, effects, comparison
-relaxation or lineage reset. Preserve full9/content checks, original descriptors,
-failures and the unknown cause of the earlier ctime differences. Any further
-contradictory observation remains a stop without replacement or readmission.
-Require the matching Wave and protocol amendments before dependent admission.
-
-The Wave's created-native-fixture decision permits only the one exclusively created
-public synthetic fixture admission in an independently admitted remaining fresh stage
-to qualify change time between write closure and separate Linux reads. Preserve the
-original write-closed identity, exact admitted content, the other eight identity fields,
-and full9 stability within each read. Keep every sampled full9 and the precise comparison
-outcomes; do not replace a baseline or use the broader compile-copy read qualification.
-Native held Windows checks and every other ordinary control remain unchanged.
-
-This accepts only the loss of that historical change-time rejection signal, not a
-benign cause or uninterrupted metadata integrity. Apply the exact
-[fixture-control protocol](experiments/windows-slice-validation.md#created-fixture-between-read-identity-qualification)
-and independently accepted source, finite evidence bounds and ordinary exact gates.
-No additional observation, settling pass, occupied-control reuse, overwrite, cleanup,
-quota or process uncertainty is included. Preserve historical failures and charges;
-the exception ends with the current grant and cannot expand or transfer automatically.
-
-The Wave's separate synthetic-native-catalog decision permits only cross-role Windows
-ChangeTime inequality for its fixed 202-leaf N1/N2/N3 catalog. Preserve strict complete
-local pin/read/held/named stability, exact admitted content, and every other cross-role
-path/object predicate. Authenticate and retain the driver's original map/digest through
-all descendant bindings; neither original nor local snapshots may be refreshed or
-replaced. This accepts the loss of an intervening metadata-change signal, not a benign
-cause or continuous metadata integrity. Apply the exact
-[native catalog protocol](experiments/windows-slice-validation.md#native-catalog-cross-role-changetime-qualification)
-only after owner acceptance and independent source/protocol review. Direct synthetic
-and real/product admission, Linux controls and unrelated inputs remain unchanged.
-No quota, process role, observer, ETW session, clock extension, cleanup or new process
-uncertainty is granted. The qualification ends with this grant.
-
-The Wave's separate synthetic-direct decision permits Linux ctime-only inequality
-within and between reads and held-input comparisons for only the fixed 200 deployed
-synthetic leaves. It also permits one non-overwrite completion of the occupied v4
-tree, retaining its 194 leaves and exclusively creating the remaining six. For that
-completion and the remaining already-funded direct originals expressly covered by
-the Wave, also qualify ctime within and between Linux reads of only the
-four fixed original SyntheticSubject artifact donors. Apply the
-[direct donor completion protocol](experiments/windows-slice-validation.md#direct-four-donor-and-194-leaf-completion)
-after the owner decision and matching amendments merge, and after exact source review.
-Preserve original descriptors, all actual ctime observations, exact admitted bytes and
-the other eight Linux identity fields. Retain the four donors' original compile
-lineage. The two Python donors and all other original donors, tools, external controls,
-private/account inputs, unrelated files and Windows predicates receive no exception.
-
-The owner decision accepts the lost ctime-only metadata/history signal and the lack of
-continuously held historical handles. The failed 24th leaf's original creation-object
-check passed, but only its first-read snapshots/content remain; do not reconstruct its
-missing creation/write-closed snapshots. Neither matching content nor the exception
-establishes a benign cause or uninterrupted integrity. Any other mismatch stops without
-repair. Keep both failed preparations' charges, partial tree and original observations;
-add no settling pass, survey, overwrite, cleanup, quota or process uncertainty. The completion is
-single-use; comparison authority expires with the grant and cannot transfer to real
-inputs or later work automatically.
-
-The Wave's v6 completion decision separately permits one non-overwrite completion
-of the 194 leaves retained by failed preparation 0149, exclusively creating its six
-remaining leaves. Apply the [exact v6 protocol](experiments/windows-slice-validation.md#direct-v6-completion-after-0149).
-Preserve original copy/readback lineage and content; the same synthetic destination
-qualification and exact four-donor qualification apply, with every other predicate
-unchanged. Local recovered artifact copies and the two Python donors remain strict.
-The owner accepts the same limited loss of a ctime-only history signal and absence
-of continuously held historical handles. No baseline is refreshed and no benign
-cause or successful outcome is inferred. Keep the failed charge, partial tree and
-observations; one newly charged D0 allocation funds the sole completion. Existing
-compilation and native evidence may be reused without another experiment. This adds
-no capacity, process role, account effect, cleanup or lifetime exception. Further
-occupied-tree adoption is excluded; the donor qualification ends with this grant.
-
-This grant permits independently reviewed narrow source/protocol corrections and its
-finite fresh owned stage versions within unchanged topology/effects; it creates no
-generic execution or discovery mechanism. Matching owner Wave acceptance and protocol
-review precede execution. Source-only review requires no experiment allocation. No new
-publication, helper/target, download, toolchain, account, WAM, credential, application or
-broker cache, installation, cleanup, signing or release effect is granted. Exhaustion or
-an expanded boundary requires a new decision; all dispositions end with this grant.
-
-
-
 Delete only identified experiment-owned artifacts when cleanup is safe. Retain normal
 selected-account session or secure-cache updates when the protocol declares that outcome.
 Deleting local files does not reverse provider-side authentication, consent, or session
@@ -835,10 +436,9 @@ Stop the experiment if:
 - native or cross-host execution accesses an environment not covered by the protocol;
 - remaining authorized attempts or cumulative capacity cannot be established;
 - experiment-controlled work cannot be stopped within the declared bounds, or safe
-  ownership cannot be established for cleanup, except for the case-specific original
-  Issue #108 invocation 0057, publications 0064, 0093, 0107 and 0110, fixture 0068,
-  and the retained-launcher allocation's sole-owned-ETW-persistence exception in
-  Termination and Retention, each within its exact accepted scope;
+  ownership cannot be established for cleanup, except within the exact
+  [Windows Slice standing dispositions](#windows-slice-standing-risk-dispositions)
+  recorded in the accepted Wave;
 - the subject's source or artifact identity no longer matches the accepted protocol; or
 - continuing would mutate an unrelated account, installation, or remote resource.
 
@@ -846,324 +446,129 @@ The historical Issue #1 rules additionally retain their unconditional WSL-to-Win
 prohibition, source-integrity checks, and proved all-exit quiescence before cleanup or
 asset access. Those specialized rules are not a general experiment framework.
 
-## Direct Observer Diagnostic Continuation
+## Windows Slice Outcome Authorization
 
-The Wave's direct observer diagnostic continuation adds only 0/7/0/43, giving current
-aggregate ceilings 39/173/30/497. It funds at most four separately admitted four-target
-compile/D0 pairs, one necessary and three contingency pairs, while retaining protected
-D1/D2 and later-product work. Each pair costs 0/2/0/12. Stop after sufficient evidence;
-failed starts retain their complete charge and ordinary independent failure disposition.
+For Issue #108, the accepted
+[Wave](../delivery-wave.md#first-windows-authentication-slice-implementation-and-scenario-acceptance)
+owns the complete bounded outcome, delegated necessary work, shared capacity,
+normal account effects, standing risk dispositions and exclusions. The existing
+[Windows protocol](experiments/windows-slice-validation.md#outcome-based-execution-and-accounting)
+owns exact finite recipes, cumulative accounting and execution/acceptance gates.
+No Issue, protocol, source guard or unused quota is an independent grant.
 
-The same seven added build/test originals replace the pool build/test ceiling 19 with
-26, the pool original maximum 22 with 29, and the total path maximum 27 with 34.
-Preserve the three-restore ceiling, all spent counts and the separate 27 immutable
-passive-lineage/108-pass limits. This adds no allocation beyond 0/7/0/43.
+This alignment replaces the earlier Issue #108 operation-specific capacity and
+owner-approval extensions in this policy. It does not modify the historical
+Issue #1 rules above, erase an observation, reopen an original invocation or
+waive source, artifact, privacy, ownership or evidence requirements.
 
-Retain native evidence when its source, artifacts and exercised behavior are unchanged.
-Direct diagnostics use only fixed numeric source locations and input ordinals within
-the existing pipe/final-record caps. No private values, exception text, raw traces,
-new process roles, broader identity qualification or additional telemetry is included
-in that diagnostic decision. The separate direct comparison decision below is the
-only added Windows qualification for the direct synthetic catalog.
-A new observer requires its own exact artifact acceptance and D0 calibration.
+### Delegated preparation and correction
 
-Apply grouped maxima compile ten, native seven, D0 seven, D1/D2 four each, total 25,
-inside-Job console hosts 62 and outside hosts 28, together with all stricter limits.
-Fresh compile stages v16-v19 and direct deployments v5-v8 remain within dedicated
-experiment roots; occupied roots are retained. Passive lineage/pass, per-original
-clock, ETW twenty-session and all other effects limits remain unchanged.
+Routine artifact discovery, bounded passive reads, durable-copy recovery,
+materialization, preflight, safe evidence collection, diagnosis and supported
+correction are necessary technical work under the Wave. A new public input,
+destination, operation number or protocol recipe is not itself a material effects
+boundary or a new owner decision. The exact input set and recipe still require
+the applicable internal review before execution; passive work must be independently
+classified and finitely bounded rather than silently treated as free execution.
 
-Extend only the same six historical and already accepted platform-host/sole-owned-ETW
-persistence dispositions to this finite scope. Preserve noExperimentLive=false and all
-historical charges and uncertainty. No new application, Job or Linux lifetime exception
-is granted. Source/control/protocol and exact-call review remain required; this section
-alone does not activate a source or authorize a retry.
+An independently accepted recipe may allocate a finite batch and correction
+buffer from the remaining common capacity. The protocol maintainer may revise
+technical allocations within the same authorized outcome and maximum effects.
+Preserve all consumption, including failed/partial starts. Do not keep an old
+stage or helper quota as an additional owner gate after its allocation has been
+superseded. A per-experiment timeout, ownership boundary, validated identity
+predicate or confidentiality rule remains effective until properly amended.
 
-## Synthetic Direct Cross-Role ChangeTime Qualification
+After a failure, accept its outcome and scoped completion, identify a supported
+correction, and accept the revised exact source/input/call before a further
+attempt. In-boundary correction needs no repeated owner scope/risk approval.
+Unknown ownership or a material safety failure stops dependent execution; inert
+preparation and investigation remain possible within their own admitted limits.
+Do not use retries to change effects, hide failure, overwrite outputs or reset a
+deadline. New material risk and unresolved findings needing owner judgment retain
+their ordinary disposition requirements.
 
-The Wave's separate direct-catalog decision permits only cross-role Windows
-ChangeTime inequality between supervisor and worker for the fixed 200-leaf D0/D1/D2
-synthetic catalog. This supersedes the diagnostic continuation's full cross-role
-baseline-equality requirement only within that scope. Preserve strict complete local
-pin/read/held/named identity stability, including ChangeTime; all other header,
-ordered-path, object and exact admitted content comparisons remain mandatory.
-Retain both local baselines and use the supervisor's original digest for downstream
-record binding only after every required projection agrees. No baseline is refreshed.
+### Artifact correspondence and identity
 
-The owner accepts the loss of the intervening metadata-change rejection signal,
-not a benign cause, continuous metadata integrity or successful calibration.
-Apply the [direct comparison protocol](experiments/windows-slice-validation.md#direct-catalog-cross-role-changetime-qualification)
-only after the specific owner decision and matching record acceptance. Native
-pinning, real/product admission, Linux controls and unrelated inputs are unchanged;
-this exception cannot transfer automatically. Use existing finite correction capacity,
-fresh stages, independent source/artifact/call gates and new D0 acceptance for changed
-observer bytes. Preserve all failed charges, protected work, historical uncertainty
-and containment. Add no observation allowance, process role, helper, clock
-extension, cleanup, occupied-tree reuse or new process uncertainty. Existing
-per-original observations and ETW reservations remain charged. The
-qualification ends with the current grant.
+A fresh bounded acquisition may recover accepted public artifact bytes into new
+durable retention. Preserve the original failed publication and spent collectors.
+Current content agreement cannot establish historical clock/handle continuity,
+natural Job drain, skipped postconditions, original success or global quiescence.
+Independently join the new copies to the accepted necessary source, dependency,
+toolchain, native-image, required-asset and symbol/provenance conclusions before
+using them. Missing necessary provenance blocks that artifact route. An alternative
+reviewed publication remains subject to its own accepted exact recipe and gates.
 
-## Synthetic Direct v7 Completion and Public Donor History
+Mutable publication outputs are eligible fixed byte sources for an admitted
+passive recipe, not automatically eligible executable subjects. Executable use
+requires independently accepted retained correspondence and deployment. Public
+PDB/object evidence does not silently become a runtime companion inventory.
 
-The Wave's single-use v7 completion permits one retained leaf and 199 exclusive
-creations, reusing the accepted observer without another compile. Apply the
-[exact v7 protocol](experiments/windows-slice-validation.md#direct-v7-completion-and-public-donor-history)
-only after matching record acceptance and independent source/input/call review.
-The fixed 196 NTFS public original donors may differ only in ctime between their
-historical expected and current opened identities. Require the original ordered
-role/path/descriptor, the other eight fields and a new exact length/hash/EOF read.
-For the 194 runtime/host/observer donors, retain strict full9 within each read;
-the two SyntheticSubject donors retain their separate existing qualification.
-Four local donors, external controls, infrastructure and unrelated inputs stay strict.
+Apply the owner's standing historical Linux ctime qualification to admitted
+input roles without a per-file question. Preserve original descriptors, fresh
+exact accepted length/hash/EOF, every other required identity comparison and
+the applicable within-read checks. This does not establish a benign cause or
+uninterrupted integrity. Existing stricter and role-specific Windows ChangeTime
+and synthetic-direct comparisons remain as defined in the accepted exact
+protocol and source; this policy creates no generic comparison switch or new
+within-read relaxation. A fresh observed identity is not a replacement historical
+baseline. Previously accepted prospective cache identities retain their exact
+scope and required content/provenance join.
 
-The owner accepts loss of that historical ctime signal and reuse without continuously
-held historical handles. Matching content does not establish a benign cause or
-continuous metadata integrity. Preserve original baselines and actual observations;
-prior hashes cannot replace the new read. The donor qualification applies only to
-this completion and ends with the grant. Existing deployed-catalog rules remain.
-Use one already funded 0/1/0/5 allocation, with only D0's submaximum raised to eight;
-add no aggregate quota or observation allowance. Preserve failed charges, protected
-work, all six historical unknowns, `noExperimentLive=false`, named Jobs/cgroups and
-existing ETW dispositions. No overwrite, repair, extra survey, clock extension,
-new process uncertainty or account effect is included. Failure cannot renew adoption.
+### Real-account acceptance
 
-## Direct ETW Failure Diagnostics and Finite Continuation
+The Wave's normal real-account effects and shared real-stage capacity apply to
+the existing selected personal/work roles on the designated Windows interactive
+host. Before execution, independently accept the exact roles, Profile/registration,
+authority/scopes, current state and permitted ordinary WAM updates. Preserve the
+external Profile gate, strict account selection, silent-first ordering and final
+result validation. No work-account or first-use claim follows from a personal
+existing-state observation. WSL requires its actual cross-host protocol and
+evidence; native R1/R6 does not consume or require the retired ETW observer.
 
-The corresponding Wave increment adds only 0/8/0/46, producing aggregate ceilings
-39/181/30/543 and, with two previously unspent synthetic units, four compile/D0
-pairs at 0/2/0/12 each. One pair supplies the instrumented observation; three are
-contingent correction capacity. Stop after sufficient evidence. Each failure
-retains its full charge and needs independent disposition and a concrete repair
-before another original. Old protected work, D1/D2 and twelve later-product slots
-cannot be transferred into this pool.
+Keep selectors, private equality checks, tokens and raw result validation local
+to Windows. Export only the accepted safe outcome fields. Request actual human
+readiness/input when the admitted operation needs sign-in, choice, delegated
+consent or unlock, after completing its automated preparation. Do not ask the
+owner to attend merely to watch automation or renew an already accepted effects
+decision. Administrator consent, account addition/removal, cache clearing/import,
+registration changes, authenticated resource requests and remote mutation remain
+outside this stage.
 
-For the same increment, shared build/test, shared total and path-original maxima
-become 34, 37 and 42. Grouped compile/D0/total maxima become 13/12/33; outside and
-inside console-host roles become 35/79. Native seven, D1/D2 four each, ETW twenty,
-passive 27 immutable lineages/108 passes, and stricter local limits remain. Use only
-exclusively fresh compile v19-v22 and direct v8-v11 stages. Admission must prove
-remaining lineage/pass capacity, not infer it from the larger execution allowance.
+Before account effects, review the operating basis and relevance of the known
+historical process/interference uncertainties. Credential-free exceptions are not
+an account-effects risk waiver. A still-material unresolved interference risk
+needs concrete disposition before dependent execution; technical evidence that
+establishes an adequate operating basis does not require another owner approval.
+Do not infer closure from a reboot, file hashes, process labels or an empty output.
 
-Synthetic failures may preserve a numeric first-source location, UInt32 native
-status and creation/stop/drain bits within the existing 40-byte pipe and 4,096-byte
-record. Latch the first cause before cleanup, including callback-thread failures;
-keep later cleanup outcomes separate. Missing facts remain unknown. This adds no
-platform query, trace, helper, snapshot, raw payload, exception text or private
-value. Successful frames, strict acceptance and real-role diagnostics stay unchanged.
+## Windows Slice Standing Risk Dispositions
 
-A synthetic post-query shape rejection may retain exactly the six public numeric
-fields already returned by its successful normal query: BufferSize, MinimumBuffers,
-MaximumBuffers, NumberOfBuffers, LogFileMode and EnableFlags. The specialized frame
-keeps the 40-byte cap, explicit availability, first-cause semantics and original
-creation/stop/drain mask; its final record keeps the 4,096-byte cap. Capture no raw
-property buffer, pointer, path or additional field. Preserve every rejection bound
-and ETW option. This diagnostic correction adds no query, experiment, activation,
-deadline or residual-lifetime disposition; subsequent execution keeps its exact gates.
+The Wave explicitly continues the six separate historical lifetime/interference
+dispositions for 0057, 0064, 0068, 0093, 0107 and 0110 only for credential-free
+work on the same hosts within the common technical pool. Preserve each failed
+result, charge, spent observation, distinct unknown and `noExperimentLive=false`.
+These dispositions do not accept a new unknown application, owned-Job, Linux or
+privileged-process lifetime, permit old-process cleanup, establish termination,
+waive evidence or transfer to another grant. Their historical observations and
+producer rules remain recoverable in Git and the retained protocol evidence.
 
-Preserve accepted native and SyntheticSubject dependencies. Carry the accepted
-historical ctime/content qualification forward for the 196 fixed donor roles.
-Rows 1-190 and 195-196 retain original paths/descriptors; observer rows 191-194
-use the newly accepted corresponding compile-stage artifact descriptors. No other
-descriptor is refreshed. Fresh hashes, lengths,
-EOF and all other required identity fields remain mandatory; runtime/host/observer
-within-read full9 and local/control inputs stay strict. The two SyntheticSubject
-donors and deployed catalog retain their existing narrowly scoped qualifications.
-No occupied stage or deployment is reopened.
+For the already admitted initial WSL interop console-host roles, retain the
+accepted ordinary platform console lifecycle and WSL requested-process completion
+basis. Preserve unmeasured host identity/exit separately from explicit application,
+owned-Job and Linux completion. The exact new recipe must account for actual
+roles; no universal unowned-descendant exception, host survey, direct console-host
+invocation, foreign-service operation or shared-state cleanup is created.
 
-Existing historical process and platform-host/sole-owned-ETW risk dispositions
-continue within this finite credential-free scope on the same hosts. Keep all
-spent charges, `noExperimentLive=false`, creation-time named Jobs/cgroups and
-original clocks. No new application/Job/Linux lifetime exception, permission
-change, account effect, download, restore or publication follows. Ordinary exact
-source, artifact, input, call and outcome gates precede dependent execution.
+Retain the sole-owned-ETW-session/buffer persistence disposition for already
+recorded credential-free attempts. Persistence alone, after independent failure
+disposition, supplies neither successful calibration nor trace/native termination
+evidence. Preserve ownership/session identity, failed result and full charge;
+unknown ownership, consumer, OVERLAPPED, loss or native-process issues still stop
+dependent work. This migration creates no ETW session or additional stop/cleanup
+authority. The retired elevated entry and diagnostic chain remain stopped.
 
-## Compile Public-Donor Historical ctime Qualification
-
-The matching Wave applies the existing content/ctime decision to only the closed
-365 original public compile donors: 167 references, 197 toolchain leaves and one
-apphost template. Preserve their original paths/descriptors and exact accepted
-catalog/inventory linkage. A fresh read must establish exact length, SHA-256, EOF
-and all eight non-ctime identity fields against that original descriptor. Only the
-historical ctime comparison may differ; retain both operands without refreshing
-the baseline. All nine fields must still agree within each read. This loses only
-the historical ctime-change signal and establishes no benign cause or continuous
-integrity. Generic pinning, 48 local source/control inputs, infrastructure, Windows
-held-object checks, native and real/product rules remain unchanged.
-
-Use the existing finite continuation pool, remaining fresh compile v20-v22 stages
-and unused direct v8-v11 roots after the ordinary independent gates. Preserve full
-failed charges and occupied trees. No new capacity, observation, helper, metadata
-pass, retry, overwrite or cleanup is added; this qualification expires with the
-current Wave grant.
-
-## Retained Elevation Entry for Synthetic Direct Diagnostics
-
-The matching Wave permits a single temporary administrator entry for D0/D1/D2 on
-the same designated Windows host. The owner accepts its retained privilege during
-analysis, correction and independent review. Apply the
-[entry protocol](experiments/windows-slice-validation.md#retained-elevation-entry-for-synthetic-direct-diagnostics)
-and source/artifact/call gates before execution. Complete launch and automatic
-shutdown preparation before requesting fresh readiness for the UAC/manual handoff.
-The owner can leave after the actual elevated relay and its bounded ownership are
-confirmed; watching automated work is not required.
-
-Only the entry infrastructure may remain between attempts, up to 86,400 seconds
-from successful elevated entry start, including idle/review time. No deadline
-renewal, automatic relaunch or open-ended privileged command service is permitted.
-This is the sole exception to the current synthetic allocation's no-elevation and
-no-live-process-waiting-for-review rules. Actual test processes, their owned ETW
-sessions and all observations retain their original shorter bounds and separate
-outcome gates. A failed D0 still blocks D1/D2.
-
-Require creation-time named Job ownership for the Windows entry child, a named
-Linux scope for its holder, and an actual fixed child-token check through the new
-relay. Preserve the distinction between Windows Job membership, Linux containment,
-relay lifetime and ETW closure. End the entry on completion, owner stop, deadline,
-or inability to continue within the accepted scope. Observe its owned termination;
-closing a window is insufficient. Keep shared WSL infrastructure under the existing
-workstation/platform-host premise; do not stop a shared service or the distribution.
-No new unknown application, Job, Linux or elevated-relay lifetime is accepted.
-
-Use existing correction capacity for the one compilation and activation. The
-permission covers only the fixed validation harness and credential-free synthetic
-subjects. No persistent privilege/group/ACL/policy/registry/service/task change,
-real account access, product elevation, download, installation or old-session
-cleanup follows. Retained artifacts and existing historical risk decisions remain
-unchanged; elevation success does not establish ETW or scenario success.
-
-## Pre-UAC Input-Check Continuation
-
-The matching Wave permits ten bounded Linux compilation/native input-check pairs
-and one replacement retained entry after the failed first activation. The owner
-accepts the finite increment 10/11/0/26 and aggregate ceilings 49/192/30/569;
-Linux/Windows preparation ceilings become 29/20 and outside/inside console-host
-ceilings 46/80. Preserve the entire old correction balance 0/4/0/23 and all
-protected work. Entry-specific maxima are eleven compilations including the spent
-first one, ten input checks and two activations including the failed first one.
-Other original, grouped scenario, ETW and passive limits do not increase.
-
-Apply the [exact continuation protocol](experiments/windows-slice-validation.md#pre-uac-input-check-continuation)
-and ordinary independent gates before any compile or check. A check runs only the
-same pre-UAC input-admission path used by launch, with finite numeric statuses, and exits before
-Launch. It has no UAC, child, Job, relay, account, credential or ETW operation. Its
-thirty-second external interval includes termination. The Linux controller and
-normal native return require scoped evidence; killing an interop proxy, complete
-streams alone or a timed-out call cannot establish native completion. Any new
-unresolved application lifetime stops continuation. The already accepted initial
-interop-host limitation remains distinct from application completion.
-
-Carry the six existing historical process/interference dispositions and the
-platform-host/sole-owned-ETW persistence decisions into only this finite allocation
-on the same hosts. Preserve unresolved status, full failed charges and
-`noExperimentLive=false`; no new application, Job, Linux or elevated-relay uncertainty
-is accepted. A check creates no ETW, and the retained entry does not itself grant a
-D0 attempt. This extension expires with the current Wave and cannot transfer.
-
-Use fresh dedicated check/compilation evidence roots. Do not reopen old outputs,
-repair occupied payloads or refresh input baselines. A successful check must bind
-the exact unchanged four-file activation payload; it writes no activation marker.
-A failed pair needs independent outcome and scoped-completion acceptance plus a
-concrete correction before another pair. Stop after sufficient evidence.
-Only after accepted actual input-check success and complete launch/shutdown
-preparation may the one replacement activation request fresh readiness. Its full
-charge is spent even on failure; no further prompt or deadline renewal follows.
-The original retained-entry 86,400-second absolute cap, owned closure, synthetic-only
-permission and all individual test clocks remain unchanged. No persistent permission
-or account changes, restore, download, installation, publication or release follow.
-
-## Complete Retained-Entry Recovery and Continuation
-
-The matching Wave authorizes one complete credential-free recovery sequence under
-[its protocol](experiments/windows-slice-validation.md#complete-retained-entry-recovery-and-continuation).
-This adds a bounded observation path for original 0179's two recorded native
-incarnations and exact relay, not permission to ignore uncertain ownership. Before
-other experimental continuation, independently accept their current closure: neither
-original native incarnation remains active and the exact relay is absent. Preserve
-unobserved original exits/timing and all historical dispositions. Current reconciliation
-does not reconstruct past completion or diagnose the failed context predicate.
-
-One fixed non-elevated observer may query each of the two literal PIDs once with
-limited-query and synchronize rights, sample creation and held-handle exit state,
-and return normally within thirty seconds including transport termination. One Linux
-no-follow metadata sample covers only the recorded relay. Distinguish PID absence,
-reuse, matching exited/live incarnation and access/query failure. A present, changed
-or inaccessible relay does not pass. No process survey, extra rights, image/token/
-account inspection, relay connection, termination, shared-service action or UAC is
-part of reconciliation. The observer's own native completion and transport scope
-must be established; timeout or killed proxy is insufficient. An unresolved result
-stops dependent execution without replay or inferred risk acceptance.
-
-Fund at most 2/3/0/10 and five passive passes totaling at most 210 seconds/32 MiB
-from existing capacity, preserving protected work and the old 0/4/0/23 reserve.
-Only the accepted reconciliation may execute while closure is unresolved; inert
-source/diagnostic/corrective preparation remains permitted. All source, artifact,
-input, exact-call and outcome gates remain. Code fixes require supported findings;
-generic failure records do not justify guessed causes or arbitrary relaxed predicates.
-
-The single additional retained entry raises only its activation submaximum to three.
-It must preserve original 0179's absolute deadline rather than restart a 24-hour clock.
-Bind that deadline before input validation and UAC; refuse admission when insufficient
-time remains for startup and bounded closure. Fresh attendance follows completed
-preparation. A failed activation consumes its full charge without another prompt.
-Apply existing ordinary D0/D1/D2 clocks, ETW controls and outcome dependencies.
-
-No additional owner approval is needed for each technical step inside this complete
-accepted sequence. Separate owner decisions remain necessary for actual expansion
-of its effects/capacity or disposition of uncertainty beyond the declared current
-reconciliation. Standing historical ctime acceptance remains unchanged.
-
-### Pre-Query Reconciliation Correction Allowance
-
-The matching Wave permits at most two additional bounded reconciliation controller
-originals under the [exact allowance](experiments/windows-slice-validation.md#pre-query-reconciliation-correction-allowance).
-The second requires independently accepted failure before native observer creation or
-subject-relay observation, complete scoped completion and a concrete supported correction.
-Across them, at most one native observer may start and one subject relay may be sampled.
-Unknown or observed subject state does not permit another observation. Preserve every
-failed charge, spent collector and occupied root; no replay, recollection or cleanup follows.
-Only the original accepted native executable and selector may be adopted unchanged,
-with at most one exclusive native-result creation in their fixed Windows root. The owner
-accepts reuse without continuously held historical inputs. Preserve original descriptors,
-fresh exact length/hash/EOF and all non-ctime fields; apply standing historical ctime
-qualification only at the admitted comparisons and retain strict within-read full9.
-Neither matching content nor frozen absence proves continuous integrity or present
-absence. Fresh Linux controllers must not invoke, alter or repair the old holder.
-Existing files and prior outputs remain untouched; the native CreateNew-before-query
-guard supplies occupancy rejection without a new output probe.
-
-Use only the existing correction pool, at most 0/2/0/4 and two separate thirty-second,
-eight-MiB passive passes. Complete sequence maxima become 2/5/0/14 and seven passes,
-270 seconds and 48 MiB; no aggregate ceiling, protected work, ETW or metadata limit
-increases. Accepted current closure still precedes dependent entry execution. Original
-absolute deadline, one further entry/UAC maximum and all ownership obligations remain.
-This is additional finite attempt authority, not residual-risk acceptance. Standing ctime
-and already admitted infrastructure matching require no renewed owner risk decision.
-
-### Standing Historical ctime Qualification
-
-The matching Wave records the owner's standing acceptance of historical Linux
-ctime drift for already admitted input roles in the current finite credential-free
-grant. Another admitted file with that same drift does not require another owner
-risk decision. This replaces per-input risk escalation for this historical signal;
-new input/effect/attempt authority still requires its ordinary accepted records.
-
-Preserve original descriptors, all other historical identity fields and fresh
-exact admitted length/SHA-256/EOF validation. Existing within-read checks retain
-their separate accepted rules; this standing decision adds no within-read
-relaxation. Retain original and actual observations without baseline replacement.
-Do not infer a benign cause, continuous integrity or current content agreement
-from a ctime mismatch alone. Exact historical comparison points remain defined
-and independently reviewed in the applicable protocol and source.
-
-For the retained-entry payload, apply the
-[closed qualification protocol](experiments/windows-slice-validation.md#entry-payload-historical-ctime-qualification)
-to the original successful check 0164's four files before replacement 0179. This
-qualifies only their historical ctime comparison in the preceding unchanged-payload
-requirement; all other correspondence and full9 within-read stability remain.
-Allow at most one separately admitted local-control qualification readback,
-0/0/0/0 and thirty seconds including termination, after accepted failure/triage
-and matching canonical/source/call gates. Failure grants no further readback or
-readiness. Actual source/artifact/input correction still requires a new charged
-successful check. No compile, metadata survey, Windows start or quota is added.
-All lifetime, evidence, readiness and closure rules remain. The standing decision
-expires with the current grant; this readback is limited to this replacement.
+All new execution retains finite recipe bounds, original clocks, identifiable
+creation-time owned Jobs/scopes, complete transport and scoped outcome evidence.
+Historical risk acceptance is not artifact acceptance or an exemption from those
+checks. Normal real-stage effects retain the operating-basis rule above.
