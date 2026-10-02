@@ -792,14 +792,15 @@ def checkpoint(a, budget, reserved=False):
     require(set(c['historyParents']) == set(PARENTS), 'Current four-parent projection')
     for role, path in PARENTS.items():
         expected = c['historyParents'][role]
-        require(type(expected) is list and len(expected) <= 128 and expected == sorted(set(expected)),
+        maximum = 256 if role == 'windowsActions' else 128
+        require(type(expected) is list and len(expected) <= maximum and expected == sorted(set(expected)),
                 'Parent projection schema')
         if reserved and role == 'windowsActions':
             expected = sorted([*expected, a['action']])
         if reserved and role == 'windowsProjectionRoot':
             expected = sorted([*expected, 'named-fixtures-' + a['action'],
                                *(['confidential-checks-v22'] if a['suite'] == 'compile' else [])])
-        require(names(path, 128, budget) == expected, 'Current parent membership changed')
+        require(names(path, maximum, budget) == expected, 'Current parent membership changed')
     return before, charge, after
 
 
