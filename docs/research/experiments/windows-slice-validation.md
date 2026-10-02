@@ -202,6 +202,23 @@ original publication, global quiescence, installation, release or Slice completi
 is established. All later execution retains the current Wave boundary and exact
 acceptance gates.
 
+### Accepted recovered product result
+
+The separately admitted acquisition and its sole four-output collection each
+returned ordinary zero with complete original transport. Observed original
+intervals were 1.340 seconds and 0.112 seconds, within their respective 70-second
+and 30-second bounds. Independent outcome/context review accepted the four-output
+snapshot, 5,346 bytes, SHA-256
+`f7ed12a5604ed8cf56b27071e0663735a35a67d9981be1409b9b993b927ea272`,
+and explicitly joined the new CLI/DLL bytes to the unchanged accepted contextual
+artifact basis. The two immutable leaves are eligible donors for separately
+admitted materialization. Sealed producer flags remain their producer-time facts.
+
+This result adds no technical or real-stage charge and refunds no reserved passive
+capacity. Original 0110 publication remains failed. Historical uncertainty and
+`noExperimentLive=false` remain; this result supplies neither historical closure
+nor loader, account, WAM, UI, reuse, WSL, release, support or Slice acceptance.
+
 ## Native Windows Selected-Account Acceptance Preparation
 
 This section prepares the first product authentication observation for Issue #108.
@@ -350,10 +367,13 @@ rerun spent collectors, or accept matching executable hashes without provenance.
 | Profile | [Public template](../../../tools/validation/selected-account-inputs/profile.json) to `product\\selected-account-profile.json` | 568 bytes, SHA-256 `b7b26fb3bcedeca62087dc3818e858dd9184ca37dbc9eb0abcbd310a839a2c75`, accepted Profile contract and default-scope operation association. |
 | Controller/templates | Accepted controller source to `control\\Invoke-WindowsSelectedAccount.ps1`; [R1](../../../tools/validation/selected-account-inputs/R1.template.json) and [R6](../../../tools/validation/selected-account-inputs/R6.template.json) to `control\\R1.template.json` and `control\\R6.template.json` | Exact accepted bytes; the only controller activation edit is its false guard. Null-email templates cannot be used as private requests. |
 
-The proposed public materialization covers one Linux transfer original and one
-ordinary Windows preparation invocation, 180 seconds each including finite stop
-and evidence. Its combined caps are 96 MiB of payload, 128 MiB written and
-512 MiB read including readbacks and receipts. It starts no product or native
+The public materialization covers one Linux transfer original, at most 180
+seconds including finite stop, and one ordinary Windows preparation invocation
+through the existing normal 0070 launcher, at most 330 seconds of work plus its
+unchanged ten-second owned cleanup. This longer preparation envelope reuses the
+accepted launcher rather than adding a supervisor. The actual account call keeps
+its separate 180-second cutoff. Combined public caps are 96 MiB of payload,
+128 MiB written and 512 MiB read including readbacks and receipts. It starts no product or native
 caller, downloads nothing, and performs no restore or product compilation. Use
 only the fixed source list, not directory enumeration, broker/account stores,
 process state or other experimental outputs. Retain complete and partial owned
@@ -384,6 +404,123 @@ and controller must be recovered; an incomplete source list is not runtime evide
 The actual public plans bind the destination identities in `callerPins` and
 `productPins`, including the Profile. The `ActualAdmission` typed schema remains
 the consumer; do not add outer-wrapper fields to it.
+
+The concrete public preparation uses three inert supporting assets:
+
+| Asset | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [Linux transfer](../../../tools/validation/transfer_selected_account_public.py) | 11191 | `54de9a475c165d5af2766360b1bd144e76ac2928957adb256549c4cd78b097fd` |
+| [Windows adapter](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 9882 | `0cfadbe81fef8e80fde724eb13b305e9513420fe72398695fb6c482e7d6df890` |
+| [Native file checks](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 11600 | `a253cd2e90a69de45154ad5a2c78a342af988bc2c90a3d69a776be051719722a` |
+
+The adapter is copied to the normal launcher's required
+`Invoke-WindowsNamedGuardFixtures.ps1` name in the exclusively created
+`C:\Temp\azureauth-windows-slice-108\named-fixtures-0186` root. Its only
+activation is `$PreparationAdmitted = $false` to `$true`. The canonical source
+remains false. Reuse the exact 23,040-byte 0070 launcher, SHA-256
+`5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a`,
+with its existing four arguments, environment, PowerShell pin, creation-time named
+Job, capture limits, original handles, completion and finite cleanup. Separately
+admit the actual launcher donor/current input and original Linux dispatch; do not
+infer usability from its historical filename or start a new launcher compilation.
+Its hidden-console mode is suitable for this public preparation only; it cannot
+supply the real call's existing ordinary-console premise.
+
+Nonexecuting local preparation exclusively creates the eight public control
+inputs beneath
+`/home/shuaizhang/.local/state/azureauth-108-recovery-20260929/selected-account-public-inputs-v1`.
+These are `authority.json`, the activated adapter with its fixed launcher filename,
+`SelectedAccountMaterializationPins.cs`, `caller-inventory.json`, the Profile,
+activated `Invoke-WindowsSelectedAccount.ps1`, and the two null-email templates.
+The real controller's sole activation change is its false guard; canonical source
+remains false. Copying that reviewed activation does not admit account execution.
+The two payload inputs remain exclusively the newly accepted immutable recovered
+leaves. No original publication path is read again or becomes an execution subject.
+
+The transfer's `ADMISSION=None` is activated only with `stageParentFull5` and
+`sources`, where every one of the ten fixed leaves has exactly `path`, `bytes`,
+`sha256` and lossless `full9`. Its source enforces literal prepared-input and
+recovered-pair paths. Current authority, reviewed activations, retained acceptance,
+parent/runtime identities and all source descriptors are bound by the independent
+exact-call gate. Held no-follow ancestry, strict source and readback full9, exact
+hash/length/EOF, exclusive outputs, fsync and final held/named checks are required.
+Created-copy observations retain all ctime values; read continuity starts after
+the mutating descriptor closes and remains strict. Partial roots stay occupied.
+
+Transfer start and result are at most 16 KiB and 32 KiB. It enforces 128 opens,
+1,024 metadata operations, 8,192 reads/writes, 32 MiB requested reads, 16 MiB write
+requests, 128 MiB address space and 170 CPU seconds. These counts concern source
+file/transport work; installed interpreter/watchdog startup retains separate
+admission. Source work lasts at most 170 seconds from constructor entry. The
+admitted GNU watchdog begins before interpreter startup, TERM at 175 seconds and
+KILL grace at most five seconds. No child or Windows subject is started by transfer.
+The fixed failure stderr is charged before its one best-effort attempt and is
+suppressed if the existing write budget, cancellation or deadline prevents it.
+A failed write is not retried. Close each detached owned descriptor once.
+Original ordinary zero, complete
+transport and new reader/watchdog completion are required before Windows dispatch.
+
+The authority is strict public JSON hashed by the launcher. The adapter checks its
+schema `selected-account-public-preparation-authority-v1`, action, fixed roots,
+accepted product-context flag and original caller commit. Exact input review binds
+its accepted commit/Wave/safety/protocol and review hashes, controller/native source,
+public Profile/templates and caller inventory. `caller-inventory.json` is a derived
+interchange, not another manually maintained catalog: schema
+`selected-account-caller-materialization-v1`, original `sourceCommit`, and the
+complete 194 `rows` with `relative`, `bytes` and `sha256`. Regenerate it only from
+the previously admitted original-0130 catalog and artifact basis; independently
+compare all rows, exact membership and 81,083,019-byte total before use.
+
+The adapter reads only fixed bootstrap leaves, compiles the admitted public C# 5
+Win32 type with existing Windows PowerShell 5.1 `Add-Type`, and exclusively creates
+the fixed account destination. No restore, product build, account discovery or
+product/caller execution occurs. Compiler transient files stay under the normal
+launcher's dedicated TEMP/TMP root, within the same Job. Accept actual compiler/
+Framework startup and finite byte/process accounting before dispatch; this is one
+validation-helper compilation, not a new toolchain installation.
+
+The native type derives its no-reparse ancestry, deny-delete directory holds,
+regular/single-link/final-name checks, native snapshots and create/write/readback
+identity joins from `FixtureNativePins`. It hashes each fixed donor while retaining
+its deny-write/delete read handle, copies through that handle, flushes, and accepts
+only exact held destination hash/length/EOF with unchanged volume/index/creation
+identity across the writer/readback gap. It retains every donor and output read
+handle through final checks. Current donor snapshots are current observations
+joined to admitted byte provenance; they are not invented historical identities.
+Fresh output identities are actual materialization observations for the later
+`ActualAdmission` consumer, never translated Linux or synthetic first-held pins.
+
+The native limits are 512 held resources, 128 directories, 4,096 opens, 32,768
+metadata/read/write operations, 448 MiB requested reads and 128 MiB payload writes.
+Bootstrap reads share an enforced 8 MiB requested-byte/8,192-call cap across
+all four leaves, charging each full request and EOF probe before I/O without
+refunds for short returns. Native 448 MiB, transfer 32 MiB, bootstrap 8 MiB and
+collection 1 MiB sum to 489 MiB; reserve the remaining 23 MiB for other admitted
+source/control requests within the unchanged combined 512 MiB ceiling. Exact-call
+review must bind that remaining work. Installed interpreter/Framework/compiler
+startup retains its separate operating/accounting admission; these source/evidence
+request counters do not assert an exhaustive census of OS reads.
+
+The adapter further requires exactly 200 copied leaves, at most 64 new child
+directories and the shared 96 MiB payload cap. Its public result is at most 256 KiB
+and includes both current source and destination native identities. Work/checks
+finish before its original 300-second cutoff, owned handle closure before 310,
+and exclusive flushed receipt/return before 320. These do not renew the launcher's
+original 330+10-second envelope. The receipt's `passed` flag is provisional; accept
+only with timely ordinary original zero, terminal launcher exit, root exit, native
+Job zero and both EOFs. Timeout/forced stop/partial result is failure and never
+establishes content acceptance or permits another attempt automatically.
+
+Reserve one helper build/test and the independently established maximum synthetic
+process charges from the existing common pool before Windows dispatch. Reserve
+finite passive transfer and result collection from the same ledger. Exact Linux
+dispatch/runtime/cgroup/transport gates remain necessary; their failure cannot be
+replaced by later receipts or inferred Windows closure. The sole post-dispatch
+collection may read only `materialization-result.json`, `launcher.jsonl` and the
+launcher's two public capture files for this root, at most 1 MiB/30 seconds. No
+reopen of donor/output payloads, enumeration, private input, process survey, ETW or
+broker state is included. Independently accept inventory, native identities,
+original outcome and scoped completion before private-input creation.
 
 The one proposed private step has 120 seconds including local owner input and
 closure, and runs only in the same Windows console after actual readiness.
