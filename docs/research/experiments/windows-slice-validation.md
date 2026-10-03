@@ -330,7 +330,7 @@ caller source commit, all194 exact public length/hash rows and their aggregate
 byte count. The inventory and expectedRows are generated reviewable interchanges,
 not second manually maintained catalogs. A missing or incompatible row stops.
 
-For the current public materialization successor at named-fixtures-0192 and
+For the current public materialization successor at named-fixtures-0193 and
 account-v2, use donor v23 and `selected-account-public-preparation-authority-v2`.
 The ended 0189 Linux transfer retains its failed outcome and occupied staging root.
 This binds public preparation to the fresh root-compatible candidate; all required
@@ -346,8 +346,8 @@ The old v9 total81083019 is historical, not a new-build output expectation.
 The public eight-leaf control recipe/generator, transfer, dispatch authority and
 result collector must bind this same new inventory/source/build/authority and all
 200 expectedRows before activation. Their filenames and v2 plan/output schemas remain as accepted; the current
-`selected-account-public-inputs-v3` root and action0192 literals are defined by the
-exclusive Linux transfer successor below. Bind every changed public payload byte.
+`selected-account-public-inputs-v4` root and action0193 literals are defined by the
+created-copy ctime successor below. Bind every changed public payload byte.
 Update the native materializer's current source binding atomically below. Keep
 its guards false and reuse its unchanged diagnostic/native/I/O/cleanup checks.
 No old authority-v1 or inventory-v1 input substitutes for this v2 conjunction.
@@ -376,7 +376,7 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [DirectObserver.rsp](../../../tools/validation/controlled-callers/control/DirectObserver.rsp) | 20404 | `b4af49e38b70808369e259466a7a759339d6f422733c9b61a31f560d12159fb6` |
 | [SyntheticSubject.rsp](../../../tools/validation/controlled-callers/control/SyntheticSubject.rsp) | 21309 | `7016e29b6f8f43805786e81c8213f2dc509bfabc100d7b4b5478eee707b78325` |
 | [FixtureDriver.rsp](../../../tools/validation/controlled-callers/control/FixtureDriver.rsp) | 21276 | `aeebc66eb198c2d70f640051ad3d915164e6af124a1778679ad9bfdf63b2d01c` |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `4691ff49ff8023df80ac87f24626194cd6ad44d0083e738b62bc0396a03cb0da` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `3e7ae35b2c63382f7e9fa3fa82cd155da84638bcb72798aff6b4a663a377b0a4` |
 
 ## Retained Product Byte Acquisition Recipe
 
@@ -980,14 +980,14 @@ Per original, admit only needed separately charged fixed passes within these max
 | --- | ---: | ---: | ---: |
 | Exclusive Linux public control creation and readback | 1 | 30 | 1 MiB |
 | Fixed public source/runtime/control preflight | 1 | 30 | 32 MiB |
-| Exclusive fixed transfer and readback | 1 | 180 | 32 MiB |
+| Exclusive fixed transfer and readback | 1 | 180 | 64 MiB |
 | Owned Windows materialization dispatch/control work | 1 | 400 | 460 MiB |
 | New original's fixed public results | 4 | 30 | 1 MiB |
 | New original's own Linux scope witness/events | 1 | 30 | 32 KiB |
 
-These maxima total nine passes/790s/(529 MiB+32 KiB) per original, and
-36 passes/3160s/2218917888B for four originals. The combined public read reservation
-ceiling for this successor is 640 MiB including retained failed preparation and
+These maxima total nine passes/790s/(561 MiB+32 KiB) per original, and
+36 passes/3160s/2353135616B for four originals. The combined public read reservation
+ceiling for the current successor is 704 MiB including retained failed preparation and
 the current preflight/transfer/Windows/
 result/scope requests; this explicitly supersedes the initial 512 MiB combined
 allocation for fresh successors only. Individual source limits, 96 MiB payload,
@@ -1101,7 +1101,7 @@ separately scoped completion are accepted. Preserve all old files, full charges,
 primitive/provisional/pending fields and historical uncertainties. No original,
 collector, output or deadline is replayed, repaired or adopted.
 
-The current successor uses exclusive `named-fixtures-0192` and freshly generated
+The now-ended first-fault successor used exclusive `named-fixtures-0192` and freshly generated
 `selected-account-public-inputs-v3`. Reuse the accepted public product pair and
 root-compatible caller194 inventory with their unchanged provenance. Retain the
 v2 authority/inventory/result schemas and account-v2 target; source byte bindings
@@ -1124,7 +1124,7 @@ own accepted exact protocol/source/input/call and prior outcome/scoped-completio
 joins, within the standing common capacity; no renewed owner decision follows
 solely from their new filenames or finite allocations.
 
-The inert transfer changes no hash, EOF, short-write, exclusive creation,
+That first-fault transfer changed no hash, EOF, short-write, exclusive creation,
 no-follow ancestry, strict full9 source/copy stability, created-reader or disposal
 predicate. In-memory numeric setters add no filesystem operation or clock.
 A caught primary run fault is frozen before disposal, with the last attempted
@@ -1187,6 +1187,104 @@ ordinary Windows root/Job/two-EOF conjunctions still precede private creation.
 Personal, work and actualWSL acceptance remain outstanding. Canonical guards stay
 inert; exact activation changes only their admitted literals/guards after review.
 
+##### Created-copy between-read ctime successor
+
+The ended0192 transfer remains failed. Its complete safe first-fault frame
+identifies phase6/role3/ordinal0/op10: the first final held check of the created
+start marker, after the ten individual copy methods and before receipt construction.
+Only the retained Linux full9 ctime field differs. This observed mismatch and the
+source path do not identify its cause, establish current stage content, or prove
+uninterrupted history. The strict original method enforced its accepted predicates.
+Independent outcome/scoped-completion acceptance and distinct GOV-011 triage support
+a prospective current-byte remedy; no additional cause experiment is necessary.
+Keep0192 and0189 occupied, failed and fully charged, without repair, adoption or replay.
+
+The current successor uses exclusive `named-fixtures-0193`, freshly generated
+`selected-account-public-inputs-v4`, authority action0193 and unchanged account-v2.
+Keep the accepted product pair, caller194/build/source provenance and native200
+materialization obligations. The initializer, transfer, dispatch authority and
+mutex, collector and derived expected200 inventory must coherently bind0193.
+The eight-control generator retains its accepted method and fresh exact payload
+bindings. One30s/1MiB creation, at most one30s/32MiB preflight and one180s/64MiB
+transfer use the same passive pool. Reuse unchanged accepted preflight evidence
+only where fresh strict metadata and exact runtime/interop/environment joins
+establish that its admitted inputs still correspond; new controls require their
+own accepted generation/readback and exact input joins. A changed descriptor is
+not a content qualification or permission to replace an old baseline. Otherwise
+admit a fresh fixed preflight under the existing recipe. The704MiB combined
+reservation includes retained failed preparation, these new requests and the
+existing Windows/result/scope work. Preserve every prior charge, uncertainty and
+primitive/provisional/pending field; real capacity remains separate and unadmitted.
+
+Only the two existing final created-file check sets change. Directory full5 and
+all source-role full9/hash/EOF/final comparisons remain strict. Initial exclusive
+write, writer-to-readonly-reader identity join, strict immediate readback and
+original reader descriptors remain unchanged. Registered newly created public
+start/copy/receipt readers alone may qualify a ctime difference BETWEEN completed
+reads, never private/account roles, Windows ChangeTime or an arbitrary path/flag.
+
+At each created check, require every original non-ctime field: device, inode,
+mode, uid, gid, length, mtime and link count. Obtain fresh agreeing held/named
+full9. If its ctime differs from the original readonly descriptor, seek that same
+held reader to zero once and reread the exact known length/SHA-256/EOF. Require
+all-nine held/named equality immediately before and after this read, including
+current ctime. Any other-field, named/held, within-read, hash, EOF, seek, deadline,
+limit or disposal failure stops. No settling loop, original replacement or
+history/benign-cause inference is permitted. A ctime-equal final check retains its
+strict held/named comparison without an added payload read.
+
+There are exactly11 created checks before receipt and12 afterward, at most23
+checks and one added reread per check. Record each successful check as the typed
+five-item array `[phase, ordinal, originalCtime, currentCtime, reread]`: phase6
+with ordered ordinals0–10, then phase9 with ordered ordinals0–11; ctime values
+are lossless integers, and `reread` is an exact Boolean equal to their inequality.
+Original ctime joins the immutable readonly full9 for that role. Current full9
+has the same other eight fields; these arrays do not replace those originals.
+
+The hashed receipt changes to `selected-account-public-transfer-v2` and adds
+`copyChecks` containing the eleven phase6 rows and a separate `startRow` holding
+the existing start write's returned descriptor. Its exact fields are `name`
+(`transfer-started.json`), positive `bytes` no greater than16KiB, `sha256` (64
+lowercase hexadecimal characters), original readonly `full9` and `createdFull9`
+(lossless nine-integer arrays). Both phase6 and phase9 ordinal0 `originalCtime`
+must equal `startRow.full9[7]`, not the initial writer's ctime. Keep exactly ten
+deployment/content rows; stageFull5, countsBeforeReceipt and false product/account
+flags remain. Exporting the existing descriptor adds no filesystem operation.
+The sole
+success frame changes to `selected-account-public-transfer-result-v2`: the
+unchanged receipt name/bytes/hash/original full9/createdFull9 fields plus all23
+`copyChecks` and `countsAfterChecks`. The phase6 prefix must exactly equal the
+receipt's list, and phase9 ordinal11 joins the receipt's own original full9.
+This places post-receipt/self-check evidence in transport without rewriting the
+hashed receipt. Source/input/result review must validate exact allowlists, counts,
+role order, types, original joins, strict fresh rereads and receipt correspondence
+before admitting Windows dispatch. Incomplete evidence is failure, not a partial
+success or an alternative deployment authority. Refresh the finite current receipt
+reader's exact descriptor/length/hash/call and v2 interpretation before use; never
+run the historical0186 receipt reader unchanged or reopen a spent receipt pass.
+
+Retain170s source work/CPU, AS128MiB,128 opens,1024 metadata,8192 read/write calls,
+16MiB written requests and GNU175TERM+5KILL whole180s. Requested reads are at most
+64MiB, with an additional enforced combined explicit requested-read/written-byte
+cap of64MiB minus32KiB; the reserved32KiB bootstrap-source allowance then fits the
+whole64MiB pass. Every request is charged before I/O, including added rereads,
+EOF and output, with no refund for short returns. Exact current lengths determine
+the normal maximum read count/bytes at the call gate; partial requests may exhaust
+the finite cap and fail. Installed interpreter/OS startup keeps its separate
+admitted basis. The unchanged16KiB start and32KiB receipt limits remain; success
+stdout is at most8192B and failure stderr at most4096B. `createdChecks` is an
+additional bounded counter0–23; all earlier counters retain their meanings.
+Operation14 denotes lseek; other numeric first-fault roles/phases/operations and
+freeze-before-disposal behavior remain. Preserve original clocks and deterministic
+owned-descriptor disposal. This correction starts no child or Windows/account work.
+
+Independently accept the amended exact method and current inputs/activation/call,
+full debit/sole submission, actual result/complete transport and separately scoped
+transfer/GNUenv/watchdog completion before any dependent dispatch. Matching bytes
+establish current correspondence only. All native200 identities, locked-content
+checks, ordinary Windows root/Job/two-EOF, Profile/real operating basis and local
+private-input gates remain. Personal, work and actualWSL evidence remain required.
+
 ##### Pure projection validation
 
 Before accepting actual results, admit at most one Linux-only in-memory projection
@@ -1217,10 +1315,10 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `4691ff49ff8023df80ac87f24626194cd6ad44d0083e738b62bc0396a03cb0da` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `3e7ae35b2c63382f7e9fa3fa82cd155da84638bcb72798aff6b4a663a377b0a4` |
 | [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 14818 | `f8ee043f3e82a8d565aa583cfe1d0e8d451aae8d83db630cd6865200a51498da` |
-| [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 14402 | `2e6ac87114aca899087871c871530f3b9b3b0dc7699483279852a968473163dd` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 20933 | `80358b80965504faa10207276dadc40ef29c27b40576ddf891db635fc1bf2a8b` |
+| [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 16283 | `d8a32ec2c7ebc9dcc84784f530d83d1577652d5c473e45f9d1d5c87efeb3277c` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 20933 | `d14127271cd1a47a7520102271b6f3b34183e2d6913d6d8752f8b47b685f77ed` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `a871492cde058916dd6a0aa80c46cef1cca3bf256d6d080b3bb9d74adb795088` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `1b8ec11edfbabb492e84e80639a036595f69c2fd5b5292475959739c635e2dae` |
 | [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `34fa06aa823ab21e7c71c14105f2be5c006e0d5e9dea9f74b09d17a56f4b5a1e` |
@@ -1228,7 +1326,7 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 | [selected-account-inputs/R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `5ac3fbd53a3ea779cd15658babe89d2bafc95f6bbb41155f43887d558fe6d1db` |
 | [selected-account-inputs/R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `526c8cdded4c0266a31d47b162c31616ce00b51cb2cee81df5562038fb175660` |
 | [selected-account-inputs/R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `c6c0e4d3dd2d0e98589385d41d9d87cbbe6f2d1c67ca3fe1dde77ad72ca14b0f` |
-| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 7203 | `8537076e1582685df5dc5e377a0d596d644e80bc6bbfaffe43b27964985c4653` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 7203 | `34c8e848d74bf2d7cf04034d1b90c6ff80b9690f4171f67feeb7fa7a2b905d7c` |
 
 #### Public Transfer Receipt and Dispatch Input Current Correspondence
 
