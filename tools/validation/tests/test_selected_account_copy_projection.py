@@ -10,8 +10,8 @@ import resource
 import sys
 
 SOURCE = Path(__file__).resolve().parents[1] / 'collect_selected_account_copy_results.py'
-EXPECTED_SHA256 = 'fdbd92847bd7f7f91cbaa4168189d6985ff795e49f77a95ae35726ad22743173'
-EXPECTED_SOURCE_BYTES = 29167
+EXPECTED_SHA256 = '141fb52e2d1c2f34dfdec50e543a90c4497d7f3ec0d9aee2b8249bec1ca03d3e'
+EXPECTED_SOURCE_BYTES = 29194
 if SOURCE.is_symlink() or SOURCE.stat().st_size != EXPECTED_SOURCE_BYTES:
     raise ValueError('Unexpected test source shape')
 with SOURCE.open('rb') as stream:
