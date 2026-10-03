@@ -1242,8 +1242,15 @@ Original ctime joins the immutable readonly full9 for that role. Current full9
 has the same other eight fields; these arrays do not replace those originals.
 
 The hashed receipt changes to `selected-account-public-transfer-v2` and adds
-`copyChecks` containing the eleven phase6 rows; its existing ten content rows,
-stageFull5, countsBeforeReceipt and false product/account flags remain. The sole
+`copyChecks` containing the eleven phase6 rows and a separate `startRow` holding
+the existing start write's returned descriptor. Its exact fields are `name`
+(`transfer-started.json`), positive `bytes` no greater than16KiB, `sha256` (64
+lowercase hexadecimal characters), original readonly `full9` and `createdFull9`
+(lossless nine-integer arrays). Both phase6 and phase9 ordinal0 `originalCtime`
+must equal `startRow.full9[7]`, not the initial writer's ctime. Keep exactly ten
+deployment/content rows; stageFull5, countsBeforeReceipt and false product/account
+flags remain. Exporting the existing descriptor adds no filesystem operation.
+The sole
 success frame changes to `selected-account-public-transfer-result-v2`: the
 unchanged receipt name/bytes/hash/original full9/createdFull9 fields plus all23
 `copyChecks` and `countsAfterChecks`. The phase6 prefix must exactly equal the
@@ -1310,7 +1317,7 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 | --- | ---: | --- |
 | [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `3e7ae35b2c63382f7e9fa3fa82cd155da84638bcb72798aff6b4a663a377b0a4` |
 | [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 14818 | `f8ee043f3e82a8d565aa583cfe1d0e8d451aae8d83db630cd6865200a51498da` |
-| [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 16218 | `d389ec889a67153b8b4b530ff61576eda0a148a544094ca199cd43899d15afa2` |
+| [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 16283 | `d8a32ec2c7ebc9dcc84784f530d83d1577652d5c473e45f9d1d5c87efeb3277c` |
 | [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 20933 | `d14127271cd1a47a7520102271b6f3b34183e2d6913d6d8752f8b47b685f77ed` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `a871492cde058916dd6a0aa80c46cef1cca3bf256d6d080b3bb9d74adb795088` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `1b8ec11edfbabb492e84e80639a036595f69c2fd5b5292475959739c635e2dae` |

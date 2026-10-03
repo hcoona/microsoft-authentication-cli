@@ -241,7 +241,7 @@ class Transfer:
                             sort_keys=True, separators=(',', ':'), allow_nan=False) + '\n').encode('ascii')
         if len(start) > 16384:
             raise ValueError('Transfer start bound')
-        self.write(stage, 'transfer-started.json', start)
+        start_row = self.write(stage, 'transfer-started.json', start)
         self.native(8, os.fsync, pfd)
         rows = []
         self.phase = 5
@@ -273,6 +273,7 @@ class Transfer:
         stage_identity = full5(self.metadata(stage))
         self.operation = 12
         receipt = (json.dumps({'schema': 'selected-account-public-transfer-v2', 'rows': rows,
+                              'startRow': start_row,
                               'copyChecks': self.copy_checks,
                               'stageFull5': stage_identity, 'countsBeforeReceipt': self.counts,
                               'productStarted': False, 'accountAccess': False},
