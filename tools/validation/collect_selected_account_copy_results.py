@@ -306,6 +306,7 @@ def main():
     owned, directories, leaves, missing = [], {}, [], []
     requested, operations = 0, 0
     output = None
+    phase, ordinal, failure_phase, failure_kind = 0, 0, 0, 0
 
     def before():
         nonlocal operations
@@ -385,9 +386,11 @@ def main():
                     raise ValueError('Diagnostic named ancestry')
 
     try:
+        phase = 1
         if (sys.executable != '/usr/bin/python3.14' or len(sys.argv) != 1 or
                 not sys.flags.isolated or not sys.flags.no_site or not sys.flags.dont_write_bytecode):
             raise ValueError('Diagnostic runtime')
+        phase = 2
         keys = {'stageFull5', 'retentionParentFull5', 'nonce', 'originalEpochMonotonicNs',
                 'authoritySha256', 'passNumber', 'expectedRows'}
         if type(ADMISSION) is not dict or set(ADMISSION) != keys:
@@ -403,10 +406,11 @@ def main():
                     for key in ('stageFull5', 'retentionParentFull5'))):
             raise ValueError('Diagnostic admission values')
         expected = ADMISSION['expectedRows']
+        phase = 3
         if type(expected) is not list or len(expected) != 200:
             raise ValueError('Copy expected inventory shape')
         expected_seen = set()
-        for row in expected:
+        for ordinal, row in enumerate(expected, 1):
             if (type(row) is not dict or set(row) != {'relative', 'bytes', 'sha256', 'role'} or
                     type(row['relative']) is not str or not 1 <= len(row['relative']) <= 1024 or
                     not re.fullmatch(r'(?:toolchain|source|control|artifact|product)\\[a-zA-Z0-9_.\\-]+', row['relative']) or
@@ -418,16 +422,19 @@ def main():
             expected_seen.add(row['relative'].lower())
         if sum(row['bytes'] for row in expected) > 100663296:
             raise ValueError('Copy expected payload limit')
+        phase, ordinal = 4, 0
         resource.setrlimit(resource.RLIMIT_AS, (134217728, 134217728))
         resource.setrlimit(resource.RLIMIT_CPU, (25, 25))
         for sig in (signal.SIGTERM, signal.SIGINT):
             signal.signal(sig, stop)
+        phase = 5
         stage, parent = directory(STAGE), directory(RECOVERY)
         if (full9(os.fstat(stage))[:5] != ADMISSION['stageFull5'] or
                 full9(os.fstat(parent))[:5] != ADMISSION['retentionParentFull5']):
             raise ValueError('Diagnostic parents')
         rows = []
-        for name, maximum in FILES:
+        phase = 6
+        for ordinal, (name, maximum) in enumerate(FILES, 1):
             before()
             try:
                 named = full9(os.stat(name, dir_fd=stage, follow_symlinks=False))
@@ -445,7 +452,9 @@ def main():
             rows.append({'name': name, 'status': 'collected', 'bytes': len(raw),
                          'sha256': hashlib.sha256(raw).hexdigest(), 'full9': named,
                          **interpret(name, raw)})
+        phase, ordinal = 7, 0
         check_all()
+        phase = 8
         snapshot = (json.dumps({'schema': 'selected-account-public-copy-result-snapshot-v1',
                     'nonce': ADMISSION['nonce'], 'originalEpochMonotonicNs': ADMISSION['originalEpochMonotonicNs'],
                     'authoritySha256': ADMISSION['authoritySha256'], 'passNumber': ADMISSION['passNumber'],
@@ -455,6 +464,7 @@ def main():
                     sort_keys=True, separators=(',', ':'), allow_nan=False) + '\n').encode('ascii')
         if len(snapshot) > 524288:
             raise ValueError('Diagnostic snapshot bound')
+        phase = 9
         name = 'selected-account-public-copy-result-snapshot-' + str(ADMISSION['passNumber']) + '.json'
         fd = opened(name, os.O_RDWR | os.O_CREAT | os.O_EXCL, parent)
         before()
@@ -474,13 +484,30 @@ def main():
         before()
         os.fsync(parent)
         check_all()
+        phase = 10
         output = (json.dumps({'schema': 'selected-account-public-copy-result-collection-v1',
                     'name': name, 'bytes': len(snapshot), 'sha256': hashlib.sha256(snapshot).hexdigest(),
                     'full9': current, 'requestedReadBytes': requested, 'publicRecordsOnly': True},
                     sort_keys=True, separators=(',', ':')) + '\n').encode('ascii')
         if len(output) > 2048:
             raise ValueError('Diagnostic transport')
-    except Exception:
+    except Exception as error:
+        failure_phase = phase
+        # Only a fixed category is public; never serialize exception text or errno.
+        if isinstance(error, TimeoutError):
+            failure_kind = 1
+        elif isinstance(error, FileNotFoundError):
+            failure_kind = 2
+        elif isinstance(error, PermissionError):
+            failure_kind = 3
+        elif isinstance(error, OSError):
+            failure_kind = 4
+        elif isinstance(error, ValueError):
+            failure_kind = 5
+        elif isinstance(error, MemoryError):
+            failure_kind = 6
+        else:
+            failure_kind = 7
         output = None
     finally:
         close_failed = False
@@ -494,6 +521,21 @@ def main():
                 # this original process exits; do not loop beyond its deadline.
                 break
     if close_failed or output is None:
+        # The same cancellation, checkpoint and original deadline still apply.
+        try:
+            before()
+            marker = (json.dumps({
+                'schema': 'selected-account-public-copy-collection-failure-v1',
+                'phase': 11 if close_failed else failure_phase,
+                'ordinal': 0 if close_failed else ordinal,
+                'kind': 0 if close_failed else failure_kind,
+                'closeFailed': close_failed,
+            }, sort_keys=True, separators=(',', ':')) + '\n').encode('ascii')
+            if len(marker) <= 192:
+                os.write(1, marker)
+                before()
+        except Exception:
+            pass
         return 1
     try:
         before()
