@@ -479,7 +479,7 @@ Current root-sensitive source bindings:
 | [R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `512f46787a095b8b932bb90a462c778cb7d39f44be9789a72e1b22894594a4ff` |
 | [R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `4eedc38d930c8019d10102222d18e089f7c1df6ae4770152b2c5d4c9f5b535c6` |
 | [R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `f44a93b8813ccf2e289f195a76ff9bfc8175f9adea24bf3455fe68d45f95c445` |
-| [test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 20268 | `81efb0774ccc8b7c1ddc8283bb6b211efeac593397ce7f06ff039be8a47d5bd5` |
+| [test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 20268 | `010cd22f339c716a45103d37bd6b0ed26fa4cdbb753f8bd17f185d9e332377d1` |
 
 ## Retained Product Byte Acquisition Recipe
 
@@ -1191,7 +1191,7 @@ projection still requires its own current call admission):
 | --- | ---: | --- |
 | [Initialize-WindowsPublicCopyDiagnosis.ps1](../../../tools/validation/Initialize-WindowsPublicCopyDiagnosis.ps1) | 6798 | `b2d8e9b7b9d5cc3a65d91bcbded8ff994e764adeca8ab6772db76c1dcabd0498` |
 | [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 29194 | `141fb52e2d1c2f34dfdec50e543a90c4497d7f3ec0d9aee2b8249bec1ca03d3e` |
-| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 20268 | `81efb0774ccc8b7c1ddc8283bb6b211efeac593397ce7f06ff039be8a47d5bd5` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 20268 | `010cd22f339c716a45103d37bd6b0ed26fa4cdbb753f8bd17f185d9e332377d1` |
 
 The existing native type and normal launcher retain their current bindings. This
 source/protocol supplement reserves or executes nothing; exact admission remains
