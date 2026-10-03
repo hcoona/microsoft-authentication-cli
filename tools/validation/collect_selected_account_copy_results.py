@@ -117,7 +117,7 @@ def output_sealing(diagnostic, maximum, completed):
             changed > sealed + (1 if stage in (1, 2) else 0) or
             (stage == 3 and sealed == 0) or
             (diagnostic['nativePhase'] in (220, 270, 271, 272, 273, 274) and stage != 1) or
-            (diagnostic['nativePhase'] in (240, 280, 281, 282, 283, 284) and stage != 2)):
+            (diagnostic['nativePhase'] in (230, 240, 280, 281, 282, 283, 284) and stage != 2)):
         raise ValueError('Public output sealing context')
 
 
@@ -143,7 +143,7 @@ def public_receipt(result):
     phases.update(base + offset for base in (170, 270, 320, 400) for offset in range(5))
     establishing = result['schema'] == 'selected-account-public-materialization-v3'
     if establishing:
-        phases.update((220, 240))
+        phases.update((220, 230, 240))
         phases.update(280 + offset for offset in range(5))
     diagnostic = result['diagnostic']
     if diagnostic is not None:
@@ -167,16 +167,16 @@ def public_receipt(result):
         mask = diagnostic.get('identityMismatchMask', 0)
         identity_phases = (170, 174, 270, 274, 320, 324, 400, 404)
         if establishing:
-            identity_phases += (220, 280, 284)
+            identity_phases += (220, 230, 280, 284)
         if (not exact_int(mask, 0, 255) or
-                (establishing and diagnostic['nativePhase'] == 220 and mask & 64) or
+                (establishing and diagnostic['nativePhase'] in (220, 230) and mask & 64) or
                 (mask != 0 and (diagnostic['errorKind'] != 1 or
                  diagnostic['nativePhase'] not in identity_phases))):
             raise ValueError('Copy identity difference context')
         snapshot_mask = diagnostic.get('snapshotMismatchMask', 0)
         snapshot_phases = (104, 204, 305, 170, 174, 270, 274, 320, 324, 400, 404)
         if establishing:
-            snapshot_phases += (220, 280, 284)
+            snapshot_phases += (220, 230, 280, 284)
         if (not exact_int(snapshot_mask, 0, 15) or
                 (snapshot_mask & 8 and snapshot_mask != 8) or
                 (snapshot_mask != 0 and (mask != 0 or diagnostic['errorKind'] != 1 or

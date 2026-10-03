@@ -275,6 +275,27 @@ class ProjectionTests(unittest.TestCase):
                     else: value['diagnostic'][field] = change
                     self.reject(value)
 
+    def test_sealing_post_read_candidate_has_distinct_phase_and_stage(self):
+        value = self.sealing_value()
+        value.update(passed=False, copyCompleted=False, failure='copy')
+        value['diagnostic'].update(wrapperPhase=1, nativePhase=230, outputStage=2,
+            heldOrdinal=0, sealedOutputs=0, firstReadChangeCount=0,
+            errorKind=1, errorCode=230, identityMismatchMask=128)
+        self.assertEqual(self.project(value)['receipt'], value)
+        for change in ({'outputStage': 1}, {'identityMismatchMask': 64},
+                       {'identityMismatchMask': 192}, {'nativePhase': 220, 'errorCode': 220}):
+            with self.subTest(change=change):
+                changed = json.loads(json.dumps(value))
+                changed['diagnostic'].update(change); self.reject(changed)
+        value['diagnostic'].update(identityMismatchMask=0, snapshotMismatchMask=4)
+        self.assertEqual(self.project(value)['receipt'], value)
+        value['diagnostic']['identityMismatchMask'] = 1; self.reject(value)
+        legacy = self.single_value()
+        legacy.update(passed=False, copyCompleted=False, failure='copy')
+        legacy['diagnostic'].update(wrapperPhase=1, nativePhase=230,
+            errorKind=1, errorCode=230, identityMismatchMask=128)
+        self.reject(legacy)
+
     def test_sealing_rejects_impossible_phase_or_completion(self):
         for change in ({'outputStage': 2}, {'sealedOutputs': 0}, {'sealedOutputs': 2},
                        {'firstReadChangeCount': 2}, {'outputStage': 4}):

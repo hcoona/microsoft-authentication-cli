@@ -292,14 +292,14 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
             SetPhase(205); Name(handle, path);
             SetPhase(206); stream = new FileStream(handle, FileAccess.Read, 65536, false);
             SetPhase(207); Need(Hash(stream, length) == hash);
-            SelectedAccountHeldFile file;
+            SelectedAccountFileIdentity namedInitial, observed;
             // The first named identity query is part of fresh output establishment.
             // Reuse this handle for full agreement; do not open repeatedly until quiet.
             SetPhase(272);
             using (SafeFileHandle named = Open(path, 0x80, 1, 3, 0x00200000))
             {
                 SetPhase(273); Name(named, path);
-                SetPhase(220); SelectedAccountFileIdentity namedInitial = Snapshot(named);
+                SetPhase(220); namedInitial = Snapshot(named);
                 int namedMask = (namedInitial.volume != initial.volume ? 1 : 0) |
                     (namedInitial.index != initial.index ? 2 : 0) |
                     (namedInitial.attributes != initial.attributes ? 4 : 0) |
@@ -311,7 +311,7 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
                 Need(namedMask == 0);
                 SetPhase(317); Need(namedInitial.volume == original.volume && namedInitial.index == original.index &&
                     namedInitial.created == original.created);
-                SetPhase(220); SelectedAccountFileIdentity observed = Snapshot(handle);
+                SetPhase(220); observed = Snapshot(handle);
                 // All seven non-ChangeTime fields must agree across this first window.
                 int mask = (observed.volume != initial.volume ? 1 : 0) |
                     (observed.index != initial.index ? 2 : 0) |
@@ -325,19 +325,34 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
                 SetPhase(317); Need(observed.volume == original.volume && observed.index == original.index &&
                     observed.created == original.created);
                 if (namedInitial.changed != initial.changed || observed.changed != initial.changed) firstReadChangeCount++;
-                file = new SelectedAccountHeldFile { Stream = stream, OutputObservationHandle = handle, path = path,
-                    sha256 = hash, identity = observed, outputInitialIdentity = initial, outputFirstReadIdentity = observed,
-                    outputFirstNamedIdentity = namedInitial };
-                // Full held/named agreement establishes a prospective baseline, never continuity.
-                SetPhase(270); NeedStableIdentity(Snapshot(handle), file.identity);
+                // Retain first-window agreement; the final baseline follows both content reads.
+                SetPhase(270); NeedStableIdentity(Snapshot(handle), observed);
                 SetPhase(271); Name(handle, path);
                 SetPhase(273); Name(named, path);
-                SetPhase(274); NeedStableIdentity(Snapshot(named), file.identity);
+                SetPhase(274); NeedStableIdentity(Snapshot(named), observed);
             }
             outputStage = 2;
             SetPhase(240); Need(Hash(stream, length) == hash);
+            stream.Position = 0;
+            SetPhase(230); SelectedAccountFileIdentity candidate = Snapshot(handle);
+            int candidateMask = (candidate.volume != initial.volume ? 1 : 0) |
+                (candidate.index != initial.index ? 2 : 0) |
+                (candidate.attributes != initial.attributes ? 4 : 0) |
+                (candidate.links != initial.links ? 8 : 0) |
+                (candidate.created != initial.created ? 16 : 0) |
+                (candidate.modified != initial.modified ? 32 : 0) |
+                (candidate.length != initial.length ? 128 : 0);
+            if (candidateMask != 0 && !faulted) identityMismatchMask = candidateMask;
+            Need(candidateMask == 0);
+            SetPhase(317); Need(candidate.volume == original.volume && candidate.index == original.index &&
+                candidate.created == original.created);
+            // This still-local Copy output receives its final prospective baseline only once.
+            SelectedAccountHeldFile file = new SelectedAccountHeldFile { Stream = stream,
+                OutputObservationHandle = handle, path = path, sha256 = hash, identity = candidate,
+                outputInitialIdentity = initial, outputFirstReadIdentity = observed,
+                outputFirstNamedIdentity = namedInitial };
             Stable(file, 280); SetPhase(209);
-            stream.Position = 0; owned.Add(stream); files.Add(file);
+            owned.Add(stream); files.Add(file);
             outputStage = 3; sealedOutputs++; return file;
         }
         catch (Exception error)

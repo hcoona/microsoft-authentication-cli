@@ -468,18 +468,18 @@ Current root-sensitive source bindings:
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11352 | `b92f6584fff251b80472e058bc8a110e9964718de379cf8de0573f15c4a0045e` |
-| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 20893 | `8a6fc4357cdeae8a5a0cd9ae2c72ec5e43e614875ea2caa3b3679dc0b3f27304` |
+| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 21826 | `0fc81ef7595cb06ab68140a12ddd62f066944fdfff8937ff9ef9c7a76026cd1c` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `fcfd340e52f05edc670ce2fb062fa20de54dca87d29ad2028eba6575270a1419` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `3506fc1c85d7ec8e37d86e067e018660cc93429a8fb8d1a1eced71037d68fcb3` |
 | [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `b81b6e0b24892d7f556432cee8b3359e266595eccc90cc4e414eb15e3b5b598f` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 29167 | `fdbd92847bd7f7f91cbaa4168189d6985ff795e49f77a95ae35726ad22743173` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 29194 | `141fb52e2d1c2f34dfdec50e543a90c4497d7f3ec0d9aee2b8249bec1ca03d3e` |
 | [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `78598f2aed164bd2a2fbf950d725b61a53809d5a52cd7287e144f8067eab8dab` |
 | [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `3e2f6e6e5d9fb49448e369b55f5b0feae125877ed9654ab8c16ae52fc5cb9758` |
 | [R1.template.json](../../../tools/validation/selected-account-inputs/R1.template.json) | 746 | `1bdce95732e130444da1e28b4ce3dd5a9341a3b7ae2502472a064dfddfb7c5dc` |
 | [R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `512f46787a095b8b932bb90a462c778cb7d39f44be9789a72e1b22894594a4ff` |
 | [R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `4eedc38d930c8019d10102222d18e089f7c1df6ae4770152b2c5d4c9f5b535c6` |
 | [R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `f44a93b8813ccf2e289f195a76ff9bfc8175f9adea24bf3455fe68d45f95c445` |
-| [test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 18959 | `1bf3ca039d8e60c5610f3d03a4579a519a3fdc279c4d87b92537d8ce6c177b45` |
+| [test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 20268 | `81efb0774ccc8b7c1ddc8283bb6b211efeac593397ce7f06ff039be8a47d5bd5` |
 
 ## Retained Product Byte Acquisition Recipe
 
@@ -1190,8 +1190,8 @@ projection still requires its own current call admission):
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [Initialize-WindowsPublicCopyDiagnosis.ps1](../../../tools/validation/Initialize-WindowsPublicCopyDiagnosis.ps1) | 6798 | `b2d8e9b7b9d5cc3a65d91bcbded8ff994e764adeca8ab6772db76c1dcabd0498` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 27565 | `c5a5405430a7bc3b768bd77ea409a13cb8e24b50edc947cc333c8d4a038ce7e3` |
-| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 19000 | `575f02c31f2612499a86dfedca7c99dcdd606d216d9fd2d73c013ce2bd0c4c50` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 29194 | `141fb52e2d1c2f34dfdec50e543a90c4497d7f3ec0d9aee2b8249bec1ca03d3e` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 20268 | `81efb0774ccc8b7c1ddc8283bb6b211efeac593397ce7f06ff039be8a47d5bd5` |
 
 The existing native type and normal launcher retain their current bindings. This
 source/protocol supplement reserves or executes nothing; exact admission remains
@@ -1238,6 +1238,16 @@ Current native-handle, root/Job/twoEOF/capture and qualified own-Linux completio
 were independently accepted; productStarted and accountAccess were false.
 ChangeTime inequality is the observed predicate failure; its physical cause
 remains UNKNOWN. Preserve0202 and all spent observations and occupied outputs.
+
+The independently accepted0205 single-file output-observation-alias test also
+failed at280/kind1/code280, mask64 and snapshotMask0, after both destination
+hash/EOF passes and the first full held/named agreement. OutputStage2,
+firstReadChangeCount0 and sealedOutputs0 preserve the failed copy. Current
+native-handle, root/Job/twoEOF/capture and qualified own-Linux completion were
+independently accepted; productStarted and accountAccess were false. The alias
+did not establish success. Physical cause remains UNKNOWN. Preserve0205 and its
+spent observations, full charges and occupied output. The prospective method
+below changes when the final output baseline is established, not that outcome.
 
 Microsoft's [FILE_BASIC_INFO reference](https://learn.microsoft.com/windows/win32/api/winbase/ns-winbase-file_basic_info)
 distinguishes metadata ChangeTime from data-stream LastWriteTime, and
@@ -1296,33 +1306,56 @@ held file; they are not interchangeable with its prospective identity baseline.
 Record first-window ChangeTime inequality only as the bounded count below.
 
 Then require full held identity/Name agreement at270–271 and full identity/Name
-agreement on that same first named handle at273–274, including ChangeTime, with
-the observed candidate. Dispose that temporary named handle before advancing to
-outputStage2. This finite full agreement establishes the prospective baseline.
-Unconditionally perform exactly one more complete hash/EOF from position0 on the
-same held reader, followed by unchanged generic full Stable280–284. Any later
-ChangeTime, other-field, hash/EOF, shape, ownership, deadline, API or closure
-failure freezes the first fault and stops. Only after the second strict read and
-postchecks succeed may the output register for unchanged final CheckAll and count
-as sealed. Source/donor Pin and all private/historical/executable admissions remain
-unchanged; there is no fault clearing, retry-until-quiet or ignore-field option.
+agreement on that same first named handle at273–274 with the first-read observed
+candidate, including ChangeTime. Dispose the temporary named handle before
+advancing to outputStage2. This retains first-window agreement; it does not yet
+establish the final sealed baseline. Unconditionally perform exactly one more
+complete hash/EOF from position0 on the same held reader, then move its existing
+final Position=0 operation before the final candidate observation.
 
-Validate the output-only observation alias with fresh action0205,
-`named-fixtures-0205` and `public-copy-diagnosis-0205`. Use the admitted public
+At fixed phase230, take exactly one held Snapshot using the output alias. Require
+all existing shape predicates and all seven non-ChangeTime fields equal to the
+initial reader, then writer-to-reader volume/index/creation agreement at317.
+Retain the initial, first named and first-read identities unchanged. Only now
+construct the still-local, unregistered held-file object with this post-read
+candidate as its final prospective identity. Require unchanged generic full
+Stable280–284: all eight held fields, held Name, one named open/Name and all eight
+named fields against that candidate. Only then register the stream/file, advance
+to stage3 and increment sealedOutputs. Do not reposition again after these checks.
+Final CheckAll and every later Stable remain strict against the final identity.
+
+This explicitly relinquishes the earlier requirement for ChangeTime equality
+with the first-read candidate across the second content read and repositioning.
+It preserves two exact content hash/EOF passes, source provenance, seven-field
+and writer-creation joins, finite full held/named agreement and strict post-seal
+checks under the admitted public-file workstation boundary. It does not establish
+continuous metadata integrity, absence of intervening attribute changes,
+adversarial tamper resistance, historical closure or a benign physical cause.
+FirstReadChangeCount keeps only its first-window meaning; no new counter reports
+second-window ChangeTime variation, and zero cannot prove none occurred.
+
+Any required field, hash/EOF, shape, ownership, deadline, API or closure failure
+freezes the first fault and stops. Source/donor Pin, generic Stable and all
+private/historical/executable admissions remain unchanged. This private fresh
+Copy path sets its final identity once; no sealed or input identity is refreshed,
+no fault is cleared, and no retry-until-quiet or ignore-field option exists.
+
+Validate the final post-read baseline with fresh action0208,
+`named-fixtures-0208` and `public-copy-diagnosis-0208`. Use the admitted public
 Microsoft.CSharp.dll at980776 bytes and SHA-256
 `2000912f2fc52e0c64ed893d79f4e7b143502540fb7170b5ae5fcea7099ba431`,
 the same first inventory leaf rejected by0197. Reuse the existing fixed single-file
 controls, transfer, dispatch, result and own-scope recipes with those literals,
 that exact public input and newly accepted source/authority bindings. Native fault
 mapping and materialization-v3/diagnosis-v2 closed shapes stay unchanged. The
-original0198/0199/0202 diagnoses and every earlier outcome remain retained; no occupied
+original0198/0199/0202/0205 diagnoses and every earlier outcome remain retained; no occupied
 output is reopened or reused. The unchanged finite batch,0/1/0/4 charge, exact
 current source/input/call gates and independent actual outcome/scoped completion
 acceptance apply. This amendment reserves nothing and promises no successful copy.
 
 After sufficient independently accepted single-file evidence, the fresh-root
-caller/build/materialization sequence above uses0206/v25 then0207/account-v4.
-These replace the unexecuted0203/0204 continuation; neither is an accepted result.
+caller/build/materialization sequence above uses0209/v25 then0210/account-v4.
+These replace the unexecuted0206/0207 continuation; neither is an accepted result.
 Reuse admitted toolchains, source methods and public donors in their exact roles;
 only the required root/source correspondence changes justify the new caller build.
 Preserve every earlier successful preparation as provenance and every failed
@@ -1336,16 +1369,18 @@ The new closed materialization-v3 and diagnosis-v2 diagnostics add exactly:
 
 | Field | Values and meaning |
 | --- | --- |
-| outputStage | 0 before output establishment;1 after initial output snapshot and during first-read/sealing checks;2 after full baseline agreement and during strict second read;3 after that read's postchecks and output registration |
+| outputStage | 0 before output establishment;1 after initial output snapshot and during first-window checks;2 after first-window full agreement and during the second read/final candidate and strict sealing checks;3 after their success and output registration |
 | firstReadChangeCount | Cumulative outputs whose first named or observed held ChangeTime differs from the initial reader after both accepted seven-field and creation joins,0–200 for full materialization or0–1 for diagnosis; each output counts at most once and this is disclosure, not fault clearing or a causal conclusion |
-| sealedOutputs | Cumulative outputs whose second strict read and registration succeeded,0–200 or0–1; a later row-binding/deadline failure can still fail Copy/result |
+| sealedOutputs | Cumulative outputs whose two content reads, final full identity agreement and registration succeeded,0–200 or0–1; a later row-binding/deadline failure can still fail Copy/result |
 
 The initial named and held post-snapshot/seven-field comparisons use220; only
 bits1/2/4/8/16/32/128 may occur in their first identity fault. Their original
 creation joins remain317.
-Phase240 is the mandatory second hash;280–284 have the same full identity/Name
-semantics as the existing Stable phases. Snapshot masks may occur at220/280/284;
-full identity masks including64 may occur at280/284. Preserve all existing mask,
+Phase230 is the post-second-read shape/seven-field comparison at outputStage2;
+only identity bits1/2/4/8/16/32/128 are possible there, and its writer join remains317.
+Phase220 retains its first-window/stage1 meaning. Phase240 is the mandatory second
+hash;280–284 retain their full identity/Name semantics at stage2. Snapshot masks
+may occur at220/230/280/284; full identity masks including64 may occur at280/284. Preserve all existing mask,
 error, first-fault, disposal and final held-ordinal meanings. Output-stage/counter
 values are captured before cleanup. New schemas require the complete typed field
 set and mask pair; old schemas keep their old closed shapes and phase meanings.
@@ -1360,7 +1395,8 @@ nominally three reads: four length-plus-EOF passes total416,932 requested bytes,
 writes,19 opens and83 metadata operations without short reads. The
 Open/Name-before-candidate order adds one Name query, giving84 metadata operations
 for that same nominal case. The current additional named Snapshot adds three
-metadata operations, giving87, with no extra open or payload I/O.
+metadata operations, giving87. The final post-read Snapshot adds three more,
+giving90 for that same nominal case, with no extra open or payload I/O.
 The fresh980,776-byte leaf instead has four nominal passes totaling3,923,108
 requested bytes,64 reads and980,776 written bytes; its exact ancestry and operation
 counts must be admitted with the new controls. Counters and hard caps govern actual
@@ -1368,8 +1404,9 @@ requests. Relative to a complete strict original Copy,
 the sealing method adds one open,12 metadata operations and one length-plus-EOF hash.
 The current first-named query order adds one Name and one Snapshot per output,
 four metadata operations in total; its open and data-read counts match the
-already accepted sealing method. The new Snapshot alone adds at most600
-metadata operations across200 outputs, under the unchanged32768 hard cap.
+already accepted sealing method. The final post-read Snapshot adds three metadata operations per reached output,
+at most600 across200 outputs in addition to the first-named query method, under
+the unchanged32768 hard cap. Opens, data passes and request/write caps do not change.
 For at most200 leaves/96MiB, four full passes request at most402,653,984 bytes
 when each request returns in full, below unchanged448MiB. Short reads still charge
 full requests and stop at the same caps; no refund or success guarantee follows.
@@ -1387,8 +1424,9 @@ test and collector source, each at most32KiB plus EOF, with32KiB startup-source
 allowance within128KiB aggregate. The test AST-selects seven pure functions and
 seven allowlist constants, never collector main, its guard or an experimental
 path. It uses synthetic values only, writes no files, starts no child or Windows
-process and exports at most4096B of typed outcome counters. The current32 methods
-include legacy preservation, first-read change disclosure, strict later-change
+process and exports at most4096B of typed outcome counters. Use the remaining slot in the existing two-original allocation; this amendment
+does not reset its consumed original or create another pool. The current33 methods
+include post-read candidate phase/stage/mask validation, legacy preservation, first-read change disclosure, strict later-change
 failure, non-ChangeTime rejection, typed counters, complete sealing, and rejection
 of undeclared identity/timestamp fields. Exact source/runtime/call and full charge
 precede submission; independently accept timely ordinary0 and complete transport.
