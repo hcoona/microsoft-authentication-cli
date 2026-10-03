@@ -468,7 +468,7 @@ Current root-sensitive source bindings:
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `b065dcf24e3c20af6244f1b577a09ad5c1f43d7113735cfd80833515812baab5` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `d6ce4c1a886f48d1bb074cf9deacb8d92516f6c24eeb34c0164d0b1c527b4599` |
 | [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `b89d8cc9a0b0a224092ad1a161d14a8bd73107cca77c25eba5e3e9186df2e82e` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 27565 | `b409e7de7d79deb53036dba222bab2cb6d16b0ff0219a0d7236de8c02d5f140d` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 29167 | `b55f33b0250ab8460e9406b7022ad504cdb13e27f7d3a220de0b7801046432e3` |
 | [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `9fa34044b8ce70447d79f2c7e266d616531133a1070fa64a9ac50ae069336f65` |
 | [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `307c21c1bbbaacd09348974e8df6471c5dec6fc232fe840635a72dc763fd5a24` |
 | [R1.template.json](../../../tools/validation/selected-account-inputs/R1.template.json) | 746 | `8489733228e5328b2d2363b0e79c2187de89aadd05b1a695ea1ad7f66b53312c` |
@@ -1369,7 +1369,23 @@ Each result pass retains a fresh numbered exclusive snapshot, at most512 KiB;
 Windows leaf maxima total448 KiB, so snapshot readback plus five EOF requests fits
 its1MiB reservation. Source AS128MiB/CPU25s/work25s/512 checkpoints and admitted
 clean Python3.14 -I -S -B under GNU25+5s remain. Return only a<=2048B exact descriptor
-and request count after owned handle closure. Producer materialization/native-closure
+and request count after owned handle closure on success. On failure, the reader may
+instead attempt one <=192B `selected-account-public-copy-collection-failure-v1`
+marker after its existing descriptor-disposal attempt, while preserving exit1.
+Its exact fields are `schema`, integer `phase` (1 runtime, 2 admission, 3 expected
+inventory, 4 resource limits, 5 parents, 6 fixed leaf, 7 final ancestry, 8 snapshot
+encoding, 9 snapshot writing/readback, 10 success descriptor, 11 disposal), integer
+`ordinal` (0, or the 1-based expected row at phase3 or fixed leaf at phase6), integer
+`kind` (0 for disposal, 1 timeout, 2 missing file, 3 permission, 4 other OS error,
+5 value rejection, 6 memory, 7 other exception), and boolean `closeFailed`.
+Do not export exception text, errno, paths or payload. The same original deadline,
+512 checkpoints, cancellation, byte limits and GNU bound govern this write; if
+they prevent it, the failed transport may remain empty. A marker establishes only
+the reader's source-defined failure location/category, not its cause, successful
+explicit closure, Windows/native state or original dispatch OWN. Preserve partial
+snapshots and spent attempts. Success-output failure remains exit1 without another
+write. Fresh source/input/call/accounting and independent actual-outcome gates apply
+before another pass. Producer materialization/native-closure
 acceptance flags stay false until independent dispositions; current records do not
 claim original success, historical/global closure or real-account readiness.
 
