@@ -286,7 +286,7 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
             SetPhase(205); Name(handle, path);
             SetPhase(206); stream = new FileStream(handle, FileAccess.Read, 65536, false);
             SetPhase(207); Need(Hash(stream, length) == hash);
-            SetPhase(220); SelectedAccountFileIdentity observed = Snapshot(handle);
+            SetPhase(220); SelectedAccountFileIdentity observed = Snapshot(stream.SafeFileHandle);
             // All seven non-ChangeTime fields must agree across the first public read.
             int mask = (observed.volume != initial.volume ? 1 : 0) |
                 (observed.index != initial.index ? 2 : 0) |
