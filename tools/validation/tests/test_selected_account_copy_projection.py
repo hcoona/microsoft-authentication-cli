@@ -10,8 +10,8 @@ import resource
 import sys
 
 SOURCE = Path(__file__).resolve().parents[1] / 'collect_selected_account_copy_results.py'
-EXPECTED_SHA256 = 'b409e7de7d79deb53036dba222bab2cb6d16b0ff0219a0d7236de8c02d5f140d'
-EXPECTED_SOURCE_BYTES = 27565
+EXPECTED_SHA256 = 'fdbd92847bd7f7f91cbaa4168189d6985ff795e49f77a95ae35726ad22743173'
+EXPECTED_SOURCE_BYTES = 29167
 if SOURCE.is_symlink() or SOURCE.stat().st_size != EXPECTED_SOURCE_BYTES:
     raise ValueError('Unexpected test source shape')
 with SOURCE.open('rb') as stream:
@@ -43,7 +43,7 @@ class ProjectionTests(unittest.TestCase):
         counters = dict(opens=0, metadata=0, reads=0, writes=0, requestedReadBytes=0, writtenBytes=0)
         self.value = dict(schema='selected-account-public-materialization-v2', passed=True,
             authoritySha256='a' * 64,
-            target='C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v3',
+            target='C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v4',
             rows=[dict(row, identity=copy.deepcopy(ident), sourceIdentity=copy.deepcopy(ident)) for row in expected],
             failure='none', allHandlesClosed=True, noExperimentLive=False, productStarted=False, accountAccess=False,
             diagnostic=dict(copyOrdinal=0, completedCopies=200, wrapperPhase=4, nativePhase=405,

@@ -18,7 +18,7 @@ if (-not $ExecutionAdmitted) { exit 125 }
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
-$root = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v3'
+$root = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v4'
 $frequency = [Diagnostics.Stopwatch]::Frequency
 $callStart = $InvocationStartTicks
 $child = $null
