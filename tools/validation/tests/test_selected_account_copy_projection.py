@@ -10,15 +10,15 @@ import resource
 import sys
 
 SOURCE = Path(__file__).resolve().parents[1] / 'collect_selected_account_copy_results.py'
-EXPECTED_SHA256 = '378cc4ee60cc237a9abaa2b171ca6d43d5c433d9dbbd63032bb75953bfdbd670'
-EXPECTED_SOURCE_BYTES = 21851
+EXPECTED_SHA256 = '0c89d330d93c29d65a25204fa25478ac14404c35519adc0d9430d45d42a86d5d'
+EXPECTED_SOURCE_BYTES = 25067
 if SOURCE.is_symlink() or SOURCE.stat().st_size != EXPECTED_SOURCE_BYTES:
     raise ValueError('Unexpected test source shape')
 with SOURCE.open('rb') as stream:
     raw = stream.read(EXPECTED_SOURCE_BYTES + 1)
 if len(raw) != EXPECTED_SOURCE_BYTES or hashlib.sha256(raw).hexdigest() != EXPECTED_SHA256:
     raise ValueError('Unexpected test source bytes')
-FUNCTIONS = {'decode', 'exact_int', 'public_receipt', 'journal_record', 'interpret'}
+FUNCTIONS = {'decode', 'exact_int', 'public_receipt', 'public_single_copy_receipt', 'journal_record', 'interpret'}
 CONSTANTS = {'EVENT_FIELDS', 'CAPTURE_FIELDS', 'BOOL_FIELDS', 'INT_FIELDS',
              'NULLABLE_FIELDS', 'EXCEPTION_TYPES', 'PHASES'}
 tree = ast.parse(raw, filename=str(SOURCE))
@@ -178,6 +178,61 @@ class ProjectionTests(unittest.TestCase):
 
     def test_other_root(self):
         self.value['target'] = self.value['target'].replace('account-v2', 'account-v1'); self.reject(self.value)
+
+
+    def single_value(self):
+        return dict(schema='selected-account-single-copy-diagnosis-v1', passed=True,
+            authoritySha256='a' * 64, failure='none', copyCompleted=True,
+            allHandlesClosed=True, noExperimentLive=False, productStarted=False, accountAccess=False,
+            diagnostic=dict(wrapperPhase=3, nativePhase=405, heldOrdinal=2, errorKind=0, errorCode=0,
+                identityMismatchMask=0, snapshotMismatchMask=0, opens=0, metadata=0, reads=0, writes=0,
+                requestedReadBytes=0, writtenBytes=0))
+
+    def test_single_copy_success_is_diagnosis_only(self):
+        value = self.single_value(); projected = self.project(value)
+        self.assertEqual(projected, dict(interpretation='validated-public-single-copy-diagnosis',
+                                       receipt=value, diagnosisOnly=True))
+        self.assertNotIn('rows', projected['receipt']); self.assertNotIn('target', projected['receipt'])
+
+    def test_single_copy_first_fault_is_preserved(self):
+        value = self.single_value(); value.update(passed=False, copyCompleted=False, failure='copy')
+        value['diagnostic'].update(wrapperPhase=1, nativePhase=270, heldOrdinal=0,
+            errorKind=1, errorCode=270, identityMismatchMask=64)
+        self.assertEqual(self.project(value)['receipt'], value)
+        value['diagnostic'].update(identityMismatchMask=0, snapshotMismatchMask=8)
+        self.assertEqual(self.project(value)['receipt'], value)
+        value.update(copyCompleted=False, failure='native-source', diagnostic=None)
+        self.assertEqual(self.project(value)['receipt'], value)
+
+    def test_single_copy_rejects_private_or_untyped_data(self):
+        for location, field, changed in (('receipt', 'accountEmail', 'synthetic-private-marker'),
+                ('receipt', 'copyCompleted', 1), ('receipt', 'accountAccess', True),
+                ('receipt', 'failure', 'synthetic-private-marker'),
+                ('diagnostic', 'unexpectedPrivateField', 'synthetic-private-marker'),
+                ('diagnostic', 'requestedReadBytes', True),
+                ('diagnostic', 'snapshotMismatchMask', 'synthetic-private-marker')):
+            with self.subTest(location=location, field=field):
+                value = self.single_value(); container = value if location == 'receipt' else value['diagnostic']
+                container[field] = changed; self.reject(value)
+
+    def test_single_copy_requires_complete_success_conjunction(self):
+        for field, changed in (('copyCompleted', False), ('allHandlesClosed', False),
+                               ('failure', 'copy'), ('diagnostic', None)):
+            with self.subTest(field=field):
+                value = self.single_value(); value[field] = changed; self.reject(value)
+        for field, changed in (('heldOrdinal', 1), ('wrapperPhase', 2), ('nativePhase', 318),
+                              ('errorKind', 3), ('identityMismatchMask', 64)):
+            with self.subTest(field=field):
+                value = self.single_value(); value['diagnostic'][field] = changed; self.reject(value)
+
+    def test_single_copy_requires_exact_authority_and_mask_context(self):
+        value = self.single_value(); value['authoritySha256'] = 'b' * 64; self.reject(value)
+        for change in ({'snapshotMismatchMask': 16}, {'identityMismatchMask': 256},
+                       {'snapshotMismatchMask': 9}, {'identityMismatchMask': 64, 'snapshotMismatchMask': 1}):
+            with self.subTest(change=change):
+                value = self.single_value(); value.update(passed=False, copyCompleted=False, failure='copy')
+                value['diagnostic'].update(wrapperPhase=1, nativePhase=270, errorKind=1, errorCode=270)
+                value['diagnostic'].update(change); self.reject(value)
 
 
 if __name__ == '__main__':

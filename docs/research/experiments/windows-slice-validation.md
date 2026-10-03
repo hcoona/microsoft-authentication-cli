@@ -986,6 +986,109 @@ launcher330+10s and original GNU365+5/400s with the existing E0/Ec/Eb joins. Exa
 current enlarged control lengths, temporary/environment and startup accounting
 must fit before dispatch. Compiler temporary 8 MiB remains an assumption, not quota.
 
+##### Single public-file copy diagnosis
+
+The numeric supplement permits diagnosis of a fresh attempt; it does not identify
+the failed predicate or field in a historical receipt. When a bounded materializer
+fails inside its Stable/Snapshot window, use one fresh single-file diagnosis before
+another complete materialization if that smaller observation can answer the next
+question. For the current case, select only the public runtime leaf
+`toolchain\shared\Microsoft.NETCore.App\10.0.12\System.Collections.NonGeneric.dll`
+from the accepted current caller inventory: 104,232 bytes, SHA-256
+`aa4d5216d066c91cb489f63c6cbfcaf1f47b6e74e070db45639d3460454fc60b`.
+The source is beneath the accepted public `confidential-checks-v23` donor. Never
+inspect or adopt the partial account-v2 destination to answer this question.
+
+The first diagnosis uses action0194, exclusive `named-fixtures-0194` and
+`public-copy-diagnosis-0194` beneath the existing validation base. Allocate at most
+two diagnosis originals, including a supported correction, from the common pool;
+admit only the first initially. A second uses0195 and consistently changes only
+those action/stage/output literals after accepted prior outcome/scoped completion
+and a concrete unresolved need. Stop after sufficient evidence. A successful
+single-file copy means the historical failure was not reproduced by this case;
+it establishes neither its cause nor complete materialization or account readiness.
+
+Use the admitted normal0070 launcher and current native materialization type
+unchanged. The source-only diagnosis adapter keeps its false guard. It reads only
+the three fixed public bootstrap controls, compiles that type in the same owned
+Job, creates a new output directory and copies the one fixed donor through the
+existing strict Copy and CheckAll methods. Preserve every identity predicate,
+first-fault mask, counter, handle/ancestry check, source deadline and disposal.
+No product, caller, account/cache operation, download, installation, ETW or
+elevation is included. All output roots and partial copies are retain-always.
+
+The strict public authority binds `selected-account-single-copy-authority-v1`,
+action, fixed source/target, source length/hash and accepted public-source flag,
+plus exact controller/native-source hashes and accepted provenance. Transfer only
+authority.json, the false-to-true adapter under the existing launcher filename,
+and SelectedAccountMaterializationPins.cs to the exclusive stage. Preparation and
+transfer retain the existing no-follow ancestry, original descriptors, exact
+length/hash/EOF, within-read full9 and final held/named checks. Historical Linux
+ctime qualification applies only in its already admitted roles.
+
+Per original, independently admit and charge only the required fixed passes:
+
+| Pass | Maximum passes | Seconds | Reserved bytes |
+| --- | ---: | ---: | ---: |
+| Three-control creation/readback | 1 | 30 | 1 MiB |
+| Current fixed public runtime/source preflight | 1 | 30 | 32 MiB |
+| Exclusive three-control transfer/readback | 1 | 30 | 1 MiB |
+| Owned Windows diagnosis/dispatch | 1 | 400 | 460 MiB |
+| Four fixed public results | 1 | 30 | 1 MiB |
+| This original's own Linux scope witness/events | 1 | 30 | 32 KiB |
+
+The transfer's work and GNU watchdog use25+5s; its exact source must enforce the
+shorter work bound and fixed three-leaf selection before admission. Windows work,
+closure and receipt retain300/310/320s, launcher330+10s, GNU365+5s and whole400s.
+Reuse the original E0/Ec/Eb, own-scope, current startup/interop and complete transport
+methods with only the exact new stage, nonce and control descriptors. No clock is
+renewed. Fully charge technical units0/1/0/4 and the actual conservative host roles
+before the original, separately from all passive reservations. Preserve the existing
+single accounting carrier, spent/failed charges, uncertainties and real-stage charges;
+unused batch capacity or a source guard is not invocation admission.
+
+The adapter emits only the closed `selected-account-single-copy-diagnosis-v1`
+receipt, at most4KiB: passed, authoritySha256, fixed failure enum, copyCompleted,
+allHandlesClosed, noExperimentLive=false, productStarted=false, accountAccess=false
+and the fixed numeric diagnostic. Wrapper phases0/1/2/3 mean admission/copy/final
+held checks/result assignment; held ordinals are0–2. Preserve the two existing
+first-fault mask meanings, kinds and native phases. Provisional success requires
+copyCompleted and handle closure, wrapper3/native405/held2, kind/code0 and both
+masks0. No source/destination identity value, payload, exception text or private
+field is exported.
+
+The existing fixed four-leaf result reader receives a closed schema projection
+for this diagnosis. Generate its exact admitted source only by changing the
+stage/mutex0193 literals to0194 and the exclusive snapshot/collection schema and
+filename prefixes to `selected-account-single-copy`. Retain all source I/O,
+identity, bounded parse, capture suppression, original joins and scoped-completion
+mechanics. Its full expectedRows remains the admitted public inventory solely as
+reused numeric-validation context; no200-row result is produced or accepted by
+this diagnosis. Bind exact generated bytes/current call before execution. One
+result pass and one own-scope pass are independently accepted after the complete,
+timely original; failed or missing fields remain failure/unknown.
+
+Independent acceptance joins the actual original, receipt, authority, root exit,
+owned Job zero/twoEOF, own Linux scope and all accounting. A diagnosis success is
+only this single-file observation. Failure masks identify only the predicates or
+fields observed on this new call; no benign cause, historical success, comparison
+relaxation or automatic further attempt follows. Complete200-leaf materialization,
+root-compatible executable caller provenance, private inputs and personal/work/
+actualWSL evidence retain their separate requirements.
+
+Current source bindings for this diagnosis (the exact generated stage/prefix
+projection still requires its own current call admission):
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [Initialize-WindowsPublicCopyDiagnosis.ps1](../../../tools/validation/Initialize-WindowsPublicCopyDiagnosis.ps1) | 6655 | `49be390cee3f2753fcb6f25b0914c8734a7dbe7a8a6b016e1985c331ca242e00` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 25067 | `0c89d330d93c29d65a25204fa25478ac14404c35519adc0d9430d45d42a86d5d` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 14853 | `8dfed00b51b7a1bacc1cb60f230d59f3c4033a8b3ffab716fd01f19ef88c17ac` |
+
+The existing native type and normal launcher retain their current bindings. This
+source/protocol supplement reserves or executes nothing; exact admission remains
+required before any preparation, transfer, compiler or Windows original.
+
 ##### Finite batch and current public result collection
 
 Allocate at most four additional public materialization originals including supported
@@ -1340,7 +1443,7 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 | [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11209 | `1298b13e3b3d91ca2251d82f61690cd2322c0aa82611119e7bc3d17ec109ce07` |
 | [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 16033 | `101a7907538b3fd4201a054c132b74b31268d5748a705ebfb9d6360f653caff9` |
 | [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 16283 | `d8a32ec2c7ebc9dcc84784f530d83d1577652d5c473e45f9d1d5c87efeb3277c` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 21851 | `378cc4ee60cc237a9abaa2b171ca6d43d5c433d9dbbd63032bb75953bfdbd670` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 25067 | `0c89d330d93c29d65a25204fa25478ac14404c35519adc0d9430d45d42a86d5d` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `a871492cde058916dd6a0aa80c46cef1cca3bf256d6d080b3bb9d74adb795088` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `1b8ec11edfbabb492e84e80639a036595f69c2fd5b5292475959739c635e2dae` |
 | [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `34fa06aa823ab21e7c71c14105f2be5c006e0d5e9dea9f74b09d17a56f4b5a1e` |
@@ -1348,7 +1451,7 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 | [selected-account-inputs/R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `5ac3fbd53a3ea779cd15658babe89d2bafc95f6bbb41155f43887d558fe6d1db` |
 | [selected-account-inputs/R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `526c8cdded4c0266a31d47b162c31616ce00b51cb2cee81df5562038fb175660` |
 | [selected-account-inputs/R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `c6c0e4d3dd2d0e98589385d41d9d87cbbe6f2d1c67ca3fe1dde77ad72ca14b0f` |
-| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 11038 | `a902baab10e1a5ffd25b2fb734af68fd441dc1f4a46cb011993b3d5a3ba9c8dd` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 14853 | `8dfed00b51b7a1bacc1cb60f230d59f3c4033a8b3ffab716fd01f19ef88c17ac` |
 
 #### Public Transfer Receipt and Dispatch Input Current Correspondence
 
