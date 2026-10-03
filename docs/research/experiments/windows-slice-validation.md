@@ -402,7 +402,7 @@ All other source mappings, compiler inputs, four targets, references, runtime
 metadata and reviewed Microsoft API judgments are reused unchanged. The source
 map remains the generated correspondence carrier rather than a second catalog.
 
-Use a fresh compile original0200 at `confidential-checks-v25`, projecting the
+Use a fresh compile original0203 at `confidential-checks-v25`, projecting the
 existing root-compatible compile methods consistently across its source/response
 map, four responses, controller, Python caller, catalog and exact admission. Reuse
 the accepted current365 public donors only in their admitted roles; keep local
@@ -421,7 +421,7 @@ The v24 caller fixes account-v3 and remains passive provenance. Matching hashes 
 a manually edited inventory cannot admit its execution at account-v4.
 
 After the accepted first-named single-file check below, full materialization uses
-fresh action0201, `named-fixtures-0201`, `selected-account-public-inputs-v6` and
+fresh action0204, `named-fixtures-0204`, `selected-account-public-inputs-v6` and
 the account-v4 output. Project existing
 control-creation/transfer/dispatch/result methods only through those exact literals
 and the accepted new source/build/inventory descriptors. Use the accepted prospective
@@ -468,7 +468,7 @@ Current root-sensitive source bindings:
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11352 | `b92f6584fff251b80472e058bc8a110e9964718de379cf8de0573f15c4a0045e` |
-| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 19569 | `e6e301a01765bad6d12a27f2e38d3195ff89b01bb93df8c12362f91eccb9d44c` |
+| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 20605 | `efb3716ed54c7740e9c39dbbbe79fe897928b95f4a01f942caa2ad4243674588` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `fcfd340e52f05edc670ce2fb062fa20de54dca87d29ad2028eba6575270a1419` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `3506fc1c85d7ec8e37d86e067e018660cc93429a8fb8d1a1eced71037d68fcb3` |
 | [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `b81b6e0b24892d7f556432cee8b3359e266595eccc90cc4e414eb15e3b5b598f` |
@@ -1219,6 +1219,16 @@ Retain the occupied account-v3 root, all failed originals and their full charges
 The prospective adjustment below changes acquisition order before a baseline
 exists; it neither clears this fault nor relaxes a sealed comparison.
 
+The independently accepted0199 single-file test of the Open/Name-before-candidate
+order also failed at274/kind1/code274, mask64 and snapshotMask0. Its first
+destination hash/EOF completed, but outputStage1, firstReadChangeCount0 and
+sealedOutputs0 preserve the failed copy. Current native-handle, root/Job/twoEOF,
+capture and qualified own-Linux completion were independently accepted;
+productStarted and accountAccess were false. Opening and naming the first handle
+did not suffice for this copy. Its first actual named Snapshot still followed the
+held candidate. Retain0199 and all spent observations; the next adjustment is a
+prospective query-order hypothesis, not an identified defect or physical cause.
+
 Microsoft's [FILE_BASIC_INFO reference](https://learn.microsoft.com/windows/win32/api/winbase/ns-winbase-file_basic_info)
 distinguishes metadata ChangeTime from data-stream LastWriteTime, and
 [CreateFileW](https://learn.microsoft.com/windows/win32/api/fileapi/nf-fileapi-createfilew)
@@ -1236,11 +1246,17 @@ option. It does not catch and clear an existing fault or retry until quiet.
 The post-first-window candidate snapshot uses `stream.SafeFileHandle`, the same
 handle exposure used by Stable. After the first complete hash/EOF, open exactly
 one readonly named attribute handle and verify its Name before taking that held
-candidate snapshot. Reuse that same named handle for the first full agreement;
+candidate snapshot. Query Snapshot on that named handle exactly once before the
+held candidate, requiring its existing shape checks, all seven non-ChangeTime
+fields equal to the initial reader and volume/index/creation agreement with the
+CREATE_NEW writer identity. Retain this first named observation separately.
+Reuse that same named handle for the first full agreement;
 do not introduce another named-open attempt or loop. This explicitly includes
-the initial held-handle exposure and the first named Open/Name exposure in fresh
-output establishment. Retain initial and observed identities separately and the
-bounded ChangeTime disclosure across this complete first window.
+the initial held-handle exposure and first named Open/Name/Snapshot exposure in
+fresh output establishment. Retain initial, first named and observed held
+identities separately. Count at most one first-window ChangeTime inequality per
+output when either first named or observed held ChangeTime differs from the
+initial reader, after both seven-field and creation joins succeed.
 
 This order does not identify a physical cause, guarantee agreement, relax generic
 Stable or refresh any established input baseline. The implicit Framework/API
@@ -1267,21 +1283,21 @@ postchecks succeed may the output register for unchanged final CheckAll and coun
 as sealed. Source/donor Pin and all private/historical/executable admissions remain
 unchanged; there is no fault clearing, retry-until-quiet or ignore-field option.
 
-First validate this acquisition order with fresh action0199,
-`named-fixtures-0199` and `public-copy-diagnosis-0199`. Use the admitted public
+First validate this query order with fresh action0202,
+`named-fixtures-0202` and `public-copy-diagnosis-0202`. Use the admitted public
 Microsoft.CSharp.dll at980776 bytes and SHA-256
 `2000912f2fc52e0c64ed893d79f4e7b143502540fb7170b5ae5fcea7099ba431`,
 the same first inventory leaf rejected by0197. Reuse the existing fixed single-file
 controls, transfer, dispatch, result and own-scope recipes with those literals,
 that exact public input and newly accepted source/authority bindings. Native fault
 mapping and materialization-v3/diagnosis-v2 closed shapes stay unchanged. The
-original0198 diagnosis and every earlier outcome remain retained; no occupied
+original0198/0199 diagnoses and every earlier outcome remain retained; no occupied
 output is reopened or reused. The unchanged finite batch,0/1/0/4 charge, exact
 current source/input/call gates and independent actual outcome/scoped completion
 acceptance apply. This amendment reserves nothing and promises no successful copy.
 
 After sufficient independently accepted single-file evidence, the fresh-root
-caller/build/materialization sequence above uses0200/v25 then0201/account-v4.
+caller/build/materialization sequence above uses0203/v25 then0204/account-v4.
 Reuse admitted toolchains, source methods and public donors in their exact roles;
 only the required root/source correspondence changes justify the new caller build.
 Preserve every earlier successful preparation as provenance and every failed
@@ -1296,11 +1312,12 @@ The new closed materialization-v3 and diagnosis-v2 diagnostics add exactly:
 | Field | Values and meaning |
 | --- | --- |
 | outputStage | 0 before output establishment;1 after initial output snapshot and during first-read/sealing checks;2 after full baseline agreement and during strict second read;3 after that read's postchecks and output registration |
-| firstReadChangeCount | Cumulative first-window ChangeTime inequalities after accepted seven-field and creation joins,0–200 for full materialization or0–1 for diagnosis; this is disclosure, not fault clearing or a causal conclusion |
+| firstReadChangeCount | Cumulative outputs whose first named or observed held ChangeTime differs from the initial reader after both accepted seven-field and creation joins,0–200 for full materialization or0–1 for diagnosis; each output counts at most once and this is disclosure, not fault clearing or a causal conclusion |
 | sealedOutputs | Cumulative outputs whose second strict read and registration succeeded,0–200 or0–1; a later row-binding/deadline failure can still fail Copy/result |
 
-First-read post-snapshot/seven-field comparison uses220; only bits1/2/4/8/16/32/128
-may occur in its first identity fault. The original creation join remains317.
+The initial named and held post-snapshot/seven-field comparisons use220; only
+bits1/2/4/8/16/32/128 may occur in their first identity fault. Their original
+creation joins remain317.
 Phase240 is the mandatory second hash;280–284 have the same full identity/Name
 semantics as the existing Stable phases. Snapshot masks may occur at220/280/284;
 full identity masks including64 may occur at280/284. Preserve all existing mask,
@@ -1315,15 +1332,19 @@ sealedOutputs200 and both masks0. No count or flag alone grants acceptance.
 For the retained104,232-byte diagnosis, the added hash requests104,233 bytes and
 nominally three reads: four length-plus-EOF passes total416,932 requested bytes,
 12 reads and104,232 written bytes. Its earlier first-read method had two data
-writes,19 opens and83 metadata operations without short reads. The current order
-adds one Name query, giving84 metadata operations for that same nominal case.
+writes,19 opens and83 metadata operations without short reads. The
+Open/Name-before-candidate order adds one Name query, giving84 metadata operations
+for that same nominal case. The current additional named Snapshot adds three
+metadata operations, giving87, with no extra open or payload I/O.
 The fresh980,776-byte leaf instead has four nominal passes totaling3,923,108
 requested bytes,64 reads and980,776 written bytes; its exact ancestry and operation
 counts must be admitted with the new controls. Counters and hard caps govern actual
 requests. Relative to a complete strict original Copy,
 the sealing method adds one open,12 metadata operations and one length-plus-EOF hash.
-The first-named reordering itself adds only one Name metadata query per output;
-its open and data-read counts match the already accepted sealing method.
+The current first-named query order adds one Name and one Snapshot per output,
+four metadata operations in total; its open and data-read counts match the
+already accepted sealing method. The new Snapshot alone adds at most600
+metadata operations across200 outputs, under the unchanged32768 hard cap.
 For at most200 leaves/96MiB, four full passes request at most402,653,984 bytes
 when each request returns in full, below unchanged448MiB. Short reads still charge
 full requests and stop at the same caps; no refund or success guarantee follows.
