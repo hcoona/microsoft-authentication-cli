@@ -25,6 +25,8 @@ public sealed class SelectedAccountFileIdentity
 public sealed class SelectedAccountHeldFile
 {
     internal FileStream Stream;
+    // Copy outputs alias the stream-owned handle without invoking its flushing accessor.
+    internal SafeFileHandle OutputObservationHandle;
     public string path, sha256;
     public SelectedAccountFileIdentity identity;
     public SelectedAccountFileIdentity sourceIdentity;
@@ -184,10 +186,14 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
         }
         Need(same);
     }
+    private SafeFileHandle ObservationHandle(SelectedAccountHeldFile file)
+    {
+        return file.OutputObservationHandle ?? file.Stream.SafeFileHandle;
+    }
     private void Stable(SelectedAccountHeldFile file, int phaseBase)
     {
-        SetPhase(phaseBase); NeedStableIdentity(Snapshot(file.Stream.SafeFileHandle), file.identity);
-        SetPhase(phaseBase + 1); Name(file.Stream.SafeFileHandle, file.path);
+        SetPhase(phaseBase); NeedStableIdentity(Snapshot(ObservationHandle(file)), file.identity);
+        SetPhase(phaseBase + 1); Name(ObservationHandle(file), file.path);
         SetPhase(phaseBase + 2);
         using (SafeFileHandle named = Open(file.path, 0x80, 1, 3, 0x00200000))
         {
@@ -305,7 +311,7 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
                 Need(namedMask == 0);
                 SetPhase(317); Need(namedInitial.volume == original.volume && namedInitial.index == original.index &&
                     namedInitial.created == original.created);
-                SetPhase(220); SelectedAccountFileIdentity observed = Snapshot(stream.SafeFileHandle);
+                SetPhase(220); SelectedAccountFileIdentity observed = Snapshot(handle);
                 // All seven non-ChangeTime fields must agree across this first window.
                 int mask = (observed.volume != initial.volume ? 1 : 0) |
                     (observed.index != initial.index ? 2 : 0) |
@@ -319,12 +325,12 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
                 SetPhase(317); Need(observed.volume == original.volume && observed.index == original.index &&
                     observed.created == original.created);
                 if (namedInitial.changed != initial.changed || observed.changed != initial.changed) firstReadChangeCount++;
-                file = new SelectedAccountHeldFile { Stream = stream, path = path,
+                file = new SelectedAccountHeldFile { Stream = stream, OutputObservationHandle = handle, path = path,
                     sha256 = hash, identity = observed, outputInitialIdentity = initial, outputFirstReadIdentity = observed,
                     outputFirstNamedIdentity = namedInitial };
                 // Full held/named agreement establishes a prospective baseline, never continuity.
-                SetPhase(270); NeedStableIdentity(Snapshot(stream.SafeFileHandle), file.identity);
-                SetPhase(271); Name(stream.SafeFileHandle, path);
+                SetPhase(270); NeedStableIdentity(Snapshot(handle), file.identity);
+                SetPhase(271); Name(handle, path);
                 SetPhase(273); Name(named, path);
                 SetPhase(274); NeedStableIdentity(Snapshot(named), file.identity);
             }

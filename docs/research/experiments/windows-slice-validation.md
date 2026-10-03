@@ -468,7 +468,7 @@ Current root-sensitive source bindings:
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11352 | `b92f6584fff251b80472e058bc8a110e9964718de379cf8de0573f15c4a0045e` |
-| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 20605 | `efb3716ed54c7740e9c39dbbbe79fe897928b95f4a01f942caa2ad4243674588` |
+| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 20893 | `8a6fc4357cdeae8a5a0cd9ae2c72ec5e43e614875ea2caa3b3679dc0b3f27304` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `fcfd340e52f05edc670ce2fb062fa20de54dca87d29ad2028eba6575270a1419` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `3506fc1c85d7ec8e37d86e067e018660cc93429a8fb8d1a1eced71037d68fcb3` |
 | [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `b81b6e0b24892d7f556432cee8b3359e266595eccc90cc4e414eb15e3b5b598f` |
@@ -1229,6 +1229,16 @@ did not suffice for this copy. Its first actual named Snapshot still followed th
 held candidate. Retain0199 and all spent observations; the next adjustment is a
 prospective query-order hypothesis, not an identified defect or physical cause.
 
+The independently accepted0202 single-file query-order test progressed through
+the first full held/named baseline agreement, but still failed. Its second
+destination hash/EOF completed before native280/kind1/code280 rejected the held
+identity with mask64 and snapshotMask0. OutputStage2, firstReadChangeCount0,
+sealedOutputs0 and copyCompleted=false preserve the absence of a sealed copy.
+Current native-handle, root/Job/twoEOF/capture and qualified own-Linux completion
+were independently accepted; productStarted and accountAccess were false.
+ChangeTime inequality is the observed predicate failure; its physical cause
+remains UNKNOWN. Preserve0202 and all spent observations and occupied outputs.
+
 Microsoft's [FILE_BASIC_INFO reference](https://learn.microsoft.com/windows/win32/api/winbase/ns-winbase-file_basic_info)
 distinguishes metadata ChangeTime from data-stream LastWriteTime, and
 [CreateFileW](https://learn.microsoft.com/windows/win32/api/fileapi/nf-fileapi-createfilew)
@@ -1243,8 +1253,22 @@ Keep source/donor Pin, all private/historical/executable input admissions and fi
 CheckAll unchanged. EstablishOutput is private and has no input-role or ignore-field
 option. It does not catch and clear an existing fault or retry until quiet.
 
-The post-first-window candidate snapshot uses `stream.SafeFileHandle`, the same
-handle exposure used by Stable. After the first complete hash/EOF, open exactly
+Microsoft's [FileStream.SafeFileHandle reference](https://learn.microsoft.com/dotnet/api/system.io.filestream.safefilehandle?view=netframework-4.8)
+documents that its accessor automatically flushes the stream. Avoid that accessor
+solely for metadata observations on fresh Copy outputs: retain the exact already
+opened SafeFileHandle object passed to their FileStream as an internal output-only
+alias. Before the held-file object exists, use the same local handle directly;
+afterward, output Stable and CheckAll use the retained alias at each existing
+held Snapshot/Name observation. Pin inputs leave that field null and retain each
+original accessor evaluation, its order, and all existing queries and predicates.
+No new handle, duplicate, timestamp setter, data access through the alias, retry,
+ignored field or baseline refresh is introduced. The FileStream remains its sole
+lifetime owner; never separately register or dispose the alias or use it after
+the stream closes. Payload reads and positioning stay on the FileStream, with no
+buffered output-reader writes. This removes a documented observation-accessor
+effect prospectively; it does not identify0202's cause or predict success.
+
+After the first complete hash/EOF, open exactly
 one readonly named attribute handle and verify its Name before taking that held
 candidate snapshot. Query Snapshot on that named handle exactly once before the
 held candidate, requiring its existing shape checks, all seven non-ChangeTime
@@ -1283,21 +1307,22 @@ postchecks succeed may the output register for unchanged final CheckAll and coun
 as sealed. Source/donor Pin and all private/historical/executable admissions remain
 unchanged; there is no fault clearing, retry-until-quiet or ignore-field option.
 
-First validate this query order with fresh action0202,
-`named-fixtures-0202` and `public-copy-diagnosis-0202`. Use the admitted public
+Validate the output-only observation alias with fresh action0205,
+`named-fixtures-0205` and `public-copy-diagnosis-0205`. Use the admitted public
 Microsoft.CSharp.dll at980776 bytes and SHA-256
 `2000912f2fc52e0c64ed893d79f4e7b143502540fb7170b5ae5fcea7099ba431`,
 the same first inventory leaf rejected by0197. Reuse the existing fixed single-file
 controls, transfer, dispatch, result and own-scope recipes with those literals,
 that exact public input and newly accepted source/authority bindings. Native fault
 mapping and materialization-v3/diagnosis-v2 closed shapes stay unchanged. The
-original0198/0199 diagnoses and every earlier outcome remain retained; no occupied
+original0198/0199/0202 diagnoses and every earlier outcome remain retained; no occupied
 output is reopened or reused. The unchanged finite batch,0/1/0/4 charge, exact
 current source/input/call gates and independent actual outcome/scoped completion
 acceptance apply. This amendment reserves nothing and promises no successful copy.
 
 After sufficient independently accepted single-file evidence, the fresh-root
-caller/build/materialization sequence above uses0203/v25 then0204/account-v4.
+caller/build/materialization sequence above uses0206/v25 then0207/account-v4.
+These replace the unexecuted0203/0204 continuation; neither is an accepted result.
 Reuse admitted toolchains, source methods and public donors in their exact roles;
 only the required root/source correspondence changes justify the new caller build.
 Preserve every earlier successful preparation as provenance and every failed
