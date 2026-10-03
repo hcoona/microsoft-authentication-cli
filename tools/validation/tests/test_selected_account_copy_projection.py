@@ -177,7 +177,7 @@ class ProjectionTests(unittest.TestCase):
                          {'interpretation': 'contents-suppressed', 'empty': False})
 
     def test_other_root(self):
-        self.value['target'] = self.value['target'].replace('account-v2', 'account-v1'); self.reject(self.value)
+        self.value['target'] += '-unsupported'; self.reject(self.value)
 
 
     def single_value(self):
