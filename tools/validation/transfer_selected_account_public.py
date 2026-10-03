@@ -10,7 +10,7 @@ import sys
 import time
 
 ADMISSION = None
-STAGE = '/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0192'
+STAGE = '/mnt/c/Temp/azureauth-windows-slice-108/named-fixtures-0193'
 LEAVES = (
     'authority.json', 'Invoke-WindowsNamedGuardFixtures.ps1',
     'SelectedAccountMaterializationPins.cs', 'caller-inventory.json',
@@ -18,7 +18,7 @@ LEAVES = (
     'Invoke-WindowsSelectedAccount.ps1', 'R1.template.json', 'R6.template.json',
 )
 RECOVERY = '/home/shuaizhang/.local/state/azureauth-108-recovery-20260929'
-SOURCE_PATHS = {name: RECOVERY + '/selected-account-public-inputs-v3/' + name for name in LEAVES}
+SOURCE_PATHS = {name: RECOVERY + '/selected-account-public-inputs-v4/' + name for name in LEAVES}
 for _name in ('Authentication.Cli.exe', 'msalruntime.dll'):
     SOURCE_PATHS[_name] = RECOVERY + '/selected-account-product-bytes-v1/' + _name
 
@@ -40,6 +40,8 @@ class Transfer:
         self.directories = {}
         self.files = []
         self.file_roles = {}
+        self.created_content = {}
+        self.copy_checks = []
         self.phase = 0
         self.role = 0
         self.ordinal = 0
@@ -49,7 +51,7 @@ class Transfer:
         self.cleanup_attempted = False
         self.cleanup_completed = False
         self.counts = dict(opens=0, metadata=0, reads=0, writes=0,
-                           requestedReadBytes=0, writtenBytes=0)
+                           requestedReadBytes=0, writtenBytes=0, createdChecks=0)
 
     def native(self, operation, function, *args, **kwargs):
         self.operation = operation
@@ -85,6 +87,9 @@ class Transfer:
         self.counts[name] += count
         if self.counts[name] > maximum:
             raise ValueError('Public transfer limit')
+        if name in ('requestedReadBytes', 'writtenBytes') and \
+                self.counts['requestedReadBytes'] + self.counts['writtenBytes'] > 67108864 - 32768:
+            raise ValueError('Public transfer aggregate limit')
 
     def open(self, name, flags, parent=None, mode=0o600):
         self.charge('opens', 1, 128)
@@ -128,13 +133,13 @@ class Transfer:
         while len(data) < length:
             count = min(65536, length - len(data))
             self.charge('reads', 1, 8192)
-            self.charge('requestedReadBytes', count, 33554432)
+            self.charge('requestedReadBytes', count, 67108864)
             block = self.native(5, os.read, fd, count)
             if not block:
                 raise ValueError('Incomplete public transfer')
             data.extend(block)
         self.charge('reads', 1, 8192)
-        self.charge('requestedReadBytes', 1, 33554432)
+        self.charge('requestedReadBytes', 1, 67108864)
         if self.native(5, os.read, fd, 1):
             raise ValueError('Transfer EOF refused')
         return bytes(data)
@@ -169,10 +174,32 @@ class Transfer:
             raise ValueError('Public transfer readback refused')
         self.stable(pfd, name, reader, current)
         self.held(pfd, name, reader, current)
+        digest = hashlib.sha256(raw).hexdigest()
+        self.created_content[reader] = (len(raw), digest)
         self.native(8, os.fsync, pfd)
         self.operation = 11
-        return dict(name=name, bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest(),
+        return dict(name=name, bytes=len(raw), sha256=digest,
                     full9=current, createdFull9=initial)
+
+    def check_created(self, pfd, name, fd, original):
+        self.charge('createdChecks', 1, 23)
+        current = full9(self.metadata(fd))
+        # Preserve the original descriptor and diagnose every other-field change.
+        if any(original[index] != current[index] for index in (0, 1, 2, 3, 4, 5, 6, 8)):
+            self.same(original, current)
+        self.same(current, full9(self.metadata(pfd, name)))
+        reread = current[7] != original[7]
+        if reread:
+            length, digest = self.created_content[fd]
+            if self.native(14, os.lseek, fd, 0, os.SEEK_SET) != 0:
+                raise ValueError('Public transfer seek refused')
+            self.stable(pfd, name, fd, current)
+            raw = self.read(fd, length)
+            self.stable(pfd, name, fd, current)
+            self.operation = 11
+            if hashlib.sha256(raw).hexdigest() != digest:
+                raise ValueError('Public transfer qualified hash changed')
+        self.copy_checks.append([self.phase, self.ordinal, original[7], current[7], reread])
 
     def check_all(self):
         self.role = 1
@@ -184,7 +211,10 @@ class Transfer:
                 self.same(expected, full5(self.metadata(self.directories[parent or '/'][0], leaf)))
         for pfd, name, fd, expected in self.files:
             self.role, self.ordinal = self.file_roles[fd]
-            self.stable(pfd, name, fd, expected)
+            if self.role == 3 and fd in self.created_content:
+                self.check_created(pfd, name, fd, expected)
+            else:
+                self.stable(pfd, name, fd, expected)
 
     def run(self):
         self.phase = 1
@@ -242,7 +272,8 @@ class Transfer:
         self.phase = 7
         stage_identity = full5(self.metadata(stage))
         self.operation = 12
-        receipt = (json.dumps({'schema': 'selected-account-public-transfer-v1', 'rows': rows,
+        receipt = (json.dumps({'schema': 'selected-account-public-transfer-v2', 'rows': rows,
+                              'copyChecks': self.copy_checks,
                               'stageFull5': stage_identity, 'countsBeforeReceipt': self.counts,
                               'productStarted': False, 'accountAccess': False},
                              sort_keys=True, separators=(',', ':'), allow_nan=False) + '\n').encode('ascii')
@@ -253,6 +284,8 @@ class Transfer:
         result = self.write(stage, 'transfer-result.json', receipt)
         self.phase = 9
         self.check_all(); self.before()
+        result.update(schema='selected-account-public-transfer-result-v2',
+                      copyChecks=self.copy_checks, countsAfterChecks=dict(self.counts))
         return result
 
     def dispose(self):
@@ -293,7 +326,7 @@ def main():
         transfer.before()
         transfer.operation = 12
         raw = (json.dumps(result, sort_keys=True, separators=(',', ':')) + '\n').encode('ascii')
-        if len(raw) > 2048:
+        if len(raw) > 8192:
             raise ValueError('Transfer frame bound')
         transfer.charge('writes', 1, 8192); transfer.charge('writtenBytes', len(raw), 16777216)
         if transfer.native(6, os.write, 1, raw) != len(raw):
