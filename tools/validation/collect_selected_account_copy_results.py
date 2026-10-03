@@ -133,13 +133,27 @@ def public_receipt(result):
     if diagnostic is not None:
         limits = {'copyOrdinal': 200, 'completedCopies': 200, 'wrapperPhase': 4,
                   'heldOrdinal': 400, 'errorKind': 3, **counters}
-        if (type(diagnostic) is not dict or set(diagnostic) != {*limits, 'nativePhase', 'errorCode'} or
+        fields = {*limits, 'nativePhase', 'errorCode'}
+        if (type(diagnostic) is not dict or
+                set(diagnostic) not in (fields, fields | {'identityMismatchMask', 'snapshotMismatchMask'}) or
                 any(not exact_int(diagnostic[key], 0, maximum) for key, maximum in limits.items()) or
                 type(diagnostic['nativePhase']) is not int or diagnostic['nativePhase'] not in phases or
                 not exact_int(diagnostic['errorCode'], -(1 << 31), (1 << 31) - 1) or
                 (diagnostic['errorKind'] == 0 and diagnostic['errorCode'] != 0) or
                 (diagnostic['errorKind'] == 1 and diagnostic['errorCode'] != diagnostic['nativePhase'])):
             raise ValueError('Copy diagnostic values')
+        mask = diagnostic.get('identityMismatchMask', 0)
+        if (not exact_int(mask, 0, 255) or
+                (mask != 0 and (diagnostic['errorKind'] != 1 or
+                 diagnostic['nativePhase'] not in (170, 174, 270, 274, 320, 324, 400, 404)))):
+            raise ValueError('Copy identity difference context')
+        snapshot_mask = diagnostic.get('snapshotMismatchMask', 0)
+        if (not exact_int(snapshot_mask, 0, 15) or
+                (snapshot_mask & 8 and snapshot_mask != 8) or
+                (snapshot_mask != 0 and (mask != 0 or diagnostic['errorKind'] != 1 or
+                 diagnostic['nativePhase'] not in (104, 204, 305, 170, 174, 270, 274,
+                                                  320, 324, 400, 404)))):
+            raise ValueError('Copy snapshot predicate context')
     if 'counts' in result:
         limits = {**counters, 'bootstrapReads': 8193, 'bootstrapRequestedReadBytes': 8388608 + 65536}
         counts = result['counts']

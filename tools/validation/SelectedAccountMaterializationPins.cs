@@ -40,6 +40,7 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
     public long requestedReadBytes, writtenBytes, reads, writes, opens, metadata;
     // Fixed numeric context only. Freeze the first fault before any cleanup.
     public int phase, heldOrdinal, errorKind, errorCode;
+    public int identityMismatchMask, snapshotMismatchMask;
     private bool faulted;
     private int pinPhase = 100;
     public void SetPhase(int value) { if (!faulted) phase = value; }
@@ -95,11 +96,18 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
     {
         Info info = Information(handle); Basic basic = new Basic();
         Tick(); metadata += 2; Need(metadata <= 32768);
-        Need(GetFileType(handle) == 1 && (info.Attributes & 0x410) == 0 && info.Links == 1);
+        uint fileType = GetFileType(handle);
+        bool validShape = fileType == 1 && (info.Attributes & 0x410) == 0 && info.Links == 1;
+        if (!validShape && !faulted)
+            snapshotMismatchMask = (fileType != 1 ? 1 : 0) |
+                ((info.Attributes & 0x410) != 0 ? 2 : 0) | (info.Links != 1 ? 4 : 0);
+        Need(validShape);
         bool found = GetFileInformationByHandleEx(handle, 0, out basic, (uint)Marshal.SizeOf(typeof(Basic)));
         if (!found) { int error = Marshal.GetLastWin32Error(); Fault(2, error); }
         Need(found);
-        Need(basic.Attributes == info.Attributes);
+        bool sameAttributes = basic.Attributes == info.Attributes;
+        if (!sameAttributes && !faulted) snapshotMismatchMask = 8;
+        Need(sameAttributes);
         return new SelectedAccountFileIdentity { volume = info.Volume,
             index = ((ulong)info.IndexHigh << 32) | info.IndexLow, attributes = basic.Attributes,
             created = basic.Created, modified = basic.Modified, changed = basic.Changed,
@@ -156,9 +164,25 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
             return BitConverter.ToString(hash.Hash).Replace("-", "").ToLowerInvariant();
         }
     }
+    private void NeedStableIdentity(SelectedAccountFileIdentity current, SelectedAccountFileIdentity expected)
+    {
+        bool same = current.Same(expected);
+        if (!same && !faulted)
+        {
+            identityMismatchMask = (current.volume != expected.volume ? 1 : 0) |
+                (current.index != expected.index ? 2 : 0) |
+                (current.attributes != expected.attributes ? 4 : 0) |
+                (current.links != expected.links ? 8 : 0) |
+                (current.created != expected.created ? 16 : 0) |
+                (current.modified != expected.modified ? 32 : 0) |
+                (current.changed != expected.changed ? 64 : 0) |
+                (current.length != expected.length ? 128 : 0);
+        }
+        Need(same);
+    }
     private void Stable(SelectedAccountHeldFile file, int phaseBase)
     {
-        SetPhase(phaseBase); Need(Snapshot(file.Stream.SafeFileHandle).Same(file.identity));
+        SetPhase(phaseBase); NeedStableIdentity(Snapshot(file.Stream.SafeFileHandle), file.identity);
         SetPhase(phaseBase + 1); Name(file.Stream.SafeFileHandle, file.path);
         SetPhase(phaseBase + 2);
         using (SafeFileHandle named = Open(file.path, 0x80, 1, 3, 0x00200000))
@@ -166,7 +190,7 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
             try
             {
                 SetPhase(phaseBase + 3); Name(named, file.path);
-                SetPhase(phaseBase + 4); Need(Snapshot(named).Same(file.identity));
+                SetPhase(phaseBase + 4); NeedStableIdentity(Snapshot(named), file.identity);
             }
             catch (Exception error) { RecordManagedFault(error.HResult); throw; }
         }
