@@ -376,7 +376,7 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [DirectObserver.rsp](../../../tools/validation/controlled-callers/control/DirectObserver.rsp) | 20404 | `b4af49e38b70808369e259466a7a759339d6f422733c9b61a31f560d12159fb6` |
 | [SyntheticSubject.rsp](../../../tools/validation/controlled-callers/control/SyntheticSubject.rsp) | 21309 | `7016e29b6f8f43805786e81c8213f2dc509bfabc100d7b4b5478eee707b78325` |
 | [FixtureDriver.rsp](../../../tools/validation/controlled-callers/control/FixtureDriver.rsp) | 21276 | `aeebc66eb198c2d70f640051ad3d915164e6af124a1778679ad9bfdf63b2d01c` |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11209 | `1298b13e3b3d91ca2251d82f61690cd2322c0aa82611119e7bc3d17ec109ce07` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11352 | `f604ae3dffb885aaba6dfbb8edf94afd9629cdf31ec0a7e29a1b50437f3d5a3b` |
 
 ## Retained Product Byte Acquisition Recipe
 
@@ -1002,17 +1002,20 @@ inspect or adopt the partial account-v2 destination to answer this question.
 The first diagnosis uses action0194, exclusive `named-fixtures-0194` and
 `public-copy-diagnosis-0194` beneath the existing validation base. Allocate at most
 two diagnosis originals, including a supported correction, from the common pool;
-admit only the first initially. A second uses0195 and consistently changes only
-those action/stage/output literals after accepted prior outcome/scoped completion
-and a concrete unresolved need. Stop after sufficient evidence. A successful
+admit only the first initially. A second uses0195 after accepted prior outcome/scoped
+completion and the supported fresh-output sealing amendment below. Its exact
+controls bind that amendment as well as the new action/stage/output literals.
+Stop after sufficient evidence. A successful
 single-file copy means the historical failure was not reproduced by this case;
 it establishes neither its cause nor complete materialization or account readiness.
 
-Use the admitted normal0070 launcher and current native materialization type
-unchanged. The source-only diagnosis adapter keeps its false guard. It reads only
+Use the admitted normal0070 launcher unchanged. The initial0194 used the strict
+original native materialization type;0195 uses only the role-specific amendment
+below after its acceptance and exact admission. The source-only diagnosis adapter
+keeps its false guard. It reads only
 the three fixed public bootstrap controls, compiles that type in the same owned
 Job, creates a new output directory and copies the one fixed donor through the
-existing strict Copy and CheckAll methods. Preserve every identity predicate,
+admitted Copy and unchanged CheckAll methods. Preserve every applicable identity predicate,
 first-fault mask, counter, handle/ancestry check, source deadline and disposal.
 No product, caller, account/cache operation, download, installation, ETW or
 elevation is included. All output roots and partial copies are retain-always.
@@ -1047,19 +1050,21 @@ before the original, separately from all passive reservations. Preserve the exis
 single accounting carrier, spent/failed charges, uncertainties and real-stage charges;
 unused batch capacity or a source guard is not invocation admission.
 
-The adapter emits only the closed `selected-account-single-copy-diagnosis-v1`
+The initial adapter emitted `selected-account-single-copy-diagnosis-v1`; the
+current0195 adapter emits only the closed `selected-account-single-copy-diagnosis-v2`
 receipt, at most4KiB: passed, authoritySha256, fixed failure enum, copyCompleted,
 allHandlesClosed, noExperimentLive=false, productStarted=false, accountAccess=false
-and the fixed numeric diagnostic. Wrapper phases0/1/2/3 mean admission/copy/final
+and the fixed numeric diagnostic, including the sealing fields defined below.
+Wrapper phases0/1/2/3 mean admission/copy/final
 held checks/result assignment; held ordinals are0–2. Preserve the two existing
 first-fault mask meanings, kinds and native phases. Provisional success requires
 copyCompleted and handle closure, wrapper3/native405/held2, kind/code0 and both
-masks0. No source/destination identity value, payload, exception text or private
+masks0, outputStage3 and sealedOutputs1. No source/destination identity value, payload, exception text or private
 field is exported.
 
 The existing fixed four-leaf result reader receives a closed schema projection
 for this diagnosis. Generate its exact admitted source only by changing the
-stage/mutex0193 literals to0194 and the exclusive snapshot/collection schema and
+stage/mutex0193 literals to the admitted diagnosis action and the exclusive snapshot/collection schema and
 filename prefixes to `selected-account-single-copy`. Retain all source I/O,
 identity, bounded parse, capture suppression, original joins and scoped-completion
 mechanics. Its full expectedRows remains the admitted public inventory solely as
@@ -1081,13 +1086,115 @@ projection still requires its own current call admission):
 
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Initialize-WindowsPublicCopyDiagnosis.ps1](../../../tools/validation/Initialize-WindowsPublicCopyDiagnosis.ps1) | 6655 | `49be390cee3f2753fcb6f25b0914c8734a7dbe7a8a6b016e1985c331ca242e00` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 25067 | `0c89d330d93c29d65a25204fa25478ac14404c35519adc0d9430d45d42a86d5d` |
-| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 14853 | `8dfed00b51b7a1bacc1cb60f230d59f3c4033a8b3ffab716fd01f19ef88c17ac` |
+| [Initialize-WindowsPublicCopyDiagnosis.ps1](../../../tools/validation/Initialize-WindowsPublicCopyDiagnosis.ps1) | 6798 | `b2d8e9b7b9d5cc3a65d91bcbded8ff994e764adeca8ab6772db76c1dcabd0498` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 27565 | `c5a5405430a7bc3b768bd77ea409a13cb8e24b50edc947cc333c8d4a038ce7e3` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 19000 | `575f02c31f2612499a86dfedca7c99dcdd606d216d9fd2d73c013ce2bd0c4c50` |
 
 The existing native type and normal launcher retain their current bindings. This
 source/protocol supplement reserves or executes nothing; exact admission remains
 required before any preparation, transfer, compiler or Windows original.
+
+##### Fresh public output establishment and sealing
+
+The accepted0194 outcome is a failed single-copy diagnosis. Its first predicate
+fault was native270/kind1/code270, identityMismatchMask64 and snapshotMismatchMask0:
+only the destination's initial-to-post-hash ChangeTime inequality was observed.
+Its current root/owned-Job/two-EOF and own-Linux scoped completion were independently
+accepted. The physical cause remains UNKNOWN, and this observation does not explain
+historical0193. Retain both occupied output roots and all original charges; never
+reopen their payloads, adopt, repair, overwrite, delete or replay them.
+
+Microsoft's [FILE_BASIC_INFO reference](https://learn.microsoft.com/windows/win32/api/winbase/ns-winbase-file_basic_info)
+distinguishes metadata ChangeTime from data-stream LastWriteTime, and
+[CreateFileW](https://learn.microsoft.com/windows/win32/api/fileapi/nf-fileapi-createfilew)
+states that attribute access is unaffected by sharing restrictions. These public
+API contracts support an explicitly prospective public-output establishment
+method; they do not identify a benign cause or establish continuous integrity.
+No additional causal experiment is a prerequisite to this narrow method.
+
+Only Copy's fresh CREATE_NEW public destination is eligible. Its writer must be
+flushed and closed before EstablishOutput opens one deny-write/delete held reader.
+Keep source/donor Pin, all private/historical/executable input admissions and final
+CheckAll unchanged. EstablishOutput is private and has no input-role or ignore-field
+option. It does not catch and clear an existing fault or retry until quiet.
+
+The first hash starts at position0 and requires exact accepted length, hash and EOF.
+Before and after it, enforce regular-file/disk/single-link/no-reparse shape and held
+ancestry. Require exact held Name, all seven non-ChangeTime fields equal to the
+initial readonly snapshot, and original writer-to-reader volume/index/creation
+agreement. Retain the initial and observed first-read identities separately in the
+held file; they are not interchangeable with its prospective identity baseline.
+Record first-window ChangeTime inequality only as the bounded count below.
+
+Then require full held and named identity/Name agreement with the observed first-read
+identity at Stable270–274. That full agreement establishes the prospective baseline.
+Unconditionally perform exactly one more complete hash/EOF from position0 on the
+same held reader, followed by full held/named identity and Name checks at Stable280–284.
+The sealing Stable call supplies the full pre-read checks. Any subsequent ChangeTime,
+other-field, hash/EOF, shape, ownership, deadline or API failure stops and freezes its
+first fault. Only after the second strict read succeeds may the output register for
+unchanged final CheckAll and count as sealed. No existing input baseline is refreshed.
+Future private or executable use still requires its independent exact admission.
+
+The new closed materialization-v3 and diagnosis-v2 diagnostics add exactly:
+
+| Field | Values and meaning |
+| --- | --- |
+| outputStage | 0 before output establishment;1 after initial output snapshot and during first-read/sealing checks;2 after full baseline agreement and during strict second read;3 after that read's postchecks and output registration |
+| firstReadChangeCount | Cumulative first-window ChangeTime inequalities after accepted seven-field and creation joins,0–200 for full materialization or0–1 for diagnosis; this is disclosure, not fault clearing or a causal conclusion |
+| sealedOutputs | Cumulative outputs whose second strict read and registration succeeded,0–200 or0–1; a later row-binding/deadline failure can still fail Copy/result |
+
+First-read post-snapshot/seven-field comparison uses220; only bits1/2/4/8/16/32/128
+may occur in its first identity fault. The original creation join remains317.
+Phase240 is the mandatory second hash;280–284 have the same full identity/Name
+semantics as the existing Stable phases. Snapshot masks may occur at220/280/284;
+full identity masks including64 may occur at280/284. Preserve all existing mask,
+error, first-fault, disposal and final held-ordinal meanings. Output-stage/counter
+values are captured before cleanup. New schemas require the complete typed field
+set and mask pair; old schemas keep their old closed shapes and phase meanings.
+Do not export initial/observed identity values or timestamps in the diagnosis.
+Full materialization retains only its already required sealed output/source rows.
+Provisional materialization success additionally requires outputStage3,
+sealedOutputs200 and both masks0. No count or flag alone grants acceptance.
+
+For the fixed104,232-byte diagnosis, the added hash requests104,233 bytes and
+nominally three reads: four length-plus-EOF passes total416,932 requested bytes,
+12 reads and104,232 writes-bytes. The two data writes,19 opens and83 metadata
+operations are nominal complete-path counts without short reads; counters and
+hard caps govern actual requests. Relative to a complete strict original Copy,
+the amendment adds one open,11 metadata operations and one length-plus-EOF hash.
+For at most200 leaves/96MiB, four full passes request at most402,653,984 bytes
+when each request returns in full, below unchanged448MiB. Short reads still charge
+full requests and stop at the same caps; no refund or success guarantee follows.
+All held-resource, directory, open, metadata/read/write, payload-write, bootstrap,
+transport and original cutoff bounds remain unchanged. The460MiB diagnosis and
+512MiB aggregate envelopes already cover the native448MiB cap; installed runtime
+startup remains separately admitted. Exact control lengths and source/readback
+requests must still fit their existing reservations. No hidden OS-I/O census is claimed.
+
+After amendment acceptance, independently admit at most two Linux-only pure
+projection test originals including one supported correction, charging each0/1/0/0
+in the existing ledger. Use the accepted isolated Python3.14 runtime/stdlib and
+GNU TERM25s/KILL5s,30s total, AS128MiB and CPU25s. Read only the exact reviewed
+test and collector source, each at most32KiB plus EOF, with32KiB startup-source
+allowance within128KiB aggregate. The test AST-selects seven pure functions and
+seven allowlist constants, never collector main, its guard or an experimental
+path. It uses synthetic values only, writes no files, starts no child or Windows
+process and exports at most4096B of typed outcome counters. The current32 methods
+include legacy preservation, first-read change disclosure, strict later-change
+failure, non-ChangeTime rejection, typed counters, complete sealing, and rejection
+of undeclared identity/timestamp fields. Exact source/runtime/call and full charge
+precede submission; independently accept timely ordinary0 and complete transport.
+Stop after sufficient evidence and retain any failed charge/outcome.
+
+The next diagnosis remains the existing second slot0195, initially unadmitted.
+Reuse unchanged admitted preparation/transfer/runtime/transport methods, with
+fresh exact protocol/source/input/call/accounting gates. Successful0195 establishes
+only this prospective public copy, never0193/0194 success or account readiness.
+Any later complete materialization must use an independently admitted fresh root
+and consistently projected controls/collector; account-v2 remains occupied and
+ineligible. Reuse the existing finite full-materialization batch and common
+capacity without another owner decision; this amendment itself reserves nothing.
 
 ##### Finite batch and current public result collection
 
@@ -1440,10 +1547,10 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11209 | `1298b13e3b3d91ca2251d82f61690cd2322c0aa82611119e7bc3d17ec109ce07` |
-| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 16033 | `101a7907538b3fd4201a054c132b74b31268d5748a705ebfb9d6360f653caff9` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11352 | `f604ae3dffb885aaba6dfbb8edf94afd9629cdf31ec0a7e29a1b50437f3d5a3b` |
+| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 18835 | `88de8e1d558472c045fd01ad27115ae3f3549f2d70ded53537f9010819f9c496` |
 | [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 16283 | `d8a32ec2c7ebc9dcc84784f530d83d1577652d5c473e45f9d1d5c87efeb3277c` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 25067 | `0c89d330d93c29d65a25204fa25478ac14404c35519adc0d9430d45d42a86d5d` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 27565 | `c5a5405430a7bc3b768bd77ea409a13cb8e24b50edc947cc333c8d4a038ce7e3` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `a871492cde058916dd6a0aa80c46cef1cca3bf256d6d080b3bb9d74adb795088` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `1b8ec11edfbabb492e84e80639a036595f69c2fd5b5292475959739c635e2dae` |
 | [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `34fa06aa823ab21e7c71c14105f2be5c006e0d5e9dea9f74b09d17a56f4b5a1e` |
@@ -1451,7 +1558,7 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 | [selected-account-inputs/R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `5ac3fbd53a3ea779cd15658babe89d2bafc95f6bbb41155f43887d558fe6d1db` |
 | [selected-account-inputs/R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `526c8cdded4c0266a31d47b162c31616ce00b51cb2cee81df5562038fb175660` |
 | [selected-account-inputs/R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `c6c0e4d3dd2d0e98589385d41d9d87cbbe6f2d1c67ca3fe1dde77ad72ca14b0f` |
-| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 14853 | `8dfed00b51b7a1bacc1cb60f230d59f3c4033a8b3ffab716fd01f19ef88c17ac` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 19000 | `575f02c31f2612499a86dfedca7c99dcdd606d216d9fd2d73c013ce2bd0c4c50` |
 
 #### Public Transfer Receipt and Dispatch Input Current Correspondence
 

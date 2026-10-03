@@ -28,6 +28,8 @@ public sealed class SelectedAccountHeldFile
     public string path, sha256;
     public SelectedAccountFileIdentity identity;
     public SelectedAccountFileIdentity sourceIdentity;
+    // Retain both establishment observations; identity is the prospective sealed baseline.
+    internal SelectedAccountFileIdentity outputInitialIdentity, outputFirstReadIdentity;
 }
 
 public sealed class SelectedAccountMaterializationPins : IDisposable
@@ -41,6 +43,8 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
     // Fixed numeric context only. Freeze the first fault before any cleanup.
     public int phase, heldOrdinal, errorKind, errorCode;
     public int identityMismatchMask, snapshotMismatchMask;
+    public int outputStage;
+    public long firstReadChangeCount, sealedOutputs;
     private bool faulted;
     private int pinPhase = 100;
     public void SetPhase(int value) { if (!faulted) phase = value; }
@@ -221,6 +225,7 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
     }
     public SelectedAccountHeldFile Copy(string source, string target, long length, string hash)
     {
+        if (!faulted) outputStage = 0;
         pinPhase = 100; SetPhase(100);
         SelectedAccountHeldFile input = Pin(source, length, hash);
         SetPhase(301); Canonical(target);
@@ -262,11 +267,53 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
             }
             catch (Exception error) { RecordManagedFault(error.HResult); throw; }
         }
-        pinPhase = 200; SetPhase(200);
-        SelectedAccountHeldFile output = Pin(target, length, hash);
-        SetPhase(317); Need(output.identity.volume == original.volume && output.identity.index == original.index &&
-            output.identity.created == original.created);
+        SelectedAccountHeldFile output = EstablishOutput(target, length, hash, original);
         SetPhase(318); output.sourceIdentity = input.identity; Tick(); return output;
+    }
+    // Copy alone supplies a fresh CREATE_NEW public destination after closing its writer.
+    // This is not an alternate input Pin or a way to refresh an existing baseline.
+    private SelectedAccountHeldFile EstablishOutput(string path, long length, string hash,
+        SelectedAccountFileIdentity original)
+    {
+        SetPhase(200); SetPhase(201); Canonical(path);
+        SetPhase(202); HoldDirectory(Path.GetDirectoryName(path));
+        SetPhase(203);
+        SafeFileHandle handle = Open(path, 0x80000000, 1, 3, 0x00200000); FileStream stream = null;
+        try
+        {
+            SetPhase(204); SelectedAccountFileIdentity initial = Snapshot(handle); Need(initial.length == length);
+            outputStage = 1;
+            SetPhase(205); Name(handle, path);
+            SetPhase(206); stream = new FileStream(handle, FileAccess.Read, 65536, false);
+            SetPhase(207); Need(Hash(stream, length) == hash);
+            SetPhase(220); SelectedAccountFileIdentity observed = Snapshot(handle);
+            // All seven non-ChangeTime fields must agree across the first public read.
+            int mask = (observed.volume != initial.volume ? 1 : 0) |
+                (observed.index != initial.index ? 2 : 0) |
+                (observed.attributes != initial.attributes ? 4 : 0) |
+                (observed.links != initial.links ? 8 : 0) |
+                (observed.created != initial.created ? 16 : 0) |
+                (observed.modified != initial.modified ? 32 : 0) |
+                (observed.length != initial.length ? 128 : 0);
+            if (mask != 0 && !faulted) identityMismatchMask = mask;
+            Need(mask == 0);
+            SetPhase(317); Need(observed.volume == original.volume && observed.index == original.index &&
+                observed.created == original.created);
+            if (observed.changed != initial.changed) firstReadChangeCount++;
+            SelectedAccountHeldFile file = new SelectedAccountHeldFile { Stream = stream, path = path,
+                sha256 = hash, identity = observed, outputInitialIdentity = initial, outputFirstReadIdentity = observed };
+            // Full held/named agreement establishes a prospective baseline, never continuity.
+            Stable(file, 270); outputStage = 2;
+            SetPhase(240); Need(Hash(stream, length) == hash);
+            Stable(file, 280); SetPhase(209);
+            stream.Position = 0; owned.Add(stream); files.Add(file);
+            outputStage = 3; sealedOutputs++; return file;
+        }
+        catch (Exception error)
+        {
+            RecordManagedFault(error.HResult);
+            if (stream != null) stream.Dispose(); else handle.Dispose(); throw;
+        }
     }
     public byte[] ReadControl(SelectedAccountHeldFile file, int maximum)
     {
