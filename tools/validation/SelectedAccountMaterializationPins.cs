@@ -29,7 +29,7 @@ public sealed class SelectedAccountHeldFile
     public SelectedAccountFileIdentity identity;
     public SelectedAccountFileIdentity sourceIdentity;
     // Retain both establishment observations; identity is the prospective sealed baseline.
-    internal SelectedAccountFileIdentity outputInitialIdentity, outputFirstReadIdentity;
+    internal SelectedAccountFileIdentity outputInitialIdentity, outputFirstReadIdentity, outputFirstNamedIdentity;
 }
 
 public sealed class SelectedAccountMaterializationPins : IDisposable
@@ -287,12 +287,24 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
             SetPhase(206); stream = new FileStream(handle, FileAccess.Read, 65536, false);
             SetPhase(207); Need(Hash(stream, length) == hash);
             SelectedAccountHeldFile file;
-            // The first named-handle exposure is part of fresh output establishment.
+            // The first named identity query is part of fresh output establishment.
             // Reuse this handle for full agreement; do not open repeatedly until quiet.
             SetPhase(272);
             using (SafeFileHandle named = Open(path, 0x80, 1, 3, 0x00200000))
             {
                 SetPhase(273); Name(named, path);
+                SetPhase(220); SelectedAccountFileIdentity namedInitial = Snapshot(named);
+                int namedMask = (namedInitial.volume != initial.volume ? 1 : 0) |
+                    (namedInitial.index != initial.index ? 2 : 0) |
+                    (namedInitial.attributes != initial.attributes ? 4 : 0) |
+                    (namedInitial.links != initial.links ? 8 : 0) |
+                    (namedInitial.created != initial.created ? 16 : 0) |
+                    (namedInitial.modified != initial.modified ? 32 : 0) |
+                    (namedInitial.length != initial.length ? 128 : 0);
+                if (namedMask != 0 && !faulted) identityMismatchMask = namedMask;
+                Need(namedMask == 0);
+                SetPhase(317); Need(namedInitial.volume == original.volume && namedInitial.index == original.index &&
+                    namedInitial.created == original.created);
                 SetPhase(220); SelectedAccountFileIdentity observed = Snapshot(stream.SafeFileHandle);
                 // All seven non-ChangeTime fields must agree across this first window.
                 int mask = (observed.volume != initial.volume ? 1 : 0) |
@@ -306,9 +318,10 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
                 Need(mask == 0);
                 SetPhase(317); Need(observed.volume == original.volume && observed.index == original.index &&
                     observed.created == original.created);
-                if (observed.changed != initial.changed) firstReadChangeCount++;
+                if (namedInitial.changed != initial.changed || observed.changed != initial.changed) firstReadChangeCount++;
                 file = new SelectedAccountHeldFile { Stream = stream, path = path,
-                    sha256 = hash, identity = observed, outputInitialIdentity = initial, outputFirstReadIdentity = observed };
+                    sha256 = hash, identity = observed, outputInitialIdentity = initial, outputFirstReadIdentity = observed,
+                    outputFirstNamedIdentity = namedInitial };
                 // Full held/named agreement establishes a prospective baseline, never continuity.
                 SetPhase(270); NeedStableIdentity(Snapshot(stream.SafeFileHandle), file.identity);
                 SetPhase(271); Name(stream.SafeFileHandle, path);
