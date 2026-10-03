@@ -196,6 +196,46 @@ def public_receipt(result):
     return result
 
 
+def public_single_copy_receipt(result):
+    keys = {'schema', 'passed', 'authoritySha256', 'failure', 'copyCompleted',
+            'allHandlesClosed', 'noExperimentLive', 'productStarted', 'accountAccess', 'diagnostic'}
+    if type(result) is not dict or set(result) != keys:
+        raise ValueError('Single-copy receipt shape')
+    if (result['schema'] != 'selected-account-single-copy-diagnosis-v1' or
+            result['authoritySha256'] != ADMISSION['authoritySha256'] or
+            any(type(result[key]) is not bool for key in ('passed', 'copyCompleted', 'allHandlesClosed',
+                                                        'noExperimentLive', 'productStarted', 'accountAccess')) or
+            result['noExperimentLive'] or result['productStarted'] or result['accountAccess'] or
+            result['failure'] not in ('admission', 'native-source', 'create', 'copy', 'none')):
+        raise ValueError('Single-copy receipt values')
+    diagnostic = result['diagnostic']
+    if diagnostic is not None:
+        fields = {'wrapperPhase', 'nativePhase', 'heldOrdinal', 'errorKind', 'errorCode',
+                  'identityMismatchMask', 'snapshotMismatchMask', 'opens', 'metadata', 'reads',
+                  'writes', 'requestedReadBytes', 'writtenBytes'}
+        if (type(diagnostic) is not dict or set(diagnostic) != fields or
+                not exact_int(diagnostic['wrapperPhase'], 0, 3) or
+                not exact_int(diagnostic['heldOrdinal'], 0, 2)):
+            raise ValueError('Single-copy diagnostic shape')
+        # Reuse the existing numeric failure-context checks. This synthetic object
+        # remains local: it is never emitted or treated as materialization evidence.
+        public_receipt(dict(schema='selected-account-public-materialization-v2', passed=False,
+            authoritySha256=result['authoritySha256'], target='C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v2', rows=[], failure='copy',
+            allHandlesClosed=result['allHandlesClosed'], noExperimentLive=False,
+            productStarted=False, accountAccess=False,
+            diagnostic=dict(diagnostic, copyOrdinal=1 if diagnostic['wrapperPhase'] == 1 else 0,
+                            completedCopies=1 if result['copyCompleted'] else 0)))
+    elif result['copyCompleted']:
+        raise ValueError('Single-copy completion without diagnostic')
+    if result['passed'] and (not result['copyCompleted'] or not result['allHandlesClosed'] or
+            result['failure'] != 'none' or diagnostic is None or diagnostic['wrapperPhase'] != 3 or
+            diagnostic['nativePhase'] != 405 or diagnostic['heldOrdinal'] != 2 or
+            diagnostic['errorKind'] != 0 or diagnostic['errorCode'] != 0 or
+            diagnostic['identityMismatchMask'] != 0 or diagnostic['snapshotMismatchMask'] != 0):
+        raise ValueError('Single-copy provisional success fields')
+    return result
+
+
 def interpret(name, raw):
     if name.endswith('.bin'):
         return {'interpretation': 'contents-suppressed', 'empty': not raw}
@@ -207,7 +247,11 @@ def interpret(name, raw):
             records = [journal_record(decode(line)) for line in lines]
             return {'interpretation': 'validated-public-journal', 'records': records,
                     'newlineTerminated': not raw or raw.endswith(b'\n')}
-        result = public_receipt(decode(raw))
+        decoded = decode(raw)
+        if type(decoded) is dict and decoded.get('schema') == 'selected-account-single-copy-diagnosis-v1':
+            return {'interpretation': 'validated-public-single-copy-diagnosis',
+                    'receipt': public_single_copy_receipt(decoded), 'diagnosisOnly': True}
+        result = public_receipt(decoded)
         return {'interpretation': 'validated-public-copy-receipt', 'receipt': result,
                 'rowCount': len(result['rows'])}
     except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
