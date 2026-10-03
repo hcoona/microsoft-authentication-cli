@@ -166,6 +166,8 @@ try {
         $result.diagnostic = [ordered]@{ copyOrdinal = $copyOrdinal; completedCopies = $completedCopies
             wrapperPhase = $wrapperPhase; nativePhase = $pins.phase; heldOrdinal = $pins.heldOrdinal
             errorKind = $pins.errorKind; errorCode = $pins.errorCode
+            identityMismatchMask = $pins.identityMismatchMask
+            snapshotMismatchMask = $pins.snapshotMismatchMask
             opens = $pins.opens; metadata = $pins.metadata; reads = $pins.reads; writes = $pins.writes
             requestedReadBytes = $pins.requestedReadBytes; writtenBytes = $pins.writtenBytes }
     }

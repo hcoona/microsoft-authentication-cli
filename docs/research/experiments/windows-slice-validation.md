@@ -376,7 +376,7 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [DirectObserver.rsp](../../../tools/validation/controlled-callers/control/DirectObserver.rsp) | 20404 | `b4af49e38b70808369e259466a7a759339d6f422733c9b61a31f560d12159fb6` |
 | [SyntheticSubject.rsp](../../../tools/validation/controlled-callers/control/SyntheticSubject.rsp) | 21309 | `7016e29b6f8f43805786e81c8213f2dc509bfabc100d7b4b5478eee707b78325` |
 | [FixtureDriver.rsp](../../../tools/validation/controlled-callers/control/FixtureDriver.rsp) | 21276 | `aeebc66eb198c2d70f640051ad3d915164e6af124a1778679ad9bfdf63b2d01c` |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `3e7ae35b2c63382f7e9fa3fa82cd155da84638bcb72798aff6b4a663a377b0a4` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11209 | `1298b13e3b3d91ca2251d82f61690cd2322c0aa82611119e7bc3d17ec109ce07` |
 
 ## Retained Product Byte Acquisition Recipe
 
@@ -953,6 +953,28 @@ paths, payload or private hashes. Freeze the first fault and its native context 
 later wrapper/cleanup faults cannot replace it. Cleanup flags remain separate.
 Missing/malformed/incomplete receipts or transport retain their unknown/failure status.
 
+Fresh diagnostic receipts also record the pair `identityMismatchMask`, an integer
+from0 through255, and `snapshotMismatchMask`, an integer from0 through15.
+At a failed Stable identity comparison, bits1/2/4/8/16/32/64/128
+identify unequal volume/index/attributes/link-count/creation/modification/change-time/
+length fields respectively. Record the mask from the two already observed
+identities before freezing the same first predicate fault; add no native query,
+read, open, timestamp, path, payload or exception text. A nonzero mask requires
+error kind1 and phase170/174/270/274/320/324/400/404.
+The snapshot mask records failed existing disk-type/no-directory-or-reparse/
+single-link predicates with bits1/2/4, or inconsistent basic/file-information
+attributes with bit8 alone. Use only values already returned by the original
+native calls. A nonzero snapshot mask requires error kind1, phase104/204/305 or
+one of the Stable snapshot phases above, and a zero identity mask. Both masks
+freeze with the first fault; do not combine a later predicate or cleanup failure.
+Zero masks do not prove stable identity or success when another check fails.
+Historical receipts without either field remain readable in their original shape;
+a partially present pair is invalid. Retain their unknown failed predicate/field;
+do not backfill them or infer a cause. No identity predicate is relaxed.
+The numeric addition requires fresh exact source/input/call admission and preserves
+all old outcomes, occupied roots, clocks and charges. It does not admit another
+original or reuse the current0193/account-v2 outputs.
+
 All prior native comparisons, short-circuit/API ordering, source/destination hash,
 EOF, fresh volume/index/creation join, within-read identities, source deadlines,
 resource/I/O counters and deterministic disposal remain. Diagnostic setters add no
@@ -1315,10 +1337,10 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11085 | `3e7ae35b2c63382f7e9fa3fa82cd155da84638bcb72798aff6b4a663a377b0a4` |
-| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 14818 | `f8ee043f3e82a8d565aa583cfe1d0e8d451aae8d83db630cd6865200a51498da` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11209 | `1298b13e3b3d91ca2251d82f61690cd2322c0aa82611119e7bc3d17ec109ce07` |
+| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 16033 | `101a7907538b3fd4201a054c132b74b31268d5748a705ebfb9d6360f653caff9` |
 | [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 16283 | `d8a32ec2c7ebc9dcc84784f530d83d1577652d5c473e45f9d1d5c87efeb3277c` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 20933 | `d14127271cd1a47a7520102271b6f3b34183e2d6913d6d8752f8b47b685f77ed` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 21851 | `378cc4ee60cc237a9abaa2b171ca6d43d5c433d9dbbd63032bb75953bfdbd670` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `a871492cde058916dd6a0aa80c46cef1cca3bf256d6d080b3bb9d74adb795088` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `1b8ec11edfbabb492e84e80639a036595f69c2fd5b5292475959739c635e2dae` |
 | [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `34fa06aa823ab21e7c71c14105f2be5c006e0d5e9dea9f74b09d17a56f4b5a1e` |
@@ -1326,7 +1348,7 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 | [selected-account-inputs/R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `5ac3fbd53a3ea779cd15658babe89d2bafc95f6bbb41155f43887d558fe6d1db` |
 | [selected-account-inputs/R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `526c8cdded4c0266a31d47b162c31616ce00b51cb2cee81df5562038fb175660` |
 | [selected-account-inputs/R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `c6c0e4d3dd2d0e98589385d41d9d87cbbe6f2d1c67ca3fe1dde77ad72ca14b0f` |
-| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 7203 | `34c8e848d74bf2d7cf04034d1b90c6ff80b9690f4171f67feeb7fa7a2b905d7c` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 11038 | `a902baab10e1a5ffd25b2fb734af68fd441dc1f4a46cb011993b3d5a3ba9c8dd` |
 
 #### Public Transfer Receipt and Dispatch Input Current Correspondence
 

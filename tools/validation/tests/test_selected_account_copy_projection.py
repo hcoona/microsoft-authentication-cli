@@ -10,8 +10,8 @@ import resource
 import sys
 
 SOURCE = Path(__file__).resolve().parents[1] / 'collect_selected_account_copy_results.py'
-EXPECTED_SHA256 = 'd14127271cd1a47a7520102271b6f3b34183e2d6913d6d8752f8b47b685f77ed'
-EXPECTED_SOURCE_BYTES = 20933
+EXPECTED_SHA256 = '378cc4ee60cc237a9abaa2b171ca6d43d5c433d9dbbd63032bb75953bfdbd670'
+EXPECTED_SOURCE_BYTES = 21851
 if SOURCE.is_symlink() or SOURCE.stat().st_size != EXPECTED_SOURCE_BYTES:
     raise ValueError('Unexpected test source shape')
 with SOURCE.open('rb') as stream:
@@ -102,6 +102,70 @@ class ProjectionTests(unittest.TestCase):
     def test_missing_context(self):
         self.value.update(passed=False, failure='native-source', rows=[], diagnostic=None); self.value.pop('counts')
         self.assertIsNone(self.project(self.value)['receipt']['diagnostic'])
+
+    def test_identity_difference_mask(self):
+        self.value.update(passed=False, failure='copy', rows=[])
+        self.value['diagnostic'].update(copyOrdinal=12, completedCopies=11, wrapperPhase=1,
+            nativePhase=270, heldOrdinal=0, errorKind=1, errorCode=270,
+            identityMismatchMask=64, snapshotMismatchMask=0)
+        projected = self.project(self.value)['receipt']
+        self.assertEqual(projected, self.value)
+        self.assertEqual(projected['diagnostic']['identityMismatchMask'], 64)
+        self.value['diagnostic']['identityMismatchMask'] = 255
+        self.assertEqual(self.project(self.value)['receipt']['diagnostic']['identityMismatchMask'], 255)
+
+    def test_identity_difference_mask_type_and_range(self):
+        for field, masks in (('identityMismatchMask', (True, -1, 256, 1.0, 'synthetic-private-marker')),
+                             ('snapshotMismatchMask', (True, -1, 16, 1.0, 'synthetic-private-marker'))):
+            for mask in masks:
+                with self.subTest(field=field, mask=mask):
+                    value = copy.deepcopy(self.value)
+                    value['diagnostic'].update(identityMismatchMask=0, snapshotMismatchMask=0)
+                    value['diagnostic'][field] = mask
+                    self.reject(value)
+
+    def test_identity_difference_mask_requires_matching_fault(self):
+        for phase, kind in ((270, 3), (271, 1), (405, 0)):
+            with self.subTest(phase=phase, kind=kind):
+                value = copy.deepcopy(self.value)
+                value.update(passed=False, failure='copy', rows=[])
+                value['diagnostic'].update(nativePhase=phase, errorKind=kind,
+                    errorCode=phase if kind == 1 else 0, identityMismatchMask=1, snapshotMismatchMask=0)
+                self.reject(value)
+
+    def test_zero_identity_difference_mask_does_not_claim_success(self):
+        self.value['diagnostic'].update(identityMismatchMask=0, snapshotMismatchMask=0)
+        self.assertEqual(self.project(self.value)['receipt'], self.value)
+        self.value.update(passed=False, failure='copy', rows=[])
+        self.value['diagnostic'].update(nativePhase=270, errorKind=1, errorCode=270)
+        self.assertFalse(self.project(self.value)['receipt']['passed'])
+
+    def test_snapshot_predicate_mask(self):
+        self.value.update(passed=False, failure='copy', rows=[])
+        self.value['diagnostic'].update(copyOrdinal=12, completedCopies=11, wrapperPhase=1,
+            nativePhase=270, heldOrdinal=0, errorKind=1, errorCode=270, identityMismatchMask=0)
+        for mask in (1, 2, 3, 4, 5, 6, 7, 8):
+            with self.subTest(mask=mask):
+                self.value['diagnostic']['snapshotMismatchMask'] = mask
+                self.assertEqual(self.project(self.value)['receipt'], self.value)
+
+    def test_snapshot_mask_requires_one_matching_first_fault(self):
+        for phase, kind, identity_mask, snapshot_mask in ((270, 3, 0, 1), (271, 1, 0, 1),
+                (405, 0, 0, 1), (270, 1, 64, 1), (270, 1, 0, 9)):
+            with self.subTest(phase=phase, kind=kind, identity_mask=identity_mask, snapshot_mask=snapshot_mask):
+                value = copy.deepcopy(self.value)
+                value.update(passed=False, failure='copy', rows=[])
+                value['diagnostic'].update(nativePhase=phase, errorKind=kind,
+                    errorCode=phase if kind == 1 else 0,
+                    identityMismatchMask=identity_mask, snapshotMismatchMask=snapshot_mask)
+                self.reject(value)
+
+    def test_partial_mask_pair_is_not_a_legacy_receipt(self):
+        for field in ('identityMismatchMask', 'snapshotMismatchMask'):
+            with self.subTest(field=field):
+                value = copy.deepcopy(self.value)
+                value['diagnostic'][field] = 0
+                self.reject(value)
 
     def test_duplicate_and_noninteger_json(self):
         for raw in (b'{"x":1,"x":2}', b'{"x":1.0}', b'{"x":NaN}', b'{"x":Infinity}'):
