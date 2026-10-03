@@ -1200,6 +1200,18 @@ Keep source/donor Pin, all private/historical/executable input admissions and fi
 CheckAll unchanged. EstablishOutput is private and has no input-role or ignore-field
 option. It does not catch and clear an existing fault or retry until quiet.
 
+The post-first-read candidate snapshot uses `stream.SafeFileHandle`, the same
+handle exposure used by Stable. FileStream may flush or reconcile its buffers
+when that property is accessed; perform that documented operation before the
+candidate snapshot rather than first introducing it between the candidate and
+Stable270. The declared first establishment window therefore ends after this
+handle exposure and its snapshot. Retain both initial and observed identities and
+the existing bounded ChangeTime disclosure across that complete window.
+This acquisition order does not identify a physical cause, guarantee agreement,
+relax Stable, or refresh an established input baseline. Its implicit Framework
+operations are not a measured native-counter or OS-I/O census; retain the existing
+admitted Framework/runtime operating basis and stop on contrary evidence.
+
 The first hash starts at position0 and requires exact accepted length, hash and EOF.
 Before and after it, enforce regular-file/disk/single-link/no-reparse shape and held
 ancestry. Require exact held Name, all seven non-ChangeTime fields equal to the
@@ -1217,6 +1229,15 @@ other-field, hash/EOF, shape, ownership, deadline or API failure stops and freez
 first fault. Only after the second strict read succeeds may the output register for
 unchanged final CheckAll and count as sealed. No existing input baseline is refreshed.
 Future private or executable use still requires its independent exact admission.
+
+For a first diagnosis of this acquisition order, use fresh action0198,
+`named-fixtures-0198` and `public-copy-diagnosis-0198`. Reuse the existing fixed
+single-file controls, transfer, dispatch, result and own-scope recipes with only
+those literals and the newly accepted source/authority descriptors projected.
+Do not reopen or reuse0195 or any earlier output. The existing finite batch and
+`0/1/0/4` technical charge, exact current source/input/call gates and independent
+actual outcome/scoped-completion acceptance still apply. This source amendment
+reserves nothing and grants no replay, account operation or success claim.
 
 The new closed materialization-v3 and diagnosis-v2 diagnostics add exactly:
 
@@ -1630,7 +1651,7 @@ projection behavior only, not runtime I/O, Windows identity, closure or authenti
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11352 | `f604ae3dffb885aaba6dfbb8edf94afd9629cdf31ec0a7e29a1b50437f3d5a3b` |
-| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 18835 | `88de8e1d558472c045fd01ad27115ae3f3549f2d70ded53537f9010819f9c496` |
+| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 18850 | `2cf12bbaee3de3a9614a9c20ab9db69040f078abf049d295c5bd3f3f41650768` |
 | [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 16283 | `d8a32ec2c7ebc9dcc84784f530d83d1577652d5c473e45f9d1d5c87efeb3277c` |
 | [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 27565 | `c5a5405430a7bc3b768bd77ea409a13cb8e24b50edc947cc333c8d4a038ce7e3` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `a871492cde058916dd6a0aa80c46cef1cca3bf256d6d080b3bb9d74adb795088` |
