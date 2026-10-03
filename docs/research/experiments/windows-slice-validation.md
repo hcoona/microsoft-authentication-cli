@@ -443,6 +443,23 @@ repaired, deleted or executed. ETW/elevation remain stopped. Existing account-v2
 source bindings below retain their historical meaning; these bindings govern only
 the fresh-root successor and do not reinterpret an earlier original.
 
+The unsupported-root pure projection fixture appends the fixed `-unsupported`
+suffix to its valid synthetic target before requiring rejection. This keeps the
+negative input different when a fresh root literal is projected; a replacement
+that searches for an old version must not leave the positive input unchanged.
+The production collector's exact target predicate is unchanged.
+
+After independently accepted failed outcome, scoped completion and finding triage,
+admit at most one additional Linux-only pure projection correction original beyond
+the earlier two-original batch. This supplements only that exhausted local limit;
+both earlier originals and their charges remain spent. Use the same32 methods,
+seven pure functions/seven constants, isolated admitted Python/GNU runtime,
+30s/128KiB/4096B bounds and `0/1/0/0` charge in the existing common pool. Fresh exact
+source/runtime/input/call/accounting gates precede the separate sole original,
+and independent actual outcome/scoped-completion acceptance remains required.
+This amendment reserves nothing and admits no preparation, Windows or account
+operation. Retain failed evidence and stop after sufficient accepted evidence.
+
 Current root-sensitive source bindings:
 
 | Source | Bytes | SHA-256 |
@@ -458,7 +475,7 @@ Current root-sensitive source bindings:
 | [R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `3b0ab3f03a8cd67efa0d8fc4c2f6f5b67a3ff53595cefdc448be2ef755041c19` |
 | [R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `917d6e3f6dc918d018248b23b507501df0ccdc5e5ab567a28ecf84ea8fe93525` |
 | [R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `9eb8d0f3789effc8991a74836649ddf5ee58cfcf89eece50e60c88c9c25754ed` |
-| [test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 19000 | `768a02d17006073c7864bcdc7de8ba3a2859ecb576c8b5bbd8d07b1c4502bfba` |
+| [test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 18959 | `64e3dd34547461d1023d9f45911a309492d74b6e0d9a51bb9de07291040ca341` |
 
 ## Retained Product Byte Acquisition Recipe
 
