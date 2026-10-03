@@ -10,15 +10,15 @@ import resource
 import sys
 
 SOURCE = Path(__file__).resolve().parents[1] / 'collect_selected_account_copy_results.py'
-EXPECTED_SHA256 = '0c89d330d93c29d65a25204fa25478ac14404c35519adc0d9430d45d42a86d5d'
-EXPECTED_SOURCE_BYTES = 25067
+EXPECTED_SHA256 = 'c5a5405430a7bc3b768bd77ea409a13cb8e24b50edc947cc333c8d4a038ce7e3'
+EXPECTED_SOURCE_BYTES = 27565
 if SOURCE.is_symlink() or SOURCE.stat().st_size != EXPECTED_SOURCE_BYTES:
     raise ValueError('Unexpected test source shape')
 with SOURCE.open('rb') as stream:
     raw = stream.read(EXPECTED_SOURCE_BYTES + 1)
 if len(raw) != EXPECTED_SOURCE_BYTES or hashlib.sha256(raw).hexdigest() != EXPECTED_SHA256:
     raise ValueError('Unexpected test source bytes')
-FUNCTIONS = {'decode', 'exact_int', 'public_receipt', 'public_single_copy_receipt', 'journal_record', 'interpret'}
+FUNCTIONS = {'decode', 'exact_int', 'output_sealing', 'public_receipt', 'public_single_copy_receipt', 'journal_record', 'interpret'}
 CONSTANTS = {'EVENT_FIELDS', 'CAPTURE_FIELDS', 'BOOL_FIELDS', 'INT_FIELDS',
              'NULLABLE_FIELDS', 'EXCEPTION_TYPES', 'PHASES'}
 tree = ast.parse(raw, filename=str(SOURCE))
@@ -233,6 +233,77 @@ class ProjectionTests(unittest.TestCase):
                 value = self.single_value(); value.update(passed=False, copyCompleted=False, failure='copy')
                 value['diagnostic'].update(wrapperPhase=1, nativePhase=270, errorKind=1, errorCode=270)
                 value['diagnostic'].update(change); self.reject(value)
+
+
+    def sealing_value(self):
+        value = self.single_value()
+        value['schema'] = 'selected-account-single-copy-diagnosis-v2'
+        value['diagnostic'].update(outputStage=3, firstReadChangeCount=1, sealedOutputs=1)
+        return value
+
+    def test_sealing_discloses_first_read_change_without_identity_values(self):
+        value = self.sealing_value()
+        projected = self.project(value)
+        self.assertTrue(projected['diagnosisOnly'])
+        self.assertEqual(projected['receipt'], value)
+        self.assertEqual(set(projected['receipt']), set(self.single_value()))
+        self.assertNotIn('identity', projected['receipt']['diagnostic'])
+
+    def test_sealing_rejects_later_change_even_after_first_read_change(self):
+        value = self.sealing_value()
+        value.update(passed=False, copyCompleted=False, failure='copy')
+        value['diagnostic'].update(wrapperPhase=1, nativePhase=280, outputStage=2,
+            heldOrdinal=0, sealedOutputs=0, errorKind=1, errorCode=280, identityMismatchMask=64)
+        self.assertEqual(self.project(value)['receipt'], value)
+        value['passed'] = True; self.reject(value)
+
+    def test_sealing_preserves_non_change_time_first_read_failure(self):
+        value = self.sealing_value()
+        value.update(passed=False, copyCompleted=False, failure='copy')
+        value['diagnostic'].update(wrapperPhase=1, nativePhase=220, outputStage=1,
+            heldOrdinal=0, sealedOutputs=0, firstReadChangeCount=0,
+            errorKind=1, errorCode=220, identityMismatchMask=128)
+        self.assertEqual(self.project(value)['receipt'], value)
+        value['diagnostic']['identityMismatchMask'] = 64; self.reject(value)
+
+    def test_sealing_requires_typed_complete_counter_set(self):
+        for field in ('outputStage', 'firstReadChangeCount', 'sealedOutputs'):
+            for change in ('missing', True, -1, 1.0, 'synthetic-private-marker'):
+                with self.subTest(field=field, change=change):
+                    value = self.sealing_value()
+                    if change == 'missing': del value['diagnostic'][field]
+                    else: value['diagnostic'][field] = change
+                    self.reject(value)
+
+    def test_sealing_rejects_impossible_phase_or_completion(self):
+        for change in ({'outputStage': 2}, {'sealedOutputs': 0}, {'sealedOutputs': 2},
+                       {'firstReadChangeCount': 2}, {'outputStage': 4}):
+            with self.subTest(change=change):
+                value = self.sealing_value(); value['diagnostic'].update(change); self.reject(value)
+        value = self.sealing_value(); value.update(passed=False, copyCompleted=False, failure='copy')
+        value['diagnostic'].update(nativePhase=280, errorKind=1, errorCode=280, identityMismatchMask=64)
+        self.reject(value)
+
+    def test_sealing_shape_cannot_reinterpret_legacy_receipt(self):
+        value = self.sealing_value(); value['schema'] = 'selected-account-single-copy-diagnosis-v1'
+        self.reject(value)
+        value = self.single_value(); value['schema'] = 'selected-account-single-copy-diagnosis-v2'
+        self.reject(value)
+
+    def test_full_materialization_requires_all_outputs_sealed(self):
+        value = copy.deepcopy(self.value); value['schema'] = 'selected-account-public-materialization-v3'
+        value['diagnostic'].update(outputStage=3, firstReadChangeCount=200, sealedOutputs=200,
+            identityMismatchMask=0, snapshotMismatchMask=0)
+        self.assertEqual(self.project(value)['receipt'], value)
+        for change in ({'sealedOutputs': 199}, {'outputStage': 2}, {'firstReadChangeCount': 201}):
+            with self.subTest(change=change):
+                changed = copy.deepcopy(value); changed['diagnostic'].update(change); self.reject(changed)
+
+    def test_sealing_rejects_undeclared_initial_identity_or_timestamp(self):
+        for field in ('outputInitialIdentity', 'outputFirstReadIdentity', 'changed', 'accessed'):
+            with self.subTest(field=field):
+                value = self.sealing_value(); value['diagnostic'][field] = 134000000000000001
+                self.reject(value)
 
 
 if __name__ == '__main__':

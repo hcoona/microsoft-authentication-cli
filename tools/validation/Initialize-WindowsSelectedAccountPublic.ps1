@@ -23,7 +23,7 @@ $copyOrdinal = 0
 $completedCopies = 0
 $wrapperPhase = 0
 $result = [ordered]@{
-    schema = 'selected-account-public-materialization-v2'; passed = $false
+    schema = 'selected-account-public-materialization-v3'; passed = $false
     authoritySha256 = $AuthoritySha256; target = $target; rows = @()
     failure = 'admission'; allHandlesClosed = $false; noExperimentLive = $false
     productStarted = $false; accountAccess = $false; diagnostic = $null
@@ -168,6 +168,8 @@ try {
             errorKind = $pins.errorKind; errorCode = $pins.errorCode
             identityMismatchMask = $pins.identityMismatchMask
             snapshotMismatchMask = $pins.snapshotMismatchMask
+            outputStage = $pins.outputStage; firstReadChangeCount = $pins.firstReadChangeCount
+            sealedOutputs = $pins.sealedOutputs
             opens = $pins.opens; metadata = $pins.metadata; reads = $pins.reads; writes = $pins.writes
             requestedReadBytes = $pins.requestedReadBytes; writtenBytes = $pins.writtenBytes }
     }

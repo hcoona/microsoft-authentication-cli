@@ -11,9 +11,9 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $watch = [Diagnostics.Stopwatch]::StartNew()
-$stage = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0194'
+$stage = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0195'
 $sourcePath = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v23\toolchain\shared\Microsoft.NETCore.App\10.0.12\System.Collections.NonGeneric.dll'
-$target = 'C:\Temp\azureauth-windows-slice-108\public-copy-diagnosis-0194'
+$target = 'C:\Temp\azureauth-windows-slice-108\public-copy-diagnosis-0195'
 $sourceBytes = 104232L
 $sourceSha256 = 'aa4d5216d066c91cb489f63c6cbfcaf1f47b6e74e070db45639d3460454fc60b'
 $pins = $null
@@ -22,7 +22,7 @@ $bootstrapReads = 0L
 $bootstrapRequestedReadBytes = 0L
 $wrapperPhase = 0
 $result = [ordered]@{
-    schema = 'selected-account-single-copy-diagnosis-v1'; passed = $false
+    schema = 'selected-account-single-copy-diagnosis-v2'; passed = $false
     authoritySha256 = $AuthoritySha256; failure = 'admission'; copyCompleted = $false
     allHandlesClosed = $false; noExperimentLive = $false
     productStarted = $false; accountAccess = $false; diagnostic = $null
@@ -70,7 +70,7 @@ try {
     $utf8 = [Text.UTF8Encoding]::new($false, $true)
     $authority = $utf8.GetString((Bootstrap-Read 'authority.json' 65536 $AuthoritySha256)) | ConvertFrom-Json
     Need ($authority.schema -ceq 'selected-account-single-copy-authority-v1' -and
-        $authority.action -ceq '0194' -and $authority.target -ceq $target -and
+        $authority.action -ceq '0195' -and $authority.target -ceq $target -and
         $authority.sourcePath -ceq $sourcePath -and $authority.sourceBytes -eq $sourceBytes -and
         $authority.sourceSha256 -ceq $sourceSha256 -and $authority.publicSourceAccepted -eq $true -and
         $authority.controllerSha256 -cmatch '\A[0-9a-f]{64}\z' -and
@@ -98,6 +98,8 @@ try {
             wrapperPhase = $wrapperPhase; nativePhase = $pins.phase; heldOrdinal = $pins.heldOrdinal
             errorKind = $pins.errorKind; errorCode = $pins.errorCode
             identityMismatchMask = $pins.identityMismatchMask; snapshotMismatchMask = $pins.snapshotMismatchMask
+            outputStage = $pins.outputStage; firstReadChangeCount = $pins.firstReadChangeCount
+            sealedOutputs = $pins.sealedOutputs
             opens = $pins.opens; metadata = $pins.metadata; reads = $pins.reads; writes = $pins.writes
             requestedReadBytes = $pins.requestedReadBytes; writtenBytes = $pins.writtenBytes
         }
