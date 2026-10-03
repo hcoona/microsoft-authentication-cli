@@ -49,7 +49,7 @@ internal static class AdmissionCatalog
 
 internal sealed class ActualAdmission : IDisposable
 {
-    internal const string Root = @"C:\Temp\azureauth-windows-slice-108\confidential-native-account-v3";
+    internal const string Root = @"C:\Temp\azureauth-windows-slice-108\confidential-native-account-v4";
     private readonly FixtureNativePins pins;
     private readonly string path, sha, nonce, role, receiptRoot, privatePath;
     private readonly Group group;

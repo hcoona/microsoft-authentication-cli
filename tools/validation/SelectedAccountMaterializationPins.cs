@@ -286,24 +286,36 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
             SetPhase(205); Name(handle, path);
             SetPhase(206); stream = new FileStream(handle, FileAccess.Read, 65536, false);
             SetPhase(207); Need(Hash(stream, length) == hash);
-            SetPhase(220); SelectedAccountFileIdentity observed = Snapshot(stream.SafeFileHandle);
-            // All seven non-ChangeTime fields must agree across the first public read.
-            int mask = (observed.volume != initial.volume ? 1 : 0) |
-                (observed.index != initial.index ? 2 : 0) |
-                (observed.attributes != initial.attributes ? 4 : 0) |
-                (observed.links != initial.links ? 8 : 0) |
-                (observed.created != initial.created ? 16 : 0) |
-                (observed.modified != initial.modified ? 32 : 0) |
-                (observed.length != initial.length ? 128 : 0);
-            if (mask != 0 && !faulted) identityMismatchMask = mask;
-            Need(mask == 0);
-            SetPhase(317); Need(observed.volume == original.volume && observed.index == original.index &&
-                observed.created == original.created);
-            if (observed.changed != initial.changed) firstReadChangeCount++;
-            SelectedAccountHeldFile file = new SelectedAccountHeldFile { Stream = stream, path = path,
-                sha256 = hash, identity = observed, outputInitialIdentity = initial, outputFirstReadIdentity = observed };
-            // Full held/named agreement establishes a prospective baseline, never continuity.
-            Stable(file, 270); outputStage = 2;
+            SelectedAccountHeldFile file;
+            // The first named-handle exposure is part of fresh output establishment.
+            // Reuse this handle for full agreement; do not open repeatedly until quiet.
+            SetPhase(272);
+            using (SafeFileHandle named = Open(path, 0x80, 1, 3, 0x00200000))
+            {
+                SetPhase(273); Name(named, path);
+                SetPhase(220); SelectedAccountFileIdentity observed = Snapshot(stream.SafeFileHandle);
+                // All seven non-ChangeTime fields must agree across this first window.
+                int mask = (observed.volume != initial.volume ? 1 : 0) |
+                    (observed.index != initial.index ? 2 : 0) |
+                    (observed.attributes != initial.attributes ? 4 : 0) |
+                    (observed.links != initial.links ? 8 : 0) |
+                    (observed.created != initial.created ? 16 : 0) |
+                    (observed.modified != initial.modified ? 32 : 0) |
+                    (observed.length != initial.length ? 128 : 0);
+                if (mask != 0 && !faulted) identityMismatchMask = mask;
+                Need(mask == 0);
+                SetPhase(317); Need(observed.volume == original.volume && observed.index == original.index &&
+                    observed.created == original.created);
+                if (observed.changed != initial.changed) firstReadChangeCount++;
+                file = new SelectedAccountHeldFile { Stream = stream, path = path,
+                    sha256 = hash, identity = observed, outputInitialIdentity = initial, outputFirstReadIdentity = observed };
+                // Full held/named agreement establishes a prospective baseline, never continuity.
+                SetPhase(270); NeedStableIdentity(Snapshot(stream.SafeFileHandle), file.identity);
+                SetPhase(271); Name(stream.SafeFileHandle, path);
+                SetPhase(273); Name(named, path);
+                SetPhase(274); NeedStableIdentity(Snapshot(named), file.identity);
+            }
+            outputStage = 2;
             SetPhase(240); Need(Hash(stream, length) == hash);
             Stable(file, 280); SetPhase(209);
             stream.Position = 0; owned.Add(stream); files.Add(file);

@@ -130,7 +130,7 @@ def public_receipt(result):
         raise ValueError('Copy receipt fields')
     if (result['schema'] not in ('selected-account-public-materialization-v2', 'selected-account-public-materialization-v3') or
             result['authoritySha256'] != ADMISSION['authoritySha256'] or
-            result['target'] != 'C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v3' or
+            result['target'] != 'C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v4' or
             type(result['rows']) is not list or len(result['rows']) not in (0, 200) or
             result['failure'] not in ('admission', 'native-source', 'create', 'copy', 'none') or
             any(type(result[key]) is not bool for key in
@@ -259,7 +259,7 @@ def public_single_copy_receipt(result):
         # remains local: it is never emitted or treated as materialization evidence.
         public_receipt(dict(schema='selected-account-public-materialization-v3' if establishing else
             'selected-account-public-materialization-v2', passed=False,
-            authoritySha256=result['authoritySha256'], target='C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v3', rows=[], failure='copy',
+            authoritySha256=result['authoritySha256'], target='C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v4', rows=[], failure='copy',
             allHandlesClosed=result['allHandlesClosed'], noExperimentLive=False,
             productStarted=False, accountAccess=False,
             diagnostic=dict(diagnostic, copyOrdinal=1 if diagnostic['wrapperPhase'] == 1 else 0,
