@@ -14,7 +14,7 @@ $ProgressPreference = 'SilentlyContinue'
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $stage = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0193'
 $donor = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v23'
-$target = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v2'
+$target = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v3'
 $pins = $null
 $bootstrap = [Collections.Generic.List[IDisposable]]::new()
 $bootstrapReads = 0L
@@ -78,7 +78,7 @@ try {
         $authority.action -ceq '0193' -and $authority.target -ceq $target -and
         $authority.donor -ceq $donor -and $authority.productContextAccepted -eq $true -and
         $authority.callerSourceCommit -cmatch '\A[0-9a-f]{40}\z' -and
-        $authority.callerRootSourceSha256 -ceq '5a5340432ddc83b454c1889442f80afccc1bf58d293a75034fa572fb2e1550f4')
+        $authority.callerRootSourceSha256 -ceq '307c21c1bbbaacd09348974e8df6471c5dec6fc232fe840635a72dc763fd5a24')
     $null = Bootstrap-Read 'Invoke-WindowsNamedGuardFixtures.ps1' 65536 $authority.controllerSha256
     $source = Bootstrap-Read 'SelectedAccountMaterializationPins.cs' 32768 $authority.nativeSourceSha256
     $inventoryBytes = Bootstrap-Read 'caller-inventory.json' 65536 $authority.callerInventorySha256

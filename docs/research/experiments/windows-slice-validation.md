@@ -92,6 +92,12 @@ independently accepted observation method within the authorized effects.
 
 ## Root-Compatible Selected-Account Caller Preparation
 
+For subsequent full public materialization and account execution, use the fresh
+account-v3 successor below. The v22/v23 account-v2 source, artifact and root
+bindings in the earlier recipes retain only their historical roles. The frozen0195
+single-file diagnosis remains bound to its separately accepted sources and inputs;
+this successor neither changes those bytes nor admits a replay.
+
 The first native-account caller must match the public preparation and account
 controllers' fixed `confidential-native-account-v2` root. The original 0130 v9
 caller fixes account-v1; its retained 194 descriptors remain passive provenance
@@ -377,6 +383,82 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [SyntheticSubject.rsp](../../../tools/validation/controlled-callers/control/SyntheticSubject.rsp) | 21309 | `7016e29b6f8f43805786e81c8213f2dc509bfabc100d7b4b5478eee707b78325` |
 | [FixtureDriver.rsp](../../../tools/validation/controlled-callers/control/FixtureDriver.rsp) | 21276 | `aeebc66eb198c2d70f640051ad3d915164e6af124a1778679ad9bfdf63b2d01c` |
 | [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11352 | `f604ae3dffb885aaba6dfbb8edf94afd9629cdf31ec0a7e29a1b50437f3d5a3b` |
+
+## Fresh Selected-Account Root and Caller Correspondence
+
+The failed0193 account-v2 destination is occupied and remains retain-always. A fresh
+full materialization therefore uses
+`C:\Temp\azureauth-windows-slice-108\confidential-native-account-v3`.
+Project that literal consistently through ActualAdmission.Root, public preparation,
+original/main/cutoff controllers, the four null-selector request templates and the
+result collector. Keep authentication, request admission, private selection,
+confidentiality, deadlines, identity comparisons and cleanup semantics unchanged.
+There is no configurable root option or adoption of an old destination.
+
+The only native caller change is the account-v2-to-v3 Root literal. Its exact source
+SHA-256 is `307c21c1bbbaacd09348974e8df6471c5dec6fc232fe840635a72dc763fd5a24`.
+The public initializer and source-response map bind that same source checksum.
+All other source mappings, compiler inputs, four targets, references, runtime
+metadata and reviewed Microsoft API judgments are reused unchanged. The source
+map remains the generated correspondence carrier rather than a second catalog.
+
+Use a fresh compile original0196 at `confidential-checks-v24`, projecting the
+existing root-compatible compile methods consistently across its source/response
+map, four responses, controller, Python caller, catalog and exact admission. Reuse
+the accepted current365 public donors only in their admitted roles; keep local
+controls/current runtime and within-read identities strict. Do not run any compiled
+target during preparation. The compile's unchanged per-original maxima and
+`0/1/0/7` technical charge remain subject to exact source/input/call/accounting
+admission and the remaining common pool. This proposal reserves nothing and
+neither resets consumed capacity nor reopens a spent original.
+
+Independently accept the new build's source/artifact/413-input correspondence,
+PE/PDB/apphost/runtime closure, ordinary transport, creation-time root/Job/twoEOF
+and own Linux scoped completion under the existing compiler protocol. Derive its
+194-row caller inventory and200-row public expectedRows from that accepted build;
+keep ordered roles, exact lengths/hashes, source commit and96MiB total constraints.
+The v23 caller fixes account-v2 and remains passive provenance. Matching hashes or
+a manually edited inventory cannot admit its execution at account-v3.
+
+For full materialization use fresh action0197, `named-fixtures-0197`,
+`selected-account-public-inputs-v5` and the account-v3 output. Project existing
+control-creation/transfer/dispatch/result methods only through those exact literals
+and the accepted new source/build/inventory descriptors. Use the accepted prospective
+output sealing method and materialization-v3 interpretation. Independently bind
+current controls, all200 expectedRows, ordinary timely original, native receipt,
+root/Job/twoEOF, own Linux completion and the existing finite public batch before
+acceptance. Preserve the unchanged `0/1/0/4` technical charge and per-pass maxima.
+Neither this amendment nor single-file success admits full materialization.
+
+Private input creation remains downstream of that complete public conjunction,
+root-compatible executable provenance, cutoff loading, Profile eligibility,
+current-host/kernel relevance and real operating-basis acceptance. The creator and
+exact role/scopes/calls must bind account-v3 before local selectors are supplied.
+Normal account effects remain within the accepted Wave; personal/work/actualWSL
+observations are still required. Do not export private inputs or account state.
+
+Retain failed0193/account-v2/0194 and all earlier builds, descriptors, charges,
+uncertainties and `noExperimentLive=false`. No old payload is reopened, adopted,
+repaired, deleted or executed. ETW/elevation remain stopped. Existing account-v2
+source bindings below retain their historical meaning; these bindings govern only
+the fresh-root successor and do not reinterpret an earlier original.
+
+Current root-sensitive source bindings:
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11352 | `f26e93cce66802041dbb226ede40daddf4d1b891cd14ed4930cba56ef65000cf` |
+| [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `b065dcf24e3c20af6244f1b577a09ad5c1f43d7113735cfd80833515812baab5` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `d6ce4c1a886f48d1bb074cf9deacb8d92516f6c24eeb34c0164d0b1c527b4599` |
+| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `b89d8cc9a0b0a224092ad1a161d14a8bd73107cca77c25eba5e3e9186df2e82e` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 27565 | `b409e7de7d79deb53036dba222bab2cb6d16b0ff0219a0d7236de8c02d5f140d` |
+| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `9fa34044b8ce70447d79f2c7e266d616531133a1070fa64a9ac50ae069336f65` |
+| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `307c21c1bbbaacd09348974e8df6471c5dec6fc232fe840635a72dc763fd5a24` |
+| [R1.template.json](../../../tools/validation/selected-account-inputs/R1.template.json) | 746 | `8489733228e5328b2d2363b0e79c2187de89aadd05b1a695ea1ad7f66b53312c` |
+| [R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `3b0ab3f03a8cd67efa0d8fc4c2f6f5b67a3ff53595cefdc448be2ef755041c19` |
+| [R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `917d6e3f6dc918d018248b23b507501df0ccdc5e5ab567a28ecf84ea8fe93525` |
+| [R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `9eb8d0f3789effc8991a74836649ddf5ee58cfcf89eece50e60c88c9c25754ed` |
+| [test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 19000 | `768a02d17006073c7864bcdc7de8ba3a2859ecb576c8b5bbd8d07b1c4502bfba` |
 
 ## Retained Product Byte Acquisition Recipe
 
