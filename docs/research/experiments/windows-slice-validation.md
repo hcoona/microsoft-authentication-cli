@@ -2222,6 +2222,22 @@ previously accepted original OWN and recovered collection remain prerequisites;
 this literal does not independently accept the library or explain the original
 failed reader. Bind all current source, runtime, stage and account-root roles
 before the original. Do not infer account-root correspondence from a pathname.
+Before the first Copy, Pin the existing account-v5
+`control\Invoke-WindowsSelectedAccount.ps1` as the one public destination anchor,
+using its accepted c06 materialization receipt's exact17534B/SHA256
+`38eb5dcc7b8951793cbe5445ca567ab7cf776547c3b99314e7131279095fb583`.
+Bind that destination's recorded native identity in `rootAnchorIdentity`, with
+`rootAnchorBytes` and `rootAnchorSha256`, in the exact reviewed authority/call.
+Compare volume, file index, attributes, links, creation time, modification time
+and length with that accepted destination identity. Preserve its historical
+ChangeTime and qualify only that prior-to-current field under the accepted Wave
+disposition; do not relax the fresh Pin's strict eight-field held/named checks,
+hash/EOF or final CheckAll. Retain the anchor handle with the held target/control
+ancestry through final checks and disposal. The same receipt records both
+accepted and current anchor identities and the qualification. This binds the
+current destination to an accepted materialized public leaf; it makes no fresh
+all200 integrity or uninterrupted historical-continuity claim. The bounded
+anchor read/metadata/receipt remains inside the existing public allocation.
 
 Create only these exclusive leaves under account-v5 `control`:
 `SelectedAccountControllerCutoff.dll`, `Invoke-WindowsSelectedAccountCutoff.ps1`
@@ -2322,7 +2338,7 @@ eligibility, current real operating basis and real calls retain their separate g
 
 | Additional inert source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Initialize-WindowsSelectedAccountCutoffPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountCutoffPublic.ps1) | 9488 | `ceea2d79aaf37819278c9314830fe1578b5bb26512d7d053a2975bd84a97d45d` |
+| [Initialize-WindowsSelectedAccountCutoffPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountCutoffPublic.ps1) | 10632 | `73ee024346b886eaaf99774155f7814f43fc366f99c42a9aad46fc3901a790f5` |
 | [Initialize-WindowsSelectedAccountCutoffLoad.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountCutoffLoad.ps1) | 5338 | `54d98f0f16169012bb51ebb1a53bfa21ab19505f40d6675741e68dd5ec58e5a7` |
 
 #### Original epoch, handle ownership and one stop claim
