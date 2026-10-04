@@ -3,7 +3,7 @@
   "group": "R7",
   "requests": [
     {
-      "profilePath": "C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v4\\product\\selected-account-profile.json",
+      "profilePath": "C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v5\\product\\selected-account-profile.json",
       "tenantArgument": "common",
       "exactResultTenant": null,
       "accountEmail": null,

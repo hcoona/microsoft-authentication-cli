@@ -22,7 +22,7 @@ $bootstrapReads = 0L
 $bootstrapRequestedReadBytes = 0L
 $wrapperPhase = 0
 $result = [ordered]@{
-    schema = 'selected-account-single-copy-diagnosis-v2'; passed = $false
+    schema = 'selected-account-single-copy-diagnosis-v3'; passed = $false
     authoritySha256 = $AuthoritySha256; failure = 'admission'; copyCompleted = $false
     allHandlesClosed = $false; noExperimentLive = $false
     productStarted = $false; accountAccess = $false; diagnostic = $null
@@ -99,6 +99,7 @@ try {
             errorKind = $pins.errorKind; errorCode = $pins.errorCode
             identityMismatchMask = $pins.identityMismatchMask; snapshotMismatchMask = $pins.snapshotMismatchMask
             outputStage = $pins.outputStage; firstReadChangeCount = $pins.firstReadChangeCount
+            outputChangeTimeDifferenceCount = $pins.outputChangeTimeDifferenceCount
             sealedOutputs = $pins.sealedOutputs
             opens = $pins.opens; metadata = $pins.metadata; reads = $pins.reads; writes = $pins.writes
             requestedReadBytes = $pins.requestedReadBytes; writtenBytes = $pins.writtenBytes

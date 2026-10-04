@@ -10,8 +10,8 @@ import resource
 import sys
 
 SOURCE = Path(__file__).resolve().parents[1] / 'collect_selected_account_copy_results.py'
-EXPECTED_SHA256 = '141fb52e2d1c2f34dfdec50e543a90c4497d7f3ec0d9aee2b8249bec1ca03d3e'
-EXPECTED_SOURCE_BYTES = 29194
+EXPECTED_SHA256 = '1c72feb0382a27e29a60e2ffcf7f08d755689d46b8d681ab847c6cb5d14d8afb'
+EXPECTED_SOURCE_BYTES = 30681
 if SOURCE.is_symlink() or SOURCE.stat().st_size != EXPECTED_SOURCE_BYTES:
     raise ValueError('Unexpected test source shape')
 with SOURCE.open('rb') as stream:
@@ -43,7 +43,7 @@ class ProjectionTests(unittest.TestCase):
         counters = dict(opens=0, metadata=0, reads=0, writes=0, requestedReadBytes=0, writtenBytes=0)
         self.value = dict(schema='selected-account-public-materialization-v2', passed=True,
             authoritySha256='a' * 64,
-            target='C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v4',
+            target='C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v5',
             rows=[dict(row, identity=copy.deepcopy(ident), sourceIdentity=copy.deepcopy(ident)) for row in expected],
             failure='none', allHandlesClosed=True, noExperimentLive=False, productStarted=False, accountAccess=False,
             diagnostic=dict(copyOrdinal=0, completedCopies=200, wrapperPhase=4, nativePhase=405,
@@ -324,6 +324,102 @@ class ProjectionTests(unittest.TestCase):
         for field in ('outputInitialIdentity', 'outputFirstReadIdentity', 'changed', 'accessed'):
             with self.subTest(field=field):
                 value = self.sealing_value(); value['diagnostic'][field] = 134000000000000001
+                self.reject(value)
+
+    def qualified_single_value(self):
+        value = self.sealing_value()
+        value['schema'] = 'selected-account-single-copy-diagnosis-v3'
+        value['diagnostic'].update(outputChangeTimeDifferenceCount=4, metadata=24)
+        return value
+
+    def test_qualified_output_reports_metadata_differences(self):
+        value = self.qualified_single_value()
+        self.assertEqual(self.project(value)['receipt'], value)
+        full = copy.deepcopy(self.value)
+        full['schema'] = 'selected-account-public-materialization-v4'
+        full['diagnostic'].update(outputStage=3, firstReadChangeCount=200, sealedOutputs=200,
+            identityMismatchMask=0, snapshotMismatchMask=0,
+            outputChangeTimeDifferenceCount=1200, metadata=3600)
+        full['counts']['metadata'] = 3600
+        self.assertEqual(self.project(full)['receipt'], full)
+
+    def test_qualified_output_counter_is_typed_and_bounded(self):
+        for changed in ('missing', True, -1, 1.0, None, 'synthetic-private-marker', 32769):
+            with self.subTest(changed=changed):
+                value = self.qualified_single_value()
+                value['diagnostic']['metadata'] = 32770
+                if changed == 'missing': del value['diagnostic']['outputChangeTimeDifferenceCount']
+                else: value['diagnostic']['outputChangeTimeDifferenceCount'] = changed
+                self.reject(value)
+        value = self.qualified_single_value(); value['diagnostic']['metadata'] = 3
+        self.reject(value)
+
+    def test_qualified_output_cannot_reinterpret_legacy_schema(self):
+        for schema in ('selected-account-single-copy-diagnosis-v1',
+                       'selected-account-single-copy-diagnosis-v2'):
+            with self.subTest(schema=schema):
+                value = self.qualified_single_value(); value['schema'] = schema
+                self.reject(value)
+        value = self.sealing_value(); value['schema'] = 'selected-account-single-copy-diagnosis-v3'
+        self.reject(value)
+
+    def test_qualified_output_preserves_seven_field_failures(self):
+        for phase in (270, 274, 280, 284):
+            for mask in (1, 2, 4, 8, 16, 32, 128):
+                with self.subTest(phase=phase, mask=mask):
+                    value = self.qualified_single_value()
+                    value.update(passed=False, copyCompleted=False, failure='copy')
+                    value['diagnostic'].update(wrapperPhase=1, nativePhase=phase,
+                        outputStage=1 if phase < 280 else 2, heldOrdinal=0, sealedOutputs=0,
+                        errorKind=1, errorCode=phase, identityMismatchMask=mask)
+                    self.assertEqual(self.project(value)['receipt'], value)
+
+    def test_qualified_output_rejects_change_time_fault_at_output_sites(self):
+        for phase in (270, 274, 280, 284):
+            with self.subTest(phase=phase):
+                value = self.qualified_single_value()
+                value.update(passed=False, copyCompleted=False, failure='copy')
+                value['diagnostic'].update(wrapperPhase=1, nativePhase=phase,
+                    outputStage=1 if phase < 280 else 2, heldOrdinal=0, sealedOutputs=0,
+                    errorKind=1, errorCode=phase, identityMismatchMask=64)
+                self.reject(value)
+
+    def test_qualified_output_preserves_strict_input_change_time_fault(self):
+        value = self.qualified_single_value()
+        value.update(passed=False, copyCompleted=False, failure='copy')
+        value['diagnostic'].update(wrapperPhase=1, nativePhase=170, outputStage=0,
+            firstReadChangeCount=0, outputChangeTimeDifferenceCount=0, heldOrdinal=0,
+            sealedOutputs=0, errorKind=1, errorCode=170, identityMismatchMask=64)
+        self.assertEqual(self.project(value)['receipt'], value)
+
+    def test_qualified_checkall_distinguishes_input_and_output_change_time_faults(self):
+        for phase in (400, 404):
+            with self.subTest(phase=phase):
+                value = self.qualified_single_value()
+                value.update(passed=False, failure='copy')
+                value['diagnostic'].update(wrapperPhase=2, nativePhase=phase,
+                    heldOrdinal=1, errorKind=1, errorCode=phase, identityMismatchMask=64)
+                self.assertEqual(self.project(value)['receipt'], value)
+                value['diagnostic']['heldOrdinal'] = 2
+                self.reject(value)
+
+    def test_qualified_output_does_not_export_metadata_or_private_fields(self):
+        for field in ('changed', 'previousChangeTime', 'securityDescriptor', 'alternateStreams',
+                      'outputInitialIdentity', 'privateAccount'):
+            with self.subTest(field=field):
+                value = self.qualified_single_value()
+                value['diagnostic'][field] = 'synthetic-private-marker'
+                self.reject(value)
+
+    def test_qualified_output_requires_exact_public_inventory(self):
+        for key, changed in (('sha256', 'c' * 64), ('relative', 'toolchain\\other.dll'),
+                             ('role', 'product'), ('bytes', 2)):
+            with self.subTest(key=key):
+                value = copy.deepcopy(self.value)
+                value['schema'] = 'selected-account-public-materialization-v4'
+                value['diagnostic'].update(outputStage=3, firstReadChangeCount=0, sealedOutputs=200,
+                    identityMismatchMask=0, snapshotMismatchMask=0, outputChangeTimeDifferenceCount=0)
+                value['rows'][0][key] = changed
                 self.reject(value)
 
 
