@@ -2097,8 +2097,9 @@ review. Each has a fresh dedicated root; do not adopt, overwrite or repair any
 occupied root. Stop once accepted artifact evidence suffices. No helper method,
 console probe, lease or real-account start is included in this compilation batch.
 
-For each original, separately admit at most five charged preparation/evidence
-passes within the following maxima; classify actual effects, preserve full failed
+For each original, separately admit at most seven charged preparation/evidence
+passes, including at most two fixed diagnostic/recovery collections, within the
+following maxima; classify actual effects, preserve full failed
 charges and bind exact fixed selection/identities/resource and I/O counts before
 submission. These are allocation ceilings, not source implementations or call
 admission. A new/corrected transfer or reader remains inert until reviewed.
@@ -2110,14 +2111,52 @@ admission. A new/corrected transfer or reader remains inert until reviewed.
 | Owned Windows compilation dispatch/control work | 1 | 400 | 64 MiB |
 | Fixed library/result/journal/two-capture collection | 1 | 30 | 4 MiB |
 | Own Linux scope startup-witness/events collection | 1 | 30 | 32 KiB |
+| Fixed failed-compilation diagnostic/recovery collection | 2 | 60 | 8 MiB |
 
-The four-original maximum is 20 passes, 2,080 reserved seconds and 369,229,824
+The four-original maximum is 28 passes, 2,320 reserved seconds and 402,784,256
 reserved bytes. Reserve only needed reviewed passes, not the whole unused buffer.
 Library collection selects only `cutoff.generated.dll`,
 `SelectedAccountControllerCutoff.dll`, `cutoff-compilation-result.json`,
 `launcher.jsonl` and the two launcher capture files. Scope collection uses only
 the new original's exact own startup witness and events leaf, with justified
 absence under validated ancestry; no process, service or host survey follows.
+After independently accepted failed collection and its scoped completion, a fresh
+fixed diagnostic collection may read the same six public leaves without replaying
+compilation, the failed reader, or the OWN observer. Preserve each original charge,
+failed output and unknown. Reserve one30s/4MiB pass before submission; a second pass
+requires an accepted failed diagnostic outcome, supported correction and revised
+exact source/input/call review. No public-input, private, account, process, service,
+loader or trace-buffer survey is included. Stop collecting when sufficient accepted
+evidence exists. An occupied output is retained, never repaired or adopted as fresh.
+
+The inert [cutoff compilation recovery reader](../../../tools/validation/collect_selected_account_cutoff_compilation.py)
+selects only those six leaves under the already bound public stage. `ADMISSION`
+and `RECOVERY` remain null in the canonical source; independently reviewed private
+projections bind only the exact stage/retention identities and dedicated retained
+root. The canonical source is 9635B/SHA256`64a5e7ee7698100f551822beec199f38da85e88af1071c768f75fe7c676536c3`.
+Existing leaf reads retain all-nine held/named comparisons, exact length/hash/EOF,
+25s source work/CPU,128MiB AS,64 FDs,4MiB requested reads and a524288B exclusive
+readonly snapshot/readback ceiling. The exact call retains clean startup/runtime,
+GNU25s TERM+5s KILL and whole30s. Installed bootstrap/source reads remain separately
+declared operating allocations, not an exhaustive OS I/O census.
+
+A missing fixed leaf records only its public name under validated held ancestry;
+absence is rechecked before finalization. Nonempty public capture files are opened
+and identity-checked but their content is not read, hashed, retained or emitted;
+only a fixed suppressed disposition is exported. Empty captures retain exact EOF.
+Receipt/journal values remain limited to their accepted public schemas; no raw
+exception/compiler text or additional native query is introduced. Other read,
+identity, parser, resource or retention failures stop collection and emit only a
+fixed source phase/selected public leaf and descriptor-close Boolean after closure,
+within the existing whole30s bound. No exception text or missing-file repair follows.
+
+A recovery-reader zero means only completed bounded collection. Artifact absence or emptiness,
+failed receipt, nonempty capture, partial native journal or missing closure still
+rejects compilation acceptance. Independently accept the actual compiler/source/
+artifact and native root/Job/twoEOF evidence before library use. A successful OWN
+collection alone supplies no native evidence. The failed compiler/collection and
+historical uncertainty are never reclassified as success by this recipe.
+
 Source readers retain strict no-follow/held/named/within-read identity checks,
 length/hash/EOF and exclusive retained evidence. All input and Windows native
 correspondence, startup, environment, compiler and transport joins remain required.
