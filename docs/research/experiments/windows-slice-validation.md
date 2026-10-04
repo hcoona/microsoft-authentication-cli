@@ -2185,6 +2185,146 @@ context, new shell or renewed Type cannot reset the failed-lease refusal. The
 original carrier accepts that admitted Type; its name/type checks alone do not
 establish the artifact or loading gate. Loading does not compile another helper.
 
+#### Three additional public cutoff controls
+
+Use the inert [public cutoff materializer](../../../tools/validation/Initialize-WindowsSelectedAccountCutoffPublic.ps1)
+only after independent acceptance of the current account-v5 public materialization
+and the exact cutoff compilation/source/DLL/native/OWN conjunction. This adds the
+three required control leaves to the already accepted account root. It does not
+create or replace that root, revise the frozen200-leaf materialization or replace
+any194-leaf caller entry. An occupied control pathname rejects the operation;
+retain every completed or partial output and do not repair it.
+
+The fixed fresh public stage is `named-fixtures-0213`. Its six inputs are
+`authority.json`, the activated adapter under the normal launcher's required
+`Invoke-WindowsNamedGuardFixtures.ps1` filename, the unchanged
+`SelectedAccountMaterializationPins.cs`, the two cutoff/original PowerShell
+controls and the guarded existing-process loader. Canonical PowerShell guards stay
+false. Independently reviewed local copies change only the adapter's preparation
+guard, the two controls' execution guards and the loader's loading guard. These public copies contain no selector or private account data; activated
+bytes alone grant neither an original call nor account execution.
+
+The adapter uses the existing default Framework Add-Type provider only for the
+unchanged public file-check source,23008B/SHA256
+`a8b8efccd2dad78764d8870b602ee7d640936d1087c561be8ec7d197f323fdbd`.
+It preserves the accepted bootstrap, native Pin/Copy/output establishment,
+readback, final held/named checks, diagnostic, disposal and receipt methods.
+Declare the same installed loader/reference/compiler and ordinary compiler
+temporary-write operating basis separately; this is not a new toolchain, loader
+experiment or compilation of the cutoff source.
+
+Native Copy reads only the accepted
+`named-fixtures-0188\SelectedAccountControllerCutoff.dll` and the two new staged
+PowerShell controls. The accepted library is10240B/SHA256
+`fbc44808765c99086c35d23c245c7c42db2cb9760c60912a7f71b6ecfd2afb64`.
+Its exact source/default-compiler/artifact and native root/Job/twoEOF evidence,
+previously accepted original OWN and recovered collection remain prerequisites;
+this literal does not independently accept the library or explain the original
+failed reader. Bind all current source, runtime, stage and account-root roles
+before the original. Do not infer account-root correspondence from a pathname.
+
+Create only these exclusive leaves under account-v5 `control`:
+`SelectedAccountControllerCutoff.dll`, `Invoke-WindowsSelectedAccountCutoff.ps1`
+and `Invoke-WindowsSelectedAccountOriginal.ps1`. Separately Pin the staged loader
+source and retain its native identity/hash/length in the same receipt; it stays in
+the public stage and is not a fourth account-root copy. Each input is at most65536B and
+the three-copy aggregate is at most1MiB. Retain actual native source/destination
+identities, length/hash/EOF, output establishment and unchanged within-read
+correspondence. The sole receipt is the stage's exclusive
+`cutoff-materialization-result.json`, at most262144B; its flags remain provisional.
+This phase loads no cutoff library, invokes no helper/console/lease method,
+creates no private input and starts no product, native caller or account operation.
+
+Admit one public materialization original with technical charge `0/1/0/4` from
+remaining common capacity. Reuse normal0070, ordinary PowerShell, the current
+Linux direct-scope operating basis and the existing330+10s native envelope.
+Source work/final-check/disposal/receipt cutoffs remain300/310/320s. Preserve the
+original E0/Ec/Eb/latest-entry/365+5/400s joins and one deadline; no collector or
+retry renews it. The four conservative synthetic roles remain one PowerShell,
+one compiler and at most two internal hosts, not a claim of exact process identities.
+
+Reserve only needed reviewed passes from the existing passive accounting:
+
+| Public three-control operation | Maximum passes | Seconds per pass | Bytes per pass |
+| --- | ---: | ---: | ---: |
+| Fixed public input creation | 1 | 30 | 16 MiB |
+| Fixed source/library/runtime preflight | 1 | 30 | 16 MiB |
+| Exclusive six-control stage transfer/readback | 1 | 30 | 4 MiB |
+| Owned Windows file-check compilation and three-copy work | 1 | 400 | 704 MiB |
+| Fixed public receipt/journal/two-capture collection | 1 | 30 | 4 MiB |
+| Exact original own startup witness/events collection | 1 | 30 | 32 KiB |
+| Fixed diagnostic collection after accepted failed collection | 2 | 30 | 4 MiB |
+
+The Windows allocation covers the unchanged512MiB requested native reads,
+128MiB native writes,8MiB bootstrap requests, existing8MiB compiler temporary
+assumption, bounded receipt/capture/control work and declared installed operating
+reads. It is a conservative reservation, not a measured physical OS I/O census or
+a compiler disk quota. Preserve native4096-open/32768-metadata/read/write ceilings
+and bootstrap8192-read limits. The eight-pass maximum is610s and788561920B;
+unused diagnostic passes are not charged preemptively.
+
+A diagnostic selects only the same four fixed public result leaves under the
+bound stage. Admit one30s/4MiB pass only after accepted prior failed collection and
+scoped completion. Any second requires accepted failed diagnosis, supported
+correction and revised exact review. Never replay the materializer, failed reader
+or OWN observer, probe unrelated state, repair an occupied output or refund a charge.
+No second materialization original is granted by this local batch. A supported
+correction within the standing outcome/common pool still requires its concrete
+source/input/call protocol and prior failed outcome/scoped completion.
+
+Independently accept actual three-copy/source/native correspondence, original
+timely ordinary transport, creation-time root/Job/twoEOF, original own Linux scope
+and separately supported collector/bookkeeping completion before loading. All
+original failed/provisional/pending/history fields remain; acceptance adds a scoped
+link rather than rewriting the primitive record. Preserve all historical unknowns,
+spent calls and `noExperimentLive=false`.
+
+#### One load and persistent runtime Type
+
+The inert [existing-process loader](../../../tools/validation/Initialize-WindowsSelectedAccountCutoffLoad.ps1)
+implements the preceding loading obligation. Its loading guard stays false in the
+canonical source. Independently accept its exact projection/source/input/call and
+ordinary installed Framework dependency basis before one invocation of the staged
+`named-fixtures-0213\Initialize-WindowsSelectedAccountCutoffLoad.ps1` in the already
+admitted existing Windows PowerShell5.1 process/runspace. Bind its accepted native
+source descriptor from the materializer's receipt as well as its exact activated bytes. Bind that process's exact
+PID, session and creation time and its ordinary current-user/console/environment
+basis. Do not create a shell, child, console, Job or alternate load context to meet
+this gate or reset a failed lease. No credential-bearing operation occurs here.
+
+Read only the fixed accepted account-v5 `control` library, denying write/delete
+sharing and requiring exact10240B/hash/EOF/no-reparse ancestry. The already accepted
+native materialization and current exact input gate supply its native/held/named
+correspondence; the loader's managed byte check does not manufacture that evidence.
+The source bounds explicit library requests to512 reads and4MiB, checks source work
+before25s and handle closure/status before30s. Reserve one30s passive pass with4MiB
+selected requests plus64MiB declared ordinary source/installed-loader operating
+allocation. No exhaustive physical I/O, existing-process memory quota or hard-real-time
+claim follows; blocked or late operations remain failure and stop dependent work.
+
+Inspect at most512 already loaded assemblies in this same AppDomain for the one
+fixed Type name; no process, account, filesystem or host survey follows. Before
+the sole Assembly.Load(byte[]) call, create a constant global attempt marker.
+Load only the checked in-memory image, resolve the exact Type from the returned
+Assembly and retain it in one constant global `AzureAuth108CutoffType` variable.
+That Type strongly retains its Assembly. Reject a preexisting holder/Type or any
+second invocation; retain created marker/Type even after load/finalization failure.
+No constructor, timer/lease, console/helper method, account API or private read is
+included. Do not handle resolution by loading a replacement assembly.
+
+Export only the fixed public load status, at most4096B, and admitted public
+process/session/library correspondence. Actual original return/timing and exact
+source/current-host joins remain required; a provisional status alone is not
+loading acceptance. Independently accept the successful one-load/SAME-Type,
+source/artifact/process/session and scoped resource conjunction before the admitted
+original carrier receives that identical global Type. Private creation, Profile
+eligibility, current real operating basis and real calls retain their separate gates.
+
+| Additional inert source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [Initialize-WindowsSelectedAccountCutoffPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountCutoffPublic.ps1) | 9488 | `ceea2d79aaf37819278c9314830fe1578b5bb26512d7d053a2975bd84a97d45d` |
+| [Initialize-WindowsSelectedAccountCutoffLoad.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountCutoffLoad.ps1) | 5338 | `54d98f0f16169012bb51ebb1a53bfa21ab19505f40d6675741e68dd5ec58e5a7` |
+
 #### Original epoch, handle ownership and one stop claim
 
 Complete automated input/call preparation before actual account input/readiness.
