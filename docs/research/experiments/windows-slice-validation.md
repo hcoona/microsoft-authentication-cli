@@ -2405,6 +2405,44 @@ An occupied root cannot be repaired, replaced or adopted. Missing or late origin
 completion, forced stop, unclosed ownership, output overflow or invalid records
 fails this observation and stops its dependent account admission.
 
+### One corrected result collection after reader failure
+
+A failed four-leaf collector does not establish the Windows clock, native closure
+or its failure cause. Keep dependent account admission stopped. After independent
+acceptance of the complete failed reader return, its scoped completion, original
+ordinary return and source-qualified own Linux completion, the maintainer may
+allocate one corrected read-only collection from the shared technical capacity.
+This is the only additional result pass for this observation: at most 1 MiB and
+30 seconds, fully reserved before submission, with no technical or real-stage
+start. It does not renew the original clock, rerun Windows work, refund a prior
+pass, repair an occupied root, or grant another OWN or historical collection.
+
+Use [the inert corrected collector](../../../tools/validation/Collect-WindowsSelectedAccountClock.py),
+9,484 bytes, SHA-256
+`096a43ffa7602323bbf6fe0368466ab5ebafca5e1a7df36dac2df35161ed1e5b`. Its `ADMISSION = None` guard remains closed in
+Git. Independently bind only the designated 0187 stage full5 and the dedicated
+retention path/full5 in a private activation, together with exact current source,
+accepted protocol, failed/ordinary/OWN evidence, runtime/startup/resource basis,
+fresh output and literal call. Reuse unchanged accepted methods.
+
+The fixed four Windows leaves, individual limits, strict nofollow/held/named/full9,
+length/hash/EOF, empty-capture and strict JSON methods above remain. The failure
+stdout transport exports no partial record, leaf content, hash or exception text.
+It contains only a fixed phase, the nine-field identity-mismatch bitmask,
+registered-descriptor closure Boolean and false product/account flags; missing or
+late transport remains unknown. A successful collection writes only the fresh
+exclusive `selected-account-kernel-clock-snapshot-v2.json` in its admitted retention
+root, with the unchanged 512 KiB snapshot, readback, FD and total 1 MiB/30s bounds.
+Neither a diagnostic phase nor this new snapshot alone certifies native success.
+
+Require independent complete actual reader/transport, original root/Job/twoEOF,
+clock/source/host and retained OWN conjunction before relevance or account use.
+Preserve the failed collector, every spent observation, charge, partial output,
+historical uncertainty and `noExperimentLive=false`. Failure of this corrected
+pass stops this observation; do not retry or collect it again by inference. Any
+further observation requires a separately accepted supported protocol correction
+within the existing Wave's outcome, effects and capacity.
+
 ### Bounded current relevance conclusion
 
 After independent outcome acceptance and confirmed host/source correspondence,
