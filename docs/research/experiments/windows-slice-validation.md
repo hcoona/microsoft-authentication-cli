@@ -240,13 +240,18 @@ acceptance, six historical unknowns and `noExperimentLive=false`. Other admissio
 authority and deployment shapes remain unchanged, including deployment-v3's
 ordered `compileDonorReads` and its inventory-selected donor basis above.
 
-The current controlled caller bounds the fixed `windowsActions` history parent
-at 256 names and each of the other three history parents at 128 names. Apply the
-same role-specific ceiling to checkpoint-list validation and live enumeration,
+The current controlled caller bounds the fixed `windowsActions` and
+`windowsProjectionRoot` history parents at 256 names each. The `linuxActions` and
+`windowsProjectionActions` parents remain at 128 names each. Apply the same
+role-specific ceiling to checkpoint-list validation and live enumeration,
 including the owned reservation additions. This supersedes only the current
-caller's former 128-name `windowsActions` limit; historical recipes retain their
-original limits. Keep exact sorted membership, the four literal parents, the
-64-KiB checkpoint limit, unrelated limits and all execution gates.
+caller's former 128-name limits for those two Windows parents; historical recipes
+retain their original limits. Keep exact sorted membership, the four literal
+parents, the 64-KiB checkpoint limit, unrelated limits and all execution gates.
+Reuse accepted unchanged metadata and runtime observations where applicable;
+refresh affected source, target, protocol, checkpoint and exact-call bindings
+before execution. This amendment does not refresh a directory membership,
+admit an experiment or reset a spent observation.
 
 Retain the original 3600-second Linux submission, 1200-second dedicated service,
 330+10-second Windows launcher and existing nested compiler/controller cutoffs.
@@ -375,7 +380,7 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `5a5340432ddc83b454c1889442f80afccc1bf58d293a75034fa572fb2e1550f4` |
 | [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `83b415804b61fa8a35f10f4037114b5f6346f3cb9f9a2519affaabd2a90e4790` |
 | [controller-input-catalog.tsv](../../../tools/validation/controlled-callers/control/controller-input-catalog.tsv) | 87398 | `1bf3742530b97472bbf81aaa73ccff3fbba2dc22d2a1ee865e02ba754bfaf2bc` |
-| [run_controlled_callers.py](../../../tools/validation/controlled-callers/run_controlled_callers.py) | 80426 | `66b4d3f5c203dc1cbc5e8126e0038562b4c624fa90cfe402cdbca8f8fa705b9e` |
+| [run_controlled_callers.py](../../../tools/validation/controlled-callers/run_controlled_callers.py) | 80672 | `2affd33d40b185b9232aa2006e411195c9cdfc642936ffcb83361be50558c638` |
 | [observe_controlled_compile_current_inputs.py](../../../tools/validation/observe_controlled_compile_current_inputs.py) | 10847 | `d1fc79d9c04e41d9a9eb5176e2dbbc17a9334981256e48b0ad9c4b7dbc6587ee` |
 | [Invoke-WindowsControlledCallers.ps1](../../../tools/validation/controlled-callers/Invoke-WindowsControlledCallers.ps1) | 26463 | `53bab8dfb4802e6b541b840abcb128c6d9efb63317c91e7a63becc30c389665c` |
 | [NativeCaller.rsp](../../../tools/validation/controlled-callers/control/NativeCaller.rsp) | 20867 | `62a1b7b8cb6ba3d51535e0b4a9be7cbde8ed928fca5bba62f74b1dcb98c33e33` |

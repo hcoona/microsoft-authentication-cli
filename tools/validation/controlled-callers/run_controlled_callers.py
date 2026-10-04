@@ -840,7 +840,7 @@ def checkpoint(a, budget, reserved=False):
     require(set(c['historyParents']) == set(PARENTS), 'Current four-parent projection')
     for role, path in PARENTS.items():
         expected = c['historyParents'][role]
-        maximum = 256 if role == 'windowsActions' else 128
+        maximum = 256 if role in ('windowsActions', 'windowsProjectionRoot') else 128
         require(type(expected) is list and len(expected) <= maximum and expected == sorted(set(expected)),
                 'Parent projection schema')
         if reserved and role == 'windowsActions':
