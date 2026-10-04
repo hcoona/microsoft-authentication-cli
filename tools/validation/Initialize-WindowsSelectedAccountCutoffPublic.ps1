@@ -27,6 +27,7 @@ $result = [ordered]@{
     authoritySha256 = $AuthoritySha256; target = $target; rows = @()
     failure = 'admission'; allHandlesClosed = $false; noExperimentLive = $false
     productStarted = $false; accountAccess = $false; diagnostic = $null; loaderSource = $null
+    rootAnchor = $null
 }
 
 function Need([bool] $Condition) { if (-not $Condition) { throw 'Public preparation refused.' } }
@@ -90,6 +91,22 @@ try {
     $pins = [SelectedAccountMaterializationPins]::new([Action] { Before })
     $pins.HoldDirectory($stage); $pins.HoldDirectory($libraryDonor)
     $pins.HoldDirectory($target + '\control')
+    Need ($authority.rootAnchorBytes -eq 17534 -and
+        $authority.rootAnchorSha256 -ceq '38eb5dcc7b8951793cbe5445ca567ab7cf776547c3b99314e7131279095fb583')
+    $anchor = $pins.Pin(($target + '\control\Invoke-WindowsSelectedAccount.ps1'),
+        17534L, $authority.rootAnchorSha256)
+    # Qualify only the historical ChangeTime comparison. The fresh Pin retains
+    # strict current identity, hash/EOF and held/named checks through CheckAll.
+    $expectedAnchor = [SelectedAccountFileIdentity]::new()
+    foreach ($field in @('volume', 'index', 'attributes', 'links', 'created', 'modified', 'length')) {
+        $expectedAnchor.$field = $authority.rootAnchorIdentity.$field
+    }
+    $expectedAnchor.changed = $anchor.identity.changed
+    Need ($anchor.identity.Same($expectedAnchor))
+    $result.rootAnchor = [ordered]@{ relative = 'control\Invoke-WindowsSelectedAccount.ps1'
+        bytes = 17534L; sha256 = $authority.rootAnchorSha256
+        acceptedIdentity = $authority.rootAnchorIdentity; currentIdentity = $anchor.identity
+        historicalChangeTimeQualified = $true; currentIdentityChecksStrict = $true }
     Need ($authority.loaderBytes -gt 0 -and $authority.loaderBytes -le 65536 -and
         $authority.loaderSha256 -cmatch '\A[0-9a-f]{64}\z')
     $loader = $pins.Pin(($stage + '\Initialize-WindowsSelectedAccountCutoffLoad.ps1'),
