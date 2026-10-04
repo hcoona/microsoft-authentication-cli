@@ -2266,18 +2266,27 @@ Reserve only needed reviewed passes from the existing passive accounting:
 | Fixed public input creation | 1 | 30 | 16 MiB |
 | Fixed source/library/runtime preflight | 1 | 30 | 16 MiB |
 | Exclusive six-control stage transfer/readback | 1 | 30 | 4 MiB |
-| Owned Windows file-check compilation and three-copy work | 1 | 400 | 704 MiB |
+| Owned Windows file-check compilation and three-copy work | 1 | 400 | 1,280 MiB |
 | Fixed public receipt/journal/two-capture collection | 1 | 30 | 4 MiB |
 | Exact original own startup witness/events collection | 1 | 30 | 32 KiB |
 | Fixed diagnostic collection after accepted failed collection | 2 | 30 | 4 MiB |
 
-The Windows allocation covers the unchanged512MiB requested native reads,
-128MiB native writes,8MiB bootstrap requests, existing8MiB compiler temporary
-assumption, bounded receipt/capture/control work and declared installed operating
-reads. It is a conservative reservation, not a measured physical OS I/O census or
-a compiler disk quota. Preserve native4096-open/32768-metadata/read/write ceilings
-and bootstrap8192-read limits. The eight-pass maximum is610s and788561920B;
-unused diagnostic passes are not charged preemptively.
+The single Windows pass reserves1,280MiB from the remaining common passive pool.
+Count the unchanged448MiB requested native-read maximum once, separately from
+448MiB of installed loader/reference operating reads. Add128MiB native writes,
+8MiB bootstrap requests, the existing8MiB compiler temporary-write assumption
+and4MiB other authored reads. These distinct components total1,044MiB; the
+remaining236MiB covers bounded source/startup/control/receipt/transport work and
+completion buffer without assuming overlap between the two read roles. The
+three public copy payloads total37,538B within the native-write component; product,
+private-input and account payload writes remain zero.
+
+This is a conservative current reservation, not a measured physical OS I/O census
+or a compiler disk quota. It does not reprice historical calls or alter the
+installed operating basis. Preserve native4096-open/32768-metadata/read/write
+ceilings and bootstrap8192-read limits. The six required passes total550s and
+1,384,153,088B; the eight-pass maximum including both conditional diagnostics is
+610s and1,392,541,696B. Unused diagnostic passes are not charged preemptively.
 
 A diagnostic selects only the same four fixed public result leaves under the
 bound stage. Admit one30s/4MiB pass only after accepted prior failed collection and
