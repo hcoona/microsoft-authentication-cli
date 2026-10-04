@@ -47,6 +47,7 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
     public int identityMismatchMask, snapshotMismatchMask;
     public int outputStage;
     public long firstReadChangeCount, sealedOutputs;
+    public long outputChangeTimeDifferenceCount;
     private bool faulted;
     private int pinPhase = 100;
     public void SetPhase(int value) { if (!faulted) phase = value; }
@@ -190,9 +191,31 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
     {
         return file.OutputObservationHandle ?? file.Stream.SafeFileHandle;
     }
+    // Only Copy-created outputs use this predicate. Input Pin retains all eight fields.
+    private void NeedStableOutputIdentity(SelectedAccountFileIdentity current, SelectedAccountFileIdentity expected)
+    {
+        int mask = (current.volume != expected.volume ? 1 : 0) |
+            (current.index != expected.index ? 2 : 0) |
+            (current.attributes != expected.attributes ? 4 : 0) |
+            (current.links != expected.links ? 8 : 0) |
+            (current.created != expected.created ? 16 : 0) |
+            (current.modified != expected.modified ? 32 : 0) |
+            (current.length != expected.length ? 128 : 0);
+        if (!faulted)
+        {
+            if (current.changed != expected.changed) outputChangeTimeDifferenceCount++;
+            if (mask != 0) identityMismatchMask = mask;
+        }
+        Need(mask == 0);
+    }
+    private void NeedStableFileIdentity(SelectedAccountHeldFile file, SelectedAccountFileIdentity current)
+    {
+        if (file.OutputObservationHandle == null) NeedStableIdentity(current, file.identity);
+        else NeedStableOutputIdentity(current, file.identity);
+    }
     private void Stable(SelectedAccountHeldFile file, int phaseBase)
     {
-        SetPhase(phaseBase); NeedStableIdentity(Snapshot(ObservationHandle(file)), file.identity);
+        SetPhase(phaseBase); NeedStableFileIdentity(file, Snapshot(ObservationHandle(file)));
         SetPhase(phaseBase + 1); Name(ObservationHandle(file), file.path);
         SetPhase(phaseBase + 2);
         using (SafeFileHandle named = Open(file.path, 0x80, 1, 3, 0x00200000))
@@ -200,7 +223,7 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
             try
             {
                 SetPhase(phaseBase + 3); Name(named, file.path);
-                SetPhase(phaseBase + 4); NeedStableIdentity(Snapshot(named), file.identity);
+                SetPhase(phaseBase + 4); NeedStableFileIdentity(file, Snapshot(named));
             }
             catch (Exception error) { RecordManagedFault(error.HResult); throw; }
         }
@@ -326,10 +349,10 @@ public sealed class SelectedAccountMaterializationPins : IDisposable
                     observed.created == original.created);
                 if (namedInitial.changed != initial.changed || observed.changed != initial.changed) firstReadChangeCount++;
                 // Retain first-window agreement; the final baseline follows both content reads.
-                SetPhase(270); NeedStableIdentity(Snapshot(handle), observed);
+                SetPhase(270); NeedStableOutputIdentity(Snapshot(handle), observed);
                 SetPhase(271); Name(handle, path);
                 SetPhase(273); Name(named, path);
-                SetPhase(274); NeedStableIdentity(Snapshot(named), observed);
+                SetPhase(274); NeedStableOutputIdentity(Snapshot(named), observed);
             }
             outputStage = 2;
             SetPhase(240); Need(Hash(stream, length) == hash);

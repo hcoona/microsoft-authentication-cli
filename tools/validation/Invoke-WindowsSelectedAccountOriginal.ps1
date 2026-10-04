@@ -16,7 +16,7 @@ if (-not $ExecutionAdmitted) { exit 125 }
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
-$root = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v4'
+$root = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5'
 $accountPrefix = if ($AccountRole -ceq 'Work') { 'work-account' } else { 'selected-account' }
 $primaryGroup = if ($AccountRole -ceq 'Work') { 'R7' } else { 'R1' }
 $reuseGroup = if ($AccountRole -ceq 'Work') { 'R8' } else { 'R6' }

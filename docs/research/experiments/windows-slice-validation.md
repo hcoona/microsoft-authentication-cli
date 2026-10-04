@@ -377,8 +377,8 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `5a5340432ddc83b454c1889442f80afccc1bf58d293a75034fa572fb2e1550f4` |
-| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `83b415804b61fa8a35f10f4037114b5f6346f3cb9f9a2519affaabd2a90e4790` |
+| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `01227e0bae33f92cd5142088c79cf993395063e89d8c494d1591eab3b60ac2e1` |
+| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `98d56e85a2ec00490bdf2a9f559e67feae471c8284abd958c709bfaeb3b23e4d` |
 | [controller-input-catalog.tsv](../../../tools/validation/controlled-callers/control/controller-input-catalog.tsv) | 87398 | `1bf3742530b97472bbf81aaa73ccff3fbba2dc22d2a1ee865e02ba754bfaf2bc` |
 | [run_controlled_callers.py](../../../tools/validation/controlled-callers/run_controlled_callers.py) | 80672 | `2affd33d40b185b9232aa2006e411195c9cdfc642936ffcb83361be50558c638` |
 | [observe_controlled_compile_current_inputs.py](../../../tools/validation/observe_controlled_compile_current_inputs.py) | 10847 | `d1fc79d9c04e41d9a9eb5176e2dbbc17a9334981256e48b0ad9c4b7dbc6587ee` |
@@ -387,27 +387,30 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [DirectObserver.rsp](../../../tools/validation/controlled-callers/control/DirectObserver.rsp) | 20404 | `b4af49e38b70808369e259466a7a759339d6f422733c9b61a31f560d12159fb6` |
 | [SyntheticSubject.rsp](../../../tools/validation/controlled-callers/control/SyntheticSubject.rsp) | 21309 | `7016e29b6f8f43805786e81c8213f2dc509bfabc100d7b4b5478eee707b78325` |
 | [FixtureDriver.rsp](../../../tools/validation/controlled-callers/control/FixtureDriver.rsp) | 21276 | `aeebc66eb198c2d70f640051ad3d915164e6af124a1778679ad9bfdf63b2d01c` |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11352 | `f604ae3dffb885aaba6dfbb8edf94afd9629cdf31ec0a7e29a1b50437f3d5a3b` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11436 | `9a4c64db60d327d5e207c2e88ae1e4f21c32839be9fa1626a1a480013e275d79` |
 
 ## Fresh Selected-Account Root and Caller Correspondence
 
-The independently accepted failed0197 account-v3 destination is occupied and
-remains retain-always. A fresh full materialization therefore uses
-`C:\Temp\azureauth-windows-slice-108\confidential-native-account-v4`.
+The independently accepted failed0197 account-v3 and0210 account-v4 destinations
+are occupied and remain retain-always. A fresh full materialization therefore uses
+`C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5`.
 Project that literal consistently through ActualAdmission.Root, public preparation,
 original/main/cutoff controllers, the four null-selector request templates and the
 result collector. Keep authentication, request admission, private selection,
 confidentiality, deadlines, identity comparisons and cleanup semantics unchanged.
 There is no configurable root option or adoption of an old destination.
 
-The only native caller change is the account-v3-to-v4 Root literal. Its exact source
-SHA-256 is `3e2f6e6e5d9fb49448e369b55f5b0feae125877ed9654ab8c16ae52fc5cb9758`.
-The public initializer and source-response map bind that same source checksum.
+The only root-related native caller change for this successor is the account-v4-to-v5
+Root literal. Its exact source SHA-256 is
+`01227e0bae33f92cd5142088c79cf993395063e89d8c494d1591eab3b60ac2e1`.
+The public initializer and source-response map bind that same source checksum;
+the map's exact SHA-256 is
+`98d56e85a2ec00490bdf2a9f559e67feae471c8284abd958c709bfaeb3b23e4d`.
 All other source mappings, compiler inputs, four targets, references, runtime
 metadata and reviewed Microsoft API judgments are reused unchanged. The source
 map remains the generated correspondence carrier rather than a second catalog.
 
-Use a fresh compile original0203 at `confidential-checks-v25`, projecting the
+Use a fresh compile original at `confidential-checks-v26`, projecting the
 existing root-compatible compile methods consistently across its source/response
 map, four responses, controller, Python caller, catalog and exact admission. Reuse
 the accepted current365 public donors only in their admitted roles; keep local
@@ -422,15 +425,18 @@ PE/PDB/apphost/runtime closure, ordinary transport, creation-time root/Job/twoEO
 and own Linux scoped completion under the existing compiler protocol. Derive its
 194-row caller inventory and200-row public expectedRows from that accepted build;
 keep ordered roles, exact lengths/hashes, source commit and96MiB total constraints.
-The v24 caller fixes account-v3 and remains passive provenance. Matching hashes or
-a manually edited inventory cannot admit its execution at account-v4.
+The v24 caller fixes account-v3, and the accepted0209/v25 caller fixes account-v4;
+both retain only their original admitted provenance roles. Matching hashes or a
+manually edited inventory cannot admit either caller's execution at account-v5.
 
-After the accepted first-named single-file check below, full materialization uses
-fresh action0204, `named-fixtures-0204`, `selected-account-public-inputs-v6` and
-the account-v4 output. Project existing
+After the new build and its exact public correspondence are accepted, full
+materialization uses a fresh action, exclusive staging and public-input roots,
+and the account-v5 output. Bind all concrete action/staging/input literals in
+the independently reviewed exact admission packet; do not reuse0203/0204 or
+their roots. Project existing
 control-creation/transfer/dispatch/result methods only through those exact literals
 and the accepted new source/build/inventory descriptors. Use the accepted prospective
-output sealing method and materialization-v3 interpretation. Independently bind
+output qualification method and materialization-v4 interpretation. Independently bind
 current controls, all200 expectedRows, ordinary timely original, native receipt,
 root/Job/twoEOF, own Linux completion and the existing finite public batch before
 acceptance. Preserve the unchanged `0/1/0/4` technical charge and per-pass maxima.
@@ -439,14 +445,14 @@ Neither this amendment nor single-file success admits full materialization.
 Private input creation remains downstream of that complete public conjunction,
 root-compatible executable provenance, cutoff loading, Profile eligibility,
 current-host/kernel relevance and real operating-basis acceptance. The creator and
-exact role/scopes/calls must bind account-v4 before local selectors are supplied.
+exact role/scopes/calls must bind account-v5 before local selectors are supplied.
 Normal account effects remain within the accepted Wave; personal/work/actualWSL
 observations are still required. Do not export private inputs or account state.
 
-Retain failed0193/account-v2/0194/0195/0197/account-v3 and all earlier builds,
+Retain failed0193/account-v2/0194/0195/0197/account-v3/0210/account-v4 and all earlier builds,
 descriptors, charges, uncertainties and `noExperimentLive=false`. No old payload is reopened, adopted,
 repaired, deleted or executed. ETW/elevation remain stopped. Existing account-v2
-and account-v3 bindings and failed observations retain their historical meaning.
+and account-v3/account-v4 bindings and failed observations retain their historical meaning.
 The current bindings below govern only this fresh-root successor; they supersede
 predecessor tables for these new actions without reinterpreting an old original.
 
@@ -454,37 +460,35 @@ The unsupported-root pure projection fixture appends the fixed `-unsupported`
 suffix to its valid synthetic target before requiring rejection. This keeps the
 negative input different when a fresh root literal is projected; a replacement
 that searches for an old version must not leave the positive input unchanged.
-The production collector keeps an exact target comparison, now bound to account-v4.
+The production collector keeps an exact target comparison, now bound to account-v5.
 
-After independently accepted failed outcome and scoped completion, with any
-material finding independently triaged, admit at most one fresh Linux-only pure
-projection original for these exact reader/test bindings beyond the exhausted
-earlier batches. All prior originals and charges remain spent. Use the existing32
-methods,
-seven pure functions/seven constants, isolated admitted Python/GNU runtime,
-30s/128KiB/4096B bounds and `0/1/0/0` charge in the existing common pool. Fresh exact
-source/runtime/input/call/accounting gates precede the separate sole original,
-and independent actual outcome/scoped-completion acceptance remains required.
-This amendment reserves nothing and admits no preparation, Windows or account
-operation. Retain failed evidence and stop after sufficient accepted evidence.
+The earlier32-method projection originals and their allocations remain spent.
+The current42-method source and its new finite batch follow the output-qualification
+continuation below, with seven pure functions/seven constants, isolated admitted
+Python/GNU runtime,30s/128KiB/4096B bounds and `0/1/0/0` charge per original in the
+existing common pool. Fresh exact source/runtime/input/call/accounting gates precede
+each separately submitted original, and independent actual outcome/scoped-completion
+acceptance remains required. This amendment reserves nothing and admits no
+preparation, Windows or account operation. Retain failed evidence and stop after
+sufficient accepted evidence.
 
 Current root-sensitive source bindings:
 
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11352 | `b92f6584fff251b80472e058bc8a110e9964718de379cf8de0573f15c4a0045e` |
-| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 21826 | `0fc81ef7595cb06ab68140a12ddd62f066944fdfff8937ff9ef9c7a76026cd1c` |
-| [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `fcfd340e52f05edc670ce2fb062fa20de54dca87d29ad2028eba6575270a1419` |
-| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `3506fc1c85d7ec8e37d86e067e018660cc93429a8fb8d1a1eced71037d68fcb3` |
-| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `b81b6e0b24892d7f556432cee8b3359e266595eccc90cc4e414eb15e3b5b598f` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 29194 | `141fb52e2d1c2f34dfdec50e543a90c4497d7f3ec0d9aee2b8249bec1ca03d3e` |
-| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `78598f2aed164bd2a2fbf950d725b61a53809d5a52cd7287e144f8067eab8dab` |
-| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `3e2f6e6e5d9fb49448e369b55f5b0feae125877ed9654ab8c16ae52fc5cb9758` |
-| [R1.template.json](../../../tools/validation/selected-account-inputs/R1.template.json) | 746 | `1bdce95732e130444da1e28b4ce3dd5a9341a3b7ae2502472a064dfddfb7c5dc` |
-| [R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `512f46787a095b8b932bb90a462c778cb7d39f44be9789a72e1b22894594a4ff` |
-| [R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `4eedc38d930c8019d10102222d18e089f7c1df6ae4770152b2c5d4c9f5b535c6` |
-| [R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `f44a93b8813ccf2e289f195a76ff9bfc8175f9adea24bf3455fe68d45f95c445` |
-| [test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 20268 | `010cd22f339c716a45103d37bd6b0ed26fa4cdbb753f8bd17f185d9e332377d1` |
+| [Initialize-WindowsSelectedAccountPublic.ps1](../../../tools/validation/Initialize-WindowsSelectedAccountPublic.ps1) | 11436 | `9a4c64db60d327d5e207c2e88ae1e4f21c32839be9fa1626a1a480013e275d79` |
+| [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 23008 | `a8b8efccd2dad78764d8870b602ee7d640936d1087c561be8ec7d197f323fdbd` |
+| [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `52d1cf0bfc1087d556dfffdd33808696b0de721e696a4eb5de98f971070d34ac` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `3ef0171813076010fd88c8bcaaaf3884c96eebf11662eb4731e52b80080e4c46` |
+| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 6563 | `9f743029dd7aa7af57fb43d1be8fe61ef1b423a655a4388d2a08a9642fbeae7a` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 30681 | `1c72feb0382a27e29a60e2ffcf7f08d755689d46b8d681ab847c6cb5d14d8afb` |
+| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `98d56e85a2ec00490bdf2a9f559e67feae471c8284abd958c709bfaeb3b23e4d` |
+| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `01227e0bae33f92cd5142088c79cf993395063e89d8c494d1591eab3b60ac2e1` |
+| [R1.template.json](../../../tools/validation/selected-account-inputs/R1.template.json) | 746 | `cf98559a6b639882048094365bf714e01e585e6f381a20bda79e8115043831f8` |
+| [R6.template.json](../../../tools/validation/selected-account-inputs/R6.template.json) | 751 | `e1d0bc7d7f3a3d7bf4782a182843d03fdf58e927bdcd74f9f187a2e1da162072` |
+| [R7.template.json](../../../tools/validation/selected-account-inputs/R7.template.json) | 746 | `c40c7d775cbf29fc800aff232bda74b079b84333c7d15bf3842b68d2f3c5f18c` |
+| [R8.template.json](../../../tools/validation/selected-account-inputs/R8.template.json) | 751 | `07d03b9987297875e4cdfc7b7b11d0a70503259faf31624f30232c6815d876d0` |
+| [test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 25799 | `e83bc2e520ecb85cd034fafeab6771cfb092ecb1804dbd155863f5828fab1f5e` |
 
 ## Retained Product Byte Acquisition Recipe
 
@@ -790,7 +794,9 @@ need flush and held-handle readback. Observe fresh destination native volume,
 index, attributes, creation/modification/change times, length and link count;
 never translate Linux identities into those fields. Apply the existing
 `FixtureNativePins` regular-file, exact-final-name, single-link and unchanged
-within-read predicates. Preserve original creation volume/index/time across the
+within-read input predicates. Fresh Copy output comparisons use only the explicit
+qualification in [fresh output establishment](#fresh-public-output-establishment-and-sealing).
+Preserve original creation volume/index/time across the
 writer/readback gap. Standing historical Linux ctime acceptance relaxes neither
 native identities nor within-read checks.
 
@@ -1159,8 +1165,9 @@ single accounting carrier, spent/failed charges, uncertainties and real-stage ch
 unused batch capacity or a source guard is not invocation admission.
 
 The initial adapter emitted `selected-account-single-copy-diagnosis-v1`; the
-current0195 adapter emits only the closed `selected-account-single-copy-diagnosis-v2`
-receipt, at most4KiB: passed, authoritySha256, fixed failure enum, copyCompleted,
+0195 adapter emitted the closed `selected-account-single-copy-diagnosis-v2`
+receipt. The current adapter emits diagnosis-v3 under the output qualification
+below. Both remain at most4KiB: passed, authoritySha256, fixed failure enum, copyCompleted,
 allHandlesClosed, noExperimentLive=false, productStarted=false, accountAccess=false
 and the fixed numeric diagnostic, including the sealing fields defined below.
 Wrapper phases0/1/2/3 mean admission/copy/final
@@ -1194,9 +1201,9 @@ projection still requires its own current call admission):
 
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Initialize-WindowsPublicCopyDiagnosis.ps1](../../../tools/validation/Initialize-WindowsPublicCopyDiagnosis.ps1) | 6798 | `b2d8e9b7b9d5cc3a65d91bcbded8ff994e764adeca8ab6772db76c1dcabd0498` |
-| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 29194 | `141fb52e2d1c2f34dfdec50e543a90c4497d7f3ec0d9aee2b8249bec1ca03d3e` |
-| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 20268 | `010cd22f339c716a45103d37bd6b0ed26fa4cdbb753f8bd17f185d9e332377d1` |
+| [Initialize-WindowsPublicCopyDiagnosis.ps1](../../../tools/validation/Initialize-WindowsPublicCopyDiagnosis.ps1) | 6882 | `e86f8bbf59e897f5bacf400e12c47ac5d606895ebb0db7f9fbe66989af782e1e` |
+| [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 30681 | `1c72feb0382a27e29a60e2ffcf7f08d755689d46b8d681ab847c6cb5d14d8afb` |
+| [tests/test_selected_account_copy_projection.py](../../../tools/validation/tests/test_selected_account_copy_projection.py) | 25799 | `e83bc2e520ecb85cd034fafeab6771cfb092ecb1804dbd155863f5828fab1f5e` |
 
 The existing native type and normal launcher retain their current bindings. This
 source/protocol supplement reserves or executes nothing; exact admission remains
@@ -1254,6 +1261,16 @@ did not establish success. Physical cause remains UNKNOWN. Preserve0205 and its
 spent observations, full charges and occupied output. The prospective method
 below changes when the final output baseline is established, not that outcome.
 
+The independently accepted0210 full-copy attempt failed after14 completed copies.
+Its next output reached both content hash/EOF passes before the first held
+sealing comparison rejected ChangeTime alone: native280/kind1/code280,
+identityMismatchMask64, snapshotMismatchMask0, outputStage2 and sealedOutputs14.
+Current root/owned-Job/twoEOF and qualified own-Linux completion were accepted;
+productStarted and accountAccess were false. The physical cause remains UNKNOWN.
+Retain account-v4, all failed receipts, occupied outputs and spent charges. This
+observation motivates the prospective qualification below; it establishes neither
+benign metadata changes nor successful200-leaf materialization.
+
 Microsoft's [FILE_BASIC_INFO reference](https://learn.microsoft.com/windows/win32/api/winbase/ns-winbase-file_basic_info)
 distinguishes metadata ChangeTime from data-stream LastWriteTime, and
 [CreateFileW](https://learn.microsoft.com/windows/win32/api/fileapi/nf-fileapi-createfilew)
@@ -1264,9 +1281,11 @@ No additional causal experiment is a prerequisite to this narrow method.
 
 Only Copy's fresh CREATE_NEW public destination is eligible. Its writer must be
 flushed and closed before EstablishOutput opens one deny-write/delete held reader.
-Keep source/donor Pin, all private/historical/executable input admissions and final
-CheckAll unchanged. EstablishOutput is private and has no input-role or ignore-field
-option. It does not catch and clear an existing fault or retry until quiet.
+Keep source/donor Pin and all private/historical/executable input admissions
+strict. Final CheckAll uses the output-only comparison below for Copy-created
+outputs and the original eight-field comparison for inputs. EstablishOutput is
+private and has no caller-selected input-role or ignore-field option. It does not
+catch and clear an existing fault or retry until quiet.
 
 Microsoft's [FileStream.SafeFileHandle reference](https://learn.microsoft.com/dotnet/api/system.io.filestream.safefilehandle?view=netframework-4.8)
 documents that its accessor automatically flushes the stream. Avoid that accessor
@@ -1276,8 +1295,8 @@ alias. Before the held-file object exists, use the same local handle directly;
 afterward, output Stable and CheckAll use the retained alias at each existing
 held Snapshot/Name observation. Pin inputs leave that field null and retain each
 original accessor evaluation, its order, and all existing queries and predicates.
-No new handle, duplicate, timestamp setter, data access through the alias, retry,
-ignored field or baseline refresh is introduced. The FileStream remains its sole
+No new handle, duplicate, timestamp setter, data access through the alias, retry
+or baseline refresh is introduced. The FileStream remains its sole
 lifetime owner; never separately register or dispose the alias or use it after
 the stream closes. Payload reads and positioning stay on the FileStream, with no
 buffered output-reader writes. This removes a documented observation-accessor
@@ -1297,8 +1316,9 @@ identities separately. Count at most one first-window ChangeTime inequality per
 output when either first named or observed held ChangeTime differs from the
 initial reader, after both seven-field and creation joins succeed.
 
-This order does not identify a physical cause, guarantee agreement, relax generic
-Stable or refresh any established input baseline. The implicit Framework/API
+This order does not identify a physical cause, guarantee agreement or refresh any
+established input baseline. The prospective output-role qualification below does
+not change generic input stability. The implicit Framework/API
 operations are not a measured native-counter or OS-I/O census. Retain the admitted
 Framework/runtime operating basis and stop on contrary evidence.
 
@@ -1310,9 +1330,11 @@ agreement. Retain the initial and observed first-read identities separately in t
 held file; they are not interchangeable with its prospective identity baseline.
 Record first-window ChangeTime inequality only as the bounded count below.
 
-Then require full held identity/Name agreement at270–271 and full identity/Name
-agreement on that same first named handle at273–274 with the first-read observed
-candidate, including ChangeTime. Dispose the temporary named handle before
+Then require seven-field held identity/Name agreement at270–271 and seven-field
+identity/Name agreement on that same first named handle at273–274 with the
+first-read observed candidate. Record any ChangeTime inequality at those existing
+comparison sites in the bounded output counter below. Dispose the temporary named
+handle before
 advancing to outputStage2. This retains first-window agreement; it does not yet
 establish the final sealed baseline. Unconditionally perform exactly one more
 complete hash/EOF from position0 on the same held reader, then move its existing
@@ -1323,60 +1345,79 @@ all existing shape predicates and all seven non-ChangeTime fields equal to the
 initial reader, then writer-to-reader volume/index/creation agreement at317.
 Retain the initial, first named and first-read identities unchanged. Only now
 construct the still-local, unregistered held-file object with this post-read
-candidate as its final prospective identity. Require unchanged generic full
-Stable280–284: all eight held fields, held Name, one named open/Name and all eight
-named fields against that candidate. Only then register the stream/file, advance
+candidate as its final prospective identity. Require output Stable280–284:
+all seven required held fields, held Name, one named open/Name and all seven
+required named fields against that candidate. Record ChangeTime inequality at
+each existing comparison rather than using it as a required equality. Only then
+register the stream/file, advance
 to stage3 and increment sealedOutputs. Do not reposition again after these checks.
-Final CheckAll and every later Stable remain strict against the final identity.
+Final CheckAll and every later Stable keep the fixed seven-field output baseline
+and record ChangeTime differences. Strict eight-field input behavior remains.
 
-This explicitly relinquishes the earlier requirement for ChangeTime equality
-with the first-read candidate across the second content read and repositioning.
-It preserves two exact content hash/EOF passes, source provenance, seven-field
-and writer-creation joins, finite full held/named agreement and strict post-seal
-checks under the admitted public-file workstation boundary. It does not establish
-continuous metadata integrity, absence of intervening attribute changes,
-adversarial tamper resistance, historical closure or a benign physical cause.
-FirstReadChangeCount keeps only its first-window meaning; no new counter reports
-second-window ChangeTime variation, and zero cannot prove none occurred.
+Only Copy-created outputs select NeedStableOutputIdentity internally through
+their retained output handle alias; callers cannot supply a comparison option.
+The original Same/NeedStableIdentity and strict Pin path retain all eight fields.
+For outputs, require volume/index/attributes/links/created/modified/length at every
+first-window, sealing and later Stable/CheckAll comparison. Retain the initial,
+first named, first-read and final candidate identities, including ChangeTime;
+never replace the fixed baseline after registration. FirstReadChangeCount retains
+its first-window meaning. The new outputChangeTimeDifferenceCount records each
+ChangeTime inequality at an output-role comparison while no prior fault exists,
+even if another required field fails that comparison. It adds no query or read.
+Each comparison uses an already charged Snapshot, so the existing metadata cap
+bounds the counter; the closed receipt accepts only integer0–32768 and no more
+than its reported metadata count. Zero is not proof of continuous stability.
+
+This prospective rule verifies the exact known unnamed data stream, sampled
+seven-field identity/shape, writer-creation provenance and held/named path under
+the admitted workstation boundary. The writer-close/reader-reopen gap is not
+continuous protection from creation; the original creation joins and two digest/
+length/EOF passes establish current correspondence. Hold the readonly data handle
+with write/delete sharing denied from acquisition through final output checks.
+Sharing does not freeze metadata. This rule does not attest alternate streams,
+extended attributes, ACLs/security descriptors, continuous metadata history,
+adversarial tamper resistance, historical closure or a benign cause. Later use as
+an executable, private or historical input retains its separately strict current
+admission. The output qualification does not transfer to those input roles or
+extend the standing historical ctime qualifications.
 
 Any required field, hash/EOF, shape, ownership, deadline, API or closure failure
-freezes the first fault and stops. Source/donor Pin, generic Stable and all
-private/historical/executable admissions remain unchanged. This private fresh
-Copy path sets its final identity once; no sealed or input identity is refreshed,
-no fault is cleared, and no retry-until-quiet or ignore-field option exists.
+freezes the first fault and stops. Snapshot-internal attribute agreement remains
+strict. No timestamp is set, input or sealed baseline refreshed, fault cleared,
+additional settling observation made or retry-until-quiet introduced.
 
-Validate the final post-read baseline with fresh action0208,
-`named-fixtures-0208` and `public-copy-diagnosis-0208`. Use the admitted public
-Microsoft.CSharp.dll at980776 bytes and SHA-256
-`2000912f2fc52e0c64ed893d79f4e7b143502540fb7170b5ae5fcea7099ba431`,
-the same first inventory leaf rejected by0197. Reuse the existing fixed single-file
-controls, transfer, dispatch, result and own-scope recipes with those literals,
-that exact public input and newly accepted source/authority bindings. Native fault
-mapping and materialization-v3/diagnosis-v2 closed shapes stay unchanged. The
-original0198/0199/0202/0205 diagnoses and every earlier outcome remain retained; no occupied
-output is reopened or reused. The unchanged finite batch,0/1/0/4 charge, exact
-current source/input/call gates and independent actual outcome/scoped completion
-acceptance apply. This amendment reserves nothing and promises no successful copy.
+The prior0208 single-file evidence and0209/v25 caller build remain accepted
+provenance for their original bindings; they do not establish the failed0210
+account-v4 materialization. The occupied account-v4 root is ineligible for reuse.
+Current consumers now consistently bind account-v5. ActualAdmission embeds that
+root, so the next native caller requires a newly reviewed source-corresponding
+build in a fresh v26 build root. Reuse unchanged installed toolchains, public
+sources/dependencies, retained product runtime leaves and reviewed methods.
+This does not replay0209, refund a charge or require another owner decision.
 
-After sufficient independently accepted single-file evidence, the fresh-root
-caller/build/materialization sequence above uses0209/v25 then0210/account-v4.
-These replace the unexecuted0206/0207 continuation; neither is an accepted result.
-Reuse admitted toolchains, source methods and public donors in their exact roles;
-only the required root/source correspondence changes justify the new caller build.
-Preserve every earlier successful preparation as provenance and every failed
-charge. Shared Wave ceilings and existing per-original/per-pass bounds govern all
-allocations, including the one current pure projection slot; no new owner grant,
-second accounting system or exhaustion instruction is created. Complete public
-materialization, kernel/cutoff, Profile and real operating-basis gates still precede
-private inputs and personal/work/actualWSL acceptance.
+Allocate at most two new caller-build originals and two new full-materialization
+originals including supported corrections from the remaining common Wave pool.
+Initially admit only the required next build and subsequent materialization.
+Use the existing accepted build/artifact and public preparation/transfer/dispatch/
+result/own-scope recipes and per-original bounds. Exact sources, roots, runtime,
+inputs, actual-role charges, passive reservations and calls must be independently
+accepted before each original. Accept the exact build/provenance and derived194/
+all200 public correspondence before materialization. A subsequent failed attempt
+requires accepted failure/scoped completion, a supported correction and renewed
+exact admission within this finite batch. All previous batches remain spent.
+Stop after sufficient evidence. This amendment reserves nothing and promises no
+successful copy. Kernel/cutoff, Profile and real operating-basis gates still
+precede private inputs and personal/work/actualWSL acceptance.
 
-The new closed materialization-v3 and diagnosis-v2 diagnostics add exactly:
+The closed materialization-v4 and diagnosis-v3 diagnostics retain the earlier
+sealing fields and add only the output ChangeTime observation counter:
 
 | Field | Values and meaning |
 | --- | --- |
-| outputStage | 0 before output establishment;1 after initial output snapshot and during first-window checks;2 after first-window full agreement and during the second read/final candidate and strict sealing checks;3 after their success and output registration |
+| outputStage | 0 before output establishment;1 after initial output snapshot and during first-window checks;2 after first-window seven-field agreement and during the second read/final candidate and seven-field sealing checks;3 after their success and output registration |
 | firstReadChangeCount | Cumulative outputs whose first named or observed held ChangeTime differs from the initial reader after both accepted seven-field and creation joins,0–200 for full materialization or0–1 for diagnosis; each output counts at most once and this is disclosure, not fault clearing or a causal conclusion |
-| sealedOutputs | Cumulative outputs whose two content reads, final full identity agreement and registration succeeded,0–200 or0–1; a later row-binding/deadline failure can still fail Copy/result |
+| sealedOutputs | Cumulative outputs whose two content reads, final required seven-field identity agreement and registration succeeded,0–200 or0–1; a later row-binding/deadline failure can still fail Copy/result |
+| outputChangeTimeDifferenceCount | Integer0–32768, no more than reported metadata; cumulative ChangeTime inequalities at existing output-role identity comparisons before the first fault. It counts observations, not distinct files or physical changes, and emits no timestamp or metadata contents. |
 
 The initial named and held post-snapshot/seven-field comparisons use220; only
 bits1/2/4/8/16/32/128 may occur in their first identity fault. Their original
@@ -1384,8 +1425,14 @@ creation joins remain317.
 Phase230 is the post-second-read shape/seven-field comparison at outputStage2;
 only identity bits1/2/4/8/16/32/128 are possible there, and its writer join remains317.
 Phase220 retains its first-window/stage1 meaning. Phase240 is the mandatory second
-hash;280–284 retain their full identity/Name semantics at stage2. Snapshot masks
-may occur at220/230/280/284; full identity masks including64 may occur at280/284. Preserve all existing mask,
+hash;280–284 retain seven-field output identity/Name semantics at stage2. Snapshot
+masks may occur at220/230/280/284. For the new schemas, output comparisons at
+270/274/280/284 reject fault masks containing64; strict input comparisons still
+report ChangeTime faults. At CheckAll400/404, the fixed input/output pairs place
+inputs at odd held ordinals and outputs at even ordinals; new schemas reject
+ChangeTime fault masks for the even output ordinals. Older materialization-v3/
+diagnosis-v2 records retain
+their all-eight-field failure meanings. Preserve all other existing mask,
 error, first-fault, disposal and final held-ordinal meanings. Output-stage/counter
 values are captured before cleanup. New schemas require the complete typed field
 set and mask pair; old schemas keep their old closed shapes and phase meanings.
@@ -1421,7 +1468,7 @@ transport and original cutoff bounds remain unchanged. The460MiB diagnosis and
 startup remains separately admitted. Exact control lengths and source/readback
 requests must still fit their existing reservations. No hidden OS-I/O census is claimed.
 
-After amendment acceptance, independently admit at most two Linux-only pure
+After amendment acceptance, independently admit at most two new Linux-only pure
 projection test originals including one supported correction, charging each0/1/0/0
 in the existing ledger. Use the accepted isolated Python3.14 runtime/stdlib and
 GNU TERM25s/KILL5s,30s total, AS128MiB and CPU25s. Read only the exact reviewed
@@ -1429,22 +1476,21 @@ test and collector source, each at most32KiB plus EOF, with32KiB startup-source
 allowance within128KiB aggregate. The test AST-selects seven pure functions and
 seven allowlist constants, never collector main, its guard or an experimental
 path. It uses synthetic values only, writes no files, starts no child or Windows
-process and exports at most4096B of typed outcome counters. Use the remaining slot in the existing two-original allocation; this amendment
-does not reset its consumed original or create another pool. The current33 methods
-include post-read candidate phase/stage/mask validation, legacy preservation, first-read change disclosure, strict later-change
-failure, non-ChangeTime rejection, typed counters, complete sealing, and rejection
-of undeclared identity/timestamp fields. Exact source/runtime/call and full charge
+process and exports at most4096B of typed outcome counters. These new slots use
+the common pool and preserve every earlier spent projection
+original. The current42 methods retain legacy phase/stage/mask and inventory
+validation and cover new-schema metadata disclosure, typed/bounded counters,
+legacy-shape separation, all seven required-field fault bits, rejection of output
+ChangeTime fault masks, strict input ChangeTime faults and rejection of metadata/
+private fields. No test imports collector main or accesses an experimental path.
+Exact source/runtime/call and full charge
 precede submission; independently accept timely ordinary0 and complete transport.
 Stop after sufficient evidence and retain any failed charge/outcome.
 
-The next diagnosis remains the existing second slot0195, initially unadmitted.
-Reuse unchanged admitted preparation/transfer/runtime/transport methods, with
-fresh exact protocol/source/input/call/accounting gates. Successful0195 establishes
-only this prospective public copy, never0193/0194 success or account readiness.
-Any later complete materialization must use an independently admitted fresh root
-and consistently projected controls/collector; account-v2 remains occupied and
-ineligible. Reuse the existing finite full-materialization batch and common
-capacity without another owner decision; this amendment itself reserves nothing.
+Earlier diagnosis and full-materialization allocations and outcomes remain
+historical and spent. The new finite batch above uses fresh exclusive staging,
+control, build and account-v5 roots with consistent current source bindings.
+Neither an older guard nor an occupied output authorizes a new call.
 
 ##### Finite batch and current public result collection
 

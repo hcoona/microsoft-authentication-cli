@@ -109,7 +109,7 @@ def exact_int(value, minimum, maximum):
     return type(value) is int and minimum <= value <= maximum
 
 
-def output_sealing(diagnostic, maximum, completed):
+def output_sealing(diagnostic, maximum, completed, qualified=False):
     stage = diagnostic['outputStage']
     changed, sealed = diagnostic['firstReadChangeCount'], diagnostic['sealedOutputs']
     if (not exact_int(stage, 0, 3) or not exact_int(changed, 0, maximum) or
@@ -119,6 +119,9 @@ def output_sealing(diagnostic, maximum, completed):
             (diagnostic['nativePhase'] in (220, 270, 271, 272, 273, 274) and stage != 1) or
             (diagnostic['nativePhase'] in (230, 240, 280, 281, 282, 283, 284) and stage != 2)):
         raise ValueError('Public output sealing context')
+    if qualified and (not exact_int(diagnostic['outputChangeTimeDifferenceCount'], 0, 32768) or
+            diagnostic['outputChangeTimeDifferenceCount'] > diagnostic['metadata']):
+        raise ValueError('Public output ChangeTime observation context')
 
 
 def public_receipt(result):
@@ -128,9 +131,11 @@ def public_receipt(result):
                 'requestedReadBytes': 469762048 + 65536, 'writtenBytes': 134217728 + 65536}
     if type(result) is not dict or set(result) not in (keys, keys | {'counts'}):
         raise ValueError('Copy receipt fields')
-    if (result['schema'] not in ('selected-account-public-materialization-v2', 'selected-account-public-materialization-v3') or
+    if (result['schema'] not in ('selected-account-public-materialization-v2',
+                                'selected-account-public-materialization-v3',
+                                'selected-account-public-materialization-v4') or
             result['authoritySha256'] != ADMISSION['authoritySha256'] or
-            result['target'] != 'C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v4' or
+            result['target'] != 'C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v5' or
             type(result['rows']) is not list or len(result['rows']) not in (0, 200) or
             result['failure'] not in ('admission', 'native-source', 'create', 'copy', 'none') or
             any(type(result[key]) is not bool for key in
@@ -141,7 +146,9 @@ def public_receipt(result):
               310, 311, 313, 315, 317, 318, 405, 500}
     phases.update(base + offset for base in (100, 200) for offset in (1, 2, 3, 4, 5, 6, 7, 9))
     phases.update(base + offset for base in (170, 270, 320, 400) for offset in range(5))
-    establishing = result['schema'] == 'selected-account-public-materialization-v3'
+    qualified = result['schema'] == 'selected-account-public-materialization-v4'
+    establishing = result['schema'] in ('selected-account-public-materialization-v3',
+                                       'selected-account-public-materialization-v4')
     if establishing:
         phases.update((220, 230, 240))
         phases.update(280 + offset for offset in range(5))
@@ -154,6 +161,8 @@ def public_receipt(result):
         if establishing:
             shapes = (fields | {'identityMismatchMask', 'snapshotMismatchMask',
                                'outputStage', 'firstReadChangeCount', 'sealedOutputs'},)
+        if qualified:
+            shapes = (shapes[0] | {'outputChangeTimeDifferenceCount'},)
         if (type(diagnostic) is not dict or
                 set(diagnostic) not in shapes or
                 any(not exact_int(diagnostic[key], 0, maximum) for key, maximum in limits.items()) or
@@ -163,13 +172,16 @@ def public_receipt(result):
                 (diagnostic['errorKind'] == 1 and diagnostic['errorCode'] != diagnostic['nativePhase'])):
             raise ValueError('Copy diagnostic values')
         if establishing:
-            output_sealing(diagnostic, 200, diagnostic['completedCopies'])
+            output_sealing(diagnostic, 200, diagnostic['completedCopies'], qualified)
         mask = diagnostic.get('identityMismatchMask', 0)
         identity_phases = (170, 174, 270, 274, 320, 324, 400, 404)
         if establishing:
             identity_phases += (220, 230, 280, 284)
         if (not exact_int(mask, 0, 255) or
                 (establishing and diagnostic['nativePhase'] in (220, 230) and mask & 64) or
+                (qualified and diagnostic['nativePhase'] in (270, 274, 280, 284) and mask & 64) or
+                (qualified and diagnostic['nativePhase'] in (400, 404) and
+                 diagnostic['heldOrdinal'] > 0 and diagnostic['heldOrdinal'] % 2 == 0 and mask & 64) or
                 (mask != 0 and (diagnostic['errorKind'] != 1 or
                  diagnostic['nativePhase'] not in identity_phases))):
             raise ValueError('Copy identity difference context')
@@ -232,7 +244,9 @@ def public_single_copy_receipt(result):
             'allHandlesClosed', 'noExperimentLive', 'productStarted', 'accountAccess', 'diagnostic'}
     if type(result) is not dict or set(result) != keys:
         raise ValueError('Single-copy receipt shape')
-    if (result['schema'] not in ('selected-account-single-copy-diagnosis-v1', 'selected-account-single-copy-diagnosis-v2') or
+    if (result['schema'] not in ('selected-account-single-copy-diagnosis-v1',
+                                'selected-account-single-copy-diagnosis-v2',
+                                'selected-account-single-copy-diagnosis-v3') or
             result['authoritySha256'] != ADMISSION['authoritySha256'] or
             any(type(result[key]) is not bool for key in ('passed', 'copyCompleted', 'allHandlesClosed',
                                                         'noExperimentLive', 'productStarted', 'accountAccess')) or
@@ -244,22 +258,27 @@ def public_single_copy_receipt(result):
         fields = {'wrapperPhase', 'nativePhase', 'heldOrdinal', 'errorKind', 'errorCode',
                   'identityMismatchMask', 'snapshotMismatchMask', 'opens', 'metadata', 'reads',
                   'writes', 'requestedReadBytes', 'writtenBytes'}
-        establishing = result['schema'] == 'selected-account-single-copy-diagnosis-v2'
+        qualified = result['schema'] == 'selected-account-single-copy-diagnosis-v3'
+        establishing = result['schema'] in ('selected-account-single-copy-diagnosis-v2',
+                                           'selected-account-single-copy-diagnosis-v3')
         if establishing:
             fields |= {'outputStage', 'firstReadChangeCount', 'sealedOutputs'}
+        if qualified:
+            fields.add('outputChangeTimeDifferenceCount')
         if (type(diagnostic) is not dict or set(diagnostic) != fields or
                 not exact_int(diagnostic['wrapperPhase'], 0, 3) or
                 not exact_int(diagnostic['heldOrdinal'], 0, 2)):
             raise ValueError('Single-copy diagnostic shape')
         if establishing:
-            output_sealing(diagnostic, 1, 1 if result['copyCompleted'] else 0)
+            output_sealing(diagnostic, 1, 1 if result['copyCompleted'] else 0, qualified)
             if result['copyCompleted'] and (diagnostic['outputStage'] != 3 or diagnostic['sealedOutputs'] != 1):
                 raise ValueError('Single-copy sealing completion')
         # Reuse the existing numeric failure-context checks. This synthetic object
         # remains local: it is never emitted or treated as materialization evidence.
-        public_receipt(dict(schema='selected-account-public-materialization-v3' if establishing else
+        public_receipt(dict(schema='selected-account-public-materialization-v4' if qualified else
+            'selected-account-public-materialization-v3' if establishing else
             'selected-account-public-materialization-v2', passed=False,
-            authoritySha256=result['authoritySha256'], target='C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v4', rows=[], failure='copy',
+            authoritySha256=result['authoritySha256'], target='C:\\Temp\\azureauth-windows-slice-108\\confidential-native-account-v5', rows=[], failure='copy',
             allHandlesClosed=result['allHandlesClosed'], noExperimentLive=False,
             productStarted=False, accountAccess=False,
             diagnostic=dict(diagnostic, copyOrdinal=1 if diagnostic['wrapperPhase'] == 1 else 0,
@@ -288,7 +307,8 @@ def interpret(name, raw):
                     'newlineTerminated': not raw or raw.endswith(b'\n')}
         decoded = decode(raw)
         if type(decoded) is dict and decoded.get('schema') in ('selected-account-single-copy-diagnosis-v1',
-                                                             'selected-account-single-copy-diagnosis-v2'):
+                                                             'selected-account-single-copy-diagnosis-v2',
+                                                             'selected-account-single-copy-diagnosis-v3'):
             return {'interpretation': 'validated-public-single-copy-diagnosis',
                     'receipt': public_single_copy_receipt(decoded), 'diagnosisOnly': True}
         result = public_receipt(decoded)

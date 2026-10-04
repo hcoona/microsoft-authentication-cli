@@ -14,7 +14,7 @@ $ProgressPreference = 'SilentlyContinue'
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $stage = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0193'
 $donor = 'C:\Temp\azureauth-windows-slice-108\confidential-checks-v25'
-$target = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v4'
+$target = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5'
 $pins = $null
 $bootstrap = [Collections.Generic.List[IDisposable]]::new()
 $bootstrapReads = 0L
@@ -23,7 +23,7 @@ $copyOrdinal = 0
 $completedCopies = 0
 $wrapperPhase = 0
 $result = [ordered]@{
-    schema = 'selected-account-public-materialization-v3'; passed = $false
+    schema = 'selected-account-public-materialization-v4'; passed = $false
     authoritySha256 = $AuthoritySha256; target = $target; rows = @()
     failure = 'admission'; allHandlesClosed = $false; noExperimentLive = $false
     productStarted = $false; accountAccess = $false; diagnostic = $null
@@ -170,6 +170,7 @@ try {
             snapshotMismatchMask = $pins.snapshotMismatchMask
             outputStage = $pins.outputStage; firstReadChangeCount = $pins.firstReadChangeCount
             sealedOutputs = $pins.sealedOutputs
+            outputChangeTimeDifferenceCount = $pins.outputChangeTimeDifferenceCount
             opens = $pins.opens; metadata = $pins.metadata; reads = $pins.reads; writes = $pins.writes
             requestedReadBytes = $pins.requestedReadBytes; writtenBytes = $pins.writtenBytes }
     }
