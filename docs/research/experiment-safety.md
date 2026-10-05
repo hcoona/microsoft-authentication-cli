@@ -568,6 +568,24 @@ unknown ownership, consumer, OVERLAPPED, loss or native-process issues still sto
 dependent work. This migration creates no ETW session or additional stop/cleanup
 authority. The retired elevated entry and diagnostic chain remain stopped.
 
+### Retained-terminal absence assumption
+
+The Wave's specific owner disposition permits credential-free terminal correction
+after the separately reviewed failed retained-terminal feasibility attempt, on
+the assumption that its PowerShell process is absent. This is risk disposition,
+not runtime evidence of native exit, original natural completion or timely shutdown.
+Preserve the failed result, spent tool session, consumed capacity and unobserved
+native lifetime. Do not reuse the lost session, terminate a process identified only
+by name or age, or infer closure from an absent visible window. No reboot or cleanup
+is required by this disposition.
+
+This exception applies only to that already failed attempt and credential-free
+correction on the same host. It does not accept another unknown process lifetime,
+clear the existing historical uncertainties, admit helper loading or private input,
+or waive the independent operating-basis review before account effects. Any new
+loss of control or unobserved closure follows the normal stop rule. The corrected
+protocol, exact call, accounting and actual outcome retain their required reviews.
+
 All new execution retains finite recipe bounds, original clocks, identifiable
 creation-time owned Jobs/scopes, complete transport and scoped outcome evidence.
 Historical risk acceptance is not artifact acceptance or an exemption from those

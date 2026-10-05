@@ -2107,11 +2107,16 @@ cannot replace that cutoff Type, arm a lease or call a console/account method wh
 loading. Independently accept the actual same-host two-library source/artifact/native,
 whole-return/resource and identical-Type conjunction before private input creation.
 
-#### One credential-free existing-terminal feasibility check
+#### Bounded credential-free existing-terminal feasibility checks
 
 The visible ordinary-console route above remains the account flow's accepted host
 basis. Before adding a console-control tool, permit one credential-free feasibility
 check of the existing execution tool's retained terminal and standard-input channel.
+The original check remains spent and failed. After independent acceptance of its
+failed result and the Wave's specific retained-terminal absence assumption, permit
+exactly one corrected check below. This additional check spends a fresh call and
+nonce; it does not replay or replace the original evidence. No further check is
+admitted automatically.
 This exception admits only the check below; it admits no library load, private input,
 account original or replacement of an already loaded host. Reuse the accepted installed
 Windows PowerShell5.1 x64, WSL interoperability and initial-interop console-host basis.
@@ -2125,6 +2130,20 @@ user, runspace or service. Keep stderr suppressed. Reserve the maximum two synth
 roles (PowerShell and any associated initial-interop console host) and one35s/64MiB
 metadata allocation before the sole launch. No build, download or real-stage charge
 occurs. These are source/ordinary operating allocations, not an OS I/O or memory census.
+
+For the corrected check, configure only its newly owned Linux PTY with
+`stty -echo -icanon min 1 time 0` before the shell's `exec` replacement. Do not change
+another terminal or configure a reconnect/control service. Canonical line buffering
+is unsuitable for the fixed public commands longer than4096 bytes; disabling it is
+a prospective input correction, not proof of the original failure's cause. Record
+the owned PTY's observed canonical/echo flags with the initiating Linux startup
+frame and require both disabled before accepting launch readiness. Keep the existing
+source, PowerShell options, public nonce and fixed two-phase state challenge.
+
+[PowerShell's standard-input contract](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_exe?view=powershell-5.1#-command)
+parses statements individually; incomplete input is not executed. Submit each fixed
+public statement with its newline and one empty line. This framing contains no
+selector or private data and does not create an additional challenge or retry.
 
 Bind the exact reviewed
 [public probe](../../../tools/validation/Test-WindowsSelectedAccountTerminal.ps1),
@@ -2151,7 +2170,14 @@ the second challenge must start within30s of the first. No wait or retry renews 
 After both complete frames, submit the sole fixed `exit 0` and observe the exact original
 tool session's natural exit/EOF. On a failed check, use only the separately admitted
 fixed `exit 125` for this unloaded, credential-free probe session; observe its actual
-return. Do not terminate or replace another host. Missing/late output, malformed frames,
+return. Terminate that fixed exit statement with a newline and an empty line too.
+Permit at most four empty reads for challenge observations and four separately
+reserved empty reads for exit observation, eight total. Exit reads cannot be spent
+waiting for challenge status. Request at most1s per tool wait and include its actual
+observed duration in the original complete
+launch-to-shutdown deadline remains strictly below35s, including all waits and
+bookkeeping observations. No new deadline, command resubmission, launcher or fallback
+termination is admitted. Do not terminate or replace another host. Missing/late output, malformed frames,
 lost session control or unobserved closure fails the case and stops dependent work;
 retain its charged outcome and ownership uncertainty without replay, adoption or refund.
 Reuse applicable initial-interop console-host retention limits; do not invent closure of

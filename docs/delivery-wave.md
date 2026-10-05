@@ -118,6 +118,16 @@ may establish current correspondence; it does not replay or repair the original
 invocation or renew its collector or clock. No new unknown application, owned-Job,
 Linux, or privileged-process lifetime is accepted by this continuation.
 
+For the separately reviewed failed credential-free retained-terminal feasibility
+attempt, the owner accepts proceeding on the assumption that its PowerShell
+process is absent, while its original native exit remains unobserved. Apply this
+disposition only to subsequent credential-free terminal correction on the same
+host under the [specific safety boundary](research/experiment-safety.md#retained-terminal-absence-assumption).
+Preserve the failed result, consumed capacity and lifetime uncertainty. This is
+not observed closure, a reset of the attempt, or a disposition for a later
+unknown process. Account execution still requires its independently accepted
+operating basis; this assumption does not waive that gate.
+
 Retain the separately accepted initial-interop console-host operating basis and
 sole-owned-ETW-persistence disposition for their existing credential-free roles,
 as defined in [experiment safety](research/experiment-safety.md#windows-slice-standing-risk-dispositions).
