@@ -33,6 +33,11 @@ $self = $null
 $configFile = $null
 $config = $null
 $configHash = $null
+$configText = $null
+$configAst = $null
+$configTokens = $null
+$configErrors = $null
+$configTable = $null
 $configReadBytes = 0L
 $buffers = [Collections.Generic.List[byte[]]]::new()
 $documents = @()
@@ -103,6 +108,7 @@ try {
     while ($offset -lt $configBytes.Length) {
         Before
         $configReadBytes += $configBytes.Length - $offset
+        Before
         $count = $configFile.Read($configBytes, $offset, $configBytes.Length - $offset)
         Need ($count -gt 0); $offset += $count
     }
@@ -113,8 +119,40 @@ try {
     finally { $hash.Dispose() }
     # The hash and selected contents remain in Windows memory. Native Pin retains exact input correspondence.
     $null = $pins.Pin($PrivateConfigPath, $configBytes.Length, $configHash)
-    $configReadBytes += $configBytes.Length; Before
-    $config = Microsoft.PowerShell.Utility\Import-PowerShellDataFile -LiteralPath $PrivateConfigPath -ErrorAction Stop
+    # Parse the already charged buffer; no second pathname read or expression execution.
+    $utf8 = [Text.UTF8Encoding]::new($false, $true)
+    $configText = $utf8.GetString($configBytes)
+    if ($configText.Length -gt 0 -and $configText[0] -eq [char]0xfeff) {
+        $configText = $configText.Substring(1)
+    }
+    Before
+    $configAst = [System.Management.Automation.Language.Parser]::ParseInput(
+        $configText, [ref]$configTokens, [ref]$configErrors)
+    Need ($configErrors.Count -eq 0 -and $null -eq $configAst.ParamBlock -and
+        $null -eq $configAst.DynamicParamBlock -and $null -eq $configAst.BeginBlock -and
+        $null -eq $configAst.ProcessBlock -and $null -ne $configAst.EndBlock -and
+        ($null -eq $configAst.EndBlock.Traps -or $configAst.EndBlock.Traps.Count -eq 0) -and $configAst.EndBlock.Statements.Count -eq 1)
+    $statement = $configAst.EndBlock.Statements[0]
+    Need ($statement -is [System.Management.Automation.Language.PipelineAst] -and
+        $statement.PipelineElements.Count -eq 1)
+    $expression = $statement.PipelineElements[0]
+    Need ($expression -is [System.Management.Automation.Language.CommandExpressionAst] -and
+        $expression.Redirections.Count -eq 0)
+    $configTable = $expression.Expression
+    Need ($configTable -is [System.Management.Automation.Language.HashtableAst] -and
+        $configTable.KeyValuePairs.Count -ge 1 -and $configTable.KeyValuePairs.Count -le 3)
+    foreach ($pair in $configTable.KeyValuePairs) {
+        Need ($pair.Item1 -is [System.Management.Automation.Language.StringConstantExpressionAst] -and
+            ($null -eq $pair.Item2.Traps -or $pair.Item2.Traps.Count -eq 0) -and $pair.Item2.Statements.Count -eq 1)
+        $statement = $pair.Item2.Statements[0]
+        Need ($statement -is [System.Management.Automation.Language.PipelineAst] -and
+            $statement.PipelineElements.Count -eq 1)
+        $expression = $statement.PipelineElements[0]
+        Need ($expression -is [System.Management.Automation.Language.CommandExpressionAst] -and
+            $expression.Redirections.Count -eq 0 -and
+            $expression.Expression -is [System.Management.Automation.Language.StringConstantExpressionAst])
+    }
+    $config = $configTable.SafeGetValue()
     Before
     Need ($config -is [Collections.Hashtable] -and $config.Count -ge 1 -and $config.Count -le 3)
     foreach ($key in $config.Keys) {
@@ -183,7 +221,9 @@ try {
     if ($null -ne $pins) { try { $pins.Dispose() } catch { $closed = $false } }
     if ($null -ne $configFile) { try { $configFile.Dispose() } catch { $closed = $false } }
     if ($null -ne $self) { try { $self.Dispose() } catch { $closed = $false } }
-    $config = $null; $configHash = $null
+    $config = $null; $configHash = $null; $configText = $null
+    $configAst = $null; $configTokens = $null; $configErrors = $null; $configTable = $null
+    $statement = $null; $expression = $null; $pair = $null
     foreach ($buffer in $buffers) { [Array]::Clear($buffer, 0, $buffer.Length) }
     $documents = @(); $email = $null; $tenant = $null
     $passed = $passed -and $closed -and $watch.Elapsed.TotalSeconds -lt 120

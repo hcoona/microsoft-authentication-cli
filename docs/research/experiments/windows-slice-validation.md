@@ -2234,10 +2234,14 @@ or enumerate credential stores. The initializer reads only its exact admitted lo
 `private\test-accounts.psd1`. No selector, private content/hash or raw parser error is
 sent through Linux, command arguments, chat, screenshots or public evidence.
 
-Use the installed PowerShell5.1
-[Import-PowerShellDataFile](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/import-powershelldatafile?view=powershell-5.1)
-with `-LiteralPath`, not expression execution. The at-most4096B data file contains
-only constant strings in a hashtable. Allowed keys are `PersonalAccountEmail`,
+Use installed PowerShell5.1
+[Parser.ParseInput(String, Token[], ParseError[])](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.language.parser.parseinput?view=powershellsdk-1.1.0)
+on the already read buffer, followed by the hashtable's `SafeGetValue()`, as used by
+the installed5.1 data-file importer. Do not execute expressions or reread the pathname
+through the importer. The at-most4096B data file uses strict UTF-8 with an optional
+UTF-8 BOM and contains only one hashtable with constant-string keys and values.
+Reject parse errors, other statements/blocks, commands, redirections and nonconstant
+values before safe extraction. Allowed keys are `PersonalAccountEmail`,
 `WorkAccountEmail` and optional `WorkTenant`. Require the current role's explicit email;
 missing/empty/malformed selection stops instead of prompting or falling back. Work tenant
 absent, empty or exactly `common` uses the accepted common policy; otherwise require the
@@ -2246,10 +2250,11 @@ GUID checks and the unchanged two-template selection/equality validation.
 
 Keep a deny-write/delete FileStream, no-reparse ancestry and an exact native helper Pin
 through the operation. The bootstrap content/hash remain only in Windows memory; the
-hash is never an admission record or output. Count complete bootstrap/import read requests
-and EOF against the same1MiB selected envelope; native Pin/CheckAll keep their existing
-strict request/identity/hash/EOF checks. Import occurs while the file is held against
-modification. No helper C# change or new compilation is required. Clear owned buffers and
+hash is never an admission record or output. Count complete bootstrap read requests
+and EOF against the same1MiB selected envelope, and check the updated charge before
+each read; native Pin/CheckAll keep their existing strict request/identity/hash/EOF
+checks. Safe extraction parses the charged buffer without additional file reads,
+while the file remains held against modification. No helper C# change or new compilation is required. Clear owned buffers and
 configuration references and dispose the owned streams on every return. Preserve role
 attempt markers, exclusive two-file writes,115s source work,120s original and125s complete
 carrier bounds. No private-input UI or provider operation occurs during configuration
