@@ -1,0 +1,154 @@
+# One admitted local creation per role; no account/provider API or product start.
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory)][ValidateSet('Personal', 'Work')][string] $AccountRole,
+    [Parameter(Mandatory)][Type] $PrivatePinsType,
+    [Parameter(Mandatory)][object] $ExpectedPrimaryTemplateIdentity,
+    [Parameter(Mandatory)][object] $ExpectedReuseTemplateIdentity,
+    [Parameter(Mandatory)][bool] $CurrentOperatingBasisAccepted,
+    [Parameter(Mandatory)][bool] $ExperimentalProfileExplicitlySelected
+)
+$PrivateCreationAdmitted = $false
+if (-not $PrivateCreationAdmitted) { return }
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
+$watch = [Diagnostics.Stopwatch]::StartNew()
+$root = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5'
+$primary = if ($AccountRole -ceq 'Personal') { 'R1' } else { 'R7' }
+$reuse = if ($AccountRole -ceq 'Personal') { 'R6' } else { 'R8' }
+$hashes = @{
+    R1 = 'cf98559a6b639882048094365bf714e01e585e6f381a20bda79e8115043831f8'
+    R6 = 'e1d0bc7d7f3a3d7bf4782a182843d03fdf58e927bdcd74f9f187a2e1da162072'
+    R7 = 'c40c7d775cbf29fc800aff232bda74b079b84333c7d15bf3842b68d2f3c5f18c'
+    R8 = '07d03b9987297875e4cdfc7b7b11d0a70503259faf31624f30232c6815d876d0'
+}
+$pins = $null
+$buffers = [Collections.Generic.List[byte[]]]::new()
+$documents = @()
+$email = $null
+$tenant = $null
+$passed = $false
+$closed = $true
+$equal = $false
+$validated = $false
+$rows = @()
+function Need([bool] $Value) { if (-not $Value) { throw 'Private creation refused.' } }
+function Before {
+    Need ($watch.Elapsed.TotalSeconds -lt 115)
+    if ($null -ne $script:pins) {
+        Need ($script:pins.requestedReadBytes + $script:pins.writtenBytes -le 1048576)
+    }
+}
+function Read-LocalValue([string] $Prompt, [int] $Maximum) {
+    [Console]::WriteLine($Prompt)
+    $text = [Text.StringBuilder]::new()
+    try {
+        while ($true) {
+            Before
+            if (-not [Console]::KeyAvailable) { [Threading.Thread]::Sleep(50); continue }
+            $key = [Console]::ReadKey($true)
+            if ($key.Key -eq [ConsoleKey]::Escape) { throw 'Private creation refused.' }
+            if ($key.Key -eq [ConsoleKey]::Enter) { return $text.ToString() }
+            if ($key.Key -eq [ConsoleKey]::Backspace) {
+                if ($text.Length -gt 0) { $text.Length-- }
+                continue
+            }
+            Need (-not [char]::IsControl($key.KeyChar) -and
+                -not [char]::IsWhiteSpace($key.KeyChar) -and $text.Length -lt $Maximum)
+            $null = $text.Append($key.KeyChar)
+        }
+    } finally { $null = $text.Clear() }
+}
+function Match-Identity([object] $Expected, [object] $Actual) {
+    $fields = @('volume', 'index', 'attributes', 'created', 'modified', 'links', 'length', 'changed')
+    Need (@($Expected.PSObject.Properties).Count -eq 8)
+    foreach ($name in $fields) {
+        $a = $Expected.$name; $b = $Actual.$name
+        Need (($a -is [int] -or $a -is [long] -or $a -is [uint] -or
+            $a -is [ulong] -or $a -is [decimal]) -and
+            [decimal]$a -eq [decimal]::Truncate([decimal]$a) -and [decimal]$a -eq [decimal]$b)
+    }
+}
+try {
+    Before
+    Need ($CurrentOperatingBasisAccepted -and $ExperimentalProfileExplicitlySelected -and
+        $PrivatePinsType.FullName -ceq 'SelectedAccountPrivateInputPins' -and
+        -not $PrivatePinsType.Assembly.IsDynamic -and [Environment]::UserInteractive -and
+        [Environment]::Is64BitProcess -and $Host.Name -ceq 'ConsoleHost' -and
+        $PSVersionTable.PSEdition -ceq 'Desktop' -and
+        $PSVersionTable.PSVersion.Major -eq 5 -and $PSVersionTable.PSVersion.Minor -eq 1)
+    $marker = 'AzureAuth108PrivateCreation' + $AccountRole + 'Attempted'
+    Need ($null -eq (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue))
+    New-Variable -Name $marker -Scope Global -Option Constant -Value $true
+    $pins = [Activator]::CreateInstance($PrivatePinsType, [object[]] @([Action] { Before }))
+    $pins.HoldDirectory($root + '\private')
+    $utf8 = [Text.UTF8Encoding]::new($false, $true)
+    $expected = @($ExpectedPrimaryTemplateIdentity, $ExpectedReuseTemplateIdentity)
+    $groups = @($primary, $reuse)
+    for ($i = 0; $i -lt 2; $i++) {
+        $group = $groups[$i]
+        $length = if ($i -eq 0) { 746 } else { 751 }
+        $held = $pins.Pin($root + '\control\' + $group + '.template.json', $length, $hashes[$group])
+        Match-Identity $expected[$i] $held.identity
+        $bytes = $pins.ReadControl($held, 1024); $buffers.Add($bytes)
+        $doc = $utf8.GetString($bytes) | ConvertFrom-Json
+        Need ($doc.schema -ceq 'confidential-native-private-requests-v1' -and
+            $doc.group -ceq $group -and $doc.requests.Count -eq 1 -and
+            $null -eq $doc.requests[0].accountEmail -and
+            $doc.requests[0].profilePath -ceq ($root + '\product\selected-account-profile.json'))
+        $documents += $doc
+    }
+    $email = Read-LocalValue 'Enter the designated account email locally; input is hidden. Enter submits; Esc stops.' 320
+    Need ($email.Length -ge 3 -and $email.IndexOf('@') -gt 0 -and
+        $email.IndexOf('@') -eq $email.LastIndexOf('@') -and -not $email.EndsWith('@'))
+    $tenant = 'common'
+    if ($AccountRole -ceq 'Work') {
+        $choice = Read-LocalValue 'For the work resource tenant, Enter selects common; otherwise enter its canonical GUID locally.' 36
+        if ($choice.Length -gt 0) {
+            Need ($choice -cmatch '\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z' -and
+                [Guid]::ParseExact($choice, 'D') -ne [Guid]::Empty)
+            $tenant = $choice
+        }
+        $choice = $null
+    }
+    foreach ($doc in $documents) {
+        $doc.requests[0].accountEmail = $email
+        $doc.requests[0].tenantArgument = $tenant
+        $doc.requests[0].exactResultTenant = if ($tenant -ceq 'common') { $null } else { $tenant }
+    }
+    foreach ($field in $documents[0].requests[0].PSObject.Properties.Name) {
+        if ($field -cin @('interactionAllowed', 'requiredInteraction')) { continue }
+        Need (($documents[0].requests[0].$field | ConvertTo-Json -Compress) -ceq
+            ($documents[1].requests[0].$field | ConvertTo-Json -Compress))
+    }
+    Need ($documents[0].requests[0].interactionAllowed -eq $true -and
+        $null -eq $documents[0].requests[0].requiredInteraction -and
+        $documents[1].requests[0].interactionAllowed -eq $false -and
+        $documents[1].requests[0].requiredInteraction -ceq 'silent')
+    $equal = $true
+    $validated = $true
+    for ($i = 0; $i -lt 2; $i++) {
+        Before
+        $payload = $utf8.GetBytes(($documents[$i] | ConvertTo-Json -Depth 5 -Compress) + "`n")
+        $buffers.Add($payload); Need ($payload.Length -le 16384)
+        $identity = $pins.WritePrivate($root + '\private\' + $groups[$i] + '.json', $payload)
+        $rows += [pscustomobject]@{ group = $groups[$i]; bytes = $payload.Length; identity = $identity }
+    }
+    $pins.CheckAll(); Before
+    $passed = $true
+} catch {
+    # Suppress contents, hashes, selectors, tenant IDs, provider text and exception details.
+} finally {
+    if ($null -ne $pins) { try { $pins.Dispose() } catch { $closed = $false } }
+    foreach ($buffer in $buffers) { [Array]::Clear($buffer, 0, $buffer.Length) }
+    $documents = @(); $email = $null; $tenant = $null
+    $passed = $passed -and $closed -and $watch.Elapsed.TotalSeconds -lt 120
+}
+# Only complete timely natural return and independent outcome acceptance admit these identities.
+[pscustomobject]@{
+    schema = 'selected-account-private-creation-v1'; role = $AccountRole; passed = $passed
+    privateRowsValidated = $validated; sharedSelectionEqual = $equal; allHandlesClosed = $closed
+    rows = $rows; accountAccess = $false; productStarted = $false
+    elapsedMilliseconds = $watch.ElapsedMilliseconds
+} | ConvertTo-Json -Depth 5 -Compress

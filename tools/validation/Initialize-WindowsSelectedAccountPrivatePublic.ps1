@@ -1,0 +1,218 @@
+# Public private-input helper and Work-template preparation through the unchanged normal0070 launcher.
+[CmdletBinding()]
+param(
+    [ValidateSet('Controller')][string] $Mode,
+    [Parameter(Mandatory)][ValidatePattern('\A[0-9a-f]{64}\z')][string] $AuthoritySha256
+)
+$PrivatePublicPreparationAdmitted = $false
+if (-not $PrivatePublicPreparationAdmitted) { exit 125 }
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0214'
+$watch = [Diagnostics.Stopwatch]::StartNew()
+$held = [Collections.Generic.List[IDisposable]]::new()
+$pins = $null
+$target = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5'
+$requested = 0L
+$result = [ordered]@{
+    schema = 'selected-account-private-public-preparation-v1'; passed = $false
+    authoritySha256 = $AuthoritySha256; sourceSha256 = $null; artifactSha256 = $null
+    artifactBytes = 0; allHandlesClosed = $false; failure = 'admission'
+    controllerPid = 0; controllerCreationFileTime = $null; controllerSession = -1
+    productStarted = $false; accountAccess = $false; leaseCreated = $false
+    rootAnchor = $null; cutoffInputs = @()
+}
+
+function Need([bool] $Condition) { if (-not $Condition) { throw 'Cutoff preparation refused.' } }
+function Before([int] $Seconds = 90) { Need ($watch.Elapsed.TotalSeconds -lt $Seconds) }
+function Hash-Bytes([byte[]] $Bytes) {
+    $hash = [Security.Cryptography.SHA256]::Create()
+    try { return [BitConverter]::ToString($hash.ComputeHash($Bytes)).Replace('-', '').ToLowerInvariant() }
+    finally { $hash.Dispose() }
+}
+function Read-Public([string] $Leaf, [int] $Maximum, [string] $ExpectedHash) {
+    Before
+    Need ($Leaf -cin @('authority.json', 'Invoke-WindowsNamedGuardFixtures.ps1',
+        'SelectedAccountPrivateInputPins.cs', 'private-input.generated.dll', 'SelectedAccountPrivateInputPins.dll',
+        'Initialize-WindowsSelectedAccountPrivate.ps1', 'Initialize-WindowsSelectedAccountPrivateLoad.ps1',
+        'Invoke-WindowsSelectedAccountTimedOperation.ps1',
+        'R7.template.json', 'R8.template.json'))
+    $path = $root + '\' + $Leaf
+    for ($current = $path; $null -ne $current; $current = [IO.Path]::GetDirectoryName($current)) {
+        Need (([IO.File]::GetAttributes($current) -band [IO.FileAttributes]::ReparsePoint) -eq 0)
+    }
+    $file = [IO.File]::Open($path, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read)
+    $held.Add($file)
+    Need ($file.Length -gt 0 -and $file.Length -le $Maximum)
+    $bytes = [byte[]]::new([int] $file.Length)
+    Need ($script:requested + $bytes.Length + 1 -le 4194304)
+    $script:requested += $bytes.Length + 1
+    Before
+    Need ($file.Read($bytes, 0, $bytes.Length) -eq $bytes.Length)
+    Before
+    Need ($file.ReadByte() -eq -1 -and $file.Length -eq $bytes.Length)
+    if ($ExpectedHash) {
+        Need ($ExpectedHash -cmatch '\A[0-9a-f]{64}\z' -and (Hash-Bytes $bytes) -ceq $ExpectedHash)
+    }
+    return ,$bytes
+}
+
+try {
+    Need ($Mode -ceq 'Controller' -and $PSScriptRoot -ceq $root -and
+        $PSCommandPath -ceq ($root + '\Invoke-WindowsNamedGuardFixtures.ps1') -and
+        [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -ceq 'Desktop' -and
+        $PSVersionTable.PSVersion.Major -eq 5 -and $PSVersionTable.PSVersion.Minor -eq 1)
+    $encoding = [Text.UTF8Encoding]::new($false, $true)
+    $authority = $encoding.GetString((Read-Public 'authority.json' 65536 $AuthoritySha256)) | ConvertFrom-Json
+    Need ($authority.schema -ceq 'selected-account-private-public-preparation-authority-v1' -and
+        $authority.action -ceq '0214' -and $authority.hostRole -ceq 'designated-windows-interactive-host' -and
+        $authority.target -ceq $target -and $authority.publicRootAccepted -eq $true -and
+        $authority.cutoffMaterializationAccepted -eq $true -and
+        $authority.controllerSha256 -cmatch '\A[0-9a-f]{64}\z' -and
+        $authority.sourceSha256 -cmatch '\A[0-9a-f]{64}\z')
+    $null = Read-Public 'Invoke-WindowsNamedGuardFixtures.ps1' 65536 $authority.controllerSha256
+    $sourceBytes = Read-Public 'SelectedAccountPrivateInputPins.cs' 65536 $authority.sourceSha256
+    $source = $encoding.GetString($sourceBytes)
+    $result.sourceSha256 = $authority.sourceSha256
+    # Process-local temporary paths also apply to the one compiler child.
+    # The admitted launcher holds this fresh public root against rename/delete.
+    Before
+    $env:TEMP = $root
+    $env:TMP = $root
+    Need ([IO.Path]::GetTempPath() -ceq ($root + '\'))
+    $generated = $root + '\private-input.generated.dll'
+    $artifact = $root + '\SelectedAccountPrivateInputPins.dll'
+    Need (-not [IO.File]::Exists($generated) -and -not [IO.File]::Exists($artifact))
+    Before
+    $result.failure = 'compiler'
+    # Exactly one default Framework source batch/library compilation. No lease
+    # constructor, console query, timer or native helper method is invoked here.
+    Add-Type -TypeDefinition $source -Language CSharp -OutputAssembly $generated -OutputType Library -ErrorAction Stop
+    Before
+    $result.failure = 'artifact'
+    $bytes = Read-Public 'private-input.generated.dll' 1048576 ''
+    $digest = Hash-Bytes $bytes
+    $file = [IO.File]::Open($artifact, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    try { Before; $file.Write($bytes, 0, $bytes.Length); $file.Flush($true); Before }
+    finally { $file.Dispose() }
+    $mirror = Read-Public 'SelectedAccountPrivateInputPins.dll' 1048576 $digest
+    Need ($mirror.Length -eq $bytes.Length)
+    $result.artifactBytes = $bytes.Length
+    $result.artifactSha256 = $digest
+
+    # Use only this public compilation's checked in-memory image for public copies.
+    # No WritePrivate, selector, lease, account, product or provider method runs here.
+    $assembly = [Reflection.Assembly]::Load($mirror)
+    $type = $assembly.GetType('SelectedAccountPrivateInputPins', $true, $false)
+    Need ($type.FullName -ceq 'SelectedAccountPrivateInputPins' -and -not $assembly.IsDynamic)
+    $pins = [Activator]::CreateInstance($type, [object[]] @([Action] { Before }))
+    $pins.HoldDirectory($root); $pins.HoldDirectory($target + '\control')
+    $result.failure = 'root-anchor'
+    Need ($authority.rootAnchorBytes -eq 17534 -and
+        $authority.rootAnchorSha256 -ceq '38eb5dcc7b8951793cbe5445ca567ab7cf776547c3b99314e7131279095fb583')
+    $anchor = $pins.Pin(($target + '\control\Invoke-WindowsSelectedAccount.ps1'),
+        17534L, $authority.rootAnchorSha256)
+    # Reuse the accepted destination anchor and ONLY its historical ChangeTime
+    # qualification. Every fresh Pin/CheckAll comparison remains strict.
+    $expectedAnchor = [SelectedAccountPrivateFileIdentity]::new()
+    foreach ($field in @('volume', 'index', 'attributes', 'links', 'created', 'modified', 'length')) {
+        $expectedAnchor.$field = $authority.rootAnchorIdentity.$field
+    }
+    $expectedAnchor.changed = $anchor.identity.changed
+    Need ($anchor.identity.Same($expectedAnchor))
+    $result.rootAnchor = [ordered]@{ relative = 'control\Invoke-WindowsSelectedAccount.ps1'
+        bytes = 17534L; sha256 = $authority.rootAnchorSha256
+        acceptedIdentity = $authority.rootAnchorIdentity; currentIdentity = $anchor.identity
+        historicalChangeTimeQualified = $true; currentIdentityChecksStrict = $true }
+
+    # Recheck the four already accepted cutoff inputs in this same contained pass.
+    # They are inputs, never new copies or a replacement inventory/observer.
+    $result.failure = 'cutoff-inputs'
+    $cutoffInputs = @(
+        @('cutoff-library', $target + '\control\SelectedAccountControllerCutoff.dll', 10240L,
+            'fbc44808765c99086c35d23c245c7c42db2cb9760c60912a7f71b6ecfd2afb64'),
+        @('cutoff-controller', $target + '\control\Invoke-WindowsSelectedAccountCutoff.ps1', 20736L,
+            '8d498b0b26a947a94d07534b369af3e1c1946aabe231487f9ff5a3d2091b8534'),
+        @('original-controller', $target + '\control\Invoke-WindowsSelectedAccountOriginal.ps1', 6562L,
+            '523b6f7a07de2a43f569e898ced0af5e289898c1a6640765be2bccf7243ba8bf'),
+        @('cutoff-loader', 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0213\Initialize-WindowsSelectedAccountCutoffLoad.ps1',
+            5337L, 'ae67d76cbea001f288527200dd6d1a7caeb8054888c83ec43e901840dafcca5d')
+    )
+    Need ($authority.cutoffInputs.Count -eq 4)
+    $currentInputs = [Collections.Generic.List[object]]::new()
+    for ($ordinal = 0; $ordinal -lt $cutoffInputs.Count; $ordinal++) {
+        $inputRow = $cutoffInputs[$ordinal]; $accepted = $authority.cutoffInputs[$ordinal]
+        Need ($accepted.role -ceq $inputRow[0] -and $accepted.path -ceq $inputRow[1] -and
+            $accepted.bytes -eq $inputRow[2] -and $accepted.sha256 -ceq $inputRow[3])
+        $current = $pins.Pin($inputRow[1], $inputRow[2], $inputRow[3])
+        $expected = [SelectedAccountPrivateFileIdentity]::new()
+        foreach ($field in @('volume', 'index', 'attributes', 'links', 'created', 'modified', 'changed', 'length')) {
+            $expected.$field = $accepted.identity.$field
+        }
+        Need ($current.identity.Same($expected))
+        $currentInputs.Add([pscustomobject]@{ role = $inputRow[0]; path = $inputRow[1]
+            bytes = $inputRow[2]; sha256 = $inputRow[3]; acceptedIdentity = $accepted.identity
+            currentIdentity = $current.identity; currentIdentityChecksStrict = $true })
+    }
+    $result.cutoffInputs = $currentInputs.ToArray()
+    $pins.CheckAll(); Before
+    $result.failure = 'copy'
+    $pins.CreateDirectoryExclusive($target + '\private')
+    $rows = [Collections.Generic.List[object]]::new()
+    $copies = @(
+        @('SelectedAccountPrivateInputPins.dll', $bytes.Length, $digest),
+        @('Initialize-WindowsSelectedAccountPrivate.ps1', $authority.privateInitializerBytes, $authority.privateInitializerSha256),
+        @('Initialize-WindowsSelectedAccountPrivateLoad.ps1', $authority.privateLoaderBytes, $authority.privateLoaderSha256),
+        @('Invoke-WindowsSelectedAccountTimedOperation.ps1', $authority.timingCarrierBytes, $authority.timingCarrierSha256),
+        @('R7.template.json', 746, 'c40c7d775cbf29fc800aff232bda74b079b84333c7d15bf3842b68d2f3c5f18c'),
+        @('R8.template.json', 751, '07d03b9987297875e4cdfc7b7b11d0a70503259faf31624f30232c6815d876d0')
+    )
+    foreach ($copy in $copies) {
+        Before
+        Need ($copy[1] -gt 0 -and $copy[1] -le 1048576 -and $copy[2] -cmatch '\A[0-9a-f]{64}\z')
+        $file = $pins.Copy($root + '\' + $copy[0], $target + '\control\' + $copy[0], $copy[1], $copy[2])
+        $rows.Add([pscustomobject]@{ relative = 'control\' + $copy[0]; bytes = $copy[1]; sha256 = $copy[2]
+            identity = $file.identity; sourceIdentity = $file.sourceIdentity })
+    }
+    $pins.CheckAll(); Before
+    $result['rows'] = $rows.ToArray()
+    $result['counts'] = [ordered]@{ requestedReadBytes = $pins.requestedReadBytes; writtenBytes = $pins.writtenBytes
+        reads = $pins.reads; writes = $pins.writes; opens = $pins.opens; metadata = $pins.metadata
+        bootstrapRequestedReadBytes = $requested }
+
+    $self = [Diagnostics.Process]::GetCurrentProcess()
+    $held.Add($self)
+    $result.controllerPid = $self.Id
+    $result.controllerCreationFileTime = $self.StartTime.ToUniversalTime().ToFileTimeUtc().ToString(
+        [Globalization.CultureInfo]::InvariantCulture)
+    $result.controllerSession = $self.SessionId
+    Before
+    $result.failure = $null
+    $result.passed = $true
+} catch {
+    # Fixed phase only; do not emit exceptions or compiler diagnostics.
+} finally {
+    $closed = $true
+    if ($null -ne $pins) { try { $pins.Dispose() } catch { $closed = $false } }
+    while ($held.Count -gt 0) {
+        $index = $held.Count - 1; $item = $held[$index]; $held.RemoveAt($index)
+        try { $item.Dispose() } catch { $closed = $false }
+    }
+    $result.allHandlesClosed = $closed
+    $result.passed = $result.passed -and $closed -and $watch.Elapsed.TotalSeconds -lt 100
+}
+
+try {
+    Before 110
+    $bytes = [Text.UTF8Encoding]::new($false).GetBytes(($result | ConvertTo-Json -Depth 6 -Compress) + "`n")
+    Need ($bytes.Length -le 32768)
+    $receipt = [IO.File]::Open(($root + '\private-public-preparation-result.json'), [IO.FileMode]::CreateNew,
+        [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    try { $receipt.Write($bytes, 0, $bytes.Length); $receipt.Flush($true) }
+    finally { $receipt.Dispose() }
+    Before 110
+} catch { exit 1 }
+if ($result.passed) { exit 0 }
+exit 1
