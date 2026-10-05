@@ -10,7 +10,9 @@ if (-not $PrivatePublicPreparationAdmitted) { exit 125 }
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0214'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0215'
+$artifactRoot = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0214'
+$artifact = $artifactRoot + '\SelectedAccountPrivateInputPins.dll'
 $watch = [Diagnostics.Stopwatch]::StartNew()
 $held = [Collections.Generic.List[IDisposable]]::new()
 $pins = $null
@@ -19,7 +21,8 @@ $requested = 0L
 $result = [ordered]@{
     schema = 'selected-account-private-public-preparation-v1'; passed = $false
     authoritySha256 = $AuthoritySha256; sourceSha256 = $null; artifactSha256 = $null
-    artifactBytes = 0; allHandlesClosed = $false; failure = 'admission'
+    artifactBytes = 0; artifactInput = $null; compilerReused = $false
+    allHandlesClosed = $false; failure = 'admission'
     controllerPid = 0; controllerCreationFileTime = $null; controllerSession = -1
     productStarted = $false; accountAccess = $false; leaseCreated = $false
     rootAnchor = $null; cutoffInputs = @()
@@ -32,14 +35,17 @@ function Hash-Bytes([byte[]] $Bytes) {
     try { return [BitConverter]::ToString($hash.ComputeHash($Bytes)).Replace('-', '').ToLowerInvariant() }
     finally { $hash.Dispose() }
 }
-function Read-Public([string] $Leaf, [int] $Maximum, [string] $ExpectedHash) {
+function Read-Public([string] $Leaf, [int] $Maximum, [string] $ExpectedHash, [string] $SourceRoot = $root) {
     Before
     Need ($Leaf -cin @('authority.json', 'Invoke-WindowsNamedGuardFixtures.ps1',
-        'SelectedAccountPrivateInputPins.cs', 'private-input.generated.dll', 'SelectedAccountPrivateInputPins.dll',
+        'SelectedAccountPrivateInputPins.cs', 'SelectedAccountPrivateInputPins.dll',
         'Initialize-WindowsSelectedAccountPrivate.ps1', 'Initialize-WindowsSelectedAccountPrivateLoad.ps1',
         'Invoke-WindowsSelectedAccountTimedOperation.ps1',
         'R7.template.json', 'R8.template.json'))
-    $path = $root + '\' + $Leaf
+    Need ($SourceRoot -ceq $root -or ($SourceRoot -ceq $artifactRoot -and
+        $Leaf -ceq 'SelectedAccountPrivateInputPins.dll' -and $Maximum -eq 15872 -and
+        $ExpectedHash -ceq 'd70765f1608c6d2c92e5d4fcee2f903fa8c75bebc48dfa7e31a6e9dcebff1f62'))
+    $path = $SourceRoot + '\' + $Leaf
     for ($current = $path; $null -ne $current; $current = [IO.Path]::GetDirectoryName($current)) {
         Need (([IO.File]::GetAttributes($current) -band [IO.FileAttributes]::ReparsePoint) -eq 0)
     }
@@ -67,48 +73,46 @@ try {
     $encoding = [Text.UTF8Encoding]::new($false, $true)
     $authority = $encoding.GetString((Read-Public 'authority.json' 65536 $AuthoritySha256)) | ConvertFrom-Json
     Need ($authority.schema -ceq 'selected-account-private-public-preparation-authority-v1' -and
-        $authority.action -ceq '0214' -and $authority.hostRole -ceq 'designated-windows-interactive-host' -and
+        $authority.action -ceq '0215' -and $authority.hostRole -ceq 'designated-windows-interactive-host' -and
         $authority.target -ceq $target -and $authority.publicRootAccepted -eq $true -and
         $authority.cutoffMaterializationAccepted -eq $true -and
         $authority.controllerSha256 -cmatch '\A[0-9a-f]{64}\z' -and
         $authority.sourceSha256 -cmatch '\A[0-9a-f]{64}\z')
     $null = Read-Public 'Invoke-WindowsNamedGuardFixtures.ps1' 65536 $authority.controllerSha256
     $sourceBytes = Read-Public 'SelectedAccountPrivateInputPins.cs' 65536 $authority.sourceSha256
-    $source = $encoding.GetString($sourceBytes)
     $result.sourceSha256 = $authority.sourceSha256
-    # Process-local temporary paths also apply to the one compiler child.
-    # The admitted launcher holds this fresh public root against rename/delete.
+    Need ($sourceBytes.Length -eq 24977 -and
+        $authority.sourceSha256 -ceq '6fab7560138e865afa0d2423f6b07f7eb36d745d117de5adaded6135e08afd3b')
+    # Keep process-local temporary work inside the fresh contained public root.
     Before
     $env:TEMP = $root
     $env:TMP = $root
     Need ([IO.Path]::GetTempPath() -ceq ($root + '\'))
-    $generated = $root + '\private-input.generated.dll'
-    $artifact = $root + '\SelectedAccountPrivateInputPins.dll'
-    Need (-not [IO.File]::Exists($generated) -and -not [IO.File]::Exists($artifact))
-    Before
-    $result.failure = 'compiler'
-    # Exactly one default Framework source batch/library compilation. No lease
-    # constructor, console query, timer or native helper method is invoked here.
-    Add-Type -TypeDefinition $source -Language CSharp -OutputAssembly $generated -OutputType Library -ErrorAction Stop
-    Before
-    $result.failure = 'artifact'
-    $bytes = Read-Public 'private-input.generated.dll' 1048576 ''
-    $digest = Hash-Bytes $bytes
-    $file = [IO.File]::Open($artifact, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::Read)
-    try { Before; $file.Write($bytes, 0, $bytes.Length); $file.Flush($true); Before }
-    finally { $file.Dispose() }
-    $mirror = Read-Public 'SelectedAccountPrivateInputPins.dll' 1048576 $digest
-    Need ($mirror.Length -eq $bytes.Length)
+    $result.failure = 'retained-artifact'
+    Need ($authority.retainedArtifact.path -ceq $artifact -and $authority.retainedArtifact.bytes -eq 15872 -and
+        $authority.retainedArtifact.sha256 -ceq 'd70765f1608c6d2c92e5d4fcee2f903fa8c75bebc48dfa7e31a6e9dcebff1f62' -and
+        $authority.retainedArtifact.partialCompilerOutcomeSha256 -ceq
+            '54e882b8d20bed5a1e5ca5e1354ce511c7319237942609823fd97828932e06b1')
+    # One checked historical input, held without write/delete sharing. No compiler,
+    # generated library, mirror write or occupied-stage repair is performed.
+    $digest = $authority.retainedArtifact.sha256
+    $bytes = Read-Public 'SelectedAccountPrivateInputPins.dll' 15872 $digest $artifactRoot
+    Need ($bytes.Length -eq 15872)
     $result.artifactBytes = $bytes.Length
     $result.artifactSha256 = $digest
 
-    # Use only this public compilation's checked in-memory image for public copies.
+    # The checked-image bootstrap load is confined to this public child. Its first
+    # native Pin establishes current artifact correspondence before target mutation.
     # No WritePrivate, selector, lease, account, product or provider method runs here.
-    $assembly = [Reflection.Assembly]::Load($mirror)
+    $assembly = [Reflection.Assembly]::Load($bytes)
     $type = $assembly.GetType('SelectedAccountPrivateInputPins', $true, $false)
     Need ($type.FullName -ceq 'SelectedAccountPrivateInputPins' -and -not $assembly.IsDynamic)
     $pins = [Activator]::CreateInstance($type, [object[]] @([Action] { Before }))
     $pins.HoldDirectory($root); $pins.HoldDirectory($target + '\control')
+    $retained = $pins.Pin($artifact, 15872L, $digest)
+    $result.artifactInput = [ordered]@{ path = $artifact; bytes = 15872L; sha256 = $digest
+        identity = $retained.identity; historicalInput = $true; currentIdentityChecksStrict = $true }
+    $result.compilerReused = $true
     $result.failure = 'root-anchor'
     Need ($authority.rootAnchorBytes -eq 17534 -and
         $authority.rootAnchorSha256 -ceq '38eb5dcc7b8951793cbe5445ca567ab7cf776547c3b99314e7131279095fb583')
@@ -131,11 +135,11 @@ try {
     # They are inputs, never new copies or a replacement inventory/observer.
     $result.failure = 'cutoff-inputs'
     $cutoffInputs = @(
-        @('cutoff-library', $target + '\control\SelectedAccountControllerCutoff.dll', 10240L,
+        @('cutoff-library', ($target + '\control\SelectedAccountControllerCutoff.dll'), 10240L,
             'fbc44808765c99086c35d23c245c7c42db2cb9760c60912a7f71b6ecfd2afb64'),
-        @('cutoff-controller', $target + '\control\Invoke-WindowsSelectedAccountCutoff.ps1', 20736L,
+        @('cutoff-controller', ($target + '\control\Invoke-WindowsSelectedAccountCutoff.ps1'), 20736L,
             '8d498b0b26a947a94d07534b369af3e1c1946aabe231487f9ff5a3d2091b8534'),
-        @('original-controller', $target + '\control\Invoke-WindowsSelectedAccountOriginal.ps1', 6562L,
+        @('original-controller', ($target + '\control\Invoke-WindowsSelectedAccountOriginal.ps1'), 6562L,
             '523b6f7a07de2a43f569e898ced0af5e289898c1a6640765be2bccf7243ba8bf'),
         @('cutoff-loader', 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0213\Initialize-WindowsSelectedAccountCutoffLoad.ps1',
             5337L, 'ae67d76cbea001f288527200dd6d1a7caeb8054888c83ec43e901840dafcca5d')
@@ -172,7 +176,9 @@ try {
     foreach ($copy in $copies) {
         Before
         Need ($copy[1] -gt 0 -and $copy[1] -le 1048576 -and $copy[2] -cmatch '\A[0-9a-f]{64}\z')
-        $file = $pins.Copy($root + '\' + $copy[0], $target + '\control\' + $copy[0], $copy[1], $copy[2])
+        $sourcePath = if ($copy[0] -ceq 'SelectedAccountPrivateInputPins.dll') { $artifact }
+            else { $root + '\' + $copy[0] }
+        $file = $pins.Copy($sourcePath, $target + '\control\' + $copy[0], $copy[1], $copy[2])
         $rows.Add([pscustomobject]@{ relative = 'control\' + $copy[0]; bytes = $copy[1]; sha256 = $copy[2]
             identity = $file.identity; sourceIdentity = $file.sourceIdentity })
     }
