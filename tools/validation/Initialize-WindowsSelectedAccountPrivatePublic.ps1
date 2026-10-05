@@ -10,7 +10,7 @@ if (-not $PrivatePublicPreparationAdmitted) { exit 125 }
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
-$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0215'
+$root = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0216'
 $artifactRoot = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0214'
 $artifact = $artifactRoot + '\SelectedAccountPrivateInputPins.dll'
 $watch = [Diagnostics.Stopwatch]::StartNew()
@@ -25,7 +25,7 @@ $result = [ordered]@{
     allHandlesClosed = $false; failure = 'admission'
     controllerPid = 0; controllerCreationFileTime = $null; controllerSession = -1
     productStarted = $false; accountAccess = $false; leaseCreated = $false
-    rootAnchor = $null; cutoffInputs = @()
+    rootAnchor = $null; cutoffInputs = @(); cutoffFailure = $null
 }
 
 function Need([bool] $Condition) { if (-not $Condition) { throw 'Cutoff preparation refused.' } }
@@ -73,7 +73,7 @@ try {
     $encoding = [Text.UTF8Encoding]::new($false, $true)
     $authority = $encoding.GetString((Read-Public 'authority.json' 65536 $AuthoritySha256)) | ConvertFrom-Json
     Need ($authority.schema -ceq 'selected-account-private-public-preparation-authority-v1' -and
-        $authority.action -ceq '0215' -and $authority.hostRole -ceq 'designated-windows-interactive-host' -and
+        $authority.action -ceq '0216' -and $authority.hostRole -ceq 'designated-windows-interactive-host' -and
         $authority.target -ceq $target -and $authority.publicRootAccepted -eq $true -and
         $authority.cutoffMaterializationAccepted -eq $true -and
         $authority.controllerSha256 -cmatch '\A[0-9a-f]{64}\z' -and
@@ -131,8 +131,8 @@ try {
         acceptedIdentity = $authority.rootAnchorIdentity; currentIdentity = $anchor.identity
         historicalChangeTimeQualified = $true; currentIdentityChecksStrict = $true }
 
-    # Recheck the four already accepted cutoff inputs in this same contained pass.
-    # They are inputs, never new copies or a replacement inventory/observer.
+    # Observe all four fixed inputs before their historical comparisons or mutation.
+    # Pin retains strict current eight-field checks; no historical baseline is renewed.
     $result.failure = 'cutoff-inputs'
     $cutoffInputs = @(
         @('cutoff-library', ($target + '\control\SelectedAccountControllerCutoff.dll'), 10240L,
@@ -144,24 +144,46 @@ try {
         @('cutoff-loader', 'C:\Temp\azureauth-windows-slice-108\named-fixtures-0213\Initialize-WindowsSelectedAccountCutoffLoad.ps1',
             5337L, 'ae67d76cbea001f288527200dd6d1a7caeb8054888c83ec43e901840dafcca5d')
     )
+    $result.cutoffFailure = [ordered]@{ ordinal = $null; role = $null; predicate = 'authority-count'; fields = @() }
     Need ($authority.cutoffInputs.Count -eq 4)
     $currentInputs = [Collections.Generic.List[object]]::new()
     for ($ordinal = 0; $ordinal -lt $cutoffInputs.Count; $ordinal++) {
         $inputRow = $cutoffInputs[$ordinal]; $accepted = $authority.cutoffInputs[$ordinal]
+        $result.cutoffFailure = [ordered]@{ ordinal = $ordinal; role = $inputRow[0]
+            predicate = 'authority-row'; fields = @() }
         Need ($accepted.role -ceq $inputRow[0] -and $accepted.path -ceq $inputRow[1] -and
             $accepted.bytes -eq $inputRow[2] -and $accepted.sha256 -ceq $inputRow[3])
+        $result.cutoffFailure.predicate = 'pin'
         $current = $pins.Pin($inputRow[1], $inputRow[2], $inputRow[3])
-        $expected = [SelectedAccountPrivateFileIdentity]::new()
+        $mismatches = [Collections.Generic.List[string]]::new()
         foreach ($field in @('volume', 'index', 'attributes', 'links', 'created', 'modified', 'changed', 'length')) {
-            $expected.$field = $accepted.identity.$field
+            if ($current.identity.$field -ne $accepted.identity.$field) { $mismatches.Add($field) }
         }
-        Need ($current.identity.Same($expected))
         $currentInputs.Add([pscustomobject]@{ role = $inputRow[0]; path = $inputRow[1]
             bytes = $inputRow[2]; sha256 = $inputRow[3]; acceptedIdentity = $accepted.identity
-            currentIdentity = $current.identity; currentIdentityChecksStrict = $true })
+            currentIdentity = $current.identity; historicalMismatchFields = $mismatches.ToArray()
+            historicalChangeTimeQualified = $false; currentIdentityChecksStrict = $true })
+        # Retain successful observations even if a later Pin refuses.
+        $result.cutoffInputs = $currentInputs.ToArray()
     }
-    $result.cutoffInputs = $currentInputs.ToArray()
+    for ($ordinal = 0; $ordinal -lt $currentInputs.Count; $ordinal++) {
+        $observed = $currentInputs[$ordinal]
+        $blockingFields = @($observed.historicalMismatchFields | Where-Object { $_ -cne 'changed' })
+        $result.cutoffFailure = [ordered]@{ ordinal = $ordinal; role = $observed.role
+            predicate = 'historical-identity'; fields = $blockingFields }
+        $expected = [SelectedAccountPrivateFileIdentity]::new()
+        foreach ($field in @('volume', 'index', 'attributes', 'links', 'created', 'modified', 'length')) {
+            $expected.$field = $observed.acceptedIdentity.$field
+        }
+        # Qualify only these four historical ChangeTime comparisons. Every fresh
+        # Pin and CheckAll still compares all eight fields, including ChangeTime.
+        $expected.changed = $observed.currentIdentity.changed
+        Need ($observed.currentIdentity.Same($expected))
+        $observed.historicalChangeTimeQualified = $true
+    }
+    $result.cutoffFailure = [ordered]@{ ordinal = $null; role = $null; predicate = 'final-current-checks'; fields = @() }
     $pins.CheckAll(); Before
+    $result.cutoffFailure = $null
     $result.failure = 'copy'
     $pins.CreateDirectoryExclusive($target + '\private')
     $rows = [Collections.Generic.List[object]]::new()
@@ -198,7 +220,14 @@ try {
     $result.failure = $null
     $result.passed = $true
 } catch {
-    # Fixed phase only; do not emit exceptions or compiler diagnostics.
+    # Retain only the existing fixed numeric fault context for a native refusal.
+    # No exception, path survey or raw diagnostic text enters the receipt.
+    if ($null -ne $pins -and $null -ne $result.cutoffFailure -and
+        $result.cutoffFailure.predicate -cin @('pin', 'final-current-checks')) {
+        $result.cutoffFailure['native'] = [ordered]@{ phase = $pins.phase; heldOrdinal = $pins.heldOrdinal
+            errorKind = $pins.errorKind; errorCode = $pins.errorCode
+            identityMismatchMask = $pins.identityMismatchMask; snapshotMismatchMask = $pins.snapshotMismatchMask }
+    }
 } finally {
     $closed = $true
     if ($null -ne $pins) { try { $pins.Dispose() } catch { $closed = $false } }
