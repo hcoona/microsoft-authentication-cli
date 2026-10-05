@@ -2204,6 +2204,43 @@ Independently accept compiler/source/artifact, anchor/four input joins, all six 
 copies, original root/Job/twoEOF and new Linux/GNU scoped completion before helper use.
 No account readiness follows from a provisional receipt.
 
+##### Retained public inputs after a pre-exec refusal
+
+After independent acceptance of an exact original's source-qualified, childless
+refusal before either systemd or Windows launcher exec, the accepted eight-leaf
+`0214` transfer may remain the input for a distinct corrective original. This is
+retained-input use: the occupied stage and transfer receipt are not fresh outputs
+or new native success. Keep their bytes, descriptors and original provenance;
+do not recopy, overwrite, repair or adopt an occupied execution output. The old
+authority remains a historical input binding. The new packet separately binds
+the current accepted protocol and source/input/call review.
+
+Permit at most three such successors from the common pool, each only after the
+preceding failed outcome and scoped completion are accepted. Before its debit,
+the next exact gate must accept current stage/action/once-only correspondence,
+unchanged input bytes and qualified between-read identities, strict fresh
+within-read checks, and absence of every dedicated launcher, compiler, native
+copy and private-directory output. Use a fresh nonce, active sources, calls,
+transport and collection destination; preserve every spent call and failed
+observation. A new occupied or uncertain execution output blocks this route.
+An actual native failure retains the ordinary fresh-stage correction requirement.
+
+Each admitted successor reserves the full `0/1/0/4` technical charge and only
+three needed public passes: Windows `400s/96MiB`, result `30s/1MiB`, and original
+OWN `30s/32KiB`, totaling `460s/101744640B`. The three-successor maximum is
+`0/3/0/12` and nine passes/`1380s/305233920B`; it adds no capacity beyond the
+Wave's common ceilings. Do not replay the accepted creation, preflight or
+transfer merely to obtain another counter. Fresh current input checks remain
+part of the exact producer and contained Windows pass. Stop after sufficient
+accepted native preparation; loading/private/account gates remain unchanged.
+
+Keep producer exec and any same-session empty producer polls, lossless readiness
+parsing, Root's before bracket and the sole original in one uninterrupted
+`functions.exec` execution. This avoids a model boundary in the handoff; it is
+not a hard scheduling guarantee. Preserve the original E0, three-second producer
+readiness, eight-second client entry, twelve-second admission and every outer
+deadline. A late entry still refuses; never recapture an epoch or replay a call.
+
 The [private helper loader](../../../tools/validation/Initialize-WindowsSelectedAccountPrivateLoad.ps1)
 reuses the accepted cutoff-loader methods with a distinct fixed helper path, Type and
 constant global holder/attempt marker. Bind its DLL length/hash/native identity to the
