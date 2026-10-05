@@ -2107,6 +2107,54 @@ cannot replace that cutoff Type, arm a lease or call a console/account method wh
 loading. Independently accept the actual same-host two-library source/artifact/native,
 whole-return/resource and identical-Type conjunction before private input creation.
 
+#### File-script scope and failed unloaded-host correction
+
+Run the unchanged admitted staged loaders as actual `.ps1` files with the call
+operator. Inlining their bodies changes the ownership of their script-qualified
+read counters and does not preserve the per-instance read envelope. Do not
+dot-source them or initialize ancestor/global counters as a workaround.
+
+Before each file invocation, verify the fixed admitted staged source's exact
+length, SHA-256 and EOF, reject reparse ancestry, and retain its read-only handle
+with write/delete sharing denied through script return and owned-handle disposal.
+The staged guard-only projection and native/source correspondence remain required.
+Bound this additional public source check below5s, at most16 read requests and
+128KiB requested bytes. The unchanged loader retains its512-request/4MiB bound.
+Reserve one35s/69MiB collection pass per complete file-load operation:5MiB for
+both selected source/library requests and64MiB for the existing installed operating
+basis. Original whole-return remains below30s and complete transport below35s.
+A failed source check invokes no loader. No source/library payload is exported.
+
+The general prohibition on replacing an admitted host remains effective except
+for this one bounded correction of a credential-free failure before either helper
+assembly loaded. Independently accept the failed load, its natural enclosed return
+and owned-handle closure, and a bounded same-host diagnostic establishing both
+exact helper Types/holders absent. Preserve the existing attempt marker, failed
+outcome, spent calls and every cumulative charge. Marker presence is not permission
+to remove it or reuse the failed load.
+
+Then independently admit one orderly exit of only that retained, tool-owned host.
+Fresh exact PID/session/creation/nonce/runspace checks and at-most512-assembly
+checks for the two fixed helper Types must again establish that neither helper
+loaded and neither global Type holder exists. Confirm the ledger and admitted
+call history establish no private creation, account/product operation or lease.
+Dispose owned observation handles, permit one fixed natural `exit 0`, and require
+original tool exit0/EOF and absence of its exact owned Linux tuple within35s.
+Reserve one35s/64MiB metadata pass. No kill, exit retry, unrelated-process query,
+marker reset or cleanup fallback is permitted. Missing or late completion stops
+this correction; an earlier diagnostic does not prove current exit readiness.
+
+Only after independent acceptance of that complete exit may one fresh stock host
+be established by the already admitted standard-input method, with its maximum
+two synthetic roles and35s/64MiB metadata allocation precharged. Fresh nonce,
+identity, challenge and ordinary-user/runspace admission remain required. Invoke
+the corrected file-scope loaders only through fresh exact source/input/call gates.
+This is a new correction attempt, not historical continuity or a reset/refund of
+the original. A failure after either helper loaded, a lease failure, private or
+account effects, loss of control, or unobserved exit excludes this exception.
+No further host replacement is admitted automatically. The Wave's existing
+outcome and effects boundaries and real operating-basis gates remain unchanged.
+
 #### Bounded credential-free existing-terminal feasibility checks
 
 The visible ordinary-console route above remains the account flow's accepted host
