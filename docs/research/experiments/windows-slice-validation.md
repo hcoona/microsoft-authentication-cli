@@ -2196,6 +2196,104 @@ If this route requires substantial additional tooling, obtain the owner's concre
 work-size confirmation before implementation rather than extending the check into a
 controller or reconnect framework.
 
+#### Retained standard-input host and Windows-local test configuration
+
+After independent acceptance of the corrected credential-free two-command outcome,
+permit the same stock execution channel as an alternative ordinary host for the native
+account flow. The completed feasibility process remains exited and spent. Establish
+one fresh unloaded PowerShell5.1 x64 process with the same installed executable,
+`-NoProfile -NoLogo -Sta -NoExit -Command -`, owned noncanonical/no-echo Linux PTY and
+public newline-plus-empty-line framing. Reserve its maximum two synthetic roles before
+launch; retain it intentionally through metadata, loads, local inputs and native cases.
+No input/control tool, reconnect service, extra thread/runspace, elevation or desktop
+automation is included. A failed loaded host cannot be replaced to reset its markers.
+
+The two public state challenges and fixed twelve-key metadata establish current
+PID/session/creation time, borrowed runspace reference and unused load state. Exact
+host admission also binds the designated ordinary user and unelevated environment.
+Use a fresh public nonce and retain the probe's constant holder without resetting it.
+Require both challenges and complete metadata/timing transport within the admitted
+establishment/metadata interval; the existing35s/64MiB metadata envelope pays that
+credential-free work. Unlike the spent feasibility check, do not exit this host after
+Challenge. Input redirection proves neither active input desktop nor provider interaction.
+Independently accept actual host/metadata before the unchanged once-only loaders, retaining
+whole-return, exact native-artifact and SAME-Type gates.
+
+Pass the admitted PID, session, creation time and borrowed runspace reference explicitly
+to private creation and the original carrier. Their source checks compare all four to
+the current process/runspace; the original also requires the identical retained global
+cutoff Type. This replaces only its borrowed-console GetConsoleMode precondition.
+No cutoff C# or library is changed, compiled or reloaded. Original180s lease, owned-Job,
+safe-receipt, caller/product/private validation and outcome rules remain unchanged.
+
+Explicit test-account selection does not require live keyboard input. Prefer a designated
+existing Windows-local configuration that preserves the owner-selected Personal/Work
+roles. Never substitute an OS/broker default, infer an account from unrelated settings,
+or enumerate credential stores. The initializer reads only its exact admitted local
+`PrivateConfigPath`; its default is the existing account-v5
+`private\test-accounts.psd1`. No selector, private content/hash or raw parser error is
+sent through Linux, command arguments, chat, screenshots or public evidence.
+
+Use installed PowerShell5.1
+[Parser.ParseInput(String, Token[], ParseError[])](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.language.parser.parseinput?view=powershellsdk-1.1.0)
+on the already read buffer, followed by the hashtable's `SafeGetValue()`, as used by
+the installed5.1 data-file importer. Do not execute expressions or reread the pathname
+through the importer. The at-most4096B data file uses strict UTF-8 with an optional
+UTF-8 BOM and contains only one hashtable with constant-string keys and values.
+Reject parse errors, other statements/blocks, commands, redirections and nonconstant
+values before safe extraction. Allowed keys are `PersonalAccountEmail`,
+`WorkAccountEmail` and optional `WorkTenant`. Require the current role's explicit email;
+missing/empty/malformed selection stops instead of prompting or falling back. Work tenant
+absent, empty or exactly `common` uses the accepted common policy; otherwise require the
+existing canonical nonempty GUID. Retain320/36-character, whitespace/control, email and
+GUID checks and the unchanged two-template selection/equality validation.
+
+Keep a deny-write/delete FileStream, no-reparse ancestry and an exact native helper Pin
+through the operation. The bootstrap content/hash remain only in Windows memory; the
+hash is never an admission record or output. Count complete bootstrap read requests
+and EOF against the same1MiB selected envelope, and check the updated charge before
+each read; native Pin/CheckAll keep their existing strict request/identity/hash/EOF
+checks. Safe extraction parses the charged buffer without additional file reads,
+while the file remains held against modification. No helper C# change or new compilation is required. Clear owned buffers and
+configuration references and dispose the owned streams on every return. Preserve role
+attempt markers, exclusive two-file writes,115s source work,120s original and125s complete
+carrier bounds. No private-input UI or provider operation occurs during configuration
+reading. Failure/partial output/late return stops dependencies without automatic retry.
+
+If the designated configuration is absent, the operator may create that one data file
+once on Windows with the selected role values, using an ordinary local editor. This is
+setup, not attendance at every test. A placeholder example has this shape:
+
+```powershell
+@{
+    PersonalAccountEmail = '<designated-personal-email>'
+    WorkAccountEmail = '<designated-work-email>'
+    WorkTenant = 'common'
+}
+```
+
+Do not fill the example in committed records or Linux files. A separately nominated
+existing `.psd1` may be used only by exact Windows-local path admission; no general search
+or automatic migration of private account state is included. Configuration creation or
+reuse does not establish account presence, consent, Profile eligibility or provider success.
+
+Exclusively stage the amended initializer as
+`control\Initialize-WindowsSelectedAccountPrivateConfig.ps1` and original as
+`control\Invoke-WindowsSelectedAccountOriginalRetained.ps1` under the existing account-v5
+root, with exact length/hash/EOF/native identity evidence. The original checks that exact
+new source path. Preserve accepted copies, private helper DLL, templates, cutoff controller
+and frozen caller inventory. An exact reviewed finite copy/input/call/accounting recipe
+precedes staging; source merge alone admits no copy, host launch, load or private creation.
+The private helper's fixed private destinations and existing selection rules remain.
+
+Complete current real operating-basis and experimental Profile eligibility review before
+private creation or real originals; reuse unchanged historical relevance and preparation
+evidence. Accept actual private whole return, identity/equality and owned closure before
+R1/R7, and primary outcomes before R6/R8. Actual sign-in/MFA/consent readiness is required
+only when the admitted account operation needs it. Provider UI/no-UI, actual direct WSL
+and other required coverage remain separate. This source adaptation supplies no runtime
+success or support claim.
+
 #### One public helper and supplemental Work controls
 
 The existing public materializer supplies the native file methods for the small

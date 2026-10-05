@@ -6,7 +6,12 @@ param(
     [Parameter(Mandatory)][object] $ExpectedPrimaryTemplateIdentity,
     [Parameter(Mandatory)][object] $ExpectedReuseTemplateIdentity,
     [Parameter(Mandatory)][bool] $CurrentOperatingBasisAccepted,
-    [Parameter(Mandatory)][bool] $ExperimentalProfileExplicitlySelected
+    [Parameter(Mandatory)][bool] $ExperimentalProfileExplicitlySelected,
+    [Parameter(Mandatory)][int] $ExpectedPid,
+    [Parameter(Mandatory)][int] $ExpectedSession,
+    [Parameter(Mandatory)][long] $ExpectedCreationFileTime,
+    [Parameter(Mandatory)][object] $ExpectedRunspace,
+    [string] $PrivateConfigPath = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5\private\test-accounts.psd1'
 )
 $PrivateCreationAdmitted = $false
 if (-not $PrivateCreationAdmitted) { return }
@@ -24,6 +29,16 @@ $hashes = @{
     R8 = '07d03b9987297875e4cdfc7b7b11d0a70503259faf31624f30232c6815d876d0'
 }
 $pins = $null
+$self = $null
+$configFile = $null
+$config = $null
+$configHash = $null
+$configText = $null
+$configAst = $null
+$configTokens = $null
+$configErrors = $null
+$configTable = $null
+$configReadBytes = 0L
 $buffers = [Collections.Generic.List[byte[]]]::new()
 $documents = @()
 $email = $null
@@ -37,28 +52,15 @@ function Need([bool] $Value) { if (-not $Value) { throw 'Private creation refuse
 function Before {
     Need ($watch.Elapsed.TotalSeconds -lt 115)
     if ($null -ne $script:pins) {
-        Need ($script:pins.requestedReadBytes + $script:pins.writtenBytes -le 1048576)
+        Need ($script:pins.requestedReadBytes + $script:pins.writtenBytes + $script:configReadBytes -le 1048576)
     }
 }
-function Read-LocalValue([string] $Prompt, [int] $Maximum) {
-    [Console]::WriteLine($Prompt)
-    $text = [Text.StringBuilder]::new()
-    try {
-        while ($true) {
-            Before
-            if (-not [Console]::KeyAvailable) { [Threading.Thread]::Sleep(50); continue }
-            $key = [Console]::ReadKey($true)
-            if ($key.Key -eq [ConsoleKey]::Escape) { throw 'Private creation refused.' }
-            if ($key.Key -eq [ConsoleKey]::Enter) { return $text.ToString() }
-            if ($key.Key -eq [ConsoleKey]::Backspace) {
-                if ($text.Length -gt 0) { $text.Length-- }
-                continue
-            }
-            Need (-not [char]::IsControl($key.KeyChar) -and
-                -not [char]::IsWhiteSpace($key.KeyChar) -and $text.Length -lt $Maximum)
-            $null = $text.Append($key.KeyChar)
-        }
-    } finally { $null = $text.Clear() }
+function Local-Value([object] $Value, [int] $Maximum) {
+    Need ($Value -is [string] -and $Value.Length -le $Maximum)
+    foreach ($character in $Value.ToCharArray()) {
+        Need (-not [char]::IsControl($character) -and -not [char]::IsWhiteSpace($character))
+    }
+    return $Value
 }
 function Match-Identity([object] $Expected, [object] $Actual) {
     $fields = @('volume', 'index', 'attributes', 'created', 'modified', 'links', 'length', 'changed')
@@ -74,15 +76,88 @@ try {
     Before
     Need ($CurrentOperatingBasisAccepted -and $ExperimentalProfileExplicitlySelected -and
         $PrivatePinsType.FullName -ceq 'SelectedAccountPrivateInputPins' -and
+        [object]::ReferenceEquals($global:AzureAuth108PrivatePinsType, $PrivatePinsType) -and
         -not $PrivatePinsType.Assembly.IsDynamic -and [Environment]::UserInteractive -and
         [Environment]::Is64BitProcess -and $Host.Name -ceq 'ConsoleHost' -and
         $PSVersionTable.PSEdition -ceq 'Desktop' -and
         $PSVersionTable.PSVersion.Major -eq 5 -and $PSVersionTable.PSVersion.Minor -eq 1)
+    Need ([Threading.Thread]::CurrentThread.GetApartmentState() -eq [Threading.ApartmentState]::STA -and
+        $PID -eq $ExpectedPid -and [object]::ReferenceEquals($ExpectedRunspace,
+            [System.Management.Automation.Runspaces.Runspace]::DefaultRunspace))
+    $self = [Diagnostics.Process]::GetCurrentProcess()
+    Need ($self.Id -eq $ExpectedPid -and $self.SessionId -eq $ExpectedSession -and
+        $self.StartTime.ToUniversalTime().ToFileTimeUtc() -eq $ExpectedCreationFileTime)
     $marker = 'AzureAuth108PrivateCreation' + $AccountRole + 'Attempted'
     Need ($null -eq (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue))
     New-Variable -Name $marker -Scope Global -Option Constant -Value $true
     $pins = [Activator]::CreateInstance($PrivatePinsType, [object[]] @([Action] { Before }))
     $pins.HoldDirectory($root + '\private')
+    # Read only the explicit Windows-local test configuration; never choose an ambient account.
+    Need ($PrivateConfigPath -cmatch '\A[A-Z]:\\' -and
+        [IO.Path]::GetFullPath($PrivateConfigPath) -ceq $PrivateConfigPath -and
+        [IO.Path]::GetExtension($PrivateConfigPath) -ceq '.psd1')
+    for ($current = $PrivateConfigPath; $null -ne $current; $current = [IO.Path]::GetDirectoryName($current)) {
+        Before
+        Need (([IO.File]::GetAttributes($current) -band [IO.FileAttributes]::ReparsePoint) -eq 0)
+    }
+    $configFile = [IO.File]::Open($PrivateConfigPath, [IO.FileMode]::Open,
+        [IO.FileAccess]::Read, [IO.FileShare]::Read)
+    Need ($configFile.Length -gt 0 -and $configFile.Length -le 4096)
+    $configBytes = [byte[]]::new([int]$configFile.Length); $buffers.Add($configBytes)
+    $offset = 0
+    while ($offset -lt $configBytes.Length) {
+        Before
+        $configReadBytes += $configBytes.Length - $offset
+        Before
+        $count = $configFile.Read($configBytes, $offset, $configBytes.Length - $offset)
+        Need ($count -gt 0); $offset += $count
+    }
+    $configReadBytes++; Before
+    Need ($configFile.ReadByte() -eq -1)
+    $hash = [Security.Cryptography.SHA256]::Create()
+    try { $configHash = [BitConverter]::ToString($hash.ComputeHash($configBytes)).Replace('-', '').ToLowerInvariant() }
+    finally { $hash.Dispose() }
+    # The hash and selected contents remain in Windows memory. Native Pin retains exact input correspondence.
+    $null = $pins.Pin($PrivateConfigPath, $configBytes.Length, $configHash)
+    # Parse the already charged buffer; no second pathname read or expression execution.
+    $utf8 = [Text.UTF8Encoding]::new($false, $true)
+    $configText = $utf8.GetString($configBytes)
+    if ($configText.Length -gt 0 -and $configText[0] -eq [char]0xfeff) {
+        $configText = $configText.Substring(1)
+    }
+    Before
+    $configAst = [System.Management.Automation.Language.Parser]::ParseInput(
+        $configText, [ref]$configTokens, [ref]$configErrors)
+    Need ($configErrors.Count -eq 0 -and $null -eq $configAst.ParamBlock -and
+        $null -eq $configAst.DynamicParamBlock -and $null -eq $configAst.BeginBlock -and
+        $null -eq $configAst.ProcessBlock -and $null -ne $configAst.EndBlock -and
+        ($null -eq $configAst.EndBlock.Traps -or $configAst.EndBlock.Traps.Count -eq 0) -and $configAst.EndBlock.Statements.Count -eq 1)
+    $statement = $configAst.EndBlock.Statements[0]
+    Need ($statement -is [System.Management.Automation.Language.PipelineAst] -and
+        $statement.PipelineElements.Count -eq 1)
+    $expression = $statement.PipelineElements[0]
+    Need ($expression -is [System.Management.Automation.Language.CommandExpressionAst] -and
+        $expression.Redirections.Count -eq 0)
+    $configTable = $expression.Expression
+    Need ($configTable -is [System.Management.Automation.Language.HashtableAst] -and
+        $configTable.KeyValuePairs.Count -ge 1 -and $configTable.KeyValuePairs.Count -le 3)
+    foreach ($pair in $configTable.KeyValuePairs) {
+        Need ($pair.Item1 -is [System.Management.Automation.Language.StringConstantExpressionAst] -and
+            ($null -eq $pair.Item2.Traps -or $pair.Item2.Traps.Count -eq 0) -and $pair.Item2.Statements.Count -eq 1)
+        $statement = $pair.Item2.Statements[0]
+        Need ($statement -is [System.Management.Automation.Language.PipelineAst] -and
+            $statement.PipelineElements.Count -eq 1)
+        $expression = $statement.PipelineElements[0]
+        Need ($expression -is [System.Management.Automation.Language.CommandExpressionAst] -and
+            $expression.Redirections.Count -eq 0 -and
+            $expression.Expression -is [System.Management.Automation.Language.StringConstantExpressionAst])
+    }
+    $config = $configTable.SafeGetValue()
+    Before
+    Need ($config -is [Collections.Hashtable] -and $config.Count -ge 1 -and $config.Count -le 3)
+    foreach ($key in $config.Keys) {
+        Need ($key -cin @('PersonalAccountEmail', 'WorkAccountEmail', 'WorkTenant'))
+    }
     $utf8 = [Text.UTF8Encoding]::new($false, $true)
     $expected = @($ExpectedPrimaryTemplateIdentity, $ExpectedReuseTemplateIdentity)
     $groups = @($primary, $reuse)
@@ -99,12 +174,15 @@ try {
             $doc.requests[0].profilePath -ceq ($root + '\product\selected-account-profile.json'))
         $documents += $doc
     }
-    $email = Read-LocalValue 'Enter the designated account email locally; input is hidden. Enter submits; Esc stops.' 320
+    $emailKey = if ($AccountRole -ceq 'Personal') { 'PersonalAccountEmail' } else { 'WorkAccountEmail' }
+    Need ($config.ContainsKey($emailKey))
+    $email = Local-Value $config[$emailKey] 320
     Need ($email.Length -ge 3 -and $email.IndexOf('@') -gt 0 -and
         $email.IndexOf('@') -eq $email.LastIndexOf('@') -and -not $email.EndsWith('@'))
     $tenant = 'common'
     if ($AccountRole -ceq 'Work') {
-        $choice = Read-LocalValue 'For the work resource tenant, Enter selects common; otherwise enter its canonical GUID locally.' 36
+        $choice = if ($config.ContainsKey('WorkTenant')) { Local-Value $config.WorkTenant 36 } else { '' }
+        if ($choice -ceq 'common') { $choice = '' }
         if ($choice.Length -gt 0) {
             Need ($choice -cmatch '\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z' -and
                 [Guid]::ParseExact($choice, 'D') -ne [Guid]::Empty)
@@ -141,6 +219,11 @@ try {
     # Suppress contents, hashes, selectors, tenant IDs, provider text and exception details.
 } finally {
     if ($null -ne $pins) { try { $pins.Dispose() } catch { $closed = $false } }
+    if ($null -ne $configFile) { try { $configFile.Dispose() } catch { $closed = $false } }
+    if ($null -ne $self) { try { $self.Dispose() } catch { $closed = $false } }
+    $config = $null; $configHash = $null; $configText = $null
+    $configAst = $null; $configTokens = $null; $configErrors = $null; $configTable = $null
+    $statement = $null; $expression = $null; $pair = $null
     foreach ($buffer in $buffers) { [Array]::Clear($buffer, 0, $buffer.Length) }
     $documents = @(); $email = $null; $tenant = $null
     $passed = $passed -and $closed -and $watch.Elapsed.TotalSeconds -lt 120
