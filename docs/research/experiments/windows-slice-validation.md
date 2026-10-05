@@ -2121,8 +2121,10 @@ has the stricter1MiB combined request/write envelope below. Preserve the accepte
 fresh-output prospective sealing qualification, all observed change times and strict
 subsequent held/named checks; never refresh an occupied private input baseline.
 
-Use the [public preparation adapter](../../../tools/validation/Initialize-WindowsSelectedAccountPrivatePublic.ps1)
-once through unchanged normal0070 in fresh `named-fixtures-0214`. Its only activation
+The original `0214` recipe used the
+[public preparation adapter](../../../tools/validation/Initialize-WindowsSelectedAccountPrivatePublic.ps1)
+once through unchanged normal0070 in fresh `named-fixtures-0214`. The current
+adapter implements the fresh-stage artifact-reuse correction below. Its only activation
 is its false guard. Bind the accepted helper, private initializer, private loader,
 timing carrier and R7/R8 null-email templates plus the strict public authority.
 That authority binds accepted target/Wave/safety/protocol/source reviews and exact
@@ -2240,6 +2242,56 @@ parsing, Root's before bracket and the sole original in one uninterrupted
 not a hard scheduling guarantee. Preserve the original E0, three-second producer
 readiness, eight-second client entry, twelve-second admission and every outer
 deadline. A late entry still refuses; never recapture an epoch or replay a call.
+
+##### Fresh-stage correction with the accepted compiled helper
+
+After the accepted `0214` native failure and scoped root/Job/twoEOF/Linux completion,
+use one fresh `named-fixtures-0215` preparation with a fresh nonce and execution,
+transport, receipt, journal and capture outputs. Correct only the three computed
+cutoff-row path expressions by grouping each concatenation before the comma-separated
+row. Preserve all four roles, paths, lengths, hashes, ordering and strict eight-field
+cutoff input comparisons. A strict refusal stops the batch; no baseline renewal follows.
+
+Reuse the accepted partial compiler/source/public-image outcome for the unchanged
+24977B helper source, SHA256
+`6fab7560138e865afa0d2423f6b07f7eb36d745d117de5adaded6135e08afd3b`.
+The sole historical DLL input is the retained `0214\SelectedAccountPrivateInputPins.dll`,
+15872B/SHA256 `d70765f1608c6d2c92e5d4fcee2f903fa8c75bebc48dfa7e31a6e9dcebff1f62`.
+The exact authority binds the accepted partial-compiler outcome and this fixed input.
+Its old path and outputs remain historical inputs, never fresh outputs or repaired state.
+
+Add that one DLL to the existing finite public preflight. Check exact current
+bytes/hash/EOF, nofollow held/named Linux identities and ancestry; retain the new
+descriptor in the same preflight result. In the contained Windows controller, read
+the same exact DLL with no-reparse ancestry and a retained read-only FileStream that
+denies write/delete sharing. Load only the checked in-memory image as a public bootstrap;
+construct the unchanged helper and immediately Pin that historical DLL with its native
+hash/EOF/held/named eight-field checks. This establishes its first current native
+descriptor, not a historical native-identity baseline. Retain it through CheckAll and
+disposal. Independently accept this bootstrap/native correspondence in the batch outcome
+before later helper use; it supplies no ordinary-host, persistent-Type or private admission.
+
+Before target mutation, recheck the accepted qualified account-root anchor and all four
+strict cutoff inputs. Then exclusively create the empty private directory and the same
+six supplemental controls. The DLL copy donor is the historical `0214` input; the other
+five donors are the fresh `0215` transfer. Preserve the unchanged native Copy method and
+output sealing. Do not compile, write generated/mirror libraries, invoke WritePrivate,
+load cutoff/private controls, create a lease, access accounts or survey unrelated state.
+
+Use the same six-phase methods, full `700s/156270592B` reservation and per-phase bounds
+above, with 25 fixed preflight rows instead of 24. Fully precharge `0/1/0/4` for the
+public verification build/test and conservative launcher-role envelope; the compile
+counter is unchanged. Preserve all failed consumption, typed primitive/history/pending
+fields and uncertainties. No compiler role or compiler success is claimed for this batch.
+The original 400s Windows/330+10s/GNU365+5s ownership and stop bounds remain unchanged;
+the existing 96MiB allocation is conservative, with no new compiler work. Keep the
+continuous producer/readiness/Root-before/sole-original orchestration described above.
+
+One consolidated source/protocol review and required checks precede merge; one current
+exact input/source/activation/accounting/call gate precedes the full batch debit. Accept
+the actual historical-DLL correspondence, anchor/four inputs/six copies and scoped
+completion together before ordinary-host/load/private/real-account work. Preserve and
+stop on any partial/occupied output; no automatic second batch or diagnostic is granted.
 
 The [private helper loader](../../../tools/validation/Initialize-WindowsSelectedAccountPrivateLoad.ps1)
 reuses the accepted cutoff-loader methods with a distinct fixed helper path, Type and
