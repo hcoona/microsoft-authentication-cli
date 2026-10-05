@@ -2124,7 +2124,8 @@ subsequent held/named checks; never refresh an occupied private input baseline.
 The original `0214` recipe used the
 [public preparation adapter](../../../tools/validation/Initialize-WindowsSelectedAccountPrivatePublic.ps1)
 once through unchanged normal0070 in fresh `named-fixtures-0214`. The current
-adapter implements the fresh-stage artifact-reuse correction below. Its only activation
+adapter implements the four-input observation and historical qualification below,
+following the accepted fresh-stage artifact-reuse correction. Its only activation
 is its false guard. Bind the accepted helper, private initializer, private loader,
 timing carrier and R7/R8 null-email templates plus the strict public authority.
 That authority binds accepted target/Wave/safety/protocol/source reviews and exact
@@ -2145,9 +2146,10 @@ loading, copying or invoking them: the account-v5 cutoff DLL (10240B), cutoff
 controller (20736B), original carrier (6562B), and the staged0213 loader (5337B).
 Bind their exact hashes and eight-field native identities from the independently
 accepted recovered materialization outcome and snapshot in the ordered four-row
-`cutoffInputs` authority. Compare all eight fields to those baselines and retain
-strict current input checks through final CheckAll; the anchor's historical
-qualification does not relax these four joins. Record accepted/current descriptors
+`cutoffInputs` authority. The original0214 and corrected0215 recipes compare all
+eight historical fields. The current0216 recipe qualifies only their historical
+ChangeTime comparisons as defined below; retain strict current eight-field input
+checks through final CheckAll. Record accepted/current descriptors
 in the supplemental receipt. Later exact host/load/call admission still binds
 these inputs and their current correspondence; this pass grants no future call.
 Reuse the existing default Framework/compiler/reference basis, process-local TEMP/TMP,
@@ -2292,6 +2294,53 @@ exact input/source/activation/accounting/call gate precedes the full batch debit
 the actual historical-DLL correspondence, anchor/four inputs/six copies and scoped
 completion together before ordinary-host/load/private/real-account work. Preserve and
 stop on any partial/occupied output; no automatic second batch or diagnostic is granted.
+
+##### Four-input observation and bounded historical qualification
+
+After independent acceptance of the0215 failure, full consumption, partial DLL/anchor
+correspondence and scoped native/Linux completion, use one fresh `named-fixtures-0216`
+flow. The0215 receipt identifies only `cutoff-inputs`; it exports no failing ordinal,
+predicate or cutoff native tuple. Preserve that unknown. Linux ctime observations,
+the anchor and DLL do not establish another input's native ChangeTime or a cause.
+
+Use the same four fixed ordered cutoff roles, paths, lengths, hashes and original
+accepted native descriptors. Before any target mutation, Pin all four and retain each
+completed current descriptor immediately in the public receipt. An authority-row or
+strict Pin refusal records its ordinal, fixed role and bounded predicate, preserves
+the completed prefix and stops. For Pin or final current-check refusal, retain only
+the helper's existing numeric phase, held ordinal, error kind/code and identity/snapshot
+masks before disposal. Do not export exceptions or raw diagnostic text. Pin failure
+supplies no unobserved descriptor.
+After all four Pins, record the exact historical mismatch-field list for each row,
+then compare every historical field except ChangeTime. Qualify only these four
+historical-to-current ChangeTime comparisons; retain both original and current values.
+Require volume, index, attributes, links, creation time, last-write time and length to
+match their original baselines, and exact accepted hash/length/EOF. A mismatch in any
+of those fields records the ordinal and fields and stops before mutation.
+
+This is a role-specific current-correspondence policy, not a baseline renewal, benign
+cause finding, uninterrupted-history claim or generic identity switch. All fresh
+Pin/read/held/named checks and final CheckAll retain strict eight-field comparison,
+including current ChangeTime. A final current-check refusal is disclosed separately.
+The existing anchor qualification, historical DLL bootstrap/native Pin, unchanged
+native source/Copy/output sealing and all other input predicates remain unchanged.
+
+Only the complete conjunction permits the same six exclusive supplemental copies and
+empty private directory. Use fresh nonce, eight source controls and every execution,
+transport, journal, receipt and capture destination; never adopt or repair0215 outputs.
+No compiler/generated/mirror write, cutoff/private load, selector, lease, account,
+product or broader observer runs. Retain the same six-phase700s/156270592B allocation,
+25-row preflight, full0/1/0/4 verification debit, unchanged compile counter and all
+original clocks/ownership/stop bounds. Observation fields fit the existing32768B
+receipt and1MiB collection limits. Full failed consumption and typed history persist.
+
+One consolidated independent source/protocol review and required checks precede merge.
+One current exact source/input/activation/accounting/call gate precedes this batch's
+full debit. Independently accept the actual four-input descriptors and comparisons,
+six supplemental copies, helper/source/artifact correspondence and native/Linux
+scoped completion before ordinary-host loading. Any partial/occupied output or strict
+refusal stops; no automatic further attempt or diagnostic follows. Existing host,
+SAME-Type, Profile, private, operating-basis, real-account and actual WSL gates remain.
 
 The [private helper loader](../../../tools/validation/Initialize-WindowsSelectedAccountPrivateLoad.ps1)
 reuses the accepted cutoff-loader methods with a distinct fixed helper path, Type and
