@@ -1,4 +1,4 @@
-# Invoke once from the admitted existing Windows PowerShell console.
+# Invoke once from the admitted retained Windows PowerShell process/runspace.
 # Public helper compilation/loading and exact type/assembly admission precede use.
 [CmdletBinding()]
 param(
@@ -7,7 +7,11 @@ param(
     [Parameter(Mandatory)][ValidateRange(1, 4)][int] $Attempt,
     [ValidateSet('Personal', 'Work')][string] $AccountRole = 'Personal',
     [Parameter(Mandatory)][string] $ControllerSha256,
-    [Parameter(Mandatory)][Type] $CutoffType
+    [Parameter(Mandatory)][Type] $CutoffType,
+    [Parameter(Mandatory)][int] $ExpectedPid,
+    [Parameter(Mandatory)][int] $ExpectedSession,
+    [Parameter(Mandatory)][long] $ExpectedCreationFileTime,
+    [Parameter(Mandatory)][object] $ExpectedRunspace
 )
 
 $ExecutionAdmitted = $false
@@ -22,6 +26,7 @@ $primaryGroup = if ($AccountRole -ceq 'Work') { 'R7' } else { 'R1' }
 $reuseGroup = if ($AccountRole -ceq 'Work') { 'R8' } else { 'R6' }
 $frequency = [Diagnostics.Stopwatch]::Frequency
 $lease = $null
+$self = $null
 $invoked = $false
 $returned = $false
 $originalExitCode = 125
@@ -63,10 +68,16 @@ try {
         [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop' -and
         $CutoffType.FullName -ceq 'SelectedAccountControllerCutoff' -and
         -not $CutoffType.Assembly.IsDynamic -and $frequency -gt 0)
-    $consoleMethod = $CutoffType.GetMethod('HasExistingConsoleInput',
-        [Reflection.BindingFlags]'Public, Static')
-    Need ($null -ne $consoleMethod -and [bool] $consoleMethod.Invoke($null, $null))
-    Need ($PSCommandPath -ceq ($root + '\control\Invoke-WindowsSelectedAccountOriginal.ps1') -and
+    Need ([Environment]::UserInteractive -and $Host.Name -ceq 'ConsoleHost' -and
+        $PSVersionTable.PSVersion.Major -eq 5 -and $PSVersionTable.PSVersion.Minor -eq 1 -and
+        [Threading.Thread]::CurrentThread.GetApartmentState() -eq [Threading.ApartmentState]::STA -and
+        $PID -eq $ExpectedPid -and [object]::ReferenceEquals($ExpectedRunspace,
+            [System.Management.Automation.Runspaces.Runspace]::DefaultRunspace) -and
+        [object]::ReferenceEquals($global:AzureAuth108CutoffType, $CutoffType))
+    $self = [Diagnostics.Process]::GetCurrentProcess()
+    Need ($self.Id -eq $ExpectedPid -and $self.SessionId -eq $ExpectedSession -and
+        $self.StartTime.ToUniversalTime().ToFileTimeUtc() -eq $ExpectedCreationFileTime)
+    Need ($PSCommandPath -ceq ($root + '\control\Invoke-WindowsSelectedAccountOriginalRetained.ps1') -and
         $PlanPath -ceq ($root + '\control\' + $accountPrefix + '-plan-' + $Attempt + '.json'))
     $controller = $root + '\control\Invoke-WindowsSelectedAccountCutoff.ps1'
     $null = Read-PinnedPublic $controller 65536 $ControllerSha256
@@ -103,6 +114,7 @@ try {
         try { $null = $lease.Finish($false) } catch { }
         $passed = $false
     }
+    if ($null -ne $self) { try { $self.Dispose() } catch { $passed = $false } }
     foreach ($pin in $pins) { $pin.Dispose() }
     if ($e0 -gt 0 -and $receipt) {
         try {
