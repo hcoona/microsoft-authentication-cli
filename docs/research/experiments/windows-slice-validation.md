@@ -2308,6 +2308,36 @@ attempt markers, exclusive two-file writes,115s source work,120s original and125
 carrier bounds. No private-input UI or provider operation occurs during configuration
 reading. Failure/partial output/late return stops dependencies without automatic retry.
 
+Validate each `HashtableAst.KeyValuePairs` value directly as its `PipelineAst`
+statement, with exactly one `CommandExpressionAst` element, no redirections and
+one `StringConstantExpressionAst` expression. The PowerShell5.1
+[API contract](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.language.hashtableast.keyvaluepairs?view=powershellsdk-1.1.0)
+uses `Tuple<ExpressionAst, StatementAst>`; do not access statement-block
+`Traps` or `Statements` members on that value. Retain the unchanged constant-key,
+allowed-key and same-buffer `SafeGetValue` restrictions.
+
+After independently accepted failed private creation and scoped completion, a
+supported source correction may use `CreationAttempt=2` once for that role.
+Attempt1 retains its original constant marker. Attempt2 requires that original
+marker and creates the distinct constant marker with suffix `Correction1`;
+never remove/reset either marker, reuse a spent slot or replace the loaded host.
+The exact source/input/call and accounting gate must explicitly bind the attempt.
+A diagnostic does not spend a creation slot or authorize its reuse. Both attempts
+keep the same exclusive private destinations; an occupied or partial output
+remains occupied and causes refusal without overwrite, cleanup or adoption.
+A failed corrected call stops further creation under this recipe.
+
+Stage the corrected initializer as the new
+`control\Initialize-WindowsSelectedAccountPrivateConfigAst.ps1` leaf with exact
+source/guard projection, hash/EOF/native identity and owned closure acceptance.
+Preserve the earlier staged initializer, failed invocation, charged allocations
+and uncertainty. Reuse the existing helper Types, cutoff/original scripts,
+templates, Profile, local configuration and accepted unchanged preparation.
+This source/corrected-marker supplement supplies no runtime cause, private-file
+success, real-account admission or actual WSL evidence. It adds no account,
+provider, lease, compilation, new host or broader effects.
+
+
 If the designated configuration is absent, the operator may create that one data file
 once on Windows with the selected role values, using an ordinary local editor. This is
 setup, not attendance at every test. A placeholder example has this shape:

@@ -11,6 +11,7 @@ param(
     [Parameter(Mandatory)][int] $ExpectedSession,
     [Parameter(Mandatory)][long] $ExpectedCreationFileTime,
     [Parameter(Mandatory)][object] $ExpectedRunspace,
+    [ValidateRange(1, 2)][int] $CreationAttempt = 1,
     [string] $PrivateConfigPath = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5\private\test-accounts.psd1'
 )
 $PrivateCreationAdmitted = $false
@@ -88,6 +89,11 @@ try {
     Need ($self.Id -eq $ExpectedPid -and $self.SessionId -eq $ExpectedSession -and
         $self.StartTime.ToUniversalTime().ToFileTimeUtc() -eq $ExpectedCreationFileTime)
     $marker = 'AzureAuth108PrivateCreation' + $AccountRole + 'Attempted'
+    if ($CreationAttempt -eq 2) {
+        # A corrected call preserves the original constant marker and gets one distinct slot.
+        Need ($null -ne (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue))
+        $marker += 'Correction1'
+    }
     Need ($null -eq (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue))
     New-Variable -Name $marker -Scope Global -Option Constant -Value $true
     $pins = [Activator]::CreateInstance($PrivatePinsType, [object[]] @([Action] { Before }))
@@ -142,9 +148,10 @@ try {
     Need ($configTable -is [System.Management.Automation.Language.HashtableAst] -and
         $configTable.KeyValuePairs.Count -ge 1 -and $configTable.KeyValuePairs.Count -le 3)
     foreach ($pair in $configTable.KeyValuePairs) {
+        # HashtableAst stores each value as a statement, not a statement block.
         Need ($pair.Item1 -is [System.Management.Automation.Language.StringConstantExpressionAst] -and
-            ($null -eq $pair.Item2.Traps -or $pair.Item2.Traps.Count -eq 0) -and $pair.Item2.Statements.Count -eq 1)
-        $statement = $pair.Item2.Statements[0]
+            $pair.Item2 -is [System.Management.Automation.Language.PipelineAst])
+        $statement = $pair.Item2
         Need ($statement -is [System.Management.Automation.Language.PipelineAst] -and
             $statement.PipelineElements.Count -eq 1)
         $expression = $statement.PipelineElements[0]
