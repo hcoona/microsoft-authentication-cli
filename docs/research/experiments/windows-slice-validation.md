@@ -671,7 +671,8 @@ impersonation, or the retired elevated WSL relay. The outer host is the existing
 ordinary Windows console in that interactive session. Detached or background outer
 PowerShell is excluded. The existing shell invokes the outer mode of the same script;
 that mode creates one new PowerShell controller with ordinary console inheritance.
-Do not create another outer shell, console or console host. Exact environment/call
+Select the initial outer host under the completed native preparation recipe below.
+After its admission, do not create another outer shell, console or console host. Exact environment/call
 admission must bind this existing-console
 premise, the outer environment and the native caller's constructed current-user
 environment. Preserve ordinary console inheritance and existing strict Job counts;
@@ -2042,6 +2043,234 @@ rules below to every work original. Current controller/source/input/call review
 and independent outcome acceptance remain necessary before each dependent case.
 This supplement supplies no runtime result or whole-Slice acceptance.
 
+### Complete native account preparation and operator handoff
+
+This recipe closes the current host, whole-return timing and role-local private-input
+prerequisites for R1/R6 and R7/R8. It does not execute those cases, activate/distribute
+an external Profile, or satisfy actual direct WSL coverage. Reuse accepted account-v5
+materialization, cutoff compilation, recovered public controls, original caller/product
+provenance and current-kernel relevance. Do not repeat those accepted preparations.
+All guards remain false in the canonical sources. Exact source/runtime/input/call,
+accounting and independent actual outcome gates remain at the named dependencies below.
+
+#### Initial ordinary host and whole original return
+
+Select one designated-user ordinary unelevated interactive Windows PowerShell5.1 x64
+ConsoleHost process launched with `-NoProfile`, without remoting, impersonation or an
+alternate user. If an eligible unloaded existing window remains, reuse it. If none
+remains, permit one initially selected new outer PowerShell and at most one associated
+ordinary console host, before any actual host admission, assembly loading, private
+creation or account original. Independently admit the exact establishment method,
+ordinary installed executable/environment basis and intentional host retention; reserve
+its maximum two technical synthetic process roles before establishment. No terminal
+application, background shell, extra runspace, elevated entry or persistent host-setting
+change is included. A method needing additional roles stops for an internally reviewed
+in-boundary correction, not an inferred owner renewal. Establishment is not continuity
+with an exited historical host. Its public record reports only the admitted roles,
+ordinary environment/sole establishment attestation and subsequent exact host identity.
+The operator must observe the selected prompt within30s; absent/late establishment stops
+loading. Keep the one selected console intentionally available for this complete native
+flow. Do not terminate an unrelated console, replace an admitted host or reset a failed
+load/lease to obtain acceptance. No real-stage charge or account operation occurs here.
+
+Retain the current fixed twelve-key metadata recipe and its source/Framework basis.
+The [whole-return carrier](../../../tools/validation/Invoke-WindowsSelectedAccountTimedOperation.ps1)
+accepts only one independently admitted literal operation block and the public operation
+label. For metadata, load and role-local private creation, it captures monotonic ticks
+immediately before that block and immediately after its complete serialized status has
+naturally returned. Keep start/return/frequency as invariant decimal strings; independent
+validation uses lossless integers/Decimal and rejects duplicates/nonfinite values. The
+internal pre-output `elapsedMilliseconds` remains a sample, not whole-return evidence.
+
+The carrier exports the original single-line safe status, then one at-most1024B fixed
+`selected-account-public-original-return-v1` timing frame. Require originalReturned,
+completeStatus and timely alltrue; start>0, return>=start, frequency>0 and strict elapsed
+less than the original30s or120s bound. Metadata status remains at most2048B and exactly
+twelve keys; load/private statuses are at most4096B. Unexpected operation output is
+suppressed and fails the conjunction. No provider/product result or exception text may
+be forwarded. The frame measures the enclosed original, not its own subsequent console
+writes. Operator observation must separately establish complete two-line transport and
+natural carrier return within original bound plus5s, and same prompt/runspace continuity.
+A missing/late/blocked console return fails without killing or resetting the shared host.
+Reserve35s/64MiB for metadata; reserve35s/(4MiB selected+64MiB installed operating basis)
+for each load; reserve125s/(1MiB selected+64MiB installed operating basis) for each private
+creation carrier. The originals keep their30s/120s limits; no deadline is renewed.
+These are source checks/operating allocations, not a physical-I/O census, hard timeout
+or memory quota on the shared interactive shell.
+
+Independently accept actual metadata/host/timing/operator conjunction before either
+load. The existing cutoff loader stays byte-for-byte unchanged. Invoke it once with
+its accepted staged/native descriptor and exact observed PID/session/creation time.
+Retain its constant attempt marker and the same global cutoff Type after any failure.
+The additional private-file helper below has a distinct fixed Type/attempt marker and
+cannot replace that cutoff Type, arm a lease or call a console/account method while
+loading. Independently accept the actual same-host two-library source/artifact/native,
+whole-return/resource and identical-Type conjunction before private input creation.
+
+#### One public helper and supplemental Work controls
+
+The existing public materializer supplies the native file methods for the small
+[private-input helper](../../../tools/validation/SelectedAccountPrivateInputPins.cs).
+The only new private method accepts one fixed R1/R6/R7/R8 path, at most262144B and at
+most1MiB cumulative private payload writes per instance, creates exclusively, flushes,
+performs exact held readbacks and returns only native identity. A content hash used for
+that Windows-local readback never leaves memory or enters a result. It adds no account,
+provider, token, process observer or general transport mechanism. Native read requests
+are strictly bounded to12MiB and public copy writes to4MiB; the selected private call
+has the stricter1MiB combined request/write envelope below. Preserve the accepted
+fresh-output prospective sealing qualification, all observed change times and strict
+subsequent held/named checks; never refresh an occupied private input baseline.
+
+Use the [public preparation adapter](../../../tools/validation/Initialize-WindowsSelectedAccountPrivatePublic.ps1)
+once through unchanged normal0070 in fresh `named-fixtures-0214`. Its only activation
+is its false guard. Bind the accepted helper, private initializer, private loader,
+timing carrier and R7/R8 null-email templates plus the strict public authority.
+That authority binds accepted target/Wave/safety/protocol/source reviews and exact
+controller/source/initializer/loader/carrier descriptors; no account selector is present.
+It also binds the accepted account-v5 anchor and recovered cutoff input native
+descriptors. Before the first target mutation, Pin the existing17534B
+`control\Invoke-WindowsSelectedAccount.ps1`, SHA256
+`38eb5dcc7b8951793cbe5445ca567ab7cf776547c3b99314e7131279095fb583`.
+Reuse the accepted `rootAnchorBytes`, `rootAnchorSha256` and `rootAnchorIdentity`
+join: compare the seven non-ChangeTime historical fields, retain its historical
+ChangeTime and qualify only that comparison. Keep its current eight-field
+hash/EOF/held/named checks and held target/control ancestry through final CheckAll
+and disposal. Record both identities and the qualification in the same receipt.
+This establishes accepted-root correspondence, not a new all200 inventory claim.
+
+In the same contained pass, Pin exactly four existing cutoff inputs, without
+loading, copying or invoking them: the account-v5 cutoff DLL (10240B), cutoff
+controller (20736B), original carrier (6562B), and the staged0213 loader (5337B).
+Bind their exact hashes and eight-field native identities from the independently
+accepted recovered materialization outcome and snapshot in the ordered four-row
+`cutoffInputs` authority. Compare all eight fields to those baselines and retain
+strict current input checks through final CheckAll; the anchor's historical
+qualification does not relax these four joins. Record accepted/current descriptors
+in the supplemental receipt. Later exact host/load/call admission still binds
+these inputs and their current correspondence; this pass grants no future call.
+Reuse the existing default Framework/compiler/reference basis, process-local TEMP/TMP,
+original launch handles, creation-time Job, explicit environments and Linux direct-scope
+ownership route. Compile exactly one library, generated/final each at most1MiB. Load
+only its checked image in that contained public child to perform the fixed public copies;
+never invoke WritePrivate there. No cutoff source/library or frozen200-leaf input changes.
+
+Create the previously absent account-v5 `private` directory exclusively, with no contents.
+Copy exactly six additional control leaves exclusively: the helper DLL, private initializer,
+private loader, timing carrier, R7 template and R8 template. Keep them as a supplemental
+native inventory, not a replacement for the original200 rows. All donor/held/named hashes,
+length/EOF, no-reparse ancestry, native identities and final output sealing remain required.
+Preserve partial/occupied outputs and stop; no repair/adoption or automatic retry follows.
+
+Reserve one build and maximum four existing normal-launcher/compiler synthetic roles.
+The single public Windows pass reserves the whole400s original, including the unchanged
+330+10s Windows stop and GNU365+5s envelope, original E0/Ec/Eb/latest-entry joins and
+Linux direct-scope/deadline conjunction. Source work/checks before90s, native/owned wrapper
+closure before100s, and receipt/original return before110s are successful-path checks;
+they do not bound blocked failure. No new watchdog or deadline restart is introduced.
+
+Reserve96MiB (100663296B) for that Windows pass with disjoint roles:4MiB managed bootstrap
+requests,12MiB native read requests,64MiB ordinary installed Framework/compiler reads/work,
+and16MiB dedicated writes/startup/control work. The last component pays8MiB compiler-temp
+writes excluding the generated/final libraries,1MiB generated library,1MiB final library,
+4MiB native public-copy writes and32768B
+receipt persistence once each (14712832B total). Its remaining2064384B pays1572864B
+explicit launcher/startup/control read requests,65536B launcher journal writes,16384B
+combined captures and409600B completion/control buffer. Exact current source/startup
+descriptors and declared requests must fit these roles before dispatch. Generated/final
+readbacks are in bootstrap requests; native source/copy readbacks and the five input Pins
+are in native requests. The64MiB installed operating component pays no authored payload
+or compiler-temp writes. These allocations are operating assumptions, not an exhaustive
+OS-I/O census or compiler disk quota; contrary compiler extent stops the operating basis.
+
+The complete automatic preparation uses the existing methods and ledger, with six
+needed finite passes. Reserve the full batch before its sole submissions:
+
+| Public helper preparation operation | Maximum passes | Seconds per pass | Bytes per pass |
+| --- | ---: | ---: | ---: |
+| Fixed public input creation | 1 | 30 | 16 MiB |
+| Fixed source/runtime/input preflight | 1 | 30 | 16 MiB |
+| Exclusive fixed-source stage transfer/readback | 1 | 180 | 20 MiB |
+| Owned Windows compilation, input joins and six copies | 1 | 400 | 96 MiB |
+| Fixed preparation receipt/journal/two-capture collection | 1 | 30 | 1 MiB |
+| Exact original own startup witness/events collection | 1 | 30 | 32 KiB |
+
+The six-pass maximum is700s/156270592B. Transfer allows at most1MiB payload,
+16MiB requested reads and4MiB writes, counted disjointly in its20MiB pass. The
+receipt collector reads only this stage's preparation receipt, launcher record
+and two public captures. Exact original scope/ownership collection remains a
+separate32KiB pass; no output retry or diagnostic is allocated here. No historical
+charge is repriced, and timely success does not refund the reserved maximum.
+Independently accept compiler/source/artifact, anchor/four input joins, all six native
+copies, original root/Job/twoEOF and new Linux/GNU scoped completion before helper use.
+No account readiness follows from a provisional receipt.
+
+The [private helper loader](../../../tools/validation/Initialize-WindowsSelectedAccountPrivateLoad.ps1)
+reuses the accepted cutoff-loader methods with a distinct fixed helper path, Type and
+constant global holder/attempt marker. Bind its DLL length/hash/native identity to the
+accepted public preparation outcome, and the same actual host identity used by cutoff
+loading. One Assembly.Load of its checked bytes, at most512 assemblies/512 reads/4MiB,
+25s source work and30s closure/status; no helper constructor or method runs. Retain
+created marker/Type on failure and reject reload/replacement. The whole-return carrier
+and actual combined load outcome are required, not merely a holder's presence.
+
+#### Local inputs, real operating basis and the four originals
+
+Finish public preparation and all source/call review before one coordinated operator
+handoff. List these actual local conditions together: designated ordinary host/user;
+continued same prompt; explicit experimental selection of the named Microsoft-owned
+Profile with its ownership/support limits; intended personal and work roles; work tenant
+choice (`common` or canonical exact resource GUID); any needed sign-in/MFA/user consent;
+and attended no-visible-UI observation for the noninteractive reuse cases. Keep email,
+tenant, tokens and all private content/hashes Windows-local. Do not ask for another risk
+grant for the normal effects already accepted in the Wave.
+
+Before either private creation, independently accept the complete current real operating
+basis: source-qualified relevance of six preserved historical lifetime unknowns, accepted
+current-kernel exclusion of the old trace sessions/buffers, designated current host/session,
+ordinary loaded user/console/environment, Profile experimental eligibility, accepted caller,
+product/library/control/native inputs and the exact private call. Reuse unchanged evidence;
+no date-based clock repeat, host survey, ETW/elevation or historical cleanup is included.
+A still-material concrete unresolved interference risk retains its required disposition.
+Experimental eligibility does not assert activation/distribution or waive the external
+Profile gate's eventual account/host/redirect/consent/audit/branding obligations.
+
+The [role-local initializer](../../../tools/validation/Initialize-WindowsSelectedAccountPrivate.ps1)
+uses the accepted private helper Type and the two exact public template native identities.
+Reserve one creation per role from the declared passive envelope before its sole submission.
+It retains a constant role-specific attempt marker, obtains one locally entered hidden email,
+optionally the work tenant, and sets both same-role templates identically except their group,
+interaction permission and required route. It validates fixed template correspondence,
+selection/equality and the input shape; each generated private document is at most16384B.
+Only two fixed private leaves are created, exclusively, with held readback/final checks.
+There is no account discovery. The native caller retains its strict private-row validation
+as an additional real-invocation gate. Source work/local input is before115s and owned closure
+before120s. Sole-reader ordinary console key polling checks the same deadline; it is not a
+hard interruptibility guarantee. Failure preserves marker/partial files and stops dependent
+work. Export only fixed Booleans, roles/group labels, lengths and eight-field native identities.
+Independently accept whole return, private identity/equality and closure before real plans.
+
+Prepare one exact original at a time: Personal attempt1/R1, its accepted success then
+attempt2/R6; Work attempt1/R7, its accepted success then attempt2/R8. Retain the accepted
+four slots per role and shared real-stage allocation; corrected slots3/4 remain conditional
+on accepted failure/completion and supported correction. Bind every public plan to the
+original194 caller rows, product/companion/Profile rows, private non-content identity,
+current protocol/risk/source/closure acceptance and fresh UUIDv4 nonce. The controller
+sets the native30-minute batch clock at its current original and retains the one180s
+epoch; no real deadline waits for a review or operator. The exact original carrier uses
+the identical retained global cutoff Type. Capture its original return/exit immediately;
+require the existing safe original/outer/controller/native receipts, zero unforced exit,
+owned worker/product/Job closure and both EOFs. Use only a separately reviewed finite
+fixed safe-receipt collection, never product stdout, private files or provider diagnostics.
+Actual independent outcomes gate the dependent reuse calls. Silent primary success leaves
+visible UI/cancellation/denial coverage open; reuse success does not prove locked/expired
+state, concurrency, actual direct WSL or the entire validation table.
+
+This complete conditional recipe adds no actual attempt, charge, successful host/input,
+Profile activation or product result. All accounting remains in the existing lossless ledger;
+future allocations/submissions preserve primitive/provisional/pending/history fields,
+failed charges, six uncertainties and noExperimentLive=false. Reserve concrete finite
+batches only after current exact gates, and stop once each required claim has evidence.
+
 ### Existing-console selected-account cutoff supplement
 
 This supplement implements the existing external180s original-call obligation.
@@ -2314,8 +2543,9 @@ ordinary installed Framework dependency basis before one invocation of the stage
 admitted existing Windows PowerShell5.1 process/runspace. Bind its accepted native
 source descriptor from the materializer's receipt as well as its exact activated bytes. Bind that process's exact
 PID, session and creation time and its ordinary current-user/console/environment
-basis. Do not create a shell, child, console, Job or alternate load context to meet
-this gate or reset a failed lease. No credential-bearing operation occurs here.
+basis. Complete any permitted initial host establishment before actual host admission.
+After admission, do not create a shell, child, console, Job or alternate load context
+to meet this gate or reset a failed lease. No credential-bearing operation occurs here.
 
 Read only the fixed accepted account-v5 `control` library, denying write/delete
 sharing and requiring exact10240B/hash/EOF/no-reparse ancestry. The already accepted
