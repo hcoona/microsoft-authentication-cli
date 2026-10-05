@@ -2107,6 +2107,69 @@ cannot replace that cutoff Type, arm a lease or call a console/account method wh
 loading. Independently accept the actual same-host two-library source/artifact/native,
 whole-return/resource and identical-Type conjunction before private input creation.
 
+#### One credential-free existing-terminal feasibility check
+
+The visible ordinary-console route above remains the account flow's accepted host
+basis. Before adding a console-control tool, permit one credential-free feasibility
+check of the existing execution tool's retained terminal and standard-input channel.
+This exception admits only the check below; it admits no library load, private input,
+account original or replacement of an already loaded host. Reuse the accepted installed
+Windows PowerShell5.1 x64, WSL interoperability and initial-interop console-host basis.
+The product's active interactive Windows user/session requirements remain unchanged.
+
+Use one tool-owned terminal session to launch the installed System32
+`WindowsPowerShell\v1.0\powershell.exe` with `-NoProfile -NoLogo -Sta -NoExit -Command -`.
+The Linux shell is non-login and uses `exec` to replace itself with that invocation;
+do not add another Windows launcher, console, terminal application, remote endpoint,
+user, runspace or service. Keep stderr suppressed. Reserve the maximum two synthetic
+roles (PowerShell and any associated initial-interop console host) and one35s/64MiB
+metadata allocation before the sole launch. No build, download or real-stage charge
+occurs. These are source/ordinary operating allocations, not an OS I/O or memory census.
+
+Bind the exact reviewed
+[public probe](../../../tools/validation/Test-WindowsSelectedAccountTerminal.ps1),
+changing only its false admission guard to true, and one fresh public32-hex nonce in
+an immutable call record. In that same retained tool session, submit the exact checked
+in-memory script once with `Initialize` and once with `Challenge`, using the same nonce.
+Use only public literal commands; no selected Windows file read, keyboard read, assembly
+load, account access, cache operation or private value is included. No global state is
+removed or reset: one constant holder retains the borrowed existing runspace and its
+process identity, nonce and two-step state. Failed initialization or challenge is spent.
+
+Each operation returns one at-most2048B JSON status with the fixed
+`AA108_TERMINAL_PROBE:` prefix and `selected-account-terminal-probe-v1` schema. Allow at
+most8192B combined public frame transport, including line endings and terminal framing.
+Screen only the fixed complete frames; suppress echoed public command text and all
+unexpected output without retaining its content or hash. Preserve integer fields and
+decimal-string creation time, ticks and frequency without binary-float conversion.
+The timestamps surround the probe body and owned-wrapper disposal; they do not measure
+its later serialization, terminal delivery or full process return. The exact call's
+Linux monotonic observations must establish complete original launch-to-shutdown return
+strictly within35s. Both body intervals must be positive-frequency, ordered and below10s;
+the second challenge must start within30s of the first. No wait or retry renews a deadline.
+
+After both complete frames, submit the sole fixed `exit 0` and observe the exact original
+tool session's natural exit/EOF. On a failed check, use only the separately admitted
+fixed `exit 125` for this unloaded, credential-free probe session; observe its actual
+return. Do not terminate or replace another host. Missing/late output, malformed frames,
+lost session control or unobserved closure fails the case and stops dependent work;
+retain its charged outcome and ownership uncertainty without replay, adoption or refund.
+Reuse applicable initial-interop console-host retention limits; do not invent closure of
+that operating role from the terminal exit. The exact current source/call, accounting,
+ownership and stop method must be independently accepted before launch, and the actual
+complete outcome must be independently accepted before a supported next step.
+
+Successful matching positive PID/session/creation time, reference-identical borrowed
+runspace, nonce and ordered1/2 state establish only this two-command public channel.
+`inputRedirected` is an observation, not `GetConsoleMode` or keyboard-read proof. A Linux
+PTY or `ConsoleHost` name does not establish a visible Windows console, active input
+desktop, private-input eligibility, SAME loaded Type, provider UI/no-UI or direct WSL
+product behavior. The account carrier's console guard and hidden local input route remain
+separate prerequisites; never enter selectors in the Linux terminal to bypass them.
+If this route requires substantial additional tooling, obtain the owner's concrete
+work-size confirmation before implementation rather than extending the check into a
+controller or reconnect framework.
+
 #### One public helper and supplemental Work controls
 
 The existing public materializer supplies the native file methods for the small
