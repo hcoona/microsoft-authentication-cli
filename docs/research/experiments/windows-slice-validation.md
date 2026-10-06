@@ -2207,6 +2207,50 @@ separately reviewed supported continuation remains necessary before another host
 helper load, private command or real-account operation. Reuse unchanged accepted
 public-copy evidence with applicable fresh checks instead of copying it again.
 
+#### One continuation after observed loaded-host absence
+
+After independent acceptance of the sole known-process observation and its actual
+query-native/root-Job/two-EOF, scoped Linux and recovered-content conjunction,
+permit one separately reviewed credential-free continuation when that exact old
+host was observed absent or PID-reused. This is distinct from the failed
+unloaded-host exception: the old helpers may have loaded, but accepted call history
+must establish that no helper lease, product/account original or protected broker
+operation began. Preserve failed private-preparation outcomes and any retained
+file extent, all original load markers, consumed calls, clocks and uncertainties.
+Current absence establishes no original exit code, cause, reboot or global closure.
+
+Reuse the already admitted stock standard-input establishment method for one fresh
+ordinary designated-user PowerShell5.1 x64 ConsoleHost, with a fresh nonce and
+owned Windows/Linux tuples. Admit the existing ordinary-user/session/runspace and
+whole-return recipe, exact installed/runtime/source/native public inputs and
+intentional retention before submission. Reserve at most two synthetic process
+roles and one35s/64MiB metadata allocation. No reconnect, new launcher/controller,
+input UI, additional shell/runspace, elevation or persistent setting is included.
+
+For this one credential-free continuation, independently admit establishment and
+the two existing file-scope library loads as one conditional preparation package.
+Fresh exact host/challenge/ordinary-user/runspace and complete metadata/whole-return
+checks must pass before either load; failed prerequisites stop the dependent phase.
+Invoke each unchanged staged loader once through the accepted held-source check,
+with its fresh exact host tuple; reserve one35s/69MiB allocation per load. Keep each
+original below30s and complete transport below35s. Preserve each fixed marker and
+identical global Type after success or failure; invoke no private-input, account,
+console-lease or product method during this package. Never repair an occupied file,
+clear a failed marker or reset a lease. No new library, compiler or public copy is
+required solely because the old process ended.
+
+One independent actual package review must accept the complete establishment,
+current operating/source/native basis, actual conditional phase order, whole-return,
+owned-handle closure, identical retained Types and observed host retention before
+private preparation or real-account admission. This specific combined review
+supplies the metadata-before-load and two-load actual gates for the package; it
+waives no source gate or sensitive-effects prerequisite. Reuse unchanged evidence
+with applicable fresh checks. A lost owner, late/failed load or unknown lifetime
+stops dependents; no second host or replacement follows automatically. Existing
+private-role, Profile, real operating-basis, interaction and WSL gates remain.
+The standing Wave outcome/effects boundary and remaining shared capacity govern;
+this known-absence credential-free correction adds no owner risk exception.
+
 #### Bounded credential-free existing-terminal feasibility checks
 
 The visible ordinary-console route above remains the account flow's accepted host
