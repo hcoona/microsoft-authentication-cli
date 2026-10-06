@@ -2338,6 +2338,60 @@ success, real-account admission or actual WSL evidence. It adds no account,
 provider, lease, compilation, new host or broader effects.
 
 
+##### Public-template historical ChangeTime correspondence
+
+For private creation, qualify only the historical-to-current `changed` comparison
+of the four fixed public null-email templates, `control\R1.template.json`,
+`control\R6.template.json`, `control\R7.template.json` and
+`control\R8.template.json`. Keep their original accepted historical descriptors;
+require exact volume, index, attributes, creation time, last-write time, link count
+and length agreement, plus each accepted content hash and EOF. This is a
+public-template role policy, not a generic identity switch. It does not apply to
+configuration, private inputs, executable artifacts or arbitrary paths.
+
+Before reading each template for selection or writing a private document, retain
+its historical and current eight-field identities and exact mismatch-field list
+in `templateRows` of the safe `selected-account-private-creation-v2` result.
+Serialize public identity fields as invariant decimal strings. A required-field
+mismatch records that row and stops before private writes; only a `changed`
+difference is qualified. Native Pin, ReadControl and final CheckAll retain strict
+current eight-field held/named identity checks, exact length/hash/EOF and no-reparse
+ancestry. No historical baseline is replaced or refreshed. Preserve failures,
+markers, original descriptors and charges; do not infer a benign metadata cause
+or uninterrupted integrity from content agreement.
+
+An independently accepted bounded observation can establish current R1/R6
+seven-field agreement and ChangeTime-only deltas. That evidence is not original
+private-creation causality, historical eight-field agreement, Work-template
+success or private-input eligibility. The policy applies prospectively to the
+same four fixed template roles; every Work call still requires its own exact
+original descriptors and actual seven-field/content/current-check conjunction.
+Never claim unobserved R7/R8 agreement from the Personal observation.
+
+After independent acceptance of the failed Personal attempt2, its scoped
+completion and the public-template observation, permit one Personal
+`CreationAttempt=3` using this supported source/protocol correction. Require both
+original and `Correction1` constant markers, and create the distinct constant
+marker with suffix `Correction2`. This single slot does not apply to Work;
+Work remains at its unsubmitted attempt1. Do not reset a marker, replace/reload
+the retained host, or reuse either spent creation slot. The exact combined
+source/input/call/accounting gate binds Personal3 and Work1 and stops before Work
+if Personal fails. A failed Personal3 stops further creation under this recipe.
+
+Stage the amended initializer exclusively as the new
+`control\Initialize-WindowsSelectedAccountPrivateTemplateHistory.ps1` leaf.
+Keep earlier initializer copies and both failure records. Exact source/guard
+projection, length/hash/EOF/native identity and owned copy closure acceptance
+precede creation. Require the new schema's complete public-template rows,
+private equality/identity, natural timely return and owned closure acceptance
+before any real original. Keep the same Windows-local configuration, fixed
+exclusive private destinations, helper Types, cutoff/original carrier, Profile,
+115s source/120s original/125s whole limits, and shared finite accounting. An
+occupied or partial private output remains occupied and refuses CREATE_NEW;
+no inspection, repair, overwrite, cleanup or adoption is added. This amendment
+adds no account/provider/product/lease operation or actual WSL evidence.
+
+
 If the designated configuration is absent, the operator may create that one data file
 once on Windows with the selected role values, using an ordinary local editor. This is
 setup, not attendance at every test. A placeholder example has this shape:

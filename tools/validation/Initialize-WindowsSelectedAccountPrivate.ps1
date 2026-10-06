@@ -11,7 +11,7 @@ param(
     [Parameter(Mandatory)][int] $ExpectedSession,
     [Parameter(Mandatory)][long] $ExpectedCreationFileTime,
     [Parameter(Mandatory)][object] $ExpectedRunspace,
-    [ValidateRange(1, 2)][int] $CreationAttempt = 1,
+    [ValidateRange(1, 3)][int] $CreationAttempt = 1,
     [string] $PrivateConfigPath = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5\private\test-accounts.psd1'
 )
 $PrivateCreationAdmitted = $false
@@ -49,6 +49,7 @@ $closed = $true
 $equal = $false
 $validated = $false
 $rows = @()
+$templateRows = @()
 function Need([bool] $Value) { if (-not $Value) { throw 'Private creation refused.' } }
 function Before {
     Need ($watch.Elapsed.TotalSeconds -lt 115)
@@ -63,16 +64,26 @@ function Local-Value([object] $Value, [int] $Maximum) {
     }
     return $Value
 }
-function Match-Identity([object] $Expected, [object] $Actual) {
+function Match-TemplateIdentity([string] $Group, [object] $Expected, [object] $Actual) {
     $fields = @('volume', 'index', 'attributes', 'created', 'modified', 'links', 'length', 'changed')
     Need (@($Expected.PSObject.Properties).Count -eq 8)
+    $historical = [ordered]@{}; $current = [ordered]@{}; $mismatches = @()
     foreach ($name in $fields) {
         $a = $Expected.$name; $b = $Actual.$name
         Need (($a -is [int] -or $a -is [long] -or $a -is [uint] -or
             $a -is [ulong] -or $a -is [decimal]) -and
-            [decimal]$a -eq [decimal]::Truncate([decimal]$a) -and [decimal]$a -eq [decimal]$b)
+            [decimal]$a -eq [decimal]::Truncate([decimal]$a))
+        $historical[$name] = ([decimal]$a).ToString([Globalization.CultureInfo]::InvariantCulture)
+        $current[$name] = $b.ToString([Globalization.CultureInfo]::InvariantCulture)
+        if ([decimal]$a -ne [decimal]$b) { $mismatches += $name }
     }
+    # Only this public-template historical comparison qualifies ChangeTime.
+    # Native Pin, ReadControl and CheckAll keep strict current eight-field checks.
+    $script:templateRows += [pscustomobject]@{ group = $Group; historicalIdentity = $historical;
+        currentIdentity = $current; mismatchFields = @($mismatches); historicalChangeTimeQualified = $true }
+    Need (@($mismatches | Where-Object { $_ -cne 'changed' }).Count -eq 0)
 }
+
 try {
     Before
     Need ($CurrentOperatingBasisAccepted -and $ExperimentalProfileExplicitlySelected -and
@@ -93,6 +104,12 @@ try {
         # A corrected call preserves the original constant marker and gets one distinct slot.
         Need ($null -ne (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue))
         $marker += 'Correction1'
+    } elseif ($CreationAttempt -eq 3) {
+        # One Personal template-history correction preserves both spent markers.
+        Need ($AccountRole -ceq 'Personal' -and
+            $null -ne (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue) -and
+            $null -ne (Get-Variable -Name ($marker + 'Correction1') -Scope Global -ErrorAction SilentlyContinue))
+        $marker += 'Correction2'
     }
     Need ($null -eq (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue))
     New-Variable -Name $marker -Scope Global -Option Constant -Value $true
@@ -172,7 +189,7 @@ try {
         $group = $groups[$i]
         $length = if ($i -eq 0) { 746 } else { 751 }
         $held = $pins.Pin($root + '\control\' + $group + '.template.json', $length, $hashes[$group])
-        Match-Identity $expected[$i] $held.identity
+        Match-TemplateIdentity $group $expected[$i] $held.identity
         $bytes = $pins.ReadControl($held, 1024); $buffers.Add($bytes)
         $doc = $utf8.GetString($bytes) | ConvertFrom-Json
         Need ($doc.schema -ceq 'confidential-native-private-requests-v1' -and
@@ -237,8 +254,8 @@ try {
 }
 # Only complete timely natural return and independent outcome acceptance admit these identities.
 [pscustomobject]@{
-    schema = 'selected-account-private-creation-v1'; role = $AccountRole; passed = $passed
+    schema = 'selected-account-private-creation-v2'; role = $AccountRole; passed = $passed
     privateRowsValidated = $validated; sharedSelectionEqual = $equal; allHandlesClosed = $closed
-    rows = $rows; accountAccess = $false; productStarted = $false
+    rows = $rows; templateRows = $templateRows; accountAccess = $false; productStarted = $false
     elapsedMilliseconds = $watch.ElapsedMilliseconds
 } | ConvertTo-Json -Depth 5 -Compress
