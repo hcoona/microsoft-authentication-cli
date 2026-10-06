@@ -12,6 +12,7 @@ param(
     [Parameter(Mandatory)][long] $ExpectedCreationFileTime,
     [Parameter(Mandatory)][object] $ExpectedRunspace,
     [ValidateRange(1, 3)][int] $CreationAttempt = 1,
+    [switch] $ContinueAfterObservedAbsence,
     [string] $PrivateConfigPath = 'C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5\private\test-accounts.psd1'
 )
 $PrivateCreationAdmitted = $false
@@ -100,16 +101,24 @@ try {
     Need ($self.Id -eq $ExpectedPid -and $self.SessionId -eq $ExpectedSession -and
         $self.StartTime.ToUniversalTime().ToFileTimeUtc() -eq $ExpectedCreationFileTime)
     $marker = 'AzureAuth108PrivateCreation' + $AccountRole + 'Attempted'
+    Need (-not $ContinueAfterObservedAbsence -or ($AccountRole -ceq 'Personal' -and $CreationAttempt -eq 3))
     if ($CreationAttempt -eq 2) {
         # A corrected call preserves the original constant marker and gets one distinct slot.
         Need ($null -ne (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue))
         $marker += 'Correction1'
     } elseif ($CreationAttempt -eq 3) {
-        # One Personal template-history correction preserves both spent markers.
-        Need ($AccountRole -ceq 'Personal' -and
-            $null -ne (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue) -and
-            $null -ne (Get-Variable -Name ($marker + 'Correction1') -Scope Global -ErrorAction SilentlyContinue))
-        $marker += 'Correction2'
+        Need ($AccountRole -ceq 'Personal')
+        if ($ContinueAfterObservedAbsence) {
+            # The reviewed call preserves spent attempts in retained evidence, not reconstructed variables.
+            Need ($null -eq (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue) -and
+                $null -eq (Get-Variable -Name ($marker + 'Correction1') -Scope Global -ErrorAction SilentlyContinue))
+            $marker += 'Correction2AfterObservedAbsence'
+        } else {
+            # One Personal template-history correction preserves both spent markers in this runspace.
+            Need ($null -ne (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue) -and
+                $null -ne (Get-Variable -Name ($marker + 'Correction1') -Scope Global -ErrorAction SilentlyContinue))
+            $marker += 'Correction2'
+        }
     }
     Need ($null -eq (Get-Variable -Name $marker -Scope Global -ErrorAction SilentlyContinue))
     New-Variable -Name $marker -Scope Global -Option Constant -Value $true
