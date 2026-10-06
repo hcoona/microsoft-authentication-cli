@@ -33,14 +33,30 @@ $closed = $false
 $receiptRoot = $null
 $pins = [Collections.Generic.List[IDisposable]]::new()
 $status = [ordered]@{
-    schema = 'selected-account-controller-v1'; attempt = $Attempt
+    schema = 'selected-account-controller-v2'; attempt = $Attempt
     passed = $false; supervisorExited = $false; supervisorExitCode = -1
     streamsClosed = $false; stopAttempted = $false; ownedClosure = $false
     noExperimentLive = $false; failure = 'admission'
+    supervisorStatusDisposition = 'unavailable'; supervisorStatus = $null
 }
 
 function Need([bool] $Condition) {
     if (-not $Condition) { throw 'Selected-account admission refused.' }
+}
+
+function Read-SupervisorStatus([byte[]] $Bytes, [int] $Length, [int] $ExitCode) {
+    Need ($Length -eq 16 -and $Bytes.Length -ge $Length -and [BitConverter]::IsLittleEndian -and
+        $Bytes[0] -eq 78 -and $Bytes[1] -eq 65 -and $Bytes[2] -eq 83 -and $Bytes[3] -eq 49)
+    $stage = [int] $Bytes[4]; $fault = [int] $Bytes[5]
+    $flags = [int] [BitConverter]::ToUInt16($Bytes, 6)
+    $ordinal = [BitConverter]::ToInt32($Bytes, 8)
+    $reportedExit = [BitConverter]::ToInt32($Bytes, 12)
+    Need ($stage -ge 1 -and $stage -le 17 -and $fault -le 7 -and $flags -le 1023 -and
+        $ordinal -ge -1 -and $ordinal -le 225 -and $reportedExit -cin @(0, 1) -and $reportedExit -eq $ExitCode)
+    return [ordered]@{
+        stage = $stage; fault = $fault; flags = $flags
+        publicInputOrdinal = $ordinal; reportedExitCode = $reportedExit
+    }
 }
 
 function Before([int] $Seconds) {
@@ -307,11 +323,12 @@ try {
     Need ($child.Start())
     $started = $true
     $null = $child.Handle
-    # Both streams must be empty; one asynchronous byte read per stream is enough
-    # to observe EOF or reject output without retaining any provider diagnostics.
-    $outByte = [byte[]]::new(1); $errByte = [byte[]]::new(1)
+    # The actual supervisor emits exactly one 16-byte NAS1 status on stderr.
+    # A seventeenth byte rejects overflow; stdout and provider output remain forbidden.
+    $outByte = [byte[]]::new(1); $errBytes = [byte[]]::new(17)
+    $errLength = 0; $errClosed = $false
     $outRead = $child.StandardOutput.BaseStream.ReadAsync($outByte, 0, 1)
-    $errRead = $child.StandardError.BaseStream.ReadAsync($errByte, 0, 1)
+    $errRead = $child.StandardError.BaseStream.ReadAsync($errBytes, 0, 17)
     $identity = [ordered]@{
         schema = 'confidential-native-created-role-v1'; group = $group; role = 'supervisor'
         nonce = $plan.nonce; admissionSha256 = $controlHash; pid = $child.Id
@@ -325,8 +342,20 @@ try {
     $status.failure = 'supervision'
     while ([Diagnostics.Stopwatch]::GetTimestamp() -lt $finalEnd) {
         if ($outRead.IsCompleted) { Need ($outRead.GetAwaiter().GetResult() -eq 0) }
-        if ($errRead.IsCompleted) { Need ($errRead.GetAwaiter().GetResult() -eq 0) }
-        if ($child.HasExited -and $outRead.IsCompleted -and $errRead.IsCompleted) {
+        if (-not $errClosed -and $errRead.IsCompleted) {
+            $read = $errRead.GetAwaiter().GetResult()
+            if ($read -eq 0) { $errClosed = $true }
+            else {
+                $errLength += $read
+                if ($errLength -gt 16) { $status.supervisorStatusDisposition = 'invalid'; Need $false }
+                $errRead = $child.StandardError.BaseStream.ReadAsync($errBytes, $errLength, 17 - $errLength)
+            }
+        }
+        if ($child.HasExited) {
+            $status.supervisorExited = $true
+            $status.supervisorExitCode = $child.ExitCode
+        }
+        if ($child.HasExited -and $outRead.IsCompleted -and $errClosed) {
             $closed = $true
             break
         }
@@ -337,7 +366,14 @@ try {
     $status.supervisorExited = $true
     $status.supervisorExitCode = $child.ExitCode
     $status.streamsClosed = $true
-    $status.failure = 'terminal'
+    if ($errLength -gt 0) {
+        $status.supervisorStatusDisposition = 'invalid'
+        $status.supervisorStatus = Read-SupervisorStatus $errBytes $errLength $status.supervisorExitCode
+        $status.supervisorStatusDisposition = 'validated'
+    }
+    # Preserve failure and safe diagnostics without opening a nonexistent terminal file.
+    if ($status.supervisorExitCode -ne 0) { $status.failure = 'supervisor' }
+    else { Need ($status.supervisorStatusDisposition -ceq 'validated'); $status.failure = 'terminal' }
     $terminalPath = $receiptRoot + '\' + $group + '-terminal.json'
     # NativeCaller emits only this safe receipt after its worker, product, streams
     # and owned Job have drained. Do not collect product stdout or private inputs.
@@ -368,6 +404,7 @@ try {
                 [Math]::Floor(165000 - 1000 * ([Diagnostics.Stopwatch]::GetTimestamp() - $callStart) / $frequency)))
             $stopped = $child.WaitForExit([int] $remaining)
             $status.supervisorExited = $stopped
+            if ($stopped) { $status.supervisorExitCode = $child.ExitCode }
         } catch { }
         # Parent exit/last-close Job termination is not evidence that the product
         # and worker drained. Any missing terminal leaves ownedClosure false.
