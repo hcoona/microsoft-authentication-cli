@@ -4,7 +4,7 @@
 param(
     [Parameter(Mandatory)][string] $PlanPath,
     [Parameter(Mandatory)][string] $PlanSha256,
-    [Parameter(Mandatory)][ValidateRange(1, 4)][int] $Attempt,
+    [Parameter(Mandatory)][ValidateRange(1, 6)][int] $Attempt,
     [ValidateSet('Personal', 'Work')][string] $AccountRole = 'Personal',
     [Parameter(Mandatory)][string] $ControllerSha256,
     [Parameter(Mandatory)][Type] $CutoffType,
@@ -64,7 +64,7 @@ try {
     # Exact-call admission pins this original source, the loaded helper artifact,
     # its single retained Type, current host/user/environment and private input.
     # This script does not compile/load a replacement helper or read selectors.
-    Need ($AccountRole -cin @('Personal', 'Work') -and
+    Need (($AccountRole -ceq 'Personal' -or ($AccountRole -ceq 'Work' -and $Attempt -le 4)) -and
         [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop' -and
         $CutoffType.FullName -ceq 'SelectedAccountControllerCutoff' -and
         -not $CutoffType.Assembly.IsDynamic -and $frequency -gt 0)
@@ -77,9 +77,9 @@ try {
     $self = [Diagnostics.Process]::GetCurrentProcess()
     Need ($self.Id -eq $ExpectedPid -and $self.SessionId -eq $ExpectedSession -and
         $self.StartTime.ToUniversalTime().ToFileTimeUtc() -eq $ExpectedCreationFileTime)
-    Need ($PSCommandPath -ceq ($root + '\control\Invoke-WindowsSelectedAccountOriginalRetained.ps1') -and
+    Need ($PSCommandPath -ceq ($root + '\control\Invoke-WindowsSelectedAccountOriginalRetainedSlots.ps1') -and
         $PlanPath -ceq ($root + '\control\' + $accountPrefix + '-plan-' + $Attempt + '.json'))
-    $controller = $root + '\control\Invoke-WindowsSelectedAccountCutoff.ps1'
+    $controller = $root + '\control\Invoke-WindowsSelectedAccountCutoffSlots.ps1'
     $null = Read-PinnedPublic $controller 65536 $ControllerSha256
     $encoding = [Text.UTF8Encoding]::new($false, $true)
     $plan = $encoding.GetString((Read-PinnedPublic $PlanPath 262144 $PlanSha256)) | ConvertFrom-Json

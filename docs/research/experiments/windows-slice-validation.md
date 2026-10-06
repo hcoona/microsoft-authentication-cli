@@ -1954,7 +1954,7 @@ or historical private observations. Export only equality/validation Booleans and
 the two non-content native identities/lengths, never contents or private hashes.
 Keep ordinary permissions and retain the private files; no ACL/cache/account repair.
 
-After accepted creation outcomes, propose at most eight public-control creation
+After accepted creation outcomes, propose at most ten public-control creation
 operations across the Personal and Work native batches, each 30 seconds/1 MiB
 with zero product/caller starts. Each binds one
 slot's public plan, accepted authority/source/closure receipts, private identities
@@ -1969,10 +1969,11 @@ they are internal execution gates, not renewed per-step owner risk decisions.
 Permit a separately reviewed application of historical Windows ChangeTime
 qualification to the fixed native account public-plan roles in this batch:
 `control/selected-account-plan-N.json` and `control/work-account-plan-N.json`,
-where `N` is one of the existing four cumulative attempt numbers for that role.
-The corrected Personal primary request uses attempt3 and its subsequent reuse
-uses attempt4. This qualification changes only the historical-to-current
-ChangeTime comparison; it grants no new account slot or automatic retry.
+where `N` is 1 through 6 for Personal and 1 through 4 for Work. The earlier
+Personal correction used attempts 3/4; the next supported pair uses attempts
+5/6 under the allocation below. This qualification changes only the
+historical-to-current ChangeTime comparison; it grants no new account slot or
+automatic retry.
 
 Before applying it after a failed original, independently accept that failed
 outcome, scoped completion and the supporting fixed public-plan observation.
@@ -1999,6 +2000,73 @@ refresh an occupied baseline, reset a marker, reopen an original deadline or
 replace the retained host, assembly or controller. Exact source/input/call,
 current operating-basis/Profile, accounting and independent actual-outcome
 gates remain necessary for each dependent operation.
+
+### Fixed native public-inventory metadata correspondence
+
+For a supported fresh native personal/work pair, admit one fixed observation of
+the existing 194 caller rows and three product rows from the accepted immutable
+public control. Reuse the retained Windows process and loaded file helper; no new
+Type, assembly, host, controller tool or account operation is included. Pin and
+read the original public control by its accepted exact hash/length/EOF, then use
+the existing canonical-path, no-follow directory, read-attributes Open, Snapshot
+and Name methods on only those 197 public leaves. Any private-method reuse needs
+its exact source/signature/call review. No inventory payload or private input is
+read by this observation.
+
+Preserve every original prepared identity and accepted content hash. Require all
+seven original non-ChangeTime fields and strict current eight-field initial/final
+held/named checks; retain each separately observed current ChangeTime as invariant
+decimal text. This observation establishes metadata correspondence only. It does
+not establish fresh content hashes, historical integrity or failure cause, old
+worker/product/Job completion, authentication, or a general identity exception.
+
+Independently accept the actual fixed observation and scoped handle/transport
+completion before deriving fresh exclusive plans. New plans retain the original
+accepted content hashes and seven identity fields and use only their own accepted
+current ChangeTimes. Keep the immutable original and current tuples distinct in
+the derivation evidence; never refresh an occupied plan or historical descriptor.
+The unchanged native ActualAdmission/FixtureNativePins still require all eight
+new-plan fields plus full content-hash/length/EOF and strict current held/named
+checks before worker, product or private/account access. A metadata observation
+alone does not admit execution of the caller, product or any runtime companion;
+the current exact artifact, source, input, operating-basis, call and accounting
+gates remain mandatory.
+
+One observation reserves one synthetic role and one 40-second/4-MiB collection
+pass from the existing common ledger, with a 30-second native bound, at most
+600 opens, 6,000 metadata operations, 1 MiB requested public-control reads and
+32,768 bytes of fixed safe status. Dispose every directly returned handle and
+the helper's retained control/directory handles. No new process, lease, output
+file, WAM discovery, private-file read, environment mutation or account effect is
+included. Preserve the marker and full charge after any failure; no replay or
+current-file diagnosis reconstructs the original missing checkpoint.
+
+For the next supported Personal pair only, revise the existing local batch to
+six numbered slots: retain failed primary slots 1/3 and unrun reuse slots 2/4,
+then use fresh primary slot 5/R1 and success-gated reuse slot 6/R6. Keep Work at
+its existing four slots. Correct only the existing scripts' slot limits and
+role-specific refusal and bind their fresh immutable public copies through the
+normal source/call gates. New calls use only
+`control/Invoke-WindowsSelectedAccountOriginalRetainedSlots.ps1` and
+`control/Invoke-WindowsSelectedAccountCutoffSlots.ps1`; retain the old copies for
+their original evidence without overwrite. These fixed public original/controller
+roles retain the existing historical ChangeTime qualification: preserve prepared
+tuples, require the other seven fields and exact hash/length/EOF before invocation,
+and retain strict current eight-field Pin/CheckAll. This is a ten-slot maximum
+across the two roles within
+the standing common real pool; count each necessary reservation conservatively,
+including prior/unrun slots, without refunding or preemptively spending an unused
+correction. Slots 5/6 use fresh exclusive plans, reservations and UUIDv4 receipt
+roots; truthfully record unrun slot 4 before slot 5 under the existing predecessor
+rules. No spent call, marker, deadline, private selection or old output is reused.
+
+All existing original epochs, native batch/Job bounds, silent-first policy,
+Windows-local selectors/result validation, actual interaction handoff, strict
+private identities and independent actual R1-to-R6/R7-to-R8 success dependencies
+remain. The accepted Wave's specific failed R1 absence disposition applies only
+to that old attempt and the reviewed current operating basis. Stop on a new
+failure or ownership/safety gap. Actual direct WSL remains separately required
+and this supplement does not authorize confidential cross-host transport.
 
 ### Work-account pair and role-isolated inputs
 
