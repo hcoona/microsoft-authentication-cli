@@ -2487,6 +2487,38 @@ occupied or partial private output remains occupied and refuses CREATE_NEW;
 no inspection, repair, overwrite, cleanup or adoption is added. This amendment
 adds no account/provider/product/lease operation or actual WSL evidence.
 
+##### Unsubmitted Personal slot in the accepted absence continuation
+
+The old runspace's constant creation markers are not available in a fresh
+runspace; their absence does not erase either failed Personal attempt. After
+independent acceptance of the one known-absence host-plus-two-load continuation,
+permit the still-physically-unsubmitted Personal `CreationAttempt=3` to use
+`-ContinueAfterObservedAbsence` in that same fresh retained host. Exact admission
+must join both failed Personal outcomes, their spent attempts and unknown private
+file extent, the independently accepted physically-unsubmitted Personal3/Work1
+batch, accepted exact old-host absence, the new actual package and current full
+accounting. This transfers the existing unused slot; it grants no fourth attempt.
+
+Require both old Personal marker names absent in the fresh runspace and create
+only the distinct constant marker ending `Correction2AfterObservedAbsence`.
+Never reconstruct, delete or reset either historical marker, or reuse this new
+marker after a failed/partial submission. Keep the existing same-runspace mode
+and its two required spent markers unchanged. The switch refuses Work or another
+attempt number. Work remains its physically-unsubmitted attempt1 and follows only
+accepted Personal success; skipped allocations receive no refund.
+
+Stage the exact reviewed guard projection exclusively as the new
+`control\Initialize-WindowsSelectedAccountPrivateAfterObservedAbsence.ps1` leaf;
+retain all prior initializer copies. Reuse the existing bounded public-copy and
+held-file-call methods with exact new source/hash/EOF/native/call/accounting
+admission and actual copy closure before use. Do not overwrite an occupied leaf,
+recopy libraries, reload Types or replace the accepted host. Current private-role,
+real operating-basis and experimental Profile gates remain before creation;
+Windows-local configuration selection, private equality checks, exclusive private
+destinations, public-template qualification, 115/120/125s limits and safe schema
+remain unchanged. Occupied/partial private outputs still refuse CREATE_NEW;
+no private inspection, adoption, repair, cleanup or account original is added.
+
 
 If the designated configuration is absent, the operator may create that one data file
 once on Windows with the selected role values, using an ordinary local editor. This is
