@@ -1954,14 +1954,51 @@ or historical private observations. Export only equality/validation Booleans and
 the two non-content native identities/lengths, never contents or private hashes.
 Keep ordinary permissions and retain the private files; no ACL/cache/account repair.
 
-After accepted creation outcomes, propose at most four public-control creation
-operations, each 30 seconds/1 MiB with zero product/caller starts. Each binds one
+After accepted creation outcomes, propose at most eight public-control creation
+operations across the Personal and Work native batches, each 30 seconds/1 MiB
+with zero product/caller starts. Each binds one
 slot's public plan, accepted authority/source/closure receipts, private identities
 and fresh nonce directory. If failed R1 prevents R6, spend the paired R6 slot as
 unrun in the governing carrier and create its fixed reservation during an admitted
 control operation before a corrected pair. This adds no attempt or success.
 Source/artifact/input/call gates remain necessary after allowance acceptance;
 they are internal execution gates, not renewed per-step owner risk decisions.
+
+#### Historical identity of native account public plans
+
+Permit a separately reviewed application of historical Windows ChangeTime
+qualification to the fixed native account public-plan roles in this batch:
+`control/selected-account-plan-N.json` and `control/work-account-plan-N.json`,
+where `N` is one of the existing four cumulative attempt numbers for that role.
+The corrected Personal primary request uses attempt3 and its subsequent reuse
+uses attempt4. This qualification changes only the historical-to-current
+ChangeTime comparison; it grants no new account slot or automatic retry.
+
+Before applying it after a failed original, independently accept that failed
+outcome, scoped completion and the supporting fixed public-plan observation.
+Preserve the original prepared and diagnosed tuples separately. Each new exact
+call also retains its own immutable prepared plan tuple and the current tuple
+observed at use. A diagnosis of one plan is not an observation of another plan,
+role or attempt. Never substitute a new tuple for a historical baseline or infer
+the original refusal's cause, benign metadata changes or uninterrupted integrity.
+
+Require exact agreement in volume, file index, attributes, creation time,
+modification time, link count and length against that call's prepared tuple.
+Require the accepted exact bytes, length, hash and EOF before invocation. Native
+input Pin and final CheckAll retain strict current eight-field held/named
+agreement through owned-handle closure; do not qualify a within-read difference.
+Record the qualification indicator in the exact call. Export only the already
+admitted public correspondence and current tuple, never private input contents
+or confidential output.
+
+Keep occupied plans, failed evidence, unknown extent, original markers and every
+consumed charge. Create the next necessary numbered plan and fresh nonce
+directory exclusively; record spent or blocked paired slots truthfully under the
+existing reservation rules before a corrected pair. Do not overwrite a plan,
+refresh an occupied baseline, reset a marker, reopen an original deadline or
+replace the retained host, assembly or controller. Exact source/input/call,
+current operating-basis/Profile, accounting and independent actual-outcome
+gates remain necessary for each dependent operation.
 
 ### Work-account pair and role-isolated inputs
 
