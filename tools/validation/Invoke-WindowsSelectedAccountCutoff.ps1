@@ -4,7 +4,7 @@
 param(
     [Parameter(Mandatory)][string] $PlanPath,
     [Parameter(Mandatory)][string] $PlanSha256,
-    [Parameter(Mandatory)][ValidateRange(1, 4)][int] $Attempt,
+    [Parameter(Mandatory)][ValidateRange(1, 6)][int] $Attempt,
     [ValidateSet('Personal', 'Work')][string] $AccountRole = 'Personal',
     [Parameter(Mandatory)][string] $ControllerSha256,
     [switch] $Controller,
@@ -109,15 +109,15 @@ function Invoke-Outer {
     }
     try {
         Before 20
-        Need ($AccountRole -cin @('Personal', 'Work') -and -not $Controller -and $ReservationSha256 -ceq '')
+        Need (($AccountRole -ceq 'Personal' -or ($AccountRole -ceq 'Work' -and $Attempt -le 4)) -and -not $Controller -and $ReservationSha256 -ceq '')
         Need ($null -ne $CutoffLease -and $CutoffLease.GetType().FullName -ceq
             'SelectedAccountControllerCutoff' -and $CutoffLease.InvocationStartTicks -eq $callStart -and
             $CutoffLease.Armed -and -not $CutoffLease.Bound -and -not $CutoffLease.Failed -and
             -not $CutoffLease.StopClaimed -and -not $CutoffLease.CleanupComplete)
-        Need ($AccountRole -cin @('Personal', 'Work') -and
+        Need (($AccountRole -ceq 'Personal' -or ($AccountRole -ceq 'Work' -and $Attempt -le 4)) -and
             [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop')
         Need ($PlanPath -ceq ($root + '\control\' + $accountPrefix + '-plan-' + $Attempt + '.json'))
-        $script = $root + '\control\Invoke-WindowsSelectedAccountCutoff.ps1'
+        $script = $root + '\control\Invoke-WindowsSelectedAccountCutoffSlots.ps1'
         Need ($PSCommandPath -ceq $script)
         $null = Read-Pinned $script 65536 $ControllerSha256
         $shell = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
@@ -237,7 +237,7 @@ if (-not $Controller) { exit (Invoke-Outer) }
 
 try {
     Before 20
-    Need ($AccountRole -cin @('Personal', 'Work') -and
+    Need (($AccountRole -ceq 'Personal' -or ($AccountRole -ceq 'Work' -and $Attempt -le 4)) -and
         [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop')
     Need ($PlanPath -ceq ($root + '\control\' + $accountPrefix + '-plan-' + $Attempt + '.json'))
     $encoding = [Text.UTF8Encoding]::new($false, $true)
@@ -261,7 +261,7 @@ try {
     $null = Read-Pinned $caller 1048576 $callerPin[0].sha256
     $receiptRoot = $root + '\records\' + $group + '-' + $plan.nonce
     Need ([IO.Directory]::Exists($receiptRoot))
-    # The four reservations for this role are cumulative across controllers, source
+    # The reservations for this role are cumulative across controllers, source
     # fixes and readiness handoffs. Exact-call review joins the shared real pool
     # and all previous outcomes; switching roles never resets its consumption.
     $reservationPath = $root + '\records\' + $accountPrefix + '-attempt-' + $Attempt + '.json'
