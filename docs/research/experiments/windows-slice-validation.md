@@ -2155,6 +2155,58 @@ account effects, loss of control, or unobserved exit excludes this exception.
 No further host replacement is admitted automatically. The Wave's existing
 outcome and effects boundaries and real operating-basis gates remain unchanged.
 
+#### Lost retained-host ownership: one exact process observation
+
+After independently accepted failure before a retained-host command was submitted,
+permit one credential-free observation of only that host's previously admitted
+Windows PID, session and creation time. The exact accepted call and outcome must
+establish the negative initiating-Linux-owner observation and absence of any new
+Windows submission. Preserve the spent recipe, historical loads and markers,
+unknown Windows lifetime, every charge and all prior uncertainties. Linux absence
+is neither Windows absence nor evidence of a reboot. This supplement does not
+permit replacement of the loaded host, reconnecting, loading helpers or retrying
+private creation.
+
+Use the unchanged normal0070 launcher and ordinary installed PowerShell5.1 x64
+through one fresh `named-fixtures-0217` public stage. The query is an inert,
+independently reviewed fixed public script under the launcher's existing
+`Invoke-WindowsNamedGuardFixtures.ps1` name, with a false admission guard. Bind its
+exact guard-only projection, public authority, selected historical process tuple,
+launcher and original Linux scope before submission. This is a read-only process
+observation, not a new launcher, controller, process survey or input tool.
+
+Perform at most one local `Process.GetProcessById` lookup of the admitted PID.
+If it returns a Process object, retain its process handle while comparing only
+session and creation time with the admitted tuple; dispose every owned query
+handle. An exact match reports the old host present at that observation. A
+successfully observed different creation time reports PID reuse, without inspecting
+or modifying that other process. Only the documented not-running ArgumentException
+from the exact lookup may report the PID absent. Access, transport, timing and
+other query failures report unknown and stop; they do not establish absence.
+Never inspect command lines, modules, process memory, accounts or private files,
+signal the target, close its window or terminate it.
+
+Require source/query work below20s, owned disposal and one exclusive at-most4096B
+public receipt below30s. Export only the fixed schema, authority binding, query
+completion/closure Booleans and `present`, `absent`, `pid-reused` or `unknown`
+disposition. Reuse the launcher's original330s work/10s cleanup and complete400s
+Linux/native original envelope; require owned root/Job, zero exit and both EOFs.
+Reserve at most four synthetic roles with zero build/download/real charges, and
+at most five passive passes:30s/1MiB public input creation,30s/4MiB transfer,
+400s/64MiB dispatch,30s/4MiB fixed public receipt collection and30s/32KiB own
+Linux-scope evidence. Installed reads retain the existing declared operating basis.
+All stages and failures are retained, exclusively created, never repaired or reused.
+
+Independently accept the exact source/input/call, current operating basis,
+accounting, original natural return and scoped native/Linux completion, and then
+the actual selected-process disposition. A present or unknown host stops dependent
+work; no automatic exit, kill, replacement or cleanup follows. An accepted absent
+or PID-reused observation establishes only current absence of the old exact
+process, not its exit code, cause, uninterrupted history or global closure. A
+separately reviewed supported continuation remains necessary before another host,
+helper load, private command or real-account operation. Reuse unchanged accepted
+public-copy evidence with applicable fresh checks instead of copying it again.
+
 #### Bounded credential-free existing-terminal feasibility checks
 
 The visible ordinary-console route above remains the account flow's accepted host
