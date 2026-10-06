@@ -128,6 +128,21 @@ not observed closure, a reset of the attempt, or a disposition for a later
 unknown process. Account execution still requires its independently accepted
 operating basis; this assumption does not waive that gate.
 
+For the independently accepted failed Personal R1 attempt 3, identified by
+public attempt nonce `0ccb4416c7db46de8a73522e53b24192`, the owner accepts
+proceeding on the assumption that any experiment-owned worker, product process,
+and Job created by that attempt are now absent. Apply this disposition only to
+the current operating basis for subsequent bounded native personal/work
+acceptance on the same designated host. Preserve the failed result, spent calls,
+consumed capacity, historical `noExperimentLive=false`, and unobserved historical
+worker/product/Job completion and account-effects extent. This assumption is not
+observed closure, proof of the original failure cause, authentication success,
+a cleanup grant, or acceptance of another unknown lifetime. It neither expands
+the normal account-effects boundary nor admits confidential transport through
+WSL. Independently accept the corrected exact protocol, source, artifacts,
+inputs, call, accounting, and current operating basis before dependent real
+execution; any new ownership or safety gap retains the normal stop rule.
+
 Retain the separately accepted initial-interop console-host operating basis and
 sole-owned-ETW-persistence disposition for their existing credential-free roles,
 as defined in [experiment safety](research/experiment-safety.md#windows-slice-standing-risk-dispositions).
