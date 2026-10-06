@@ -50,7 +50,18 @@ internal static class ControlledChecks
     {
         switch (index)
         {
-            case 1: { byte[] x = Wire.Encode([Success()]); Need(x.Length == 16 && Wire.Decode(x,1)[0].Passed); break; }
+            case 1: {
+                byte[] x = Wire.Encode([Success()]); Need(x.Length == 16 && Wire.Decode(x,1)[0].Passed);
+                // Cross-language NAS1 vector: admission failure at public caller ordinal 193.
+                Need(Convert.ToHexString(Program.ActualStatus(5, 1, 512, 193, 1)) == "4E41533105010002C100000001000000");
+                Reject(() => Program.ActualStatus(0, 1, 0, -1, 1));
+                Reject(() => Program.ActualStatus(18, 1, 0, -1, 1));
+                Reject(() => Program.ActualStatus(5, 8, 0, -1, 1));
+                Reject(() => Program.ActualStatus(5, 1, 1024, -1, 1));
+                Reject(() => Program.ActualStatus(5, 1, 0, 226, 1));
+                Reject(() => Program.ActualStatus(5, 1, 0, -1, 125));
+                break;
+            }
             case 2: { byte[] x = Wire.Encode([Success(true),Success(true)]); Need(x.Length == 27 && Wire.Decode(x,2).All(r=>r.Passed)); break; }
             case 3: Need(Wire.Failure([78,67,70,49,(byte)Fault.Capture]) == Fault.Capture); break;
             case 4: { byte[] x=Wire.Encode([Success()]); Reject(()=>Wire.Decode(x[..^1],1)); Reject(()=>Wire.Decode(x.Concat(new byte[]{0}).ToArray(),1)); break; }

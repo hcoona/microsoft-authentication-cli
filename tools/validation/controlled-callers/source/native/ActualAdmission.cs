@@ -17,6 +17,7 @@ internal static class AdmissionCatalog
     internal static string[] Slots(Group group) => group == Group.R5Pair ? ["R5a", "R5b"] : [group.ToString()];
     internal static int RunRole(string[] args, long entry, bool worker)
     {
+        Program.ActualAt(1);
         PrivateRequest.Require(current is null && OperatingSystem.IsWindows() && Stopwatch.IsHighResolution &&
             args.Length == 8 && args[0] == (worker ? "--worker" : "--supervisor") &&
             Enum.TryParse(args[1], false, out Group group) && group.ToString() == args[1] && ExactJson.Nonce(args[2]));
@@ -26,12 +27,18 @@ internal static class AdmissionCatalog
         current = admission;
         try
         {
+            Program.ActualAt(8);
             PublicPlan plan = LoadPublicPlan(group, args[2]);
             Program.ValidatePublicPlan(plan);
             using IDisposable lease = HoldAcceptedInputs(plan, group, args[2], worker);
-            return worker ? Program.Work(plan, group, workEnd, false) :
-                Program.Supervise(plan, group, args[2], entry, false, null, workEnd, finalEnd);
+            try
+            {
+                return worker ? Program.Work(plan, group, workEnd, false) :
+                    Program.Supervise(plan, group, args[2], entry, false, null, workEnd, finalEnd);
+            }
+            catch (Exception caught) { Program.ActualCapture(caught); throw; }
         }
+        catch (Exception caught) { Program.ActualCapture(caught); throw; }
         finally { current = null; }
     }
     private static long Ticks(string text)
@@ -65,13 +72,16 @@ internal sealed class ActualAdmission : IDisposable
         this.path = path; this.sha = sha; this.group = group; this.nonce = nonce;
         this.batchEnd = batchEnd; this.workEnd = workEnd; this.finalEnd = finalEnd; this.entry = entry;
         role = worker ? "worker" : "supervisor";
+        Program.ActualAt(2);
         PrivateRequest.Require(path == Root + @"\control\" + group + "-" + nonce + ".json" && ExactJson.Hash(sha) &&
             workEnd > Stopwatch.GetTimestamp() && workEnd <= CallerRules.Add(entry, 135000, Stopwatch.Frequency) &&
             finalEnd > workEnd && finalEnd <= CallerRules.Add(workEnd, 10000, Stopwatch.Frequency) && finalEnd <= batchEnd);
+        Program.ActualAt(3);
         OrdinaryEnvironment(workEnd);
         pins = new FixtureNativePins(Before);
         try
         {
+            Program.ActualAt(4);
             FixtureHeldFile control = pins.Pin(path, sha, -1, 262144);
             using JsonDocument document = JsonDocument.Parse(pins.Read(control, 262144), new JsonDocumentOptions { MaxDepth = 8 });
             JsonElement data = document.RootElement;
@@ -92,6 +102,7 @@ internal sealed class ActualAdmission : IDisposable
             PrivateRequest.Require(effects.GetProperty("productLaunches").GetInt32() == AdmissionCatalog.Slots(group).Length &&
                 effects.GetProperty("callerProcesses").GetInt32() == 2 && effects.GetProperty("exemptOuterPowerShellCount").GetInt32() == 1 &&
                 effects.GetProperty("etwAttempts").GetInt32() == 0);
+            Program.ActualAt(5);
             Dictionary<string, FixtureCatalogEntry> expected = FixtureInputCatalog.Required();
             foreach (string key in expected.Keys.Where(key => key.StartsWith(@"artifact\", StringComparison.Ordinal) &&
                 !key.StartsWith(@"artifact\NativeCaller.", StringComparison.Ordinal)).ToArray()) expected.Remove(key);
@@ -99,8 +110,10 @@ internal sealed class ActualAdmission : IDisposable
             JsonElement callers = data.GetProperty("callerPins");
             PrivateRequest.Require(callers.ValueKind == JsonValueKind.Array && callers.GetArrayLength() == 194);
             string? callerHash = null; long total = 0;
+            int ordinal = 0;
             foreach (JsonElement item in callers.EnumerateArray())
             {
+                Program.ActualAt(5, ordinal++);
                 ExactJson.Members(item, "relative", "bytes", "sha256", "identity");
                 string relative = ExactJson.Text(item, "relative"), hash = ExactJson.Text(item, "sha256");
                 long length = item.GetProperty("bytes").GetInt64();
@@ -112,12 +125,14 @@ internal sealed class ActualAdmission : IDisposable
                 if (relative == @"artifact\NativeCaller.exe") callerHash = hash;
             }
             PrivateRequest.Require(expected.Count == 0 && callerHash is not null);
+            Program.ActualAt(6);
             string productImage = ExactJson.Text(data, "productImage");
             JsonElement products = data.GetProperty("productPins");
             PrivateRequest.Require(products.ValueKind == JsonValueKind.Array && products.GetArrayLength() is >= 1 and <= 32);
             var productPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase); string? productHash = null;
             foreach (JsonElement item in products.EnumerateArray())
             {
+                Program.ActualAt(6, ordinal++);
                 ExactJson.Members(item, "relative", "bytes", "sha256", "identity");
                 string relative = ExactJson.Text(item, "relative"), hash = ExactJson.Text(item, "sha256");
                 long length = item.GetProperty("bytes").GetInt64();
@@ -129,6 +144,7 @@ internal sealed class ActualAdmission : IDisposable
                 if (relative == productImage) productHash = hash;
             }
             PrivateRequest.Require(productHash is not null && productImage.EndsWith(".exe", StringComparison.Ordinal));
+            Program.ActualAt(7);
             JsonElement privateInput = data.GetProperty("privateInput");
             ExactJson.Members(privateInput, "relative", "bytes", "identity");
             PrivateRequest.Require(ExactJson.Text(privateInput, "relative") == @"private\" + group + ".json");
@@ -143,7 +159,7 @@ internal sealed class ActualAdmission : IDisposable
                 ProtocolSha256 = ExactJson.Text(data, "protocolSha256") };
             Before();
         }
-        catch { pins.Dispose(); throw; }
+        catch (Exception caught) { Program.ActualCapture(caught); pins.Dispose(); Program.ActualFlag(512); throw; }
     }
 
     private void Before() { PrivateRequest.Require(!disposed); CallerRules.Before(Stopwatch.GetTimestamp(), workEnd); }
@@ -151,6 +167,7 @@ internal sealed class ActualAdmission : IDisposable
     { Before(); PrivateRequest.Require(selected == group && selectedNonce == nonce); return plan; }
     internal IDisposable HoldRole(PublicPlan selectedPlan, Group selected, string selectedNonce, bool worker)
     {
+        Program.ActualAt(9);
         Before(); PrivateRequest.Require(!roleHeld && ReferenceEquals(selectedPlan, Plan(selected, selectedNonce)) &&
             role == (worker ? "worker" : "supervisor") && string.Equals(Environment.ProcessPath, plan.SelfImage, StringComparison.OrdinalIgnoreCase));
         string identityPath = receiptRoot + "\\" + role + "-identity.json";
@@ -213,5 +230,5 @@ internal sealed class ActualAdmission : IDisposable
                 !CurrentUserEnvironment.RejectsRuntimeKey((string)item.Key));
         }
     }
-    public void Dispose() { if (disposed) return; disposed = true; pins.Dispose(); }
+    public void Dispose() { if (disposed) return; disposed = true; pins.Dispose(); Program.ActualFlag(512); }
 }

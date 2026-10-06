@@ -17,6 +17,34 @@ internal static class Program
 {
     private static readonly bool ExecutionAdmitted = false;
     private static bool workerOutputAttempted;
+    // Actual supervisors expose only a fixed public status, never exception or provider text.
+    private static bool actualSupervisor;
+    private static byte actualStage;
+    private static int actualInputOrdinal = -1;
+    private static ushort actualFlags;
+    private static Fault? actualFault;
+    internal static void ActualAt(byte stage, int inputOrdinal = -1)
+    {
+        if (!actualSupervisor || actualFault is not null) return;
+        actualStage = stage; actualInputOrdinal = inputOrdinal;
+    }
+    internal static void ActualFlag(ushort flag) { if (actualSupervisor) actualFlags |= flag; }
+    internal static void ActualCapture(Exception caught)
+    {
+        if (actualSupervisor) actualFault ??= caught is SafeFailure safe ? safe.Fault : Fault.Native;
+    }
+    internal static byte[] ActualStatus(byte stage, byte fault, ushort flags, int inputOrdinal, int exitCode)
+    {
+        PrivateRequest.Require(stage is >= 1 and <= 17 && fault <= 7 && flags <= 1023 &&
+            inputOrdinal is >= -1 and <= 225 && exitCode is 0 or 1);
+        byte[] bytes = new byte[16];
+        bytes[0] = 78; bytes[1] = 65; bytes[2] = 83; bytes[3] = 49; // NAS1
+        bytes[4] = stage; bytes[5] = fault;
+        BinaryPrimitives.WriteUInt16LittleEndian(bytes.AsSpan(6, 2), flags);
+        BinaryPrimitives.WriteInt32LittleEndian(bytes.AsSpan(8, 4), inputOrdinal);
+        BinaryPrimitives.WriteInt32LittleEndian(bytes.AsSpan(12, 4), exitCode);
+        return bytes;
+    }
     private const int WorkMilliseconds = 135000, TerminalMilliseconds = 10000;
     private static long Now => Stopwatch.GetTimestamp();
     private static long Add(long start, int milliseconds) => CallerRules.Add(start, milliseconds, Stopwatch.Frequency);
@@ -31,17 +59,23 @@ internal static class Program
         long entry = Now;
         bool fixture = args.Length > 0 && args[0] is "--fixture-worker" or "--fixture-supervisor";
         bool worker = args.Length > 0 && args[0] is "--worker" or "--fixture-worker";
-        long diagnosticEnd=fixture && !worker?Add(entry,WorkMilliseconds+TerminalMilliseconds):0;
+        actualSupervisor = args.Length > 0 && args[0] == "--supervisor";
+        int actualExitCode = 1;
+        long diagnosticEnd=(fixture && !worker) || actualSupervisor?Add(entry,WorkMilliseconds+TerminalMilliseconds):0;
         if(fixture && !worker && args.Length==7 && long.TryParse(args[6],NumberStyles.None,CultureInfo.InvariantCulture,out long bound))
             diagnosticEnd=Math.Min(diagnosticEnd,bound);
+        if(actualSupervisor && args.Length==8 && long.TryParse(args[7],NumberStyles.None,CultureInfo.InvariantCulture,out long actualBound))
+            diagnosticEnd=Math.Min(diagnosticEnd,actualBound);
         try
         {
             if (fixture) return FixturePins.RunRole(args, entry, worker);
-            return AdmissionCatalog.RunRole(args, entry, worker);
+            actualExitCode = AdmissionCatalog.RunRole(args, entry, worker);
+            return actualExitCode;
         }
         catch (Exception caught)
         {
             if(fixture && !worker)FixtureDiagnostics.Capture(caught);
+            ActualCapture(caught);
             // A fixed enum preserves only the first safe cause. Never format the exception.
             if (worker && !workerOutputAttempted)
                 try { WriteWorkerFrame([78, 67, 70, 49, (byte)(caught is SafeFailure safe ? safe.Fault : Fault.Native)]); } catch { }
@@ -53,6 +87,14 @@ internal static class Program
             // Failure to report cannot change exit status, trigger a retry, or renew a deadline.
             if(fixture && !worker && FixtureDiagnostics.First is FixtureFailure failure)
                 try { Before(diagnosticEnd);Console.OpenStandardError().Write(failure.Encode()); } catch { }
+            if(actualSupervisor)
+                try
+                {
+                    Before(diagnosticEnd);
+                    Console.OpenStandardError().Write(ActualStatus(actualStage,
+                        actualFault is Fault fault ? (byte)fault : (byte)7, actualFlags, actualInputOrdinal, actualExitCode));
+                }
+                catch { } // Missing status is unavailable; reporting cannot renew a deadline or retry.
         }
     }
 
@@ -84,6 +126,7 @@ internal static class Program
             PrivateRequest.Require(workEnd > Now && finalEnd > workEnd);
         }
         string[] slots = AdmissionCatalog.Slots(group);
+        ActualAt(10);
         if(fixture)FixtureDiagnostics.At(FixtureStage.Reservation);
         foreach (string slot in slots) Receipt(plan, slot, nonce, true, null, false, false, false, false, false, entry, workEnd);
         SafeFileHandle? job = null;
@@ -103,22 +146,29 @@ internal static class Program
             {
                 Before(workEnd);
                 if(fixture)FixtureDiagnostics.At(FixtureStage.CreateWorker);
+                ActualAt(11);
                 job = Native.NewJob("Local\\azureauth-confidential-108-" + group + "-" + nonce, slots.Length);
+                ActualFlag(1);
                 output = new MemoryPipe(32); error = new MemoryPipe(1); input = new InputPipe(false);
                 using (CurrentUserEnvironment? environment = fixture ? null : CurrentUserEnvironment.Create(workEnd))
                 {
                     if(fixture)FixtureDiagnostics.At(FixtureStage.CreateWorker);
                     Before(workEnd);
+                    ActualAt(12);
                     worker = Native.StartSuspended(plan.SelfImage,
                         fixture ? FixturePins.RoleArguments(group, "worker", workEnd) :
                         AdmissionCatalog.WorkerArguments(group, nonce, workEnd, finalEnd),
                         plan.WorkingDirectory, input, output, error, job, environment?.Block ?? IntPtr.Zero);
+                    ActualFlag(2);
                 }
+                ActualAt(13);
                 if (fixture){FixtureDiagnostics.At(FixtureStage.BindWorker);workerIdentity = FixturePins.BindCreated(group, "worker", worker, workEnd);}
                 else workerIdentity = AdmissionCatalog.BindWorker(group, nonce, worker, workEnd, finalEnd);
                 if(fixture)FixtureDiagnostics.At(FixtureStage.ResumeWorker);
-                Before(workEnd); worker.ResumeOnce();
+                ActualAt(14);
+                Before(workEnd); worker.ResumeOnce(); ActualFlag(4);
                 if(fixture)FixtureDiagnostics.At(FixtureStage.WaitWorker);
+                ActualAt(15);
                 while (true)
                 {
                     Before(workEnd);
@@ -126,11 +176,12 @@ internal static class Program
                     Native.Accounting count = Native.Query(job);
                     jobZero = count.ActiveProcesses == 0; total = count.TotalProcesses;
                     if (CallerRules.SupervisorComplete(worker.Exited(), jobZero, output.Done, output.Eof, error.Done, error.Eof))
-                    { exit = worker.ExitCode(); complete = true; break; }
+                    { exit = worker.ExitCode(); complete = true; ActualFlag(8 | 16 | 32); break; }
                     Thread.Sleep(10);
                 }
                 Before(workEnd);
                 if(fixture)FixtureDiagnostics.At(FixtureStage.ValidateWorker);
+                ActualAt(16);
                 terminalEnd = Math.Min(terminalEnd, Add(Now, TerminalMilliseconds));
                 FrameDecision decision = CallerRules.DecideFrame(output.Bytes.Span, slots.Length, total, exit!.Value, error.Bytes.Length);
                 results = decision.Results; firstFault = decision.FirstFault; passed = decision.Passed;
@@ -138,6 +189,7 @@ internal static class Program
             catch (Exception caught)
             {
                 if(fixture)FixtureDiagnostics.Capture(caught);
+                ActualCapture(caught);
                 passed = false;
                 firstFault ??= caught is SafeFailure safe ? safe.Fault : Fault.Native;
                 terminalEnd = Math.Min(terminalEnd, Add(Now, TerminalMilliseconds));
@@ -146,7 +198,9 @@ internal static class Program
                 if (!complete && job is not null)
                 {
                     stopAttempted = true;
+                    ActualFlag(64);
                     try { stopSucceeded = Native.TerminateJobObject(job, 1); } catch { }
+                    if (stopSucceeded) ActualFlag(128);
                     while (Now < terminalEnd)
                     {
                         try
@@ -157,7 +211,7 @@ internal static class Program
                             bool streams = output is { Done: true, Eof: true, Failed: false } &&
                                 error is { Done: true, Eof: true, Failed: false };
                             if (CallerRules.SupervisorComplete(workerExit, jobZero, streams, streams, streams, streams))
-                            { exit = worker!.ExitCode(); complete = true; break; }
+                            { exit = worker!.ExitCode(); complete = true; ActualFlag(8 | 16 | 32); break; }
                         }
                         catch { break; }
                         Thread.Sleep(10);
@@ -168,14 +222,17 @@ internal static class Program
             // termination is only a fallback; it cannot manufacture a terminal witness.
             if (!complete || !jobZero || Now >= terminalEnd) return 1;
             if(fixture)FixtureDiagnostics.At(FixtureStage.TerminalReceipt);
+            ActualAt(17);
             for (int i = 0; i < slots.Length; i++)
                 Receipt(plan, slots[i], nonce, false, results?[i], CallerRules.TerminalMayPass(passed, stopAttempted),
                     true, true, stopAttempted, stopSucceeded, entry, terminalEnd, firstFault);
             return CallerRules.TerminalMayPass(passed, stopAttempted) ? 0 : 1;
         }
+        catch (Exception caught) { ActualCapture(caught); throw; }
         finally
         {
             worker?.Dispose(); job?.Dispose(); input?.Dispose(); output?.Dispose(); error?.Dispose(); workerIdentity?.Dispose();
+            ActualFlag(256); // Handle disposal is separate from observed worker/Job/stream completion.
         }
     }
 

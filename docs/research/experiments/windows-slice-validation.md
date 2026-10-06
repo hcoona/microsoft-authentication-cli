@@ -9,6 +9,130 @@ owns outcome authorization, maximum effects and shared capacity. The
 [experiment policy](../experiment-safety.md#windows-slice-outcome-authorization)
 owns safety. No recipe or source guard supplies independent authorization.
 
+## Selected-Account Supervisor Status
+
+This correction applies to the existing actual native supervisor and the existing
+selected-account scripts. It adds no controller, process, assembly, observer,
+query mode, admission-only mode, private-input reader, account effect or retry.
+The compiler targets and response ordering remain unchanged. All execution guards
+remain false. Earlier compiled artifacts and failed attempts retain their original
+source bindings; these new sources do not establish their behavior or repair their
+missing evidence. Fresh independently accepted compilation, deployment and exact
+call gates precede use. The current source table below supersedes earlier source
+bindings only for the prospective diagnostic-enabled route.
+
+### Fixed status and consumer
+
+An actual `--supervisor` invocation emits one 16-byte `NAS1` frame to its existing
+stderr pipe after role cleanup. The frame consists of ASCII NAS1, one stage byte,
+one fault byte, a little-endian unsigned16 flag mask, a little-endian signed32
+public-input ordinal, and a little-endian signed32 reported process exit code.
+The exit code is0 or1 and must match the original process handle's observed exit.
+Fault0 through6 retain the existing `Fault` enum;7 means no caught exception.
+It is not a success claim. A semantic expectation failure can return1 without a
+caught exception. No exception text, private identity, selector, path, provider
+output, rejected payload or arbitrary diagnostic field enters this frame.
+
+Stages identify attempted operations, not completed operations:
+
+| Stage | Operation |
+| ---: | --- |
+| 1 | Public role arguments |
+| 2 | Root and deadlines |
+| 3 | Ordinary environment classification |
+| 4 | Public admission control |
+| 5 | Public caller inventory |
+| 6 | Public product inventory |
+| 7 | Private-input descriptor syntax and receipt directory; no private payload read |
+| 8 | Public plan |
+| 9 | Created-role handshake |
+| 10 | Reservation publication |
+| 11 | Job and pipe preparation and constructed environment |
+| 12 | Suspended worker creation |
+| 13 | Worker identity binding |
+| 14 | Worker resume |
+| 15 | Worker and Job wait |
+| 16 | Worker frame validation |
+| 17 | Terminal receipt publication |
+
+The public ordinal is-1 outside inventory work,0 through193 for caller rows and
+194 through225 for product rows, in the exact accepted control's order. Private
+request values and private predicate locations are excluded. The first caught
+supervisor failure freezes its stage/ordinal/fault before cleanup; cleanup facts
+may still accumulate. Workers retain their NCF1 protocol and emit no NAS1 status.
+Synthetic supervisor diagnostics remain unchanged.
+
+Flag bits0 through9 mean, respectively: Job creation returned, suspended worker
+creation returned, resume returned, worker exit observed with valid EOFs and Job
+zero, Job zero in that same completion sample, both valid worker EOFs in that
+sample, explicit Job stop attempted, stop API returned true, supervisor-owned
+handle disposal completed, and public admission-pin disposal completed. These
+are positive observations at their source checkpoints, not a live host survey.
+Absent creation/resume bits do not prove that a failed native call had no partial
+effects. Disposal or stop return alone is not a process completion witness. All
+other bits are invalid; `noExperimentLive` remains false in the existing receipts.
+
+Emission uses the original entry145-second deadline clipped to the admitted
+final-end argument. Reporting failure never changes the process return, renews a
+deadline, launches a child or retries. No frame is emitted by a closed execution
+guard. Missing output after admission/reporting/cleanup failure is unavailable.
+
+Both existing selected-account scripts keep stdout empty and accept only this
+bounded stderr status. Success requires a validated status; failure can retain
+an unavailable status. The17-byte buffer supplies one overflow probe. Successive
+short reads fill it only until EOF; a17th byte fails immediately within the
+existing supervision/stop deadline. A truncated, malformed, unknown or mismatched
+frame is invalid. Persist only the validated five numeric fields in the existing
+`selected-account-controller-v2` receipt, with `supervisorStatusDisposition` equal
+to validated, unavailable or invalid and nullable `supervisorStatus`. Never retain
+or hash a rejected frame. Outer and original receipts retain their existing shapes.
+Record the original supervisor exit even on failure. Continue reading a safe
+terminal receipt when available; `ownedClosure` still requires that existing
+terminal's worker EOF and Job-zero evidence. NAS1 cannot replace it, manufacture
+closure, waive the operating-basis gate or make authentication pass.
+
+A fixed-selection safe collector for this route must explicitly admit the v2
+controller shape and validate the numeric status against the exact source and
+observed exit. Old collectors remain bound to their old shapes and spent calls;
+do not reopen them or read any additional product/private output.
+
+### Validation and continuation bounds
+
+The existing pure `ControlledChecks.WireCase(1)` adds a NAS1 golden vector and
+out-of-range producer checks within its existing bounded row; the84-row fixture
+count and native-case effects are unchanged. The matching
+[Test-SelectedAccountSupervisorStatus.ps1](../../../tools/validation/tests/Test-SelectedAccountSupervisorStatus.ps1)
+parses only the two existing scripts and extracts Need/Read-SupervisorStatus;
+it never dot-sources the controllers. Its24 public checks cover a failed-admission
+vector, signed ordinal, successful-return vector, short/long/unknown frames,
+reserved flags, exit disagreement and fragmented capture. One source-test
+invocation is bounded to30seconds,128KiB safe output and charge`0/1/0/0` in the
+existing technical pool; precharge before submission. Use the already installed
+Linux PowerShell7.5.5 for these pure source checks only. It is not a substitute
+for native Windows PowerShell5.1x64 execution or evidence. No package restore,
+installation, network, Windows invocation, native call or account read occurs.
+
+Review and repository checks can proceed before merge. Runtime tests, compilation
+and deployment require merged protocol/source and independently accepted exact
+inputs/calls/accounting. Reuse accepted toolchain/reference/provenance and compile
+mechanics; any fresh root projection must be explicit in the exact reviewed call.
+Do not overwrite earlier source/artifact/receipt roots. No further actual R1,
+R6, Work or WSL invocation follows solely from this correction. Personal5's
+unobserved downstream extent and closure remain unknown; the old-attempt3 owner
+disposition does not transfer. An unchanged readiness declaration is not closure.
+
+### Current diagnostic-enabled source bindings
+
+| Source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [Program.cs](../../../tools/validation/controlled-callers/source/native/Program.cs) | 20457 | `594272407560dfd45226660ccc9a02195a78754129a84a8866864818f4b06c35` |
+| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 16327 | `c6d4893e3c9300ff84177a467b6839c99495b92534d474f04c1262ce4199b148` |
+| [ControlledChecks.cs](../../../tools/validation/controlled-callers/source/native/ControlledChecks.cs) | 9792 | `94bf2e6242e7c1d584560ce924586c530aa14dd95206190cc3ee581c027ce470` |
+| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `3546b6ce34559c51dac09c3dd1bc1aafd88ed4b8c9388d294c650881b5878d8d` |
+| [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 19566 | `337250f5adcd702e4d8b0a38aa17d1ef0411a3de7d3416c0d8f8febda97d3404` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 22894 | `b4f4ca87e2c4dae5a3620760a39e45a88a639e3a55f0359cd23948c78ec9053b` |
+| [Test-SelectedAccountSupervisorStatus.ps1](../../../tools/validation/tests/Test-SelectedAccountSupervisorStatus.ps1) | 3103 | `81cdd23b3f56176852647a8ed451a08037ee891557989d64fc4cc3327b517914` |
+
 ## Outcome-Based Execution and Accounting
 
 ### Current allocations and historical recipes
