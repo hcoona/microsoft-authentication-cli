@@ -612,6 +612,36 @@ from their independently accepted new correspondence; never carry account-v5
 native identities into account-v6 by content equality. Any new library hash and
 size comes from accepted actual compilation, not a prediction or the old image.
 
+After independent acceptance of a failed four-leaf result collection, its ended
+ordinary return and the original dispatch/own-Linux scoped completion, permit
+one additional fixed public recovery collection for this supplemental-control
+batch. Reserve one30s/4MiB passive pass from the same ledger before its sole
+submission; no technical or real-stage start is added. Reuse the existing
+[bounded recovery reader](../../../tools/validation/collect_selected_account_cutoff_compilation.py),
+projecting only the current stage, dedicated retention/output names, the receipt
+role and these four leaves: `private-public-preparation-result.json` (32768B),
+`launcher.jsonl` (65536B), `launcher.stdout.bin` and `launcher.stderr.bin`
+(65536B each). Do not read either library or any input/private payload. Preserve
+strict no-follow/held/named/full9, length/hash/EOF, duplicate/nonfinite/noninteger
+JSON rejection,25s source/CPU,128MiB AS,64-FD,4MiB requested-read and524288B
+exclusive readonly snapshot/readback limits. Missing leaves retain validated,
+rechecked absence; nonempty captures retain only their fixed no-content-read
+suppression disposition. Failure exports only the existing fixed phase/public
+leaf/descriptor-close fields, never exception or compiler text. This projection
+adds no reader method, host process or observation mechanism.
+
+The exact source/input/call/accounting review must bind the accepted failed
+outcome, current protocol, original nonce/E0/stage identity and accepted runtime
+basis. Do not replay the failed reader, compilation, transfer or OWN observer,
+renew any original deadline, repair occupied outputs or refund consumption.
+Reader completion alone does not establish successful compilation, image/native
+correspondence, six copies or Windows root/Job/twoEOF closure. Independently
+accept those actual public records and the original scoped conjunction before
+helper use; any nonempty capture leaves successful native acceptance blocked.
+Preserve all prior pending/unknown/history fields and `noExperimentLive=false`.
+A failed recovery pass stops dependent work and requires a supported protocol
+correction before another observation; no automatic second pass is allocated.
+
 Keep canonical base scripts inert. Exact execution copies project the account-v6
 literal, the matching four null-selector template hashes and their fixed public
 control aliases consistently; methods, account selection and effects do not
