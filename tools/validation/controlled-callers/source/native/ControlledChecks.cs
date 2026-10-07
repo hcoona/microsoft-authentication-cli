@@ -63,7 +63,7 @@ internal static class ControlledChecks
                 break;
             }
             case 2: { byte[] x = Wire.Encode([Success(true),Success(true)]); Need(x.Length == 27 && Wire.Decode(x,2).All(r=>r.Passed)); break; }
-            case 3: Need(Wire.Failure([78,67,70,49,(byte)Fault.Capture]) == Fault.Capture); break;
+            case 3: WorkerFailureFrames(); break;
             case 4: { byte[] x=Wire.Encode([Success()]); Reject(()=>Wire.Decode(x[..^1],1)); Reject(()=>Wire.Decode(x.Concat(new byte[]{0}).ToArray(),1)); break; }
             case 5: { byte[] x=Wire.Encode([Success()]); x[5]=255; Reject(()=>Wire.Decode(x,1)); x=Wire.Encode([Success()]);x[7]|=128;Reject(()=>Wire.Decode(x,1));break; }
             case 6: { SafeResult r=Closed();Need(Wire.Decode(Wire.Encode([r]),1)[0].WriterCloseToCompletionMilliseconds==1000);
@@ -77,6 +77,45 @@ internal static class ControlledChecks
             case 12: PartialWrite();break;
             default: throw new SafeFailure(Fault.Admission);
         }
+    }
+    private static void WorkerFailureFrames()
+    {
+        const string profile = @"C:\fixture\existing\selected-account-profile.json";
+        Need(CallerRules.ProfileMatches(profile, profile));
+        Need(!CallerRules.ProfileMatches(@"C:\fixture\fresh\selected-account-profile.json", profile));
+        byte[] legacy = [78, 67, 70, 49, (byte)Fault.Capture];
+        Need(Wire.Failure(legacy) == Fault.Capture && Wire.InspectFailure(legacy).Disposition == WorkerFrameDisposition.Unavailable);
+        var checkpoint = new WorkerCheckpoint();
+        checkpoint.At(WorkerStage.CallerInventory, 193); checkpoint.Capture(new SafeFailure(Fault.Admission));
+        checkpoint.At(WorkerStage.PrivateParse); checkpoint.Capture(new IOException());
+        Need(checkpoint.First == new WorkerFailure(Fault.Admission, WorkerStage.CallerInventory, 193));
+        byte[] valid = Wire.EncodeFailure(checkpoint.First!.Value);
+        Need(Convert.ToHexString(valid) == "4E4346320105C1000000");
+        FrameDecision decision = CallerRules.DecideFrame(valid, 1, 1, 1, 0);
+        Need(!decision.Passed && decision.Results is null && decision.FirstFault == Fault.Admission &&
+            decision.WorkerFrame.Disposition == WorkerFrameDisposition.Validated && decision.WorkerFrame.Failure == checkpoint.First);
+        var local = new WorkerFailure(Fault.Admission, WorkerStage.PrivateRead, -1);
+        Need(Wire.InspectFailure(Wire.EncodeFailure(local)).Failure == local);
+        foreach (byte[] bad in new[] { valid[..^1], valid.Concat(new byte[] { 0 }).ToArray(),
+            new byte[] { 78, 67, 70, 51, 1, 5, 193, 0, 0, 0 }, new byte[] { 78, 67, 70, 50, 7, 5, 193, 0, 0, 0 },
+            new byte[] { 78, 67, 70, 50, 1, 0, 193, 0, 0, 0 }, new byte[] { 78, 67, 70, 50, 1, 16, 193, 0, 0, 0 },
+            new byte[] { 78, 67, 70, 50, 1, 10, 0, 0, 0, 0 }, new byte[] { 78, 67, 70, 50, 1, 5, 194, 0, 0, 0 },
+            new byte[] { 78, 67, 70, 50, 1, 6, 197, 0, 0, 0 }, new byte[] { 78, 67, 70, 50, 1, 5, 254, 255, 255, 255 } })
+        {
+            WorkerFrame invalid = Wire.InspectFailure(bad);
+            Need(invalid.Disposition == WorkerFrameDisposition.Invalid && invalid.Failure is null);
+            Reject(() => CallerRules.DecideFrame(bad, 1, 1, 1, 0));
+        }
+        Need(Wire.InspectFailure([]).Disposition == WorkerFrameDisposition.Unavailable);
+        Need(Wire.InspectFailure(Wire.Encode([Success()])).Disposition == WorkerFrameDisposition.Unavailable);
+        Need(CallerRules.DecideFrame(Wire.Encode([Success()]), 1, 2, 0, 0).Passed);
+        Need(Wire.InspectFailure(Wire.Encode([Success()])[..^1]).Disposition == WorkerFrameDisposition.Invalid);
+        byte[] receipt = SafeReceipt.Project(SafePlan(), "R1", "00000000000040008000000000000000", false,
+            null, false, true, true, false, false, 0, Fault.Admission, decision.WorkerFrame);
+        string text = Encoding.UTF8.GetString(receipt);
+        Need(text.Contains("\"workerFailureDisposition\":\"validated\"", StringComparison.Ordinal) &&
+            text.Contains("\"workerFailure\":{\"fault\":\"Admission\",\"stage\":\"CallerInventory\",\"publicInputOrdinal\":193}", StringComparison.Ordinal));
+        Need(receipt.Length <= 4096);
     }
     internal static void SequenceCase(int index)
     {

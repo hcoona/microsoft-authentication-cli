@@ -4,9 +4,10 @@ using System;
 using System.IO;
 namespace ConfidentialNativeCaller;
 internal enum ReadDecision { Continue, Data, Eof, Fail }
-internal readonly record struct FrameDecision(SafeResult[]? Results, Fault? FirstFault, bool Passed);
+internal readonly record struct FrameDecision(SafeResult[]? Results, Fault? FirstFault, bool Passed, WorkerFrame WorkerFrame);
 internal static class CallerRules
 {
+    internal static bool ProfileMatches(string selected, string pinned) => string.Equals(selected, pinned, StringComparison.Ordinal);
     internal static uint BeginRead(int limit, int count, ref int calls)
     {
         if (++calls > limit + 1024) throw new SafeFailure(Fault.Capture);
@@ -49,12 +50,13 @@ internal static class CallerRules
     {
         PrivateRequest.Require(slots is 1 or 2 && errorBytes == 0 && total >= 1 && total <= slots + 1);
         Fault? first = Wire.Failure(bytes);
-        if (first is not null) return new(null, first, false);
+        WorkerFrame frame = Wire.InspectFailure(bytes);
+        if (first is not null) return new(null, first, false, frame);
         PrivateRequest.Require(total == slots + 1);
         SafeResult[] results = Wire.Decode(bytes, slots);
         bool all = true;
         foreach (SafeResult result in results) all &= result.Passed;
         bool passed = exit == 0 && all;
-        return new(results, passed ? null : all ? Fault.Native : Fault.Expectation, passed);
+        return new(results, passed ? null : all ? Fault.Native : Fault.Expectation, passed, frame);
     }
 }

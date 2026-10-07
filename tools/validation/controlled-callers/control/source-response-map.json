@@ -130,9 +130,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 16327,
+        "bytes": 17332,
         "path": "source/native/ActualAdmission.cs",
-        "sha256": "c6d4893e3c9300ff84177a467b6839c99495b92534d474f04c1262ce4199b148"
+        "sha256": "b647d7f0aad322b5e7dbecd047fed4a8a1742879c88014b06798261d4c752110"
       },
       "stagedRelativePath": "source/native/ActualAdmission.cs"
     },
@@ -146,9 +146,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 3299,
+        "bytes": 3528,
         "path": "source/native/CallerRules.cs",
-        "sha256": "3c571186641b41f0b0139e5a3cf68dff67e5bc1733d33ea859dc48a573f08426"
+        "sha256": "fc6540593fcadc5ad07c8e48e0c266366eea208459bc49decd19b141ff208e38"
       },
       "stagedRelativePath": "source/native/CallerRules.cs"
     },
@@ -162,9 +162,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 9792,
+        "bytes": 12970,
         "path": "source/native/ControlledChecks.cs",
-        "sha256": "94bf2e6242e7c1d584560ce924586c530aa14dd95206190cc3ee581c027ce470"
+        "sha256": "61aab4132e0d299a6dd46eb4e4ce307049bb85fbdf7ea314d0d2ec0a48ea7d1c"
       },
       "stagedRelativePath": "source/native/ControlledChecks.cs"
     },
@@ -258,9 +258,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 20457,
+        "bytes": 21531,
         "path": "source/native/Program.cs",
-        "sha256": "594272407560dfd45226660ccc9a02195a78754129a84a8866864818f4b06c35"
+        "sha256": "4b3be4c42cc62ffbc7797be53cc0244e4fda033730c29e170ec0078de054cebf"
       },
       "stagedRelativePath": "source/native/Program.cs"
     },
@@ -282,9 +282,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 3587,
+        "bytes": 4402,
         "path": "source/native/SafeReceipt.cs",
-        "sha256": "d9b778c48dd8731de4bee391ecad219b4ba53d4d47fbd954963725a9ad5b67f6"
+        "sha256": "29058abda61cbd35ed1cf0df4321cf661eaa77c881dd1b2eec93e0500bd87a5a"
       },
       "stagedRelativePath": "source/native/SafeReceipt.cs"
     },
@@ -298,9 +298,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 4080,
+        "bytes": 7104,
         "path": "source/native/Wire.cs",
-        "sha256": "27f9045754116c9926360b9ad5b9fc7b22b4fc0a7af2417c1f8b9a8c700eba57"
+        "sha256": "12d520e2444be09412b8a1869ce4dd97043a7d2942b5ebbc23a6ba088c9a3373"
       },
       "stagedRelativePath": "source/native/Wire.cs"
     }
