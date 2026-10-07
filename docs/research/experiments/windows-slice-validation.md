@@ -2028,6 +2028,91 @@ establish current correspondence only. All native200 identities, locked-content
 checks, ordinary Windows root/Job/two-EOF, Profile/real operating basis and local
 private-input gates remain. Personal, work and actualWSL evidence remain required.
 
+##### Exclusive public-copy immediate readback
+
+The failed 0223 public transfer rejected the final immediate-readback identity
+comparison for its sixth exclusive output. Its fixed public diagnostic reports
+only a Linux ctime difference; its counters place that comparison after the
+payload and EOF read. This identifies the rejected operand, not the metadata
+change's cause or benignness. Independent failure and scoped childless completion
+review and distinct triage accepted that the implementation enforced its strict
+contract and that a narrow prospective correction is needed. Preserve the failed
+original, partial stage, consumed capacity and historical uncertainties. Do not
+repair, adopt or replay 0223 or renew its clock or collector.
+The exact active public transfer source was19,898B with SHA-256
+`0996e4b41ae24c7f0453d6e10ba060cdbe69130c64caeed838dd561730e3b866`,
+from the accepted public method at `cd5d61404356dee2d17efdcdabdf1eeeffb44eca`
+with admitted stage/input-path and guard projection. Its complete terminal archive
+has SHA-256 `359f93fbf32f580f116219df1d2d4dc302b4187f1cdfa6871f23efe8f370d91c`;
+independent failed-outcome/scoped-completion acceptance has SHA-256
+`4c51d80464e8bcb0085e15e61c225cf038c608280ebe8d0db8d928574f1fc717`.
+
+For a fresh exact-admitted transfer only, this supplement supersedes the strict
+immediate created-copy readback predicate in the preceding successor. Qualify
+ctime observations solely for the start marker, ten fixed `LEAVES` public copies
+and result receipt, exclusively created under that transfer's fixed fresh stage.
+The writer checks both the fixed leaf allowlist and the held stage descriptor;
+no caller-selected path, input role, private leaf or general reader can select
+this qualification. Keep exclusive no-follow creation, writer closure and the
+existing creation-to-reader identity and regular/single-link/length predicates.
+
+Retain the initial read-only reader full9. Before reading, compare its device,
+inode, mode, uid, gid, length, mtime and link count with both the held reader and
+named leaf. Require those same eight fields in the final held and named full9.
+The one bounded read must return exactly the admitted bytes already in memory,
+with the existing exact length and EOF predicates. Require final held/named full9
+equality, including ctime. Do not retry an observation, reset a deadline, replace
+an original descriptor or accept any other-field, content, EOF or final identity
+mismatch. Source readers, directories and the two later created-file check sets
+retain their existing strict predicates and bounded reread rules.
+
+Each returned created row additionally retains `readbackObservation` with exactly
+`initialReaderFull9`, `beforeReadHeldFull9`, `beforeReadNamedFull9`,
+`finalReaderFull9` and `finalNamedFull9`: five lossless nine-integer arrays.
+Keep every observed ctime, without a synthetic composite. The row's `full9` is
+the actual final named full9, which also becomes the retained reader identity
+for later checks. Preserve `createdFull9`. The same observation is required in
+`startRow` and the result receipt's own transport descriptor. Consumers require
+all eight-field joins, final full9 equality, content/EOF success and original
+phase6/phase9 joins before admitting deployment. These observations establish
+only the bounded current-byte readback, not uninterrupted history or stable ctime.
+
+The hashed receipt and success frame use
+`selected-account-public-transfer-v3` and
+`selected-account-public-transfer-result-v3`, respectively. Keep the ten rows,
+separate start row, ordered eleven/23 `copyChecks`, existing counters, fixed
+failure-v2 diagnostic and false product/account flags. The metadata operation
+count and single immediate payload read are unchanged. All original170s/CPU,
+AS128MiB, operation/byte limits,16KiB start,32KiB receipt,8192B success,4096B
+failure and GNU175TERM+5KILL whole180s bounds remain. Fresh action, initializer,
+authority, source/payload descriptors, dispatch and current receipt interpretation
+must agree; independently admit their exact inputs, call and full charge before
+use. Reuse unchanged accepted compiler, artifact, synthetic, product and runtime
+evidence where current correspondence remains established. Windows native200,
+private-local, real operating-basis, personal/work and actualWSL gates remain.
+
+After merge and exact source/call admission, permit one Linux-only synthetic
+readback regression original from the common test pool, charge `0/1/0/0`, with
+zero synthetic process, Windows, network or account effects. The isolated test
+reads only its reviewed source and the transfer source within a64KiB
+length-plus-EOF envelope; limit these sources to16KiB and32KiB, respectively.
+It selects only `full9`, `write`, `stable`, `STAGE` and `LEAVES` by AST, with
+synthetic metadata, bytes and descriptor operations. Source reading alone uses
+real file operations; no transfer main, modeled descriptor operation or new file
+output runs. Six cases preserve ctime
+observations/final identity, reject each other-field change before/after read,
+reject final held/named disagreement, reject content/length/EOF failures, reject
+unadmitted leaves/parents before creation, and keep ordinary source readers
+full9-strict. Use Python3.14 isolated/no-site/no-bytecode under GNU25TERM+5KILL,
+whole30s and at most4096B combined output. Reserve once before submission and
+independently accept actual results and source-qualified childless completion.
+This is pure synthetic regression evidence, not a Windows transfer result.
+
+| Current source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [transfer_selected_account_public.py](../../../tools/validation/transfer_selected_account_public.py) | 17324 | `320451dbb5fc79499c5aa300d221635af80140d5964a6b82dbe636e9720b32ad` |
+| [test_selected_account_transfer_readback.py](../../../tools/validation/tests/test_selected_account_transfer_readback.py) | 5832 | `eb8a249d6ab591e767beeb07b3f01d475177b77f6d0a5b6195922b02c6c40122` |
+
 ##### Pure projection validation
 
 Before accepting actual results, admit at most one Linux-only in-memory projection
