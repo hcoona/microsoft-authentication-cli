@@ -334,6 +334,38 @@ boundary. The twelve local slots across both roles stay within the unchanged
 common real-stage pool; this projection does not grant another R1 after failure
 or spend an unused slot in advance.
 
+If the previously accepted retained tool session and its fixed Linux owner are
+unavailable through the existing bounded methods, apply the standing current-absence
+disposition without claiming historical Windows closure or account-effects extent.
+For this checkpoint correction, permit one newly reviewed establishment package
+of the same existing stock PS5.1 x64 STA host kind on the designated Windows
+machine, existing interactive user/session and ordinary unelevated basis. Use the
+existing standard-input launch, two challenges, metadata and fixed ownership
+methods with a fresh nonce; the complete establishment original stays below35s.
+In that one new runspace, load the existing admitted cutoff and private file-pin
+helpers once each through their existing held-file loaders. Each body stays
+below30s and complete original below35s; accept the actual host and ordered loads
+before dependent work. Do not replay an old host or load original, reset a spent
+marker, rebuild a helper or create another controller, host or observation kind.
+
+Allocate exactly technical[0,0,0,2], one outside console-host role, one35s/64MiB
+metadata pass and two35s/69MiB helper-load collection passes from the unchanged
+common pools. Keep real charges zero for establishment and loading. No private
+configuration read, private document creation, product start, account access,
+cutoff lease, reboot, elevation or cache repair is permitted by this package.
+Preserve the unavailable original host, all failures, spent observations and
+charges. A package failure stops dependencies; no replacement, reload or retry
+is admitted. Independently bind exact public artifacts, current authority, source,
+inputs, calls, cumulative accounting and operating basis before execution.
+
+After actual package acceptance, rebind the existing mixed197 metadata recipe to
+that exact new host identity and admit one40s/4MiB observation, with one synthetic
+charge. Keep all four private role documents, PrivateRoot and ExistingProfilePath
+at their already admitted account-v6 paths; no account reselection or private
+rewrite. Preserve the old failed observation and its missing clock evidence.
+Current public correspondence and the exact real operating basis still gate the
+single new R1 and success-gated R6. No confidential WSL transport is admitted.
+
 ## Outcome-Based Execution and Accounting
 
 ### Current allocations and historical recipes
