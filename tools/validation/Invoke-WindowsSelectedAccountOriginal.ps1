@@ -4,7 +4,7 @@
 param(
     [Parameter(Mandatory)][string] $PlanPath,
     [Parameter(Mandatory)][string] $PlanSha256,
-    [Parameter(Mandatory)][ValidateRange(1, 6)][int] $Attempt,
+    [Parameter(Mandatory)][ValidateRange(1, 8)][int] $Attempt,
     [ValidateSet('Personal', 'Work')][string] $AccountRole = 'Personal',
     [Parameter(Mandatory)][string] $ControllerSha256,
     [Parameter(Mandatory)][Type] $CutoffType,
