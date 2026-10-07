@@ -2423,6 +2423,44 @@ file, WAM discovery, private-file read, environment mutation or account effect i
 included. Preserve the marker and full charge after any failure; no replay or
 current-file diagnosis reconstructs the original missing checkpoint.
 
+#### Actual public-input historical ChangeTime qualification
+
+A separately reviewed correction may qualify the historical-to-current Windows
+ChangeTime comparison for exactly the actual native admission's 194 public caller
+rows and three public product/Profile rows. Its purpose is to admit current exact
+public bytes when their prepared ChangeTime differs; it is not synthetic
+first-held admission or permission to substitute a baseline. The unchanged caller
+above remains strict until the corrected source and artifact are accepted.
+
+Require the original independently accepted path, length, content hash and complete
+prepared tuple. At the first native open, compare volume, file index, attributes,
+creation time, modification time, length and link count to that tuple. Require the
+exact content hash and EOF. Retain the prepared tuple in the immutable admission
+input and the separately observed complete current tuple in the held-file identity
+through the existing ownership and closure checks. Strict current eight-field
+held/named comparisons before and after reads and at final checks remain unchanged;
+a difference during those checks still fails admission.
+
+The correction must select this behavior explicitly only at the two actual public
+caller/product pin use points. The default pin behavior, private input, public
+control, fixture, installed-runtime and unrelated input roles remain strict. Do not
+omit the expected tuple, manufacture current identities from Linux, replace a
+historical descriptor, qualify content or another metadata field, or infer the
+cause of a historical difference. An exact call and its sanitized outcome record
+must identify the qualified public roles and preserve the original input and
+current-identity evidence with their limitations; no public identity observation
+establishes authentication or historical closure.
+
+Before using the corrected caller, independently accept its exact source,
+compilation/artifact correspondence, public inputs, current operating basis, call
+and cumulative accounting. Reuse the existing compiler, native pin and ownership
+methods and shared capacity; this supplement grants no new helper/controller kind,
+observation tool, account effect, private read, collector allowance or automatic
+retry. Preserve every failed call, spent charge, cutoff/lifetime uncertainty and
+`noExperimentLive=false`. Unresolved ownership or material safety defects retain
+the existing stop rule. Actual success and scoped completion still gate the
+same-pair reuse scenario, followed by the required work-account and WSL scenarios.
+
 For the next supported Personal pair only, revise the existing local batch to
 six numbered slots: retain failed primary slots 1/3 and unrun reuse slots 2/4,
 then use fresh primary slot 5/R1 and success-gated reuse slot 6/R6. Keep Work at
