@@ -80,6 +80,9 @@ internal static class ControlledChecks
     }
     private static void WorkerFailureFrames()
     {
+        const string profile = @"C:\fixture\existing\selected-account-profile.json";
+        Need(CallerRules.ProfileMatches(profile, profile));
+        Need(!CallerRules.ProfileMatches(@"C:\fixture\fresh\selected-account-profile.json", profile));
         byte[] legacy = [78, 67, 70, 49, (byte)Fault.Capture];
         Need(Wire.Failure(legacy) == Fault.Capture && Wire.InspectFailure(legacy).Disposition == WorkerFrameDisposition.Unavailable);
         var checkpoint = new WorkerCheckpoint();

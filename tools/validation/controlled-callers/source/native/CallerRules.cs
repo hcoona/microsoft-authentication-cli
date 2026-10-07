@@ -7,6 +7,7 @@ internal enum ReadDecision { Continue, Data, Eof, Fail }
 internal readonly record struct FrameDecision(SafeResult[]? Results, Fault? FirstFault, bool Passed, WorkerFrame WorkerFrame);
 internal static class CallerRules
 {
+    internal static bool ProfileMatches(string selected, string pinned) => string.Equals(selected, pinned, StringComparison.Ordinal);
     internal static uint BeginRead(int limit, int count, ref int calls)
     {
         if (++calls > limit + 1024) throw new SafeFailure(Fault.Capture);

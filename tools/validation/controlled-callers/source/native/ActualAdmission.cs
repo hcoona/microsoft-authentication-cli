@@ -57,6 +57,11 @@ internal static class AdmissionCatalog
 internal sealed class ActualAdmission : IDisposable
 {
     internal const string Root = @"C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5";
+    // The prospective caller reuses the admitted Windows-local role documents.
+    // Its public deployment root may change; this private source stays fixed.
+    internal const string PrivateRoot = @"C:\Temp\azureauth-windows-slice-108\confidential-native-account-v6\private\";
+    internal const string ExistingProfilePath = @"C:\Temp\azureauth-windows-slice-108\confidential-native-account-v6\product\selected-account-profile.json";
+    private const string ProfileRelative = @"product\selected-account-profile.json";
     private readonly FixtureNativePins pins;
     private readonly string path, sha, nonce, role, receiptRoot, privatePath;
     private readonly Group group;
@@ -139,11 +144,11 @@ internal sealed class ActualAdmission : IDisposable
                 PrivateRequest.Require(relative.StartsWith(@"product\", StringComparison.Ordinal) && productPaths.Add(relative) &&
                     ExactJson.Hash(hash) && length > 0 && length <= 67108864);
                 total = checked(total + length); PrivateRequest.Require(total <= 268435456);
-                string productPath = Root + "\\" + relative;
+                string productPath = relative == ProfileRelative ? ExistingProfilePath : Root + "\\" + relative;
                 pins.Pin(productPath, hash, length, 67108864, ExactJson.Identity(item.GetProperty("identity"), length));
                 if (relative == productImage) productHash = hash;
             }
-            PrivateRequest.Require(productHash is not null && productImage.EndsWith(".exe", StringComparison.Ordinal));
+            PrivateRequest.Require(productPaths.Contains(ProfileRelative) && productHash is not null && productImage.EndsWith(".exe", StringComparison.Ordinal));
             Program.ActualAt(7);
             JsonElement privateInput = data.GetProperty("privateInput");
             ExactJson.Members(privateInput, "relative", "bytes", "identity");
@@ -151,7 +156,7 @@ internal sealed class ActualAdmission : IDisposable
             privateLength = privateInput.GetProperty("bytes").GetInt64();
             PrivateRequest.Require(privateLength is > 0 and <= 262144);
             privateIdentity = ExactJson.Identity(privateInput.GetProperty("identity"), privateLength);
-            privatePath = Root + @"\private\" + group + ".json";
+            privatePath = PrivateRoot + group + ".json";
             receiptRoot = Root + @"\records\" + group + "-" + nonce;
             pins.HoldDirectory(receiptRoot);
             plan = new PublicPlan { SelfImage = Root + @"\artifact\NativeCaller.exe", ProductImage = Root + "\\" + productImage,
@@ -201,7 +206,13 @@ internal sealed class ActualAdmission : IDisposable
         FixtureHeldFile file = pins.Pin(privatePath, null, privateLength, 262144, privateIdentity);
         byte[] bytes = pins.Read(file, 262144);
         Program.WorkerAt(WorkerStage.PrivateParse);
-        try { PrivateRequest[] rows = PrivateRequestDocument.Parse(bytes, group); Before(); return rows; }
+        try
+        {
+            PrivateRequest[] rows = PrivateRequestDocument.Parse(bytes, group);
+            Program.WorkerAt(WorkerStage.PrivateValidation);
+            PrivateRequest.Require(rows.All(row => CallerRules.ProfileMatches(row.ProfilePath, ExistingProfilePath)));
+            Before(); return rows;
+        }
         catch (Exception caught) { Program.ActualCapture(caught); throw; }
         finally { Array.Clear(bytes); }
     }

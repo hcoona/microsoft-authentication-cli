@@ -201,14 +201,14 @@ disposition does not transfer. An unchanged readiness declaration is not closure
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [Program.cs](../../../tools/validation/controlled-callers/source/native/Program.cs) | 21531 | `4b3be4c42cc62ffbc7797be53cc0244e4fda033730c29e170ec0078de054cebf` |
-| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 16505 | `fa299b4ab8878c1c88c68a5957f1b6c82cc2002b960cb9ed4b57a5ea22ba15d3` |
-| [ControlledChecks.cs](../../../tools/validation/controlled-callers/source/native/ControlledChecks.cs) | 12722 | `5394ec5a8f457ece6643476e6e565be68ebc5de21701d7b0b8e7a5710c20810c` |
-| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16741 | `664bbfe08729330aa179bd35ddf5fc5683a9913909d94a954e2209808b3a3038` |
+| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 17332 | `b647d7f0aad322b5e7dbecd047fed4a8a1742879c88014b06798261d4c752110` |
+| [ControlledChecks.cs](../../../tools/validation/controlled-callers/source/native/ControlledChecks.cs) | 12970 | `61aab4132e0d299a6dd46eb4e4ce307049bb85fbdf7ea314d0d2ec0a48ea7d1c` |
+| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16741 | `923780b2e7f1c39633a170d335c637964288c141791d5a9049351696b5303497` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 19566 | `337250f5adcd702e4d8b0a38aa17d1ef0411a3de7d3416c0d8f8febda97d3404` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 22894 | `b4f4ca87e2c4dae5a3620760a39e45a88a639e3a55f0359cd23948c78ec9053b` |
 | [Test-SelectedAccountSupervisorStatus.ps1](../../../tools/validation/tests/Test-SelectedAccountSupervisorStatus.ps1) | 3103 | `81cdd23b3f56176852647a8ed451a08037ee891557989d64fc4cc3327b517914` |
 | [Wire.cs](../../../tools/validation/controlled-callers/source/native/Wire.cs) | 7104 | `12d520e2444be09412b8a1869ce4dd97043a7d2942b5ebbc23a6ba088c9a3373` |
-| [CallerRules.cs](../../../tools/validation/controlled-callers/source/native/CallerRules.cs) | 3394 | `b0966343f27aaad866d6eda365246b88b65dcd2e8377f91eaf09870bbb371ffd` |
+| [CallerRules.cs](../../../tools/validation/controlled-callers/source/native/CallerRules.cs) | 3528 | `fc6540593fcadc5ad07c8e48e0c266366eea208459bc49decd19b141ff208e38` |
 | [SafeReceipt.cs](../../../tools/validation/controlled-callers/source/native/SafeReceipt.cs) | 4402 | `29058abda61cbd35ed1cf0df4321cf661eaa77c881dd1b2eec93e0500bd87a5a` |
 
 ## Selected-Account Worker Failure Checkpoint
@@ -273,7 +273,8 @@ no new fields or status decoder; their existing terminal identity/EOF/Job checks
 and pass criteria remain unchanged.
 
 The existing pure WireCase(3) covers first-failure freezing, a fixed NCF2 golden
-vector, legacy and success behavior, private-stage ordinal exclusion, malformed,
+vector, exact actual-Profile binding, legacy and success behavior, private-stage
+ordinal exclusion, malformed,
 short, long, unknown and incompatible frames, and the terminal projection. Bound
 this expanded existing row to96 pure decisions; the84-row fixture count and three
 native-case effects remain unchanged. Its execution remains part of the existing
@@ -285,10 +286,26 @@ public deployment through the existing finite compile/materialization recipes,
 with fresh unused roots, exact source projections and conservative shared charges.
 Reuse unchanged toolchains, product/Profile, private documents, retained host,
 loaded helpers and accepted evidence where their correspondence remains valid.
-Any necessary private-document relocation uses the existing Windows-local method
-and requires exact identity and account-role equality admission; private contents
-and their hashes do not pass through Linux. Do not repeat unrelated fixture or
-ownership preparations. Preserve old artifacts, calls, failed records and charges.
+The prospective caller uses its fixed `ActualAdmission.PrivateRoot` for the four
+already admitted Windows-local role documents, independently of the fresh public
+deployment Root. Permit only those existing R1/R6/R7/R8 documents and preserve
+their exact admitted identity/length and local role/account equality gates. The
+control's existing private relative-role field selects the group, not an arbitrary
+private path. Do not relocate, rewrite or reselect these documents, or alter the
+loaded private helper. Private bytes and their hashes remain Windows-local. The
+fresh-root projection changes only public Root and fixture stage literals; it
+must leave PrivateRoot fixed. The singleton product/Profile inventory role
+`product\selected-account-profile.json` resolves only to fixed ExistingProfilePath
+in the existing account-v6 product directory. All other196 public rows resolve
+under fresh public Root. Require that Profile row, its exact admitted hash/length/
+full8 and existing held-pin lifetime. Before product creation, every parsed request
+must select that exact bound path; a mismatch reports only coarse PrivateValidation.
+The fresh call's inventory, control and current197 metadata projections must use
+this mixed mapping and the actual original Profile identity. A separately copied
+Profile is not evidence for the file consumed by the request. Keep the existing
+public copy receipt distinct; no private document is rewritten to point at it.
+Do not repeat unrelated fixture or ownership preparations. Preserve old artifacts,
+calls, failed records and charges.
 
 After independently accepting the exact fresh artifact/source/input/call/accounting
 and current operating basis, admit at most one new Personal R1 observation for this

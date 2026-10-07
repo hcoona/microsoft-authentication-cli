@@ -130,9 +130,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 16505,
+        "bytes": 17332,
         "path": "source/native/ActualAdmission.cs",
-        "sha256": "fa299b4ab8878c1c88c68a5957f1b6c82cc2002b960cb9ed4b57a5ea22ba15d3"
+        "sha256": "b647d7f0aad322b5e7dbecd047fed4a8a1742879c88014b06798261d4c752110"
       },
       "stagedRelativePath": "source/native/ActualAdmission.cs"
     },
@@ -146,9 +146,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 3394,
+        "bytes": 3528,
         "path": "source/native/CallerRules.cs",
-        "sha256": "b0966343f27aaad866d6eda365246b88b65dcd2e8377f91eaf09870bbb371ffd"
+        "sha256": "fc6540593fcadc5ad07c8e48e0c266366eea208459bc49decd19b141ff208e38"
       },
       "stagedRelativePath": "source/native/CallerRules.cs"
     },
@@ -162,9 +162,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 12722,
+        "bytes": 12970,
         "path": "source/native/ControlledChecks.cs",
-        "sha256": "5394ec5a8f457ece6643476e6e565be68ebc5de21701d7b0b8e7a5710c20810c"
+        "sha256": "61aab4132e0d299a6dd46eb4e4ce307049bb85fbdf7ea314d0d2ec0a48ea7d1c"
       },
       "stagedRelativePath": "source/native/ControlledChecks.cs"
     },
