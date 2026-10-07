@@ -304,7 +304,7 @@ public sealed class SelectedAccountPrivateInputPins : IDisposable
     // The hash is used only inside this Windows-local held readback operation.
     public SelectedAccountPrivateFileIdentity WritePrivate(string path, byte[] payload)
     {
-        const string root = @"C:\Temp\azureauth-windows-slice-108\confidential-native-account-v5\private\";
+        const string root = @"C:\Temp\azureauth-windows-slice-108\confidential-native-account-v6\private\";
         Need(path == root + "R1.json" || path == root + "R6.json" ||
             path == root + "R7.json" || path == root + "R8.json");
         Need(payload != null && payload.Length > 0 && payload.Length <= 262144 &&
