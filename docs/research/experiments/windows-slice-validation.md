@@ -205,7 +205,7 @@ disposition does not transfer. An unchanged readiness declaration is not closure
 | [ControlledChecks.cs](../../../tools/validation/controlled-callers/source/native/ControlledChecks.cs) | 12970 | `61aab4132e0d299a6dd46eb4e4ce307049bb85fbdf7ea314d0d2ec0a48ea7d1c` |
 | [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16741 | `923780b2e7f1c39633a170d335c637964288c141791d5a9049351696b5303497` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 19566 | `337250f5adcd702e4d8b0a38aa17d1ef0411a3de7d3416c0d8f8febda97d3404` |
-| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 22894 | `638f550429c5621b3294b07261c077bdb88d84b65e75a3edc7374b2ca4bf406c` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 22895 | `20707745ba230706a7ef79e6e4c5dd95a7a178bcb4fcf8f4aab795cde69f9025` |
 | [Test-SelectedAccountSupervisorStatus.ps1](../../../tools/validation/tests/Test-SelectedAccountSupervisorStatus.ps1) | 3103 | `81cdd23b3f56176852647a8ed451a08037ee891557989d64fc4cc3327b517914` |
 | [Wire.cs](../../../tools/validation/controlled-callers/source/native/Wire.cs) | 7104 | `12d520e2444be09412b8a1869ce4dd97043a7d2942b5ebbc23a6ba088c9a3373` |
 | [CallerRules.cs](../../../tools/validation/controlled-callers/source/native/CallerRules.cs) | 3528 | `fc6540593fcadc5ad07c8e48e0c266366eea208459bc49decd19b141ff208e38` |
@@ -365,6 +365,55 @@ at their already admitted account-v6 paths; no account reselection or private
 rewrite. Preserve the old failed observation and its missing clock evidence.
 Current public correspondence and the exact real operating basis still gate the
 single new R1 and success-gated R6. No confidential WSL transport is admitted.
+
+### Current public metadata follow-up after failed Personal slot 7
+
+After independent acceptance of the failed Personal slot 7 outcome and a fresh
+current public197 metadata observation, permit one supported next Personal pair
+within the unchanged shared pools. Preserve the failed original, its four safe
+receipts and absent case terminal, all spent observations and charges, and its
+unresolved exact admission predicate and historical account-effects extent.
+A later ChangeTime difference establishes a current input mismatch; it does not
+prove the earlier failure cause, uninterrupted content integrity or benign change.
+
+Reuse the accepted account-v7 public deployment and current caller/runtime,
+retained stock host and loaded helpers. Do not rebuild or replace the caller,
+create another public Root, reload a helper or repeat unrelated validation and
+preparation. Keep the consumed Profile and all four private role documents at
+their admitted account-v6 paths. Derive the fresh plan from the existing mixed197
+baseline using only the independently accepted current Changed values; preserve
+all hashes, lengths, other seven native identity fields, original descriptors
+and private selection. The caller retains strict current eight-field Pin/CheckAll,
+content/length/EOF and named/held checks. This creates no comparison relaxation,
+private input rewrite, cache repair or new historical-closure assumption.
+
+Project the existing original and cutoff sources to account-v7 with Personal
+slots 1 through 10 and unchanged Work slots 1 through 4. Preserve failed Personal
+slots 1/3/5/7 and unrun paired slots 2/4/6; truthfully reserve unrun slot 8 before
+fresh slot 9/R1, with slot 10/R6 success-gated. Use fresh exclusive public aliases
+`control/Invoke-WindowsSelectedAccountOriginalRetainedSlots10.ps1` and
+`control/Invoke-WindowsSelectedAccountCutoffSlots10.ps1`; the immutable projection
+changes only public Root, admission guard and those two fixed basename literals.
+Retain the slot-8 script copies and all existing account-v7 reservation leaves
+without overwrite. Bind their accepted original history and slot-7 reservation
+through the exact source/input/call/accounting review; aliases do not replace
+history or reset consumption. Materialize only the new plan, truthful unrun record
+and two fresh script copies through the existing finite public transfer/copy
+methods, with a fresh UUIDv4 receipt directory. No new process or helper kind,
+controller implementation, observer, UI tool or per-file approval is introduced.
+
+This supersedes the checkpoint's eight-slot projection only for this supported
+follow-up pair. Fourteen local slots across the two roles are not a new real-stage
+pool or permission to precharge unused corrections. Preserve cumulative history,
+full conservative failed/unrun charges, predecessor rules and all uncertainties.
+The new pair still needs independent exact artifact/input/account-role/Profile/
+scopes/current operating-basis/call/accounting admission, current at-use host and
+file checks, original finite clocks and the existing owned-Job stop procedure.
+Use cache/silent first; notify and wait for actual operator sign-in, choice,
+delegated consent or MFA. A failure ends this one next-primary allocation and
+requires accepted outcome and supported correction before further real work.
+Independently accept actual R1 success before R6. Work and actual WSL evidence
+remain required; confidential WSL transport remains separately unadmitted.
 
 ## Outcome-Based Execution and Accounting
 
@@ -936,7 +985,7 @@ Current root-sensitive source bindings:
 | [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 23008 | `a8b8efccd2dad78764d8870b602ee7d640936d1087c561be8ec7d197f323fdbd` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `52d1cf0bfc1087d556dfffdd33808696b0de721e696a4eb5de98f971070d34ac` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `3ef0171813076010fd88c8bcaaaf3884c96eebf11662eb4731e52b80080e4c46` |
-| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 7481 | `ad55f51f278d1ffcc115768717221b64b53e4fe0965ab49f213f7015e3c3ae88` |
+| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 7482 | `4960da4eaf4bb65f51d83e9fd578ab694bf6c51c0cfd73c5fb389012115e75a9` |
 | [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 30681 | `1c72feb0382a27e29a60e2ffcf7f08d755689d46b8d681ab847c6cb5d14d8afb` |
 | [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `98d56e85a2ec00490bdf2a9f559e67feae471c8284abd958c709bfaeb3b23e4d` |
 | [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `01227e0bae33f92cd5142088c79cf993395063e89d8c494d1591eab3b60ac2e1` |
