@@ -571,6 +571,75 @@ Windows-local input when needed. Normal account effects remain authorized by the
 Wave. This preparation neither waives those gates nor requests a repeated owner
 decision. Personal, work and actual WSL evidence remain required for the outcome.
 
+### Private-input preparation for the accepted account-v6 candidate
+
+After independent acceptance of the current account-v6 public200/native/Windows
+and original Linux completion conjunction, continue the existing cutoff and
+private-input preparation methods for that same candidate. Do not repeat its
+accepted caller compilation, public inventory, pure/native validation or full
+materialization. The historical account-v5 package and host remain retained;
+this continuation does not reopen their spent originals or use the historical
+retained host.
+
+The private helper's only implementation change is its fixed WritePrivate
+destination from account-v5 to account-v6. Its R1/R6/R7/R8 allowlist, exclusive
+creation, Windows-local content/readback hashes, finite requests, strict current
+identity comparisons, sealing and disposal remain unchanged. This source is
+24977B, SHA-256
+`98a330a380178d69d6f9ccd6fcecae69f077d0e501db11762e8aa7cbfc95d5ab`.
+The account-v5 library cannot supply that new destination predicate. Compile
+exactly one fresh library with the already accepted default Framework compilation
+method in the existing contained normal0070 public preparation route; do not
+recompile the cutoff library or introduce a helper kind, controller or toolchain.
+The generated and final library bounds and checked-image public bootstrap load
+remain those of One public helper and supplemental Work controls below. Bind and
+independently accept the new source/image/native identities before loading or
+calling that helper in an ordinary retained PowerShell process.
+
+Use the existing three-cutoff-control materialization and six-supplemental-control
+preparation as two bounded batches, with their original finite technical and
+passive allocations, startup/deadline/Job/direct-scope/collection methods. Exact
+packets project only the fresh stage, account-v6 target, current public anchor,
+the role-aware original/cutoff controller aliases, and corresponding source,
+template, artifact and native descriptors. The retained original and cutoff
+aliases remain Invoke-WindowsSelectedAccountOriginalRetainedSlots.ps1 and
+Invoke-WindowsSelectedAccountCutoffSlots.ps1. The private batch restores the
+already accepted fresh compilation step in place of historical artifact reuse;
+it does not load or call the cutoff library or write private inputs. Preserve
+current all-field checks and the already accepted historical ChangeTime
+qualification. Bind the account-v6 anchor and all four cutoff input observations
+from their independently accepted new correspondence; never carry account-v5
+native identities into account-v6 by content equality. Any new library hash and
+size comes from accepted actual compilation, not a prediction or the old image.
+
+Keep canonical base scripts inert. Exact execution copies project the account-v6
+literal, the matching four null-selector template hashes and their fixed public
+control aliases consistently; methods, account selection and effects do not
+change. Read the already designated Windows-local test configuration through the
+existing explicit PrivateConfigPath parameter. No input UI or new configuration
+transport is required. Account selectors, private file contents and hashes remain
+Windows-local. Preserve prior role-creation attempts in the same ledger; admit
+at most one new exclusive two-document creation per role for this fresh root,
+using the existing120s/1MiB per-role bounds after the current Profile, host/load
+and real operating-basis gates. This is no clean-account or cache-reset claim.
+
+Reuse the accepted ordinary retained-host and once-load methods, with their exact
+current process/runspace/library and finite call gates. Do not survey unrelated
+state, touch the historical retained host, reboot, introduce an observation/controller tool, clear
+caches or replace the selected accounts. Apply the standing current-absence
+disposition internally when an experiment-owned process or Job cannot be found;
+preserve historical uncertainty and handle positive ongoing work with the
+existing stop procedure. Private creation and loading establish no authentication
+success. Personal R1/R6, Work R7/R8 and actual WSL acceptance remain required;
+actual sign-in, choice, consent or MFA requires notifying and waiting for the
+operator. Confidential WSL transport retains its separate boundary.
+
+All old failures, occupied roots, spent calls, charges, pending and unknown fields
+and historical noExperimentLive=false remain. Exact source, artifact, input,
+call, accounting and actual outcome reviews precede dependent execution. Stop
+after sufficient evidence. This supplement reserves or invokes nothing and
+requires no renewed owner decision inside the accepted Slice effects boundary.
+
 ### Current root-compatible source bindings
 
 | Source | Bytes | SHA-256 |
