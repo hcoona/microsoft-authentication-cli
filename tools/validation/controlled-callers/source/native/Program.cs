@@ -19,20 +19,26 @@ internal static class Program
     private static bool workerOutputAttempted;
     // Actual supervisors expose only a fixed public status, never exception or provider text.
     private static bool actualSupervisor;
+    private static bool actualWorker;
+    private static readonly WorkerCheckpoint workerCheckpoint = new();
     private static byte actualStage;
     private static int actualInputOrdinal = -1;
     private static ushort actualFlags;
     private static Fault? actualFault;
     internal static void ActualAt(byte stage, int inputOrdinal = -1)
     {
+        if (actualWorker) workerCheckpoint.At((WorkerStage)stage, inputOrdinal);
         if (!actualSupervisor || actualFault is not null) return;
         actualStage = stage; actualInputOrdinal = inputOrdinal;
     }
     internal static void ActualFlag(ushort flag) { if (actualSupervisor) actualFlags |= flag; }
     internal static void ActualCapture(Exception caught)
     {
+        if (actualWorker) workerCheckpoint.Capture(caught);
         if (actualSupervisor) actualFault ??= caught is SafeFailure safe ? safe.Fault : Fault.Native;
     }
+    internal static void WorkerAt(WorkerStage stage)
+    { if (actualWorker) workerCheckpoint.At(stage); }
     internal static byte[] ActualStatus(byte stage, byte fault, ushort flags, int inputOrdinal, int exitCode)
     {
         PrivateRequest.Require(stage is >= 1 and <= 17 && fault <= 7 && flags <= 1023 &&
@@ -60,6 +66,7 @@ internal static class Program
         bool fixture = args.Length > 0 && args[0] is "--fixture-worker" or "--fixture-supervisor";
         bool worker = args.Length > 0 && args[0] is "--worker" or "--fixture-worker";
         actualSupervisor = args.Length > 0 && args[0] == "--supervisor";
+        actualWorker = args.Length > 0 && args[0] == "--worker";
         int actualExitCode = 1;
         long diagnosticEnd=(fixture && !worker) || actualSupervisor?Add(entry,WorkMilliseconds+TerminalMilliseconds):0;
         if(fixture && !worker && args.Length==7 && long.TryParse(args[6],NumberStyles.None,CultureInfo.InvariantCulture,out long bound))
@@ -78,7 +85,8 @@ internal static class Program
             ActualCapture(caught);
             // A fixed enum preserves only the first safe cause. Never format the exception.
             if (worker && !workerOutputAttempted)
-                try { WriteWorkerFrame([78, 67, 70, 49, (byte)(caught is SafeFailure safe ? safe.Fault : Fault.Native)]); } catch { }
+                try { WriteWorkerFrame(actualWorker && workerCheckpoint.First is WorkerFailure failure ?
+                    Wire.EncodeFailure(failure) : [78, 67, 70, 49, (byte)(caught is SafeFailure safe ? safe.Fault : Fault.Native)]); } catch { }
             return 1;
         }
         finally
@@ -139,6 +147,7 @@ internal static class Program
         uint total = 0;
         SafeResult[]? results = null;
         Fault? firstFault = null;
+        WorkerFrame workerFrame = new(WorkerFrameDisposition.Unavailable);
         long terminalEnd = finalEnd;
         try
         {
@@ -183,8 +192,9 @@ internal static class Program
                 if(fixture)FixtureDiagnostics.At(FixtureStage.ValidateWorker);
                 ActualAt(16);
                 terminalEnd = Math.Min(terminalEnd, Add(Now, TerminalMilliseconds));
+                workerFrame = Wire.InspectFailure(output.Bytes.Span);
                 FrameDecision decision = CallerRules.DecideFrame(output.Bytes.Span, slots.Length, total, exit!.Value, error.Bytes.Length);
-                results = decision.Results; firstFault = decision.FirstFault; passed = decision.Passed;
+                results = decision.Results; firstFault = decision.FirstFault; passed = decision.Passed; workerFrame = decision.WorkerFrame;
             }
             catch (Exception caught)
             {
@@ -225,7 +235,7 @@ internal static class Program
             ActualAt(17);
             for (int i = 0; i < slots.Length; i++)
                 Receipt(plan, slots[i], nonce, false, results?[i], CallerRules.TerminalMayPass(passed, stopAttempted),
-                    true, true, stopAttempted, stopSucceeded, entry, terminalEnd, firstFault);
+                    true, true, stopAttempted, stopSucceeded, entry, terminalEnd, firstFault, fixture ? null : workerFrame);
             return CallerRules.TerminalMayPass(passed, stopAttempted) ? 0 : 1;
         }
         catch (Exception caught) { ActualCapture(caught); throw; }
@@ -259,6 +269,7 @@ internal static class Program
     internal static int Work(PublicPlan plan, Group group, long originalWorkEnd, bool fixture)
     {
         PrivateRequest[] requests = fixture ? FixtureAdmission.Requests(group) : AdmissionCatalog.LoadPrivateRequests(group);
+        WorkerAt(WorkerStage.PrivateValidation);
         PrivateRequest.Require(requests.Length == AdmissionCatalog.Slots(group).Length);
         foreach (PrivateRequest request in requests) request.Validate();
         if (group == Group.R5Pair)
@@ -275,10 +286,12 @@ internal static class Program
         {
             foreach (PrivateRequest request in requests)
             {
+                WorkerAt(WorkerStage.BeforeProduct);
                 long began = Now;
                 // Product duration, existing one-second ending allowance, then five
                 // seconds for private validation and bounded safe evidence must fit.
                 PrivateRequest.Require(Add(began, request.TimeoutSeconds * 1000 + 6000) < originalWorkEnd);
+                WorkerAt(WorkerStage.ProductLifecycle);
                 var live = new Live(request, began, Add(began, request.TimeoutSeconds * 1000 + 1000));
                 active.Add(live);
                 live.Child = Native.StartSuspended(plan.ProductImage, fixture ? FixtureAdmission.Arguments(group, request) : request.Arguments(), plan.WorkingDirectory,
@@ -331,10 +344,12 @@ internal static class Program
             }
             Before(originalWorkEnd);
             SafeResult[] results = active.Select(x => x.Result!).ToArray();
+            WorkerAt(WorkerStage.SafeOutput);
             byte[] safe = Wire.Encode(results);
             WriteWorkerFrame(safe);
             return results.All(x => x.Passed) ? 0 : 1;
         }
+        catch (Exception caught) { ActualCapture(caught); throw; }
         finally { foreach (Live live in active) live.Dispose(); }
     }
 
@@ -344,11 +359,12 @@ internal static class Program
     }
 
     private static void Receipt(PublicPlan plan, string slot, string nonce, bool reservation, SafeResult? result,
-        bool passed, bool safeEof, bool jobZero, bool stopAttempted, bool stopSucceeded, long entry, long deadline, Fault? firstFault = null)
+        bool passed, bool safeEof, bool jobZero, bool stopAttempted, bool stopSucceeded, long entry, long deadline, Fault? firstFault = null,
+        WorkerFrame? workerFrame = null)
     {
         Before(deadline);
         byte[] safe = SafeReceipt.Project(plan, slot, nonce, reservation, result, passed, safeEof, jobZero,
-            stopAttempted, stopSucceeded, Elapsed(entry), firstFault);
+            stopAttempted, stopSucceeded, Elapsed(entry), firstFault, workerFrame);
         string leaf = slot + (reservation ? "-reservation.json" : "-terminal.json");
         SafeReceipt.Persist(safe, () => Before(deadline),
             () => new FileStream(Path.Combine(plan.ReceiptDirectory, leaf), FileMode.CreateNew, FileAccess.Write, FileShare.Read),

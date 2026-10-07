@@ -133,7 +133,8 @@ The public ordinal is-1 outside inventory work,0 through193 for caller rows and
 194 through225 for product rows, in the exact accepted control's order. Private
 request values and private predicate locations are excluded. The first caught
 supervisor failure freezes its stage/ordinal/fault before cleanup; cleanup facts
-may still accumulate. Workers retain their NCF1 protocol and emit no NAS1 status.
+may still accumulate. Legacy NCF1 decoding remains supported; the actual worker
+failure extension below uses the existing stdout pipe and emits no NAS1 status.
 Synthetic supervisor diagnostics remain unchanged.
 
 Flag bits0 through9 mean, respectively: Job creation returned, suspended worker
@@ -199,13 +200,106 @@ disposition does not transfer. An unchanged readiness declaration is not closure
 
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
-| [Program.cs](../../../tools/validation/controlled-callers/source/native/Program.cs) | 20457 | `594272407560dfd45226660ccc9a02195a78754129a84a8866864818f4b06c35` |
-| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 16327 | `c6d4893e3c9300ff84177a467b6839c99495b92534d474f04c1262ce4199b148` |
-| [ControlledChecks.cs](../../../tools/validation/controlled-callers/source/native/ControlledChecks.cs) | 9792 | `94bf2e6242e7c1d584560ce924586c530aa14dd95206190cc3ee581c027ce470` |
-| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `b8a0c1482d2f414eb0bfb6dc06cdf8025b83a0b31c050bca2b6c51f5eccd0988` |
+| [Program.cs](../../../tools/validation/controlled-callers/source/native/Program.cs) | 21531 | `4b3be4c42cc62ffbc7797be53cc0244e4fda033730c29e170ec0078de054cebf` |
+| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 16505 | `fa299b4ab8878c1c88c68a5957f1b6c82cc2002b960cb9ed4b57a5ea22ba15d3` |
+| [ControlledChecks.cs](../../../tools/validation/controlled-callers/source/native/ControlledChecks.cs) | 12722 | `5394ec5a8f457ece6643476e6e565be68ebc5de21701d7b0b8e7a5710c20810c` |
+| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16741 | `664bbfe08729330aa179bd35ddf5fc5683a9913909d94a954e2209808b3a3038` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 19566 | `337250f5adcd702e4d8b0a38aa17d1ef0411a3de7d3416c0d8f8febda97d3404` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 22894 | `b4f4ca87e2c4dae5a3620760a39e45a88a639e3a55f0359cd23948c78ec9053b` |
 | [Test-SelectedAccountSupervisorStatus.ps1](../../../tools/validation/tests/Test-SelectedAccountSupervisorStatus.ps1) | 3103 | `81cdd23b3f56176852647a8ed451a08037ee891557989d64fc4cc3327b517914` |
+| [Wire.cs](../../../tools/validation/controlled-callers/source/native/Wire.cs) | 7104 | `12d520e2444be09412b8a1869ce4dd97043a7d2942b5ebbc23a6ba088c9a3373` |
+| [CallerRules.cs](../../../tools/validation/controlled-callers/source/native/CallerRules.cs) | 3394 | `b0966343f27aaad866d6eda365246b88b65dcd2e8377f91eaf09870bbb371ffd` |
+| [SafeReceipt.cs](../../../tools/validation/controlled-callers/source/native/SafeReceipt.cs) | 4402 | `29058abda61cbd35ed1cf0df4321cf661eaa77c881dd1b2eec93e0500bd87a5a` |
+
+## Selected-Account Worker Failure Checkpoint
+
+The existing actual worker reports its first caught failure through the existing
+stdout channel. NCF2 is exactly10bytes: ASCII NCF2, one existing Fault byte0-6,
+one attempted-stage byte1-15 and one little-endian signed32 public-input ordinal.
+It stays within the existing32-byte capture capacity. Legacy five-byte NCF1 and
+NCW2 success decoding remain accepted. This adds no process, pipe, helper kind,
+controller, query mode, account read, provider output or retry. NAS1 and the outer
+controller receipts retain their existing contracts.
+
+| Stage | Attempted operation |
+| ---: | --- |
+| 1 | Public role arguments |
+| 2 | Root and deadlines |
+| 3 | Ordinary environment |
+| 4 | Public admission control |
+| 5 | Public caller inventory |
+| 6 | Public product/Profile inventory |
+| 7 | Local private descriptor and receipt preparation |
+| 8 | Public plan |
+| 9 | Created-role handshake |
+| 10 | Local private input read |
+| 11 | Local private input parsing |
+| 12 | Local private request validation |
+| 13 | Before-product budget check |
+| 14 | Product creation, execution and local result validation |
+| 15 | Safe output preparation and emission |
+
+The stage identifies an attempted region, never the exact failed predicate or a
+completed operation. Ordinal-1 means unavailable. Other ordinals are allowed only
+at stage5 for the194 admitted public caller rows0-193, or stage6 for the three
+admitted public product/Profile rows194-196. Private stages always use-1. No private
+field, predicate location, identity, selector, path, tenant, payload, private-content
+hash, token, authorization code or provider text is emitted. The first caught
+failure freezes fault/stage/ordinal before admission or product cleanup. Later
+cleanup cannot replace it. Missing reporting remains unavailable and never changes
+an exit, pass criterion, clock, deadline, source guard, ownership or account behavior.
+
+The existing supervisor validates only the fixed frame. Empty output and valid
+legacy/success frames have no checkpoint. Truncated, overlong, unknown-version,
+invalid-enum or incompatible-ordinal frames are invalid and retain no rejected
+bytes or digest. NCW2 still must satisfy its existing complete decoder. An invalid
+failure frame cannot become a successful result. The supervisor adds only
+`workerFailureDisposition` and `workerFailure` to its existing actual terminal
+`confidential-native-case-v1` receipt. The disposition is validated, unavailable
+or invalid. `workerFailure` is null unless validated; otherwise its exact fields
+are `fault` (existing enum name), `stage` (the fixed WorkerStage enum name) and
+`publicInputOrdinal` (integer with the bounds above). Reservations and synthetic
+receipts keep their old shapes. This is a route-specific additive projection;
+old strict collectors keep their original bindings and spent observations.
+
+The existing fixed five-leaf selected-account collector must admit those two
+terminal fields explicitly, require exact nested keys and primitive types, enforce
+the stage/ordinal relationship and disposition/null correspondence, and reject a
+checkpoint-bearing terminal that claims a passed, reserved or validated product
+result. Keep all current leaf selections, full9/EOF/within-read predicates,
+limits, failure retention and no-private/no-product-output-read behavior. No new
+collector pass follows merely from this source amendment. The outer scripts need
+no new fields or status decoder; their existing terminal identity/EOF/Job checks
+and pass criteria remain unchanged.
+
+The existing pure WireCase(3) covers first-failure freezing, a fixed NCF2 golden
+vector, legacy and success behavior, private-stage ordinal exclusion, malformed,
+short, long, unknown and incompatible frames, and the terminal projection. Bound
+this expanded existing row to96 pure decisions; the84-row fixture count and three
+native-case effects remain unchanged. Its execution remains part of the existing
+admitted fixture route after fresh compilation. Repository checks and independent
+source review may precede merge; no source-only review is runtime evidence.
+
+For this correction, admit at most one fresh controlled-caller compilation and
+public deployment through the existing finite compile/materialization recipes,
+with fresh unused roots, exact source projections and conservative shared charges.
+Reuse unchanged toolchains, product/Profile, private documents, retained host,
+loaded helpers and accepted evidence where their correspondence remains valid.
+Any necessary private-document relocation uses the existing Windows-local method
+and requires exact identity and account-role equality admission; private contents
+and their hashes do not pass through Linux. Do not repeat unrelated fixture or
+ownership preparations. Preserve old artifacts, calls, failed records and charges.
+
+After independently accepting the exact fresh artifact/source/input/call/accounting
+and current operating basis, admit at most one new Personal R1 observation for this
+checkpoint correction. Reserve any unrun paired R6 slot truthfully without refund;
+R6 remains success-gated. Use cache/silent first and notify/wait for actual operator
+login, choice, consent or MFA. A failure ends this observation allocation; accept
+its safe outcome and identify a supported next correction before another attempt.
+This does not diagnose an earlier admission failure or cutoff delay, establish
+historical closure/account-effects extent, clear `noExperimentLive=false`, or admit
+confidential WSL transport. Personal reuse, Work and actual WSL acceptance still
+require their own actual evidence under the existing Slice grant.
 
 ## Outcome-Based Execution and Accounting
 

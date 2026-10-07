@@ -4,11 +4,62 @@ using System.Buffers.Binary;
 
 namespace ConfidentialNativeCaller;
 
+internal enum WorkerStage : byte
+{
+    PublicArguments = 1, RootAndDeadlines, OrdinaryEnvironment, PublicControl,
+    CallerInventory, ProductInventory, PrivateDescriptor, PublicPlan, CreatedRole,
+    PrivateRead, PrivateParse, PrivateValidation, BeforeProduct, ProductLifecycle, SafeOutput
+}
+internal enum WorkerFrameDisposition { Unavailable, Invalid, Validated }
+internal readonly record struct WorkerFailure(Fault Fault, WorkerStage Stage, int PublicInputOrdinal);
+internal readonly record struct WorkerFrame(WorkerFrameDisposition Disposition, WorkerFailure? Failure = null);
+internal sealed class WorkerCheckpoint
+{
+    private WorkerStage stage = WorkerStage.PublicArguments;
+    private int ordinal = -1;
+    internal WorkerFailure? First { get; private set; }
+    internal void At(WorkerStage next, int publicOrdinal = -1)
+    { if (First is null) { stage = next; ordinal = publicOrdinal; } }
+    internal void Capture(Exception caught) =>
+        First ??= new(caught is SafeFailure safe ? safe.Fault : Fault.Native, stage, ordinal);
+}
+
 internal static class Wire
 {
-    // Fixed binary safe-only worker frame, max 27 bytes; never a private result channel.
+    // Fixed binary safe-only worker frames, max 27 bytes; never a private result channel.
+    internal static bool ValidWorkerFailure(WorkerFailure failure) =>
+        (byte)failure.Fault <= (byte)Fault.Expectation &&
+        (byte)failure.Stage is >= 1 and <= 15 &&
+        (failure.PublicInputOrdinal == -1 ||
+            (failure.Stage == WorkerStage.CallerInventory && failure.PublicInputOrdinal is >= 0 and <= 193) ||
+            (failure.Stage == WorkerStage.ProductInventory && failure.PublicInputOrdinal is >= 194 and <= 196));
+    internal static byte[] EncodeFailure(WorkerFailure failure)
+    {
+        PrivateRequest.Require(ValidWorkerFailure(failure));
+        byte[] bytes = new byte[10];
+        "NCF2"u8.CopyTo(bytes); bytes[4] = (byte)failure.Fault; bytes[5] = (byte)failure.Stage;
+        BinaryPrimitives.WriteInt32LittleEndian(bytes.AsSpan(6), failure.PublicInputOrdinal);
+        return bytes;
+    }
+    internal static WorkerFrame InspectFailure(ReadOnlySpan<byte> bytes)
+    {
+        if (bytes.Length == 0 || (bytes.Length == 5 && bytes[..4].SequenceEqual("NCF1"u8) && bytes[4] <= (byte)Fault.Expectation))
+            return new(WorkerFrameDisposition.Unavailable);
+        if (bytes.Length >= 5 && bytes[..4].SequenceEqual("NCW2"u8))
+        {
+            if (bytes[4] is not (1 or 2)) return new(WorkerFrameDisposition.Invalid);
+            try { _ = Decode(bytes, bytes[4]); return new(WorkerFrameDisposition.Unavailable); }
+            catch (SafeFailure) { return new(WorkerFrameDisposition.Invalid); }
+        }
+        if (bytes.Length != 10 || !bytes[..4].SequenceEqual("NCF2"u8))
+            return new(WorkerFrameDisposition.Invalid);
+        var failure = new WorkerFailure((Fault)bytes[4], (WorkerStage)bytes[5], BinaryPrimitives.ReadInt32LittleEndian(bytes[6..]));
+        return ValidWorkerFailure(failure) ? new(WorkerFrameDisposition.Validated, failure) : new(WorkerFrameDisposition.Invalid);
+    }
     internal static Fault? Failure(ReadOnlySpan<byte> bytes)
     {
+        WorkerFrame frame = InspectFailure(bytes);
+        if (frame.Failure is WorkerFailure failure) return failure.Fault;
         if (bytes.Length != 5 || !bytes[..4].SequenceEqual("NCF1"u8)) return null;
         PrivateRequest.Require(bytes[4] <= (byte)Fault.Expectation);
         return (Fault)bytes[4];

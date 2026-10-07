@@ -195,11 +195,14 @@ internal sealed class ActualAdmission : IDisposable
     }
     internal PrivateRequest[] PrivateRows(Group selected)
     {
+        Program.WorkerAt(WorkerStage.PrivateRead);
         Before(); PrivateRequest.Require(roleHeld && role == "worker" && group == selected && !privateRead);
         privateRead = true;
         FixtureHeldFile file = pins.Pin(privatePath, null, privateLength, 262144, privateIdentity);
         byte[] bytes = pins.Read(file, 262144);
+        Program.WorkerAt(WorkerStage.PrivateParse);
         try { PrivateRequest[] rows = PrivateRequestDocument.Parse(bytes, group); Before(); return rows; }
+        catch (Exception caught) { Program.ActualCapture(caught); throw; }
         finally { Array.Clear(bytes); }
     }
     internal string[] WorkerArguments(Group selected, string selectedNonce, long selectedWorkEnd, long selectedFinalEnd)

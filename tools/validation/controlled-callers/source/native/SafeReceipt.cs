@@ -7,7 +7,7 @@ internal static class SafeReceipt
 {
     internal static byte[] Project(PublicPlan plan, string slot, string nonce, bool reservation, SafeResult? result,
         bool passed, bool safeEof, bool jobZero, bool stopAttempted, bool stopSucceeded, int elapsedMilliseconds,
-        Fault? firstFault = null)
+        Fault? firstFault = null, WorkerFrame? workerFrame = null)
     {
         using var memory = new MemoryStream();
         using (var json = new Utf8JsonWriter(memory))
@@ -22,6 +22,19 @@ internal static class SafeReceipt
             json.WriteBoolean("stopSucceeded", stopSucceeded); json.WriteBoolean("noExperimentLive", false);
             json.WriteString("outcome", result?.Outcome.ToString() ?? "Unknown");
             json.WriteString("firstFailure", firstFault?.ToString() ?? "None");
+            if (workerFrame is WorkerFrame frame)
+            {
+                json.WriteString("workerFailureDisposition", frame.Disposition switch {
+                    WorkerFrameDisposition.Validated => "validated", WorkerFrameDisposition.Invalid => "invalid", _ => "unavailable" });
+                json.WritePropertyName("workerFailure");
+                if (frame.Failure is WorkerFailure failure)
+                {
+                    json.WriteStartObject(); json.WriteString("fault", failure.Fault.ToString());
+                    json.WriteString("stage", failure.Stage.ToString()); json.WriteNumber("publicInputOrdinal", failure.PublicInputOrdinal);
+                    json.WriteEndObject();
+                }
+                else json.WriteNullValue();
+            }
             json.WriteString("apiRoute", result?.Route.ToString() ?? "None");
             json.WriteBoolean("protocolValid", result?.ProtocolValid ?? false);
             json.WriteBoolean("productExitConsistent", result is not null);
