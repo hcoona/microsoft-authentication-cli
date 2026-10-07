@@ -9,6 +9,50 @@ owns outcome authorization, maximum effects and shared capacity. The
 [experiment policy](../experiment-safety.md#windows-slice-outcome-authorization)
 owns safety. No recipe or source guard supplies independent authorization.
 
+## Controlled Caller Root Ownership
+
+The existing controlled caller must reject a prospective `named-fixtures-{action}`
+root already present in the admitted Windows-projection membership. This preflight
+does not replace exclusive directory creation. The original invocation may request
+cancellation only after its own exclusive root creation succeeds. The worker may
+request cancellation only after its exact durable original/root binding succeeds.
+Before those respective points, failure retention must skip cancellation and record
+`cancelSkippedUnownedRoot=true`. Once ownership is established, retain the existing
+bounded cancellation and failure-retention behavior, counters and original clocks.
+
+An occupied root is not adopted, overwritten, cleaned or made fresh by this
+correction. Preserve the failed invocation, its charge, retained evidence and any
+uncertainty about a previously observed cancel marker's creator or prior-root
+effects. Source correction does not attribute that marker or repair the old call.
+A later compiler invocation needs a fresh root, accepted failure/scoped completion,
+remaining capacity and its independently accepted exact source/input/call gate.
+Earlier source-bound attempts remain historical; guards remain closed until admission.
+
+### Source-only ownership regressions
+
+The inert [Python regression source](../../../tools/validation/tests/Test-ControlledRootOwnership.py)
+is4757B/SHA256`da509bff84cd10a2c9fe0fa14791f0789338bd5d5447905629b6b89253ce0016`.
+It binds the current caller source in the source table below. After merge and exact
+independent admission, permit one invocation with only `TEST_ADMITTED` and
+`FIXTURE_ROOT` projected to their admitted values. Use the already installed Linux
+Python3.14 with `-I -S -B`, a detached accepted-source checkout and a fresh dedicated
+Linux fixture root created exclusively by the test. Record the original invocation
+before execution and charge `[0,1,0,0]` to the existing shared technical ledger.
+No parallel experiment or automatic retry is permitted.
+
+Bound this invocation to30seconds with a GNU timeout and5seconds to forced
+termination,4MiB aggregate fixture/source I/O,128KiB combined captured output,
+24 created directories and16 created files. Stop on any assertion, output overflow,
+deadline or unaccepted effect; retain the fixture root and finite safe outcome.
+Subprocess launch and transport are forbidden mocks. Only AST-selected caller
+imports, constants and definitions are loaded; its guard and entry point never run.
+The three cases require an existing colliding root and sentinel to remain untouched,
+an unbound worker to skip cancellation, and eligible owned-root failure to retain its
+cancel marker and failure receipts. These mock filesystem observations establish
+only the tested source branches. They do not establish Windows execution, real
+account effects, historical closure or accounting acceptance for an actual caller.
+Accept the bounded test outcome independently before using it as compiler-gate evidence.
+
 ## Selected-Account Supervisor Status
 
 This correction applies to the existing actual native supervisor and the existing
@@ -504,7 +548,7 @@ decision. Personal, work and actual WSL evidence remain required for the outcome
 | [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `01227e0bae33f92cd5142088c79cf993395063e89d8c494d1591eab3b60ac2e1` |
 | [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `98d56e85a2ec00490bdf2a9f559e67feae471c8284abd958c709bfaeb3b23e4d` |
 | [controller-input-catalog.tsv](../../../tools/validation/controlled-callers/control/controller-input-catalog.tsv) | 87398 | `1bf3742530b97472bbf81aaa73ccff3fbba2dc22d2a1ee865e02ba754bfaf2bc` |
-| [run_controlled_callers.py](../../../tools/validation/controlled-callers/run_controlled_callers.py) | 80672 | `2affd33d40b185b9232aa2006e411195c9cdfc642936ffcb83361be50558c638` |
+| [run_controlled_callers.py](../../../tools/validation/controlled-callers/run_controlled_callers.py) | 81101 | `21f031cf0e92defc6a81174aba3cc22fb0be7f07573572475266f3df671174d0` |
 | [observe_controlled_compile_current_inputs.py](../../../tools/validation/observe_controlled_compile_current_inputs.py) | 10847 | `d1fc79d9c04e41d9a9eb5176e2dbbc17a9334981256e48b0ad9c4b7dbc6587ee` |
 | [Invoke-WindowsControlledCallers.ps1](../../../tools/validation/controlled-callers/Invoke-WindowsControlledCallers.ps1) | 26463 | `53bab8dfb4802e6b541b840abcb128c6d9efb63317c91e7a63becc30c389665c` |
 | [NativeCaller.rsp](../../../tools/validation/controlled-callers/control/NativeCaller.rsp) | 20867 | `62a1b7b8cb6ba3d51535e0b4a9be7cbde8ed928fca5bba62f74b1dcb98c33e33` |
