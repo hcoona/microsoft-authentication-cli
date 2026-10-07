@@ -145,6 +145,9 @@ class Transfer:
         return bytes(data)
 
     def write(self, pfd, name, raw):
+        if name not in LEAVES + ('transfer-started.json', 'transfer-result.json') or \
+                pfd != self.directories[STAGE][0]:
+            raise ValueError('Unadmitted public output readback')
         self.role = 3
         fd = self.open(name, os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, pfd)
         initial = full9(self.metadata(fd))
@@ -161,25 +164,38 @@ class Transfer:
             offset += used
         self.native(7, os.fsync, fd)
         # Close the mutating descriptor before taking the read-only baseline.
-        # Created-copy ctime observations are retained; strict read continuity
-        # starts at this new reader, without relaxing any source comparison.
+        # Only this exclusive output readback qualifies ctime observations.
+        # Source readers and later between-read checks keep their own predicates.
         self.close(fd)
         reader = self.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, pfd)
         current = full9(self.metadata(reader))
         if current[:2] != initial[:2] or current[3:5] != initial[3:5] or \
                 not stat.S_ISREG(current[2]) or current[5] != len(raw) or current[8] != 1:
             raise ValueError('Created transfer identity changed')
-        self.stable(pfd, name, reader, current)
+        before_held = full9(self.metadata(reader))
+        before_named = full9(self.metadata(pfd, name))
+        for observed in (before_held, before_named):
+            if any(current[index] != observed[index] for index in (0, 1, 2, 3, 4, 5, 6, 8)):
+                self.same(current, observed)
         if self.read(reader, len(raw)) != raw:
             raise ValueError('Public transfer readback refused')
-        self.stable(pfd, name, reader, current)
+        final_held = full9(self.metadata(reader))
+        final_named = full9(self.metadata(pfd, name))
+        for observed in (final_held, final_named):
+            if any(current[index] != observed[index] for index in (0, 1, 2, 3, 4, 5, 6, 8)):
+                self.same(current, observed)
+        self.same(final_held, final_named)
+        observation = dict(initialReaderFull9=current, beforeReadHeldFull9=before_held,
+                           beforeReadNamedFull9=before_named, finalReaderFull9=final_held,
+                           finalNamedFull9=final_named)
+        current = final_named
         self.held(pfd, name, reader, current)
         digest = hashlib.sha256(raw).hexdigest()
         self.created_content[reader] = (len(raw), digest)
         self.native(8, os.fsync, pfd)
         self.operation = 11
         return dict(name=name, bytes=len(raw), sha256=digest,
-                    full9=current, createdFull9=initial)
+                    full9=current, createdFull9=initial, readbackObservation=observation)
 
     def check_created(self, pfd, name, fd, original):
         self.charge('createdChecks', 1, 23)
@@ -272,7 +288,7 @@ class Transfer:
         self.phase = 7
         stage_identity = full5(self.metadata(stage))
         self.operation = 12
-        receipt = (json.dumps({'schema': 'selected-account-public-transfer-v2', 'rows': rows,
+        receipt = (json.dumps({'schema': 'selected-account-public-transfer-v3', 'rows': rows,
                               'startRow': start_row,
                               'copyChecks': self.copy_checks,
                               'stageFull5': stage_identity, 'countsBeforeReceipt': self.counts,
@@ -285,7 +301,7 @@ class Transfer:
         result = self.write(stage, 'transfer-result.json', receipt)
         self.phase = 9
         self.check_all(); self.before()
-        result.update(schema='selected-account-public-transfer-result-v2',
+        result.update(schema='selected-account-public-transfer-result-v3',
                       copyChecks=self.copy_checks, countsAfterChecks=dict(self.counts))
         return result
 
