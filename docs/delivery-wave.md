@@ -143,6 +143,34 @@ WSL. Independently accept the corrected exact protocol, source, artifacts,
 inputs, call, accounting, and current operating basis before dependent real
 execution; any new ownership or safety gap retains the normal stop rule.
 
+For the independently accepted failed Personal R1 attempt 5, identified by
+public attempt nonce `cc9a97f939164e918edf39815af0aa98`, the owner accepts
+proceeding on the assumption that its experiment-owned worker, product process
+and Job are now absent, with historical completion and account-effects extent
+still unobserved. This permits subsequent bounded native personal/work acceptance
+on the same designated host after the applicable exact execution gates.
+
+For further attempts within this same Windows Slice grant and its existing
+designated hosts, the owner accepts a standing current-absence assumption for
+experiment-owned processes and Jobs that cannot be found through the existing
+bounded observation methods available to the agent. Missing terminal or exit
+evidence alone does not require a renewed owner decision, exhaustive process
+search, reboot or a new observation tool. The maintainer records the unavailable
+observation and applies this disposition through the existing operating-basis
+review. Positive evidence of ongoing experiment-owned work must be handled by
+the accepted stop procedure; it is not absence. Ownership defects still require
+technical correction before further execution.
+
+Preserve failed outcomes, spent calls, consumed capacity, historical
+`noExperimentLive=false`, unobserved completion and account-effects extent.
+This standing disposition does not establish observed closure, authentication
+success or the original failure cause. It grants no cleanup of unrelated state,
+elevation, new host or expanded account effects, and does not admit confidential
+transport through WSL. Exact protocol, source, artifact, input, call, accounting
+and operating-basis gates remain internal execution checks; applying this
+accepted absence assumption does not require another owner approval. Material
+effects outside this grant retain their owner-decision boundary.
+
 Retain the separately accepted initial-interop console-host operating basis and
 sole-owned-ETW-persistence disposition for their existing credential-free roles,
 as defined in [experiment safety](research/experiment-safety.md#windows-slice-standing-risk-dispositions).
