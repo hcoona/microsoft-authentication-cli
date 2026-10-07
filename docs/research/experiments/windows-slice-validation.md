@@ -53,6 +53,36 @@ only the tested source branches. They do not establish Windows execution, real
 account effects, historical closure or accounting acceptance for an actual caller.
 Accept the bounded test outcome independently before using it as compiler-gate evidence.
 
+## Controlled Fixture Stage Correspondence
+
+The existing native fixture's `AcceptedFixtureInputs.Root` must equal the admitted
+compile stage. Its current source uses `confidential-checks-v22`, matching the
+controlled callers, four response files, and source/response map. A fresh-stage
+projection must change that existing constant together with those stage bindings;
+it must not carry the old fixture source as an unchanged donor. Keep all execution
+guards closed until their existing independent exact admission.
+
+Before compilation, the exact source gate compares the projected fixture Root with
+the projected source-map stage, both caller stage bindings, and the fixture-admission
+path. Bind the projected source bytes and checksum in the input inventory and map.
+Before native execution, join that same fixture source through the accepted compiled
+PE/PDB document correspondence to the admitted stage and fixture-admission path.
+These checks reuse existing source/artifact gates and add no runtime read, process,
+helper, controller, observation tool, or effects boundary. Existing responses,
+targets, APIs, guards,84 pure rows and3 native cases remain unchanged.
+
+| Current source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [AcceptedFixtureInputs.cs](../../../tools/validation/controlled-callers/source/native/AcceptedFixtureInputs.cs) | 16437 | `3cbf90eb0e01751aafc49aafa3afe123e7e52373982940207797cd25fc288942` |
+
+This repairs a source/input incompatibility, not a demonstrated runtime cause.
+Retain the failed original and all charges; missing batch evidence does not establish
+C# entry, passing checks or historical completion. A corrected fresh build and its
+accepted source, input, artifact, call, accounting and operating-basis gates remain
+necessary before dependent native or account execution. Reuse unchanged accepted
+evidence; do not rerun prior status-parser or ownership mocks solely for this literal
+correction. The Wave's standing process-absence disposition retains its exact limits.
+
 ## Selected-Account Supervisor Status
 
 This correction applies to the existing actual native supervisor and the existing
@@ -172,7 +202,7 @@ disposition does not transfer. An unchanged readiness declaration is not closure
 | [Program.cs](../../../tools/validation/controlled-callers/source/native/Program.cs) | 20457 | `594272407560dfd45226660ccc9a02195a78754129a84a8866864818f4b06c35` |
 | [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 16327 | `c6d4893e3c9300ff84177a467b6839c99495b92534d474f04c1262ce4199b148` |
 | [ControlledChecks.cs](../../../tools/validation/controlled-callers/source/native/ControlledChecks.cs) | 9792 | `94bf2e6242e7c1d584560ce924586c530aa14dd95206190cc3ee581c027ce470` |
-| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `3546b6ce34559c51dac09c3dd1bc1aafd88ed4b8c9388d294c650881b5878d8d` |
+| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `b8a0c1482d2f414eb0bfb6dc06cdf8025b83a0b31c050bca2b6c51f5eccd0988` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 19566 | `337250f5adcd702e4d8b0a38aa17d1ef0411a3de7d3416c0d8f8febda97d3404` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 22894 | `b4f4ca87e2c4dae5a3620760a39e45a88a639e3a55f0359cd23948c78ec9053b` |
 | [Test-SelectedAccountSupervisorStatus.ps1](../../../tools/validation/tests/Test-SelectedAccountSupervisorStatus.ps1) | 3103 | `81cdd23b3f56176852647a8ed451a08037ee891557989d64fc4cc3327b517914` |
