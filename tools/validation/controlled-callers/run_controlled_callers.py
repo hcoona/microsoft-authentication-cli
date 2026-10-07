@@ -822,6 +822,9 @@ def checkpoint(a, budget, reserved=False):
             c['capacityAmendmentAccepted'] is True and
             c['historicalDispositionsExtended'] == HISTORICAL_UNKNOWN and
             c['reservation'] == 'controlled-' + a['suite'], 'Current checkpoint acceptance')
+    if not reserved:
+        require('named-fixtures-' + a['action'] not in c['historyParents']['windowsProjectionRoot'],
+                'Fresh Windows fixture root')
     before = c['counters']
     require(type(before) is list and len(before) == 4 and all(type(x) is int and x >= 0 for x in before) and
             before[0] >= 20 and before[1] >= 106 and before[2] >= 6 and
@@ -1038,7 +1041,7 @@ def request_cancel(root, budget):
         pass
 
 
-def retain_failure(local, root, budget, result, prefix, result_leaf):
+def retain_failure(local, root, budget, result, prefix, result_leaf, cancel_allowed):
     """At most three writes, using reserved time/bytes and the original counters."""
     budget.enter_terminal()
     result['passed'] = False
@@ -1051,10 +1054,13 @@ def retain_failure(local, root, budget, result, prefix, result_leaf):
         write_new(local / (prefix + '-first-failure.json'), encode(first), budget)
     except BaseException as retention_error:
         result['firstFailureRetentionFailure'] = type(retention_error).__name__
-    try:
-        request_cancel(root, budget)
-    except BaseException as cancellation_error:
-        result['cancelFailure'] = type(cancellation_error).__name__
+    if cancel_allowed:
+        try:
+            request_cancel(root, budget)
+        except BaseException as cancellation_error:
+            result['cancelFailure'] = type(cancellation_error).__name__
+    else:
+        result['cancelSkippedUnownedRoot'] = True
     try:
         write_new(local / result_leaf, encode(result), budget)
     except BaseException as result_error:
@@ -1068,6 +1074,7 @@ def retain_failure(local, root, budget, result, prefix, result_leaf):
 
 def worker(a, began, deadline, service_intent, service_deadline, budget):
     root, local = windows_root(a), LINUX / 'windows-actions' / a['action']
+    cancel_allowed = False
     result = {'schema': 'windows-controlled-harness-worker-result-v1', 'passed': False,
               'noExperimentLive': False, 'historicalLifetimeUnknown': HISTORICAL_UNKNOWN,
               'stage': 'worker-admission'}
@@ -1097,6 +1104,7 @@ def worker(a, began, deadline, service_intent, service_deadline, budget):
                 digest(budget.read(root / 'Invoke-WindowsNamedGuardFixtures.ps1', 65536)[0]) == a['controller']['sha256'] and
                 budget.read(root / 'controller-input-catalog.tsv', 131072)[0] == budget.pin(a['catalog'], 131072),
                 'Durable original binding')
+        cancel_allowed = True
         result['fixtureVerification'] = verify_deployment(a, root, local, budget)
         checkpoint(a, budget, reserved=True)
         command = [a['launcher']['path'], windows_root_name(a), a['nonce'],
@@ -1136,12 +1144,13 @@ def worker(a, began, deadline, service_intent, service_deadline, budget):
     except BaseException as error:
         result.setdefault('failureType', type(error).__name__)
         result['caughtFailure'] = failure_identity(error)
-        return retain_failure(local, root, budget, result, 'worker', 'worker-result.json')
+        return retain_failure(local, root, budget, result, 'worker', 'worker-result.json', cancel_allowed)
 
 
 def original(a, began, deadline, budget):
     root, local = windows_root(a), LINUX / 'windows-actions' / a['action']
     reserved_local = False
+    cancel_allowed = False
     stage = 'original-admission'
     capture = None
     service_evidence = None
@@ -1165,6 +1174,7 @@ def original(a, began, deadline, budget):
         write_new(local / 'started.json', reservation, budget)
         direct(root.parent)
         root.mkdir(mode=0o700)
+        cancel_allowed = True
         write_new(root / 'started.json', reservation, budget)
         for name in ('temp', 'results', 'home', 'empty-program-files'):
             (root / name).mkdir(mode=0o700)
@@ -1280,7 +1290,7 @@ def original(a, began, deadline, budget):
                 result['transport'] = capture
                 if capture['failure'] is not None:
                     result['failureType'] = capture['failure']
-            return retain_failure(local, root, budget, result, 'original', 'original-failure.json')
+            return retain_failure(local, root, budget, result, 'original', 'original-failure.json', cancel_allowed)
         raise
     finally:
         # Lease covers reservation, execution, original evidence and terminal write.
