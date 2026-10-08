@@ -44,7 +44,7 @@ public identity, private exclusion and finite-read checks remain applicable.
 Prepare one finite correction batch using the existing Linux development and
 Windows validation roots, installed admitted .NET/MSAL/toolchain versions, public
 retained dependencies and same designated host. Allocate at most six build/test
-actions, four Native AOT publication attempts and eight credential-free synthetic process
+actions, four Native AOT publication attempts and thirty-six credential-free synthetic process
 scenarios from the existing common pool. Each build/test/publication has at most
 1800 seconds, 32 MiB aggregate captured output and 2 GiB newly retained public
 outputs; each synthetic scenario has at most 180 seconds, 1 MiB output and its
@@ -59,7 +59,7 @@ accept the actual source/artifact/validation correspondence afterward.
 
 Allocate one preparation action for the correction batch's fresh offline locked
 restore from the same common capacity; retain its failed-start accounting. Use
-at most eight separately admitted calls of the unchanged normal launcher for
+at most eleven separately admitted calls of the unchanged normal launcher for
 restore, build, one corrective managed build if needed, the exact managed test
 selection, publication, and up to three corrective publication attempts if needed. Before the corrective build, acquire and independently
 accept the exact compiler, analyzer, and configuration inputs identified by the
@@ -102,6 +102,37 @@ it is not an immutable input throughout compilation. Reusing it requires its own
 applicable current input admission, and final artifact acceptance still binds the
 actual compiler inputs, generated sources, outputs and dependencies. Do not weaken
 hash checks or claim uninterrupted correspondence for a rewritten file.
+
+After independent acceptance of the current Native AOT candidate, use the existing
+controlled-caller compilation and fixture recipes to rebuild the changed
+`NativeCaller` and `FixtureDriver` from the pinned source in a fresh stage. Project
+the existing compilation loop to those two targets only; retain the admitted
+public compiler, reference, runtime, apphost and source-input checks. One such
+compilation group consumes one build/test action and five synthetic units: the
+existing three launcher/host roles and two compiler starts. Permit at most one
+additional corrected compilation group after independently accepted failure and
+scoped completion. Reuse an unchanged accepted synthetic subject or other fixture
+asset only where its exact source, bytes and current consumer binding still apply.
+Do not compile, execute or load an observer merely because it is in an older input
+catalog.
+
+Run the existing `FixtureDriver` controlled batch once after accepting the fresh
+helper artifacts and exact fixture inputs. Its 84 pure checks include all twelve
+wire cases, including the changed mechanism-diagnostic encoding; its three
+credential-free N1/N2/N3 cases exercise the actual worker/supervisor transport.
+This batch consumes one build/test action and fifteen synthetic units under the
+existing native recipe. These controlled cases do not satisfy real R1/R6, work
+R7/R8 or WSL acceptance. Retain the existing fixed commands, original clocks,
+owned Job and scoped termination/capture requirements, public-only synthetic
+inputs and actual-outcome review. The two compilation groups and one fixture
+batch add at most three launcher calls within the same finite correction batch.
+No helper assembly load into the retained account host, new controller mechanism,
+account input, cache repair, installation, private read or real account effect is
+added. Exact projected source, inputs, accounting and calls still require
+independent admission before execution. Preserve all prior charges; the larger
+synthetic allocation replaces the earlier eight-unit local allocation within the
+unchanged Wave pool rather than resetting consumption or admitting another run
+of a spent invocation.
 
 The first publication failed while the validation script held generated metadata
 with `FileShare.Read`; the compiler reported a sharing violation when writing its
