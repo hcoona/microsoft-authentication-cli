@@ -10,6 +10,23 @@ internal static class FixtureDriverProgram
     public static int Main(string[] args)
     {
         if (!ExecutionAdmitted) return 125;
+        if (args.Length == 1 && args[0] == "--interaction-controls")
+        {
+            // Changed pure permission/argument/result paths only. No account or process call.
+            long end = CallerRules.Add(Stopwatch.GetTimestamp(), 10000, Stopwatch.Frequency);
+            try
+            {
+                ControlledChecks.InteractionPermissionControls();
+                CallerRules.Before(Stopwatch.GetTimestamp(), end);
+                Console.WriteLine("Interaction permission controls passed.");
+                return 0;
+            }
+            catch
+            {
+                Console.Error.WriteLine("Interaction permission controls failed.");
+                return 1;
+            }
+        }
         if (args.Length == 1 && args[0] == "--wire-controls")
         {
             // Pure data checks: no platform, account, fixture pin or process calls.

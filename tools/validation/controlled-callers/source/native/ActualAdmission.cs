@@ -70,6 +70,7 @@ internal sealed class ActualAdmission : IDisposable
     private readonly FixtureFileIdentity privateIdentity;
     private readonly long privateLength;
     private readonly PublicPlan plan;
+    private readonly bool interactionPermitted;
     private bool roleHeld, privateRead, workerBound, disposed;
 
     internal ActualAdmission(string path, string sha, Group group, string nonce, long batchEnd,
@@ -93,12 +94,13 @@ internal sealed class ActualAdmission : IDisposable
             JsonElement data = document.RootElement;
             ExactJson.Members(data, "schema", "admitted", "accountEffectsAccepted", "group", "nonce", "protocolSha256",
                 "riskDecisionSha256", "sourceAcceptanceSha256", "closureAcceptanceSha256", "batchStartTicks", "batchEndTicks",
-                "stopwatchFrequency", "callerPins", "productPins", "productImage", "privateInput", "effects", "environmentMode");
-            PrivateRequest.Require(ExactJson.Text(data, "schema") == "confidential-native-account-admission-v1" &&
+                "stopwatchFrequency", "callerPins", "productPins", "productImage", "privateInput", "effects", "environmentMode", "interactionPermitted");
+            PrivateRequest.Require(ExactJson.Text(data, "schema") == "confidential-native-account-admission-v2" &&
                 ExactJson.Flag(data, "admitted") && ExactJson.Flag(data, "accountEffectsAccepted") &&
                 ExactJson.Text(data, "environmentMode") == "constructed-current-user-profile-v1" &&
                 ExactJson.Text(data, "group") == group.ToString() && ExactJson.Text(data, "nonce") == nonce &&
                 data.GetProperty("stopwatchFrequency").GetInt64() == Stopwatch.Frequency && data.GetProperty("batchEndTicks").GetInt64() == batchEnd);
+            interactionPermitted = ParseInteractionPermission(data, group);
             long batchStart = data.GetProperty("batchStartTicks").GetInt64();
             PrivateRequest.Require(batchStart > 0 && batchStart <= entry && batchEnd == CallerRules.Add(batchStart, 1800000, Stopwatch.Frequency));
             foreach (string key in new[] { "protocolSha256", "riskDecisionSha256", "sourceAcceptanceSha256", "closureAcceptanceSha256" })
@@ -175,6 +177,18 @@ internal sealed class ActualAdmission : IDisposable
         catch (Exception caught) { Program.ActualCapture(caught); pins.Dispose(); Program.ActualFlag(512); throw; }
     }
 
+    internal static bool ParseInteractionPermission(JsonElement data, Group group)
+    {
+        PrivateRequest.Require(data.ValueKind == JsonValueKind.Object &&
+            data.TryGetProperty("schema", out JsonElement schema) && schema.ValueKind == JsonValueKind.String &&
+            schema.GetString() == "confidential-native-account-admission-v2" &&
+            data.TryGetProperty("interactionPermitted", out JsonElement flag) &&
+            flag.ValueKind is JsonValueKind.True or JsonValueKind.False);
+        bool permitted = data.GetProperty("interactionPermitted").GetBoolean();
+        PrivateRequest.Require(!permitted || group is Group.R1 or Group.R7);
+        return permitted;
+    }
+
     private void Before() { PrivateRequest.Require(!disposed); CallerRules.Before(Stopwatch.GetTimestamp(), workEnd); }
     internal PublicPlan Plan(Group selected, string selectedNonce)
     { Before(); PrivateRequest.Require(selected == group && selectedNonce == nonce); return plan; }
@@ -223,7 +237,9 @@ internal sealed class ActualAdmission : IDisposable
             PrivateRequest[] rows = PrivateRequestDocument.Parse(bytes, group);
             Program.WorkerAt(WorkerStage.PrivateValidation);
             PrivateRequest.Require(rows.All(row => CallerRules.ProfileMatches(row.ProfilePath, ExistingProfilePath)));
-            Before(); return rows;
+            PrivateRequest[] effective = rows.Select(row => row.WithInteractionPermission(interactionPermitted)).ToArray();
+            foreach (PrivateRequest row in effective) row.Validate();
+            Before(); return effective;
         }
         catch (Exception caught) { Program.ActualCapture(caught); throw; }
         finally { Array.Clear(bytes); }

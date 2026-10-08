@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 namespace ConfidentialNativeCaller;
 internal static class ControlledChecks
 {
@@ -46,6 +47,64 @@ internal static class ControlledChecks
             Need(!text.Contains(secret, StringComparison.Ordinal));
         Need(receipt.Length <= 4096 && !text.Contains("\"noExperimentLive\":true", StringComparison.Ordinal));
     }
+    internal static void InteractionPermissionControls()
+    {
+        ProtocolVector silent = ProtocolVectors.All().Single(vector => vector.Id == "G1-01");
+        ProtocolVector interactive = ProtocolVectors.All().Single(vector => vector.Id == "G1-02");
+        ProtocolVector required = ProtocolVectors.All().Single(vector => vector.Id == "G2-02");
+        foreach (bool privateAllowed in new[] { false, true })
+        foreach (bool publicAllowed in new[] { false, true })
+        {
+            PrivateRequest original = new()
+            {
+                ProfilePath = silent.Request.ProfilePath, Email = silent.Request.Email,
+                Scopes = silent.Request.Scopes, TenantArgument = silent.Request.TenantArgument,
+                ExactResultTenant = silent.Request.ExactResultTenant, InteractionAllowed = privateAllowed,
+                TimeoutSeconds = 5, LifetimePipe = true, CloseWriterAfterMilliseconds = 100,
+                RequireCloseAfterLiveSample = true, ExpectedOutcome = Outcome.Success, ExpectedRoute = Route.None
+            };
+            PrivateRequest effective = original.WithInteractionPermission(publicAllowed);
+            effective.Validate();
+            Need(effective.InteractionAllowed == (privateAllowed && publicAllowed) &&
+                original.InteractionAllowed == privateAllowed && !ReferenceEquals(original, effective));
+            Need(effective.ProfilePath == original.ProfilePath && effective.Email == original.Email &&
+                ReferenceEquals(effective.Scopes, original.Scopes) && effective.TenantArgument == original.TenantArgument &&
+                effective.ExactResultTenant == original.ExactResultTenant && effective.TimeoutSeconds == original.TimeoutSeconds &&
+                effective.LifetimePipe && effective.CloseWriterAfterMilliseconds == 100 && effective.RequireCloseAfterLiveSample &&
+                effective.ExpectedOutcome == original.ExpectedOutcome && effective.ExpectedRoute == original.ExpectedRoute &&
+                effective.RequirePersistenceUnconfirmed == original.RequirePersistenceUnconfirmed &&
+                effective.DefaultAssociationIndependentlyAccepted == original.DefaultAssociationIndependentlyAccepted);
+            string[] args = effective.Arguments();
+            Need(args[Array.IndexOf(args, "--interaction") + 1] ==
+                (effective.InteractionAllowed ? "interactive-if-needed" : "non-interactive-only"));
+            Need(ProtocolResult.Validate(silent.Bytes, 0, effective, silent.Received).Passed);
+            if (effective.InteractionAllowed)
+                Need(ProtocolResult.Validate(interactive.Bytes, 0, effective, interactive.Received).Passed);
+            else Reject(() => ProtocolResult.Validate(interactive.Bytes, 0, effective, interactive.Received));
+            SafeResult decision = ProtocolResult.Validate(required.Bytes, 1, effective, required.Received);
+            Need(decision.ProtocolValid && decision.Outcome == Outcome.InteractionRequired && !decision.Passed);
+        }
+        foreach (Group group in new[] { Group.R1, Group.R6, Group.R7, Group.R8 })
+        foreach (bool permitted in new[] { false, true })
+        {
+            using JsonDocument document = JsonDocument.Parse("{\"schema\":\"confidential-native-account-admission-v2\",\"interactionPermitted\":" +
+                (permitted ? "true" : "false") + "}");
+            if (permitted && group is Group.R6 or Group.R8)
+                Reject(() => ActualAdmission.ParseInteractionPermission(document.RootElement, group));
+            else Need(ActualAdmission.ParseInteractionPermission(document.RootElement, group) == permitted);
+        }
+        foreach (string invalid in new[] { "{}", "null", "[]",
+            "{\"schema\":\"confidential-native-account-admission-v1\",\"interactionPermitted\":false}",
+            "{\"schema\":\"confidential-native-account-admission-v2\"}",
+            "{\"schema\":\"confidential-native-account-admission-v2\",\"interactionPermitted\":null}",
+            "{\"schema\":\"confidential-native-account-admission-v2\",\"interactionPermitted\":0}",
+            "{\"schema\":\"confidential-native-account-admission-v2\",\"interactionPermitted\":\"false\"}" })
+        {
+            using JsonDocument document = JsonDocument.Parse(invalid);
+            Reject(() => ActualAdmission.ParseInteractionPermission(document.RootElement, Group.R1));
+        }
+    }
+
     internal static void WireCase(int index)
     {
         switch (index)

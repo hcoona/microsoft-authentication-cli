@@ -1,17 +1,16 @@
-# Invoke once from the admitted retained Windows PowerShell process/runspace.
+# Invoke once in an admitted ordinary Windows PowerShell 5.1 x64 STA process.
 # Public helper compilation/loading and exact type/assembly admission precede use.
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string] $PlanPath,
     [Parameter(Mandatory)][string] $PlanSha256,
-    [Parameter(Mandatory)][ValidateRange(1, 14)][int] $Attempt,
+    [Parameter(Mandatory)][ValidateRange(1, 96)][int] $Attempt,
     [ValidateSet('Personal', 'Work')][string] $AccountRole = 'Personal',
     [Parameter(Mandatory)][string] $ControllerSha256,
-    [Parameter(Mandatory)][Type] $CutoffType,
-    [Parameter(Mandatory)][int] $ExpectedPid,
-    [Parameter(Mandatory)][int] $ExpectedSession,
-    [Parameter(Mandatory)][long] $ExpectedCreationFileTime,
-    [Parameter(Mandatory)][object] $ExpectedRunspace
+    [Parameter(Mandatory)][string] $CutoffAssemblyPath,
+    [Parameter(Mandatory)][string] $CutoffAssemblySha256,
+    [Parameter(Mandatory)][string] $PrivatePinsAssemblyPath,
+    [Parameter(Mandatory)][string] $PrivatePinsAssemblySha256
 )
 
 $ExecutionAdmitted = $false
@@ -27,6 +26,10 @@ $reuseGroup = if ($AccountRole -ceq 'Work') { 'R8' } else { 'R6' }
 $frequency = [Diagnostics.Stopwatch]::Frequency
 $lease = $null
 $self = $null
+$CutoffType = $null
+$privatePinsType = $null
+$invocationIdentity = $null
+$invocationRunspace = [System.Management.Automation.Runspaces.Runspace]::DefaultRunspace
 $invoked = $false
 $returned = $false
 $originalExitCode = 125
@@ -62,7 +65,7 @@ function Local-Value([object] $Value, [int] $Maximum) {
 }
 function Hold-ValidatedPrivateInput([object] $PublicPlan, [string] $Group) {
     Before-PrivateInput
-    $type = $global:AzureAuth108PrivatePinsType
+    $type = $script:privatePinsType
     Need ($type -is [Type] -and $type.FullName -ceq 'SelectedAccountPrivateInputPins' -and
         -not $type.Assembly.IsDynamic -and $null -eq $script:privateInputPins)
     $script:privateInputPins = [Activator]::CreateInstance($type, [object[]] @([Action] { Before-PrivateInput }))
@@ -227,31 +230,42 @@ function Read-PinnedPublic([string] $Path, [int] $Maximum, [string] $ExpectedHas
 }
 
 try {
-    # Exact-call admission pins this original source, the loaded helper artifact,
-    # its single retained Type, current host/user/environment and private input.
-    # Reuse both admitted helper types; selectors and hashes remain Windows-local.
-    Need (($AccountRole -ceq 'Personal' -or ($AccountRole -ceq 'Work' -and $Attempt -le 4)) -and
-        [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop' -and
-        $CutoffType.FullName -ceq 'SelectedAccountControllerCutoff' -and
-        -not $CutoffType.Assembly.IsDynamic -and $frequency -gt 0)
+    # Exact-call admission pins this ordinary source, both existing helper
+    # artifacts, the current host/user/environment and unchanged private inputs.
+    Need ([Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop' -and $frequency -gt 0)
     Need ([Environment]::UserInteractive -and $Host.Name -ceq 'ConsoleHost' -and
         $PSVersionTable.PSVersion.Major -eq 5 -and $PSVersionTable.PSVersion.Minor -eq 1 -and
         [Threading.Thread]::CurrentThread.GetApartmentState() -eq [Threading.ApartmentState]::STA -and
-        $PID -eq $ExpectedPid -and [object]::ReferenceEquals($ExpectedRunspace,
-            [System.Management.Automation.Runspaces.Runspace]::DefaultRunspace) -and
-        [object]::ReferenceEquals($global:AzureAuth108CutoffType, $CutoffType))
+        $null -ne $invocationRunspace -and [object]::ReferenceEquals($invocationRunspace,
+            [System.Management.Automation.Runspaces.Runspace]::DefaultRunspace))
     $self = [Diagnostics.Process]::GetCurrentProcess()
-    Need ($self.Id -eq $ExpectedPid -and $self.SessionId -eq $ExpectedSession -and
-        $self.StartTime.ToUniversalTime().ToFileTimeUtc() -eq $ExpectedCreationFileTime)
-    Need ($PSCommandPath -ceq ($root + '\control\Invoke-WindowsSelectedAccountOriginalRetainedSlots.ps1') -and
+    Need ($self.Id -eq $PID -and $self.SessionId -gt 0 -and
+        $self.StartTime.ToUniversalTime().ToFileTimeUtc() -gt 0)
+    Need ($PSCommandPath -ceq ($root + '\control\Invoke-WindowsSelectedAccountOriginalOrdinarySlots.ps1') -and
         $PlanPath -ceq ($root + '\control\' + $accountPrefix + '-plan-' + $Attempt + '.json'))
+    $invocationIdentity = [ordered]@{ pid = $self.Id; session = $self.SessionId
+        createdFileTime = $self.StartTime.ToUniversalTime().ToFileTimeUtc() }
+    # Load each accepted helper exactly once from its held hash/EOF-checked bytes.
+    # These types belong only to this invocation; no retained global state is used.
+    Need ($CutoffAssemblyPath -ceq ($root + '\control\SelectedAccountControllerCutoff.dll') -and
+        $PrivatePinsAssemblyPath -ceq ($root + '\control\SelectedAccountPrivateInputPins.dll'))
+    $cutoffAssembly = [Reflection.Assembly]::Load((Read-PinnedPublic $CutoffAssemblyPath 262144 $CutoffAssemblySha256))
+    $privateAssembly = [Reflection.Assembly]::Load((Read-PinnedPublic $PrivatePinsAssemblyPath 262144 $PrivatePinsAssemblySha256))
+    $CutoffType = $cutoffAssembly.GetType('SelectedAccountControllerCutoff', $true, $false)
+    $privatePinsType = $privateAssembly.GetType('SelectedAccountPrivateInputPins', $true, $false)
+    Need (-not $cutoffAssembly.IsDynamic -and -not $privateAssembly.IsDynamic -and
+        [object]::ReferenceEquals($CutoffType.Assembly, $cutoffAssembly) -and
+        [object]::ReferenceEquals($privatePinsType.Assembly, $privateAssembly))
     $controller = $root + '\control\Invoke-WindowsSelectedAccountCutoffSlots.ps1'
     $null = Read-PinnedPublic $controller 65536 $ControllerSha256
     $encoding = [Text.UTF8Encoding]::new($false, $true)
     $plan = $encoding.GetString((Read-PinnedPublic $PlanPath 262144 $PlanSha256)) | ConvertFrom-Json
-    $group = if ($Attempt % 2 -eq 1) { $primaryGroup } else { $reuseGroup }
-    Need ($plan.schema -ceq 'confidential-native-account-admission-v1' -and $plan.group -ceq $group -and
+    $group = $plan.group
+    Need ($group -cin @($primaryGroup, $reuseGroup))
+    Need ($plan.schema -ceq 'confidential-native-account-admission-v2' -and $plan.group -ceq $group -and
         $plan.admitted -eq $true -and $plan.accountEffectsAccepted -eq $true -and
+        $plan.interactionPermitted -is [bool] -and
+        (-not $plan.interactionPermitted -or $group -ceq $primaryGroup) -and
         $plan.nonce -cmatch '\A[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\z')
     $receipt = $root + '\records\' + $group + '-' + $plan.nonce + '\original-terminal.json'
     Need (-not [IO.File]::Exists($receipt))
@@ -293,7 +307,8 @@ try {
         try {
             Need (([Diagnostics.Stopwatch]::GetTimestamp() - $e0) / $frequency -lt 180)
             $safe = [ordered]@{
-                schema = 'selected-account-original-v2'; attempt = $Attempt
+                schema = 'selected-account-original-v3'; attempt = $Attempt
+                invocationIdentity = $invocationIdentity
                 invocationStartTicks = $e0; stopwatchFrequency = $frequency
                 invoked = $invoked; returned = $returned; originalExitCode = $originalExitCode
                 privateContentMatched = $privateContentMatched; privateInputHandlesClosed = $privateInputHandlesClosed
