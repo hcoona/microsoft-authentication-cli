@@ -201,15 +201,15 @@ disposition does not transfer. An unchanged readiness declaration is not closure
 | Source | Bytes | SHA-256 |
 | --- | ---: | --- |
 | [Program.cs](../../../tools/validation/controlled-callers/source/native/Program.cs) | 21531 | `4b3be4c42cc62ffbc7797be53cc0244e4fda033730c29e170ec0078de054cebf` |
-| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 17332 | `b647d7f0aad322b5e7dbecd047fed4a8a1742879c88014b06798261d4c752110` |
-| [ControlledChecks.cs](../../../tools/validation/controlled-callers/source/native/ControlledChecks.cs) | 12970 | `61aab4132e0d299a6dd46eb4e4ce307049bb85fbdf7ea314d0d2ec0a48ea7d1c` |
-| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16741 | `923780b2e7f1c39633a170d335c637964288c141791d5a9049351696b5303497` |
+| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 17933 | `76491fbbec21df64ce4a54a948d1c88db40fbda9683f7185b65e6b48c668e22d` |
+| [ControlledChecks.cs](../../../tools/validation/controlled-callers/source/native/ControlledChecks.cs) | 15375 | `cafbbe7a5a7eedca75eca3eb977e2fd671a95272e85a1205db0de6c0a7c28bd7` |
+| [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16741 | `dda96911d4548bd3eacc3d8004339322f458187623d007a41a54e9f88b302b8f` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 19566 | `337250f5adcd702e4d8b0a38aa17d1ef0411a3de7d3416c0d8f8febda97d3404` |
-| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 22895 | `20707745ba230706a7ef79e6e4c5dd95a7a178bcb4fcf8f4aab795cde69f9025` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 22896 | `b00ffb95575fdaa5cbd423e80e92580c4bb27530fd54cf2689b0aef351c0aca7` |
 | [Test-SelectedAccountSupervisorStatus.ps1](../../../tools/validation/tests/Test-SelectedAccountSupervisorStatus.ps1) | 3103 | `81cdd23b3f56176852647a8ed451a08037ee891557989d64fc4cc3327b517914` |
 | [Wire.cs](../../../tools/validation/controlled-callers/source/native/Wire.cs) | 7104 | `12d520e2444be09412b8a1869ce4dd97043a7d2942b5ebbc23a6ba088c9a3373` |
 | [CallerRules.cs](../../../tools/validation/controlled-callers/source/native/CallerRules.cs) | 3528 | `fc6540593fcadc5ad07c8e48e0c266366eea208459bc49decd19b141ff208e38` |
-| [SafeReceipt.cs](../../../tools/validation/controlled-callers/source/native/SafeReceipt.cs) | 4402 | `29058abda61cbd35ed1cf0df4321cf661eaa77c881dd1b2eec93e0500bd87a5a` |
+| [SafeReceipt.cs](../../../tools/validation/controlled-callers/source/native/SafeReceipt.cs) | 5948 | `df3260e6f27ff479a00dd76832d3295b00ffb5c56488b50488ebc5eaba472582` |
 
 ## Selected-Account Worker Failure Checkpoint
 
@@ -365,6 +365,72 @@ at their already admitted account-v6 paths; no account reselection or private
 rewrite. Preserve the old failed observation and its missing clock evidence.
 Current public correspondence and the exact real operating basis still gate the
 single new R1 and success-gated R6. No confidential WSL transport is admitted.
+
+### Actual caller public historical ChangeTime correction after failed slot 9
+
+This supported correction implements the existing
+[actual public-input qualification](#actual-public-input-historical-changetime-qualification)
+in `FixtureNativePins.Pin` and explicitly selects it at only the two public pin
+sites in `ActualAdmission`: 194 caller rows and exactly three product/Profile
+rows. A qualified pin requires a prepared tuple, exact length and content hash.
+Only prepared Changed may differ; fresh hash/EOF and complete current held/named
+comparisons remain mandatory. Default, control, private, fixture and unrelated
+roles retain strict historical comparison. Neither content agreement nor this
+source correction proves the exact predicate or cause of the failed slot 9.
+
+The existing case receipt adds `publicHistoricalChanged`, only for actual plans:
+mode `actual-public-historical-changed-v1`, observedRole `supervisor`, and 197
+ordered rows `[ordinal, preparedTuple, currentTuple]`. Each tuple uses
+`[volume,index,attributes,created,modified,changed,length,links]`. Ordinals 0-193
+join the immutable caller input; 194-196 join the product/Profile input. These
+are supervisor first-held observations after successful hash/EOF and current
+stability checks, not observations of the worker's tuple or uninterrupted
+history. The worker independently applies the same qualified pins and retains
+its complete current identities; the existing safe worker stage/failure frame
+remains unchanged. Absence of a case receipt leaves this observation unavailable.
+No private file identity or selection enters the public evidence.
+
+Keep the existing output path and five-leaf safe collector. Only the actual case
+receipt's per-leaf ceiling changes from 4 KiB to 64 KiB; the other four leaves
+stay at 4 KiB. Validate the exact mode, role, 197 ordinals, integer tuple types and
+ranges, prepared tuples against the immutable plan, equality of the seven other
+fields and accepted lengths, before exporting the safe receipt. Keep its existing
+262,144-byte requested-read ceiling, 131,072-byte aggregate output ceiling,
+1 MiB combined operation allocation and 30-second
+collector deadline. Five maximum inputs plus EOF and output readback request
+212,998 bytes; including output writes totals 344,070 bytes, within the existing
+1 MiB allocation. No new collector or output channel is admitted. Focused
+checks extend existing WireCase 3 with historical Changed-only acceptance,
+rejection of each other mismatch, strict default comparison and full public
+receipt serialization including Int64/UInt64 values. Native hash/read/EOF and
+current instability checks remain part of the existing finite fixture method.
+
+After independent source acceptance, permit one caller compilation through the
+existing caller build methods and one existing finite three-case native fixture
+batch, with finite exact allocations and artifacts independently admitted before
+execution. Reuse unchanged public runtime/product dependencies. Deploy through the
+existing public materialization methods into a fresh account-v8 public Root;
+retain account-v7. Keep all four private documents and consumed Profile at their
+already admitted account-v6 paths. The mixed inventory is 196 new public copies
+plus the original consumed Profile, without private rewrite or reselection.
+This correction supersedes the following metadata-only supplement's prohibition
+on rebuilding or changing Root only for this supported correction.
+
+For this next pair, project the existing original/cutoff sources to account-v8
+with Personal slots 1-12 and unchanged Work slots 1-4, using fresh public aliases
+`control/Invoke-WindowsSelectedAccountOriginalRetainedSlots12.ps1` and
+`control/Invoke-WindowsSelectedAccountCutoffSlots12.ps1`. Preserve failed slots
+1/3/5/7/9 and unrun slots 2/4/6/8; truthfully reserve unrun slot 10 before new
+slot 11/R1. Slot 12/R6 requires independently accepted actual R1 success and
+scoped completion. Join the original account-v6/v7 reservation history rather
+than resetting it when changing Root. Preserve complete cumulative charges,
+failed calls, unknowns and historical `noExperimentLive=false`. A failure ends
+this primary allocation. Exact source/artifact/input/account-role/Profile/scopes,
+operating basis, call and accounting gates remain. Use cache/silent first;
+notify and wait when actual operator input is needed. Work and actual WSL
+acceptance remain required; confidential WSL transport remains unadmitted.
+No new host/helper/controller/observer kind, helper reload, reboot, elevation,
+ETW, cache repair, new reviewer or expanded effects are included.
 
 ### Current public metadata follow-up after failed Personal slot 7
 
@@ -985,7 +1051,7 @@ Current root-sensitive source bindings:
 | [SelectedAccountMaterializationPins.cs](../../../tools/validation/SelectedAccountMaterializationPins.cs) | 23008 | `a8b8efccd2dad78764d8870b602ee7d640936d1087c561be8ec7d197f323fdbd` |
 | [Invoke-WindowsSelectedAccount.ps1](../../../tools/validation/Invoke-WindowsSelectedAccount.ps1) | 17535 | `52d1cf0bfc1087d556dfffdd33808696b0de721e696a4eb5de98f971070d34ac` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 20737 | `3ef0171813076010fd88c8bcaaaf3884c96eebf11662eb4731e52b80080e4c46` |
-| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 7482 | `4960da4eaf4bb65f51d83e9fd578ab694bf6c51c0cfd73c5fb389012115e75a9` |
+| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 7482 | `67541f235dfd034bad75f898675f2004b100618adece87177a8097e4cc6855a7` |
 | [collect_selected_account_copy_results.py](../../../tools/validation/collect_selected_account_copy_results.py) | 30681 | `1c72feb0382a27e29a60e2ffcf7f08d755689d46b8d681ab847c6cb5d14d8afb` |
 | [source-response-map.json](../../../tools/validation/controlled-callers/control/source-response-map.json) | 16740 | `98d56e85a2ec00490bdf2a9f559e67feae471c8284abd958c709bfaeb3b23e4d` |
 | [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 15615 | `01227e0bae33f92cd5142088c79cf993395063e89d8c494d1591eab3b60ac2e1` |

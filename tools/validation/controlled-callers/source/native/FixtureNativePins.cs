@@ -16,6 +16,7 @@ internal enum FixtureCheckSource { None, NativePins, Admission }
 internal enum FixturePinPhase { None, CreateWrite, Readback, CreatedIdentity }
 internal readonly record struct FixtureFileIdentity(uint Volume,ulong Index,uint Attributes,long Created,long Modified,
     long Changed,long Length,uint Links);
+internal readonly record struct ActualPublicPinEvidence(int Ordinal,FixtureFileIdentity Prepared,FixtureFileIdentity Current);
 internal sealed class FixtureHeldFile(FileStream stream,FixtureFileIdentity identity) : IDisposable
 {
     internal readonly FileStream Stream=stream;
@@ -66,9 +67,11 @@ internal sealed class FixtureNativePins : IDisposable
         Canonical(path);HoldDirectory(Path.GetDirectoryName(path)!);before();
         Need(CreateDirectory(path,IntPtr.Zero));HoldDirectory(path);
     }
-    internal FixtureHeldFile Pin(string path,string? hash,long length,long maximum,FixtureFileIdentity? expected=null)
+    internal FixtureHeldFile Pin(string path,string? hash,long length,long maximum,FixtureFileIdentity? expected=null,
+        bool qualifyPublicHistoricalChanged=false)
     {
         Canonical(path);Need(maximum is >0 and <=67108864 && length>=-1 && length<=maximum);
+        Need(!qualifyPublicHistoricalChanged || (expected is not null && hash is not null && length>=0));
         HoldDirectory(Path.GetDirectoryName(path)!);before();
         SafeFileHandle handle=Open(path,0x80000000,1,3,0x00200000);
         FileStream? stream=null;
@@ -76,7 +79,7 @@ internal sealed class FixtureNativePins : IDisposable
         {
             FixtureFileIdentity identity=Snapshot(handle);
             Need(identity.Links==1 && identity.Length>=0 && identity.Length<=maximum && (length<0 || identity.Length==length));
-            if(expected is FixtureFileIdentity pin)Need(identity==pin);
+            if(expected is FixtureFileIdentity pin)Need(PreparedMatches(identity,pin,qualifyPublicHistoricalChanged));
             RequireName(handle,path);stream=new FileStream(handle,FileAccess.Read,65536,false);
             if(hash is not null)
             {
@@ -101,6 +104,11 @@ internal sealed class FixtureNativePins : IDisposable
         }
         catch{if(stream is not null)stream.Dispose();else handle.Dispose();throw;}
     }
+    // Qualification applies only to the prepared-to-first-held comparison. All
+    // subsequent snapshots compare the complete current identity, including Changed.
+    internal static bool PreparedMatches(FixtureFileIdentity current,FixtureFileIdentity prepared,
+        bool qualifyPublicHistoricalChanged=false) =>
+        (qualifyPublicHistoricalChanged ? current with {Changed=prepared.Changed} : current)==prepared;
     internal byte[] Read(FixtureHeldFile file,int maximum,string? namedPath=null)
     {
         before();Need(file.Identity.Length<=maximum && Snapshot(file.Stream.SafeFileHandle)==file.Identity);

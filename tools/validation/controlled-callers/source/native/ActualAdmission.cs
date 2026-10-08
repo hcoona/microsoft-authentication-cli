@@ -63,6 +63,7 @@ internal sealed class ActualAdmission : IDisposable
     internal const string ExistingProfilePath = @"C:\Temp\azureauth-windows-slice-108\confidential-native-account-v6\product\selected-account-profile.json";
     private const string ProfileRelative = @"product\selected-account-profile.json";
     private readonly FixtureNativePins pins;
+    private readonly List<ActualPublicPinEvidence> publicPins = [];
     private readonly string path, sha, nonce, role, receiptRoot, privatePath;
     private readonly Group group;
     private readonly long batchEnd, workEnd, finalEnd, entry;
@@ -126,14 +127,17 @@ internal sealed class ActualAdmission : IDisposable
                     length > 0 && length <= exact!.MaximumBytes && (exact.Bytes < 0 || length == exact.Bytes) &&
                     (exact.Sha256 is null || hash == exact.Sha256));
                 total = checked(total + length); PrivateRequest.Require(total <= 100663296);
-                pins.Pin(Root + "\\" + relative, hash, length, exact.MaximumBytes, ExactJson.Identity(item.GetProperty("identity"), length));
+                FixtureFileIdentity prepared = ExactJson.Identity(item.GetProperty("identity"), length);
+                FixtureHeldFile held = pins.Pin(Root + "\\" + relative, hash, length, exact.MaximumBytes, prepared,
+                    qualifyPublicHistoricalChanged: true);
+                publicPins.Add(new(ordinal - 1, prepared, held.Identity));
                 if (relative == @"artifact\NativeCaller.exe") callerHash = hash;
             }
             PrivateRequest.Require(expected.Count == 0 && callerHash is not null);
             Program.ActualAt(6);
             string productImage = ExactJson.Text(data, "productImage");
             JsonElement products = data.GetProperty("productPins");
-            PrivateRequest.Require(products.ValueKind == JsonValueKind.Array && products.GetArrayLength() is >= 1 and <= 32);
+            PrivateRequest.Require(products.ValueKind == JsonValueKind.Array && products.GetArrayLength() == 3);
             var productPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase); string? productHash = null;
             foreach (JsonElement item in products.EnumerateArray())
             {
@@ -145,9 +149,13 @@ internal sealed class ActualAdmission : IDisposable
                     ExactJson.Hash(hash) && length > 0 && length <= 67108864);
                 total = checked(total + length); PrivateRequest.Require(total <= 268435456);
                 string productPath = relative == ProfileRelative ? ExistingProfilePath : Root + "\\" + relative;
-                pins.Pin(productPath, hash, length, 67108864, ExactJson.Identity(item.GetProperty("identity"), length));
+                FixtureFileIdentity prepared = ExactJson.Identity(item.GetProperty("identity"), length);
+                FixtureHeldFile held = pins.Pin(productPath, hash, length, 67108864, prepared,
+                    qualifyPublicHistoricalChanged: true);
+                publicPins.Add(new(ordinal - 1, prepared, held.Identity));
                 if (relative == productImage) productHash = hash;
             }
+            PrivateRequest.Require(publicPins.Count == 197 && ordinal == 197);
             PrivateRequest.Require(productPaths.Contains(ProfileRelative) && productHash is not null && productImage.EndsWith(".exe", StringComparison.Ordinal));
             Program.ActualAt(7);
             JsonElement privateInput = data.GetProperty("privateInput");
@@ -161,7 +169,7 @@ internal sealed class ActualAdmission : IDisposable
             pins.HoldDirectory(receiptRoot);
             plan = new PublicPlan { SelfImage = Root + @"\artifact\NativeCaller.exe", ProductImage = Root + "\\" + productImage,
                 WorkingDirectory = Root, ReceiptDirectory = receiptRoot, CallerSha256 = callerHash!, ProductSha256 = productHash!,
-                ProtocolSha256 = ExactJson.Text(data, "protocolSha256") };
+                ProtocolSha256 = ExactJson.Text(data, "protocolSha256"), ActualPublicPins = publicPins.ToArray() };
             Before();
         }
         catch (Exception caught) { Program.ActualCapture(caught); pins.Dispose(); Program.ActualFlag(512); throw; }
