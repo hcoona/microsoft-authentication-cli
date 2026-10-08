@@ -211,7 +211,11 @@ internal sealed class ActualAdmission : IDisposable
         Program.WorkerAt(WorkerStage.PrivateRead);
         Before(); PrivateRequest.Require(roleHeld && role == "worker" && group == selected && !privateRead);
         privateRead = true;
-        FixtureHeldFile file = pins.Pin(privatePath, null, privateLength, 262144, privateIdentity);
+        // The exact admitted original holds this file after Windows-local expected
+        // content validation. Qualify only its historical Changed field; current
+        // snapshots, length, EOF and all other prepared fields remain strict.
+        FixtureHeldFile file = pins.Pin(privatePath, null, privateLength, 262144, privateIdentity,
+            qualifyPrivateHistoricalChanged: true);
         byte[] bytes = pins.Read(file, 262144);
         Program.WorkerAt(WorkerStage.PrivateParse);
         try

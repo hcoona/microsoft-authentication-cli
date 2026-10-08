@@ -4,7 +4,7 @@
 param(
     [Parameter(Mandatory)][string] $PlanPath,
     [Parameter(Mandatory)][string] $PlanSha256,
-    [Parameter(Mandatory)][ValidateRange(1, 12)][int] $Attempt,
+    [Parameter(Mandatory)][ValidateRange(1, 14)][int] $Attempt,
     [ValidateSet('Personal', 'Work')][string] $AccountRole = 'Personal',
     [Parameter(Mandatory)][string] $ControllerSha256,
     [switch] $Controller,
@@ -184,7 +184,9 @@ function Invoke-Outer {
         while (([Diagnostics.Stopwatch]::GetTimestamp() - $callStart) / $frequency -lt 170) {
             if ($stdout.IsCompleted) { Need ($stdout.GetAwaiter().GetResult() -eq 0) }
             if ($stderr.IsCompleted) { Need ($stderr.GetAwaiter().GetResult() -eq 0) }
-            if ($process.HasExited -and $stdout.IsCompleted -and $stderr.IsCompleted) {
+            # WaitForExit(0) tests completed exit without renewing the deadline.
+            # Require completed exit together with both validated EOFs.
+            if ($process.WaitForExit(0) -and $stdout.IsCompleted -and $stderr.IsCompleted) {
                 $complete = $true
                 $safe.controllerExited = $true
                 $safe.streamsClosed = $true
@@ -194,8 +196,9 @@ function Invoke-Outer {
         }
         Need $complete
         Before 170
-        Need ($process.ExitCode -eq 0)
+        # Record retained-handle completion for successful and failed exits.
         Need ($CutoffLease.MarkObservedExit())
+        Need ($process.ExitCode -eq 0)
         $safe.passed = $true
         $safe.failure = 'none'
     } catch {
