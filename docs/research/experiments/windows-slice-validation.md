@@ -434,6 +434,11 @@ ETW, cache repair, new reviewer or expanded effects are included.
 
 ### Private content correspondence and historical Changed qualification
 
+The shared native pin source uses the exact existing account-v6 private-root literal
+for its private path predicate. It therefore remains compilable in DirectObserver,
+which shares this source but does not include `ActualAdmission`; the default-false
+private qualifier and all path, range, identity and content checks remain unchanged.
+
 For a further admitted selected-account original, reuse the already loaded
 input-pin helper in the retained stock host. Reconstruct the expected private
 request in Windows memory from the same fixed admitted local configuration and
@@ -511,7 +516,7 @@ elevation, ETW, private hash export or expanded account effects is permitted.
 | [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 18746 | `acfcaf23826d500180d8a46dd4f4288e982a115e1466d7a64496c562c12b9166` |
 | [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 23131 | `5feceb0793d51473b1433cd9980e789fb28b4162e863e1c80fb9170e9284f55e` |
 | [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 18229 | `add88a3df74e1da5a2a53dea026ea344347f4baa1b3da5bec97bcf8bed135254` |
-| [FixtureNativePins.cs](../../../tools/validation/controlled-callers/source/native/FixtureNativePins.cs) | 16476 | `3381cea9c6b126f182749ef058f04328e3c20ac9764df2fd762ca22b7a9dfed7` |
+| [FixtureNativePins.cs](../../../tools/validation/controlled-callers/source/native/FixtureNativePins.cs) | 16527 | `12d3dba6ef9b99c5b303ddeee3b952e06287cb1a8a9c30c6ed69d733b27c6539` |
 
 ### Private request metadata diagnosis after Personal slot 11
 
