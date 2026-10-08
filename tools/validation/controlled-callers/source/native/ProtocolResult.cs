@@ -9,8 +9,16 @@ using System.Text.RegularExpressions;
 namespace ConfidentialNativeCaller;
 
 // Only enums, Booleans and bounded durations can leave private parsing/capture.
+internal enum MechanismDiagnostic : byte
+{
+    NotApplicable, Unavailable, Invalid, HostPlatform, HostWorkstation, HostThreadToken,
+    HostLogon, HostSession, HostInputDesktop, DllSearch, BrokerUnavailable,
+    BrokerPlatform, BrokerInitialization, RejectedWebUi
+}
+
 internal sealed class SafeResult
 {
+    internal MechanismDiagnostic MechanismDiagnostic;
     internal Outcome Outcome;
     internal Route Route;
     internal bool Passed, ProtocolValid, MetadataValid, PersistenceUnconfirmed, PersistenceFailed, WriterClosedAfterLiveSample;
@@ -22,6 +30,30 @@ internal sealed class SafeResult
 internal static class ProtocolResult
 {
     private static readonly UTF8Encoding StrictUtf8 = new(false, true);
+    // Compare bounded captured bytes with fixed producer indications. Never decode,
+    // export or hash arbitrary stderr, even when it fails this allowlist.
+    internal static MechanismDiagnostic ReadMechanismDiagnostic(ReadOnlySpan<byte> bytes, Outcome outcome)
+    {
+        if (outcome != Outcome.MechanismUnavailable) return MechanismDiagnostic.NotApplicable;
+        if (bytes.Length == 0) return MechanismDiagnostic.Unavailable;
+        if (bytes.SequenceEqual("Authentication request completed.\n"u8)) return MechanismDiagnostic.Unavailable;
+        if (!bytes.StartsWith("Authentication request completed.\n"u8)) return MechanismDiagnostic.Invalid;
+        bytes = bytes["Authentication request completed.\n"u8.Length..];
+        if (bytes.SequenceEqual("Mechanism unavailable at unavailable.\n"u8)) return MechanismDiagnostic.Unavailable;
+        if (bytes.SequenceEqual("Mechanism unavailable at host_platform.\n"u8)) return MechanismDiagnostic.HostPlatform;
+        if (bytes.SequenceEqual("Mechanism unavailable at host_workstation.\n"u8)) return MechanismDiagnostic.HostWorkstation;
+        if (bytes.SequenceEqual("Mechanism unavailable at host_thread_token.\n"u8)) return MechanismDiagnostic.HostThreadToken;
+        if (bytes.SequenceEqual("Mechanism unavailable at host_logon.\n"u8)) return MechanismDiagnostic.HostLogon;
+        if (bytes.SequenceEqual("Mechanism unavailable at host_session.\n"u8)) return MechanismDiagnostic.HostSession;
+        if (bytes.SequenceEqual("Mechanism unavailable at host_input_desktop.\n"u8)) return MechanismDiagnostic.HostInputDesktop;
+        if (bytes.SequenceEqual("Mechanism unavailable at dll_search.\n"u8)) return MechanismDiagnostic.DllSearch;
+        if (bytes.SequenceEqual("Mechanism unavailable at broker_unavailable.\n"u8)) return MechanismDiagnostic.BrokerUnavailable;
+        if (bytes.SequenceEqual("Mechanism unavailable at broker_platform.\n"u8)) return MechanismDiagnostic.BrokerPlatform;
+        if (bytes.SequenceEqual("Mechanism unavailable at broker_initialization.\n"u8)) return MechanismDiagnostic.BrokerInitialization;
+        if (bytes.SequenceEqual("Mechanism unavailable at rejected_web_ui.\n"u8)) return MechanismDiagnostic.RejectedWebUi;
+        return MechanismDiagnostic.Invalid;
+    }
+
     private static readonly string[] SuccessNames = ["accessToken", "tokenType", "expiresOn", "accountEmail",
         "tenantId", "authority", "scopes", "mechanism", "interaction", "warnings", "correlationId"];
     private static readonly string[] ForbiddenMaterial = ["refreshToken", "idToken", "authorizationCode", "claims"];

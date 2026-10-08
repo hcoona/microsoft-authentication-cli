@@ -328,6 +328,7 @@ internal static class Program
                     Before(live.EffectiveDeadline);
                     live.Input.CloseWriter();
                     SafeResult result = ProtocolResult.Validate(live.Output.Bytes, live.Child.ExitCode(), live.Request, live.Output.ReceivedUtc);
+                    result.MechanismDiagnostic = ProtocolResult.ReadMechanismDiagnostic(live.Error.Bytes.Span, result.Outcome);
                     result.ElapsedMilliseconds = Elapsed(live.Began);
                     result.WriterClosedAfterLiveSample = live.ClosedAfterLiveSample;
                     if (live.WriterCloseBegan is long closed)

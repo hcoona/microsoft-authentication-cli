@@ -162,9 +162,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 15375,
+        "bytes": 17387,
         "path": "source/native/ControlledChecks.cs",
-        "sha256": "cafbbe7a5a7eedca75eca3eb977e2fd671a95272e85a1205db0de6c0a7c28bd7"
+        "sha256": "9daa9ea6b7463b3a37fcf70a4cbe174bf53a3827596b8c56e9643cf609496699"
       },
       "stagedRelativePath": "source/native/ControlledChecks.cs"
     },
@@ -258,17 +258,17 @@
     },
     {
       "authoredSource": {
-        "bytes": 21531,
+        "bytes": 21659,
         "path": "source/native/Program.cs",
-        "sha256": "4b3be4c42cc62ffbc7797be53cc0244e4fda033730c29e170ec0078de054cebf"
+        "sha256": "b98fa00e7ef147a525f835e169cfb66052c85e0f3c67e0327fc792a7faae8abb"
       },
       "stagedRelativePath": "source/native/Program.cs"
     },
     {
       "authoredSource": {
-        "bytes": 7924,
+        "bytes": 10520,
         "path": "source/native/ProtocolResult.cs",
-        "sha256": "31d9f6900919b6a808da1ab0ad9b070fc1051978be01180604b8c3b2f39e2de4"
+        "sha256": "38342602adabaa6b4d1cd8ca53d7692ea6ba9a88411911ef07501683636f6d8a"
       },
       "stagedRelativePath": "source/native/ProtocolResult.cs"
     },
@@ -282,9 +282,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 5948,
+        "bytes": 6065,
         "path": "source/native/SafeReceipt.cs",
-        "sha256": "df3260e6f27ff479a00dd76832d3295b00ffb5c56488b50488ebc5eaba472582"
+        "sha256": "22109a90c567182f14a833fda55ae37d6cbb1b1054e65e2e6f83f5a5231116fa"
       },
       "stagedRelativePath": "source/native/SafeReceipt.cs"
     },
@@ -298,9 +298,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 7104,
+        "bytes": 8336,
         "path": "source/native/Wire.cs",
-        "sha256": "12d520e2444be09412b8a1869ce4dd97043a7d2942b5ebbc23a6ba088c9a3373"
+        "sha256": "693fb47b3ecc8d8e44dad31845af736328ac87b1d22d5bb226d2bbad708846c4"
       },
       "stagedRelativePath": "source/native/Wire.cs"
     }

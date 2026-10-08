@@ -52,6 +52,7 @@ internal static class SafeReceipt
                 json.WriteEndArray(); json.WriteEndObject();
             }
             json.WriteString("apiRoute", result?.Route.ToString() ?? "None");
+            json.WriteString("productMechanismDiagnostic", result?.MechanismDiagnostic.ToString() ?? "NotSupplied");
             json.WriteBoolean("protocolValid", result?.ProtocolValid ?? false);
             json.WriteBoolean("productExitConsistent", result is not null);
             json.WriteNumber("productExitCode", result is null ? -1 : result.Outcome == Outcome.Success ? 0 : 1);

@@ -7,6 +7,8 @@ namespace Authentication.Windows;
 
 internal sealed class MsalSessionFactory : IMsalSessionFactory
 {
+    private readonly WindowsMechanismTrace? trace;
+    internal MsalSessionFactory(WindowsMechanismTrace? trace = null) => this.trace = trace;
     public IMsalSession Create(MsalClientSettings settings, IMsalHttpClientFactory http,
         CancellationToken cancellationToken)
     {
@@ -15,8 +17,11 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
         var available = application.IsBrokerAvailable();
         cancellationToken.ThrowIfCancellationRequested();
         if (!available)
+        {
+            trace?.Record(WindowsMechanismFailure.BrokerUnavailable);
             throw new ProviderFailureException(AuthenticationFailure.MechanismUnavailable);
-        return new Session(application);
+        }
+        return new Session(application, trace);
     }
 
     internal static PublicClientApplication BuildApplication(MsalClientSettings settings,
@@ -38,7 +43,7 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
         return application;
     }
 
-    private sealed class Session(PublicClientApplication application) : IMsalSession
+    private sealed class Session(PublicClientApplication application, WindowsMechanismTrace? trace) : IMsalSession
     {
         public async Task<IReadOnlyList<IAccount>> GetAccountsAsync(CancellationToken cancellationToken)
         {
@@ -66,7 +71,7 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
             var builder = application.AcquireTokenInteractive(operation.Scopes)
                 .WithCorrelationId(operation.CorrelationId)
                 .WithParentActivityOrWindow(operation.ParentWindow)
-                .WithCustomWebUi(new RejectingWebUi());
+                .WithCustomWebUi(new RejectingWebUi(trace));
             if (RestrictiveTenant(operation.Tenant) is { } tenant)
                 builder.WithTenantId(tenant);
             if (operation.Account is { } account)

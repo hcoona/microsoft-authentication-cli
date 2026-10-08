@@ -770,6 +770,19 @@ exception. Only `accessToken` in a validated success may expose authentication m
 Do not emit refresh/ID tokens, claims, account IDs, raw exceptions, provider property bags,
 or diagnostic email hashes. Keep stdout exclusively for that result.
 
+A `mechanism_unavailable` result may additionally have one fixed stderr indication
+naming the first failed local admission or broker boundary: `host_platform`,
+`host_workstation`, `host_thread_token`, `host_logon`, `host_session`,
+`host_input_desktop`, `dll_search`, `broker_unavailable`, `broker_platform`,
+`broker_initialization`, or `rejected_web_ui`. `unavailable` means no boundary
+was captured. Record only these source-defined categories, never a native error,
+identifier, exception, provider property, or input value. An admission category
+identifies a rejected predicate, not the underlying OS cause. Emission remains
+optional and cannot change result, cancellation, retry, or termination semantics.
+The existing confidential validator may project only an exact bounded indication
+to a fixed safe enum; absent or invalid diagnostics remain unavailable or invalid.
+They neither establish authentication success nor relax any passing expectation.
+
 Stderr carries bounded fixed human indications and, only with `--telemetry stderr`, local
 JSON event lines containing `event`, `stage`, `outcome`, and elapsed milliseconds. Events
 contain no token, email, path, Profile/client/account identifier, tenant, resource, scope,

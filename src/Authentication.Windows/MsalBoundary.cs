@@ -8,7 +8,11 @@ namespace Authentication.Windows;
 // Interpret public provider observations without exporting provider diagnostics.
 public static class MsalBoundary
 {
-    public static ProviderFailureException MapFailure(Exception exception, CancellationToken cancellationToken)
+    public static ProviderFailureException MapFailure(Exception exception, CancellationToken cancellationToken) =>
+        MapFailure(exception, cancellationToken, null);
+
+    internal static ProviderFailureException MapFailure(Exception exception, CancellationToken cancellationToken,
+        WindowsMechanismTrace? trace)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var code = (exception as MsalException)?.ErrorCode;
@@ -30,7 +34,11 @@ public static class MsalBoundary
 
         if (code is "platform_not_supported" or "wam_runtime_init_failed"
             || exception is ProviderFailureException { Failure: AuthenticationFailure.MechanismUnavailable })
+        {
+            if (code == "platform_not_supported") trace?.Record(WindowsMechanismFailure.BrokerPlatform);
+            if (code == "wam_runtime_init_failed") trace?.Record(WindowsMechanismFailure.BrokerInitialization);
             return new(AuthenticationFailure.MechanismUnavailable);
+        }
 
         if (exception is MsalException { IsRetryable: true })
             return new(AuthenticationFailure.TemporarilyUnavailable, reason: AuthenticationReason.ProviderTransient);

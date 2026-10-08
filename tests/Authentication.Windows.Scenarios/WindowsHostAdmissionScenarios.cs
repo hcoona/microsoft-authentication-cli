@@ -301,6 +301,45 @@ public sealed class WindowsHostAdmissionScenarios
         Assert.AreEqual(1, scene.InteractiveCalls);
     }
 
+    [TestMethod]
+    public void FixedDiagnosticsIdentifyRejectedGateWithoutProviderEffects()
+    {
+        foreach (var failure in new[] { WindowsMechanismFailure.HostPlatform, WindowsMechanismFailure.HostWorkstation,
+            WindowsMechanismFailure.HostThreadToken, WindowsMechanismFailure.HostLogon,
+            WindowsMechanismFailure.HostSession, WindowsMechanismFailure.HostInputDesktop })
+        {
+            using var scene = new Scene();
+            switch (failure)
+            {
+                case WindowsMechanismFailure.HostPlatform: scene.Platform = scene.Platform with { IsWindows = false }; break;
+                case WindowsMechanismFailure.HostWorkstation: scene.Workstation = false; break;
+                case WindowsMechanismFailure.HostThreadToken: scene.ThreadIdentity = WindowsThreadIdentity.Impersonating; break;
+                case WindowsMechanismFailure.HostLogon: scene.Logon = null; break;
+                case WindowsMechanismFailure.HostSession: scene.Session = WindowsSessionConnection.Inactive; break;
+                case WindowsMechanismFailure.HostInputDesktop: scene.InputDesktop = false; break;
+            }
+            var trace = new WindowsMechanismTrace();
+            var exception = Assert.ThrowsExactly<ProviderFailureException>(() => new WindowsHostAdmission(scene, trace).Admit(scene.Original.Token));
+            Assert.AreEqual(AuthenticationFailure.MechanismUnavailable, exception.Failure);
+            Assert.AreEqual(failure, trace.Failure);
+            NoProviderEffects(scene);
+            var indication = Encoding.ASCII.GetString(WindowsDiagnostics.MechanismIndication(trace.Failure));
+            Assert.IsFalse(indication.Contains(PrivateMarker, StringComparison.Ordinal));
+            Assert.IsFalse(indication.Contains(Email, StringComparison.Ordinal));
+        }
+    }
+
+    [TestMethod]
+    public void CancelledObservationDoesNotPublishRejectedGate()
+    {
+        using var scene = new Scene { Session = WindowsSessionConnection.Inactive };
+        scene.DuringObservation = name => { if (name == "session") scene.Original.Cancel(); };
+        var trace = new WindowsMechanismTrace();
+        Assert.ThrowsExactly<OperationCanceledException>(() => new WindowsHostAdmission(scene, trace).Admit(scene.Original.Token));
+        Assert.AreEqual(WindowsMechanismFailure.Unavailable, trace.Failure);
+        NoProviderEffects(scene);
+    }
+
     private static WindowsHostPlatform ValidPlatform() => new(true, Architecture.X64, Architecture.X64, new(10, 0, 22000));
 
     private static async Task RejectedAfter(Scene scene, string observation)

@@ -30,11 +30,13 @@ internal sealed record WindowsLocalLogon(uint LogonType, WindowsLogonIdentity Id
 internal sealed class WindowsHostAdmission : IWindowsHostAdmission
 {
     private readonly IWindowsHostObservations observations;
+    private readonly WindowsMechanismTrace? trace;
 
-    internal WindowsHostAdmission(IWindowsHostObservations observations)
+    internal WindowsHostAdmission(IWindowsHostObservations observations, WindowsMechanismTrace? trace = null)
     {
         ArgumentNullException.ThrowIfNull(observations);
         this.observations = observations;
+        this.trace = trace;
     }
 
     public void Admit(CancellationToken cancellationToken)
@@ -43,9 +45,9 @@ internal sealed class WindowsHostAdmission : IWindowsHostAdmission
         Require(platform.IsWindows && platform.ProcessArchitecture == Architecture.X64
             && platform.OsArchitecture == Architecture.X64
             && platform.Version.Major == 10 && platform.Version.Minor == 0
-            && platform.Version.Build >= 22000);
-        Require(Observe(observations.ReadWorkstationProduct, cancellationToken) == true);
-        Require(Observe(observations.ReadThreadIdentity, cancellationToken) == WindowsThreadIdentity.NoToken);
+            && platform.Version.Build >= 22000, WindowsMechanismFailure.HostPlatform);
+        Require(Observe(observations.ReadWorkstationProduct, cancellationToken) == true, WindowsMechanismFailure.HostWorkstation);
+        Require(Observe(observations.ReadThreadIdentity, cancellationToken) == WindowsThreadIdentity.NoToken, WindowsMechanismFailure.HostThreadToken);
 
         var logon = Observe(observations.ReadOwnLogonAndStation, cancellationToken);
         Require(logon is
@@ -54,17 +56,17 @@ internal sealed class WindowsHostAdmission : IWindowsHostAdmission
             Identity: WindowsLogonIdentity.User,
             VisibleStation: true,
             StationUserMatches: true,
-        });
+        }, WindowsMechanismFailure.HostLogon);
 
-        Require(Observe(observations.ReadSessionConnection, cancellationToken) == WindowsSessionConnection.Active);
-        Require(Observe(observations.ReadInputDesktop, cancellationToken) == true);
+        Require(Observe(observations.ReadSessionConnection, cancellationToken) == WindowsSessionConnection.Active, WindowsMechanismFailure.HostSession);
+        Require(Observe(observations.ReadInputDesktop, cancellationToken) == true, WindowsMechanismFailure.HostInputDesktop);
     }
 
     public void Recheck(CancellationToken cancellationToken)
     {
-        Require(Observe(observations.ReadThreadIdentity, cancellationToken) == WindowsThreadIdentity.NoToken);
-        Require(Observe(observations.ReadSessionConnection, cancellationToken) == WindowsSessionConnection.Active);
-        Require(Observe(observations.ReadInputDesktop, cancellationToken) == true);
+        Require(Observe(observations.ReadThreadIdentity, cancellationToken) == WindowsThreadIdentity.NoToken, WindowsMechanismFailure.HostThreadToken);
+        Require(Observe(observations.ReadSessionConnection, cancellationToken) == WindowsSessionConnection.Active, WindowsMechanismFailure.HostSession);
+        Require(Observe(observations.ReadInputDesktop, cancellationToken) == true, WindowsMechanismFailure.HostInputDesktop);
     }
 
     private static T Observe<T>(Func<CancellationToken, T> observation, CancellationToken cancellationToken)
@@ -86,9 +88,12 @@ internal sealed class WindowsHostAdmission : IWindowsHostAdmission
         return result;
     }
 
-    private static void Require(bool eligible)
+    private void Require(bool eligible, WindowsMechanismFailure failure)
     {
         if (!eligible)
+        {
+            trace?.Record(failure);
             throw new ProviderFailureException(AuthenticationFailure.MechanismUnavailable);
+        }
     }
 }
