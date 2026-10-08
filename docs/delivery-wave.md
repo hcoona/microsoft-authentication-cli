@@ -42,6 +42,29 @@ technical preparation and correction that contribute directly to this outcome:
 - Prepare and independently review protocol and validation-tool amendments;
   publish and merge in-scope changes with the required checks and reviews.
 
+Include a bounded, explicit diagnostic invocation in the existing CLI so this
+Slice can be investigated without exporting its confidential success result.
+Accept the applicable requirements, design, output contract, and validation basis
+before implementation. Reuse the normal request validation, exact account
+selection, silent-first acquisition, interaction permission, and process lifetime.
+Emit only an allowlisted structured summary of the outcome, existing validation
+results, timing, and optional interpretation of the token acquired by that request.
+Token interpretation is best-effort diagnostic information: it must not determine
+identity correctness, change authentication success, claim signature validation,
+or imply resource-service acceptance. Preserve the normal protocol 1 request,
+credential-bearing result, and exit semantics for existing callers.
+
+This addition permits neither an arbitrary-token input/analyzer nor a second
+authentication request, persistent helper host, new controller, or new provider.
+Keep token contents, account and tenant identifiers, identifier hashes, and raw
+provider diagnostics out of diagnostic output. Simplify the validation carrier
+using the CLI's existing lifetime and ordinary invocation where sufficient; do
+not require retained PowerShell memory state solely to carry the diagnostics.
+The diagnostic summary does not replace the required observations of normal
+credential-bearing output or actual WSL transport. Existing source/artifact,
+protocol, independent-review, shared-capacity, and real-account effects gates
+continue to apply. It does not itself admit confidential transport through WSL.
+
 These are implementation choices within one grant. A new filename, destination,
 action number, passive read, correction, or protocol supplement does not require
 a renewed owner decision solely for that reason. Work must still fit this outcome,
