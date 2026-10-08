@@ -10,6 +10,29 @@ internal static class FixtureDriverProgram
     public static int Main(string[] args)
     {
         if (!ExecutionAdmitted) return 125;
+        if (args.Length == 1 && args[0] == "--wire-controls")
+        {
+            // Pure data checks: no platform, account, fixture pin or process calls.
+            // This mode still requires exact source/artifact/call admission.
+            long start = Stopwatch.GetTimestamp();
+            long end = CallerRules.Add(start, 10000, Stopwatch.Frequency);
+            try
+            {
+                for (int i = 1; i <= 12; i++)
+                {
+                    CallerRules.Before(Stopwatch.GetTimestamp(), end);
+                    ControlledChecks.WireCase(i);
+                }
+                CallerRules.Before(Stopwatch.GetTimestamp(), end);
+                Console.WriteLine("Wire controls passed: 12.");
+                return 0;
+            }
+            catch
+            {
+                Console.Error.WriteLine("Wire controls failed.");
+                return 1;
+            }
+        }
         int rows=0,cases=0;bool passed=false;IDisposable? admission=null;
         long began=Stopwatch.GetTimestamp(),workEnd=CallerRules.Add(began,300000,Stopwatch.Frequency);
         long terminalEnd=CallerRules.Add(workEnd,10000,Stopwatch.Frequency);
