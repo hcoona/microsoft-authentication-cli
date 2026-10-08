@@ -432,6 +432,50 @@ acceptance remain required; confidential WSL transport remains unadmitted.
 No new host/helper/controller/observer kind, helper reload, reboot, elevation,
 ETW, cache repair, new reviewer or expanded effects are included.
 
+### Private request metadata diagnosis after Personal slot 11
+
+After independent acceptance of the failed original and corrected case receipt,
+permit one metadata-only observation of the original account-v6 private R1
+request. The validated worker failure locates rejection at `PrivateRead`; its
+exact predicate remains unknown. The accepted public Changed qualification is
+already deployed and needs no repeated compilation or materialization.
+
+Reuse the same retained stock PowerShell 5.1 x64 host, loaded input-pin helper,
+and existing metadata reflection method. Bind the host/runspace and Linux owner
+identities to their accepted records. Load only the hash-pinned original public
+plan for slot 11 as the expected private descriptor. Keep its original descriptor
+unchanged. Open only that descriptor's fixed original private R1 file with
+`FILE_READ_ATTRIBUTES`, deny write/delete sharing, and use the existing canonical
+path, held-directory, regular-file, no-reparse, single-link and final-name checks.
+Do not open a private content stream, hash or parse its payload, or read account
+configuration. Compare the eight historical fields locally and report only an
+eight-bit difference mask; retain no private identity or field value outside
+Windows. Check all eight current fields across initial/final held observations
+and a named reopen. This establishes only current metadata correspondence or
+difference, not content correspondence or the original first failure cause.
+
+Bound the sole observation to 30 seconds native and 40 seconds whole transport,
+1 MiB requested public-plan reads, 64 opens, 512 metadata calls and 16 KiB safe
+status. Bind the exact expected public plan, reflected methods, source/call,
+operation counts and current accounting before submission. Precharge one
+synthetic scenario and one 40-second/4-MiB collection interval from the existing
+shared ledger; real-stage debits are zero. Preserve all earlier charges, failed
+outcomes, spent calls, primitive types, pending flags and unknowns. Stop on failed
+host binding, unexpected metadata, unsafe output, deadline or handle closure.
+Dispose all owned handles, retain the existing host and safe result, and require
+independent actual outcome acceptance. Failure spends the pass and grants no
+retry, host recreation, helper reload or additional observation.
+
+A Changed-only difference is diagnostic evidence, not permission to refresh the
+private baseline or relax its strict historical predicate. A later correction
+requires supported Windows-local content correspondence and separately accepted
+exact source/input/call limits; historical ctime qualification remains standing
+under the Wave without a per-file owner question. This pass changes no request,
+selector, cache, product or provider state. It does not resolve the separate
+cutoff failure or reopen slot 12/R6 or another account invocation. No new helper,
+controller, observer, host kind, compilation, reboot, elevation, ETW or expanded
+account effects are included.
+
 ### Corrected case receipt reread after Personal slot 11
 
 After independently accepted failure and distinct triage of the missing
