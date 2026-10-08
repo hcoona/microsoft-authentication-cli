@@ -792,6 +792,58 @@ output to 8 KiB, drop excess, never await a flush at result delivery, and ignore
 failure without changing authentication or exit status. The process watchdog covers a
 blocked diagnostic writer too. No upstream telemetry configuration is read.
 
+### Local OpenTelemetry-Compatible Observation
+
+Instrument the request and its Profile read, account discovery, silent acquisition,
+owned interaction, interactive acquisition, candidate validation and owned-UI close
+with .NET `ActivitySource`/`Activity`. Use the fork-owned source name
+`hcoona.microsoft-authentication-cli`, version `0.0.0` for this undistributed Slice.
+These APIs are the [.NET OpenTelemetry instrumentation boundary](https://learn.microsoft.com/dotnet/core/diagnostics/observability-with-otel#net-implementation-of-opentelemetry),
+not an assertion that an OpenTelemetry SDK/exporter has been installed or run.
+No new dependency, exporter endpoint or Collector service is needed for local observation.
+
+`--telemetry stderr` installs a request-local `ActivityListener` that listens only
+to that source and projects fixed stage-start and stage-completion JSON lines to
+the existing bounded stderr sink. Start notifications supply immediate progress;
+completed spans supply durations. A pending span is not evidence of completion.
+Keep the existing `request_completed` event and fixed human indications. The local
+projection permits fixed event/stage/outcome names, nonnegative relative durations,
+and request-local W3C trace/span/parent-span IDs only. IDs are newly generated for
+each request, never derived from input/provider/machine state and never persisted
+as a user identity. Do not serialize arbitrary tags, baggage, exceptions, resource
+attributes, dependency activities or provider objects. Unknown events/attributes
+are omitted rather than forwarded. Telemetry-off installs no local listener.
+
+Use explicit parent contexts for the owned spans and preserve `Activity.Current`
+around their start/stop. The observation must not become ambient context for MSAL,
+HTTP or other dependencies: do not add outgoing trace headers or baggage. Listener
+or sink exceptions are contained; no synchronous I/O, unbounded queue, flush wait
+or export work belongs on an authentication callback or commitment lock. Keep one
+bounded local writer and the original process watchdog/ending allowance. Missing,
+dropped, partial or sampled observations cannot establish success or closure.
+
+An optional token-interpretation observation may examine only a committed,
+validated success, locally and after normal result commitment. At most 64 KiB of
+token text and a 32 KiB decoded JWT payload with JSON depth eight may be examined.
+Malformed input, duplicate members, unsupported format or an exceeded bound yields
+only a fixed unavailable/unreadable/limit category. Emit only a format category,
+whether `exp`, `aud` and `scp` claims are present in their expected types, and
+provider-reported expiration/remaining lifetime. Never emit a header/payload,
+claim value/name supplied by input, token length/hash, account or tenant identifier.
+JWT decoding is explicitly unverified; it does not establish signature validity,
+identity, scope satisfaction or resource acceptance. Opaque tokens remain valid
+authentication candidates. Interpretation cannot change the committed result.
+
+For flow-only investigation, discard normal stdout using the Windows null device.
+For output-contract acceptance, reuse the existing Windows-local
+`ProtocolResult.Validate` allowlisted validator/redactor with the selected private
+request and observed exit. Export only its fixed check conclusions; even malformed
+output and additive fields are never copied into evidence. It is a result parser,
+not a new authentication host/controller. Required actual process exit and window
+behavior retain external observations. Neither telemetry nor stdout discarded at
+the null device proves normal output or actual WSL credential transport. No new
+authentication command or alternative stdout result mode is introduced.
+
 Protocol 1 producers emit only the defined fields. Consumers must tolerate unknown
 additional result fields but still validate the known outcome and required fields;
 additive optional result metadata is compatible. Request and Profile readers reject

@@ -11,6 +11,46 @@ owns safety. No recipe or source guard supplies independent authorization.
 
 ## Fixed Mechanism-Unavailability Diagnostics
 
+### Local observation preparation
+
+Prepare the [local OpenTelemetry-compatible observation](../../designs/windows-ado-authentication.md#local-opentelemetry-compatible-observation)
+within the existing Windows Slice grant. This changes only optional local observation;
+ordinary request, result, account effects and lifetime remain unchanged. The existing
+Windows-local `ProtocolResult.Validate` remains the output-contract validator/redactor.
+Retained PowerShell memory state is not an observation prerequisite. Replacing a
+host-bound execution recipe still requires its own minimal accepted exact recipe;
+this supplement does not authorize executing that old recipe under new assumptions.
+
+Allocate one dependency-preparation action and at most three build/test actions from
+the common technical pool for a finite Linux pure-scenario preparation batch. Use the
+already installed Linux x64 .NET SDK 10.0.401/runtime 10.0.12, the existing retained
+public offline feed/cache, and a fresh dedicated nonproduction output/package root.
+Restore only the Core, Windows library and existing Core scenario project dependencies
+from that feed with cleared package sources/credentials, audit disabled and no network
+download. Build with one MSBuild node, no node reuse and shared compilation disabled.
+Run the Core scenarios, including observer/privacy/interpretation cases, without another
+restore or build. A Windows-library compile is source/API evidence, not Windows runtime,
+Native AOT or WAM evidence. No product/authentication/provider binary executes on Linux.
+No account/configuration/cache, Windows private-input or broker access is permitted.
+
+Each original preparation/build/test invocation has a maximum 180 seconds, 8 MiB of
+captured public output and 1 GiB newly retained public build/package/test artifacts.
+Use ordinary foreground commands under GNU timeout with a five-second final kill
+allowance; no build server or detached child may survive completion. Preserve every
+failed/partial start and never replay its original call or refund its charge. Stop on
+unexpected network/account access, missing dependencies, output/deadline overrun,
+uncertain owned completion or failed checks. No automatic retry is admitted by this
+batch. Retain its bounded public artifacts and sanitized outcomes in its dedicated root.
+
+Before execution, independently accept the exact source commit, accepted protocol
+revision, installed toolchain/public dependency and output identities, finite command
+list, test selection and complete existing cumulative ledger/precharge. Reuse unchanged
+source/evidence pins; ctime alone does not reject stronger accepted content/identity
+checks. Independently review the actual checks and source/artifact correspondence.
+Repository hk checks and desk review are not product runtime observations. This batch
+does not allocate a new accounting system, Windows process scenario, publication,
+real-account attempt, host/controller, exporter service or confidential WSL transport.
+
 For the Windows Slice, retain the existing request-local diagnostic stderr sink
 and confidential native worker capture. A source-defined mechanism failure code
 may travel from the existing local host, DLL-search, broker-availability,
