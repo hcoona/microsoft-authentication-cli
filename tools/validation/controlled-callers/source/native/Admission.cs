@@ -27,6 +27,7 @@ internal sealed class PublicPlan
     internal required string ProductSha256 { get; init; }
     internal required string CallerSha256 { get; init; }
     internal required string ProtocolSha256 { get; init; }
+    internal ActualPublicPinEvidence[]? ActualPublicPins { get; init; }
 }
 
 // Never serialize, format, hash or put this object into an exception/receipt.

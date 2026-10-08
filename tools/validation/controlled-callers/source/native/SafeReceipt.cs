@@ -35,6 +35,22 @@ internal static class SafeReceipt
                 }
                 else json.WriteNullValue();
             }
+            if (plan.ActualPublicPins is { } publicPins)
+            {
+                PrivateRequest.Require(publicPins.Length == 197);
+                json.WriteStartObject("publicHistoricalChanged");
+                json.WriteString("mode", "actual-public-historical-changed-v1");
+                json.WriteString("observedRole", "supervisor");
+                json.WriteStartArray("rows");
+                for (int ordinal = 0; ordinal < publicPins.Length; ordinal++)
+                {
+                    ActualPublicPinEvidence pin = publicPins[ordinal];
+                    PrivateRequest.Require(pin.Ordinal == ordinal && FixtureNativePins.PreparedMatches(pin.Current, pin.Prepared, true));
+                    json.WriteStartArray(); json.WriteNumberValue(ordinal);
+                    Identity(json, pin.Prepared); Identity(json, pin.Current); json.WriteEndArray();
+                }
+                json.WriteEndArray(); json.WriteEndObject();
+            }
             json.WriteString("apiRoute", result?.Route.ToString() ?? "None");
             json.WriteBoolean("protocolValid", result?.ProtocolValid ?? false);
             json.WriteBoolean("productExitConsistent", result is not null);
@@ -54,8 +70,16 @@ internal static class SafeReceipt
             json.WriteNumber("productElapsedMilliseconds", result?.ElapsedMilliseconds ?? 0);
             json.WriteEndObject(); json.Flush();
         }
-        memory.WriteByte(10); PrivateRequest.Require(memory.Length <= 4096);
+        memory.WriteByte(10); PrivateRequest.Require(memory.Length <= (plan.ActualPublicPins is null ? 4096 : 65536));
         return memory.ToArray();
+    }
+    // Fixed public tuple order; no selector, private identity or authentication output.
+    private static void Identity(Utf8JsonWriter json, FixtureFileIdentity id)
+    {
+        json.WriteStartArray(); json.WriteNumberValue(id.Volume); json.WriteNumberValue(id.Index);
+        json.WriteNumberValue(id.Attributes); json.WriteNumberValue(id.Created); json.WriteNumberValue(id.Modified);
+        json.WriteNumberValue(id.Changed); json.WriteNumberValue(id.Length); json.WriteNumberValue(id.Links);
+        json.WriteEndArray();
     }
     internal static void Persist(byte[] bytes, Action before, Func<Stream> createExclusive, Action<Stream> flushDurably)
     {

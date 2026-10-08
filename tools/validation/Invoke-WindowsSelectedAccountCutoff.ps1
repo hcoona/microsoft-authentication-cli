@@ -4,7 +4,7 @@
 param(
     [Parameter(Mandatory)][string] $PlanPath,
     [Parameter(Mandatory)][string] $PlanSha256,
-    [Parameter(Mandatory)][ValidateRange(1, 10)][int] $Attempt,
+    [Parameter(Mandatory)][ValidateRange(1, 12)][int] $Attempt,
     [ValidateSet('Personal', 'Work')][string] $AccountRole = 'Personal',
     [Parameter(Mandatory)][string] $ControllerSha256,
     [switch] $Controller,
@@ -379,7 +379,7 @@ try {
     # and owned Job have drained. Do not collect product stdout or private inputs.
     $terminalFile = [IO.File]::OpenRead($terminalPath)
     try {
-        Need ($terminalFile.Length -gt 0 -and $terminalFile.Length -le 4096)
+        Need ($terminalFile.Length -gt 0 -and $terminalFile.Length -le 65536)
         $reader = [IO.StreamReader]::new($terminalFile, $encoding, $false)
         try { $terminal = $reader.ReadToEnd() | ConvertFrom-Json } finally { $reader.Dispose() }
     } finally { $terminalFile.Dispose() }

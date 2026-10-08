@@ -63,7 +63,7 @@ internal static class ControlledChecks
                 break;
             }
             case 2: { byte[] x = Wire.Encode([Success(true),Success(true)]); Need(x.Length == 27 && Wire.Decode(x,2).All(r=>r.Passed)); break; }
-            case 3: WorkerFailureFrames(); break;
+            case 3: WorkerFailureFrames(); PublicHistoricalChanged(); break;
             case 4: { byte[] x=Wire.Encode([Success()]); Reject(()=>Wire.Decode(x[..^1],1)); Reject(()=>Wire.Decode(x.Concat(new byte[]{0}).ToArray(),1)); break; }
             case 5: { byte[] x=Wire.Encode([Success()]); x[5]=255; Reject(()=>Wire.Decode(x,1)); x=Wire.Encode([Success()]);x[7]|=128;Reject(()=>Wire.Decode(x,1));break; }
             case 6: { SafeResult r=Closed();Need(Wire.Decode(Wire.Encode([r]),1)[0].WriterCloseToCompletionMilliseconds==1000);
@@ -116,6 +116,37 @@ internal static class ControlledChecks
         Need(text.Contains("\"workerFailureDisposition\":\"validated\"", StringComparison.Ordinal) &&
             text.Contains("\"workerFailure\":{\"fault\":\"Admission\",\"stage\":\"CallerInventory\",\"publicInputOrdinal\":193}", StringComparison.Ordinal));
         Need(receipt.Length <= 4096);
+    }
+    private static void PublicHistoricalChanged()
+    {
+        var prepared = new FixtureFileIdentity(uint.MaxValue, ulong.MaxValue, uint.MaxValue,
+            long.MaxValue, long.MaxValue, long.MaxValue - 1, 67108864, 1);
+        FixtureFileIdentity changed = prepared with { Changed = long.MaxValue };
+        Need(FixtureNativePins.PreparedMatches(prepared, prepared));
+        Need(!FixtureNativePins.PreparedMatches(changed, prepared));
+        Need(FixtureNativePins.PreparedMatches(changed, prepared, true));
+        // The production current-snapshot comparison still uses full record equality.
+        Need(changed != prepared);
+        foreach (FixtureFileIdentity other in new[] { changed with { Volume = 0 }, changed with { Index = 0 },
+            changed with { Attributes = 0 }, changed with { Created = 0 }, changed with { Modified = 0 },
+            changed with { Length = 0 }, changed with { Links = 2 } })
+            Need(!FixtureNativePins.PreparedMatches(other, prepared, true));
+        var pins = Enumerable.Range(0, 197).Select(i => new ActualPublicPinEvidence(i, prepared, changed)).ToArray();
+        PublicPlan basis = SafePlan();
+        var plan = new PublicPlan { SelfImage = basis.SelfImage, ProductImage = basis.ProductImage,
+            WorkingDirectory = basis.WorkingDirectory, ReceiptDirectory = basis.ReceiptDirectory,
+            ProductSha256 = basis.ProductSha256, CallerSha256 = basis.CallerSha256,
+            ProtocolSha256 = basis.ProtocolSha256, ActualPublicPins = pins };
+        byte[] receipt = SafeReceipt.Project(plan, "R1", "00000000000040008000000000000000", false,
+            Success(), true, true, true, false, false, 0);
+        Need(receipt.Length <= 65536);
+        using System.Text.Json.JsonDocument document = System.Text.Json.JsonDocument.Parse(receipt);
+        var evidence = document.RootElement.GetProperty("publicHistoricalChanged");
+        Need(evidence.GetProperty("mode").GetString() == "actual-public-historical-changed-v1" &&
+            evidence.GetProperty("observedRole").GetString() == "supervisor" && evidence.GetProperty("rows").GetArrayLength() == 197);
+        var row = evidence.GetProperty("rows")[196];
+        Need(row[0].GetInt32() == 196 && row[1][5].GetInt64() == prepared.Changed && row[2][5].GetInt64() == changed.Changed &&
+            row[2][1].GetUInt64() == ulong.MaxValue);
     }
     internal static void SequenceCase(int index)
     {
