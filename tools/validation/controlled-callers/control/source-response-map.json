@@ -194,9 +194,9 @@
     },
     {
       "authoredSource": {
-        "bytes": 4626,
+        "bytes": 5539,
         "path": "source/native/FixtureDriverProgram.cs",
-        "sha256": "2a5d5f5bb8647cd66ca190ba1e69920fee94179dec24e5a10f6909dc699a4b4e"
+        "sha256": "aa4f31e82639b4e7681d82b4d5df84893c95a01b0dad356e0c2bf7b58f7f909c"
       },
       "stagedRelativePath": "source/native/FixtureDriverProgram.cs"
     },

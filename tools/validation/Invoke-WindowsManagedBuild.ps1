@@ -154,11 +154,16 @@ function Receive-ManagedRunner {
     $tasks = @($streams[0].ReadAsync($buffers[0], 0, 4096), $streams[1].ReadAsync($buffers[1], 0, 4096))
     $done = @($false, $false)
     $disposition = 'read-failure'
+    $lastOutputInventoryMilliseconds = -1000L
     try {
         while (-not ($child.HasExited -and $done[0] -and $done[1])) {
             Assert-ControllerBudget 275000
             if ($runnerWatch.ElapsedMilliseconds -ge 190000) {
                 $disposition = 'runner-timeout'; throw 'Managed runner expired'
+            }
+            if ($runnerWatch.ElapsedMilliseconds - $lastOutputInventoryMilliseconds -ge 1000) {
+                $null = Get-NewOutputInventory
+                $lastOutputInventoryMilliseconds = $runnerWatch.ElapsedMilliseconds
             }
             for ($index = 0; $index -lt 2; $index++) {
                 if (-not $done[$index] -and $tasks[$index].IsCompleted) {
@@ -199,6 +204,60 @@ function Save-PhaseCapture {
     $script:capturedTotal += $capture.stdout.Length + $capture.stderr.Length
 }
 
+function Get-NewOutputInventory {
+    # Observe only this invocation and its admitted source tree. No disk quota
+    # or atomic snapshot is claimed; exceeding a bound stops the original call.
+    $rows = [Collections.Generic.List[object]]::new()
+    $queue = [Collections.Generic.Queue[string]]::new()
+    $queue.Enqueue($root)
+    if ($subjectRoot -cne $root) { $queue.Enqueue("$subjectRoot\subject") }
+    $directories = 0
+    $files = 0
+    $newBytes = 0L
+    while ($queue.Count -gt 0) {
+        Assert-ControllerBudget 275000
+        if ($null -ne $runnerWatch -and $runnerWatch.ElapsedMilliseconds -ge 190000) {
+            throw 'Output inventory exceeded original runner interval'
+        }
+        $directory = $queue.Dequeue()
+        Assert-Direct $directory
+        $directories++
+        if ($directories -gt 4096) { throw 'Output directory inventory bound' }
+        $entries = [IO.Directory]::EnumerateFileSystemEntries($directory).GetEnumerator()
+        try {
+            while ($entries.MoveNext()) {
+                Assert-ControllerBudget 275000
+                $path = [string]$entries.Current
+                try {
+                    Assert-Direct $path
+                    $item = Get-Item -LiteralPath $path -Force
+                } catch [Management.Automation.ItemNotFoundException] {
+                    # SDK temporary files may disappear during the observation.
+                    # Do not retry; the final inventory follows phase completion.
+                    continue
+                }
+                if ($item -is [IO.DirectoryInfo]) { $queue.Enqueue($path) }
+                elseif ($item -is [IO.FileInfo]) {
+                    $files++
+                    if ($files -gt 8192) { throw 'Output file inventory bound' }
+                    if (-not $paths.Contains($path)) {
+                        $length = [long]$item.Length
+                        # Reserve the final manifest and terminal result writes.
+                        if ($length -lt 0 -or $length -gt 2147418112L - $newBytes) {
+                            throw 'New retained output byte bound'
+                        }
+                        $newBytes += $length
+                        $rows.Add([ordered]@{ path = $path; bytes = $length })
+                    }
+                } else { throw 'Nonregular output inventory member' }
+            }
+        } finally { $entries.Dispose() }
+    }
+    return [ordered]@{ schema = 'retained-windows-new-output-inventory-v1';
+        directories = $directories; files = $files; newlyRetainedBytes = $newBytes;
+        entries = $rows.ToArray(); atomicSnapshot = $false; diskQuota = $false }
+}
+
 try {
     if ($Mode -cne 'Controller' -or $root -cnotmatch
         '^C:\\Temp\\azureauth-windows-slice-108\\named-fixtures-[0-9]{4}$' -or
@@ -211,9 +270,10 @@ try {
     $authority = [Text.UTF8Encoding]::new($false, $true).GetString($authorityBytes) | ConvertFrom-Json
     if ($authority.schema -cne 'retained-windows-managed-build-authority-v1' -or
         $authority.accepted -ne $true -or $authority.action -cne $root.Substring($root.Length - 4) -or
-        $authority.operation -cnotin @('restore', 'build') -or $authority.sourceCommit -cnotmatch '^[0-9a-f]{40}$' -or
+        $authority.operation -cnotin @('restore', 'build', 'test', 'publish') -or $authority.sourceCommit -cnotmatch '^[0-9a-f]{40}$' -or
         $authority.preparationCharge -ne [int]($authority.operation -ceq 'restore') -or
-        $authority.buildTestCharge -ne [int]($authority.operation -ceq 'build') -or
+        $authority.buildTestCharge -ne [int]($authority.operation -cin @('build', 'test')) -or
+        $authority.publicationCharge -ne [int]($authority.operation -ceq 'publish') -or
         $authority.syntheticCharge -ne 1 -or $authority.exemptOuterPowerShellCount -ne 1 -or
         $authority.runnerSeconds -ne 190 -or $authority.wrapperSeconds -ne 300 -or
         $authority.maximumCaptureBytes -ne 8388608 -or $authority.noExperimentLive -ne $false) {
@@ -225,7 +285,7 @@ try {
     }
     if ($authority.subjectAction -cnotmatch '^[0-9]{4}$' -or [int]$authority.subjectAction -le 110 -or
         ($authority.operation -ceq 'restore' -and $authority.subjectAction -cne $authority.action) -or
-        ($authority.operation -ceq 'build' -and [int]$authority.subjectAction -ge [int]$authority.action)) {
+        ($authority.operation -cne 'restore' -and [int]$authority.subjectAction -ge [int]$authority.action)) {
         throw 'Unbound separately reviewed restore tree'
     }
     $subjectRoot = 'C:\Temp\azureauth-windows-slice-108\named-fixtures-' + $authority.subjectAction
@@ -249,7 +309,7 @@ try {
     foreach ($line in $lines) {
         $fields = $line.Split("`t")
         if ($fields.Length -ne 4 -or $fields[0] -cnotin @('dotnet', 'tool', 'source', 'cache', 'metadata') -or
-            $fields[1] -cnotmatch '^C:\\(?:Program Files\\dotnet\\|Temp\\azureauth-windows-slice-108\\)[A-Za-z0-9 _.,=\\-]+$' -or
+            $fields[1] -cnotmatch '^C:\\(?:Program Files\\dotnet\\|Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14\.51\.36231\\|Program Files \(x86\)\\Windows Kits\\10\\(?:Include|Lib|bin)\\10\.0\.26100\.0\\|Temp\\azureauth-windows-slice-108\\)[A-Za-z0-9 _.,=\\-]+$' -or
             $fields[1].Contains('..') -or $fields[1].EndsWith('\') -or
             $fields[2] -cnotmatch '^(?:0|[1-9][0-9]{0,8})$' -or $fields[3] -cnotmatch '^[0-9a-f]{64}$' -or
             -not $paths.Add($fields[1])) { throw 'Unbound inventory leaf' }
@@ -259,7 +319,7 @@ try {
             }
             $dotnet = $fields[1]
         } elseif ($fields[0] -ceq 'tool') {
-            if (-not $fields[1].StartsWith('C:\Program Files\dotnet\', [StringComparison]::Ordinal)) {
+            if ($fields[1] -cnotmatch '^C:\\(?:Program Files\\dotnet\\|Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14\.51\.36231\\|Program Files \(x86\)\\Windows Kits\\10\\(?:Include|Lib|bin)\\10\.0\.26100\.0\\)') {
                 throw 'Unbound installed tool'
             }
         } elseif ($fields[0] -ceq 'source') {
@@ -270,7 +330,7 @@ try {
         } else {
             $prefix = "$subjectRoot\packages\"
             if ($fields[0] -ceq 'metadata') {
-                if ($authority.operation -cne 'build') { throw 'Restore cannot reuse metadata' }
+                if ($authority.operation -ceq 'restore') { throw 'Restore cannot reuse metadata' }
                 $prefix = "$subjectRoot\subject\"
             } else { $cacheCount++ }
             if (-not $fields[1].StartsWith($prefix, [StringComparison]::Ordinal)) {
@@ -333,6 +393,31 @@ try {
             $root + '\offline.config" --source "' + $subjectRoot + '\empty-feed" --packages "' + $subjectRoot + '\packages"' + $common
         build = 'build Windows.slnx -c Release --no-restore' + $common +
             ' "-bl:' + $root + '\results\managed-build.binlog;ProjectImports=None"'
+        test = '"' + $subjectRoot + '\subject\tests\Authentication.Windows.Scenarios\bin\Release\net10.0-windows\Authentication.Windows.Scenarios.dll"' +
+            ' --report-trx --results-directory "' + $root + '\results" --filter "' +
+            'FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.FixedDiagnosticsIdentifyRejectedGateWithoutProviderEffects|' +
+            'FullyQualifiedName=Authentication.Windows.Scenarios.WindowsHostAdmissionScenarios.CancelledObservationDoesNotPublishRejectedGate|' +
+            'FullyQualifiedName=Authentication.Windows.Scenarios.MsalAdapterScenarios.MechanismTraceKeepsFirstFixedCauseAndNeverProviderText"'
+        publish = 'publish src\Authentication.Cli\Authentication.Cli.csproj -c Release -r win-x64 --self-contained true --no-restore' +
+            $common + ' -p:PublishAot=true -p:RuntimeFrameworkVersion=10.0.12 -p:IlcUseEnvironmentalTools=true' +
+            ' "-p:CppLinker=C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64\link.exe"' +
+            ' -p:TrimmerSingleWarn=false -p:NuGetInteractive=false "-p:PublishDir=' + $root + '\publish"' +
+            ' "-bl:' + $root + '\results\native-publish.binlog;ProjectImports=None"'
+    }
+    if ($authority.operation -ceq 'publish') {
+        $environment.PATH = 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64;' +
+            'C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64;C:\Windows\System32;C:\Program Files\dotnet'
+        $environment.INCLUDE = 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include;' +
+            'C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt;' +
+            'C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um;' +
+            'C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\shared'
+        $environment.LIB = 'C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\lib\x64;' +
+            'C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\ucrt\x64;' +
+            'C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\um\x64'
+        $environment.VSCMD_SKIP_SENDTELEMETRY = '1'
+        # Dedicated endpoint declaration preserves the existing native recipe.
+        # It does not assert that any compiler descendant will drain normally.
+        $environment._MSPDBSRV_ENDPOINT_ = 'azureauth-diagnostic-' + $authority.action
     }
     Assert-ControllerBudget 60000
     # Exactly one phase runs. Restore must close and receive independent review before a later build.
@@ -387,6 +472,12 @@ try {
         $child = $null
     }
     Assert-ControllerBudget 275000
+    $inventory = Get-NewOutputInventory
+    $inventoryBytes = [Text.UTF8Encoding]::new($false).GetBytes(($inventory | ConvertTo-Json -Depth 12 -Compress) + "`n")
+    if ($inventoryBytes.Length -gt 4194304 -or $inventory.newlyRetainedBytes + $inventoryBytes.Length -gt 2147450880L) {
+        throw 'Final output inventory byte bound'
+    }
+    Save-NewBytes 'output-inventory.json' $inventoryBytes 4194304
     $phase = 'captured'
     $result.passed = $true
 } catch {

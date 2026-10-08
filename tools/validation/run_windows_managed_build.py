@@ -9,6 +9,7 @@ if not ADMITTED:
     raise RuntimeError('Source-only final scenario caller; no execution is admitted')
 
 import base64
+from decimal import Decimal
 import fcntl
 import hashlib
 import json
@@ -26,13 +27,13 @@ import xml.etree.ElementTree as ET
 LINUX = Path('/var/tmp/azureauth-windows-slice-108')
 PROJECTION = Path('/mnt/c/Temp/azureauth-windows-slice-108')
 WINDOWS = r'C:\Temp\azureauth-windows-slice-108'
-CEILINGS = [39, 181, 30, 543]  # Proposed ceilings; guard remains closed until amended authority.
+CEILINGS = [100, 400, 60, 1200]  # Accepted shared pool; exact batch admission remains required.
 HISTORICAL_UNKNOWN = ['0057', '0064', '0068', '0093', '0107', '0110']
-PRODUCT = '503360753accd0829801953823b1b57a4f852440'
+PRODUCT = None  # Set to the accepted commit only in the exact admitted projection.
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
 LAUNCHER_PROJECTION = PROJECTION / 'normal-launcher-dispatch-v1' / 'WindowsScriptJobLauncher.exe'
-CHARGES = {'restore': 1, 'build': 1}
-SERVICE_SECONDS = 1200
+CHARGES = {'restore': 1, 'build': 1, 'test': 1, 'publish': 1}
+SERVICE_SECONDS = 550
 PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows-actions',
            'windowsProjectionActions': PROJECTION / 'actions', 'windowsProjectionRoot': PROJECTION}
 
@@ -75,19 +76,59 @@ def failure_identity(error):
     return result
 
 
+def strict_json(raw, transport_numbers=False, ledger_numbers=False):
+    def unique(pairs):
+        out = {}
+        for k, v in pairs:
+            assert k not in out
+            out[k] = v
+        return out
+    def reject(_):
+        raise ValueError('Noninteger/nonfinite numeric token')
+    def finite_decimal(token):
+        value = Decimal(token)
+        assert value.is_finite()
+        return value
+    assert not (transport_numbers and ledger_numbers)
+    return json.loads(raw, object_pairs_hook=unique,
+                      parse_float=finite_decimal if ledger_numbers else float if transport_numbers else reject,
+                      parse_constant=reject)
+
+def exact_json_text(value, level=0):
+    """Carry exact finite decimal primitives; ordinary records keep JSON types."""
+    assert level <= 256
+    if value is None or type(value) in (bool, int, str, float):
+        return json.dumps(value, ensure_ascii=True, allow_nan=False)
+    if type(value) is Decimal:
+        assert value.is_finite()
+        return str(value)
+    assert type(value) in (list, dict)
+    if type(value) is dict:
+        assert all(type(key) is str for key in value)
+        entries = [json.dumps(key, ensure_ascii=True) + ': ' + exact_json_text(value[key], level+1)
+                   for key in sorted(value)]
+        opening, closing = '{', '}'
+    else:
+        entries = [exact_json_text(item, level+1) for item in value]
+        opening, closing = '[', ']'
+    if not entries:
+        return opening + closing
+    indentation = '  ' * (level+1)
+    return opening + '\n' + indentation + (',\n' + indentation).join(entries) + '\n' + '  '*level + closing
+
+def typed(value):
+    if isinstance(value, dict):
+        return (dict, tuple((key, typed(value[key])) for key in sorted(value)))
+    if isinstance(value, list):
+        return (list, tuple(map(typed, value)))
+    return (type(value), value)
+
 def encode(value):
-    return (json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False) + '\n').encode('ascii')
+    return (exact_json_text(value) + '\n').encode('ascii')
 
 
 def decode(raw):
-    def unique(pairs):
-        value = {}
-        for key, item in pairs:
-            require(key not in value, 'Duplicate JSON member')
-            value[key] = item
-        return value
-    return json.loads(raw.decode('utf-8'), object_pairs_hook=unique,
-                      parse_constant=lambda _: require(False, 'Nonfinite JSON'))
+    return strict_json(raw, ledger_numbers=True)
 
 
 def digest(raw):
@@ -118,6 +159,7 @@ class Budget:
         self.written = 0
         self.created_directories = 0
         self.cancelled = False
+        self.ctime_observations = []
 
     def enter_terminal(self):
         # Use the reserved final interval with the SAME aggregate counters. This
@@ -184,7 +226,7 @@ class Budget:
             raw = b''.join(parts)
             initial_identity = identity(before)
             final_identity = named_identity = None
-            fields = range(9) if created_identity is None else (0, 1, 2, 3, 4, 5, 6, 8)
+            fields = (0, 1, 2, 3, 4, 5, 6, 8)
 
             def matches(observed):
                 return all(initial_identity[i] == observed[i] for i in fields)
@@ -204,6 +246,31 @@ class Budget:
                 read_observation['createdCopyPin'] = True
             if not stable:
                 require(False, 'Unstable descriptor/path identity', read_observation=read_observation)
+            first_ordinal = self.reads
+            require(os.lseek(fd, 0, os.SEEK_SET) == 0, 'Same-descriptor rewind')
+            self.reads += 1
+            self.requested += before.st_size + 1
+            require(self.reads <= 8192 and self.requested <= 4 * 1024 * 1024 * 1024,
+                    'Aggregate repeated-read budget')
+            repeated, remaining = [], before.st_size + 1
+            while remaining:
+                self.check()
+                chunk = os.read(fd, min(65536, remaining))
+                if not chunk:
+                    break
+                repeated.append(chunk)
+                remaining -= len(chunk)
+            second = b''.join(repeated)
+            second_descriptor, second_named = identity(os.fstat(fd)), identity(path.lstat())
+            require(len(second) == before.st_size and second == raw and digest(second) == digest(raw) and
+                    matches(second_descriptor) and matches(second_named), 'Repeated content/non-ctime identity')
+            read_observation.update(readOrdinal=first_ordinal, secondReadOrdinal=self.reads,
+                                    secondDescriptor=second_descriptor, secondNamedPath=second_named,
+                                    contentVerifiedTwice=True)
+            if len({row[7] for row in (initial_identity, final_identity, named_identity,
+                                      second_descriptor, second_named)}) > 1:
+                self.ctime_observations.append({'path': str(path), 'read': read_observation})
+                require(len(self.ctime_observations) <= 8192, 'Ctime observation bound')
             if created_identity is not None and not created_copy_pin:
                 require(raw == expected_payload, 'Created copy differs from admitted payload')
             self.check()
@@ -217,7 +284,11 @@ class Budget:
         raw, observed = self.read(Path(value['path']), maximum)
         length_matches = len(raw) == value['bytes']
         digest_matches = digest(raw) == value['sha256'] if length_matches else None
-        identity_matches = observed == value['identity'] if digest_matches else None
+        identity_matches = all(observed[i] == value['identity'][i] for i in (0, 1, 2, 3, 4, 5, 6, 8)) if digest_matches else None
+        if identity_matches and observed[7] != value['identity'][7]:
+            self.ctime_observations.append({'path': value['path'], 'expectedIdentity': value['identity'],
+                                           'observedIdentity': observed})
+            require(len(self.ctime_observations) <= 8192, 'Ctime observation bound')
         if identity_matches is not True:
             # Only already observed operands are retained. Preserve short-circuit
             # comparisons and omit malformed/unbounded descriptor values entirely.
@@ -248,13 +319,18 @@ def qualified_created_descriptor(created, source, *, paired_build=False):
     require(set(pin) == {'path', 'bytes', 'sha256', 'identity'} and
             pin['bytes'] == source['descriptor']['bytes'] and pin['sha256'] == source['descriptor']['sha256'] and
             set(observation) == {'readOrdinal', 'createdCopyReadback', 'expectedBytes', 'returnedBytes',
-                                 'initialDescriptor', 'finalDescriptor', 'namedPath'} and
+                                 'initialDescriptor', 'finalDescriptor', 'namedPath', 'secondReadOrdinal',
+                                 'secondDescriptor', 'secondNamedPath', 'contentVerifiedTwice'} and
+            observation['contentVerifiedTwice'] is True and
+            type(observation['secondReadOrdinal']) is int and
+            observation['secondReadOrdinal'] == observation['readOrdinal'] + 1 and
             observation['createdCopyReadback'] is True and
             type(observation['readOrdinal']) is int and 1 <= observation['readOrdinal'] <= 8192 and
             observation['expectedBytes'] == observation['returnedBytes'] == pin['bytes'],
             'Created deployment lineage content')
     identities = [created['writeClosedIdentity'], observation['initialDescriptor'],
-                  observation['finalDescriptor'], observation['namedPath'], pin['identity']]
+                  observation['finalDescriptor'], observation['namedPath'], observation['secondDescriptor'],
+                  observation['secondNamedPath'], pin['identity']]
     require(all(type(value) is list and len(value) == 9 and all(type(x) is int for x in value)
                 for value in identities), 'Created deployment lineage identities')
     baseline = identities[0]
@@ -266,7 +342,7 @@ def qualified_created_descriptor(created, source, *, paired_build=False):
 
 def paired_restore_copy(a, item):
     """Join only the accepted paired restore's original creation evidence."""
-    qualified = a['suite'] == 'build' and item['role'] in ('source', 'cache')
+    qualified = a['suite'] != 'restore' and item['role'] in ('source', 'cache')
     fields = {'role', 'windowsPath', 'descriptor', 'materialize'}
     require(set(item) == fields | ({'restoreCreation'} if qualified else set()), 'Inventory fields')
     if not qualified:
@@ -333,7 +409,7 @@ def names(path, maximum, budget):
 
 def project(path):
     require(type(path) is str and '\x00' not in path and '\t' not in path and '\n' not in path and
-            re.fullmatch(r'C:\\(?:Temp\\azureauth-windows-slice-108\\|Program Files\\dotnet\\)[A-Za-z0-9 _.,=\\-]+', path) and
+            re.fullmatch(r'C:\\(?:Temp\\azureauth-windows-slice-108\\|Program Files\\dotnet\\|Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14\.51\.36231\\|Program Files \(x86\)\\Windows Kits\\10\\(?:Include|Lib|bin)\\10\.0\.26100\.0\\)[A-Za-z0-9 _.,=\\-]+', path) and
             all(0 < len(x) <= 128 and x not in ('.', '..') and not x.endswith(('.', ' ')) and
                 x.split('.')[0].upper() not in ('CON', 'PRN', 'AUX', 'NUL',
                     *('COM' + str(i) for i in range(1, 10)), *('LPT' + str(i) for i in range(1, 10)))
@@ -342,23 +418,23 @@ def project(path):
 
 
 def load_admission(path, expected, budget):
-    require(re.fullmatch(r'/tmp/windows-managed-harness-[0-9]{4}-admission\.json', str(path)), 'Admission leaf')
+    require(re.fullmatch(r'/home/shuaizhang/\.local/state/azureauth-108-recovery-20260929/windows-managed-harness-[0-9]{4}-admission\.json', str(path)), 'Admission leaf')
     raw, full9 = budget.read(path, 65536)
     require(digest(raw) == expected, 'Original admission hash')
     value = decode(raw)
     require(set(value) == {'schema', 'action', 'suite', 'nonce', 'product', 'checkpoint', 'checkpointAcceptance',
                           'inputAcceptance', 'sourceCommit', 'subjectAction', 'slot', 'sourceReview', 'exactCallReview', 'inventory',
                           'controller', 'windowsAuthority', 'caller', 'launcher', 'python', 'systemdRun',
-                          'interop', 'runtimeDirectory'},
+                          'interop', 'runtimeDirectory', 'accounting'},
             'Admission fields')
-    require(value['schema'] == 'windows-managed-harness-admission-v1' and value['product'] == PRODUCT and
+    require(value['schema'] == 'windows-diagnostic-build-admission-v1' and value['product'] == PRODUCT and
             re.fullmatch(r'[0-9]{4}', value['action']) and int(value['action']) > 110 and
-            value['suite'] in ('restore', 'build') and
-            re.fullmatch(r'[0-9a-f]{40}', value['sourceCommit']) and
+            value['suite'] in CHARGES and
+            value['sourceCommit'] == PRODUCT and re.fullmatch(r'[0-9a-f]{40}', value['sourceCommit']) and
             re.fullmatch(r'[0-9]{4}', value['subjectAction']) and int(value['subjectAction']) > 110 and
             value['slot'] in ('primary', 'c1-a', 'c1-b', 'c2-a', 'c2-b', 'c3-a', 'c3-b', 'supplemental') and
             ((value['suite'] == 'restore' and value['subjectAction'] == value['action']) or
-             (value['suite'] == 'build' and int(value['subjectAction']) < int(value['action']))) and
+             (value['suite'] != 'restore' and int(value['subjectAction']) < int(value['action']))) and
             re.fullmatch(r'[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}', value['nonce']), 'Admission identity')
     value['_raw'], value['_identity'], value['_path'] = raw, full9, str(path)
     return value
@@ -379,25 +455,27 @@ def require_executable_launcher(a, budget):
     try:
         before = os.fstat(fd)
         require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and
-                before.st_mode & 0o111 and identity(before) == pin['identity'],
+                before.st_mode & 0o111 and all(identity(before)[i] == pin['identity'][i]
+                    for i in (0, 1, 2, 3, 4, 5, 6, 8)),
                 'Admitted executable launcher identity and mode')
         require(os.access(path, os.X_OK, effective_ids=True, follow_symlinks=False),
                 'Effective-user launcher execute access')
-        require(identity(os.fstat(fd)) == pin['identity'] == identity(path.lstat()),
-                'Executable launcher full9 unchanged')
+        require(all(identity(os.fstat(fd))[i] == pin['identity'][i] == identity(path.lstat())[i]
+                    for i in (0, 1, 2, 3, 4, 5, 6, 8)),
+                'Executable launcher non-ctime identity unchanged')
         budget.check()
     finally:
         os.close(fd)
 
 
 def verify_admission(a, budget):
-    acceptance(a['checkpointAcceptance'], 'windows-managed-harness-checkpoint-acceptance-v1',
-               {'checkpoint': a['checkpoint']}, budget)
+    acceptance(a['checkpointAcceptance'], 'windows-diagnostic-build-checkpoint-acceptance-v1',
+               {'checkpoint': a['checkpoint'], 'accounting': a['accounting']}, budget)
     acceptance(a['inputAcceptance'], 'windows-managed-harness-input-acceptance-v1',
                {'sourceCommit': a['sourceCommit'], 'inventory': a['inventory'], 'slot': a['slot'],
                 'subjectAction': a['subjectAction'], 'operation': a['suite'],
                 'completePublicCacheOnly': True, 'emptyFeedOnly': True,
-                'restoreIndependentlyAccepted': a['suite'] == 'build',
+                'restoreIndependentlyAccepted': a['suite'] != 'restore',
                 'noOriginalRuntimeOrRestoreReads': True}, budget)
     acceptance(a['sourceReview'], 'windows-managed-harness-source-acceptance-v1',
                {'caller': a['caller'], 'launcher': a['launcher'], 'controller': a['controller'],
@@ -443,8 +521,8 @@ def verify_admission(a, budget):
                     'Dedicated deployment subdirectory')
         else:
             require(destination == Path(pin['path']) and
-                    ((role in ('dotnet', 'tool') and path.startswith('C:\\Program Files\\dotnet\\')) or
-                     (a['suite'] == 'build' and role in ('source', 'cache', 'metadata') and
+                    ((role in ('dotnet', 'tool') and not destination.is_relative_to(PROJECTION)) or
+                     (a['suite'] != 'restore' and role in ('source', 'cache', 'metadata') and
                       destination.is_relative_to(subject_root(a)))), 'Installed runtime input only')
         paths.add(path.casefold())
         if role == 'dotnet':
@@ -472,7 +550,7 @@ def verify_admission(a, budget):
             'Fresh source and complete public cache roles')
     for x in inventory['files']:
         if x['role'] == 'metadata':
-            require(a['suite'] == 'build' and project(x['windowsPath']).is_relative_to(subject_root(a) / 'subject'),
+            require(a['suite'] != 'restore' and project(x['windowsPath']).is_relative_to(subject_root(a) / 'subject'),
                     'Separately admitted new restore metadata')
     bindings = ('\n'.join(tsv) + '\n').encode('utf-8')
     authority_raw = budget.pin(a['windowsAuthority'], 65536)
@@ -481,7 +559,8 @@ def verify_admission(a, budget):
         'schema': 'retained-windows-managed-build-authority-v1', 'accepted': True,
         'action': a['action'], 'operation': a['suite'], 'sourceCommit': a['sourceCommit'],
         'subjectAction': a['subjectAction'], 'preparationCharge': int(a['suite'] == 'restore'),
-        'buildTestCharge': int(a['suite'] == 'build'), 'syntheticCharge': 1,
+        'buildTestCharge': int(a['suite'] in ('build', 'test')),
+        'publicationCharge': int(a['suite'] == 'publish'), 'syntheticCharge': 1,
         'exemptOuterPowerShellCount': 1, 'runnerSeconds': 190, 'wrapperSeconds': 300,
         'maximumCaptureBytes': 8388608, 'noExperimentLive': False,
         'checkpointSha256': a['checkpoint']['sha256'],
@@ -574,47 +653,45 @@ def verify_deployment(a, root, local, budget):
 
 
 def checkpoint(a, budget, reserved=False):
-    c = decode(budget.pin(a['checkpoint'], 65536))
-    require(set(c) == {'schema', 'counters', 'ceilings', 'nextAction', 'historyParents',
-                      'historicalLifetimeUnknown', 'noExperimentLive', 'knownEndpoints', 'predecessorAccepted',
-                      'protectedAfter', 'capacityAmendmentAccepted', 'historicalDispositionsExtended', 'hostPreparations'},
-            'Current checkpoint fields')
-    require(c['schema'] == 'windows-managed-harness-current-checkpoint-v1' and c['nextAction'] == a['action'] and
-            c['ceilings'] == CEILINGS and c['historicalLifetimeUnknown'] == HISTORICAL_UNKNOWN and
-            c['noExperimentLive'] is False and c['predecessorAccepted'] is True and
-            c['capacityAmendmentAccepted'] is True and
-            c['historicalDispositionsExtended'] == HISTORICAL_UNKNOWN, 'Current checkpoint acceptance')
-    before = c['counters']
-    require(type(before) is list and len(before) == 4 and all(type(x) is int and x >= 0 for x in before) and
-            before[0] >= 20 and before[1] >= 106 and before[2] >= 6 and
-            before[3] >= 163, 'Current nonrefundable accounting')
-    charge = [int(a['suite'] == 'restore'), int(a['suite'] == 'build'), 0, 1]
-    after = [x + y for x, y in zip(before, charge, strict=True)]
-    hosts = c['hostPreparations']
-    require(type(hosts) is dict and set(hosts) == {'linux', 'windows'}, 'Preparation host allocation')
-    for name, ceiling in (('linux', 18), ('windows', 21)):
-        v = hosts[name]
-        require(type(v) is list and len(v) == 2 and all(type(n) is int for n in v) and
-                v[1] == ceiling and 0 <= v[0] <= ceiling, 'Host preparation ceiling')
-    require(hosts['linux'][0] + hosts['windows'][0] == before[0] and
-            hosts['windows'][0] + charge[0] <= 21, 'Windows preparation debit')
-    protected = c['protectedAfter']
+    # The reviewed writer precharges the canonical COMPLETE ledger. This caller
+    # verifies every typed field and never maintains a second accounting system.
+    accounting = a['accounting']
+    require(type(accounting) is dict and set(accounting) == {'prior', 'recordKey', 'protectedAfter'},
+            'Whole-ledger accounting binding')
+    key = 'mechanismDiagnosticBuild' + a['action']
+    require(accounting['recordKey'] == key, 'Fixed batch intent key')
+    prior = decode(budget.pin(accounting['prior'], 4194304))
+    current = decode(budget.pin(a['checkpoint'], 4194304))
+    before = prior['consumed']
+    require(type(before) is list and len(before) == 4 and
+            all(type(value) is int and value >= 0 for value in before), 'Complete prior counters')
+    charge = [int(a['suite'] == 'restore'), int(a['suite'] in ('build', 'test')),
+              int(a['suite'] == 'publish'), 1]
+    after = [value + debit for value, debit in zip(before, charge, strict=True)]
+    stamp = current['recordedUtc']
+    require(type(stamp) is str and len(stamp) <= 64 and
+            re.fullmatch(r'20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9:.+Z-]{8,40}', stamp), 'Recorded UTC bound')
+    row = {'schema': 'mechanism-diagnostic-build-start-intent-v1', 'action': a['action'],
+           'operation': a['suite'], 'sourceCommit': PRODUCT, 'subjectAction': a['subjectAction'],
+           'before': before, 'charge': charge, 'after': after, 'submissionSpent': True, 'recordedUtc': stamp}
+    protected = accounting['protectedAfter']
     require(type(protected) is list and len(protected) == 4 and
-            all(type(x) is int and x >= 0 for x in protected) and protected[1] >= 12 and
-            all(x + p <= y for x, p, y in zip(after, protected, CEILINGS, strict=True)),
-            'Current ceiling and independently protected remaining reservations')
-    require(type(c['knownEndpoints']) is list and 5 <= len(c['knownEndpoints']) <= 128 and
-            len(set(c['knownEndpoints'])) == len(c['knownEndpoints']), 'Preserve retained endpoints')
-    require(set(c['historyParents']) == set(PARENTS), 'Current four-parent projection')
-    for role, path in PARENTS.items():
-        expected = c['historyParents'][role]
-        require(type(expected) is list and len(expected) <= 128 and expected == sorted(set(expected)),
-                'Parent projection schema')
-        if reserved and role == 'windowsActions':
-            expected = sorted([*expected, a['action']])
-        if reserved and role == 'windowsProjectionRoot':
-            expected = sorted([*expected, 'named-fixtures-' + a['action']])
-        require(names(path, 128, budget) == expected, 'Current parent membership changed')
+            all(type(value) is int and value >= 0 for value in protected) and protected[1] >= 12 and
+            all(value + remaining <= ceiling for value, remaining, ceiling in
+                zip(after, protected, CEILINGS, strict=True)), 'Shared capacity/protected remainder')
+    expected = decode(encode(prior))
+    require(key not in expected and prior['ceilings'] == CEILINGS and
+            prior['noExperimentLive'] is False and prior['realStage']['executionAdmitted'] is False,
+            'Preserved global gates and unused intent')
+    expected.update(consumed=after, combinedRemaining=[ceiling - value for ceiling, value in
+                    zip(CEILINGS, after, strict=True)], recordedUtc=stamp,
+                    purpose='Precharge one fixed Windows diagnostic ' + a['suite'] +
+                            ' call; preserve history and all real-stage gates',
+                    priorRecoveryAccounting={name: accounting['prior'][name] for name in ('path', 'bytes', 'sha256')})
+    expected['newExperimentChargesDuringRecovery'] = [value + debit for value, debit in
+        zip(prior['newExperimentChargesDuringRecovery'], charge, strict=True)]
+    expected[key] = row
+    require(typed(expected) == typed(current), 'Complete finite Decimal/int ledger transition')
     return before, charge, after
 
 
@@ -738,8 +815,72 @@ def managed_evidence(root, a, roles, budget, controller):
                 for name in ('stdout', 'stderr')}
     require(sum(map(len, captures.values())) <= 8388608 and
             all(len(captures[name]) == phase[name + 'Bytes'] for name in captures), 'Complete phase capture')
+    inventory_raw = budget.read(root / 'output-inventory.json', 4194304)[0]
+    inventory = decode(inventory_raw)
+    require(type(inventory) is dict and set(inventory) == {'schema', 'directories', 'files',
+            'newlyRetainedBytes', 'entries', 'atomicSnapshot', 'diskQuota'} and
+            inventory['schema'] == 'retained-windows-new-output-inventory-v1' and
+            inventory['atomicSnapshot'] is False and inventory['diskQuota'] is False,
+            'Finite observed output inventory')
+    require(all(type(inventory[key]) is int for key in ('directories', 'files', 'newlyRetainedBytes')) and
+            0 <= inventory['directories'] <= 4096 and 0 <= inventory['files'] <= 8192 and
+            0 <= inventory['newlyRetainedBytes'] <= 2147418112 and
+            inventory['newlyRetainedBytes'] + len(inventory_raw) + 32768 <= 2147483648 and
+            type(inventory['entries']) is list and len(inventory['entries']) <= inventory['files'],
+            'Finite output inventory counts and bytes')
+    seen, total = set(), 0
+    for entry in inventory['entries']:
+        require(type(entry) is dict and set(entry) == {'path', 'bytes'} and
+                type(entry['path']) is str and type(entry['bytes']) is int and entry['bytes'] >= 0,
+                'Output entry schema')
+        path = project(entry['path'])
+        require(entry['path'].casefold() not in seen and
+                (path.is_relative_to(root) or path.is_relative_to(subject_root(a) / 'subject')),
+                'Unique owned output entry')
+        seen.add(entry['path'].casefold())
+        total += entry['bytes']
+        require(total <= 2147418112, 'Observed output aggregate')
+    require(total == inventory['newlyRetainedBytes'], 'Observed output total correspondence')
+    if operation == 'test':
+        reports = [name for name in names(root / 'results', 32, budget) if name.endswith('.trx')]
+        require(len(reports) == 1, 'One diagnostic TRX report')
+        diagnostic_test_report(budget.read(root / 'results' / reports[0], 1048576)[0])
     return {'pid': started['pid'], 'creationFileTime': started['creationFileTime'],
             'operation': operation, 'requiresIndependentOutputAcceptance': True}
+
+
+def diagnostic_test_report(raw):
+    # Reuse the existing TRX identity/counter/result join, with a fixed selection.
+    require(b'<!DOCTYPE' not in raw and b'<!ENTITY' not in raw, 'TRX declarations not admitted')
+    report = ET.fromstring(raw)
+    prefix = 'Authentication.Windows.Scenarios.'
+    cases = {prefix + name: 'Passed' for name in (
+        'WindowsHostAdmissionScenarios.FixedDiagnosticsIdentifyRejectedGateWithoutProviderEffects',
+        'WindowsHostAdmissionScenarios.CancelledObservationDoesNotPublishRejectedGate',
+        'MsalAdapterScenarios.MechanismTraceKeepsFirstFixedCauseAndNeverProviderText')}
+    required = {'total': '3', 'executed': '3', 'passed': '3', 'failed': '0'}
+    required.update({name: '0' for name in ('error', 'timeout', 'aborted', 'inconclusive', 'passedButRunAborted',
+        'notRunnable', 'notExecuted', 'disconnected', 'warning', 'completed', 'inProgress', 'pending')})
+    counters = report.findall('.//{*}Counters')
+    require(len(counters) == 1 and counters[0].attrib == required, 'Exact diagnostic test counters')
+    identities = {}
+    for item in report.findall('.//{*}UnitTest'):
+        methods = item.findall('{*}TestMethod')
+        require(item.attrib['id'] not in identities and len(methods) == 1 and
+                item.attrib['name'] == methods[0].attrib['name'], 'Diagnostic test definition identity')
+        identities[item.attrib['id']] = (methods[0].attrib['className'] + '.' + methods[0].attrib['name'],
+                                        methods[0].attrib['name'])
+    observed, identifiers = {}, set()
+    for item in report.findall('.//{*}UnitTestResult'):
+        key = item.attrib['testId']
+        require(key in identities and key not in identifiers, 'Diagnostic test result identity')
+        identifiers.add(key)
+        qualified, name = identities[key]
+        require(qualified not in observed and item.attrib['testName'] == name, 'Diagnostic expanded test identity')
+        observed[qualified] = item.attrib['outcome']
+    require(len(identities) == 3 and identifiers == set(identities) and observed == cases,
+            'Exactly three diagnostic tests passed')
+    return {'rows': 3, 'passed': 3}
 
 
 def unit_name(a):
@@ -848,6 +989,7 @@ def worker(a, began, deadline, service_intent, service_deadline, budget):
         require(stdout == b'' and stderr == b'', 'Empty successful PowerShell transport')
         result['controller'] = validate_journal(budget.read(root / 'launcher.jsonl', 65536)[0], a, stdout, stderr)
         result['managed'] = managed_evidence(root, a, roles, budget, result['controller'])
+        write_new(local / 'input-ctime-observations.json', encode(budget.ctime_observations), budget, 4194304)
         result['artifactAccepted'] = False
         result['restoreAccepted'] = False
         result.update(passed=True, stage='worker-result-retention', scopedJobQuiescent=True)
@@ -957,6 +1099,7 @@ def original(a, began, deadline, budget):
         require(result['passed'] is True and result['scopedJobQuiescent'] is True and
                 result['noExperimentLive'] is False, 'Original worker completion')
         checkpoint(a, budget, reserved=True)
+        write_new(local / 'original-input-ctime-observations.json', encode(budget.ctime_observations), budget, 4194304)
         stage = 'original-result-retention'
         budget.enter_terminal()
         write_new(local / 'original-result.json', encode({'schema': 'windows-managed-harness-original-result-v1',
@@ -1004,9 +1147,9 @@ def main():
         budget = Budget(began, terminal_deadline - 10_000_000_000, terminal_deadline)
     else:
         require(len(sys.argv) == 4, 'Original argv')
-        began, deadline = entered, entered + 3_600_000_000_000
+        began, deadline = entered, entered + 900_000_000_000
         budget = Budget(began, deadline - 10_000_000_000, deadline)
-    require(deadline - began == 3_600_000_000_000, 'Single original clock')
+    require(deadline - began == 900_000_000_000, 'Single original clock')
     # Admission uses the SAME bounded counters and service-relative clock as the
     # rest of the worker. No fresh work budget begins after admission or failure.
     budget.check()

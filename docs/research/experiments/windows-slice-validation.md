@@ -57,6 +57,58 @@ prior complete typed ledger and conservative precharge. Builds, tests and failed
 starts remain spent. Independently accept that exact packet before execution and
 accept the actual source/artifact/validation correspondence afterward.
 
+Allocate one preparation action for the correction batch's fresh offline locked
+restore from the same common capacity; retain its failed-start accounting. Use
+four separately admitted calls of the unchanged normal launcher for restore,
+build, the exact managed test selection, and publication. Project the existing
+managed caller and script with fixed operations and exact installed MSVC/Windows
+SDK inputs, without adding a controller mechanism or loading the final-publication
+guard. Keep their shorter 190-second runner, 275-second operational cutoff,
+300-second script and 330-second launcher plus ten-second cleanup bounds; the
+900-second ceiling does not extend those clocks. Each outer call consumes one
+synthetic unit, while its ordinary tools remain in the selected technical role.
+Use finite input/output inventories and stop if newly retained output exceeds
+2 GiB; this observation is not an operating-system disk quota. Generated metadata,
+build output and the three-test report require acceptance before the dependent
+call. Natural root exit, Job active count zero and both EOFs remain required;
+compiler exit alone does not establish descendant completion.
+
+For this projected caller's fixed, public regular-file inputs and receipts,
+qualify content with two exact length/EOF reads and identical bytes/SHA-256 on
+one retained descriptor, with one rewind and strict device, inode, mode, owner,
+group, size, mtime and link-count comparisons. Existing expected hashes remain
+mandatory. Retain the original and observed nine-field descriptors and bounded
+ctime-difference receipts; ctime alone rejects neither an admitted baseline nor
+the repeated read. This qualification does not apply to a socket, directory,
+process identity, private input or account store. Preserve the failed historical
+reader without replay, and include the repeated reads in the original operation
+and byte budgets. No new ctime owner approval or settling loop is needed.
+
+Use the existing finite Decimal/int codec for the complete canonical ledger.
+Before each original call, independently review and write its conservative
+start-intent debit with actual preparation/build-test/publication/synthetic role
+charges. The projected caller verifies the complete typed prior-to-current
+transition, including all untouched history, uncertainties and global real-stage
+gates. Do not replace it with a counter-only checkpoint, float/JavaScript
+round-trip, second accounting system or an old action-specific host ceiling.
+Retain an unused intent and any failed start without refund. The projected
+original interval is 900 seconds including copying, its service interval is
+550 seconds, and its existing worker reservations remain nested in those
+original clocks. The exact packet includes the public caches and toolchain,
+copy/read/write counts and bytes, remaining protected capacity, source/receipt
+schemas and scoped ownership/stop evidence. No source guard is activated before
+its exact independently accepted packet and durable debit.
+
+The existing fixture driver may select only `--wire-controls` to run
+`ControlledChecks.WireCase(1..12)` on the admitted Linux runtime. This path uses
+controlled data, starts no child, reads no private fixture/account input and
+calls no Windows API. It has one ten-second interval and fixed success/failure
+output. Its compilation and execution consume build/test capacity within the
+six-action allocation; they add no Windows synthetic scenario. Keep the original
+full driver mode and its obligations unchanged. The source/artifact/call gates
+still apply, including the driver's closed execution guard and the refreshed
+authored-source mapping. This is not an authentication execution route.
+
 Validate the fixed producer indications, first-failure and cancellation behavior,
 rejection of non-allowlisted stderr, bounded safe enum wire round-trip, NCW2
 compatibility and diagnostic/result separation using controlled data only.
