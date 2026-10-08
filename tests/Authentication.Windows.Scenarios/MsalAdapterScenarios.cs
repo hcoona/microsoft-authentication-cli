@@ -19,6 +19,25 @@ public sealed class MsalAdapterScenarios
     private static readonly DateTimeOffset Now = new(2026, 9, 13, 0, 0, 0, TimeSpan.Zero);
 
     [TestMethod]
+    public void MechanismTraceKeepsFirstFixedCauseAndNeverProviderText()
+    {
+        var trace = new WindowsMechanismTrace();
+        var failure = MsalBoundary.MapFailure(new MsalClientException("wam_runtime_init_failed", PrivateMarker), CancellationToken.None, trace);
+        Assert.AreEqual(AuthenticationFailure.MechanismUnavailable, failure.Failure);
+        Assert.AreEqual(WindowsMechanismFailure.BrokerInitialization, trace.Failure);
+        trace.Record(WindowsMechanismFailure.HostSession);
+        Assert.AreEqual(WindowsMechanismFailure.BrokerInitialization, trace.Failure);
+        var text = Encoding.ASCII.GetString(WindowsDiagnostics.MechanismIndication(trace.Failure));
+        Assert.AreEqual("Mechanism unavailable at broker_initialization.\n", text);
+        Assert.IsFalse(text.Contains(PrivateMarker, StringComparison.Ordinal));
+        using var cancelled = new CancellationTokenSource(); cancelled.Cancel();
+        var cancelledTrace = new WindowsMechanismTrace();
+        Assert.ThrowsExactly<OperationCanceledException>(() => MsalBoundary.MapFailure(
+            new MsalClientException("platform_not_supported", PrivateMarker), cancelled.Token, cancelledTrace));
+        Assert.AreEqual(WindowsMechanismFailure.Unavailable, cancelledTrace.Failure);
+    }
+
+    [TestMethod]
     public async Task ConsentRequirementHonorsInteractionPermission()
     {
         var scene = new Scene(Consent());

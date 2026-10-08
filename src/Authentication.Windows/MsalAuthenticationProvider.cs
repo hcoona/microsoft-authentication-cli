@@ -10,17 +10,19 @@ internal sealed class MsalAuthenticationProvider : IAuthenticationProvider
     private readonly IMsalSession session;
     private readonly bool legacy;
     private readonly string initialTenant;
+    private readonly WindowsMechanismTrace? trace;
 
-    private MsalAuthenticationProvider(IMsalSession session, bool legacy, string initialTenant)
+    private MsalAuthenticationProvider(IMsalSession session, bool legacy, string initialTenant, WindowsMechanismTrace? trace)
     {
         this.session = session;
         this.legacy = legacy;
         this.initialTenant = initialTenant;
+        this.trace = trace;
     }
 
     internal static IAuthenticationProvider Initialize(ClientProfile profile,
         AuthenticationRequest request, IMsalSessionFactory sessions, IMsalHttpClientFactory http,
-        Action<CancellationToken> restrictDllSearch, CancellationToken cancellationToken)
+        Action<CancellationToken> restrictDllSearch, CancellationToken cancellationToken, WindowsMechanismTrace? trace = null)
     {
         try
         {
@@ -36,11 +38,11 @@ internal sealed class MsalAuthenticationProvider : IAuthenticationProvider
                 ListOperatingSystemAccounts: true, MsaPassthrough: legacy);
             var session = sessions.Create(settings, http, cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
-            return new MsalAuthenticationProvider(session, legacy, tenant);
+            return new MsalAuthenticationProvider(session, legacy, tenant, trace);
         }
         catch (Exception exception)
         {
-            throw MsalBoundary.MapFailure(exception, cancellationToken);
+            throw MsalBoundary.MapFailure(exception, cancellationToken, trace);
         }
     }
 
@@ -55,7 +57,7 @@ internal sealed class MsalAuthenticationProvider : IAuthenticationProvider
         }
         catch (Exception exception)
         {
-            throw MsalBoundary.MapFailure(exception, cancellationToken);
+            throw MsalBoundary.MapFailure(exception, cancellationToken, trace);
         }
     }
 
@@ -78,7 +80,7 @@ internal sealed class MsalAuthenticationProvider : IAuthenticationProvider
         }
         catch (Exception exception)
         {
-            throw MsalBoundary.MapFailure(exception, cancellationToken);
+            throw MsalBoundary.MapFailure(exception, cancellationToken, trace);
         }
     }
 
@@ -99,7 +101,7 @@ internal sealed class MsalAuthenticationProvider : IAuthenticationProvider
         }
         catch (Exception exception)
         {
-            throw MsalBoundary.MapFailure(exception, cancellationToken);
+            throw MsalBoundary.MapFailure(exception, cancellationToken, trace);
         }
     }
 }

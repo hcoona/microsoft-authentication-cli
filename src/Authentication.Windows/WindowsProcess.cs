@@ -6,11 +6,14 @@ namespace Authentication.Windows;
 // prefixes, callbacks, native I/O and cleanup never execute on that thread.
 public static class WindowsProcess
 {
-    public static int Run(string[] arguments, long entryTimestamp) =>
-        RunDefault(arguments, entryTimestamp,
-            new WindowsHostAdmission(new NativeWindowsHostObservations()),
-            WindowsLoader.RestrictSearch, new MsalSessionFactory(),
-            () => new MsalHttpClientFactory(new HttpClientHandler()));
+    public static int Run(string[] arguments, long entryTimestamp)
+    {
+        var trace = new WindowsMechanismTrace();
+        return RunDefault(arguments, entryTimestamp,
+            new WindowsHostAdmission(new NativeWindowsHostObservations(), trace),
+            token => WindowsLoader.RestrictSearch(token, trace), new MsalSessionFactory(trace),
+            () => new MsalHttpClientFactory(new HttpClientHandler()), trace: trace);
+    }
 
     public static int Run(string[] arguments, long entryTimestamp, IRequestHost host,
         Func<ClientProfile, IAuthenticationProvider> createProvider, IProfileSource? profiles = null) =>
@@ -22,7 +25,7 @@ public static class WindowsProcess
         IWindowsHostAdmission admission, Action<CancellationToken> restrictDllSearch,
         IMsalSessionFactory sessions, Func<MsalHttpClientFactory> createHttp,
         Func<Func<Task>, Action, IWindowsHostAdmission, OwnedRequestHost>? createHost = null,
-        Action<OwnedProcessCheckpoint>? checkpoint = null)
+        Action<OwnedProcessCheckpoint>? checkpoint = null, WindowsMechanismTrace? trace = null)
     {
         MsalHttpClientFactory? http = null;
         return RunCore(arguments, entryTimestamp,
@@ -35,8 +38,8 @@ public static class WindowsProcess
                 // Retain ownership before loader/session initialization can fail.
                 http ??= createHttp();
                 return MsalAuthenticationProvider.Initialize(profile, request, sessions, http,
-                    restrictDllSearch, token);
-            }), null, checkpoint, () => http?.Dispose());
+                    restrictDllSearch, token, trace);
+            }), null, checkpoint, () => http?.Dispose(), trace);
     }
 
     internal static int RunOwned(string[] arguments, long entryTimestamp,
@@ -53,13 +56,14 @@ public static class WindowsProcess
     private static int RunCore(string[] arguments, long entryTimestamp,
         Func<ProcessState, IRequestHost> createHost,
         Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
-        IProfileSource? profiles, Action<OwnedProcessCheckpoint>? checkpoint, Action? disposeHttp = null)
+        IProfileSource? profiles, Action<OwnedProcessCheckpoint>? checkpoint, Action? disposeHttp = null,
+        WindowsMechanismTrace? trace = null)
     {
         var process = new ProcessState(entryTimestamp);
         try
         {
             new Thread(() => Execute(process, arguments, entryTimestamp, createHost, createProvider,
-                profiles ?? new WindowsProfileSource(), checkpoint, disposeHttp)) { IsBackground = true }.Start();
+                profiles ?? new WindowsProfileSource(), checkpoint, disposeHttp, trace)) { IsBackground = true }.Start();
 
             while (true)
             {
@@ -83,7 +87,8 @@ public static class WindowsProcess
     private static void Execute(ProcessState process, string[] arguments, long entryTimestamp,
         Func<ProcessState, IRequestHost> createHost,
         Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
-        IProfileSource profiles, Action<OwnedProcessCheckpoint>? checkpoint, Action? disposeHttp)
+        IProfileSource profiles, Action<OwnedProcessCheckpoint>? checkpoint, Action? disposeHttp,
+        WindowsMechanismTrace? trace)
     {
         var exitCode = 2;
         RequestInvocation? invocation = null;
@@ -124,7 +129,7 @@ public static class WindowsProcess
             if (!process.TryCommit(invocation, out var result)) return;
             checkpoint?.Invoke(OwnedProcessCheckpoint.AfterCommit);
             pipe?.Stop();
-            WindowsDiagnostics.Completed(result!, invocation.Request?.TelemetryStderr == true, entryTimestamp);
+            WindowsDiagnostics.Completed(result!, invocation.Request?.TelemetryStderr == true, entryTimestamp, trace);
             exitCode = WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json)
                 ? result.ExitCode : 2;
         }

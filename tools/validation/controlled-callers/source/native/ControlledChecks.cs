@@ -51,7 +51,7 @@ internal static class ControlledChecks
         switch (index)
         {
             case 1: {
-                byte[] x = Wire.Encode([Success()]); Need(x.Length == 16 && Wire.Decode(x,1)[0].Passed);
+                byte[] x = Wire.Encode([Success()]); Need(x.Length == 17 && Wire.Decode(x,1)[0].Passed);
                 // Cross-language NAS1 vector: admission failure at public caller ordinal 193.
                 Need(Convert.ToHexString(Program.ActualStatus(5, 1, 512, 193, 1)) == "4E41533105010002C100000001000000");
                 Reject(() => Program.ActualStatus(0, 1, 0, -1, 1));
@@ -62,7 +62,7 @@ internal static class ControlledChecks
                 Reject(() => Program.ActualStatus(5, 1, 0, -1, 125));
                 break;
             }
-            case 2: { byte[] x = Wire.Encode([Success(true),Success(true)]); Need(x.Length == 27 && Wire.Decode(x,2).All(r=>r.Passed)); break; }
+            case 2: { byte[] x = Wire.Encode([Success(true),Success(true)]); Need(x.Length == 29 && Wire.Decode(x,2).All(r=>r.Passed)); break; }
             case 3: WorkerFailureFrames(); PublicHistoricalChanged(); break;
             case 4: { byte[] x=Wire.Encode([Success()]); Reject(()=>Wire.Decode(x[..^1],1)); Reject(()=>Wire.Decode(x.Concat(new byte[]{0}).ToArray(),1)); break; }
             case 5: { byte[] x=Wire.Encode([Success()]); x[5]=255; Reject(()=>Wire.Decode(x,1)); x=Wire.Encode([Success()]);x[7]|=128;Reject(()=>Wire.Decode(x,1));break; }
@@ -72,12 +72,37 @@ internal static class ControlledChecks
                 byte[] x=Wire.Encode([Success()]);x[7]|=16;Reject(()=>Wire.Decode(x,1));break; }
             case 8: { SafeResult r=Closed();r.WriterCloseToExitMilliseconds=1000;r.WriterCloseToCompletionMilliseconds=999;Reject(()=>Wire.Decode(Wire.Encode([r]),1));break; }
             case 9: { byte[] x=Wire.Encode([Closed()]);x[12]=255;x[13]=255;Reject(()=>Wire.Decode(x,1));break; }
-            case 10: { byte[] x=Wire.Encode([Success(true),Success(true)]);x[18]&=63;Reject(()=>Wire.Decode(x,2));break; }
+            case 10: { byte[] x=Wire.Encode([Success(true),Success(true)]);x[19]&=63;Reject(()=>Wire.Decode(x,2));break; }
             case 11: Reject(()=>CallerRules.DecideFrame([78,67,70,49,(byte)Fault.Native],2,4,1,0));break;
-            case 12: PartialWrite();break;
+            case 12: PartialWrite(); MechanismDiagnostics(); break;
             default: throw new SafeFailure(Fault.Admission);
         }
     }
+    private static void MechanismDiagnostics()
+    {
+        const string prefix = "Authentication request completed.\nMechanism unavailable at ";
+        byte[] good = Encoding.ASCII.GetBytes(prefix + "host_session.\n");
+        Need(ProtocolResult.ReadMechanismDiagnostic(good, Outcome.MechanismUnavailable) == MechanismDiagnostic.HostSession);
+        Need(ProtocolResult.ReadMechanismDiagnostic(good, Outcome.Success) == MechanismDiagnostic.NotApplicable);
+        Need(ProtocolResult.ReadMechanismDiagnostic([], Outcome.MechanismUnavailable) == MechanismDiagnostic.Unavailable);
+        foreach (string invalid in new[] { prefix + "SYNTHETIC_PRIVATE@example.test.\n", prefix + "host_session.\nprivate", prefix + "host_session.\r\n" })
+            Need(ProtocolResult.ReadMechanismDiagnostic(Encoding.ASCII.GetBytes(invalid), Outcome.MechanismUnavailable) == MechanismDiagnostic.Invalid);
+        SafeResult result = new() { Outcome = Outcome.MechanismUnavailable, ProtocolValid = true,
+            MechanismDiagnostic = MechanismDiagnostic.HostSession };
+        byte[] frame = Wire.Encode([result]);
+        Need(frame.Length == 17 && Wire.Decode(frame, 1)[0].MechanismDiagnostic == MechanismDiagnostic.HostSession);
+        byte[] legacy = frame[..16]; legacy[3] = (byte)'2';
+        Need(Wire.Decode(legacy, 1)[0].MechanismDiagnostic == MechanismDiagnostic.Unavailable);
+        frame[16] = 255; Reject(() => Wire.Decode(frame, 1));
+        frame = Wire.Encode([Success()]); frame[16] = (byte)MechanismDiagnostic.HostSession;
+        Reject(() => Wire.Decode(frame, 1));
+        byte[] receipt = SafeReceipt.Project(SafePlan(), "R1", "00000000000040008000000000000000", false,
+            result, false, true, true, false, false, 0);
+        string text = Encoding.UTF8.GetString(receipt);
+        Need(text.Contains("\"productMechanismDiagnostic\":\"HostSession\"", StringComparison.Ordinal));
+        Need(!text.Contains("SYNTHETIC_PRIVATE", StringComparison.Ordinal));
+    }
+
     private static void WorkerFailureFrames()
     {
         const string profile = @"C:\fixture\existing\selected-account-profile.json";

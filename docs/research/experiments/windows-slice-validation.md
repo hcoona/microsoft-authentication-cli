@@ -9,6 +9,76 @@ owns outcome authorization, maximum effects and shared capacity. The
 [experiment policy](../experiment-safety.md#windows-slice-outcome-authorization)
 owns safety. No recipe or source guard supplies independent authorization.
 
+## Fixed Mechanism-Unavailability Diagnostics
+
+For the Windows Slice, retain the existing request-local diagnostic stderr sink
+and confidential native worker capture. A source-defined mechanism failure code
+may travel from the existing local host, DLL-search, broker-availability,
+broker-error mapping or rejected-web-UI boundary to the fixed indication described
+in the [design](../../designs/windows-ado-authentication.md#result-diagnostics-and-compatibility).
+It is not raw diagnostic export, a new observer, a process controller, account
+selection, cache inspection, or a new public authentication result field. The
+first bounded category is explanatory evidence of a rejected boundary, not proof
+of its underlying cause or of account-effects extent. Cancellation retains its
+existing precedence. Missing optional stderr cannot be converted to success.
+
+The existing worker examines at most its already admitted 8 KiB stderr capture
+Windows-locally. Only an exact complete fixed human indication under telemetry-off
+may become `productMechanismDiagnostic` in the same safe case receipt. Unknown,
+partial, additive, malformed, or private-looking bytes produce only `Invalid`;
+absent bytes or a completion indication without the category produce `Unavailable`.
+Raw bytes, hashes of invalid content, provider text, tokens and private identifiers
+remain excluded. Other outcomes report `NotApplicable`; an unrun reservation
+reports `NotSupplied`. This enum is independent of outcome/expectation/exit/closure
+validation, and is never a new passing condition.
+
+Fresh worker frames use `NCW3`, with one additional bounded enum byte per existing
+result and a maximum of 29 bytes for a pair. The existing 32-byte supervisor pipe
+and all process, Job, deadline and safe EOF gates remain unchanged. The decoder
+retains `NCW2` only for its existing historical/synthetic consumers, with a missing
+mechanism category treated as unavailable. Do not rewrite or reaccept historical
+receipts. A fresh receipt reader validates this fixed additional field against
+its allowlist and the exact new caller/artifact binding; all previous schema,
+public identity, private exclusion and finite-read checks remain applicable.
+
+Prepare one finite correction batch using the existing Linux development and
+Windows validation roots, installed admitted .NET/MSAL/toolchain versions, public
+retained dependencies and same designated host. Allocate at most six build/test
+actions, one Native AOT publication and four credential-free synthetic process
+scenarios from the existing common pool. Each build/test/publication has at most
+900 seconds, 32 MiB aggregate captured output and 2 GiB newly retained public
+outputs; each synthetic scenario has at most 180 seconds, 1 MiB output and its
+existing one-second product ending allowance plus original ten-second terminal
+allowance. No new dependency download, toolchain installation, elevation, host,
+helper assembly load, controller, account configuration or cache repair is added.
+The exact pre-execution packet binds source, accepted protocol revision, artifact
+inputs, existing public caches/toolchain, finite command topology, output roots,
+prior complete typed ledger and conservative precharge. Builds, tests and failed
+starts remain spent. Independently accept that exact packet before execution and
+accept the actual source/artifact/validation correspondence afterward.
+
+Validate the fixed producer indications, first-failure and cancellation behavior,
+rejection of non-allowlisted stderr, bounded safe enum wire round-trip, NCW2
+compatibility and diagnostic/result separation using controlled data only.
+For this supplement, the fixed managed selection consists only of
+`WindowsHostAdmissionScenarios.FixedDiagnosticsIdentifyRejectedGateWithoutProviderEffects`,
+`WindowsHostAdmissionScenarios.CancelledObservationDoesNotPublishRejectedGate`,
+and `MsalAdapterScenarios.MechanismTraceKeepsFirstFixedCauseAndNeverProviderText`.
+The existing twelve `ControlledChecks.WireCase` checks retain their earlier
+obligations and add the bounded stderr/enum/legacy rejection checks. Bind these
+exact selections in the reviewed packet; no wildcard, custom settings or
+operator-provided filter admits another test. Refresh changed authored-source
+length/hash mappings for the existing source-response consumer without treating
+its old staging root as fresh or adopting any spent output. Keep
+all other required Slice artifact/security/provenance gates. The next real R1
+requires its existing independently accepted exact account call and current
+operating basis; this section does not automatically admit a retry. Preserve the
+failed original, spent readers, all previous charges and unknown account effects,
+`noExperimentLive=false`, and the global real execution gate. Stop for a new
+ownership gap, non-ctime correspondence failure, exceeded bounds, positive ongoing
+owned work, or an effect outside the accepted Wave. Intentionally retain dedicated
+outputs and failed evidence without resetting or cleaning unrelated state.
+
 ## Fixed Public Receipt Content Correspondence on DrvFS
 
 For the existing fixed public selected-account terminal/attempt receipt reader,
