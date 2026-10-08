@@ -432,6 +432,87 @@ acceptance remain required; confidential WSL transport remains unadmitted.
 No new host/helper/controller/observer kind, helper reload, reboot, elevation,
 ETW, cache repair, new reviewer or expanded effects are included.
 
+### Private content correspondence and historical Changed qualification
+
+For a further admitted selected-account original, reuse the already loaded
+input-pin helper in the retained stock host. Reconstruct the expected private
+request in Windows memory from the same fixed admitted local configuration and
+hash-pinned public role template used by the accepted private preparation. Reuse
+its restricted data-file AST parser, exact role selection, tenant handling,
+Profile path, JSON property order and UTF-8 serialization with final newline.
+Never invoke the initializer or create, overwrite or reselect a private request.
+
+Before lease arming or controller invocation, compare the selected original
+private file against that expected local SHA-256, exact length and EOF with the
+existing input-pin helper. Require all seven non-Changed fields to equal the
+original public plan descriptor and all eight current fields to remain stable
+within that local read. Keep its read-only stream open without write or delete
+sharing through the original controller return. This retained handle prevents
+content replacement after the local comparison; it is not a content hash or
+selector transport. The configuration, expected bytes and hashes remain in
+Windows and are cleared from local buffers after comparison. Export only the
+fixed `privateContentMatched` and `privateInputHandlesClosed` booleans in
+`selected-account-original-v2`; retain v1 support for historical receipts.
+Successful invocation requires both booleans to be true. A preflight failure
+must not invoke the controller or manufacture a started-role receipt.
+
+Only the actual worker's fixed account-v6 R1/R6/R7/R8 `Pin` may qualify its
+prepared-to-first-held Changed comparison under this exact original/local-content
+and held-input gate. The private qualifier requires the admitted fixed path,
+positive exact length at most 262,144, that same maximum, a prepared descriptor,
+no public qualifier and no exported private hash. It preserves the original
+prepared descriptor, all other seven comparisons, exact length and EOF, and
+complete current-eight held/named checks during Pin and Read. Default/control
+pins remain strict; public qualification still requires its exact public hash.
+This establishes prospective content correspondence and safe current use,
+not uninterrupted history or the original failure cause. No new baseline,
+private proof file, environment augmentation, helper or observer is introduced.
+
+Bound local input admission to 20 seconds from this original script's entry,
+1 MiB combined requested public/control/configuration/helper reads, 64 helper
+opens and 512 helper metadata operations. It is part of the already precharged
+real original and creates no additional process or account effect. Its retained
+input handles close after the controller returns, within the existing overall
+carrier and terminal limits. There is no renewed original epoch on failure.
+The existing 180-second original epoch still begins before lease arming; the
+whole carrier remains 205 seconds, including this bounded preparation. Actual
+source/call review must prove the complete time and operation fit before use.
+
+The outer caller uses `Process.WaitForExit(0)` together with both validated EOFs
+to identify completed process exit. It then calls the existing retained-handle
+`MarkObservedExit` before checking whether the exit code is zero. A nonzero exit
+remains a failed original; completed exit is recorded independently of success.
+The poll interval, original deadlines, sole stop claim, timer, native handle
+verification and cleanup rules remain unchanged. This supported source change
+is not a diagnosis or repair of the earlier cutoff failure. Reuse the existing
+loaded cutoff helper; no helper reload, timer reset or controller kind is added.
+
+After independent acceptance of the preceding failure and scoped completion,
+permit one fresh Personal slot 13/R1 and its successful-only slot 14/R6 under
+this corrected exact operating basis. Retain all original slots and charges,
+including a truthful unrun slot 12 marker; no prior call or collector is replayed.
+Use the existing shared technical and real pools, finite compilation/native,
+public-copy, metadata, collector and scenario methods. Every new allocation and
+source/artifact/input/call/outcome gate remains required. Source inspection alone
+does not admit compilation, deployment, private reads or another account call.
+Work R7/R8 and actual WSL retain their separate scenario and transport gates.
+
+This supplement supersedes source bindings only for the prospective corrected
+route below. Execution guards remain false. Public deployment may project only
+the exact public Root binding and fixed slot aliases; the account-v6 private and
+Profile roots and account-v5 configuration path are immutable inputs and must
+not change through a global textual replacement. Preserve every prior source,
+failed outcome, charge, pending flag, unknown and `noExperimentLive=false`.
+No new host, helper/controller/observer kind, cache or selector repair, reboot,
+elevation, ETW, private hash export or expanded account effects is permitted.
+
+| Prospective corrected source | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [Invoke-WindowsSelectedAccountOriginal.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountOriginal.ps1) | 18746 | `acfcaf23826d500180d8a46dd4f4288e982a115e1466d7a64496c562c12b9166` |
+| [Invoke-WindowsSelectedAccountCutoff.ps1](../../../tools/validation/Invoke-WindowsSelectedAccountCutoff.ps1) | 23131 | `5feceb0793d51473b1433cd9980e789fb28b4162e863e1c80fb9170e9284f55e` |
+| [ActualAdmission.cs](../../../tools/validation/controlled-callers/source/native/ActualAdmission.cs) | 18229 | `add88a3df74e1da5a2a53dea026ea344347f4baa1b3da5bec97bcf8bed135254` |
+| [FixtureNativePins.cs](../../../tools/validation/controlled-callers/source/native/FixtureNativePins.cs) | 16476 | `3381cea9c6b126f182749ef058f04328e3c20ac9764df2fd762ca22b7a9dfed7` |
+
 ### Private request metadata diagnosis after Personal slot 11
 
 After independent acceptance of the failed original and corrected case receipt,

@@ -68,10 +68,16 @@ internal sealed class FixtureNativePins : IDisposable
         Need(CreateDirectory(path,IntPtr.Zero));HoldDirectory(path);
     }
     internal FixtureHeldFile Pin(string path,string? hash,long length,long maximum,FixtureFileIdentity? expected=null,
-        bool qualifyPublicHistoricalChanged=false)
+        bool qualifyPublicHistoricalChanged=false, bool qualifyPrivateHistoricalChanged=false)
     {
         Canonical(path);Need(maximum is >0 and <=67108864 && length>=-1 && length<=maximum);
         Need(!qualifyPublicHistoricalChanged || (expected is not null && hash is not null && length>=0));
+        // The admitted retained original validates expected private content locally
+        // and keeps this exact fixed file open without write/delete sharing until
+        // its controller returns. No private hash crosses the public control.
+        Need(!qualifyPrivateHistoricalChanged || (!qualifyPublicHistoricalChanged && expected is not null &&
+            hash is null && length is >0 and <=262144 && maximum==262144 &&
+            new[]{"R1", "R6", "R7", "R8"}.Any(group=>path==ActualAdmission.PrivateRoot+group+".json")));
         HoldDirectory(Path.GetDirectoryName(path)!);before();
         SafeFileHandle handle=Open(path,0x80000000,1,3,0x00200000);
         FileStream? stream=null;
@@ -79,7 +85,7 @@ internal sealed class FixtureNativePins : IDisposable
         {
             FixtureFileIdentity identity=Snapshot(handle);
             Need(identity.Links==1 && identity.Length>=0 && identity.Length<=maximum && (length<0 || identity.Length==length));
-            if(expected is FixtureFileIdentity pin)Need(PreparedMatches(identity,pin,qualifyPublicHistoricalChanged));
+            if(expected is FixtureFileIdentity pin)Need(PreparedMatches(identity,pin,qualifyPublicHistoricalChanged || qualifyPrivateHistoricalChanged));
             RequireName(handle,path);stream=new FileStream(handle,FileAccess.Read,65536,false);
             if(hash is not null)
             {
