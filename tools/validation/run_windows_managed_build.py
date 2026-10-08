@@ -33,7 +33,7 @@ PRODUCT = None  # Set to the accepted commit only in the exact admitted projecti
 NORMAL_LAUNCHER = (23040, '5b018f38669fd6ca3cec8f760533af392e0265280047bfb5c531dd41a349690a')
 LAUNCHER_PROJECTION = PROJECTION / 'normal-launcher-dispatch-v1' / 'WindowsScriptJobLauncher.exe'
 CHARGES = {'restore': 1, 'build': 1, 'test': 1, 'publish': 1}
-SERVICE_SECONDS = 550
+SERVICE_SECONDS = 900
 PARENTS = {'linuxActions': LINUX / 'actions', 'windowsActions': LINUX / 'windows-actions',
            'windowsProjectionActions': PROJECTION / 'actions', 'windowsProjectionRoot': PROJECTION}
 
@@ -622,8 +622,12 @@ def materialize_inputs(a, root, local, budget):
             created['writeClosedIdentity'] = write_closed_identity
             created['readbackObservation'] = read_observation
         deployed.append(created)
-    evidence = encode({'schema': 'windows-managed-harness-deployment-v1',
-                       'inventorySha256': a['inventory']['sha256'], 'files': deployed})
+    # This public descriptor record contains integer identities, not ledger numbers.
+    # Compact JSON keeps complete copy lineage within the existing receipt bound.
+    evidence = (json.dumps({'schema': 'windows-managed-harness-deployment-v1',
+                            'inventorySha256': a['inventory']['sha256'], 'files': deployed},
+                           sort_keys=True, ensure_ascii=True, allow_nan=False,
+                           separators=(',', ':')) + '\n').encode('ascii')
     write_new(local / 'deployment.json', evidence, budget, 4194304)
     write_new(root / 'deployment.json', evidence, budget, 4194304)
 
@@ -1147,9 +1151,9 @@ def main():
         budget = Budget(began, terminal_deadline - 10_000_000_000, terminal_deadline)
     else:
         require(len(sys.argv) == 4, 'Original argv')
-        began, deadline = entered, entered + 900_000_000_000
+        began, deadline = entered, entered + 1_800_000_000_000
         budget = Budget(began, deadline - 10_000_000_000, deadline)
-    require(deadline - began == 900_000_000_000, 'Single original clock')
+    require(deadline - began == 1_800_000_000_000, 'Single original clock')
     # Admission uses the SAME bounded counters and service-relative clock as the
     # rest of the worker. No fresh work budget begins after admission or failure.
     budget.check()

@@ -46,7 +46,7 @@ Windows validation roots, installed admitted .NET/MSAL/toolchain versions, publi
 retained dependencies and same designated host. Allocate at most six build/test
 actions, one Native AOT publication and four credential-free synthetic process
 scenarios from the existing common pool. Each build/test/publication has at most
-900 seconds, 32 MiB aggregate captured output and 2 GiB newly retained public
+1800 seconds, 32 MiB aggregate captured output and 2 GiB newly retained public
 outputs; each synthetic scenario has at most 180 seconds, 1 MiB output and its
 existing one-second product ending allowance plus original ten-second terminal
 allowance. No new dependency download, toolchain installation, elevation, host,
@@ -65,7 +65,7 @@ managed caller and script with fixed operations and exact installed MSVC/Windows
 SDK inputs, without adding a controller mechanism or loading the final-publication
 guard. Keep their shorter 190-second runner, 275-second operational cutoff,
 300-second script and 330-second launcher plus ten-second cleanup bounds; the
-900-second ceiling does not extend those clocks. Each outer call consumes one
+1800-second ceiling does not extend those clocks. Each outer call consumes one
 synthetic unit, while its ordinary tools remain in the selected technical role.
 Use finite input/output inventories and stop if newly retained output exceeds
 2 GiB; this observation is not an operating-system disk quota. Generated metadata,
@@ -92,9 +92,12 @@ transition, including all untouched history, uncertainties and global real-stage
 gates. Do not replace it with a counter-only checkpoint, float/JavaScript
 round-trip, second accounting system or an old action-specific host ceiling.
 Retain an unused intent and any failed start without refund. The projected
-original interval is 900 seconds including copying, its service interval is
-550 seconds, and its existing worker reservations remain nested in those
-original clocks. The exact packet includes the public caches and toolchain,
+original interval is 1800 seconds including copying, its service interval is
+900 seconds, and its existing worker reservations remain nested in those
+original clocks. The larger outer and service intervals provide finite buffer
+for fresh copying and repeated input validation; they do not extend the Windows
+runner, script, launcher or cleanup clocks. The exact packet includes the public
+caches and toolchain,
 copy/read/write counts and bytes, remaining protected capacity, source/receipt
 schemas and scoped ownership/stop evidence. No source guard is activated before
 its exact independently accepted packet and durable debit.
