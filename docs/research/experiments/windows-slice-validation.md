@@ -103,6 +103,19 @@ Reuse cases keep interaction permission false and remain success-gated by their
 corresponding primary. Apply this to personal R1/R6 and work R7/R8; retain the common
 real-stage ceilings, all failed/skipped charges and original attempt identities.
 
+The existing original script accepts the exact paths and hashes of its two helper
+assemblies, loads their held bytes once, and records its current process/session
+identity. Its attempt index preserves the prior cumulative role records and is
+bounded by the common 96-start ceiling; exact admission still checks combined
+role consumption. Read the scene from the hash-bound plan's explicit `group`,
+not attempt parity, so a stopped primary probe can be followed by another primary.
+The existing controller retains its original process-handle handshake and deadlines.
+It records a closed, validated noninteractive `InteractionRequired` decision as
+failure with an allowlisted participation indication, never primary success.
+The existing FixtureDriver's isolated `--interaction-controls` selection exercises
+the changed permission, arguments and result paths without replaying the unchanged
+84 pure checks or N1/N2/N3 cases. Exact source/artifact/call admission precedes it.
+
 Before covered execution, independently accept the exact protocol/source/candidate,
 unchanged or corrected helper artifacts, explicit selected roles and existing
 Profile/configuration/private inputs, finite calls, original clocks, complete

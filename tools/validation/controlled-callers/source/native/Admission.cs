@@ -50,6 +50,19 @@ internal sealed class PrivateRequest
     internal bool DefaultAssociationIndependentlyAccepted { get; init; }
     public override string ToString() => nameof(PrivateRequest);
 
+    // This ephemeral view is never serialized. Permission may only be narrowed;
+    // arguments and result validation consume this same view.
+    internal PrivateRequest WithInteractionPermission(bool permitted) => new()
+    {
+        ProfilePath = ProfilePath, Email = Email, Scopes = Scopes,
+        TenantArgument = TenantArgument, ExactResultTenant = ExactResultTenant,
+        InteractionAllowed = InteractionAllowed && permitted, TimeoutSeconds = TimeoutSeconds,
+        LifetimePipe = LifetimePipe, CloseWriterAfterMilliseconds = CloseWriterAfterMilliseconds,
+        RequireCloseAfterLiveSample = RequireCloseAfterLiveSample, ExpectedOutcome = ExpectedOutcome,
+        ExpectedRoute = ExpectedRoute, RequirePersistenceUnconfirmed = RequirePersistenceUnconfirmed,
+        DefaultAssociationIndependentlyAccepted = DefaultAssociationIndependentlyAccepted
+    };
+
     internal string[] Arguments()
     {
         var args = new List<string> { "authenticate", "--protocol", "1", "--profile", ProfilePath,

@@ -4,7 +4,7 @@
 param(
     [Parameter(Mandatory)][string] $PlanPath,
     [Parameter(Mandatory)][string] $PlanSha256,
-    [Parameter(Mandatory)][ValidateRange(1, 14)][int] $Attempt,
+    [Parameter(Mandatory)][ValidateRange(1, 96)][int] $Attempt,
     [ValidateSet('Personal', 'Work')][string] $AccountRole = 'Personal',
     [Parameter(Mandatory)][string] $ControllerSha256,
     [switch] $Controller,
@@ -38,6 +38,7 @@ $status = [ordered]@{
     streamsClosed = $false; stopAttempted = $false; ownedClosure = $false
     noExperimentLive = $false; failure = 'admission'
     supervisorStatusDisposition = 'unavailable'; supervisorStatus = $null
+    interactionRequired = $false
 }
 
 function Need([bool] $Condition) {
@@ -125,12 +126,12 @@ function Invoke-Outer {
     }
     try {
         Before 20
-        Need (($AccountRole -ceq 'Personal' -or ($AccountRole -ceq 'Work' -and $Attempt -le 4)) -and -not $Controller -and $ReservationSha256 -ceq '')
+        Need (($AccountRole -cin @('Personal', 'Work')) -and -not $Controller -and $ReservationSha256 -ceq '')
         Need ($null -ne $CutoffLease -and $CutoffLease.GetType().FullName -ceq
             'SelectedAccountControllerCutoff' -and $CutoffLease.InvocationStartTicks -eq $callStart -and
             $CutoffLease.Armed -and -not $CutoffLease.Bound -and -not $CutoffLease.Failed -and
             -not $CutoffLease.StopClaimed -and -not $CutoffLease.CleanupComplete)
-        Need (($AccountRole -ceq 'Personal' -or ($AccountRole -ceq 'Work' -and $Attempt -le 4)) -and
+        Need (($AccountRole -cin @('Personal', 'Work')) -and
             [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop')
         Need ($PlanPath -ceq ($root + '\control\' + $accountPrefix + '-plan-' + $Attempt + '.json'))
         $script = $root + '\control\Invoke-WindowsSelectedAccountCutoffSlots.ps1'
@@ -140,10 +141,13 @@ function Invoke-Outer {
         $null = Read-Pinned $shell 1048576 '8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e'
         $utf8 = [Text.UTF8Encoding]::new($false, $true)
         $public = $utf8.GetString((Read-Pinned $PlanPath 262144 $PlanSha256)) | ConvertFrom-Json
-        $group = if ($Attempt % 2 -eq 1) { $primaryGroup } else { $reuseGroup }
-        Need ($public.schema -ceq 'confidential-native-account-admission-v1' -and
+        $group = $public.group
+        Need ($group -cin @($primaryGroup, $reuseGroup))
+        Need ($public.schema -ceq 'confidential-native-account-admission-v2' -and
             $public.group -ceq $group -and $public.admitted -eq $true -and
             $public.accountEffectsAccepted -eq $true -and
+            $public.interactionPermitted -is [bool] -and
+            (-not $public.interactionPermitted -or $group -ceq $primaryGroup) -and
             $public.nonce -cmatch '\A[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}\z')
         $outerReceipt = $root + '\records\' + $group + '-' + $public.nonce + '\outer-terminal.json'
         for ($prior = 1; $prior -lt $Attempt; $prior++) {
@@ -256,14 +260,17 @@ if (-not $Controller) { exit (Invoke-Outer) }
 
 try {
     Before 20
-    Need (($AccountRole -ceq 'Personal' -or ($AccountRole -ceq 'Work' -and $Attempt -le 4)) -and
+    Need (($AccountRole -cin @('Personal', 'Work')) -and
         [Environment]::Is64BitProcess -and $PSVersionTable.PSEdition -eq 'Desktop')
     Need ($PlanPath -ceq ($root + '\control\' + $accountPrefix + '-plan-' + $Attempt + '.json'))
     $encoding = [Text.UTF8Encoding]::new($false, $true)
     $plan = $encoding.GetString((Read-Pinned $PlanPath 262144 $PlanSha256)) | ConvertFrom-Json
-    $group = if ($Attempt % 2 -eq 1) { $primaryGroup } else { $reuseGroup }
-    Need ($plan.schema -ceq 'confidential-native-account-admission-v1' -and
-        $plan.group -ceq $group -and $plan.admitted -eq $true -and $plan.accountEffectsAccepted -eq $true)
+    $group = $plan.group
+    Need ($group -cin @($primaryGroup, $reuseGroup))
+    Need ($plan.schema -ceq 'confidential-native-account-admission-v2' -and
+        $plan.group -ceq $group -and $plan.admitted -eq $true -and $plan.accountEffectsAccepted -eq $true -and
+        $plan.interactionPermitted -is [bool] -and
+        (-not $plan.interactionPermitted -or $group -ceq $primaryGroup))
     Need ($plan.environmentMode -ceq 'constructed-current-user-profile-v1' -and
         $plan.effects.productLaunches -eq 1 -and $plan.effects.callerProcesses -eq 2 -and
         $plan.effects.exemptOuterPowerShellCount -eq 1 -and $plan.effects.etwAttempts -eq 0)
@@ -390,6 +397,9 @@ try {
         $terminal.nonce -ceq $plan.nonce -and $terminal.protocolSha256 -ceq $plan.protocolSha256 -and
         $terminal.reservation -eq $false -and $terminal.scopedJobZero -eq $true -and $terminal.safeWorkerEof -eq $true)
     $status.ownedClosure = $true
+    $status.interactionRequired = -not $plan.interactionPermitted -and $group -ceq $primaryGroup -and
+        $terminal.outcome -ceq 'InteractionRequired' -and $terminal.protocolValid -eq $true -and
+        $terminal.stopAttempted -eq $false -and $child.ExitCode -eq 1
     Need ($child.ExitCode -eq 0 -and $terminal.passed -eq $true -and $terminal.outcome -ceq 'Success' -and
         $terminal.protocolValid -eq $true -and $terminal.metadataValid -eq $true -and $terminal.stopAttempted -eq $false)
     Need ($terminal.apiRoute -cin @('Silent', 'Interactive'))
