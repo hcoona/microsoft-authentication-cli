@@ -432,6 +432,54 @@ acceptance remain required; confidential WSL transport remains unadmitted.
 No new host/helper/controller/observer kind, helper reload, reboot, elevation,
 ETW, cache repair, new reviewer or expanded effects are included.
 
+### Corrected case receipt reread after Personal slot 11
+
+After independently accepted failure and distinct triage of the missing
+`typed` helper in the slot 11 safe collector, permit one corrected read of the
+original `R1-terminal.json`. The missing binding prevents a valid 197-row
+`publicHistoricalChanged` object from passing its prepared-tuple comparison;
+it does not prove the actual first rejected predicate or an input mismatch.
+Preserve the spent original five-leaf collector and its incomplete safe result.
+Reuse its four validated receipts rather than reading those leaves again.
+
+Use the same fixed selected-account collector and original nonce-bound case
+path under account-v8. Restore only the existing type-preserving comparison
+helper. Require static binding verification and unchanged mode, supervisor role,
+197 ordered ordinals, integer types/ranges, immutable prepared-tuple equality,
+seven current-field equalities, complete safe case schema and result semantics.
+Historical current Changed alone remains qualified; no prepared tuple, other
+identity field, hash, length, EOF or current within-read predicate is relaxed.
+This correction adds no diagnostic field, native call or product behavior.
+Reuse the accepted native tuple and boundary checks; no caller rebuild,
+materialization, helper reload or repeated native fixture batch is needed.
+
+Select only that original case leaf, capped at 64 KiB, with a fresh exclusive
+safe result in the existing private recovery area. Bind the original call,
+nonce, source/artifact/protocol lineage and prepared tuples to the immutable
+accepted plan before reading. Keep direct/no-follow, regular-file, exact
+initial held/final held/named full9, bounded read/EOF and finally-close checks.
+Apply the existing safe schema before retaining or exporting any payload.
+Absent, invalid or unverifiable content retains only the existing finite
+suppression disposition, phase, field ordinal and metadata mismatch mask;
+retain no rejected contents, digest or partial tuple values.
+
+Allocate one additional collector-only pass: 30 seconds and 1 MiB combined
+operations, including the existing 262,144-byte requested-read ceiling and
+131,072-byte safe output ceiling. Technical and real-stage debits are zero.
+Preserve all earlier charges, spent calls, pending flags and unknowns. Require
+accepted source/input/call/current-accounting admission before the sole read,
+complete transport, bounded own-descriptor closure and independent actual
+outcome acceptance. The pass is spent even on failure and grants no retry.
+
+A validated case can supply only its original supervisor public tuple and safe
+worker/result observations, joined with the four previously validated receipts.
+It cannot turn the failed original into success, diagnose the separate cutoff
+failure, establish global or historical closure, or reopen slot 12/R6. Dependent
+real execution remains stopped until supported correction and its exact gates.
+No account query, private configuration, product stdout, provider text, token,
+host invocation, new collector/controller/helper kind, cache repair, selection
+change, reboot, elevation or ETW operation is included.
+
 ### Current public metadata follow-up after failed Personal slot 7
 
 After independent acceptance of the failed Personal slot 7 outcome and a fresh
