@@ -1,6 +1,7 @@
 namespace Authentication.Core;
 
-public sealed class RequestCoordinator(IAuthenticationProvider provider, IRequestHost host)
+public sealed class RequestCoordinator(IAuthenticationProvider provider, IRequestHost host,
+    AuthenticationTrace? trace = null)
 {
     private readonly IAuthenticationProvider provider = provider;
     private readonly IRequestHost host = host;
@@ -9,6 +10,8 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         AuthenticationRequest request,
         CancellationToken cancellationToken = default)
     {
+        using var ownedTrace = trace is null ? AuthenticationTrace.Start() : null;
+        var observation = trace ?? ownedTrace!;
         var closeOwnedUi = false;
         var interactive = false;
         AuthenticationOutcome outcome;
@@ -33,6 +36,7 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         {
             try
             {
+                using var phase = observation.Begin(AuthenticationStage.InteractionClose);
                 await host.CloseInteractionAsync();
             }
             catch (Exception)
@@ -53,7 +57,9 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         async Task<AuthenticationOutcome> AcquireAsync()
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var accounts = await provider.GetAccountsAsync(cancellationToken);
+            IReadOnlyList<ProviderAccount> accounts;
+            using (observation.Begin(AuthenticationStage.AccountDiscovery))
+                accounts = await provider.GetAccountsAsync(cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
             ProviderAccount? selected = null;
             foreach (var account in accounts)
@@ -78,9 +84,11 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
                 try
                 {
                     var silentOperation = Guid.NewGuid();
-                    var candidate = await provider.AcquireSilentAsync(request, selected, silentOperation, cancellationToken);
+                    TokenCandidate candidate;
+                    using (observation.Begin(AuthenticationStage.SilentAcquisition))
+                        candidate = await provider.AcquireSilentAsync(request, selected, silentOperation, cancellationToken);
                     cancellationToken.ThrowIfCancellationRequested();
-                    return ValidateCandidate(request, candidate, silentOperation, interactive: false);
+                    return ValidateCandidate(request, candidate, silentOperation, interactive: false, observation);
                 }
                 catch (ProviderFailureException exception) when (exception.Failure == AuthenticationFailure.InteractionRequired)
                 {
@@ -96,7 +104,9 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
             }
 
             closeOwnedUi = true;
-            var parent = await host.OpenInteractionAsync(cancellationToken);
+            nint parent;
+            using (observation.Begin(AuthenticationStage.InteractionOpen))
+                parent = await host.OpenInteractionAsync(cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
             if (parent == 0)
             {
@@ -105,16 +115,20 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
 
             interactive = true;
             var interactiveOperation = Guid.NewGuid();
-            var interactiveCandidate = await provider.AcquireInteractiveAsync(
-                request, selected, claims, parent, interactiveOperation, cancellationToken);
+            TokenCandidate interactiveCandidate;
+            using (observation.Begin(AuthenticationStage.InteractiveAcquisition))
+                interactiveCandidate = await provider.AcquireInteractiveAsync(
+                    request, selected, claims, parent, interactiveOperation, cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
-            return ValidateCandidate(request, interactiveCandidate, interactiveOperation, interactive: true);
+            return ValidateCandidate(request, interactiveCandidate, interactiveOperation, interactive: true, observation);
         }
     }
 
     private AuthenticationOutcome ValidateCandidate(
-        AuthenticationRequest request, TokenCandidate? candidate, Guid operationId, bool interactive)
+        AuthenticationRequest request, TokenCandidate? candidate, Guid operationId, bool interactive,
+        AuthenticationTrace observation)
     {
+        using var phase = observation.Begin(AuthenticationStage.CandidateValidation);
         if (candidate is null || string.IsNullOrEmpty(candidate.AccessToken)
             || !string.Equals(candidate.Email, request.AccountEmail, StringComparison.OrdinalIgnoreCase)
             || candidate.Tenant is null
