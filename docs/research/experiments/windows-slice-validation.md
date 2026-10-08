@@ -9,6 +9,46 @@ owns outcome authorization, maximum effects and shared capacity. The
 [experiment policy](../experiment-safety.md#windows-slice-outcome-authorization)
 owns safety. No recipe or source guard supplies independent authorization.
 
+## Fixed Public Receipt Content Correspondence on DrvFS
+
+For the existing fixed public selected-account terminal/attempt receipt reader,
+Linux `st_ctime_ns` is an observation, not a content-admission predicate. This
+qualification applies only to its five exact, independently admitted receipt
+paths on `/mnt/c`, after the admitted original returns or its existing scoped
+stop procedure completes. It does not permit private input, product output,
+account-store access, directory enumeration, process observation or another
+reader. Preserve the first failed reader and its consumed charge; a separately
+precharged diagnostic pass does not replay that reader or the account call.
+
+Use the same no-follow ancestry and retained descriptors, fixed selection,
+size/schema screening and finite source/operation bounds. Require exact device,
+inode, mode, owner, group, length, mtime and link count across the named and held
+observations before, during and after each admitted read. Retain all original and
+observed nine-field descriptors, including every ctime difference. Do not replace
+an original descriptor or infer why ctime changed.
+
+For each qualified leaf, read its exact bounded length and EOF from the retained
+read-only descriptor, seek that same descriptor to zero once, and repeat the
+exact length/EOF read. Require identical SHA-256 values and bytes; retain strict
+non-ctime identity comparisons around both reads and at final held/named checks.
+Existing expected length/hash bindings, when supplied, remain mandatory. A
+non-ctime, content, EOF, seek, schema, alias, limit or closure failure rejects the
+leaf. A ctime difference alone must not reject it, including at the initial
+pathname-to-descriptor join. No settling loop or unbounded reread is permitted.
+
+The existing five-leaf selection, maximum 30 seconds, 1 MiB total I/O, 64 KiB
+case leaf, 4 KiB other leaves, 256 KiB requested payload bytes and 128 KiB output
+remain the upper bounds; the exact call proves the additional read fits before
+reservation. Retain the same public-safe schemas and Windows-local private
+validation. Use the existing passive ledger and independent exact source/call
+and actual outcome gates. There is no account/technical charge, new tool kind,
+controller, host, cache/configuration effect or owner-decision boundary.
+
+This supersedes earlier within-read ctime requirements only for these admitted
+DrvFS receipt leaves. All other roles retain their applicable comparisons.
+Repeated matching content establishes current correspondence, not historical
+continuity, authentication success, process closure or the original failure cause.
+
 ## Controlled Caller Root Ownership
 
 The existing controlled caller must reject a prospective `named-fixtures-{action}`
