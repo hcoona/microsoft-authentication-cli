@@ -40,7 +40,15 @@ internal static class WindowsDiagnostics
         _ => "Mechanism unavailable at unavailable.\n"u8.ToArray(),
     };
 
-    internal static void Completed(SerializedResult result, bool telemetry, long entryTimestamp, WindowsMechanismTrace? trace = null)
+    internal static LocalActivityTelemetry? Start(bool telemetry, long entryTimestamp)
+    {
+        if (!telemetry) return null;
+        try { return new(entryTimestamp, bytes => WindowsStandardHandles.Write(WindowsStandardHandles.Error, bytes)); }
+        catch (Exception) { return null; }
+    }
+
+    internal static void Completed(SerializedResult result, bool telemetry, long entryTimestamp,
+        WindowsMechanismTrace? trace = null, LocalActivityTelemetry? observation = null)
     {
         try
         {
@@ -62,6 +70,26 @@ internal static class WindowsDiagnostics
                 writer.WriteString("outcome", outcome);
                 writer.WriteNumber("elapsedMilliseconds", (long)Math.Max(0,
                     TimeProvider.System.GetElapsedTime(entryTimestamp).TotalMilliseconds));
+                if (outcome == "success")
+                {
+                    var interpretation = result.Utf8Json.Length <= 262144
+                        ? TokenDiagnostics.Describe(json.RootElement.GetProperty("accessToken").GetString())
+                        : new TokenDiagnostic(TokenDiagnosticFormat.LimitExceeded, false, false, false);
+                    writer.WriteString("tokenFormat", interpretation.Format switch
+                    {
+                        TokenDiagnosticFormat.DecodedUnverified => "decoded_unverified",
+                        TokenDiagnosticFormat.Unreadable => "unreadable",
+                        TokenDiagnosticFormat.LimitExceeded => "limit_exceeded", _ => "unavailable",
+                    });
+                    writer.WriteBoolean("hasExpirationClaim", interpretation.HasExpiration);
+                    writer.WriteBoolean("hasAudienceClaim", interpretation.HasAudience);
+                    writer.WriteBoolean("hasScopesClaim", interpretation.HasScopes);
+                    if (json.RootElement.GetProperty("expiresOn").TryGetDateTimeOffset(out var expiration))
+                    {
+                        writer.WriteString("providerExpiresOn", expiration);
+                        writer.WriteNumber("remainingSeconds", (long)Math.Floor((expiration - DateTimeOffset.UtcNow).TotalSeconds));
+                    }
+                }
                 writer.WriteEndObject();
                 writer.Flush();
                 buffer.WriteByte((byte)'\n');
@@ -69,6 +97,11 @@ internal static class WindowsDiagnostics
 
             if (buffer.Length > 8192) return;
             var bytes = buffer.ToArray();
+            if (observation is not null)
+            {
+                _ = observation.TryWriteFinal(bytes);
+                return;
+            }
             new Thread(() =>
             {
                 try { _ = WindowsStandardHandles.Write(WindowsStandardHandles.Error, bytes); }

@@ -94,6 +94,7 @@ public static class WindowsProcess
         RequestInvocation? invocation = null;
         OwnedRequestHost? ownedHost = null;
         WindowsLifetimePipe? pipe = null;
+        LocalActivityTelemetry? observation = null;
         ConsoleCancelEventHandler cancelHandler = (_, notification) =>
         {
             notification.Cancel = true;
@@ -113,6 +114,7 @@ public static class WindowsProcess
             ownedHost = host as OwnedRequestHost;
             invocation = new RequestInvocation(arguments, host, entryTimestamp, process.CancellationToken);
             process.Publish(invocation, ownedHost);
+            observation = WindowsDiagnostics.Start(invocation.Request?.TelemetryStderr == true, entryTimestamp);
             Console.CancelKeyPress += cancelHandler;
             if (invocation.Request?.CancelOnStdinClose == true)
             {
@@ -129,7 +131,8 @@ public static class WindowsProcess
             if (!process.TryCommit(invocation, out var result)) return;
             checkpoint?.Invoke(OwnedProcessCheckpoint.AfterCommit);
             pipe?.Stop();
-            WindowsDiagnostics.Completed(result!, invocation.Request?.TelemetryStderr == true, entryTimestamp, trace);
+            WindowsDiagnostics.Completed(result!, invocation.Request?.TelemetryStderr == true,
+                entryTimestamp, trace, observation);
             exitCode = WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json)
                 ? result.ExitCode : 2;
         }
@@ -167,6 +170,7 @@ public static class WindowsProcess
             {
                 process.Ending();
             }
+            observation?.Dispose();
             if (drained) process.Finish(exitCode);
         }
     }

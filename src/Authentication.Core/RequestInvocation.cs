@@ -13,6 +13,7 @@ public sealed class RequestInvocation : IDisposable
 {
     private readonly RequestLifetime lifetime;
     private readonly IRequestHost host;
+    private AuthenticationTrace? trace;
 
     public ParsedRequest? Request { get; }
 
@@ -20,7 +21,11 @@ public sealed class RequestInvocation : IDisposable
 
     public long? TerminalTimestamp => lifetime.TerminalTimestamp;
 
-    public Task CompleteAsync() => lifetime.CompleteAsync();
+    public async Task CompleteAsync()
+    {
+        await lifetime.CompleteAsync().ConfigureAwait(false);
+        trace?.Dispose();
+    }
 
     public void FailHost() => lifetime.FailHost();
 
@@ -41,7 +46,10 @@ public sealed class RequestInvocation : IDisposable
 
     public Task<AuthenticationOutcome> RunAsync(IProfileSource profiles,
         Func<ClientProfile, AuthenticationRequest, IAuthenticationProvider> createProvider,
-        Task<bool>? hostAdmission = null) => lifetime.RunAsync(async token =>
+        Task<bool>? hostAdmission = null)
+    {
+        trace ??= AuthenticationTrace.Start();
+        return lifetime.RunAsync(async token =>
         {
             if (Request is null) return new(null, AuthenticationFailure.InvalidRequest);
 
@@ -58,6 +66,7 @@ public sealed class RequestInvocation : IDisposable
             try
             {
                 token.ThrowIfCancellationRequested();
+                using var phase = trace.Begin(AuthenticationStage.ProfileRead);
                 bytes = await profiles.ReadAsync(Request.ProfilePath, token).ConfigureAwait(false);
             }
             catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
@@ -86,8 +95,9 @@ public sealed class RequestInvocation : IDisposable
             }
 
             token.ThrowIfCancellationRequested();
-            return await new RequestCoordinator(provider, host).AuthenticateAsync(request, token).ConfigureAwait(false);
+            return await new RequestCoordinator(provider, host, trace).AuthenticateAsync(request, token).ConfigureAwait(false);
         });
+    }
 
     private static AuthenticationOutcome InvalidConfiguration() =>
         new(null, AuthenticationFailure.InvalidRequest, Reason: AuthenticationReason.InvalidConfiguration);
@@ -97,8 +107,20 @@ public sealed class RequestInvocation : IDisposable
         result = null;
         if (!lifetime.TryCommit(out var outcome)) return false;
         result = ResultProjection.Serialize(outcome!);
+        trace?.Committed(outcome!);
         return true;
     }
 
-    public void Dispose() => lifetime.Dispose();
+    public void Dispose()
+    {
+        lifetime.Dispose();
+        _ = EndTraceAsync();
+    }
+
+    private async Task EndTraceAsync()
+    {
+        try { await lifetime.CompleteAsync().ConfigureAwait(false); }
+        catch (Exception) { }
+        finally { trace?.Dispose(); }
+    }
 }
