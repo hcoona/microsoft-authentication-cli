@@ -51,6 +51,69 @@ Repository hk checks and desk review are not product runtime observations. This 
 does not allocate a new accounting system, Windows process scenario, publication,
 real-account attempt, host/controller, exporter service or confidential WSL transport.
 
+### Ordinary Windows candidate and selected-account continuation
+
+Replace the retained-host entry requirement with one ordinary Windows PowerShell
+5.1 x64 STA script invocation on the same designated interactive host. Reuse the
+existing normal script Job launcher, NativeCaller supervisor/worker, original
+process handles, identity handshake, Job limits, deadlines, window observations
+and Windows-local `ProtocolResult.Validate`. Necessary existing accepted helper
+assemblies may load once inside that invocation; no helper Type or runspace must
+survive it. Bind the current invocation's own identity and runspace rather than an
+old retained process. Missing old hosts use the Wave's accepted current-absence
+basis; preserve their historical completion/account-effects uncertainties.
+
+Prepare a candidate from the accepted observation implementation and its minimum
+ordinary-entry/interaction-permission correction in fresh dedicated roots. Use the
+already admitted Windows SDK 10.0.401/runtime 10.0.12, MSVC 14.51.36231, Windows SDK
+10.0.26100.0 and retained public dependency cache. Allocate at most one public
+dependency-preparation action, four build/test actions, one Native AOT publication
+and sixty-four credential-free synthetic process scenarios from the common pool.
+Each build/test/publication keeps the existing 1800-second, 32-MiB public-output
+and 2-GiB retained-output ceilings; the unchanged normal launcher's shorter
+330-second work/10-second terminal bounds still apply where it is used. Public
+staging/collection must have separately reviewed finite file/byte/time bounds.
+No download, installation, signing, new machine/persistent host/controller, elevation, exporter or
+account/cache/configuration repair is added. Reuse unchanged helper checks and
+provenance; verify changed argument/permission behavior and affected product
+process cases without replaying unchanged accepted fixture cases.
+
+A fresh public native admission document uses
+`confidential-native-account-admission-v2` and adds the required boolean
+`interactionPermitted` to the existing v1 fields. It can only narrow the admitted
+private row's permission: effective permission is private `interactionAllowed`
+AND public `interactionPermitted`. Apply that same effective private request to
+argument construction and result validation. All selectors, Profile, authority,
+scopes, expected-result and lifetime fields remain unchanged Windows-local values;
+never rewrite an existing private document or serialize the projected row. Keep
+all existing public/private input, hash/EOF/current-identity and operating-basis
+gates. Unsupported or malformed permission/schema values stop before product
+start. This is an internal validation-input revision, not a product command or
+public authentication contract change.
+
+For each primary role, first invoke its admitted exact request with public
+interaction permission false. A validated normal silent success may satisfy that
+primary case; accept its result, actual exit and required window/lifetime evidence
+before the fresh-process reuse case. A valid closed `interaction_required` result
+is a decision to request operator participation, never primary success. Stop that
+attempt, notify the operator and wait for fresh readiness before one separately
+admitted permission-true primary attempt. No automatic account retry or prompt is
+allowed by the probe. Other failures retain the normal stop/disposition rule.
+Reuse cases keep interaction permission false and remain success-gated by their
+corresponding primary. Apply this to personal R1/R6 and work R7/R8; retain the common
+real-stage ceilings, all failed/skipped charges and original attempt identities.
+
+Before covered execution, independently accept the exact protocol/source/candidate,
+unchanged or corrected helper artifacts, explicit selected roles and existing
+Profile/configuration/private inputs, finite calls, original clocks, complete
+cumulative precharge and current operating basis. Preserve creation-time process
+ownership, safe stdout/result checks, fixed diagnostic projection, two-stream EOF,
+Job-zero and actual exit/window claims. Ordinary process return or telemetry alone
+cannot establish those claims. Source review and compilation do not admit real
+execution. Retain all partial/failed outputs; no spent original, occupied output,
+collector or deadline is replayed or refunded. Actual WSL credential transport
+remains outside this supplement and needs its own accepted boundary/evidence.
+
 For the Windows Slice, retain the existing request-local diagnostic stderr sink
 and confidential native worker capture. A source-defined mechanism failure code
 may travel from the existing local host, DLL-search, broker-availability,
