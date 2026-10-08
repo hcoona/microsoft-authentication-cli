@@ -44,7 +44,7 @@ public identity, private exclusion and finite-read checks remain applicable.
 Prepare one finite correction batch using the existing Linux development and
 Windows validation roots, installed admitted .NET/MSAL/toolchain versions, public
 retained dependencies and same designated host. Allocate at most six build/test
-actions, one Native AOT publication and four credential-free synthetic process
+actions, one Native AOT publication and five credential-free synthetic process
 scenarios from the existing common pool. Each build/test/publication has at most
 1800 seconds, 32 MiB aggregate captured output and 2 GiB newly retained public
 outputs; each synthetic scenario has at most 180 seconds, 1 MiB output and its
@@ -59,8 +59,18 @@ accept the actual source/artifact/validation correspondence afterward.
 
 Allocate one preparation action for the correction batch's fresh offline locked
 restore from the same common capacity; retain its failed-start accounting. Use
-four separately admitted calls of the unchanged normal launcher for restore,
-build, the exact managed test selection, and publication. Project the existing
+at most five separately admitted calls of the unchanged normal launcher for
+restore, build, one corrective managed build if needed, the exact managed test
+selection, and publication. Before the corrective build, acquire and independently
+accept the exact compiler, analyzer, and configuration inputs identified by the
+retained build log. Keep a missing historical input binding unresolved; a fresh
+capture supplies prospective input evidence, not proof of bytes consumed by the
+previous build. Reuse unchanged accepted restore, source, and cache evidence where
+their original lineage permits. Force compilation in the corrective build;
+an incremental no-op is not a new compiler observation. The corrective build
+consumes the existing six-action build/test allocation and needs its own fresh destination, input/call
+admission, durable charge, and actual artifact acceptance. Preserve the original
+build and all spent observations. Project the existing
 managed caller and script with fixed operations and exact installed MSVC/Windows
 SDK inputs, without adding a controller mechanism or loading the final-publication
 guard. Keep their shorter 190-second runner, 275-second operational cutoff,
