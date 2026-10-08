@@ -44,7 +44,7 @@ public identity, private exclusion and finite-read checks remain applicable.
 Prepare one finite correction batch using the existing Linux development and
 Windows validation roots, installed admitted .NET/MSAL/toolchain versions, public
 retained dependencies and same designated host. Allocate at most six build/test
-actions, two Native AOT publications and six credential-free synthetic process
+actions, four Native AOT publication attempts and eight credential-free synthetic process
 scenarios from the existing common pool. Each build/test/publication has at most
 1800 seconds, 32 MiB aggregate captured output and 2 GiB newly retained public
 outputs; each synthetic scenario has at most 180 seconds, 1 MiB output and its
@@ -59,9 +59,9 @@ accept the actual source/artifact/validation correspondence afterward.
 
 Allocate one preparation action for the correction batch's fresh offline locked
 restore from the same common capacity; retain its failed-start accounting. Use
-at most six separately admitted calls of the unchanged normal launcher for
+at most eight separately admitted calls of the unchanged normal launcher for
 restore, build, one corrective managed build if needed, the exact managed test
-selection, publication, and one corrective publication if needed. Before the corrective build, acquire and independently
+selection, publication, and up to three corrective publication attempts if needed. Before the corrective build, acquire and independently
 accept the exact compiler, analyzer, and configuration inputs identified by the
 retained build log. Keep a missing historical input binding unresolved; a fresh
 capture supplies prospective input evidence, not proof of bytes consumed by the
@@ -108,7 +108,8 @@ with `FileShare.Read`; the compiler reported a sharing violation when writing it
 generated editor configuration. Preserve that failure, spent publication and outer
 call, conservative original result flags and unobserved root exit. The separately
 retained owned Job cleanup and current exact Linux cgroup absence are scoped
-observations, not historical or global closure. One corrective publication may use
+observations, not historical or global closure. Up to three corrective publication
+attempts may use
 the metadata-handle correction under the same command, clocks, effects and output
 limits, with a fresh invocation destination and independently accepted current
 source, input, call, accounting and operating basis. Its publication and synthetic
@@ -116,6 +117,15 @@ charges are additional, never refunded or transferred from the failed call. Reus
 accepted managed-build and exact three-test evidence; do not rerun those tests merely
 because publication failed. No new controller mechanism or account operation is
 introduced.
+
+Generate each invocation nonce as lowercase UUID v4 hexadecimal and verify the
+complete proposed admission identity against the existing caller's allowlist before
+reserving a fresh start. A prior intent whose call was rejected before Windows
+launch remains spent, including its conservatively reserved publication and
+synthetic units. The finite correction buffer includes such rejected starts; it
+does not reset an attempt, replay its call, extend its deadline or authorize more
+work after sufficient accepted evidence. Retain and review each actual failure
+before another dependent call.
 
 Use the existing finite Decimal/int codec for the complete canonical ledger.
 Before each original call, independently review and write its conservative
