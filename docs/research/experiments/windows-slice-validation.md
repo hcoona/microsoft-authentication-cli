@@ -44,7 +44,7 @@ public identity, private exclusion and finite-read checks remain applicable.
 Prepare one finite correction batch using the existing Linux development and
 Windows validation roots, installed admitted .NET/MSAL/toolchain versions, public
 retained dependencies and same designated host. Allocate at most six build/test
-actions, one Native AOT publication and five credential-free synthetic process
+actions, two Native AOT publications and six credential-free synthetic process
 scenarios from the existing common pool. Each build/test/publication has at most
 1800 seconds, 32 MiB aggregate captured output and 2 GiB newly retained public
 outputs; each synthetic scenario has at most 180 seconds, 1 MiB output and its
@@ -59,9 +59,9 @@ accept the actual source/artifact/validation correspondence afterward.
 
 Allocate one preparation action for the correction batch's fresh offline locked
 restore from the same common capacity; retain its failed-start accounting. Use
-at most five separately admitted calls of the unchanged normal launcher for
+at most six separately admitted calls of the unchanged normal launcher for
 restore, build, one corrective managed build if needed, the exact managed test
-selection, and publication. Before the corrective build, acquire and independently
+selection, publication, and one corrective publication if needed. Before the corrective build, acquire and independently
 accept the exact compiler, analyzer, and configuration inputs identified by the
 retained build log. Keep a missing historical input binding unresolved; a fresh
 capture supplies prospective input evidence, not proof of bytes consumed by the
@@ -93,6 +93,29 @@ the repeated read. This qualification does not apply to a socket, directory,
 process identity, private input or account store. Preserve the failed historical
 reader without replay, and include the repeated reads in the original operation
 and byte budgets. No new ctime owner approval or settling loop is needed.
+
+Before a tool starts, validate each generated `metadata` input against its admitted
+length, EOF and SHA-256, then close that input's Windows validation stream. Retain
+the existing read-only handles for source, cache and installed-tool inputs.
+Generated metadata is a pre-execution baseline that the admitted build may rewrite;
+it is not an immutable input throughout compilation. Reusing it requires its own
+applicable current input admission, and final artifact acceptance still binds the
+actual compiler inputs, generated sources, outputs and dependencies. Do not weaken
+hash checks or claim uninterrupted correspondence for a rewritten file.
+
+The first publication failed while the validation script held generated metadata
+with `FileShare.Read`; the compiler reported a sharing violation when writing its
+generated editor configuration. Preserve that failure, spent publication and outer
+call, conservative original result flags and unobserved root exit. The separately
+retained owned Job cleanup and current exact Linux cgroup absence are scoped
+observations, not historical or global closure. One corrective publication may use
+the metadata-handle correction under the same command, clocks, effects and output
+limits, with a fresh invocation destination and independently accepted current
+source, input, call, accounting and operating basis. Its publication and synthetic
+charges are additional, never refunded or transferred from the failed call. Reuse
+accepted managed-build and exact three-test evidence; do not rerun those tests merely
+because publication failed. No new controller mechanism or account operation is
+introduced.
 
 Use the existing finite Decimal/int codec for the complete canonical ledger.
 Before each original call, independently review and write its conservative
