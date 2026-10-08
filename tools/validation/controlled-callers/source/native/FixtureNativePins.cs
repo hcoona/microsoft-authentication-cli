@@ -77,7 +77,7 @@ internal sealed class FixtureNativePins : IDisposable
         // its controller returns. No private hash crosses the public control.
         Need(!qualifyPrivateHistoricalChanged || (!qualifyPublicHistoricalChanged && expected is not null &&
             hash is null && length is >0 and <=262144 && maximum==262144 &&
-            new[]{"R1", "R6", "R7", "R8"}.Any(group=>path==ActualAdmission.PrivateRoot+group+".json")));
+            new[]{"R1", "R6", "R7", "R8"}.Any(group=>path==@"C:\Temp\azureauth-windows-slice-108\confidential-native-account-v6\private\"+group+".json")));
         HoldDirectory(Path.GetDirectoryName(path)!);before();
         SafeFileHandle handle=Open(path,0x80000000,1,3,0x00200000);
         FileStream? stream=null;
