@@ -68,14 +68,14 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
             cancellationToken.ThrowIfCancellationRequested();
             var opened = OpenProcessToken(process, TokenQuery, out token);
             cancellationToken.ThrowIfCancellationRequested();
-            if (opened == 0 || token == 0) return null;
+            if (opened == 0 || token == 0) return UnavailableLogon(WindowsLogonReadFailure.ProcessToken);
 
             TokenStatistics statistics = default;
             cancellationToken.ThrowIfCancellationRequested();
             var queried = GetTokenInformation(token, TokenStatisticsClass, &statistics,
                 (uint)sizeof(TokenStatistics), out var returned);
             cancellationToken.ThrowIfCancellationRequested();
-            if (queried == 0 || returned != sizeof(TokenStatistics)) return null;
+            if (queried == 0 || returned != sizeof(TokenStatistics)) return UnavailableLogon(WindowsLogonReadFailure.TokenStatistics);
 
             nint allocation = 0;
             try
@@ -83,13 +83,13 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
                 cancellationToken.ThrowIfCancellationRequested();
                 var status = LsaGetLogonSessionData(&statistics.AuthenticationId, out allocation);
                 cancellationToken.ThrowIfCancellationRequested();
-                if (status != 0 || allocation == 0) return null;
+                if (status != 0 || allocation == 0) return UnavailableLogon(WindowsLogonReadFailure.SessionData);
                 var data = (LogonPrefix*)allocation;
                 // Read only Size until the returned prefix covers every selected field.
-                if (data->Size < sizeof(LogonPrefix)) return null;
+                if (data->Size < sizeof(LogonPrefix)) return UnavailableLogon(WindowsLogonReadFailure.SessionDataSize);
                 if (data->LogonId.Low != statistics.AuthenticationId.Low
-                    || data->LogonId.High != statistics.AuthenticationId.High) return null;
-                if (!ValidSid(data->Sid, cancellationToken)) return null;
+                    || data->LogonId.High != statistics.AuthenticationId.High) return UnavailableLogon(WindowsLogonReadFailure.SessionId);
+                if (!ValidSid(data->Sid, cancellationToken)) return UnavailableLogon(WindowsLogonReadFailure.SessionSid);
 
                 var identity = ClassifySid(data->Sid, cancellationToken);
                 if (identity != WindowsLogonIdentity.User)
@@ -107,6 +107,9 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
         }
         finally { CloseToken(token); }
     }
+
+    private static WindowsLocalLogon UnavailableLogon(WindowsLogonReadFailure failure) =>
+        new(0, WindowsLogonIdentity.Invalid, false, null, failure);
 
     public WindowsSessionConnection ReadSessionConnection(CancellationToken cancellationToken)
     {

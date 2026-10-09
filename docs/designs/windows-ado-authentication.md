@@ -779,6 +779,16 @@ was captured. Record only these source-defined categories, never a native error,
 identifier, exception, provider property, or input value. An admission category
 identifies a rejected predicate, not the underlying OS cause. Emission remains
 optional and cannot change result, cancellation, retry, or termination semantics.
+The own-logon observation further distinguishes its existing rejection branches:
+`host_logon_process_token`, `host_logon_token_statistics`,
+`host_logon_session_data`, `host_logon_session_data_size`,
+`host_logon_session_id`, and `host_logon_session_sid` identify an unavailable or
+invalid required read; `host_logon_type` and `host_logon_identity` identify rejected
+local conditions. `host_station_visible`, `host_station_user_unavailable`, and
+`host_station_user_mismatch` distinguish the existing station checks. The generic
+`host_logon` remains the fallback for an unclassified missing observation. These
+categories add no native query, expose no observed value, and relax no admission
+condition. Classification happens after the original cancellation recheck.
 The existing confidential validator may project only an exact bounded indication
 to a fixed safe enum; absent or invalid diagnostics remain unavailable or invalid.
 They neither establish authentication success nor relax any passing expectation.
