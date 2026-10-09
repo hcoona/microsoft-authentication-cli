@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Runtime.InteropServices;
 using Authentication.Core;
 
@@ -10,7 +11,11 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
     private const uint TokenQuery = 0x0008;
     private const int NoThreadToken = 1008; // ERROR_NO_TOKEN.
     private const uint TokenStatisticsClass = 10;
+    private const uint TokenLogonSidClass = 28;
+    private const int LogonIdsSidType = 21;
     private const int MaximumSidBytes = 68;
+    private const int SingleGroupPrefixBytes = 24; // x64 TOKEN_GROUPS with one SID_AND_ATTRIBUTES.
+    private const int MaximumLogonSidBufferBytes = SingleGroupPrefixBytes + MaximumSidBytes;
 
     public WindowsHostPlatform ReadPlatform(CancellationToken cancellationToken)
     {
@@ -95,7 +100,7 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
                 if (identity != WindowsLogonIdentity.User)
                     return new(data->LogonType, identity, false, null);
 
-                var station = ReadStation(data->Sid, cancellationToken);
+                var station = ReadStation(token, data->Sid, cancellationToken);
                 return new(data->LogonType, identity, station.Visible, station.UserMatches);
             }
             finally
@@ -156,7 +161,7 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
         return queried != 0 && bytes == sizeof(int) ? receivesInput != 0 : null;
     }
 
-    private static (bool Visible, bool? UserMatches) ReadStation(nint logonSid,
+    private static (bool Visible, bool? UserMatches) ReadStation(nint token, nint accountSid,
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -182,9 +187,57 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
             return (true, null);
         if (!ValidSid((nint)sid, cancellationToken)) return (true, null);
         cancellationToken.ThrowIfCancellationRequested();
-        var same = EqualSid(logonSid, (nint)sid);
+        var same = EqualSid(accountSid, (nint)sid);
+        cancellationToken.ThrowIfCancellationRequested();
+        if (same != 0) return (true, true);
+
+        // A station can be associated with the logon-session identity rather than
+        // the LSA account identity. Only compare that representation to the same token.
+        var logonIdentity = IsWellKnownSid((nint)sid, LogonIdsSidType);
+        cancellationToken.ThrowIfCancellationRequested();
+        if (logonIdentity == 0) return (true, false);
+
+        var groups = stackalloc byte[MaximumLogonSidBufferBytes];
+        new Span<byte>(groups, MaximumLogonSidBufferBytes).Clear();
+        cancellationToken.ThrowIfCancellationRequested();
+        queried = GetTokenInformation(token, TokenLogonSidClass, groups,
+            MaximumLogonSidBufferBytes, out bytes);
+        cancellationToken.ThrowIfCancellationRequested();
+        if (queried == 0 || bytes > MaximumLogonSidBufferBytes
+            || !TryReadLogonSidOffset(new ReadOnlySpan<byte>(groups, (int)bytes),
+                (ulong)groups, out var offset)) return (true, null);
+        var ownLogonSid = (nint)(groups + offset);
+        if (!ValidSid(ownLogonSid, cancellationToken)) return (true, null);
+        cancellationToken.ThrowIfCancellationRequested();
+        logonIdentity = IsWellKnownSid(ownLogonSid, LogonIdsSidType);
+        cancellationToken.ThrowIfCancellationRequested();
+        if (logonIdentity == 0) return (true, null);
+        same = EqualSid(ownLogonSid, (nint)sid);
         cancellationToken.ThrowIfCancellationRequested();
         return (true, same != 0);
+    }
+
+    // Parse only the admitted x64 ABI. Check the complete pointed-to SID before
+    // calling native SID functions; no pointer or identity leaves this observation.
+    internal static bool TryReadLogonSidOffset(ReadOnlySpan<byte> buffer, ulong address,
+        out int offset)
+    {
+        offset = 0;
+        if (buffer.Length is < SingleGroupPrefixBytes or > MaximumLogonSidBufferBytes
+            || address == 0 || address > ulong.MaxValue - (ulong)buffer.Length
+            || BinaryPrimitives.ReadUInt32LittleEndian(buffer) != 1
+            || (BinaryPrimitives.ReadUInt32LittleEndian(buffer[16..]) & 0xC0000000) != 0xC0000000)
+            return false;
+        var pointer = BinaryPrimitives.ReadUInt64LittleEndian(buffer[8..]);
+        if (pointer < address) return false;
+        var relative = pointer - address;
+        if (relative < SingleGroupPrefixBytes || relative % 4 != 0
+            || relative > (ulong)(buffer.Length - 8))
+            return false;
+        var sid = buffer[(int)relative..];
+        if (sid[0] != 1 || sid[1] > 15 || 8 + 4 * sid[1] > sid.Length) return false;
+        offset = (int)relative;
+        return true;
     }
 
     private static bool ValidSid(nint sid, CancellationToken cancellationToken)
