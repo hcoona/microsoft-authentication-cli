@@ -526,6 +526,13 @@ result validation. No work-account or first-use claim follows from a personal
 existing-state observation. WSL requires its actual cross-host protocol and
 evidence; native R1/R6 does not consume or require the retired ETW observer.
 
+Use ordinary foreground product invocation and standard local telemetry under the
+accepted Windows protocol. Dedicated retained hosts, script launchers, cutoff
+controllers, NativeCaller handshakes and chained receipt collectors are not
+required execution or observation gates. Keep the result validator limited to
+one Windows-local result; ordinary calls still need finite external stop and
+actual owned-process exit evidence.
+
 Keep selectors, private equality checks, tokens and raw result validation local
 to Windows. Export only the accepted safe outcome fields. Request actual human
 readiness/input when the admitted operation needs sign-in, choice, delegated
@@ -586,7 +593,9 @@ or waive the independent operating-basis review before account effects. Any new
 loss of control or unobserved closure follows the normal stop rule. The corrected
 protocol, exact call, accounting and actual outcome retain their required reviews.
 
-All new execution retains finite recipe bounds, original clocks, identifiable
-creation-time owned Jobs/scopes, complete transport and scoped outcome evidence.
-Historical risk acceptance is not artifact acceptance or an exemption from those
-checks. Normal real-stage effects retain the operating-basis rule above.
+All new execution retains finite recipe bounds, original clocks, unambiguous
+creation-time process ownership, actual exit and complete applicable transport
+evidence. When a Job or scope is used, preserve its actual scoped outcome; a
+specialized Job launcher is not mandatory for direct bounded execution. Historical
+risk acceptance is not artifact acceptance or an exemption from ownership and
+termination checks. Normal real-stage effects retain the operating-basis rule above.

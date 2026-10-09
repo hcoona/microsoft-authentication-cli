@@ -836,7 +836,7 @@ authentication candidates. Interpretation cannot change the committed result.
 
 For flow-only investigation, discard normal stdout using the Windows null device.
 For output-contract acceptance, reuse the existing Windows-local
-`ProtocolResult.Validate` allowlisted validator/redactor with the selected private
+`ProtocolResult.Validate` in `tools/result-validation` with the selected private
 request and observed exit. Export only its fixed check conclusions; even malformed
 output and additive fields are never copied into evidence. It is a result parser,
 not a new authentication host/controller. Required actual process exit and window

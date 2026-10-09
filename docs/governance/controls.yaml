@@ -13,8 +13,8 @@ controls:
     governing_rules:
       - docs/governance/governance-system.md#gov-005-controls-implement-policy
       - docs/governance/record-system.md#record-system-gate
-      - docs/research/experiments/windows-slice-validation.md#windows-environment-and-retained-inputs
-      - docs/research/experiments/windows-slice-validation.md#windows-cli-process-supplement
+      - docs/research/experiments/windows-slice-validation.md#source-and-artifact-admission
+      - docs/research/experiments/windows-slice-validation.md#ordinary-process-execution
     invariant: >-
       Pre-commit checks run only when the worktree matches the staged snapshot, and
       tracked text has no unresolved conflict markers or whitespace errors. The four
@@ -141,35 +141,6 @@ controls:
       - local-fast
       - ci
     failure_mode: The recorded result becomes inconsistent or unreproducible, blockers or conclusions contradict primitive evidence, retained output or assets violate their safety boundary, lifecycle evidence loses its source or component binding, a hash-bound component drifts without the required replay-or-migration decision, or repository validation accepts evidence that the retained validator rejects.
-
-  - id: controlled-caller-catalog-bindings
-    state: current
-    class: mechanical
-    enforcement: blocking
-    producer: hk and the controlled caller catalog checker
-    maintainer: Validation maintainer
-    consumers:
-      - Validation source authors at local-fast before commit
-      - GitHub Actions and reviewers at CI before merge
-    governing_rules:
-      - docs/research/experiments/windows-slice-validation.md#source-and-deployment-correspondence
-      - docs/research/experiments/windows-slice-validation.md#controlled-catalog-binding-correction
-    invariant: >-
-      The inert Python caller's catalog length and SHA-256 and the PowerShell
-      controller's catalog SHA-256 match the exact tracked catalog bytes.
-      Static parsing does not import a caller or grant execution or artifact acceptance.
-    runner: hk
-    implementation:
-      kind: hk-steps
-      steps:
-        local-fast:
-          - controlled-caller-catalog-bindings
-        ci:
-          - controlled-caller-catalog-bindings
-    execution_points:
-      - local-fast
-      - ci
-    failure_mode: A catalog update leaves one caller's literal stale and consumes a Windows attempt before any compiler starts.
 
   - id: requirement-id-uniqueness
     state: current
