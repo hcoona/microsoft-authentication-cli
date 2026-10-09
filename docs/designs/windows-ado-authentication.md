@@ -328,7 +328,7 @@ need to inspect real logon state merely to exercise the owned window.
 | Calling thread is not impersonating | `OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, ...)` must fail specifically with `ERROR_NO_TOKEN`. A returned token, anonymous impersonation, or any other failure rejects admission. Capture the native error immediately and close any returned token. |
 | Own process has an interactive local logon | Open only the current process token with `TOKEN_QUERY`. Use `GetTokenInformation(TokenStatistics).AuthenticationId` to query that one logon through `LsaGetLogonSessionData`. Require sufficient returned structure size, the matching LUID and a valid nonnull SID; reject LocalSystem, LocalService and NetworkService. Accept only `Interactive`, `RemoteInteractive`, `CachedInteractive` or `CachedRemoteInteractive`. Other types, including `NewCredentials`, reject admission. |
 | Current session is actively connected | Obtain the current process's nonzero session ID with `ProcessIdToSessionId`. Query only that local session with `WTSQuerySessionInformationW(WTSConnectState)` and require a correctly sized `WTSActive` value. Unknown, disconnected, malformed or unavailable state rejects admission. |
-| Visible station belongs to the local logon user | On the borrowed `GetProcessWindowStation` handle, require successful `GetUserObjectInformationW(UOI_FLAGS)` with `WSF_VISIBLE`. Require a bounded valid nonempty `UOI_USER_SID` equal to the own-logon SID. Missing associated user, mismatch or failed observation rejects admission. |
+| Visible station belongs to the local logon user | On the borrowed `GetProcessWindowStation` handle, require successful `GetUserObjectInformationW(UOI_FLAGS)` with `WSF_VISIBLE`. Require a bounded valid nonempty `UOI_USER_SID`. Accept exact equality to the own-logon account SID, or, only for an associated SID classified as `WinLogonIdsSid`, exact equality to the logon SID returned by `GetTokenInformation(TokenLogonSid)` on that same current process token. Missing associated user, mismatch or failed observation rejects admission. |
 | Calling desktop currently receives input | On the borrowed `GetThreadDesktop(GetCurrentThreadId())` handle, require successful `GetUserObjectInformationW(UOI_IO)` with a true native BOOL. A desktop handle alone does not satisfy this condition. |
 
 The [.NET OS architecture contract](https://learn.microsoft.com/dotnet/core/compatibility/interop/7.0/osarchitecture-emulation)
@@ -348,10 +348,32 @@ does not revert impersonation when `OpenAsSelf` is true. The
 requires no administrator role for the session owner. Its
 [logon-type contract](https://learn.microsoft.com/windows/win32/api/ntsecapi/ne-ntsecapi-security_logon_type)
 distinguishes `NewCredentials`, which can keep the local identity while replacing outbound
-credentials. The station SID comparison detects a different local user; it does not prove
-equal logon sessions or exhaustively detect same-user alternate-launch provenance. Retain
-normal launch as an acceptance precondition; do not silently require `LOGON_WINLOGON`,
-another user's token, a shell process, or privileged `WTSQueryUserToken` access.
+credentials. The LSA session's account SID and a token's logon SID represent different identities.
+The [token-information contract](https://learn.microsoft.com/windows/win32/api/winnt/ne-winnt-token_information_class)
+returns the latter as `TOKEN_GROUPS` for `TokenLogonSid`; the
+[group contract](https://learn.microsoft.com/windows/win32/api/winnt/ns-winnt-token_groups)
+identifies it with `SE_GROUP_LOGON_ID`. The
+[well-known SID classes](https://learn.microsoft.com/windows/win32/api/winnt/ne-winnt-well_known_sid_type)
+include `WinLogonIdsSid` (21). Do not compare a logon SID to an account SID and interpret
+inequality as a different user. Preserve the account-SID comparison, then allow the
+same-token logon-SID comparison only when the associated station SID has that class.
+Use one fixed bounded query, not arbitrary group enumeration or a SID synthesized
+from the authentication LUID. On the admitted x64 ABI, accept exactly one group,
+require `SE_GROUP_LOGON_ID`, and validate its SID pointer and complete SID bytes within
+the returned buffer before native validation or equality. A failed or malformed query
+remains unavailable; a valid unequal SID remains a mismatch. Read no token names,
+foreign tokens or account metadata, and export no SID, group attributes or pointers.
+
+The historical
+[Winlogon interface](https://learn.microsoft.com/windows/win32/api/winwlx/nf-winwlx-wlxloggedoutsas)
+describes using a logon-session SID to protect the station and desktop. This motivates
+handling the distinct representation; it does not prove which representation the
+current Windows host returns or establish the cause of a failed acceptance attempt.
+The account-SID branch detects a different local user but does not prove equal logon
+sessions. The logon-SID branch requires exact same-token logon identity. Neither branch
+exhaustively detects same-user alternate-launch provenance. Retain normal launch as an
+acceptance precondition; do not silently require `LOGON_WINLOGON`, another user's token,
+a shell process, or privileged `WTSQueryUserToken` access.
 
 The [WTS query](https://learn.microsoft.com/windows/win32/api/wtsapi32/nf-wtsapi32-wtsquerysessioninformationw)
 can fail when Remote Desktop Services is unavailable. A session ID is not substitute
