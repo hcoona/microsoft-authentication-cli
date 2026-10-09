@@ -448,6 +448,66 @@ public sealed class WindowsHostAdmissionScenarios
         NoProviderEffects(scene);
     }
 
+    [TestMethod]
+    public async Task SessionLossDuringDesktopObservationPreventsInitialization()
+    {
+        foreach (var session in new[] { WindowsSessionConnection.Inactive, WindowsSessionConnection.QueryUnavailable })
+        {
+            using var scene = new Scene();
+            scene.DuringObservation = name => { if (name == "desktop") scene.Session = session; };
+            Failure(AuthenticationFailure.MechanismUnavailable, await scene.RunAsync());
+            CollectionAssert.AreEqual(new[] { "desktop", "session" }, scene.Observed.TakeLast(2).ToArray());
+            NoProviderEffects(scene);
+        }
+    }
+
+    [TestMethod]
+    public void AdmissionAndRecheckRejectSessionLossAfterDesktopComparison()
+    {
+        foreach (var recheck in new[] { false, true })
+        {
+            using var scene = new Scene();
+            scene.DuringObservation = name => { if (name == "desktop") scene.Session = WindowsSessionConnection.Inactive; };
+            var trace = new WindowsMechanismTrace();
+            var admission = new WindowsHostAdmission(scene, trace);
+            var exception = Assert.ThrowsExactly<ProviderFailureException>(() =>
+            {
+                if (recheck) admission.Recheck(scene.Original.Token);
+                else admission.Admit(scene.Original.Token);
+            });
+            Assert.AreEqual(AuthenticationFailure.MechanismUnavailable, exception.Failure);
+            Assert.AreEqual(WindowsMechanismFailure.HostSessionInactive, trace.Failure);
+            CollectionAssert.AreEqual(new[] { "desktop", "session" }, scene.Observed.TakeLast(2).ToArray());
+            NoProviderEffects(scene);
+        }
+    }
+
+    [TestMethod]
+    public void CancellationAfterTrailingSessionObservationHasPrecedence()
+    {
+        foreach (var recheck in new[] { false, true })
+        foreach (var throwing in new[] { false, true })
+        {
+            using var scene = new Scene();
+            scene.DuringObservation = name =>
+            {
+                if (name != "session" || !scene.Observed.Contains("desktop")) return;
+                scene.Original.Cancel();
+                scene.Session = WindowsSessionConnection.Inactive;
+                if (throwing) throw new InvalidOperationException(PrivateMarker);
+            };
+            var trace = new WindowsMechanismTrace();
+            var admission = new WindowsHostAdmission(scene, trace);
+            Assert.ThrowsExactly<OperationCanceledException>(() =>
+            {
+                if (recheck) admission.Recheck(scene.Original.Token);
+                else admission.Admit(scene.Original.Token);
+            });
+            Assert.AreEqual(WindowsMechanismFailure.Unavailable, trace.Failure);
+            NoProviderEffects(scene);
+        }
+    }
+
     private static WindowsHostPlatform ValidPlatform() => new(true, Architecture.X64, Architecture.X64, new(10, 0, 22000));
 
     private static async Task RejectedAfter(Scene scene, string observation)

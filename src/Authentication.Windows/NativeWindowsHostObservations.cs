@@ -8,6 +8,7 @@ namespace Authentication.Windows;
 // borrowed pointer, handle, account name, or diagnostic. Construction is inert.
 internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHostObservations
 {
+    internal const int MaximumDesktopNameBytes = 512;
     private const uint TokenQuery = 0x0008;
     private const int NoThreadToken = 1008; // ERROR_NO_TOKEN.
     private const uint TokenStatisticsClass = 10;
@@ -150,15 +151,66 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
         RequireWindows(cancellationToken);
         var thread = GetCurrentThreadId();
         cancellationToken.ThrowIfCancellationRequested();
-        var desktop = GetThreadDesktop(thread); // Borrowed; never CloseDesktop.
+        var calling = GetThreadDesktop(thread); // Borrowed; never CloseDesktop.
         cancellationToken.ThrowIfCancellationRequested();
-        if (desktop == 0) return null;
-        int receivesInput = 0;
-        cancellationToken.ThrowIfCancellationRequested();
-        var queried = GetUserObjectInformationW(desktop, 6, &receivesInput,
-            sizeof(int), out var bytes); // UOI_IO returns a native BOOL.
-        cancellationToken.ThrowIfCancellationRequested();
-        return queried != 0 && bytes == sizeof(int) ? receivesInput != 0 : null;
+        if (calling == 0) return null;
+
+        nint input = 0;
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            input = OpenInputDesktop(0, 0, 1); // Non-inheritable DESKTOP_READOBJECTS only.
+            cancellationToken.ThrowIfCancellationRequested();
+            if (input == 0) return null;
+            var callingName = stackalloc char[MaximumDesktopNameBytes / sizeof(char)];
+            var inputName = stackalloc char[MaximumDesktopNameBytes / sizeof(char)];
+            var callingBuffer = new Span<char>(callingName, MaximumDesktopNameBytes / sizeof(char));
+            var inputBuffer = new Span<char>(inputName, MaximumDesktopNameBytes / sizeof(char));
+            callingBuffer.Clear();
+            inputBuffer.Clear();
+
+            cancellationToken.ThrowIfCancellationRequested();
+            var queried = GetUserObjectInformationW(calling, 2, callingName,
+                MaximumDesktopNameBytes, out var callingBytes); // UOI_NAME.
+            cancellationToken.ThrowIfCancellationRequested();
+            if (queried == 0 || !TryGetDesktopNameLength(callingBuffer, callingBytes, out var callingLength))
+                return null;
+            cancellationToken.ThrowIfCancellationRequested();
+            queried = GetUserObjectInformationW(input, 2, inputName,
+                MaximumDesktopNameBytes, out var inputBytes);
+            cancellationToken.ThrowIfCancellationRequested();
+            if (queried == 0 || !TryGetDesktopNameLength(inputBuffer, inputBytes, out var inputLength))
+                return null;
+            // Both objects belong to the unchanged current process station. Compare
+            // complete returned names exactly; never normalize or export them.
+            return callingBuffer[..callingLength].SequenceEqual(inputBuffer[..inputLength]);
+        }
+        finally
+        {
+            if (input != 0 && CloseDesktop(input) == 0)
+                throw new InvalidOperationException("Input desktop observation cleanup failed.");
+        }
+    }
+
+    internal static bool TryGetDesktopNameLength(ReadOnlySpan<char> buffer, uint returnedBytes, out int length)
+    {
+        length = 0;
+        if (returnedBytes < 4 || returnedBytes > MaximumDesktopNameBytes
+            || returnedBytes % sizeof(char) != 0 || returnedBytes / sizeof(char) > buffer.Length)
+            return false;
+        var count = (int)(returnedBytes / sizeof(char));
+        if (buffer[count - 1] != '\0') return false;
+        for (var index = 0; index < count - 1; index++)
+        {
+            var character = buffer[index];
+            if (character == '\0' || char.IsLowSurrogate(character)) return false;
+            if (char.IsHighSurrogate(character))
+            {
+                if (++index >= count - 1 || !char.IsLowSurrogate(buffer[index])) return false;
+            }
+        }
+        length = count - 1;
+        return true;
     }
 
     private static (bool Visible, bool? UserMatches) ReadStation(nint token, nint accountSid,
@@ -390,6 +442,14 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
     [LibraryImport("user32.dll")]
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     private static partial nint GetThreadDesktop(uint thread);
+
+    [LibraryImport("user32.dll")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+    private static partial nint OpenInputDesktop(uint flags, int inherit, uint access);
+
+    [LibraryImport("user32.dll")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+    private static partial int CloseDesktop(nint desktop);
 
     [LibraryImport("user32.dll")]
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
