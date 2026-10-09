@@ -529,12 +529,20 @@ evidence; native R1/R6 does not consume or require the retired ETW observer.
 Use ordinary foreground product invocation and standard local telemetry under the
 accepted Windows protocol. Dedicated retained hosts, script launchers, cutoff
 controllers, NativeCaller handshakes and chained receipt collectors are not
-required execution or observation gates. Keep the result validator limited to
-one Windows-local result; ordinary calls still need finite external stop and
+required execution or observation gates. Keep result validation Windows-only
+and limited to one result; ordinary calls still need finite external stop and
 actual owned-process exit evidence.
 
 Keep selectors, private equality checks, tokens and raw result validation local
-to Windows. Export only the accepted safe outcome fields. Request actual human
+to Windows by default. Only the explicitly owner-approved and merged
+[four-call WSL batch](experiments/windows-slice-validation.md#bounded-wsl-result-transport-batch),
+within its accepted Wave grant, may transport selected request values and a
+token-bearing result through bounded private Linux caller memory and ordinary
+pipes before Windows-only validation. This exception remains inert until the
+owner accepts that additional exposure and the amendment merges; it permits no
+confidential files or retained output and relaxes no other containment, stop,
+accounting or historical-evidence requirement. Export only the accepted safe
+outcome fields. Request actual human
 readiness/input when the admitted operation needs sign-in, choice, delegated
 consent or unlock, after completing its automated preparation. Do not ask the
 owner to attend merely to watch automation or renew an already accepted effects

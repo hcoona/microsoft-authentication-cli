@@ -3,7 +3,8 @@ using System.Text.Json;
 using WindowsResultValidation;
 
 // This entry processes one result. Its caller owns process control and the receipt time.
-// All arguments and stdin must remain Windows-local for real-account validation.
+// This entry runs only on Windows. Native inputs stay Windows-local; an admitted
+// WSL caller may return its confidential result here through the standard stdin pipe.
 try
 {
     if (args.Length < 8 || !OperatingSystem.IsWindows()) throw new InvalidResultException();

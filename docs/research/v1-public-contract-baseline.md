@@ -1315,6 +1315,26 @@ the retained outcomes for the other entries:
 | RECHECK-006 | [Issue #398](https://github.com/AzureAD/microsoft-authentication-cli/issues/398) remains open with no comments, updated `2024-08-13T16:18:59Z`. No cache fallback or secure-store support claim changes. |
 | RECHECK-007 | The same-day [Client Profile and tenant assessment](#client-profile-and-tenant-mapping-assessment) remains applicable. Neither direct invocation nor another Azure DevOps consumer enables a Profile or enlarges the observed account/host coverage. |
 
+### Bounded WSL Transport Recheck
+
+**Public source findings, retrieved 2026-10-09 UTC:** The bounded direct-invocation
+batch reevaluates RECHECK-003/005. [Issue #460](https://github.com/AzureAD/microsoft-authentication-cli/issues/460)
+is still open, updated `2026-05-13T17:25:51Z`. [PR #462](https://github.com/AzureAD/microsoft-authentication-cli/pull/462)
+was merged on `2026-09-17T19:33:15Z`; this supersedes the earlier retrieved
+open/unmerged status, without rewriting the fixed patch findings. Its Linux broker
+path and the current [MSAL.NET WSL guidance](https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl)
+do not themselves establish Windows CLI result transport, strict selected-account
+behavior or this fork's WSL acceptance. The guidance still describes Linux broker
+packages, native dependencies and an unlocked keyring. The selected deployment
+remains direct Windows executable invocation with Windows WAM; it adopts no Linux
+broker, keyring, forwarding service or new dependency.
+
+The registry evaluation retains RECHECK-001/002's interaction/account constraints,
+RECHECK-004's unselected browser path, RECHECK-006's state ownership and RECHECK-007's
+experimental Profile limits. RECHECK-008's exact candidate/dependency basis and
+RECHECK-009's provider-failure mapping are unchanged. This recheck authorizes no
+execution, enables no Profile and makes no runtime, release or support claim.
+
 ### Azure Artifacts Token Forms and NuGet Paths
 
 **Immutable source findings, retrieved 2026-09-11 UTC:** Azure Artifacts Credential Provider at

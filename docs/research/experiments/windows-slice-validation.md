@@ -47,7 +47,9 @@ alone do not establish dependency, source, native-image or Profile provenance.
 Retain stronger content/identity checks and the accepted historical ctime
 qualification. Do not copy or recompile inputs already sufficiently accepted.
 
-Keep selected account values, Profile binding and equality checks Windows-local.
+Keep native-call account values, Profile binding and equality checks Windows-local.
+Only the bounded WSL batch below admits confidential caller transport; its
+Windows-only validator retains the same exact request and result checks.
 Use the existing owner-designated personal and work roles and existing private
 configuration; no substitute account, enumeration for unrelated purposes, cache
 repair, Profile provisioning or rewriting of private documents is permitted.
@@ -107,11 +109,14 @@ and syntactically valid unknown reason text are not forwarded.
 
 The validator owns no process, clock, file discovery, account acquisition, retry,
 telemetry collection or authentication lifetime. It receives the actual exit and a
-receipt timestamp; it cannot prove those observations itself. No real result, token,
+receipt timestamp; it cannot prove those observations itself. For native calls, no
+real result, token,
 account/tenant identifier or identifier hash, authorization code, provider text or
 raw diagnostic may enter Linux, agent/chat output, retained captures or Git.
 Do not write a token-bearing result to an intermediate file. The ordinary shell call
-must route confidential stdout directly to Windows-local in-memory validation.
+must route native-call confidential stdout directly to Windows-local in-memory
+validation. Only the bounded WSL batch below admits an intermediate caller pipe
+and memory buffer before returning the result to this Windows-only validator.
 Raw stderr is not a fallback: only the product's fixed safe indications and bounded
 allowlisted telemetry may become evidence.
 
@@ -173,10 +178,83 @@ is not required merely to watch automated preparation or authentication logs.
 ## Actual WSL Acceptance
 
 Native R1/R6 and R7/R8 do not establish actual WSL transport, caller-death/lifetime-pipe
-behavior or WSL/UI acceptance. Keep both account-role WSL obligations open. This
-protocol does not admit confidential token transport through WSL. Accept the smallest
-explicit Wave/protocol boundary amendment before such execution; do not resurrect the
-retired ETW observer, host or controller chain to prepare it.
+behavior or WSL/UI acceptance. Keep both account-role WSL obligations open. The batch
+below admits only normal result transport and an initially closed lifetime pipe.
+It does not admit caller-death or interactive WSL experiments. Do not resurrect the
+retired ETW observer, host or controller chain to prepare or observe it.
+
+### Bounded WSL Result-Transport Batch
+
+Use the existing designated WSL2 Linux x64 caller and Windows 11 x64 ordinary user,
+the same accepted Native AOT candidate, selected account roles, experimental
+Profile and Azure DevOps default scope. Independently accept the native primary
+and fresh-process success for a role before its WSL cases. Reuse their unchanged
+source, dependency, artifact and validator evidence; do not recompile or recopy
+those assets. This is an existing-state experiment, not clean first use or service
+authorization. Normal protected provider updates retain the native account boundary.
+
+| Case, once per role | Request and expected observation |
+| --- | --- |
+| Normal result | Same selected request, noninteractive permission, lifetime-pipe writer kept open. Directly invoke the Windows CLI through WSL interop; require complete normal stdout, validated `Success`/`Silent`, exit 0 and complete transport termination. |
+| Initially closed pipe | Same explicit request and noninteractive permission, but close the dedicated writer before starting the CLI. Require a valid `Cancelled`/`None` result, exit 1, no token, and complete transport termination before accepting the case. |
+
+Allocate all four product starts, discoveries and silent calls conservatively from
+the remaining shared real pool; allocate no interactive call. Precharge the whole
+four-case batch and its exact bounded file passes before its first covered operation.
+There is no automatic retry. Missing configuration, an unexpected result, malformed
+output, a timeout or incomplete ownership/completion stops dependent cases for
+review. A valid closed `InteractionRequired` ends that role's probe; it does not
+authorize interaction under this batch.
+
+Use ordinary foreground shell/process facilities. Before authentication, one
+Windows-local read of the existing private account data file, at most 8 KiB and
+30 seconds, projects only the selected email and applicable tenant into a private
+caller pipe, at most 1 KiB. Preserve a supplied work tenant; only its absence uses
+`common` under `V2-REQ-019`. Reject invalid supplied values without fallback or
+repair. Supply exactly those values to the product and validator. The Profile path
+retains Windows interpretation; no Linux configuration becomes authoritative.
+
+The admitted Linux caller may hold the selected request values and complete result
+in bounded private memory. Product stdout must pass through its ordinary interop
+pipe before returning, without an intermediate file, to the existing Windows-only
+validator. The caller does not parse token claims or expose result fields. Disable
+caller core dumps; retain no private payload, selector, identifier hash, raw stderr
+or exception text. Return only the validator's explicit safe projection and fixed
+phase, exit, timeout and completion facts. Malformed or unexpected output yields a
+fixed failure; it is never partially forwarded. Product local telemetry remains
+optional and cannot change the authentication result or cause another attempt.
+
+Each call has the same 120-second product deadline, at most 130 seconds for product
+completion/transport, 10 seconds for validator delivery/completion and five seconds
+of validator stop allowance. Bound the whole foreground call to 180 seconds plus
+five final stop seconds; component deadlines cannot renew that outer clock.
+Limit product stdout and stderr to 1 MiB each and safe validator output to 4 KiB.
+Use the same receipt-time and actual-exit inputs as native validation. Keep exactly
+one caller-owned lifetime-pipe writer, prevent its inheritance by other children,
+and close unused ends. Stdin remains a lifetime signal, never a credential channel.
+
+Bound necessary public-input and private-configuration checks to at most four
+metadata passes, 64 operations and 16 MiB plus 8 KiB per pass, 30 seconds each,
+within the unchanged shared passive ceilings. Exact admission must include any
+necessary public materialization pass; no new artifact survey is permitted.
+
+Require actual interop exit and both complete streams; source safeguards and
+telemetry alone cannot establish Windows process completion. A Linux signal is
+not proof of Windows termination. Stop only experiment-owned objects through
+ordinary bounded facilities, never shared brokers or unrelated processes. Preserve
+the original deadline on failure: close the lifetime writer and allow completion
+only through the remaining product deadline and its five-second shutdown allowance.
+Ending an owned Linux relay after that limit is not observed Windows closure.
+Preserve
+any missing Windows completion and consumed charge; do not infer success or admit
+another attempt from the configured deadline. Independently accept the actual
+safe result, transport and scoped completion before dependent execution.
+
+Record unavailable UI evidence explicitly. Neither these four cases nor normal
+interop completion proves UI absence, EOF during WAM, Linux-caller-death behavior,
+timeout behavior or full WSL acceptance. Those required observations remain open
+and need their own smallest admitted calls; this batch grants no observer project,
+retained host, new controller, network listener or confidential file transport.
 
 ## Outcome-Based Execution and Accounting
 
