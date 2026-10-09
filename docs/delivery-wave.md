@@ -102,7 +102,7 @@ that disposition. Normal account-effects authority above remains standing for
 in-boundary real-stage protocols and corrections.
 
 Keep native-call selectors and confidential token validation Windows-local. The
-bounded WSL batch below is the sole exception for confidential caller transport.
+WSL boundary below is the sole exception for confidential caller transport.
 Do not export tokens, account identifiers or their hashes, authorization codes,
 provider text, or raw diagnostics to chat, agent output, logs, retained captures,
 or Git. Require actual operator input or readiness only when
@@ -111,27 +111,36 @@ preparation and observation do not require attendance merely to watch them.
 Administrator consent, account addition/removal, cache clearing/import, registration
 changes, authenticated service requests, and remote resource mutation are excluded.
 
-**Bounded WSL result-transport batch:** The repository owner authorizes four
-ordinary direct Windows CLI invocations from the existing designated WSL2 caller:
-one silent normal-result case and one initially closed lifetime-pipe case for
-each selected account role. Allocate four starts, discoveries and silent calls,
-and no interactive calls, from the remaining shared real pool before execution.
-The owner accepts the additional exposure of the selected request values and
-normal stdout result, including a successful access token, to this trusted Linux
-caller's bounded process memory and ordinary interop pipes. Read the existing
+**WSL selected-role acceptance boundary:** The repository owner authorizes the
+necessary bounded actual WSL scenarios for the same selected personal and work
+roles: normal result transport, silent-first permission-gated interaction,
+fresh-process reuse and owned lifetime-pipe/caller-death cancellation. Allocate
+independently reviewed finite batches from the remaining shared real and passive
+pools; this boundary creates no second capacity pool or per-case owner grant.
+The owner accepts exposure of the selected request values and normal stdout
+result, including a successful access token, to this trusted Linux caller's
+bounded process memory and ordinary interop pipes. The normal account-effects
+boundary above also applies to permitted WSL interaction and cancellation:
+provider-managed sessions and protected updates may complete despite cancellation
+and are not promised to be reversible. Read the existing
 private account configuration only on Windows; project only the selected email
 and applicable tenant to the caller. Keep token-bearing results out of files,
 tool output and retained evidence. Return the result to the existing Windows-only
 validator and export only its fixed check conclusions and process facts.
 
-The [WSL batch protocol](research/experiments/windows-slice-validation.md#bounded-wsl-result-transport-batch)
+The [WSL protocol](research/experiments/windows-slice-validation.md#bounded-wsl-result-transport-batch)
 owns exact calls, finite memory/time limits, accounting, termination and acceptance.
 Reuse the accepted candidate, Profile and validator; introduce no new executable
-project, generic runner, controller, host, listener or cache. This grant covers
-neither an interactive WSL request nor a caller-death experiment. Preserve missing
-UI, caller-death and later lifetime evidence as incomplete; this batch does not
-complete the WSL or whole-Slice claim by itself. Historical dispositions do not
-independently authorize this confidential transport.
+project, generic runner, controller, retained host, listener or cache. Request
+fresh actual readiness only when an admitted operation needs sign-in, selection
+or delegated user consent; do not force UI, change scopes or repair account state
+to manufacture an observation. Ending a Linux caller does not prove Windows
+completion. Lifetime recipes must bind owned objects, preserve original deadlines,
+define available completion evidence and stop dependent execution on a new gap;
+apply the accepted current-absence disposition only through its existing review.
+Preserve missing UI and lifetime evidence as incomplete. No allocation, valid
+failed result or caller exit completes the WSL or whole-Slice claim. Historical
+dispositions do not independently authorize this confidential transport.
 
 **Standing historical dispositions:** Continue the separately accepted
 0057/0064/0068/0093/0107/0110 lifetime/interference dispositions only for

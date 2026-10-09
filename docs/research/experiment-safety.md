@@ -535,7 +535,7 @@ actual owned-process exit evidence.
 
 Keep selectors, private equality checks, tokens and raw result validation local
 to Windows by default. Only the explicitly owner-approved and merged
-[four-call WSL batch](experiments/windows-slice-validation.md#bounded-wsl-result-transport-batch),
+[WSL selected-role protocol](experiments/windows-slice-validation.md#bounded-wsl-result-transport-batch),
 within its accepted Wave grant, may transport selected request values and a
 token-bearing result through bounded private Linux caller memory and ordinary
 pipes before Windows-only validation. This exception remains inert until the
@@ -549,6 +549,18 @@ owner to attend merely to watch automation or renew an already accepted effects
 decision. Administrator consent, account addition/removal, cache clearing/import,
 registration changes, authenticated resource requests and remote mutation remain
 outside this stage.
+
+The accepted WSL grant may include permission-gated interaction and owned caller
+lifetime cancellation under the same normal account-effects boundary. Each finite
+batch still needs its own accepted exact protocol before execution; a transport
+exception alone does not admit an interactive or caller-death call. Fresh readiness
+follows automated preparation when sign-in, selection or delegated consent is
+actually needed. Do not force interaction or change account state to obtain UI
+evidence. Ending the Linux caller can remove its immediate observation/control
+path; preserve the original Windows deadline and any missing completion or
+account-effects extent. Unknown termination is not success, a renewed clock or a
+cleanup grant. Existing current-absence and independent operating-basis rules
+remain applicable; no new observer, controller or retained host is authorized.
 
 Before account effects, review the operating basis and relevance of the known
 historical process/interference uncertainties. Credential-free exceptions are not
