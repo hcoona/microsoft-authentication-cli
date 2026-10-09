@@ -5,6 +5,7 @@
     <EnableMSTestRunner>true</EnableMSTestRunner>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../tools/result-validation/*.cs" Link="ResultValidation/%(Filename)%(Extension)" />
     <ProjectReference Include="../../src/Authentication.Core/Authentication.Core.csproj" />
     <PackageReference Include="MSTest" Version="[4.1.0]" />
   </ItemGroup>

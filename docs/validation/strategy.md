@@ -434,14 +434,11 @@ prove resource equivalence, tenant precedence, provider behavior, or lifecycle c
 | Output and optional local telemetry | One complete result with matching 0/1 status, or recognizable transport failure. Only validated success exposes a token; stderr has no token/email/identifier/provider text. Local telemetry opt-in, overflow, or sink failure cannot alter authentication. | Contract and orchestration scenarios with synthetic secret markers; no production credential fixture. |
 | Local OpenTelemetry-compatible observation | Owned request/phase activities have explicit parentage; phase starts are observable before an awaited operation finishes. Only allowlisted local observations are emitted. Ambient activity, outgoing HTTP headers, ordinary result/exit, cancellation and process bounds are preserved. Optional interpretation of opaque/malformed JWTs cannot change success or expose claims. | Controlled listeners and safe-sink scenarios with synthetic private markers, listener/sink failure and overflow, parentage and ambient-context checks, and opaque/duplicate/oversized-token cases; exact Windows artifact/lifetime checks before dependent real use. Telemetry is not an independent proof of process exit, visible UI, normal stdout or actual WSL credential transport. |
 
-The [native selected-account preparation](../research/experiments/windows-slice-validation.md#native-windows-selected-account-acceptance-preparation)
-defines a first real product observation for the personal-account and subsequent
-invocation rows above. Its native creation-handle/Job route does not consume the
-direct WSL observer, so ETW calibration is not a prerequisite for preparing those
-two native cases. The preparation remains inert and supplies no runtime result.
-The current Wave owns normal account-effects authority; exact protocol, artifact,
-private-input, call and real-host operating-basis acceptance still precede execution.
-Keep actual WSL, work-account and other evidence obligations above open independently.
+The [direct selected-account protocol](../research/experiments/windows-slice-validation.md#selected-account-scenarios)
+uses ordinary product invocation, standard local telemetry and Windows-local result
+validation. Real-account execution still requires exact source/artifact/request/call,
+cumulative accounting and current operating-basis acceptance. Work-account, actual
+WSL, visible-UI and other evidence obligations remain independently open.
 
 The [local host predicates](../designs/windows-ado-authentication.md#local-windows-host-admission)
 do not prove continuing eligibility, every alternate-launch origin or WAM health.
@@ -449,23 +446,23 @@ Controlled results establish branching and suppressed effects; historical accoun
 experiments do not establish this new local metadata path. Do not force service, account,
 desktop or logon-state changes merely to manufacture rejection evidence.
 
-The [controlled host-admission result](../research/experiments/windows-slice-validation.md#controlled-windows-host-admission-green-evidence)
+The [controlled host-admission result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#controlled-windows-host-admission-green-evidence)
 binds the unchanged twenty-two scenario methods to their red/green execution and
 bounded evidence. It covers synthetic fact classification and suppressed provider
 effects; native observations, UI-thread integration and real-provider acceptance
 retain the obligations above.
 
-The [controlled owned-host fault result](../research/experiments/windows-slice-validation.md#owned-host-fault-lifetime-evidence)
+The [controlled owned-host fault result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#owned-host-fault-lifetime-evidence)
 binds core request termination, cancellation/deadline precedence and withholding
 uncommitted success to the unchanged red/green scenarios. That core-only result does
 not by itself establish actual UI fault/commit synchronization or process drain.
 
-The [request-context initialization result](../research/experiments/windows-slice-validation.md#request-context-initialization-evidence)
+The [request-context initialization result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#request-context-initialization-evidence)
 binds the existing personal, fixed-work and explicit-work application scenarios to
 the same admitted request at provider initialization and acquisition. It supplies
 controlled forwarding evidence; real provider initialization remains separate.
 
-The [owned-host process result](../research/experiments/windows-slice-validation.md#owned-host-process-composition-evidence)
+The [owned-host process result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#owned-host-process-composition-evidence)
 binds the ten managed Windows scenarios to typed local cancellation/fault consumption
 before result commitment, cancellation during creation, the first host-ending bound,
 and actual owned-thread/callback drain. The controlled providers and owned native
@@ -473,7 +470,7 @@ windows establish those process-composition observations. They do not establish 
 native admission, production MSAL initialization, WAM/account reuse, actual WSL caller
 lifetime, final Native AOT or whole-Slice acceptance.
 
-The [MSAL adapter composition result](../research/experiments/windows-slice-validation.md#msal-adapter-composition-evidence)
+The [MSAL adapter composition result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#msal-adapter-composition-evidence)
 binds sixteen unchanged red/green scenarios to request initialization, Profile/tenant
 mapping, exact account and claims continuation, cancellation, safe provider failures,
 and one owned HTTP client retained until cancellation and drain. Controlled sessions
@@ -482,7 +479,7 @@ MSAL construction has separate evidence below. Real broker availability and acco
 default entry activation, Windows/WSL lifetime and final Native AOT retain their
 separate evidence obligations.
 
-The [concrete MSAL construction result](../research/experiments/windows-slice-validation.md#concrete-msal-construction-evidence)
+The [concrete MSAL construction result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#concrete-msal-construction-evidence)
 binds four unchanged red/green scenarios to the real shared production application
 builder: common, organizations and an exact synthetic tenant configuration, plus
 original cancellation before construction. Supplied HTTP-factory identity, disabled
@@ -491,7 +488,7 @@ Only the construction helper executes; the remaining concrete session bindings h
 source and compiled review. Real availability, discovery/acquisition, native/default
 activation, WAM/account reuse, Windows/WSL lifetime and final Native AOT remain open.
 
-The [shared default HTTP composition result](../research/experiments/windows-slice-validation.md#shared-default-http-composition-evidence)
+The [shared default HTTP composition result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#shared-default-http-composition-evidence)
 binds two unchanged red/green scenarios to the common public/default composition:
 HTTP ownership survives pending cancellation work, actual request/host/pipe/cancellation
 drains precede disposal, and disposal precedes process completion. A disposal stall
