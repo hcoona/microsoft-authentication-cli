@@ -178,9 +178,11 @@ is not required merely to watch automated preparation or authentication logs.
 ## Actual WSL Acceptance
 
 Native R1/R6 and R7/R8 do not establish actual WSL transport, caller-death/lifetime-pipe
-behavior or WSL/UI acceptance. Keep both account-role WSL obligations open. The batch
-below admits only normal result transport and an initially closed lifetime pipe.
-It does not admit caller-death or interactive WSL experiments. Do not resurrect the
+behavior or WSL/UI acceptance. Keep unobserved account-role WSL obligations open.
+The calls below admit normal result transport and an initially closed lifetime
+pipe; the personal continuation additionally admits permission-gated interaction.
+Other lifetime scenarios need their own accepted exact recipes within the Wave's
+WSL boundary before execution. Do not resurrect the
 retired ETW observer, host or controller chain to prepare or observe it.
 
 ### Bounded WSL Result-Transport Batch
@@ -198,13 +200,13 @@ authorization. Normal protected provider updates retain the native account bound
 | Normal result | Same selected request, noninteractive permission, lifetime-pipe writer kept open. Directly invoke the Windows CLI through WSL interop; require complete normal stdout, validated `Success`/`Silent`, exit 0 and complete transport termination. |
 | Initially closed pipe | Same explicit request and noninteractive permission, but close the dedicated writer before starting the CLI. Require a valid `Cancelled`/`None` result, exit 1, no token, and complete transport termination before accepting the case. |
 
-Allocate all four product starts, discoveries and silent calls conservatively from
-the remaining shared real pool; allocate no interactive call. Precharge the whole
-four-case batch and its exact bounded file passes before its first covered operation.
+Allocate each finite batch's product starts, discoveries, silent calls and eligible
+interactive calls conservatively from the remaining shared real pool. Precharge the
+whole batch and its exact bounded file passes before its first covered operation.
 There is no automatic retry. Missing configuration, an unexpected result, malformed
 output, a timeout or incomplete ownership/completion stops dependent cases for
-review. A valid closed `InteractionRequired` ends that role's probe; it does not
-authorize interaction under this batch.
+review. A valid closed `InteractionRequired` ends that role's noninteractive probe;
+interaction requires a separately admitted continuation and fresh actual readiness.
 
 Use ordinary foreground shell/process facilities. Before authentication, one
 Windows-local read of the existing private account data file, at most 8 KiB and
@@ -250,11 +252,55 @@ any missing Windows completion and consumed charge; do not infer success or admi
 another attempt from the configured deadline. Independently accept the actual
 safe result, transport and scoped completion before dependent execution.
 
-Record unavailable UI evidence explicitly. Neither these four cases nor normal
+Record unavailable UI evidence explicitly. Neither these calls nor normal
 interop completion proves UI absence, EOF during WAM, Linux-caller-death behavior,
 timeout behavior or full WSL acceptance. Those required observations remain open
-and need their own smallest admitted calls; this batch grants no observer project,
+and need their own smallest admitted calls; this protocol grants no observer project,
 retained host, new controller, network listener or confidential file transport.
+
+### Personal WSL Interactive Continuation
+
+After independently accepting a personal-role WSL `InteractionRequired` result,
+complete streams, actual exit and scoped completion, admit one sequential
+three-call continuation using the same selected account, Profile, authority,
+Azure DevOps default scope, candidate and Windows-only validator. Reuse sufficient
+native and work-role evidence. Do not repeat the accepted work WSL cases or alter
+configuration, scopes, caches or broker state to force a personal prompt.
+
+| Case, at most once | Permission and acceptance |
+| --- | --- |
+| Interactive permission | Use `interactive-if-needed`, retaining silent-first selection. Require valid `Success`, exit 0 and complete result/metadata/transport; either `Silent` or `Interactive` is eligible. Use the existing validator's unrestricted expected-route option and separately retain its actual fixed route. Obtain fresh actual sign-in readiness after all automated preparation, before this call. |
+| Fresh silent reuse | Only after accepting the first call's success and scoped completion, use a fresh process with `non-interactive-only`. Require `Success`/`Silent`, exit 0 and the same complete checks. |
+| Initially closed pipe | Only after accepting silent reuse, close the dedicated writer before starting a fresh `non-interactive-only` request. Require valid `Cancelled`/`None`, exit 1, no token and complete transport termination. |
+
+Allocate three starts, discoveries and silent calls plus one eligible interactive
+call from the remaining shared real pool. Allocate at most three metadata passes,
+64 operations and 16 MiB plus 8 KiB per pass, 30 seconds each; allocate at most
+three safe outcome collection passes, eight operations and 1 MiB per pass,
+30 seconds each. Precharge the whole continuation and any necessary public
+materialization before its first covered operation. There is no automatic retry
+or refund for cancellation, failure or an unsubmitted dependent slot.
+
+All ordinary memory, confidential-transport, product/validator/outer deadlines,
+pipe ownership and stop limits above apply unchanged, including the 120-second
+product deadline and original-clock shutdown allowance. The Windows configuration
+read and strict selected values remain authoritative. A valid failure, unexpected
+result, incomplete streams, missing exit or new ownership gap stops dependent
+cases for review; this continuation admits no account, configuration or cache repair.
+
+When sign-in, selection or delegated user consent appears, wait for the designated
+operator's actual action in the ordinary Windows desktop. Administrator consent
+and account addition remain excluded. Record actual UI observations only when
+available from the operator or another already admitted observation path. A
+`Silent` success does not prove visible UI absence; an `Interactive` result alone
+does not prove the observed windows or their closure. Do not rerun a sufficient
+success to manufacture UI evidence. Preserve missing observations explicitly.
+
+This continuation admits no caller-death, EOF-during-WAM or intentional timeout
+experiment. Prepare and independently accept the smallest exact lifetime recipes
+within the accepted Wave before those cases execute; reuse standard process/pipe
+facilities and the existing validator rather than creating a new observer project.
+Accepting this continuation alone does not complete the WSL or whole-Slice claim.
 
 ## Outcome-Based Execution and Accounting
 
