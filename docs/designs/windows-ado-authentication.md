@@ -811,6 +811,20 @@ local conditions. `host_station_visible`, `host_station_user_unavailable`, and
 `host_logon` remains the fallback for an unclassified missing observation. These
 categories add no native query, expose no observed value, and relax no admission
 condition. Classification happens after the original cancellation recheck.
+The current-session observation similarly distinguishes `host_session_id_unavailable`
+from `host_session_query_unavailable`, identifying failure of the already selected
+process-session or WTS query. `host_session_zero`, `host_session_inactive`, and
+`host_session_malformed` identify a rejected zero session, a valid non-active connection
+state, or invalid returned data. `host_session_unavailable` covers an unclassified
+unavailable observation; `host_session` remains the fallback for an unknown category.
+The input-desktop check distinguishes `host_input_desktop_unavailable` from
+`host_input_desktop_not_receiving`. Use the same classification during initial admission
+and rechecks. These categories add no query, disclose no session ID, connection-state
+number or native error, and do not authorize session/service repair or infer a reason
+for a non-active connection. The
+[connection-state contract](https://learn.microsoft.com/windows/win32/api/wtsapi32/ne-wtsapi32-wts_connectstate_class)
+defines `WTSActive` and the other states; an inactive category alone does not select a
+particular non-active state or prove how the operator is connected.
 The existing confidential validator may project only an exact bounded indication
 to a fixed safe enum; absent or invalid diagnostics remain unavailable or invalid.
 They neither establish authentication success nor relax any passing expectation.

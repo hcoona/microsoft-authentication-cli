@@ -20,7 +20,7 @@ internal sealed record WindowsHostPlatform(bool IsWindows, Architecture ProcessA
 
 internal enum WindowsThreadIdentity { NoToken, Impersonating, Unavailable }
 internal enum WindowsLogonIdentity { Invalid, User, LocalSystem, LocalService, NetworkService }
-internal enum WindowsSessionConnection { Unavailable, ZeroSession, Active, Inactive, Malformed }
+internal enum WindowsSessionConnection { Unavailable, ZeroSession, Active, Inactive, Malformed, SessionIdUnavailable, QueryUnavailable }
 internal enum WindowsLogonReadFailure { None, ProcessToken, TokenStatistics, SessionData, SessionDataSize, SessionId, SessionSid }
 
 internal sealed record WindowsLocalLogon(uint LogonType, WindowsLogonIdentity Identity,
@@ -68,15 +68,38 @@ internal sealed class WindowsHostAdmission : IWindowsHostAdmission
         Require(logon.StationUserMatches.HasValue, WindowsMechanismFailure.HostStationUserUnavailable);
         Require(logon.StationUserMatches == true, WindowsMechanismFailure.HostStationUserMismatch);
 
-        Require(Observe(observations.ReadSessionConnection, cancellationToken) == WindowsSessionConnection.Active, WindowsMechanismFailure.HostSession);
-        Require(Observe(observations.ReadInputDesktop, cancellationToken) == true, WindowsMechanismFailure.HostInputDesktop);
+        RequireSession(cancellationToken);
+        RequireInputDesktop(cancellationToken);
     }
 
     public void Recheck(CancellationToken cancellationToken)
     {
         Require(Observe(observations.ReadThreadIdentity, cancellationToken) == WindowsThreadIdentity.NoToken, WindowsMechanismFailure.HostThreadToken);
-        Require(Observe(observations.ReadSessionConnection, cancellationToken) == WindowsSessionConnection.Active, WindowsMechanismFailure.HostSession);
-        Require(Observe(observations.ReadInputDesktop, cancellationToken) == true, WindowsMechanismFailure.HostInputDesktop);
+        RequireSession(cancellationToken);
+        RequireInputDesktop(cancellationToken);
+    }
+
+    private void RequireSession(CancellationToken cancellationToken)
+    {
+        var session = Observe(observations.ReadSessionConnection, cancellationToken);
+        Require(session == WindowsSessionConnection.Active, session switch
+        {
+            WindowsSessionConnection.Unavailable => WindowsMechanismFailure.HostSessionUnavailable,
+            WindowsSessionConnection.ZeroSession => WindowsMechanismFailure.HostSessionZero,
+            WindowsSessionConnection.Inactive => WindowsMechanismFailure.HostSessionInactive,
+            WindowsSessionConnection.Malformed => WindowsMechanismFailure.HostSessionMalformed,
+            WindowsSessionConnection.SessionIdUnavailable => WindowsMechanismFailure.HostSessionIdUnavailable,
+            WindowsSessionConnection.QueryUnavailable => WindowsMechanismFailure.HostSessionQueryUnavailable,
+            _ => WindowsMechanismFailure.HostSession,
+        });
+    }
+
+    private void RequireInputDesktop(CancellationToken cancellationToken)
+    {
+        var receivesInput = Observe(observations.ReadInputDesktop, cancellationToken);
+        Require(receivesInput == true, receivesInput.HasValue
+            ? WindowsMechanismFailure.HostInputDesktopNotReceiving
+            : WindowsMechanismFailure.HostInputDesktopUnavailable);
     }
 
     private static T Observe<T>(Func<CancellationToken, T> observation, CancellationToken cancellationToken)

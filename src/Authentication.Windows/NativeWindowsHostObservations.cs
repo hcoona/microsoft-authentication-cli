@@ -123,7 +123,7 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
         cancellationToken.ThrowIfCancellationRequested();
         var identified = ProcessIdToSessionId(process, out var session);
         cancellationToken.ThrowIfCancellationRequested();
-        if (identified == 0) return WindowsSessionConnection.Unavailable;
+        if (identified == 0) return WindowsSessionConnection.SessionIdUnavailable;
         if (session == 0) return WindowsSessionConnection.ZeroSession;
 
         nint allocation = 0;
@@ -133,7 +133,7 @@ internal sealed unsafe partial class NativeWindowsHostObservations : IWindowsHos
             cancellationToken.ThrowIfCancellationRequested();
             var queried = WTSQuerySessionInformationW(0, session, 8, out allocation, out var bytes);
             cancellationToken.ThrowIfCancellationRequested();
-            if (queried == 0) return WindowsSessionConnection.Unavailable;
+            if (queried == 0) return WindowsSessionConnection.QueryUnavailable;
             if (allocation == 0 || bytes != sizeof(int)) return WindowsSessionConnection.Malformed;
             var state = *(int*)allocation;
             if (state is < 0 or > 9) return WindowsSessionConnection.Malformed;
