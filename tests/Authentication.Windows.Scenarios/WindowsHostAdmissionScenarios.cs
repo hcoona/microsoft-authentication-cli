@@ -330,6 +330,56 @@ public sealed class WindowsHostAdmissionScenarios
     }
 
     [TestMethod]
+    public void OwnLogonDiagnosticsDistinguishRequiredReadAndConditionFailures()
+    {
+        var valid = new WindowsLocalLogon(2, WindowsLogonIdentity.User, true, true);
+        (WindowsLocalLogon? Logon, string Indication)[] cases =
+        [
+            (null, "host_logon"),
+            (valid with { ReadFailure = WindowsLogonReadFailure.ProcessToken }, "host_logon_process_token"),
+            (valid with { ReadFailure = WindowsLogonReadFailure.TokenStatistics }, "host_logon_token_statistics"),
+            (valid with { ReadFailure = WindowsLogonReadFailure.SessionData }, "host_logon_session_data"),
+            (valid with { ReadFailure = WindowsLogonReadFailure.SessionDataSize }, "host_logon_session_data_size"),
+            (valid with { ReadFailure = WindowsLogonReadFailure.SessionId }, "host_logon_session_id"),
+            (valid with { ReadFailure = WindowsLogonReadFailure.SessionSid }, "host_logon_session_sid"),
+            (valid with { ReadFailure = (WindowsLogonReadFailure)int.MaxValue }, "host_logon"),
+            (valid with { LogonType = 9 }, "host_logon_type"),
+            (valid with { Identity = WindowsLogonIdentity.Invalid }, "host_logon_identity"),
+            (valid with { Identity = WindowsLogonIdentity.LocalSystem }, "host_logon_identity"),
+            (valid with { VisibleStation = false }, "host_station_visible"),
+            (valid with { StationUserMatches = null }, "host_station_user_unavailable"),
+            (valid with { StationUserMatches = false }, "host_station_user_mismatch"),
+        ];
+        foreach (var (logon, indication) in cases)
+        {
+            using var scene = new Scene { Logon = logon };
+            var trace = new WindowsMechanismTrace();
+            var exception = Assert.ThrowsExactly<ProviderFailureException>(() =>
+                new WindowsHostAdmission(scene, trace).Admit(scene.Original.Token));
+            Assert.AreEqual(AuthenticationFailure.MechanismUnavailable, exception.Failure);
+            Assert.AreEqual($"Mechanism unavailable at {indication}.\n",
+                Encoding.ASCII.GetString(WindowsDiagnostics.MechanismIndication(trace.Failure)));
+            Assert.AreEqual("logon", scene.Observed.Last());
+            NoProviderEffects(scene);
+        }
+    }
+
+    [TestMethod]
+    public void CancelledLogonReadDoesNotPublishItsFailureCategory()
+    {
+        foreach (var failure in Enum.GetValues<WindowsLogonReadFailure>())
+        {
+            using var scene = new Scene { Logon = new(0, WindowsLogonIdentity.Invalid, false, null, failure) };
+            scene.DuringObservation = name => { if (name == "logon") scene.Original.Cancel(); };
+            var trace = new WindowsMechanismTrace();
+            Assert.ThrowsExactly<OperationCanceledException>(() =>
+                new WindowsHostAdmission(scene, trace).Admit(scene.Original.Token));
+            Assert.AreEqual(WindowsMechanismFailure.Unavailable, trace.Failure);
+            NoProviderEffects(scene);
+        }
+    }
+
+    [TestMethod]
     public void CancelledObservationDoesNotPublishRejectedGate()
     {
         using var scene = new Scene { Session = WindowsSessionConnection.Inactive };

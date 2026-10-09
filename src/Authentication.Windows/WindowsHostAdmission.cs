@@ -21,9 +21,10 @@ internal sealed record WindowsHostPlatform(bool IsWindows, Architecture ProcessA
 internal enum WindowsThreadIdentity { NoToken, Impersonating, Unavailable }
 internal enum WindowsLogonIdentity { Invalid, User, LocalSystem, LocalService, NetworkService }
 internal enum WindowsSessionConnection { Unavailable, ZeroSession, Active, Inactive, Malformed }
+internal enum WindowsLogonReadFailure { None, ProcessToken, TokenStatistics, SessionData, SessionDataSize, SessionId, SessionSid }
 
 internal sealed record WindowsLocalLogon(uint LogonType, WindowsLogonIdentity Identity,
-    bool VisibleStation, bool? StationUserMatches);
+    bool VisibleStation, bool? StationUserMatches, WindowsLogonReadFailure ReadFailure = WindowsLogonReadFailure.None);
 
 // Classifies synchronous local observations before initialization and later effects.
 // Construction remains inert; the caller supplies the observation implementation.
@@ -50,13 +51,22 @@ internal sealed class WindowsHostAdmission : IWindowsHostAdmission
         Require(Observe(observations.ReadThreadIdentity, cancellationToken) == WindowsThreadIdentity.NoToken, WindowsMechanismFailure.HostThreadToken);
 
         var logon = Observe(observations.ReadOwnLogonAndStation, cancellationToken);
-        Require(logon is
+        Require(logon is not null, WindowsMechanismFailure.HostLogon);
+        Require(logon!.ReadFailure == WindowsLogonReadFailure.None, logon.ReadFailure switch
         {
-            LogonType: 2 or 10 or 11 or 12,
-            Identity: WindowsLogonIdentity.User,
-            VisibleStation: true,
-            StationUserMatches: true,
-        }, WindowsMechanismFailure.HostLogon);
+            WindowsLogonReadFailure.ProcessToken => WindowsMechanismFailure.HostLogonProcessToken,
+            WindowsLogonReadFailure.TokenStatistics => WindowsMechanismFailure.HostLogonTokenStatistics,
+            WindowsLogonReadFailure.SessionData => WindowsMechanismFailure.HostLogonSessionData,
+            WindowsLogonReadFailure.SessionDataSize => WindowsMechanismFailure.HostLogonSessionDataSize,
+            WindowsLogonReadFailure.SessionId => WindowsMechanismFailure.HostLogonSessionId,
+            WindowsLogonReadFailure.SessionSid => WindowsMechanismFailure.HostLogonSessionSid,
+            _ => WindowsMechanismFailure.HostLogon,
+        });
+        Require(logon.LogonType is 2 or 10 or 11 or 12, WindowsMechanismFailure.HostLogonType);
+        Require(logon.Identity == WindowsLogonIdentity.User, WindowsMechanismFailure.HostLogonIdentity);
+        Require(logon.VisibleStation, WindowsMechanismFailure.HostStationVisible);
+        Require(logon.StationUserMatches.HasValue, WindowsMechanismFailure.HostStationUserUnavailable);
+        Require(logon.StationUserMatches == true, WindowsMechanismFailure.HostStationUserMismatch);
 
         Require(Observe(observations.ReadSessionConnection, cancellationToken) == WindowsSessionConnection.Active, WindowsMechanismFailure.HostSession);
         Require(Observe(observations.ReadInputDesktop, cancellationToken) == true, WindowsMechanismFailure.HostInputDesktop);
