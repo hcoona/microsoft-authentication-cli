@@ -115,6 +115,22 @@ must route confidential stdout directly to Windows-local in-memory validation.
 Raw stderr is not a fallback: only the product's fixed safe indications and bounded
 allowlisted telemetry may become evidence.
 
+The small `tools/result-validation/cli` .NET 10 entry makes the same validator
+callable from the ordinary Windows shell without loading .NET 10 assemblies into
+PowerShell 5.1. It accepts, in order, the actual product exit, the receipt time in
+round-trip (`O`) format, selected email, tenant (`common` or the exact GUID),
+interaction permission, expected `Outcome`, expected `Route`, and scopes. Supply
+these arguments from the same Windows-local values used for authentication, and
+pipe only the captured result bytes to its stdin; no intermediate result file is
+permitted. Its default-scope association is limited to the already accepted Azure
+DevOps resource. It emits only fixed check conclusions or a fixed validation
+failure. Validator exit 0 means a valid result was checked, including a failed
+authentication; scenario acceptance additionally requires the reported checks and
+actual product exit. Its caller bounds stdin delivery and validator termination.
+It does not start or stop the authentication product, read configuration, collect
+telemetry, or retry. Review and precharge any necessary bounded compilation before
+using this entry, reusing the accepted pure-parser scenarios.
+
 Optional product token interpretation remains best-effort after committed success.
 It does not establish signature validity, account identity, scope satisfaction or
 resource-service acceptance. No arbitrary-token analyzer or token-input channel is added.
@@ -204,6 +220,14 @@ foreground execution. Each invocation has at most 180 seconds, 8 MiB public outp
 1 GiB retained artifacts and five seconds of final stop allowance. Exact original calls
 and cumulative precharge precede execution. No detached compiler/test process survives
 completion. This is parser/source evidence, not Windows, WAM, UI or WSL acceptance.
+
+The Windows-local CLI entry may additionally use one offline preparation action
+and one build action under these same installed-toolchain, finite-time, output,
+retention and compiler-ownership bounds. It has no package dependencies. Reuse
+the accepted parser scenarios instead of rerunning them. Independently admit its
+exact source and compilation call, precharge the existing ledger, and accept the
+actual compiler outcome before using its output. A Linux managed build establishes
+compilation only; exact Windows execution admission remains required.
 
 ## Historical Evidence
 
