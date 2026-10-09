@@ -11,7 +11,10 @@ internal enum WindowsMechanismFailure
     HostLogonSessionDataSize, HostLogonSessionId, HostLogonSessionSid,
     HostLogonType, HostLogonIdentity, HostStationVisible,
     HostStationUserUnavailable, HostStationUserMismatch,
-    HostSession, HostInputDesktop, DllSearch, BrokerUnavailable,
+    HostSession, HostSessionUnavailable, HostSessionZero, HostSessionInactive,
+    HostSessionMalformed, HostSessionIdUnavailable, HostSessionQueryUnavailable,
+    HostInputDesktop, HostInputDesktopUnavailable, HostInputDesktopNotReceiving,
+    DllSearch, BrokerUnavailable,
     BrokerPlatform, BrokerInitialization, RejectedWebUi
 }
 
@@ -46,7 +49,15 @@ internal static class WindowsDiagnostics
         WindowsMechanismFailure.HostStationUserUnavailable => "Mechanism unavailable at host_station_user_unavailable.\n"u8.ToArray(),
         WindowsMechanismFailure.HostStationUserMismatch => "Mechanism unavailable at host_station_user_mismatch.\n"u8.ToArray(),
         WindowsMechanismFailure.HostSession => "Mechanism unavailable at host_session.\n"u8.ToArray(),
+        WindowsMechanismFailure.HostSessionUnavailable => "Mechanism unavailable at host_session_unavailable.\n"u8.ToArray(),
+        WindowsMechanismFailure.HostSessionZero => "Mechanism unavailable at host_session_zero.\n"u8.ToArray(),
+        WindowsMechanismFailure.HostSessionInactive => "Mechanism unavailable at host_session_inactive.\n"u8.ToArray(),
+        WindowsMechanismFailure.HostSessionMalformed => "Mechanism unavailable at host_session_malformed.\n"u8.ToArray(),
+        WindowsMechanismFailure.HostSessionIdUnavailable => "Mechanism unavailable at host_session_id_unavailable.\n"u8.ToArray(),
+        WindowsMechanismFailure.HostSessionQueryUnavailable => "Mechanism unavailable at host_session_query_unavailable.\n"u8.ToArray(),
         WindowsMechanismFailure.HostInputDesktop => "Mechanism unavailable at host_input_desktop.\n"u8.ToArray(),
+        WindowsMechanismFailure.HostInputDesktopUnavailable => "Mechanism unavailable at host_input_desktop_unavailable.\n"u8.ToArray(),
+        WindowsMechanismFailure.HostInputDesktopNotReceiving => "Mechanism unavailable at host_input_desktop_not_receiving.\n"u8.ToArray(),
         WindowsMechanismFailure.DllSearch => "Mechanism unavailable at dll_search.\n"u8.ToArray(),
         WindowsMechanismFailure.BrokerUnavailable => "Mechanism unavailable at broker_unavailable.\n"u8.ToArray(),
         WindowsMechanismFailure.BrokerPlatform => "Mechanism unavailable at broker_platform.\n"u8.ToArray(),

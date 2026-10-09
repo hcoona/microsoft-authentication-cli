@@ -306,7 +306,7 @@ public sealed class WindowsHostAdmissionScenarios
     {
         foreach (var failure in new[] { WindowsMechanismFailure.HostPlatform, WindowsMechanismFailure.HostWorkstation,
             WindowsMechanismFailure.HostThreadToken, WindowsMechanismFailure.HostLogon,
-            WindowsMechanismFailure.HostSession, WindowsMechanismFailure.HostInputDesktop })
+            WindowsMechanismFailure.HostSessionInactive, WindowsMechanismFailure.HostInputDesktopNotReceiving })
         {
             using var scene = new Scene();
             switch (failure)
@@ -315,8 +315,8 @@ public sealed class WindowsHostAdmissionScenarios
                 case WindowsMechanismFailure.HostWorkstation: scene.Workstation = false; break;
                 case WindowsMechanismFailure.HostThreadToken: scene.ThreadIdentity = WindowsThreadIdentity.Impersonating; break;
                 case WindowsMechanismFailure.HostLogon: scene.Logon = null; break;
-                case WindowsMechanismFailure.HostSession: scene.Session = WindowsSessionConnection.Inactive; break;
-                case WindowsMechanismFailure.HostInputDesktop: scene.InputDesktop = false; break;
+                case WindowsMechanismFailure.HostSessionInactive: scene.Session = WindowsSessionConnection.Inactive; break;
+                case WindowsMechanismFailure.HostInputDesktopNotReceiving: scene.InputDesktop = false; break;
             }
             var trace = new WindowsMechanismTrace();
             var exception = Assert.ThrowsExactly<ProviderFailureException>(() => new WindowsHostAdmission(scene, trace).Admit(scene.Original.Token));
@@ -326,6 +326,64 @@ public sealed class WindowsHostAdmissionScenarios
             var indication = Encoding.ASCII.GetString(WindowsDiagnostics.MechanismIndication(trace.Failure));
             Assert.IsFalse(indication.Contains(PrivateMarker, StringComparison.Ordinal));
             Assert.IsFalse(indication.Contains(Email, StringComparison.Ordinal));
+        }
+    }
+
+    [TestMethod]
+    public void SessionAndDesktopDiagnosticsPreserveAdmissionAndRecheckBoundaries()
+    {
+        (WindowsSessionConnection Session, bool? Desktop, string Indication)[] cases =
+        [
+            (WindowsSessionConnection.Unavailable, true, "host_session_unavailable"),
+            (WindowsSessionConnection.ZeroSession, true, "host_session_zero"),
+            (WindowsSessionConnection.Inactive, true, "host_session_inactive"),
+            (WindowsSessionConnection.Malformed, true, "host_session_malformed"),
+            (WindowsSessionConnection.SessionIdUnavailable, true, "host_session_id_unavailable"),
+            (WindowsSessionConnection.QueryUnavailable, true, "host_session_query_unavailable"),
+            ((WindowsSessionConnection)int.MaxValue, true, "host_session"),
+            (WindowsSessionConnection.Active, null, "host_input_desktop_unavailable"),
+            (WindowsSessionConnection.Active, false, "host_input_desktop_not_receiving"),
+        ];
+        foreach (var (session, desktop, indication) in cases)
+        foreach (var recheck in new[] { false, true })
+        {
+            using var scene = new Scene { Session = session, InputDesktop = desktop };
+            var trace = new WindowsMechanismTrace();
+            var admission = new WindowsHostAdmission(scene, trace);
+            var exception = Assert.ThrowsExactly<ProviderFailureException>(() =>
+            {
+                if (recheck) admission.Recheck(scene.Original.Token);
+                else admission.Admit(scene.Original.Token);
+            });
+            Assert.AreEqual(AuthenticationFailure.MechanismUnavailable, exception.Failure);
+            Assert.AreEqual($"Mechanism unavailable at {indication}.\n",
+                Encoding.ASCII.GetString(WindowsDiagnostics.MechanismIndication(trace.Failure)));
+            Assert.AreEqual(session == WindowsSessionConnection.Active ? "desktop" : "session", scene.Observed.Last());
+            NoProviderEffects(scene);
+        }
+    }
+
+    [TestMethod]
+    public void CancelledSessionAndDesktopObservationsDoNotPublishFailureCategories()
+    {
+        foreach (var recheck in new[] { false, true })
+        foreach (var observation in new[] { "session", "desktop" })
+        {
+            using var scene = new Scene
+            {
+                Session = observation == "session" ? WindowsSessionConnection.QueryUnavailable : WindowsSessionConnection.Active,
+                InputDesktop = null,
+            };
+            scene.DuringObservation = name => { if (name == observation) scene.Original.Cancel(); };
+            var trace = new WindowsMechanismTrace();
+            var admission = new WindowsHostAdmission(scene, trace);
+            Assert.ThrowsExactly<OperationCanceledException>(() =>
+            {
+                if (recheck) admission.Recheck(scene.Original.Token);
+                else admission.Admit(scene.Original.Token);
+            });
+            Assert.AreEqual(WindowsMechanismFailure.Unavailable, trace.Failure);
+            NoProviderEffects(scene);
         }
     }
 
