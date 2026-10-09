@@ -70,6 +70,7 @@ internal sealed class WindowsHostAdmission : IWindowsHostAdmission
 
         RequireSession(cancellationToken);
         RequireInputDesktop(cancellationToken);
+        RequireSession(cancellationToken); // OpenInputDesktop also opens a disconnected session's future desktop.
     }
 
     public void Recheck(CancellationToken cancellationToken)
@@ -77,6 +78,7 @@ internal sealed class WindowsHostAdmission : IWindowsHostAdmission
         Require(Observe(observations.ReadThreadIdentity, cancellationToken) == WindowsThreadIdentity.NoToken, WindowsMechanismFailure.HostThreadToken);
         RequireSession(cancellationToken);
         RequireInputDesktop(cancellationToken);
+        RequireSession(cancellationToken); // OpenInputDesktop also opens a disconnected session's future desktop.
     }
 
     private void RequireSession(CancellationToken cancellationToken)

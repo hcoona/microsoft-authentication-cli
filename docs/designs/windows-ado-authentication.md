@@ -329,7 +329,7 @@ need to inspect real logon state merely to exercise the owned window.
 | Own process has an interactive local logon | Open only the current process token with `TOKEN_QUERY`. Use `GetTokenInformation(TokenStatistics).AuthenticationId` to query that one logon through `LsaGetLogonSessionData`. Require sufficient returned structure size, the matching LUID and a valid nonnull SID; reject LocalSystem, LocalService and NetworkService. Accept only `Interactive`, `RemoteInteractive`, `CachedInteractive` or `CachedRemoteInteractive`. Other types, including `NewCredentials`, reject admission. |
 | Current session is actively connected | Obtain the current process's nonzero session ID with `ProcessIdToSessionId`. Query only that local session with `WTSQuerySessionInformationW(WTSConnectState)` and require a correctly sized `WTSActive` value. Unknown, disconnected, malformed or unavailable state rejects admission. |
 | Visible station belongs to the local logon user | On the borrowed `GetProcessWindowStation` handle, require successful `GetUserObjectInformationW(UOI_FLAGS)` with `WSF_VISIBLE`. Require a bounded valid nonempty `UOI_USER_SID`. Accept exact equality to the own-logon account SID, or, only for an associated SID classified as `WinLogonIdsSid`, exact equality to the logon SID returned by `GetTokenInformation(TokenLogonSid)` on that same current process token. Missing associated user, mismatch or failed observation rejects admission. |
-| Calling desktop currently receives input | On the borrowed `GetThreadDesktop(GetCurrentThreadId())` handle, require successful `GetUserObjectInformationW(UOI_IO)` with a true native BOOL. A desktop handle alone does not satisfy this condition. |
+| Calling desktop is the current input desktop | Obtain the borrowed `GetThreadDesktop(GetCurrentThreadId())` handle and a non-inheritable `OpenInputDesktop(0, FALSE, DESKTOP_READOBJECTS)` handle in the current process station. Require complete bounded `UOI_NAME` observations with identical nonempty names. Require an active current session both before and after this comparison. Unavailable or malformed observations, a different desktop, or inactive session reject admission. An input-desktop handle alone does not satisfy this condition. |
 
 The [.NET OS architecture contract](https://learn.microsoft.com/dotnet/core/compatibility/interop/7.0/osarchitecture-emulation)
 distinguishes the host from emulation. [.NET's OS version property](https://learn.microsoft.com/dotnet/api/system.environment.osversion?view=net-10.0)
@@ -380,8 +380,31 @@ can fail when Remote Desktop Services is unavailable. A session ID is not substi
 connection evidence; return unavailable without starting or repairing the service. Do
 not impose a physical-console-only condition. The
 [user-object information contract](https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-getuserobjectinformationw)
-defines both associated-user SID and input-desktop observations. Neither visible station
-surfaces nor `OpenInputDesktop` success alone proves all required conditions.
+defines associated-user SID and object-name observations. The
+[thread-desktop contract](https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-getthreaddesktop)
+returns the calling thread's borrowed desktop. The
+[input-desktop contract](https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-openinputdesktop)
+resolves the input desktop in the current process's station; it can instead return the
+desktop that will become active when a disconnected session reconnects. Preserve the
+active-session predicate and recheck it after the desktop observation. The
+[desktop namespace contract](https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-createdesktopw)
+places desktops in the current station and opens the existing object for an existing
+name. Compare the two returned names exactly, without normalization or case folding,
+while both handles remain live. A matching arbitrary name from another station is not
+sufficient; this process never changes its station, and both handles come from that
+station. Do not enumerate, attach to, switch, or create a desktop.
+
+Use one fixed 512-byte UTF-16 buffer per name observation, without size discovery or
+retry. Validate the returned byte count, even alignment, nonempty name, final NUL and
+absence of embedded NULs before comparing the complete names. Overlong, unavailable or
+malformed observations reject admission. Names remain local and transient; no name,
+handle or name hash enters results, logs or telemetry. Close the owned input-desktop
+handle once in `finally`; failure to close is a host fault. Keep the calling-thread
+handle borrowed. This selects name equality to the resolved input desktop rather than
+requiring `UOI_IO` as an additional eligibility flag. It makes no claim about the cause
+of an earlier `UOI_IO` rejection or OS behavior beyond the cited API contracts. Neither
+visible station surfaces nor `OpenInputDesktop` success alone proves all required
+conditions.
 
 Recheck the original token before and after each synchronous observation, before
 classifying its result or releasing the next effect. A rejected or unobservable required
