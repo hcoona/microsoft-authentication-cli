@@ -678,6 +678,33 @@ future reuse, or require a readback. Do no post-validation persistence I/O or wa
 
 ## Windows UI and Request Lifetime
 
+### Parent-Window Simplification Assessment
+
+The CLI product boundary remains governed by
+[V2-REQ-002](../product/requirements/product-boundary.md#v2-req-002-no-implicit-product-expansion).
+An in-process Win32 implementation does not by itself justify an extra
+user-facing desktop surface. The currently selected parent combines the WAM
+handle, Profile/registration context, and Cancel action; assess those needs
+separately before retaining or replacing that presentation.
+
+The [console-parent source assessment](../research/v1-public-contract-baseline.md#console-parent-versus-a-separate-desktop-surface)
+and [credential-free comparison](../research/experiments/windows-slice-validation.md#console-parent-feasibility)
+evaluate an existing console parent, including the proposed intermediate
+PowerShell launch from WSL. This is an investigation, not an accepted replacement
+host. Keep the current implementation and its scoped evidence intact during
+that comparison. Do not infer WAM eligibility from a nonzero or visible borrowed
+handle, select an unrelated foreground window, force a visible shell, or hide
+the current parent before the replacement is independently accepted.
+
+A later simplification must preserve self-contained interaction and completion,
+strict selection, pre-authentication unofficial/Profile ownership context,
+operator-controlled sign-in, cancellation, the original deadline, and normal
+termination. Borrowed terminal windows must never be closed or destroyed by V2.
+If the existing-console prerequisite is unavailable, record that result before
+considering another minimal parent binding; this assessment grants no new
+desktop app, retained host, launcher framework, or observation project.
+
+
 The candidate uses a small Win32 window on an owned STA thread with a message loop only when
 interaction is both needed and permitted. It supplies a stable nonzero HWND and explicit
 cancel/close behavior. It does not ask for account email, passwords, URLs, or credentials;

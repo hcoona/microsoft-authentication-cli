@@ -302,6 +302,133 @@ within the accepted Wave before those cases execute; reuse standard process/pipe
 facilities and the existing validator rather than creating a new observer project.
 Accepting this continuation alone does not complete the WSL or whole-Slice claim.
 
+## Console Parent Feasibility
+
+This credential-free comparison answers whether an intermediate, already
+installed PowerShell 7 process gives a WSL-launched console child an existing
+visible root parent. It does not test authentication or modify the selected
+product host. Use the same designated WSL2 caller and ordinary Windows user;
+operator sign-in attendance is unnecessary because no WAM/provider, account,
+Profile, cache, network, or visible-window operation runs.
+
+Use only the already admitted Windows PowerShell 5.1 x64 executable as the
+metadata subject. Compare two ordinary finite foreground calls, at most once
+each:
+
+| Case | Exact launch shape |
+| --- | --- |
+| Direct | WSL invokes `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe` with `-NoLogo -NoProfile -NonInteractive -Sta -EncodedCommand` and the fixed script below. |
+| Via PowerShell 7 | If the fixed existing `C:\Program Files\PowerShell\7\pwsh.exe` is present and independently admitted, WSL invokes it with `-NoLogo -NoProfile -NonInteractive -EncodedCommand`. Its only command invokes the same Windows PowerShell subject with the same arguments and script, then exits with the actual child's `$LASTEXITCODE`. No other command or child is allowed. |
+
+Before the second call, finitely inspect only that fixed PowerShell 7 executable
+as public installed-tool data, at most 32 MiB and 30 seconds, with exact
+length/hash/EOF correspondence and an independent input admission. If absent,
+record the second case as unavailable, keep its conservative charge, and do not
+search other paths, install PowerShell, or substitute another shell. A file's
+presence alone does not admit executable use.
+
+The entire batch reserves three synthetic process starts/scenarios conservatively
+(one direct process and at most two processes for the second case), zero
+preparation/build/publication actions and zero real-account units. Allocate one
+metadata pass, at most 16 operations, 32 MiB plus 64 KiB and 30 seconds; one safe
+collection pass, at most eight operations, 1 MiB and 30 seconds. Precharge the
+whole batch before its first covered file read or process call. Reuse existing
+source/artifact/basis reviews; no second accounting system or generic runner is
+needed.
+
+Pin the extracted script and both encoded command strings in the independently
+accepted exact call. Each foreground original has a 30-second deadline and
+five-second external stop allowance, at most 64 KiB stdout and stderr. Require
+actual normal root return, complete streams, zero exit and empty stderr before
+accepting its safe report. A timeout, malformed output, unexpected child or
+missing completion stops the batch; retain the failure and original deadline.
+Stopping a Linux relay is not observed Windows closure. Apply existing
+current-absence review only through its accepted boundary; no reboot, elevation,
+process survey or unrelated cleanup is allowed.
+
+The complete observation script is:
+
+```powershell
+$ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
+Set-StrictMode -Version Latest
+$report = [ordered]@{
+    ObservationFailed = $false
+    ConsoleHandlePresent = $false
+    ConsoleExists = $false
+    ConsoleVisibleStyle = $false
+    RootOwnerHandlePresent = $false
+    RootOwnerExists = $false
+    RootOwnerVisibleStyle = $false
+    RootOwnerEqualsConsole = $false
+}
+try {
+    $assembly = [Reflection.Emit.AssemblyBuilder]::DefineDynamicAssembly(
+        [Reflection.AssemblyName]::new('ConsoleParentObservation'),
+        [Reflection.Emit.AssemblyBuilderAccess]::Run)
+    $module = $assembly.DefineDynamicModule('ConsoleParentObservation')
+    $type = $module.DefineType('ConsoleParentNative', [Reflection.TypeAttributes]::Public)
+    $attributes = [Reflection.MethodAttributes]::Public -bor [Reflection.MethodAttributes]::Static -bor [Reflection.MethodAttributes]::PinvokeImpl
+    $declarations = @(
+        @('GetConsoleWindow', 'kernel32.dll', [IntPtr], [Type[]]@()),
+        @('GetAncestor', 'user32.dll', [IntPtr], [Type[]]@([IntPtr], [uint32])),
+        @('IsWindow', 'user32.dll', [int], [Type[]]@([IntPtr])),
+        @('IsWindowVisible', 'user32.dll', [int], [Type[]]@([IntPtr]))
+    )
+    foreach ($declaration in $declarations) {
+        $method = $type.DefinePInvokeMethod($declaration[0],
+            ([Environment]::SystemDirectory + '\' + $declaration[1]),
+            $attributes, [Reflection.CallingConventions]::Standard,
+            $declaration[2], $declaration[3],
+            [Runtime.InteropServices.CallingConvention]::Winapi,
+            [Runtime.InteropServices.CharSet]::Unicode)
+        $method.SetImplementationFlags([Reflection.MethodImplAttributes]::PreserveSig)
+    }
+    $native = $type.CreateType()
+    $console = $native.GetMethod('GetConsoleWindow').Invoke($null, $null)
+    $report.ConsoleHandlePresent = $console -ne [IntPtr]::Zero
+    if ($report.ConsoleHandlePresent) {
+        $report.ConsoleExists = $native.GetMethod('IsWindow').Invoke(
+            $null, [object[]]@($console)) -ne 0
+        $report.ConsoleVisibleStyle = $native.GetMethod('IsWindowVisible').Invoke(
+            $null, [object[]]@($console)) -ne 0
+        $root = $native.GetMethod('GetAncestor').Invoke(
+            $null, [object[]]@($console, [uint32]3))
+        $report.RootOwnerHandlePresent = $root -ne [IntPtr]::Zero
+        if ($report.RootOwnerHandlePresent) {
+            $report.RootOwnerExists = $native.GetMethod('IsWindow').Invoke(
+                $null, [object[]]@($root)) -ne 0
+            $report.RootOwnerVisibleStyle = $native.GetMethod('IsWindowVisible').Invoke(
+                $null, [object[]]@($root)) -ne 0
+            $report.RootOwnerEqualsConsole = $root -eq $console
+        }
+    }
+} catch {
+    $report.ObservationFailed = $true
+}
+$report | ConvertTo-Json -Compress
+if ($report.ObservationFailed) { exit 1 }
+exit 0
+```
+
+The four P/Invoke declarations query only the subject's console and its root
+owner. Emit only the eight fixed booleans above; do not emit HWNDs, process IDs,
+window titles, paths, desktop/account identifiers, exception text or diagnostic
+data. No compiler, on-disk assembly, message loop, window creation, foreground
+window selection, attach/detach, display/focus change, or borrowed-handle
+destruction is permitted. Transient Reflection.Emit declarations live only in
+the ordinary PowerShell subject; they do not establish Native AOT compatibility.
+
+A zero or nonvisible root is evidence against using that launch shape to obtain
+an existing visible parent. A visible root is only an instantaneous prerequisite,
+not proof of correct WAM modality, user-visible focus or durable handle ownership.
+Windows PowerShell is a surrogate console subject: neither outcome proves the
+exact Native AOT product's handle behavior. Retain that limitation, the installed
+PowerShell input identity, each launch shape, safe observations, exits, full
+charges and scoped completion. Independently accept actual results before
+changing the parent design or running any dependent real-account experiment.
+No automatic retry or forced shell/window presentation is allowed.
+
 ## Outcome-Based Execution and Accounting
 
 Continue the existing sanitized cumulative accounting carrier. Preserve every prior
