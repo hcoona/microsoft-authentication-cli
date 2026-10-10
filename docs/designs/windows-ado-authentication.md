@@ -737,6 +737,12 @@ Reuse accepted unrelated evidence, and leave unobserved title, focus, cancellati
 and lifetime behavior explicitly incomplete. If ordinary silent-first acquisition
 needs no interaction, do not manufacture a prompt or modify account/cache state.
 
+The [initial candidate observations](../research/v1-public-contract-baseline.md#hidden-owned-parent-candidate-observations)
+establish four synthetic hidden-parent lifecycle cases. The actual personal silent
+assessment ended normally with `MechanismUnavailable`; its fixed reason was not
+collected. This does not select or reject the hypothesis. Use existing standard
+diagnostics for the bounded correction, retaining the notice and WAM UX obligations.
+
 A later simplification must preserve self-contained interaction and completion,
 strict selection, pre-authentication unofficial/Profile ownership context,
 operator-controlled sign-in, cancellation, the original deadline, and normal

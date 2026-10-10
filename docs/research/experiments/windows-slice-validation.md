@@ -501,8 +501,27 @@ titles containing private data, selectors, tokens or provider text. A title sett
 span completion or caller exit alone does not establish UX or full native lifetime.
 No new window collector or observation tool is permitted.
 
+If the initial silent assessment returns a complete valid `MechanismUnavailable`
+without a retained fixed reason, independently accept its failure and normal
+completion, then close that comparison with all charges retained. Admit at most
+one separately charged silent diagnostic call of the same candidate and selected
+request. Reuse the existing WSL transport, validator and standard local output;
+project only the existing fixed phase names and mechanism indication. A missing,
+malformed or unavailable observation cannot change result acceptance, cause a
+retry or expose raw diagnostics. This is not an additional host query or observer.
+
+Only an accepted fixed diagnostic that establishes a current host/session/input
+obstruction permits one fresh three-case comparison after the required actual
+operator state action and independent current-basis/call admission. It uses the
+same silent assessment, conditional interaction and success-gated reuse rules
+above; state readiness alone is not interaction permission. Allocate that whole
+fresh batch before its first operation, without reusing or refunding the original
+skipped reservations. No further correction batch, configuration/cache repair,
+prompt manufacturing or interaction follows from this supplement. A diagnostic
+success does not itself admit interaction or dependent reuse.
+
 Allocate exact finite preparation and real batches from the current accounting;
-reserve at most six metadata and six safe-collection passes cumulatively for this
+reserve at most ten metadata and ten safe-collection passes cumulatively for this
 recipe, within the shared passive ceilings. Reuse the prior exact per-role bounds:
 public materialization at most 16 MiB/30 seconds, one bounded public artifact pass
 at most 5 GiB/60 seconds, and each account call's 16 MiB plus 8 KiB/30-second
