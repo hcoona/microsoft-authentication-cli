@@ -696,6 +696,16 @@ that comparison. Do not infer WAM eligibility from a nonzero or visible borrowed
 handle, select an unrelated foreground window, force a visible shell, or hide
 the current parent before the replacement is independently accepted.
 
+The [runtime prerequisite comparison](../research/v1-public-contract-baseline.md#console-parent-versus-a-separate-desktop-surface)
+found no console HWND in either the direct WSL surrogate call or the otherwise
+identical call through the existing PowerShell 7. Ordinary shell wrapping is
+therefore not an established parent source for this launch context. This result
+does not prove that WAM requires a visible window: exact-product borrowed or
+nonvisible parent behavior remains unvalidated. The current visible window is
+created explicitly by V2; changing the process launcher alone does not remove it.
+Do not force another terminal to manufacture a parent. A future minimal binding
+must be assessed separately before changing the selected implementation.
+
 A later simplification must preserve self-contained interaction and completion,
 strict selection, pre-authentication unofficial/Profile ownership context,
 operator-controlled sign-in, cancellation, the original deadline, and normal

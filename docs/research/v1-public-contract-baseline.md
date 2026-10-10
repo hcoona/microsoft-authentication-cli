@@ -1517,6 +1517,46 @@ the currently selected host. No new provider, Profile, browser fallback,
 registration, account state, dependency version, or Native AOT publishing mode
 is selected by this assessment.
 
+**Runtime prerequisite comparison, 2026-10-10 UTC:** Under the accepted
+[Console Parent Feasibility protocol](experiments/windows-slice-validation.md#console-parent-feasibility)
+at commit `39ff59bf20cd5f68d465570766f99eb287b69745`, the designated WSL2
+caller ran each ordinary launch once, using Windows PowerShell 5.1 x64 as the
+same credential-free console surrogate:
+
+| Launch | Console HWND present | Root-owner HWND present | Exit / stderr |
+| --- | --- | --- | --- |
+| WSL directly to Windows PowerShell | No | No | 0 / empty |
+| WSL to installed PowerShell 7, then the same Windows PowerShell | No | No | 0 / empty |
+
+Both complete reports had `ObservationFailed=false`; all seven handle,
+existence, visible-style and equality flags were false. The transient source
+was SHA-256 `896057bbf4a086a0f95cdeaefd5df0f646393c74f3363b2c767017c1167b50ee`.
+The optional fixed installed `pwsh.exe` was a 301,368-byte AMD64 console image,
+SHA-256 `bfb46af89433268872ddb43d1ca7a3f433452ee91ed356a9786940f90118e285`,
+independently admitted only for this metadata role under the workstation trust
+model. Its release version, signature, released-artifact provenance and
+historical continuity were not established by the bounded correspondence read.
+
+Neither call invoked V2, MSAL or WAM, created an application window, read account,
+Profile or cache state, or needed manual interaction. Account roles, authority,
+scopes and provider versions are nonapplicable. Telemetry was opted out and
+PowerShell update checks disabled before startup; no network operation was
+requested. Both ordinary requested roots returned normally, the outer shell
+returned the child's exit code, all safe streams were complete, and no forced
+termination or retry occurred. Safe captures are retained locally; no account or
+installation state was changed by the recipe. Preserve the existing ordinary
+interop console-host lifecycle basis rather than claim an exhaustive OS-process
+survey. The whole conservative three-synthetic-start allocation and one metadata
+and one collection pass remain spent; real-account consumption was zero.
+
+**Inference and limit:** In this sampled launch context, an intermediate ordinary
+PowerShell process did not supply the surrogate with a console HWND. Wrapping
+alone therefore does not establish the proposed existing-console parent source.
+This is not exact Native AOT product evidence, a claim about every WSL terminal,
+or evidence that WAM requires a visible application window. It does not select a
+replacement parent, validate hidden-parent WAM behavior, or invalidate prior
+accepted authentication results.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
