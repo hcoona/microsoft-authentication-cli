@@ -1557,6 +1557,54 @@ or evidence that WAM requires a visible application window. It does not select a
 replacement parent, validate hidden-parent WAM behavior, or invalidate prior
 accepted authentication results.
 
+### Hidden Owned-Parent Candidate Observations
+
+**Bounded runtime observations, 2026-10-10 UTC:** The accepted
+[candidate protocol](experiments/windows-slice-validation.md#hidden-owned-parent-candidate)
+at `effe583b3a8cecd7ae64280866b7383756cf75e1` admitted isolated source
+[`8e3ac5c76964b94ba27a9c636bd224a981a4104d`](https://github.com/hcoona/microsoft-authentication-cli/commit/8e3ac5c76964b94ba27a9c636bd224a981a4104d),
+tree `8acdf7d5a26346ac1d24417fe78cc89d39e3a008`. It omits the existing parent
+show call, sets the explicit unofficial MSAL broker title and adapts the existing
+visibility assertion. It does not replace the selected candidate.
+
+On the designated Windows 11 x64/WSL2 host, the admitted installed .NET SDK
+10.0.401/runtime 10.0.12, MSAL/Broker 4.83.1, NativeInterop 0.20.3, MSVC
+14.51.36231 and Windows SDK 10.0.26100.0 completed two offline restores, the
+existing test build and one Native AOT publication. All four phases exited 0
+without forced termination. Source pins, warm public cache/locks, compiler exits,
+PE checks and bounded artifact readbacks establish the provenance chain; no
+clean-restore or deployment claim follows. The executable is 8,922,624 bytes,
+SHA-256 `7e3409563adb6ef94020dfb085058ac513a5999720fb64a01f060e0c4cd40c65`;
+the native runtime hash remains unchanged.
+
+Exactly four existing credential-free Windows cases passed with complete standard
+TRX and normal runner completion: hidden owned-parent readiness with immutable
+Profile/STA checks, cancellation during creation, internal close without caller
+cancellation, and completion waiting for actual UI-thread exit. These establish
+synthetic own-window/lifecycle behavior, not WAM or human UX.
+
+The selected personal silent-only request then returned a valid
+`MechanismUnavailable/None`, product exit 1, complete stdout/stderr and normal
+completion without stopping a Linux relay. All six public inputs and Windows-local
+selection preflight passed; token/result validation remained Windows-local after
+bounded confidential WSL memory/pipe transport. The fixed phase and mechanism
+indication were not retained by that caller, so the blocking stage and cause are
+unknown. No interactive permission, prompt or configuration/cache repair was
+requested. Existing account/cache state was not assumed clean; any ordinary
+provider-managed effects remain unconfirmed. No private payload was retained.
+
+The whole preparation allocation `2/2/1/4` and real comparison reservation
+`3/3/3/1` remain spent, including skipped interaction and reuse. Metadata and safe
+collection each reserved three preparation passes and three real passes. Failed
+history, unused charges and `noExperimentLive=false` remain preserved. The
+[Issue #108 evidence](https://github.com/hcoona/microsoft-authentication-cli/issues/108#issuecomment-6093678279)
+and independent reviews retain source/call/actual correspondence.
+
+**Limit:** This failure neither validates nor rejects hidden-parent WAM behavior.
+Broker title presentation, focus, human cancellation, notice delivery and the
+remaining real lifetime obligations stay open. Reuse sufficient accepted native,
+work and prior WSL evidence within its original limits.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
