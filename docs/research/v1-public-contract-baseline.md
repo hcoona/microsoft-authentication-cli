@@ -1481,6 +1481,42 @@ absence of a public durable-write receipt still requires the accepted persistenc
 Concrete semantics are owned by the [Windows design](../designs/windows-ado-authentication.md),
 not by these source findings. Synthetic and real-platform validation remain separate.
 
+### Console Parent Versus a Separate Desktop Surface
+
+**Public-source findings, retrieved 2026-10-10 UTC:** The current Microsoft
+[WAM guide](https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/wam#parent-window-handles)
+requires an explicit parent HWND. Its console example calls
+`GetConsoleWindow()` followed by `GetAncestor(..., GA_ROOTOWNER)`; it does not
+create an application window or require Windows Forms, WPF, or WinUI. The same
+guide's integration best practices recommend giving the user context before a
+user-triggered authentication request, drawing a UI or window, and trying silent
+acquisition first. The sample's parent selection and that user-experience
+recommendation are distinct; neither proves that a separate visible V2 window is
+the only adequate presentation for an explicitly invoked CLI.
+
+The [GetConsoleWindow contract](https://learn.microsoft.com/en-us/windows/console/getconsolewindow#remarks)
+states that a pseudoconsole supplies a message-queue handle whose associated
+window is not displayed locally. A nonzero handle therefore does not establish
+a visible terminal parent. [GetAncestor](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getancestor)
+with `GA_ROOTOWNER = 3` walks parent and owner relationships; it is not a
+promise that the result is visible or that an intermediate shell creates a
+window. [IsWindowVisible](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-iswindowvisible)
+reports the `WS_VISIBLE` chain, not unobscured presentation, focus, or WAM
+eligibility. [IsWindow](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-iswindow)
+is an instantaneous existence observation; a borrowed handle can be destroyed
+or recycled afterward.
+
+**Hypothesis:** An already installed `pwsh.exe` may give a WSL-launched child
+a usable existing console parent without a separate V2 desktop surface. A shell
+process parent is not itself a window owner, and inherited pseudoconsole state
+may leave this hypothesis false. The
+[bounded console-parent comparison](experiments/windows-slice-validation.md#console-parent-feasibility)
+tests only that prerequisite. A positive visibility observation still requires
+exact-product WAM, context, cancellation, and lifetime evidence before replacing
+the currently selected host. No new provider, Profile, browser fallback,
+registration, account state, dependency version, or Native AOT publishing mode
+is selected by this assessment.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
