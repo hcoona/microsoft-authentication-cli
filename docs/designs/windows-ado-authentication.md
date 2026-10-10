@@ -706,6 +706,37 @@ created explicitly by V2; changing the process launcher alone does not remove it
 Do not force another terminal to manufacture a parent. A future minimal binding
 must be assessed separately before changing the selected implementation.
 
+### Hidden Owned-Parent Hypothesis
+
+The next [bounded candidate experiment](../research/experiments/windows-slice-validation.md#hidden-owned-parent-candidate)
+keeps the existing ordinary top-level HWND hidden while retaining its owned STA,
+message pump, admission rechecks, cancellation latch and creating-thread cleanup.
+This is not a message-only HWND, a borrowed foreground window or a separate host.
+The current published validation candidate remains unchanged; the experimental
+source and artifacts occupy separate retained roots. Do not promote the variant
+to the selected product implementation before its applicable evidence is accepted.
+
+For the first comparison, omit only the native show call. Retain the existing
+hidden controls and resource cleanup to isolate visibility from a larger host
+rewrite. Set MSAL `BrokerOptions.Title` to the fixed public string
+`Unofficial hcoona/microsoft-authentication-cli`. The
+[documented property](https://learn.microsoft.com/en-us/dotnet/api/microsoft.identity.client.brokeroptions.title)
+exists in the pinned MSAL 4.83.1 reference documentation; its actual presentation
+and suitability remain runtime questions. The explicit selected Profile retains
+its registration-ownership and external-dependency metadata. The operator must
+receive the experimental Profile/ownership context before an admitted interactive
+call. Hidden control text is not a user-facing notice, and a broker title is not
+proof that the notice was displayed or understood. General product notice delivery
+remains a replacement-design obligation rather than an incidental diagnostic log.
+
+The hidden window offers no usable Cancel button, caption or Escape action.
+Evaluate provider-owned cancellation and retain caller cancellation, lifetime-pipe
+EOF and the original deadline; synthetic message delivery does not prove an
+operator can cancel WAM. A silent success cannot establish hidden-parent WAM UX.
+Reuse accepted unrelated evidence, and leave unobserved title, focus, cancellation
+and lifetime behavior explicitly incomplete. If ordinary silent-first acquisition
+needs no interaction, do not manufacture a prompt or modify account/cache state.
+
 A later simplification must preserve self-contained interaction and completion,
 strict selection, pre-authentication unofficial/Profile ownership context,
 operator-controlled sign-in, cancellation, the original deadline, and normal

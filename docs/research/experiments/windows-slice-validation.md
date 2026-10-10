@@ -429,6 +429,90 @@ charges and scoped completion. Independently accept actual results before
 changing the parent design or running any dependent real-account experiment.
 No automatic retry or forced shell/window presentation is allowed.
 
+## Hidden Owned-Parent Candidate
+
+This experiment evaluates the hidden owned-parent hypothesis in the
+[Windows design](../../designs/windows-ado-authentication.md#hidden-owned-parent-hypothesis),
+under the existing Windows Slice Wave, designated hosts, selected roles, normal
+account effects and shared pools. It does not replace the accepted candidate,
+add a desktop application or introduce a runtime mode/public command.
+
+Pin a separate experimental source commit based on accepted `main-v2`. Its
+production-code delta is limited to omitting `ShowNativeParent(window)` in
+`OwnedRequestHost.RunWindow` and setting `BrokerOptions.Title` to
+`Unofficial hcoona/microsoft-authentication-cli`. Preserve the original creation,
+controls, gate/readiness ordering, STA pump, rechecks, provider policy and cleanup.
+Adapt the existing `ReadyParentCarriesAdmittedBranding` visibility assertion to
+require a live owned hidden parent; retain its immutable-Profile and thread checks.
+No new project, native observer, controller, launcher, export or dependency is
+part of this comparison. Independently admit the exact source and calls before
+any build or execution; the experimental branch is not a product acceptance.
+
+Use the same installed SDK/runtime, MSAL/Broker/NativeInterop, MSVC/Windows SDK,
+public offline caches and bounded ordinary compilation/artifact recipe already
+admitted for the current candidate. Use fresh source/build/artifact destinations.
+At most two offline preparations, two build/test actions, one Native AOT publication
+and four credential-free native scenarios are permitted by this recipe; reserve
+all actual roles before their batch. Each compiler phase has at most 600 seconds,
+the combined foreground preparation/build/publication call at most 1,260 seconds
+plus five seconds for stopping, and bounded public logs/artifacts under the reused
+recipe. A failure stops dependent work; no automatic retry or tool installation.
+
+Run only these existing Windows scenarios, once each, under one finite runner call:
+`ReadyParentCarriesAdmittedBranding`, `CancellationDuringCreationRejectsLateParent`,
+`InternalCloseDoesNotCancelCaller`, and `CompletionWaitsForActualUiThreadExit`.
+Give the call at most 120 seconds plus five seconds for stopping and 1 MiB per
+safe output stream. Require actual runner exit, complete results and all four
+passing cases. These establish own-HWND/readiness/teardown behavior with synthetic
+providers, not WAM, user-visible branding or real user cancellation. Other tests
+that require a visible parent remain outside this experimental subset; preserve
+their accepted evidence for the unchanged selected implementation.
+
+After independent artifact and synthetic acceptance, admit at most three actual
+product calls for the same selected personal request, sequentially: (1) silent-only
+assessment; (2) only after an accepted closed `InteractionRequired`, separately
+admitted interactive permission with fresh actual readiness and silent-first
+acquisition; (3) only after accepted normal success, fresh-process silent reuse.
+An accepted success in case 1 skips case 2 without refund and leaves hidden-parent
+WAM behavior unvalidated. Do not force interaction, refresh, claims, consent,
+account choice or scopes to manufacture UX evidence. Cancellation instead of
+success ends this authentication comparison; no success-gated reuse follows it.
+All real calls retain the accepted 120-second product, 130-second process,
+180+5-second foreground, memory/output limits and Windows-only result validator.
+Use the existing bounded WSL private-memory/pipe transport if the exact call does;
+no confidential output may enter files, traces, chat or committed evidence.
+
+Before case 2, communicate the public unofficial project and experimental Profile's
+registration-owner/external-dependency context, the expected WAM-only visible
+surface, the actual sign-in/choice/consent action if needed, and available caller
+cancellation. Wait for fresh actual readiness. The operator may cancel on WAM's
+own surface; neither a hidden button nor synthetic `WM_CLOSE` is a usable human
+Cancel action. Unexpected owned-window display, unusable focus, unrequested
+interaction, a private-output leak, mismatched inputs or uncertain completion stops
+the batch. Use only the existing owned stop procedure; do not manipulate foreign
+windows or terminate the shared broker. Retain provider-managed session updates
+under the standing account-effects boundary, including after cancellation.
+
+Observe through existing standard local OTEL stages, fixed diagnostics, normal
+stdout validation and actual process return. Record operator observations separately
+when WAM actually appears: visible surfaces/title, ability to interact, performed
+login/cancellation and disappearance. Do not export screenshots, window handles,
+titles containing private data, selectors, tokens or provider text. A title setting,
+span completion or caller exit alone does not establish UX or full native lifetime.
+No new window collector or observation tool is permitted.
+
+Allocate exact finite preparation and real batches from the current accounting;
+reserve at most six metadata and six safe-collection passes cumulatively for this
+recipe, within the shared passive ceilings. Reuse the prior exact per-role bounds:
+public materialization at most 16 MiB/30 seconds, one bounded public artifact pass
+at most 5 GiB/60 seconds, and each account call's 16 MiB plus 8 KiB/30-second
+metadata and 1 MiB/30-second safe collection. Exact calls must include any scenario
+build and runner inputs in these allocations. Retain all spent/failed/unused
+charges, historical flags and original deadlines. Independently accept each actual
+and scoped completion before its dependent step. Preserve the current candidate,
+public artifacts and safe evidence; no cache/configuration repair, install, cleanup
+of historical unknown objects or general support promise follows from this recipe.
+
 ## Outcome-Based Execution and Accounting
 
 Continue the existing sanitized cumulative accounting carrier. Preserve every prior
