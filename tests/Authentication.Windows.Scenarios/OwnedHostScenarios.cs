@@ -65,7 +65,7 @@ public sealed class OwnedHostScenarios
         {
             Assert.IsFalse(token.IsCancellationRequested);
             Assert.AreNotEqual((nint)0, parent);
-            Assert.IsTrue(OwnedWindowObservation.IsVisible(parent));
+            Assert.IsFalse(OwnedWindowObservation.IsVisible(parent));
             Assert.AreEqual(ApartmentState.STA, fixture.UiApartment);
             Assert.IsNotNull(fixture.UiThread);
             Assert.IsTrue(fixture.UiThread.IsBackground);

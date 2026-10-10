@@ -716,6 +716,10 @@ The current published validation candidate remains unchanged; the experimental
 source and artifacts occupy separate retained roots. Do not promote the variant
 to the selected product implementation before its applicable evidence is accepted.
 
+This isolated experimental branch implements only the hidden-parent comparison
+and its existing visibility assertion. Runtime WAM and human UX evidence remain
+pending; this source change does not replace the selected validation candidate.
+
 For the first comparison, omit only the native show call. Retain the existing
 hidden controls and resource cleanup to isolate visibility from a larger host
 rewrite. Set MSAL `BrokerOptions.Title` to the fixed public string

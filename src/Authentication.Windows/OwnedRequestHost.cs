@@ -256,13 +256,12 @@ internal sealed partial class OwnedRequestHost : IRequestHost
 
             lock (gate)
             {
-                // This is the only native show and readiness publication path.
-                // The gate orders other threads; reentrant terminal callbacks destroy
-                // the HWND before native show can continue. Creation checkpoints hold
-                // no lock, and neither path can publish readiness after invalidation.
+                // The experiment preserves the readiness gate and terminal ordering,
+                // while leaving the owned parent hidden. Creation checkpoints hold
+                // no lock, and readiness cannot publish after invalidation.
                 if (IsTerminal) return;
                 showing = true;
-                try { ShowNativeParent(window); }
+                try { /* The experimental parent intentionally remains hidden. */ }
                 finally { showing = false; }
                 if (IsTerminal) return;
                 published = true;
