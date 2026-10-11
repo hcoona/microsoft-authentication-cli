@@ -582,6 +582,54 @@ and scoped completion before its dependent step. Preserve the current candidate,
 public artifacts and safe evidence; no cache/configuration repair, install, cleanup
 of historical unknown objects or general support promise follows from this recipe.
 
+## Windows Request Lifetime Dispatch Validation
+
+After the accepted request-lifetime dispatch correction, build the unchanged visible
+owned-parent product from its accepted source. Reuse the prior current-candidate
+compiler environment, installed toolchains and public offline package cache. Preserve
+the selected candidate until the new source, artifacts and relevant controlled
+process outcomes have independent acceptance. No account configuration, Profile,
+cache, broker state, hidden-parent behavior or dependency changes are part of this
+preparation.
+
+In fresh dedicated roots, admit at most two offline preparations, two build/test
+actions, one Native AOT publication and 12 synthetic process scenarios. The compiler
+call restores the CLI and existing Windows scenario project, builds the latter and
+publishes the CLI. Reuse the existing ordinary creation-time process handles and
+owned stop method, with one MSBuild node and no shared compiler, node reuse or build
+servers. Restore phases have at most 180 seconds each, build 240 seconds and publish
+600 seconds; the whole call has at most 1,260 seconds plus five stop seconds. Bound
+each of the four Windows-local compiler logs to 512 KiB, aggregate 2 MiB, and retain
+at most 1 GiB and 10,000 entries. Export only the existing fixed code/fact report.
+
+Run these unchanged cases once through the existing scenario runner:
+
+- ProcessScenarios: selected success despite broken diagnostics, initially closed
+  lifetime pipe, writer closure rejecting late success, and uncooperative deadline.
+- OwnedProcessScenarios: normal closure, local cancellation, local host fault, actual
+  UI-thread drain, outgoing callback drain, and closure arming the bound before core
+  terminal selection.
+- DefaultHttpCompositionScenarios: cancellation through drain, and disposal stall
+  retaining the watchdog.
+
+These 12 cases cover result transport, pipe cancellation, original deadline/watchdog,
+owned UI/callback drain and HTTP disposal. Controlled providers and synthetic
+Profiles remain credential-free. Allow the runner at most 120 seconds plus five
+stop seconds, each safe stream/log/TRX at most 1 MiB, and require actual runner exit,
+complete fixed results, all expected cases and their required owned-child completion.
+No new launcher, controller, observer or executable project is admitted.
+
+Allocate three metadata and three safe-collection passes before the batch. Reuse
+the prior fixed public-source materialization, four compiler-log projection, three
+public output acquisition and scenario-result qualification recipes, with their
+16 MiB/30-second, 2 MiB/30-second, 5 GiB/60-second and bounded scenario limits.
+Independently admit exact source/input/calls, operating basis and full charges before
+the first Windows read or invocation. A failure stops dependent execution without
+retry or refund. Independently accept compiler/artifact outcomes before the runner,
+and accept all actual outcomes before executable account use. Reuse the accepted
+Core scenarios and unchanged dependency/native API evidence. These controlled cases
+do not establish a real WAM cancellation, actual WSL deadline or full Slice acceptance.
+
 ## Outcome-Based Execution and Accounting
 
 Continue the existing sanitized cumulative accounting carrier. Preserve every prior
@@ -592,7 +640,11 @@ publication and 1,200 synthetic scenarios; the real pool remains separate at
 execution mechanics, not those authorizations or historical consumption.
 
 Passive metadata ceilings remain 512 passes / 16 GiB reserved bytes / 30,720 seconds;
-collection ceilings remain 512 passes / 1 TiB reserved bytes / 153,600 seconds.
+Collection capacity is 560 passes / 1 TiB reserved bytes / 153,600 seconds, including
+the remaining preparation and acceptance buffer under the same Wave outcome and
+effects boundary. This revision changes only the pass ceiling; it preserves all
+consumption, failed and unused reservations, and original byte/time ceilings.
+Capacity is not an instruction to consume the buffer.
 Each necessary pass needs a reviewed fixed selection and stricter finite operation,
 byte and time limits. Do not perform passive surveys or read private inputs through
 Linux. Ordinary source editing and repository checks are not account experiments.
