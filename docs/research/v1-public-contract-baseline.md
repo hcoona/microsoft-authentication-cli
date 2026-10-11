@@ -1699,6 +1699,46 @@ reservations and `noExperimentLive=false` remain preserved. No raw result, priva
 payload or diagnostics were retained. Reuse existing sufficient success evidence;
 actual deadline and the other incomplete lifetime/UI claims remain open.
 
+
+### Windows Dispatch Correction Validation
+
+**Bounded controlled observation, 2026-10-11 UTC:** The accepted source
+`2d79f3a07408cffe024ce9d888d1cca272f5c926`, tree
+`7e6b8531f83900d211780ac1856561958b1e46cd`, dispatches the request body so a
+synchronous dependency prefix cannot withhold the selected terminal task from
+its caller. The prior four-case red observation and 72-case green observation
+establish that controlled source behavior; they do not identify the real exit-2
+failure cause.
+
+Under the [Windows dispatch protocol](experiments/windows-slice-validation.md#windows-request-lifetime-dispatch-validation)
+at `7f1c8de8d05d6a55e2fe51ed9cbd120e1cdf33ca`, two offline restores, the existing
+Windows scenario build and Native AOT publication all returned exit 0. The four
+fixed compiler reports indicated normal created-root completion without forced
+termination. Exact EXE, PDB and runtime content, EOF and non-ctime identity checks
+joined retained copies to the accepted source/toolchain/dependency basis. The EXE
+is Windows x64 PE32+ without a CLR directory, SHA-256
+`f6a045888160ce1734396392e2bb27d1eb6800bf7a39886868a2d54eab4e00d9`.
+
+The 12 existing process cases all passed through the standard runner and TRX:
+normal result despite broken diagnostics, initially closed input, writer closure,
+uncooperative deadline, six owned-host cancellation/fault/thread/callback/drain
+cases, and two default HTTP ownership/disposal cases. The runner returned exit 0
+with normal created-root completion and no forced termination. Source assertions
+bind their child exit, capture and applicable drain observations; runner return
+alone is not global closure. Independent compiler/artifact and final actual
+reviews passed before admitting the candidate for separately authorized real calls.
+
+Accounting1004 closes the batch without a debit or refund. Technical consumption
+is `61/231/19/819`, remaining `39/169/41/381`; real remains `49/49/49/13`.
+Metadata consumption is 92 passes and collection 513. All historical flags, failed
+and unused reservations and `noExperimentLive=false` remain preserved. No private
+input, account effects or real authentication were part of this controlled batch.
+
+**Limit:** These synthetic cases establish their controlled behaviors, not actual
+WAM cancellation, a real typed WSL timeout, human UI evidence, caller death or full
+Slice acceptance. Reuse the accepted native personal/work and actual WSL successes
+within their original limits. The isolated hidden-parent variant remains unpromoted.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
