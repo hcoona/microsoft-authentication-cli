@@ -633,6 +633,42 @@ exact source and compilation call, precharge the existing ledger, and accept the
 actual compiler outcome before using its output. A Linux managed build establishes
 compilation only; exact Windows execution admission remains required.
 
+## Focused Request Lifetime Dispatch Check
+
+Use the existing Core scenario project to check terminal-task availability while a
+synthetic dependency blocks synchronously before returning its Task. Cover caller
+cancellation and original deadline expiry, each with and without a pending
+cancellation callback. Keep the synthetic operation and callback pending until the
+test has checked terminal-task availability, cancellation, withholding late success
+and incomplete actual drain. Release both gates in `finally`, observe operation and
+callback completion, and join the one owned caller thread within finite fixture
+limits, including after an assertion failure. No Windows, broker, account, UI or
+private input is involved.
+
+Independently admit the exact red and green source trees and calls before execution.
+The red selection adds these four cases to the unchanged inline-dispatch source;
+expected terminal-task wait failures demonstrate the missing behavior. A compiler
+failure, unexpected test result or incomplete owned completion stops the batch.
+The green selection applies the reviewed dispatch correction and any required
+fixture publication synchronization, then runs RequestLifetimeScenarios,
+ApplicationScenarios and TelemetryScenarios in the existing project. Retain the
+expected failed red evidence; it is not a passing product observation.
+
+Allocate one offline preparation action and two combined build/test actions from
+the remaining common technical pool before the first SDK call. Use the admitted
+Linux SDK 10.0.401/runtime 10.0.12, retained public offline feeds, locked dependencies,
+cleared credentials and network sources, audit disabled, and fresh dedicated output
+roots bound to each admitted source tree. Disable node reuse, shared compilation,
+build servers and tool/test telemetry. Each foreground call has at most 180 seconds
+plus five stop seconds and 8 MiB public output; the batch retains at most 1 GiB and
+10,000 entries. No detached compiler or test process may survive completion.
+
+There is no real-account or passive-collection charge, automatic retry, download,
+new executable project or controller. Preserve all historical failures and charges.
+Independently accept red/green outcomes and scoped completion before relying on the
+correction. This check establishes controlled lifetime behavior, not the cause of a
+real exit-2 failure, actual Windows shutdown, WAM cancellation or WSL acceptance.
+
 ## Historical Evidence
 
 The prior detailed protocols, source pins, receipts, failed outcomes and bounded
