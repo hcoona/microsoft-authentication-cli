@@ -1600,7 +1600,49 @@ history, unused charges and `noExperimentLive=false` remain preserved. The
 [Issue #108 evidence](https://github.com/hcoona/microsoft-authentication-cli/issues/108#issuecomment-6093678279)
 and independent reviews retain source/call/actual correspondence.
 
-**Limit:** This failure neither validates nor rejects hidden-parent WAM behavior.
+**Bounded diagnostic and fresh-comparison observations, 2026-10-10 and
+2026-10-11 UTC:** The accepted correction protocol at
+`05e4f1c214d24ce3bfa9da0dc33a2f21e7eb0b50` admitted one separately charged
+silent diagnostic using the same candidate and selected request. It returned a
+valid `MechanismUnavailable/None`, product exit 1, complete streams and normal
+completion. Existing fixed diagnostics reported `host_session_inactive` with
+`profile_read` and `account_discovery` phase names. This establishes failure of
+the calling Windows session's Active-state gate, not the exact WTS substate or
+physical cause. The caller's result-receipt timestamp was corrected to occur
+immediately after transport and before diagnostic projection; independent finding
+triage and exact-source admission accepted that correction.
+
+After the required ordinary Windows desktop connection/usable-state action, the
+one admitted fresh comparison ran an initial silent assessment and a fresh-process
+silent reuse. Both returned `Success/Silent`, product and foreground exit 0,
+complete stdout/stderr, passing normal-result and selected-account metadata
+checks, six verified public inputs, and preflight exit 0 with empty stderr.
+They completed in 6,635 ms and 2,558 ms, respectively, with normal owned-root
+completion and no stopped Linux relay. Fixed observations included
+`profile_read`, `account_discovery`, `silent_acquisition` and
+`candidate_validation`; no mechanism-unavailable indication was observed.
+The first success skipped the conditional interactive case without refund.
+No WAM UX observation follows from either noninteractive success.
+
+The source, candidate, Profile, selected personal request, common authority,
+Azure DevOps `.default` scope, Windows-local private configuration and validator
+remained unchanged. Results traversed only the accepted bounded confidential WSL
+memory/pipes before Windows-only validation; no private payload or raw diagnostics
+were retained. No prompt was forced, and no account/cache/configuration repair or
+service request occurred. Persistence remains explicitly unconfirmed; the second
+success establishes fresh-process reuse rather than a durable-write receipt.
+Independent actual acceptance passed before reuse and after the final call.
+
+The diagnostic reservation `1/1/1/0` and fresh-comparison reservation `3/3/3/1`
+remain spent in addition to the initial failed comparison. Each added actual-call
+slot reserved one metadata and one safe-collection pass, including skipped
+interaction. Current cumulative technical consumption is `58/227/18/807` and
+real consumption is `47/47/47/13`, with `49/49/49/39` real units remaining.
+Metadata consumption is 87 passes and safe collection is 508 passes. The closed
+comparison preserves all failures, unused charges and historical
+`noExperimentLive=false`; it admits no further call under this recipe.
+
+**Limit:** These observations neither validate nor reject hidden-parent WAM behavior.
 Broker title presentation, focus, human cancellation, notice delivery and the
 remaining real lifetime obligations stay open. Reuse sufficient accepted native,
 work and prior WSL evidence within its original limits.

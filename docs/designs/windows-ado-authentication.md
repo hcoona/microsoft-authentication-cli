@@ -740,8 +740,14 @@ needs no interaction, do not manufacture a prompt or modify account/cache state.
 The [initial candidate observations](../research/v1-public-contract-baseline.md#hidden-owned-parent-candidate-observations)
 establish four synthetic hidden-parent lifecycle cases. The actual personal silent
 assessment ended normally with `MechanismUnavailable`; its fixed reason was not
-collected. This does not select or reject the hypothesis. Use existing standard
-diagnostics for the bounded correction, retaining the notice and WAM UX obligations.
+collected. A separately admitted standard diagnostic identified the calling
+session's Active-state obstruction. After the required ordinary desktop action,
+the same isolated candidate completed the accepted fresh comparison with an
+initial silent success and a fresh-process silent success. The interactive case
+was skipped without manufacturing a prompt. These results establish selected
+request transport and reuse for that candidate, but do not select or reject its
+WAM UX hypothesis. Notice delivery, title presentation, focus, human cancellation
+and the remaining lifetime obligations stay open.
 
 A later simplification must preserve self-contained interaction and completion,
 strict selection, pre-authentication unofficial/Profile ownership context,
