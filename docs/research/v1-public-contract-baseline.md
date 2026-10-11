@@ -1754,6 +1754,23 @@ technical unchanged `61/231/19/819`, metadata 93 and collection 514. All histori
 flags and charges remain. The one-shot recipe is exhausted; no retry is running.
 The prior controlled successes and actual lifetime/UI evidence limits still apply.
 
+**Same-request reassessment, 2026-10-11 UTC:** The accepted supplement at
+`0d6981cda4fa7f17d571b6c610dfcfceb3a166f2` ran once after its required desktop
+state action, on the same candidate and request. Six public inputs and preflight
+exit 0 with empty stderr passed. Product exit 2 and both complete streams were
+observed; all created roots closed normally without stopping a Linux relay.
+Windows-only result validation accepted no typed outcome. This is a transport
+failure, not a typed Timeout. Fixed phase observations included `profile_read`
+and `account_discovery`; no mechanism indication was observed. The 2,116 ms
+caller launch-to-full-streams interval and 5,954 ms complete foreground interval
+do not identify the product entry clock, watchdog path, dependency pending at
+expiry or the internal exit-2 cause.
+
+Independent actual acceptance passed. Accounting1008 closes only this assessment
+without a debit or refund: real `51/51/51/13`, remaining `45/45/45/39`; technical
+unchanged `61/231/19/819`, metadata 94 and collection 515. All historical flags
+and charges remain. The supplement is exhausted, with no automatic retry.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
