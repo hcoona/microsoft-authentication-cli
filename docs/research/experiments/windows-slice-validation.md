@@ -341,6 +341,17 @@ and historical noExperimentLive=false. Independently accept the actual and scope
 completion before any dependent work. This one call does not satisfy caller death,
 EOF during WAM, human cancellation, hidden-parent UX or the whole Slice.
 
+If this assessment instead completes with a valid unavailable result whose
+existing fixed diagnostics establish a current host/session/input obstruction,
+independently accept the failed actual and normal completion, retaining its full
+charge. After the required actual ordinary desktop state action, admit at most
+one separately charged assessment of the same candidate and exact request. This
+is a new reviewed call, not an automatic retry or a renewed original deadline.
+Require unchanged source/artifact/current-basis admission and the same full
+one-call allocation before its first operation. Any result ends this supplement;
+no additional attempt, host restoration, account/cache/configuration repair,
+forced prompt or network manipulation follows from it.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
