@@ -384,6 +384,40 @@ request, limits, observations, operating-basis admission and full one-call alloc
 Any outcome ends this supplement without another attempt. It grants no host switch,
 new launch mechanism, state repair, forced UI or interaction permission.
 
+
+### WSL Deadline Observation Correction
+
+After independent acceptance of the preceding exit-2 reassessment and its normal
+scoped completion, admit one same-candidate/request noninteractive diagnostic call.
+Correct only the safe projection of existing standard local telemetry. Preserve
+stage event start/completion, stage name, bounded elapsed/duration milliseconds
+and fixed status for the request and existing authentication phases, at most
+32 events. Also preserve fixed completion/cancellation indications, an allowlisted
+request-completion outcome and elapsed time, stdout/stderr byte counts and validator
+exit/stderr-presence. Do not export trace/span IDs, provider text, arbitrary fields
+or any raw result or diagnostics. Invalid observation fields mark observation
+failure; they do not change authentication or manufacture a typed result.
+
+Reuse the accepted dispatch candidate, preflight, selected request, Profile,
+Windows-only validator and confidential bounded memory/pipe transport. Retain
+one-second product, six-second completion, all original preflight/validator/outer
+limits and stop rules. Reserve one start/discovery/silent call, zero interactive
+calls, one 64-operation metadata pass of 16 MiB plus 8 KiB/30 seconds and one
+eight-operation safe-collection pass of 1 MiB/30 seconds before execution.
+Independently accept the exact corrected source/call and current basis; unchanged
+artifact and input admission remains reusable. No new desktop action or sign-in
+permission is required for this noninteractive observation correction.
+
+Any result ends this recipe without retry or refund. Exit 2 remains a transport
+failure, even when fixed telemetry suggests a selected terminal outcome; only the
+unchanged Windows validator with matching exit and complete transport can accept
+a typed result. Missing optional events do not prove an event did not occur, and
+phase-start or caller elapsed alone does not prove a dependency pending at expiry
+or identify a watchdog branch. Use the fixed observations to choose supported
+source correction or retain the specific unknown. This recipe does not reopen a
+spent call or admit caller-death/EOF-during-WAM execution, a new observer/controller,
+product host, state repair, forced UI or a larger process allowance.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
