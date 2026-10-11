@@ -1739,6 +1739,21 @@ WAM cancellation, a real typed WSL timeout, human UI evidence, caller death or f
 Slice acceptance. Reuse the accepted native personal/work and actual WSL successes
 within their original limits. The isolated hidden-parent variant remains unpromoted.
 
+**Actual followup, 2026-10-11 UTC:** Under the one-shot deadline protocol at
+`b4ff21ffcda1177a4027f4108f83b01d2e2a6f5a`, the corrected candidate returned
+valid `MechanismUnavailable/None`, exit 1, with fixed `host_session_inactive`.
+Six public inputs and preflight exit 0 with empty stderr passed; both streams and
+created roots completed normally without stopping a Linux relay. The 987 ms caller
+launch-to-full-streams interval and 2,421 ms complete foreground interval establish
+neither the product entry clock nor dependency work pending at expiry. No typed
+Timeout was obtained, and the exact WTS substate or physical cause is unknown.
+
+Independent actual acceptance passed. Accounting1006 closes only this failed
+assessment without a debit or refund: real `50/50/50/13`, remaining `46/46/46/39`;
+technical unchanged `61/231/19/819`, metadata 93 and collection 514. All historical
+flags and charges remain. The one-shot recipe is exhausted; no retry is running.
+The prior controlled successes and actual lifetime/UI evidence limits still apply.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn

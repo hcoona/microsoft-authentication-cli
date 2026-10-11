@@ -375,6 +375,15 @@ retain ordinary insufficient outcomes and transport failures. This new assessmen
 does not reopen the exhausted prior supplement or admit state repair, forced UI,
 network manipulation, a new observer, or caller-death/EOF-during-WAM execution.
 
+If this new assessment returns a valid unavailable result with the existing fixed
+host/session/input indication and normal scoped completion, independently accept
+that failed outcome before one separately charged same-request reassessment.
+Finish exact preparation first, then require the owner to freshly connect and keep
+the ordinary designated Windows desktop usable. Keep the same corrected candidate,
+request, limits, observations, operating-basis admission and full one-call allocation.
+Any outcome ends this supplement without another attempt. It grants no host switch,
+new launch mechanism, state repair, forced UI or interaction permission.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
