@@ -446,6 +446,37 @@ No new host, account/cache repair, forced UI, process observer/controller or
 lifetime experiment is admitted. Preserve the remaining typed-deadline, caller
 death, EOF-during-WAM and human UI gaps separately from baseline success.
 
+
+### Corrected-Candidate Interactive Cancellation
+
+After accepting the preceding valid InteractionRequired result and scoped
+completion, admit one personal WSL `interactive-if-needed` request on the same
+corrected candidate, selected request, Profile, validator and transport. Preserve
+silent-first behavior. Complete exact source/call/current-basis preparation and
+independent admission, then obtain fresh actual operator readiness before the
+whole one-call precharge and invocation. Existing desktop readiness is not sign-in
+or cancellation attendance for this call.
+
+If ordinary WAM sign-in, selection or delegated-consent UI appears, the operator
+cancels that surface using its normal cancel or close action. Do not enter
+credentials merely for this cancellation case, force interaction, change state
+or launch a different surface. Require validated Cancelled/None, exit 1, no token,
+complete result/streams and normal created-root completion for the cancellation
+claim. Separately record actual operator observations of the surface, action and
+window closure when available. Provider Denied, silent Success or another valid
+outcome remains its own observation and does not satisfy user cancellation; do
+not repeat a successful or insufficient result to manufacture UI.
+
+Reserve one product start/discovery/silent call and one permitted interactive
+call, one 64-operation metadata pass of 16 MiB plus 8 KiB/30 seconds and one
+eight-operation safe-collection pass of 1 MiB/30 seconds before the first covered
+operation. Keep the preceding ordinary 120-second product, 130-second completion,
+preflight/validator/outer limits, fixed projection, privacy, writer ownership and
+stop rules. Any outcome ends this recipe without retry or refund. Retain missing
+UI evidence as incomplete. No account addition, administrator consent, cache or
+configuration repair, new observer/controller/host, deadline or EOF/caller-death
+experiment is admitted by this cancellation call.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
