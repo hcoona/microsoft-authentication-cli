@@ -1647,6 +1647,40 @@ Broker title presentation, focus, human cancellation, notice delivery and the
 remaining real lifetime obligations stay open. Reuse sufficient accepted native,
 work and prior WSL evidence within its original limits.
 
+### Actual WSL Deadline Assessment Observation
+
+**Bounded runtime observation, 2026-10-11 UTC:** The accepted
+[deadline protocol](experiments/windows-slice-validation.md#actual-wsl-deadline-assessment)
+at `d2eecc84236ce28a394314a79af0265cd923637d` admitted one noninteractive
+personal-account request with a one-second timeout on the unchanged selected
+Native AOT candidate, not the hidden-parent variant. The selected Profile,
+common authority, Azure DevOps default scope, existing private Windows
+configuration and Windows-only validator were unchanged.
+
+The actual request returned valid `MechanismUnavailable/None`, product and
+foreground exit 1, complete streams, six verified public inputs, preflight exit 0
+with empty stderr, and normal owned-root completion without stopping a Linux relay.
+The fixed mechanism indication was `host_session_inactive`; observed phase names
+were `profile_read` and `account_discovery`. The complete foreground call took
+2,304 ms, including preflight and validation; this is not a measured product
+deadline interval. It establishes the calling session's Active-state obstruction,
+not its exact WTS substate or physical cause. No dependency-pending-at-expiry,
+authentication success or actual timeout evidence was obtained.
+
+Independent actual acceptance passed. The full `1/1/1/0` real reservation, one
+metadata pass and one safe-collection pass remain spent. Cumulative real
+consumption is `48/48/48/13`, with `48/48/48/39` remaining; technical consumption
+remains `58/227/18/807`. Metadata consumption is 88 passes and safe collection is
+509 passes. The failed assessment is closed without refund or automatic retry;
+historical failures and `noExperimentLive=false` remain preserved. No private
+payload, raw diagnostics, state repair, forced interaction or network manipulation
+was retained or performed.
+
+**Limit:** This valid failure does not complete actual deadline, caller-death,
+EOF-during-WAM, hidden-parent UX or whole-Slice acceptance. Any new assessment
+requires its accepted protocol and current operating-basis gates; reuse sufficient
+native, work and WSL success evidence.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
