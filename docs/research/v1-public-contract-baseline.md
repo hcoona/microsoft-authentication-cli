@@ -1813,6 +1813,35 @@ remaining `43/43/43/39`; technical unchanged `61/231/19/819`, metadata 96 and
 collection 517. All historical flags and full charges remain. The recipe ended;
 interaction requires separate exact admission and fresh actual readiness.
 
+**Interactive cancellation attempt, 2026-10-11 UTC:** After fresh operator
+readiness, the one admitted personal WSL `interactive-if-needed` call at
+`69af581f74230b93bc2d27997cb4640bb7e6f4da` used the same corrected candidate,
+selected request, Profile and Windows-only validator, retaining silent-first
+behavior. It returned validated `Timeout/None`, exit 1, rather than Cancelled.
+Preflight verified six public inputs, exit 0 and empty stderr. Both streams and
+created roots completed normally without stopping a Linux relay; no raw result,
+private selector or provider diagnostic was retained.
+
+Standard local telemetry reported request completion as `timeout` at 120,006 ms.
+Account discovery ran from 6 to 2,059 ms, interaction opening from 2,059 to
+2,072 ms and interactive acquisition from 2,072 to 120,036 ms; interaction
+closure completed at 120,036 ms. The caller launch-to-full-streams interval was
+120,157 ms and the complete foreground interval 122,485 ms. These caller intervals
+are not exact Windows entry/exit measurements. The valid typed result establishes
+an actual WSL timeout under the ordinary 120-second deadline, without another
+one-second assessment. Phase observations alone do not establish visible WAM UI
+or a particular provider-internal cause.
+
+The operator did not continuously watch and saw no WAM window on returning to
+check. Earlier appearance, an explicit cancel action and disappearance timing
+were not observed. The user-cancellation claim therefore remains incomplete.
+This one-shot recipe ended with its alternative result, without retry or refund.
+Independent actual acceptance passed. Accounting1014 closes only this call and
+retains its full precharge: real `54/54/54/14`, remaining `42/42/42/38`;
+technical unchanged `61/231/19/819`, metadata 97 and collection 518. Historical
+flags and charges remain. Caller death, EOF during actual WAM, denial, applicable
+hidden-parent UX and full Slice acceptance remain separate obligations.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
