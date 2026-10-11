@@ -407,6 +407,92 @@ public sealed class RequestLifetimeScenarios
         Assert.IsNull(duplicate);
     }
 
+    [TestMethod]
+    [DataRow(false, false)]
+    [DataRow(true, false)]
+    [DataRow(false, true)]
+    [DataRow(true, true)]
+    public async Task TerminalTaskIsReturnedWhileSynchronousDependencyAndCallbacksRemainPending(
+        bool deadline, bool pendingCallback)
+    {
+        using var caller = new CancellationTokenSource();
+        using var releaseDependency = new ManualResetEventSlim();
+        using var releaseCallback = new ManualResetEventSlim();
+        var entered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var callbackEntered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var returned = new TaskCompletionSource<Task<AuthenticationOutcome>>(
+            TaskCreationOptions.RunContinuationsAsynchronously);
+        var callerFinished = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var scene = new Scene();
+        using var lifetime = new RequestLifetime(scene.Clock, scene.Clock.GetTimestamp(), Budget, caller.Token);
+        CancellationToken observedToken = default;
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                var run = lifetime.RunAsync(token =>
+                {
+                    observedToken = token;
+                    using var registration = pendingCallback
+                        ? token.Register(() =>
+                        { callbackEntered.TrySetResult(); releaseCallback.Wait(); }) : default;
+                    entered.TrySetResult();
+                    releaseDependency.Wait();
+                    return Task.FromResult(scene.Success());
+                });
+                returned.TrySetResult(run);
+            }
+            catch (Exception exception) { returned.TrySetException(exception); }
+            finally { callerFinished.TrySetResult(); }
+        }) { IsBackground = true };
+        var failures = new List<Exception>();
+        thread.Start();
+        try
+        {
+            await entered.Task.WaitAsync(HarnessLimit);
+            if (deadline) scene.Clock.Advance(Budget);
+            else caller.Cancel();
+            if (pendingCallback) await callbackEntered.Task.WaitAsync(HarnessLimit);
+            var run = await returned.Task.WaitAsync(HarnessLimit);
+            var expected = deadline ? AuthenticationFailure.Timeout : AuthenticationFailure.Cancelled;
+            AssertFailure(expected, await RequireOutcomeAsync(run));
+            Assert.IsTrue(observedToken.IsCancellationRequested);
+            Assert.IsFalse(lifetime.OperationCompletion.IsCompleted);
+            Assert.IsFalse(lifetime.CompleteAsync().IsCompleted,
+                "A terminal task is available before actual dependency/callback drain.");
+            Assert.IsTrue(lifetime.TryCommit(out var committed));
+            AssertFailure(expected, committed!);
+        }
+        catch (Exception exception) { failures.Add(exception); }
+        finally
+        {
+            releaseDependency.Set();
+            releaseCallback.Set();
+            try
+            {
+                try { await callerFinished.Task.WaitAsync(HarnessLimit); }
+                catch (Exception exception) { failures.Add(exception); }
+            }
+            finally
+            {
+                try
+                {
+                    try { Assert.IsTrue(thread.Join(HarnessLimit), "The owned caller thread must actually exit."); }
+                    catch (Exception exception) { failures.Add(exception); }
+                }
+                finally
+                {
+                    try { await lifetime.CompleteAsync().WaitAsync(HarnessLimit); }
+                    catch (Exception exception) { failures.Add(exception); }
+                }
+            }
+        }
+        if (failures.Count == 1)
+            System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(failures[0]).Throw();
+        if (failures.Count > 1) throw new AggregateException(failures);
+        Assert.IsFalse(lifetime.TryCommit(out _));
+    }
+
     private static void AssertFailure(AuthenticationFailure expected, AuthenticationOutcome outcome)
     {
         Assert.AreEqual(expected, outcome.Failure);
@@ -437,17 +523,30 @@ public sealed class RequestLifetimeScenarios
         public List<string> Effects { get; } = [];
         public TaskCompletionSource Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         public TaskCompletionSource Release { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        public Task<AuthenticationOutcome> Body { get; private set; } = Task.FromResult(new AuthenticationOutcome(null, AuthenticationFailure.InternalFailure));
+        private readonly TaskCompletionSource bodyCompleted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public Task Body => bodyCompleted.Task;
         public CancellationToken ProviderToken { get; private set; }
 
-        public Task<AuthenticationOutcome> RunAsync(RequestLifetime lifetime) => lifetime.RunAsync(token =>
-            Body = new RequestCoordinator(this, this).AuthenticateAsync(new(Email, [Scope], true, Tenant), token));
+        private RequestLifetime? activeLifetime;
+        public Task<AuthenticationOutcome> RunAsync(RequestLifetime lifetime)
+        {
+            activeLifetime = lifetime;
+            return lifetime.RunAsync(async token =>
+            {
+                try
+                {
+                    return await new RequestCoordinator(this, this)
+                        .AuthenticateAsync(new(Email, [Scope], true, Tenant), token);
+                }
+                finally { bodyCompleted.TrySetResult(); }
+            });
+        }
 
         public async Task ReleaseAndDrainAsync(Task<AuthenticationOutcome> run)
         {
             Release.TrySetResult();
-            await Body.WaitAsync(HarnessLimit);
             await run.WaitAsync(HarnessLimit);
+            await activeLifetime!.OperationCompletion.WaitAsync(HarnessLimit);
         }
 
         public AuthenticationOutcome Success() => new(Candidate(Guid.NewGuid()), null, PersistenceUnconfirmed: true);

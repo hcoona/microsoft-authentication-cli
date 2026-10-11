@@ -97,9 +97,10 @@ public sealed class RequestLifetime : IDisposable
             }
         }
 
-        // The concrete request body checks this token before each external effect.
-        // Never hold the terminal lock while invoking or awaiting a dependency.
-        _ = ObserveOperationAsync(operation);
+        // Return the terminal task even when a dependency blocks before its first
+        // await. Do not cancel dispatch: its finally must publish actual completion.
+        // The concrete request body checks the original token before each effect.
+        _ = Task.Run(() => ObserveOperationAsync(operation));
         return terminal.Task;
     }
 

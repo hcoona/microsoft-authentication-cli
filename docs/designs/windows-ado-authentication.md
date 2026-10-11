@@ -860,6 +860,17 @@ original request lifetime and precedes Profile access. An initially closed pipe
 cannot release Profile work while cancellation propagation is pending. Optional
 diagnostics have separate bounded bytes and do not participate in required drain.
 
+The request lifetime dispatches its dependency body through `Task.Run` before
+returning the terminal task. A synchronous dependency prefix therefore cannot keep
+the result worker from observing cancellation or the original deadline. Dispatch
+has no scheduling cancellation token: the body checks the original provider token
+before effects, and its `finally` must publish actual operation completion even
+when cancellation occurred before execution. ExecutionContext continues to flow;
+native admission checks the actual executing request thread, and owned UI remains
+on its dedicated STA. Scheduling delay or an uncooperative dependency may still
+prevent required drain. A selected terminal task does not establish cleanup or a
+matching result exit, and the unchanged watchdog remains the process bound.
+
 External broker windows/session changes are not forcibly rolled back. Forward cancellation
 through MSAL, close the owned parent, invalidate completion, and write a fixed sanitized
 completion/cancellation indication to stderr when available. Do not wait for the user to
