@@ -1796,6 +1796,23 @@ technical unchanged `61/231/19/819`, metadata 95 and collection 516. Historical
 flags and full charges remain. The diagnostic recipe is exhausted. Another
 identical one-second call has no established additional evidence value.
 
+
+**Normal baseline followup, 2026-10-11 UTC:** One noninteractive 120-second
+personal WSL request at `491067629530465d523138014d736b8f35ef17c8` returned
+validated `InteractionRequired/None`, exit 1. Preflight verified six public inputs,
+exit 0 and empty stderr. Both streams and created roots completed normally without
+stopping a Linux relay. Fixed telemetry recorded Profile completion at 5 ms,
+account discovery from 5 to 4,430 ms and request completion at 4,431 ms. The
+4,537 ms caller interval is not an exact Windows entry/exit measurement.
+
+This result establishes the completed request path on the corrected candidate,
+not a successful token, a cache-state cause, visible UI or general support. No
+interaction was allowed. Independent actual acceptance passed. Accounting1012
+closes only this failed baseline without a debit/refund: real `53/53/53/13`,
+remaining `43/43/43/39`; technical unchanged `61/231/19/819`, metadata 96 and
+collection 517. All historical flags and full charges remain. The recipe ended;
+interaction requires separate exact admission and fresh actual readiness.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
