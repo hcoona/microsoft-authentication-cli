@@ -418,6 +418,34 @@ source correction or retain the specific unknown. This recipe does not reopen a
 spent call or admit caller-death/EOF-during-WAM execution, a new observer/controller,
 product host, state repair, forced UI or a larger process allowance.
 
+
+### Corrected-Candidate Real-Provider Baseline
+
+After accepting the preceding diagnostic failure and scoped completion, admit
+one ordinary 120-second noninteractive personal WSL request on the accepted
+dispatch candidate. This establishes its current real-provider/result baseline
+before planning the remaining lifetime cases; it does not repeat the already
+accepted old-candidate personal/work pairs or attempt another one-second timeout.
+Reuse the existing preflight, selected request, Profile, confidential memory/pipe
+transport, Windows-only validator and fixed observation projection above.
+
+Require validated Success/Silent, exit 0, complete result and streams and normal
+created-root completion. Preserve the original 120-second product deadline,
+130-second completion limit, 30-second preflight, 10-second validator plus five
+stop seconds, and 180-second whole call plus five stop seconds. Keep all current
+byte, observation, lifetime-writer ownership and stop limits. Reserve one
+start/discovery/silent call, zero interactive calls, one 64-operation metadata
+pass of 16 MiB plus 8 KiB/30 seconds and one eight-operation safe-collection pass
+of 1 MiB/30 seconds before the first covered operation. Exact source/call/current
+basis requires independent admission; reuse unchanged artifact/input admission.
+
+Any result ends this recipe without retry or refund. A valid InteractionRequired
+ends the silent probe and needs a separately admitted interactive continuation
+and fresh sign-in readiness; do not infer permission from desktop readiness.
+No new host, account/cache repair, forced UI, process observer/controller or
+lifetime experiment is admitted. Preserve the remaining typed-deadline, caller
+death, EOF-during-WAM and human UI gaps separately from baseline success.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already

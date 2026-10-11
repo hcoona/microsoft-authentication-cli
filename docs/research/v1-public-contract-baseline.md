@@ -1771,6 +1771,31 @@ without a debit or refund: real `51/51/51/13`, remaining `45/45/45/39`; technica
 unchanged `61/231/19/819`, metadata 94 and collection 515. All historical flags
 and charges remain. The supplement is exhausted, with no automatic retry.
 
+
+**Observation correction, 2026-10-11 UTC:** The one admitted diagnostic call at
+`a405d92bd288a589bfd7a16ba78c735f6ec8df46` preserved existing fixed telemetry.
+Profile reading started at 2 ms and completed at 6 ms; account discovery started
+at 6 ms, with no completion event observed. A fixed request-completion event
+reported `timeout` at 1,010 ms. Product stdout contained 54 bytes; its exit was 2,
+and Windows-only validation accepted no typed result. Both streams and created
+roots completed normally without stopping a Linux relay. Preflight verified six
+public inputs, exit 0 and empty stderr. No raw payload was retained or inspected.
+
+The caller launch-to-full-streams interval was 2,092 ms; whole foreground time was
+4,417 ms. These intervals are not exact Windows entry/exit measurements. The
+fixed timeout-completion observation does not identify the watchdog path or a
+specific unfinished dependency or cleanup. Missing optional phase completion is
+not proof that the operation never finished. The accepted design permits exit 2
+if required operation/callback/host/pipe/HTTP drain cannot finish within its original
+bound, including after result writing; this source rule is not a diagnosis of
+the actual exit. Complete typed Timeout acceptance remains open.
+
+Independent actual acceptance passed. Accounting1010 closes only this diagnostic
+failure without a debit or refund: real `52/52/52/13`, remaining `44/44/44/39`;
+technical unchanged `61/231/19/819`, metadata 95 and collection 516. Historical
+flags and full charges remain. The diagnostic recipe is exhausted. Another
+identical one-second call has no established additional evidence value.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
