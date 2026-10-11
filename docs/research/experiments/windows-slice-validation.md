@@ -302,6 +302,45 @@ within the accepted Wave before those cases execute; reuse standard process/pipe
 facilities and the existing validator rather than creating a new observer project.
 Accepting this continuation alone does not complete the WSL or whole-Slice claim.
 
+### Actual WSL Deadline Assessment
+
+After the accepted native and WSL success evidence, admit one actual noninteractive
+personal-account deadline assessment on the unchanged selected Native AOT candidate,
+Profile, common authority and Azure DevOps default scope. Reuse the existing
+Windows-local selected configuration, bounded confidential WSL transport, fixed
+local observations and Windows-only result validator. The hidden-parent experimental
+variant is not selected for this assessment. No sign-in or attendance is required.
+
+Set the supported caller timeout to one second; the request's original entry clock
+covers all phases. Observe product exit and both complete streams for at most six
+seconds from launch, preserving the product's original watchdog allowance. The
+unchanged preflight has at most 30 seconds, the validator ten seconds plus five
+stop seconds, and the whole foreground call 180 seconds plus five stop seconds.
+Keep stdout/stderr at most 1 MiB each, validator output at most 4 KiB, and private
+configuration/projection at most 8 KiB/1 KiB. Keep the single noninherited lifetime
+writer open during the normal assessment; on failure close it and use only the
+remaining original deadline/stop allowance. A stopped Linux relay does not prove
+Windows closure and stops dependent work.
+
+Require valid Timeout/None, exit 1, no token, complete result/streams and normal
+owned completion for a successful timeout observation. A valid success before
+expiry, InteractionRequired or other ordinary failure is retained as an insufficient
+observation, without a retry or a timeout claim. Exit 2 or incomplete transport is
+a transport failure, not a complete typed timeout. Do not stall the network, alter
+account/cache/configuration/provider state, force interaction, refresh or change
+scopes to manufacture expiry. Local fixed phase observations locate observed
+progress but do not prove a dependency was pending at expiry; retain that limit.
+
+Independently admit the exact source, selected artifact, preflight, request,
+current operating basis and cumulative accounting before execution. Reserve one
+product start/discovery/silent call and zero interactive calls, one metadata pass
+of 64 operations/16 MiB plus 8 KiB/30 seconds, and one safe collection pass of eight
+operations/1 MiB/30 seconds. Precharge before the first covered read or invocation;
+no automatic retry or refund. Preserve all previous failures, conservative charges
+and historical noExperimentLive=false. Independently accept the actual and scoped
+completion before any dependent work. This one call does not satisfy caller death,
+EOF during WAM, human cancellation, hidden-parent UX or the whole Slice.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
