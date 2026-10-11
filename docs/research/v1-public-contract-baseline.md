@@ -1681,6 +1681,24 @@ EOF-during-WAM, hidden-parent UX or whole-Slice acceptance. Any new assessment
 requires its accepted protocol and current operating-basis gates; reuse sufficient
 native, work and WSL success evidence.
 
+**Bounded reassessment observation, 2026-10-11 UTC:** After the separately admitted
+ordinary-desktop state action, the same request ran once under the supplement at
+`a9aa414ca305c8efd8b57f3454e0a1a04340f384`. Preflight returned exit 0 with empty
+stderr and six verified public inputs. The product returned exit 2; both streams
+completed and all created roots ended normally without stopping a Linux relay.
+Result validation failed, so no validated outcome, route or typed timeout was
+obtained. Fixed phase observations recorded `profile_read` and `account_discovery`,
+with no mechanism indication. They establish neither pending WAM work nor the exact
+exit-2 path. The 4,472 ms whole foreground duration is not the product entry interval.
+
+Independent actual and scoped-completion review accepted this failure. The supplement
+ended with its full charge retained and no retry or refund. Real consumption is
+`49/49/49/13`, remaining `47/47/47/39`; technical consumption remains `58/227/18/807`.
+Metadata consumption is 89 passes and safe collection 510 passes. Historical failures,
+reservations and `noExperimentLive=false` remain preserved. No raw result, private
+payload or diagnostics were retained. Reuse existing sufficient success evidence;
+actual deadline and the other incomplete lifetime/UI claims remain open.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
