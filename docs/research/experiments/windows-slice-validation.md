@@ -352,6 +352,29 @@ one-call allocation before its first operation. Any result ends this supplement;
 no additional attempt, host restoration, account/cache/configuration repair,
 forced prompt or network manipulation follows from it.
 
+
+### WSL Deadline After Dispatch Correction
+
+After independent acceptance of the corrected request-lifetime source, ordinary
+Windows publication and existing process scenarios, admit one new noninteractive
+personal-account deadline assessment on that candidate. Reuse the exact selected
+request, Windows-local configuration, Profile, validator and confidential memory/pipe
+transport from the prior deadline recipe. Keep its one-second original request
+clock, six-second product completion limit, preflight/validator/outer limits,
+allowlisted observations, byte bounds, stop rules and typed Timeout acceptance.
+The candidate and public preflight hashes are the only subject-input changes.
+
+Record caller launch-to-complete-streams elapsed time as a caller interval, not an
+exact product-entry clock or proof of a dependency pending at expiry. Reserve one
+start/discovery/silent call, zero interactive calls, one existing 64-operation
+metadata pass of 16 MiB plus 8 KiB/30 seconds and one eight-operation safe-collection
+pass of 1 MiB/30 seconds. Independently accept exact source/artifact/call/current
+basis and full charges before execution. No attendance is required for this
+noninteractive request. Any outcome ends this recipe without retry or refund;
+retain ordinary insufficient outcomes and transport failures. This new assessment
+does not reopen the exhausted prior supplement or admit state repair, forced UI,
+network manipulation, a new observer, or caller-death/EOF-during-WAM execution.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
