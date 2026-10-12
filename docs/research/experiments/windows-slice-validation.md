@@ -568,6 +568,18 @@ no interactive call, two metadata passes (64 operations, 16 MiB plus 8 KiB and
 130 seconds). Preserve all historical flags, consumed charges and original clocks.
 No new controller, retained host, executable project or general observer is admitted.
 
+If this case instead ends before caller death with a complete valid
+`MechanismUnavailable/None` result and the existing fixed `host_session_inactive`
+indication, independently accept the actual and scoped completion, retain the
+full charge and close that recipe. After the operator actually reconnects and
+unlocks the same designated Windows desktop and supplies fresh readiness, admit
+at most one separately charged fresh assessment under the exact same request,
+sources, process binding, noninteractive permission and original deadline rules.
+Prepare and review its exact call before requesting that action. Readiness is
+an operating-state prerequisite, not sign-in permission. No automatic retry,
+another correction batch, state repair or forced interaction follows from this
+supplement; another outcome remains itself and ends without refund.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already

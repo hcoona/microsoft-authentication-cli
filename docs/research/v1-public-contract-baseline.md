@@ -1872,6 +1872,33 @@ technical unchanged `61/231/19/819`, metadata 98 and collection 519. All histori
 flags and charges remain. User cancellation, caller death, denial, applicable
 hidden-parent UX and full Slice acceptance remain separate obligations.
 
+**Caller-death assessment, 2026-10-12 UTC:** The single admitted personal WSL
+noninteractive call at `fa52b2ab35bd80b9bde04386e835d44fcdf40bb9` omitted the lifetime
+flag and used null stdin. It reused the accepted candidate, request, Profile,
+private configuration and Windows-only validator. The product returned before
+caller termination: valid `MechanismUnavailable/None`, product exit 1, validator
+exit 0 and `ProtocolValid=true`. Both streams and created roots completed normally,
+without stopping a Linux relay. Preflight verified six public inputs, exit 0 and
+empty stderr. The complete foreground call exited 0 because a validated early
+alternative is retained as itself; the caller-death case did not pass.
+
+The fixed diagnostic was `host_session_inactive`. Standard telemetry recorded
+Profile completion at 7 ms, account discovery from 7 to 10 ms, and request
+`mechanism_unavailable` completion at 10 ms. These phase names do not establish
+provider discovery or acquisition. Exact session state and the cause of the
+rejection remain unknown. Caller launch-to-full-streams was 117 ms and total
+caller elapsed time was 2,747 ms, with separate origins from product telemetry.
+No caller signal, native-wait submission or operator action occurred. No UI,
+Linux-caller-death or independently held native-exit evidence was established.
+
+The one-shot recipe ended without retry or refund. Its whole1017 precharge remains:
+real `56/56/56/15`, remaining `40/40/40/37`; technical unchanged `61/231/19/819`,
+metadata 100 and collection 520. All historical flags, failures and charges remain.
+The fixed host rejection requires an actual connected/unlocked desktop action
+before a separately admitted fresh assessment. Caller death, actual WAM EOF,
+human cancellation/denial, applicable hidden-parent UX and full Slice acceptance
+remain incomplete.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
