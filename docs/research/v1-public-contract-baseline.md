@@ -1899,6 +1899,37 @@ before a separately admitted fresh assessment. Caller death, actual WAM EOF,
 human cancellation/denial, applicable hidden-parent UX and full Slice acceptance
 remain incomplete.
 
+**Fresh caller-death assessment, 2026-10-12 UTC:** After the required desktop
+state action and fresh readiness, the sole fresh noninteractive assessment at
+`1e1813e0620eeed65a44b8756209ceb655b85cd2` reused the same accepted candidate,
+request, inputs and validator. It returned valid `InteractionRequired/None`,
+product exit 1, validator exit 0 and `ProtocolValid=true`. Both streams and created
+roots completed normally without stopping a Linux relay. Preflight again verified
+six public inputs, exit 0 and empty stderr. Caller launch-to-full-streams was
+2,639 ms and total caller elapsed time was 4,896 ms. Standard telemetry recorded
+Profile completion at 7 ms, account discovery from 7 to 2,534 ms and request
+`interaction_required` completion at 2,534 ms. These origins differ; phase names
+do not establish provider acquisition, the account-state cause or exact native
+entry/exit timing. The prior fixed host rejection was not observed in this call.
+
+The separate stock PowerShell observer bound a native instance and emitted its
+fixed Ready fact. The live orchestration parser removed CSI terminal escapes but
+omitted the OSC title prefix, so it failed to recognize that fact on the same
+line. The retained safe output establishes emission only. No receipt clock
+sample, pidfd, caller signal or `CallerEnded` marker followed. The caller's
+original foreground call exited 0 normally. The observer reached its finite
+marker deadline and exited 1 with `ObservationFailed=true`; it reported no native
+exit. The known original Linux relay was absent at launch plus 17,346 ms. That
+scoped absence is separate from native-handle exit evidence. The original handles
+are terminal, but caller-death ordering and held-native completion remain unproved.
+
+The sole fresh supplement is exhausted without retry or refund. Whole1019 retains
+real `57/57/57/15`, remaining `39/39/39/37`; technical unchanged `61/231/19/819`,
+metadata 102 and collection 521. Historical flags, failures and charges remain.
+No interaction was allowed and no UI evidence was obtained. Caller death, actual
+WAM EOF, human cancellation/denial, applicable hidden-parent UX and full Slice
+acceptance remain incomplete. This observation admits no further execution.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
