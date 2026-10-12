@@ -1996,6 +1996,32 @@ The operator reported no window observed before leaving and no window present
 after returning. The intervening interval was unattended. This establishes only
 those observations, not absence throughout the request or provider termination.
 
+**Console marker and subsequent caller-death observations, 2026-10-12 UTC:**
+At accepted target `50e11b24512ecbc0bbb3982e8d99af7164c7f5a6`, one
+credential-free stock PowerShell check confirmed exact `CallerEnded` receipt
+with CR termination and exited 0. Its elapsed time was 1,497 ms. This establishes
+the current console delivery path, not the prior LF failure cause. Independent
+actual acceptance passed; accounting1026 closes only that check without refund.
+
+The subsequent separately charged WSL assessment again bound the native instance.
+Both original clock qualifications passed; caller-only pidfd SIGTERM succeeded,
+and the original Linux caller exited 143 before confirmed CR marker receipt.
+The observer then exited 1 at `LiveAfterCallerEnded`, reporting no native exit.
+Its source rejects either an already exited subject or elapsed budget expiry
+before reading the retained handle's exit code. The result does not distinguish
+those alternatives or establish the native exit code/time. The final relay
+observation was attempted at launch plus 132,603 ms; its 130-second guard
+prevented a process-state read. Current relay completion remains unobserved.
+
+The sole assessment is exhausted, with no retry or refund. Whole1027 retains
+real `60/60/60/17`, remaining `36/36/36/35`, technical `61/231/19/820`,
+metadata 109 and collection 525, including all historical uncertainties and
+flags. These facts establish caller termination and marker receipt only;
+full caller-death acceptance and the remaining WAM/human/UX obligations stay
+open. Independent scoped actual acceptance passed; accounting1028 closes only
+this failed assessment without debit or refund. The observation correction
+removes the console handshake and post-marker liveness gate; it does not retroactively repair this missing exit.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
