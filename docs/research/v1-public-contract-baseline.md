@@ -1961,6 +1961,37 @@ remaining caller-death and WAM interaction observations need their own admitted
 pending-case basis. Actual WAM EOF, human cancellation/denial, applicable
 hidden-parent UX and full Slice acceptance remain incomplete.
 
+**Interactive-permission caller-death assessment, 2026-10-12 UTC:** The sole
+personal WSL assessment at `234061777bfb1f9153f8b0489181999239e28fc8` reused
+the accepted visible-parent candidate, selected inputs and null stdin without a
+lifetime-pipe option. It permitted ordinary interaction while retaining silent-first
+behavior. Preflight verified six public inputs, exit 0 and empty stderr. The
+stock observer's first 2,000-ms return contained one exact Ready fact after
+CSI/OSC decoding. Both clock-bracket inequalities, Linux wall/monotonic
+consistency and the original Ready window passed.
+
+The caller-only pidfd signal succeeded. The original Linux caller then exited
+143 under default SIGTERM disposition, without a normal final result, before
+`CallerEnded` was submitted to the same observer. This establishes the scoped
+Linux caller termination and submission order. The observer's PTY echoed the
+public marker, but its final facts reported `CallerEndedMarker=false`,
+`LiveAfterCallerEnded=false`, `NativeExitObserved=false` and
+`ObservationFailed=true` at `CallerEndedMarker`; its original exited 1.
+Submission and echo do not establish native receipt. The exact reader failure
+cause and native exit remain unknown. The echo had no trailing newline, so the
+aggregate line decoder did not extract the final JSON; the final original
+return separately retains those fixed facts without upgrading live ordering.
+
+One read of the known original Linux relay observed absence at launch plus
+39,571 ms, within the original 130-second interval. This is separate from
+held-native exit evidence. The one-shot assessment is exhausted without retry
+or refund. Whole1023 retains real `59/59/59/16`, remaining `37/37/37/36`,
+technical unchanged `61/231/19/819`, metadata 106 and collection 523; all
+historical flags and charges remain. No typed authentication result was obtained
+after caller death. Full caller-death acceptance, actual WAM EOF, human
+cancellation/denial, applicable hidden-parent UX and full Slice acceptance
+remain incomplete. UI observations require a separate actual operator report.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
