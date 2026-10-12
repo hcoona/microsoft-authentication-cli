@@ -1842,6 +1842,36 @@ technical unchanged `61/231/19/819`, metadata 97 and collection 518. Historical
 flags and charges remain. Caller death, EOF during actual WAM, denial, applicable
 hidden-parent UX and full Slice acceptance remain separate obligations.
 
+**Interaction-pipe EOF, 2026-10-12 UTC:** After fresh operator readiness, the
+single admitted personal WSL `interactive-if-needed` call at
+`87676fc6ae822da655ff30e41cff7372eb587fae` reused the same corrected candidate,
+selected request, Profile, Windows-only validator and bounded transport. The
+existing sole lifetime writer closed while the product was running, 15,022 ms
+after the caller's product launch. The result was validated `Cancelled/None`,
+product exit 1, with no token. Both streams and created roots completed normally
+without stopping a Linux relay. Preflight verified six public inputs, exit 0
+and empty stderr. No raw result, private selector or provider diagnostic was
+retained.
+
+Standard local telemetry reported `cancelled` completion at 14,938 ms. Account
+discovery ran from 7 to 4,493 ms, interaction opening from 4,493 to 4,512 ms and
+interactive acquisition from 4,512 to 14,971 ms; interaction closure completed
+at 14,971 ms. Caller launch-to-full-streams was 15,105 ms and the complete
+foreground interval was 17,220 ms. Caller and telemetry clocks have separate
+origins; these values do not establish exact Windows entry/exit or UI timing.
+
+The operator observed only a Win32 application window and did not observe a WAM
+window. Window attribution, explicit user action and later window state were
+not reported. Phase events do not prove visible WAM or its shutdown. The timed
+pipe-cancellation case passed; EOF during actual WAM remains incomplete. The
+one-shot recipe ended without retry or refund.
+
+Independent actual acceptance passed. Accounting1016 closes only this call and
+retains the whole1015 precharge: real `55/55/55/15`, remaining `41/41/41/37`;
+technical unchanged `61/231/19/819`, metadata 98 and collection 519. All historical
+flags and charges remain. User cancellation, caller death, denial, applicable
+hidden-parent UX and full Slice acceptance remain separate obligations.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
