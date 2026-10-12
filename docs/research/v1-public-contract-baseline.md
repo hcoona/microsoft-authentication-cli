@@ -2040,6 +2040,29 @@ scoped-completion acceptance passed; accounting1030 closes only this three-check
 batch, retaining its whole1029 charge without refund. Historical failed exits,
 missing relay observations and all charges remain unchanged.
 
+**Remaining-batch caller-death alternative, 2026-10-12 UTC:** At accepted
+`7961a6c3f0e02d5a71dc3e66476dcd4576c324d5` (PR #446), the sole initial
+caller-death request completed before any signal or native observer. It returned
+valid MechanismUnavailable/None, product exit 1 and validator exit 0 with
+ProtocolValid=true. Both streams and all created roots completed normally;
+caller original269aa6 exited 0. Preflight verified the same six public inputs,
+exit 0 and empty stderr. Product launch-to-full-streams was 126 ms.
+
+The existing fixed indication was host_session_inactive. Live standard phase
+facts recorded Profile completion at 6 ms, the account-discovery wrapper from
+6 to 11 ms and mechanism_unavailable completion at 11 ms. These stage names
+do not establish an actual provider discovery call. The exact session state
+and rejection cause remain unobserved. No WAM UI or caller termination is proved.
+The observation method captured this completed alternative without a source
+change; it is not another observer failure or a passed caller-death case.
+
+The initial caller-death slot is exhausted without refund. Whole1031 conservatively
+retains real63/63/63/20, remaining33/33/33/32; technical61/231/19/823,
+metadata114 and collection529. The two required human-action slots remain
+unsubmitted. A separately admitted fresh caller-death request requires the
+actual same-machine desktop reactivation and retains the original failure,
+charges, historical globalfalse and all missing evidence.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
