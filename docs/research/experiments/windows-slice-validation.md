@@ -580,6 +580,23 @@ an operating-state prerequisite, not sign-in permission. No automatic retry,
 another correction batch, state repair or forced interaction follows from this
 supplement; another outcome remains itself and ends without refund.
 
+### Ready-Framing Correction Caller-Death Assessment
+
+After independent acceptance and scoped closure of the fresh assessment's missed
+Ready fact, admit one separately charged noninteractive assessment using the same
+request, preflight, candidate and stock native-wait sources above. In the existing
+agent tool orchestration, remove ordinary CSI and complete OSC terminal framing
+before parsing fixed JSON lines; require the exact Ready keys and types before
+the unchanged clock and signal gates. Preserve the complete bounded safe output.
+Use a 750-ms initial observer yield instead of 1,500 ms to reduce presentation
+delay; do not add wake-up input, suspend the product or renew any original clock.
+Reuse unchanged source and artifact admission, and independently accept this
+exact decoding, timing, call and full charge before execution. Early completion
+or another observation failure ends this sole assessment as itself, without
+retry or refund. Correct framing does not establish pending provider work or
+caller death. All original privacy, ownership, effects, deadlines, capacity and
+stop conditions apply. No new executable, controller or retained host is admitted.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
