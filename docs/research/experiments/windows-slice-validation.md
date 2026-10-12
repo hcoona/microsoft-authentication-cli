@@ -511,181 +511,108 @@ scoped completion. Any outcome ends this recipe without retry or refund. No
 caller-death experiment, forced interaction, account/cache/configuration repair,
 new tool or effects boundary is admitted.
 
-### Corrected-Candidate Caller Death Without Lifetime Pipe
+### Fixed WSL Observation Method
 
-Admit one personal noninteractive-only WSL request on the same accepted visible
-owned-parent candidate, Profile, common tenant, scopes, private configuration and
-validator. Omit `--cancel-on-stdin-close` and use null stdin. Preserve the product's
-120-second deadline, launch-plus-130-second completion bound, private memory/pipe
-limits and 180+5-second foreground bound. No sign-in readiness, forced interaction,
-account-state repair, product change or build is part of this case.
+Use this same observation method for caller death, EOF during WAM and human
+cancellation/denial. Correct and accept the observation method before spending
+further real-account calls on these goals. Keep the product, existing local
+telemetry, selected request, Profile, validator and account state unchanged.
+No product instrumentation change, new host, controller, executable project,
+network exporter, console input handshake or elevated observer is part of this
+correction. Retired recipes remain historical evidence, not extra current gates.
 
-Before launch, one Windows-local query must find no `Authentication.Cli` instance.
-The existing request caller alone launches the product and retains all private
-readers. It emits only fixed startup facts: its Linux PID and start-time ticks,
-the owned interop relay's PID and ticks, original monotonic/UTC launch times,
-successful input-preflight facts and default SIGTERM disposition. Admit the exact
-sole-launch operating basis; snapshots alone do not establish ownership.
+Keep three evidence channels separate:
 
-Use existing agent foreground process calls directly, with one separate finite
-stock PowerShell command. Its one same-name query must find exactly one instance.
-Acquire and retain that instance's native `Process.Handle` before final checks of
-the exact candidate path, start within the reviewed launch-time window and live
-state. Permission failure, absence or ambiguity ends the case without elevation,
-another query or retry. Dispose all acquired process objects.
+- Existing local OTEL stage-start/completion events establish observed request
+  phases. The ordinary caller reads stderr while the operation runs and exports
+  only reconstructed fixed event/stage names and bounded elapsed milliseconds.
+  Cap progress output at 32 events; never forward raw lines, tags, exceptions,
+  identifiers, provider text or stdout. Missing events remain unavailable.
+- Ordinary process handles and actual tool returns establish process completion.
+  Normal calls additionally require complete streams and Windows-only result
+  validation. For caller death, retain one independent Windows process handle
+  because terminating the Linux caller removes its result/exit channel.
+- Actual operator reports establish visible WAM and the human action when those
+  facts are required. Phase events and process exit do not prove visible UI,
+  window attribution, provider-wide closure or an unattended interval.
 
-After the fixed ready fact, terminate only the original Python caller with SIGTERM,
-using its matching start-time identity and an ordinary Linux pidfd. Confirm that
-its original foreground call is terminal with default signal termination before
-sending the fixed `CallerEnded` marker through the existing tool's stdin facility.
-The same PowerShell command must find its held native instance still live after
-that marker, then call finite `WaitForExit(int)` and report only fixed identity,
-ordering, exit and failure facts. Early exit is insufficient caller-death evidence.
-The observer inherits no private endpoint and reads no product output or selectors.
-Do not replace caller death with EOF cleanup, relay termination or typed validation.
+The separate caller-death stock PowerShell command performs one same-name query,
+opens and retains the sole native handle, and verifies the accepted candidate
+path and original launch-time association. The zero-match preflight and sole
+caller launch remain required. Absence, ambiguity or failed binding ends as
+unavailable, without elevation, another query or substitute identity. Emit one
+fixed Ready fact, including whether the instance is then live, and immediately
+perform finite `Process.WaitForExit(int)` on that same object. Read its exit code
+and exit timestamp even if it has already exited. Early completion is a valid
+observation, not an observer failure or proof of interruption. Never require
+post-marker liveness, read `CallerEnded`, use a PTY or add a stdin handshake.
 
-Binding, marker receipt and native waiting share the original launch-plus-130-second
-bound. Convert UTC expiry once to a Stopwatch budget with a reviewed clock margin;
-clamp the outer observer call to the remaining original Linux monotonic interval.
-Require final completion within that original interval. A new attachment never
-renews it. Bound marker reading to 11 fixed ASCII characters and at most 15 seconds
-using a separate `StreamReader`, not synchronous `Console.In.ReadLineAsync`.
-Require the original observer's terminal result and complete bounded safe output.
+Keep the original 120-second product deadline, launch-plus-130-second completion
+bound and 180+5-second foreground bound. Convert the original Windows UTC expiry
+once to a Stopwatch budget with the existing four-second margin and reviewed
+no-clock-step operating basis; independently clamp the stock command to the
+remaining original Linux 125+5-second interval. Waiting with zero remaining
+milliseconds may read an already signaled handle but cannot renew the deadline.
+Record a late receipt as late evidence, without claiming timely completion.
 
-An early complete product result follows the existing Windows-only validation and
-ends as itself, without caller-death acceptance or retry. Binding failure before
-death leaves the caller under its original bounds. After death, missing native
-completion stops dependencies. Observe only the known relay's PID/start-time state
-within the original bound; absence or zombie state cannot substitute for native
-exit or provide its exit code. Never signal the relay, product or shared broker.
-Native exit establishes scoped completion only, not a typed cancellation, success,
-persistence, UI closure, descendant quiescence or whole-Slice acceptance.
+Use one sequential tool orchestration for startup/Ready qualification, any
+caller-only pidfd signal, actual default SIGTERM termination, finite observer
+completion and the final known-relay PID/start-time read. Do not leave a model
+turn between these steps. Poll admitted originals only within their remaining
+original clocks; a first tool return or presentation delay is not an acceptance
+condition. Use ordinary non-PTY output and fixed JSON lines. The final relay
+read must occur within its original 130-second window; expiration records
+Unavailable without another wait or query. Never signal the relay, native
+product, shared broker or unrelated process. Before a caller-death action,
+require unambiguous caller PID/start-time identity, bound native identity and
+live work evidence. An early result or completion is retained as itself. Do
+not infer precise cross-host ordering from unsynchronized wall timestamps.
 
-Before the first covered operation, independently admit the exact source, ordinary
-tool sequence, operating basis and whole charge: one start/discovery/silent call,
-no interactive call, two metadata passes (64 operations, 16 MiB plus 8 KiB and
-30 seconds each) and one safe collection pass (eight operations, 1 MiB and
-130 seconds). Preserve all historical flags, consumed charges and original clocks.
-No new controller, retained host, executable project or general observer is admitted.
+Completion observation and scenario acceptance are separate decisions. A valid
+native exit establishes only scoped native completion. It is not a typed result,
+pending-WAM interruption, UI closure, persistence or whole-Slice acceptance.
+Retain signal, phase, exit and relay facts independently. If ordering or an
+actually pending interaction is needed for a claim, require its own evidence;
+do not add a liveness failure to the observer to manufacture that evidence.
 
-If this case instead ends before caller death with a complete valid
-`MechanismUnavailable/None` result and the existing fixed `host_session_inactive`
-indication, independently accept the actual and scoped completion, retain the
-full charge and close that recipe. After the operator actually reconnects and
-unlocks the same designated Windows desktop and supplies fresh readiness, admit
-at most one separately charged fresh assessment under the exact same request,
-sources, process binding, noninteractive permission and original deadline rules.
-Prepare and review its exact call before requesting that action. Readiness is
-an operating-state prerequisite, not sign-in permission. No automatic retry,
-another correction batch, state repair or forced interaction follows from this
-supplement; another outcome remains itself and ends without refund.
+### Credential-Free Observation Verification
 
-### Ready-Framing Correction Caller-Death Assessment
+Before further real-account acceptance, admit one batch of at most three stock
+PowerShell calls on the same designated host, using public inputs only. Each
+starts one known credential-free child with ordinary `Process.Start`, retains
+its handle and executes the identical completion block used above:
 
-After independent acceptance and scoped closure of the fresh assessment's missed
-Ready fact, admit one separately charged noninteractive assessment using the same
-request, preflight, candidate and stock native-wait sources above. In the existing
-agent tool orchestration, remove ordinary CSI and complete OSC terminal framing
-before parsing fixed JSON lines; require the exact Ready keys and types before
-the unchanged clock and signal gates. Preserve the complete bounded safe output.
-Use a 750-ms initial observer yield instead of 1,500 ms to reduce presentation
-delay; do not add wake-up input, suspend the product or renew any original clock.
-Reuse unchanged source and artifact admission, and independently accept this
-exact decoding, timing, call and full charge before execution. Early completion
-or another observation failure ends this sole assessment as itself, without
-retry or refund. Correct framing does not establish pending provider work or
-caller death. All original privacy, ownership, effects, deadlines, capacity and
-stop conditions apply. No new executable, controller or retained host is admitted.
+| Call, once | Expected observation |
+| --- | --- |
+| Already exited | Stock `cmd.exe /d /c exit 7`; establish its exit, then read the retained handle. Report exit 7 without observation failure. |
+| Still running | Stock PowerShell sleeps two seconds and exits 9. Start waiting while it is live; report exit 9 without observation failure. |
+| Deadline exhausted | The same two-second child, with a zero remaining wait budget. Report completion unavailable rather than success; independently observe its natural exit within the original test bound. |
 
+These are observer checks, not product authentication or WAM claims. Use the
+installed PowerShell 5.1 x64 only, no product/account/configuration access,
+network, private streams, new project or retained host. Each call has a single
+30+5-second outer bound and at most 4 KiB safe output. Child startup/observation
+has five seconds, natural completion eight seconds, and an owned-child-only
+kill plus two-second exit observation is the failure fallback; forced cleanup
+fails the check. Keep every process handle through actual exit and dispose it.
+Any failed check stops the batch without an automatic retry or added test.
 
-### Interactive-Permission Caller-Death Assessment
+Independently review the exact native completion source, three public test
+commands, streaming phase projection, one continuous orchestration and operating
+basis together. Precharge three shared synthetic actions, one 64-operation
+metadata pass of 4 MiB/30 seconds and one eight-operation collection pass of
+1 MiB/120 seconds before the first call. Use no real-account units and preserve
+all prior charges, failed observations and historical `noExperimentLive=false`.
+Independently accept actual check results and scoped completion. After a passing
+batch, freeze these observation mechanics for the remaining three goals. A
+necessary correction requires a concrete failure; do not add speculative
+infrastructure or repeat successful checks.
 
-After independent acceptance and scoped closure of the Ready-framing correction's
-valid early `InteractionRequired` result and clock-gate rejection, admit one
-personal WSL `interactive-if-needed` caller-death assessment. Reuse the same
-visible owned-parent candidate, selected request, Profile, Windows-local private
-configuration, validator, null stdin and no lifetime-pipe option. Silent-first
-behavior remains mandatory; ordinary interaction permission is the only request
-change. It may permit pending provider work, but does not establish its presence
-or force a WAM prompt. An early result ends as itself without retry or refund.
-
-Complete exact source/call/current-basis admission and preparation before asking
-for fresh operator readiness. The operator may observe ordinary WAM surfaces;
-do not sign in, grant consent or cancel merely for this lifetime case. If a
-surface needs an unplanned choice or another action, retain that limitation
-rather than automating it. Actual UI observations remain separate evidence;
-phase events alone do not establish a visible WAM surface or its closure.
-If a test-created provider surface remains after the finite product assessment,
-the operator may close that surface normally and report the action. Do not
-terminate shared brokers or infer provider-wide completion from its absence.
-
-Use the same fixed startup, held native-instance binding, complete CSI/OSC
-framing decoder, exact Ready shape, two-sample clock qualification, caller-only
-pidfd SIGTERM, actual default caller termination before the marker, live native
-instance after the marker and finite native-exit observation. Use a 2,000-ms
-initial observer yield. If that first return lacks one exact Ready fact, submit
-no additional Ready poll, signal or marker; let the finite originals end and
-retain the incomplete outcome. Do not weaken the clock bracket or add wake-up
-input. Preserve original 120-second product, launch-plus-130-second completion,
-125+5-second observer, 180+5-second foreground and private/output limits.
-
-Independently admit the exact changed caller and ordinary tool sequence; reuse
-unchanged preflight, native-wait, artifact and source admissions. Before the first
-covered operation reserve one start/discovery/silent/interactive call, two
-metadata passes of 64 operations, 16 MiB plus 8 KiB and 30 seconds each, and one
-safe collection pass of eight operations, 1 MiB and 130 seconds. Retain all prior
-charges and flags in the existing accounting carrier. Native exit, including
-exit 2, establishes scoped completion only; it is not a typed cancellation,
-authentication success, UI closure or whole-Slice acceptance. All ownership,
-privacy and stop rules of the caller-death recipe apply. No product change,
-build, new executable/controller/host, account/cache/configuration repair,
-forced interaction or renewed clock is admitted.
-
-### Console Marker Correction
-
-After accepting the preceding partial caller-death outcome, admit one
-credential-free check of the same stock PowerShell 5.1 x64 STA console reader
-through the existing tool-owned PTY. Reuse `StreamReader`, ASCII encoding,
-11-character `ReadAsync` and finite task waiting from the native-wait source;
-omit all product queries, process binding, authentication and private inputs.
-Emit fixed Ready, submit `CallerEnded\r` once to that same original, and require
-confirmed exact marker receipt and terminal exit 0. Preserve complete safe
-output; echo alone is insufficient. A missing first-return Ready or any failure
-ends the sole check without retry. The reader shares a 15-second Stopwatch
-budget; the original stock command has a 25+5-second external bound and a
-4-KiB safe-output limit. No console-mode change, simulated sign-in, installed
-tool, retained host or new executable project is admitted.
-
-Microsoft's [console-mode contract](https://learn.microsoft.com/windows/console/getconsolemode)
-states that line input waits for a carriage return. This supports testing CR
-instead of the prior LF; it does not establish the original console mode or
-failure cause. Independently accept the exact source, call and operating basis.
-Before the check reserve one shared synthetic action, one 64-operation metadata
-pass of 1 MiB/30 seconds and one eight-operation collection pass of 1 MiB/30
-seconds; consume no real-account units. Retain prior charges and uncertainties.
-Require actual terminal completion before dependent work. No attendance is
-needed for this automated, public-input-only check.
-
-After independent acceptance of a successful marker check and its scoped
-completion, admit one separately charged personal WSL caller-death assessment
-under the preceding interactive-permission recipe. Change only the tool marker
-terminator to CR; the caller, native-wait source, candidate, selected request,
-privacy, first-return Ready, clock gates, caller-only pidfd and original deadlines
-remain unchanged. Prepare public command encoding before the submission clock
-and compute the remaining original observer interval immediately before submission.
-Require independently reviewed current absence and sole-launch operating basis;
-preserve the prior unobserved native completion and historical global false.
-The Wave's standing absence disposition is not evidence of native exit.
-
-This assessment requires no sign-in, choice, consent or state unlock. Do not ask
-for attendance merely to watch it or automate an unexpected choice. Operator UI
-facts, if available, remain separate; missing UI does not invalidate a scoped
-native-exit observation. Reserve the same whole one-start/discovery/silent/
-interactive, two metadata and one collection allocation before its first covered
-operation. Any result ends this distinct assessment without retry or refund.
-No product, host, account/cache/configuration, forced-UI or effects change is
-admitted. Missing held-native completion still stops dependent execution; full
-Slice acceptance and actual WAM EOF/cancellation remain separate obligations.
+Further real cases retain the preceding WSL account, private-memory, result,
+pipe-ownership and deadline boundaries. Their exact calls, finite allocation and
+required human action must be accepted before execution. This verification does
+not itself reopen any exhausted real-account recipe or complete caller death,
+actual WAM EOF, human cancellation/denial or applicable hidden-parent UX.
 
 ## Console Parent Feasibility
 
