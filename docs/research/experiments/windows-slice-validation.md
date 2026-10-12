@@ -646,7 +646,16 @@ timed cancellation. An early success, timeout, host rejection, unavailable UI
 or another valid outcome is retained as itself, without forced UI or retry.
 
 Use a matching Linux pidfd and saved start-time ticks for either caller signal.
-Never signal the product, relay or shared broker. Death removes the result path:
+Never signal the product, relay or shared broker. Before caller termination,
+record the existing Linux UTC/monotonic pair at observer submission and actual
+Ready receipt; require both elapsed-clock comparisons against launch within
+100 ms. Require the same Ready timestamp `W >= receiptUTC - 2000 ms`, and
+`receiptMono + max(0, 126000 - (W - launchUTC))` inside launch-plus-130 seconds,
+using matching units. This qualifies backward clock offset and a conservative
+original budget without a symmetric bracket or first-return rule. Missing or
+failed qualification withholds the signal and dependent execution; it does not
+change frozen sources, renew a deadline or authorize another clock query.
+Death removes the result path:
 collect only the existing native observer and known relay within their original
 clocks, in one continuous orchestration. For the two pipe cases, close the owned
 writer on an execution failure and use only the remaining original product
