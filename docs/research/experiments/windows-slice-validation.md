@@ -614,6 +614,58 @@ required human action must be accepted before execution. This verification does
 not itself reopen any exhausted real-account recipe or complete caller death,
 actual WAM EOF, human cancellation/denial or applicable hidden-parent UX.
 
+### Remaining WSL Acceptance Batch
+
+After independent acceptance of the credential-free observation batch, admit
+one separately charged three-case personal-role batch on the unchanged selected
+visible-parent candidate, request, Profile, validator and Windows configuration.
+Reuse the fixed observation method above without another observation check or
+source change to its native completion block or phase projection. Ordinary WAM
+provider session/protected-state effects retain the existing Wave boundary.
+The exact call and current-absence/sole-launch basis still need independent
+admission before any real invocation. This is existing-state acceptance, not
+clean first use, forced interaction or a new support promise.
+
+| Case, at most once | Action and evidence |
+| --- | --- |
+| Caller death without lifetime pipe | Null stdin, no lifetime option, `interactive-if-needed` with mandatory silent first. Bind the same native handle before caller-only default SIGTERM. Require actual caller exit 143 without a normal final result, observed held-native exit within the original bound, and the known original relay ended. Early completion stays itself; do not require post-action liveness or infer immediate Windows signal delivery. No actual sign-in/choice/consent is needed for this case. |
+| EOF during actual WAM | One dedicated noninherited lifetime writer, same interaction permission. Obtain actual operator readiness before launch. Keep the writer open until the operator reports an ordinary WAM surface. Then signal only the owned matching caller with SIGUSR1; its ordinary pipe loop closes its own writer once while the product is running. Require observed phase progress, actual surface before closure, validated Cancelled/None, exit 1, no token, complete streams and normal root completion; separately record subsequent window state. A timed or initially closed pipe result is already sufficient for its own claim and is not repeated. |
+| Human cancellation/denial | Keep the sole lifetime writer open. After actual readiness, the operator cancels/closes the ordinary WAM or owned parent surface, or declines ordinary delegated consent if offered. Require the actual reported action, the corresponding valid Cancelled or recognized Denied result, exit 1, no token, complete streams and normal root completion. Distinguish parent cancellation from WAM cancellation/denial and record observed closure. Do not enter credentials merely for this case or automate the action. |
+
+All calls retain the original 120-second product, 130-second completion,
+10+5-second validator and 180+5-second foreground bounds. Startup and local phase
+facts use at most 16 KiB safe output; private product streams remain at most
+1 MiB each, configuration/projection at most 8 KiB/1 KiB and validator output
+at most 4 KiB. Only fixed reconstructed stage facts, signal/pipe/process facts
+and the existing validator conclusions may be retained. No arbitrary stderr,
+result, selector, identifier/hash or exception is exported. Stdin never carries
+credentials. The SIGUSR1 action is ordinary Linux signaling of the already owned
+caller, not a console marker, extra process or control channel to Windows.
+A report of no WAM surface does not trigger EOF merely to reproduce the prior
+timed cancellation. An early success, timeout, host rejection, unavailable UI
+or another valid outcome is retained as itself, without forced UI or retry.
+
+Use a matching Linux pidfd and saved start-time ticks for either caller signal.
+Never signal the product, relay or shared broker. Death removes the result path:
+collect only the existing native observer and known relay within their original
+clocks, in one continuous orchestration. For the two pipe cases, close the owned
+writer on an execution failure and use only the remaining original product
+allowance; never renew its clock. Preserve any unavailable exit and stop dependent
+execution. Reuse the Wave's independently reviewed standing current-absence
+basis without a new owner question or exhaustive survey.
+
+Precharge the whole batch: three starts/discoveries/silent/eligible-interactive
+calls, four metadata passes of 64 operations/16 MiB plus 8 KiB/30 seconds each,
+and three collection passes of eight operations/1 MiB/180 seconds each. Reserve
+all slots before the first covered operation; no refund for failed or unsubmitted
+slots. Independently accept each actual and scoped completion before advancing.
+A safely completed alternative may leave its claim open while another separately
+admitted case progresses. New ownership or safety gaps stop the batch. The
+operator may close only an identified test-created surface normally; no foreign
+cleanup, account/cache repair, administrator consent, registration change,
+main-program modification, new tool/project/controller/host or network exporter
+is included. Applicable hidden-parent UX and whole-Slice acceptance remain open.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
