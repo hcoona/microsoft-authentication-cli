@@ -1992,6 +1992,10 @@ after caller death. Full caller-death acceptance, actual WAM EOF, human
 cancellation/denial, applicable hidden-parent UX and full Slice acceptance
 remain incomplete. UI observations require a separate actual operator report.
 
+The operator reported no window observed before leaving and no window present
+after returning. The intervening interval was unattended. This establishes only
+those observations, not absence throughout the request or provider termination.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn

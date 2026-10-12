@@ -641,6 +641,52 @@ privacy and stop rules of the caller-death recipe apply. No product change,
 build, new executable/controller/host, account/cache/configuration repair,
 forced interaction or renewed clock is admitted.
 
+### Console Marker Correction
+
+After accepting the preceding partial caller-death outcome, admit one
+credential-free check of the same stock PowerShell 5.1 x64 STA console reader
+through the existing tool-owned PTY. Reuse `StreamReader`, ASCII encoding,
+11-character `ReadAsync` and finite task waiting from the native-wait source;
+omit all product queries, process binding, authentication and private inputs.
+Emit fixed Ready, submit `CallerEnded\r` once to that same original, and require
+confirmed exact marker receipt and terminal exit 0. Preserve complete safe
+output; echo alone is insufficient. A missing first-return Ready or any failure
+ends the sole check without retry. The reader shares a 15-second Stopwatch
+budget; the original stock command has a 25+5-second external bound and a
+4-KiB safe-output limit. No console-mode change, simulated sign-in, installed
+tool, retained host or new executable project is admitted.
+
+Microsoft's [console-mode contract](https://learn.microsoft.com/windows/console/getconsolemode)
+states that line input waits for a carriage return. This supports testing CR
+instead of the prior LF; it does not establish the original console mode or
+failure cause. Independently accept the exact source, call and operating basis.
+Before the check reserve one shared synthetic action, one 64-operation metadata
+pass of 1 MiB/30 seconds and one eight-operation collection pass of 1 MiB/30
+seconds; consume no real-account units. Retain prior charges and uncertainties.
+Require actual terminal completion before dependent work. No attendance is
+needed for this automated, public-input-only check.
+
+After independent acceptance of a successful marker check and its scoped
+completion, admit one separately charged personal WSL caller-death assessment
+under the preceding interactive-permission recipe. Change only the tool marker
+terminator to CR; the caller, native-wait source, candidate, selected request,
+privacy, first-return Ready, clock gates, caller-only pidfd and original deadlines
+remain unchanged. Prepare public command encoding before the submission clock
+and compute the remaining original observer interval immediately before submission.
+Require independently reviewed current absence and sole-launch operating basis;
+preserve the prior unobserved native completion and historical global false.
+The Wave's standing absence disposition is not evidence of native exit.
+
+This assessment requires no sign-in, choice, consent or state unlock. Do not ask
+for attendance merely to watch it or automate an unexpected choice. Operator UI
+facts, if available, remain separate; missing UI does not invalidate a scoped
+native-exit observation. Reserve the same whole one-start/discovery/silent/
+interactive, two metadata and one collection allocation before its first covered
+operation. Any result ends this distinct assessment without retry or refund.
+No product, host, account/cache/configuration, forced-UI or effects change is
+admitted. Missing held-native completion still stops dependent execution; full
+Slice acceptance and actual WAM EOF/cancellation remain separate obligations.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
