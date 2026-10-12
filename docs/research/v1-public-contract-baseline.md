@@ -1930,6 +1930,37 @@ No interaction was allowed and no UI evidence was obtained. Caller death, actual
 WAM EOF, human cancellation/denial, applicable hidden-parent UX and full Slice
 acceptance remain incomplete. This observation admits no further execution.
 
+
+**Ready-framing correction assessment, 2026-10-12 UTC:** The separately admitted
+noninteractive assessment at `240d5a6b865b02f50dd0d8a8b638371a7306fb09` correctly
+decoded the stock observer's fixed Ready fact after removing CSI/OSC framing.
+The initial 750-ms tool return contained framing only; the next empty-input
+poll took approximately five seconds. The receipt-to-Windows-Ready difference
+was 5,292 ms, so the required clock bracket failed. Linux wall/monotonic
+consistency and the original Ready window passed, but neither waives that
+bracket. No pidfd, signal or `CallerEnded` marker was submitted.
+
+The caller returned valid `InteractionRequired/None`, product exit 1, validator
+exit 0 and `ProtocolValid=true`. Both streams and created roots completed normally
+without stopping a Linux relay. Preflight verified six public inputs, exit 0 and
+empty stderr. Caller launch-to-full-streams was 3,492 ms and total elapsed time
+was 5,870 ms. Standard telemetry recorded Profile completion at 6 ms, account
+discovery from 6 to 3,389 ms and request `interaction_required` at 3,390 ms.
+These separate origins do not establish exact native entry/exit or a pending
+provider at receipt. No interaction was allowed and no UI evidence was obtained.
+
+The observer bound a native instance, then reached its finite marker deadline
+and exited 1 with `ObservationFailed=true` and no native exit observation.
+The caller's original exited 0; the known relay was absent at original launch
+plus 17,646 ms. These are scoped observations, not held-native completion or
+caller-death evidence. The sole correction recipe is exhausted without retry
+or refund. Whole1021 retains real `58/58/58/15`, remaining `38/38/38/37`,
+technical unchanged `61/231/19/819`, metadata 104 and collection 522. Historical
+flags, failures and charges remain. Stop repeating fast noninteractive calls;
+remaining caller-death and WAM interaction observations need their own admitted
+pending-case basis. Actual WAM EOF, human cancellation/denial, applicable
+hidden-parent UX and full Slice acceptance remain incomplete.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn

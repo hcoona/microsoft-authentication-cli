@@ -597,6 +597,50 @@ retry or refund. Correct framing does not establish pending provider work or
 caller death. All original privacy, ownership, effects, deadlines, capacity and
 stop conditions apply. No new executable, controller or retained host is admitted.
 
+
+### Interactive-Permission Caller-Death Assessment
+
+After independent acceptance and scoped closure of the Ready-framing correction's
+valid early `InteractionRequired` result and clock-gate rejection, admit one
+personal WSL `interactive-if-needed` caller-death assessment. Reuse the same
+visible owned-parent candidate, selected request, Profile, Windows-local private
+configuration, validator, null stdin and no lifetime-pipe option. Silent-first
+behavior remains mandatory; ordinary interaction permission is the only request
+change. It may permit pending provider work, but does not establish its presence
+or force a WAM prompt. An early result ends as itself without retry or refund.
+
+Complete exact source/call/current-basis admission and preparation before asking
+for fresh operator readiness. The operator may observe ordinary WAM surfaces;
+do not sign in, grant consent or cancel merely for this lifetime case. If a
+surface needs an unplanned choice or another action, retain that limitation
+rather than automating it. Actual UI observations remain separate evidence;
+phase events alone do not establish a visible WAM surface or its closure.
+If a test-created provider surface remains after the finite product assessment,
+the operator may close that surface normally and report the action. Do not
+terminate shared brokers or infer provider-wide completion from its absence.
+
+Use the same fixed startup, held native-instance binding, complete CSI/OSC
+framing decoder, exact Ready shape, two-sample clock qualification, caller-only
+pidfd SIGTERM, actual default caller termination before the marker, live native
+instance after the marker and finite native-exit observation. Use a 2,000-ms
+initial observer yield. If that first return lacks one exact Ready fact, submit
+no additional Ready poll, signal or marker; let the finite originals end and
+retain the incomplete outcome. Do not weaken the clock bracket or add wake-up
+input. Preserve original 120-second product, launch-plus-130-second completion,
+125+5-second observer, 180+5-second foreground and private/output limits.
+
+Independently admit the exact changed caller and ordinary tool sequence; reuse
+unchanged preflight, native-wait, artifact and source admissions. Before the first
+covered operation reserve one start/discovery/silent/interactive call, two
+metadata passes of 64 operations, 16 MiB plus 8 KiB and 30 seconds each, and one
+safe collection pass of eight operations, 1 MiB and 130 seconds. Retain all prior
+charges and flags in the existing accounting carrier. Native exit, including
+exit 2, establishes scoped completion only; it is not a typed cancellation,
+authentication success, UI closure or whole-Slice acceptance. All ownership,
+privacy and stop rules of the caller-death recipe apply. No product change,
+build, new executable/controller/host, account/cache/configuration repair,
+forced interaction or renewed clock is admitted.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
