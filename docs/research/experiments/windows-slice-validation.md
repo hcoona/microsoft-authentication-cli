@@ -511,6 +511,63 @@ scoped completion. Any outcome ends this recipe without retry or refund. No
 caller-death experiment, forced interaction, account/cache/configuration repair,
 new tool or effects boundary is admitted.
 
+### Corrected-Candidate Caller Death Without Lifetime Pipe
+
+Admit one personal noninteractive-only WSL request on the same accepted visible
+owned-parent candidate, Profile, common tenant, scopes, private configuration and
+validator. Omit `--cancel-on-stdin-close` and use null stdin. Preserve the product's
+120-second deadline, launch-plus-130-second completion bound, private memory/pipe
+limits and 180+5-second foreground bound. No sign-in readiness, forced interaction,
+account-state repair, product change or build is part of this case.
+
+Before launch, one Windows-local query must find no `Authentication.Cli` instance.
+The existing request caller alone launches the product and retains all private
+readers. It emits only fixed startup facts: its Linux PID and start-time ticks,
+the owned interop relay's PID and ticks, original monotonic/UTC launch times,
+successful input-preflight facts and default SIGTERM disposition. Admit the exact
+sole-launch operating basis; snapshots alone do not establish ownership.
+
+Use existing agent foreground process calls directly, with one separate finite
+stock PowerShell command. Its one same-name query must find exactly one instance.
+Acquire and retain that instance's native `Process.Handle` before final checks of
+the exact candidate path, start within the reviewed launch-time window and live
+state. Permission failure, absence or ambiguity ends the case without elevation,
+another query or retry. Dispose all acquired process objects.
+
+After the fixed ready fact, terminate only the original Python caller with SIGTERM,
+using its matching start-time identity and an ordinary Linux pidfd. Confirm that
+its original foreground call is terminal with default signal termination before
+sending the fixed `CallerEnded` marker through the existing tool's stdin facility.
+The same PowerShell command must find its held native instance still live after
+that marker, then call finite `WaitForExit(int)` and report only fixed identity,
+ordering, exit and failure facts. Early exit is insufficient caller-death evidence.
+The observer inherits no private endpoint and reads no product output or selectors.
+Do not replace caller death with EOF cleanup, relay termination or typed validation.
+
+Binding, marker receipt and native waiting share the original launch-plus-130-second
+bound. Convert UTC expiry once to a Stopwatch budget with a reviewed clock margin;
+clamp the outer observer call to the remaining original Linux monotonic interval.
+Require final completion within that original interval. A new attachment never
+renews it. Bound marker reading to 11 fixed ASCII characters and at most 15 seconds
+using a separate `StreamReader`, not synchronous `Console.In.ReadLineAsync`.
+Require the original observer's terminal result and complete bounded safe output.
+
+An early complete product result follows the existing Windows-only validation and
+ends as itself, without caller-death acceptance or retry. Binding failure before
+death leaves the caller under its original bounds. After death, missing native
+completion stops dependencies. Observe only the known relay's PID/start-time state
+within the original bound; absence or zombie state cannot substitute for native
+exit or provide its exit code. Never signal the relay, product or shared broker.
+Native exit establishes scoped completion only, not a typed cancellation, success,
+persistence, UI closure, descendant quiescence or whole-Slice acceptance.
+
+Before the first covered operation, independently admit the exact source, ordinary
+tool sequence, operating basis and whole charge: one start/discovery/silent call,
+no interactive call, two metadata passes (64 operations, 16 MiB plus 8 KiB and
+30 seconds each) and one safe collection pass (eight operations, 1 MiB and
+130 seconds). Preserve all historical flags, consumed charges and original clocks.
+No new controller, retained host, executable project or general observer is admitted.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
