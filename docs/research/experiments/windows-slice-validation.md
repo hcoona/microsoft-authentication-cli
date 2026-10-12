@@ -675,6 +675,31 @@ cleanup, account/cache repair, administrator consent, registration change,
 main-program modification, new tool/project/controller/host or network exporter
 is included. Applicable hidden-parent UX and whole-Slice acceptance remain open.
 
+#### Single Caller-Death Continuation After Desktop Reactivation
+
+After independently accepting the initial batch's normally completed
+host_session_inactive alternative and closing only that case, permit one
+separately charged fresh CallerDeath request. Before launch, the operator must
+actually reconnect and unlock the same ordinary Windows desktop and report
+readiness. This state correction does not prove the earlier session state or
+cause. Retain the failed case and its exhausted slot; the two unsubmitted human
+cases remain in their original precharged batch.
+
+Use exactly the preceding CallerDeath command, source, candidate, account
+configuration, native completion and phase projection, clock qualification,
+continuous collection and original deadlines. Do not modify or repeat the
+observation checks. Independently admit the exact fresh call and operating basis,
+then precharge one start/discovery/silent/eligible-interactive unit, two metadata
+passes of 64 operations/16 MiB plus 8 KiB/30 seconds each and one collection pass
+of eight operations/1 MiB/180 seconds. No refund, automatic retry, new host,
+controller, account/cache repair or main-program change is included.
+
+Accept the actual and scoped completion before advancing. Another early
+alternative remains itself. If host_session_inactive recurs after the reported
+desktop action, stop dependent real calls and diagnose the concrete source or
+environment cause before proposing another execution; do not repeat desktop
+preparation or change the frozen observer speculatively.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
