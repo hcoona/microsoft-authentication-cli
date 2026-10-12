@@ -477,6 +477,40 @@ UI evidence as incomplete. No account addition, administrator consent, cache or
 configuration repair, new observer/controller/host, deadline or EOF/caller-death
 experiment is admitted by this cancellation call.
 
+### Corrected-Candidate Interaction-Pipe EOF
+
+After accepting the preceding alternative typed Timeout and normal scoped
+completion, admit one personal WSL `interactive-if-needed` request using the same
+corrected candidate, selected request, Profile, validator and bounded transport.
+Retain silent-first behavior and the original 120-second product deadline. Complete
+exact source/call/current-basis review, then obtain fresh operator readiness to
+observe any ordinary WAM surface. Do not sign in or cancel merely for this case.
+
+Use the existing single, noninherited lifetime writer. If the product is still
+running, close that writer once, 15 seconds after the caller's product launch;
+the existing ordinary pipe loop may perform this action without another process,
+observer, host or controller. Record whether closure occurred while the product
+was running and its caller-relative elapsed time. An earlier result ends the
+case without delayed closure or retry. These caller times do not establish the
+exact product entry clock or native UI state.
+
+Require validated Cancelled/None, exit 1, no token, complete streams, normal
+created-root completion and actual timed writer closure for the pipe-cancellation
+result. A claim of EOF during actual WAM additionally requires the operator's
+observation of an ordinary WAM surface before that closure and its later state,
+together with the existing standard phase observations. Phase events alone do not
+prove visible UI or its shutdown. Preserve missing observations as incomplete;
+do not force a prompt or repeat an insufficient outcome to manufacture evidence.
+
+Reserve one start/discovery/silent/interactive call, one 64-operation metadata
+pass of 16 MiB plus 8 KiB/30 seconds and one eight-operation safe-collection pass
+of 1 MiB/30 seconds before the first covered operation. Preserve the preceding
+preflight, validator, memory, original deadlines and owned stop limits; closing
+the writer does not renew a clock. Independently accept every actual result and
+scoped completion. Any outcome ends this recipe without retry or refund. No
+caller-death experiment, forced interaction, account/cache/configuration repair,
+new tool or effects boundary is admitted.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
