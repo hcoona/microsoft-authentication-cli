@@ -2022,6 +2022,24 @@ open. Independent scoped actual acceptance passed; accounting1028 closes only
 this failed assessment without debit or refund. The observation correction
 removes the console handshake and post-marker liveness gate; it does not retroactively repair this missing exit.
 
+**Completion observation verification, 2026-10-12 UTC:** Under accepted target
+`b8df232675e4dbcabefe3387e95a46f8713a3763` (PR #445), the three credential-free
+stock checks each passed once without a source change or retry. The retained
+handle reported exit 7 for an already exited child and exit 9 after waiting for
+a live child. A zero-budget wait correctly reported completion unavailable;
+that same child subsequently exited naturally within its original test bound.
+All three original calls exited 0 and all owned subjects were observed ended,
+without forced cleanup, account access or an authentication product start.
+
+The checks establish the completion block's three paths on this host. Native
+product binding and real WAM/UI behavior are not established by these stock
+subjects. The existing standard-telemetry caller projection has independent
+source admission; no product instrumentation changed. Keep these observation
+mechanics fixed for the remaining acceptance scenarios. Independent actual and
+scoped-completion acceptance passed; accounting1030 closes only this three-check
+batch, retaining its whole1029 charge without refund. Historical failed exits,
+missing relay observations and all charges remain unchanged.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
