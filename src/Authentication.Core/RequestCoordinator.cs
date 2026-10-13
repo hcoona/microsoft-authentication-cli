@@ -57,6 +57,8 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         async Task<AuthenticationOutcome> AcquireAsync()
         {
             cancellationToken.ThrowIfCancellationRequested();
+            if (request.ForceInteractive && !request.InteractionAllowed)
+                return new(null, AuthenticationFailure.InvalidRequest);
             IReadOnlyList<ProviderAccount> accounts;
             using (observation.Begin(AuthenticationStage.AccountDiscovery))
                 accounts = await provider.GetAccountsAsync(cancellationToken);
@@ -79,7 +81,7 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
 
             string? claims = null;
             var interactionReason = AuthenticationReason.None;
-            if (selected is not null)
+            if (selected is not null && !request.ForceInteractive)
             {
                 try
                 {

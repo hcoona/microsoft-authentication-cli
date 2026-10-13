@@ -53,6 +53,20 @@ public sealed class RequestSyntaxTests
     }
 
     [TestMethod]
+    [DataRow("non-interactive-only", false, false)]
+    [DataRow("interactive-if-needed", true, false)]
+    [DataRow("force-interactive", true, true)]
+    public void InteractionModesPreserveBothPermissionAndExplicitIntent(string mode, bool allowed, bool forced)
+    {
+        var arguments = Arguments();
+        Set(arguments, "--interaction", mode);
+        var request = RequestSyntax.Parse(arguments);
+        Assert.IsNotNull(request);
+        Assert.AreEqual(allowed, request.InteractionAllowed);
+        Assert.AreEqual(forced, request.ForceInteractive);
+    }
+
+    [TestMethod]
     [DataRow("499b84ac-1321-427f-aa17-267ca6975798/.default")]
     [DataRow("api://example.test/application/read")]
     [DataRow("https://example.test/resource/read")]

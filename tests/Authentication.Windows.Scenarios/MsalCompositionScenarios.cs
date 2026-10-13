@@ -77,6 +77,40 @@ public sealed class MsalCompositionScenarios
     }
 
     [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task ForcedSelectionPreservesTheSameAccountOrHintAndOriginalRequest(bool accountVisible)
+    {
+        using var scene = new Scene(forceInteractive: true) { IncludeSelectedAccount = accountVisible };
+        var outcome = await scene.RunAsync();
+        Assert.IsNotNull(outcome.Success);
+        Assert.IsTrue(outcome.Interactive);
+        Assert.AreEqual(1, scene.Discoveries);
+        Assert.AreEqual(0, scene.Silent.Count);
+        Assert.AreEqual(1, scene.Interactive.Count);
+        var operation = scene.Interactive[0];
+        Assert.IsTrue(operation.ForceInteractive);
+        if (accountVisible)
+        {
+            Assert.AreSame(scene.Selected, operation.Account);
+            Assert.IsNull(operation.LoginHint);
+        }
+        else
+        {
+            Assert.IsNull(operation.Account);
+            Assert.AreEqual(Email, operation.LoginHint);
+        }
+        Assert.IsNull(operation.Claims);
+        Assert.AreEqual(Tenant, operation.Tenant);
+        Assert.AreEqual((nint)42, operation.ParentWindow);
+        CollectionAssert.AreEqual(new[] { Scope }, operation.Scopes.ToArray());
+        Assert.AreEqual(operation.CorrelationId, outcome.Success.OperationId);
+        Assert.AreEqual(1, scene.Opened);
+        Assert.AreEqual(1, scene.Closed);
+        Assert.IsTrue(scene.Tokens.All(token => token == scene.Original.Token));
+    }
+
+    [TestMethod]
     public async Task SilentClaimsContinueWithTheSameAccountAndNoCompetingHint()
     {
         using var scene = new Scene();
@@ -88,6 +122,7 @@ public sealed class MsalCompositionScenarios
         Assert.AreEqual(1, scene.Silent.Count);
         Assert.AreEqual(1, scene.Interactive.Count);
         var operation = scene.Interactive[0];
+        Assert.IsFalse(operation.ForceInteractive);
         Assert.AreSame(scene.Selected, operation.Account);
         Assert.IsNull(operation.LoginHint);
         Assert.AreEqual(claims, operation.Claims);
@@ -110,6 +145,7 @@ public sealed class MsalCompositionScenarios
         Assert.AreEqual(0, scene.Silent.Count);
         Assert.AreEqual(1, scene.Interactive.Count);
         Assert.IsNull(scene.Interactive[0].Account);
+        Assert.IsFalse(scene.Interactive[0].ForceInteractive);
         Assert.AreEqual(Email, scene.Interactive[0].LoginHint);
         Assert.IsNull(scene.Interactive[0].Claims);
         Assert.AreEqual(Tenant, scene.Interactive[0].Tenant);
@@ -216,7 +252,8 @@ public sealed class MsalCompositionScenarios
     private sealed class Scene : IMsalSessionFactory, IMsalSession, IMsalHttpClientFactory,
         IWindowsHostAdmission, IRequestHost, IDisposable
     {
-        internal Scene(bool legacy = false, string tenantPolicy = "explicit", bool personalAccount = false)
+        internal Scene(bool legacy = false, string tenantPolicy = "explicit", bool personalAccount = false,
+            bool forceInteractive = false)
         {
             Profile = new("Synthetic", Guid.Parse(legacy
                 ? "872cd9fa-d31f-45e0-9eab-6e460a02d1f1" : "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"),
@@ -225,7 +262,7 @@ public sealed class MsalCompositionScenarios
                 legacy ? "Microsoft" : "Synthetic fixture owner", "Synthetic fixture");
             var selector = tenantPolicy == "explicit" ? Tenant : null;
             Assert.IsTrue(ProfileSyntax.TryResolveTenant(Profile, selector, out var exactTenant));
-            Request = new(Email, [Scope], true, exactTenant);
+            Request = new(Email, [Scope], true, exactTenant, forceInteractive);
             Selected = new("PERSONAL@example.test", personalAccount ? MsaTenant : Tenant);
         }
 

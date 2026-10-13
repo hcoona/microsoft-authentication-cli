@@ -78,7 +78,8 @@ necessary bounded real-account acceptance for the designated personal and work
 account roles, existing Windows interactive user, and explicitly selected admitted
 public-client Profile and Azure DevOps scopes. The owner accepts ordinary WAM
 discovery needed for exact selection, selected-account silent acquisition,
-permission-gated interactive sign-in, operator-controlled delegated user consent,
+permission-gated interactive sign-in or explicitly requested supported interactive
+account selection, operator-controlled delegated user consent,
 and normal provider-managed protected session/cache updates. Existing state is
 not a clean first-use environment; completed provider sessions and updates are
 not promised to be reversible when a request is cancelled. The exact account
@@ -113,7 +114,8 @@ changes, authenticated service requests, and remote resource mutation are exclud
 
 **WSL selected-role acceptance boundary:** The repository owner authorizes the
 necessary bounded actual WSL scenarios for the same selected personal and work
-roles: normal result transport, silent-first permission-gated interaction,
+roles: normal result transport, silent-first permission-gated interaction or explicit
+`force-interactive` account selection under the accepted contract,
 fresh-process reuse and owned lifetime-pipe/caller-death cancellation. Allocate
 independently reviewed finite batches from the remaining shared real and passive
 pools; this boundary creates no second capacity pool or per-case owner grant.
@@ -133,7 +135,8 @@ owns exact calls, finite memory/time limits, accounting, termination and accepta
 Reuse the accepted candidate, Profile and validator; introduce no new executable
 project, generic runner, controller, retained host, listener or cache. Request
 fresh actual readiness only when an admitted operation needs sign-in, selection
-or delegated user consent; do not force UI, change scopes or repair account state
+or delegated user consent. An explicit supported account-selection request does not
+guarantee visible UI. Do not manipulate windows, change scopes or repair account state
 to manufacture an observation. Ending a Linux caller does not prove Windows
 completion. Lifetime recipes must bind owned objects, preserve original deadlines,
 define available completion evidence and stop dependent execution on a new gap;

@@ -94,7 +94,7 @@ internal sealed class MsalAuthenticationProvider : IAuthenticationProvider
             var selected = account is null ? null : (IAccount)account.Handle;
             var operation = new MsalInteractiveOperation(request.Scopes, selected,
                 selected is null ? request.AccountEmail : null, initialTenant,
-                claims, parentWindow, operationId);
+                claims, parentWindow, operationId, request.ForceInteractive);
             var result = await session.AcquireInteractiveAsync(operation, cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
             return MsalBoundary.Project(result, operationId);

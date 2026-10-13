@@ -17,7 +17,8 @@ internal sealed record MsalSilentOperation(IReadOnlyList<string> Scopes, IAccoun
 }
 
 internal sealed record MsalInteractiveOperation(IReadOnlyList<string> Scopes, IAccount? Account,
-    string? LoginHint, string Tenant, string? Claims, nint ParentWindow, Guid CorrelationId)
+    string? LoginHint, string Tenant, string? Claims, nint ParentWindow, Guid CorrelationId,
+    bool ForceInteractive = false)
 {
     public override string ToString() => nameof(MsalInteractiveOperation);
 }

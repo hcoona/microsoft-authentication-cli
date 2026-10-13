@@ -11,7 +11,8 @@ public sealed record ParsedRequest(
     string? Tenant,
     int TimeoutSeconds,
     bool CancelOnStdinClose,
-    bool TelemetryStderr)
+    bool TelemetryStderr,
+    bool ForceInteractive = false)
 {
     public override string ToString() => nameof(ParsedRequest);
 }
@@ -64,7 +65,7 @@ public static class RequestSyntax
             || !values.TryGetValue("--profile", out var profile) || !IsWindowsPath(profile)
             || !values.TryGetValue("--account-email", out var email) || !IsEmail(email)
             || !values.TryGetValue("--interaction", out var interaction)
-            || interaction is not ("non-interactive-only" or "interactive-if-needed")
+            || interaction is not ("non-interactive-only" or "interactive-if-needed" or "force-interactive")
             || !ValidScopes(scopes))
         {
             return null;
@@ -90,8 +91,8 @@ public static class RequestSyntax
             return null;
         }
 
-        return new(profile, email, scopes.AsReadOnly(), interaction == "interactive-if-needed",
-            tenant, timeout, cancelOnClose, telemetry == "stderr");
+        return new(profile, email, scopes.AsReadOnly(), interaction != "non-interactive-only",
+            tenant, timeout, cancelOnClose, telemetry == "stderr", interaction == "force-interactive");
     }
 
     internal static bool TryGuid(string value, out Guid result)

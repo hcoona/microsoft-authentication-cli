@@ -181,7 +181,7 @@ public static class WindowsProcess
         Usage:
           authenticate --protocol 1 --profile <absolute-Windows-path>
             --account-email <full-email> --scope <scope>
-            --interaction <non-interactive-only|interactive-if-needed>
+            --interaction <non-interactive-only|interactive-if-needed|force-interactive>
             [--scope <scope> ...] [--tenant <common|tenant-guid>]
             [--timeout-seconds <1..600>] [--cancel-on-stdin-close]
             [--telemetry <off|stderr>]
