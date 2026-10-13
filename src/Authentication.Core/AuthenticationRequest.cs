@@ -6,7 +6,8 @@ public sealed record AuthenticationRequest(
     string AccountEmail,
     IReadOnlyList<string> Scopes,
     bool InteractionAllowed,
-    Guid? ExactTenant)
+    Guid? ExactTenant,
+    bool ForceInteractive = false)
 {
     public override string ToString() => nameof(AuthenticationRequest);
 }

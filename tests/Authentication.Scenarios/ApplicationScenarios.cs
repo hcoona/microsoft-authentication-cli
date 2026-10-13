@@ -131,6 +131,45 @@ public sealed class ApplicationScenarios
     }
 
     [TestMethod]
+    public async Task ForcedIntentReachesProviderConstructionAndTheInteractiveResult()
+    {
+        var scene = new Scene();
+        var arguments = Arguments();
+        arguments[arguments.IndexOf("--interaction") + 1] = "force-interactive";
+        using var invocation = scene.Create(arguments);
+        AuthenticationRequest? initialization = null;
+        await invocation.RunAsync(scene, (profile, request) =>
+        {
+            initialization = request;
+            return scene.CreateProvider(profile);
+        }).WaitAsync(HarnessLimit);
+        await invocation.CompleteAsync().WaitAsync(HarnessLimit);
+
+        using var json = AssertSuccess(Commit(invocation), PersonalEmail);
+        Assert.AreEqual("interactive", json.RootElement.GetProperty("interaction").GetString());
+        Assert.IsNotNull(initialization);
+        Assert.IsTrue(initialization.ForceInteractive);
+        Assert.IsTrue(initialization.InteractionAllowed);
+        Assert.AreEqual(initialization, scene.ProviderRequest);
+        CollectionAssert.AreEqual(new[] { "construct", "discover", "open", "interactive", "close" }, scene.Effects.ToArray());
+    }
+
+    [TestMethod]
+    public async Task ForcedInteractionConsumesTheOriginalEntryBudgetAndWithholdsLateSuccess()
+    {
+        var scene = new Scene { ReadTime = TimeSpan.FromSeconds(60), InteractiveTime = TimeSpan.FromSeconds(31) };
+        var arguments = Arguments();
+        arguments[arguments.IndexOf("--interaction") + 1] = "force-interactive";
+        var entry = scene.Clock.GetTimestamp();
+        scene.Clock.Advance(TimeSpan.FromSeconds(30));
+        using var invocation = scene.Create(arguments, entry: entry);
+        await RunAsync(invocation, scene);
+
+        AssertFailure(Commit(invocation), "timeout");
+        CollectionAssert.AreEqual(new[] { "construct", "discover", "open", "interactive", "close" }, scene.Effects.ToArray());
+    }
+
+    [TestMethod]
     public async Task ChangingTheBackingProfileDoesNotChangeTheAdmittedRequest()
     {
         var scene = new Scene();
@@ -345,6 +384,7 @@ public sealed class ApplicationScenarios
         public bool Challenge { get; init; }
         public TimeSpan ReadTime { get; init; }
         public TimeSpan ProviderTime { get; init; }
+        public TimeSpan InteractiveTime { get; init; }
         public Action? OnConstruct { get; set; }
         public List<string> Reads { get; } = [];
         public List<string> Effects { get; } = [];
@@ -401,6 +441,8 @@ public sealed class ApplicationScenarios
             CancellationToken cancellationToken)
         {
             Effects.Add("interactive");
+            ProviderRequest = request;
+            Clock.Advance(InteractiveTime);
             return Task.FromResult(Candidate(request, account?.Email, operationId));
         }
 

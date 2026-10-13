@@ -537,6 +537,15 @@ defaults, outcomes, result fields, and their meanings are unchanged. An older ex
 that does not implement this enum value returns `invalid_request`; callers must not
 silently downgrade a rejected forced request to `interactive-if-needed`.
 
+The managed request projection retains a request-local `ForceInteractive` flag alongside
+interaction permission through CLI admission, provider initialization and the MSAL
+interactive operation. Forced intent requires permission; an inconsistent internal
+request is rejected before discovery. The coordinator preserves exact account discovery
+and ambiguity rejection, then skips its silent branch only for that flag. The adapter
+sets the fixed extra query parameter only on that interactive request builder; both
+older modes leave it unset. Controlled application and adapter scenarios cover this
+projection, single-call effects, identity rejection and original cancellation/deadline.
+
 The adapter enters the WAM interactive path and explicitly requests account selection,
 even when the engine could acquire silently. This is invocation intent, not a guarantee
 that the provider renews credentials or displays a particular surface. WAM may reuse an

@@ -1135,12 +1135,12 @@ foreground calls before execution. Core coverage includes argument admission and
 projection, skipping a successful silent path, exact discovery and ambiguity,
 selected account or requested hint, one interactive call, final identity rejection,
 terminal provider failure, owned-parent cleanup and original cancellation/deadline.
-Windows coverage uses the existing controlled MSAL session to check request-local
-account-selection intent without constructing or invoking a broker. Existing
-MSAL construction checks may construct the public-client builder with rejecting
-HTTP, but must not check availability, load native libraries, discover accounts,
-acquire tokens, create windows or start product/child processes. No private input
-or network request is admitted. These checks do not establish actual WAM UI.
+Windows adapter coverage uses the existing controlled MSAL session to check
+request-local account-selection intent without constructing or invoking a broker.
+Exclude `MsalConstructionScenarios` from Linux execution: their Windows-only
+broker-enabled assertions require the designated Windows environment. No private
+input, network request, availability check, native load, account/token acquisition,
+window or product/child process is admitted. These checks do not establish WAM UI.
 
 Allocate at most two offline preparation and two combined build/test actions from
 the shared technical pool. Use installed SDK 10.0.401/runtime 10.0.12, retained
@@ -1157,6 +1157,86 @@ automatic retry. Retain failed evidence and intentionally retain only public sou
 dependencies, build output and test reports. Independently accept actual results
 and scoped completion before relying on them. No new executable project, runner,
 controller, observation check, account effect or real-account charge is included.
+
+## Forced-Interaction Candidate Preparation
+
+After accepting the exact managed implementation and relevant controlled outcomes,
+publish its Windows x64 Native AOT candidate on the designated ordinary Windows
+host. A failed managed batch remains failed; independently accepted passing cases
+may establish their narrower coverage. Reuse sufficient unchanged source, dependency,
+host/lifetime and earlier real-account evidence. Preserve the selected candidate
+until the new compilation, artifacts and Windows construction checks are accepted.
+
+Reuse the existing ordinary compiler shell, installed SDK/runtime, MSVC and Windows
+SDK, public offline feeds/cache, creation-time process handles, fixed diagnostic
+projection and owned stop method. In fresh dedicated roots, allocate at most two
+offline preparations, two build/test actions and one Native AOT publication from
+the shared pool. Restore the CLI and existing Windows scenario project, build the
+latter and publish the CLI with one MSBuild node and no build servers, node reuse
+or shared compilation. Restore phases have 180 seconds each, build 240 seconds,
+publish 600 seconds and the whole compiler call 1,260 seconds plus five stop seconds.
+Each compiler log is at most 512 KiB, aggregate 2 MiB; retain at most 1 GiB and
+10,000 entries. Do not install or download a toolchain or change broker/account state.
+
+Then run only the four existing `MsalConstructionScenarios` on Windows, with rejecting
+HTTP, no availability or broker/account/token invocation, and no product/window/child
+scenario. Bound this foreground call to 120 seconds plus five stop seconds, each
+public stream/log/TRX to 1 MiB, and require actual exit, complete results and all four
+cases passed. This checks Windows builder settings and original cancellation, not
+WAM effectiveness. Do not repeat the accepted Linux Core/controlled-session cases or
+the unchanged process/lifetime scenarios merely for this candidate.
+
+Independently accept exact source/input/calls, current operating basis and whole charge
+before the first covered Windows operation. Allocate three metadata and three safe
+collection passes using the existing public-source materialization, compiler-log
+projection, public-output acquisition and result qualification, with their fixed
+16 MiB/30-second, 2 MiB/30-second, 5 GiB/60-second and scenario bounds. The exact call
+must supply stricter finite operation selections and charges. Stop on unexpected
+failure, overflow or incomplete owned completion without retry or refund. Retain failed
+evidence. Accept compiler/artifact outcomes before the Windows checks, then accept
+their actual/scoped outcomes before selecting the candidate for real use. No new
+runner, controller, retained host, observer or account invocation is admitted.
+
+### Forced-Interaction WSL Acceptance
+
+After independent candidate acceptance, admit one new two-case batch for the already
+selected work role, unchanged Windows-local configuration, Profile, applicable tenant,
+scopes and Windows-only validator. Both calls explicitly select `force-interactive`
+under the accepted contract; no engine silent call, cache clearing or account repair
+is permitted. Provider-managed session reuse/updates retain the ordinary Wave boundary.
+The stopped older human route and exhausted EOF/caller-death attempts stay stopped or
+spent. This is a fresh finite allocation, not replay or restored capacity.
+
+| Case, at most once | Action and acceptance |
+| --- | --- |
+| EOF during actual WAM | Obtain fresh readiness, keep the sole lifetime writer open, and wait for the operator to confirm an actual WAM surface while the request is pending. Only then signal the matched existing caller with SIGUSR1 to close its owned writer once. Require valid Cancelled/None, exit 1, no token, complete transport and normal owned completion; separately record subsequent observed windows. |
+| Actual WAM cancellation/denial | Obtain fresh readiness and keep the lifetime writer open. The operator cancels/closes the identified WAM surface or declines ordinary delegated consent if offered. Require the reported WAM action, valid Cancelled or recognized Denied, exit 1, no token, complete transport and normal owned completion; distinguish a parent-window action and record observed closure. |
+
+Use the frozen local OTEL phase projection, ordinary process/pipe facts and actual
+operator reports; no fourth observation check or retuning is admitted. The existing
+caller may change only the explicit interaction argument and accepted candidate path.
+Preserve its pipe ownership, signal matching, finite loops and confidential transport.
+Use 120-second product, 130-second completion, 10+5-second validator and 180+5-second
+foreground bounds. Configuration/projection remains 8 KiB/1 KiB, private streams
+1 MiB each, safe progress 16 KiB and validator output 4 KiB. Actual WAM confirmation
+must precede EOF; an API phase or `interaction: interactive` result is insufficient.
+
+No operator credential entry is required for these cases. An early success, missing
+WAM, timeout or another valid alternative remains itself; do not manufacture a prompt
+through another account, scopes, cache state, UI automation or a retry. Independently
+accept each actual/scoped outcome before the next case. A safely completed alternative
+may leave its claim open while the separately admitted other case proceeds; a new
+ownership/safety gap stops dependent calls. Close only the owned writer on failure
+and retain the remaining original product allowance and current-absence disposition.
+
+Precharge two starts/discoveries/eligible interactive calls and zero engine silent
+calls from the existing real pool, plus four metadata passes of 64 operations/16 MiB
+plus 8 KiB/30 seconds and two collection passes of eight operations/1 MiB/180 seconds.
+Independently admit exact source, request, candidate, validator, calls, current basis,
+accounting and needed human actions before execution. No refund, account probing,
+administrator consent, registration change, authenticated service request, new tool
+or network exporter is included. No successful alternative, allocation or missing
+observation completes actual WAM, hidden-parent UX or whole-Slice acceptance.
 
 ## Historical Evidence
 

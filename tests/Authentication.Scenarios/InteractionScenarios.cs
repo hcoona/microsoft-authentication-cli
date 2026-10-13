@@ -27,10 +27,48 @@ public sealed class InteractionScenarios
     }
 
     [TestMethod]
-    public async Task MissingSelectedAccountUsesOnePermittedInteractiveCallWithoutSubstitutingWorkAccount()
+    public async Task ForcedInteractionSkipsSuccessfulSilentReuseAndPreservesTheSelectedAccount()
+    {
+        var scene = new Scene();
+        var outcome = await scene.RunAsync(forceInteractive: true);
+
+        Assert.IsNotNull(outcome.Success);
+        Assert.IsTrue(outcome.Interactive);
+        Assert.AreSame(scene.Accounts[0], scene.InteractiveAccount);
+        Assert.IsNull(scene.InteractiveClaims);
+        Assert.IsTrue(scene.InteractiveForce);
+        CollectionAssert.AreEqual(new[] { "discover", "open", "interactive", "close" }, scene.Effects.ToArray());
+    }
+
+    [TestMethod]
+    public async Task ForcedInteractionCannotOverrideProhibitedInteraction()
+    {
+        var scene = new Scene();
+        var outcome = await scene.RunAsync(interactionAllowed: false, forceInteractive: true);
+        Assert.AreEqual(AuthenticationFailure.InvalidRequest, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+        Assert.IsEmpty(scene.Effects);
+    }
+
+    [TestMethod]
+    public async Task OriginalCancellationWithholdsForcedSuccessAndClosesTheOwnedParent()
+    {
+        using var original = new CancellationTokenSource();
+        var scene = new Scene { DuringInteraction = () => original.Cancel() };
+        var outcome = await scene.RunAsync(forceInteractive: true, cancellationToken: original.Token);
+        Assert.AreEqual(AuthenticationFailure.Cancelled, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+        Assert.AreEqual(original.Token, scene.InteractiveCancellation);
+        CollectionAssert.AreEqual(new[] { "discover", "open", "interactive", "close" }, scene.Effects.ToArray());
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task MissingSelectedAccountUsesOnePermittedInteractiveCallWithoutSubstitutingWorkAccount(bool forced)
     {
         var scene = new Scene { Accounts = [new(WorkEmail, new object())] };
-        var outcome = await scene.RunAsync();
+        var outcome = await scene.RunAsync(forceInteractive: forced);
 
         Assert.IsNotNull(outcome.Success);
         Assert.AreEqual(Email, outcome.Success.Email);
@@ -40,6 +78,7 @@ public sealed class InteractionScenarios
         Assert.IsNull(scene.InteractiveClaims);
         Assert.AreEqual(Email, scene.InteractiveEmail);
         Assert.AreEqual(scene.ParentWindow, scene.InteractiveParent);
+        Assert.AreEqual(forced, scene.InteractiveForce);
         CollectionAssert.AreEqual(new[] { "discover", "open", "interactive", "close" }, scene.Effects.ToArray());
     }
 
@@ -78,10 +117,12 @@ public sealed class InteractionScenarios
     }
 
     [TestMethod]
-    public async Task PermissionCannotResolveAmbiguityByOpeningAnAccountPicker()
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task PermissionCannotResolveAmbiguityByOpeningAnAccountPicker(bool forced)
     {
         var scene = new Scene { Accounts = [new(Email, new object()), new(Email.ToUpperInvariant(), new object())] };
-        var outcome = await scene.RunAsync();
+        var outcome = await scene.RunAsync(forceInteractive: forced);
 
         Assert.AreEqual(AuthenticationFailure.AccountAmbiguous, outcome.Failure);
         Assert.IsNull(outcome.Success);
@@ -89,10 +130,12 @@ public sealed class InteractionScenarios
     }
 
     [TestMethod]
-    public async Task ParentCreationFailurePreventsTheInteractiveCall()
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task ParentCreationFailurePreventsTheInteractiveCall(bool forced)
     {
         var scene = new Scene { Accounts = [], ParentWindow = 0 };
-        var outcome = await scene.RunAsync();
+        var outcome = await scene.RunAsync(forceInteractive: forced);
 
         Assert.AreEqual(AuthenticationFailure.MechanismUnavailable, outcome.Failure);
         Assert.IsNull(outcome.Success);
@@ -139,16 +182,22 @@ public sealed class InteractionScenarios
     }
 
     [TestMethod]
-    [DataRow(AuthenticationFailure.InteractionRequired)]
-    [DataRow(AuthenticationFailure.Cancelled)]
-    [DataRow(AuthenticationFailure.Denied)]
-    [DataRow(AuthenticationFailure.MechanismUnavailable)]
-    [DataRow(AuthenticationFailure.TemporarilyUnavailable)]
-    [DataRow(AuthenticationFailure.InternalFailure)]
-    public async Task InteractiveFailureClosesOwnedUiWithoutAnotherAttempt(AuthenticationFailure failure)
+    [DataRow(AuthenticationFailure.InteractionRequired, false)]
+    [DataRow(AuthenticationFailure.Cancelled, false)]
+    [DataRow(AuthenticationFailure.Denied, false)]
+    [DataRow(AuthenticationFailure.MechanismUnavailable, false)]
+    [DataRow(AuthenticationFailure.TemporarilyUnavailable, false)]
+    [DataRow(AuthenticationFailure.InternalFailure, false)]
+    [DataRow(AuthenticationFailure.InteractionRequired, true)]
+    [DataRow(AuthenticationFailure.Cancelled, true)]
+    [DataRow(AuthenticationFailure.Denied, true)]
+    [DataRow(AuthenticationFailure.MechanismUnavailable, true)]
+    [DataRow(AuthenticationFailure.TemporarilyUnavailable, true)]
+    [DataRow(AuthenticationFailure.InternalFailure, true)]
+    public async Task InteractiveFailureClosesOwnedUiWithoutAnotherAttempt(AuthenticationFailure failure, bool forced)
     {
         var scene = new Scene { Accounts = [], InteractiveFailure = new ProviderFailureException(failure, "synthetic-claims") };
-        var outcome = await scene.RunAsync();
+        var outcome = await scene.RunAsync(forceInteractive: forced);
 
         Assert.AreEqual(failure, outcome.Failure);
         Assert.IsNull(outcome.Success);
@@ -156,13 +205,16 @@ public sealed class InteractionScenarios
     }
 
     [TestMethod]
-    [DataRow("wrong-email")]
-    [DataRow("wrong-tenant")]
-    [DataRow("wrong-operation")]
-    public async Task InteractiveSuccessStillMustSatisfyTheOriginalRequest(string defect)
+    [DataRow("wrong-email", false)]
+    [DataRow("wrong-tenant", false)]
+    [DataRow("wrong-operation", false)]
+    [DataRow("wrong-email", true)]
+    [DataRow("wrong-tenant", true)]
+    [DataRow("wrong-operation", true)]
+    public async Task InteractiveSuccessStillMustSatisfyTheOriginalRequest(string defect, bool forced)
     {
         var scene = new Scene { Accounts = [], InteractiveDefect = defect };
-        var outcome = await scene.RunAsync();
+        var outcome = await scene.RunAsync(forceInteractive: forced);
 
         Assert.AreEqual(AuthenticationFailure.IdentityValidationFailed, outcome.Failure);
         Assert.IsNull(outcome.Success);
@@ -202,13 +254,18 @@ public sealed class InteractionScenarios
         public string? InteractiveEmail { get; private set; }
         public string? InteractiveClaims { get; private set; }
         public nint InteractiveParent { get; private set; }
+        public bool InteractiveForce { get; private set; }
+        public CancellationToken InteractiveCancellation { get; private set; }
+        public Action? DuringInteraction { get; init; }
         public TimeProvider Clock { get; } = new ScenarioClock();
 
-        public async Task<AuthenticationOutcome> RunAsync(bool interactionAllowed = true)
+        public async Task<AuthenticationOutcome> RunAsync(bool interactionAllowed = true, bool forceInteractive = false,
+            CancellationToken cancellationToken = default)
         {
             try
             {
-                return await new RequestCoordinator(this, this).AuthenticateAsync(new(Email, [Scope], interactionAllowed, Tenant));
+                return await new RequestCoordinator(this, this).AuthenticateAsync(
+                    new(Email, [Scope], interactionAllowed, Tenant, forceInteractive), cancellationToken);
             }
             catch (Exception)
             {
@@ -241,6 +298,9 @@ public sealed class InteractionScenarios
             InteractiveAccount = account;
             InteractiveEmail = request.AccountEmail;
             InteractiveClaims = claims;
+            InteractiveForce = request.ForceInteractive;
+            InteractiveCancellation = cancellationToken;
+            DuringInteraction?.Invoke();
             FailIfRequested("interactive");
             if (InteractiveFailure is not null) throw InteractiveFailure;
             var candidate = Candidate(operationId);

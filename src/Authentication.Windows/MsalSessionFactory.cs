@@ -81,6 +81,15 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
                     ?? throw new InvalidOperationException("The interactive operation requires a login hint."));
             if (operation.Claims is { } claims)
                 builder.WithClaims(claims);
+            if (operation.ForceInteractive)
+            {
+                // Pinned RuntimeBroker omits WithPrompt. This fixed WAM intent is
+                // request-local and does not change token identity or its cache key.
+                builder.WithExtraQueryParameters(new Dictionary<string, (string Value, bool IncludeInCacheKey)>
+                {
+                    ["prompt"] = ("select_account", false),
+                });
+            }
             return builder.ExecuteAsync(cancellationToken);
         }
 

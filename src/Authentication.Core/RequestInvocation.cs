@@ -82,7 +82,7 @@ public sealed class RequestInvocation : IDisposable
             }
 
             var request = new AuthenticationRequest(Request.AccountEmail, Request.Scopes,
-                Request.InteractionAllowed, tenant);
+                Request.InteractionAllowed, tenant, Request.ForceInteractive);
             token.ThrowIfCancellationRequested();
             IAuthenticationProvider provider;
             try
