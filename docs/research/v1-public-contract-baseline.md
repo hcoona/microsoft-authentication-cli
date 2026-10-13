@@ -2063,6 +2063,29 @@ unsubmitted. A separately admitted fresh caller-death request requires the
 actual same-machine desktop reactivation and retains the original failure,
 charges, historical globalfalse and all missing evidence.
 
+**Desktop-reactivation continuation alternative, 2026-10-13 UTC:** At accepted
+`2efa86b24297c19419e60cdf148bf0b5e8e8687e` (PR #447), the separately charged
+personal request returned validated Success/Silent, product and validator exit 0,
+ProtocolValid/MetadataValid/Passed=true, complete streams and normal completion
+of all created roots. Product launch-to-full-streams was 3,954 ms. Account
+discovery took 2,823 ms and silent acquisition 1,007 ms; the reported phase path
+did not enter interaction. Actual visible-window state and the precise earlier
+host-session rejection cause remain unobserved.
+
+The first tool return after 3.002 seconds was empty while the same original was
+still running. Startup arrived later, about 11.35 seconds after caller creation;
+the same original26614 then completed normally, terminal 0 at chunk9df728.
+The no-startup alternative had already withheld caller termination. No signal,
+native observer, clock sample or guarded relay read ran. This observed silent
+success does not satisfy caller death, WAM EOF or human cancellation, and the
+initial empty return was not itself product completion.
+
+Independent actual/scoped-completion review passed. Accounting1034 closes only
+this continuation, retaining real64/64/64/21, remaining32/32/32/31,
+technical61/231/19/823, metadata116 and collection530 without refund. The two
+original human slots remain unsubmitted. Observation sources and product code
+are unchanged; the result does not supply missing historical exit or UI evidence.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn

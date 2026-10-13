@@ -700,6 +700,35 @@ desktop action, stop dependent real calls and diagnose the concrete source or
 environment cause before proposing another execution; do not repeat desktop
 preparation or change the frozen observer speculatively.
 
+#### Remaining Goals From Observed Entry Conditions
+
+After accepting the normally completed personal Success/Silent alternative,
+the two still-unsubmitted human cases may use the already admitted selected
+work role. Retain their original whole-batch charges and slots; independently
+admit the role-specific call, Windows-local selection, applicable supplied tenant,
+unchanged Profile/scope/validator and operating basis before execution. The sole
+existing caller may take only a fixed Personal or Work role argument. Its native
+completion and live phase projection remain unchanged; product code is unchanged.
+
+Run the work-role WamEof case first, after actual readiness. Its writer stays
+open until actual operator WAM confirmation. If it completes silently or otherwise
+fails to establish actual WAM EOF, accept that alternative and stop this route;
+do not submit the other human slot or probe another account to obtain a prompt.
+Only accepted actual WAM appearance and EOF cancellation permit the remaining
+work-role continuation: one separately charged CallerDeath and the original
+unsubmitted HumanCancellation case. A later early alternative stays itself.
+No interaction is forced, and account, cache, scopes and configuration are unchanged.
+
+For that single additional CallerDeath, wait on the same original for its
+CallerStarted fact within the existing 30-second preflight bound. An empty
+initial tool return is not a completed preflight or permission to skip that wait.
+If a final result also arrived, do not signal. Then use the frozen native handle,
+clock qualification, caller-only signal and continuous completion/relay sequence.
+Precharge the same one-unit real, two-pass metadata and one-pass collection
+allocation as the desktop-reactivation continuation before its first covered
+operation; no debit is made while that conditional case remains unsubmitted.
+Preserve all previous charges, failures, unknowns and separately scoped completions.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
