@@ -1735,6 +1735,7 @@ def synthetic_case(
     mismatch_mise_version: bool = False,
     occupy_public_config: bool = False,
     timeout_command: str | None = None,
+    mutate_after_timeout: bool = False,
     sensitive_command: str | None = None,
     overflow_command: str | None = None,
     overflow_sensitive_command: str | None = None,
@@ -2017,9 +2018,16 @@ def synthetic_case(
             argv: Any,
             **keywords: Any,
         ):
-            if keywords.get("label") == timeout_command:
+            selected = keywords.get("label") == timeout_command
+            if selected:
                 keywords["timeout_seconds"] = 0.08
-            return original_run_supervised(argv, **keywords)
+            result = original_run_supervised(argv, **keywords)
+            if selected and mutate_after_timeout:
+                # Establish the later source change without racing child startup.
+                Path(keywords["cwd"]).joinpath("AzureAuth.sln").write_text(
+                    "mutated\n", encoding="utf-8"
+                )
+            return result
 
         runner.run_supervised = shorten_selected_timeout
     if spawn_failure_label is not None:
@@ -3724,7 +3732,7 @@ def test_source_unchanged_guard() -> None:
     overlap, _, _, _ = synthetic_case(
         "source-mutation-after-timeout",
         timeout_command="source-faithful-build",
-        mutate_command="source-faithful-build",
+        mutate_after_timeout=True,
         use_real_candidate_validator=True,
     )
     overlap_outcome = next(
