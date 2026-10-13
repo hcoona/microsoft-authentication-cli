@@ -1123,6 +1123,41 @@ Independently accept red/green outcomes and scoped completion before relying on 
 correction. This check establishes controlled lifetime behavior, not the cause of a
 real exit-2 failure, actual Windows shutdown, WAM cancellation or WSL acceptance.
 
+## Focused Forced-Interaction Implementation Check
+
+Validate the accepted `force-interactive` account-selection intent in the existing
+Core and Windows scenario projects on the admitted WSL2 Linux x64 development
+environment. This is a separate finite batch; the earlier focused dispatch batch
+and real-account routes remain spent or stopped as recorded.
+
+Independently admit the exact implementation, scenario selection and ordinary
+foreground calls before execution. Core coverage includes argument admission and
+projection, skipping a successful silent path, exact discovery and ambiguity,
+selected account or requested hint, one interactive call, final identity rejection,
+terminal provider failure, owned-parent cleanup and original cancellation/deadline.
+Windows coverage uses the existing controlled MSAL session to check request-local
+account-selection intent without constructing or invoking a broker. Existing
+MSAL construction checks may construct the public-client builder with rejecting
+HTTP, but must not check availability, load native libraries, discover accounts,
+acquire tokens, create windows or start product/child processes. No private input
+or network request is admitted. These checks do not establish actual WAM UI.
+
+Allocate at most two offline preparation and two combined build/test actions from
+the shared technical pool. Use installed SDK 10.0.401/runtime 10.0.12, retained
+public offline feeds, locked dependencies, cleared credentials/network sources,
+audit disabled and fresh dedicated output/cache/temp roots. Disable build servers,
+node reuse, shared compilation and tool/test telemetry. Each of the four calls
+has at most 180 seconds plus five stop seconds and 8 MiB public output; the batch
+retains at most 1 GiB and 10,000 entries. Keep exact finite test filters in the
+reviewed call; no Windows-only scenario or unfiltered test run is included.
+
+Precharge before the first SDK call. A failed compilation, unexpected test result,
+overflow or incomplete owned-process completion stops dependent execution without
+automatic retry. Retain failed evidence and intentionally retain only public source,
+dependencies, build output and test reports. Independently accept actual results
+and scoped completion before relying on them. No new executable project, runner,
+controller, observation check, account effect or real-account charge is included.
+
 ## Historical Evidence
 
 The prior detailed protocols, source pins, receipts, failed outcomes and bounded
