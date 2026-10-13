@@ -52,7 +52,36 @@ public static class MsalBoundary
             || exception is OperationCanceledException { InnerException: TimeoutException })
             return new(AuthenticationFailure.TemporarilyUnavailable, reason: AuthenticationReason.NetworkTransient);
 
-        return new(AuthenticationFailure.InternalFailure);
+        return new(AuthenticationFailure.InternalFailure, diagnosticError: ClassifyInternalFailure(exception));
+    }
+
+    private static ProviderDiagnosticError ClassifyInternalFailure(Exception exception)
+    {
+        if (exception is MsalException { ErrorCode: MsalError.DuplicateQueryParameterError })
+            return ProviderDiagnosticError.QueryParameterConflict;
+
+        // Pinned WamAdapters decorates structured native status, not provider text.
+        // Unknown/malformed bags cannot alter authentication or become output.
+        try
+        {
+            if (exception is MsalServiceException service
+                && service.ErrorCode.StartsWith("WAM_provider_error_", StringComparison.Ordinal)
+                && service.AdditionalExceptionData?.TryGetValue(MsalException.BrokerErrorStatus, out var status) == true)
+            {
+                if (status == "ApiContractViolation") return ProviderDiagnosticError.BrokerContract;
+                if (status == "IncorrectConfiguration") return ProviderDiagnosticError.BrokerConfiguration;
+            }
+        }
+        catch (Exception) { }
+
+        return exception switch
+        {
+            MsalClientException => ProviderDiagnosticError.MsalClient,
+            MsalServiceException => ProviderDiagnosticError.MsalService,
+            ArgumentException => ProviderDiagnosticError.Argument,
+            InvalidOperationException => ProviderDiagnosticError.InvalidOperation,
+            _ => ProviderDiagnosticError.Unexpected,
+        };
     }
 
     public static TokenCandidate Project(AuthenticationResult result, Guid operationId) =>

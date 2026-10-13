@@ -93,10 +93,17 @@ public interface IRequestHost
     Task CloseInteractionAsync() => Task.CompletedTask;
 }
 
+public enum ProviderDiagnosticError
+{
+    None, QueryParameterConflict, BrokerContract, BrokerConfiguration,
+    MsalClient, MsalService, Argument, InvalidOperation, Unexpected,
+}
+
 // The adapter supplies structured categories, never provider message text. Claims are
 // request-local opaque input for the one permitted continuation and are not output.
 public sealed class ProviderFailureException(AuthenticationFailure failure, string? claims = null,
-    AuthenticationReason reason = AuthenticationReason.None)
+    AuthenticationReason reason = AuthenticationReason.None,
+    ProviderDiagnosticError diagnosticError = ProviderDiagnosticError.None)
     : Exception("Authentication provider failed.")
 {
     public AuthenticationFailure Failure { get; } = failure;
@@ -104,4 +111,6 @@ public sealed class ProviderFailureException(AuthenticationFailure failure, stri
     public string? Claims { get; } = claims;
 
     public AuthenticationReason Reason { get; } = reason;
+
+    public ProviderDiagnosticError DiagnosticError { get; } = diagnosticError;
 }

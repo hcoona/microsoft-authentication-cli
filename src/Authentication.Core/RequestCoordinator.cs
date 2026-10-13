@@ -25,6 +25,8 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         }
         catch (ProviderFailureException exception)
         {
+            if (exception.Failure == AuthenticationFailure.InternalFailure)
+                observation.RecordProviderFailure(exception.DiagnosticError);
             outcome = new(null, SafeFailure(exception.Failure), Interactive: interactive, Reason: exception.Reason);
         }
         catch (Exception)
