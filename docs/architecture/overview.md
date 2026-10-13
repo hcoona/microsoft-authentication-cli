@@ -296,8 +296,8 @@ cloud, client, and tenant constraints before provider work. Owns the original re
 deadline and cancellation scope. Applies versioned product acquisition order after
 filtering for profile and host compatibility. The explicit interaction mode selects the
 initial acquisition path: ordinary modes retain silent-first behavior, while
-`force-interactive` enters provider-supported reauthentication after strict account
-resolution. Later mechanisms require typed retryable outcomes rather than arbitrary
+`force-interactive` enters the provider interactive path with an account-selection request
+after strict account resolution. Later mechanisms require typed retryable outcomes rather than arbitrary
 exception fallthrough, preserving normalized request constraints and the original
 deadline. Interaction intent does not select token format or downstream service behavior.
 

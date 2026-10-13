@@ -8,7 +8,7 @@ request has been uniquely resolved, `non-interactive-only` and `interactive-if-n
 must attempt silent acquisition before initiating any permitted interaction.
 `force-interactive` instead enters the supported interactive authentication path directly
 after account resolution, without a silent token-acquisition attempt. This explicit
-reauthentication intent is not caller-defined mechanism ordering.
+interaction intent is not caller-defined mechanism ordering.
 
 The versioned product policy owns the per-platform mechanism order. A Client Profile
 filters incompatible mechanisms but must not redefine that order.
@@ -16,17 +16,20 @@ filters incompatible mechanisms but must not redefine that order.
 ## V2-REQ-014: Explicit Per-Request Interaction Permission
 
 Every authentication request must explicitly state whether user interaction is prohibited,
-permitted when necessary, or required for reauthentication. This intent must apply
-throughout the request, independently of the authentication mechanism.
+permitted when necessary, or explicitly requested without an engine silent attempt. This
+intent must apply throughout the request, independently of the authentication mechanism.
 Profile configuration, fallback, retries,
 and ambient state must not permit interaction that the request prohibits.
 
 The first version has three modes: `non-interactive-only`, `interactive-if-needed`, and
 `force-interactive`. The existing modes retain their behavior. Forced interaction must
-request provider-supported reauthentication even when reusable credentials are available;
-it must not fall back to silent acquisition or return a silent success. A provider/host
-combination that cannot honor that intent is unavailable. It must not expose a
-caller-selected prompt-type whitelist or promise a password, MFA method, or exact UI.
+enter the provider interactive path and request supported account selection even when
+reusable credentials are available. The engine must not call silent acquisition or fall
+back to it. A provider/host combination that cannot honor this invocation intent is
+unavailable. The provider may reuse its session within the interactive call; success
+reports the invoked path, not proof of visible UI or renewed credentials. V2 must not
+expose a caller-selected prompt-type whitelist or promise a password, MFA method, or
+exact UI.
 
 Forced interaction is not token-cache refresh, logout, account removal, consent
 revocation, or cache clearing. Normal provider-managed session/state updates may occur;

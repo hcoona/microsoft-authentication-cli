@@ -95,15 +95,18 @@ already available from that work; it does not access the store again. The
 [state-observation boundary](#state-ownership-and-persistence-observation) below applies
 to both silent and interactive results.
 
-## Explicit Reauthentication
+## Explicit Interactive Acquisition
 
 `force-interactive` changes the initial acquisition path, not account selection or the
 fallback policy. Resolve the requested full email through the same provider discovery.
 Multiple exact matches remain terminal ambiguity. With zero or one exact match, establish
-the owned interaction context and perform one provider-supported reauthentication call
-with the same account/hint and original intent. Do not attempt silent token acquisition,
+the owned interaction context and perform one provider interactive call with supported
+account-selection intent, the same account/hint and original request constraints. Do not
+attempt silent token acquisition,
 fabricate a silent failure, relax identity validation, or fall back to silent reuse.
-An unsupported host/provider combination is unavailable.
+An unsupported host/provider combination is unavailable. The provider may reuse its
+session inside this call; an interactive result identifies the invoked path and does not
+prove visible UI or renewed credentials.
 
 Use the same completion, strict validation, state-observation and terminal-lifecycle
 paths as other interactive requests. This does not remove accounts, clear state, revoke

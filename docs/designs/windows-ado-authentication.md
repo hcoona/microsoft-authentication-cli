@@ -169,7 +169,7 @@ the resulting argument vector without invoking another shell.
 | `--profile <absolute-Windows-file-path>` | Required selection of one Profile document, not inline client configuration. |
 | `--account-email <full-email>` | Required strict account constraint. |
 | `--scope <qualified-scope>` | Required, repeatable for permissions on exactly one resource. |
-| `--interaction non-interactive-only\|interactive-if-needed\|force-interactive` | Required interaction intent for the entire request. The first two modes retain silent-first behavior; the third requests reauthentication without silent token acquisition. |
+| `--interaction non-interactive-only\|interactive-if-needed\|force-interactive` | Required interaction intent for the entire request. The first two modes retain silent-first behavior; the third requests interactive account selection without engine silent token acquisition. |
 | `--tenant common\|<tenant-GUID>` | Optional; normalize under the selected Profile's tenant policy. |
 | `--timeout-seconds <integer>` | Optional, 1 through 600 inclusive; default 120. One monotonic deadline measured from managed entry, including Profile reading and validation. |
 | `--cancel-on-stdin-close` | Optional valueless lifetime flag. Use a dedicated caller-owned pipe whose writer remains open until completion or cancellation. EOF or pipe failure cancels the request. Stdin is never an authentication request or credential channel. |
@@ -511,7 +511,7 @@ cancellation/deadline boundary.
 | --- | --- |
 | Admission or Profile semantic error | `invalid_request`; no provider call. |
 | No visible match or provider interaction requirement | `interaction_required`, or the one compatible interactive call when permitted. |
-| Explicit `force-interactive` with zero or one exact match | One provider-supported reauthentication call; no silent acquisition or fallback. |
+| Explicit `force-interactive` with zero or one exact match | One provider interactive call with account-selection intent; no engine silent acquisition or fallback. |
 | Multiple exact visible matches | `account_ambiguous`; no silent call or picker. |
 | Broker unavailable, unsupported session, or rejected web fallback | `mechanism_unavailable`; no alternate mechanism. |
 | Caller cancellation, owned-window close, or provider user cancellation | `cancelled`; no retry. The local cancellation/deadline latch determines its own origin before interpreting a provider cancellation code. |
@@ -537,15 +537,34 @@ defaults, outcomes, result fields, and their meanings are unchanged. An older ex
 that does not implement this enum value returns `invalid_request`; callers must not
 silently downgrade a rejected forced request to `interactive-if-needed`.
 
-The adapter must request the provider's supported force-login semantics, rather than
-merely invoke its interactive API with a prompt that may reuse the existing session.
-Microsoft documents [force-login intent](https://learn.microsoft.com/entra/msal/dotnet/acquiring-tokens/desktop-mobile/acquiring-tokens-interactively#withprompt)
-through `WithPrompt(Prompt.ForceLogin)`. Its exact mapping and support through pinned
-MSAL/Broker 4.83.1 and NativeInterop 0.20.3 require dependency source review before
-implementation and bounded real WAM evidence before support is claimed. A host/provider
-combination that cannot honor this intent returns `mechanism_unavailable`; it must not
-silently substitute another prompt or acquisition path. No particular password, MFA
-method, number of windows, or provider UI is promised.
+The adapter enters the WAM interactive path and explicitly requests account selection,
+even when the engine could acquire silently. This is invocation intent, not a guarantee
+that the provider renews credentials or displays a particular surface. WAM may reuse an
+existing session inside that call. Success reports `interaction: interactive` for the
+invoked path; actual visible WAM behavior requires separate runtime observation.
+
+Do not implement this intent with `WithPrompt` alone. In pinned MSAL/Broker 4.83.1,
+the [interactive builder](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/AcquireTokenInteractiveParameterBuilder.cs#L177-L180)
+stores the requested `Prompt`, but [RuntimeBroker's interactive path](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/RuntimeBroker.cs#L149-L292)
+does not read its interactive-parameters argument. Its selected-account and sign-in
+paths use [common native parameters](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/WamAdapters.cs#L130-L211),
+which copy supplied extra query parameters without translating that `Prompt`.
+This is a source finding about the pinned mapping, not proof that every WAM/native route
+is incapable of reauthentication. NativeInterop cannot recover an intent omitted before
+its boundary.
+
+For this mode only, use the interactive request builder's
+[`WithExtraQueryParameters`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/BaseAbstractAcquireTokenParameterBuilder.cs#L98-L127)
+tuple overload with the fixed `prompt=select_account` pair and cache-key inclusion false.
+This UI intent does not change token identity or create a new cache partition. The [WAM API reference](https://learn.microsoft.com/entra/identity-platform/reference-entra-id-wam-api#microsoft-entra-id-wam-api-reference)
+documents this account-selection prompt. Pinned Broker copies the request parameters to
+native properties; no arbitrary caller parameters, undocumented force-login property,
+application-wide prompt default, or changed silent operation is admitted. This establishes
+a documented request and inspected transport path, not exact NativeInterop 0.20.3 or
+Windows UI effectiveness. Review the exact adapter mapping before implementation and
+obtain bounded real WAM evidence before claiming runtime support. A provider/host
+combination that cannot honor the invocation intent returns `mechanism_unavailable`;
+no silent fallback, browser path, or second attempt is permitted.
 
 Reuse the same account discovery, strict selection and final validation, Profile/tenant/
 scope constraints, owned parent, one interactive call, original deadline, and cancellation
@@ -565,7 +584,7 @@ protocol under the accepted Wave, and obtain actual operator readiness.
 
 ### Token Format and Future Extensions
 
-Interaction intent and token format are separate concerns: forced authentication does
+Interaction intent and token format are separate concerns: forced interaction does
 not select PoP, refresh semantics, or a different resource. Keep access-token material
 opaque and preserve the provider-reported `tokenType` in the existing result. Consumers
 must use the reported type rather than infer a type from the interaction mode; that field
@@ -680,7 +699,7 @@ sequenceDiagram
         end
         opt force-interactive, or permitted no match / silent interaction requirement
             CLI->>UI: Create owned parent and completion context
-            CLI->>MSAL: One interactive call with account/hint and same intent#59; force-login when explicitly required
+            CLI->>MSAL: One interactive call with account/hint and same intent#59; account selection when explicitly requested
             MSAL->>WAM: Interactive operation with owned HWND and cancellation
             WAM-->>MSAL: Candidate or failure
             MSAL-->>CLI: Candidate or typed provider observation
