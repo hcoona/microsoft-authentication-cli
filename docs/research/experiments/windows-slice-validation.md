@@ -1238,6 +1238,75 @@ administrator consent, registration change, authenticated service request, new t
 or network exporter is included. No successful alternative, allocation or missing
 observation completes actual WAM, hidden-parent UX or whole-Slice acceptance.
 
+## Focused Provider Failure Observation Correction
+
+Implement the Windows design's fixed `error.type` observation through the existing
+sanitized provider-failure seam, owned request span and bounded local projection.
+Use the existing Core and Windows controlled scenario projects. Check fixed MSAL
+and broker classification, rejection of arbitrary codes/property values, committed
+failure attribution, superseding cancellation/deadline, telemetry-off/broken sinks
+and omission of unknown or injected attributes. This is an additive diagnostic
+correction, not a change to authentication or protocol 1 outcomes.
+
+Admit one separate offline batch with at most two preparation and two combined
+build/test actions. Reuse the installed Linux SDK/runtime and retained public feeds,
+locked dependencies, cleared package-source credentials, disabled audit/tool telemetry,
+one node, no build servers/node reuse/shared compilation, and fresh dedicated roots.
+Each foreground call has 180 seconds plus five stop seconds and 8 MiB public output;
+the batch retains at most 1 GiB/10,000 entries. Exact filters cover TelemetryScenarios,
+ApplicationScenarios, RequestLifetimeScenarios and MsalAdapterScenarios only. No
+Windows construction, native load, account, network, window or child process runs.
+Independently accept exact source/calls and precharge before SDK execution; a failed
+or partial result stops dependent work without retry/refund. Independently accept
+actual results and scoped completion before relying on them.
+
+After those gates, admit one Windows candidate preparation using the established
+ordinary public-source materialization, compiler shell, public-output acquisition
+and qualification methods on the same host/toolchains. Use fresh destinations and
+one CLI restore (180 seconds) and one Windows x64 Native AOT publish (600 seconds),
+with a 780+5-second foreground bound. Allocate one preparation, one build/test and
+one publication action, three metadata passes of at most 128 operations/16 MiB/30
+seconds, and two collection passes of at most 128 operations/5 GiB/60 seconds.
+Keep existing offline feeds, compiler ownership/stop rules, 512 KiB per log and
+1 GiB/10,000-entry retention bounds. Retain only necessary public product/provenance
+files. Reuse the accepted four Windows construction cases only after independent
+review confirms their builder/configuration/dependency basis is unchanged; otherwise
+stop and admit the smallest required replacement. No repeat of sufficient managed,
+construction or process/lifetime checks is required solely for a new filename.
+Accept exact inputs/calls/current basis before execution and independently accept
+compiler/artifact correspondence and scoped completion before selecting the candidate.
+
+The sole permitted caller observation change is a whitelist extraction of optional
+`error.type` from the completed request event into existing safe PhaseEvents. Keep
+the live phase projection, native completion block, pipe/signal ownership, clocks,
+finite loops, private transport and result validator unchanged. Independently review
+this narrow delta and its synthetic input cases; no fourth calibration or new observer,
+controller, retained host, exporter, UIA or executable project is admitted. Candidate
+path/hash binding may change after accepted artifact correspondence.
+
+Then admit at most one distinct Work WSL diagnostic request under the same selected
+Windows-local configuration, Profile, tenant and scopes, with `force-interactive`,
+zero engine silent calls and the existing sole lifetime writer held open. Allocate
+one start/discovery/interactive call, one metadata pass of 64 operations/16 MiB plus
+8 KiB/30 seconds and one collection pass of eight operations/1 MiB/180 seconds.
+Use the existing 120-second product, 130-second completion, 10+5-second validator
+and 180+5-second foreground limits and existing private/output bounds. Independently
+admit exact source/candidate/request/current basis and precharge; obtain fresh
+readiness if ordinary sign-in, selection, cancellation or consent may need input.
+The operator may cancel an identified WAM surface; no credentials or state repair
+are required. Do not close the live writer to manufacture EOF evidence. Retain the
+actual typed outcome, fixed classification, complete transport/owned completion
+and any operator observation, without promising a prompt or a particular failure.
+
+This diagnostic request does not replay the spent WamEof slot or caller-death case,
+activate stopped routes, or spend the existing unsubmitted HumanCancellation slot.
+All previous charges, failures and unknowns remain. No automatic retry, cache/config
+repair, other account or raw provider output is permitted. Independently accept the
+actual/scoped outcome before further authentication. The original HumanCancellation
+slot may later bind to an independently accepted corrected candidate through its
+unchanged acceptance procedure; diagnosis alone completes none of the open WAM or
+hidden-parent claims.
+
 ## Historical Evidence
 
 The prior detailed protocols, source pins, receipts, failed outcomes and bounded
