@@ -1057,6 +1057,23 @@ as a user identity. Do not serialize arbitrary tags, baggage, exceptions, resour
 attributes, dependency activities or provider objects. Unknown events/attributes
 are omitted rather than forwarded. Telemetry-off installs no local listener.
 
+For a committed `internal_failure`, the completed owned request span may additionally
+carry the OpenTelemetry `error.type` attribute. The adapter supplies one fixed enum
+through its existing sanitized failure boundary; no exception object, message, stack,
+dynamic MSAL error code or broker property is retained. Permitted values are
+`query_parameter_conflict`, `broker_contract`, `broker_configuration`, `msal_client`,
+`msal_service`, `argument`, `invalid_operation`, and `unexpected`. The first recognizes
+MSAL's exact duplicate-query-parameter error; the next two recognize only the pinned
+broker's structured contract/configuration status. Other exceptions receive only their
+fixed category. Unknown enum or provider values cannot become attribute text.
+
+Only the committed request's stopped span may project this optional attribute into
+the existing bounded local JSON event. Do not forward arbitrary tags or dependency
+activities. A later cancellation, timeout or other commitment omits the provisional
+classification. The attribute identifies the observed failure boundary, not a root
+cause, registration ownership or provider-internal state. Its absence is unavailable
+evidence. Result fields, authentication routing and failure mapping remain unchanged.
+
 Use explicit parent contexts for the owned spans and preserve `Activity.Current`
 around their start/stop. The observation must not become ambient context for MSAL,
 HTTP or other dependencies: do not add outgoing trace headers or baggage. Listener
