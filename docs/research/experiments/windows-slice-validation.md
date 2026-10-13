@@ -1307,6 +1307,83 @@ slot may later bind to an independently accepted corrected candidate through its
 unchanged acceptance procedure; diagnosis alone completes none of the open WAM or
 hidden-parent claims.
 
+## Focused WAM Account-Selection Mapping Correction
+
+Correct the forced interactive adapter using the Windows design's unbound sign-in
+mapping. Preserve selected-account discovery and ambiguity rejection, the request's
+exact selector and final candidate validation, both silent-first modes, one interactive
+call, parent ownership, original cancellation/deadline, protocol outcomes and fixed
+OTEL projection. Remove the extra-query `prompt` mapping; do not replace it with an
+undocumented native property. The accepted diagnostic's `broker_contract` category
+is a failure-boundary observation, not proof of the offending parameter. Source
+inspection and a controlled mapping check do not establish real WAM effectiveness.
+
+Admit one separate offline batch using the existing Core and Windows scenario projects:
+at most two preparation and two combined build/test actions, with exact finite filters
+covering ApplicationScenarios, InteractionScenarios, RequestLifetimeScenarios,
+TelemetryScenarios, MsalCompositionScenarios and MsalAdapterScenarios only. Check forced
+intent with and without a discovered match, omission of account/hint and extra query
+parameters at the real interactive-builder boundary, preservation of ordinary account/
+hint/claims/tenant/scopes/parent/correlation mapping, exact identity rejection, and
+original cancellation/deadline. Use a construction-only controlled builder; do not
+execute it, initialize or check broker availability, load native libraries, read private
+input, create windows or reach account/network state. Exclude Windows construction
+and all unfiltered scenarios. Reuse the installed SDK/runtime, public locked offline
+feeds, empty source credentials, audit/tool telemetry disabled, one node, no build
+servers/node reuse/shared compilation and fresh dedicated roots. Each foreground call
+retains 180+5 seconds and 8 MiB public output; retention is 1 GiB/10,000 entries.
+Independently admit exact source/calls and precharge before SDK execution; accept actual
+results and scoped completion before candidate preparation. Failures stop dependent
+execution without automatic retry, charge refund or counter reset.
+
+After those gates, admit one Windows candidate preparation through the unchanged
+ordinary source-materialization, compiler shell and public artifact qualification
+methods. Allocate one preparation, one build/test and one Native AOT publication;
+three metadata passes of at most 128 operations/16 MiB/30 seconds and two collection
+passes of at most 128 operations/5 GiB/60 seconds. Keep the same installed toolchains,
+offline feeds, one CLI restore at 180 seconds and one x64 publish at 600 seconds,
+780+5-second foreground limit, 512 KiB logs, ownership/stop rules and 1 GiB/10,000-entry
+retention. Independently admit exact source/calls/current basis, then accept actual
+compiler/artifact correspondence before selection. Reuse the four accepted Windows
+construction cases only if independent review confirms the application-construction
+function and its configuration/dependency basis remain unchanged; a changed containing
+file alone does not require repeating the same construction evidence. Otherwise stop
+and admit the smallest necessary replacement under a separate finite protocol.
+
+After independent exact corrected-candidate/caller/current-basis admission, permit one
+new Work `WamEof` attempt and the already reserved, unsubmitted Work `HumanCancellation`
+slot. The new EOF attempt allocates one product start/discovery/interactive call and
+zero engine silent calls; the human slot retains its earlier charge without refund or
+double charge. Each call allocates one metadata pass of 64 operations/16 MiB plus
+8 KiB/30 seconds and one collection pass of eight operations/1 MiB/180 seconds; reuse
+already reserved passive capacity only where its exact role is unchanged. Precharge
+new allocations before any covered Windows/private/product operation. Preserve all
+spent EOF, caller-death and diagnostic attempts; no automatic retry is admitted.
+
+Bind the existing caller/preflight only by corrected candidate path/hash. Do not change
+observation, native held-handle completion, private memory/pipe transport, validator,
+signals, sole-writer ownership or clocks. Reuse exactly three accepted observation
+checks; no fourth calibration, UIA, observer, controller, retained host, exporter or new
+executable project. Product `force-interactive` and validator's existing Boolean-true
+permission projection remain distinct and unchanged. Both calls retain the same
+Windows-local selected Work configuration, Profile, tenant and scopes, normal protected
+provider state effects and historical operating-basis dispositions. No account/config/
+cache repair, alternate identity, scope change, elevation, reboot or resource request.
+
+Use the existing Remaining WSL Acceptance and Forced-Interaction WSL Acceptance
+procedures unchanged: 120-second product, 130-second native completion, 10+5-second
+validator and 180+5-second foreground bounds, existing private/output caps and safe
+fixed projection. Obtain fresh actual readiness before each attended call. For EOF,
+keep the writer open until the operator identifies WAM and the original is still live;
+then signal only the identity-matched caller once through its held association. No WAM
+confirmation or early completion means no signal and no EOF claim. For human cancellation,
+keep the writer open and require actual cancellation/close or delegated consent denial
+of identified WAM; no credential entry is needed. An unidentified parent action is not
+WAM cancellation. Independently accept each actual/scoped outcome before the next
+real call. Preserve protocol-valid alternatives and incomplete UI/claim evidence;
+a new ownership or safety gap stops dependent execution. These allocations guarantee
+no particular prompt or outcome and complete no whole-Slice claim by themselves.
+
 ## Historical Evidence
 
 The prior detailed protocols, source pins, receipts, failed outcomes and bounded

@@ -542,9 +542,12 @@ interaction permission through CLI admission, provider initialization and the MS
 interactive operation. Forced intent requires permission; an inconsistent internal
 request is rejected before discovery. The coordinator preserves exact account discovery
 and ambiguity rejection, then skips its silent branch only for that flag. The adapter
-sets the fixed extra query parameter only on that interactive request builder; both
-older modes leave it unset. Controlled application and adapter scenarios cover this
-projection, single-call effects, identity rejection and original cancellation/deadline.
+omits the discovered account and login hint from the forced interactive builder so
+the pinned broker enters its sign-in/account-selection path. Both older modes retain
+their selected account or requested hint. The request still retains its exact account
+selector for discovery and final validation. Controlled application and adapter
+scenarios cover this projection, single-call effects, identity rejection and original
+cancellation/deadline.
 
 The adapter enters the WAM interactive path and explicitly requests account selection,
 even when the engine could acquire silently. This is invocation intent, not a guarantee
@@ -562,18 +565,34 @@ This is a source finding about the pinned mapping, not proof that every WAM/nati
 is incapable of reauthentication. NativeInterop cannot recover an intent omitted before
 its boundary.
 
-For this mode only, use the interactive request builder's
-[`WithExtraQueryParameters`](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/BaseAbstractAcquireTokenParameterBuilder.cs#L98-L127)
-tuple overload with the fixed `prompt=select_account` pair and cache-key inclusion false.
-This UI intent does not change token identity or create a new cache partition. The [WAM API reference](https://learn.microsoft.com/entra/identity-platform/reference-entra-id-wam-api#microsoft-entra-id-wam-api-reference)
-documents this account-selection prompt. Pinned Broker copies the request parameters to
-native properties; no arbitrary caller parameters, undocumented force-login property,
-application-wide prompt default, or changed silent operation is admitted. This establishes
-a documented request and inspected transport path, not exact NativeInterop 0.20.3 or
-Windows UI effectiveness. Review the exact adapter mapping before implementation and
-obtain bounded real WAM evidence before claiming runtime support. A provider/host
-combination that cannot honor the invocation intent returns `mechanism_unavailable`;
-no silent fallback, browser path, or second attempt is permitted.
+For this mode only, leave the interactive builder's account and login hint unset and
+set no extra query parameters. In the pinned
+[RuntimeBroker](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/RuntimeBroker.cs#L174-L292),
+a bound account can enter `AcquireTokenInteractivelyAsync` for that account;
+an unbound request enters `SignInInteractivelyAsync` with no login hint, the
+broker's account-selection route. The official
+[MSAL Python broker mapping](https://github.com/AzureAD/microsoft-authentication-library-for-python/blob/03d030f715f8398a26151602ac578f66b4bb40e8/msal/broker.py#L186-L230)
+also removes a login hint for `select_account` instead of setting a native `prompt`
+property. This cross-library reference supports the choice; it does not establish
+pinned .NET or Windows runtime behavior.
+
+The previous fixed `prompt=select_account` extra-query mapping transported a raw WAM
+request property through MSAL Runtime without establishing that runtime's support for
+it. The separately bounded Work diagnostic returned a protocol-valid
+`internal_failure` with fixed `error.type: broker_contract` and observed scoped
+completion. That category establishes the failure boundary, not the offending
+parameter or the historical failures' cause. Remove that mapping rather than adding
+an undocumented native property. Do not change client/Profile/scopes, application
+configuration, dependencies, cache keys or either silent-first mode.
+
+The picker may let the operator choose an account other than the requested one. Only
+the designated requested account is permitted in acceptance; production final
+validation must reject any different returned identity before emitting a token.
+No new discovery, silent call, browser fallback or retry is introduced. This is a
+supported source-level invocation path awaiting bounded real WAM confirmation;
+it does not guarantee visible UI or renewed credentials. A provider/host combination
+that cannot honor the invocation intent returns `mechanism_unavailable` when that
+condition is established; an unexplained broker failure retains its existing mapping.
 
 Reuse the same account discovery, strict selection and final validation, Profile/tenant/
 scope constraints, owned parent, one interactive call, original deadline, and cancellation
