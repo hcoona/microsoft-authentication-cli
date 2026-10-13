@@ -2086,6 +2086,28 @@ technical61/231/19/823, metadata116 and collection530 without refund. The two
 original human slots remain unsubmitted. Observation sources and product code
 are unchanged; the result does not supply missing historical exit or UI evidence.
 
+**Work-role WAM EOF alternative, 2026-10-13 UTC:** At accepted
+`eb513ab82e26420441a8b6aed27b1f326d600826` (PR #448), the original precharged
+WamEof slot returned Success/Silent, product and validator exit 0,
+ProtocolValid/MetadataValid=true, complete streams and normal created-root
+completion. Passed=false records the expected Cancelled/None mismatch; it does
+not invalidate this successful authentication result. Product launch-to-full-streams
+was 3,704 ms; discovery took 2,609 ms and silent acquisition 963 ms.
+
+The phase path did not enter interaction. Actual UI remains unobserved; no
+operator WAM confirmation preceded completion, no SIGUSR1 was sent and the
+writer was not closed during live product execution. The same original12118
+ended normally, terminal 0 at chunk339d62. No native observer, clock sample or
+relay query ran. Observation mechanics and product code remain unchanged.
+
+Independent actual/scoped-completion review passed. Accounting1036 closes only
+that case without another debit or refund; consumption remains
+real64/64/64/21, remaining32/32/32/31, technical61/231/19/823, metadata116 and
+collection530. The prescribed human route stopped: HumanCancellation remains
+unsubmitted and the earlier conditional caller-death proposal remains inert
+and uncharged. This result does not establish WAM EOF, human cancellation or
+caller death, and does not complete WSL or whole-Slice acceptance.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn
