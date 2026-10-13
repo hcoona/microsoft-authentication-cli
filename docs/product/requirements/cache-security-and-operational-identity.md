@@ -14,8 +14,9 @@ cache miss and must not consume it. Recovery must preserve the account email, ef
 tenant policy, Client Profile, scopes, interaction permission, and original overall
 deadline.
 
-V2 must reuse valid, safe authentication state when it can satisfy the request without
-another user sign-in. A change of downstream consumer, package ecosystem, or working
+Unless the caller explicitly selects `force-interactive`, V2 must reuse valid, safe
+authentication state when it can satisfy the request without another user sign-in.
+A change of downstream consumer, package ecosystem, or working
 repository alone must not require another sign-in for an otherwise compatible request.
 Reuse must preserve the requested account, effective tenant policy, Client Profile,
 resource and scopes, and applicable security context rather than treating different
@@ -39,8 +40,9 @@ Unfinished V2-controlled persistence work must end with the request under `V2-RE
 it must not continue in the background for an ended request. This does not select an
 asynchronous mechanism or a storage lifecycle.
 
-A later invocation with usable state remains subject to selected-account silent-first
-acquisition under `V2-REQ-013` and `V2-REQ-020`.
+A later invocation with usable state remains subject to its explicit interaction mode
+under `V2-REQ-013`, `V2-REQ-014`, and `V2-REQ-020`. Forced interaction does not clear or
+invalidate that state; normal provider-managed updates and persistence limits still apply.
 
 Concurrent processes sharing authentication state must preserve locking and atomic-update
 integrity and observe consistent state. This does not promise cross-process interaction

@@ -81,6 +81,17 @@ across concurrent processes.
 A caller can prohibit interaction even when sign-in or unlocking state would be needed.
 This goal is control over interaction, not guaranteed background success.
 
+## Explicitly Reauthenticate the Selected Account
+
+> As a developer who explicitly wants to sign in again for a selected account, I want to
+> request interactive reauthentication even when reusable credentials are available,
+> so that my request does not silently finish using the existing sign-in state.
+
+This is deliberate caller intent rather than a side effect of switching repositories or
+tools. It does not mean clearing shared authentication state, signing out other
+applications, revoking prior tokens, or selecting a specific credential or MFA method.
+Provider policy controls the authentication experience and normal protected-state updates.
+
 ## Direct Protected-Service Access
 
 > As a developer calling a protected development or test service, I want to obtain an
@@ -126,6 +137,7 @@ first-release blocker.
 | First-use OS sign-in reuse | [Reusable state](requirements/cache-security-and-operational-identity.md) (`V2-REQ-040`, `041`); [strict silent acquisition](requirements/strategy-interaction-and-host.md) (`013`, `020`, `022`) | [Account-state matrix](../validation/strategy.md#account-state-matrix) |
 | Cross-ecosystem and cross-repository reuse | [Reusable state](requirements/cache-security-and-operational-identity.md) (`V2-REQ-040`, `041`); [engine boundary](requirements/product-boundary.md) (`002`) | [Cross-consumer reuse scenarios](../validation/strategy.md#cross-consumer-reuse-scenarios) |
 | Background requests without UI | [Interaction and deadline](requirements/strategy-interaction-and-host.md) (`V2-REQ-014`, `015`, `021`, `025`); [typed outcomes](requirements/result-and-process-protocol.md) (`030`, `032`) | [Interaction matrix](../validation/strategy.md#interaction-matrix) |
+| Explicit selected-account reauthentication | [Interaction intent and order](requirements/strategy-interaction-and-host.md) (`V2-REQ-013`, `014`, `020`, `022`, `023`); [state boundaries](requirements/cache-security-and-operational-identity.md) (`041`) | [Interaction matrix](../validation/strategy.md#interaction-matrix) and [Windows Slice design acceptance](../validation/strategy.md#windows-slice-design-acceptance) |
 | Direct protected-service access | [Delegated public-client scope](requirements/product-boundary.md) (`V2-REQ-001`); [explicit target](requirements/request-identity-and-authority.md) (`010`, `011`, `012`, `018`, `019`, `027`); [validated opaque result](requirements/result-and-process-protocol.md) (`030`–`036`) | [Generic caller scenarios](../validation/strategy.md#generic-caller-scenarios) |
 | Integrated remote-tool authentication | [Downstream boundary](requirements/product-boundary.md) (`V2-REQ-002`, `004`); [explicit request](requirements/request-identity-and-authority.md); [process result](requirements/result-and-process-protocol.md); [reuse](requirements/cache-security-and-operational-identity.md) (`041`) | [Generic caller scenarios](../validation/strategy.md#generic-caller-scenarios) and [cross-consumer reuse scenarios](../validation/strategy.md#cross-consumer-reuse-scenarios) |
 | Engine updates with an unchanged adapter | [Supported protocol compatibility](requirements/result-and-process-protocol.md#v2-req-037-supported-protocol-compatibility) (`V2-REQ-037`) | [Contract tests](../validation/strategy.md#contract-tests) |

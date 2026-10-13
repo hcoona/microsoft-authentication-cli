@@ -16,7 +16,7 @@ classes, synchronization primitives, serialized schemas, or a provider implement
 
 The protocol boundary handles argument shape and protocol-major admission. Authentication
 policy resolves the selected Client Profile and normalizes email, scopes/resource,
-cloud/client, effective tenant policy, interaction permission, and the one finite deadline
+cloud/client, effective tenant policy, interaction intent, and the one finite deadline
 before provider work. Every later operation uses that same intent and cancellation scope.
 Capabilities can exclude a path but cannot widen the request.
 
@@ -39,9 +39,10 @@ user, administrator, kernel, or broker.
 
 ## Primary Journey: Selected-Account Silent Reuse
 
-This path applies both to first use with eligible OS sign-in state and to a later
-compatible invocation. It assumes that the selected profile/provider can supply a unique
-real account and sufficient result metadata; that premise remains subject to the
+This path applies to `non-interactive-only` and `interactive-if-needed`, both on first use
+with eligible OS sign-in state and on a later compatible invocation. It assumes that the
+selected profile/provider can supply a unique real account and sufficient result
+metadata; that premise remains subject to the
 [primary-journey gate](../validation/strategy.md#primary-journey-gate).
 
 ```mermaid
@@ -94,10 +95,26 @@ already available from that work; it does not access the store again. The
 [state-observation boundary](#state-ownership-and-persistence-observation) below applies
 to both silent and interactive results.
 
+## Explicit Reauthentication
+
+`force-interactive` changes the initial acquisition path, not account selection or the
+fallback policy. Resolve the requested full email through the same provider discovery.
+Multiple exact matches remain terminal ambiguity. With zero or one exact match, establish
+the owned interaction context and perform one provider-supported reauthentication call
+with the same account/hint and original intent. Do not attempt silent token acquisition,
+fabricate a silent failure, relax identity validation, or fall back to silent reuse.
+An unsupported host/provider combination is unavailable.
+
+Use the same completion, strict validation, state-observation and terminal-lifecycle
+paths as other interactive requests. This does not remove accounts, clear state, revoke
+sessions or establish confirmed persistence. Provider UI and normal protected-state
+updates remain provider-owned; no new host, signing component or token format is selected.
+
 ## Interaction After a Silent Miss
 
-Only a classified outcome can reach a later mechanism. The interaction decision belongs
-to policy for the whole request, including state unlock. Host or provider code cannot
+In the ordinary modes, only a classified outcome can reach a later mechanism.
+The interaction decision belongs to policy for the whole request, including state unlock.
+Host or provider code cannot
 convert a silent operation into an interactive one implicitly.
 
 ```mermaid
@@ -146,7 +163,8 @@ stateDiagram-v2
     Admission --> Failure: Invalid request or unsupported major
     state Active {
         [*] --> Resolve
-        Resolve --> Silent: Unique matching real account
+        Resolve --> Silent: Unique match and ordinary interaction mode
+        Resolve --> InteractionGate: Explicit force-interactive and no ambiguity
         Resolve --> InteractionGate: No match and interaction could satisfy request
         Silent --> Validate: Provider reports candidate success
         Silent --> Classify: Provider reports failure
@@ -231,8 +249,9 @@ does not establish that every storage operation honors it.
 
 ## Reuse Across Invocations and Consumers
 
-Each process independently validates a new request. Cache coordination makes eligible
-secure state available to the provider; account resolution and result validation remain
+Each process independently validates a new request. Unless forced interaction is explicitly
+selected, cache coordination makes eligible secure state available to the provider;
+account resolution and result validation remain
 necessary even when the previous invocation succeeded. Changing only the caller,
 repository, or package ecosystem does not introduce another sign-in requirement.
 

@@ -21,7 +21,7 @@ applies to every operation, configuration, and failure path.
 | --- | --- |
 | Runtime and UI | C# on .NET 10 LTS, `net10.0-windows`, `win-x64`; SDK 10.0.401 and runtime 10.0.12. A small in-process Win32 window replaces the Windows Forms host in the design below. It requires no Windows Desktop managed framework. |
 | Authentication dependencies | `Microsoft.Identity.Client` and `Microsoft.Identity.Client.Broker` 4.83.1, with `Microsoft.Identity.Client.NativeInterop` 0.20.3. Preserve the existing probe's authentication dependency baseline while changing the managed host. |
-| Provider | Windows WAM only. One real-account discovery, at most one selected-account silent call, and at most one permitted interactive call. No application-level network retry or second provider. |
+| Provider | Windows WAM only. One real-account discovery, at most one selected-account silent call for the two existing modes, and at most one permitted or explicitly required interactive call. Forced interaction skips silent acquisition. No application-level network retry or second provider. |
 | State | Broker-owned reusable state; a fresh in-memory MSAL application per invocation. No MSAL Extensions cache helper, serialized MSAL cache, shadow refresh-token store, engine account binding, or cross-process lock. |
 | Host | Windows 11 x64 in an active interactive user session, with WAM available. WSL 2 callers use normal Windows executable interoperability. Service, impersonated, disconnected desktop, and native Linux hosts are outside this Slice. |
 | Distribution | Executable basename, installer, signing, and update channel remain release identities under the [registry](../governance/operational-identities.yaml). `<windows-cli>` below denotes the caller-selected executable, not a new installed command. |
@@ -169,7 +169,7 @@ the resulting argument vector without invoking another shell.
 | `--profile <absolute-Windows-file-path>` | Required selection of one Profile document, not inline client configuration. |
 | `--account-email <full-email>` | Required strict account constraint. |
 | `--scope <qualified-scope>` | Required, repeatable for permissions on exactly one resource. |
-| `--interaction non-interactive-only\|interactive-if-needed` | Required permission for the entire request. |
+| `--interaction non-interactive-only\|interactive-if-needed\|force-interactive` | Required interaction intent for the entire request. The first two modes retain silent-first behavior; the third requests reauthentication without silent token acquisition. |
 | `--tenant common\|<tenant-GUID>` | Optional; normalize under the selected Profile's tenant policy. |
 | `--timeout-seconds <integer>` | Optional, 1 through 600 inclusive; default 120. One monotonic deadline measured from managed entry, including Profile reading and validation. |
 | `--cancel-on-stdin-close` | Optional valueless lifetime flag. Use a dedicated caller-owned pipe whose writer remains open until completion or cancellation. EOF or pipe failure cancels the request. Stdin is never an authentication request or credential channel. |
@@ -478,19 +478,22 @@ risk-decision prerequisites.
 Use MSAL's returned real accounts as the visible account set. Do not consult upstream
 files, OS-account sentinels, a previous chosen-account binding, or a different source
 after ambiguity. Count exact full-email matches: zero permits interaction only if the
-host/Profile can perform it, one permits silent acquisition with that `IAccount`, and
-more than one is terminal `account_ambiguous`. Missing account email is not a match.
+request and host/Profile allow it, one selects that `IAccount`, and more than one is
+terminal `account_ambiguous` in every mode. Missing account email is not a match.
 
-For a unique real account, call `AcquireTokenSilent(scopes, account)` before considering
-interaction. Preserve the normalized tenant constraint separately from the provider
-route. Under the legacy integration and `common` only, a resolved MSA home-account tenant
+For a unique real account in `non-interactive-only` or `interactive-if-needed`, call
+`AcquireTokenSilent(scopes, account)` before considering interaction. Preserve the
+normalized tenant constraint separately from the provider route. Under the legacy
+integration and `common` only, a resolved MSA home-account tenant
 selects the public transfer tenant `f8cdef31-a31e-4b4a-93e4-5f571e91255a` for silent use;
 the initial authority is `organizations` with passthrough. An explicit resource GUID
 always wins and is never replaced. This mapping comes from the existing architecture,
 not from an email suffix or a new account-kind request.
 
-Only no match or a classified `MsalUiRequiredException` can advance to the one interactive
-call. With permission, establish the owned UI first. The pinned builder makes
+In `interactive-if-needed`, only no match or a classified `MsalUiRequiredException` can
+advance to the one interactive call. `force-interactive` instead enters that call directly
+after unambiguous account resolution; perform no silent token-acquisition call and do not
+fabricate a provider exception. Establish the owned UI first. The pinned builder makes
 `WithAccount` and `WithLoginHint` mutually exclusive: use `WithAccount` for the
 uniquely resolved real account, from which MSAL derives the observed username hint;
 otherwise use `WithLoginHint` with the requested email. Preserve the original request
@@ -508,6 +511,7 @@ cancellation/deadline boundary.
 | --- | --- |
 | Admission or Profile semantic error | `invalid_request`; no provider call. |
 | No visible match or provider interaction requirement | `interaction_required`, or the one compatible interactive call when permitted. |
+| Explicit `force-interactive` with zero or one exact match | One provider-supported reauthentication call; no silent acquisition or fallback. |
 | Multiple exact visible matches | `account_ambiguous`; no silent call or picker. |
 | Broker unavailable, unsupported session, or rejected web fallback | `mechanism_unavailable`; no alternate mechanism. |
 | Caller cancellation, owned-window close, or provider user cancellation | `cancelled`; no retry. The local cancellation/deadline latch determines its own origin before interpreting a provider cancellation code. |
@@ -525,6 +529,55 @@ arbitrary provider text. An interactive call that again requires interaction ter
 as `interaction_required`. State-related interaction requirements follow the same
 permission policy; an unexplained broker failure does not authorize account deletion,
 cache repair, or retries.
+
+### Forced Interactive Authentication
+
+`force-interactive` is an explicit opt-in extension to protocol 1. Existing requests,
+defaults, outcomes, result fields, and their meanings are unchanged. An older executable
+that does not implement this enum value returns `invalid_request`; callers must not
+silently downgrade a rejected forced request to `interactive-if-needed`.
+
+The adapter must request the provider's supported force-login semantics, rather than
+merely invoke its interactive API with a prompt that may reuse the existing session.
+Microsoft documents [force-login intent](https://learn.microsoft.com/entra/msal/dotnet/acquiring-tokens/desktop-mobile/acquiring-tokens-interactively#withprompt)
+through `WithPrompt(Prompt.ForceLogin)`. Its exact mapping and support through pinned
+MSAL/Broker 4.83.1 and NativeInterop 0.20.3 require dependency source review before
+implementation and bounded real WAM evidence before support is claimed. A host/provider
+combination that cannot honor this intent returns `mechanism_unavailable`; it must not
+silently substitute another prompt or acquisition path. No particular password, MFA
+method, number of windows, or provider UI is promised.
+
+Reuse the same account discovery, strict selection and final validation, Profile/tenant/
+scope constraints, owned parent, one interactive call, original deadline, and cancellation
+paths. Forced interaction carries no fabricated or caller-supplied claims challenge.
+Success reports `interaction: interactive`; failure retains the existing no-token
+result and exit contract. Actual visible WAM behavior still requires runtime observation.
+
+This operation does not call token-cache refresh, sign-out, account removal, consent
+revocation, or cache-clearing APIs. Normal provider-managed protected-state/session updates
+can occur. Success does not guarantee new token bytes, revocation of earlier credentials,
+or a persistence receipt; keep the existing persistence warnings.
+
+Contract acceptance alone does not authorize implementation or a new real-account call.
+Existing protocols retain their exact modes and exhausted/stopped routes. Before forced
+real use, independently admit the changed source/artifact, exact request and bounded
+protocol under the accepted Wave, and obtain actual operator readiness.
+
+### Token Format and Future Extensions
+
+Interaction intent and token format are separate concerns: forced authentication does
+not select PoP, refresh semantics, or a different resource. Keep access-token material
+opaque and preserve the provider-reported `tokenType` in the existing result. Consumers
+must use the reported type rather than infer a type from the interaction mode; that field
+alone does not advertise support for another token format.
+
+A future opt-in PoP contract would need explicit request-binding semantics, resource
+compatibility, signing/key ownership, confidential transport, and lifecycle review.
+Preserve the meaning of current requests and results. Use a compatible additive extension
+only when those meanings remain intact; otherwise select a new protocol major. Do not
+reserve dormant PoP fields, export private keys, accept unknown request options, or
+reinterpret a current access token as a signing handle. PoP remains unsupported in this
+Slice, and no signing service or downstream request protocol is introduced here.
 
 ### Adapter Observation Boundary
 
@@ -616,25 +669,27 @@ sequenceDiagram
     WAM-->>MSAL: Provider accounts
     MSAL-->>CLI: Visible account set
     CLI->>CLI: Count strict full-email matches
-    alt Exactly one match
-        CLI->>MSAL: AcquireTokenSilent(scopes, real account)
-        MSAL->>WAM: Selected-account silent operation
-        WAM-->>MSAL: Candidate or classified failure
-        MSAL-->>CLI: Candidate or interaction-required
-    else Ambiguous
+    alt Multiple exact matches
         CLI-->>Caller: account_ambiguous#59; exit 1
+    else Zero or one exact match
+        opt Exactly one match and mode is not force-interactive
+            CLI->>MSAL: AcquireTokenSilent(scopes, real account)
+            MSAL->>WAM: Selected-account silent operation
+            WAM-->>MSAL: Candidate or classified failure
+            MSAL-->>CLI: Candidate or interaction-required
+        end
+        opt force-interactive, or permitted no match / silent interaction requirement
+            CLI->>UI: Create owned parent and completion context
+            CLI->>MSAL: One interactive call with account/hint and same intent#59; force-login when explicitly required
+            MSAL->>WAM: Interactive operation with owned HWND and cancellation
+            WAM-->>MSAL: Candidate or failure
+            MSAL-->>CLI: Candidate or typed provider observation
+        end
+        CLI->>CLI: Validate identity, tenant, client/context, scopes, and metadata
+        CLI->>CLI: Classify already available persistence observation
+        CLI->>UI: Close owned UI#59; invalidate acquisition completion
+        CLI-->>Caller: One JSON result#59; success 0 or failure 1
     end
-    opt No match or silent interaction requirement#59; permission allows interaction
-        CLI->>UI: Create owned parent and completion context
-        CLI->>MSAL: One interactive call with account/hint and same intent
-        MSAL->>WAM: Interactive operation with owned HWND and cancellation
-        WAM-->>MSAL: Candidate or failure
-        MSAL-->>CLI: Candidate or typed provider observation
-    end
-    CLI->>CLI: Validate identity, tenant, client/context, scopes, and metadata
-    CLI->>CLI: Classify already available persistence observation
-    CLI->>UI: Close owned UI#59; invalidate acquisition completion
-    CLI-->>Caller: One JSON result#59; success 0 or failure 1
     Note over Caller,WAM: Cancellation/deadline can terminate any pending path#59; external session changes are not rolled back
 ```
 
