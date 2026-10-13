@@ -137,3 +137,19 @@ rechecks:
       diagnostic error_codes and the application error contract; update or
       explicitly disposition affected Windows design and validation conclusions
       without treating this review as a service-stability guarantee.
+
+  - id: RECHECK-010
+    subject: WAM interactive account-selection prompt
+    sources:
+      - https://learn.microsoft.com/en-us/entra/identity-platform/reference-entra-id-wam-api
+    triggers:
+      - kind: decision
+        value: interaction-policy
+      - kind: release
+        value: any
+    required_outcome: >-
+      Reassess documented WAM prompt values and the exact pinned MSAL/Broker/native
+      transport before accepting or changing explicitly interactive account-selection
+      intent. Preserve the distinction between a documented request, inspected parameter
+      transport and actual UI behavior; do not infer renewed credentials from an
+      interactive API result or replace missing runtime evidence with prompt metadata.
