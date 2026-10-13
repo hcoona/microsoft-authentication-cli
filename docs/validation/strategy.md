@@ -101,7 +101,10 @@ evidence that a mechanism or platform passes the corresponding tests.
 - One request and one terminal outcome per native authentication process.
 - Stable versioned structured stdout for success and failure, including invalid requests;
   prompts, usage text, and diagnostics separated; no alternate authentication output mode.
-- Required fields, invalid combinations, and unknown-enum behavior.
+- Required fields, invalid combinations, and unknown-enum behavior. The explicit
+  `force-interactive` value is additive; existing interaction meanings and result/exit
+  shapes remain unchanged. An older executable rejects the new value without an
+  automatic downgrade by the caller.
 - Explicit Client Profile selection, including missing selection with exactly one
   available profile; no implicit/default selection or inline full client configuration.
 - Equal interpretation and validation of pre-distributed and user-provided profiles.
@@ -137,7 +140,13 @@ evidence that a mechanism or platform passes the corresponding tests.
   enable PAT behavior. Verify provider-operation semantics and observable effects;
   do not classify credential types by parsing or scanning opaque token contents.
 - Versioned product order, profile compatibility filtering without reordering, and
-  mandatory silent-first acquisition after unique real-account pre-resolution.
+  mandatory silent-first acquisition after unique real-account pre-resolution for the
+  two ordinary modes. Explicit forced interaction instead skips silent acquisition and
+  requests provider-supported reauthentication after the same strict resolution.
+- Forced interaction with usable state, zero matches, and duplicate exact matches:
+  retain strict selection/validation and at most one interactive call. No fabricated
+  silent failure, silent success/fallback, cache clearing, sign-out or second attempt.
+  Unsupported force-login semantics return unavailable rather than a weaker prompt.
 - Host capability discovery never changing caller intent.
 - No authentication or state-unlock interaction under every no-interaction request shape.
 - Terminal versus retryable failure classification.
@@ -219,7 +228,7 @@ separation alone does not isolate OS accounts.
 | Empty application cache | Resolve visible real provider accounts before any silent attempt; absence cannot trigger ambient silent acquisition. |
 | First V2 use with compatible OS sign-in state and no V2-created cache | Consider the OS state without requiring prior V2 sign-in; resolve the unique requested real account before silent acquisition and validate every success postcondition. |
 | First V2 use with only opaque or incompatible OS state | Do not substitute the OS default or assume resource authorization; preserve account resolution, typed outcomes, and interaction permission. |
-| One exact visible account with usable state | Selected account is attempted silently first and success reports provider-observed email, not a stable ID. |
+| One exact visible account with usable state | Ordinary modes attempt that account silently first; forced interaction requests reauthentication without silent acquisition. Success reports provider-observed email, not a stable ID. |
 | Multiple visible accounts with one full-email match | Only the unique matching account is eligible for silent acquisition. |
 | No matching account | No silent fallback to another account; interaction-required handling follows request permission. |
 | Corporate OS default differs from requested personal email | Default is not substituted; identity-opaque OS-account acquisition is never used. |
@@ -227,7 +236,7 @@ separation alone does not isolate OS accounts.
 | Aliases, missing provider email, or non-enumerated accounts | Different aliases do not match; unverifiable success fails; document visibility limits without claiming detection of hidden duplicates. |
 | Guest and home-tenant representations | Exact selector checks the token/resource tenant, not the account home tenant. |
 | Microsoft account and work account | Behavior is recorded per client application/resource, without an independent public Account Kind postcondition. |
-| Usable state on a subsequent invocation | Strict pre-resolution and silent-first behavior recur without silently relaxing identity or storage policy. |
+| Usable state on a subsequent invocation | Strict pre-resolution recurs; the explicit interaction mode determines reuse versus forced reauthentication without relaxing identity or storage policy. |
 
 ### Account-Context Variants
 
@@ -298,6 +307,7 @@ For every supported mechanism:
 
 - no-interaction request;
 - interaction allowed after silent miss;
+- forced reauthentication despite usable state, with separately observed provider UI;
 - user cancellation;
 - user denial;
 - consent required;
@@ -424,6 +434,7 @@ prove resource equivalence, tenant precedence, provider behavior, or lifecycle c
 | Local Windows host admission rejects or cannot observe required state | Return the existing unavailable outcome before real provider initialization, with no account discovery or owned UI. Cover rejected OS/client/architecture, thread impersonation or query failure, service/batch/new-credentials logon, station-user mismatch, disconnected/unobservable session and non-input desktop; retain a valid ordinary-user path. | Scenario fixtures at the local-observation/provider boundary; inspect actual native ABI and bounded resource ownership. A later exact protocol must cover own-logon metadata access and the selected normal Windows/WSL launch before real-provider acceptance. |
 | Cancellation or host eligibility changes around provider/UI effects | Original cancellation/deadline wins; failed volatile rechecks prevent the next effect and close any owned parent. Broker false or recognized initialization failure permits no discovery or browser fallback. | Controlled scenarios for cancellation after a local check, loss of session/input before interaction and initialization failure. Bind checks to the actual request/UI threads in source review; real session rejection claims need their own bounded observations. |
 | User cancellation, denial, or another claims challenge | Stop within the same request; no alternate account, tenant, registration, mechanism, PAT, or repeated interaction. Only current silent-challenge data may reach the permitted interactive call. | Scenario outcomes and provider-call trace; bounded UI cancellation/denial evidence. |
+| Explicit `force-interactive`, including when silent reuse would succeed | Perform strict account discovery, no silent acquisition, and one supported force-login operation using the same Profile/tenant/scopes and owned UI. A successful result reports `interactive`; unavailable semantics, cancellation/denial and identity failure stay terminal. No cache management or changed token-byte/persistence guarantee. | Contract examples and controlled policy/adapter scenarios, pinned MSAL/Broker/native source review before implementation, and separately authorized actual WAM/UI/cancellation/EOF evidence before support. Existing silent-success evidence does not establish this new mode; observation remains frozen. |
 | Lifetime pipe closes before discovery or during WAM | Cancel without late success, end owned UI and process, and expose no token. Reject console/file stdin when the pipe flag is selected. | Deterministic lifecycle scenario and actual WSL-to-Windows pipe integration, including writer-handle inheritance. |
 | Linux caller dies without the optional lifetime pipe | Do not assert Linux signal delivery to Windows. Windows work ends through detected transport failure or the original finite deadline. | Bounded WSL process-lifetime test; no immediate-disconnect support claim for this combination. |
 | Deadline during Profile reading, discovery, silent, interaction, or validation | Original deadline is never restarted. Incomplete validation yields timeout; late candidates cannot resume. | Clock-driven scenarios and bounded real host tests for dependency cancellation and process exit. |

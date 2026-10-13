@@ -43,8 +43,10 @@
     "interaction": {
       "enum": [
         "non-interactive-only",
-        "interactive-if-needed"
-      ]
+        "interactive-if-needed",
+        "force-interactive"
+      ],
+      "description": "Prohibit interaction, permit it after a silent miss, or explicitly request provider-supported reauthentication without silent token acquisition. Forced interaction is not cache refresh or clearing."
     },
     "tenant": {
       "oneOf": [
@@ -98,6 +100,16 @@
       "interaction": "non-interactive-only",
       "tenant": "11111111-2222-3333-4444-555555555555",
       "timeoutSeconds": 30
+    },
+    {
+      "protocol": 1,
+      "profile": "C:\\AuthProfiles\\visual-studio-legacy.json",
+      "accountEmail": "personal@example.test",
+      "scopes": [
+        "499b84ac-1321-427f-aa17-267ca6975798/.default"
+      ],
+      "interaction": "force-interactive",
+      "cancelOnStdinClose": true
     }
   ]
 }

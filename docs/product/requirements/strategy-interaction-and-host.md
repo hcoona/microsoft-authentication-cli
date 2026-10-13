@@ -4,22 +4,33 @@
 
 V2 must apply a documented, deterministic acquisition order using only mechanisms
 compatible with the selected Client Profile and host. When an account satisfying the
-request has been uniquely resolved, V2 must attempt silent acquisition before initiating
-permitted interaction. The first version must not expose caller-defined mechanism
-ordering.
+request has been uniquely resolved, `non-interactive-only` and `interactive-if-needed`
+must attempt silent acquisition before initiating any permitted interaction.
+`force-interactive` instead enters the supported interactive authentication path directly
+after account resolution, without a silent token-acquisition attempt. This explicit
+reauthentication intent is not caller-defined mechanism ordering.
 
 The versioned product policy owns the per-platform mechanism order. A Client Profile
 filters incompatible mechanisms but must not redefine that order.
 
 ## V2-REQ-014: Explicit Per-Request Interaction Permission
 
-Every authentication request must explicitly state whether user interaction is prohibited
-or permitted when necessary. This permission must apply throughout the request,
-independently of the authentication mechanism. Profile configuration, fallback, retries,
+Every authentication request must explicitly state whether user interaction is prohibited,
+permitted when necessary, or required for reauthentication. This intent must apply
+throughout the request, independently of the authentication mechanism.
+Profile configuration, fallback, retries,
 and ambient state must not permit interaction that the request prohibits.
 
-The first version has two modes: `non-interactive-only` and `interactive-if-needed`.
-It must not expose a caller-selected prompt-type whitelist.
+The first version has three modes: `non-interactive-only`, `interactive-if-needed`, and
+`force-interactive`. The existing modes retain their behavior. Forced interaction must
+request provider-supported reauthentication even when reusable credentials are available;
+it must not fall back to silent acquisition or return a silent success. A provider/host
+combination that cannot honor that intent is unavailable. It must not expose a
+caller-selected prompt-type whitelist or promise a password, MFA method, or exact UI.
+
+Forced interaction is not token-cache refresh, logout, account removal, consent
+revocation, or cache clearing. Normal provider-managed session/state updates may occur;
+new token bytes, revoked old tokens, and confirmed persistence are not guaranteed.
 
 ## V2-REQ-015: Common Deadline
 
@@ -65,6 +76,8 @@ produce an account-ambiguous outcome.
 The identity-opaque `OperatingSystemAccount` sentinel is not a resolved account. With
 `interactive-if-needed`, an interaction-required acquisition outcome may proceed to
 permitted interaction under `V2-REQ-023`; it is terminal without interaction permission.
+`force-interactive` uses the same exact account resolution, but proceeds directly to its
+interactive path with the unique account or the requested email hint when none matches.
 Account ambiguity must not fall back to another account or a picker that bypasses the
 strict-email ambiguity.
 
@@ -93,6 +106,10 @@ and overall deadline. User cancellation, user denial, and failure to validate a
 provider-reported success must terminate the request.
 
 Caller cancellation is also terminal; it must not trigger retry or fallback.
+
+Entering the initial interactive path for `force-interactive` is fulfillment of the
+original request, not fallback from a fabricated silent failure. It does not authorize
+another interactive attempt, a different account, or a later silent fallback.
 
 ## V2-REQ-024: Request-Bounded Claims Handling
 

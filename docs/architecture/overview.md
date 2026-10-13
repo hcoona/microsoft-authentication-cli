@@ -294,9 +294,12 @@ The Windows Slice design and linked schemas own protocol 1 serialization and fla
 Resolves the explicitly selected Client Profile and normalizes request intent against its
 cloud, client, and tenant constraints before provider work. Owns the original request
 deadline and cancellation scope. Applies versioned product acquisition order after
-filtering for profile and host compatibility. It selects the next legal mechanism from typed retryable outcomes rather
-than arbitrary exception fallthrough, preserving normalized request constraints and the
-original deadline.
+filtering for profile and host compatibility. The explicit interaction mode selects the
+initial acquisition path: ordinary modes retain silent-first behavior, while
+`force-interactive` enters provider-supported reauthentication after strict account
+resolution. Later mechanisms require typed retryable outcomes rather than arbitrary
+exception fallthrough, preserving normalized request constraints and the original
+deadline. Interaction intent does not select token format or downstream service behavior.
 
 Owns final success validation against the same normalized request, using provider metadata
 supplied by the adapters. An adapter's reported success is a candidate until validation
