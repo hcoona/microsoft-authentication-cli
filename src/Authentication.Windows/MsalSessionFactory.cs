@@ -43,6 +43,43 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
         return application;
     }
 
+    // Pinned RuntimeBroker chooses its sign-in/account-picker route only when
+    // no account is bound. A login hint can suppress that selection experience.
+    // Keep the exact selector in the request for final validation, not this builder.
+    internal static AcquireTokenInteractiveParameterBuilder BuildInteractiveRequest(
+        PublicClientApplication application, MsalInteractiveOperation operation,
+        WindowsMechanismTrace? trace, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        var builder = application.AcquireTokenInteractive(operation.Scopes)
+            .WithCorrelationId(operation.CorrelationId)
+            .WithParentActivityOrWindow(operation.ParentWindow)
+            .WithCustomWebUi(new RejectingWebUi(trace));
+        if (RestrictiveTenant(operation.Tenant) is { } tenant)
+            builder.WithTenantId(tenant);
+        if (!operation.ForceInteractive)
+        {
+            if (operation.Account is { } account)
+                builder.WithAccount(account);
+            else
+                builder.WithLoginHint(operation.LoginHint
+                    ?? throw new InvalidOperationException("The interactive operation requires a login hint."));
+        }
+        if (operation.Claims is { } claims)
+            builder.WithClaims(claims);
+        return builder;
+    }
+
+    private static string? RestrictiveTenant(string tenant)
+    {
+        // Named audiences remain on the application; request overrides must narrow it.
+        if (tenant is "common" or "organizations")
+            return null;
+        if (!Guid.TryParseExact(tenant, "D", out _))
+            throw new InvalidOperationException("The MSAL operation requires an admitted tenant.");
+        return tenant;
+    }
+
     private sealed class Session(PublicClientApplication application, WindowsMechanismTrace? trace) : IMsalSession
     {
         public async Task<IReadOnlyList<IAccount>> GetAccountsAsync(CancellationToken cancellationToken)
@@ -67,40 +104,8 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
         public Task<AuthenticationResult> AcquireInteractiveAsync(MsalInteractiveOperation operation,
             CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            var builder = application.AcquireTokenInteractive(operation.Scopes)
-                .WithCorrelationId(operation.CorrelationId)
-                .WithParentActivityOrWindow(operation.ParentWindow)
-                .WithCustomWebUi(new RejectingWebUi(trace));
-            if (RestrictiveTenant(operation.Tenant) is { } tenant)
-                builder.WithTenantId(tenant);
-            if (operation.Account is { } account)
-                builder.WithAccount(account);
-            else
-                builder.WithLoginHint(operation.LoginHint
-                    ?? throw new InvalidOperationException("The interactive operation requires a login hint."));
-            if (operation.Claims is { } claims)
-                builder.WithClaims(claims);
-            if (operation.ForceInteractive)
-            {
-                // Pinned RuntimeBroker omits WithPrompt. This fixed WAM intent is
-                // request-local and does not change token identity or its cache key.
-                builder.WithExtraQueryParameters(new Dictionary<string, (string Value, bool IncludeInCacheKey)>
-                {
-                    ["prompt"] = ("select_account", false),
-                });
-            }
+            var builder = BuildInteractiveRequest(application, operation, trace, cancellationToken);
             return builder.ExecuteAsync(cancellationToken);
-        }
-
-        private static string? RestrictiveTenant(string tenant)
-        {
-            // Named audiences remain on the application; request overrides must narrow it.
-            if (tenant is "common" or "organizations")
-                return null;
-            if (!Guid.TryParseExact(tenant, "D", out _))
-                throw new InvalidOperationException("The MSAL operation requires an admitted tenant.");
-            return tenant;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Nodes;
 using Authentication.Core;
@@ -108,6 +109,61 @@ public sealed class MsalCompositionScenarios
         Assert.AreEqual(1, scene.Opened);
         Assert.AreEqual(1, scene.Closed);
         Assert.IsTrue(scene.Tokens.All(token => token == scene.Original.Token));
+    }
+
+    [TestMethod]
+    [DataRow(false, false)]
+    [DataRow(false, true)]
+    [DataRow(true, false)]
+    [DataRow(true, true)]
+    public void RealInteractiveBuilderBindsAnIdentityOnlyForOrdinaryRequests(bool forced, bool accountVisible)
+    {
+        using var scene = new Scene();
+        // Construction only: no broker is registered and this builder is never executed.
+        var application = (PublicClientApplication)PublicClientApplicationBuilder
+            .Create(scene.Profile.ClientId.ToString("D"))
+            .WithAuthority("https://login.microsoftonline.com/common")
+            .WithRedirectUri("http://localhost")
+            .WithHttpClientFactory(scene)
+            .Build();
+        var account = accountVisible ? scene.Selected : null;
+        var hint = accountVisible ? null : Email;
+        const string claims = "{\"access_token\":{\"synthetic_claim\":null}}";
+        var correlation = Guid.NewGuid();
+        var operation = new MsalInteractiveOperation([Scope], account, hint, Tenant,
+            claims, (nint)42, correlation, forced);
+        var builder = MsalSessionFactory.BuildInteractiveRequest(application, operation,
+            null, scene.Original.Token);
+
+        // Inspect the pinned MSAL request boundary, rather than the session fake.
+        var interactive = BuilderMember(builder, "Parameters")!;
+        var common = BuilderMember(builder, "CommonParameters")!;
+        Assert.AreSame(forced ? null : account, BuilderMember(interactive, "Account"));
+        Assert.AreEqual(forced ? null : hint, BuilderMember(interactive, "LoginHint"));
+        Assert.IsNull(BuilderMember(common, "ExtraQueryParameters"));
+        Assert.IsNull(BuilderMember(common, "CacheKeyComponents"));
+        CollectionAssert.AreEqual(new[] { Scope }, ((IEnumerable<string>)BuilderMember(common, "Scopes")!).ToArray());
+        Assert.AreEqual(claims, BuilderMember(common, "Claims"));
+        Assert.AreEqual(correlation, BuilderMember(common, "UserProvidedCorrelationId"));
+        var parent = BuilderMember(interactive, "UiParent")!;
+        Assert.AreEqual((nint)42, BuilderMember(parent, "OwnerWindow"));
+        Assert.IsInstanceOfType<RejectingWebUi>(BuilderMember(interactive, "CustomWebUi"));
+        Assert.AreSame(account, operation.Account);
+        Assert.AreEqual(hint, operation.LoginHint);
+        Assert.AreEqual(0, scene.Discoveries);
+        Assert.IsEmpty(scene.Silent);
+        Assert.IsEmpty(scene.Interactive);
+    }
+
+    private static object? BuilderMember(object instance, string name)
+    {
+        for (var type = instance.GetType(); type is not null; type = type.BaseType)
+        {
+            var property = type.GetProperty(name,
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+            if (property is not null) return property.GetValue(instance);
+        }
+        throw new AssertFailedException($"The pinned MSAL request member {name} is missing.");
     }
 
     [TestMethod]
