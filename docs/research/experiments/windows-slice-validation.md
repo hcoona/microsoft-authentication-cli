@@ -729,6 +729,31 @@ allocation as the desktop-reactivation continuation before its first covered
 operation; no debit is made while that conditional case remains unsubmitted.
 Preserve all previous charges, failures, unknowns and separately scoped completions.
 
+#### Independent Caller Death With Existing Silent State
+
+After accepting the work-role WamEof Success/Silent alternative and its scoped
+completion, stop that human-case route as specified above. Actual WAM EOF and
+HumanCancellation remain open; their missing entry condition does not prevent
+the separate caller-death claim, which requires no WAM surface or human action.
+Permit one independently admitted, separately charged Work CallerDeath request
+on the unchanged selected candidate, request, source and operating basis.
+
+Use the existing no-lifetime-pipe caller-death sequence, retained native handle,
+clock qualification, matching caller-only signal and original finite deadlines.
+Poll the same original for CallerStarted within its 30-second preflight bound;
+request a three-second initial caller yield and one-second observer/poll yields.
+Actual tool returns may take longer; the original clocks still govern.
+Do not signal after an observed final result or completed native alternative.
+An early alternative remains itself, with no automatic retry or forced UI.
+The frozen native completion block and phase projection do not change.
+
+Before its first covered operation, charge one fresh real unit in each category,
+two metadata passes and one collection pass with the identical limits used by
+the desktop-reactivation continuation. Independently accept its actual and scoped
+completion. Preserve the exhausted human EOF slot, unsubmitted cancellation slot,
+uncharged earlier conditional proposal, all prior charges and historical unknowns.
+This separate case does not activate the stopped human route or establish WAM UX.
+
 ## Console Parent Feasibility
 
 This credential-free comparison answers whether an intermediate, already
