@@ -69,6 +69,7 @@ public sealed class TelemetryScenarios
             ActivityStarted = activity =>
             {
                 activity.SetTag("private", PrivateMarker);
+                activity.SetTag("error.type", activity.OperationName == "request" ? "msal_client" : PrivateMarker);
                 activity.AddBaggage("private", PrivateMarker);
                 activity.DisplayName = PrivateMarker;
                 activity.TraceStateString = PrivateMarker;
@@ -207,6 +208,162 @@ public sealed class TelemetryScenarios
         Assert.IsFalse(value.HasExpiration);
         Assert.IsFalse(value.HasAudience);
         Assert.IsFalse(value.HasScopes);
+    }
+
+    [TestMethod]
+    [DataRow(ProviderDiagnosticError.QueryParameterConflict, "query_parameter_conflict", false)]
+    [DataRow(ProviderDiagnosticError.BrokerContract, "broker_contract", false)]
+    [DataRow(ProviderDiagnosticError.BrokerConfiguration, "broker_configuration", false)]
+    [DataRow(ProviderDiagnosticError.MsalClient, "msal_client", false)]
+    [DataRow(ProviderDiagnosticError.MsalService, "msal_service", false)]
+    [DataRow(ProviderDiagnosticError.Argument, "argument", false)]
+    [DataRow(ProviderDiagnosticError.InvalidOperation, "invalid_operation", false)]
+    [DataRow(ProviderDiagnosticError.Unexpected, "unexpected", false)]
+    [DataRow(ProviderDiagnosticError.MsalClient, "msal_client", true)]
+    [DataRow(ProviderDiagnosticError.None, null, false)]
+    [DataRow((ProviderDiagnosticError)999, null, false)]
+    public async Task OnlyCommittedInternalFailureExportsFixedErrorType(
+        ProviderDiagnosticError category, string? expected, bool constructionFailure)
+    {
+        var messages = new ConcurrentQueue<byte[]>();
+        using var observer = new LocalActivityTelemetry(TimeProvider.System.GetTimestamp(), bytes =>
+        { messages.Enqueue(bytes); return true; });
+        var scene = new FailureScene(category);
+        using var invocation = FailureInvocation(scene);
+        await invocation.RunAsync(scene, _ => constructionFailure ? throw scene.Failure : scene).WaitAsync(Limit);
+        Assert.IsTrue(invocation.TryCommitResult(out var result));
+        Assert.IsNotNull(result);
+        Assert.AreEqual(1, result.ExitCode);
+        using var json = JsonDocument.Parse(result.Utf8Json);
+        Assert.AreEqual("internal_failure", json.RootElement.GetProperty("outcome").GetString());
+        Assert.IsFalse(Encoding.UTF8.GetString(result.Utf8Json).Contains("error.type", StringComparison.Ordinal));
+        await invocation.CompleteAsync().WaitAsync(Limit);
+        observer.Dispose();
+        await observer.Completion.WaitAsync(Limit);
+        var classified = 0;
+        foreach (var bytes in messages)
+        {
+            Assert.IsFalse(Encoding.UTF8.GetString(bytes).Contains(PrivateMarker, StringComparison.Ordinal));
+            using var record = JsonDocument.Parse(bytes);
+            var root = record.RootElement;
+            if (root.TryGetProperty("error.type", out var error))
+            {
+                classified++;
+                Assert.AreEqual("stage_completed", root.GetProperty("event").GetString());
+                Assert.AreEqual("request", root.GetProperty("stage").GetString());
+                Assert.AreEqual("error", root.GetProperty("status").GetString());
+                Assert.AreEqual(expected, error.GetString());
+            }
+        }
+        Assert.AreEqual(expected is null ? 0 : 1, classified);
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task CancellationOrDeadlineSuppressesPendingProviderClassification(bool deadline)
+    {
+        var messages = new ConcurrentQueue<byte[]>();
+        using var observer = new LocalActivityTelemetry(TimeProvider.System.GetTimestamp(), bytes =>
+        { messages.Enqueue(bytes); return true; });
+        using var caller = new CancellationTokenSource();
+        var scene = new FailureScene(ProviderDiagnosticError.QueryParameterConflict) { HoldClose = true };
+        using var invocation = FailureInvocation(scene, caller.Token);
+        var run = invocation.RunAsync(scene, _ => scene);
+        try
+        {
+            await scene.CloseEntered.Task.WaitAsync(Limit);
+            if (deadline) scene.Clock.Advance(TimeSpan.FromSeconds(121));
+            else caller.Cancel();
+            scene.CloseRelease.TrySetResult();
+            await run.WaitAsync(Limit);
+            Assert.IsTrue(invocation.TryCommitResult(out var result));
+            Assert.IsNotNull(result);
+            using var json = JsonDocument.Parse(result.Utf8Json);
+            Assert.AreEqual(deadline ? "timeout" : "cancelled",
+                json.RootElement.GetProperty("outcome").GetString());
+        }
+        finally
+        {
+            scene.CloseRelease.TrySetResult();
+            await run.WaitAsync(Limit);
+            await invocation.CompleteAsync().WaitAsync(Limit);
+            observer.Dispose();
+            await observer.Completion.WaitAsync(Limit);
+        }
+        Assert.IsTrue(messages.All(bytes =>
+        {
+            using var json = JsonDocument.Parse(bytes);
+            return !json.RootElement.TryGetProperty("error.type", out _);
+        }));
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task FailureClassificationDoesNotDependOnTelemetry(bool brokenSink)
+    {
+        using var observer = brokenSink
+            ? new LocalActivityTelemetry(TimeProvider.System.GetTimestamp(), _ => throw new IOException(PrivateMarker))
+            : null;
+        var scene = new FailureScene(ProviderDiagnosticError.BrokerContract);
+        using var invocation = FailureInvocation(scene);
+        await invocation.RunAsync(scene, _ => scene).WaitAsync(Limit);
+        Assert.IsTrue(invocation.TryCommitResult(out var result));
+        Assert.IsNotNull(result);
+        using var json = JsonDocument.Parse(result.Utf8Json);
+        Assert.AreEqual("internal_failure", json.RootElement.GetProperty("outcome").GetString());
+        await invocation.CompleteAsync().WaitAsync(Limit);
+        if (observer is not null)
+        {
+            observer.Dispose();
+            await observer.Completion.WaitAsync(Limit);
+        }
+    }
+
+    private static RequestInvocation FailureInvocation(FailureScene scene, CancellationToken token = default) =>
+        new(["authenticate", "--protocol", "1", "--profile", @"C:\synthetic\selected-profile.json",
+            "--account-email", Email, "--scope", Scope, "--interaction", "force-interactive"],
+            scene, scene.Clock.GetTimestamp(), token);
+
+    private sealed class FailureScene(ProviderDiagnosticError category) : IProfileSource, IAuthenticationProvider, IRequestHost
+    {
+        public ProviderFailureException Failure { get; } = new(AuthenticationFailure.InternalFailure,
+            claims: PrivateMarker, diagnosticError: category);
+        public ScenarioClock Clock { get; } = new();
+        TimeProvider IRequestHost.Clock => Clock;
+        public bool HoldClose { get; init; }
+        public TaskCompletionSource CloseEntered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public TaskCompletionSource CloseRelease { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public Task<ReadOnlyMemory<byte>> ReadAsync(string path, CancellationToken token) =>
+            Task.FromResult<ReadOnlyMemory<byte>>(Encoding.UTF8.GetBytes("""
+                {"schemaVersion":1,"name":"synthetic-selected-profile",
+                 "clientId":"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee","cloud":"public",
+                 "tenantPolicy":{"kind":"multitenant"},"integration":"windows-wam",
+                 "registration":{"owner":"Synthetic external owner","externalDependency":true,
+                 "supportNotice":"Synthetic configuration; no support commitment."}}
+                """));
+        public Task<IReadOnlyList<ProviderAccount>> GetAccountsAsync(CancellationToken token) =>
+            Task.FromResult<IReadOnlyList<ProviderAccount>>([]);
+        public Task<TokenCandidate> AcquireSilentAsync(AuthenticationRequest request, ProviderAccount account,
+            Guid operationId, CancellationToken token) => throw new AssertFailedException("Forced intent must skip silent acquisition.");
+        public Task<TokenCandidate> AcquireInteractiveAsync(AuthenticationRequest request, ProviderAccount? account,
+            string? claims, nint parentWindow, Guid operationId, CancellationToken token) =>
+            Task.FromException<TokenCandidate>(Failure);
+        public Task<nint> OpenInteractionAsync(CancellationToken token) => Task.FromResult<nint>(42);
+        public async Task CloseInteractionAsync()
+        {
+            CloseEntered.TrySetResult();
+            if (HoldClose) await CloseRelease.Task;
+        }
+    }
+
+    private sealed class ScenarioClock : TimeProvider
+    {
+        private long timestamp;
+        public override long GetTimestamp() => Interlocked.Read(ref timestamp);
+        public override long TimestampFrequency => TimeSpan.TicksPerSecond;
+        public void Advance(TimeSpan elapsed) => Interlocked.Add(ref timestamp, elapsed.Ticks);
     }
 
     private static string Jwt(string payload) => "e30." + Convert.ToBase64String(Encoding.UTF8.GetBytes(payload))

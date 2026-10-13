@@ -71,6 +71,9 @@ public sealed class LocalActivityTelemetry : IDisposable
                     {
                         ActivityStatusCode.Ok => "ok", ActivityStatusCode.Error => "error", _ => "unset",
                     });
+                    if (activity.OperationName == "request" && activity.Status == ActivityStatusCode.Error
+                        && AuthenticationTrace.CommittedErrorType(activity) is { } errorType)
+                        writer.WriteString("error.type", errorType);
                 }
                 writer.WriteEndObject();
                 writer.Flush();

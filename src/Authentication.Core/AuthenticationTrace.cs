@@ -18,6 +18,8 @@ public sealed class AuthenticationTrace : IDisposable
         catch (Exception) { return null; }
     });
     private Activity? request;
+    private int providerError;
+    private const string CommittedErrorProperty = "Authentication.Core.CommittedProviderError";
 
     private AuthenticationTrace() => request = StartActivity("request", default);
 
@@ -51,12 +53,45 @@ public sealed class AuthenticationTrace : IDisposable
         return activity is null ? null : new Phase(activity);
     }
 
+    internal static string? ErrorTypeName(ProviderDiagnosticError error) => error switch
+    {
+        ProviderDiagnosticError.QueryParameterConflict => "query_parameter_conflict",
+        ProviderDiagnosticError.BrokerContract => "broker_contract",
+        ProviderDiagnosticError.BrokerConfiguration => "broker_configuration",
+        ProviderDiagnosticError.MsalClient => "msal_client",
+        ProviderDiagnosticError.MsalService => "msal_service",
+        ProviderDiagnosticError.Argument => "argument",
+        ProviderDiagnosticError.InvalidOperation => "invalid_operation",
+        ProviderDiagnosticError.Unexpected => "unexpected",
+        _ => null,
+    };
+
+    internal static string? KnownErrorType(object? value) => value is string text
+        && text is "query_parameter_conflict" or "broker_contract" or "broker_configuration"
+            or "msal_client" or "msal_service" or "argument" or "invalid_operation" or "unexpected"
+                ? text : null;
+
+    internal static string? CommittedErrorType(Activity activity) =>
+        KnownErrorType(activity.GetCustomProperty(CommittedErrorProperty));
+
+    internal void RecordProviderFailure(ProviderDiagnosticError error)
+    {
+        if (ErrorTypeName(error) is not null)
+            _ = Interlocked.CompareExchange(ref providerError, (int)error, 0);
+    }
+
     internal void Committed(AuthenticationOutcome outcome)
     {
         try
         {
             // Setting status does not invoke listeners or perform export work.
-            Volatile.Read(ref request)?.SetStatus(outcome.Success is not null && outcome.Failure is null
+            var activity = Volatile.Read(ref request);
+            var errorType = outcome.Success is null && outcome.Failure == AuthenticationFailure.InternalFailure
+                ? ErrorTypeName((ProviderDiagnosticError)Volatile.Read(ref providerError)) : null;
+            activity?.SetTag("error.type", errorType);
+            // Local export uses our commitment rather than listener-injected tags.
+            activity?.SetCustomProperty(CommittedErrorProperty, errorType);
+            activity?.SetStatus(outcome.Success is not null && outcome.Failure is null
                 ? ActivityStatusCode.Ok : ActivityStatusCode.Error);
         }
         catch (Exception) { }

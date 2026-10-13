@@ -38,6 +38,120 @@ public sealed class MsalAdapterScenarios
     }
 
     [TestMethod]
+    [DataRow("query", ProviderDiagnosticError.QueryParameterConflict)]
+    [DataRow("client", ProviderDiagnosticError.MsalClient)]
+    [DataRow("service", ProviderDiagnosticError.MsalService)]
+    [DataRow("argument", ProviderDiagnosticError.Argument)]
+    [DataRow("operation", ProviderDiagnosticError.InvalidOperation)]
+    [DataRow("unexpected", ProviderDiagnosticError.Unexpected)]
+    public void InternalFailureRetainsOnlyFixedProviderCategory(string kind, ProviderDiagnosticError expected)
+    {
+        Exception exception = kind switch
+        {
+            "query" => new MsalClientException(MsalError.DuplicateQueryParameterError, PrivateMarker),
+            "client" => new MsalClientException(PrivateMarker, PrivateMarker),
+            "service" => new MsalServiceException(PrivateMarker, PrivateMarker) { IsRetryable = false },
+            "argument" => new ArgumentException(PrivateMarker),
+            "operation" => new InvalidOperationException(PrivateMarker),
+            _ => new Exception(PrivateMarker),
+        };
+        var mapped = MsalBoundary.MapFailure(exception, CancellationToken.None);
+        Assert.AreEqual(AuthenticationFailure.InternalFailure, mapped.Failure);
+        Assert.AreEqual(expected, mapped.DiagnosticError);
+        Assert.IsFalse(mapped.ToString().Contains(PrivateMarker, StringComparison.Ordinal));
+        Assert.IsNull(mapped.InnerException);
+        Assert.IsNull(mapped.Claims);
+    }
+
+    [TestMethod]
+    [DataRow("ApiContractViolation", ProviderDiagnosticError.BrokerContract)]
+    [DataRow("IncorrectConfiguration", ProviderDiagnosticError.BrokerConfiguration)]
+    [DataRow("6", ProviderDiagnosticError.MsalService)]
+    [DataRow("9", ProviderDiagnosticError.MsalService)]
+    [DataRow("06", ProviderDiagnosticError.MsalService)]
+    [DataRow(" 6", ProviderDiagnosticError.MsalService)]
+    [DataRow("9 ", ProviderDiagnosticError.MsalService)]
+    [DataRow(" ApiContractViolation", ProviderDiagnosticError.MsalService)]
+    [DataRow("IncorrectConfiguration ", ProviderDiagnosticError.MsalService)]
+    [DataRow("0", ProviderDiagnosticError.MsalService)]
+    [DataRow(PrivateMarker, ProviderDiagnosticError.MsalService)]
+    [DataRow(null, ProviderDiagnosticError.MsalService)]
+    public void BrokerStatusRequiresExactPinnedStructuredValue(string? status, ProviderDiagnosticError expected)
+    {
+        var exception = new MsalServiceException("WAM_provider_error_synthetic", PrivateMarker)
+        {
+            IsRetryable = false,
+            AdditionalExceptionData = status is null ? null! : new Dictionary<string, string>
+            {
+                [MsalException.BrokerErrorStatus] = status,
+                [MsalException.BrokerErrorContext] = PrivateMarker,
+                [MsalException.BrokerErrorCode] = PrivateMarker,
+                [MsalException.BrokerTelemetry] = PrivateMarker,
+            },
+        };
+        var mapped = MsalBoundary.MapFailure(exception, CancellationToken.None);
+        Assert.AreEqual(AuthenticationFailure.InternalFailure, mapped.Failure);
+        Assert.AreEqual(expected, mapped.DiagnosticError);
+        Assert.IsFalse(mapped.ToString().Contains(PrivateMarker, StringComparison.Ordinal));
+        exception = new MsalServiceException("synthetic_other_service", PrivateMarker)
+        {
+            IsRetryable = false,
+            AdditionalExceptionData = new Dictionary<string, string> { [MsalException.BrokerErrorStatus] = "ApiContractViolation" },
+        };
+        Assert.AreEqual(ProviderDiagnosticError.MsalService,
+            MsalBoundary.MapFailure(exception, CancellationToken.None).DiagnosticError);
+    }
+
+    [TestMethod]
+    public void MalformedBrokerBagCannotChangeTheSafeOutcome()
+    {
+        var exception = new MsalServiceException("WAM_provider_error_synthetic", PrivateMarker)
+        {
+            IsRetryable = false,
+            AdditionalExceptionData = new ThrowingBrokerData(),
+        };
+        var mapped = MsalBoundary.MapFailure(exception, CancellationToken.None);
+        Assert.AreEqual(AuthenticationFailure.InternalFailure, mapped.Failure);
+        Assert.AreEqual(ProviderDiagnosticError.MsalService, mapped.DiagnosticError);
+        Assert.IsFalse(mapped.ToString().Contains(PrivateMarker, StringComparison.Ordinal));
+    }
+
+    private sealed class ThrowingBrokerData : IReadOnlyDictionary<string, string>
+    {
+        public string this[string key] => throw new InvalidOperationException(PrivateMarker);
+        public IEnumerable<string> Keys => [];
+        public IEnumerable<string> Values => [];
+        public int Count => 0;
+        public bool ContainsKey(string key) => false;
+        public bool TryGetValue(string key, out string value) => throw new InvalidOperationException(PrivateMarker);
+        public IEnumerator<KeyValuePair<string, string>> GetEnumerator() => Enumerable.Empty<KeyValuePair<string, string>>().GetEnumerator();
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    [TestMethod]
+    public void OriginalOutcomePrecedenceDoesNotAcquireDiagnosticClassification()
+    {
+        Exception[] failures =
+        [
+            new MsalClientException("authentication_canceled", PrivateMarker),
+            new MsalServiceException("access_denied", PrivateMarker),
+            new MsalClientException("platform_not_supported", PrivateMarker),
+            new MsalClientException(MsalError.DuplicateQueryParameterError, PrivateMarker) { IsRetryable = true },
+            new MsalUiRequiredException("invalid_grant", PrivateMarker),
+        ];
+        foreach (var failure in failures)
+        {
+            var mapped = MsalBoundary.MapFailure(failure, CancellationToken.None);
+            Assert.AreNotEqual(AuthenticationFailure.InternalFailure, mapped.Failure);
+            Assert.AreEqual(ProviderDiagnosticError.None, mapped.DiagnosticError);
+        }
+        using var caller = new CancellationTokenSource();
+        caller.Cancel();
+        Assert.ThrowsExactly<OperationCanceledException>(() => MsalBoundary.MapFailure(
+            new MsalClientException(MsalError.DuplicateQueryParameterError, PrivateMarker), caller.Token));
+    }
+
+    [TestMethod]
     public async Task ConsentRequirementHonorsInteractionPermission()
     {
         var scene = new Scene(Consent());
