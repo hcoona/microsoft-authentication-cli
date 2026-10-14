@@ -862,7 +862,8 @@ to choose that Cancel. In that one observation the parent was disabled and its C
 was not actionable while WAM was shown. The visible parent also adds a DPI-unaware
 desktop surface that the product does not otherwise need. WAM cancellation, caller
 lifetime-pipe EOF and the original deadline do not depend on the owned controls and
-are expected to remain unchanged; the hidden-parent observation below must confirm them.
+are expected to remain unchanged. Accepted lifetime evidence is reused; hidden-parent
+EOF and deadline were not separately observed.
 
 The hidden parent keeps the existing owned STA, message pump, admission rechecks,
 cancellation latch and creating-thread cleanup, and omits only the native show call.
@@ -874,9 +875,10 @@ user depends on that caller and is not claimed. Human cancellation is WAM's own 
 and Escape are no longer user actions. Visible-parent keyboard, focus, DPI and
 assistive validation obligations are retired with that surface.
 
-Implementation follows separate review. Hidden-parent WAM presentation, focus, title
-and human cancellation still need one bounded interactive observation of the
-implemented candidate; accepted silent, reuse and lifetime evidence is reused.
+The [hidden-parent observation](../research/v1-public-contract-baseline.md#hidden-owned-parent-interactive-observation)
+accepted WAM presentation and human cancellation for the implemented candidate.
+By owner decision, WAM title and focus are not acceptance obligations. Accepted
+silent, reuse and lifetime evidence is reused.
 
 A later simplification must preserve self-contained interaction and completion,
 strict selection, pre-authentication unofficial/Profile ownership context,

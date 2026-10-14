@@ -458,7 +458,7 @@ and human WAM close at their exact candidate/request scopes. Preserve earlier
 failed alternatives and the limits of operator versus process evidence. Reuse
 sufficient unchanged controlled/native evidence; these results do not establish
 every row above. The hidden parent is now selected by owner decision. One accepted
-[hidden-parent observation](https://github.com/hcoona/microsoft-authentication-cli/issues/108#issuecomment-6178833344) established that no product window was
+[hidden-parent observation](../research/v1-public-contract-baseline.md#hidden-owned-parent-interactive-observation) established that no product window was
 exposed, that the WAM prompt was cancelled on WAM's own surface and that the stderr
 notice was written. The owner does not require WAM title or focus confirmation, so
 those are not acceptance obligations. Pre-interaction notice delivery to users, attended locked/expired-state no-UI behavior, real broker
