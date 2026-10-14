@@ -30,7 +30,7 @@ public static class WindowsProcess
         MsalHttpClientFactory? http = null;
         return RunCore(arguments, entryTimestamp,
             process => createHost is null
-                ? new OwnedRequestHost(process.Cancel, process.FailHost, admission: admission)
+                ? new OwnedRequestHost(process.Cancel, process.FailHost, admission: admission, notice: process.Notice)
                 : createHost(process.Cancel, process.FailHost, admission),
             (profile, request) => new LocalWindowsProvider(admission, token =>
             {
@@ -49,7 +49,7 @@ public static class WindowsProcess
         Action<OwnedProcessCheckpoint>? checkpoint = null) =>
         RunCore(arguments, entryTimestamp,
             process => createHost is null
-                ? new OwnedRequestHost(process.Cancel, process.FailHost)
+                ? new OwnedRequestHost(process.Cancel, process.FailHost, notice: process.Notice)
                 : createHost(process.Cancel, process.FailHost),
             createProvider, profiles, checkpoint);
 
@@ -115,6 +115,7 @@ public static class WindowsProcess
             invocation = new RequestInvocation(arguments, host, entryTimestamp, process.CancellationToken);
             process.Publish(invocation, ownedHost);
             observation = WindowsDiagnostics.Start(invocation.Request?.TelemetryStderr == true, entryTimestamp);
+            process.PublishObservation(observation);
             Console.CancelKeyPress += cancelHandler;
             if (invocation.Request?.CancelOnStdinClose == true)
             {
@@ -209,6 +210,26 @@ public static class WindowsProcess
         internal ProcessCompletion? Completion => Volatile.Read(ref completion);
         internal Task CancellationCompletion => Volatile.Read(ref cancellationTimestamp) == long.MinValue
             ? Task.CompletedTask : cancelled.Task;
+
+        private LocalActivityTelemetry? observation;
+
+        internal void PublishObservation(LocalActivityTelemetry? value) => Volatile.Write(ref observation, value);
+
+        // Never blocks the owned UI thread: telemetry enqueues, otherwise a
+        // background thread performs the one bounded stderr write.
+        internal void Notice(byte[] bytes)
+        {
+            if (Volatile.Read(ref observation) is { } local)
+            {
+                _ = local.TryWriteNotice(bytes);
+                return;
+            }
+            new Thread(() =>
+            {
+                try { _ = WindowsStandardHandles.Write(WindowsStandardHandles.Error, bytes); }
+                catch (Exception) { }
+            }) { IsBackground = true }.Start();
+        }
 
         internal void Publish(RequestInvocation request, OwnedRequestHost? host)
         {

@@ -14,6 +14,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
     private readonly Action fault;
     private readonly Action<OwnedHostCheckpoint, nint>? checkpoint;
     private readonly IWindowsHostAdmission? admission;
+    private readonly Action<byte[]>? notice;
     private readonly TaskCompletionSource<nint> ready = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private readonly TaskCompletionSource completed = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private ClientProfile? profile;
@@ -23,7 +24,6 @@ internal sealed partial class OwnedRequestHost : IRequestHost
     private nint parent;
     private bool terminal;
     private bool published;
-    private bool showing;
     private Task? cancellation;
     private Task? faultNotification;
     private Exception? cleanupFailure;
@@ -31,13 +31,21 @@ internal sealed partial class OwnedRequestHost : IRequestHost
     private long endingTimestamp = long.MinValue;
 
     internal OwnedRequestHost(Func<Task> cancel, Action fault,
-        Action<OwnedHostCheckpoint, nint>? checkpoint = null, IWindowsHostAdmission? admission = null)
+        Action<OwnedHostCheckpoint, nint>? checkpoint = null, IWindowsHostAdmission? admission = null,
+        Action<byte[]>? notice = null)
     {
         this.cancel = cancel;
         this.fault = fault;
         this.checkpoint = checkpoint;
         this.admission = admission;
+        this.notice = notice;
     }
+
+    // One bounded fixed-template indication before the provider display. Profile
+    // name and owner are admitted public values (at most 128 characters, no controls).
+    internal static byte[] Notice(ClientProfile profile) => System.Text.Encoding.UTF8.GetBytes(
+        $"Unofficial hcoona/microsoft-authentication-cli. Profile: {profile.Name}. "
+        + $"Registration owner: {profile.RegistrationOwner}. Sign-in continues in the provider display.\n");
 
     public TimeProvider Clock => TimeProvider.System;
 
@@ -164,15 +172,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
         // Detachment and posting share this lock, so a recycled HWND cannot receive
         // a late close. Calls from another thread never wait for native destruction.
         if (parent == 0) return;
-        if (showing && currentHost == this)
-        {
-            // Monitor allows this UI thread to reenter during SetWindowPos. Destroy
-            // the still-owned HWND before returning into that pending native show;
-            // posting a close would allow its visibility change to continue first.
-            parent = 0;
-            AbortNativeShow();
-        }
-        else PostOwnedClose(parent);
+        PostOwnedClose(parent);
     }
 
     private bool IsTerminal
@@ -254,16 +254,15 @@ internal sealed partial class OwnedRequestHost : IRequestHost
             if (IsTerminal) return;
             RecheckAdmission();
 
+            // The parent stays hidden: WAM owns the visible sign-in display.
+            if (IsTerminal) return;
+            try { notice?.Invoke(Notice(profile!)); }
+            catch (Exception) { } // Optional output cannot alter authentication.
+
             lock (gate)
             {
-                // This is the only native show and readiness publication path.
-                // The gate orders other threads; reentrant terminal callbacks destroy
-                // the HWND before native show can continue. Creation checkpoints hold
-                // no lock, and neither path can publish readiness after invalidation.
-                if (IsTerminal) return;
-                showing = true;
-                try { ShowNativeParent(window); }
-                finally { showing = false; }
+                // This is the only readiness publication path. Creation checkpoints
+                // hold no lock and cannot publish readiness after invalidation.
                 if (IsTerminal) return;
                 published = true;
                 ready.TrySetResult(window);

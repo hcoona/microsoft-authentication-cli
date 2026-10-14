@@ -34,6 +34,7 @@ public sealed class OwnedHostScenarios
         Assert.AreEqual(0, fixture.Provider.InteractiveCalls);
         Assert.AreEqual(0, fixture.CancelCalls);
         Assert.IsFalse(fixture.Fault.Task.IsCompleted);
+        Assert.IsTrue(fixture.Notices.IsEmpty);
     }
 
     [TestMethod]
@@ -65,7 +66,7 @@ public sealed class OwnedHostScenarios
         {
             Assert.IsFalse(token.IsCancellationRequested);
             Assert.AreNotEqual((nint)0, parent);
-            Assert.IsTrue(OwnedWindowObservation.IsVisible(parent));
+            Assert.IsFalse(OwnedWindowObservation.IsVisible(parent)); // WAM owns the visible display.
             Assert.AreEqual(ApartmentState.STA, fixture.UiApartment);
             Assert.IsNotNull(fixture.UiThread);
             Assert.IsTrue(fixture.UiThread.IsBackground);
@@ -78,6 +79,9 @@ public sealed class OwnedHostScenarios
             StringAssert.Contains(text, "Synthetic external owner");
             StringAssert.Contains(text, "provider", StringComparison.OrdinalIgnoreCase);
             Assert.IsFalse(text.Contains("replacement-owned-host-profile", StringComparison.Ordinal));
+            var notice = Encoding.UTF8.GetString(fixture.Notices.Single());
+            Assert.AreEqual("Unofficial hcoona/microsoft-authentication-cli. Profile: synthetic-owned-host-profile. "
+                + "Registration owner: Synthetic external owner. Sign-in continues in the provider display.\n", notice);
             return Task.FromResult(Candidate(request, operation));
         };
         fixture.AfterBinding = () => fixture.Profiles.Bytes = Encoding.UTF8.GetBytes(
@@ -303,6 +307,7 @@ public sealed class OwnedHostScenarios
         Assert.AreEqual(false, visibleAtRejection);
         Assert.AreEqual(0, fixture.Provider.InteractiveCalls);
         Assert.AreEqual(2, admission.Observations.Count);
+        Assert.IsTrue(fixture.Notices.IsEmpty);
         Assert.IsFalse(OwnedWindowObservation.Exists(hidden));
         Assert.AreEqual((nint)0, await fixture.Host.OpenInteractionAsync(CancellationToken.None));
         // The snapshots catch showing before rejection; source-placement review
@@ -463,6 +468,7 @@ public sealed class OwnedHostScenarios
         internal Thread? UiThread;
         internal ApartmentState UiApartment;
         internal int CancelCalls;
+        internal readonly System.Collections.Concurrent.ConcurrentQueue<byte[]> Notices = new();
         private RequestInvocation? invocation;
         private Task<AuthenticationOutcome>? invocationObservation;
         private readonly object cancellationGate = new();
@@ -487,7 +493,7 @@ public sealed class OwnedHostScenarios
                     UiApartment = Thread.CurrentThread.GetApartmentState();
                 }
                 Checkpoint?.Invoke(stage, window);
-            }, admission);
+            }, admission, Notices.Enqueue);
         }
 
         TimeProvider IRequestHost.Clock => Host.Clock;

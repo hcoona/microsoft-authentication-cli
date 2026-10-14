@@ -91,6 +91,9 @@ public sealed class LocalActivityTelemetry : IDisposable
     // Leave room for it even when phase observations exhaust their allocation.
     public bool TryWriteFinal(byte[] bytes) => Enqueue(bytes, terminal: true);
 
+    // The host's one bounded pre-interaction notice shares the ordinary allocation.
+    public bool TryWriteNotice(byte[] bytes) => Enqueue(bytes, terminal: false);
+
     private bool Enqueue(byte[] bytes, bool terminal)
     {
         try

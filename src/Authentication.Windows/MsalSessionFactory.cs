@@ -37,6 +37,7 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
             {
                 ListOperatingSystemAccounts = settings.ListOperatingSystemAccounts,
                 MsaPassthrough = settings.MsaPassthrough,
+                Title = "Unofficial hcoona/microsoft-authentication-cli",
             })
             .Build();
         cancellationToken.ThrowIfCancellationRequested();

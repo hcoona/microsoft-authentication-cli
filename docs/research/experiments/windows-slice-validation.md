@@ -40,7 +40,7 @@ The review may reuse unchanged accepted evidence and cover these matters togethe
 no separate executable admission generator or review for each source leaf is needed.
 A review does not activate an unmerged protocol change.
 
-Use the established Windows x64 product basis: .NET SDK 10.0.401/runtime 10.0.12,
+Use the established Windows x64 product basis: .NET SDK 10.0.402/runtime 10.0.12,
 MSAL/Broker 4.83.1 and NativeInterop 0.20.3. Necessary Native AOT compilation retains
 the admitted MSVC 14.51.36231 and Windows SDK 10.0.26100.0. Matching executable hashes
 alone do not establish dependency, source, native-image or Profile provenance.
