@@ -1527,13 +1527,15 @@ filtering top-level windows on that process identifier. Any other count ends
 observation without action. Read only that window and its descendants: title,
 the four public Profile/owner/provider/Cancel notice phrases, Text/Button counts,
 enabled, focusable and offscreen states, bounding containment and overlap,
-window-context and monitor-effective DPI and physical window size. Read only the
+window-context and monitor-effective DPI, physical and logical window size and
+whether each DPI context switch succeeded. Read only the
 process identifier of the currently focused element. Output only fixed booleans
 and numbers. Do not read content of, or act on, provider, WAM or other windows.
 
 After a short dwell for the provider display, the script copies only the owned
-window's own rendering with `PrintWindow`, sized from its physical window
-rectangle, to a private local file. It contains public Profile text only; never
+window's own rendering with `PrintWindow`, sized from its window rectangle in
+the product's own DPI-unaware context, to a private local file named by the
+exact call. It contains public Profile text only; never
 commit it or capture a screen region. Only when the parent and Cancel are both
 enabled and on screen, the script focuses and invokes the owned Cancel button
 through its UIA Invoke pattern, the control's standard clicked notification, and
@@ -1545,7 +1547,8 @@ Notice and layout are supported only by `TitleMatches`, all four notice
 phrases, one Text and one Cancel, both inside the parent and on screen, no
 overlap and Cancel enabled; any other value remains itself or missing. Focus
 ownership and DPI values are recorded only. The independent actual-outcome
-reviewer judges the private rendering's readability at the recorded DPI only.
+reviewer judges only the window's own logical-DPI rendering; physical scaled
+readability remains unobserved unless an operator separately reports it.
 Accept owned Cancel only with complete transport, validated Cancelled/None
 without a token, product exit 1 and scoped completion.
 
