@@ -851,6 +851,30 @@ request transport and reuse for that candidate, but do not select or reject its
 WAM UX hypothesis. Notice delivery, title presentation, focus, human cancellation
 and the remaining lifetime obligations stay open.
 
+### Parent Selection Decision
+
+The repository owner selects the hidden owned parent as the target WAM parent and
+withdraws acceptance of a visible Win32 parent UX. The
+[UIA observation](../research/experiments/windows-slice-validation.md#selected-visible-parent-uia-observation)
+found that WAM disables the visible owned parent while its prompt is shown, so the
+parent's Cancel cannot stop a pending WAM request in that state. Its notice told users
+to choose that Cancel. The visible parent also adds a DPI-unaware desktop surface that
+the product does not otherwise need. Cancellation through WAM, caller lifetime-pipe EOF
+and the original deadline work the same with either parent.
+
+The hidden parent keeps the existing owned STA, message pump, admission rechecks,
+cancellation latch and creating-thread cleanup, and omits only the native show call.
+Its controls are not a user-facing notice. Deliver the unofficial-project, Profile
+and registration-owner context before the interactive call as one bounded fixed
+stderr indication built from the admitted Profile, and set the fixed public MSAL
+`BrokerOptions.Title`. Human cancellation is WAM's own cancel; owned Cancel, caption
+and Escape are no longer user actions. Visible-parent keyboard, focus, DPI and
+assistive validation obligations are retired with that surface.
+
+Implementation follows separate review. Hidden-parent WAM presentation, focus, title
+and human cancellation still need one bounded interactive observation of the
+implemented candidate; accepted silent, reuse and lifetime evidence is reused.
+
 A later simplification must preserve self-contained interaction and completion,
 strict selection, pre-authentication unofficial/Profile ownership context,
 operator-controlled sign-in, cancellation, the original deadline, and normal
