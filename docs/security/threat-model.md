@@ -141,8 +141,8 @@ later protocol must declare the actual metadata access and account effects separ
 The selected Native AOT design replaces the managed desktop host with finite static Win32
 interop inside the same process. Explicit ABI/layout, callback lifetime, creating-thread
 window destruction and nonblocking cancellation are review obligations; the unmanaged
-boundary must not leak exceptions or accept a late success. Standard accessible controls
-display bounded plain text and collect no credentials. Process DLL search must exclude
+boundary must not leak exceptions or accept a late success. The hidden owned parent
+holds only bounded plain text and collects no credentials. Process DLL search must exclude
 the current directory and ambient `PATH`, retaining only the application directory and
 System32 before provider initialization. Validate the actual broker loader and every
 required native asset under those restrictions; Native AOT alone supplies no dependency
