@@ -20,8 +20,10 @@ personal-account pair does not complete the other required scenarios.
 
 **Accepted basis:** Retain the accepted requirements, protocol 1 contracts,
 architecture, security model, operational identities, and research with their
-recorded limitations. Use Windows x64, .NET SDK 10.0.401/runtime 10.0.12,
-MSAL/Broker 4.83.1, and NativeInterop 0.20.3. Material changes to that basis retain
+recorded limitations. Use Windows x64, .NET SDK 10.0.402/runtime 10.0.12,
+MSAL/Broker 4.83.1, and NativeInterop 0.20.3. The owner approved SDK 10.0.402
+because 10.0.401 is no longer installed on the designated host; the runtime
+target and package inputs are unchanged. Material changes to that basis retain
 their applicable architecture, dependency, security, and evidence reviews.
 For the existing framework-dependent Windows-only result validator, permit exact
 binding to an independently admitted, already installed .NET 10 runtime patch
