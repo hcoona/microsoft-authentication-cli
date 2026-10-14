@@ -1567,6 +1567,48 @@ Independently accept the exact protocol, script, call and accounting before
 execution, precharge before covered operations and independently accept the
 actual scoped outcome before further authentication.
 
+## Hidden Owned-Parent Interactive Observation
+
+Under the [parent selection decision](../../designs/windows-ado-authentication.md#parent-selection-decision),
+admit one attended observation of the implemented hidden owned parent. Use the
+same Windows 11 x64 interactive desktop and WSL2 caller. Use one existing build of
+accepted `main-v2` with SDK 10.0.402; the call binds its exact product hash, and its
+source-tree, artifact and current-basis correspondence is independently accepted
+before execution. No new build is allocated unless that acceptance fails. Use the explicit Profile, the work
+role, its applicable tenant/scopes, the Windows-local configuration and the
+Windows-only result validator. Reuse the existing human-action caller procedure
+with one explicit `force-interactive` request, no engine silent acquisition and
+the sole lifetime writer held until result completion. Copy the accepted caller
+and preflight with only the product path and pins changed, plus one fixed Boolean
+reporting whether stderr contained the exact pre-interaction notice line. Keep
+every limit unchanged: 120-second product, 130-second completion, 10+5-second
+validator and 180+5-second foreground bounds, and the private-memory and pipe limits.
+
+Run the accepted selected-parent UIA script once with `-NoInvoke` and a 30-second
+wait, changing only its product path literal to the selected candidate; the call
+pins the successor hash and starts it before the product. It binds the product
+process and reports only whether a product-owned top-level window is exposed.
+"No exposed product window" requires `ProductBound=true`, no multiple products or
+parents, `Aborted=false` and `ParentFound=false`. It reads nothing from WAM
+and takes no action. Request fresh actual readiness after preparation. Before the
+call, tell the operator the public unofficial project/Profile/owner context and
+the expected surface: WAM only, with no product window. The operator then reports
+whether a product window appeared, whether WAM appeared and received focus, the
+title WAM showed if any (no account text), and then cancels on WAM's own surface
+without signing in. Accept the hidden-parent WAM presentation and human
+cancellation only with: no exposed product window, an operator-reported WAM prompt
+that could be cancelled, validated Cancelled/None without a token, product exit 1,
+the notice Boolean true and scoped completion. The title is confirmed only if the
+operator reports exactly `Unofficial hcoona/microsoft-authentication-cli`, and focus
+only if WAM received focus without operator action; neither conditions the other
+acceptance. Any other result, including unknown, is recorded as itself. Do not retry automatically, force UI, or change account, scopes or state.
+
+Allocate one new start/discovery/eligible interactive call and zero silent calls,
+one metadata pass of 64 operations/16 MiB plus 8 KiB/30 seconds and one collection
+pass of eight operations/1 MiB/180 seconds from the remaining shared pools.
+Independently accept the exact call and accounting before execution, precharge
+before covered operations, and independently accept the actual scoped outcome.
+
 ## Historical Evidence
 
 The prior detailed protocols, source pins, receipts, failed outcomes and bounded
