@@ -1643,8 +1643,10 @@ comparison preserves all failures, unused charges and historical
 `noExperimentLive=false`; it admits no further call under this recipe.
 
 **Limit:** These observations neither validate nor reject hidden-parent WAM behavior.
-Broker title presentation, focus, human cancellation, notice delivery and the
-remaining real lifetime obligations stay open. Reuse sufficient accepted native,
+The later [interactive observation](#hidden-owned-parent-interactive-observation)
+covers presentation and human cancellation; by owner decision WAM title and focus
+are not required. Notice delivery to users and the remaining real lifetime
+obligations stay open. Reuse sufficient accepted native,
 work and prior WSL evidence within its original limits.
 
 ### Actual WSL Deadline Assessment Observation
@@ -2199,6 +2201,25 @@ lifetimes; hidden-parent adoption is not a prerequisite for accepting this batch
 Profile activation/distribution, downstream service operations, installation,
 release and general support remain separate. This evidence update admits no
 new experiment or observation mechanism.
+
+### Hidden Owned-Parent Interactive Observation
+
+Under the [accepted protocol](experiments/windows-slice-validation.md#hidden-owned-parent-interactive-observation)
+at `843c4f5`, one work-role WSL `force-interactive` call ran the merged hidden-parent
+product (Native AOT executable SHA-256 `b9ecea4f0ec76f1ea94cb1a5826e0cfd48d6256d9b156b6715c1a125f4cfd1cc`,
+source tree identical to `main-v2` at `68c5175`, SDK 10.0.402). The read-only UI
+Automation check bound the product process and found no exposed product-owned
+top-level window. The operator saw no product window, saw the WAM prompt and
+cancelled it on WAM's own surface a few seconds later. The validated result was
+`cancelled` with no token, product exit 1, and every created process ended normally.
+The exact pre-interaction notice line was written to stderr. No residual window
+remained.
+
+**Limit:** UI Automation shows that no product window was exposed, not that none
+existed. The stderr notice shows delivery to the caller, not that a user saw it.
+The operator did not report WAM title or focus; by owner decision they are not
+acceptance obligations. Hidden-parent lifetime-pipe EOF and deadline were not
+observed; accepted lifetime evidence is reused.
 
 ### Windows Native AOT Assessment
 
