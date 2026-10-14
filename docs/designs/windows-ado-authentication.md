@@ -785,9 +785,9 @@ future reuse, or require a readback. Do no post-validation persistence I/O or wa
 The CLI product boundary remains governed by
 [V2-REQ-002](../product/requirements/product-boundary.md#v2-req-002-no-implicit-product-expansion).
 An in-process Win32 implementation does not by itself justify an extra
-user-facing desktop surface. The currently selected parent combines the WAM
-handle, Profile/registration context, and Cancel action; assess those needs
-separately before retaining or replacing that presentation.
+user-facing desktop surface. The former visible parent combined the WAM handle,
+Profile/registration context and Cancel action; the
+[parent selection decision](#parent-selection-decision) now separates them.
 
 The [console-parent source assessment](../research/v1-public-contract-baseline.md#console-parent-versus-a-separate-desktop-surface)
 and [credential-free comparison](../research/experiments/windows-slice-validation.md#console-parent-feasibility)
@@ -814,9 +814,9 @@ The next [bounded candidate experiment](../research/experiments/windows-slice-va
 keeps the existing ordinary top-level HWND hidden while retaining its owned STA,
 message pump, admission rechecks, cancellation latch and creating-thread cleanup.
 This is not a message-only HWND, a borrowed foreground window or a separate host.
-The current published validation candidate remains unchanged; the experimental
-source and artifacts occupy separate retained roots. Do not promote the variant
-to the selected product implementation before its applicable evidence is accepted.
+The experimental source and artifacts occupy separate retained roots. The
+[parent selection decision](#parent-selection-decision) now selects this
+direction; this section keeps the original comparison and its observations.
 
 For the first comparison, omit only the native show call. Retain the existing
 hidden controls and resource cleanup to isolate visibility from a larger host
@@ -828,8 +828,8 @@ and suitability remain runtime questions. The explicit selected Profile retains
 its registration-ownership and external-dependency metadata. The operator must
 receive the experimental Profile/ownership context before an admitted interactive
 call. Hidden control text is not a user-facing notice, and a broker title is not
-proof that the notice was displayed or understood. General product notice delivery
-remains a replacement-design obligation rather than an incidental diagnostic log.
+proof that the notice was displayed or understood. The decision below defines the
+product notice indication.
 
 The hidden window offers no usable Cancel button, caption or Escape action.
 Evaluate provider-owned cancellation and retain caller cancellation, lifetime-pipe
@@ -858,16 +858,19 @@ withdraws acceptance of a visible Win32 parent UX. The
 [UIA observation](../research/experiments/windows-slice-validation.md#selected-visible-parent-uia-observation)
 found that WAM disables the visible owned parent while its prompt is shown, so the
 parent's Cancel cannot stop a pending WAM request in that state. Its notice told users
-to choose that Cancel. The visible parent also adds a DPI-unaware desktop surface that
-the product does not otherwise need. Cancellation through WAM, caller lifetime-pipe EOF
-and the original deadline work the same with either parent.
+to choose that Cancel. In that one observation the parent was disabled and its Cancel
+was not actionable while WAM was shown. The visible parent also adds a DPI-unaware
+desktop surface that the product does not otherwise need. WAM cancellation, caller
+lifetime-pipe EOF and the original deadline do not depend on the owned controls and
+are expected to remain unchanged; the hidden-parent observation below must confirm them.
 
 The hidden parent keeps the existing owned STA, message pump, admission rechecks,
 cancellation latch and creating-thread cleanup, and omits only the native show call.
-Its controls are not a user-facing notice. Deliver the unofficial-project, Profile
-and registration-owner context before the interactive call as one bounded fixed
-stderr indication built from the admitted Profile, and set the fixed public MSAL
-`BrokerOptions.Title`. Human cancellation is WAM's own cancel; owned Cancel, caption
+Its controls are not a user-facing notice. Before the interactive call, write one
+bounded stderr indication from a fixed template that contains only the unofficial
+project identity and the admitted Profile's public name and registration owner, and
+set the fixed public MSAL `BrokerOptions.Title`. Whether a caller shows stderr to the
+user depends on that caller and is not claimed. Human cancellation is WAM's own cancel; owned Cancel, caption
 and Escape are no longer user actions. Visible-parent keyboard, focus, DPI and
 assistive validation obligations are retired with that surface.
 
@@ -884,18 +887,18 @@ considering another minimal parent binding; this assessment grants no new
 desktop app, retained host, launcher framework, or observation project.
 
 
-The candidate uses a small Win32 window on an owned STA thread with a message loop only when
-interaction is both needed and permitted. It supplies a stable nonzero HWND and explicit
-cancel/close behavior. It does not ask for account email, passwords, URLs, or credentials;
+The product uses a hidden owned Win32 window on an owned STA thread with a message loop
+only when interaction is both needed and permitted. It supplies a stable nonzero HWND
+and offers no user controls. It does not ask for account email, passwords, URLs, or credentials;
 those belong to the caller's request and provider UI. Parent WAM with that HWND, use the
 specified login hint, and let WAM choose sign-in/MFA/consent methods. Failure to create the
 owned parent makes the path unavailable before the interactive call.
 
-The UI thread registers the window class and creates/destroys its HWND. Use standard
-Windows text/button controls, keyboard navigation, accessible names and system visual
-settings; show the bounded public branding/ownership text required above and an explicit
-Cancel action. No custom credential form, embedded browser, COM automation or rich-text
-rendering is needed. Accessibility and DPI/focus behavior remain host-validation cases.
+The UI thread registers the window class and creates/destroys its HWND without showing
+it. The notice and cancellation sources are defined by the parent selection decision.
+No custom credential form, embedded browser, COM automation or rich-text rendering is
+needed. WAM presentation, title and focus with the hidden parent remain host-validation
+cases.
 Keep the window-procedure callback and request context alive through window destruction;
 unmanaged callbacks must not unwind managed exceptions across the ABI boundary.
 
@@ -1069,7 +1072,8 @@ The existing confidential validator may project only an exact bounded indication
 to a fixed safe enum; absent or invalid diagnostics remain unavailable or invalid.
 They neither establish authentication success nor relax any passing expectation.
 
-Stderr carries bounded fixed human indications and, only with `--telemetry stderr`, local
+Stderr carries bounded fixed human indications, the bounded pre-interaction Profile
+notice from the parent selection decision, and, only with `--telemetry stderr`, local
 JSON event lines containing `event`, `stage`, `outcome`, and elapsed milliseconds. Events
 contain no token, email, path, Profile/client/account identifier, tenant, resource, scope,
 claims, or provider text. This is optional local telemetry; network export and persistent
