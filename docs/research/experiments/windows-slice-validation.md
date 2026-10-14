@@ -1499,6 +1499,56 @@ before further authentication. Existing failure/current-absence and ordinary
 provider-update boundaries remain; no installation, repair, new host/controller,
 observer, UIA, calibration, exporter or separate executable project is included.
 
+## Selected Visible-Parent UIA Observation
+
+The first selected visible-parent UX observation ended as an accepted Timeout
+without physical evidence. Its slot remains spent. Admit one further attempt that
+replaces manual reporting of the owned parent's structure, notice, layout and
+owned Cancel with a short PowerShell 5.1 x64 STA script using the standard
+Windows UI Automation client and default Win32 proxies. Reuse the accepted
+candidate, Profile, work role, tenant/scopes, Windows-local configuration,
+preflight, caller, private transport, Windows-only validator, limits and
+sole-writer human-action procedure of the preceding supplement unchanged.
+
+Start the script on the same interactive desktop alongside the one
+`force-interactive` request. Bind exactly one new product process by its accepted
+executable path and start time, then exactly one top-level window of that process
+whose class has the owned `Authentication.OwnedRequest.` prefix. Any other count
+ends observation without action. Read only that window and its descendants: title,
+the four public Profile/owner/provider/Cancel notice phrases, Text/Button counts,
+enabled, focusable and offscreen states, bounding containment and overlap, window
+DPI and whether current focus belongs to the product process. Output only these
+fixed booleans and numbers. Do not read, enumerate or act on provider, WAM or
+other application windows.
+
+After a short dwell for the provider display, the script may copy only the owned
+window's own rendering with `PrintWindow` to a private local file for visual
+readability review. It contains public Profile text only; never commit it, and
+do not capture a screen region. The script then focuses and invokes the owned
+Cancel button through its UIA Invoke pattern, the standard clicked notification
+of that control, and waits at most 15 seconds for product exit. Accept owned
+Cancel only with complete transport, validated Cancelled/None without a token,
+product exit 1 and scoped completion. Normally close residual WAM afterward
+without claiming shared broker termination.
+
+UIA Invoke is not Tab/Enter navigation, and accessible names, rectangles or a
+window rendering do not establish screen-reader behavior or readability at every
+scale. Record the actual DPI only; keyboard reachability rests on the standard
+tab-stop/default-button controls and existing controlled Escape/close scenarios,
+and assistive-technology use remains a separate open observation. No operator
+action is needed, but any visible residual window must remain closable by the
+operator. An early result, missing or ambiguous window, timeout or other
+alternative ends this attempt as itself; do not retry automatically, force UI,
+change account/scopes/state or extend the script into a controller or observer.
+
+Allocate one new start/discovery/eligible interactive call and zero silent calls,
+one metadata pass of 64 operations/16 MiB plus 8 KiB/30 seconds and one collection
+pass of eight operations/1 MiB/180 seconds from the remaining shared pools. Bound
+the script to 140 seconds and 4 KiB of output. Independently accept the exact
+protocol, script, call and accounting before execution, precharge before covered
+operations and independently accept the actual scoped outcome before further
+authentication.
+
 ## Historical Evidence
 
 The prior detailed protocols, source pins, receipts, failed outcomes and bounded
