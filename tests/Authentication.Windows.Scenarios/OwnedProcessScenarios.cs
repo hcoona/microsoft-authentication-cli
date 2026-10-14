@@ -159,8 +159,13 @@ public sealed class OwnedProcessScenarios
         if (child.Output.Length != 0)
         {
             using var result = ParseOne(child.Output);
-            indication = result.RootElement.GetProperty("outcome").GetString() == "cancelled"
-                ? "Authentication request cancelled.\n"u8 : "Authentication request completed.\n"u8;
+            indication = result.RootElement.GetProperty("outcome").GetString() switch
+            {
+                "cancelled" => "Authentication request cancelled.\n"u8,
+                // Synthetic hosts record no fixed mechanism reason.
+                "mechanism_unavailable" => "Authentication request completed.\nMechanism unavailable at unavailable.\n"u8,
+                _ => "Authentication request completed.\n"u8,
+            };
         }
         // Optional diagnostics may end with the process before their writer drains.
         Assert.IsTrue(indication.StartsWith(child.Error), "Unexpected diagnostic bytes.");
