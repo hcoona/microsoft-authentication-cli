@@ -1499,6 +1499,74 @@ before further authentication. Existing failure/current-absence and ordinary
 provider-update boundaries remain; no installation, repair, new host/controller,
 observer, UIA, calibration, exporter or separate executable project is included.
 
+## Selected Visible-Parent UIA Observation
+
+The first selected visible-parent UX observation ended as an accepted Timeout
+without physical evidence. Its slot remains spent. Admit one further attempt that
+replaces manual reporting of the owned parent's structure, notice, layout and
+owned Cancel with a short PowerShell 5.1 x64 STA script using the standard
+Windows UI Automation client and default Win32 proxies. Reuse the accepted
+candidate, Profile, work role, tenant/scopes, Windows-local configuration,
+preflight, caller, private transport, Windows-only validator, limits and
+sole-writer human-action procedure of the preceding supplement. The script,
+not the operator, performs the owned Cancel action.
+
+Keep fresh actual readiness only so an operator is present to identify and
+normally close any residual WAM afterward, without signing in, choosing an
+account or consenting; without a ready operator, do not start. Launch the
+script immediately before the one `force-interactive` request, as an ordinary
+`powershell.exe -NoLogo -NoProfile -NonInteractive -Sta -File` process on the
+same interactive desktop. An in-process timer exits it after 140 seconds; read
+at most 4 KiB of its standard output. Errors such as early product exit or a
+lost element end the script with `Aborted` and the fixed fields gathered so far.
+
+Bind exactly one product process by its accepted executable path and a start
+time after the script started, then exactly one top-level window of that process
+whose class has the owned `Authentication.OwnedRequest.` prefix, found by
+filtering top-level windows on that process identifier. Any other count ends
+observation without action. Read only that window and its descendants: title,
+the four public Profile/owner/provider/Cancel notice phrases, Text/Button counts,
+enabled, focusable and offscreen states, bounding containment and overlap,
+window-context and monitor-effective DPI, physical and logical window size and
+whether each DPI context switch succeeded. Read only the
+process identifier of the currently focused element. Output only fixed booleans
+and numbers. Do not read content of, or act on, provider, WAM or other windows.
+
+After a short dwell for the provider display, the script copies only the owned
+window's own rendering with `PrintWindow`, sized from its window rectangle in
+the product's own DPI-unaware context, to a private local file named by the
+exact call. It contains public Profile text only; never
+commit it or capture a screen region. Only when the parent and Cancel are both
+enabled and on screen, the script focuses and invokes the owned Cancel button
+through its UIA Invoke pattern, the control's standard clicked notification, and
+waits at most 15 seconds for product exit. Otherwise it records the state and
+takes no action. Normally close residual WAM afterward without claiming shared
+broker termination.
+
+Notice and layout are supported only by `TitleMatches`, all four notice
+phrases, one Text and one Cancel, both inside the parent and on screen, no
+overlap and Cancel enabled; any other value remains itself or missing. Focus
+ownership and DPI values are recorded only. The independent actual-outcome
+reviewer judges only the window's own logical-DPI rendering; physical scaled
+readability remains unobserved unless an operator separately reports it.
+Accept owned Cancel only with complete transport, validated Cancelled/None
+without a token, product exit 1 and scoped completion.
+
+UIA Invoke is not Tab/Enter navigation, and accessible names, rectangles or a
+window rendering do not establish screen-reader behavior or readability at
+other scales. Keyboard navigation, focus between the parent and WAM and
+assistive-technology use remain open, unobserved items. An early result,
+missing or ambiguous window, non-actionable Cancel, timeout or other
+alternative ends this attempt as itself; do not retry automatically, force UI,
+change account/scopes/state or extend the script into a controller or observer.
+
+Allocate one new start/discovery/eligible interactive call and zero silent calls,
+one metadata pass of 64 operations/16 MiB plus 8 KiB/30 seconds and one collection
+pass of eight operations/1 MiB/180 seconds from the remaining shared pools.
+Independently accept the exact protocol, script, call and accounting before
+execution, precharge before covered operations and independently accept the
+actual scoped outcome before further authentication.
+
 ## Historical Evidence
 
 The prior detailed protocols, source pins, receipts, failed outcomes and bounded
