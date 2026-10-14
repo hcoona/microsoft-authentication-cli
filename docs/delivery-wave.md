@@ -23,6 +23,12 @@ architecture, security model, operational identities, and research with their
 recorded limitations. Use Windows x64, .NET SDK 10.0.401/runtime 10.0.12,
 MSAL/Broker 4.83.1, and NativeInterop 0.20.3. Material changes to that basis retain
 their applicable architecture, dependency, security, and evidence reviews.
+For the existing framework-dependent Windows-only result validator, permit exact
+binding to an independently admitted, already installed .NET 10 runtime patch
+when its previously pinned patch is unavailable. Keep the authentication product
+and Native AOT publication basis above. Require current public host/runtime
+correspondence and bounded synthetic validation before real use; this grants no
+installation, runtime repair, new validation project, or broader compatibility claim.
 
 **Delegated work:** Authorize the implementation, validation, and necessary
 technical preparation and correction that contribute directly to this outcome:
