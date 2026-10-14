@@ -2108,6 +2108,98 @@ unsubmitted and the earlier conditional caller-death proposal remains inert
 and uncharged. This result does not establish WAM EOF, human cancellation or
 caller death, and does not complete WSL or whole-Slice acceptance.
 
+### Selected-Role Windows and WSL Acceptance Observations
+
+**Runtime observations accepted through October 14, 2026 UTC, for Issue #108:**
+The named remaining WSL cases now have independently accepted evidence at the
+scopes below. Earlier alternatives, transport failures, missed observations and
+charges remain historical evidence; these later results do not repair them.
+
+The environment remains the designated Windows 11 x64 interactive user and
+WSL2 Linux x64 caller, with existing selected personal/work accounts and broker
+state. Reuse the accepted native personal R1/R6 and work R7/R8 acquisition and
+fresh-process reuse, actual WSL success/reuse, initially closed lifetime pipe,
+typed Timeout and timed Cancelled observations under their original candidate
+and request bindings. Existing state does not establish clean first use or
+durable persistence. Actual Git/feed operations and Profile distribution remain
+outside this authentication acceptance.
+
+The October 14 work calls use the accepted
+[account-selection implementation](https://github.com/hcoona/microsoft-authentication-cli/pull/457),
+source `af054606fcd6f8436b78872a3c7234539c2238cf`, accepted at
+`a9e877c0bcb1c32560ebde43dcbc45a445dda71a`. Its independently accepted Windows x64
+Native AOT executable has SHA-256
+`4a393afdd9b537beaadddef2164e625973be882e220a94e10e629c81d1052478`.
+The publication basis remains SDK 10.0.401/runtime 10.0.12, MSAL/Broker 4.83.1
+and NativeInterop 0.20.3. Reuse the accepted 191 controlled cases, four unchanged
+Windows construction cases and native source/artifact/dependency correspondence.
+The selected implementation still shows its owned Win32 parent; it is separate
+from the unpromoted hidden-parent variant.
+
+The [accepted protocol revision](https://github.com/hcoona/microsoft-authentication-cli/blob/e0992a988fac8b5957260e8b6a167cc086a615f6/docs/research/experiments/windows-slice-validation.md)
+binds the existing explicit public-client Profile, Public Cloud, selected work
+role, `common` authority and admitted Azure DevOps scopes. Each October 14 call
+uses `force-interactive`: strict discovery, no engine silent acquisition, one
+supported WAM sign-in/account-selection operation and strict final validation.
+Ordinary provider-managed session/protected-cache updates are permitted and
+intentionally retained; cancellation does not promise to reverse them. No
+account/cache repair, administrator consent or authenticated resource operation
+is part of these cases.
+
+Only the existing Windows-only result validator now launches with
+`--fx-version 10.0.13`, under the
+[accepted runtime correction](https://github.com/hcoona/microsoft-authentication-cli/pull/458).
+Current public host/runtime correspondence, six public input checks and two
+fixed public validation cases passed independent acceptance before real use:
+valid Cancelled was accepted and duplicate outcome was rejected. This is not a
+product runtime change, installation or validation of the earlier failed EOF
+whose validator exited 150. That earlier case remains failed and spent.
+
+| Actual case and public acceptance | Observed result and bounded conclusion |
+| --- | --- |
+| [Independent Work caller death, October 13](https://github.com/hcoona/microsoft-authentication-cli/issues/108#issuecomment-6135958075), under PR #449 at `cef5e13b05eb994468f3098e0b129459bba5133e` | Without the optional lifetime pipe, caller-only SIGTERM ended Linux caller with exit 143. The same independently retained Windows process handle observed native exit 1; the known relay was absent in the single guarded read at launch plus 2,674.661449 ms, within the original bound. This establishes finite scoped Windows completion after caller death, not immediate Windows signal delivery, a typed result, token absence or UI closure. |
+| [Work EOF during actual WAM, October 14](https://github.com/hcoona/microsoft-authentication-cli/issues/108#issuecomment-6160780098) | After separate fresh readiness, the operator confirmed actual WAM before the matched held-pidfd SIGUSR1 at caller plus 40,002 ms. The sole writer closed while the product was live at 40,047 ms. Product exit 1, complete streams, validator exit 0 and valid Cancelled/None passed, with normal scoped completion and no forced termination. The operator made no login/cancel/close action before EOF and later closed remaining WAM normally. This later cleanup is distinct from human-cancellation acceptance. |
+| [Work human WAM close, October 14](https://github.com/hcoona/microsoft-authentication-cli/issues/108#issuecomment-6161244691) | After separate fresh readiness, the operator saw Win32 and WAM, closed WAM with its X, then observed WAM followed by Win32 disappear. Product exit 1, complete streams, validator exit 0 and valid Cancelled/None passed, with normal scoped completion. The sole writer stayed open until completion; no signal, live EOF, caller death or forced termination substituted for the human action. This establishes actual WAM cancellation, not consent denial or the owned parent's Cancel/caption/Escape behavior. |
+
+For both October 14 calls, Windows-local validation established
+`Passed=true`, `ProtocolValid=true` and `TypedCancellationChecksPassed=true`.
+Token-bearing stdout used only the admitted bounded confidential caller memory
+and ordinary pipes, then the existing Windows-only validator. Retained evidence
+contains fixed conclusions, process facts and allowlisted local telemetry, not
+raw results, selectors, identifier hashes, tokens or provider diagnostics.
+The frozen caller's `ExpectedCasePassed=false` and `UiEvidence=Unavailable`
+remain unchanged: actual scenario/UI judgment is supplied by the separately
+accepted result checks and operator observations. Telemetry alone proves neither
+visible WAM nor process completion. Operator observations do not attribute an
+HWND or establish broker-global termination. EOF did not close external WAM;
+normal owned-process completion is not a promise to terminate shared broker UI.
+
+Independent actual/scoped reviews accepted caller death and EOF (reviewer A)
+and human close (reviewer B), with no material findings. Accounting1072 closes
+the two-call batch and marks the one forwarded human reservation consumed.
+There is no new debit/refund or rewriting of its historical submission state.
+Consumption remains technical `71/242/22/825`, real `70/70/65/27`, metadata 138
+and collection 546; real capacity remaining is `26/26/31/25`. All earlier failed
+charges, historical lifetime uncertainties and global `noExperimentLive=false`
+remain retained. No authentication is live and no readiness is retained for
+another call.
+
+**Acceptance limits:** These observations complete the three named WSL
+lifetime/action cases for their admitted candidates. They do not themselves
+close the whole Slice. Contextual requirement-to-evidence review must use the
+[existing scenario basis](../validation/strategy.md#windows-slice-design-acceptance).
+The selected visible-parent implementation has structural owned-HWND/thread,
+branding, cancellation and teardown evidence from its existing controlled
+scenarios, but physical accessibility/DPI/focus and notice suitability remain
+unobserved. Attended locked/expired-state no-UI behavior, real broker
+unavailability/disappearance, concurrency and deployment without undeclared
+development-machine dependencies retain their respective claim-specific gates.
+The visible-parent calls do not validate hidden-parent notice/title/focus or
+lifetimes; hidden-parent adoption is not a prerequisite for accepting this batch.
+Profile activation/distribution, downstream service operations, installation,
+release and general support remain separate. This evidence update admits no
+new experiment or observation mechanism.
+
 ### Windows Native AOT Assessment
 
 **RECHECK-008 refreshed September 12, 2026 UTC, for Issue #92 publishing selection:** Current Microsoft Learn

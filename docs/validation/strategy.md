@@ -450,8 +450,19 @@ prove resource equivalence, tenant precedence, provider behavior, or lifecycle c
 The [direct selected-account protocol](../research/experiments/windows-slice-validation.md#selected-account-scenarios)
 uses ordinary product invocation, standard local telemetry and Windows-local result
 validation. Real-account execution still requires exact source/artifact/request/call,
-cumulative accounting and current operating-basis acceptance. Work-account, actual
-WSL, visible-UI and other evidence obligations remain independently open.
+cumulative accounting and current operating-basis acceptance. The
+[selected-role Windows and WSL observations](../research/v1-public-contract-baseline.md#selected-role-windows-and-wsl-acceptance-observations)
+link accepted native personal/work acquisition and reuse, actual WSL transport,
+deadline and pipe cancellation, independent caller death, EOF during actual WAM
+and human WAM close at their exact candidate/request scopes. Preserve earlier
+failed alternatives and the limits of operator versus process evidence. Reuse
+sufficient unchanged controlled/native evidence; these results do not select
+the hidden-parent hypothesis or establish every row above. Physical UI usability
+and notice suitability, attended locked/expired-state no-UI behavior, real broker
+failure, concurrency and minimal-deployment evidence retain their corresponding
+claim gates. Contextual requirement-to-evidence review and whole-Slice closure
+remain separate from this completed WSL batch; Profile activation/distribution,
+downstream service operations, release and general support remain separate.
 
 The [local host predicates](../designs/windows-ado-authentication.md#local-windows-host-admission)
 do not prove continuing eligibility, every alternate-launch origin or WAM health.
