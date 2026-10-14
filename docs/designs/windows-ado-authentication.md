@@ -897,8 +897,8 @@ owned parent makes the path unavailable before the interactive call.
 The UI thread registers the window class and creates/destroys its HWND without showing
 it. The notice and cancellation sources are defined by the parent selection decision.
 No custom credential form, embedded browser, COM automation or rich-text rendering is
-needed. WAM presentation, title and focus with the hidden parent remain host-validation
-cases.
+needed. Hidden-parent WAM presentation and human cancellation have one accepted host
+observation; WAM title and focus are not acceptance obligations.
 Keep the window-procedure callback and request context alive through window destruction;
 unmanaged callbacks must not unwind managed exceptions across the ABI boundary.
 
