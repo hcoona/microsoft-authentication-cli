@@ -1609,6 +1609,34 @@ pass of eight operations/1 MiB/180 seconds from the remaining shared pools.
 Independently accept the exact call and accounting before execution, precharge
 before covered operations, and independently accept the actual scoped outcome.
 
+## Locked-State Non-Interactive Observation
+
+Admit one attended observation for the strategy row on noninteractive requests in
+a locked or expired state. Use the same Windows 11 x64 host and WSL2 caller, the
+accepted hidden-parent candidate and its pinned preflight, the explicit Profile,
+the work role with its applicable tenant/scopes, the Windows-local configuration
+and the Windows-only result validator. On this Remote Desktop host, a disconnected
+session is the locked state: the session shows the lock screen and has no input
+desktop. Copy the hidden-parent caller with only these changes: a `LockedNoUi`
+case that sends `non-interactive-only`, uses no lifetime pipe and expects
+`MechanismUnavailable`/`None`. Keep every existing limit.
+
+The command script first checks with `quser` that the operator's session is
+disconnected, and makes no call otherwise. After the call, the operator reconnects
+and reports whether any WAM, product window or unlock prompt appeared or remains.
+Accept the no-UI claim only with: the session confirmed disconnected, a complete
+validated `ProtocolValid` result of `MechanismUnavailable` or `InteractionRequired`
+with no token, product exit 1, no interactive stage in local telemetry, scoped
+completion, and an operator report of no such surface. Any other result is
+recorded as itself. Do not retry automatically or change account, cache or
+session state beyond the operator's ordinary disconnect and reconnect.
+
+Allocate one start/discovery call, zero eligible silent and zero interactive
+calls, one metadata pass of 64 operations/16 MiB plus 8 KiB/30 seconds and one
+collection pass of eight operations/1 MiB/180 seconds from the shared pools.
+Independently accept the exact call and accounting before execution, precharge
+before covered operations, and independently accept the actual scoped outcome.
+
 ## Historical Evidence
 
 The prior detailed protocols, source pins, receipts, failed outcomes and bounded
