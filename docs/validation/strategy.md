@@ -456,9 +456,10 @@ link accepted native personal/work acquisition and reuse, actual WSL transport,
 deadline and pipe cancellation, independent caller death, EOF during actual WAM
 and human WAM close at their exact candidate/request scopes. Preserve earlier
 failed alternatives and the limits of operator versus process evidence. Reuse
-sufficient unchanged controlled/native evidence; these results do not select
-the hidden-parent hypothesis or establish every row above. Physical UI usability
-and notice suitability, attended locked/expired-state no-UI behavior, real broker
+sufficient unchanged controlled/native evidence; these results do not establish
+every row above. The hidden parent is now selected by owner decision; its WAM
+presentation, title, focus and human cancellation remain unobserved. Pre-interaction
+notice delivery, attended locked/expired-state no-UI behavior, real broker
 failure, concurrency and minimal-deployment evidence retain their corresponding
 claim gates. Contextual requirement-to-evidence review and whole-Slice closure
 remain separate from this completed WSL batch; Profile activation/distribution,
@@ -581,8 +582,9 @@ exception; it cannot silently change the selected mode or weaken platform checks
 Review and render the C4 deployment and UML request, UI-cancellation and terminal-state
 sources against their normative contracts. Later application tests must cover HWND
 readiness, creation failure, callback lifetime/ABI, creating-thread destruction, stalled
-UI dispatch, keyboard/accessibility/DPI/focus behavior, and cancellation racing provider
-completion. Verify strict Profile parsing and result allowlists on the published binary,
+UI dispatch, the hidden parent never becoming visible, the bounded pre-interaction
+notice, and cancellation racing provider completion. One bounded interactive observation
+must confirm hidden-parent WAM title, focus and human cancellation. Verify strict Profile parsing and result allowlists on the published binary,
 including duplicate/unknown JSON fields and synthetic secret markers. Use the existing
 scenario matrix for account, tenant, interaction, reuse and lifetime semantics rather
 than treating an AOT publish as their acceptance.
