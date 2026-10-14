@@ -1449,6 +1449,56 @@ credential entry, account/cache repair, scope change, elevation or reboot is inc
 Valid alternatives and missing evidence remain incomplete; this correction guarantees
 no prompt, result, window disappearance, hidden-parent UX or whole-Slice acceptance.
 
+## Selected Visible-Parent UX Observation
+
+After independent acceptance of the existing named WSL lifetime/action results,
+admit one attended observation of the selected visible-parent implementation on
+the same Windows 11 x64 interactive desktop and WSL2 caller. Reuse the accepted
+candidate, explicit Profile, selected work role, applicable tenant/scopes,
+Windows-local configuration, result validator and frozen observation method.
+The hidden-parent candidate remains unpromoted. This supplement collects the
+selected presentation's missing physical evidence; it makes no general support
+or undeclared-display/accessibility claim.
+
+Use one explicit `force-interactive` request, no engine silent acquisition, with
+the sole lifetime writer held until result completion. Reuse the existing human
+action caller procedure, without live EOF, signals or caller termination. Bind
+it to this distinct UX observation in the exact call and accounting; no spent
+HumanCancellation or other reservation is reused. Keep the existing 120-second
+product, 130-second completion, 10+5-second validator and 180+5-second foreground
+bounds, private-memory/pipe limits, preflight and Windows-only validation.
+
+Before fresh readiness, explain the fixed public fork/Profile/external-owner
+context and the ordinary observation/actions. Record only the existing display
+scale and applicable assistive interaction, without machine/account identifiers;
+make no display, account or cache changes. Observe actual readability and layout,
+fork/Profile/owner and provider-controlled sign-in context before authentication,
+and ordinary keyboard focus/navigation between the owned parent and WAM. Use the
+existing declared accessibility facility if available; otherwise retain that
+observation as missing, not infer accessibility from source or standard controls.
+End the pending request using the owned Cancel control through ordinary keyboard
+interaction, without entering credentials or performing delegated consent. No
+screenshot, identity-bearing text, automated window inspection or manipulation is
+allowed. Observe remaining windows separately; normally close residual WAM if
+necessary, without claiming shared broker termination.
+
+Accept only actually reported physical observations, alongside complete normal
+transport, validated Cancelled/None without a token, product exit 1 and scoped
+completion. Fixed caller UI fields remain unchanged; operator evidence is separate.
+An early result, missing required surface/observation, timeout or other alternative
+ends this one attempt as itself. Preserve missing claims and all charges; do not
+retry automatically, force UI, change account/scopes/state or create another tool.
+
+Allocate one new start/discovery/eligible interactive call and zero silent calls,
+one metadata pass of 64 operations/16 MiB plus 8 KiB/30 seconds and one collection
+pass of eight operations/1 MiB/180 seconds from the remaining shared pools.
+Independently accept exact protocol/source/artifact/request/call/current basis and
+accounting before execution; precharge before covered operations and require fresh
+actual readiness after preparation. Independently accept the actual scoped outcome
+before further authentication. Existing failure/current-absence and ordinary
+provider-update boundaries remain; no installation, repair, new host/controller,
+observer, UIA, calibration, exporter or separate executable project is included.
+
 ## Historical Evidence
 
 The prior detailed protocols, source pins, receipts, failed outcomes and bounded
