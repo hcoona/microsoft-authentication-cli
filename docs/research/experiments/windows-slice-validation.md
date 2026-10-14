@@ -1621,14 +1621,21 @@ desktop. Copy the hidden-parent caller with only these changes: a `LockedNoUi`
 case that sends `non-interactive-only`, uses no lifetime pipe and expects
 `MechanismUnavailable`/`None`. Keep every existing limit.
 
-The command script first checks with `quser` that the operator's session is
-disconnected, and makes no call otherwise. After the call, the operator reconnects
+The command script first reduces a `quser` check to one fixed Boolean, whether
+exactly one session of the current user is disconnected, keeps no raw output and
+makes no call otherwise. After the call, the operator reconnects
 and reports whether any WAM, product window or unlock prompt appeared or remains.
-Accept the no-UI claim only with: the session confirmed disconnected, a complete
-validated `ProtocolValid` result of `MechanismUnavailable` or `InteractionRequired`
-with no token, product exit 1, no interactive stage in local telemetry, scoped
-completion, and an operator report of no such surface. Any other result is
-recorded as itself. Do not retry automatically or change account, cache or
+Local admission requires an active session with the input desktop, so the
+expected result is rejection before any provider call. Accept only with: the
+session confirmed disconnected, `ProtocolValid` and `Passed` for
+`MechanismUnavailable`/`None` with no token, the fixed host-session or
+input-desktop mechanism indication, product exit 1, no interactive stage in
+local telemetry, scoped completion, and an operator report of no such surface.
+Any other result, including `InteractionRequired`, is recorded as itself. The
+claim is limited to this: on this Remote Desktop host, a noninteractive request
+from a disconnected session is rejected at local admission with no product, WAM
+or unlock surface. Broker behavior under a connected lock screen or an expired
+credential is not observed. Do not retry automatically or change account, cache or
 session state beyond the operator's ordinary disconnect and reconnect.
 
 Allocate one start/discovery call, zero eligible silent and zero interactive
