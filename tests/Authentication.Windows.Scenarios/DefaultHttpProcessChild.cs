@@ -119,7 +119,7 @@ internal sealed class DefaultHttpProcessChild(string scenario) : IWindowsHostAdm
     public Task<AuthenticationResult> AcquireInteractiveAsync(MsalInteractiveOperation operation, CancellationToken token)
     {
         CheckToken(token);
-        Require(operation.ParentWindow == parent && OwnedWindowObservation.IsVisible(parent)
+        Require(operation.ParentWindow == parent && !OwnedWindowObservation.IsVisible(parent)
             && operation.Account is null && operation.LoginHint == ProcessChild.Email
             && operation.Claims is null && operation.Tenant == ProcessChild.Tenant
             && operation.Scopes.SequenceEqual([ProcessChild.Scope]) && operation.CorrelationId != Guid.Empty);

@@ -51,8 +51,8 @@ internal sealed partial class OwnedRequestHost
         var rectangle = new Rectangle { Right = checked(lineHeight * 36), Bottom = checked(lineHeight * 16) };
         if (AdjustWindowRectEx(&rectangle, ParentStyle, 0, 0) == 0)
             throw new InvalidOperationException("Owned window sizing failed.");
-        // No WS_VISIBLE. Even cancellation during native creation can only leave
-        // a hidden parent, which is destroyed by this same thread's finally block.
+        // No WS_VISIBLE, and the product never shows it. The creating thread's
+        // finally block destroys it.
         nativeParent = CreateWindowExW(0, className, "hcoona/microsoft-authentication-cli",
             ParentStyle, int.MinValue, int.MinValue, checked(rectangle.Right - rectangle.Left),
             checked(rectangle.Bottom - rectangle.Top), 0, 0, instance, 0);
@@ -77,14 +77,6 @@ internal sealed partial class OwnedRequestHost
             checked(lineHeight * 2), window, CancelId, instance, 0);
         if (cancelButton == 0) throw new InvalidOperationException("Owned Cancel control creation failed.");
         _ = SendMessageW(cancelButton, 0x0030, (nuint)font, 0);
-    }
-
-    private static void ShowNativeParent(nint window)
-    {
-        // Synchronous on the creating thread. NOACTIVATE/NOZORDER avoid controlling
-        // another application; SHOWWINDOW does not inherit launcher STARTUPINFO state.
-        if (SetWindowPos(window, 0, 0, 0, 0, 0, 0x0057) == 0)
-            throw new InvalidOperationException("Owned window display failed.");
     }
 
     private unsafe void PumpNativeMessages(nint window)
@@ -120,9 +112,6 @@ internal sealed partial class OwnedRequestHost
         {
             if (host is null) return DefWindowProcW(window, message, parameter, detail);
             host.checkpoint?.Invoke(OwnedHostCheckpoint.MessageDispatch, window);
-            // A reentrant terminal callback may already have destroyed this parent.
-            // Nested destruction callbacks retain nativeParent until DestroyWindow returns.
-            if (host.showing && host.nativeParent == 0) return 0;
             switch (message)
             {
                 case 0x0010: // WM_CLOSE: explicit user cancellation, never internal closure.
@@ -170,19 +159,6 @@ internal sealed partial class OwnedRequestHost
                 throw new InvalidOperationException("Owned window class release failed.");
             windowClass = 0;
         }
-    }
-
-    private void AbortNativeShow()
-    {
-        try { DestroyNativeParent(); }
-        catch (Exception)
-        {
-            // A failed native veto cannot return to the pending visibility change.
-            // Reuse the existing sanitized, current-process-only fail-closed exit.
-            WindowsStandardHandles.Terminate();
-        }
-        // Font, class and thread context remain alive until SetWindowPos unwinds
-        // into RunWindow's ordinary finally. No callback releases them early.
     }
 
     private void DestroyNativeParent()
@@ -307,10 +283,6 @@ internal sealed partial class OwnedRequestHost
     [LibraryImport("user32.dll")]
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     private static partial nint SendMessageW(nint window, uint message, nuint parameter, nint detail);
-
-    [LibraryImport("user32.dll")]
-    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-    private static partial int SetWindowPos(nint window, nint insertAfter, int x, int y, int width, int height, uint flags);
 
     [LibraryImport("user32.dll")]
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]

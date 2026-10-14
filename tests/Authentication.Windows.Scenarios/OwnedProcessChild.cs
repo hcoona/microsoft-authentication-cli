@@ -182,7 +182,7 @@ internal sealed class OwnedProcessChild(string scenario) : IAuthenticationProvid
     public async Task<TokenCandidate> AcquireInteractiveAsync(AuthenticationRequest request,
         ProviderAccount? selected, string? claims, nint window, Guid operationId, CancellationToken token)
     {
-        if (window != parent || !OwnedWindowObservation.IsVisible(window))
+        if (window != parent || OwnedWindowObservation.IsVisible(window))
             throw new InvalidOperationException("Interactive acquisition requires the ready owned parent.");
         ProcessChild.Mark("provider-ready");
         if (scenario is "host-cancel" or "host-callback-drain")
