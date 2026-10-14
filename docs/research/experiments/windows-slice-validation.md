@@ -1384,6 +1384,71 @@ real call. Preserve protocol-valid alternatives and incomplete UI/claim evidence
 a new ownership or safety gap stops dependent execution. These allocations guarantee
 no particular prompt or outcome and complete no whole-Slice claim by themselves.
 
+## Focused Validator Runtime Binding Correction
+
+The observed Work WAM EOF attempt reached actual operator-confirmed WAM and closed
+its sole writer while the product was live. It returned complete streams and a fixed
+cancellation indication, but the unchanged result validator exited 150 without check
+conclusions. Preserve that failed acceptance, spent attempt and all charges. The
+operator's later normal close of the remaining external WAM surface is cleanup,
+not the reserved human-cancellation case. External broker surfaces retain the Windows
+design's rule against forced rollback; no global quiescence is inferred.
+
+The independently admitted public metadata read established that the validator's
+unchanged runtime configuration requests `Microsoft.NETCore.App` 10.0.12 with
+`rollForward: Disable`, while the designated Windows installation contains 10.0.13
+and no 10.0.12 directory or CoreCLR file. This establishes a current prerequisite
+mismatch; it does not recover the discarded validator stderr or validate the earlier
+result. Retain the original result and transport facts without claiming typed-result,
+protocol or no-token checks.
+
+Use the same admitted validator DLL, dependency and runtime-configuration files,
+with their existing hashes. Bind only its ordinary `dotnet` launch to the already
+installed 10.0.13 by placing `--fx-version 10.0.13` before the DLL path. The
+[documented option](https://learn.microsoft.com/dotnet/core/tools/dotnet#options-for-running-an-application)
+overrides the first framework reference; this validator has exactly one reference.
+Independently accept the current public host/runtime correspondence before execution.
+This changes the validation helper's runtime, not the Native AOT product, parser
+source, request, account configuration, result contract or authentication dependencies.
+No runtime installation, repair, configuration rewrite, validator rebuild or new
+executable project is included.
+
+Before any real use, admit one credential-free Windows check batch of two existing
+validator invocations: a fixed public `Cancelled` result with exit 1 must return valid
+protocol and matching outcome/route conclusions; the same public result with a duplicate
+member must return only the fixed validation failure with validator exit 2. Use an
+explicit synthetic email under `example.invalid`, `common`, the existing Boolean-true
+interaction projection and Azure DevOps default-scope association. Neither result
+contains a token or provider/account state. Keep inputs below 1 KiB, each output below
+4 KiB and each invocation at 10 seconds plus five stop seconds, with one 90+5-second
+foreground batch. Require complete streams, actual exits and scoped completion.
+Allocate one build/test action and two synthetic process scenarios, zero preparation,
+publication or real-stage calls, one metadata pass of at most 64 operations/32 MiB/30
+seconds and one collection pass of at most eight operations/1 MiB/90 seconds. Bind
+exact public inputs, current host/runtime, source/calls and accounting independently;
+precharge before covered operations and independently accept actual results. A failure
+stops dependent real execution without retry or refund. Reuse sufficient prior parser,
+product and construction evidence.
+
+After those checks and exact corrected-caller/current-basis admission, permit one new
+Work WAM EOF attempt plus the existing reserved, unsubmitted Work HumanCancellation
+slot. Charge one new start/discovery/interactive call and zero engine silent calls,
+one metadata pass of 64 operations/16 MiB plus 8 KiB/30 seconds and one collection pass
+of eight operations/1 MiB/180 seconds. Reuse the human slot's unchanged real and passive
+roles without double charge. Preserve every spent EOF, caller-death and diagnostic
+attempt and the historical global `noExperimentLive=false`.
+
+The sole caller change is the validator's two explicit framework-version arguments;
+candidate path/hash binding may follow its already accepted candidate. Keep observation,
+native completion, private transport, sole-writer/signals, clocks, finite limits and
+Windows-only validation unchanged. Apply the existing WAM EOF and human-cancellation
+procedures, including fresh readiness for each attended call, actual WAM confirmation
+before live EOF and independent actual/scoped acceptance before the next authentication.
+No fourth observation check, observer, UIA, controller, retained host, exporter,
+credential entry, account/cache repair, scope change, elevation or reboot is included.
+Valid alternatives and missing evidence remain incomplete; this correction guarantees
+no prompt, result, window disappearance, hidden-parent UX or whole-Slice acceptance.
+
 ## Historical Evidence
 
 The prior detailed protocols, source pins, receipts, failed outcomes and bounded
