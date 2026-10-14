@@ -22,7 +22,11 @@ internal sealed class OwnedProcessChild(string scenario) : IAuthenticationProvid
 
     internal static bool Supports(string value) => value is "host-success" or "host-cancel"
         or "host-fault" or "host-create-cancel" or "host-callback-drain" or "host-create-failure"
-        or "host-fault-before-commit" or "host-fault-after-commit" or "host-ui-join" or "host-close-stall";
+        or "host-fault-before-commit" or "host-fault-after-commit" or "host-ui-join" or "host-close-stall"
+        or "host-notice" or "host-notice-raw" or "host-notice-blocked";
+
+    // These cases use the product's default host construction and notice path.
+    internal static bool DefaultHost(string value) => value is "host-notice" or "host-notice-raw" or "host-notice-blocked";
 
     internal static int Run(string scenario, string[] arguments, long entry)
     {
@@ -36,7 +40,8 @@ internal sealed class OwnedProcessChild(string scenario) : IAuthenticationProvid
                 || !request.InteractionAllowed || !request.Scopes.SequenceEqual([ProcessChild.Scope]))
                 throw new InvalidOperationException("Synthetic request admission failed.");
             return fixture;
-        }, createHost: fixture.CreateHost, checkpoint: fixture.ProcessCheckpoint);
+        }, createHost: DefaultHost(scenario) ? null : fixture.CreateHost, checkpoint: fixture.ProcessCheckpoint);
+        if (DefaultHost(scenario)) return result;
         if (fixture.host!.Completion.IsCompletedSuccessfully && fixture.uiThread is { IsAlive: false })
             ProcessChild.Mark("host-drained");
         else ProcessChild.Mark("host-undrained");
@@ -182,7 +187,13 @@ internal sealed class OwnedProcessChild(string scenario) : IAuthenticationProvid
     public async Task<TokenCandidate> AcquireInteractiveAsync(AuthenticationRequest request,
         ProviderAccount? selected, string? claims, nint window, Guid operationId, CancellationToken token)
     {
-        if (window != parent || OwnedWindowObservation.IsVisible(window))
+        if (DefaultHost(scenario))
+        {
+            OwnedWindowObservation.RequireOwned(window);
+            if (OwnedWindowObservation.IsVisible(window))
+                throw new InvalidOperationException("The default owned parent must stay hidden.");
+        }
+        else if (window != parent || OwnedWindowObservation.IsVisible(window))
             throw new InvalidOperationException("Interactive acquisition requires the ready owned parent.");
         ProcessChild.Mark("provider-ready");
         if (scenario is "host-cancel" or "host-callback-drain")

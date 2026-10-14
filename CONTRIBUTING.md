@@ -77,7 +77,7 @@ path-based checks inspect the same tree Git will record.
 
 ## .NET and Agent Tooling
 
-The optional `mise.development.toml` environment selects .NET SDK 10.0.401, APM v0.29.0,
+The optional `mise.development.toml` environment selects .NET SDK 10.0.402, APM v0.29.0,
 and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. The
 historical .NET 8 probe retains its own SDK and package inputs. Shared MSBuild/package
 files wait for a concrete product consumer.

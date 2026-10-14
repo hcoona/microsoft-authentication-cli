@@ -137,6 +137,51 @@ public sealed class OwnedProcessScenarios
         Assert.IsFalse(child.Marked("before-commit"));
     }
 
+    private const string Notice = "Unofficial hcoona/microsoft-authentication-cli. Profile: synthetic-process-profile. "
+        + "Registration owner: Synthetic external owner. Sign-in continues in the provider display.";
+
+    [TestMethod]
+    public async Task DefaultHostQueuesTheNoticeBeforeTheCompletionIndication()
+    {
+        using var child = new ProcessFixture("host-notice");
+        await child.FinishAsync();
+        RequireMarkers(child, "provider-ready", "candidate-returned");
+        Assert.IsFalse(child.Forced);
+        Assert.AreEqual(0u, child.ExitCode);
+        AssertSuccess(child);
+        var lines = Encoding.UTF8.GetString(child.Error).Split('\n');
+        Assert.AreEqual(1, lines.Count(line => line == Notice));
+        var completed = Array.IndexOf(lines, "Authentication request completed.");
+        Assert.IsTrue(completed > Array.IndexOf(lines, Notice), "The notice must precede the completion indication.");
+    }
+
+    [TestMethod]
+    public async Task DefaultHostWritesTheExactNoticeWithoutTelemetry()
+    {
+        using var child = new ProcessFixture("host-notice-raw");
+        await child.FinishAsync();
+        RequireMarkers(child, "provider-ready", "candidate-returned");
+        Assert.IsFalse(child.Forced);
+        Assert.AreEqual(0u, child.ExitCode);
+        AssertSuccess(child);
+        // Separate background writers have no guaranteed mutual order.
+        var lines = Encoding.UTF8.GetString(child.Error).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        Assert.AreEqual(1, lines.Count(line => line == Notice));
+        Assert.IsTrue(lines.All(line => line == Notice || line == "Authentication request completed."));
+    }
+
+    [TestMethod]
+    public async Task BlockedStderrCannotStallTheNoticeOrTheResult()
+    {
+        using var child = new ProcessFixture("host-notice-blocked");
+        await child.FinishAsync();
+        RequireMarkers(child, "provider-ready", "candidate-returned");
+        Assert.IsFalse(child.Forced, "A blocked notice writer must not keep the process alive.");
+        Assert.AreEqual(0u, child.ExitCode);
+        AssertSuccess(child);
+        Assert.IsTrue(child.DiagnosticPrefill > 0);
+    }
+
     internal static void RequireMarkers(ProcessFixture child, params string[] names)
     {
         Assert.IsTrue(child.Marked("entered"), "Actual controlled entry is required.");

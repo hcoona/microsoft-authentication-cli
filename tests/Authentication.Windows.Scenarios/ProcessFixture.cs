@@ -66,7 +66,7 @@ internal sealed partial class ProcessFixture : IDisposable
             throw new InvalidOperationException("Unallocated child scenario.");
 
         blockedOutput = scenario == "blocked-output";
-        blockedError = scenario == "blocked-diagnostics";
+        blockedError = scenario is "blocked-diagnostics" or "host-notice-blocked";
         DirectoryPath = Path.Combine(Path.GetTempPath(), "process-" + scenario);
         if (Directory.Exists(DirectoryPath)) throw new InvalidOperationException("Scenario already reserved.");
         Directory.CreateDirectory(DirectoryPath);
@@ -125,7 +125,8 @@ internal sealed partial class ProcessFixture : IDisposable
                 if (DefaultHttpProcessChild.Supports(scenario)
                     || scenario is "file-stdin" or "closed-stdin" or "close-pending" or "data-close")
                     arguments.Add("--cancel-on-stdin-close");
-                if (scenario is "success" or "blocked-diagnostics") arguments.AddRange(["--telemetry", "stderr"]);
+                if (scenario is "success" or "blocked-diagnostics" or "host-notice")
+                    arguments.AddRange(["--telemetry", "stderr"]);
                 if (nativeProfile) arguments.AddRange(["--telemetry", "off"]);
             }
             Start(executable, arguments);

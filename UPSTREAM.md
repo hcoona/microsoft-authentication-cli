@@ -64,7 +64,7 @@ owns the reviewed installation and observation boundaries.
 | [Microsoft Learn CLI](https://www.npmjs.com/package/@microsoft/learn-cli/v/1.0.0) | 1.0.0 | Official CLI, MIT; transitive dependency identities and integrity values are in `tools/learn-cli/package-lock.json`. Keep package notices; the CLI archive omits a separate license file, so its upstream code notice is reproduced below. |
 | [hcoona/three](https://github.com/hcoona/three/tree/516af0e99dfa4327e72c7e9bc2878b8dd26aad2f) | `516af0e99dfa4327e72c7e9bc2878b8dd26aad2f` | Reference for conventional C#/.NET, mise, and APM organization. No project license headers, package inventory, monorepo framework, or build extension is imported. |
 
-The SDK archives are Microsoft's .NET SDK 10.0.401 distributions, and Node.js is the
+The SDK archives are Microsoft's .NET SDK 10.0.402 distributions, and Node.js is the
 22.22.2 distribution. Their archive identities are in `mise.development.lock`; retain
 the license and third-party notices shipped with those installations. Selecting these
 tools does not relicense their contents under this repository's own MIT license.
