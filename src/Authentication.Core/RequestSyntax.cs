@@ -79,7 +79,8 @@ public static class RequestSyntax
 
         var timeout = 120;
         if (values.TryGetValue("--timeout-seconds", out var timeoutText)
-            && (!int.TryParse(timeoutText, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out timeout)
+            && (!IsUnsignedDecimal(timeoutText)
+                || !int.TryParse(timeoutText, NumberStyles.None, CultureInfo.InvariantCulture, out timeout)
                 || timeout is < 1 or > 600))
         {
             return null;
@@ -94,6 +95,10 @@ public static class RequestSyntax
         return new(profile, email, scopes.AsReadOnly(), interaction != "non-interactive-only",
             tenant, timeout, cancelOnClose, telemetry == "stderr", interaction == "force-interactive");
     }
+
+    // Exactly ^[1-9][0-9]{0,2}$: ASCII digits, no sign, whitespace or leading zero.
+    private static bool IsUnsignedDecimal(string value) =>
+        value.Length is >= 1 and <= 3 && value[0] is >= '1' and <= '9' && value.All(char.IsAsciiDigit);
 
     internal static bool TryGuid(string value, out Guid result)
     {
@@ -195,5 +200,8 @@ public static class RequestSyntax
         return !(pathStart < 0 ? authority : authority[..pathStart]).Contains('@');
     }
 
-    private static bool IsWhitespaceOrControl(char value) => char.IsWhiteSpace(value) || char.IsControl(value);
+    // U+FEFF is neither whitespace nor a control in .NET, but ECMAScript \s (used by
+    // the request schema) includes it; reject it so both readers agree.
+    private static bool IsWhitespaceOrControl(char value) =>
+        char.IsWhiteSpace(value) || char.IsControl(value) || value == '\uFEFF';
 }

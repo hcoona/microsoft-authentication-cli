@@ -52,7 +52,7 @@ public static class ProfileSyntax
                         break;
                     case "name":
                         name = ReadText(ref reader, 128);
-                        if (name is null) return null;
+                        if (name is null || !IsDisplayable(name)) return null;
                         break;
                     case "clientId":
                         clientText = ReadText(ref reader, 36);
@@ -149,6 +149,21 @@ public static class ProfileSyntax
             && !value.Any(character => character < ' ' || character == '\u007f') ? value : null;
     }
 
+    // Name and owner appear in the pre-interaction notice. Reject every control
+    // (C0, DEL, C1) and Unicode format character, including bidirectional
+    // overrides and isolates, zero-width characters and U+FEFF. Supplementary
+    // format characters are classified as whole scalar values.
+    private static bool IsDisplayable(string value)
+    {
+        foreach (var rune in value.EnumerateRunes())
+        {
+            var category = Rune.GetUnicodeCategory(rune);
+            if (category is UnicodeCategory.Control or UnicodeCategory.Format) return false;
+        }
+
+        return true;
+    }
+
     private static bool ReadTenant(ref Utf8JsonReader reader, out Guid? tenant)
     {
         tenant = null;
@@ -192,7 +207,7 @@ public static class ProfileSyntax
             {
                 case "owner":
                     owner = ReadText(ref reader, 128);
-                    if (owner is null) return false;
+                    if (owner is null || !IsDisplayable(owner)) return false;
                     break;
                 case "supportNotice":
                     notice = ReadText(ref reader, 1024);

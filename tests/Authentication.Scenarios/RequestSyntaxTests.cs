@@ -148,6 +148,10 @@ public sealed class RequestSyntaxTests
     [DataRow("--account-email", "a@@example.test")]
     [DataRow("--account-email", "a b@example.test")]
     [DataRow("--account-email", "a\u0000@example.test")]
+    [DataRow("--account-email", "\uFEFFa@example.test")]
+    [DataRow("--account-email", "a@example.test\uFEFF")]
+    [DataRow("--scope", "499b84ac-1321-427f-aa17-267ca6975798/\uFEFFread")]
+    [DataRow("--scope", "\uFEFF499b84ac-1321-427f-aa17-267ca6975798/read")]
     [DataRow("--profile", "relative.json")]
     [DataRow("--profile", @"C:relative.json")]
     [DataRow("--profile", @"\\server\share\profile.json")]
@@ -176,6 +180,14 @@ public sealed class RequestSyntaxTests
     [DataRow("-1")]
     [DataRow("1.5")]
     [DataRow("NaN")]
+    [DataRow("+1")]
+    [DataRow("01")]
+    [DataRow("0600")]
+    [DataRow(" 1")]
+    [DataRow("1 ")]
+    [DataRow("1000")]
+    [DataRow("\u0661")]
+    [DataRow("")]
     public void DeadlineOverrideMustBeABoundedInteger(string value)
     {
         var arguments = Arguments();
@@ -235,7 +247,7 @@ public sealed class RequestSyntaxTests
     [TestMethod]
     [DataRow("1", 1)]
     [DataRow("600", 600)]
-    [DataRow("+1", 1)]
+    [DataRow("30", 30)]
     public void ExplicitDeadlineAndTelemetryOffPreserveTheirMeaning(string text, int expected)
     {
         var arguments = Arguments();
