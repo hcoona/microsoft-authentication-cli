@@ -15,6 +15,13 @@ Issue body updated at 2026-10-15T04:28:23Z (body SHA-256
 `4991ce2b6da5c458294b9610beeaee1a05c28c707dcd34e39484d66381f735c2`). Later Issue edits
 do not change this outcome.
 
+**Owner-approved additions:** The repository owner also approved, on 2026-10-15:
+(1) removing the disabled `http:dotnet-sdk` 8.0.424 tool entry, used only by the
+retired public-build replay; and (2) merging `mise.development.toml` and
+`mise.development.lock` into `mise.toml` and `mise.lock` as one toolchain, keeping the
+same tool versions and checksums, and updating CI, hk, contributor guidance and records
+that reference the separate environment. Jobs may still install only the tools they use.
+
 **Delegated work:** Amend the requirements, architecture, design, threat-model,
 validation and governance records the dispositions name; retire or compact completed
 experiment records and migrate their consumers, links and controls to current
@@ -32,7 +39,7 @@ local package cache, are development validation rather than experiments under th
 support no public-restore or real-platform claim.
 
 **Exclusions:** No real-account, WAM, broker, interactive or Windows-host execution;
-no Windows CI runner; no dependency, SDK or runtime change; no change to a concrete
+no Windows CI runner; no dependency, SDK or runtime version change beyond the additions above; no change to a concrete
 Profile's selection or content or to a client registration (CORE-06/WIN-02 validation
 tightening of Profile schema fields is in scope); no release, signing or distribution
 identity.
