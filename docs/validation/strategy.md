@@ -461,10 +461,13 @@ every row above. The hidden parent is now selected by owner decision. One accept
 [hidden-parent observation](../research/v1-public-contract-baseline.md#hidden-owned-parent-interactive-observation) established that no product window was
 exposed, that the WAM prompt was cancelled on WAM's own surface and that the stderr
 notice was written. The owner does not require WAM title or focus confirmation, so
-those are not acceptance obligations. Pre-interaction notice delivery to users, attended locked/expired-state no-UI behavior, real broker
-failure, concurrency and minimal-deployment evidence retain their corresponding
-claim gates. Contextual requirement-to-evidence review and whole-Slice closure
-remain separate from this completed WSL batch; Profile activation/distribution,
+those are not acceptance obligations. The
+[locked-state observation](../research/v1-public-contract-baseline.md#locked-state-non-interactive-observation)
+covers the noninteractive locked request on this host. The
+[requirement-to-evidence review](../research/v1-public-contract-baseline.md#windows-slice-requirement-to-evidence-review)
+records each row's evidence, the rows outside Slice closure and the claims the
+owner chose not to make. Real broker failure, concurrency and minimal-deployment
+evidence retain their claim gates; Profile activation/distribution,
 downstream service operations, release and general support remain separate.
 
 The [local host predicates](../designs/windows-ado-authentication.md#local-windows-host-admission)
