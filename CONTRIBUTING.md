@@ -78,21 +78,23 @@ path-based checks inspect the same tree Git will record.
 ## .NET and Agent Tooling
 
 The optional `mise.development.toml` environment selects .NET SDK 10.0.402, APM v0.29.0,
-and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. The
-historical .NET 8 probe retains its own SDK and package inputs. Shared MSBuild/package
-files wait for a concrete product consumer.
+and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. Shared
+MSBuild/package files wait for a concrete product consumer.
 
-The locked development toolchain has Linux x64 and Windows x64 entries. Acceptance
-observations cover the declared WSL Linux host and client versions in the
-[developer-tooling protocol](docs/research/experiments/developer-tooling.md); Windows
-runtime discovery is not established. Installation and experiments remain subject to
-current work authorization and the applicable protocol.
+This section is the single authority for contributor tooling setup. The locked
+development toolchain has Linux x64 and Windows x64 entries. The completed
+[developer-tooling evidence](docs/research/experiments/developer-tooling.md) records the
+WSL Linux installation, discovery, and retrieval observations behind it; Windows runtime
+discovery is not established.
 
-Apply the protocol's public-only preflight first: empty process-local GH/npm configuration,
-disabled Git credential helpers/prompts, omitted token variables, and a checked empty
-`NETRC` file. Keep APM's built-in checks enabled. An inherited registry, policy, credential,
-or hook configuration is a stop condition. From the repository root, these command
-forms work in PowerShell and a POSIX shell:
+Install from public sources without ambient credentials: use an empty process-local
+GitHub CLI configuration directory and npm user configuration, disable Git credential
+helpers and prompts through process-only Git configuration, omit token variables, and set
+`NETRC` to an empty file. Before invoking APM, confirm its manager configuration is absent
+or holds only `default_client`, `install_target`, and `auto_integrate`. Keep APM's
+built-in checks enabled. An inherited registry, policy, credential, or hook configuration
+is a reason to stop rather than to work around it. From the repository root, these
+command forms work in PowerShell and a POSIX shell:
 
 ```text
 mise -E development install --locked http:dotnet-development github:microsoft/apm node
@@ -102,9 +104,9 @@ mise -E development exec -- dotnet --version
 ```
 
 Use public package sources and preserve existing instruction/configuration entries.
-Do not invoke an authentication fallback or override a conflicting installation. The
-accepted protocol details the credential-free acceptance environment and APM manager
-preflight. Ordinary repository checks continue to use the default mise environment.
+Do not invoke an authentication fallback or override a conflicting installation. For
+.NET commands, set `DOTNET_CLI_TELEMETRY_OPTOUT=1`. Ordinary repository checks continue to
+use the default mise environment.
 
 `apm.yml` selects exactly `directory-build-organization`, `property-patterns`,
 `msbuild-antipatterns`, `microsoft-docs`, and `microsoft-code-reference`. APM owns their
@@ -133,8 +135,9 @@ mise -E development exec -- node tools/learn-cli/node_modules/@microsoft/learn-c
 
 An update is a reviewed change to the direct version/ref declarations and their generated
 locks under current work authorization. Regenerate only the development mise lock for
-`http:dotnet-development`, `github:microsoft/apm`, and `node`, on `linux-x64,windows-x64`;
-do not regenerate the historical toolchain. Resolve the Learn package lock with
+`http:dotnet-development`, `github:microsoft/apm`, and `node`, on `linux-x64,windows-x64`.
+Use the exact HTTP SDK tool rather than the generic `dotnet` alias, whose lock does not
+pin SDK archive checksums. Resolve the Learn package lock with
 `--package-lock-only --ignore-scripts --no-audit --no-fund`, review its graph, then use
 `npm ci` with the same restrictions. Resolve APM with the same explicit targets,
 `--no-trust-bin`, and `--https`, then verify a frozen replay and content preservation.

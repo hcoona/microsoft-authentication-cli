@@ -53,8 +53,9 @@ imported production implementation.
 
 These are development dependencies, not imported production authentication code. The
 manifests and native locks own dependency selection; generated local deployments retain
-upstream content. The [tooling protocol](docs/research/experiments/developer-tooling.md)
-owns the reviewed installation and observation boundaries.
+upstream content. [CONTRIBUTING.md](CONTRIBUTING.md#net-and-agent-tooling) owns
+contributor setup; the [tooling evidence](docs/research/experiments/developer-tooling.md)
+records the bounded installation and discovery observations.
 
 | Source | Fixed reference | Use and license |
 | --- | --- | --- |
