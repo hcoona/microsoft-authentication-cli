@@ -162,8 +162,10 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
     private static bool SatisfiesScopes(IReadOnlyList<string> requested, IReadOnlyList<string> granted)
     {
         // Admission has already established one resource and isolated /.default.
-        // The operation ID above binds its result to that original resource request;
-        // providers need not return the literal /.default spelling among grants.
+        // Providers need not return the literal /.default spelling among grants, so
+        // granted scopes cannot be compared here. The operation ID check above only
+        // binds the candidate to the provider call that carried this request; it does
+        // not prove the granted resource. Dynamic scopes are compared exactly below.
         if (requested.Count == 1 && requested[0].EndsWith("/.default", StringComparison.Ordinal))
         {
             return true;

@@ -84,12 +84,16 @@ public static class MsalBoundary
         };
     }
 
-    public static TokenCandidate Project(AuthenticationResult result, Guid operationId) =>
+    // The operation binding is the provider-returned correlation ID, never the
+    // caller's argument: the coordinator compares it with the ID it sent, so a
+    // result from another operation (or with no correlation) fails validation.
+    public static TokenCandidate Project(AuthenticationResult result) =>
         new(result.AccessToken, result.Account?.Username,
             Guid.TryParse(result.TenantId, out var tenant) ? tenant : null,
             // Missing scopes must reach the coordinator's metadata rejection. An empty
             // observed list has distinct /.default semantics and cannot replace null.
-            result.Scopes?.ToArray()!, result.TokenType, result.ExpiresOn, operationId, result.CorrelationId);
+            result.Scopes?.ToArray()!, result.TokenType, result.ExpiresOn, result.CorrelationId,
+            result.CorrelationId);
 
     private static bool HasStructuredDenial(string? body)
     {

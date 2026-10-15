@@ -339,10 +339,9 @@ public sealed class MsalAdapterScenarios
         var account = new SyntheticAccount("work@example.test");
         var observedTenant = new Guid("22222222-3333-4444-5555-666666666666");
         var correlation = new Guid("33333333-4444-5555-6666-777777777777");
-        var operation = new Guid("44444444-5555-6666-7777-888888888888");
         var result = new AuthenticationResult("synthetic-access", false, PrivateMarker, Now.AddHours(1), Now.AddHours(1),
             observedTenant.ToString(), account, PrivateMarker, [Scope, "synthetic-observed-scope"], correlation, tokenType: "Bearer");
-        var candidate = MsalBoundary.Project(result, operation);
+        var candidate = MsalBoundary.Project(result);
 
         Assert.AreEqual("work@example.test", candidate.Email);
         Assert.AreEqual(observedTenant, candidate.Tenant);
@@ -351,7 +350,7 @@ public sealed class MsalAdapterScenarios
         Assert.AreEqual("Bearer", candidate.TokenType);
         Assert.AreEqual(Now.AddHours(1), candidate.ExpiresOn);
         Assert.AreEqual(correlation, candidate.CorrelationId);
-        Assert.AreEqual(operation, candidate.OperationId);
+        Assert.AreEqual(correlation, candidate.OperationId, "The operation binding is the provider-returned correlation ID.");
     }
 
     [TestMethod]
@@ -359,7 +358,7 @@ public sealed class MsalAdapterScenarios
     {
         var result = new AuthenticationResult("synthetic-access", false, PrivateMarker, Now.AddHours(1), Now.AddHours(1),
             "not-a-guid", null, PrivateMarker, [Scope], Guid.Empty, tokenType: "Bearer");
-        var candidate = MsalBoundary.Project(result, Guid.Empty);
+        var candidate = MsalBoundary.Project(result);
         Assert.IsNull(candidate.Email);
         Assert.IsNull(candidate.Tenant);
     }
