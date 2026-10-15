@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/hcoona/microsoft-authentication-cli/schemas/research/public-build-experiment-bundle.schema.json",
   "title": "Phase 1 Public-Build Experiment Bundle",
-  "description": "Strict Issue #1 singleton plan and runner-produced evidence contract.",
+  "description": "Strict shape of the frozen Issue #1 recorded evidence. Component paths and the policy reference identify retired historical inputs recoverable at commit 242cd292a10ee5626e783f42349e570c2e5a19a1; this schema grants no replay or execution.",
   "x-public-build-contract": {
     "mode": "runtime",
     "version": 3,
@@ -131,6 +131,7 @@
       "uniqueItems": true
     },
     "policy_reference": {
+      "description": "Frozen historical reference. The cited section and the runner components are retired; they remain at https://github.com/hcoona/microsoft-authentication-cli/blob/242cd292a10ee5626e783f42349e570c2e5a19a1/docs/research/experiment-safety.md#phase-1-public-build-record.",
       "const": "docs/research/experiment-safety.md#phase-1-public-build-record"
     },
     "runtime_evidence": {

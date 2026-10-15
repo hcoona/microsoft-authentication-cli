@@ -410,7 +410,7 @@ families:
     producer: Public-source auditor
     maintainer: Research maintainer
     consumers:
-      - Repository checker and research reviewers when reconstructing or validating the recorded dependency evidence
+      - Repository checker and research reviewers when validating the frozen recorded dependency evidence
       - Research reviewers when comparing runtime records with the fixed upstream source
     creation_trigger: The accepted issue #2 governance change authorized the immutable public-source audit used by the completed issue #1 experiment.
     failure_mode: Current evidence consumers must reconstruct target and dependency identity from an opaque hash or may omit a source-declared build input.
@@ -432,97 +432,92 @@ families:
     failure_mode: Lasso responsibility analysis can omit operational call sites while still matching an incomplete hash.
     review_point: Changes that correct source-reference attribution or change the issue #1 audited commit
 
-  - id: windows-msal-account-metadata-protocol
+  - id: windows-msal-account-metadata-evidence
     state: current
-    concern: Exact procedure and sanitized execution history for the bounded Windows MSAL account, metadata, and designated Git discovery investigation
+    concern: Completed bounded Windows MSAL account-visibility, result-metadata, and designated Git discovery observations
     carrier: repository-file
     path: docs/research/experiments/windows-msal-account-metadata.md
     format: markdown
-    producer: Research maintainer with operator observations
+    producer: Research maintainer
     maintainer: Research maintainer
     consumers:
-      - Experiment operator before each bounded attempt
-      - Architecture and evidence reviewers evaluating account visibility, result metadata, designated Git discovery, and reuse limitations
-    creation_trigger: Issue #35 needs bounded Windows MSAL observations that public source alone cannot establish.
-    failure_mode: Authentication runs without an accepted procedure or their state effects, consumed limits, and evidence scope cannot be recovered.
-    review_point: Independent record-system and research-evidence review before protocol acceptance, amendment, execution-evidence acceptance, or reliance on its conclusions
+      - Architecture and requirements reviewers relying on the observed account, metadata, and broker-reuse conclusions through the v1 baseline and client-identity architecture
+    creation_trigger: Issue #35 produced runtime observations that current architecture and research records cite; its procedure and history remain in Git.
+    failure_mode: Current conclusions cite observations whose scope, evidence level, or limitations can no longer be read.
+    review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
-  - id: windows-native-aot-protocol
+  - id: windows-native-aot-evidence
     state: current
-    concern: Exact synthetic Windows Native AOT publish and upstream-import procedure and bounded observations
+    concern: Completed synthetic Windows Native AOT publish and upstream native-import observations
     carrier: repository-file
     path: docs/research/experiments/windows-native-aot.md
     format: markdown
-    producer: Research maintainer with sanitized execution evidence
+    producer: Research maintainer
     maintainer: Research maintainer
     consumers:
-      - Experiment operator before each bounded download, build, or synthetic execution
-      - Architecture and validation reviewers evaluating Windows Native AOT compatibility evidence
-    creation_trigger: Issue #76 needs bounded synthetic evidence that public source alone cannot supply.
-    failure_mode: Native AOT compatibility is asserted without a reproducible safe subject or recoverable cumulative limits.
-    review_point: Independent record-system and research-evidence review before protocol acceptance, amendment, or reliance on observations
+      - Design, security, and validation reviewers relying on the bounded Native AOT conclusion
+    creation_trigger: Issues #76 and #92 produced synthetic observations that the Windows design, threat model, and validation strategy cite; the procedure and history remain in Git.
+    failure_mode: Native AOT compatibility is asserted beyond the scope and limitations of the recorded observations.
+    review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
-  - id: windows-slice-validation-protocol
+  - id: windows-slice-validation-evidence
     state: current
-    concern: Bounded source admission, managed scenario execution, and sanitized validation evidence for the first Windows authentication Slice
+    concern: Completed selected-account, WSL, and parent-window observations from the first Windows authentication Slice
     carrier: repository-file
     path: docs/research/experiments/windows-slice-validation.md
     format: markdown
-    producer: Implementation and validation maintainers with independent admission review
+    producer: Validation maintainer
     maintainer: Validation maintainer
     consumers:
-      - Implementer and operator before each bounded dependency, build, or scenario action
-      - Validation and research reviewers accepting scenario evidence and its limitations
-    creation_trigger: Issue #108 requires a controlled implementation test loop under the accepted Windows Slice grant.
-    failure_mode: Development tests execute without recoverable source, effects, or cumulative limits, or synthetic results are substituted for real-platform acceptance.
-    review_point: Independent record-system and research-evidence review before protocol acceptance, amendment, source admission, or reliance on observations
+      - Validation, design, and research reviewers relying on the recorded Windows Slice observations and their limitations
+    creation_trigger: Issue #108 produced real-host observations that the validation strategy, Windows design, and v1 baseline cite; the procedure and history remain in Git.
+    failure_mode: Synthetic or partial observations are substituted for real-platform acceptance, or their limitations are lost.
+    review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
-  - id: developer-tooling-protocol
+  - id: developer-tooling-evidence
     state: current
-    concern: Bounded developer-tool installation, client discovery, and public Learn retrieval procedure and observations
+    concern: Completed developer-tool installation, client discovery, and public Learn retrieval observations
     carrier: repository-file
     path: docs/research/experiments/developer-tooling.md
     format: markdown
-    producer: Tooling maintainer with sanitized execution evidence
+    producer: Tooling maintainer
     maintainer: Tooling maintainer
     consumers:
-      - Tooling operator before each bounded installation or discovery attempt
-      - Contributors and reviewers evaluating reproducible setup and actual host coverage
-    creation_trigger: The accepted tooling Wave requires installer and discovery acceptance without account or global Agent effects.
-    failure_mode: Tooling setup is executed without bounded effects or claimed complete without reproducibility and actual discovery evidence.
-    review_point: Independent record-system and research-evidence review before protocol, amendment, or execution-evidence acceptance
+      - Contributors and reviewers evaluating the reproducibility and actual host coverage behind the CONTRIBUTING.md tooling setup
+    creation_trigger: Issue #68 produced installation and discovery observations behind the locked contributor tooling; the procedure and history remain in Git.
+    failure_mode: Tooling setup is claimed to cover hosts, clients, or cache states it was never observed on.
+    review_point: Independent research-evidence review when the contributor tooling selection or its claimed coverage changes
 
   - id: public-build-experiment-bundles
     state: current
-    concern: Retained strict-JSON runtime evidence and reproducibility contract for the recorded issue #1 public-build experiment
+    concern: Frozen strict-JSON runtime evidence for the recorded issue #1 public-build experiment
     carrier: repository-file
     path: docs/research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json
     format: json
     schema: schemas/research/public-build-experiment-bundle.schema.json
-    producer: Issue #1 experiment runner
+    producer: Retired issue #1 experiment runner
     maintainer: Research maintainer
     consumers:
-      - Repository checker and research reviewers reproducing the recorded command, dependency, and public-build conclusions
-      - Architecture and requirements reviewers relying on the bounded recorded evidence
-    creation_trigger: The completed issue #1 experiment produced runtime evidence cited by current research and architecture conclusions.
-    failure_mode: Current conclusions rely on runtime evidence whose source binding, command topology, isolation, component identity, or retained observations can no longer be reproduced.
-    review_point: When a current conclusion or reference changes, whenever a Delivery Wave entry proposes reliance on the bundle, and at the first proposed change to a hash-bound runner, validator, contract, schema, extractor, NuGet-helper, or experiment-lock component, which must atomically choose historical replay or record migration with independent research-evidence review
+      - The v1 architecture audit and research reviewers relying on the bounded recorded public-build conclusions
+      - Repository checker when validating the frozen evidence
+    creation_trigger: The completed issue #1 experiment produced runtime evidence cited by current research conclusions.
+    failure_mode: Current conclusions rely on recorded evidence that was silently edited, lost its source binding or retained assets, or no longer matches its embedded receipt.
+    review_point: When a current conclusion relying on the bundle changes, or a correction to the frozen evidence is proposed with independent research-evidence review; the retired runner is not replayed
 
   - id: public-build-assets-evidence
     state: current
-    concern: Sanitized project.assets.json inputs retained from issue #1 for reproducible dependency projections
+    concern: Sanitized project.assets.json inputs retained as part of the frozen issue #1 evidence
     carrier: repository-files
     path: docs/research/experiments/assets/*.project.assets.json
     format: json
     schema: schemas/research/public-build-assets-evidence.schema.json
-    producer: Issue #1 experiment runner
+    producer: Retired issue #1 experiment runner
     maintainer: Research maintainer
     consumers:
-      - The retained assets extractor and repository checker when reproducing complete or partial dependency projections
-      - Research reviewers validating project, runtime, package, and source claims against retained restore evidence
-    creation_trigger: The completed issue #1 restore produced project.assets.json inputs used by recorded dependency projections.
-    failure_mode: A projection can remain internally consistent while omitting or misattributing topology from the restore artifact it claims to represent.
-    review_point: When retained assets or their referencing recorded evidence are corrected, replayed, or migrated
+      - Research reviewers validating dependency claims against retained restore evidence, routed through the recorded bundle that references each file
+    creation_trigger: The completed issue #1 restore produced project.assets.json inputs referenced by the recorded dependency projections.
+    failure_mode: A recorded projection loses or misattributes the restore artifact it claims to represent.
+    review_point: When retained assets or the recorded evidence that references them are corrected
 
   - id: validation-cases
     state: scheduled

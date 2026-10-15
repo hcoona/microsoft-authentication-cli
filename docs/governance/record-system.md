@@ -27,7 +27,7 @@ Authority is scoped rather than globally ranked.
 | Public source and empirical evidence | Research records |
 | Security assumptions and trust boundaries | Security records |
 | Validation needed for a claim | Validation records |
-| Upstream relationship and imports | Root `UPSTREAM.md` and import records |
+| Upstream relationship and imports | Root `UPSTREAM.md` |
 | Issue-backed work scope, ownership, discussion, dependencies, and progress | GitHub Issues and Milestones |
 | Direct single-PR work scope and proposed repository state | Pull requests |
 | Current accepted repository state | `main-v2` |
@@ -84,6 +84,10 @@ structured evidence when it adds a distinct conclusion, limitation, or decision 
 
 Structured records require a real consumer, a schema or equivalent typed contract, and a
 defined validation point.
+
+Generated dependency lock files retain the exact bytes their generator produced,
+including line endings. Repository text checks may inspect them but must not rewrite
+them; a changed lock is reviewed as a regenerated dependency selection.
 
 ## Work Authorization and Concurrency
 
@@ -225,7 +229,9 @@ catalog. Its bounded record roots are the canonical root interfaces and the `doc
 requires updating the checker and catalog in the same change. A catalog edit therefore
 cannot remove a retained record from family, schema, or portal validation merely by
 deleting its family entry. Governed records must use direct repository paths; symbolic
-links are rejected rather than treated as authority routing.
+links are rejected rather than treated as authority routing. The documentation portal
+routes every retained record directly, except that an evidence-only file referenced by
+path from a portal-linked structured record is routed through that parent record.
 
 Every current hk control maps each declared hk execution point to the concrete step names
 that implement it. The repository checker evaluates HK's actual `pre-commit` and `check`

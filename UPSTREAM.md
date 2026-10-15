@@ -53,8 +53,9 @@ imported production implementation.
 
 These are development dependencies, not imported production authentication code. The
 manifests and native locks own dependency selection; generated local deployments retain
-upstream content. The [tooling protocol](docs/research/experiments/developer-tooling.md)
-owns the reviewed installation and observation boundaries.
+upstream content. [CONTRIBUTING.md](CONTRIBUTING.md#net-and-agent-tooling) owns
+contributor setup; the [tooling evidence](docs/research/experiments/developer-tooling.md)
+records the bounded installation and discovery observations.
 
 | Source | Fixed reference | Use and license |
 | --- | --- | --- |
@@ -65,7 +66,7 @@ owns the reviewed installation and observation boundaries.
 | [hcoona/three](https://github.com/hcoona/three/tree/516af0e99dfa4327e72c7e9bc2878b8dd26aad2f) | `516af0e99dfa4327e72c7e9bc2878b8dd26aad2f` | Reference for conventional C#/.NET, mise, and APM organization. No project license headers, package inventory, monorepo framework, or build extension is imported. |
 
 The SDK archives are Microsoft's .NET SDK 10.0.402 distributions, and Node.js is the
-22.22.2 distribution. Their archive identities are in `mise.development.lock`; retain
+22.22.2 distribution. Their archive identities are in `mise.lock`; retain
 the license and third-party notices shipped with those installations. Selecting these
 tools does not relicense their contents under this repository's own MIT license.
 

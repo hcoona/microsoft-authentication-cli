@@ -44,12 +44,11 @@ is navigation, not an independent authority.
 | Experiment authors and reviewers | Experiment authorization, environment/effects boundaries, safety, and evidence rules | [`research/experiment-safety.md`](research/experiment-safety.md) |
 | Public-build evidence maintainers and reviewers | Fixed solution targets, source dependencies, and build-stage applicability | [`research/public-build-source-baseline.json`](research/public-build-source-baseline.json) |
 | Public-build evidence maintainers and reviewers | Fixed source-level Lasso usage manifest | [`research/public-build-lasso-reference-manifest.json`](research/public-build-lasso-reference-manifest.json) |
-| Windows MSAL experiment operators and architecture reviewers | Bounded account visibility, token metadata, and broker-reuse procedure and execution history | [`windows-msal-account-metadata.md`](research/experiments/windows-msal-account-metadata.md) |
-| Tooling operators, contributors, and reviewers | Bounded developer-tool installation, discovery, and public Learn retrieval | [`developer-tooling.md`](research/experiments/developer-tooling.md) |
-| Windows Native AOT experiment operators and design reviewers | Synthetic publish and upstream native-import procedure and bounded observations | [`windows-native-aot.md`](research/experiments/windows-native-aot.md) |
-| Windows Slice implementers and validation reviewers | Bounded source admission and controlled implementation scenario execution | [`windows-slice-validation.md`](research/experiments/windows-slice-validation.md) |
-| Public-build evidence consumers and reviewers | Recorded WSL2-Linux-x64 public-build runtime evidence and its reproducibility contract | [`research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`](research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json) |
-| Public-build evidence maintainers and reviewers | Retained public-only dependency inputs admitted by the current singleton receipt | [`AdoPat`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-adopat-net8-0.project.assets.json), [`MSALWrapper`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-msalwrapper-net8-0.project.assets.json), and [`TestHelper`](research/experiments/assets/public-build-wsl2-linux-x64-dotnet-8-0-424-public-only-target-testhelper-net8-0.project.assets.json) |
+| Architecture and evidence reviewers | Completed Windows MSAL account visibility, token metadata, and broker-reuse evidence | [`windows-msal-account-metadata.md`](research/experiments/windows-msal-account-metadata.md) |
+| Contributors and reviewers | Completed developer-tool installation, discovery, and public Learn retrieval evidence | [`developer-tooling.md`](research/experiments/developer-tooling.md) |
+| Design and validation reviewers | Completed synthetic Native AOT publish and upstream native-import evidence | [`windows-native-aot.md`](research/experiments/windows-native-aot.md) |
+| Validation and design reviewers | Completed Windows Slice selected-account and host observation evidence | [`windows-slice-validation.md`](research/experiments/windows-slice-validation.md) |
+| Public-build evidence consumers and reviewers | Frozen WSL2-Linux-x64 public-build runtime evidence, including the retained dependency assets it references | [`research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`](research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json) |
 | Research and release reviewers | Mutable public facts and their recheck triggers | [`research/rechecks.yaml`](research/rechecks.yaml) |
 | Maintainers and upstream-source consumers | Upstream baseline and import policy | [`../UPSTREAM.md`](../UPSTREAM.md) |
 
@@ -81,7 +80,7 @@ is navigation, not an independent authority.
 | Public-build source-audit automation | Public-build source-baseline schema | [`public-build-source-baseline.schema.json`](../schemas/research/public-build-source-baseline.schema.json) |
 | Public-build source-audit automation | Public-build Lasso-reference schema | [`public-build-lasso-reference-manifest.schema.json`](../schemas/research/public-build-lasso-reference-manifest.schema.json) |
 | Public-build evidence automation | Retained `project.assets.json` evidence schema | [`public-build-assets-evidence.schema.json`](../schemas/research/public-build-assets-evidence.schema.json) |
-| Public-build evidence automation and reviewers | Strict-JSON recorded public-build evidence and historical lifecycle contract | [`public-build-experiment-bundle.schema.json`](../schemas/research/public-build-experiment-bundle.schema.json) |
+| Public-build evidence automation and reviewers | Strict shape of the frozen recorded public-build evidence | [`public-build-experiment-bundle.schema.json`](../schemas/research/public-build-experiment-bundle.schema.json) |
 
 The root [`README.md`](../README.md) is the public landing page. The root
 [`AGENTS.md`](../AGENTS.md) is an AI-agent interface and is not human onboarding

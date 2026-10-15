@@ -2373,9 +2373,9 @@ latest versions. Upgrade and release review must refresh the applicable dependen
 
 ## Windows MSAL Probe Basis
 
-The [bounded Windows protocol](experiments/windows-msal-account-metadata.md) governs
+The [bounded Windows protocol](https://github.com/hcoona/microsoft-authentication-cli/blob/242cd292a10ee5626e783f42349e570c2e5a19a1/docs/research/experiments/windows-msal-account-metadata.md) governed
 account discovery, selected-account acquisition, result metadata, conditional broker reuse,
-and discovery at the single owner-designated Azure DevOps Git repository. It uses V1's
+and discovery at the single owner-designated Azure DevOps Git repository. It used V1's
 managed/native dependency versions in a small research probe. The first sequence stopped
 without a token; the diagnostic sequence later timed out with structured cancellation
 fields, also without a token. Authentication configuration and selection logic were
@@ -2387,11 +2387,11 @@ sequence succeeded in both interactive acquisition and fresh-process silent reus
 exact returned email and recognized authenticated Git discovery. Its bounded current
 conclusion is recorded below; earlier failures retain their original evidence limits.
 
-The protocol's [execution history](experiments/windows-msal-account-metadata.md#execution-history)
-records the initial public-index and launcher failures, followed by successful Windows
+The [completed evidence record](experiments/windows-msal-account-metadata.md#execution-history)
+summarizes the initial public-index and launcher failures, followed by successful Windows
 compilation and synthetic self-check of the metadata-only subject and the amended
 Git-discovery subject, then the diagnostic subject with its error-output self-check.
-The preparations retain their distinct source and artifact identities. Preparation used
+The pinned protocol retains their distinct source and artifact identities. Preparation used
 public packages transferred through WSL to a Windows local feed and did not change the
 native Windows account or token boundary.
 
@@ -2402,8 +2402,8 @@ action returned the probe's `provider-rejected` category without an authenticati
 The sequence stopped without an authenticated Git request or reuse follow-up. The error
 category does not identify the cause or establish categorical MSA incompatibility.
 That first sequence left successful result metadata, token acceptance, fresh-state
-behavior, and later reuse unobserved; the [protocol history](experiments/windows-msal-account-metadata.md#account-visibility-and-unresolved-acquisition-failure)
-owns the exact observations and limitations.
+behavior, and later reuse unobserved; the [evidence record](experiments/windows-msal-account-metadata.md#account-visibility-and-unresolved-acquisition-failure)
+owns the observations and limitations.
 
 The later [diagnostic action](experiments/windows-msal-account-metadata.md#diagnostic-subject-preparation-and-acquisition)
 reported zero exact matches and used the existing login-hint branch, rather than the
@@ -2502,9 +2502,10 @@ application cache or browser fallback. It does not reproduce GCM's full runtime 
 **Hypothesis and consequence:** The configuration difference could explain why the earlier
 probe did not reach a usable MSA path. The completed comparison below demonstrates a
 successful configuration; it does not isolate one option's causal effect or prove the
-cause of `0x80049D59`. The existing
-[protocol](experiments/windows-msal-account-metadata.md#current-disposition-msa-acquisition-and-reuse-observed)
-owns execution limits, readiness, and actual results. No GCM helper, cache, credential,
+cause of `0x80049D59`. The
+[evidence record](experiments/windows-msal-account-metadata.md#current-disposition-msa-acquisition-and-reuse-observed)
+owns the actual results; execution limits and readiness remained in the
+[pinned protocol](https://github.com/hcoona/microsoft-authentication-cli/blob/242cd292a10ee5626e783f42349e570c2e5a19a1/docs/research/experiments/windows-msal-account-metadata.md). No GCM helper, cache, credential,
 organization API, or extra discovery request was used. No Profile or platform is selected.
 
 ### Client Profile and Tenant Mapping Assessment

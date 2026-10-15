@@ -53,15 +53,17 @@ risk decision defined by the experiment policy.
 
 ## Local Checks
 
-Install the pinned repository toolchain and hooks:
+`mise.toml` and `mise.lock` define one locked toolchain for checks and development.
+Repository checks need only the check tools, so install those and the hooks without
+downloading the .NET SDK, APM, or Node.js:
 
 ```sh
-mise install --locked
+mise install --locked actionlint gitleaks hk lychee pipx:check-jsonschema python uv
 mise run hooks:install
 ```
 
-The locked toolchain is supported on platforms represented for every required tool in
-`mise.lock`. The pinned hk release has no Intel macOS binary; use CI or another supported
+`mise install --locked` without tool names also installs the development tools below.
+The check tools are supported on platforms represented for each of them in `mise.lock`. The pinned hk release has no Intel macOS binary; use CI or another supported
 development host on Intel macOS.
 
 The pre-commit hook runs the local fast set through hk. Run the complete CI-equivalent
@@ -77,34 +79,35 @@ path-based checks inspect the same tree Git will record.
 
 ## .NET and Agent Tooling
 
-The optional `mise.development.toml` environment selects .NET SDK 10.0.402, APM v0.29.0,
-and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. The
-historical .NET 8 probe retains its own SDK and package inputs. Shared MSBuild/package
-files wait for a concrete product consumer.
+The same toolchain selects .NET SDK 10.0.402 (`http:dotnet-development`), APM v0.29.0,
+and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. Shared
+MSBuild/package files wait for a concrete product consumer.
 
-The locked development toolchain has Linux x64 and Windows x64 entries. Acceptance
-observations cover the declared WSL Linux host and client versions in the
-[developer-tooling protocol](docs/research/experiments/developer-tooling.md); Windows
-runtime discovery is not established. Installation and experiments remain subject to
-current work authorization and the applicable protocol.
+This section is the single authority for contributor tooling setup. These development
+tools have Linux x64 and Windows x64 lock entries. The completed
+[developer-tooling evidence](docs/research/experiments/developer-tooling.md) records the
+WSL Linux installation, discovery, and retrieval observations behind it; Windows runtime
+discovery is not established.
 
-Apply the protocol's public-only preflight first: empty process-local GH/npm configuration,
-disabled Git credential helpers/prompts, omitted token variables, and a checked empty
-`NETRC` file. Keep APM's built-in checks enabled. An inherited registry, policy, credential,
-or hook configuration is a stop condition. From the repository root, these command
-forms work in PowerShell and a POSIX shell:
+Install from public sources without ambient credentials: use an empty process-local
+GitHub CLI configuration directory and npm user configuration, disable Git credential
+helpers and prompts through process-only Git configuration, omit token variables, and set
+`NETRC` to an empty file. Before invoking APM, confirm its manager configuration is absent
+or holds only `default_client`, `install_target`, and `auto_integrate`. Keep APM's
+built-in checks enabled. An inherited registry, policy, credential, or hook configuration
+is a reason to stop rather than to work around it. From the repository root, these
+command forms work in PowerShell and a POSIX shell:
 
 ```text
-mise -E development install --locked http:dotnet-development github:microsoft/apm node
-mise -E development exec -- npm ci --prefix tools/learn-cli --ignore-scripts --no-audit --no-fund
-mise -E development exec -- apm install --frozen --target copilot,codex --no-trust-bin --https
-mise -E development exec -- dotnet --version
+mise install --locked http:dotnet-development github:microsoft/apm node
+mise exec -- npm ci --prefix tools/learn-cli --ignore-scripts --no-audit --no-fund
+mise exec -- apm install --frozen --target copilot,codex --no-trust-bin --https
+mise exec -- dotnet --version
 ```
 
 Use public package sources and preserve existing instruction/configuration entries.
-Do not invoke an authentication fallback or override a conflicting installation. The
-accepted protocol details the credential-free acceptance environment and APM manager
-preflight. Ordinary repository checks continue to use the default mise environment.
+Do not invoke an authentication fallback or override a conflicting installation. For
+.NET commands, set `DOTNET_CLI_TELEMETRY_OPTOUT=1`.
 
 `apm.yml` selects exactly `directory-build-organization`, `property-patterns`,
 `msbuild-antipatterns`, `microsoft-docs`, and `microsoft-code-reference`. APM owns their
@@ -112,7 +115,7 @@ shared `.agents/skills/` deployment and the named `microsoft-learn` entries in
 `.github/mcp.json` and `.codex/config.toml`. Both clients consume that shared Skill
 location. The two hand-maintained review Skills remain in `.github/skills/`.
 
-Commit `apm.lock.yaml`, `mise.development.lock`, and `tools/learn-cli/package-lock.json`.
+Commit `apm.lock.yaml`, `mise.lock`, and `tools/learn-cli/package-lock.json`.
 Generated dependency directories and client projections remain ignored. Preserve
 `AGENTS.md`, review Skills, and the ignored private `AGENTS.local.md`. Never run
 `apm compile` over the hand-maintained instructions, duplicate the selected Skills with a
@@ -124,7 +127,7 @@ those examples are not this repository's locked installation. The locked officia
 is available as:
 
 ```text
-mise -E development exec -- node tools/learn-cli/node_modules/@microsoft/learn-cli/dist/index.js --help
+mise exec -- node tools/learn-cli/node_modules/@microsoft/learn-cli/dist/index.js --help
 ```
 
 [UPSTREAM.md](UPSTREAM.md) identifies sources and license notices.
@@ -132,9 +135,11 @@ mise -E development exec -- node tools/learn-cli/node_modules/@microsoft/learn-c
 ### Explicit Updates and Removal
 
 An update is a reviewed change to the direct version/ref declarations and their generated
-locks under current work authorization. Regenerate only the development mise lock for
-`http:dotnet-development`, `github:microsoft/apm`, and `node`, on `linux-x64,windows-x64`;
-do not regenerate the historical toolchain. Resolve the Learn package lock with
+locks under current work authorization. Regenerate only the `mise.lock` entries for
+`http:dotnet-development`, `github:microsoft/apm`, and `node`, on `linux-x64,windows-x64`,
+and leave the check-tool entries unchanged.
+Use the exact HTTP SDK tool rather than the generic `dotnet` alias, whose lock does not
+pin SDK archive checksums. Resolve the Learn package lock with
 `--package-lock-only --ignore-scripts --no-audit --no-fund`, review its graph, then use
 `npm ci` with the same restrictions. Resolve APM with the same explicit targets,
 `--no-trust-bin`, and `--https`, then verify a frozen replay and content preservation.
