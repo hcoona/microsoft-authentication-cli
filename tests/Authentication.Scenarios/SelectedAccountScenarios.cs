@@ -95,6 +95,43 @@ public sealed class SelectedAccountScenarios
         Assert.IsNull(outcome.Success);
     }
 
+    // Account matching is exact apart from ASCII-insensitive case: no plus or dot
+    // alias folding and no cross-domain equivalence, in discovery or final validation.
+    [TestMethod]
+    [DataRow("personal+alias@example.test")]
+    [DataRow("per.sonal@example.test")]
+    [DataRow("personal@example.org")]
+    [DataRow("personal@sub.example.test")]
+    public async Task AliasOrOtherDomainAccountIsNotDiscoveredAsTheRequestedAccount(string visible)
+    {
+        var provider = new ScenarioProvider([new ProviderAccount(visible, new object())]);
+
+        var outcome = await Application(provider).AuthenticateAsync(Request(PersonalEmail));
+
+        Assert.AreEqual(AuthenticationFailure.InteractionRequired, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+        Assert.IsEmpty(provider.Acquisitions);
+    }
+
+    [TestMethod]
+    [DataRow("personal+alias@example.test")]
+    [DataRow("per.sonal@example.test")]
+    [DataRow("personal@example.org")]
+    [DataRow("personal@sub.example.test")]
+    public async Task AliasOrOtherDomainInProviderSuccessFailsFinalValidation(string returned)
+    {
+        var provider = new ScenarioProvider([new ProviderAccount(PersonalEmail, new object())])
+        {
+            ReturnedEmail = returned,
+        };
+
+        var outcome = await Application(provider).AuthenticateAsync(Request(PersonalEmail));
+
+        Assert.AreEqual(AuthenticationFailure.IdentityValidationFailed, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+        Assert.HasCount(1, provider.Acquisitions);
+    }
+
     [TestMethod]
     public async Task WrongResourceTenantCannotSucceedEvenWhenTheWorkAccountMatches()
     {
