@@ -437,8 +437,8 @@ Stop the experiment if:
 - remaining authorized attempts or cumulative capacity cannot be established;
 - experiment-controlled work cannot be stopped within the declared bounds, or safe
   ownership cannot be established for cleanup, except within the exact
-  [Windows Slice standing dispositions](#windows-slice-standing-risk-dispositions)
-  recorded in the accepted Wave;
+  historical [Windows Slice standing dispositions](#windows-slice-standing-risk-dispositions)
+  while their Wave grant was current;
 - the subject's source or artifact identity no longer matches the accepted protocol; or
 - continuing would mutate an unrelated account, installation, or remote resource.
 
@@ -448,8 +448,10 @@ asset access. Those specialized rules are not a general experiment framework.
 
 ## Windows Slice Outcome Authorization
 
+The Issue #108 Wave entry was completed and removed. This section records historical rules for that grant and authorizes nothing; a new entry must restate any disposition, capacity or exception it needs.
+
 For Issue #108, the accepted
-[Wave](../delivery-wave.md#first-windows-authentication-slice-implementation-and-scenario-acceptance)
+[Wave entry](https://github.com/hcoona/microsoft-authentication-cli/blob/e8f74fa759a9d15488242ee338f3a9c87089ed3f/docs/delivery-wave.md#first-windows-authentication-slice-implementation-and-scenario-acceptance) (completed and removed)
 owns the complete bounded outcome, delegated necessary work, shared capacity,
 normal account effects, standing risk dispositions and exclusions. The existing
 [Windows protocol](experiments/windows-slice-validation.md#outcome-based-execution-and-accounting)
@@ -570,6 +572,8 @@ establishes an adequate operating basis does not require another owner approval.
 Do not infer closure from a reboot, file hashes, process labels or an empty output.
 
 ## Windows Slice Standing Risk Dispositions
+
+The Issue #108 Wave entry was completed and removed. This section records historical rules for that grant and authorizes nothing; a new entry must restate any disposition, capacity or exception it needs.
 
 The Wave explicitly continues the six separate historical lifetime/interference
 dispositions for 0057, 0064, 0068, 0093, 0107 and 0110 only for credential-free
