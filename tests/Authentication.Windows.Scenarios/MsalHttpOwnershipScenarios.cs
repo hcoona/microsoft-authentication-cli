@@ -15,6 +15,8 @@ public sealed class MsalHttpOwnershipScenarios
             var first = factory.GetHttpClient();
             var second = factory.GetHttpClient();
             Assert.AreSame(first, second, "MSAL operations must share the owner's HTTP client.");
+            Assert.AreEqual(Timeout.InfiniteTimeSpan, first.Timeout,
+                "Only the original request token may bound managed HTTP.");
             for (var index = 0; index < 2; index++)
             {
                 using var request = new HttpRequestMessage(HttpMethod.Get, "https://authority.example.test/synthetic");
