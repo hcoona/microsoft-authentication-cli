@@ -275,7 +275,7 @@ controls:
       - GitHub Actions and reviewers at CI before merge
     governing_rules:
       - docs/governance/governance-system.md#gov-005-controls-implement-policy
-      - docs/validation/strategy.md
+      - docs/validation/strategy.md#test-design-and-evidence-selection
     invariant: >-
       Every pull request and main-v2 push restores Linux.slnx from the committed lock
       files with the pinned development .NET SDK and NuGet.org only, builds it, and
