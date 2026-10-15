@@ -44,6 +44,10 @@ cache, or integrity outcome. Serialization field names are not frozen by this vo
 Identity correctness must not depend on parsing access-token claims. Access tokens must
 be treated as opaque bearer material.
 
+The only permitted local token interpretation is the opt-in validation observation
+under [`V2-REQ-038`](#v2-req-038-local-token-shape-validation-observation). It never
+contributes to identity, scope, or result correctness.
+
 ## V2-REQ-034: Output Discipline
 
 For an authentication invocation, stdout must be reserved for one terminal result in the
@@ -83,3 +87,27 @@ AzureAuth.
 
 This preserves the calling contract of an unchanged adapter while its protocol major
 remains supported. Protocol versioning is distinct from the V2 product-generation name.
+
+## V2-REQ-038: Local Token-Shape Validation Observation
+
+Integration validation needs to establish that a delivered access token has the expected
+shape without exposing token material to evidence. V2 may therefore provide a local,
+explicitly opted-in observation of a validated success token's shape.
+
+The observation must:
+
+- run only when the caller explicitly enables local diagnostics for that request;
+- examine only the token of a validated success, and only after the complete result has
+  been written to stdout;
+- emit to the local diagnostic channel only fixed categories, such as format and the
+  presence of expected claims, plus the provider-reported expiration and the remaining
+  lifetime derived from it, which are non-token metadata already present in the success
+  result; never token text, header or payload content, claim values, token length or
+  hash, or account or tenant identifiers;
+- be bounded in the input it examines and the work it performs; and
+- never be exported over a network, change the result or exit status, or delay result
+  delivery.
+
+The observation is unverified and is not evidence of signature validity, identity, scope
+satisfaction, or resource acceptance. Opaque or unreadable tokens remain valid results
+under `V2-REQ-033`.

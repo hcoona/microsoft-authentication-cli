@@ -4,9 +4,9 @@ This record owns the concrete Windows request implementation design and the prot
 command-line/process semantics. The linked JSON Schemas own serialized field shapes.
 Requirements remain authoritative for required behavior; the
 [architecture](../architecture/overview.md) owns system-wide boundaries. This is a
-design record, not an activated Client Profile, executable, or support claim. The Native
-AOT publishing disposition below selects the preimplementation path; product validation
-remains outstanding.
+design record, not an activated Client Profile or support claim. The Slice is implemented
+under `src/` and `tests/`; the [validation strategy](../validation/strategy.md#windows-slice-requirement-to-evidence-ledger)
+owns its evidence and the release gates that remain open.
 
 ## Selected Boundary and Dependencies
 
@@ -20,17 +20,15 @@ applies to every operation, configuration, and failure path.
 | Choice | Concrete design and reason |
 | --- | --- |
 | Runtime and UI | C# on .NET 10 LTS, `net10.0-windows`, `win-x64`; SDK 10.0.402 and runtime 10.0.12. A small in-process Win32 window replaces the Windows Forms host in the design below. It requires no Windows Desktop managed framework. |
-| Authentication dependencies | `Microsoft.Identity.Client` and `Microsoft.Identity.Client.Broker` 4.83.1, with `Microsoft.Identity.Client.NativeInterop` 0.20.3. Preserve the existing probe's authentication dependency baseline while changing the managed host. |
+| Authentication dependencies | `Microsoft.Identity.Client` and `Microsoft.Identity.Client.Broker` 4.83.1, with `Microsoft.Identity.Client.NativeInterop` 0.20.3. Preserve this authentication dependency baseline. |
 | Provider | Windows WAM only. One real-account discovery, at most one selected-account silent call for the two existing modes, and at most one permitted or explicitly required interactive call. Forced interaction skips silent acquisition. No application-level network retry or second provider. |
 | State | Broker-owned reusable state; a fresh in-memory MSAL application per invocation. No MSAL Extensions cache helper, serialized MSAL cache, shadow refresh-token store, engine account binding, or cross-process lock. |
 | Host | Windows 11 x64 in an active interactive user session, with WAM available. WSL 2 callers use normal Windows executable interoperability. Service, impersonated, disconnected desktop, and native Linux hosts are outside this Slice. |
 | Distribution | Executable basename, installer, signing, and update channel remain release identities under the [registry](../governance/operational-identities.yaml). `<windows-cli>` below denotes the caller-selected executable, not a new installed command. |
 
 The [dependency assessment](../research/v1-public-contract-baseline.md#windows-slice-dependency-and-host-contracts)
-binds these choices to public source. The .NET 10 synthetic evidence below supplements
-the public framework contracts; the earlier .NET 8 authentication probe remains distinct.
-Future upgrades must use the existing dependency review/validation matrix. No restore, build, or new
-authentication experiment is part of accepting this design.
+binds these choices to public source. Future upgrades must use the existing dependency
+review/validation matrix.
 
 ### Native AOT Target Disposition
 
@@ -38,28 +36,13 @@ Select **Native AOT** for the one .NET 10 `net10.0-windows` / `win-x64` executab
 with the small in-process Win32 host, under
 [V2-REQ-055](../product/requirements/quality-build-and-validation.md#v2-req-055-native-aot-publishing).
 Retain SDK 10.0.402/runtime 10.0.12, MSAL/Broker 4.83.1 and NativeInterop 0.20.3.
-The reviewed evidence resolves the preimplementation publishing premise for this
-design. No non-AOT exception is needed. Implementation still requires a new accepted
-Wave; this selection is not complete-application compatibility, release or support
-acceptance.
+No non-AOT exception is needed. This selection is not complete-application
+compatibility, release or support acceptance.
 
-The [latest synthetic results](../research/experiments/windows-native-aot.md#diagnostic-round-05-results)
-establish a resolved public dependency graph, complete warning-free native compilation
-with the selected provider surface rooted, and accepted publish completion. The native
-EXE actually ran on the existing Windows host through WSL: it created MSAL configuration,
-allocated native parameters, found the cleanup exports, returned from first and repeated
-disposal without observed cleanup exceptions, and rejected the genuine x86 DLL. The
-[earlier missing/decoy cases](../research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results)
-separately establish rejection under restricted search for their recorded artifact.
-Public toolchain/Win32 contracts and these bounded observations support selecting the
-path without changing authentication dependencies or relaxing DLL search.
-
-This inference preserves the observation limits. The provider APIs were rooted for
-compilation, not used for authentication. Disposal evidence does not inspect opaque
-native deallocation; static imports and synthetic calls do not close dependencies used
-only by actual WAM operations. The historical stops and unavailable diagnostics remain
-in the experiment authority. Publish-only VCTIP cleanup does not relax product lifetime
-requirements. The [validation basis](../validation/strategy.md#native-aot-publishing)
+The [Native AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
+owns the public toolchain/Win32 contracts and the bounded synthetic observations that
+support this path without changing authentication dependencies or relaxing DLL search,
+together with their limits. The [validation basis](../validation/strategy.md#native-aot-publishing)
 retains complete-application, WAM/UI, account/Profile, dynamic-dependency, symbol,
 performance, release and support obligations.
 
@@ -70,13 +53,13 @@ distinguishes the following alternatives:
 | --- | --- |
 | Existing Windows Forms host | Cannot be selected as a supported Native AOT route: Native AOT requires trimming, and Microsoft disables supported Windows Forms trimming because of built-in COM dependencies. Keeping this host would require a justified non-AOT exception; it is not necessary merely to own an HWND. |
 | WPF replacement | Its documented trimming limitation does not resolve the blocker. |
-| Small Win32 host with static interop | Selected Native AOT path: the required parent, public branding, completion and cancellation controls need only Win32 window APIs, an owned message loop, and statically known callbacks. This removes the managed desktop-framework blocker without another process or provider. |
+| Small Win32 host with static interop | Selected Native AOT path: the required parent HWND, completion and cancellation handling need only Win32 window APIs, an owned message loop, and statically known callbacks. This removes the managed desktop-framework blocker without another process or provider. The [parent selection decision](#parent-selection-decision) separately fixes that parent as hidden, without controls. |
 | Larger UI framework or direct broker rewrite | No present UI requirement justifies another framework's dependency surface or replacing the supported MSAL integration with direct broker internals. Neither is needed for the selected smaller host. |
 | Same Win32 host with ordinary self-contained JIT publishing | Future comparison baseline, not an accepted fallback or exception. Consider an exception only if later application validation identifies an AOT blocker that cannot reasonably be remediated, with the requirement's evidence and reassessment obligations. |
 
-On implementation, enable `PublishAot` in the executable project, retaining AOT/trim
+Enable `PublishAot` in the executable project, retaining AOT/trim
 analysis during development. Owned libraries participate in compatibility analysis
-without executable publishing settings. Do not apply this property to historical probes,
+without executable publishing settings. Do not
 use blanket warning suppression, add dynamic plugins, or equate ReadyToRun/trimming with
 Native AOT. Use source-generated P/Invoke for the finite owned Win32 API surface and
 static `UnmanagedCallersOnly` callbacks with explicit ABI/layout. Built-in COM, runtime
@@ -89,7 +72,7 @@ arbitrary provider objects. These choices do not change the schemas or loosen in
 validation. MSAL's own .NET 8 asset uses its generated JSON context; the separate Broker
 asset targets .NET Standard 2.0 and does not inherit that AOT annotation automatically.
 
-The accepted synthetic graph selects the public net8.0 Client, netstandard2.0 Broker,
+The resolved graph selects the public net8.0 Client, netstandard2.0 Broker,
 net9.0 NativeInterop and `win-x64/msalruntime.dll` assets. Its loader/allocation evidence
 applies to those exact assets; the older .NET Standard loader report and package metadata
 do not replace that observation. The actual application's resolved graph must retain
@@ -106,21 +89,19 @@ exact upstream loader, its dependencies, and the process search restriction must
 validated together on the actual application; an incompatible loader makes the target
 unavailable rather than silently weakening search rules or copying private runtime internals.
 
-A separately authorized product publish must pin the Windows x64 public native build chain
+A product publish must pin the Windows x64 public native build chain
 (Visual Studio C++ tools, Windows SDK, and `link.exe`), SDK/runtime inputs, resolved
 NuGet graph, and publish properties before execution. Microsoft's documented Windows
 prerequisite is Visual Studio 2022 or later with Desktop development with C++ and its default
-components; this record does not select a floating installed compiler. No compiler is
-installed by this design revision. Artifact closure must include the native broker and
+components; this record does not select a floating installed compiler. Artifact closure must include the native broker and
 OS prerequisites; an AOT executable does not imply one-file deployment or no OS dependency.
 Debug symbols have a separate diagnostic/release treatment and are included when
 comparing total development and distribution costs.
 
-The remaining work verifies the implemented application against the existing Windows
-scenario and release gates. Actual WAM, account, UI and cancellation behavior still need
-their appropriate evidence; synthetic success does not satisfy those gates. Investigate
-precise supported dependency or host corrections if application validation finds a
-blocker, before proposing a scoped exception. The historical .NET 8 probe is unchanged.
+The implemented application is verified against the existing Windows scenario basis and
+release gates. Synthetic success does not satisfy real WAM, account, UI or cancellation
+gates. Investigate precise supported dependency or host corrections if application
+validation finds a blocker, before proposing a scoped exception.
 
 ### C4 Deployment View
 
@@ -134,9 +115,9 @@ flowchart LR
             caller["Git or package adapter<br/>[External system instance]"]
         end
         subgraph windows["Windows interactive user session [Execution environment]"]
-            cli["Windows CLI + MSAL<br/>[Container instance: .NET 10 process]<br/>Native AOT selected; preimplementation design"]
+            cli["Windows CLI + MSAL<br/>[Container instance: .NET 10 process]<br/>Native AOT"]
             profile[("Explicitly selected Profile file<br/>[External data store: caller-managed JSON]")]
-            ui["Win32 parent and completion UI<br/>[Component in the CLI process]"]
+            ui["Hidden Win32 parent HWND, no controls<br/>[Component in the CLI process]"]
             wam["WAM and protected reusable state<br/>[External OS system]"]
         end
     end
@@ -144,7 +125,7 @@ flowchart LR
     resource["Azure DevOps Git / Artifacts<br/>[External system]"]
     caller <-->|Arguments, result, stderr, exit<br/>Optional stdin lifetime pipe| cli
     profile -->|One bounded read| cli
-    cli -->|Permission-gated parent window| ui
+    cli -->|Permission-gated hidden parent| ui
     cli <-->|Real accounts, token operations, cancellation| wam
     wam <-->|Authentication and issuance| identity
     cli -->|Authority discovery through MSAL| identity
@@ -171,7 +152,7 @@ the resulting argument vector without invoking another shell.
 | `--scope <qualified-scope>` | Required, repeatable for permissions on exactly one resource. |
 | `--interaction non-interactive-only\|interactive-if-needed\|force-interactive` | Required interaction intent for the entire request. The first two modes retain silent-first behavior; the third requests interactive account selection without engine silent token acquisition. |
 | `--tenant common\|<tenant-GUID>` | Optional; normalize under the selected Profile's tenant policy. |
-| `--timeout-seconds <integer>` | Optional, 1 through 600 inclusive; default 120. One monotonic deadline measured from managed entry, including Profile reading and validation. |
+| `--timeout-seconds <integer>` | Optional, 1 through 600 inclusive; default 120. The value is an unsigned ASCII decimal without sign, leading zeros, whitespace or separators. One monotonic deadline measured from managed entry, including Profile reading and validation. |
 | `--cancel-on-stdin-close` | Optional valueless lifetime flag. Use a dedicated caller-owned pipe whose writer remains open until completion or cancellation. EOF or pipe failure cancels the request. Stdin is never an authentication request or credential channel. |
 | `--telemetry off\|stderr` | Optional, default `off`. Enables only the bounded local event stream described below; it does not configure network export. |
 
@@ -183,6 +164,8 @@ versions, and conflicts with a Profile produce `invalid_request` before provider
 No environment variable supplies request intent or Profile selection.
 
 `help` and root `--help` are non-authentication entry points and may print help to stdout.
+The help text states that the project is unofficial and not a Microsoft release, under
+[V2-REQ-003](../product/requirements/product-boundary.md#v2-req-003-unofficial-product-identity).
 Every attempted authentication invocation, including malformed ones, uses the terminal
 result contract. An unsupported or absent version returns a protocol 1 `invalid_request`
 envelope with a safe reason; it does not echo the unsupported input. This bootstrap
@@ -190,12 +173,13 @@ failure envelope remains recognizable independently of later supported major ver
 
 ### Scope and Email Normalization
 
-Accept a nonempty full email with one `@` and no whitespace/control characters, up to
-320 characters. Preserve spelling and compare the whole string using ordinal
+Accept a nonempty full email with one `@` and no whitespace, control characters or
+U+FEFF, up to 320 characters. Preserve spelling and compare the whole string using ordinal
 case-insensitive equality. Do not strip aliases, fold dots, rewrite domains, apply
 Unicode normalization, or create an account-kind selector.
 
 Each scope must contain an explicit resource prefix and a final permission segment.
+A scope must not contain whitespace, control characters or U+FEFF.
 Split at the last `/`: the prefix must be a GUID or an absolute application-ID URI with
 an authority, no userinfo, query, or fragment; the last segment must be nonempty. This
 covers the Azure DevOps GUID prefix and URI resources such as `api://<application-id>`
@@ -218,6 +202,10 @@ fields. A Profile has its own `schemaVersion`, name, client ID, Public Cloud sel
 tenant policy, integration kind, and explicit registration ownership/support metadata.
 Protocol major and Profile schema version are separate version spaces. The current
 reader accepts version 1 only and rejects unknown fields and duplicate JSON keys.
+The Profile name and registration owner are bounded plain text: they reject C0 and C1
+control characters and Unicode format characters (category Cf, including bidirectional
+controls and U+FEFF), so that the pre-interaction indication cannot be visually
+reordered or hidden.
 
 `--profile` is the sole lookup mechanism. Open that file once, read at most 64 KiB as
 strict UTF-8 JSON, validate it, and retain an immutable in-memory snapshot for the request.
@@ -261,10 +249,11 @@ and explicit path selection as a user-created file.
 Microsoft owns the registration. AzureAuth and GCM publicly use it; this fork has no
 upstream endorsement, support commitment, or control over account eligibility, consent,
 policy, or availability. Authentication, consent, and audit records can identify the
-Visual Studio application rather than this fork. The owned UI must identify the fork,
-display the Profile name and external owner as bounded plain text, and explain that the
-provider controls the ensuing sign-in/consent display. It must not impersonate Visual
-Studio or promise a particular Security Key, PIN, or MFA choice.
+Visual Studio application rather than this fork. The best-effort pre-interaction stderr
+indication identifies the fork, names the Profile and external owner as bounded plain
+text, and states that the provider display continues sign-in; the fixed broker title
+identifies the fork. Neither impersonates Visual Studio or promises a particular
+Security Key, PIN, or MFA choice.
 
 State sharing under this registration is intentional only through WAM APIs and compatible
 account, tenant, client, resource, and Windows-user context. It does not authorize reading
@@ -293,7 +282,8 @@ validation; the number of conceptual architecture boxes is not a class count.
    terminal-result gate. Parse and validate the arguments and Profile before any account
    discovery or authentication. Honor cancellation during admission.
 2. Normalize tenant policy once. A fixed Profile uses its fixed GUID and rejects a
-   conflicting selector. Multitenant omission becomes `common`; an explicit GUID remains
+   conflicting selector with `invalid_request` and the distinct safe reason
+   `tenant_conflict`. Multitenant omission becomes `common`; an explicit GUID remains
    an exact resource-tenant constraint throughout.
 3. Keep the provider factory and constructor inert. At the start of its first
    `GetAccountsAsync(originalToken)`, complete the local host admission below on request
@@ -416,15 +406,16 @@ Close owned process/thread token handles, free WTS buffers with `WTSFreeMemory`,
 the LSA buffer once with `LsaFreeReturnBuffer` after SID comparisons finish. Its SID remains
 borrowed; station, thread-desktop and pseudo-handles remain borrowed too. Never inspect or
 copy the returned LSA name, domain, UPN, profile-path or logon-server strings. The query
-still retrieves local metadata, which the later execution protocol must explicitly cover.
+still retrieves local metadata; real-host observation of it requires an accepted protocol
+under the [experiment policy](../research/experiment-safety.md).
 
 Stable process architecture and logon observations need not be repeated in this process,
 which never changes identity. Recheck calling-thread impersonation, session connection
 and input desktop immediately before each later provider operation. For real-provider
 interaction, recheck those volatile conditions on the actual owned UI thread before
-native creation and before showing/publishing its parent, as well as on the calling
+native creation and before publishing the hidden parent, as well as on the calling
 thread before the interactive provider effect. Retain the coordinator's post-readiness
-token check and terminal/show synchronization. Rejection closes any owned UI through the
+token check and terminal/publication synchronization. Rejection destroys any hidden parent through the
 same lifetime path; it cannot restart acquisition. There is no background polling,
 wait-for-unlock, identity/desktop switching or new timeout. Synchronous checks run on
 request/UI work, with the independent process watchdog retaining its existing bound.
@@ -441,8 +432,7 @@ account discovery to verify availability. Preserve the rejecting custom web UI.
 These predicates are snapshots, not an atomic freeze of the Windows session or a defense
 against a compromised current user. The selected normal host and exact Native AOT
 interop still require the evidence in the [validation strategy](../validation/strategy.md#windows-slice-design-acceptance).
-This design admits no local metadata query, broker initialization or account experiment;
-execution retains its accepted Wave, exact protocol and source/artifact review gates.
+Real-host observation of these predicates follows the experiment policy.
 
 ### Managed HTTP Identity
 
@@ -469,9 +459,7 @@ This selection applies to fork-owned managed requests, including MSAL authority
 discovery when needed. WAM/native broker transport and its HTTP identity remain
 dependency-owned; no claim is made that the managed factory controls those requests.
 The OAuth client registration, consent/audit identity, mechanism and Profile gates are
-unchanged. A synthetic message-handler test must establish header behavior before the
-networked adapter executes; real authentication retains its Wave/protocol and owner
-risk-decision prerequisites.
+unchanged. A synthetic message-handler test establishes header behavior.
 
 ### Resolution, Acquisition, and Failure Classification
 
@@ -493,12 +481,14 @@ not from an email suffix or a new account-kind request.
 In `interactive-if-needed`, only no match or a classified `MsalUiRequiredException` can
 advance to the one interactive call. `force-interactive` instead enters that call directly
 after unambiguous account resolution; perform no silent token-acquisition call and do not
-fabricate a provider exception. Establish the owned UI first. The pinned builder makes
-`WithAccount` and `WithLoginHint` mutually exclusive: use `WithAccount` for the
-uniquely resolved real account, from which MSAL derives the observed username hint;
-otherwise use `WithLoginHint` with the requested email. Preserve the original request
-email separately, including when its casing differs from the observed account spelling.
-Neither choice replaces strict final matching. The pinned
+fabricate a provider exception. Establish the hidden owned parent first. For
+`interactive-if-needed`, the pinned builder makes `WithAccount` and `WithLoginHint`
+mutually exclusive: use `WithAccount` for the uniquely resolved real account, from which
+MSAL derives the observed username hint; otherwise use `WithLoginHint` with the requested
+email. For `force-interactive`, supply neither (see
+[Forced Interactive Authentication](#forced-interactive-authentication)). Preserve the
+original request email separately, including when its casing differs from the observed
+account spelling. No choice replaces strict final matching. The pinned
 [interactive builder](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/AcquireTokenInteractiveParameterBuilder.cs)
 and [request parameters](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/Internal/Requests/AuthenticationRequestParameters.cs)
 own that API behavior. Forward an opaque claims challenge
@@ -511,10 +501,10 @@ cancellation/deadline boundary.
 | --- | --- |
 | Admission or Profile semantic error | `invalid_request`; no provider call. |
 | No visible match or provider interaction requirement | `interaction_required`, or the one compatible interactive call when permitted. |
-| Explicit `force-interactive` with zero or one exact match | One provider interactive call with account-selection intent; no engine silent acquisition or fallback. |
+| Explicit `force-interactive` with zero or one exact match | One provider interactive call with account-selection intent and neither account nor login hint; no engine silent acquisition or fallback. |
 | Multiple exact visible matches | `account_ambiguous`; no silent call or picker. |
 | Broker unavailable, unsupported session, or rejected web fallback | `mechanism_unavailable`; no alternate mechanism. |
-| Caller cancellation, owned-window close, or provider user cancellation | `cancelled`; no retry. The local cancellation/deadline latch determines its own origin before interpreting a provider cancellation code. |
+| Caller cancellation, lifetime-pipe EOF, `WM_CLOSE` delivered to the hidden parent, or provider user cancellation | `cancelled`; no retry. The local cancellation/deadline latch determines its own origin before interpreting a provider cancellation code. |
 | Recognized provider denial, including OAuth `access_denied` or AADSTS65004 | `denied`; no retry. Do not classify all service exceptions as denial. |
 | Recognized network/service transient or provider `IsRetryable` hint | `temporarily_unavailable`; no application retry in this Slice. |
 | Required result postcondition absent or mismatched | `identity_validation_failed`; discard the candidate token and stop. |
@@ -523,9 +513,12 @@ cancellation/deadline boundary.
 
 Map codes through an explicit bounded table using structured provider codes/statuses,
 never message substring parsing. Safe reason strings identify categories such as
-`invalid_profile`, `consent_required`, `broker_unavailable`, `provider_denied`,
-`provider_transient`, `metadata_missing`, or `provider_failure`; they never contain
-arbitrary provider text. An interactive call that again requires interaction terminates
+`invalid_configuration`, `tenant_conflict`, `consent_required`, `provider_transient`,
+`network_transient` or `service_transient`; otherwise the reason repeats the outcome
+name. They never contain arbitrary provider text. Provider-reported timeout or invalid
+request observations, and failure to construct the provider, pass through the same safe
+filter and map to `internal_failure`; only the request's own deadline produces
+`timeout` and only admission produces `invalid_request`. An interactive call that again requires interaction terminates
 as `interaction_required`. State-related interaction requirements follow the same
 permission policy; an unexplained broker failure does not authorize account deletion,
 cache repair, or retries.
@@ -576,26 +569,23 @@ also removes a login hint for `select_account` instead of setting a native `prom
 property. This cross-library reference supports the choice; it does not establish
 pinned .NET or Windows runtime behavior.
 
-The previous fixed `prompt=select_account` extra-query mapping transported a raw WAM
-request property through MSAL Runtime without establishing that runtime's support for
-it. The separately bounded Work diagnostic returned a protocol-valid
-`internal_failure` with fixed `error.type: broker_contract` and observed scoped
-completion. That category establishes the failure boundary, not the offending
-parameter or the historical failures' cause. Remove that mapping rather than adding
-an undocumented native property. Do not change client/Profile/scopes, application
-configuration, dependencies, cache keys or either silent-first mode.
+The Microsoft [WAM API reference](https://learn.microsoft.com/entra/identity-platform/reference-entra-id-wam-api)
+documents a `prompt` request property (`no_select` or `select_account`) and a
+`LoginHint` property. That is a documented request contract; the pinned transport above
+does not carry `Prompt`, and actual WAM UI behavior for either route is a runtime
+observation. Do not set an undocumented or untranslated native property, an extra
+`prompt` query parameter, or change client/Profile/scopes, application configuration,
+dependencies, cache keys or either silent-first mode.
 
-The picker may let the operator choose an account other than the requested one. Only
-the designated requested account is permitted in acceptance; production final
-validation must reject any different returned identity before emitting a token.
-No new discovery, silent call, browser fallback or retry is introduced. This is a
-supported source-level invocation path awaiting bounded real WAM confirmation;
-it does not guarantee visible UI or renewed credentials. A provider/host combination
-that cannot honor the invocation intent returns `mechanism_unavailable` when that
-condition is established; an unexplained broker failure retains its existing mapping.
+The picker may let the user choose an account other than the requested one. Final
+validation rejects any different returned identity with `identity_validation_failed`
+before emitting a token. No new discovery, silent call, browser fallback or retry is
+introduced. A provider/host combination that cannot honor the invocation intent returns
+`mechanism_unavailable` when that condition is established; an unexplained broker
+failure retains its existing mapping.
 
 Reuse the same account discovery, strict selection and final validation, Profile/tenant/
-scope constraints, owned parent, one interactive call, original deadline, and cancellation
+scope constraints, hidden owned parent, one interactive call, original deadline, and cancellation
 paths. Forced interaction carries no fabricated or caller-supplied claims challenge.
 Success reports `interaction: interactive`; failure retains the existing no-token
 result and exit contract. Actual visible WAM behavior still requires runtime observation.
@@ -604,11 +594,6 @@ This operation does not call token-cache refresh, sign-out, account removal, con
 revocation, or cache-clearing APIs. Normal provider-managed protected-state/session updates
 can occur. Success does not guarantee new token bytes, revocation of earlier credentials,
 or a persistence receipt; keep the existing persistence warnings.
-
-Contract acceptance alone does not authorize implementation or a new real-account call.
-Existing protocols retain their exact modes and exhausted/stopped routes. Before forced
-real use, independently admit the changed source/artifact, exact request and bounded
-protocol under the accepted Wave, and obtain actual operator readiness.
 
 ### Token Format and Future Extensions
 
@@ -726,15 +711,16 @@ sequenceDiagram
             MSAL-->>CLI: Candidate or interaction-required
         end
         opt force-interactive, or permitted no match / silent interaction requirement
-            CLI->>UI: Create owned parent and completion context
-            CLI->>MSAL: One interactive call with account/hint and same intent#59; account selection when explicitly requested
+            CLI->>UI: Create hidden owned parent and completion context
+            CLI-->>Caller: Best-effort unofficial/Profile indication on stderr
+            CLI->>MSAL: One interactive call#59; account or hint only when not force-interactive
             MSAL->>WAM: Interactive operation with owned HWND and cancellation
             WAM-->>MSAL: Candidate or failure
             MSAL-->>CLI: Candidate or typed provider observation
         end
         CLI->>CLI: Validate identity, tenant, client/context, scopes, and metadata
         CLI->>CLI: Classify already available persistence observation
-        CLI->>UI: Close owned UI#59; invalidate acquisition completion
+        CLI->>UI: Destroy hidden parent#59; invalidate acquisition completion
         CLI-->>Caller: One JSON result#59; success 0 or failure 1
     end
     Note over Caller,WAM: Cancellation/deadline can terminate any pending path#59; external session changes are not rolled back
@@ -780,136 +766,60 @@ future reuse, or require a readback. Do no post-validation persistence I/O or wa
 
 ## Windows UI and Request Lifetime
 
-### Parent-Window Simplification Assessment
-
-The CLI product boundary remains governed by
-[V2-REQ-002](../product/requirements/product-boundary.md#v2-req-002-no-implicit-product-expansion).
-An in-process Win32 implementation does not by itself justify an extra
-user-facing desktop surface. The former visible parent combined the WAM handle,
-Profile/registration context and Cancel action; the
-[parent selection decision](#parent-selection-decision) now separates them.
-
-The [console-parent source assessment](../research/v1-public-contract-baseline.md#console-parent-versus-a-separate-desktop-surface)
-and [credential-free comparison](../research/experiments/windows-slice-validation.md#console-parent-feasibility)
-evaluate an existing console parent, including the proposed intermediate
-PowerShell launch from WSL. This is an investigation, not an accepted replacement
-host. Keep the current implementation and its scoped evidence intact during
-that comparison. Do not infer WAM eligibility from a nonzero or visible borrowed
-handle, select an unrelated foreground window, force a visible shell, or hide
-the current parent before the replacement is independently accepted.
-
-The [runtime prerequisite comparison](../research/v1-public-contract-baseline.md#console-parent-versus-a-separate-desktop-surface)
-found no console HWND in either the direct WSL surrogate call or the otherwise
-identical call through the existing PowerShell 7. Ordinary shell wrapping is
-therefore not an established parent source for this launch context. This result
-does not prove that WAM requires a visible window: exact-product borrowed or
-nonvisible parent behavior remains unvalidated. The current visible window is
-created explicitly by V2; changing the process launcher alone does not remove it.
-Do not force another terminal to manufacture a parent. A future minimal binding
-must be assessed separately before changing the selected implementation.
-
-### Hidden Owned-Parent Hypothesis
-
-The next [bounded candidate experiment](../research/experiments/windows-slice-validation.md#hidden-owned-parent-candidate)
-keeps the existing ordinary top-level HWND hidden while retaining its owned STA,
-message pump, admission rechecks, cancellation latch and creating-thread cleanup.
-This is not a message-only HWND, a borrowed foreground window or a separate host.
-The experimental source and artifacts occupy separate retained roots. The
-[parent selection decision](#parent-selection-decision) now selects this
-direction; this section keeps the original comparison and its observations.
-
-For the first comparison, omit only the native show call. Retain the existing
-hidden controls and resource cleanup to isolate visibility from a larger host
-rewrite. Set MSAL `BrokerOptions.Title` to the fixed public string
-`Unofficial hcoona/microsoft-authentication-cli`. The
-[documented property](https://learn.microsoft.com/en-us/dotnet/api/microsoft.identity.client.brokeroptions.title)
-exists in the pinned MSAL 4.83.1 reference documentation; its actual presentation
-and suitability remain runtime questions. The explicit selected Profile retains
-its registration-ownership and external-dependency metadata. The operator must
-receive the experimental Profile/ownership context before an admitted interactive
-call. Hidden control text is not a user-facing notice, and a broker title is not
-proof that the notice was displayed or understood. The decision below defines the
-product notice indication.
-
-The hidden window offers no usable Cancel button, caption or Escape action.
-Evaluate provider-owned cancellation and retain caller cancellation, lifetime-pipe
-EOF and the original deadline; synthetic message delivery does not prove an
-operator can cancel WAM. A silent success cannot establish hidden-parent WAM UX.
-Reuse accepted unrelated evidence, and leave unobserved title, focus, cancellation
-and lifetime behavior explicitly incomplete. If ordinary silent-first acquisition
-needs no interaction, do not manufacture a prompt or modify account/cache state.
-
-The [initial candidate observations](../research/v1-public-contract-baseline.md#hidden-owned-parent-candidate-observations)
-establish four synthetic hidden-parent lifecycle cases. The actual personal silent
-assessment ended normally with `MechanismUnavailable`; its fixed reason was not
-collected. A separately admitted standard diagnostic identified the calling
-session's Active-state obstruction. After the required ordinary desktop action,
-the same isolated candidate completed the accepted fresh comparison with an
-initial silent success and a fresh-process silent success. The interactive case
-was skipped without manufacturing a prompt. These results establish selected
-request transport and reuse for that candidate, but do not select or reject its
-WAM UX hypothesis. Notice delivery, title presentation, focus, human cancellation
-and the remaining lifetime obligations stay open.
-
 ### Parent Selection Decision
 
-The repository owner selects the hidden owned parent as the target WAM parent and
-withdraws acceptance of a visible Win32 parent UX. The
-[UIA observation](../research/experiments/windows-slice-validation.md#selected-visible-parent-uia-observation)
-found that WAM disables the visible owned parent while its prompt is shown, so the
-parent's Cancel cannot stop a pending WAM request in that state. Its notice told users
-to choose that Cancel. In that one observation the parent was disabled and its Cancel
-was not actionable while WAM was shown. The visible parent also adds a DPI-unaware
-desktop surface that the product does not otherwise need. WAM cancellation, caller
-lifetime-pipe EOF and the original deadline do not depend on the owned controls and
-are expected to remain unchanged. Accepted lifetime evidence is reused; hidden-parent
-EOF and deadline were not separately observed.
+The CLI product boundary remains governed by
+[V2-REQ-002](../product/requirements/product-boundary.md#v2-req-002-no-implicit-product-expansion);
+an in-process Win32 implementation does not justify an extra user-facing desktop surface.
+The repository owner selects a hidden owned parent as the WAM parent. The
+[Microsoft WAM guide](https://learn.microsoft.com/entra/msal/dotnet/acquiring-tokens/desktop-mobile/wam#parent-window-handles)
+requires an explicit parent HWND, but no visible V2 window. A visible parent's Cancel
+action cannot stop a pending WAM prompt while WAM disables its owner, and it adds a
+DPI-unaware surface the product does not otherwise need. The research record owns the
+[console-parent comparison](../research/v1-public-contract-baseline.md#console-parent-versus-a-separate-desktop-surface)
+and [hidden-parent observations](../research/v1-public-contract-baseline.md#hidden-owned-parent-candidate-observations)
+that informed this decision; borrowed console or foreground windows are not parent
+sources.
 
-The hidden parent keeps the existing owned STA, message pump, admission rechecks,
-cancellation latch and creating-thread cleanup, and omits only the native show call.
-Its controls are not a user-facing notice. Before the interactive call, write one
-bounded stderr indication from a fixed template that contains only the unofficial
-project identity and the admitted Profile's public name and registration owner, and
-set the fixed public MSAL `BrokerOptions.Title`. Whether a caller shows stderr to the
-user depends on that caller and is not claimed. Human cancellation is WAM's own cancel; owned Cancel, caption
-and Escape are no longer user actions. Visible-parent keyboard, focus, DPI and
-assistive validation obligations are retired with that surface.
+The product uses an ordinary top-level Win32 window, never shown, on an owned STA thread
+with a message loop, only when interaction is both needed and permitted. It supplies a
+stable nonzero HWND and has no child controls: no label, button, font, layout, dialog
+message routing, `WM_COMMAND` or Escape handling. It does not ask for account email,
+passwords, URLs, or credentials; those belong to the caller's request and provider UI.
+Parent WAM with that HWND and let WAM choose sign-in/MFA/consent methods. Failure to
+create the parent makes the path unavailable before the interactive call.
 
-The [hidden-parent observation](../research/v1-public-contract-baseline.md#hidden-owned-parent-interactive-observation)
-accepted WAM presentation and human cancellation for the implemented candidate.
-By owner decision, WAM title and focus are not acceptance obligations. Accepted
-silent, reuse and lifetime evidence is reused.
-
-A later simplification must preserve self-contained interaction and completion,
-strict selection, pre-authentication unofficial/Profile ownership context,
-operator-controlled sign-in, cancellation, the original deadline, and normal
-termination. Borrowed terminal windows must never be closed or destroyed by V2.
-If the existing-console prerequisite is unavailable, record that result before
-considering another minimal parent binding; this assessment grants no new
-desktop app, retained host, launcher framework, or observation project.
-
-
-The product uses a hidden owned Win32 window on an owned STA thread with a message loop
-only when interaction is both needed and permitted. It supplies a stable nonzero HWND
-and offers no user controls. It does not ask for account email, passwords, URLs, or credentials;
-those belong to the caller's request and provider UI. Parent WAM with that HWND, use the
-specified login hint, and let WAM choose sign-in/MFA/consent methods. Failure to create the
-owned parent makes the path unavailable before the interactive call.
-
-The UI thread registers the window class and creates/destroys its HWND without showing
-it. The notice and cancellation sources are defined by the parent selection decision.
+The window procedure handles only `WM_CLOSE`, which signals the request cancellation
+latch, `WM_DESTROY`, the private owned-closure message and creation failure. The UI
+thread registers the window class and creates and destroys its HWND without showing it.
 No custom credential form, embedded browser, COM automation or rich-text rendering is
-needed. Hidden-parent WAM presentation and human cancellation have one accepted host
-observation; WAM title and focus are not acceptance obligations.
-Keep the window-procedure callback and request context alive through window destruction;
-unmanaged callbacks must not unwind managed exceptions across the ABI boundary.
+needed. Keep the window-procedure callback and request context alive through window
+destruction; unmanaged callbacks must not unwind managed exceptions across the ABI
+boundary.
+
+Unofficial identity under
+[V2-REQ-003](../product/requirements/product-boundary.md#v2-req-003-unofficial-product-identity)
+is presented without owned controls. Before the interactive call, write one bounded
+stderr indication, best-effort, from a fixed template that contains only the unofficial
+project identity and the admitted Profile's public name and registration owner. Set the
+fixed public MSAL [`BrokerOptions.Title`](https://learn.microsoft.com/dotnet/api/microsoft.identity.client.brokeroptions.title)
+`Unofficial hcoona/microsoft-authentication-cli`. Whether a caller shows stderr to the
+user, and how WAM presents the title, are outside the engine's control and are not
+claimed. No per-use confirmation is requested.
+
+Human cancellation is WAM's own cancel. Cancellation sources are caller cancellation,
+lifetime-pipe EOF or failure, the original deadline, WAM's cancel and `WM_CLOSE`
+delivered to the hidden parent. Borrowed terminal windows are never closed or destroyed
+by V2. A later simplification must preserve self-contained interaction and completion,
+strict selection, the pre-interaction indication, operator-controlled sign-in,
+cancellation, the original deadline, and normal termination.
 
 The coordinator awaits a ready HWND or a typed creation failure under the original
 deadline before the one interactive call. Its asynchronous MSAL work must not block the
 UI message pump with `.Result`, synchronous waits, or synchronous cross-thread window
-messages. UI cancel/close signals the request cancellation latch. Terminal completion
+messages. `WM_CLOSE` signals the request cancellation latch. Terminal completion
 invalidates the request context and posts owned-window closure to the creating thread;
-that thread destroys its windows and quits its loop. A queued completion cannot recreate
+that thread destroys its window and quits its loop. A queued completion cannot recreate
 UI or authorize success after cancellation. If creation, dispatch or destruction stalls,
 the existing one-process shutdown watchdog remains the final bound.
 
@@ -918,16 +828,17 @@ the existing one-process shutdown watchdog remains the final bound.
 ```mermaid
 sequenceDiagram
     participant C as Request coordinator
-    participant U as Owned STA and Win32 message loop
+    participant U as Owned STA, hidden parent and message loop
     participant P as MSAL and WAM
     participant W as Process shutdown watchdog
     C->>U: Start only when interaction is needed and permitted
-    U-->>C: Ready HWND or creation failure
+    U-->>C: Ready hidden HWND or creation failure
     opt Ready before original deadline and request still active
+        C-->>C: Write best-effort unofficial/Profile indication to stderr
         C->>P: One asynchronous interactive call with HWND and request token
         Note over U: Continue dispatching messages while provider work is pending
-        alt Cancel, close, lifetime-pipe failure, or deadline
-            U-->>C: Cancel/close notification when originating in UI
+        alt Caller cancel, lifetime-pipe EOF, deadline, WAM cancel, or WM_CLOSE
+            U-->>C: Cancellation notification when WM_CLOSE reaches the hidden parent
             C->>C: Latch cancellation/timeout and reject late success
             C->>P: Request cancellation
             C->>W: Enforce existing shutdown allowance
@@ -942,14 +853,15 @@ sequenceDiagram
     end
 ```
 
-No visible window or prompt is created for a prohibited-interaction request. Broker
+No window or prompt is created for a prohibited-interaction request. Broker
 discovery and silent APIs are the eligible no-interaction operations; no opaque default
 account call is used. The engine cannot promise that a malfunctioning OS is repaired by
 application code. A dependency contract regression makes that combination ineligible.
 
 The coordinator races provider completion against the original cancellation/deadline
-latch. Cancellation sources are Windows console cancellation when delivered, owned UI
-cancel/close, and EOF/failure on the optional lifetime pipe. With
+latch. Cancellation sources are caller cancellation (Windows console cancellation when
+delivered), EOF/failure on the optional lifetime pipe, the original deadline, WAM's own
+cancel, and `WM_CLOSE` delivered to the hidden parent. With
 `--cancel-on-stdin-close`, stdin must be a redirected pipe; reject a console or regular
 file before provider work. The caller must retain the sole writer and avoid leaking it
 to descendants. Data is not interpreted or logged; the reader only observes closure.
@@ -1003,7 +915,7 @@ prevent required drain. A selected terminal task does not establish cleanup or a
 matching result exit, and the unchanged watchdog remains the process bound.
 
 External broker windows/session changes are not forcibly rolled back. Forward cancellation
-through MSAL, close the owned parent, invalidate completion, and write a fixed sanitized
+through MSAL, destroy the hidden parent, invalidate completion, and write a fixed sanitized
 completion/cancellation indication to stderr when available. Do not wait for the user to
 dismiss an external surface before ending the CLI process.
 
@@ -1074,8 +986,14 @@ The existing confidential validator may project only an exact bounded indication
 to a fixed safe enum; absent or invalid diagnostics remain unavailable or invalid.
 They neither establish authentication success nor relax any passing expectation.
 
-Stderr carries bounded fixed human indications, the bounded pre-interaction Profile
-notice from the parent selection decision, and, only with `--telemetry stderr`, local
+The consuming scenario for this vocabulary is a bounded Windows host observation in
+which an otherwise valid request returns `mechanism_unavailable`: the operator or
+validator needs the first failed boundary to decide which ordinary host condition (for
+example, an inactive session) to restore before another permitted attempt, without
+exporting native details. The vocabulary changes no product behavior.
+
+Stderr carries bounded fixed human indications, the bounded pre-interaction indication
+from the parent selection decision, and, only with `--telemetry stderr`, local
 JSON event lines containing `event`, `stage`, `outcome`, and elapsed milliseconds. Events
 contain no token, email, path, Profile/client/account identifier, tenant, resource, scope,
 claims, or provider text. This is optional local telemetry; network export and persistent
@@ -1131,26 +1049,26 @@ or export work belongs on an authentication callback or commitment lock. Keep on
 bounded local writer and the original process watchdog/ending allowance. Missing,
 dropped, partial or sampled observations cannot establish success or closure.
 
-An optional token-interpretation observation may examine only a committed,
-validated success, locally and after normal result commitment. At most 64 KiB of
+Under [V2-REQ-038](../product/requirements/result-and-process-protocol.md#v2-req-038-local-token-shape-validation-observation),
+the token-shape observation lets integration validation check a delivered token
+without exposing it. It runs only with `--telemetry stderr`, only for a committed,
+validated success, and only after the complete result has been written to stdout, so
+its work can never delay result delivery or consume the shutdown allowance before that
+write. At most 64 KiB of
 token text and a 32 KiB decoded JWT payload with JSON depth eight may be examined.
 Malformed input, duplicate members, unsupported format or an exceeded bound yields
 only a fixed unavailable/unreadable/limit category. Emit only a format category,
 whether `exp`, `aud` and `scp` claims are present in their expected types, and
-provider-reported expiration/remaining lifetime. Never emit a header/payload,
+the provider-reported expiration and remaining lifetime, which V2-REQ-038 permits as
+non-token metadata already in the success result. Never emit a header/payload,
 claim value/name supplied by input, token length/hash, account or tenant identifier.
 JWT decoding is explicitly unverified; it does not establish signature validity,
 identity, scope satisfaction or resource acceptance. Opaque tokens remain valid
 authentication candidates. Interpretation cannot change the committed result.
 
-For flow-only investigation, discard normal stdout using the Windows null device.
-For output-contract acceptance, reuse the existing Windows-local
-`ProtocolResult.Validate` in `tools/result-validation` with the selected private
-request and observed exit. Export only its fixed check conclusions; even malformed
-output and additive fields are never copied into evidence. It is a result parser,
-not a new authentication host/controller. Required actual process exit and window
-behavior retain external observations. Neither telemetry nor stdout discarded at
-the null device proves normal output or actual WSL credential transport. No new
+Output-contract validation on a real host uses the Windows-local result validator in
+`tools/result-validation` and exports only its fixed check conclusions. Telemetry is not
+evidence of normal output, process exit or WSL credential transport. No new
 authentication command or alternative stdout result mode is introduced.
 
 Protocol 1 producers emit only the defined fields. Consumers must tolerate unknown
@@ -1179,8 +1097,6 @@ suppression, network telemetry export, Profile auto-discovery/activation, and im
 Linux-parent-death detection without the lifetime pipe. Git clone and NuGet restore
 remain downstream service tests, not operations of this engine.
 
-Design acceptance requires complete contracts, scenario obligations, reviewed dependency
-premises, and security/TMT consistency. Implementation, Profile activation, and platform
-support each retain their later authorization and evidence gates. The existing personal
-account probe is positive mechanism evidence for its .NET 8 host and state; it does not
-replace future .NET 10, company-account, fresh-state, cancellation, or feed validation.
+Profile activation, platform support and release each retain their own authorization
+and evidence gates; the [validation strategy](../validation/strategy.md#release-gates)
+lists them. Slice closure is not release readiness.

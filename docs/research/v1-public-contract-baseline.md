@@ -2188,8 +2188,9 @@ another call.
 
 **Acceptance limits:** These observations complete the three named WSL
 lifetime/action cases for their admitted candidates. They do not themselves
-close the whole Slice. Contextual requirement-to-evidence review must use the
-[existing scenario basis](../validation/strategy.md#windows-slice-design-acceptance).
+close the whole Slice. The validation strategy's
+[Slice ledger](../validation/strategy.md#windows-slice-requirement-to-evidence-ledger)
+owns the mapping from scenarios to these observations.
 The selected visible-parent implementation has structural owned-HWND/thread,
 branding, cancellation and teardown evidence from its existing controlled
 scenarios, but physical accessibility/DPI/focus and notice suitability remain
@@ -2236,35 +2237,6 @@ the operator saw no WAM, product window or extra prompt.
 **Limit:** This shows rejection at local admission with no UI for a disconnected
 Remote Desktop session. It does not observe broker handling of an expired
 credential, which this Slice does not claim.
-
-### Windows Slice Requirement-to-Evidence Review
-
-An independent contextual review at `main-v2` `e789c64`, completed by the
-observation above, maps each [validation scenario](../validation/strategy.md#windows-slice-design-acceptance)
-to accepted evidence:
-
-- **Satisfied by real Windows and WSL evidence:** personal and work requests,
-  existing-state first use and later reuse, Git-then-Artifacts reuse through
-  fresh-process reuse with the same request, persistence-unconfirmed reuse,
-  `force-interactive` with actual WAM EOF and human cancellation, user cancellation,
-  lifetime-pipe closure before discovery and during WAM, Linux caller death,
-  deadlines, and the noninteractive locked-state request above. See the
-  [selected-role observations](#selected-role-windows-and-wsl-acceptance-observations),
-  the [hidden-parent observation](#hidden-owned-parent-interactive-observation)
-  and the observation above. The hidden parent reuses lifetime evidence because
-  those mechanisms do not depend on the owned controls.
-- **Satisfied by controlled evidence:** account matching, tenant and scope
-  normalization, provider metadata validation, local host admission,
-  cancellation and eligibility races, blocked output, output and telemetry
-  allowlists, and local OpenTelemetry observation. The merged hidden-parent
-  candidate passed all 182 Windows scenarios, and CI runs the schema and
-  record checks.
-- **Outside Slice closure:** real broker unavailability and concurrency ("before
-  support" or "before that claim"), Profile consent, audit and branding (external
-  Profile gate), and minimal-deployment support (deployment support claim).
-- **Not claimed by owner decision:** clean-state first use, consent denial, an
-  explicit work-tenant GUID combination, WAM title and focus, notice visibility to
-  users, and expired-credential behavior.
 
 ### Windows Native AOT Assessment
 

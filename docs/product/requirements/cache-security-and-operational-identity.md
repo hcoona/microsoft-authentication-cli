@@ -84,9 +84,12 @@ unsupported rather than silently weakening storage.
 ## V2-REQ-046: Optional Telemetry Semantics
 
 V2 must provide optional telemetry. Network export must be disabled unless explicitly
-configured. Export or bounded-flush failure must not change the authentication result or
-its process status, trigger authentication retry, fallback, or interaction, or prevent
-process termination beyond a finite bound.
+configured, and it remains unavailable until a decision under decision
+[`0005`](../../decisions/0005-establish-independent-operational-identity.md) defines its
+fork-owned endpoint, data contract, notice, retention policy, and user control. Export or
+bounded-flush failure must not change the authentication result or its process status,
+trigger authentication retry, fallback, or interaction, or prevent process termination
+beyond a finite bound.
 
 Telemetry remains subject to the authentication-material and email containment in
 `V2-REQ-035` and `V2-REQ-036` and the independent identity requirements in `V2-REQ-043`

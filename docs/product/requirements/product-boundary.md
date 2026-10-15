@@ -17,9 +17,22 @@ consumers of the v2 authentication protocol.
 
 ## V2-REQ-003: Unofficial Product Identity
 
-Every user-facing surface must identify the project as unofficial and must not imply an
-official Microsoft release, upstream support, or ownership of a Microsoft application
-registration.
+V2 must identify the project as unofficial and must not imply an official Microsoft
+release, upstream support, or ownership of a Microsoft application registration.
+
+The following presentation surfaces satisfy this identification:
+
+- the repository presentation, including its README;
+- the CLI help text, which must state that the project is unofficial;
+- before an interactive authentication call, a bounded unofficial identity indication
+  written to the designated diagnostic channel; it is best-effort, and whether a caller
+  shows that channel to the user is caller-dependent; and
+- a fixed unofficial title supplied to the provider's interactive surface when the
+  provider supports one; its actual presentation is provider-controlled.
+
+No surface may contradict that identity. V2 must not require a per-use confirmation or
+acknowledgment of the unofficial status. The machine-readable result protocol is not a
+user-facing surface for this requirement.
 
 ## V2-REQ-004: One Authentication Request Per Process
 
