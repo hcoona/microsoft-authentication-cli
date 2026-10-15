@@ -49,6 +49,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task CancellationDuringCreationSurvivesClosureFailure()
     {
         using var child = new ProcessFixture("host-create-cancel");
@@ -74,6 +75,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task CleanupFaultAfterNormalClosureSuppressesUncommittedSuccess()
     {
         using var child = new ProcessFixture("host-fault-before-commit");
@@ -87,6 +89,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task CleanupFaultAfterCommitCannotReplaceTheResult()
     {
         using var child = new ProcessFixture("host-fault-after-commit");
@@ -99,6 +102,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task ProcessWaitsForTheActualOwnedThreadExit()
     {
         using var child = new ProcessFixture("host-ui-join");
@@ -111,6 +115,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task ProcessWaitsForTheOutgoingOwnedCallback()
     {
         using var child = new ProcessFixture("host-callback-drain");
@@ -126,6 +131,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task NormalClosureArmsTheBoundBeforeCoreTerminalSelection()
     {
         using var child = new ProcessFixture("host-close-stall");

@@ -61,6 +61,7 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task WriterClosureRejectsLateSuccessAndEndsTheProcess()
     {
         using var child = new ProcessFixture("close-pending");
@@ -83,6 +84,7 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task LifetimePipePayloadIsIgnoredAndClosureStillCancels()
     {
         using var child = new ProcessFixture("data-close");
@@ -97,6 +99,7 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task DeadlineEndsUncooperativeWorkWithinTheProcessBound()
     {
         using var child = new ProcessFixture("deadline");
@@ -127,6 +130,7 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task UndrainedResultPipeCannotKeepTheProcessAlive()
     {
         using var child = new ProcessFixture("blocked-output");
@@ -141,6 +145,7 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task BlockedDiagnosticsDoNotChangeTheAuthenticationResultOrKeepTheProcessAlive()
     {
         using var child = new ProcessFixture("blocked-diagnostics");
