@@ -79,8 +79,11 @@ public sealed class MsalCompositionScenarios
     [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
-    public async Task ForcedSelectionPreservesTheSameAccountOrHintAndOriginalRequest(bool accountVisible)
+    public async Task ForcedOperationCarriesTheSelectorOnlyForTheBuilderToOmit(bool accountVisible)
     {
+        // The operation still records the discovered account or hint, but the real
+        // builder omits both for force-interactive (see the builder scenario below);
+        // final identity validation then rejects any other returned account.
         using var scene = new Scene(forceInteractive: true) { IncludeSelectedAccount = accountVisible };
         var outcome = await scene.RunAsync();
         Assert.IsNotNull(outcome.Success);

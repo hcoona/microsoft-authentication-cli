@@ -27,7 +27,7 @@ public sealed class InteractionScenarios
     }
 
     [TestMethod]
-    public async Task ForcedInteractionSkipsSuccessfulSilentReuseAndPreservesTheSelectedAccount()
+    public async Task ForcedInteractionSkipsSuccessfulSilentReuseAndHandsTheDiscoveredAccountToTheProvider()
     {
         var scene = new Scene();
         var outcome = await scene.RunAsync(forceInteractive: true);
