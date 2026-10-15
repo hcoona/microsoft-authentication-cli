@@ -15,6 +15,8 @@ public sealed class ProcessScenarios
         await child.FinishAsync();
         AssertNormalExit(child, 0);
         var text = Encoding.UTF8.GetString(child.Output);
+        StringAssert.StartsWith(text, "AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)\n"
+            + "Unofficial project: not a Microsoft product and not supported by Microsoft.\n");
         StringAssert.Contains(text, "authenticate");
         StringAssert.Contains(text, "--profile");
         Assert.IsFalse(text.Contains("SYNTHETIC_INVALID_VERSION", StringComparison.Ordinal));

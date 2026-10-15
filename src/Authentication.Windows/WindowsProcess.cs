@@ -177,7 +177,8 @@ public static class WindowsProcess
     }
 
     private static byte[] Help => """
-        Microsoft authentication CLI
+        AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)
+        Unofficial project: not a Microsoft product and not supported by Microsoft.
 
         Usage:
           authenticate --protocol 1 --profile <absolute-Windows-path>
