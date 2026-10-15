@@ -18,6 +18,10 @@ jobs:
     name: Repository Controls
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      # Never auto-install the development SDK, APM, or Node.js for checks.
+      MISE_EXEC_AUTO_INSTALL: "false"
+      MISE_TASK_RUN_AUTO_INSTALL: "false"
 
     steps:
       - name: Check out the repository
@@ -29,6 +33,9 @@ jobs:
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
           version: 2026.8.10
+          # Install only the check tools; the development SDK, APM, and Node.js are
+          # not needed for repository controls.
+          install_args: actionlint gitleaks hk lychee pipx:check-jsonschema python uv
           cache: true
 
       - name: Run repository controls
@@ -38,7 +45,7 @@ jobs:
 
   # Implementation notes (not part of the linux-scenario-tests control invariant):
   # restore uses the committed package lock files in locked mode, and the job uses
-  # the pinned development .NET SDK from mise.development.lock.
+  # the pinned .NET SDK (http:dotnet-development) from mise.lock.
   linux-scenarios:
     name: Linux Scenario Tests
     runs-on: ubuntu-latest
@@ -62,17 +69,17 @@ jobs:
           cache: true
 
       - name: Install the pinned .NET SDK
-        run: mise -E development install --locked http:dotnet-development
+        run: mise install --locked http:dotnet-development
 
       - name: Restore with the committed lock files
-        run: mise -E development exec -- dotnet restore Linux.slnx --locked-mode
+        run: mise exec -- dotnet restore Linux.slnx --locked-mode
 
       - name: Build
-        run: mise -E development exec -- dotnet build Linux.slnx --configuration Release --no-restore
+        run: mise exec -- dotnet build Linux.slnx --configuration Release --no-restore
 
       - name: Run the platform-neutral scenario tests
         # SDK 10.0.402 carries runtime 10.0.13; the projects pin 10.0.12 without
         # roll-forward. Only this test host rolls forward to the newest patch.
-        run: mise -E development exec -- dotnet tests/Authentication.Scenarios/bin/Release/net10.0/Authentication.Scenarios.dll
+        run: mise exec -- dotnet tests/Authentication.Scenarios/bin/Release/net10.0/Authentication.Scenarios.dll
         env:
           DOTNET_ROLL_FORWARD: LatestPatch
