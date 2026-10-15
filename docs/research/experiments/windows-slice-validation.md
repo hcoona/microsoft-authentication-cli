@@ -2,8 +2,9 @@
 
 This protocol governs execution and evidence for
 [Issue #108](https://github.com/hcoona/microsoft-authentication-cli/issues/108).
-The accepted [Delivery Wave](../../delivery-wave.md) owns authorization, normal
-account effects, shared capacity and standing risk dispositions. The
+The [Delivery Wave entry](https://github.com/hcoona/microsoft-authentication-cli/blob/e8f74fa759a9d15488242ee338f3a9c87089ed3f/docs/delivery-wave.md#first-windows-authentication-slice-implementation-and-scenario-acceptance) owned authorization, normal account effects,
+shared capacity and standing risk dispositions. That entry was completed and
+removed; this protocol is a historical record and authorizes nothing. The
 [experiment policy](../experiment-safety.md) owns safety. The
 [validation strategy](../../validation/strategy.md#windows-slice-design-acceptance)
 owns the evidence required for acceptance.
