@@ -47,6 +47,8 @@ internal static class ProcessChild
     private sealed class Host : IRequestHost
     {
         public TimeProvider Clock => TimeProvider.System;
+        public Task<nint> OpenInteractionAsync(CancellationToken cancellationToken) => Task.FromResult<nint>(0);
+        public Task CloseInteractionAsync() => Task.CompletedTask;
     }
 
     private sealed class ProfileSource : IProfileSource
@@ -94,5 +96,9 @@ internal static class ProcessChild
             return new(scenario == "blocked-output" ? new string('S', 262144) : Token,
                 Email, Guid.Parse(Tenant), [Scope], "Bearer", DateTimeOffset.UtcNow.AddMinutes(10), operationId);
         }
+
+        public Task<TokenCandidate> AcquireInteractiveAsync(AuthenticationRequest request, ProviderAccount? account,
+            string? claims, nint parentWindow, Guid operationId, CancellationToken cancellationToken) =>
+            Task.FromException<TokenCandidate>(new ProviderFailureException(AuthenticationFailure.MechanismUnavailable));
     }
 }

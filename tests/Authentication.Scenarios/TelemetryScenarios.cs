@@ -370,7 +370,12 @@ public sealed class TelemetryScenarios
         .TrimEnd('=').Replace('+', '-').Replace('/', '_') + ".c3ludGhldGlj";
     private static string? Text(JsonDocument document, string property) => document.RootElement.GetProperty(property).GetString();
     private static AuthenticationRequest Request() => new(Email, [Scope], false, Guid.Parse("11111111-2222-3333-4444-555555555555"));
-    private sealed class Host : IRequestHost { public TimeProvider Clock => TimeProvider.System; }
+    private sealed class Host : IRequestHost
+    {
+        public TimeProvider Clock => TimeProvider.System;
+        public Task<nint> OpenInteractionAsync(CancellationToken cancellationToken) => Task.FromResult<nint>(0);
+        public Task CloseInteractionAsync() => Task.CompletedTask;
+    }
 
     private sealed class Provider(Task release) : IAuthenticationProvider
     {
@@ -390,5 +395,9 @@ public sealed class TelemetryScenarios
             await release.WaitAsync(cancellationToken);
             return new(Token, Email, request.ExactTenant, [Scope], "Bearer", DateTimeOffset.UtcNow.AddMinutes(10), operationId);
         }
+
+        public Task<TokenCandidate> AcquireInteractiveAsync(AuthenticationRequest request, ProviderAccount? account,
+            string? claims, nint parentWindow, Guid operationId, CancellationToken cancellationToken) =>
+            Task.FromException<TokenCandidate>(new ProviderFailureException(AuthenticationFailure.MechanismUnavailable));
     }
 }

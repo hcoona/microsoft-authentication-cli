@@ -81,17 +81,16 @@ public interface IAuthenticationProvider
         string? claims,
         nint parentWindow,
         Guid operationId,
-        CancellationToken cancellationToken) =>
-        Task.FromException<TokenCandidate>(new ProviderFailureException(AuthenticationFailure.MechanismUnavailable));
+        CancellationToken cancellationToken);
 }
 
 public interface IRequestHost
 {
     TimeProvider Clock { get; }
 
-    Task<nint> OpenInteractionAsync(CancellationToken cancellationToken) => Task.FromResult<nint>(0);
+    Task<nint> OpenInteractionAsync(CancellationToken cancellationToken);
 
-    Task CloseInteractionAsync() => Task.CompletedTask;
+    Task CloseInteractionAsync();
 }
 
 public enum ProviderDiagnosticError

@@ -232,6 +232,7 @@ public sealed class ResultContractScenarios
     {
         public TimeProvider Clock { get; } = new ContractClock();
         public Task<nint> OpenInteractionAsync(CancellationToken cancellationToken) => Task.FromResult<nint>(1);
+        public Task CloseInteractionAsync() => Task.CompletedTask;
     }
 
     private sealed class ContractClock : TimeProvider

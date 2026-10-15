@@ -51,11 +51,16 @@ public sealed class DefaultPermissionScenarios
                 "synthetic-default-access", Email, new Guid("11111111-2222-3333-4444-555555555555"),
                 [Resource + "/user_impersonation"], "Bearer", Now.AddMinutes(10),
                 UnrelatedOperation ? Guid.Empty : operationId));
+        public Task<TokenCandidate> AcquireInteractiveAsync(AuthenticationRequest request, ProviderAccount? account,
+            string? claims, nint parentWindow, Guid operationId, CancellationToken cancellationToken) =>
+            Task.FromException<TokenCandidate>(new ProviderFailureException(AuthenticationFailure.MechanismUnavailable));
     }
 
     private sealed class ScenarioHost : IRequestHost
     {
         public TimeProvider Clock { get; } = new ScenarioClock();
+        public Task<nint> OpenInteractionAsync(CancellationToken cancellationToken) => Task.FromResult<nint>(0);
+        public Task CloseInteractionAsync() => Task.CompletedTask;
     }
 
     private sealed class ScenarioClock : TimeProvider

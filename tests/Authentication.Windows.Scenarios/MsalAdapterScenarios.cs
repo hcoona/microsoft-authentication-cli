@@ -448,6 +448,8 @@ public sealed class MsalAdapterScenarios
         }
 
         public Task<nint> OpenInteractionAsync(CancellationToken cancellationToken) => Task.FromResult<nint>(42);
+
+        public Task CloseInteractionAsync() => Task.CompletedTask;
     }
 
     private sealed class ScenarioClock : TimeProvider

@@ -210,6 +210,8 @@ public sealed class ProfileFileScenarios
     private sealed class ControlledHost : IRequestHost
     {
         public TimeProvider Clock => TimeProvider.System;
+        public Task<nint> OpenInteractionAsync(CancellationToken cancellationToken) => Task.FromResult<nint>(0);
+        public Task CloseInteractionAsync() => Task.CompletedTask;
     }
 
     private sealed class SyntheticProvider(string email, Action<AuthenticationRequest>? observe = null)
@@ -227,5 +229,9 @@ public sealed class ProfileFileScenarios
             return Task.FromResult(new TokenCandidate("SYNTHETIC_FILE_SCENARIO_TOKEN", email,
                 Guid.Parse(Tenant), [Scope], "Bearer", DateTimeOffset.UtcNow.AddMinutes(10), operationId));
         }
+
+        public Task<TokenCandidate> AcquireInteractiveAsync(AuthenticationRequest request, ProviderAccount? account,
+            string? claims, nint parentWindow, Guid operationId, CancellationToken cancellationToken) =>
+            Task.FromException<TokenCandidate>(new ProviderFailureException(AuthenticationFailure.MechanismUnavailable));
     }
 }
