@@ -67,6 +67,8 @@ jobs:
           version: 2026.8.10
           install: false
           cache: true
+          # Keep a separate cache so this job never restores tools another job installed.
+          cache_key_prefix: mise-v1-scenarios
 
       - name: Install the pinned .NET SDK
         run: mise install --locked http:dotnet-development
