@@ -1,11 +1,20 @@
 [tools]
 actionlint = "1.7.12"
+"github:microsoft/apm" = "v0.29.0"
 gitleaks = "8.30.1"
 hk = "1.56.1"
 lychee = "0.24.2"
+node = "22.22.2"
 "pipx:check-jsonschema" = "0.38.0"
 python = "3.13.15"
 uv = "0.12.7"
+
+[tools."http:dotnet-development"]
+version = "10.0.402"
+
+[tools."http:dotnet-development".platforms]
+linux-x64 = { url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.402/dotnet-sdk-10.0.402-linux-x64.tar.gz", checksum = "sha512:1904a98dda2db34ba78ba3c4fb1b224455329af91c341d83547843c1839e112b04ae699ee92fa2449a8f62249196a938723078c0c60b9f65c88539d5687729c2" }
+windows-x64 = { url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.402/dotnet-sdk-10.0.402-win-x64.zip", checksum = "sha512:ae4fd528cb7e9f6af6aaf7de36715a69f761f183744f1bb3025d19f5a92447090ec561410e46266c1d10a63781ed6f3de771760bc76c876d87daabc367b898cd" }
 
 [env]
 HK_MISE = "1"

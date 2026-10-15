@@ -66,7 +66,7 @@ records the bounded installation and discovery observations.
 | [hcoona/three](https://github.com/hcoona/three/tree/516af0e99dfa4327e72c7e9bc2878b8dd26aad2f) | `516af0e99dfa4327e72c7e9bc2878b8dd26aad2f` | Reference for conventional C#/.NET, mise, and APM organization. No project license headers, package inventory, monorepo framework, or build extension is imported. |
 
 The SDK archives are Microsoft's .NET SDK 10.0.402 distributions, and Node.js is the
-22.22.2 distribution. Their archive identities are in `mise.development.lock`; retain
+22.22.2 distribution. Their archive identities are in `mise.lock`; retain
 the license and third-party notices shipped with those installations. Selecting these
 tools does not relicense their contents under this repository's own MIT license.
 
