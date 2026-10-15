@@ -32,8 +32,10 @@ local package cache, are development validation rather than experiments under th
 support no public-restore or real-platform claim.
 
 **Exclusions:** No real-account, WAM, broker, interactive or Windows-host execution;
-no Windows CI runner; no dependency, SDK, runtime, Profile or registration change; no
-release, signing or distribution identity.
+no Windows CI runner; no dependency, SDK or runtime change; no change to a concrete
+Profile's selection or content or to a client registration (CORE-06/WIN-02 validation
+tightening of Profile schema fields is in scope); no release, signing or distribution
+identity.
 
 **External effects:** None beyond repository changes, public package restore and
 ordinary CI.
