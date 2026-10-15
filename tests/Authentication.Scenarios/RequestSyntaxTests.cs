@@ -142,6 +142,36 @@ public sealed class RequestSyntaxTests
         Assert.IsNull(RequestSyntax.Parse(arguments));
     }
 
+    // No PAT path exists: every PAT-like option is an unknown option, so the
+    // request fails closed before any Profile read or provider construction.
+    [TestMethod]
+    [DataRow("--pat", "SYNTHETIC_PAT")]
+    [DataRow("--token", "SYNTHETIC_PAT")]
+    [DataRow("--personal-access-token", "SYNTHETIC_PAT")]
+    [DataRow("--pat-fallback", "true")]
+    [DataRow("--allow-pat", "true")]
+    [DataRow("--output", "pat")]
+    [DataRow("--mode", "pat")]
+    public void PersonalAccessTokenOptionsAreRejected(string option, string value)
+    {
+        var arguments = Arguments();
+        arguments.AddRange([option, value]);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    [DataRow("--interaction", "pat")]
+    [DataRow("--telemetry", "pat")]
+    public void PersonalAccessTokenValuesAreRejected(string option, string value)
+    {
+        var arguments = Arguments();
+        if (arguments.Contains(option)) Set(arguments, option, value);
+        else arguments.AddRange([option, value]);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
     [TestMethod]
     [DataRow("--account-email", "missing-at")]
     [DataRow("--account-email", "@example.test")]
