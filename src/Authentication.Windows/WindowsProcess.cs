@@ -132,10 +132,12 @@ public static class WindowsProcess
             if (!process.TryCommit(invocation, out var result)) return;
             checkpoint?.Invoke(OwnedProcessCheckpoint.AfterCommit);
             pipe?.Stop();
-            WindowsDiagnostics.Completed(result!, invocation.Request?.TelemetryStderr == true,
-                entryTimestamp, trace, observation);
+            // Deliver the authoritative result before any optional diagnostic work,
+            // including the token-shape observation, can consume the shutdown bound.
             exitCode = WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json)
                 ? result.ExitCode : 2;
+            WindowsDiagnostics.Completed(result, invocation.Request?.TelemetryStderr == true,
+                entryTimestamp, trace, observation);
         }
         catch (Exception)
         {
