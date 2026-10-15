@@ -13,15 +13,14 @@ controls:
     governing_rules:
       - docs/governance/governance-system.md#gov-005-controls-implement-policy
       - docs/governance/record-system.md#record-system-gate
-      - docs/research/experiments/windows-slice-validation.md#source-and-artifact-admission
-      - docs/research/experiments/windows-slice-validation.md#ordinary-process-execution
+      - docs/governance/record-system.md#formats
     invariant: >-
       Pre-commit checks run only when the worktree matches the staged snapshot, and
-      tracked text has no unresolved conflict markers or whitespace errors. The four
-      generated Windows lock paths named in the trailing-whitespace step retain their
-      reviewed restore bytes instead of undergoing whitespace rewriting. Their byte
-      integrity is established by the existing protocol's independent admission review,
-      not by hk; all other applicable checks still include them.
+      tracked text has no unresolved conflict markers or whitespace errors. The generated
+      CRLF dependency lock paths named in the trailing-whitespace step retain their
+      generator bytes instead of undergoing whitespace rewriting; review of a regenerated
+      lock, not hk, establishes its content. All other applicable checks still include
+      them.
     runner: hk
     implementation:
       kind: hk-steps
@@ -89,32 +88,6 @@ controls:
       - ci
     failure_mode: A structured record becomes ambiguous or unreadable by its consumer.
 
-  - id: public-build-source-audit-consistency
-    state: current
-    class: mechanical
-    enforcement: blocking
-    producer: hk and the repository record checker
-    maintainer: Research maintainer
-    consumers:
-      - Repository checker and research maintainers when preserving the fixed source baseline and Lasso manifest
-      - Research reviewers when validating recorded public-build conclusions or a proposed correction, replay, or migration
-    governing_rules:
-      - docs/research/experiment-safety.md#phase-1-public-build-record
-      - docs/governance/record-system.md#record-system-gate
-    invariant: The current public-build source baseline and Lasso manifest retain canonical source identity, hashes, identifiers, ordering, and cross-record consistency under duplicate-rejecting JSON parsing, and a small static fixture set verifies recorded-bundle source binding, command topology, isolation principles, and exact extractor replay without executing the subject.
-    runner: hk
-    implementation:
-      kind: hk-steps
-      steps:
-        local-fast:
-          - structured-record-schema
-        ci:
-          - structured-record-schema
-    execution_points:
-      - local-fast
-      - ci
-    failure_mode: A fixed-source authority, planned-bundle contract, or retained synthetic assets projection becomes internally inconsistent while still passing schema validation.
-
   - id: public-build-evidence-consistency
     state: current
     class: mechanical
@@ -122,25 +95,32 @@ controls:
     producer: hk and the repository record checker
     maintainer: Research maintainer
     consumers:
-      - Repository checker and research reviewers when validating the recorded result
-      - Research reviewers when evaluating the public-build conclusion
+      - Repository checker and research maintainers when preserving the fixed source baseline, Lasso manifest, and frozen Issue 1 evidence
+      - Research reviewers when relying on or correcting the recorded public-build conclusions
     governing_rules:
-      - docs/research/experiment-safety.md#phase-1-public-build-record
-    invariant: The recorded singleton remains strict, filename-bound, source- and component-bound, within its historical host and safety ceilings, and internally consistent with the fixed two-mode non-publishing Issue #1 execution. Its retained command evidence, shared-reducer result, bounded sanitized output, all-exit quiescence, source integrity, dependency extraction, receipt, and recording lifecycle remain reproducible without granting authority for another run.
+      - docs/governance/record-system.md#formats
+      - docs/governance/record-system.md#record-system-gate
+    invariant: >-
+      The public-build source baseline and Lasso manifest retain canonical source
+      identity, hashes, identifiers, ordering, and cross-record consistency under
+      duplicate-rejecting JSON parsing. The recorded Issue 1 bundle is frozen evidence:
+      its bytes match the digest pinned in the repository checker, it validates against
+      its schema, binds both source authorities by hash, retains exactly the asset files
+      it references with matching hashes, and keeps its embedded receipt digest
+      consistent. The retired runner is not replayed; its components and the
+      historical policy remain recoverable at the pinned revision named by the schema.
     runner: hk
     implementation:
       kind: hk-steps
       steps:
         local-fast:
           - structured-record-schema
-          - public-build-runner-conformance
         ci:
           - structured-record-schema
-          - public-build-runner-conformance
     execution_points:
       - local-fast
       - ci
-    failure_mode: The recorded result becomes inconsistent or unreproducible, blockers or conclusions contradict primitive evidence, retained output or assets violate their safety boundary, lifecycle evidence loses its source or component binding, a hash-bound component drifts without the required replay-or-migration decision, or repository validation accepts evidence that the retained validator rejects.
+    failure_mode: A fixed-source authority or the frozen recorded evidence is silently edited, loses an admitted asset, or becomes internally inconsistent while still passing schema validation.
 
   - id: requirement-id-uniqueness
     state: current
@@ -203,7 +183,7 @@ controls:
     governing_rules:
       - docs/governance/governance-system.md#gov-002-one-canonical-authority
       - docs/governance/record-system.md#authority-by-concern
-    invariant: Current record-family paths exist, governed records match one declared family, and the documentation portal routes to every retained current record.
+    invariant: Current record-family paths exist, governed records match one declared family, and the documentation portal routes to every retained current record directly or, for an evidence-only file, through a portal-linked structured record that references its path.
     runner: hk
     implementation:
       kind: hk-steps
