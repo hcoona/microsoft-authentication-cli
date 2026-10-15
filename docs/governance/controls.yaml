@@ -276,12 +276,12 @@ controls:
     governing_rules:
       - docs/governance/governance-system.md#gov-005-controls-implement-policy
       - docs/validation/strategy.md#test-design-and-evidence-selection
+      - docs/product/requirements/quality-build-and-validation.md#v2-req-053-public-build-chain
     invariant: >-
-      Every pull request and main-v2 push restores Linux.slnx from the committed lock
-      files with the pinned development .NET SDK and NuGet.org only, builds it, and
-      passes every platform-neutral tests/Authentication.Scenarios scenario. Windows
-      projects, Windows host-timing evidence and real-account behavior are outside
-      this control.
+      Every pull request and main-v2 push restores Linux.slnx from public package
+      sources only, builds it, and passes every platform-neutral
+      tests/Authentication.Scenarios scenario. Windows projects, Windows host-timing
+      evidence and real-account behavior are outside this control.
     runner: github-platform
     implementation:
       kind: repository-path

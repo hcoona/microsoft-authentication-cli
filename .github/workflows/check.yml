@@ -36,6 +36,9 @@ jobs:
         env:
           HK_BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
 
+  # Implementation notes (not part of the linux-scenario-tests control invariant):
+  # restore uses the committed package lock files in locked mode, and the job uses
+  # the pinned development .NET SDK from mise.development.lock.
   linux-scenarios:
     name: Linux Scenario Tests
     runs-on: ubuntu-latest
