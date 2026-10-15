@@ -182,6 +182,29 @@ public sealed class InteractionScenarios
     }
 
     [TestMethod]
+    [DataRow(AuthenticationFailure.Timeout, false)]
+    [DataRow(AuthenticationFailure.InvalidRequest, false)]
+    [DataRow((AuthenticationFailure)999, false)]
+    [DataRow(AuthenticationFailure.Timeout, true)]
+    [DataRow(AuthenticationFailure.InvalidRequest, true)]
+    [DataRow((AuthenticationFailure)999, true)]
+    public async Task ProviderCannotReportEngineOwnedOrUndefinedOutcomes(AuthenticationFailure reported, bool interactive)
+    {
+        var failure = new ProviderFailureException(reported, "synthetic-claims", AuthenticationReason.InvalidConfiguration);
+        var scene = interactive
+            ? new Scene { Accounts = [], InteractiveFailure = failure }
+            : new Scene { SilentFailure = failure };
+        var outcome = await scene.RunAsync();
+
+        Assert.AreEqual(AuthenticationFailure.InternalFailure, outcome.Failure);
+        Assert.AreEqual(AuthenticationReason.None, outcome.Reason);
+        Assert.IsNull(outcome.Success);
+        CollectionAssert.AreEqual(interactive
+            ? new[] { "discover", "open", "interactive", "close" }
+            : new[] { "discover", "silent" }, scene.Effects.ToArray());
+    }
+
+    [TestMethod]
     [DataRow(AuthenticationFailure.InteractionRequired, false)]
     [DataRow(AuthenticationFailure.Cancelled, false)]
     [DataRow(AuthenticationFailure.Denied, false)]

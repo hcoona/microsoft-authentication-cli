@@ -265,6 +265,24 @@ public sealed class ApplicationScenarios
     }
 
     [TestMethod]
+    [DataRow(AuthenticationFailure.Timeout)]
+    [DataRow(AuthenticationFailure.InvalidRequest)]
+    [DataRow((AuthenticationFailure)999)]
+    public async Task ProviderConstructionCannotReportEngineOwnedOrUndefinedOutcomes(AuthenticationFailure reported)
+    {
+        var scene = new Scene
+        {
+            OnConstruct = () => throw new ProviderFailureException(reported,
+                reason: AuthenticationReason.InvalidConfiguration),
+        };
+        using var invocation = scene.Create(Arguments());
+        await RunAsync(invocation, scene);
+
+        AssertFailure(Commit(invocation), "internal_failure");
+        Assert.IsFalse(scene.Effects.Contains("discover"));
+    }
+
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task ProviderConstructionFailureUsesOnlyItsSafeCategory(bool unavailable)

@@ -91,9 +91,7 @@ public sealed class RequestInvocation : IDisposable
             }
             catch (ProviderFailureException exception)
             {
-                if (exception.Failure == AuthenticationFailure.InternalFailure)
-                    trace.RecordProviderFailure(exception.DiagnosticError);
-                return new(null, exception.Failure, Reason: exception.Reason);
+                return RequestCoordinator.ProviderOutcome(exception, trace);
             }
 
             token.ThrowIfCancellationRequested();
