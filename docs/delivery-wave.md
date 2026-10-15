@@ -40,15 +40,22 @@ Provider-managed sessions, broker state and caches may receive their ordinary
 authentication updates and are retained. Each interactive case needs the owner at the
 desktop for that call.
 
-**Limits:** At most 6 interactive calls and 10 non-interactive (silent-path) product calls in
-total, counting failed and interrupted starts. Synthetic scenario runs, builds and
+**Limits (circuit breakers, owner-raised):** At most 24 interactive-capable calls and 40
+\`non-interactive-only\` product calls in total, counting failed and interrupted starts.
+A call is interactive-capable when its interaction permission allows UI
+(\`interactive-if-needed\` or \`force-interactive\`, including its cancellation, EOF and
+deadline cases), whether or not UI appears. Synthetic scenario runs, builds and
 publishes are not counted but stay within ordinary local resources. No automatic retry.
+A case that existing account state cannot reach without an excluded state change is
+recorded as not reached, never simulated.
 
 **Delegated work:** Prepare, independently review and merge a research protocol before any
 real call; build, publish and run on the host within it; record sanitized evidence;
 update the validation strategy, Windows design and threat model with the results;
-correct product defects that the evidence exposes, with their tests; re-review and
-re-disposition TMT candidates.
+correct product defects and design records that the evidence exposes, with their tests,
+inside this entry; re-review and re-disposition TMT candidates. A corrected build is a
+new subject: rebind it through a reviewed protocol amendment before further real calls,
+sharing the same limits.
 
 **Exclusions:** No account addition or removal, sign-out, consent revocation, cache
 clearing or import, administrator consent, registration change, authenticated service
