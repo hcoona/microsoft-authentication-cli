@@ -41,9 +41,9 @@ authentication updates and are retained. Each interactive case needs the owner a
 desktop for that call.
 
 **Limits (circuit breakers, owner-raised):** At most 24 interactive-capable calls and 40
-\`non-interactive-only\` product calls in total, counting failed and interrupted starts.
+`non-interactive-only` product calls in total, counting failed and interrupted starts.
 A call is interactive-capable when its interaction permission allows UI
-(\`interactive-if-needed\` or \`force-interactive\`, including its cancellation, EOF and
+(`interactive-if-needed` or `force-interactive`, including its cancellation, EOF and
 deadline cases), whether or not UI appears. Synthetic scenario runs, builds and
 publishes are not counted but stay within ordinary local resources. No automatic retry.
 A case that existing account state cannot reach without an excluded state change is
