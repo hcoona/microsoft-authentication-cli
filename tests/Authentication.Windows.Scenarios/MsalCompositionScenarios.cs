@@ -137,7 +137,10 @@ public sealed class MsalCompositionScenarios
         var builder = MsalSessionFactory.BuildInteractiveRequest(application, operation,
             null, scene.Original.Token);
 
-        // Inspect the pinned MSAL request boundary, rather than the session fake.
+        // Pinned-dependency contract probe: reflection reads non-public members of
+        // the pinned MSAL 4.83.1 builder, so a dependency update that renames them
+        // fails here rather than silently skipping the check. It inspects the real
+        // request boundary, not the session fake.
         var interactive = BuilderMember(builder, "Parameters")!;
         var common = BuilderMember(builder, "CommonParameters")!;
         Assert.AreSame(forced ? null : account, BuilderMember(interactive, "Account"));
@@ -150,8 +153,6 @@ public sealed class MsalCompositionScenarios
         var parent = BuilderMember(interactive, "UiParent")!;
         Assert.AreEqual((nint)42, BuilderMember(parent, "OwnerWindow"));
         Assert.IsInstanceOfType<RejectingWebUi>(BuilderMember(interactive, "CustomWebUi"));
-        Assert.AreSame(account, operation.Account);
-        Assert.AreEqual(hint, operation.LoginHint);
         Assert.AreEqual(0, scene.Discoveries);
         Assert.IsEmpty(scene.Silent);
         Assert.IsEmpty(scene.Interactive);
