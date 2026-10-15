@@ -6,7 +6,7 @@ This record defines how project rules, policies, controls, and review procedures
 created, changed, deferred, enforced, and retired.
 
 It does not define product behavior. Product requirements, architecture, security,
-research, and release records retain authority within their own scopes.
+research, and project records retain authority within their own scopes.
 
 ## Trust Base
 
@@ -25,8 +25,8 @@ No additional governance layer is required to validate this trust base.
 Project governance is divided into:
 
 1. **Governance principles:** rules for maintaining other rules.
-2. **Domain policies:** project, record, security, experiment, upstream, and release
-   policies.
+2. **Domain policies:** project, record, security, experiment, and upstream policies.
+   Project identity and release posture are owned by the project policy.
 3. **Structured standards:** catalogs and schemas consumed by tools or agents.
 4. **Audience interfaces:** contributor guidance and AI-agent instructions.
 5. **Controls:** human review, Agent Skills, hk checks, workflows, and repository rules.
