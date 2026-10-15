@@ -163,6 +163,17 @@ public sealed class ResultContractScenarios
     }
 
     [TestMethod]
+    [DataRow(AuthenticationReason.InvalidConfiguration, "invalid_configuration")]
+    [DataRow(AuthenticationReason.TenantConflict, "tenant_conflict")]
+    public void InvalidRequestReasonsHaveDistinctFixedValues(AuthenticationReason reason, string expected)
+    {
+        AssertFailure(ResultProjection.Serialize(new(null, AuthenticationFailure.InvalidRequest, Reason: reason)),
+            "invalid_request", expected);
+        AssertFailure(ResultProjection.Serialize(new(null, AuthenticationFailure.Denied, Reason: reason)),
+            "internal_failure", "internal_failure");
+    }
+
+    [TestMethod]
     public void UnknownFailureCannotBecomeAnArbitraryPublicOutcome()
     {
         AssertFailure(ResultProjection.Serialize(new(null, (AuthenticationFailure)12345)), "internal_failure", "internal_failure");

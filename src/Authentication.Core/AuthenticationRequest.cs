@@ -34,6 +34,7 @@ public enum AuthenticationReason
     NetworkTransient,
     ServiceTransient,
     InvalidConfiguration,
+    TenantConflict,
 }
 
 public sealed record AuthenticationOutcome(

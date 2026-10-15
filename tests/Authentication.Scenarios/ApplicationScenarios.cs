@@ -64,7 +64,6 @@ public sealed class ApplicationScenarios
     [DataRow("access-denied")]
     [DataRow("invalid-utf8")]
     [DataRow("duplicate-field")]
-    [DataRow("tenant-conflict")]
     public async Task UnusableSelectedProfileFailsSafelyBeforeProviderConstruction(string defect)
     {
         var scene = new Scene();
@@ -77,15 +76,27 @@ public sealed class ApplicationScenarios
             case "duplicate-field":
                 scene.ProfileBytes = Encoding.UTF8.GetBytes(ProfileJson.Replace("\"schemaVersion\": 1,", "\"schemaVersion\": 1, \"schemaVersion\": 1,"));
                 break;
-            case "tenant-conflict":
-                scene.ProfileBytes = FixedProfile();
-                arguments.AddRange(["--tenant", "common"]);
-                break;
         }
         using var invocation = scene.Create(arguments);
         await RunAsync(invocation, scene);
 
         AssertFailure(Commit(invocation), "invalid_request", "invalid_configuration");
+        CollectionAssert.AreEqual(new[] { ProfilePath }, scene.Reads);
+        Assert.IsEmpty(scene.Effects);
+    }
+
+    [TestMethod]
+    [DataRow("common")]
+    [DataRow("99999999-8888-7777-6666-555555555555")]
+    public async Task TenantConflictWithAFixedProfileHasItsOwnSafeReason(string selector)
+    {
+        var scene = new Scene { ProfileBytes = FixedProfile() };
+        var arguments = Arguments();
+        arguments.AddRange(["--tenant", selector]);
+        using var invocation = scene.Create(arguments);
+        await RunAsync(invocation, scene);
+
+        AssertFailure(Commit(invocation), "invalid_request", "tenant_conflict");
         CollectionAssert.AreEqual(new[] { ProfilePath }, scene.Reads);
         Assert.IsEmpty(scene.Effects);
     }

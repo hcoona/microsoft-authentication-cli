@@ -76,9 +76,12 @@ public sealed class RequestInvocation : IDisposable
 
             token.ThrowIfCancellationRequested();
             var profile = ProfileSyntax.Parse(bytes);
-            if (profile is null || !ProfileSyntax.TryResolveTenant(profile, Request.Tenant, out var tenant))
+            if (profile is null) return InvalidConfiguration();
+            if (!ProfileSyntax.TryResolveTenant(profile, Request.Tenant, out var tenant))
             {
-                return InvalidConfiguration();
+                // A valid Profile whose fixed tenant conflicts with --tenant is a
+                // caller/Profile mismatch, not an unusable configuration.
+                return new(null, AuthenticationFailure.InvalidRequest, Reason: AuthenticationReason.TenantConflict);
             }
 
             var request = new AuthenticationRequest(Request.AccountEmail, Request.Scopes,

@@ -87,6 +87,7 @@ public static class ResultProjection
         {
             (_, AuthenticationReason.None) => name,
             (AuthenticationFailure.InvalidRequest, AuthenticationReason.InvalidConfiguration) => "invalid_configuration",
+            (AuthenticationFailure.InvalidRequest, AuthenticationReason.TenantConflict) => "tenant_conflict",
             (AuthenticationFailure.InteractionRequired, AuthenticationReason.ConsentRequired) => "consent_required",
             (AuthenticationFailure.TemporarilyUnavailable, AuthenticationReason.ProviderTransient) => "provider_transient",
             (AuthenticationFailure.TemporarilyUnavailable, AuthenticationReason.NetworkTransient) => "network_transient",
