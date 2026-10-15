@@ -449,7 +449,7 @@ asset access. Those specialized rules are not a general experiment framework.
 ## Windows Slice Outcome Authorization
 
 For Issue #108, the accepted
-[Wave](../delivery-wave.md#first-windows-authentication-slice-implementation-and-scenario-acceptance)
+[Wave entry](https://github.com/hcoona/microsoft-authentication-cli/blob/e8f74fa759a9d15488242ee338f3a9c87089ed3f/docs/delivery-wave.md#first-windows-authentication-slice-implementation-and-scenario-acceptance) (completed and removed)
 owns the complete bounded outcome, delegated necessary work, shared capacity,
 normal account effects, standing risk dispositions and exclusions. The existing
 [Windows protocol](experiments/windows-slice-validation.md#outcome-based-execution-and-accounting)
