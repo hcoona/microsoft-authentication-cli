@@ -277,6 +277,7 @@ controls:
       - docs/governance/governance-system.md#gov-005-controls-implement-policy
       - docs/validation/strategy.md#test-design-and-evidence-selection
       - docs/product/requirements/quality-build-and-validation.md#v2-req-053-public-build-chain
+      - docs/validation/strategy.md#continuous-integration-and-host-timing-evidence
     invariant: >-
       Every pull request and main-v2 push restores Linux.slnx from public package
       sources only, builds it, and passes every platform-neutral
