@@ -38,7 +38,10 @@ experimental `visual-studio-legacy-wam` Profile and the Azure DevOps default sco
 accounts on that host, whose actual selectors stay local and are never committed.
 Provider-managed sessions, broker state and caches may receive their ordinary
 authentication updates and are retained. Each interactive case needs the owner at the
-desktop for that call.
+desktop for that call. A successful WSL-launched call returns the access token through
+stdout to the trusted Linux caller's bounded process memory and ordinary interop pipes;
+the owner accepts that exposure, while captured output, logs and agent traces still
+exclude the token.
 
 **Limits (circuit breakers, owner-raised):** At most 24 interactive-capable calls and 40
 `non-interactive-only` product calls in total, counting failed and interrupted starts.
