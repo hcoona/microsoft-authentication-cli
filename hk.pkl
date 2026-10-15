@@ -66,6 +66,24 @@ local fastSteps = new Mapping<String, Step> {
     }
   }
   ["public-build-runner-conformance"] {
+    // Replays the historical public-build runner contract (minutes). Run it only
+    // when its inputs change; "hk check --all" in CI still runs it every time.
+    glob = List(
+      "tools/check_public_build_runner_conformance.py",
+      "tools/run_public_build_experiment.py",
+      "tools/public_build_validation.py",
+      "tools/public_build_contract.py",
+      "tools/extract_public_build_assets.py",
+      "tools/nuget_versions.py",
+      "tools/public-build-mise.lock",
+      "tools/fixtures/public-build/**",
+      "docs/research/public-build-*.json",
+      "docs/research/experiments/public-build-*.json",
+      "docs/research/experiments/assets/**",
+      "schemas/research/public-build-*.json",
+      "mise.toml",
+      "hk.pkl",
+    )
     check = new Command {
       argv = List(
         "uv",
