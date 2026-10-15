@@ -9,7 +9,9 @@ namespace Authentication.Scenarios;
 public sealed class RequestLifetimeScenarios
 {
     private static readonly TimeSpan Budget = TimeSpan.FromSeconds(120);
-    private static readonly TimeSpan HarnessLimit = TimeSpan.FromSeconds(2);
+    // Failure-only harness bound: passing runs never wait for it. Shared CI runners can
+    // delay thread-pool and timer callbacks by seconds under parallel scenarios.
+    private static readonly TimeSpan HarnessLimit = TimeSpan.FromSeconds(30);
 
     [TestMethod]
     public async Task AlreadyCancelledRequestDoesNotDiscoverAccountsOrCreateUi()

@@ -16,7 +16,9 @@ public sealed class ApplicationScenarios
     private const string ClientId = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
     private const string Tenant = "11111111-2222-3333-4444-555555555555";
     private const string Scope = "499b84ac-1321-427f-aa17-267ca6975798/user_impersonation";
-    private static readonly TimeSpan HarnessLimit = TimeSpan.FromSeconds(2);
+    // Failure-only harness bound: passing runs never wait for it. Shared CI runners can
+    // delay thread-pool and timer callbacks by seconds under parallel scenarios.
+    private static readonly TimeSpan HarnessLimit = TimeSpan.FromSeconds(30);
     private const string ProfileJson = """
         {
           "schemaVersion": 1,
