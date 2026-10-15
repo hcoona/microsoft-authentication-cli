@@ -1059,7 +1059,8 @@ token text and a 32 KiB decoded JWT payload with JSON depth eight may be examine
 Malformed input, duplicate members, unsupported format or an exceeded bound yields
 only a fixed unavailable/unreadable/limit category. Emit only a format category,
 whether `exp`, `aud` and `scp` claims are present in their expected types, and
-provider-reported expiration/remaining lifetime. Never emit a header/payload,
+the provider-reported expiration and remaining lifetime, which V2-REQ-038 permits as
+non-token metadata already in the success result. Never emit a header/payload,
 claim value/name supplied by input, token length/hash, account or tenant identifier.
 JWT decoding is explicitly unverified; it does not establish signature validity,
 identity, scope satisfaction or resource acceptance. Opaque tokens remain valid

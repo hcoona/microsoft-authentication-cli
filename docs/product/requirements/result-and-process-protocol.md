@@ -99,9 +99,11 @@ The observation must:
 - run only when the caller explicitly enables local diagnostics for that request;
 - examine only the token of a validated success, and only after the complete result has
   been written to stdout;
-- emit only fixed categories, such as format and the presence of expected claims, to the
-  local diagnostic channel, never token text, header or payload content, claim values,
-  token length or hash, or account or tenant identifiers;
+- emit to the local diagnostic channel only fixed categories, such as format and the
+  presence of expected claims, plus the provider-reported expiration and the remaining
+  lifetime derived from it, which are non-token metadata already present in the success
+  result; never token text, header or payload content, claim values, token length or
+  hash, or account or tenant identifiers;
 - be bounded in the input it examines and the work it performs; and
 - never be exported over a network, change the result or exit status, or delay result
   delivery.
