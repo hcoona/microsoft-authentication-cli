@@ -84,12 +84,23 @@ public static class MsalBoundary
         };
     }
 
-    public static TokenCandidate Project(AuthenticationResult result, Guid operationId) =>
+    // The operation binding is the provider-returned correlation ID, never the
+    // caller's argument: the coordinator compares it with the ID it sent, so a
+    // result from another operation (or with no correlation) fails validation.
+    // Pinned MSAL 4.83.1 (tag commit d5d7de6) builds every AuthenticationResult
+    // from RequestContext.CorrelationId, which WithCorrelationId sets: see
+    // src/client/Microsoft.Identity.Client/Internal/Requests/RequestBase.cs lines
+    // 353 (token response saved to cache, including broker responses) and 548
+    // (retryable-failure cache fallback). That a real WAM/runtime-broker success
+    // carries the sent ID is unverified until an authorized experiment; if it did
+    // not, every success would fail closed as identity_validation_failed.
+    public static TokenCandidate Project(AuthenticationResult result) =>
         new(result.AccessToken, result.Account?.Username,
             Guid.TryParse(result.TenantId, out var tenant) ? tenant : null,
             // Missing scopes must reach the coordinator's metadata rejection. An empty
             // observed list has distinct /.default semantics and cannot replace null.
-            result.Scopes?.ToArray()!, result.TokenType, result.ExpiresOn, operationId, result.CorrelationId);
+            result.Scopes?.ToArray()!, result.TokenType, result.ExpiresOn, result.CorrelationId,
+            result.CorrelationId);
 
     private static bool HasStructuredDenial(string? body)
     {

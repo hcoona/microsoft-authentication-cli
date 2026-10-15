@@ -49,6 +49,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task CancellationDuringCreationSurvivesClosureFailure()
     {
         using var child = new ProcessFixture("host-create-cancel");
@@ -74,6 +75,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task CleanupFaultAfterNormalClosureSuppressesUncommittedSuccess()
     {
         using var child = new ProcessFixture("host-fault-before-commit");
@@ -87,6 +89,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task CleanupFaultAfterCommitCannotReplaceTheResult()
     {
         using var child = new ProcessFixture("host-fault-after-commit");
@@ -99,6 +102,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task ProcessWaitsForTheActualOwnedThreadExit()
     {
         using var child = new ProcessFixture("host-ui-join");
@@ -111,6 +115,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task ProcessWaitsForTheOutgoingOwnedCallback()
     {
         using var child = new ProcessFixture("host-callback-drain");
@@ -126,6 +131,7 @@ public sealed class OwnedProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task NormalClosureArmsTheBoundBeforeCoreTerminalSelection()
     {
         using var child = new ProcessFixture("host-close-stall");
@@ -153,6 +159,17 @@ public sealed class OwnedProcessScenarios
         Assert.AreEqual(1, lines.Count(line => line == Notice));
         var completed = Array.IndexOf(lines, "Authentication request completed.");
         Assert.IsTrue(completed > Array.IndexOf(lines, Notice), "The notice must precede the completion indication.");
+        // Telemetry on: the completion event carries the token-shape category but
+        // never token material or an accessToken member.
+        var events = lines.Where(line => line.StartsWith('{')).ToArray();
+        using var completion = JsonDocument.Parse(events.Single(line => line.Contains("\"request_completed\"", StringComparison.Ordinal)));
+        Assert.AreEqual("success", completion.RootElement.GetProperty("outcome").GetString());
+        Assert.IsTrue(completion.RootElement.TryGetProperty("tokenFormat", out var format));
+        Assert.IsFalse(string.IsNullOrEmpty(format.GetString()));
+        Assert.IsFalse(completion.RootElement.TryGetProperty("accessToken", out _));
+        var error = Encoding.UTF8.GetString(child.Error);
+        Assert.IsFalse(error.Contains(ProcessChild.Token, StringComparison.Ordinal), "Token material reached stderr.");
+        Assert.IsFalse(error.Contains("accessToken", StringComparison.Ordinal));
     }
 
     [TestMethod]
@@ -168,6 +185,11 @@ public sealed class OwnedProcessScenarios
         var lines = Encoding.UTF8.GetString(child.Error).Split('\n', StringSplitOptions.RemoveEmptyEntries);
         Assert.AreEqual(1, lines.Count(line => line == Notice));
         Assert.IsTrue(lines.All(line => line == Notice || line == "Authentication request completed."));
+        // Telemetry off: no completion event and no token-shape observation.
+        var error = Encoding.UTF8.GetString(child.Error);
+        Assert.IsFalse(error.Contains("request_completed", StringComparison.Ordinal));
+        Assert.IsFalse(error.Contains("tokenFormat", StringComparison.Ordinal));
+        Assert.IsFalse(error.Contains(ProcessChild.Token, StringComparison.Ordinal));
     }
 
     [TestMethod]

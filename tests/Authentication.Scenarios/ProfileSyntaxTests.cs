@@ -225,6 +225,42 @@ public sealed class ProfileSyntaxTests
     }
 
     [TestMethod]
+    [DataRow("name", "\u0007")]
+    [DataRow("name", "\u007f")]
+    [DataRow("name", "\u0085")]
+    [DataRow("name", "\u009b")]
+    [DataRow("name", "\u202e")]
+    [DataRow("name", "\u2066")]
+    [DataRow("name", "\u200b")]
+    [DataRow("name", "\u200e")]
+    [DataRow("name", "\ufeff")]
+    [DataRow("name", "\U000e0041")]
+    [DataRow("owner", "\u0085")]
+    [DataRow("owner", "\u202e")]
+    [DataRow("owner", "\u2067")]
+    [DataRow("owner", "\ufeff")]
+    public void DisplayedProfileMetadataRejectsControlAndFormatCharacters(string field, string character)
+    {
+        var document = field == "name"
+            ? ProfileJson.Replace("synthetic-selected-profile", "synthetic" + character + "profile")
+            : ProfileJson.Replace("Synthetic external owner", "Synthetic" + character + "owner");
+
+        Assert.IsNull(Parse(document));
+    }
+
+    [TestMethod]
+    public void DisplayedProfileMetadataKeepsOrdinaryUnicodeText()
+    {
+        var profile = Parse(ProfileJson
+            .Replace("synthetic-selected-profile", "Profil \u00e9t\u00e9 \u05e9\u05dc\u05d5\u05dd \U0001f600")
+            .Replace("Synthetic external owner", "\u6240\u6709\u8005"));
+
+        Assert.IsNotNull(profile);
+        Assert.AreEqual("Profil \u00e9t\u00e9 \u05e9\u05dc\u05d5\u05dd \U0001f600", profile.Name);
+        Assert.AreEqual("\u6240\u6709\u8005", profile.RegistrationOwner);
+    }
+
+    [TestMethod]
     [DataRow("")]
     [DataRow("organizations")]
     [DataRow("COMMON")]

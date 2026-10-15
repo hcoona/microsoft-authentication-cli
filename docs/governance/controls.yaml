@@ -265,6 +265,31 @@ controls:
       - ci
     failure_mode: The repository merges a workflow that cannot execute its declared checks.
 
+  - id: linux-scenario-tests
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: GitHub Actions Linux Scenario Tests job
+    maintainer: Control maintainer
+    consumers:
+      - GitHub Actions and reviewers at CI before merge
+    governing_rules:
+      - docs/governance/governance-system.md#gov-005-controls-implement-policy
+      - docs/validation/strategy.md#test-design-and-evidence-selection
+      - docs/product/requirements/quality-build-and-validation.md#v2-req-053-public-build-chain
+    invariant: >-
+      Every pull request and main-v2 push restores Linux.slnx from public package
+      sources only, builds it, and passes every platform-neutral
+      tests/Authentication.Scenarios scenario. Windows projects, Windows host-timing
+      evidence and real-account behavior are outside this control.
+    runner: github-platform
+    implementation:
+      kind: repository-path
+      value: .github/workflows/check.yml
+    execution_points:
+      - ci
+    failure_mode: A core, contract or scenario change merges without its platform-neutral scenarios compiling or passing.
+
   - id: record-system-review
     state: current
     class: procedural-review

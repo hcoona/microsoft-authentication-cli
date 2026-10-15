@@ -35,6 +35,10 @@ public sealed class MsalConstructionScenarios
         Assert.IsFalse(config.IsDefaultPlatformLoggingEnabled);
         Assert.IsNull(config.LoggingCallback);
         Assert.IsNull(config.ClientCapabilities);
+        var broker = MsalSessionFactory.Broker(settings);
+        Assert.AreEqual("Unofficial hcoona/microsoft-authentication-cli", broker.Title);
+        Assert.AreEqual(settings.ListOperatingSystemAccounts, broker.ListOperatingSystemAccounts);
+        Assert.AreEqual(settings.MsaPassthrough, broker.MsaPassthrough);
         Assert.AreEqual(0, http.ClientRequests, "Construction must not request an HTTP client.");
         Assert.AreEqual(0, http.Transport.Sends, "Construction must not send an HTTP request.");
     }

@@ -76,7 +76,7 @@ internal sealed class MsalAuthenticationProvider : IAuthenticationProvider
             var operation = new MsalSilentOperation(request.Scopes, selected, tenant, operationId);
             var result = await session.AcquireSilentAsync(operation, cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
-            return MsalBoundary.Project(result, operationId);
+            return MsalBoundary.Project(result);
         }
         catch (Exception exception)
         {
@@ -97,7 +97,7 @@ internal sealed class MsalAuthenticationProvider : IAuthenticationProvider
                 claims, parentWindow, operationId, request.ForceInteractive);
             var result = await session.AcquireInteractiveAsync(operation, cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
-            return MsalBoundary.Project(result, operationId);
+            return MsalBoundary.Project(result);
         }
         catch (Exception exception)
         {

@@ -59,7 +59,7 @@ public sealed class OwnedHostScenarios
     }
 
     [TestMethod]
-    public async Task ReadyParentCarriesAdmittedBranding()
+    public async Task ReadyParentIsHiddenChildlessAndNoticeCarriesAdmittedMetadata()
     {
         await using var fixture = new Fixture();
         fixture.Provider.Interactive = (request, parent, operation, token) =>
@@ -70,15 +70,9 @@ public sealed class OwnedHostScenarios
             Assert.AreEqual(ApartmentState.STA, fixture.UiApartment);
             Assert.IsNotNull(fixture.UiThread);
             Assert.IsTrue(fixture.UiThread.IsBackground);
-            var controls = OwnedWindowObservation.ReadControls(parent);
-            Assert.IsTrue(controls.Any(control => control.ClassName == "Button" && control.Text == "Cancel"));
-            var text = OwnedWindowObservation.ReadText(parent) + "\n"
-                + string.Join("\n", controls.Select(control => control.Text));
-            StringAssert.Contains(text, "hcoona/microsoft-authentication-cli");
-            StringAssert.Contains(text, "synthetic-owned-host-profile");
-            StringAssert.Contains(text, "Synthetic external owner");
-            StringAssert.Contains(text, "provider", StringComparison.OrdinalIgnoreCase);
-            Assert.IsFalse(text.Contains("replacement-owned-host-profile", StringComparison.Ordinal));
+            // The hidden owner has no label, button or other owned control.
+            Assert.IsEmpty(OwnedWindowObservation.ReadControls(parent));
+            Assert.AreEqual("hcoona/microsoft-authentication-cli", OwnedWindowObservation.ReadText(parent));
             var notice = Encoding.UTF8.GetString(fixture.Notices.Single());
             Assert.AreEqual("Unofficial hcoona/microsoft-authentication-cli. Profile: synthetic-owned-host-profile. "
                 + "Registration owner: Synthetic external owner. Sign-in continues in the provider display.\n", notice);
@@ -95,6 +89,7 @@ public sealed class OwnedHostScenarios
         Assert.IsNotNull(fixture.UiThread);
         Assert.IsFalse(fixture.UiThread.IsAlive);
         Assert.AreEqual(0, fixture.CancelCalls);
+        Assert.IsGreaterThan(0, fixture.WindowObservations, "The hidden owner was never observed.");
     }
 
     [TestMethod]
@@ -216,13 +211,7 @@ public sealed class OwnedHostScenarios
     }
 
     [TestMethod]
-    public Task CancelButtonStopsPendingAuthentication() => CancelPendingAsync("button");
-
-    [TestMethod]
-    public Task CaptionCloseStopsPendingAuthentication() => CancelPendingAsync("caption");
-
-    [TestMethod]
-    public Task EscapeStopsPendingAuthentication() => CancelPendingAsync("escape");
+    public Task UserOrSystemCloseStopsPendingAuthentication() => ClosePendingAsync();
 
     [TestMethod]
     public async Task PostReadinessCallbackFaultIsContained()
@@ -379,7 +368,7 @@ public sealed class OwnedHostScenarios
         Assert.AreEqual(0, fixture.Provider.InteractiveCalls);
     }
 
-    private static async Task CancelPendingAsync(string action)
+    private static async Task ClosePendingAsync()
     {
         await using var fixture = new Fixture();
         var entered = new TaskCompletionSource<nint>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -396,20 +385,8 @@ public sealed class OwnedHostScenarios
             _ = await Task.WhenAny(entered.Task, invocation).WaitAsync(FixtureLimit);
             Assert.IsTrue(entered.Task.IsCompletedSuccessfully, "A ready parent did not reach provider interaction.");
             var parent = await entered.Task;
-            if (action == "button")
-            {
-                var button = OwnedWindowObservation.ReadControls(parent)
-                    .Single(control => control.ClassName == "Button" && control.Text == "Cancel");
-                OwnedWindowObservation.Post(button.Handle, 0x00f5); // BM_CLICK on the actual control.
-            }
-            else if (action == "caption")
-            {
-                OwnedWindowObservation.Post(parent, 0x0010); // WM_CLOSE.
-            }
-            else
-            {
-                OwnedWindowObservation.Post(parent, 0x0100, 0x1b, 1); // WM_KEYDOWN / VK_ESCAPE.
-            }
+            Assert.IsEmpty(OwnedWindowObservation.ReadControls(parent));
+            OwnedWindowObservation.Post(parent, 0x0010); // WM_CLOSE from the user or system.
             await fixture.Cancelled.Task.WaitAsync(FixtureLimit);
             Assert.IsTrue(fixture.Caller.IsCancellationRequested);
             release.TrySetResult();
@@ -468,6 +445,10 @@ public sealed class OwnedHostScenarios
         internal Thread? UiThread;
         internal ApartmentState UiApartment;
         internal int CancelCalls;
+        // Every creation and dispatch checkpoint samples the owner on its creating
+        // thread; any visible sample fails disposal (never-visible lifetime invariant).
+        internal int WindowObservations;
+        internal int VisibleObservations;
         internal readonly System.Collections.Concurrent.ConcurrentQueue<byte[]> Notices = new();
         private RequestInvocation? invocation;
         private Task<AuthenticationOutcome>? invocationObservation;
@@ -491,6 +472,12 @@ public sealed class OwnedHostScenarios
                 {
                     UiThread = Thread.CurrentThread;
                     UiApartment = Thread.CurrentThread.GetApartmentState();
+                }
+                if (window != 0 && stage is OwnedHostCheckpoint.HiddenParentCreated or OwnedHostCheckpoint.MessageDispatch)
+                {
+                    Interlocked.Increment(ref WindowObservations);
+                    if (OwnedWindowObservation.IsVisibleOnCreatingThread(window))
+                        Interlocked.Increment(ref VisibleObservations);
                 }
                 Checkpoint?.Invoke(stage, window);
             }, admission, Notices.Enqueue);
@@ -592,6 +579,8 @@ public sealed class OwnedHostScenarios
             await AttemptAsync(() => Host.Completion);
             if (UiThread?.IsAlive == true)
                 Failed(new InvalidOperationException("The owned UI thread remains active."));
+            if (Volatile.Read(ref VisibleObservations) != 0)
+                Failed(new InvalidOperationException("The hidden owner window became visible."));
             if (pauses.Any(pause => pause.TimedOut))
                 Failed(new InvalidOperationException("A finite owned UI checkpoint exceeded its bound."));
 

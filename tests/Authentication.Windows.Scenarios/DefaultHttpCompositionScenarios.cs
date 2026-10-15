@@ -8,6 +8,7 @@ namespace Authentication.Windows.Scenarios;
 public sealed class DefaultHttpCompositionScenarios
 {
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task SharedDefaultHttpOwnershipSurvivesCancellationUntilDrain()
     {
         using var child = new ProcessFixture("default-http-cancel-drain");
@@ -53,6 +54,7 @@ public sealed class DefaultHttpCompositionScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task SharedDefaultHttpDisposalStallRetainsTheProcessWatchdog()
     {
         using var child = new ProcessFixture("default-http-dispose-stall");

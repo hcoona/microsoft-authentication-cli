@@ -19,7 +19,6 @@ public sealed class MsalCompositionScenarios
     private const string TransferTenant = "f8cdef31-a31e-4b4a-93e4-5f571e91255a";
     private const string PrivateMarker = "SYNTHETIC-MSAL-COMPOSITION-PRIVATE";
     private static readonly DateTimeOffset Now = new(2026, 9, 15, 0, 0, 0, TimeSpan.Zero);
-    private static readonly Guid ObservedCorrelation = new("33333333-4444-5555-6666-777777777777");
 
     [TestMethod]
     public Task OrdinaryMultitenantProfileUsesCommon() =>
@@ -66,7 +65,7 @@ public sealed class MsalCompositionScenarios
         Assert.AreEqual(silentTenant, scene.Silent[0].Tenant);
         CollectionAssert.AreEqual(new[] { Scope }, scene.Silent[0].Scopes.ToArray());
         Assert.AreNotEqual(Guid.Empty, scene.Silent[0].CorrelationId);
-        Assert.AreEqual(ObservedCorrelation, outcome.Success.CorrelationId);
+        Assert.AreEqual(scene.Silent[0].CorrelationId, outcome.Success.CorrelationId);
         Assert.AreEqual(scene.Silent[0].CorrelationId, outcome.Success.OperationId);
         Assert.AreEqual(Email, outcome.Success.Email);
         Assert.AreEqual(Guid.Parse(Tenant), outcome.Success.Tenant);
@@ -80,8 +79,11 @@ public sealed class MsalCompositionScenarios
     [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
-    public async Task ForcedSelectionPreservesTheSameAccountOrHintAndOriginalRequest(bool accountVisible)
+    public async Task ForcedOperationCarriesTheSelectorOnlyForTheBuilderToOmit(bool accountVisible)
     {
+        // The operation still records the discovered account or hint, but the real
+        // builder omits both for force-interactive (see the builder scenario below);
+        // final identity validation then rejects any other returned account.
         using var scene = new Scene(forceInteractive: true) { IncludeSelectedAccount = accountVisible };
         var outcome = await scene.RunAsync();
         Assert.IsNotNull(outcome.Success);
@@ -135,7 +137,10 @@ public sealed class MsalCompositionScenarios
         var builder = MsalSessionFactory.BuildInteractiveRequest(application, operation,
             null, scene.Original.Token);
 
-        // Inspect the pinned MSAL request boundary, rather than the session fake.
+        // Pinned-dependency contract probe: reflection reads non-public members of
+        // the pinned MSAL 4.83.1 builder, so a dependency update that renames them
+        // fails here rather than silently skipping the check. It inspects the real
+        // request boundary, not the session fake.
         var interactive = BuilderMember(builder, "Parameters")!;
         var common = BuilderMember(builder, "CommonParameters")!;
         Assert.AreSame(forced ? null : account, BuilderMember(interactive, "Account"));
@@ -148,8 +153,6 @@ public sealed class MsalCompositionScenarios
         var parent = BuilderMember(interactive, "UiParent")!;
         Assert.AreEqual((nint)42, BuilderMember(parent, "OwnerWindow"));
         Assert.IsInstanceOfType<RejectingWebUi>(BuilderMember(interactive, "CustomWebUi"));
-        Assert.AreSame(account, operation.Account);
-        Assert.AreEqual(hint, operation.LoginHint);
         Assert.AreEqual(0, scene.Discoveries);
         Assert.IsEmpty(scene.Silent);
         Assert.IsEmpty(scene.Interactive);
@@ -206,6 +209,27 @@ public sealed class MsalCompositionScenarios
         Assert.IsNull(scene.Interactive[0].Claims);
         Assert.AreEqual(Tenant, scene.Interactive[0].Tenant);
         Assert.AreEqual(1, scene.Closed);
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task ResultFromAnotherCorrelationCannotBecomeSuccess(bool interactive)
+    {
+        // The candidate binds to the provider-returned correlation ID; the ID the
+        // adapter sent is never copied into the candidate as proof.
+        using var scene = new Scene { IncludeSelectedAccount = !interactive, ReturnedCorrelation = Guid.NewGuid() };
+        Failure(AuthenticationFailure.IdentityValidationFailed, await scene.RunAsync());
+        Assert.AreEqual(interactive ? 0 : 1, scene.Silent.Count);
+        Assert.AreEqual(interactive ? 1 : 0, scene.Interactive.Count);
+    }
+
+    [TestMethod]
+    public async Task ResultWithoutCorrelationCannotBecomeSuccess()
+    {
+        using var scene = new Scene { ReturnedCorrelation = Guid.Empty };
+        Failure(AuthenticationFailure.IdentityValidationFailed, await scene.RunAsync());
+        Assert.AreEqual(1, scene.Silent.Count);
     }
 
     [TestMethod]
@@ -329,6 +353,8 @@ public sealed class MsalCompositionScenarios
         internal MsalClientSettings? Settings;
         internal IMsalHttpClientFactory? HttpFactory;
         internal bool IncludeSelectedAccount { get; init; } = true;
+        // Null echoes the operation's correlation ID as pinned MSAL does.
+        internal Guid? ReturnedCorrelation { get; init; }
         internal Exception? InitializationFailure, DiscoveryFailure, SilentFailure, InteractiveFailure;
         internal Action? DuringLoader, DuringInitialization, DuringDiscovery;
         internal int Initializations, Discoveries, Opened, Closed;
@@ -375,14 +401,14 @@ public sealed class MsalCompositionScenarios
         {
             Silent.Add(operation); Tokens.Add(token);
             return SilentFailure is { } failure ? Task.FromException<AuthenticationResult>(failure)
-                : Task.FromResult(Result());
+                : Task.FromResult(Result(operation.CorrelationId));
         }
 
         public Task<AuthenticationResult> AcquireInteractiveAsync(MsalInteractiveOperation operation, CancellationToken token)
         {
             Interactive.Add(operation); Tokens.Add(token);
             return InteractiveFailure is { } failure ? Task.FromException<AuthenticationResult>(failure)
-                : Task.FromResult(Result());
+                : Task.FromResult(Result(operation.CorrelationId));
         }
 
         public HttpClient GetHttpClient() => throw new InvalidOperationException("Synthetic MSAL sessions do not use HTTP.");
@@ -392,9 +418,9 @@ public sealed class MsalCompositionScenarios
         }
         public Task CloseInteractionAsync() { Closed++; return Task.CompletedTask; }
         public void Dispose() => Original.Dispose();
-        private AuthenticationResult Result() => new("synthetic-access", false, PrivateMarker,
+        private AuthenticationResult Result(Guid sent) => new("synthetic-access", false, PrivateMarker,
             Now.AddHours(1), Now.AddHours(1), Tenant, new SyntheticAccount(Email, Tenant), PrivateMarker,
-            [Scope], ObservedCorrelation, tokenType: "Bearer");
+            [Scope], ReturnedCorrelation ?? sent, tokenType: "Bearer");
     }
 
     private sealed class SyntheticAccount(string username, string homeTenant) : IAccount

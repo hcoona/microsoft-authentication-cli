@@ -26,6 +26,10 @@ internal static unsafe partial class OwnedWindowObservation
         return IsWindowVisible(window) != 0;
     }
 
+    // Never throws: callers sample from inside native dispatch on the creating thread.
+    internal static bool IsVisibleOnCreatingThread(nint window) =>
+        IsWindow(window) != 0 && IsWindowVisible(window) != 0;
+
     internal static bool Exists(nint window) => window != 0 && IsWindow(window) != 0;
 
     internal static IReadOnlyList<Control> ReadControls(nint parent)

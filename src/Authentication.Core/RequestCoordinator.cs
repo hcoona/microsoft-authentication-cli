@@ -25,9 +25,7 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         }
         catch (ProviderFailureException exception)
         {
-            if (exception.Failure == AuthenticationFailure.InternalFailure)
-                observation.RecordProviderFailure(exception.DiagnosticError);
-            outcome = new(null, SafeFailure(exception.Failure), Interactive: interactive, Reason: exception.Reason);
+            outcome = ProviderOutcome(exception, observation, interactive);
         }
         catch (Exception)
         {
@@ -149,21 +147,39 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         return new(candidate, null, PersistenceUnconfirmed: true, Interactive: interactive);
     }
 
-    private static AuthenticationFailure SafeFailure(AuthenticationFailure failure) => failure switch
+    // One safe filter for every provider-reported failure, including provider
+    // construction. Request validity and the deadline belong to the engine: a
+    // provider cannot report invalid_request or timeout, and an undefined value
+    // cannot become a public outcome. Reasons survive only with their own failure.
+    internal static AuthenticationOutcome ProviderOutcome(ProviderFailureException exception,
+        AuthenticationTrace observation, bool interactive = false)
     {
-        AuthenticationFailure.InteractionRequired or AuthenticationFailure.AccountAmbiguous
-            or AuthenticationFailure.IdentityValidationFailed or AuthenticationFailure.InvalidRequest
-            or AuthenticationFailure.Cancelled or AuthenticationFailure.Denied
-            or AuthenticationFailure.MechanismUnavailable or AuthenticationFailure.TemporarilyUnavailable
-            or AuthenticationFailure.Timeout => failure,
-        _ => AuthenticationFailure.InternalFailure,
-    };
+        var failure = exception.Failure switch
+        {
+            AuthenticationFailure.InteractionRequired or AuthenticationFailure.AccountAmbiguous
+                or AuthenticationFailure.IdentityValidationFailed
+                or AuthenticationFailure.Cancelled or AuthenticationFailure.Denied
+                or AuthenticationFailure.MechanismUnavailable
+                or AuthenticationFailure.TemporarilyUnavailable => exception.Failure,
+            _ => AuthenticationFailure.InternalFailure,
+        };
+        if (failure == AuthenticationFailure.InternalFailure)
+        {
+            observation.RecordProviderFailure(exception.Failure == AuthenticationFailure.InternalFailure
+                ? exception.DiagnosticError : ProviderDiagnosticError.Unexpected);
+            return new(null, failure, Interactive: interactive);
+        }
+
+        return new(null, failure, Interactive: interactive, Reason: exception.Reason);
+    }
 
     private static bool SatisfiesScopes(IReadOnlyList<string> requested, IReadOnlyList<string> granted)
     {
         // Admission has already established one resource and isolated /.default.
-        // The operation ID above binds its result to that original resource request;
-        // providers need not return the literal /.default spelling among grants.
+        // Providers need not return the literal /.default spelling among grants, so
+        // granted scopes cannot be compared here. The operation ID check above only
+        // binds the candidate to the provider call that carried this request; it does
+        // not prove the granted resource. Dynamic scopes are compared exactly below.
         if (requested.Count == 1 && requested[0].EndsWith("/.default", StringComparison.Ordinal))
         {
             return true;

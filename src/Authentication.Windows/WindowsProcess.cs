@@ -132,10 +132,12 @@ public static class WindowsProcess
             if (!process.TryCommit(invocation, out var result)) return;
             checkpoint?.Invoke(OwnedProcessCheckpoint.AfterCommit);
             pipe?.Stop();
-            WindowsDiagnostics.Completed(result!, invocation.Request?.TelemetryStderr == true,
-                entryTimestamp, trace, observation);
+            // Deliver the authoritative result before any optional diagnostic work,
+            // including the token-shape observation, can consume the shutdown bound.
             exitCode = WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json)
                 ? result.ExitCode : 2;
+            WindowsDiagnostics.Completed(result, invocation.Request?.TelemetryStderr == true,
+                entryTimestamp, trace, observation);
         }
         catch (Exception)
         {
@@ -177,7 +179,8 @@ public static class WindowsProcess
     }
 
     private static byte[] Help => """
-        Microsoft authentication CLI
+        AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)
+        Unofficial project: not a Microsoft product and not supported by Microsoft.
 
         Usage:
           authenticate --protocol 1 --profile <absolute-Windows-path>

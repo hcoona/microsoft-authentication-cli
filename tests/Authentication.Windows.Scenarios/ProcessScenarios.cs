@@ -15,6 +15,8 @@ public sealed class ProcessScenarios
         await child.FinishAsync();
         AssertNormalExit(child, 0);
         var text = Encoding.UTF8.GetString(child.Output);
+        StringAssert.StartsWith(text, "AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)\n"
+            + "Unofficial project: not a Microsoft product and not supported by Microsoft.\n");
         StringAssert.Contains(text, "authenticate");
         StringAssert.Contains(text, "--profile");
         Assert.IsFalse(text.Contains("SYNTHETIC_INVALID_VERSION", StringComparison.Ordinal));
@@ -59,6 +61,7 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task WriterClosureRejectsLateSuccessAndEndsTheProcess()
     {
         using var child = new ProcessFixture("close-pending");
@@ -81,6 +84,7 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task LifetimePipePayloadIsIgnoredAndClosureStillCancels()
     {
         using var child = new ProcessFixture("data-close");
@@ -95,6 +99,7 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task DeadlineEndsUncooperativeWorkWithinTheProcessBound()
     {
         using var child = new ProcessFixture("deadline");
@@ -125,6 +130,7 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task UndrainedResultPipeCannotKeepTheProcessAlive()
     {
         using var child = new ProcessFixture("blocked-output");
@@ -139,6 +145,7 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [TestCategory(WindowsHostTiming.Category)]
     public async Task BlockedDiagnosticsDoNotChangeTheAuthenticationResultOrKeepTheProcessAlive()
     {
         using var child = new ProcessFixture("blocked-diagnostics");

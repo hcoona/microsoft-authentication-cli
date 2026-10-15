@@ -142,12 +142,46 @@ public sealed class RequestSyntaxTests
         Assert.IsNull(RequestSyntax.Parse(arguments));
     }
 
+    // No PAT path exists: every PAT-like option is an unknown option, so the
+    // request fails closed before any Profile read or provider construction.
+    [TestMethod]
+    [DataRow("--pat", "SYNTHETIC_PAT")]
+    [DataRow("--token", "SYNTHETIC_PAT")]
+    [DataRow("--personal-access-token", "SYNTHETIC_PAT")]
+    [DataRow("--pat-fallback", "true")]
+    [DataRow("--allow-pat", "true")]
+    [DataRow("--output", "pat")]
+    [DataRow("--mode", "pat")]
+    public void PersonalAccessTokenOptionsAreRejected(string option, string value)
+    {
+        var arguments = Arguments();
+        arguments.AddRange([option, value]);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    [DataRow("--interaction", "pat")]
+    [DataRow("--telemetry", "pat")]
+    public void PersonalAccessTokenValuesAreRejected(string option, string value)
+    {
+        var arguments = Arguments();
+        if (arguments.Contains(option)) Set(arguments, option, value);
+        else arguments.AddRange([option, value]);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
     [TestMethod]
     [DataRow("--account-email", "missing-at")]
     [DataRow("--account-email", "@example.test")]
     [DataRow("--account-email", "a@@example.test")]
     [DataRow("--account-email", "a b@example.test")]
     [DataRow("--account-email", "a\u0000@example.test")]
+    [DataRow("--account-email", "\uFEFFa@example.test")]
+    [DataRow("--account-email", "a@example.test\uFEFF")]
+    [DataRow("--scope", "499b84ac-1321-427f-aa17-267ca6975798/\uFEFFread")]
+    [DataRow("--scope", "\uFEFF499b84ac-1321-427f-aa17-267ca6975798/read")]
     [DataRow("--profile", "relative.json")]
     [DataRow("--profile", @"C:relative.json")]
     [DataRow("--profile", @"\\server\share\profile.json")]
@@ -176,6 +210,14 @@ public sealed class RequestSyntaxTests
     [DataRow("-1")]
     [DataRow("1.5")]
     [DataRow("NaN")]
+    [DataRow("+1")]
+    [DataRow("01")]
+    [DataRow("0600")]
+    [DataRow(" 1")]
+    [DataRow("1 ")]
+    [DataRow("1000")]
+    [DataRow("\u0661")]
+    [DataRow("")]
     public void DeadlineOverrideMustBeABoundedInteger(string value)
     {
         var arguments = Arguments();
@@ -235,7 +277,7 @@ public sealed class RequestSyntaxTests
     [TestMethod]
     [DataRow("1", 1)]
     [DataRow("600", 600)]
-    [DataRow("+1", 1)]
+    [DataRow("30", 30)]
     public void ExplicitDeadlineAndTelemetryOffPreserveTheirMeaning(string text, int expected)
     {
         var arguments = Arguments();

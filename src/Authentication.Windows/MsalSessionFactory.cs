@@ -33,16 +33,21 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
             .WithAuthority(settings.Authority)
             .WithRedirectUri(settings.RedirectUri)
             .WithHttpClientFactory(http)
-            .WithBroker(new BrokerOptions(BrokerOptions.OperatingSystems.Windows)
-            {
-                ListOperatingSystemAccounts = settings.ListOperatingSystemAccounts,
-                MsaPassthrough = settings.MsaPassthrough,
-                Title = "Unofficial hcoona/microsoft-authentication-cli",
-            })
+            .WithBroker(Broker(settings))
             .Build();
         cancellationToken.ThrowIfCancellationRequested();
         return application;
     }
+
+    // The fixed broker title is one of the unofficial-identity surfaces; scenarios
+    // assert it on the exact options the application is built with.
+    internal static BrokerOptions Broker(MsalClientSettings settings) =>
+        new(BrokerOptions.OperatingSystems.Windows)
+        {
+            ListOperatingSystemAccounts = settings.ListOperatingSystemAccounts,
+            MsaPassthrough = settings.MsaPassthrough,
+            Title = "Unofficial hcoona/microsoft-authentication-cli",
+        };
 
     // Pinned RuntimeBroker chooses its sign-in/account-picker route only when
     // no account is bound. A login hint can suppress that selection experience.

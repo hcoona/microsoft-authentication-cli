@@ -5,7 +5,7 @@ using Authentication.Core;
 
 namespace Authentication.Windows;
 
-// One request owns one lazy STA window. Closure invalidates readiness immediately;
+// One request owns one lazy, hidden, childless STA owner window. Closure invalidates readiness immediately;
 // Completion separately drains callbacks and joins the actual creating thread.
 internal sealed partial class OwnedRequestHost : IRequestHost
 {
@@ -250,11 +250,9 @@ internal sealed partial class OwnedRequestHost : IRequestHost
             lock (gate) parent = window;
             checkpoint?.Invoke(OwnedHostCheckpoint.HiddenParentCreated, window);
             if (IsTerminal) return;
-            CreateNativeControls(window, profile!);
-            if (IsTerminal) return;
             RecheckAdmission();
 
-            // The parent stays hidden: WAM owns the visible sign-in display.
+            // The parent stays hidden and childless: WAM owns the visible sign-in display.
             if (IsTerminal) return;
             try { notice?.Invoke(Notice(profile!)); }
             catch (Exception) { } // Optional output cannot alter authentication.
@@ -268,7 +266,7 @@ internal sealed partial class OwnedRequestHost : IRequestHost
                 ready.TrySetResult(window);
             }
 
-            PumpNativeMessages(window);
+            PumpNativeMessages();
         }
         catch (Exception)
         {
