@@ -249,6 +249,15 @@ with `ObjectModel(LocalFile, false)`. `ModelLoadHasIssues` was false;
 native API workflow, not a supported public CLI contract. The pull request records the
 reproduction commands, input hash, tool/template versions, and observed counts.
 
+On **2026-10-15 UTC**, the security re-review below reopened the re-dispositioned model
+with the same installed TMT **7.3.51110.1** through the same native API workflow, in a
+dedicated temporary directory removed afterwards and without installing or reconfiguring
+the tool. `ModelLoadHasIssues` was false, and generation again produced and reconciled
+**96 candidates** with unchanged categories: 27 denial of service, 20 elevation of
+privilege, 20 spoofing, 17 repudiation, 7 information disclosure and 5 tampering. The
+native `SaveAs` output preserved every disposition. TMT 7.3 stores `NeedsInvestigation`
+under the same value it displays as *Needs Mitigation*.
+
 Desktop reproduction remains possible by opening `authentication-engine.tm7` and switching
 to Analysis View. The file embeds its template; importing an Azure template or regenerating
 from Markdown is unnecessary. Review candidate justification and status in the native file
@@ -260,26 +269,51 @@ required for every unrelated CI change.
 ### Candidate Dispositions
 
 All 96 candidates have a scenario-specific or threat-family justification in the native
-file. **76 are `NeedsInvestigation` and 20 are `NotApplicable`; none is marked `Mitigated`.**
-`NeedsInvestigation` records planned application controls, dependency configuration, or
-verification obligations. It does not mean that 76 new architectural feasibility
-questions or observed vulnerabilities were found.
+file. The 2026-10-15 security re-review against the implemented Slice at `main-v2`
+`563c262` (Issue #482) re-dispositioned them: **44 are `Mitigated`, 30 are
+`NeedsInvestigation` and 22 are `NotApplicable`** (previously 76 `NeedsInvestigation`,
+20 `NotApplicable` and none `Mitigated`).
 
-These dispositions predate implementation and the hidden-parent decision. They are
-**pending security re-review** against the implemented Slice; this record does not
-re-disposition any candidate.
+- **`Mitigated`** requires an implemented control with executed evidence: the Linux CI
+  run of `tests/Authentication.Scenarios` (378 cases at `563c262`) or a recorded
+  real-host observation in the
+  [Windows Slice research](../research/v1-public-contract-baseline.md#selected-role-windows-and-wsl-acceptance-observations).
+  Each native justification names the control and those scenarios or observations.
+- **`NeedsInvestigation`** covers two cases. Where the only evidence is the built but
+  not yet executed `tests/Authentication.Windows.Scenarios`, the justification says
+  *awaiting this Wave's Windows scenario execution (real-host validation protocol)* and
+  lists the exact scenarios, so the candidate can be re-dispositioned once their
+  recorded run passes. Where evidence depends on an open release gate (independent
+  distribution identity, real broker failure or concurrency), the justification names
+  that gate.
+- **`NotApplicable`** adds the two optional telemetry-endpoint candidates (IDs 85 and 87):
+  the Slice exports no network telemetry. Selecting network export must re-disposition
+  them.
 
-| Candidate group | Design disposition and verification focus |
+`Mitigated` means the named control is implemented and exercised by that evidence
+within the declared threat model; it is not a support claim, release readiness or proof
+of platform security. Trusted dependencies (OS process isolation, WAM, MSAL TLS and
+OAuth handling) remain trusted rather than verified.
+
+| Candidate group | Disposition after the 2026-10-15 re-review |
 | --- | --- |
-| Spoofing and input tampering | Preserve explicit intent, select a real account, validate provider identity/tenant/scopes, use trusted authority and broker APIs, and bind completion to the request. Test wrong-default and unverifiable-success scenarios. |
-| Token/state disclosure and store corruption | Use OS process boundaries, maintained OAuth/TLS integration, and platform-secure storage; preserve secret-free diagnostics, V2 state identity, and safe corruption recovery. No second OS-security subsystem or plaintext fallback. |
-| Interrupted flows, process failure, and inaccessible storage | Bound work by the original deadline, classify failures, reject late results, and distinguish validated success from unconfirmed persistence. Optional telemetry failure cannot change the authentication result. |
-| Execution-flow and privilege threats | Keep request parsing and policy explicit, use maintained dependency parsers, and introduce no privileged helper or impersonation service. Full compromise of the OS session/kernel/broker remains outside the declared threat model. |
-| OAuth response CSRF candidates | Preserve the maintained OAuth implementation's state, PKCE, and redirect validation where applicable, plus V2-owned completion and final result validation. Do not implement a parallel OAuth verifier. |
+| Caller, identity-service and broker-completion spoofing; input validation (IDs 2, 3, 20, 33, 34, 43, 47, 48) | `Mitigated`: closed request/Profile syntax, fixed Public Cloud authority and strict email/tenant/scope/operation validation, executed in Core scenarios. |
+| Process spoofing (IDs 1, 18, 32, 46, 65, 73) | `NeedsInvestigation`: operation binding is executed, but executable identity depends on the open distribution-identity release gate under decision 0005. |
+| Broker and interaction-surface spoofing (IDs 15, 19, 29) | `NeedsInvestigation`: DLL-search restriction, broker-availability check, rejected custom web UI and hidden-parent construction await Windows scenario execution and this Wave's Native AOT dependency-loading check. |
+| Data-flow disclosure; token and diagnostic destinations (IDs 5, 12, 22, 36, 50, 69, 76, 82) | `Mitigated`: no credential input, no application token store, token only in a validated success, allowlisted diagnostics; executed in Core scenarios with synthetic markers and recorded real-host transport. |
+| Interrupted flows (IDs 7, 14, 17, 24, 31, 38, 45, 52, 58, 60, 62, 64, 71, 78, 84, 93) | `Mitigated` except ID 14: original deadline, single terminal latch and no retry/fallback in Core scenarios, plus recorded closed-pipe, EOF-during-WAM, human-cancellation, caller-death and timeout observations. ID 14, result delivery, is `NeedsInvestigation` until the Windows process scenarios run. |
+| Process crash/stop and Profile-read bounds (IDs 6, 23, 37, 51, 77, 92) | `NeedsInvestigation`: typed outcomes and Profile bounds are executed, but the process watchdog evidence is in the unexecuted Windows process scenarios. |
+| Impersonation (IDs 8, 25, 39, 53) | `NeedsInvestigation`: no privileged helper exists; the impersonation and logon-kind admission checks await Windows scenario execution. |
+| Remote code execution (IDs 9, 26, 40, 54, 80, 95) | `Mitigated` for request and Profile input (IDs 9, 95); `NeedsInvestigation` for provider data (IDs 26, 40, 54, 80), whose bounded error-body and broker-status parsing awaits Windows scenario execution. |
+| Execution-flow changes (IDs 10, 27, 41, 55, 81, 96) | `Mitigated`: explicit policy state, one safe provider-failure filter and Profile fields that cannot select policy, executed in Core scenarios. |
+| OAuth response CSRF (IDs 42, 56) | `NeedsInvestigation`: correlation binding is executed in Core, but the MSAL composition scenarios await execution and real WAM correlation echo (CORE-01) is a real-host item of this Wave. No parallel OAuth verifier. |
+| Reusable-state spoofing, persistence status and resources (IDs 66, 68, 70, 74) | `Mitigated`: no application-owned store, persistence always reported as unconfirmed, no coordination or retry outside the deadline; recorded fresh-process reuse. |
+| Store corruption and inaccessibility (IDs 67, 72, 79) | `NeedsInvestigation`: real broker failure and concurrency remain release gates; unavailable-broker scenarios await Windows execution. |
+| Profile source and reads (IDs 89, 94) | `Mitigated` for unreadable configuration (ID 94); `NeedsInvestigation` for source substitution (ID 89), whose file-snapshot scenarios await Windows execution. |
+| Optional telemetry endpoint (IDs 85, 87) | `NotApplicable`: the Slice exports no network telemetry. |
 | Generic nonrepudiation candidates (`R6`/`R7`, 16 items) | Not applicable: the engine promises typed results and sanitized diagnostics, not signed delivery receipts or an identity-rich audit ledger. Persistence-status accuracy remains applicable under the separate storage candidate. |
 | CSRF on a CLI request or broker API result (IDs 11 and 28) | Not applicable to these non-browser-cookie endpoints. Their input-validation and spoofing concerns remain applicable under other candidates. |
 | Profile disclosure through a spoofed receiver or weak store ACL (IDs 88 and 91) | Not applicable to confidentiality of deliberately nonsecret registration metadata. Profile integrity, executable selection, and authenticated output remain covered by applicable spoofing and tampering candidates. |
-| Profile source substitution, parsing, interruption, and execution-flow threats (IDs 89 and 92–96) | Validate one bounded immutable local-file snapshot using a closed data-only schema; rely on Windows permissions within the stated trust model. Reject invalid or unavailable configuration without ambient search, partial defaults, executable extensions, account fallback, or state repair. Preserve request-owned account, scopes, interaction permission, and deadline. |
 
 Generic template attribute defaults are question prompts, not observations that a
 platform lacks TLS, memory protection, or secure storage. Dispositions evaluate the

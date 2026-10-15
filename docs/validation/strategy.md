@@ -514,8 +514,9 @@ readiness. The following [release gates](#release-gates) remain open: the primar
 gate for a release, real broker failure and concurrency evidence, external Profile
 consent/audit/branding acceptance and Profile activation/distribution, minimal
 deployment without development-machine dependencies, independent distribution and
-installation identity under decision 0005, re-review of the native threat-model
-candidate dispositions, and downstream service operations.
+installation identity under decision 0005, resolution of the native threat-model
+candidates that the [re-review](../security/threat-model.md#candidate-dispositions)
+left `NeedsInvestigation`, and downstream service operations.
 
 The Slice explicitly excludes browser/device code, Linux forwarding/native brokers,
 non-Public Cloud, service/impersonated/disconnected Windows sessions, ARM64, Profile
