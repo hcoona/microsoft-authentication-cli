@@ -270,7 +270,7 @@ required for every unrelated CI change.
 
 All 96 candidates have a scenario-specific or threat-family justification in the native
 file. The 2026-10-15 security re-review against the implemented Slice at `main-v2`
-`563c262` (Issue #482) re-dispositioned them: **44 are `Mitigated`, 30 are
+`563c262` (Issue #482) re-dispositioned them: **43 are `Mitigated`, 31 are
 `NeedsInvestigation` and 22 are `NotApplicable`** (previously 76 `NeedsInvestigation`,
 20 `NotApplicable` and none `Mitigated`).
 
@@ -289,6 +289,18 @@ file. The 2026-10-15 security re-review against the implemented Slice at `main-v
 - **`NotApplicable`** adds the two optional telemetry-endpoint candidates (IDs 85 and 87):
   the Slice exports no network telemetry. Selecting network export must re-disposition
   them.
+
+**Evidence provenance.** The cited real-host observations were made on earlier accepted
+builds, not on `563c262`: the visible-parent build from source `af05460` (Native AOT
+SHA-256 `4a393afd…`) and the hidden-parent build identical to `68c5175` (Native AOT
+SHA-256 `b9ecea4f…`). They still apply because `WindowsLifetimePipe.cs` and
+`WindowsProfileSource.cs` are unchanged since `af05460`, and the later source changes
+(result-before-diagnostics ordering, correlation binding, the single provider-failure
+filter, tightened request/Profile validation and the hidden parent) preserve or narrow
+the observed properties and are covered by the named executed Core scenarios. The
+research record already accepts reusing lifetime evidence for the hidden parent. A
+deadline expiring while WAM is pending and hidden-parent lifetime-pipe EOF remain
+real-host items of this Wave.
 
 `Mitigated` means the named control is implemented and exercised by that evidence
 within the declared threat model; it is not a support claim, release readiness or proof
@@ -309,7 +321,7 @@ OAuth handling) remain trusted rather than verified.
 | OAuth response CSRF (IDs 42, 56) | `NeedsInvestigation`: correlation binding is executed in Core, but the MSAL composition scenarios await execution and real WAM correlation echo (CORE-01) is a real-host item of this Wave. No parallel OAuth verifier. |
 | Reusable-state spoofing, persistence status and resources (IDs 66, 68, 70, 74) | `Mitigated`: no application-owned store, persistence always reported as unconfirmed, no coordination or retry outside the deadline; recorded fresh-process reuse. |
 | Store corruption and inaccessibility (IDs 67, 72, 79) | `NeedsInvestigation`: real broker failure and concurrency remain release gates; unavailable-broker scenarios await Windows execution. |
-| Profile source and reads (IDs 89, 94) | `Mitigated` for unreadable configuration (ID 94); `NeedsInvestigation` for source substitution (ID 89), whose file-snapshot scenarios await Windows execution. |
+| Profile source and reads (IDs 89, 94) | `NeedsInvestigation`: admission of a reported failure is executed in Core, but source substitution and the translation of real file-store failures rely on the unexecuted Windows file-snapshot scenarios. |
 | Optional telemetry endpoint (IDs 85, 87) | `NotApplicable`: the Slice exports no network telemetry. |
 | Generic nonrepudiation candidates (`R6`/`R7`, 16 items) | Not applicable: the engine promises typed results and sanitized diagnostics, not signed delivery receipts or an identity-rich audit ledger. Persistence-status accuracy remains applicable under the separate storage candidate. |
 | CSRF on a CLI request or broker API result (IDs 11 and 28) | Not applicable to these non-browser-cookie endpoints. Their input-validation and spoofing concerns remain applicable under other candidates. |
