@@ -1,7 +1,9 @@
 # Validation Strategy
 
-This record defines the evidence required before v2 can claim support. No implementation
-or release currently satisfies these gates.
+This record defines the evidence required before v2 can claim support. The Windows Slice
+is implemented and its [Slice ledger](#windows-slice-requirement-to-evidence-ledger)
+records its evidence; Slice closure is not release readiness. No release currently
+satisfies the [release gates](#release-gates).
 
 Scenario tests provide the main coverage of business behavior. Focused unit and contract
 tests protect core rules and public behavior, while targeted real-environment tests cover
@@ -139,12 +141,20 @@ evidence that a mechanism or platform passes the corresponding tests.
   settings and inherited provider defaults, including a Compact-token default, cannot
   enable PAT behavior. Verify provider-operation semantics and observable effects;
   do not classify credential types by parsing or scanning opaque token contents.
+- The no-PAT rows are satisfied by the absence of any PAT path: no request option,
+  Profile field, provider configuration or code path solicits, accepts, creates,
+  exchanges, persists or returns a PAT, confirmed by source review, plus contract cases
+  that reject PAT-like options (for example `--pat` or a PAT-valued Profile field) as
+  unknown input with `invalid_request` before provider work. No separate PAT scenario
+  per failure mode is required while no PAT path exists.
 - Versioned product order, profile compatibility filtering without reordering, and
   mandatory silent-first acquisition after unique real-account pre-resolution for the
   two ordinary modes. Explicit forced interaction instead skips silent acquisition and
   requests the provider interactive path with supported account selection after the same strict resolution.
 - Forced interaction with usable state, zero matches, and duplicate exact matches:
-  retain strict selection/validation and at most one interactive call. No fabricated
+  retain strict selection/validation and at most one interactive call that supplies
+  neither the discovered account nor a login hint. A different account chosen in the
+  provider picker fails final validation. No fabricated
   silent failure, engine silent call/fallback, cache clearing, sign-out or second attempt.
   Unsupported interactive account-selection intent returns unavailable. Provider session
   reuse inside the interactive call is allowed; its result is not visible-UI evidence.
@@ -159,8 +169,10 @@ evidence that a mechanism or platform passes the corresponding tests.
   Kind, stable-ID selection, or hidden first-account binding.
 - No match permitting only policy-allowed interaction; multiple visible matches remaining
   ambiguous without a wrong-account silent attempt.
-- Interactive login hint when supported and final authoritative validation regardless of
-  hint use.
+- For `interactive-if-needed`, the interactive call carries the resolved account or the
+  requested email as login hint when supported; for `force-interactive` it carries
+  neither. Final authoritative validation applies regardless of hint use and rejects any
+  other returned account.
 - Fixed single-tenant policy, eligible multitenant/MSA `common` default, compatible exact
   token/resource-tenant GUID, B2B home/resource-tenant distinction, and no exact-to-common
   fallback or email-domain inference.
@@ -433,108 +445,76 @@ prove resource equivalence, tenant precedence, provider behavior, or lifecycle c
 | Wrong/missing provider metadata | No token reaches stdout after wrong email, exact-tenant mismatch, missing actual tenant, insufficient scope coverage, or a mismatched operation/client context. | Candidate-validation scenarios and core validation tests; real result metadata coverage before activation. |
 | Noninteractive request in locked or expired state | No owned UI, broker interaction, browser, device-code instruction, or unlock prompt is initiated. Return the applicable interaction/unavailability outcome. | Scenario call assertions and attended real-platform no-UI observation; do not infer this solely from API names. |
 | Broker unavailable or disappears between checks | Return `mechanism_unavailable`; rejecting custom web UI prevents automatic browser fallback. | Provider/host scenario, then bounded Windows failure test before support. |
-| Local Windows host admission rejects or cannot observe required state | Return the existing unavailable outcome before real provider initialization, with no account discovery or owned UI. Cover rejected OS/client/architecture, thread impersonation or query failure, service/batch/new-credentials logon, station-user mismatch, disconnected/unobservable session and non-input desktop; retain a valid ordinary-user path. | Scenario fixtures at the local-observation/provider boundary; inspect actual native ABI and bounded resource ownership. A later exact protocol must cover own-logon metadata access and the selected normal Windows/WSL launch before real-provider acceptance. |
+| Local Windows host admission rejects or cannot observe required state | Return the existing unavailable outcome before real provider initialization, with no account discovery or owned UI. Cover rejected OS/client/architecture, thread impersonation or query failure, service/batch/new-credentials logon, station-user mismatch, disconnected/unobservable session and non-input desktop; retain a valid ordinary-user path. | Scenario fixtures at the local-observation/provider boundary; inspect actual native ABI and bounded resource ownership. Real-host observation of own-logon metadata access follows the experiment policy. |
 | Cancellation or host eligibility changes around provider/UI effects | Original cancellation/deadline wins; failed volatile rechecks prevent the next effect and close any owned parent. Broker false or recognized initialization failure permits no discovery or browser fallback. | Controlled scenarios for cancellation after a local check, loss of session/input before interaction and initialization failure. Bind checks to the actual request/UI threads in source review; real session rejection claims need their own bounded observations. |
 | User cancellation, denial, or another claims challenge | Stop within the same request; no alternate account, tenant, registration, mechanism, PAT, or repeated interaction. Only current silent-challenge data may reach the permitted interactive call. | Scenario outcomes and provider-call trace; bounded UI cancellation/denial evidence. |
-| Explicit `force-interactive`, including when silent reuse would succeed | Perform strict account discovery, no silent acquisition, and one provider interactive operation with supported account-selection intent using the same Profile/tenant/scopes and owned UI. A successful result reports the invoked path as `interactive`, not proof of visible UI or renewed credentials; unavailable semantics, cancellation/denial and identity failure stay terminal. No cache management or changed token-byte/persistence guarantee. | Contract examples and controlled policy/adapter scenarios, pinned MSAL/Broker/native source review before implementation, and separately authorized actual WAM/UI/cancellation/EOF evidence before support. Existing silent-success evidence does not establish this new mode; observation remains frozen. |
-| Lifetime pipe closes before discovery or during WAM | Cancel without late success, end owned UI and process, and expose no token. Reject console/file stdin when the pipe flag is selected. | Deterministic lifecycle scenario and actual WSL-to-Windows pipe integration, including writer-handle inheritance. |
+| Explicit `force-interactive`, including when silent reuse would succeed | Perform strict account discovery, no silent acquisition, and one provider interactive operation with supported account-selection intent, supplying neither the discovered account nor a login hint, using the same Profile/tenant/scopes and hidden parent. A different account chosen in the picker fails final validation. A successful result reports the invoked path as `interactive`, not proof of visible UI or renewed credentials; unavailable semantics, cancellation/denial and identity failure stay terminal. No cache management or changed token-byte/persistence guarantee. | Contract examples and controlled policy/adapter scenarios, pinned MSAL/Broker/native source review, and actual WAM/UI/cancellation/EOF evidence before support. Existing silent-success evidence does not establish this mode. |
+| Lifetime pipe closes before discovery or during WAM | Cancel without late success, destroy the hidden parent, end the process, and expose no token. Reject console/file stdin when the pipe flag is selected. | Deterministic lifecycle scenario and actual WSL-to-Windows pipe integration, including writer-handle inheritance. |
 | Linux caller dies without the optional lifetime pipe | Do not assert Linux signal delivery to Windows. Windows work ends through detected transport failure or the original finite deadline. | Bounded WSL process-lifetime test; no immediate-disconnect support claim for this combination. |
 | Deadline during Profile reading, discovery, silent, interaction, or validation | Original deadline is never restarted. Incomplete validation yields timeout; late candidates cannot resume. | Clock-driven scenarios and bounded real host tests for dependency cancellation and process exit. |
 | Blocked stdout/stderr or uncooperative completion | The shutdown watchdog ends the one process within the defined local shutdown allowance. Incomplete output is a transport failure, never a complete typed result. | Controlled process/pipe scenario before shipping; no tests using real credentials are needed for this transport condition. |
 | Validated token with no broker persistence receipt | Return success with `persistence_unconfirmed`, no readback, extra acquisition, write, or persistence wait. Next invocation may still reuse usable state. | Scenario and real reuse evidence; do not infer durable-write confirmation from provider success. |
 | Concurrent invocations | Broker integrity is preserved through supported APIs; no app-owned cache or locking is introduced. Duplicate prompts are not suppressed by contract. | Concurrent Windows integration before that support claim; trust broker internals within their documented boundary. |
-| Explicit Profile file and compatibility candidate | Same parser for user-provided and eventually provisioned files; no implicit selection, hot reread, external URL, inherited configuration, or upstream cache import. Show external ownership without claiming Microsoft endorsement. | Admission scenarios, contract examples, and later bounded consent/audit/branding validation under the external Profile gate. |
+| Explicit Profile file and compatibility candidate | Same parser for user-provided and eventually provisioned files; no implicit selection, hot reread, external URL, inherited configuration, or upstream cache import. Show external ownership without claiming Microsoft endorsement. Profile name and owner reject control and Unicode format characters. | Admission scenarios, contract examples, and later bounded consent/audit/branding validation under the external Profile gate. |
+| Unofficial identity presentation | CLI help states that the project is unofficial; before an interactive call, a best-effort bounded stderr indication names the unofficial project and the Profile's name and owner; the fixed broker title is set. No per-use confirmation. | Contract test of help text and scenario assertions on the indication and title; caller display of stderr and WAM title presentation are not claimed. |
 | Output and optional local telemetry | One complete result with matching 0/1 status, or recognizable transport failure. Only validated success exposes a token; stderr has no token/email/identifier/provider text. Local telemetry opt-in, overflow, or sink failure cannot alter authentication. | Contract and orchestration scenarios with synthetic secret markers; no production credential fixture. |
-| Local OpenTelemetry-compatible observation | Owned request/phase activities have explicit parentage; phase starts are observable before an awaited operation finishes. Only allowlisted local observations are emitted. Ambient activity, outgoing HTTP headers, ordinary result/exit, cancellation and process bounds are preserved. Optional interpretation of opaque/malformed JWTs cannot change success or expose claims. | Controlled listeners and safe-sink scenarios with synthetic private markers, listener/sink failure and overflow, parentage and ambient-context checks, and opaque/duplicate/oversized-token cases; exact Windows artifact/lifetime checks before dependent real use. Telemetry is not an independent proof of process exit, visible UI, normal stdout or actual WSL credential transport. |
+| Local OpenTelemetry-compatible observation | Owned request/phase activities have explicit parentage; phase starts are observable before an awaited operation finishes. Only allowlisted local observations are emitted. Ambient activity, outgoing HTTP headers, ordinary result/exit, cancellation and process bounds are preserved. | Controlled listeners and safe-sink scenarios with synthetic private markers, listener/sink failure and overflow, parentage and ambient-context checks; exact Windows artifact/lifetime checks before dependent real use. Telemetry is not an independent proof of process exit, visible UI, normal stdout or actual WSL credential transport. |
+| Token-shape validation observation under [`V2-REQ-038`](../product/requirements/result-and-process-protocol.md#v2-req-038-local-token-shape-validation-observation) | Runs only with `--telemetry stderr` and only after the complete success result is written to stdout. Emits fixed categories only; opaque, malformed, duplicate-member or oversized tokens cannot change success or expose token material. | Controlled scenarios asserting ordering after the stdout write, opt-in gating, and opaque/duplicate/oversized-token cases with synthetic markers. |
 
-The [direct selected-account protocol](../research/experiments/windows-slice-validation.md#selected-account-scenarios)
-uses ordinary product invocation, standard local telemetry and Windows-local result
-validation. Real-account execution still requires exact source/artifact/request/call,
-cumulative accounting and current operating-basis acceptance. The
-[selected-role Windows and WSL observations](../research/v1-public-contract-baseline.md#selected-role-windows-and-wsl-acceptance-observations)
-link accepted native personal/work acquisition and reuse, actual WSL transport,
-deadline and pipe cancellation, independent caller death, EOF during actual WAM
-and human WAM close at their exact candidate/request scopes. Preserve earlier
-failed alternatives and the limits of operator versus process evidence. Reuse
-sufficient unchanged controlled/native evidence; these results do not establish
-every row above. The hidden parent is now selected by owner decision. One accepted
-[hidden-parent observation](../research/v1-public-contract-baseline.md#hidden-owned-parent-interactive-observation) established that no product window was
-exposed, that the WAM prompt was cancelled on WAM's own surface and that the stderr
-notice was written. The owner does not require WAM title or focus confirmation, so
-those are not acceptance obligations. The
-[locked-state observation](../research/v1-public-contract-baseline.md#locked-state-non-interactive-observation)
-covers the noninteractive locked request on this host. The
-[requirement-to-evidence review](../research/v1-public-contract-baseline.md#windows-slice-requirement-to-evidence-review)
-records each row's evidence, the rows outside Slice closure and the claims the
-owner chose not to make. Real broker failure, concurrency and minimal-deployment
-evidence retain their claim gates; Profile activation/distribution,
-downstream service operations, release and general support remain separate.
+The [research evidence for the Windows Slice](../research/v1-public-contract-baseline.md#windows-slice-dependency-and-host-contracts)
+owns each observation, its exact candidate/request binding and its limits. This
+strategy owns only the mapping below from scenarios to that evidence; it does not
+restate the observations.
 
-The [local host predicates](../designs/windows-ado-authentication.md#local-windows-host-admission)
-do not prove continuing eligibility, every alternate-launch origin or WAM health.
-Controlled results establish branching and suppressed effects; historical account/AOT
-experiments do not establish this new local metadata path. Do not force service, account,
-desktop or logon-state changes merely to manufacture rejection evidence.
+### Windows Slice Requirement-to-Evidence Ledger
 
-The [controlled host-admission result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#controlled-windows-host-admission-green-evidence)
-binds the unchanged twenty-two scenario methods to their red/green execution and
-bounded evidence. It covers synthetic fact classification and suppressed provider
-effects; native observations, UI-thread integration and real-provider acceptance
-retain the obligations above.
+An independent contextual review at `main-v2` `e789c64` mapped each scenario above
+to accepted evidence; the 2026-10-15 review remediation (Issue #474) refined rows whose
+evidence covers only part of the scenario. "Partially satisfied" names the observed
+sub-condition and the sub-condition that remains unobserved.
 
-The [controlled owned-host fault result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#owned-host-fault-lifetime-evidence)
-binds core request termination, cancellation/deadline precedence and withholding
-uncommitted success to the unchanged red/green scenarios. That core-only result does
-not by itself establish actual UI fault/commit synchronization or process drain.
+| Scenario | Status | Evidence and exact sub-condition |
+| --- | --- | --- |
+| Personal request with a different corporate OS default | Satisfied | Native and WSL personal acquisition and reuse in the [selected-role observations](../research/v1-public-contract-baseline.md#selected-role-windows-and-wsl-acceptance-observations). |
+| Work request for company Azure DevOps | Partially satisfied | Work acquisition and reuse with `common` observed; an explicit work-tenant GUID combination was not observed and is not claimed by owner decision. |
+| First use and later invocation | Partially satisfied | Existing-state first engine use and fresh-process silent reuse observed; clean-state first use was not observed and is not claimed by owner decision. |
+| Git followed by Artifacts acquisition | Partially satisfied | Fresh-process reuse with the same request observed; a change of downstream consumer was not itself exercised, and Git/feed operations remain downstream evidence. |
+| Validated token with no broker persistence receipt | Satisfied | `persistence_unconfirmed` success followed by fresh-process reuse. |
+| Explicit `force-interactive` | Partially satisfied | Strict discovery, no silent call, actual WAM presentation, EOF during WAM and human WAM cancellation observed. A successful forced acquisition and a different account chosen in the picker were not observed; controlled scenarios cover the no-account/no-hint call and final-validation rejection. |
+| User cancellation, denial, or another claims challenge | Partially satisfied | Human WAM cancellation observed; consent denial was not observed and is not claimed by owner decision. Claims continuation has controlled evidence only. |
+| Lifetime pipe closes before discovery or during WAM | Satisfied | Initially closed pipe and EOF during actual WAM. |
+| Linux caller dies without the optional lifetime pipe | Satisfied | Finite scoped Windows completion after caller-only SIGTERM. |
+| Deadline during Profile reading, discovery, silent, interaction, or validation | Partially satisfied | Typed timeout and timed cancellation observed at their recorded stages; a deadline expiring while WAM work is pending was not observed. Hidden-parent EOF and deadline reuse the visible-parent lifetime evidence, which does not depend on owned controls. |
+| Noninteractive request in locked or expired state | Partially satisfied | A disconnected Remote Desktop session was rejected at local admission with no UI ([locked-state observation](../research/v1-public-contract-baseline.md#locked-state-non-interactive-observation)); expired-credential broker handling was not observed and is not claimed. |
+| Hidden owned parent | Satisfied | No exposed product window and WAM presentation with human cancellation in the [hidden-parent observation](../research/v1-public-contract-baseline.md#hidden-owned-parent-interactive-observation); Windows scenarios assert that the parent has no child controls and never becomes visible. |
+| Unofficial identity indication | Partially satisfied | The stderr indication was written before interaction; its visibility to users depends on the caller and is not claimed. WAM title presentation and focus are not acceptance obligations by owner decision. |
+| No match, duplicate match, alias-only visibility; tenant and scope normalization; wrong/missing provider metadata; local host admission; cancellation and eligibility races; blocked output; output and telemetry allowlists; local OpenTelemetry observation; token-shape observation | Satisfied by controlled evidence | Core and Windows scenario suites; controlled results are recorded at a [pinned research revision](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md). |
+| Broker unavailable or disappears; concurrent invocations | Outside Slice closure | Retain their "before support" claim gates. |
+| Explicit Profile file and compatibility candidate | Outside Slice closure | Consent, audit and branding remain under the external Profile gate. |
+| Minimal deployment without development-machine dependencies | Outside Slice closure | Retains the deployment support claim gate. |
 
-The [request-context initialization result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#request-context-initialization-evidence)
-binds the existing personal, fixed-work and explicit-work application scenarios to
-the same admitted request at provider initialization and acquisition. It supplies
-controlled forwarding evidence; real provider initialization remains separate.
+The local host predicates do not prove continuing eligibility, every alternate-launch
+origin or WAM health. Do not force service, account, desktop or logon-state changes
+merely to manufacture rejection evidence.
 
-The [owned-host process result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#owned-host-process-composition-evidence)
-binds the ten managed Windows scenarios to typed local cancellation/fault consumption
-before result commitment, cancellation during creation, the first host-ending bound,
-and actual owned-thread/callback drain. The controlled providers and owned native
-windows establish those process-composition observations. They do not establish real
-native admission, production MSAL initialization, WAM/account reuse, actual WSL caller
-lifetime, final Native AOT or whole-Slice acceptance.
+### Continuous Integration and Host-Timing Evidence
 
-The [MSAL adapter composition result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#msal-adapter-composition-evidence)
-binds sixteen unchanged red/green scenarios to request initialization, Profile/tenant
-mapping, exact account and claims continuation, cancellation, safe provider failures,
-and one owned HTTP client retained until cancellation and drain. Controlled sessions
-and a terminal HTTP handler with no network transport establish these observations. Concrete
-MSAL construction has separate evidence below. Real broker availability and accounts,
-default entry activation, Windows/WSL lifetime and final Native AOT retain their
-separate evidence obligations.
+CI restores, builds and runs the platform-neutral `tests/Authentication.Scenarios`
+project on Linux, alongside the schema and record checks. The
+`tests/Authentication.Windows.Scenarios` project runs only on a Windows host and is not
+part of CI. Its wall-clock process assertions, such as the one-second shutdown
+allowance and process-exit bounds, are Windows host-timing evidence: they establish
+timing only on the host where they ran and are not reproduced by Linux CI.
 
-The [concrete MSAL construction result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#concrete-msal-construction-evidence)
-binds four unchanged red/green scenarios to the real shared production application
-builder: common, organizations and an exact synthetic tenant configuration, plus
-original cancellation before construction. Supplied HTTP-factory identity, disabled
-logging and no client request or transport send are observed in that selection.
-Only the construction helper executes; the remaining concrete session bindings have
-source and compiled review. Real availability, discovery/acquisition, native/default
-activation, WAM/account reuse, Windows/WSL lifetime and final Native AOT remain open.
+### Slice Closure Versus Release Readiness
 
-The [shared default HTTP composition result](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md#shared-default-http-composition-evidence)
-binds two unchanged red/green scenarios to the common public/default composition:
-HTTP ownership survives pending cancellation work, actual request/host/pipe/cancellation
-drains precede disposal, and disposal precedes process completion. A disposal stall
-retains the product watchdog and exits within the original ending allowance without
-fixture enforcement. Native admission, DLL-search setup, MSAL session and network
-transport are controlled substitutes. This supplies managed Windows process ownership
-evidence; real default dependency activation, WAM/account reuse, actual WSL caller
-lifetime, final Native AOT and overall Slice acceptance remain open.
-
-The design's public dependency premises and security/TMT update receive independent
-architecture, consistency, minimality, security, record-system, and research-evidence
-review. Record schema checks, native TMT open/analysis, review identities, findings and
-dispositions, and exact reviewed tree in the PR. Design acceptance does not require
-pretending that these future runtime cases already pass, nor does it authorize running
-them. A newly found premise that invalidates a selected implementation path must be
-resolved before calling that path design-ready.
+Closing the Windows Slice means its scenarios have the evidence above. It is not release
+readiness. The following [release gates](#release-gates) remain open: the primary journey
+gate for a release, real broker failure and concurrency evidence, external Profile
+consent/audit/branding acceptance and Profile activation/distribution, minimal
+deployment without development-machine dependencies, independent distribution and
+installation identity under decision 0005, re-review of the native threat-model
+candidate dispositions, and downstream service operations.
 
 The Slice explicitly excludes browser/device code, Linux forwarding/native brokers,
 non-Public Cloud, service/impersonated/disconnected Windows sessions, ARM64, Profile
@@ -552,29 +532,22 @@ condition, or an unresolved choice that cannot be called implementation-ready. R
 public toolchain/dependency contracts and supported alternatives before accepting an
 exception. Requirement acceptance does not establish compatibility of the current
 UI/MSAL host; the [concrete disposition](../designs/windows-ado-authentication.md#native-aot-target-disposition)
-selects Native AOT for the .NET 10 Windows x64 Win32 host at the preimplementation
-design level. No non-AOT exception is accepted. Implementation authorization remains
-separate from that decision and from the later evidence required for support.
+selects Native AOT for the .NET 10 Windows x64 Win32 host. No non-AOT exception is
+accepted. That selection is separate from the later evidence required for support.
 
-The [latest synthetic results](../research/experiments/windows-native-aot.md#diagnostic-round-05-results)
-close the bounded preimplementation obligations below for their exact pinned source,
-toolchain, artifacts and existing host. They do not validate an unimplemented application.
+The [Native AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
+owns the synthetic observations that closed the bounded obligations below for their
+exact pinned source, toolchain, artifacts and host; it does not validate the complete
+application.
 
-| Synthetic obligation | Accepted evidence and limit |
+| Synthetic obligation | Status |
 | --- | --- |
-| Resolved provider assets and provenance | The ten-library graph selects net8.0 Client, netstandard2.0 Broker, net9.0 NativeInterop and the x64 DLL. All declared package/download payloads were checked against reused public archives; clean network restore remains unproved. |
-| Complete AOT/trim diagnostics and publish completion | Rooted provider compilation produced complete warning-free diagnostics. Publish completed with the accepted VCTIP cleanup criterion and final zero Job count. No suppression or dependency exception was needed; product build-helper and symbol behavior remain separate. |
-| Native dependency disposition | Exact native EXE/DLL identities, x64 PE headers and direct Windows/API-set imports are retained. Actual synthetic loading/allocation worked with restricted search. Dynamic WAM dependencies and deployment without development tools remain product validation obligations. |
-| Observable native cleanup | Export checks, a passing first-chance self-check, first and repeated disposal returns and zero observed cleanup exceptions support the pinned public wrapper path. Opaque native deallocation correctness and a shutdown return status are not claimed. |
-| Genuine wrong architecture | The pinned x86 DLL was rejected by the x64 EXE without loading its module. Expected subject failure completed normally; runtime termination was not used as success. |
-| Missing and decoy inputs | The [earlier cases](../research/experiments/windows-native-aot.md#retained-native-artifact-runtime-results) failed to load the module with missing or working-directory/PATH-decoy inputs. Their artifact identity and historical publish uncertainty remain distinct. |
-
-Both latest runtime cases require and have strict normal zero-process completion with
-no forced termination. Preserve all earlier stops, missing diagnostics and cumulative
-consumption; later success neither reconstructs old evidence nor authorizes replay.
-The [protocol](../research/experiments/windows-native-aot.md) owns exact execution
-procedures, while the accepted Delivery Wave owns authorization. Unused buffer is not
-a new runtime allocation.
+| Resolved provider assets and provenance | Satisfied for the synthetic graph; clean network restore remains unproved. |
+| Complete AOT/trim diagnostics and publish completion | Satisfied; product build-helper and symbol behavior remain separate. |
+| Native dependency disposition | Partially satisfied: synthetic loading under restricted search observed; dynamic WAM dependencies and deployment without development tools remain open. |
+| Observable native cleanup | Partially satisfied: observable disposal without exceptions; opaque native deallocation and shutdown status not claimed. |
+| Genuine wrong architecture | Satisfied. |
+| Missing and decoy inputs | Satisfied for the recorded artifact. |
 
 For the implemented application, verify the resolved graph and every required native
 asset under application-directory/System32 search before claiming deployment support.
@@ -588,8 +561,9 @@ Review and render the C4 deployment and UML request, UI-cancellation and termina
 sources against their normative contracts. Later application tests must cover HWND
 readiness, creation failure, callback lifetime/ABI, creating-thread destruction, stalled
 UI dispatch, the hidden parent never becoming visible, the bounded pre-interaction
-notice, and cancellation racing provider completion. One bounded interactive observation
-confirms hidden-parent WAM presentation and human cancellation. Verify strict Profile parsing and result allowlists on the published binary,
+indication, and cancellation racing provider completion. Windows scenarios assert that
+the hidden parent has no child controls and never becomes visible. One bounded
+interactive observation confirms hidden-parent WAM presentation and human cancellation. Verify strict Profile parsing and result allowlists on the published binary,
 including duplicate/unknown JSON fields and synthetic secret markers. Use the existing
 scenario matrix for account, tenant, interaction, reuse and lifetime semantics rather
 than treating an AOT publish as their acceptance.
@@ -604,7 +578,7 @@ prove runtime compatibility.
 
 Exercise the applicable existing contract and scenario basis on the published artifact,
 including serialization, native broker loading, strict account/result validation,
-silent and permitted interactive paths, owned UI, cancellation, deadline, and process
+silent and permitted interactive paths, hidden parent, cancellation, deadline, and process
 termination. Select the least costly evidence level that establishes each property;
 real WAM/UI behavior still needs bounded Windows evidence. Apply these obligations to
 an accepted non-AOT exception as well. Do not add redundant copies of the scenario matrix

@@ -885,7 +885,7 @@ No automatic retry or forced shell/window presentation is allowed.
 ## Hidden Owned-Parent Candidate
 
 This experiment evaluates the hidden owned-parent hypothesis in the
-[Windows design](../../designs/windows-ado-authentication.md#hidden-owned-parent-hypothesis),
+[Windows design](../../designs/windows-ado-authentication.md#parent-selection-decision),
 under the existing Windows Slice Wave, designated hosts, selected roles, normal
 account effects and shared pools. It does not replace the accepted candidate,
 add a desktop application or introduce a runtime mode/public command.

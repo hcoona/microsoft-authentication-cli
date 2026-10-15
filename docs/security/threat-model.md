@@ -3,9 +3,10 @@
 ## Scope
 
 This threat model applies to the delegated public-client authentication architecture and
-the [concrete Windows Slice design](../designs/windows-ado-authentication.md). Its
-application controls remain planned until implementation and validation; design review
-does not mark them effective on a real platform.
+the [concrete Windows Slice design](../designs/windows-ado-authentication.md). The Slice
+is implemented; its controls are effective only to the extent the
+[validation strategy](../validation/strategy.md#windows-slice-requirement-to-evidence-ledger)
+records evidence for them, and design review alone does not mark them effective.
 
 The goal is to protect authentication intent, token material, account metadata, cache
 state, machine protocols, and user interaction within a normal developer workstation
@@ -80,7 +81,7 @@ threat model owns their security assumptions and mitigation tradeoffs.
 | Another local user reads or modifies reusable state, unsafe state is consumed, or storage silently falls back to plaintext. | [`V2-REQ-040`](../product/requirements/cache-security-and-operational-identity.md#v2-req-040-secure-authentication-state) and [`V2-REQ-041`](../product/requirements/cache-security-and-operational-identity.md#v2-req-041-safe-reusable-state-recovery-and-concurrency) |
 | Reuse across consumers confuses account, tenant, client, resource, or security contexts, or OS sign-in is mistaken for permission to use an opaque default. | [`V2-REQ-041`](../product/requirements/cache-security-and-operational-identity.md#v2-req-041-safe-reusable-state-recovery-and-concurrency), [`V2-REQ-020`](../product/requirements/strategy-interaction-and-host.md#v2-req-020-pre-resolved-account-for-silent-acquisition), and [`V2-REQ-022`](../product/requirements/strategy-interaction-and-host.md#v2-req-022-strict-result-identity) |
 | Authentication work outlives cancellation or timeout. | [`V2-REQ-015`](../product/requirements/strategy-interaction-and-host.md#v2-req-015-common-deadline) and [`V2-REQ-025`](../product/requirements/strategy-interaction-and-host.md#v2-req-025-no-orphaned-work) |
-| A WSL-launched prompt is hidden, unowned, or attached to the wrong desktop. | [`V2-REQ-016`](../product/requirements/strategy-interaction-and-host.md#v2-req-016-self-contained-interactive-authentication) and [`V2-REQ-021`](../product/requirements/strategy-interaction-and-host.md#v2-req-021-no-interaction-guarantee) |
+| A WSL-launched provider prompt cannot be presented, has no owner, or appears on the wrong desktop. The hidden owned parent is deliberately never shown and is not itself the threat. | [`V2-REQ-016`](../product/requirements/strategy-interaction-and-host.md#v2-req-016-self-contained-interactive-authentication) and [`V2-REQ-021`](../product/requirements/strategy-interaction-and-host.md#v2-req-021-no-interaction-guarantee) |
 | A Microsoft-owned client ID is mistaken for an owned credential or support contract. | [`V2-REQ-042`](../product/requirements/cache-security-and-operational-identity.md#v2-req-042-client-registration-as-configuration) and decision [`0003`](../decisions/0003-treat-client-registration-as-an-external-dependency.md) |
 | A caller directs discovery or authentication to an attacker-controlled authority. | [`V2-REQ-011A`](../product/requirements/request-identity-and-authority.md#v2-req-011a-trusted-authority) |
 | Home-tenant identity is mistaken for the requested resource tenant, or token parsing fabricates scope satisfaction. | [`V2-REQ-019`](../product/requirements/request-identity-and-authority.md#v2-req-019-tenant-selection), [`V2-REQ-027`](../product/requirements/request-identity-and-authority.md#v2-req-027-scope-satisfaction), and [`V2-REQ-033`](../product/requirements/result-and-process-protocol.md#v2-req-033-opaque-access-tokens) |
@@ -122,11 +123,15 @@ app-owned token file, cache callback, cross-process lock, account binding, or re
 operation. Missing durable-write confirmation is represented accurately as a success
 warning. No new persistence service or independent proof of broker internals is needed.
 
-The owned Windows parent exists only for permitted interaction. WAM controls its own
-credential/MFA/consent UI; the engine supplies an HWND and login hint, validates the final
-result, forwards cancellation, and invalidates late completion. Provider prompt choice
-is not an application security control. Unknown or terminal failures cannot activate a
-PAT, alternate registration, browser, or account fallback.
+The hidden owned Windows parent exists only for permitted interaction, is never shown,
+and has no controls; its window procedure only turns `WM_CLOSE` into cancellation and
+handles destruction. WAM controls its own credential/MFA/consent UI and its cancel. The
+engine supplies the HWND, supplies the account or login hint only for
+`interactive-if-needed` (`force-interactive` supplies neither, so the user may pick
+another account), validates the final result, rejects any account other than the
+requested email, forwards cancellation, and invalidates late completion. Provider prompt
+choice is not an application security control. Unknown or terminal failures cannot
+activate a PAT, alternate registration, browser, or account fallback.
 
 Before real provider initialization, the [local host admission design](../designs/windows-ado-authentication.md#local-windows-host-admission)
 checks only the current process/thread, its own logon, local session, station and desktop.
@@ -142,7 +147,9 @@ The selected Native AOT design replaces the managed desktop host with finite sta
 interop inside the same process. Explicit ABI/layout, callback lifetime, creating-thread
 window destruction and nonblocking cancellation are review obligations; the unmanaged
 boundary must not leak exceptions or accept a late success. The hidden owned parent
-holds only bounded plain text and collects no credentials. Process DLL search must exclude
+holds no text controls and collects no credentials. The pre-interaction stderr indication
+carries only fixed text and the admitted Profile name and owner, which reject control and
+Unicode format characters. Process DLL search must exclude
 the current directory and ambient `PATH`, retaining only the application directory and
 System32 before provider initialization. Validate the actual broker loader and every
 required native asset under those restrictions; Native AOT alone supplies no dependency
@@ -151,11 +158,10 @@ integrity or DLL-loading guarantee. A conflict makes the affected target unavail
 The native TMT model's process, UI, broker, caller, Profile and data flows do not change:
 these are internal host and deployment mitigations of its existing execution, tampering,
 disclosure and availability threats. The
-[synthetic evidence](../research/experiments/windows-native-aot.md#diagnostic-round-05-results)
+[Native AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
 supports the bounded loader/allocation/observable-cleanup premise; it does not mark
-product controls effective. The publishing choice is resolved at the design level.
-The native model and its candidate dispositions remain unchanged, and complete-application,
-Profile and security acceptance gates remain applicable.
+product controls effective. Complete-application, Profile and security acceptance gates
+remain applicable.
 
 The optional lifetime pipe gives a cooperating caller a concrete cancellation signal.
 Its contract depends on ordinary writer-handle closure, not Linux-to-Windows signal
@@ -167,11 +173,13 @@ fail-closed response to the actual transport limitation, without an additional d
 
 Only the validated result contains a token. Fixed stderr indications and optional local
 telemetry use an allowlist, have bounded buffering, and carry no email or authentication
-material. Network telemetry is not selected. Externally owned Visual Studio registration
+material. The opt-in token-shape observation under
+[`V2-REQ-038`](../product/requirements/result-and-process-protocol.md#v2-req-038-local-token-shape-validation-observation)
+runs only after the result is written and emits fixed categories only. Network telemetry
+is not selected. Externally owned Visual Studio registration
 branding, consent, audit attribution, and availability remain explicit dependency limits
 under the candidate Profile gate. The Slice scenario matrix tests these application
-boundaries; actual company-account, .NET 10, first-use, WSL cancellation, and feed behavior
-are not established by the existing personal-account probe.
+boundaries.
 
 The normative release evidence requirements are defined by
 [`validation/strategy.md`](../validation/strategy.md). Security review prioritizes its
@@ -255,7 +263,11 @@ All 96 candidates have a scenario-specific or threat-family justification in the
 file. **76 are `NeedsInvestigation` and 20 are `NotApplicable`; none is marked `Mitigated`.**
 `NeedsInvestigation` records planned application controls, dependency configuration, or
 verification obligations. It does not mean that 76 new architectural feasibility
-questions or observed vulnerabilities were found. Product implementation has not begun.
+questions or observed vulnerabilities were found.
+
+These dispositions predate implementation and the hidden-parent decision. They are
+**pending security re-review** against the implemented Slice; this record does not
+re-disposition any candidate.
 
 | Candidate group | Design disposition and verification focus |
 | --- | --- |

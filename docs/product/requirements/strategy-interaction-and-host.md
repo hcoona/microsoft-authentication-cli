@@ -64,8 +64,12 @@ owner or raw platform window handle. If that interaction cannot be established u
 current host and request constraints, V2 must treat the path as unavailable rather than
 initiate unmanaged interaction.
 
-When the provider supports a login hint, interactive acquisition must use the requested
-email as that hint. A hint does not replace final identity validation under `V2-REQ-022`.
+For `interactive-if-needed`, when the provider supports a login hint, interactive
+acquisition must use the requested email, or the uniquely resolved account, as that hint.
+For `force-interactive`, interactive acquisition must supply neither the discovered
+account nor a login hint, so that the provider's account selection is not pre-filled.
+In both modes a hint, or its absence, does not replace final identity validation under
+`V2-REQ-022`; a returned account other than the requested one must be rejected.
 
 ## V2-REQ-020: Pre-resolved Account for Silent Acquisition
 
@@ -80,9 +84,11 @@ The identity-opaque `OperatingSystemAccount` sentinel is not a resolved account.
 `interactive-if-needed`, an interaction-required acquisition outcome may proceed to
 permitted interaction under `V2-REQ-023`; it is terminal without interaction permission.
 `force-interactive` uses the same exact account resolution, but proceeds directly to its
-interactive path with the unique account or the requested email hint when none matches.
-Account ambiguity must not fall back to another account or a picker that bypasses the
-strict-email ambiguity.
+interactive path after zero or one exact match, supplying neither the discovered account
+nor a login hint under `V2-REQ-016`. The requested email remains the strict selector for
+final validation under `V2-REQ-022`, which rejects any other account chosen during
+provider account selection. Account ambiguity must not fall back to another account or
+a picker that bypasses the strict-email ambiguity.
 
 ## V2-REQ-021: No-Interaction Guarantee
 
