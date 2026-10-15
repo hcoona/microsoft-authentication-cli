@@ -40,6 +40,12 @@ jobs:
     name: Linux Scenario Tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      TESTINGPLATFORM_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+      # Install only the explicitly named SDK; never auto-install Node or APM.
+      MISE_EXEC_AUTO_INSTALL: "false"
 
     steps:
       - name: Check out the repository
