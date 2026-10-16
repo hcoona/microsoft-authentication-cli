@@ -899,8 +899,10 @@ ordinary token acquisition. Both `<root>` directories were deleted at 21:37:02Z 
 the hashes, S1 counts and ledger rows above were recorded in the local ledger: the
 variant's `C:\Temp\azureauth-real-host-20261016-1`
 under Retention and Cleanup, and the retained third-subject `<root>`
-`C:\Temp\azureauth-real-host-20261016`, whose retention ended when the variant's results
-were recorded; no process ran from either. The local launchers (including the variant
+`C:\Temp\azureauth-real-host-20261016`, deleted after the variant's results were recorded in
+the local ledger and before this Results append was committed; the executor treated
+local-ledger recording as "the variant's Results are recorded" (an interpretation of the
+trigger under Resumed confirmation). No process ran from either. The local launchers (including the variant
 copies), `roles.json`, Profile, ledger and the machine-local restore configuration are
 retained until the Wave entry ends, then deleted. WAM sessions and caches are retained;
 deleting local files reverses no provider-side change.
