@@ -95,7 +95,10 @@ account store, or create another planned side effect.
 
 ### Interaction and Telemetry
 
-- Disable upstream-product and experiment-tool telemetry through documented controls.
+- Before running an upstream AzureAuth v1
+  ([microsoft/microsoft-authentication-cli](https://github.com/microsoft/microsoft-authentication-cli))
+  binary, disable its telemetry through its documented controls. This policy does not
+  govern telemetry from the toolchain, experiment tools, or host-wide programs.
 - When the behavior of a telemetry switch is under test, isolate network access and
   record only sanitized endpoint and field observations.
 - Record the expected interactive surface before execution. Keep sign-in, account
