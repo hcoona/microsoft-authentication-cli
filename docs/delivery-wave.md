@@ -43,6 +43,16 @@ stdout to the trusted Linux caller's bounded process memory and ordinary interop
 the owner accepts that exposure, while captured output, logs and agent traces still
 exclude the token.
 
+**Owner decision (2026-10-16, Windows restore workaround):** The Windows host cannot reach
+the public NuGet endpoint because of a host network problem. On that host only, restore may
+use an owner-designated private Azure Artifacts feed that proxies nuget.org. The feed is
+reached with the owner's work-account credentials through the already installed Azure
+Artifacts Credential Provider. The feed URL, its configuration and any credential stay
+machine-local and are never committed, logged or reported. Restore stays in locked mode
+against the committed lock files, so every package must match its locked content hash.
+This run supports no public-restore claim; the Linux CI job remains the public build-chain
+evidence.
+
 **Limits (circuit breakers, owner-raised):** At most 24 interactive-capable calls and 40
 `non-interactive-only` product calls in total, counting failed and interrupted starts.
 A call is interactive-capable when its interaction permission allows UI
