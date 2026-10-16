@@ -277,5 +277,178 @@ ahead of the next subject's rows.
 For each subject, record the bound commit, OS build, WSL version and
 sanitized initial state before B1; then B1 to S1 outcomes, hashes, imports and the ledger:
 
+**First-subject ledger reconciliation and root.** Before B1 of the second subject, rows 1
+and 2 below reconciled to 0 I and 2 N used, leaving 24 I and 38 N. The first `<root>` was
+deleted after its sanitized outcomes were recorded, because no first-subject artifact is
+relied on and no process ran from it; the second subject then used a fresh directory of
+the same base name, `C:\Temp\azureauth-real-host-20261016`, with no `-n` suffix.
+
+**Second subject `8d9be2708c4bedaff059a37a2f69765c29a81766` (runtime observation).**
+
+- **Environment.** Windows 11 Enterprise x64 build 26300 (10.0.26300.9711) in an active
+  Remote Desktop session of the designated user; WSL 3.0.3.0, Ubuntu 26.04 under WSL 2 as
+  the second caller. Both callers ran the same `<root>\run\Authentication.Cli.exe`;
+  account state, WAM and UI belonged to the Windows session. MSAL and Broker 4.83.1,
+  NativeInterop 0.20.3, SDK 10.0.402, runtime 10.0.13, MSVC 14.51.36231, Windows SDK
+  10.0.26100.0, PowerShell 7.6.7.
+- **Initial state.** Personal (Microsoft account) and work (organizational) roles both
+  existed with unknown prior broker state. Requests used the `visual-studio-legacy-wam`
+  example Profile (SHA-256 `b7b26fb3bcedeca62087dc3818e858dd9184ca37dbc9eb0abcbd310a839a2c75`),
+  Public Cloud, `--tenant common` for both roles (no work tenant GUID was supplied) and
+  the Azure DevOps default scope. Application files were separate; WAM sessions and
+  caches received ordinary updates and are retained.
+- **B1.** Owner-exempted machine-local restore workaround, as for the first subject; this
+  is not a public-restore result and departs from the protocol's nuget.org-only restore
+  rule; the owner's [disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/491#issuecomment-6208285632) states that
+  the standalone exemption covers this second subject. `--locked-mode` with new empty package and HTTP caches:
+  exit 0. Lock closure verified for 26 of 26 lock-file packages by content hash; 3
+  implicit packages not lock-verified: `Microsoft.NETCore.App.Host.win-x64`,
+  `Microsoft.NETCore.App.Runtime.win-x64` and
+  `Microsoft.NETCore.App.Runtime.NativeAOT.win-x64`, all 10.0.12.
+  Their provenance against nuget.org is unverified; they feed the self-contained
+  Native AOT artifact, so the artifact hashes, imports and loading evidence below are
+  bounded by that limit.
+- **B2 to B4.** Build exit 0 with 0 warnings. Publish exit 0; one `vctip.exe` from the
+  pinned MSVC directory remained and was terminated; no other survivor. Validator
+  restore exit 0 resolving 0 libraries (one NU1900 warning that vulnerability data was
+  unreachable), build exit 0; `ResultValidation.dll` SHA-256
+  `e7280e7ff4c99b0c6ce0ab8382b117021e99d8e86d027b70163f3c1d68cceed2`.
+- **Published files** (bytes, SHA-256), copied unchanged to `<root>\run`:
+
+  | File | Bytes | SHA-256 |
+  | --- | --- | --- |
+  | `Authentication.Cli.exe` | 8,928,256 | `E8558EAF5857E5910B0FA43C320C7F583755FA56C41B66F7306A26D0F5C6326A` |
+  | `msalruntime.dll` | 2,949,656 | `9DF30B54B7AF974A072B1D55FEE3590A5562C77EBC46F47016F0DD5199CD0C79` |
+  | `Authentication.Cli.pdb` | 37,097,472 | `CCFB041FF472B327DC50F201DE307DA2E7A8DF49A263F50B047A19918456DB8A` |
+  | `Authentication.Core.pdb` | 24,528 | `2231502EC2C5896D82015E5902F04606C09EF54E2441EF3D5DC2246AE5B5400C` |
+  | `Authentication.Windows.pdb` | 34,804 | `D8DDDE1E7A4EDEE16871648D07B0A74CDBB5B7966EFF887018BC4525A6D72894` |
+
+- **Imports** (`dumpbin /DEPENDENTS`). `Authentication.Cli.exe`: ADVAPI32, bcrypt,
+  CRYPT32, IPHLPAPI, KERNEL32, ncrypt, ole32, Secur32, USER32, WS2_32 and
+  `api-ms-win-crt-*` (heap, math, string, convert, stdio, runtime, locale).
+  `msalruntime.dll`: CRYPT32, WININET, RPCRT4, OLEAUT32, bcrypt, SspiCli, ncrypt,
+  USER32, GDI32, SHELL32, ole32 and `api-ms-win-core-*`/`api-ms-win-security-*` API
+  sets. No non-Windows DLL is imported.
+- **Artifact checks** (rows 3 and 4, charged N). From a new empty directory with
+  `PATH=C:\Windows\System32`: `help` exit 0 with the unofficial first line;
+  `authenticate --protocol 0` exit 1 with `invalid_request`.
+- **S1.** Scenario runtimeconfig probe change 10.0.12 to 10.0.13, SHA-256 before
+  `352468623ef7a48f919a73cf597426aa3ab99e935ac50dcae9e2c7ab96589cbf`, after
+  `78c2412dcaa1787e533b89d2d9a81743e53b90f65e95077451665232b907d263`; no outer Job
+  object. S1-1 (all categories including `WindowsHostTiming`): exit 0, 183 passed, 0
+  failed, 0 skipped. S1-2 (direct PowerShell 7, single-argument filter): exit 0, exactly
+  2 passed, 0 failed, 0 skipped. S1-3 (`--native-profile-cases`): exit 0; the entry
+  reports no per-test counts. No surviving process and no latched safety stop.
+- **Native loading.** Every real call reached a typed provider outcome; none reported a
+  `dll_search` or `broker_initialization` indication. This establishes that
+  `msalruntime.dll` loaded from the application directory with its System32 imports on
+  this host; it does not establish deployment on another host or without the
+  development tools installed here.
+
+**Real calls.** Each row was appended before its call started; outcomes were filled
+afterwards. Launchers printed only the evidence allowlist. Readiness was a fresh owner
+answer relayed by the coordinator immediately before each interactive-capable call, with
+one **protocol deviation**: for #13, #18 and #20 the answer was given before the
+immediately preceding `N` call (#12, #17, #19), and each I call started 3 to 8 seconds
+after that call's start. No other preparation occurred in between and no unexpected
+prompt was reported; no effect on the outcomes was observed. "PASS" applies the protocol's
+pass rule; P7 uses expected `InteractionRequired`, so its `Success/Silent` shows as
+not passed and is dispositioned below.
+
 | # | Case | Role | Caller | Unit | Start (UTC) | Outcome and exits | I left | N left |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | A1 artifact help | none | native | N | 2026-10-16T03:35:30Z | exit 0, unofficial first line, 0.85 s, no survivor | 24 | 39 |
+| 2 | A2 artifact protocol 0 | none | native | N | 2026-10-16T03:35:38Z | exit 1, invalid_request on stdout, 0.05 s, no survivor | 24 | 38 |
+| 3 | A1 artifact help | none | native | N | 2026-10-16T03:54:52Z | exit 0, unofficial first line, 0.82 s, no survivor | 24 | 37 |
+| 4 | A2 artifact protocol 0 | none | native | N | 2026-10-16T03:54:59Z | exit 1, invalid_request on stdout, 0.05 s, no survivor | 24 | 36 |
+| 5 | P7 | personal | native | N | 2026-10-16T04:04:54Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Silent","Passed":false,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; NOT PASSED; 4.32 s; notice=False; overrun=False; survivors=0 | 24 | 35 |
+| 6 | P1 | personal | native | I | 2026-10-16T04:11:44Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Silent","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 1.29 s; notice=False; overrun=False; survivors=0 | 23 | 35 |
+| 7 | P2 | personal | native | N | 2026-10-16T04:12:14Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Silent","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 1.37 s; notice=False; overrun=False; survivors=0 | 23 | 34 |
+| 8 | P3 | personal | native | I | 2026-10-16T04:13:09Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Interactive","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 34.64 s; notice=True; overrun=False; survivors=0 | 22 | 34 |
+| 9 | P4 | personal | native | I | 2026-10-16T04:15:06Z | product exit 1; validator exit 0 {"Outcome":"Cancelled","Route":"None","Passed":true,"ProtocolValid":true,"MetadataValid":false,"PersistenceUnconfirmed":false,"PersistenceFailed":false}; PASS; 7.51 s; notice=True; overrun=False; survivors=0 | 21 | 34 |
+| 10 | P6 | personal | native | I | 2026-10-16T04:16:05Z | product exit 1; validator exit 0 {"Outcome":"Timeout","Route":"None","Passed":true,"ProtocolValid":true,"MetadataValid":false,"PersistenceUnconfirmed":false,"PersistenceFailed":false}; PASS; 30.08 s; notice=True; overrun=False; survivors=0 | 20 | 34 |
+| 11 | P1 | personal | wsl | I | 2026-10-16T04:17:46Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Silent","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 0.53 s; notice=False; overrun=false; survivors=0 | 19 | 34 |
+| 12 | P2 | personal | wsl | N | 2026-10-16T04:18:40Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Silent","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 1.68 s; notice=False; overrun=false; survivors=0 | 19 | 33 |
+| 13 | P3 | personal | wsl | I | 2026-10-16T04:18:46Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Interactive","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 80.65 s; notice=True; overrun=false; survivors=0 | 18 | 33 |
+| 14 | P4 | personal | wsl | I | 2026-10-16T04:21:33Z | product exit 1; validator exit 0 {"Outcome":"Cancelled","Route":"None","Passed":true,"ProtocolValid":true,"MetadataValid":false,"PersistenceUnconfirmed":false,"PersistenceFailed":false}; PASS; 4.71 s; notice=True; overrun=false; survivors=0 | 17 | 33 |
+| 15 | P5 | personal | wsl | I | 2026-10-16T04:22:53Z | product exit 1; validator exit 0 {"Outcome":"Cancelled","Route":"None","Passed":true,"ProtocolValid":true,"MetadataValid":false,"PersistenceUnconfirmed":false,"PersistenceFailed":false}; PASS; 10.9 s; notice=True; overrun=false; survivors=0 | 16 | 33 |
+| 16 | P6 | personal | wsl | I | 2026-10-16T04:23:54Z | product exit 1; validator exit 0 {"Outcome":"Timeout","Route":"None","Passed":true,"ProtocolValid":true,"MetadataValid":false,"PersistenceUnconfirmed":false,"PersistenceFailed":false}; PASS; 30.15 s; notice=True; overrun=false; survivors=0 | 15 | 33 |
+| 17 | P7 | work | native | N | 2026-10-16T04:27:25Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Silent","Passed":false,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; NOT PASSED; 1.89 s; notice=False; overrun=False; survivors=0 | 15 | 32 |
+| 18 | P1 | work | native | I | 2026-10-16T04:27:33Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Silent","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 0.92 s; notice=False; overrun=False; survivors=0 | 14 | 32 |
+| 19 | P2 | work | native | N | 2026-10-16T04:28:08Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Silent","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 1 s; notice=False; overrun=False; survivors=0 | 14 | 31 |
+| 20 | P3 | work | native | I | 2026-10-16T04:28:11Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Interactive","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 7.33 s; notice=True; overrun=False; survivors=0 | 13 | 31 |
+| 21 | P4 | work | native | I | 2026-10-16T04:28:58Z | product exit 1; validator exit 0 {"Outcome":"Cancelled","Route":"None","Passed":true,"ProtocolValid":true,"MetadataValid":false,"PersistenceUnconfirmed":false,"PersistenceFailed":false}; PASS; 3.2 s; notice=True; overrun=False; survivors=0 | 12 | 31 |
+| 22 | P1 | work | wsl | I | 2026-10-16T04:30:03Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Silent","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 0.5 s; notice=False; overrun=false; survivors=0 | 11 | 31 |
+| 23 | P2 | work | wsl | N | 2026-10-16T04:30:08Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Silent","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 0.44 s; notice=False; overrun=false; survivors=0 | 11 | 30 |
+| 24 | P3 | work | wsl | I | 2026-10-16T04:31:19Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Interactive","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 5.48 s; notice=True; overrun=false; survivors=0 | 10 | 30 |
+
+**Dispositions and operator observations** (owner yes/no answers relayed by the
+coordinator):
+
+- **P7 not reached** for both roles (#5, #17): existing state already permitted silent
+  use; not repeated and no state changed to reach it.
+- **Silent calls** (#6, #7, #11, #12, #18, #19, #22, #23): no window appeared where the
+  owner was asked (#6, #11, #18, #22).
+- **P3** (#8, #13, #20, #24): WAM shown, designated account chosen, no consent prompt,
+  strict validation passed. See F1 for the personal role.
+- **P4** (#9, #14, #21): WAM shown, owner cancelled on the WAM surface, no leftover window.
+- **P5** (#15): after the owner confirmed WAM was shown, the launcher closed the sole
+  lifetime writer at 04:23:03Z; the product ended `Cancelled/None` about one second later.
+- **P6** (#10, #16): `Timeout/None` at about 30 s, within the 40 s bound.
+- **Not executed by owner decision, no capacity charged.** Work-role P6 (native and WSL)
+  and work-role WSL P4 and P5. The protocol's plan has no skip route; the owner decision
+  and rationale are recorded in the [owner disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/491#issuecomment-6208285632), which accepts the
+  Wave's work-role EOF and deadline items as partially satisfied. That these cases add no
+  role-dependent behavior beyond personal native and WSL P4, P5 and P6 and work native P4
+  is an **inference**, not an observation; F1 shows the forced path can differ by role.
+- **Finding F1 (runtime observation; UX defect candidate).** For `force-interactive` with
+  this MSA-passthrough Profile, owner yes/no answers for the personal role (#8 native, #13
+  WSL): WAM shown yes; a second provider surface shown yes; personal account offered for
+  direct selection on it no; account chosen yes, after the operator entered it manually.
+  Work role (#20, #24): second surface no. Strict validation passed in every case. Cause
+  not established. A relation to the forced path passing neither account nor login hint
+  (source finding: `MsalSessionFactory.BuildInteractiveRequest`) into the
+  `organizations` MSA-passthrough flow is an **inference**.
+- **Finding F2 (runtime observation).** A WAM window remained after the product ended in
+  all three non-human terminations observed: product timeout (#10, #16) and lifetime-pipe
+  cancellation (#15). The operator closed it. Human cancellation (#9, #14, #21) left no
+  window. This matches the design, which forwards cancellation but neither waits for nor
+  forces dismissal of external surfaces, and the earlier Slice's EOF observation.
+- **Broker title (runtime observation).** Owner answer: configured broker title presented
+  on the WAM account picker, yes. The pre-interaction stderr notice line appeared in every
+  `force-interactive` call and in no silent-route call.
+- **Evidence-handling deviation and missed stop condition.** Free-form operator
+  descriptions of the provider surfaces behind F1 and the title, including provider UI
+  wording, were relayed through the coordinator chat into agent traces between #8 (ended
+  about 04:13:44Z) and #9 (04:15:06Z). The protocol's stop condition for raw provider
+  text entering a trace or record therefore fired at that point and was not honored. It
+  fired again when quoted provider strings from the owner's screenshots were written into
+  the local ledger between #13 and #14 (04:21:33Z). Calls #9 to #24 were executed past
+  that stop condition. The relayed text contained no token, email, tenant or other
+  identifier; the screenshots were not shared with the executor; the quotes were removed
+  from the local ledger and never committed. Only the yes/no projection above is
+  recorded. The repository owner's
+  [disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/491#issuecomment-6208392178)
+  accepts calls #9 to #24 as evidence; text already in chat and agent traces is retained
+  there and must not enter the repository.
+- **CORE-01 (inference).** Each of the 14 validated successes (#5 to #8, #11 to #13,
+  #17 to #20, #22 to #24) passed the coordinator's fail-closed correlation check, so the
+  MSAL result returned the sent correlation ID and the check did not reject a real broker
+  success. Broker-level echo is not established; no ID was recorded.
+- **Telemetry.** `--telemetry stderr` projected only fixed stage events. Stage status was
+  `unset` for inner stages; the request span was `ok` for success and `error` for
+  cancellation and timeout. No `error.type` or mechanism indication appeared.
+- **Not observed.** Work-role WSL WAM cancellation, work-role WSL lifetime-pipe EOF, the
+  work-role original deadline (native and WSL), fresh-state first use, consent denial,
+  an explicit work tenant GUID, deadline expiry before WAM, concurrent calls and any
+  other host. Existing-state results establish none of those.
+
+**Consumption and cleanup.** 14 I and 10 N were used in total (including the 4 artifact
+runs), leaving 10 I and 30 N. No call overlapped, overran its bound or left a product
+process. No account, consent, cache or remote state changed beyond ordinary token
+acquisition. `<root>` was deleted after recording. The local launchers, `roles.json`,
+Profile and ledger are retained until the Wave entry ends. Outside the protocol's
+retention list and under the restore exemption, the machine-local restore configuration
+is retained until then and the restore credential cache is retained. WAM sessions and
+caches are retained; deleting local
+files reverses no provider-side change.
