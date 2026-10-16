@@ -257,7 +257,7 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
 
 ## Results
 
-**First subject `c9ac862` (closed; no real call).** B1: owner-exempted machine-local
+**First subject `c9ac86266b87d701052554fdb3b9c3031a47a059` (closed; no real call).** B1: owner-exempted machine-local
 restore workaround used (PR #487 closure comment); this is not a public-restore result,
 and this protocol neither grants nor changes that exemption. Locked-mode verification
 passed for 26 of 26 lock-file packages; 3 implicit runtime packages were not
@@ -265,7 +265,13 @@ lock-verified. B2, B3, B4 and the native artifact checks passed. S1-1: 183 of 18
 passed. S1-2: exit 5, no tests run, because a local wrapper split the filter at `|` into
 two arguments (operator error). S1-3: exit 1 from an outdated `NativeProfileScenarios`
 assertion (test defect, corrected by PR #489). The two artifact runs were charged as N;
-24 I and 38 N remain and carry over to the next subject.
+24 I and 38 N remain and carry over to the next subject. These first-subject results
+record only capacity consumption and stop causes; they are not evidence for any Wave
+real-host item, and no artifact, hash or B1 outcome from this subject is relied on.
+Before B1 of the next subject, the executor reconciles the first subject's two N rows in
+the local ledger to 24 I and 38 N remaining (otherwise stop) and records whether the
+first `<root>` was deleted or is retained and why; those rows are copied unchanged below,
+ahead of the next subject's rows.
 
 For each subject, record the bound commit, OS build, WSL version and
 sanitized initial state before B1; then B1 to S1 outcomes, hashes, imports and the ledger:
