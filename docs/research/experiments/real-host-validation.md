@@ -9,6 +9,12 @@ acceptance; it adds no product, support or release claim. The Wave entry owns
 the owner risk decision, call limits and exclusions; this record only narrows them.
 Results are appended under [Results](#results) through reviewed pull requests.
 
+**Amendment (2026-10-16).** Per the repository owner's clarification of the experiment
+policy's telemetry rule (it covers the upstream AzureAuth product and the documented
+controls of tools this procedure runs, not host-wide product programs such as the Visual
+Studio Experience Improvement Program), the former toolchain telemetry preflight and its
+stop condition are removed. No execution had occurred; nothing else changes.
+
 ## Subject and Inputs
 
 - **Source.** Execution binds this protocol's merge commit on `main-v2`, or a later
@@ -46,26 +52,11 @@ which admits only nuget.org; no credential provider, feed credential or private 
 is used. Builds pass `--disable-build-servers -nr:false -p:UseSharedCompilation=false`.
 These steps are not counted against the Wave call limits.
 
-**Toolchain telemetry preflight.** Source finding: the
-[Visual Studio Experience Improvement Program](https://learn.microsoft.com/visualstudio/ide/visual-studio-experience-improvement-program)
-is on by default; its documented value is `OptIn` (DWORD, `0` opted out, `1` opted in)
-under `HKLM\SOFTWARE\Wow6432Node\Microsoft\VSCommon\17.0\SQM` or the Group Policy key
-`HKLM\Software\Policies\Microsoft\VisualStudio\SQM`. The page names no Visual Studio 18 key,
-no precedence and excludes required diagnostic data. Inference: whether it governs the
-MSVC `vctip.exe` helper seen in earlier Native AOT publishes is unproven. Before B1, read
-both keys without changing them (never an undocumented `18.0` key). Continue only if the
-policy value is DWORD `0`, or it is absent and the `17.0` value is DWORD `0`. Record
-only "documented opt-out present: yes/no". When present, the documented control is
-applied; any remaining upload and the unproven `vctip.exe` link are recorded as a stated
-limitation. Otherwise stop before B1; only a merged Wave amendment with an owner risk
-decision naming toolchain telemetry resolves that stop, never a comment, Issue or pull
-request. This protocol neither sets the opt-out nor assumes the owner will.
-
 **Step termination.** Each step runs as one foreground process tree. On overrun, stop
 that tree, record the step as failed and stop the experiment. After B3 and S1, list
 processes whose image path is under `<root>` or the pinned MSVC directory; a remaining
-`vctip.exe` from that directory is terminated and recorded (this limits its run time, not
-what it may already have sent); any other survivor stops the experiment. No outer Job
+`vctip.exe` compiler helper from that directory is terminated and recorded so that no
+unexpected process remains; any other survivor stops the experiment. No outer Job
 object is used although the scenario fixture's comment assumes one; S1 records that.
 
 | Step | Command (from `<root>\src`) | Bound |
@@ -247,7 +238,7 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
 
 ## Results
 
-No execution has occurred. Record the bound commit, OS build, WSL version, preflight and
+No execution has occurred. Record the bound commit, OS build, WSL version and
 sanitized initial state before B1; then B1 to S1 outcomes, hashes, imports and the ledger:
 
 | # | Case | Role | Caller | Unit | Start (UTC) | Outcome and exits | I left | N left |
