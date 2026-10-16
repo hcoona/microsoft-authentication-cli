@@ -40,11 +40,13 @@ Wave limits are now 48 I and 64 N.
 
 ## Subject and Inputs
 
-- **Source.** The third subject is `0eb257ae71adc948202698b2914391185ba68d68`, which
-  contains `3477534`, the merge of PR #492, and is already recorded in the ledger.
-  Later `main-v2` commits that change only records do not rebind it. The F3 variant
-  subject is defined under [F3 Investigation](#f3-investigation).
-  Materialize it with
+- **Source.** The second subject (`8d9be27`) and the third subject (`0eb257a`) were each
+  bound under the former rule: this protocol's merge commit on `main-v2`, or a later
+  `main-v2` commit whose copy of this file is unchanged. The third subject,
+  `0eb257ae71adc948202698b2914391185ba68d68`, contains `3477534`, the merge of PR #492;
+  it stays bound in its retained `<root>` and is not rebuilt. The F3 variant subject is
+  defined under [F3 Investigation](#f3-investigation). Only a new subject is
+  materialized, with
   `git archive <commit> | tar -x -C <root>/src` into a fresh
   `C:\Temp\azureauth-real-host-YYYYMMDD[-n]\src` (`<root>` below; add the lowest free
   `-n` if the name exists, and record the actual `<root>` in the ledger); no Git metadata,
@@ -235,7 +237,9 @@ product exit; wall durations; from `--telemetry stderr`, the `event`, `stage`,
 `status`, `outcome`, `error.type` and `durationMilliseconds` values and any fixed
 `Mechanism unavailable at <category>` indication; whether the pre-interaction notice line
 appeared; and owner yes/no answers (WAM shown, account chosen, cancelled, no unexpected
-window). Trace IDs, token-shape fields, provider text and screenshots are excluded.
+window; Q1 to Q5 of F1 Confirmation; whether UI appeared) and, after a Q5 yes, the
+defaulted and chosen credential method, each exactly one of `security key`,
+`Windows Hello`, `password`, `authenticator` or `other`. Trace IDs, token-shape fields, provider text and screenshots are excluded.
 
 **Ledger.** Before each counted call starts, append a row to the local sanitized ledger
 `%LOCALAPPDATA%\azureauth-real-host\ledger.md` with case, role class, caller, unit, start
@@ -300,7 +304,7 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
 - **Questions.** After each interactive-capable call the executor asks: Q1, did WAM present its interactive
   UI (a pre-filled account counts as yes)? Q2, did the designated account complete
   sign-in on it? Q3 (personal role), did the second provider page of F1 appear? Q4, did a
-  consent or permission prompt or any unexpected window appear? Q5 (personal role), did
+  consent or permission prompt or any unexpected window appear? Q5 (every role), did
   the provider default to a credential method the operator did not want, so that the
   operator had to cancel that step and choose another? A Q4 yes follows the consent rule
   under Order and plan.
@@ -317,6 +321,12 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
 
 - **Resumed confirmation.** On the third subject, without repeating B1 to S1: #28
   personal WSL P3, then #29 work native P3, each under F1 Confirmation with Q1 to Q5.
+  Before #28 the executor copies the third subject's recorded values unchanged from the
+  local ledger into Results (`<root>`, byte size and SHA-256 of every file in
+  `<root>\run`, and the Profile and validator SHA-256) and checks each against the
+  files; a missing value, a missing `<root>` or any mismatch stops real calls, and
+  rebuilding then requires a new reviewed amendment. The third `<root>` is deleted under
+  Retention and Cleanup only after #29 is recorded.
 - **Variant subject (experiment only).** A commit on the dedicated branch
   `experiment/forced-bound-account` whose parent is the third subject and whose only
   change is: when `force-interactive` finds exactly one discovered account matching the
@@ -378,8 +388,11 @@ by an operator defect and not repeated; `authenticate --protocol 0` exit 1 with
 validator pass, 35.2 s, no surviving process; owner answers Q1 yes, Q2 yes, Q3 no, Q4 no.
 Q4 was not among this protocol's questions then; the executor added it from the earlier
 operator-observation practice, and it is now part of the protocol. Used 15 I and 12 N in
-total; 9 I and 28 N remained under the former limits. The executor copies rows #25 to #27
-unchanged from the local ledger.
+total; 9 I and 28 N remained under the former limits. `<root>` is
+`C:\Temp\azureauth-real-host-20261016` (the second subject's `<root>` of that name had
+been deleted); after the stop it was retained unchanged with the launchers,
+`roles.json`, Profile and ledger. The executor copies rows #25 to #27 and the recorded
+hashes unchanged from the local ledger.
 
 - **Stop and disposition.** After #27 the owner described the credential-method steps,
   and the executor stopped under the yes/no-only rule. The repository owner dispositioned
