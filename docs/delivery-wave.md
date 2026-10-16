@@ -43,7 +43,7 @@ stdout to the trusted Linux caller's bounded process memory and ordinary interop
 the owner accepts that exposure, while captured output, logs and agent traces still
 exclude the token.
 
-**Limits (circuit breakers, owner-raised):** At most 24 interactive-capable calls and 40
+**Limits (circuit breakers, owner-raised twice):** At most 48 interactive-capable calls and 64
 `non-interactive-only` product calls in total, counting failed and interrupted starts.
 A call is interactive-capable when its interaction permission allows UI
 (`interactive-if-needed` or `force-interactive`, including its cancellation, EOF and
