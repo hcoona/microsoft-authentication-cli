@@ -261,7 +261,7 @@ under the same value it displays as *Needs Mitigation*.
 On **2026-10-16 UTC**, the follow-up below reopened its model with the same installed
 TMT **7.3.51110.1** and native API workflow, again in a dedicated temporary directory
 removed afterwards. `ModelLoadHasIssues` was false; generation produced and reconciled
-**96 candidates** with the same categories, and the states were 63 `Mitigated`, 11
+**96 candidates**, and the states were 63 `Mitigated`, 11
 `NeedsInvestigation` and 22 `NotApplicable`. A native `SaveAs` output reloaded without
 issues and preserved those states.
 
