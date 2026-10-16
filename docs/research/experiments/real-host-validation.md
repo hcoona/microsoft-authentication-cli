@@ -270,7 +270,10 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   owner's standalone machine-local restore exemption
   ([PR #487 closure](https://github.com/hcoona/microsoft-authentication-cli/pull/487#issuecomment-6207448294),
   [PR #491 disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/491#issuecomment-6208285632))
-  instead of the nuget.org-only rule. This protocol neither grants nor changes that
+  instead of the nuget.org-only rule; the owner's
+  [PR #494 disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/494#issuecomment-6222226699)
+  extends it to every subject built on this host, including this third subject. This
+  protocol neither grants nor changes that
   exemption; no feed identifier is recorded, the result is not a public-restore result,
   and implicit runtime packages keep the not-lock-verified limitation.
 - **Cases.** Only P3 (`force-interactive`), in order: personal native, personal WSL,
