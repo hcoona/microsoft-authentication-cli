@@ -16,14 +16,25 @@ which this procedure does not run. The former toolchain telemetry preflight and 
 condition are removed, and the `vctip.exe` termination rationale is restated as process
 hygiene. No execution had occurred.
 
+**Amendment (2026-10-16, rebind).** The first subject, `c9ac862`, stopped at S1 before any
+real call (see [Results](#results)). S1-2 failed from an operator error and S1-3 from an
+outdated test assertion, corrected by
+[PR #489](https://github.com/hcoona/microsoft-authentication-cli/pull/489); neither
+indicates a product defect. No real call is made against `c9ac862`. Execution rebinds
+under [Corrected Builds](#corrected-builds) to the commit defined in Source below, which
+repeats B1 to B4, the artifact checks and S1 in a new `<root>` with the shared limits and
+recorded consumption; S1-2 now fixes its argument form.
+
 ## Subject and Inputs
 
 - **Source.** Execution binds this protocol's merge commit on `main-v2`, or a later
-  `main-v2` commit whose copy of this file is unchanged. Record the full commit hash in
-  the ledger before the first build. Materialize it with
+  `main-v2` commit whose copy of this file is unchanged; either contains `edc9ce0`, the
+  merge of PR #489. Record the full commit hash in the ledger before the first build.
+  Materialize it with
   `git archive <commit> | tar -x -C <root>/src` into a fresh
-  `C:\Temp\azureauth-real-host-YYYYMMDD\src` (`<root>` below); no Git metadata, local
-  edits or other checkout is used.
+  `C:\Temp\azureauth-real-host-YYYYMMDD[-n]\src` (`<root>` below; add the lowest free
+  `-n` if the name exists, and record the actual `<root>` in the ledger); no Git metadata,
+  local edits or other checkout is used.
 - **Dependencies.** MSAL and Broker 4.83.1, NativeInterop 0.20.3, and the other versions
   fixed by the committed `packages.lock.json` files. Restore uses `--locked-mode`; a
   lock mismatch stops the build. No dependency, SDK or runtime is added or installed.
@@ -96,9 +107,16 @@ non-`broker_initialization` outcome.
 
 **S1**, after the native artifact checks. Run the built scenario host once with
 `dotnet <dll>` and no filter, covering all categories including `WindowsHostTiming`;
-then once with `--native-cli-executable <root>\run\Authentication.Cli.exe` and
-`--filter "Name=RootHelpCompletesWithoutAuthentication|Name=MalformedAuthenticationReturnsTheBootstrapFailure"`;
-then `--native-profile-cases <root>\run\Authentication.Cli.exe` once. The fixture refuses
+then once (S1-2) directly from the PowerShell 7 session, without a wrapper script or
+`cmd.exe`, exactly as
+
+```powershell
+dotnet <dll> --native-cli-executable <root>\run\Authentication.Cli.exe --filter 'Name=RootHelpCompletesWithoutAuthentication|Name=MalformedAuthenticationReturnsTheBootstrapFailure'
+```
+
+so that the single-quoted filter, including its `|`, reaches the host as one argument;
+S1-2 passes only if it runs exactly 2 tests. Then
+`--native-profile-cases <root>\run\Authentication.Cli.exe` once. The fixture refuses
 to reuse a `%TEMP%\process-<scenario>` directory and latches a `process-safety-stop.json`
 there, so each of the three runs sets `TEMP` and `TMP` to its own new empty directory
 `<root>\tmp\s1-1`, `s1-2` or `s1-3`; a nonempty directory stops S1. Record only the runner
@@ -240,7 +258,23 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
 
 ## Results
 
-No execution has occurred. Record the bound commit, OS build, WSL version and
+**First subject `c9ac86266b87d701052554fdb3b9c3031a47a059` (closed; no real call).** B1: owner-exempted machine-local
+restore workaround used (PR #487 closure comment); this is not a public-restore result,
+and this protocol neither grants nor changes that exemption. Locked-mode verification
+passed for 26 of 26 lock-file packages; 3 implicit runtime packages were not
+lock-verified. B2, B3, B4 and the native artifact checks passed. S1-1: 183 of 183
+passed. S1-2: exit 5, no tests run, because a local wrapper split the filter at `|` into
+two arguments (operator error). S1-3: exit 1 from an outdated `NativeProfileScenarios`
+assertion (test defect, corrected by PR #489). The two artifact runs were charged as N;
+24 I and 38 N remain and carry over to the next subject. These first-subject results
+record only capacity consumption and stop causes; they are not evidence for any Wave
+real-host item, and no artifact, hash or B1 outcome from this subject is relied on.
+Before B1 of the next subject, the executor reconciles the first subject's two N rows in
+the local ledger to 24 I and 38 N remaining (otherwise stop) and records whether the
+first `<root>` was deleted or is retained and why; those rows are copied unchanged below,
+ahead of the next subject's rows.
+
+For each subject, record the bound commit, OS build, WSL version and
 sanitized initial state before B1; then B1 to S1 outcomes, hashes, imports and the ledger:
 
 | # | Case | Role | Caller | Unit | Start (UTC) | Outcome and exits | I left | N left |
