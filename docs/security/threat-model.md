@@ -128,7 +128,8 @@ and has no controls; its window procedure only turns `WM_CLOSE` into cancellatio
 handles destruction. WAM controls its own credential/MFA/consent UI and its cancel. The
 engine supplies the HWND, supplies the resolved account or the requested-email login
 hint for `interactive-if-needed` and only that login hint for `force-interactive` (a
-hint does not bind the result, so the user may still pick another account), validates
+hint does not bind the result, so the user may still pick another account, and may only
+pre-fill the WAM UI that `force-interactive` requires), validates
 the final result, rejects any account other than the
 requested email, forwards cancellation, and invalidates late completion. Provider prompt
 choice is not an application security control. Unknown or terminal failures cannot

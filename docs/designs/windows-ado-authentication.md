@@ -545,10 +545,11 @@ scenarios cover this projection, single-call effects, identity rejection and ori
 cancellation/deadline.
 
 The adapter enters the WAM interactive path through its sign-in/account-selection route,
-even when the engine could acquire silently. This is invocation intent, not a guarantee
-that the provider renews credentials or displays a particular surface. WAM may reuse an
-existing session inside that call. Success reports `interaction: interactive` for the
-invoked path; actual visible WAM behavior requires separate runtime observation.
+even when the engine could acquire silently. The mode requires WAM to actually present
+its interactive UI; the adapter cannot enforce that, and it is not a guarantee that the
+provider renews credentials or displays a particular surface. WAM may reuse an existing
+session inside the presented UI. Success reports `interaction: interactive` for the
+invoked path; whether WAM presents its UI requires separate runtime observation.
 
 Do not implement this intent with `WithPrompt` alone. In pinned MSAL/Broker 4.83.1,
 the [interactive builder](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/AcquireTokenInteractiveParameterBuilder.cs#L177-L180)
@@ -570,13 +571,16 @@ account-selection route, and passes the request's login hint to it
 ([hint selection](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/RuntimeBroker.cs#L242-L292)).
 With a hint and no account, the forced call therefore still takes the sign-in route
 rather than the selected-account route; the account binding, not the hint, chooses the
-route. The hint may pre-fill or skip the account selection for the requested email.
-The pinned
+route. The hint is accepted only to pre-fill WAM's interactive UI for the requested
+email; it must not replace that UI. The pinned
 [interactive builder](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/AcquireTokenInteractiveParameterBuilder.cs#L136-L138)
 documents `WithLoginHint` as a way to avoid select-account dialogs when the user is
 signed in with several identities. That is the builder's documented intent, a source
-finding, not a UI observation. Whether WAM pre-fills, skips or still shows a picker with
-the hint is undetermined runtime behavior for a rebound real-host observation.
+finding, not a UI observation. Whether WAM still presents its interactive UI with the
+hint is undetermined runtime behavior for a rebound real-host observation. If that
+observation finds that WAM completes the forced call without presenting its interactive
+UI because of the hint, that is a defect of this mode and requires another design; a
+skipped UI is not accepted.
 
 Earlier, this mode also left the login hint unset, following the official
 [MSAL Python broker mapping](https://github.com/AzureAD/microsoft-authentication-library-for-python/blob/03d030f715f8398a26151602ac578f66b4bb40e8/msal/broker.py#L186-L230),
@@ -589,10 +593,13 @@ work role did not. Its cause is not established, and relating it to the missing 
 an inference. By repository-owner decision (2026-10-16, quoted in
 [PR #492](https://github.com/hcoona/microsoft-authentication-cli/pull/492)), forced
 interaction must still enter the provider interactive path without a silent attempt,
-but now supplies the requested email as login hint, with no account; a pre-filled or
-skipped selection is acceptable.
-Whether the hint removes the second page is a runtime question for a rebound real-host
-observation, not a claim of this design.
+but now supplies the requested email as login hint, with no account; a pre-filled
+interactive UI is acceptable. A second owner decision (2026-10-16, quoted in the same
+pull request) does not accept completion without interactive UI for forced interaction,
+while the other modes may complete without UI; the hint therefore may pre-fill but
+must not skip the UI. Whether the hint removes the second page, and whether WAM still
+presents its UI, are runtime questions for a rebound real-host observation, not claims
+of this design.
 
 The Microsoft [WAM API reference](https://learn.microsoft.com/entra/identity-platform/reference-entra-id-wam-api)
 documents a `prompt` request property (`no_select` or `select_account`) and a

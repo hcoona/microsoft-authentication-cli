@@ -27,8 +27,14 @@ enter the provider interactive path through its supported sign-in and account-se
 route, without binding a discovered account, even when
 reusable credentials are available. The engine must not call silent acquisition or fall
 back to it. A provider/host combination that cannot honor this invocation intent is
-unavailable. The provider may reuse its session within the interactive call; success
-reports the invoked path, not proof of visible UI or renewed credentials. V2 must not
+unavailable. Forced interaction requires the provider to actually present its
+interactive UI and must not complete without it; a login hint may only pre-fill that
+UI. Whether the provider presents it is undetermined runtime behavior that requires
+real-host confirmation. If a provider completes a forced call without presenting its
+interactive UI, including because of the login hint, that is a defect of this mode
+that requires another approach, not accepted behavior. The other modes may complete
+without UI. The provider may reuse its session within the presented interactive UI;
+success reports the invoked path, not proof of visible UI or renewed credentials. V2 must not
 expose a caller-selected prompt-type whitelist or promise a password, MFA method, or
 exact UI.
 
@@ -69,7 +75,8 @@ For `interactive-if-needed`, when the provider supports a login hint, interactiv
 acquisition must use the requested email, or the uniquely resolved account, as that hint.
 For `force-interactive`, interactive acquisition must not supply the discovered account;
 when the provider supports a login hint, it must supply the requested email as that hint,
-so the provider's account selection may be pre-filled or skipped for the requested email.
+which may only pre-fill the provider's interactive UI and must not replace it under
+`V2-REQ-014`.
 In both modes a hint does not replace final identity validation under
 `V2-REQ-022`; a returned account other than the requested one must be rejected.
 
@@ -87,7 +94,9 @@ The identity-opaque `OperatingSystemAccount` sentinel is not a resolved account.
 permitted interaction under `V2-REQ-023`; it is terminal without interaction permission.
 `force-interactive` uses the same exact account resolution, but proceeds directly to its
 interactive path after zero or one exact match, supplying the requested email as the login
-hint and never the discovered account under `V2-REQ-016`. The requested email remains the strict selector for
+hint and never the discovered account under `V2-REQ-016`. That hint may only pre-fill the
+provider's interactive UI, which the forced call must still present under `V2-REQ-014`.
+The requested email remains the strict selector for
 final validation under `V2-REQ-022`, which rejects any other account chosen during
 provider account selection. Account ambiguity must not fall back to another account or
 a picker that bypasses the strict-email ambiguity.

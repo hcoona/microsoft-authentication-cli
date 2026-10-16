@@ -100,16 +100,18 @@ to both silent and interactive results.
 `force-interactive` changes the initial acquisition path, not account selection or the
 fallback policy. Resolve the requested full email through the same provider discovery.
 Multiple exact matches remain terminal ambiguity. With zero or one exact match, establish
-the owned interaction context and perform one provider interactive call through its sign-in/account-selection route, with picker presentation runtime-dependent,
-and the original request constraints. That call supplies
-the requested email as the login hint when supported and never the discovered account,
-so the provider's account selection may be pre-filled or skipped for the requested email; final
-identity validation still rejects any account other than the
+the owned interaction context and perform one provider interactive call through its
+sign-in/account-selection route with the original request constraints. That call
+supplies the requested email as the login hint when supported and never the discovered
+account. The provider must actually present its interactive UI; the hint may only
+pre-fill it. Whether it does is undetermined runtime behavior pending real-host
+confirmation, and completion without that UI is a defect of this mode, not accepted
+behavior. Final identity validation still rejects any account other than the
 requested email. Do not attempt silent token acquisition,
 fabricate a silent failure, relax identity validation, or fall back to silent reuse.
 An unsupported host/provider combination is unavailable. The provider may reuse its
-session inside this call; an interactive result identifies the invoked path and does not
-prove visible UI or renewed credentials.
+session inside the presented UI; an interactive result identifies the invoked path and
+does not prove visible UI or renewed credentials.
 
 Use the same completion, strict validation, state-observation and terminal-lifecycle
 paths as other interactive requests. This does not remove accounts, clear state, revoke
