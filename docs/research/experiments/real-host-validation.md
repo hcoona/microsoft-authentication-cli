@@ -327,12 +327,13 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   RuntimeBroker, cited in the Windows design): a bound account enters
   `AcquireTokenInteractivelyAsync` for that account instead of `SignInInteractivelyAsync`.
   Whether WAM then presents UI is the question under test.
-- **Variant gate.** The variant is not a correction of the `main-v2` product, so it
-  depends on [PR #496](https://github.com/hcoona/microsoft-authentication-cli/pull/496),
-  the Wave change authorizing one experiment-only variant subject. It runs only after
-  (1) PR #496 merges into `main-v2`, (2) the variant commit is independently reviewed,
-  and (3) a reviewed amendment to this file records its full hash. #28 and #29 do not
-  wait for this gate.
+- **Variant gate.** The variant is not a correction of the `main-v2` product; it is the
+  experiment-only variant subject authorized by Wave outcome (3). It runs only after the
+  variant commit is independently reviewed and a reviewed amendment to this file records
+  its full hash. #28 and #29 do not wait for this gate.
+- **Decision question** (Wave outcome (3)). Does the variant reach a visible interactive
+  surface without the second provider page of F1 (Q3 no) and without a
+  provider-defaulted credential method the operator must cancel (Q5 no)?
 - **Variant procedure.** In a new `<root>`, materialize the variant with `git archive`,
   then B1 to B4 (under the same restore exemption), the native artifact checks (2 N) and
   S1; S1 must pass before any variant call. Cases, all `force-interactive` with the P3
@@ -346,8 +347,10 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   these may be repeated once for a recorded operator-side reason under Repeats, so the
   worst case is 10 I and 4 N, leaving at least 23 I and 48 N. Before #28, reconcile the
   local ledger to 33 I and 52 N remaining under the new limits (otherwise stop).
-- **Scope.** F3 conclusions cover only the observed role, caller and subject; the
-  variant establishes no product behavior or support.
+- **Scope.** F3 conclusions cover only the observed role, caller and subject. Variant
+  evidence is recorded and labeled separately under its own subject, is not mapped as
+  `main-v2` validation, and does not by itself authorize a product behavior change; any
+  such change requires a separate owner decision.
 
 ## Results
 
