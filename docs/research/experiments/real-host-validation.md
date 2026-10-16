@@ -31,12 +31,22 @@ recorded consumption; S1-2 now fixes its argument form.
 rebinds under [Corrected Builds](#corrected-builds) to a third subject defined in Source
 below and runs only the cases in [F1 Confirmation](#f1-confirmation-third-subject).
 
+**Amendment (2026-10-16, F3).** The F1 confirmation stopped after call #27 under its
+yes/no-only rule; the repository owner has dispositioned that stop (see [Results](#results)).
+The third subject stays bound and is not rebuilt. This amendment adds Q4 and Q5, admits a
+fixed credential-method vocabulary, resumes the two remaining confirmation calls and
+defines a forced bound-account variant under [F3 Investigation](#f3-investigation). The
+Wave limits are now 48 I and 64 N.
+
 ## Subject and Inputs
 
-- **Source.** Execution binds this protocol's merge commit on `main-v2`, or a later
-  `main-v2` commit whose copy of this file is unchanged; either contains `3477534`, the
-  merge of PR #492. Record the full commit hash in the ledger before the first build.
-  Materialize it with
+- **Source.** The second subject (`8d9be27`) and the third subject (`0eb257a`) were each
+  bound under the former rule: this protocol's merge commit on `main-v2`, or a later
+  `main-v2` commit whose copy of this file is unchanged. The third subject,
+  `0eb257ae71adc948202698b2914391185ba68d68`, contains `3477534`, the merge of PR #492;
+  it stays bound in its retained `<root>` and is not rebuilt. The F3 variant subject is
+  defined under [F3 Investigation](#f3-investigation). Only a new subject is
+  materialized, with
   `git archive <commit> | tar -x -C <root>/src` into a fresh
   `C:\Temp\azureauth-real-host-YYYYMMDD[-n]\src` (`<root>` below; add the lowest free
   `-n` if the name exists, and record the actual `<root>` in the ledger); no Git metadata,
@@ -227,7 +237,9 @@ product exit; wall durations; from `--telemetry stderr`, the `event`, `stage`,
 `status`, `outcome`, `error.type` and `durationMilliseconds` values and any fixed
 `Mechanism unavailable at <category>` indication; whether the pre-interaction notice line
 appeared; and owner yes/no answers (WAM shown, account chosen, cancelled, no unexpected
-window). Trace IDs, token-shape fields, provider text and screenshots are excluded.
+window; Q1 to Q5 of F1 Confirmation; whether UI appeared) and, after a Q5 yes, the
+defaulted and chosen credential method, each exactly one of `security key`,
+`Windows Hello`, `password`, `authenticator` or `other`. Trace IDs, token-shape fields, provider text and screenshots are excluded.
 
 **Ledger.** Before each counted call starts, append a row to the local sanitized ledger
 `%LOCALAPPDATA%\azureauth-real-host\ledger.md` with case, role class, caller, unit, start
@@ -289,11 +301,82 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   presenting its interactive UI, record a defect of the forced mode, stop all real calls
   and do not accept the call. A call not accepted for another reason follows Repeats.
   The F1 conclusion covers only the observed role and caller combinations.
+- **Questions.** After each interactive-capable call the executor asks: Q1, did WAM present its interactive
+  UI (a pre-filled account counts as yes)? Q2, did the designated account complete
+  sign-in on it? Q3 (personal role), did the second provider page of F1 appear? Q4, did a
+  consent or permission prompt or any unexpected window appear? Q5 (every role), did
+  the provider default to a credential method the operator did not want, so that the
+  operator had to cancel that step and choose another? A Q4 yes follows the consent rule
+  under Order and plan. A Q3 or Q5 yes is recorded as evidence only: it does not make a
+  call unaccepted, is not an unexpected outcome, does not stop calls and is not a reason
+  to repeat.
 - **Yes/no only.** The executor asks only these yes/no questions and records only yes or
-  no. The stop condition for raw provider text applies without exception: if the owner
-  or a relay describes or quotes provider UI text, the executor records none of it in
+  no, except one fixed category: after a Q5 yes, the executor offers the closed options
+  below, separately for the defaulted and the chosen credential method, and the operator
+  picks one of each without describing them; each is recorded as exactly one of `security key`,
+  `Windows Hello`, `password`, `authenticator` or `other`. Any other description is
+  provider text. The stop condition for raw provider text applies without exception: if
+  the owner or a relay describes or quotes provider UI text, the executor records none of it in
   the ledger, Results, launcher output or its own messages, stops all real calls and
   preserves state.
+
+## F3 Investigation
+
+- **Protocol revision.** #28 and #29 bind the merge commit of this F3 amendment on
+  `main-v2`, or a later `main-v2` commit whose copy of this file is unchanged; the
+  executor records its full hash in the ledger before #28 and in Results. Variant calls
+  bind, in the same way, the merge commit of the amendment that records the variant hash;
+  its full hash is recorded before the variant's B1.
+- **Resumed confirmation.** On the third subject, without repeating B1 to S1: #28
+  personal WSL P3, then #29 work native P3, each under F1 Confirmation with Q1 to Q5.
+  Before #28 the executor checks the third subject's recorded values in the local ledger
+  (`<root>`, byte size and SHA-256 of every file in `<root>\run`, and the Profile and
+  validator SHA-256) against the files and records the check in the ledger; a missing value, a missing `<root>` or any mismatch stops real calls, and
+  rebuilding then requires a new reviewed amendment. The third `<root>` is deleted under
+  Retention and Cleanup only after #29 is recorded. The values are copied unchanged into
+  Results in the pull request that records #28 and #29; that append does not change the
+  protocol revision #28 and #29 bound.
+- **Variant subject (experiment only).** A commit on the dedicated branch
+  `experiment/forced-bound-account` whose parent is the third subject and whose only
+  change is: when `force-interactive` finds exactly one discovered account matching the
+  requested email, the adapter passes that account and `BuildInteractiveRequest` calls
+  `WithAccount` and no `WithLoginHint`; with no matching account the adapter fails
+  before calling WAM (after the coordinator has opened its hidden owned parent and
+  printed the notice line), expected `InternalFailure/None`, exit 1, `error.type`
+  `invalid_operation`; more than one matching account returns `AccountAmbiguous` before
+  interaction through the unchanged coordinator (`RequestCoordinator.AcquireAsync`).
+  Either is recorded as not reached, charged 1 I, not repeated and outside Repeats, but
+  only when that exact outcome is observed and Q1 is no; otherwise it is a variant
+  defect and stops variant calls. The variant review checks that the implementation
+  yields these outcomes; the forced `MsalCompositionScenarios` are updated to match. It
+  never merges into `main-v2` and is not a product correction. Source finding (pinned
+  RuntimeBroker, cited in the Windows design): a bound account enters
+  `AcquireTokenInteractivelyAsync` for that account instead of `SignInInteractivelyAsync`.
+  Whether WAM then presents UI is the question under test.
+- **Variant gate.** The variant is not a correction of the `main-v2` product; it is the
+  experiment-only variant subject authorized by Wave outcome (3). It runs only after the
+  variant commit is independently reviewed and a reviewed amendment to this file records
+  its full hash. #28 and #29 do not wait for this gate.
+- **Decision question** (Wave outcome (3)). Does the variant reach a visible interactive
+  surface without the second provider page of F1 (Q3 no) and without a
+  provider-defaulted credential method the operator must cancel (Q5 no)?
+- **Variant procedure.** In a new `<root>`, materialize the variant with `git archive`,
+  then B1 to B4 (under the same restore exemption), the native artifact checks (2 N) and
+  S1; S1 must pass before any variant call. Cases, all `force-interactive` with the P3
+  validator expectations (`Success/Interactive`, 0): personal native, personal WSL, work
+  native; 3 I. Observations: Q1 to Q5 for every variant call, Q3 recorded as not
+  applicable for the work role. Unlike F1 Confirmation, a Q1 no records that this path
+  does not satisfy the forced-interaction requirement and is evidence, not a stop; the
+  next variant case may run. Other unexpected outcomes follow Repeats.
+- **Planned use and buffer.** 15 I and 12 N are used (see Results), leaving 33 I and 52 N
+  under the Wave's 48 I and 64 N. Planned: confirmation 2 I; variant 3 I and 2 N. Each of
+  these may be repeated once for a recorded operator-side reason under Repeats, so the
+  worst case is 10 I and 4 N, leaving at least 23 I and 48 N. Before #28, reconcile the
+  local ledger to 33 I and 52 N remaining under the new limits (otherwise stop).
+- **Scope.** F3 conclusions cover only the observed role, caller and subject. Variant
+  evidence is recorded and labeled separately under its own subject, is not mapped as
+  `main-v2` validation, and does not by itself authorize a product behavior change; any
+  such change requires a separate owner decision.
 
 ## Results
 
@@ -312,6 +395,33 @@ Before B1 of the next subject, the executor reconciles the first subject's two N
 the local ledger to 24 I and 38 N remaining (otherwise stop) and records whether the
 first `<root>` was deleted or is retained and why; those rows are copied unchanged below,
 ahead of the next subject's rows.
+
+**Third subject `0eb257ae71adc948202698b2914391185ba68d68` (runtime observation;
+summary).** B1 to B4, the native artifact checks and S1 passed (S1-1 185 of 185). Calls
+#25 and #26 were the artifact runs (2 N): `help` exit 0, its first-line check affected
+by an operator defect and not repeated; `authenticate --protocol 0` exit 1 with
+`invalid_request`. #27 personal native P3 (1 I): product exit 0, `Success/Interactive`,
+validator pass, 35.2 s, no surviving process; owner answers Q1 yes, Q2 yes, Q3 no, Q4 no.
+Q4 was not among this protocol's questions then; the executor added it from the earlier
+operator-observation practice, and it is now part of the protocol. Used 15 I and 12 N in
+total; 9 I and 28 N remained under the former limits. `<root>` is
+`C:\Temp\azureauth-real-host-20261016` (the second subject's `<root>` of that name had
+been deleted); after the stop it was retained unchanged with the launchers,
+`roles.json`, Profile and ledger. The executor copies rows #25 to #27 and the recorded
+hashes unchanged from the local ledger.
+
+- **Stop and disposition.** After #27 the owner described the credential-method steps,
+  and the executor stopped under the yes/no-only rule. The repository owner dispositioned
+  that stop (chat, 2026-10-16, quoted in the pull request adding this amendment): the
+  description contained no sensitive information, may be relayed to the executor, and
+  needs investigation. It is an owner-authorized categorical description, not a leak of
+  provider text; no provider UI wording is recorded.
+- **Candidate finding F3 (operator observation).** For the personal role in
+  `force-interactive` with the login hint, the credential method defaulted to a security
+  key, Windows Hello was not offered, and the operator had to cancel that step and choose
+  Windows Hello. The owner also states that before the F1 correction, without the hint,
+  the call did not go directly to a security key; this is a later recollection, not a
+  yes/no record made at the time. Cause not established.
 
 For each subject, record the bound commit, OS build, WSL version and
 sanitized initial state before B1; then B1 to S1 outcomes, hashes, imports and the ledger:
