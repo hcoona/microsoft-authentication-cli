@@ -16,6 +16,12 @@ which this procedure does not run. The former toolchain telemetry preflight and 
 condition are removed, and the `vctip.exe` termination rationale is restated as process
 hygiene. No execution had occurred.
 
+**Amendment (2026-10-16, Windows restore workaround).** The public B1 restore failed on
+the Windows host (see [Results](#results)). Under the Wave owner decision for that host,
+[B1 private-feed retry](#b1-private-feed-retry) permits one locked-mode retry through an
+owner-designated private Azure Artifacts feed. It binds this amendment's merge commit as
+the protocol revision, keeps the materialized subject, and makes no public-restore claim.
+
 ## Subject and Inputs
 
 - **Source.** Execution binds this protocol's merge commit on `main-v2`, or a later
@@ -51,7 +57,8 @@ ordinary command environment sets
 `MSBUILDDISABLENODEREUSE=1`. `NUGET_PACKAGES` and `NUGET_HTTP_CACHE_PATH` point to new empty
 directories under `<root>`. Every restore passes `--configfile <root>\src\nuget.config`,
 which admits only nuget.org; no credential provider, feed credential or private package
-is used. Builds pass `--disable-build-servers -nr:false -p:UseSharedCompilation=false`.
+is used, except under [B1 private-feed retry](#b1-private-feed-retry). Builds pass
+`--disable-build-servers -nr:false -p:UseSharedCompilation=false`.
 These steps are not counted against the Wave call limits.
 
 **Step termination.** Each step runs as one foreground process tree. On overrun, stop
@@ -68,6 +75,61 @@ object is used although the scenario fixture's comment assumes one; S1 records t
 | B3 publish | `dotnet publish src\Authentication.Cli -c Release -r win-x64 --no-restore -o <root>\publish` | 1,200 s |
 | B4 validator | `dotnet restore tools\result-validation\cli --configfile nuget.config`, then `dotnet build tools\result-validation\cli -c Release --no-restore -o <root>\validator` | 300 s |
 | S1 scenarios | See below | 900 s |
+
+### B1 private-feed retry
+
+On the Windows host only, when the public B1 restore has failed for a recorded host
+network-path reason, B1 may be retried once, as the Wave owner decision permits. B4 then
+uses the same configuration. Any other B1 failure, or a failed retry, stops the
+experiment.
+
+- **Binding.** Execution binds this amendment's merge commit as the protocol revision and
+  keeps the materialized subject. Before the retry, record in the ledger that
+  `git diff --name-only <subject commit> <amendment merge commit>` lists only paths under
+  `docs/`; otherwise stop. The subject commit and its `<root>\src` tree are unchanged.
+- **Configuration.** A machine-local file
+  `%LOCALAPPDATA%\azureauth-real-host\nuget.config`, outside `<root>`, contains
+  `<packageSources>` with `<clear />` and one source: the owner-designated private feed.
+  It holds no credential, other source or other setting. Source finding
+  ([NuGet configuration](https://learn.microsoft.com/nuget/consume-packages/configuring-nuget-behavior#how-settings-are-applied)):
+  with `--configfile`, NuGet uses only that file's settings. The feed URL and name are
+  never committed, logged, displayed or reported.
+- **Authentication.** The already installed Azure Artifacts Credential Provider (a NuGet
+  plugin) authenticates; nothing is installed or updated. Record its version only. The
+  owner gives a fresh readiness answer after all preparation, then signs in with the work
+  account if prompted, on the provider's window or browser surface. That prompt is not a
+  product call and does not count toward the I/N limits. The owner cancels a prompt that
+  asks to add an account, use another account or grant consent; the attempt then fails.
+  A device-code prompt is unusable because restore output is not shown, so that attempt
+  fails at the bound.
+- **State.** Delete every `obj` directory under `<root>\src` left by the public attempt.
+  Set `NUGET_PACKAGES` and `NUGET_HTTP_CACHE_PATH` to new empty directories
+  `<root>\nuget-packages-feed` and `<root>\nuget-http-cache-feed`.
+- **Command.** From `<root>\src`, within the B1 bound:
+  `dotnet restore Windows.slnx --locked-mode --interactive --configfile %LOCALAPPDATA%\azureauth-real-host\nuget.config`.
+  For B4, the same `--configfile` and `--interactive` replace the public file. The step
+  wrapper keeps restore output only in memory, writes no log file, and prints only the
+  exit code, duration and any `NU` code identifiers.
+- **Hash check.** Source finding
+  ([NU1403](https://learn.microsoft.com/nuget/reference/errors-and-warnings/nu1403)):
+  locked mode fails when a package's content differs from its lock-file hash. After a
+  successful restore, a local check also compares the `contentHash` in each
+  `.nupkg.metadata` under `NUGET_PACKAGES` with the committed `packages.lock.json` files.
+  It reads no other field and prints only counts and the public ID and version of any
+  package that mismatches or that no lock file lists. A mismatch stops the experiment. An
+  unlisted package, such as an SDK-implied runtime pack, is recorded as not lock-verified.
+- **Record.** Only the exit code, duration, `NU` codes, provider version, that the
+  private-feed workaround was used, the hash-check counts, and the IDs and versions of
+  unlisted packages. No feed identifier, account, tenant or provider text.
+- **Effects.** Authenticated, locked-mode package download from the designated feed with
+  the work account, and the provider's ordinary session and MSAL token-cache updates.
+  Source finding
+  ([Azure Artifacts package graphs](https://learn.microsoft.com/azure/devops/artifacts/concepts/package-graph)):
+  consuming a package through an upstream source saves a copy to the feed. Inference: the
+  sign-in may also update work-account state that the work-role P7 case observes, so the
+  work-role initial state records that this sign-in preceded the real calls.
+- **Claim limit.** Results from this retry state that they make no public-restore claim.
+  The Linux CI job remains the public build-chain evidence.
 
 **Runtime binding.** Source finding: framework-dependent outputs pin
 `Microsoft.NETCore.App` 10.0.12 with `rollForward: Disable` (`src/Directory.Build.props`,
@@ -220,15 +282,19 @@ interaction or in another session; the owner cannot identify or close a prompt; 
 exceeds its external bound or its process cannot be confirmed ended; the subject hash,
 Profile or validator differs from the recorded values; a lock or restore mismatch occurs;
 remaining capacity is unknown; or any account, cache, installation or remote effect
-outside this protocol is observed. Unexpected typed outcomes follow the repeat rule above.
+outside this protocol is observed; or a feed identifier would enter captured output, a
+log or a record. Unexpected typed outcomes follow the repeat rule above.
 
 ## Retention and Cleanup
 
 After the public artifact hashes, S1 counts and the ledger are recorded, delete
 `<root>` (source, packages, build, publish, run and validator directories). Keep the local
 launchers, `roles.json`, Profile and ledger until the Wave entry ends, then delete them.
-Provider-managed WAM sessions and caches are retained; no sign-out or cache removal is
-performed, and deleting local files reverses no provider-side change.
+When the Wave entry ends, also delete the local private-feed `nuget.config`; deleting
+`<root>` removes package metadata, restore assets and HTTP cache entries that name the
+feed. Provider-managed WAM sessions and caches, and the credential provider's session and
+MSAL token caches (the owner's ordinary credential state), are retained; no sign-out or
+cache removal is performed, and deleting local files reverses no provider-side change.
 
 ## Corrected Builds
 
@@ -240,8 +306,21 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
 
 ## Results
 
-No execution has occurred. Record the bound commit, OS build, WSL version and
-sanitized initial state before B1; then B1 to S1 outcomes, hashes, imports and the ledger:
+Record the bound commit, OS build, WSL version and sanitized initial state before B1;
+then B1 to S1 outcomes, hashes, imports and the ledger.
+
+**Public B1 attempt (2026-10-16).** Protocol revision and subject commit
+`c9ac86266b87d701052554fdb3b9c3031a47a059`; Windows 11 Enterprise x64 build 26300, WSL
+3.0.3.0 (WSL 2, Ubuntu); designated user in an active Remote Desktop session; both roles
+present with unknown prior broker state; no prior consumption (24 I, 40 N remaining).
+Runtime observations: a first invocation failed within 1 s from a local wrapper argument
+defect, before any restore. The B1 restore then exited 1 after 43.8 s with NU1301 (service
+index of `https://api.nuget.org/v3/index.json` not loaded, TLS handshake failure) and
+NU1900. `NUGET_PACKAGES` stayed empty and no experiment process remained. A separate
+check showed Windows Schannel clients failing the TLS handshake to `api.nuget.org` while
+other public hosts succeeded and WSL OpenSSL reached `api.nuget.org`. Inference: a host
+network-path problem, not a lock mismatch or subject defect, caused the failure. The
+experiment stopped before B2; no product call has been made.
 
 | # | Case | Role | Caller | Unit | Start (UTC) | Outcome and exits | I left | N left |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
