@@ -32,8 +32,9 @@ recorded consumption; S1-2 now fixes its argument form.
   merge of PR #489. Record the full commit hash in the ledger before the first build.
   Materialize it with
   `git archive <commit> | tar -x -C <root>/src` into a fresh
-  `C:\Temp\azureauth-real-host-YYYYMMDD\src` (`<root>` below); no Git metadata, local
-  edits or other checkout is used.
+  `C:\Temp\azureauth-real-host-YYYYMMDD[-n]\src` (`<root>` below; add the lowest free
+  `-n` if the name exists, and record the actual `<root>` in the ledger); no Git metadata,
+  local edits or other checkout is used.
 - **Dependencies.** MSAL and Broker 4.83.1, NativeInterop 0.20.3, and the other versions
   fixed by the committed `packages.lock.json` files. Restore uses `--locked-mode`; a
   lock mismatch stops the build. No dependency, SDK or runtime is added or installed.
