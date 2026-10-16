@@ -171,7 +171,7 @@ evidence that a mechanism or platform passes the corresponding tests.
   ambiguous without a wrong-account silent attempt.
 - For `interactive-if-needed`, the interactive call carries the resolved account or the
   requested email as login hint when supported; for `force-interactive` it carries only
-  the requested email as login hint. Final authoritative validation applies regardless of hint use and rejects any
+  the requested email as login hint when supported. Final authoritative validation applies regardless of hint use and rejects any
   other returned account.
 - Fixed single-tenant policy, eligible multitenant/MSA `common` default, compatible exact
   token/resource-tenant GUID, B2B home/resource-tenant distinction, and no exact-to-common

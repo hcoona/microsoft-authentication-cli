@@ -100,8 +100,7 @@ to both silent and interactive results.
 `force-interactive` changes the initial acquisition path, not account selection or the
 fallback policy. Resolve the requested full email through the same provider discovery.
 Multiple exact matches remain terminal ambiguity. With zero or one exact match, establish
-the owned interaction context and perform one provider interactive call with supported
-through its sign-in/account-selection route, with picker presentation runtime-dependent,
+the owned interaction context and perform one provider interactive call through its sign-in/account-selection route, with picker presentation runtime-dependent,
 and the original request constraints. That call supplies
 the requested email as the login hint when supported and never the discovered account,
 so the provider's account selection may be pre-filled or skipped for the requested email; final
