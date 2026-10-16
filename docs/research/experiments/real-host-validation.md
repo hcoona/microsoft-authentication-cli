@@ -444,8 +444,10 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   the consent rule and the yes/no-only rule with its fixed credential-method vocabulary
   apply as under F1 Confirmation; Q3 is not applicable to the work role.
 - **Acceptance.** A call is accepted only when the validator pass rule holds, Q1 is yes
-  and Q2 is yes. If Q1 is no, record a defect of the forced mode, record Q2, Q3 and Q5 as
-  not applicable, stop all real calls and do not repeat the call. Q3 is expected yes for
+  and Q2 is yes. If Q1 is no, record Q2, Q3 and Q5 as not applicable. If, in addition,
+  the product returned `Success` (WAM completed without presenting its interactive UI),
+  record a defect of the forced mode, stop all real calls and do not repeat the call; any
+  other Q1 no follows Repeats. Q3 is expected yes for
   the personal role: F1 is a known limitation of this subject, and a yes is only
   recorded. A Q5 yes is recorded with the fixed vocabulary only. Neither makes a call
   unaccepted, stops calls or justifies a repeat. A call not accepted for another reason
