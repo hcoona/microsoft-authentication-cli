@@ -37,7 +37,10 @@ internal static class NativeProfileScenarios
                 await child.FinishAsync();
                 Assert.IsFalse(child.Forced, "Fixture enforcement cannot establish product completion.");
                 Assert.AreEqual(1u, child.ExitCode);
-                Assert.AreEqual(0, child.Error.Length, "Telemetry is disabled for native Profile negatives.");
+                // Without telemetry, stderr may carry only a prefix of the fixed completion
+                // indication: its best-effort writer can end with the process.
+                Assert.IsTrue("Authentication request completed.\n"u8.StartsWith(child.Error),
+                    "Native Profile negatives emit at most the fixed completion indication.");
                 var bytes = child.Output;
                 Assert.IsTrue(bytes.Length > 1 && bytes[^1] == (byte)'\n');
                 Assert.IsFalse(bytes.AsSpan().StartsWith(new byte[] { 0xef, 0xbb, 0xbf }));
