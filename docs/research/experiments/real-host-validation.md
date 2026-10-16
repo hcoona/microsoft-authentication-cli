@@ -43,8 +43,15 @@ Wave limits are now 48 I and 64 N.
 `389f85a94f9a6da15c8bc4bc5f66abb88f09cc5c` on the dedicated branch
 `experiment/forced-bound-account`, whose parent is the third subject. Its independent
 review concluded "No material findings." This amendment records that hash and satisfies
-the variant gate; it changes no other procedure, limit or question. Variant calls bind
-this amendment's merge commit under Protocol revision.
+the variant gate. Variant calls bind this amendment's merge commit under Protocol
+revision. In #29 (work native P3) the owner answered Q1 no; the executor recorded a
+forced-mode defect and stopped all real calls under F1 Confirmation, and its Results are
+appended separately. The repository owner dispositioned that stop (chat, 2026-10-16,
+quoted in the pull request adding this amendment): run the variant first, each of its
+three cases once, to see whether it meets all of "interactive UI must appear", "no second
+page" and "no defaulted security key", then decide the product change. The stop
+therefore applies only to the third subject; the variant runs under
+[F3 Investigation](#f3-investigation) as revised here.
 
 ## Subject and Inputs
 
@@ -377,22 +384,28 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   coordinator are unchanged; conclusion: "No material findings." The Windows solution
   built with 0 warnings and the Linux scenarios passed; `Authentication.Windows.Scenarios`
   were only compiled on Linux and run first as S1 of the variant procedure.
-- **Decision question** (Wave outcome (3)). Does the variant reach a visible interactive
-  surface without the second provider page of F1 (Q3 no) and without a
-  provider-defaulted credential method the operator must cancel (Q5 no)?
+- **Decision question** (Wave outcome (3)). Does the variant meet the owner's three
+  criteria: interactive UI appears (Q1 yes; a no records that this path does not satisfy
+  the forced-interaction requirement), no second provider page of F1 for the personal role
+  (Q3 no), and no provider-defaulted credential method the operator must cancel (Q5 no;
+  after a yes, the fixed vocabulary)? Q2 and Q4 are also asked. Variant answers are
+  labeled as outcome (3) evidence only and are not mapped as `main-v2` validation.
 - **Variant procedure.** In a new `<root>`, materialize the variant with `git archive`,
   then B1 to B4 (under the same restore exemption), the native artifact checks (2 N) and
   S1; S1 must pass before any variant call. Cases, all `force-interactive` with the P3
   validator expectations (`Success/Interactive`, 0): personal native, personal WSL, work
   native; 3 I. Observations: Q1 to Q5 for every variant call, Q3 recorded as not
-  applicable for the work role. Unlike F1 Confirmation, a Q1 no records that this path
-  does not satisfy the forced-interaction requirement and is evidence, not a stop; the
-  next variant case may run. Other unexpected outcomes follow Repeats.
-- **Planned use and buffer.** 15 I and 12 N are used (see Results), leaving 33 I and 52 N
-  under the Wave's 48 I and 64 N. Planned: confirmation 2 I; variant 3 I and 2 N. Each of
-  these may be repeated once for a recorded operator-side reason under Repeats, so the
-  worst case is 10 I and 4 N, leaving at least 23 I and 48 N. Before #28, reconcile the
-  local ledger to 33 I and 52 N remaining under the new limits (otherwise stop).
+  applicable for the work role. Unlike F1 Confirmation, a Q1 no in any variant case
+  records only that the variant does not satisfy the requirement and does not stop the
+  remaining variant cases, because that is the question under test. Every other stop
+  condition (raw provider text, an unexpected account or prompt, token exposure and the
+  rest of Stop Conditions and the yes/no-only rule) is unchanged; other unexpected
+  outcomes follow Repeats.
+- **Planned use and buffer.** Before #28, 33 I and 52 N remained under the Wave's 48 I and
+  64 N; #28 and #29 used 2 I, leaving 31 I and 52 N. Planned for the variant: 3 I and the
+  2 N artifact runs, each repeatable at most once under Repeats, so the worst case is 6 I
+  and 4 N, leaving at least 25 I and 48 N. Before the variant's B1, reconcile the local
+  ledger to 31 I and 52 N remaining (otherwise stop).
 - **Scope.** F3 conclusions cover only the observed role, caller and subject. Variant
   evidence is recorded and labeled separately under its own subject, is not mapped as
   `main-v2` validation, and does not by itself authorize a product behavior change; any
