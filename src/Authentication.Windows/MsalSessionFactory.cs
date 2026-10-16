@@ -49,9 +49,11 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
             Title = "Unofficial hcoona/microsoft-authentication-cli",
         };
 
-    // Pinned RuntimeBroker chooses its sign-in/account-picker route only when
-    // no account is bound. A login hint can suppress that selection experience.
-    // Keep the exact selector in the request for final validation, not this builder.
+    // Pinned RuntimeBroker chooses its sign-in route (SignInInteractivelyAsync) only
+    // when no account is bound. Forced interaction therefore binds no account but
+    // supplies the requested email as the login hint, so the selection may be
+    // pre-filled for that email. The hint is not a selector: final validation
+    // still rejects any other returned account.
     internal static AcquireTokenInteractiveParameterBuilder BuildInteractiveRequest(
         PublicClientApplication application, MsalInteractiveOperation operation,
         WindowsMechanismTrace? trace, CancellationToken cancellationToken)
@@ -63,18 +65,24 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
             .WithCustomWebUi(new RejectingWebUi(trace));
         if (RestrictiveTenant(operation.Tenant) is { } tenant)
             builder.WithTenantId(tenant);
-        if (!operation.ForceInteractive)
+        if (operation.ForceInteractive)
         {
-            if (operation.Account is { } account)
-                builder.WithAccount(account);
-            else
-                builder.WithLoginHint(operation.LoginHint
-                    ?? throw new InvalidOperationException("The interactive operation requires a login hint."));
+            if (operation.Account is not null)
+                throw new InvalidOperationException("A forced interactive operation must not bind an account.");
+            builder.WithLoginHint(RequiredHint(operation));
         }
+        else if (operation.Account is { } account)
+            builder.WithAccount(account);
+        else
+            builder.WithLoginHint(RequiredHint(operation));
         if (operation.Claims is { } claims)
             builder.WithClaims(claims);
         return builder;
     }
+
+    private static string RequiredHint(MsalInteractiveOperation operation) =>
+        operation.LoginHint
+        ?? throw new InvalidOperationException("The interactive operation requires a login hint.");
 
     private static string? RestrictiveTenant(string tenant)
     {

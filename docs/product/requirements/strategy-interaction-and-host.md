@@ -23,7 +23,8 @@ and ambient state must not permit interaction that the request prohibits.
 
 The first version has three modes: `non-interactive-only`, `interactive-if-needed`, and
 `force-interactive`. The existing modes retain their behavior. Forced interaction must
-enter the provider interactive path and request supported account selection even when
+enter the provider interactive path through its supported sign-in and account-selection
+route, without binding a discovered account, even when
 reusable credentials are available. The engine must not call silent acquisition or fall
 back to it. A provider/host combination that cannot honor this invocation intent is
 unavailable. The provider may reuse its session within the interactive call; success
@@ -66,9 +67,10 @@ initiate unmanaged interaction.
 
 For `interactive-if-needed`, when the provider supports a login hint, interactive
 acquisition must use the requested email, or the uniquely resolved account, as that hint.
-For `force-interactive`, interactive acquisition must supply neither the discovered
-account nor a login hint, so that the provider's account selection is not pre-filled.
-In both modes a hint, or its absence, does not replace final identity validation under
+For `force-interactive`, interactive acquisition must not supply the discovered account;
+when the provider supports a login hint, it must supply the requested email as that hint,
+so the provider's account selection may be pre-filled with the requested email.
+In both modes a hint does not replace final identity validation under
 `V2-REQ-022`; a returned account other than the requested one must be rejected.
 
 ## V2-REQ-020: Pre-resolved Account for Silent Acquisition
@@ -84,8 +86,8 @@ The identity-opaque `OperatingSystemAccount` sentinel is not a resolved account.
 `interactive-if-needed`, an interaction-required acquisition outcome may proceed to
 permitted interaction under `V2-REQ-023`; it is terminal without interaction permission.
 `force-interactive` uses the same exact account resolution, but proceeds directly to its
-interactive path after zero or one exact match, supplying neither the discovered account
-nor a login hint under `V2-REQ-016`. The requested email remains the strict selector for
+interactive path after zero or one exact match, supplying the requested email as the login
+hint and never the discovered account under `V2-REQ-016`. The requested email remains the strict selector for
 final validation under `V2-REQ-022`, which rejects any other account chosen during
 provider account selection. Account ambiguity must not fall back to another account or
 a picker that bypasses the strict-email ambiguity.

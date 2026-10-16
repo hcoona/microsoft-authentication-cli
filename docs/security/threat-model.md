@@ -126,9 +126,10 @@ warning. No new persistence service or independent proof of broker internals is 
 The hidden owned Windows parent exists only for permitted interaction, is never shown,
 and has no controls; its window procedure only turns `WM_CLOSE` into cancellation and
 handles destruction. WAM controls its own credential/MFA/consent UI and its cancel. The
-engine supplies the HWND, supplies the account or login hint only for
-`interactive-if-needed` (`force-interactive` supplies neither, so the user may pick
-another account), validates the final result, rejects any account other than the
+engine supplies the HWND, supplies the resolved account or the requested-email login
+hint for `interactive-if-needed` and only that login hint for `force-interactive` (a
+hint does not bind the result, so the user may still pick another account), validates
+the final result, rejects any account other than the
 requested email, forwards cancellation, and invalidates late completion. Provider prompt
 choice is not an application security control. Unknown or terminal failures cannot
 activate a PAT, alternate registration, browser, or account fallback.
