@@ -53,6 +53,14 @@ page" and "no defaulted security key", then decide the product change. The stop
 therefore applies only to the third subject; the variant runs under
 [F3 Investigation](#f3-investigation) as revised here.
 
+**Amendment (2026-10-16, revert confirmation).** The variant did not present interactive
+UI in any observed case (see [Results](#results)).
+[PR #501](https://github.com/hcoona/microsoft-authentication-cli/pull/501) (merge
+`d01cb0a`) corrected the #29 forced-mode defect by reverting forced interaction to bind
+neither a login hint nor an account. Execution rebinds under
+[Corrected Builds](#corrected-builds) to a fourth subject and runs only the cases in
+[Revert Confirmation](#revert-confirmation-fourth-subject).
+
 ## Subject and Inputs
 
 - **Source.** The second subject (`8d9be27`) and the third subject (`0eb257a`) were each
@@ -61,7 +69,8 @@ therefore applies only to the third subject; the variant runs under
   `0eb257ae71adc948202698b2914391185ba68d68`, contains `3477534`, the merge of PR #492;
   it stays bound in its retained `<root>` and is not rebuilt. The F3 variant subject is
   defined under [F3 Investigation](#f3-investigation) and is
-  `389f85a94f9a6da15c8bc4bc5f66abb88f09cc5c`. Only a new subject is
+  `389f85a94f9a6da15c8bc4bc5f66abb88f09cc5c`. The fourth subject is defined under
+  [Revert Confirmation](#revert-confirmation-fourth-subject). Only a new subject is
   materialized, with
   `git archive <commit> | tar -x -C <root>/src` into a fresh
   `C:\Temp\azureauth-real-host-YYYYMMDD[-n]\src` (`<root>` below; add the lowest free
@@ -415,6 +424,39 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   evidence is recorded and labeled separately under its own subject, is not mapped as
   `main-v2` validation, and does not by itself authorize a product behavior change; any
   such change requires a separate owner decision.
+
+## Revert Confirmation (Fourth Subject)
+
+- **Subject and revision.** The fourth subject and the protocol revision its calls bind are
+  both this amendment's merge commit on `main-v2`, or a later `main-v2` commit whose copy
+  of this file is unchanged; either contains `d01cb0a`. Before B1 the executor records
+  its full hash in the ledger, and later in Results.
+- **Preparation.** Before B1, reconcile the local ledger to 28 I and 50 N remaining
+  (otherwise stop). In a new `<root>`, materialize the subject with `git archive`, then
+  run B1 to B4, the native artifact checks (2 N) and S1; S1-1 covers the reverted
+  `MsalCompositionScenarios`, and S1 must pass before any real call. B1 uses the owner's
+  machine-local restore exemption, which the
+  [PR #494 disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/494#issuecomment-6222226699)
+  extends to every subject built on this host, including this one, with the limits
+  stated under F1 Confirmation.
+- **Cases.** Only P3 (`force-interactive`; expected `Success/Interactive`, exit 0), in
+  order: personal native, work native, personal WSL, work WSL; 4 I. Readiness, Q1 to Q5,
+  the consent rule and the yes/no-only rule with its fixed credential-method vocabulary
+  apply as under F1 Confirmation; Q3 is not applicable to the work role.
+- **Acceptance.** A call is accepted only when the validator pass rule holds, Q1 is yes
+  and Q2 is yes. If Q1 is no, record a defect of the forced mode, record Q2, Q3 and Q5 as
+  not applicable, stop all real calls and do not repeat the call. Q3 is expected yes for
+  the personal role: F1 is a known limitation of this subject, and a yes is only
+  recorded. A Q5 yes is recorded with the fixed vocabulary only. Neither makes a call
+  unaccepted, stops calls or justifies a repeat. A call not accepted for another reason
+  follows Repeats.
+- **Planned use.** 4 I and 2 N; each case is repeatable at most once, only for a recorded
+  operator-side reason under Repeats, so the worst case is 8 I and 4 N, leaving at least
+  20 I and 46 N under 48 I and 64 N.
+- **Scope.** These results only confirm whether the reverted forced mode presents
+  interactive UI for the observed role and caller combinations, and record F1 as a known
+  limitation. They draw no F3 conclusion; Q5 answers are recorded for a later owner
+  decision.
 
 ## Results
 
