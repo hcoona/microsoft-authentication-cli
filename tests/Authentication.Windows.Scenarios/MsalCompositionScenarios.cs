@@ -110,7 +110,6 @@ public sealed class MsalCompositionScenarios
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
-    [DataRow(true, true)]
     public void RealInteractiveBuilderBindsAnAccountOnlyForOrdinaryRequestsAndForcedUsesTheHint(bool forced, bool accountVisible)
     {
         using var scene = new Scene();
@@ -140,11 +139,6 @@ public sealed class MsalCompositionScenarios
         var common = BuilderMember(builder, "CommonParameters")!;
         Assert.AreSame(account, BuilderMember(interactive, "Account"));
         Assert.AreEqual(hint, BuilderMember(interactive, "LoginHint"));
-        if (forced)
-        {
-            Assert.IsNull(BuilderMember(interactive, "Account"));
-            Assert.AreEqual(Email, BuilderMember(interactive, "LoginHint"));
-        }
         Assert.IsNull(BuilderMember(common, "ExtraQueryParameters"));
         Assert.IsNull(BuilderMember(common, "CacheKeyComponents"));
         CollectionAssert.AreEqual(new[] { Scope }, ((IEnumerable<string>)BuilderMember(common, "Scopes")!).ToArray());

@@ -580,7 +580,8 @@ then showed that, with neither account nor hint under the `organizations` author
 MSA passthrough, the personal role reached a second provider page that did not offer the
 personal account for direct selection, and the operator had to enter it manually; the
 work role did not. Its cause is not established, and relating it to the missing hint is
-an inference. By repository-owner decision (2026-10-16), forced interaction must still
+an inference. By repository-owner decision (2026-10-16, quoted in
+[PR #492](https://github.com/hcoona/microsoft-authentication-cli/pull/492)), forced interaction must still
 enter the provider interactive path without a silent attempt, but now supplies the
 requested email as login hint, with no account; a pre-filled selection is acceptable.
 Whether the hint removes the second page is a runtime question for a rebound real-host
