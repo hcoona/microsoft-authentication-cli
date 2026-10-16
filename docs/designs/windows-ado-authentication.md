@@ -580,12 +580,14 @@ pinned .NET broker path is found that forces the WAM UI: `WithPrompt` is not tra
 (above), so this design controls only whether an account or hint is supplied.
 
 The [real-host results](../research/experiments/real-host-validation.md#results)
-compare three implementations of this mode on the designated host and existing account
-state (runtime observations; each covers only the role and caller combinations listed):
+compare three implementations of this mode, the first on two subjects, on the designated
+host and existing account state (runtime observations; each covers only the role and
+caller combinations listed):
 
 | Implementation | Subject | Interactive UI presented | Second provider page (F1) |
 | --- | --- | --- | --- |
 | Neither account nor hint (this design) | `8d9be27`, calls #8, #13, #20, #24 | Yes for the personal and work roles, native and WSL | Yes for the personal role (#8, #13); no for the work role |
+| Neither account nor hint (this design, after the revert) | `3ae2554`, calls #37 to #40 | Yes for the personal and work roles, native and WSL | Yes for the personal role (#37, #39); not asked for the work role |
 | Requested email as login hint, no account | `0eb257a`, calls #27 to #29 | Yes for the personal role (#27 native, #28 WSL); **no** for the work role (#29 native) | No for the personal role |
 | Discovered account bound, no hint (experiment-only variant) | `389f85a`, calls #32 to #34 | **No** for all three (personal native and WSL, work native) | Not observable |
 
@@ -598,9 +600,13 @@ verbatim in the pull request that made this change), forced interaction reverts 
 original implementation, supplying neither hint nor account, and F1 is recorded as a
 [known limitation](#validation-and-explicit-unsupported-cases). That the hint or the
 bound account caused the skipped UI is an **inference**; the source findings above are
-consistent with it but do not establish broker behavior. The reverted implementation is
-the one whose forced calls presented UI for both roles; that it will continue to do so
-on other hosts or account states is not established.
+consistent with it but do not establish broker behavior. The reverted implementation
+(fourth subject `3ae2554`) passed its unfiltered Windows scenario run (186 of 186,
+including the reverted `MsalCompositionScenarios`), and its forced calls #37 to #40
+presented WAM's interactive UI and completed sign-in with the designated account for
+both roles from native and WSL callers; the #29 defect did not recur, and no call had a
+provider-defaulted credential method the operator had to cancel. That it will continue
+to present UI on other hosts or account states is not established.
 
 The Microsoft [WAM API reference](https://learn.microsoft.com/entra/identity-platform/reference-entra-id-wam-api)
 documents a `prompt` request property (`no_select` or `select_account`) and a
@@ -1153,18 +1159,17 @@ Known limitation (finding F1): for `force-interactive` with the
 personal Microsoft account can reach a second provider page that does not offer it for
 direct selection, so the user enters the requested account manually. This was observed
 for the personal role from native and WSL callers on the designated host (calls #8 and
-#13); the work role did not reach it. Forced interaction supplies neither account nor
-login hint because both alternatives completed some observed forced calls without WAM
-UI (#29; #32 to #34; see
+#13, and again on the reverted source in #37 and #39); the work role did not reach it.
+Forced interaction supplies neither account nor login hint because both alternatives
+completed some observed forced calls without WAM UI (#29; #32 to #34; see
 [Forced Interactive Authentication](#forced-interactive-authentication)). The final
 identity is still bound by strict validation: any returned account other than the
 requested email fails with `identity_validation_failed`. The F3 candidate (a
 provider-defaulted security-key credential method) was observed only with the login
-hint (#27, #28) and is expected not to occur for the personal role after this revert;
-that expectation is an **inference** from the owner's later recollection of the earlier
-personal-role no-hint calls, not an observation recorded at the time. For the work role
-the credential method was never observed, and no real call has exercised the reverted
-source.
+hint (#27, #28). On the reverted source, no forced call (#37 to #40: personal and work
+roles, native and WSL) had a provider-defaulted credential method that the operator had
+to cancel; these runtime observations cover only those combinations on that host and
+existing state, draw no F3 conclusion and are recorded for a later owner decision.
 
 Profile activation, platform support and release each retain their own authorization
 and evidence gates; the [validation strategy](../validation/strategy.md#release-gates)
