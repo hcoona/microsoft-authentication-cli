@@ -281,8 +281,11 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   holds and the owner answers yes to both: WAM presented its interactive UI (a UI
   pre-filled from the hint is acceptable); the designated account completed sign-in on
   it. For the personal role the owner also answers whether the second provider surface
-  of F1 appeared. If WAM completed without presenting its interactive UI, record a
-  defect of the forced mode, stop all real calls and do not accept the call.
+  of F1 appeared; expected no. A yes records F1 as not confirmed corrected for that role
+  and caller; it alone does not make the call unaccepted. If WAM completed without
+  presenting its interactive UI, record a defect of the forced mode, stop all real calls
+  and do not accept the call. A call not accepted for another reason follows Repeats.
+  The F1 conclusion covers only the observed role and caller combinations.
 - **Yes/no only.** The executor asks only these yes/no questions and records only yes or
   no. The stop condition for raw provider text applies without exception: if the owner
   or a relay describes or quotes provider UI text, the executor records none of it in
