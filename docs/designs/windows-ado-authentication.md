@@ -536,8 +536,8 @@ interactive operation. Forced intent requires permission; an inconsistent intern
 request is rejected before discovery. The coordinator preserves exact account discovery
 and ambiguity rejection, then skips its silent branch only for that flag. The adapter
 omits the discovered account and login hint from the forced interactive builder, so
-the pinned broker enters its sign-in/account-selection path without a pre-filled
-identity. Both older modes retain their selected account or
+the pinned broker enters its sign-in/account-selection path and the engine pre-fills
+no identity. Both older modes retain their selected account or
 requested hint. The request still retains its exact account
 selector for discovery and final validation. Controlled application and adapter
 scenarios cover this projection, single-call effects, identity rejection and original
@@ -589,8 +589,9 @@ state (runtime observations; each covers only the role and caller combinations l
 | Requested email as login hint, no account | `0eb257a`, calls #27 to #29 | Yes for the personal role (#27 native, #28 WSL); **no** for the work role (#29 native) | No for the personal role |
 | Discovered account bound, no hint (experiment-only variant) | `389f85a`, calls #32 to #34 | **No** for all three (personal native and WSL, work native) | Not observable |
 
-The hinted and account-bound implementations completed forced calls without presenting
-WAM UI, which forced interaction does not accept. With the hint, the personal role's
+The hinted implementation (in one of three observed combinations, #29) and the
+account-bound implementation (in all three, #32 to #34) completed forced calls without
+presenting WAM UI, which forced interaction does not accept. With the hint, the personal role's
 forced calls also defaulted to a security-key credential method that the operator had
 to cancel (F3 candidate, #27 and #28). By repository-owner decision (2026-10-16 UTC, quoted
 verbatim in the pull request that made this change), forced interaction reverts to the
@@ -1153,7 +1154,8 @@ personal Microsoft account can reach a second provider page that does not offer 
 direct selection, so the user enters the requested account manually. This was observed
 for the personal role from native and WSL callers on the designated host (calls #8 and
 #13); the work role did not reach it. Forced interaction supplies neither account nor
-login hint because both alternatives completed forced calls without WAM UI (see
+login hint because both alternatives completed some observed forced calls without WAM
+UI (#29; #32 to #34; see
 [Forced Interactive Authentication](#forced-interactive-authentication)). The final
 identity is still bound by strict validation: any returned account other than the
 requested email fails with `identity_validation_failed`. The F3 candidate (a

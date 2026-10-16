@@ -102,8 +102,8 @@ fallback policy. Resolve the requested full email through the same provider disc
 Multiple exact matches remain terminal ambiguity. With zero or one exact match, establish
 the owned interaction context and perform one provider interactive call through its
 sign-in/account-selection route with the original request constraints. That call
-supplies neither the discovered account nor a login hint, so the provider's account
-selection is not pre-filled. The provider must actually present its interactive UI;
+supplies neither the discovered account nor a login hint, so the engine pre-fills
+nothing. The provider must actually present its interactive UI;
 the engine cannot enforce that, it remains runtime behavior, and completion without
 that UI is a defect of this mode, not accepted behavior. Final identity validation
 still rejects any account other than the

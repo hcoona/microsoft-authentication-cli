@@ -32,9 +32,9 @@ interactive UI and must not complete without it. The engine cannot enforce that
 presentation; whether the provider presents it is runtime behavior that requires
 real-host observation. If a provider completes a forced call without presenting its
 interactive UI, that is a defect of this mode that requires another approach, not
-accepted behavior. The other modes may complete without UI. Account-selection
-inconvenience inside the presented UI, such as having to enter the requested account
-manually, is a known limitation rather than a defect of this mode. The provider may
+accepted behavior. The other modes may complete without UI. Finding F1, manual entry of
+the requested account inside the presented UI, is a known limitation of this mode. The
+provider may
 reuse its session within the presented interactive UI;
 success reports the invoked path, not proof of visible UI or renewed credentials. V2 must not
 expose a caller-selected prompt-type whitelist or promise a password, MFA method, or
@@ -76,8 +76,9 @@ initiate unmanaged interaction.
 For `interactive-if-needed`, when the provider supports a login hint, interactive
 acquisition must use the requested email, or the uniquely resolved account, as that hint.
 For `force-interactive`, interactive acquisition must supply neither the discovered
-account nor a login hint, so that neither can let the provider skip the interactive UI
-required under `V2-REQ-014`; the provider's account selection is not pre-filled.
+account nor a login hint, because forced calls carrying either completed without the
+interactive UI required under `V2-REQ-014` on the designated host; the engine pre-fills
+nothing.
 In both modes a hint, or its absence, does not replace final identity validation under
 `V2-REQ-022`; a returned account other than the requested one must be rejected.
 
