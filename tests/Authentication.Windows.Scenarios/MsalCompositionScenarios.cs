@@ -77,15 +77,12 @@ public sealed class MsalCompositionScenarios
     }
 
     [TestMethod]
-    [DataRow(false)]
-    [DataRow(true)]
-    public async Task ForcedOperationCarriesOnlyTheRequestedEmailAsLoginHint(bool accountVisible)
+    public async Task ForcedOperationBindsTheDiscoveredAccountWithoutALoginHint()
     {
-        // Forced interaction never binds the discovered account, even when one exact
-        // match is visible; it carries the requested email as the login hint (see the
-        // builder scenario below). Final identity validation then rejects any other
-        // returned account.
-        using var scene = new Scene(forceInteractive: true) { IncludeSelectedAccount = accountVisible };
+        // Experiment-only variant: forced interaction binds the one discovered exact
+        // match and carries no login hint (see the builder scenario below). Final
+        // identity validation then rejects any other returned account.
+        using var scene = new Scene(forceInteractive: true);
         var outcome = await scene.RunAsync();
         Assert.IsNotNull(outcome.Success);
         Assert.IsTrue(outcome.Interactive);
@@ -94,8 +91,8 @@ public sealed class MsalCompositionScenarios
         Assert.AreEqual(1, scene.Interactive.Count);
         var operation = scene.Interactive[0];
         Assert.IsTrue(operation.ForceInteractive);
-        Assert.IsNull(operation.Account);
-        Assert.AreEqual(Email, operation.LoginHint);
+        Assert.AreSame(scene.Selected, operation.Account);
+        Assert.IsNull(operation.LoginHint);
         Assert.IsNull(operation.Claims);
         Assert.AreEqual(Tenant, operation.Tenant);
         Assert.AreEqual((nint)42, operation.ParentWindow);
@@ -107,10 +104,26 @@ public sealed class MsalCompositionScenarios
     }
 
     [TestMethod]
+    public async Task ForcedOperationWithoutADiscoveredAccountFailsBeforeWam()
+    {
+        // Experiment-only variant: without an exact match the adapter fails after the
+        // owned parent opens and before any WAM call, as an internal failure.
+        using var scene = new Scene(forceInteractive: true) { IncludeSelectedAccount = false };
+        var outcome = await scene.RunAsync();
+        Failure(AuthenticationFailure.InternalFailure, outcome);
+        Assert.AreEqual(AuthenticationReason.None, outcome.Reason);
+        Assert.AreEqual(1, scene.Discoveries);
+        Assert.AreEqual(0, scene.Silent.Count);
+        Assert.AreEqual(0, scene.Interactive.Count);
+        Assert.AreEqual(1, scene.Opened);
+        Assert.AreEqual(1, scene.Closed);
+    }
+
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
-    [DataRow(true, false)]
-    public void RealInteractiveBuilderBindsAnAccountOnlyForOrdinaryRequestsAndForcedUsesTheHint(bool forced, bool accountVisible)
+    [DataRow(true, true)]
+    public void RealInteractiveBuilderBindsTheAccountWhenPresentAndForcedUsesNoHint(bool forced, bool accountVisible)
     {
         using var scene = new Scene();
         // Construction only: no broker is registered and this builder is never executed.
@@ -120,9 +133,9 @@ public sealed class MsalCompositionScenarios
             .WithRedirectUri("http://localhost")
             .WithHttpClientFactory(scene)
             .Build();
-        // The adapter never projects an account into a forced operation, so forced
-        // operations always carry only the requested email as the login hint.
-        var account = accountVisible && !forced ? scene.Selected : null;
+        // Experiment-only variant: the adapter projects the discovered account into a
+        // forced operation and never a login hint.
+        var account = accountVisible ? scene.Selected : null;
         var hint = account is null ? Email : null;
         const string claims = "{\"access_token\":{\"synthetic_claim\":null}}";
         var correlation = Guid.NewGuid();
@@ -153,7 +166,10 @@ public sealed class MsalCompositionScenarios
     }
 
     [TestMethod]
-    public void RealInteractiveBuilderRejectsAForcedAccount()
+    [DataRow(false, null)]
+    [DataRow(false, Email)]
+    [DataRow(true, Email)]
+    public void RealInteractiveBuilderRejectsAForcedOperationWithoutOnlyAnAccount(bool bound, string? hint)
     {
         using var scene = new Scene();
         // Construction only: no broker is registered and this builder is never executed.
@@ -163,15 +179,14 @@ public sealed class MsalCompositionScenarios
             .WithRedirectUri("http://localhost")
             .WithHttpClientFactory(scene)
             .Build();
-        var operation = new MsalInteractiveOperation([Scope], scene.Selected, Email, Tenant, null, (nint)42, Guid.NewGuid(), true);
+        var operation = new MsalInteractiveOperation([Scope], bound ? scene.Selected : null, hint, Tenant, null,
+            (nint)42, Guid.NewGuid(), true);
         Assert.ThrowsExactly<InvalidOperationException>(() =>
             MsalSessionFactory.BuildInteractiveRequest(application, operation, null, scene.Original.Token));
     }
 
     [TestMethod]
-    [DataRow(false)]
-    [DataRow(true)]
-    public void RealInteractiveBuilderRejectsAMissingHint(bool forced)
+    public void RealInteractiveBuilderRejectsAMissingHint()
     {
         using var scene = new Scene();
         // Construction only: no broker is registered and this builder is never executed.
@@ -181,7 +196,7 @@ public sealed class MsalCompositionScenarios
             .WithRedirectUri("http://localhost")
             .WithHttpClientFactory(scene)
             .Build();
-        var operation = new MsalInteractiveOperation([Scope], null, null, Tenant, null, (nint)42, Guid.NewGuid(), forced);
+        var operation = new MsalInteractiveOperation([Scope], null, null, Tenant, null, (nint)42, Guid.NewGuid(), false);
         Assert.ThrowsExactly<InvalidOperationException>(() =>
             MsalSessionFactory.BuildInteractiveRequest(application, operation, null, scene.Original.Token));
     }

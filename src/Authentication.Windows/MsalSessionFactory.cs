@@ -49,13 +49,12 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
             Title = "Unofficial hcoona/microsoft-authentication-cli",
         };
 
-    // Pinned RuntimeBroker chooses its sign-in route (SignInInteractivelyAsync) only
-    // when no account is bound. Forced interaction therefore binds no account but
-    // supplies the requested email as the login hint, which may only pre-fill the
-    // WAM interactive UI. Forced interaction requires WAM to present that UI; MSAL
-    // documents the hint as avoiding select-account dialogs, so a skipped UI would be
-    // a defect pending real-host confirmation. The hint is not a selector: final
-    // validation still rejects any other returned account.
+    // Experiment-only variant (Wave outcome (3)); never merged into main-v2. Forced
+    // interaction binds the discovered account and supplies no login hint. Pinned
+    // RuntimeBroker then enters AcquireTokenInteractivelyAsync for that account
+    // instead of SignInInteractivelyAsync; whether WAM presents its interactive UI
+    // is the question under test. Final validation still rejects any other
+    // returned account.
     internal static AcquireTokenInteractiveParameterBuilder BuildInteractiveRequest(
         PublicClientApplication application, MsalInteractiveOperation operation,
         WindowsMechanismTrace? trace, CancellationToken cancellationToken)
@@ -69,9 +68,9 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
             builder.WithTenantId(tenant);
         if (operation.ForceInteractive)
         {
-            if (operation.Account is not null)
-                throw new InvalidOperationException("A forced interactive operation must not bind an account.");
-            builder.WithLoginHint(RequiredHint(operation));
+            if (operation.Account is not { } forcedAccount || operation.LoginHint is not null)
+                throw new InvalidOperationException("A forced interactive operation must bind exactly the discovered account.");
+            builder.WithAccount(forcedAccount);
         }
         else if (operation.Account is { } account)
             builder.WithAccount(account);

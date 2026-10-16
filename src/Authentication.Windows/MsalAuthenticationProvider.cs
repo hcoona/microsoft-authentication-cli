@@ -91,9 +91,12 @@ internal sealed class MsalAuthenticationProvider : IAuthenticationProvider
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
-            // Forced interaction never binds the discovered account; it carries the
-            // requested email as the login hint instead (see BuildInteractiveRequest).
-            var selected = account is null || request.ForceInteractive ? null : (IAccount)account.Handle;
+            // Experiment-only variant: forced interaction binds the one discovered
+            // account and carries no login hint (see BuildInteractiveRequest). Without
+            // a matching account it fails here, before any WAM call.
+            if (request.ForceInteractive && account is null)
+                throw new InvalidOperationException("A forced interactive operation requires a discovered account.");
+            var selected = account is null ? null : (IAccount)account.Handle;
             var operation = new MsalInteractiveOperation(request.Scopes, selected,
                 selected is null ? request.AccountEmail : null, initialTenant,
                 claims, parentWindow, operationId, request.ForceInteractive);
