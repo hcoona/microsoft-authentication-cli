@@ -102,11 +102,11 @@ fallback policy. Resolve the requested full email through the same provider disc
 Multiple exact matches remain terminal ambiguity. With zero or one exact match, establish
 the owned interaction context and perform one provider interactive call through its
 sign-in/account-selection route with the original request constraints. That call
-supplies the requested email as the login hint when supported and never the discovered
-account. The provider must actually present its interactive UI; the hint may only
-pre-fill it. Whether it does is undetermined runtime behavior pending real-host
-confirmation, and completion without that UI is a defect of this mode, not accepted
-behavior. Final identity validation still rejects any account other than the
+supplies neither the discovered account nor a login hint, so the provider's account
+selection is not pre-filled. The provider must actually present its interactive UI;
+the engine cannot enforce that, it remains runtime behavior, and completion without
+that UI is a defect of this mode, not accepted behavior. Final identity validation
+still rejects any account other than the
 requested email. Do not attempt silent token acquisition,
 fabricate a silent failure, relax identity validation, or fall back to silent reuse.
 An unsupported host/provider combination is unavailable. The provider may reuse its

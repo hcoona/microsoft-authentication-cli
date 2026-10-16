@@ -33,7 +33,8 @@ public sealed class InteractionScenarios
         var outcome = await scene.RunAsync(forceInteractive: true);
 
         // Core hands the account across the provider interface; the Windows adapter
-        // does not bind it for forced interaction (see MsalCompositionScenarios).
+        // passes neither it nor a login hint for forced interaction (see
+        // MsalCompositionScenarios).
         Assert.IsNotNull(outcome.Success);
         Assert.IsTrue(outcome.Interactive);
         Assert.AreSame(scene.Accounts[0], scene.InteractiveAccount);
