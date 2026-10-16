@@ -46,18 +46,25 @@ which admits only nuget.org; no credential provider, feed credential or private 
 is used. Builds pass `--disable-build-servers -nr:false -p:UseSharedCompilation=false`.
 These steps are not counted against the Wave call limits.
 
-**Toolchain telemetry preflight.** Earlier Native AOT evidence observed the MSVC
-`vctip.exe` telemetry helper during publish. Its documented control is the machine-wide
+**Toolchain telemetry preflight.** Source finding: the
 [Visual Studio Experience Improvement Program](https://learn.microsoft.com/visualstudio/ide/visual-studio-experience-improvement-program)
-`OptIn` registry value (or its policy key). Before B1, read that value without changing
-it. Continue only if it shows opt-out; otherwise stop before B1 and escalate to the owner,
-because enabling the opt-out or accepting the upload is outside this protocol.
+is on by default; its documented value is `OptIn` (DWORD, `0` opted out, `1` opted in)
+under `HKLM\SOFTWARE\Wow6432Node\Microsoft\VSCommon\17.0\SQM` or the Group Policy key
+`HKLM\Software\Policies\Microsoft\VisualStudio\SQM`. The page names no Visual Studio 18 key,
+no precedence and excludes required diagnostic data. Inference: whether it governs the
+MSVC `vctip.exe` helper seen in earlier Native AOT publishes is unproven. Before B1, read
+both keys without changing them (never an undocumented `18.0` key). Continue only if the
+policy value is DWORD `0`, or it is absent and the `17.0` value is DWORD `0`; otherwise
+stop before B1 and escalate to the owner. Record only "documented opt-out present:
+yes/no". Even when present, the opt-out does not prove that the toolchain sends nothing;
+any residual toolchain upload is a stated limitation that requires the owner's
+acceptance or a Wave amendment before B1.
 
 **Step termination.** Each step runs as one foreground process tree. On overrun, stop
 that tree, record the step as failed and stop the experiment. After B3 and S1, list
 processes whose image path is under `<root>` or the pinned MSVC directory; a remaining
-`vctip.exe` from that directory is terminated and recorded, and any other survivor stops
-the experiment with state preserved. No outer Job object is used; the scenario fixture's
+`vctip.exe` from that directory is terminated and recorded (this limits its run time, not
+what it may already have sent); any other survivor stops the experiment. No outer Job object is used; the scenario fixture's
 comment assumes one, so its absence is recorded as a limitation of S1.
 
 | Step | Command (from `<root>\src`) | Bound |
@@ -118,9 +125,8 @@ calls until reviewed; S1 is not repeated on the same subject.
   account), both existing on the host with unknown prior broker state. Their emails and an
   optional work tenant GUID exist only in `%LOCALAPPDATA%\azureauth-real-host\roles.json`.
 - **Launchers.** Two small local launchers in that directory (PowerShell 7 for native,
-  bash for WSL) read `roles.json`, pass the values and the Windows-form
-  Profile path as product and validator arguments,
-  and print only the evidence allowlist. They are not committed, never echo arguments,
+  bash for WSL) read `roles.json`, pass the values and the Windows-form Profile path as
+  product and validator arguments, and print only the evidence allowlist. They are not committed, never echo arguments,
   and run with tracing disabled. Emails, tenants, tokens, raw stderr and provider text
   never enter logs, records, agent traces or chat.
 - **Effects.** Token acquisition for the two existing accounts; WAM sessions and caches
@@ -152,8 +158,7 @@ process stops the experiment with state preserved; an overrun is a transport fai
 | P6 | `force-interactive --timeout-seconds 30`; owner confirms WAM and does not act | `Timeout/None`, 1 | I | 40 s |
 
 **Order and plan.** P7 comes first because a P1 success would make it unreachable.
-Personal native (P7, P1, P2, P3, P4, P6), personal WSL (P1, P2, P3, P4,
-P5, P6), then the same for work: 18 I and 6 N, plus the 2 N artifact runs, within the
+Personal native (P7, P1, P2, P3, P4, P6), personal WSL (P1, P2, P3, P4, P5, P6), then the same for work: 18 I and 6 N, plus the 2 N artifact runs, within the
 Wave's 24 I and 40 N. A P7 result of `Success/Silent` means existing state already permits
 silent use: record P7 as **not reached** for that role. It is not repeated, and no state is
 changed to reach it. A consent or permission prompt in any case is cancelled by the owner
@@ -235,15 +240,14 @@ performed, and deleting local files reverses no provider-side change.
 
 If evidence exposes a product defect, the correction merges to `main-v2` with its tests
 under the Wave entry. Before further real calls, a reviewed amendment to this file names
-the new commit and any changed steps or cases; the new subject repeats B1 to B4, S1 and
-the artifact checks in a new `<root>`, and continues the same ledger and limits.
-Evidence from the earlier subject stays attributed to its commit and artifact hashes.
+the new commit and any changed steps or cases; the new subject repeats B1 to B4, S1 and the
+artifact checks in a new `<root>`, and continues the same ledger and limits.
+Earlier evidence stays attributed to its own commit and artifact hashes.
 
 ## Results
 
-No execution has occurred. Record before the first build: bound commit, host OS build,
-WSL version and initial state notes (sanitized). Then record B1 to S1 outcomes, artifact
-hashes and imports, and the attempt ledger:
+No execution has occurred. Record the bound commit, OS build, WSL version, preflight and
+sanitized initial state before B1; then B1 to S1 outcomes, hashes, imports and the ledger:
 
 | # | Case | Role | Caller | Unit | Start (UTC) | Outcome and exits | I left | N left |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
