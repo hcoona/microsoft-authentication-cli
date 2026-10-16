@@ -24,16 +24,18 @@ and ambient state must not permit interaction that the request prohibits.
 The first version has three modes: `non-interactive-only`, `interactive-if-needed`, and
 `force-interactive`. The existing modes retain their behavior. Forced interaction must
 enter the provider interactive path through its supported sign-in and account-selection
-route, without binding a discovered account, even when
+route, supplying neither a discovered account nor a login hint, even when
 reusable credentials are available. The engine must not call silent acquisition or fall
 back to it. A provider/host combination that cannot honor this invocation intent is
 unavailable. Forced interaction requires the provider to actually present its
-interactive UI and must not complete without it; a login hint may only pre-fill that
-UI. Whether the provider presents it is undetermined runtime behavior that requires
-real-host confirmation. If a provider completes a forced call without presenting its
-interactive UI, including because of the login hint, that is a defect of this mode
-that requires another approach, not accepted behavior. The other modes may complete
-without UI. The provider may reuse its session within the presented interactive UI;
+interactive UI and must not complete without it. The engine cannot enforce that
+presentation; whether the provider presents it is runtime behavior that requires
+real-host observation. If a provider completes a forced call without presenting its
+interactive UI, that is a defect of this mode that requires another approach, not
+accepted behavior. The other modes may complete without UI. Finding F1, manual entry of
+the requested account inside the presented UI, is a known limitation of this mode. The
+provider may
+reuse its session within the presented interactive UI;
 success reports the invoked path, not proof of visible UI or renewed credentials. V2 must not
 expose a caller-selected prompt-type whitelist or promise a password, MFA method, or
 exact UI.
@@ -73,11 +75,11 @@ initiate unmanaged interaction.
 
 For `interactive-if-needed`, when the provider supports a login hint, interactive
 acquisition must use the requested email, or the uniquely resolved account, as that hint.
-For `force-interactive`, interactive acquisition must not supply the discovered account;
-when the provider supports a login hint, it must supply the requested email as that hint,
-which may only pre-fill the provider's interactive UI and must not replace it under
-`V2-REQ-014`.
-In both modes a hint does not replace final identity validation under
+For `force-interactive`, interactive acquisition must supply neither the discovered
+account nor a login hint, because forced calls carrying either completed without the
+interactive UI required under `V2-REQ-014` on the designated host; the engine pre-fills
+nothing.
+In both modes a hint, or its absence, does not replace final identity validation under
 `V2-REQ-022`; a returned account other than the requested one must be rejected.
 
 ## V2-REQ-020: Pre-resolved Account for Silent Acquisition
@@ -93,9 +95,9 @@ The identity-opaque `OperatingSystemAccount` sentinel is not a resolved account.
 `interactive-if-needed`, an interaction-required acquisition outcome may proceed to
 permitted interaction under `V2-REQ-023`; it is terminal without interaction permission.
 `force-interactive` uses the same exact account resolution, but proceeds directly to its
-interactive path after zero or one exact match, supplying the requested email as the login
-hint and never the discovered account under `V2-REQ-016`. That hint may only pre-fill the
-provider's interactive UI, which the forced call must still present under `V2-REQ-014`.
+interactive path after zero or one exact match, supplying neither the discovered account
+nor a login hint under `V2-REQ-016`; the forced call must still present the provider's
+interactive UI under `V2-REQ-014`.
 The requested email remains the strict selector for
 final validation under `V2-REQ-022`, which rejects any other account chosen during
 provider account selection. Account ambiguity must not fall back to another account or

@@ -485,8 +485,7 @@ fabricate a provider exception. Establish the hidden owned parent first. For
 `interactive-if-needed`, the pinned builder makes `WithAccount` and `WithLoginHint`
 mutually exclusive: use `WithAccount` for the uniquely resolved real account, from which
 MSAL derives the observed username hint; otherwise use `WithLoginHint` with the requested
-email. For `force-interactive`, never bind the account and always use `WithLoginHint`
-with the requested email (see
+email. For `force-interactive`, supply neither (see
 [Forced Interactive Authentication](#forced-interactive-authentication)). Preserve the
 original request email separately, including when its casing differs from the observed
 account spelling. No choice replaces strict final matching. The pinned
@@ -502,7 +501,7 @@ cancellation/deadline boundary.
 | --- | --- |
 | Admission or Profile semantic error | `invalid_request`; no provider call. |
 | No visible match or provider interaction requirement | `interaction_required`, or the one compatible interactive call when permitted. |
-| Explicit `force-interactive` with zero or one exact match | One provider interactive call through the sign-in/account-selection route, the requested email as login hint and no bound account; no engine silent acquisition or fallback. |
+| Explicit `force-interactive` with zero or one exact match | One provider interactive call through the sign-in/account-selection route with neither account nor login hint; no engine silent acquisition or fallback. |
 | Multiple exact visible matches | `account_ambiguous`; no silent call or picker. |
 | Broker unavailable, unsupported session, or rejected web fallback | `mechanism_unavailable`; no alternate mechanism. |
 | Caller cancellation, lifetime-pipe EOF, `WM_CLOSE` delivered to the hidden parent, or provider user cancellation | `cancelled`; no retry. The local cancellation/deadline latch determines its own origin before interpreting a provider cancellation code. |
@@ -536,9 +535,9 @@ interaction permission through CLI admission, provider initialization and the MS
 interactive operation. Forced intent requires permission; an inconsistent internal
 request is rejected before discovery. The coordinator preserves exact account discovery
 and ambiguity rejection, then skips its silent branch only for that flag. The adapter
-never binds the discovered account to the forced interactive builder, so the pinned
-broker enters its sign-in/account-selection path, and supplies the requested email as
-the login hint on that path. Both older modes retain their selected account or
+omits the discovered account and login hint from the forced interactive builder, so
+the pinned broker enters its sign-in/account-selection path and the engine pre-fills
+no identity. Both older modes retain their selected account or
 requested hint. The request still retains its exact account
 selector for discovery and final validation. Controlled application and adapter
 scenarios cover this projection, single-call effects, identity rejection and original
@@ -561,45 +560,47 @@ This is a source finding about the pinned mapping, not proof that every WAM/nati
 is incapable of reauthentication. NativeInterop cannot recover an intent omitted before
 its boundary.
 
-For this mode only, leave the interactive builder's account unset, set its login hint
-to the requested email through the supported `WithLoginHint` builder input, and set no
-extra query parameters. In the pinned
+For this mode only, leave the interactive builder's account and login hint unset and
+set no extra query parameters. In the pinned
 [RuntimeBroker](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/RuntimeBroker.cs#L174-L292),
 a bound account can enter `AcquireTokenInteractivelyAsync` for that account;
 an unbound request enters `SignInInteractivelyAsync`, the broker's sign-in and
-account-selection route, and passes the request's login hint to it
+account-selection route, and passes any request login hint to it
 ([hint selection](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/RuntimeBroker.cs#L242-L292)).
-With a hint and no account, the forced call therefore still takes the sign-in route
-rather than the selected-account route; the account binding, not the hint, chooses the
-route. The hint is accepted only to pre-fill WAM's interactive UI for the requested
-email; it must not replace that UI. The pinned
+The account binding, not the hint, chooses the route. The pinned
 [interactive builder](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/AcquireTokenInteractiveParameterBuilder.cs#L136-L138)
 documents `WithLoginHint` as a way to avoid select-account dialogs when the user is
 signed in with several identities. That is the builder's documented intent, a source
-finding, not a UI observation. Whether WAM still presents its interactive UI with the
-hint is undetermined runtime behavior for a rebound real-host observation. If that
-observation finds that WAM completes the forced call without presenting its interactive
-UI because of the hint, that is a defect of this mode and requires another design; a
-skipped UI is not accepted.
+finding, not a UI observation. The official
+[MSAL Python broker mapping](https://github.com/AzureAD/microsoft-authentication-library-for-python/blob/03d030f715f8398a26151602ac578f66b4bb40e8/msal/broker.py#L199-L210)
+likewise implements `select_account` by dropping the login hint, not by setting a
+native `prompt` property. This cross-library reference supports the choice; it does
+not establish pinned .NET or Windows runtime behavior. No supported builder input on the
+pinned .NET broker path is found that forces the WAM UI: `WithPrompt` is not transported
+(above), so this design controls only whether an account or hint is supplied.
 
-Earlier, this mode also left the login hint unset, following the official
-[MSAL Python broker mapping](https://github.com/AzureAD/microsoft-authentication-library-for-python/blob/03d030f715f8398a26151602ac578f66b4bb40e8/msal/broker.py#L186-L230),
-which removes a login hint for `select_account`. The
-[real-host results](../research/experiments/real-host-validation.md#results) (finding F1)
-then showed that, with neither account nor hint under the `organizations` authority with
-MSA passthrough, the personal role reached a second provider page that did not offer the
-personal account for direct selection, and the operator had to enter it manually; the
-work role did not. Its cause is not established, and relating it to the missing hint is
-an inference. By repository-owner decision (2026-10-16, quoted in
-[PR #492](https://github.com/hcoona/microsoft-authentication-cli/pull/492)), forced
-interaction must still enter the provider interactive path without a silent attempt,
-but now supplies the requested email as login hint, with no account; a pre-filled
-interactive UI is acceptable. A second owner decision (2026-10-16, quoted in the same
-pull request) does not accept completion without interactive UI for forced interaction,
-while the other modes may complete without UI; the hint therefore may pre-fill but
-must not skip the UI. Whether the hint removes the second page, and whether WAM still
-presents its UI, are runtime questions for a rebound real-host observation, not claims
-of this design.
+The [real-host results](../research/experiments/real-host-validation.md#results)
+compare three implementations of this mode on the designated host and existing account
+state (runtime observations; each covers only the role and caller combinations listed):
+
+| Implementation | Subject | Interactive UI presented | Second provider page (F1) |
+| --- | --- | --- | --- |
+| Neither account nor hint (this design) | `8d9be27`, calls #8, #13, #20, #24 | Yes for the personal and work roles, native and WSL | Yes for the personal role (#8, #13); no for the work role |
+| Requested email as login hint, no account | `0eb257a`, calls #27 to #29 | Yes for the personal role (#27 native, #28 WSL); **no** for the work role (#29 native) | No for the personal role |
+| Discovered account bound, no hint (experiment-only variant) | `389f85a`, calls #32 to #34 | **No** for all three (personal native and WSL, work native) | Not observable |
+
+The hinted implementation (in one of three observed combinations, #29) and the
+account-bound implementation (in all three, #32 to #34) completed forced calls without
+presenting WAM UI, which forced interaction does not accept. With the hint, the personal role's
+forced calls also defaulted to a security-key credential method that the operator had
+to cancel (F3 candidate, #27 and #28). By repository-owner decision (2026-10-16 UTC, quoted
+verbatim in the pull request that made this change), forced interaction reverts to the
+original implementation, supplying neither hint nor account, and F1 is recorded as a
+[known limitation](#validation-and-explicit-unsupported-cases). That the hint or the
+bound account caused the skipped UI is an **inference**; the source findings above are
+consistent with it but do not establish broker behavior. The reverted implementation is
+the one whose forced calls presented UI for both roles; that it will continue to do so
+on other hosts or account states is not established.
 
 The Microsoft [WAM API reference](https://learn.microsoft.com/entra/identity-platform/reference-entra-id-wam-api)
 documents a `prompt` request property (`no_select` or `select_account`) and a
@@ -745,7 +746,7 @@ sequenceDiagram
         opt force-interactive, or permitted no match / silent interaction requirement
             CLI->>UI: Create hidden owned parent and completion context
             CLI-->>Caller: Best-effort unofficial/Profile indication on stderr
-            CLI->>MSAL: One interactive call#59; account or email hint#59; forced: email hint only
+            CLI->>MSAL: One interactive call#59; account or hint only when not force-interactive
             MSAL->>WAM: Interactive operation with owned HWND and cancellation
             WAM-->>MSAL: Candidate or failure
             MSAL-->>CLI: Candidate or typed provider observation
@@ -1146,6 +1147,24 @@ remain after the process ends (finding F2, 3 of 3 observed non-human termination
 the user closes it; the committed typed result and its no-token outcome are unaffected.
 See [request lifetime](#uml-ui-ownership-and-cancellation-sequence) and the
 [threat model](../security/threat-model.md#known-limitation-provider-window-after-non-human-termination).
+
+Known limitation (finding F1): for `force-interactive` with the
+`visual-studio-legacy-wam` Profile (`organizations` authority with MSA passthrough), a
+personal Microsoft account can reach a second provider page that does not offer it for
+direct selection, so the user enters the requested account manually. This was observed
+for the personal role from native and WSL callers on the designated host (calls #8 and
+#13); the work role did not reach it. Forced interaction supplies neither account nor
+login hint because both alternatives completed some observed forced calls without WAM
+UI (#29; #32 to #34; see
+[Forced Interactive Authentication](#forced-interactive-authentication)). The final
+identity is still bound by strict validation: any returned account other than the
+requested email fails with `identity_validation_failed`. The F3 candidate (a
+provider-defaulted security-key credential method) was observed only with the login
+hint (#27, #28) and is expected not to occur for the personal role after this revert;
+that expectation is an **inference** from the owner's later recollection of the earlier
+personal-role no-hint calls, not an observation recorded at the time. For the work role
+the credential method was never observed, and no real call has exercised the reverted
+source.
 
 Profile activation, platform support and release each retain their own authorization
 and evidence gates; the [validation strategy](../validation/strategy.md#release-gates)
