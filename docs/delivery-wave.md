@@ -59,6 +59,10 @@ correct product defects and design records that the evidence exposes, with their
 inside this entry; re-review and re-disposition TMT candidates. A corrected build is a
 new subject: rebind it through a reviewed protocol amendment before further real calls,
 sharing the same limits.
+The owner also authorizes one experiment-only product variant subject: forced
+interaction that binds the discovered account and supplies no login hint, built from a
+dedicated experiment branch that is never merged into main-v2, executed only under a
+reviewed protocol amendment and sharing the same limits.
 
 **Exclusions:** No account addition or removal, sign-out, consent revocation, cache
 clearing or import, administrator consent, registration change, authenticated service
