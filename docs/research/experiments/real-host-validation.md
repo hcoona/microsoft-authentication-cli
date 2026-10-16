@@ -298,11 +298,16 @@ the same base name, `C:\Temp\azureauth-real-host-20261016`, with no `-n` suffix.
   the Azure DevOps default scope. Application files were separate; WAM sessions and
   caches received ordinary updates and are retained.
 - **B1.** Owner-exempted machine-local restore workaround, as for the first subject; this
-  is not a public-restore result. `--locked-mode` with new empty package and HTTP caches:
+  is not a public-restore result and departs from the protocol's nuget.org-only restore
+  rule; the owner's coverage of this second subject is to be recorded in PR #491 before
+  merge. `--locked-mode` with new empty package and HTTP caches:
   exit 0. Lock closure verified for 26 of 26 lock-file packages by content hash; 3
   implicit packages not lock-verified: `Microsoft.NETCore.App.Host.win-x64`,
   `Microsoft.NETCore.App.Runtime.win-x64` and
   `Microsoft.NETCore.App.Runtime.NativeAOT.win-x64`, all 10.0.12.
+  Their provenance against nuget.org is unverified; they feed the self-contained
+  Native AOT artifact, so the artifact hashes, imports and loading evidence below are
+  bounded by that limit.
 - **B2 to B4.** Build exit 0 with 0 warnings. Publish exit 0; one `vctip.exe` from the
   pinned MSVC directory remained and was terminated; no other survivor. Validator
   restore exit 0 resolving 0 libraries (one NU1900 warning that vulnerability data was
@@ -342,9 +347,11 @@ the same base name, `C:\Temp\azureauth-real-host-20261016`, with no `-n` suffix.
 
 **Real calls.** Each row was appended before its call started; outcomes were filled
 afterwards. Launchers printed only the evidence allowlist. Readiness was a fresh owner
-answer relayed by the coordinator immediately before each interactive-capable call (for
-#13, #18 and #20 the answer was given before the immediately preceding `N` call, which
-started and ended within seconds with no other preparation). "PASS" applies the protocol's
+answer relayed by the coordinator immediately before each interactive-capable call, with
+one **protocol deviation**: for #13, #18 and #20 the answer was given before the
+immediately preceding `N` call (#12, #17, #19), and each I call started 3 to 8 seconds
+after that call's start. No other preparation occurred in between and no unexpected
+prompt was reported; no effect on the outcomes was observed. "PASS" applies the protocol's
 pass rule; P7 uses expected `InteractionRequired`, so its `Success/Silent` shows as
 not passed and is dispositioned below.
 
@@ -388,29 +395,34 @@ coordinator):
 - **P5** (#15): after the owner confirmed WAM was shown, the launcher closed the sole
   lifetime writer at 04:23:03Z; the product ended `Cancelled/None` about one second later.
 - **P6** (#10, #16): `Timeout/None` at about 30 s, within the 40 s bound.
-- **Owner-skipped, no capacity charged.** Work-role P6 (native and WSL): no role-dependent
-  behavior; timeout covered by personal native and WSL. Work-role WSL P4 and P5:
-  cancellation precedes account selection; covered by personal WSL P4/P5 and work native
-  P4.
-- **Finding F1 (runtime observation; UX defect candidate).** With `force-interactive`
-  and this MSA-passthrough Profile, the personal role needed two surfaces on both callers
-  (#8 native, #13 WSL). The first, the native WAM account picker, listed both roles. After
-  the personal role was picked, a second web-style account page listed only the work
-  role, marked as connected to Windows, plus "Use another account"; the operator chose
-  that and typed the personal account. The work role completed in one window (#20, #24).
-  Final strict validation passed in every case. Cause not established. That it relates to
-  the forced path passing neither account nor login hint (source finding:
-  `MsalSessionFactory.BuildInteractiveRequest`) into the `organizations` MSA-passthrough
-  flow is an **inference**.
+- **Not executed by owner decision, no capacity charged.** Work-role P6 (native and WSL)
+  and work-role WSL P4 and P5. The protocol's plan has no skip route; the owner decision
+  and rationale are to be recorded in PR #491 before merge. That these cases add no
+  role-dependent behavior beyond personal native and WSL P4, P5 and P6 and work native P4
+  is an **inference**, not an observation; F1 shows the forced path can differ by role.
+- **Finding F1 (runtime observation; UX defect candidate).** For `force-interactive` with
+  this MSA-passthrough Profile, owner yes/no answers for the personal role (#8 native, #13
+  WSL): WAM shown yes; a second provider surface shown yes; personal account offered for
+  direct selection on it no; account chosen yes, after the operator entered it manually.
+  Work role (#20, #24): second surface no. Strict validation passed in every case. Cause
+  not established. A relation to the forced path passing neither account nor login hint
+  (source finding: `MsalSessionFactory.BuildInteractiveRequest`) into the
+  `organizations` MSA-passthrough flow is an **inference**.
 - **Finding F2 (runtime observation).** A WAM window remained after the product ended in
   all three non-human terminations observed: product timeout (#10, #16) and lifetime-pipe
   cancellation (#15). The operator closed it. Human cancellation (#9, #14, #21) left no
   window. This matches the design, which forwards cancellation but neither waits for nor
   forces dismissal of external surfaces, and the earlier Slice's EOF observation.
-- **Broker title (runtime observation).** The WAM account picker's subtitle showed the
-  fixed broker title "Unofficial hcoona/microsoft-authentication-cli", so the configured
-  broker title was presented on this host. The pre-interaction stderr notice line
-  appeared in every `force-interactive` call and in no silent-route call.
+- **Broker title (runtime observation).** Owner answer: configured broker title presented
+  on the WAM account picker, yes. The pre-interaction stderr notice line appeared in every
+  `force-interactive` call and in no silent-route call.
+- **Evidence-handling deviation.** During execution, free-form operator descriptions of
+  the provider surfaces behind F1 and the title, including provider UI wording, were
+  relayed through the coordinator chat and so entered agent traces and the local ledger,
+  beyond the protocol's yes/no allowlist. They contained no token, email, tenant or other
+  identifier; the owner's screenshots were not shared with the executor and are not
+  retained here. Only the yes/no projection above is recorded, and the local ledger was
+  reduced to match.
 - **CORE-01 (inference).** Each of the 14 validated successes (#5 to #8, #11 to #13,
   #17 to #20, #22 to #24) passed the coordinator's fail-closed correlation check, so the
   MSAL result returned the sent correlation ID and the check did not reject a real broker
@@ -418,14 +430,17 @@ coordinator):
 - **Telemetry.** `--telemetry stderr` projected only fixed stage events. Stage status was
   `unset` for inner stages; the request span was `ok` for success and `error` for
   cancellation and timeout. No `error.type` or mechanism indication appeared.
-- **Not observed.** Fresh-state first use, consent denial, an explicit work tenant GUID,
-  deadline expiry before WAM, concurrent calls and any other host. Existing-state results
-  establish none of those.
+- **Not observed.** Work-role WSL WAM cancellation, work-role WSL lifetime-pipe EOF, the
+  work-role original deadline (native and WSL), fresh-state first use, consent denial,
+  an explicit work tenant GUID, deadline expiry before WAM, concurrent calls and any
+  other host. Existing-state results establish none of those.
 
 **Consumption and cleanup.** 14 I and 10 N were used in total (including the 4 artifact
 runs), leaving 10 I and 30 N. No call overlapped, overran its bound or left a product
 process. No account, consent, cache or remote state changed beyond ordinary token
 acquisition. `<root>` was deleted after recording. The local launchers, `roles.json`,
-Profile, ledger and machine-local restore configuration are retained until the Wave entry
-ends. WAM sessions, caches and the restore credential cache are retained; deleting local
+Profile and ledger are retained until the Wave entry ends. Outside the protocol's
+retention list and under the restore exemption, the machine-local restore configuration
+is retained until then and the restore credential cache is retained. WAM sessions and
+caches are retained; deleting local
 files reverses no provider-side change.
