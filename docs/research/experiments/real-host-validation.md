@@ -734,8 +734,14 @@ between:
 used in total, leaving 31 I and 52 N under 48 I and 64 N. No call overlapped, overran its
 bound or left a product process. No account, consent, cache or remote state changed
 beyond ordinary token acquisition. Deviation from Retention and Cleanup: `<root>` was
-not deleted after #29 was recorded. The coordinator's direction retains it
-unchanged for a possible comparison with the variant; it holds only public
-source, packages, build outputs and the run copy, and no product process runs from it. The local launchers,
-`roles.json`, Profile, ledger, the machine-local restore configuration and WAM sessions
-and caches are retained as before; deleting local files reverses no provider-side change.
+not deleted after #29 was recorded. At the coordinator's direction it is retained
+unchanged for a possible comparison with the variant, until the variant's results are
+recorded or the Wave entry ends, whichever comes first; it is then deleted under
+Retention and Cleanup and the deletion is recorded. It holds the materialized source;
+the package and NuGet HTTP caches restored under the owner's machine-local restore
+exemption (no feed identifier recorded); the build, publish, validator and run outputs;
+the step logs and local step wrapper scripts; the synthetic S1 scenario output under
+`tmp`; and empty per-call and artifact-check directories. No product process runs from
+it. The local launchers, `roles.json`, Profile, ledger, the machine-local restore
+configuration and WAM sessions and caches are retained as before; deleting local files
+reverses no provider-side change.
