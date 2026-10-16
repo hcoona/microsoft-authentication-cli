@@ -288,7 +288,11 @@ moved from `NeedsInvestigation` to `Mitigated` (IDs 6, 8, 14, 15, 19, 23, 25, 26
 37, 39, 40, 51, 53, 54, 77, 80, 89, 92 and 94), and every justification that awaited the
 Windows scenario execution now cites that run. `src` at `69d9a72` is identical to
 `563c262` and to the real-host subject `8d9be27`, so the run and the real calls
-exercise the re-reviewed source.
+exercise the re-reviewed source. The F1 correction
+([PR #492](https://github.com/hcoona/microsoft-authentication-cli/pull/492)) later changed
+`src`: `force-interactive` now supplies the requested email as login hint. Its
+replacement builder scenarios await Windows execution, and the hinted forced call awaits
+a rebound real-host confirmation; see ID 29 in the native file.
 
 - **`Mitigated`** requires an implemented control with executed evidence: the Linux CI
   run of `tests/Authentication.Scenarios` (378 cases at `563c262`); the unfiltered
@@ -303,7 +307,9 @@ exercise the re-reviewed source.
   on an open [Issue #482](https://github.com/hcoona/microsoft-authentication-cli/issues/482)
   release gate: independent distribution identity, real broker failure or concurrency,
   and real-WAM correlation-echo confirmation (CORE-01). Each justification names that
-  gate. No candidate still awaits the Windows scenario execution.
+  gate. No candidate disposition depends on still-pending Windows scenario execution.
+  ID 29 also cites the F1 replacement builder scenarios, which await Windows execution;
+  its `Mitigated` basis (hidden parent and rejected custom web UI) was executed in S1-1.
 - **`NotApplicable`** adds the two optional telemetry-endpoint candidates (IDs 85 and 87):
   the Slice exports no network telemetry. Selecting network export must re-disposition
   them.
@@ -342,7 +348,7 @@ OAuth handling) remain trusted rather than verified.
 | --- | --- |
 | Caller, identity-service and broker-completion spoofing; input validation (IDs 2, 3, 20, 33, 34, 43, 47, 48) | `Mitigated`: closed request/Profile syntax, cloud and tenant admission and strict email/tenant/scope/operation validation, executed in Core scenarios; the production correlation binding is executed in the Windows S1-1 run. Construction of the fixed Public Cloud authority is Windows code exercised by the recorded real-host acquisitions on earlier accepted builds (see the provenance table above). |
 | Process spoofing (IDs 1, 18, 32, 46, 65, 73) | `NeedsInvestigation`: operation binding is executed, but executable identity depends on the open distribution-identity release gate under decision 0005. |
-| Broker and interaction-surface spoofing (IDs 15, 19, 29) | `Mitigated`: DLL-search restriction, broker-availability check, rejected custom web UI and hidden-parent construction executed in the Windows S1-1 run; the published Native AOT application imports only Windows DLLs and its real calls loaded the broker from the application directory with System32 imports and reported no `dll_search` or `broker_initialization` indication; validated `force-interactive` success for both roles ([real-host results](../research/experiments/real-host-validation.md#results)). Deployment without development-machine dependencies remains a separate Native AOT release gate. |
+| Broker and interaction-surface spoofing (IDs 15, 19, 29) | `Mitigated`: DLL-search restriction, broker-availability check, rejected custom web UI and hidden-parent construction executed in the Windows S1-1 run; the published Native AOT application imports only Windows DLLs and its real calls loaded the broker from the application directory with System32 imports and reported no `dll_search` or `broker_initialization` indication; validated `force-interactive` success for both roles on the pre-F1 source, which passed no login hint; the hinted forced call (F1 correction) awaits rebound real-host confirmation, and completion without the WAM UI would be a defect ([real-host results](../research/experiments/real-host-validation.md#results)). Deployment without development-machine dependencies remains a separate Native AOT release gate. |
 | Data-flow disclosure; token and diagnostic destinations (IDs 5, 12, 22, 36, 50, 69, 76, 82) | `Mitigated`: no credential input, no application token store, token only in a validated success, allowlisted diagnostics; executed in Core scenarios with synthetic markers and recorded real-host transport. |
 | Interrupted flows (IDs 7, 14, 17, 24, 31, 38, 45, 52, 58, 60, 62, 64, 71, 78, 84, 93) | `Mitigated`: original deadline, single terminal latch and no retry/fallback in Core scenarios, plus recorded closed-pipe, EOF-during-WAM, human-cancellation, caller-death and timeout observations, and on the current source a deadline and lifetime-pipe EOF while WAM was shown ([real-host results](../research/experiments/real-host-validation.md#results)). ID 14, result delivery, now rests on the Windows `ProcessScenarios` executed in S1-1. A provider window left after non-human termination is a [known limitation](#known-limitation-provider-window-after-non-human-termination), not an unmitigated interruption. |
 | Process crash/stop and Profile-read bounds (IDs 6, 23, 37, 51, 77, 92) | `Mitigated`: typed outcomes and Profile bounds are executed in Core, and the process watchdog, broken or undrained result pipe and Profile size limit are executed in the Windows S1-1 run. |

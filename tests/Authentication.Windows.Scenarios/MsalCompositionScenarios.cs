@@ -153,10 +153,7 @@ public sealed class MsalCompositionScenarios
     }
 
     [TestMethod]
-    [DataRow(true, false)]
-    [DataRow(false, true)]
-    [DataRow(false, false)]
-    public void RealInteractiveBuilderRejectsAForcedAccountOrAMissingHint(bool accountBound, bool forced)
+    public void RealInteractiveBuilderRejectsAForcedAccount()
     {
         using var scene = new Scene();
         // Construction only: no broker is registered and this builder is never executed.
@@ -166,11 +163,25 @@ public sealed class MsalCompositionScenarios
             .WithRedirectUri("http://localhost")
             .WithHttpClientFactory(scene)
             .Build();
-        // accountBound rows always build a forced operation; forced applies only to
-        // the missing-hint rows.
-        var operation = accountBound
-            ? new MsalInteractiveOperation([Scope], scene.Selected, Email, Tenant, null, (nint)42, Guid.NewGuid(), true)
-            : new MsalInteractiveOperation([Scope], null, null, Tenant, null, (nint)42, Guid.NewGuid(), forced);
+        var operation = new MsalInteractiveOperation([Scope], scene.Selected, Email, Tenant, null, (nint)42, Guid.NewGuid(), true);
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
+            MsalSessionFactory.BuildInteractiveRequest(application, operation, null, scene.Original.Token));
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void RealInteractiveBuilderRejectsAMissingHint(bool forced)
+    {
+        using var scene = new Scene();
+        // Construction only: no broker is registered and this builder is never executed.
+        var application = (PublicClientApplication)PublicClientApplicationBuilder
+            .Create(scene.Profile.ClientId.ToString("D"))
+            .WithAuthority("https://login.microsoftonline.com/common")
+            .WithRedirectUri("http://localhost")
+            .WithHttpClientFactory(scene)
+            .Build();
+        var operation = new MsalInteractiveOperation([Scope], null, null, Tenant, null, (nint)42, Guid.NewGuid(), forced);
         Assert.ThrowsExactly<InvalidOperationException>(() =>
             MsalSessionFactory.BuildInteractiveRequest(application, operation, null, scene.Original.Token));
     }
