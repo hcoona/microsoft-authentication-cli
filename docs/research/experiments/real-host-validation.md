@@ -38,6 +38,14 @@ fixed credential-method vocabulary, resumes the two remaining confirmation calls
 defines a forced bound-account variant under [F3 Investigation](#f3-investigation). The
 Wave limits are now 48 I and 64 N.
 
+**Amendment (2026-10-16, variant).** The experiment-only variant subject defined under
+[F3 Investigation](#f3-investigation) is the commit
+`389f85a94f9a6da15c8bc4bc5f66abb88f09cc5c` on the dedicated branch
+`experiment/forced-bound-account`, whose parent is the third subject. Its independent
+review concluded "No material findings." This amendment records that hash and satisfies
+the variant gate; it changes no other procedure, limit or question. Variant calls bind
+this amendment's merge commit under Protocol revision.
+
 ## Subject and Inputs
 
 - **Source.** The second subject (`8d9be27`) and the third subject (`0eb257a`) were each
@@ -45,7 +53,8 @@ Wave limits are now 48 I and 64 N.
   `main-v2` commit whose copy of this file is unchanged. The third subject,
   `0eb257ae71adc948202698b2914391185ba68d68`, contains `3477534`, the merge of PR #492;
   it stays bound in its retained `<root>` and is not rebuilt. The F3 variant subject is
-  defined under [F3 Investigation](#f3-investigation). Only a new subject is
+  defined under [F3 Investigation](#f3-investigation) and is
+  `389f85a94f9a6da15c8bc4bc5f66abb88f09cc5c`. Only a new subject is
   materialized, with
   `git archive <commit> | tar -x -C <root>/src` into a fresh
   `C:\Temp\azureauth-real-host-YYYYMMDD[-n]\src` (`<root>` below; add the lowest free
@@ -357,6 +366,17 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   experiment-only variant subject authorized by Wave outcome (3). It runs only after the
   variant commit is independently reviewed and a reviewed amendment to this file records
   its full hash. #28 and #29 do not wait for this gate.
+- **Variant commit and review.** The variant commit is
+  `389f85a94f9a6da15c8bc4bc5f66abb88f09cc5c` (parent
+  `0eb257ae71adc948202698b2914391185ba68d68`), changing only
+  `MsalAuthenticationProvider.cs` and `MsalSessionFactory.cs` in
+  `src/Authentication.Windows` and the matching `MsalCompositionScenarios` and an
+  `InteractionScenarios` comment. A reviewer who neither authored nor implemented it
+  checked the parent, that the change is limited to the behavior under Variant subject
+  (including the no-match and ambiguous-match outcomes) and that the non-forced path and
+  coordinator are unchanged; conclusion: "No material findings." The Windows solution
+  built with 0 warnings and the Linux scenarios passed; `Authentication.Windows.Scenarios`
+  were only compiled on Linux and run first as S1 of the variant procedure.
 - **Decision question** (Wave outcome (3)). Does the variant reach a visible interactive
   surface without the second provider page of F1 (Q3 no) and without a
   provider-defaulted credential method the operator must cancel (Q5 no)?
