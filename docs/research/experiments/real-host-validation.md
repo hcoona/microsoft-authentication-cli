@@ -417,13 +417,18 @@ coordinator):
 - **Broker title (runtime observation).** Owner answer: configured broker title presented
   on the WAM account picker, yes. The pre-interaction stderr notice line appeared in every
   `force-interactive` call and in no silent-route call.
-- **Evidence-handling deviation.** During execution, free-form operator descriptions of
-  the provider surfaces behind F1 and the title, including provider UI wording, were
-  relayed through the coordinator chat and so entered agent traces and the local ledger,
-  beyond the protocol's yes/no allowlist. They contained no token, email, tenant or other
-  identifier; the owner's screenshots were not shared with the executor and are not
-  retained here. Only the yes/no projection above is recorded, and the local ledger was
-  reduced to match.
+- **Evidence-handling deviation and missed stop condition.** Free-form operator
+  descriptions of the provider surfaces behind F1 and the title, including provider UI
+  wording, were relayed through the coordinator chat into agent traces between #8 (ended
+  about 04:13:44Z) and #9 (04:15:06Z). The protocol's stop condition for raw provider
+  text entering a trace or record therefore fired at that point and was not honored. It
+  fired again when quoted provider strings from the owner's screenshots were written into
+  the local ledger between #13 and #14 (04:21:33Z). Calls #9 to #24 were executed past
+  that stop condition. The relayed text contained no token, email, tenant or other
+  identifier; the screenshots were not shared with the executor; the quotes were removed
+  from the local ledger and never committed. Only the yes/no projection above is
+  recorded. Whether calls #9 to #24 are accepted as evidence is an owner disposition
+  linked here: pending.
 - **CORE-01 (inference).** Each of the 14 validated successes (#5 to #8, #11 to #13,
   #17 to #20, #22 to #24) passed the coordinator's fail-closed correlation check, so the
   MSAL result returned the sent correlation ID and the check did not reject a real broker
