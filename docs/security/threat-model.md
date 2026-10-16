@@ -320,7 +320,7 @@ OAuth handling) remain trusted rather than verified.
 
 | Candidate group | Disposition after the 2026-10-15 re-review |
 | --- | --- |
-| Caller, identity-service and broker-completion spoofing; input validation (IDs 2, 3, 20, 33, 34, 43, 47, 48) | `Mitigated`: closed request/Profile syntax, fixed Public Cloud authority and strict email/tenant/scope/operation validation, executed in Core scenarios. |
+| Caller, identity-service and broker-completion spoofing; input validation (IDs 2, 3, 20, 33, 34, 43, 47, 48) | `Mitigated`: closed request/Profile syntax, cloud and tenant admission and strict email/tenant/scope/operation validation, executed in Core scenarios. Construction of the fixed Public Cloud authority is Windows code exercised by the recorded real-host acquisitions on earlier accepted builds (see the provenance table below). |
 | Process spoofing (IDs 1, 18, 32, 46, 65, 73) | `NeedsInvestigation`: operation binding is executed, but executable identity depends on the open distribution-identity release gate under decision 0005. |
 | Broker and interaction-surface spoofing (IDs 15, 19, 29) | `NeedsInvestigation`: DLL-search restriction, broker-availability check, rejected custom web UI and hidden-parent construction await Windows scenario execution and this Wave's Native AOT dependency-loading check. |
 | Data-flow disclosure; token and diagnostic destinations (IDs 5, 12, 22, 36, 50, 69, 76, 82) | `Mitigated`: no credential input, no application token store, token only in a validated success, allowlisted diagnostics; executed in Core scenarios with synthetic markers and recorded real-host transport. |
