@@ -258,6 +258,13 @@ privilege, 20 spoofing, 17 repudiation, 7 information disclosure and 5 tampering
 native `SaveAs` output preserved every disposition. TMT 7.3 stores `NeedsInvestigation`
 under the same value it displays as *Needs Mitigation*.
 
+On **2026-10-16 UTC**, the follow-up below reopened its model with the same installed
+TMT **7.3.51110.1** and native API workflow, again in a dedicated temporary directory
+removed afterwards. `ModelLoadHasIssues` was false; generation produced and reconciled
+**96 candidates** with the same categories, and the states were 63 `Mitigated`, 11
+`NeedsInvestigation` and 22 `NotApplicable`. A native `SaveAs` output reloaded without
+issues and preserved those states.
+
 Desktop reproduction remains possible by opening `authentication-engine.tm7` and switching
 to Analysis View. The file embeds its template; importing an Azure template or regenerating
 from Markdown is unnecessary. Review candidate justification and status in the native file
@@ -270,22 +277,31 @@ required for every unrelated CI change.
 
 All 96 candidates have a scenario-specific or threat-family justification in the native
 file. The 2026-10-15 security re-review against the implemented Slice at `main-v2`
-`563c262` (Issue #482) re-dispositioned them: **43 are `Mitigated`, 31 are
-`NeedsInvestigation` and 22 are `NotApplicable`** (previously 76 `NeedsInvestigation`,
-20 `NotApplicable` and none `Mitigated`).
+`563c262` (Issue #482) re-dispositioned them to 43 `Mitigated`, 31 `NeedsInvestigation`
+and 22 `NotApplicable` (previously 76 `NeedsInvestigation`, 20 `NotApplicable` and none
+`Mitigated`). The 2026-10-16 follow-up against `main-v2` `69d9a72` applied the
+[real-host results](../research/experiments/real-host-validation.md#results): **63 are
+`Mitigated`, 11 are `NeedsInvestigation` and 22 are `NotApplicable`**. Twenty candidates
+moved from `NeedsInvestigation` to `Mitigated` (IDs 6, 8, 14, 15, 19, 23, 25, 26, 29,
+37, 39, 40, 51, 53, 54, 77, 80, 89, 92 and 94), and every justification that awaited the
+Windows scenario execution now cites that run. `src` at `69d9a72` is identical to
+`563c262` and to the real-host subject `8d9be27`, so the run and the real calls
+exercise the re-reviewed source.
 
 - **`Mitigated`** requires an implemented control with executed evidence: the Linux CI
-  run of `tests/Authentication.Scenarios` (378 cases at `563c262`) or a recorded
-  real-host observation in the
+  run of `tests/Authentication.Scenarios` (378 cases at `563c262`); the unfiltered
+  `tests/Authentication.Windows.Scenarios` run on the designated Windows host (S1-1: 183
+  passed, 0 failed, 0 skipped, including `WindowsHostTiming`) or the published Native
+  AOT import and loading checks, both in the
+  [real-host results](../research/experiments/real-host-validation.md#results); or a
+  recorded real-host observation in those results or the
   [Windows Slice research](../research/v1-public-contract-baseline.md#selected-role-windows-and-wsl-acceptance-observations).
   Each native justification names the control and those scenarios or observations.
-- **`NeedsInvestigation`** covers two cases. Where the only evidence is the built but
-  not yet executed `tests/Authentication.Windows.Scenarios`, the justification says
-  *awaiting this Wave's Windows scenario execution (real-host validation protocol)* and
-  lists the exact scenarios, so the candidate can be re-dispositioned once their
-  recorded run passes. Where evidence depends on an open release gate (independent
-  distribution identity, real broker failure or concurrency), the justification names
-  that gate.
+- **`NeedsInvestigation`** now covers only candidates whose remaining evidence depends
+  on an open [Issue #482](https://github.com/hcoona/microsoft-authentication-cli/issues/482)
+  release gate: independent distribution identity, real broker failure or concurrency,
+  and real-WAM correlation-echo confirmation (CORE-01). Each justification names that
+  gate. No candidate still awaits the Windows scenario execution.
 - **`NotApplicable`** adds the two optional telemetry-endpoint candidates (IDs 85 and 87):
   the Slice exports no network telemetry. Selecting network export must re-disposition
   them.
@@ -307,32 +323,34 @@ timeout, EOF, caller-death and WAM-cancellation observations ran. Later changes 
 `RequestCoordinator.cs` and `ResultProjection.cs` (explicit account selection, provider
 failure categories and the single failure filter, correlation binding, the tenant-conflict
 reason) narrow acceptance and are exercised by the named executed Core scenarios. Changes
-to `WindowsProcess.cs` (result written before diagnostics, help text, notice path) rest
-on source review only; their executed evidence awaits this Wave's Windows
-`ProcessScenarios` run. Earlier success transport is therefore supplementary: token
-containment rests on the executed Core scenarios. A deadline expiring while WAM is pending
-and hidden-parent lifetime-pipe EOF remain real-host items of this Wave.
+to `WindowsProcess.cs` (result written before diagnostics, help text, notice path) are
+executed by the Windows `ProcessScenarios` in the S1-1 run. Earlier success transport is
+supplementary: token containment rests on the executed Core and Windows scenarios. On the
+current source, the real-host results add, for the personal role, a deadline expiring
+while WAM was shown (native and WSL) and lifetime-pipe EOF while WAM was shown (WSL), both
+under the hidden parent; the corresponding work-role cases were not executed by owner
+decision.
 
 `Mitigated` means the named control is implemented and exercised by that evidence
 within the declared threat model; it is not a support claim, release readiness or proof
 of platform security. Trusted dependencies (OS process isolation, WAM, MSAL TLS and
 OAuth handling) remain trusted rather than verified.
 
-| Candidate group | Disposition after the 2026-10-15 re-review |
+| Candidate group | Disposition after the 2026-10-16 follow-up |
 | --- | --- |
-| Caller, identity-service and broker-completion spoofing; input validation (IDs 2, 3, 20, 33, 34, 43, 47, 48) | `Mitigated`: closed request/Profile syntax, cloud and tenant admission and strict email/tenant/scope/operation validation, executed in Core scenarios. Construction of the fixed Public Cloud authority is Windows code exercised by the recorded real-host acquisitions on earlier accepted builds (see the provenance table below). |
+| Caller, identity-service and broker-completion spoofing; input validation (IDs 2, 3, 20, 33, 34, 43, 47, 48) | `Mitigated`: closed request/Profile syntax, cloud and tenant admission and strict email/tenant/scope/operation validation, executed in Core scenarios; the production correlation binding is executed in the Windows S1-1 run. Construction of the fixed Public Cloud authority is Windows code exercised by the recorded real-host acquisitions on earlier accepted builds (see the provenance table above). |
 | Process spoofing (IDs 1, 18, 32, 46, 65, 73) | `NeedsInvestigation`: operation binding is executed, but executable identity depends on the open distribution-identity release gate under decision 0005. |
-| Broker and interaction-surface spoofing (IDs 15, 19, 29) | `NeedsInvestigation`: DLL-search restriction, broker-availability check, rejected custom web UI and hidden-parent construction await Windows scenario execution and this Wave's Native AOT dependency-loading check. |
+| Broker and interaction-surface spoofing (IDs 15, 19, 29) | `Mitigated`: DLL-search restriction, broker-availability check, rejected custom web UI and hidden-parent construction executed in the Windows S1-1 run; the published Native AOT application imports only Windows DLLs and its real calls loaded the broker from the application directory with System32 imports and reported no `dll_search` or `broker_initialization` indication; validated `force-interactive` success for both roles ([real-host results](../research/experiments/real-host-validation.md#results)). Deployment without development-machine dependencies remains a separate Native AOT release gate. |
 | Data-flow disclosure; token and diagnostic destinations (IDs 5, 12, 22, 36, 50, 69, 76, 82) | `Mitigated`: no credential input, no application token store, token only in a validated success, allowlisted diagnostics; executed in Core scenarios with synthetic markers and recorded real-host transport. |
-| Interrupted flows (IDs 7, 14, 17, 24, 31, 38, 45, 52, 58, 60, 62, 64, 71, 78, 84, 93) | `Mitigated` except ID 14: original deadline, single terminal latch and no retry/fallback in Core scenarios, plus recorded closed-pipe, EOF-during-WAM, human-cancellation, caller-death and timeout observations. ID 14, result delivery, is `NeedsInvestigation` until the Windows process scenarios run. |
-| Process crash/stop and Profile-read bounds (IDs 6, 23, 37, 51, 77, 92) | `NeedsInvestigation`: typed outcomes and Profile bounds are executed, but the process watchdog evidence is in the unexecuted Windows process scenarios. |
-| Impersonation (IDs 8, 25, 39, 53) | `NeedsInvestigation`: no privileged helper exists; the impersonation and logon-kind admission checks await Windows scenario execution. |
-| Remote code execution (IDs 9, 26, 40, 54, 80, 95) | `Mitigated` for request and Profile input (IDs 9, 95); `NeedsInvestigation` for provider data (IDs 26, 40, 54, 80), whose bounded error-body and broker-status parsing awaits Windows scenario execution. |
+| Interrupted flows (IDs 7, 14, 17, 24, 31, 38, 45, 52, 58, 60, 62, 64, 71, 78, 84, 93) | `Mitigated`: original deadline, single terminal latch and no retry/fallback in Core scenarios, plus recorded closed-pipe, EOF-during-WAM, human-cancellation, caller-death and timeout observations, and on the current source a deadline and lifetime-pipe EOF while WAM was shown ([real-host results](../research/experiments/real-host-validation.md#results)). ID 14, result delivery, now rests on the Windows `ProcessScenarios` executed in S1-1. A provider window left after non-human termination is a [known limitation](#known-limitation-provider-window-after-non-human-termination), not an unmitigated interruption. |
+| Process crash/stop and Profile-read bounds (IDs 6, 23, 37, 51, 77, 92) | `Mitigated`: typed outcomes and Profile bounds are executed in Core, and the process watchdog, broken or undrained result pipe and Profile size limit are executed in the Windows S1-1 run. |
+| Impersonation (IDs 8, 25, 39, 53) | `Mitigated`: no privileged helper exists; the impersonation and logon-kind admission checks are executed in the Windows S1-1 run. |
+| Remote code execution (IDs 9, 26, 40, 54, 80, 95) | `Mitigated`: request and Profile input (IDs 9, 95) in Core; bounded provider error-body and broker-status parsing (IDs 26, 40, 54, 80) in the Windows S1-1 run. |
 | Execution-flow changes (IDs 10, 27, 41, 55, 81, 96) | `Mitigated`: explicit policy state, one safe provider-failure filter and Profile fields that cannot select policy, executed in Core scenarios. |
-| OAuth response CSRF (IDs 42, 56) | `NeedsInvestigation`: correlation binding is executed in Core, but the MSAL composition scenarios await execution and real WAM correlation echo (CORE-01) is a real-host item of this Wave. No parallel OAuth verifier. |
+| OAuth response CSRF (IDs 42, 56) | `NeedsInvestigation`: correlation binding is executed in Core and the MSAL composition scenarios in the Windows S1-1 run, and every validated real success passed the fail-closed correlation check; broker-level echo remains an inference, so real-WAM confirmation (CORE-01) stays an Issue #482 release gate. No parallel OAuth verifier. |
 | Reusable-state spoofing, persistence status and resources (IDs 66, 68, 70, 74) | `Mitigated`: no application-owned store, persistence always reported as unconfirmed, no coordination or retry outside the deadline; recorded fresh-process reuse. |
-| Store corruption and inaccessibility (IDs 67, 72, 79) | `NeedsInvestigation`: real broker failure and concurrency remain release gates; unavailable-broker scenarios await Windows execution. |
-| Profile source and reads (IDs 89, 94) | `NeedsInvestigation`: admission of a reported failure is executed in Core, but source substitution and the translation of real file-store failures rely on the unexecuted Windows file-snapshot scenarios. |
+| Store corruption and inaccessibility (IDs 67, 72, 79) | `NeedsInvestigation`: unavailable-broker scenarios are executed in the Windows S1-1 run, but real broker failure, disappearance and concurrency remain Issue #482 release gates. |
+| Profile source and reads (IDs 89, 94) | `Mitigated`: admission of a reported failure is executed in Core, and source substitution and the translation of real file-store failures in the Windows file-snapshot scenarios of the S1-1 run. |
 | Optional telemetry endpoint (IDs 85, 87) | `NotApplicable`: the Slice exports no network telemetry. |
 | Generic nonrepudiation candidates (`R6`/`R7`, 16 items) | Not applicable: the engine promises typed results and sanitized diagnostics, not signed delivery receipts or an identity-rich audit ledger. Persistence-status accuracy remains applicable under the separate storage candidate. |
 | CSRF on a CLI request or broker API result (IDs 11 and 28) | Not applicable to these non-browser-cookie endpoints. Their input-validation and spoofing concerns remain applicable under other candidates. |
@@ -342,6 +360,29 @@ Generic template attribute defaults are question prompts, not observations that 
 platform lacks TLS, memory protection, or secure storage. Dispositions evaluate the
 actual flow and the declared dependency trust rather than mechanically adopting each
 suggested control.
+
+### Known Limitation: Provider Window After Non-Human Termination
+
+The [real-host results](../research/experiments/real-host-validation.md#results) record
+finding F2: after a product timeout or a lifetime-pipe cancellation while WAM was shown,
+a WAM window remained after the CLI process ended, in 3 of 3 such terminations (two
+timeouts and one lifetime-pipe EOF, personal role). Human cancellation on the WAM surface
+left no window.
+
+That window belongs to the provider. The product forwards cancellation through MSAL,
+destroys its hidden parent and invalidates the pending request; it does not wait for, or
+guarantee, closure of a provider surface. This matches the externally owned surface
+clause of [`V2-REQ-025`](../product/requirements/strategy-interaction-and-host.md#v2-req-025-no-orphaned-work)
+and the [design's cancellation semantics](../designs/windows-ado-authentication.md#uml-ui-ownership-and-cancellation-sequence).
+The user closes the window manually.
+
+Result correctness is unaffected. The terminal outcome is latched and the typed
+`Timeout` or `Cancelled` result is committed before the process ends, so no token is
+delivered for that request, and a late provider completion cannot resume it. Whether
+acting in the leftover window changes provider-managed session state was not observed;
+the requirement does not promise to revoke independently completed provider changes. By
+repository-owner decision, no window-closing mechanism will be added; this is a known
+limitation, not an open candidate.
 
 ### Scenario Review Beyond STRIDE Generation
 
