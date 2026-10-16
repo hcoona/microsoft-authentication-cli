@@ -101,9 +101,10 @@ to both silent and interactive results.
 fallback policy. Resolve the requested full email through the same provider discovery.
 Multiple exact matches remain terminal ambiguity. With zero or one exact match, establish
 the owned interaction context and perform one provider interactive call with supported
-account-selection intent and the original request constraints. That call supplies
+through its sign-in/account-selection route, with picker presentation runtime-dependent,
+and the original request constraints. That call supplies
 the requested email as the login hint when supported and never the discovered account,
-so the provider's account selection may be pre-filled for the requested email; final
+so the provider's account selection may be pre-filled or skipped for the requested email; final
 identity validation still rejects any account other than the
 requested email. Do not attempt silent token acquisition,
 fabricate a silent failure, relax identity validation, or fall back to silent reuse.

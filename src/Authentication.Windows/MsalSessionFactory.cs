@@ -52,7 +52,8 @@ internal sealed class MsalSessionFactory : IMsalSessionFactory
     // Pinned RuntimeBroker chooses its sign-in route (SignInInteractivelyAsync) only
     // when no account is bound. Forced interaction therefore binds no account but
     // supplies the requested email as the login hint, so the selection may be
-    // pre-filled for that email. The hint is not a selector: final validation
+    // pre-filled or skipped for that email (MSAL documents the hint as avoiding
+    // select-account dialogs). The hint is not a selector: final validation
     // still rejects any other returned account.
     internal static AcquireTokenInteractiveParameterBuilder BuildInteractiveRequest(
         PublicClientApplication application, MsalInteractiveOperation operation,

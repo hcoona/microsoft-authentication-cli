@@ -166,6 +166,8 @@ public sealed class MsalCompositionScenarios
             .WithRedirectUri("http://localhost")
             .WithHttpClientFactory(scene)
             .Build();
+        // accountBound rows always build a forced operation; forced applies only to
+        // the missing-hint rows.
         var operation = accountBound
             ? new MsalInteractiveOperation([Scope], scene.Selected, Email, Tenant, null, (nint)42, Guid.NewGuid(), true)
             : new MsalInteractiveOperation([Scope], null, null, Tenant, null, (nint)42, Guid.NewGuid(), forced);

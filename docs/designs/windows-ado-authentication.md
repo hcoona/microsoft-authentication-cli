@@ -502,7 +502,7 @@ cancellation/deadline boundary.
 | --- | --- |
 | Admission or Profile semantic error | `invalid_request`; no provider call. |
 | No visible match or provider interaction requirement | `interaction_required`, or the one compatible interactive call when permitted. |
-| Explicit `force-interactive` with zero or one exact match | One provider interactive call with account-selection intent, the requested email as login hint and no bound account; no engine silent acquisition or fallback. |
+| Explicit `force-interactive` with zero or one exact match | One provider interactive call through the sign-in/account-selection route, the requested email as login hint and no bound account; no engine silent acquisition or fallback. |
 | Multiple exact visible matches | `account_ambiguous`; no silent call or picker. |
 | Broker unavailable, unsupported session, or rejected web fallback | `mechanism_unavailable`; no alternate mechanism. |
 | Caller cancellation, lifetime-pipe EOF, `WM_CLOSE` delivered to the hidden parent, or provider user cancellation | `cancelled`; no retry. The local cancellation/deadline latch determines its own origin before interpreting a provider cancellation code. |
@@ -570,7 +570,13 @@ account-selection route, and passes the request's login hint to it
 ([hint selection](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client.Broker/RuntimeBroker.cs#L242-L292)).
 With a hint and no account, the forced call therefore still takes the sign-in route
 rather than the selected-account route; the account binding, not the hint, chooses the
-route. The hint may pre-fill the selection for the requested email.
+route. The hint may pre-fill or skip the account selection for the requested email.
+The pinned
+[interactive builder](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/AcquireTokenInteractiveParameterBuilder.cs#L136-L138)
+documents `WithLoginHint` as a way to avoid select-account dialogs when the user is
+signed in with several identities. That is the builder's documented intent, a source
+finding, not a UI observation. Whether WAM pre-fills, skips or still shows a picker with
+the hint is undetermined runtime behavior for a rebound real-host observation.
 
 Earlier, this mode also left the login hint unset, following the official
 [MSAL Python broker mapping](https://github.com/AzureAD/microsoft-authentication-library-for-python/blob/03d030f715f8398a26151602ac578f66b4bb40e8/msal/broker.py#L186-L230),
@@ -581,9 +587,10 @@ MSA passthrough, the personal role reached a second provider page that did not o
 personal account for direct selection, and the operator had to enter it manually; the
 work role did not. Its cause is not established, and relating it to the missing hint is
 an inference. By repository-owner decision (2026-10-16, quoted in
-[PR #492](https://github.com/hcoona/microsoft-authentication-cli/pull/492)), forced interaction must still
-enter the provider interactive path without a silent attempt, but now supplies the
-requested email as login hint, with no account; a pre-filled selection is acceptable.
+[PR #492](https://github.com/hcoona/microsoft-authentication-cli/pull/492)), forced
+interaction must still enter the provider interactive path without a silent attempt,
+but now supplies the requested email as login hint, with no account; a pre-filled or
+skipped selection is acceptable.
 Whether the hint removes the second page is a runtime question for a rebound real-host
 observation, not a claim of this design.
 

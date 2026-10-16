@@ -69,7 +69,7 @@ For `interactive-if-needed`, when the provider supports a login hint, interactiv
 acquisition must use the requested email, or the uniquely resolved account, as that hint.
 For `force-interactive`, interactive acquisition must not supply the discovered account;
 when the provider supports a login hint, it must supply the requested email as that hint,
-so the provider's account selection may be pre-filled with the requested email.
+so the provider's account selection may be pre-filled or skipped for the requested email.
 In both modes a hint does not replace final identity validation under
 `V2-REQ-022`; a returned account other than the requested one must be rejected.
 
