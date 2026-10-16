@@ -13,7 +13,8 @@ Results are appended under [Results](#results) through reviewed pull requests.
 policy's telemetry rule (it covers the upstream AzureAuth product and the documented
 controls of tools this procedure runs, not host-wide product programs such as the Visual
 Studio Experience Improvement Program), the former toolchain telemetry preflight and its
-stop condition are removed. No execution had occurred; nothing else changes.
+stop condition are removed, the `vctip.exe` termination rationale is restated as process
+hygiene, and Results state host-wide telemetry as uncontrolled. No execution had occurred.
 
 ## Subject and Inputs
 
@@ -237,6 +238,14 @@ artifact checks in a new `<root>`, and continues the same ledger and limits.
 Earlier evidence stays attributed to its own commit and artifact hashes.
 
 ## Results
+
+**Telemetry controls.** The recorded results state the applied controls as the
+per-invocation opt-outs listed under [Build and Synthetic Steps](#build-and-synthetic-steps).
+They state as a limitation that host-wide programs are neither read nor changed,
+including the Visual Studio Experience Improvement Program and any VC++ Technology
+Improvement Program upload by the MSVC toolchain
+([public context](windows-native-aot.md#historical-stops-and-preserved-unknowns)), so
+that telemetry is uncontrolled in this experiment.
 
 No execution has occurred. Record the bound commit, OS build, WSL version and
 sanitized initial state before B1; then B1 to S1 outcomes, hashes, imports and the ledger:
