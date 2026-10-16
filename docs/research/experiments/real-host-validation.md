@@ -78,10 +78,11 @@ object is used although the scenario fixture's comment assumes one; S1 records t
 
 ### B1 private-feed retry
 
-On the Windows host only, when the public B1 restore has failed for a recorded host
-network-path reason, B1 may be retried once, as the Wave owner decision permits. B4 then
-uses the same configuration. Any other B1 failure, or a failed retry, stops the
-experiment.
+On the Windows host only, B1 may be retried once, as the Wave owner decision permits,
+when the public B1 restore exited with NU1301 because the nuget.org service index could
+not be loaded (TLS handshake failure), with `NUGET_PACKAGES` still empty and no NU1403 or
+other lock mismatch. B4 then uses the same configuration. Any other B1 failure, or a
+failed retry, stops the experiment.
 
 - **Binding.** Execution binds this amendment's merge commit as the protocol revision and
   keeps the materialized subject. Before the retry, record in the ledger that
@@ -316,11 +317,14 @@ present with unknown prior broker state; no prior consumption (24 I, 40 N remain
 Runtime observations: a first invocation failed within 1 s from a local wrapper argument
 defect, before any restore. The B1 restore then exited 1 after 43.8 s with NU1301 (service
 index of `https://api.nuget.org/v3/index.json` not loaded, TLS handshake failure) and
-NU1900. `NUGET_PACKAGES` stayed empty and no experiment process remained. A separate
-check showed Windows Schannel clients failing the TLS handshake to `api.nuget.org` while
-other public hosts succeeded and WSL OpenSSL reached `api.nuget.org`. Inference: a host
-network-path problem, not a lock mismatch or subject defect, caused the failure. The
-experiment stopped before B2; no product call has been made.
+NU1900. `NUGET_PACKAGES` stayed empty, no NU1403 occurred and no experiment process
+remained; this meets the retry condition. An operator diagnostic outside this protocol,
+which contacted only public hosts and invoked no product, credential or feed, showed
+Windows Schannel clients failing the TLS handshake to `api.nuget.org` while other public
+hosts succeeded and WSL OpenSSL reached `api.nuget.org`. It is informational and not a
+retry condition. Inference: a host network-path problem, not a lock mismatch or subject
+defect, caused the failure. The experiment stopped before B2; no product call has been
+made.
 
 | # | Case | Role | Caller | Unit | Start (UTC) | Outcome and exits | I left | N left |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
