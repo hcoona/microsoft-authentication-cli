@@ -919,6 +919,17 @@ through MSAL, destroy the hidden parent, invalidate completion, and write a fixe
 completion/cancellation indication to stderr when available. Do not wait for the user to
 dismiss an external surface before ending the CLI process.
 
+The product forwards cancellation but does not guarantee that WAM closes its window. The
+[real-host results](../research/experiments/real-host-validation.md#results) (finding F2)
+observed a WAM window remaining after the process ended in 3 of 3 non-human
+terminations while WAM was shown: product timeout (twice) and lifetime-pipe EOF. Human
+cancellation on the WAM surface left none. The window is provider-owned; the user closes
+it manually. The typed `timeout` or `cancelled` result is already committed, no token is
+delivered and a late completion cannot resume the request. By repository-owner decision
+no window-closing mechanism is added; the
+[threat model](../security/threat-model.md#known-limitation-provider-window-after-non-human-termination)
+records this known limitation.
+
 ### UML Terminal State View
 
 ```mermaid
@@ -1096,6 +1107,13 @@ continuation, shared-cache import/repair, logout/cache commands, duplicate-promp
 suppression, network telemetry export, Profile auto-discovery/activation, and immediate
 Linux-parent-death detection without the lifetime pipe. Git clone and NuGet restore
 remain downstream service tests, not operations of this engine.
+
+Known limitation: closing a provider-owned WAM window after a product timeout or caller
+cancellation (lifetime-pipe EOF or caller cancellation) is unsupported. Such a window can
+remain after the process ends (finding F2, 3 of 3 observed non-human terminations) and
+the user closes it; the committed typed result and its no-token outcome are unaffected.
+See [request lifetime](#uml-ui-ownership-and-cancellation-sequence) and the
+[threat model](../security/threat-model.md#known-limitation-provider-window-after-non-human-termination).
 
 Profile activation, platform support and release each retain their own authorization
 and evidence gates; the [validation strategy](../validation/strategy.md#release-gates)
