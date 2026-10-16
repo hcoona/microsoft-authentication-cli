@@ -299,8 +299,8 @@ the same base name, `C:\Temp\azureauth-real-host-20261016`, with no `-n` suffix.
   caches received ordinary updates and are retained.
 - **B1.** Owner-exempted machine-local restore workaround, as for the first subject; this
   is not a public-restore result and departs from the protocol's nuget.org-only restore
-  rule; the owner's coverage of this second subject is to be recorded in PR #491 before
-  merge. `--locked-mode` with new empty package and HTTP caches:
+  rule; the owner's [disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/491#issuecomment-6208285632) states that
+  the standalone exemption covers this second subject. `--locked-mode` with new empty package and HTTP caches:
   exit 0. Lock closure verified for 26 of 26 lock-file packages by content hash; 3
   implicit packages not lock-verified: `Microsoft.NETCore.App.Host.win-x64`,
   `Microsoft.NETCore.App.Runtime.win-x64` and
@@ -397,7 +397,8 @@ coordinator):
 - **P6** (#10, #16): `Timeout/None` at about 30 s, within the 40 s bound.
 - **Not executed by owner decision, no capacity charged.** Work-role P6 (native and WSL)
   and work-role WSL P4 and P5. The protocol's plan has no skip route; the owner decision
-  and rationale are to be recorded in PR #491 before merge. That these cases add no
+  and rationale are recorded in the [owner disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/491#issuecomment-6208285632), which accepts the
+  Wave's work-role EOF and deadline items as partially satisfied. That these cases add no
   role-dependent behavior beyond personal native and WSL P4, P5 and P6 and work native P4
   is an **inference**, not an observation; F1 shows the forced path can differ by role.
 - **Finding F1 (runtime observation; UX defect candidate).** For `force-interactive` with
