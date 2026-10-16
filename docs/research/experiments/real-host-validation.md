@@ -601,3 +601,141 @@ retention list and under the restore exemption, the machine-local restore config
 is retained until then and the restore credential cache is retained. WAM sessions and
 caches are retained; deleting local
 files reverses no provider-side change.
+
+**Third subject `0eb257ae71adc948202698b2914391185ba68d68`: B1 to S1 and calls #25 to #29
+(runtime observation).** This completes the summary above. #25 to #27 bound the F1
+Confirmation revision `0eb257a` (protocol file SHA-256
+`6d9651135e34cb0ed930993606e8237ab235e8e6b859cc0f69e437fe56be592a`); #28 and #29 bound
+the F3 amendment merge `268ea4b0548f07a81ccd029e932af6f98afb6957`, recorded in the
+ledger before #28. This append does not change either revision.
+
+- **Environment.** As for the second subject: Windows 11 Enterprise x64 build 26300
+  (10.0.26300.9711), WSL 3.0.3.0 with Ubuntu 26.04 under WSL 2, PowerShell 7.6.7, SDK
+  10.0.402, only .NET 10 runtime 10.0.13, MSVC 14.51.36231, Windows SDK 10.0.26100.0,
+  MSAL and Broker 4.83.1, NativeInterop 0.20.3. Same `visual-studio-legacy-wam` example
+  Profile, Public Cloud, `--tenant common` for both roles and the Azure DevOps default
+  scope. The designated session was disconnected at preflight; B1 to B4 and the artifact
+  checks ran then, and S1 was deferred until the owner connected and the session was
+  active (a conservative choice; the protocol does not require an active session for S1).
+  The session was active before each of #27 to #29.
+- **Initial state.** Both roles existed; their broker state carried the second subject's
+  ordinary updates (both had reached silent use) and was not further characterized.
+- **Source.** `<root>` `C:\Temp\azureauth-real-host-20261016`, a fresh directory (the
+  second subject's `<root>` of that name had been deleted); `git archive` of the bound
+  commit produced 170 files, equal to its tree, with `src\nuget.config` unchanged.
+- **B1.** A first invocation failed in 0.6 s because the local step wrapper passed the
+  argument list as one string; no restore ran and no package or `obj` directory was
+  created. The rerun used the owner's machine-local restore exemption (cited under F1
+  Confirmation) with `--locked-mode` and new empty package and HTTP caches: exit 0,
+  14.8 s. Lock closure was verified for 26 of 26 lock-file packages by content hash; the
+  same 3 implicit 10.0.12 runtime packages as for the second subject were not
+  lock-verified and no other package was present. This is not a public-restore result,
+  and the second subject's provenance limit on the Native AOT artifact applies unchanged.
+- **B2 to B4.** Build exit 0, 0 warnings. Publish exit 0; one `vctip.exe` from the pinned
+  MSVC directory remained and was terminated; no other survivor. B4 was first run with
+  the machine-local restore configuration instead of `src\nuget.config` (operator
+  deviation; 0 libraries resolved) and then repeated as specified: restore exit 0
+  resolving 0 libraries with one NU1900 warning, build exit 0. `ResultValidation.dll`
+  SHA-256 `e7280e7ff4c99b0c6ce0ab8382b117021e99d8e86d027b70163f3c1d68cceed2` after both
+  passes, equal to the second subject's.
+- **Published files** (bytes, SHA-256), copied unchanged to `<root>\run`:
+
+  | File | Bytes | SHA-256 |
+  | --- | --- | --- |
+  | `Authentication.Cli.exe` | 8,928,256 | `09B575567A13C77AC59B19C464880CBA45F13740D048072A2B008BF4EED95729` |
+  | `msalruntime.dll` | 2,949,656 | `9DF30B54B7AF974A072B1D55FEE3590A5562C77EBC46F47016F0DD5199CD0C79` |
+  | `Authentication.Cli.pdb` | 37,097,472 | `132AF6A399FEAA3D80F0F577FA6269F93610A49698F92674191B10AC4379EAD6` |
+  | `Authentication.Core.pdb` | 24,528 | `2231502EC2C5896D82015E5902F04606C09EF54E2441EF3D5DC2246AE5B5400C` |
+  | `Authentication.Windows.pdb` | 34,848 | `1765AC9343F96AACA2ABD25E7A6F215F427B7C6E752FE41E18FE497F63031DDC` |
+
+- **Imports** (`dumpbin /DEPENDENTS`). The same DLL name sets as the second subject for
+  both files; no non-Windows DLL is imported.
+- **Artifact checks** (#25, #26, charged N). `authenticate --protocol 0` exit 1 with
+  `invalid_request`. `help` exit 0, but the local checker expected the first line to
+  start with `Unofficial` while the product's first line, asserted by the bound commit's
+  `ProcessScenarios`, starts with `AzureAuth Unofficial V2`; the output was not
+  retained, so #25 establishes exit 0 only. This is an operator checker defect; #25 was
+  not repeated, and S1-2's `RootHelpCompletesWithoutAuthentication` asserts those lines
+  against the same executable. The checker wrote "FIRST LINE MISMATCH" into #25's outcome
+  cell; the executor rewrote that cell to the wording below after the call.
+- **S1.** Same runtimeconfig probe change and SHA-256 values as the second subject; no
+  outer Job object; each run used its own new empty `TEMP`. S1-1 (all categories,
+  including `WindowsHostTiming` and the changed `MsalCompositionScenarios`): exit 0,
+  185 passed, 0 failed, 0 skipped. S1-2 (direct PowerShell 7 command, single-argument
+  filter): exit 0, exactly 2 passed. S1-3: exit 0; no per-test counts. No surviving
+  process and no latched safety stop.
+- **Retained `<root>` check before #28.** `<root>` was present; `<root>\run` held exactly
+  the five files above with matching bytes and SHA-256; the validator hash matched. The
+  local ledger had recorded no Profile SHA-256 for the third subject, only that it was
+  unchanged, so the executor stopped before #28 as the F3 amendment requires for a
+  missing value. The repository owner's
+  [ruling](https://github.com/hcoona/microsoft-authentication-cli/pull/497#issuecomment-6224331392)
+  set the recorded value to the second subject's Profile SHA-256
+  `b7b26fb3bcedeca62087dc3818e858dd9184ca37dbc9eb0abcbd310a839a2c75`; the retained
+  Profile matched it, and calls resumed.
+- **Ledger reconciliation under the new limits.** Before #28, rows #1 to #27 reconciled to
+  15 I and 12 N used, leaving 33 I and 52 N under 48 I and 64 N. #25 to #27 show
+  remaining counts under the former 24 I and 40 N; from #28 the counts use the new
+  limits. The local launchers' reconciliation constants were updated accordingly; no row
+  was edited for this change.
+
+Rows #25 to #29, copied from the local ledger (#25's outcome cell as rewritten above).
+Each row was appended before its call; a fresh owner readiness answer, relayed by the
+coordinator, immediately preceded each of #27 to #29 with no other counted call in
+between:
+
+| # | Case | Role | Caller | Unit | Start (UTC) | Outcome and exits | I left | N left |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 25 | A1 artifact help | none | native | N | 2026-10-16T18:44:11Z | exit 0, first line not established (checker defect, see note), 1.35 s, no survivor | 10 | 29 |
+| 26 | A2 artifact protocol 0 | none | native | N | 2026-10-16T18:44:16Z | exit 1, invalid_request on stdout, 0.05 s, no survivor | 10 | 28 |
+| 27 | P3 | personal | native | I | 2026-10-16T19:28:25Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Interactive","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 35.21 s; notice=True; overrun=False; survivors=0 | 9 | 28 |
+| 28 | P3 | personal | wsl | I | 2026-10-16T20:45:01Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Interactive","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 65.79 s; notice=True; overrun=false; survivors=0 | 32 | 52 |
+| 29 | P3 | work | native | I | 2026-10-16T20:48:12Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Interactive","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 3.31 s; notice=True; overrun=False; survivors=0 | 31 | 52 |
+
+**Dispositions and operator observations** (owner answers relayed by the coordinator):
+
+- **#27 personal native P3: accepted.** Q1 yes, Q2 yes, Q3 no, Q4 no. Q5 was not yet
+  asked; the F3 candidate finding above records the owner-authorized description for
+  this call.
+- **#28 personal WSL P3: accepted.** Q1 yes, Q2 yes, Q3 no, Q4 no, Q5 yes; defaulted
+  credential method `security key`, chosen `Windows Hello`.
+- **#29 work native P3: not accepted; defect of the forced mode.** Q1 no, Q4 no. The
+  owner answered Q2 and Q5 as not applicable because no interactive surface was shown;
+  they are recorded as not applicable, not as yes or no. Q3 is not applicable to the work
+  role. The product returned `Success/Interactive` with a passing validator and an
+  `interactive_acquisition` stage of 1,551 ms. Under F1 Confirmation, WAM completing
+  without presenting its interactive UI is recorded as a defect of the forced mode; all
+  real calls stopped, and #29 was not repeated. The variant of F3 Investigation was not
+  started (no branch, build or call).
+- **F1 (runtime observation).** The second provider page did not appear for the personal
+  role on the corrected subject, native (#27) or WSL (#28). This covers only those two
+  combinations on this host and existing state.
+- **F3 candidate (operator observation).** With the login hint, the personal role's
+  forced call defaulted to a security key and the operator reselected Windows Hello: by
+  owner description after #27 (see above) and by the fixed-category Q5 answers for #28.
+  Not observed for the work role, which showed no interactive surface. Cause not
+  established.
+- **Forced-mode defect (runtime observation and inference).** Observation: for the work
+  role, native caller and existing state, the corrected forced call completed without
+  WAM presenting interactive UI (#29). Source finding: at the bound commit,
+  `MsalSessionFactory.BuildInteractiveRequest` passes only `WithLoginHint` for
+  `force-interactive` (no `WithAccount`, no prompt option), and its comment notes that
+  MSAL documents the hint as avoiding account-selection dialogs and that a skipped UI
+  would be a defect pending real-host confirmation. That the hint caused the skip is an
+  **inference**; the work-role WSL caller was not observed on this subject. Before the
+  correction, the second subject's work-role P3 calls without a hint (#20, #24) presented
+  WAM.
+- **CORE-01 (inference).** #27 to #29 passed the coordinator's fail-closed correlation
+  check, as for the second subject; no ID was recorded. #29 nonetheless is not accepted.
+- **Telemetry.** Only fixed stage events; the pre-interaction notice line appeared in
+  all three forced calls; no `error.type` or mechanism indication appeared.
+
+**Consumption and retention.** The third subject used 3 I and 2 N; 17 I and 12 N were
+used in total, leaving 31 I and 52 N under 48 I and 64 N. No call overlapped, overran its
+bound or left a product process. No account, consent, cache or remote state changed
+beyond ordinary token acquisition. Deviation from Retention and Cleanup: `<root>` was
+not deleted after #29 was recorded. The coordinator's direction retains it
+unchanged for a possible comparison with the variant; it holds only public
+source, packages, build outputs and the run copy, and no product process runs from it. The local launchers,
+`roles.json`, Profile, ledger, the machine-local restore configuration and WAM sessions
+and caches are retained as before; deleting local files reverses no provider-side change.
