@@ -72,13 +72,18 @@ sharing the same limits.
 
 **Exclusions:** No account addition or removal, sign-out, consent revocation, cache
 clearing or import, administrator consent, registration change, authenticated service
-request beyond token acquisition, or remote mutation. No new dependency, SDK or runtime
+request beyond token acquisition (except the Windows restore workaround above: locked-mode,
+read-only package download from the owner-designated feed on that host), or remote
+mutation. No new dependency, SDK or runtime
 version, no Profile activation or distribution, no release, signing or installer. No
 tokens, account or tenant identifiers, raw provider diagnostics or screenshots with
 private data in committed records, logs or chat.
 
 **External effects:** Token acquisition against Microsoft Entra for the two existing
-accounts with ordinary session/cache updates; public package restore; ordinary CI.
+accounts with ordinary session/cache updates; public package restore; on the Windows
+host only, authenticated package download from the owner-designated private feed with the
+owner's work account through the installed credential provider, and that provider's
+ordinary token-cache updates; ordinary CI.
 
 **Completion:** Remove this entry through a reviewed Wave change once both outcomes merge,
 the call limits are exhausted, or the owner ends it.
