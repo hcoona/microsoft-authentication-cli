@@ -783,3 +783,126 @@ the step logs and local step wrapper scripts; the synthetic S1 scenario output u
 it. The local launchers, `roles.json`, Profile, ledger, the machine-local restore
 configuration and WAM sessions and caches are retained as before; deleting local files
 reverses no provider-side change.
+
+**Variant subject `389f85a94f9a6da15c8bc4bc5f66abb88f09cc5c` (Wave outcome (3) evidence only;
+runtime observation).** These results are labeled as evidence for Wave outcome (3), the
+experiment-only variant on branch `experiment/forced-bound-account` (parent
+`0eb257a`), which is never merged into `main-v2`. They are not mapped as `main-v2`
+validation, are not a product correction and do not by themselves authorize a product
+behavior change. Calls #30 to #34 bound the variant amendment merge
+`97a8d7680280c434be4be7b6547c8f08394dd909` (PR #498; protocol file SHA-256
+`b3c0118958fa2cd844254dd6c12eb5f7cfcf7b05df28e267169c233f82951007`), recorded in the
+ledger before B1. This append does not change that revision.
+
+- **Ledger reconciliation.** Before B1, rows #1 to #29 reconciled to 17 I and 12 N used,
+  leaving 31 I and 52 N under 48 I and 64 N, as the variant amendment requires.
+- **Environment.** As for the third subject: Windows 11 Enterprise x64 build 26300
+  (10.0.26300.9711), WSL 3.0.3.0 with Ubuntu 26.04 under WSL 2, PowerShell 7.6.7, SDK
+  10.0.402, only .NET 10 runtime 10.0.13, MSVC 14.51.36231, Windows SDK 10.0.26100.0,
+  MSAL and Broker 4.83.1, NativeInterop 0.20.3. Same `visual-studio-legacy-wam` example
+  Profile (SHA-256 `b7b26fb3bcedeca62087dc3818e858dd9184ca37dbc9eb0abcbd310a839a2c75`),
+  Public Cloud, `--tenant common` for both roles and the Azure DevOps default scope. The
+  designated session was active from preflight through #34.
+- **Initial state.** Both roles existed; their broker state carried the earlier subjects'
+  ordinary updates (both had reached silent use, and #27 to #29 forced calls had
+  succeeded) and was not further characterized.
+- **Source.** `<root>` `C:\Temp\azureauth-real-host-20261016-1`: the base name was
+  occupied by the retained third-subject `<root>`, and the protocol does not fix where
+  `-n` starts; the executor chose `-1` as the lowest positive suffix (conservative choice,
+  recorded in the ledger). `git archive` of the variant commit produced 170 files, equal to
+  its tree, with `src\nuget.config` unchanged. No process ran from the third-subject
+  `<root>`.
+- **B1.** Owner's machine-local restore exemption (cited under F1 Confirmation) with
+  `--locked-mode` and new empty package and HTTP caches: exit 0, 14.2 s. Lock closure
+  verified for 26 of 26 lock-file packages by content hash; the same 3 implicit 10.0.12
+  runtime packages were not lock-verified and no other package was present. This is not a
+  public-restore result; the provenance limit on the Native AOT artifact applies
+  unchanged.
+- **B2 to B4.** Build exit 0, 0 warnings. Publish exit 0; one `vctip.exe` from the pinned
+  MSVC directory remained and was terminated; no other survivor. Validator restore with
+  `src\nuget.config` exit 0 resolving 0 libraries with one NU1900 warning, build exit 0.
+  `ResultValidation.dll` SHA-256
+  `398d08437cda112f4659f60df5e7f3c076947bccfd224c3f49fb1220b6e198b1`. It differs from the
+  earlier subjects' value although `tools/result-validation` is unchanged between
+  `0eb257a` and the variant; the DLL embeds a PDB path under `<root>`, so a different
+  `<root>` yields a different hash (observation of the embedded path; that it is the only
+  cause is an **inference**). The variant launchers verified this recorded value.
+- **Published files** (bytes, SHA-256), copied unchanged to `<root>\run`:
+
+  | File | Bytes | SHA-256 |
+  | --- | --- | --- |
+  | `Authentication.Cli.exe` | 8,928,768 | `AB8B44AD7CB1C337B56F9829BB10597AD4AF84DDAA409122457A5754AD8B9F8F` |
+  | `msalruntime.dll` | 2,949,656 | `9DF30B54B7AF974A072B1D55FEE3590A5562C77EBC46F47016F0DD5199CD0C79` |
+  | `Authentication.Cli.pdb` | 37,097,472 | `B41DF9BB4A2A8D3192C89B4627572ED64C107BF201512E142164110AED394E44` |
+  | `Authentication.Core.pdb` | 24,532 | `C9DA1F21730594A42B46ECD0146BF59EED565F4B641213F7887DFEA8A2B56E03` |
+  | `Authentication.Windows.pdb` | 34,900 | `0AD081F4E5EE72D2F44CE5A2A00DA1B859BA467944C165FA6575EF004094B14C` |
+
+- **Imports** (`dumpbin /DEPENDENTS`). The same DLL name sets as the second and third
+  subjects for both files; no non-Windows DLL is imported.
+- **Artifact checks** (#30, #31, charged N). From a new empty directory with
+  `PATH=C:\Windows\System32`: `help` exit 0, and the corrected local checker confirmed
+  that the first line starts with `AzureAuth Unofficial V2`; `authenticate --protocol 0`
+  exit 1 with `invalid_request`.
+- **S1.** Same runtimeconfig probe change and SHA-256 values as the earlier subjects; no
+  outer Job object; each run used its own new empty `TEMP`. S1-1 (all categories,
+  including `WindowsHostTiming` and the variant's changed `MsalCompositionScenarios`):
+  exit 0, 186 passed, 0 failed, 0 skipped. S1-2 (PowerShell 7 command text given to
+  `pwsh -Command -` on stdin, without a wrapper script or `cmd.exe`; single-quoted filter
+  as one argument): exit 0, exactly 2 passed. S1-3: exit 0; no per-test counts. No
+  surviving process and no latched safety stop.
+- **Launchers.** Copies of the third-subject launchers in which only `<root>` and the
+  expected product and validator SHA-256 values changed; the Profile check and ledger
+  reconciliation were unchanged. Variant rows are labeled `P3 (variant)`.
+
+Rows #30 to #34, copied unchanged from the local ledger. Each row was appended before its
+call; a fresh owner readiness answer, relayed by the coordinator, immediately preceded
+each of #32 to #34 with no other counted call in between (the ledger note for #32's
+readiness was written just after the call, the others before):
+
+| # | Case | Role | Caller | Unit | Start (UTC) | Outcome and exits | I left | N left |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 30 | A1 artifact help | none | native | N | 2026-10-16T21:27:22Z | exit 0, unofficial first line, 1.06 s, no survivor | 31 | 51 |
+| 31 | A2 artifact protocol 0 | none | native | N | 2026-10-16T21:27:26Z | exit 1, invalid_request on stdout, 0.05 s, no survivor | 31 | 50 |
+| 32 | P3 (variant) | personal | native | I | 2026-10-16T21:30:45Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Interactive","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 2.09 s; notice=True; overrun=False; survivors=0 | 30 | 50 |
+| 33 | P3 (variant) | personal | wsl | I | 2026-10-16T21:32:25Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Interactive","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 1.78 s; notice=True; overrun=false; survivors=0 | 29 | 50 |
+| 34 | P3 (variant) | work | native | I | 2026-10-16T21:33:38Z | product exit 0; validator exit 0 {"Outcome":"Success","Route":"Interactive","Passed":true,"ProtocolValid":true,"MetadataValid":true,"PersistenceUnconfirmed":true,"PersistenceFailed":false}; PASS; 1.82 s; notice=True; overrun=False; survivors=0 | 28 | 50 |
+
+**Dispositions and operator observations** (owner yes/no answers relayed by the
+coordinator):
+
+- **#32 personal native, #33 personal WSL, #34 work native: variant does not satisfy the
+  forced-interaction requirement.** For each call, Q1 no and Q4 no. Q2 and Q5, and Q3
+  for the personal role, are recorded as not applicable because Q1 was no; Q3 is not
+  applicable to the work role. The product returned `Success/Interactive` with a passing
+  validator, and the `interactive_acquisition` stage lasted 1,229 ms, 233 ms and 1,062 ms.
+  Neither not-reached outcome (`InternalFailure/None` with `invalid_operation`, or
+  `AccountAmbiguous`) was observed, so no variant-defect stop applied. Under the variant
+  procedure, a Q1 no did not stop the remaining cases. No call was repeated.
+- **Decision question (Wave outcome (3)).** On this host and existing state, the variant
+  did not meet the owner's first criterion (interactive UI appears) for any of the three
+  observed role and caller combinations. The second and third criteria (no F1 second page,
+  no provider-defaulted credential method) could not be observed because no interactive
+  surface appeared, so this evidence neither supports nor rejects them. Source finding
+  (cited under Variant subject): the bound account enters the broker's interactive acquisition for
+  that account instead of interactive sign-in. That the broker then completed without
+  presenting UI is a runtime observation; why it did so is not established. This evidence
+  covers only these three combinations; work-role WSL was not observed.
+- **CORE-01 (inference).** #32 to #34 passed the coordinator's fail-closed correlation
+  check, as before; no ID was recorded. This is variant evidence only.
+- **Telemetry.** Only fixed stage events; the pre-interaction notice line appeared in all
+  three calls; no `error.type` or mechanism indication appeared.
+
+**Consumption and cleanup.** The variant used 3 I and 2 N; 20 I and 14 N were used in
+total, leaving 28 I and 50 N under 48 I and 64 N. No call overlapped, overran its bound or
+left a product process. No account, consent, cache or remote state changed beyond
+ordinary token acquisition. Both `<root>` directories were deleted at 21:37:02Z after
+the hashes, S1 counts and ledger rows above were recorded in the local ledger: the
+variant's `C:\Temp\azureauth-real-host-20261016-1`
+under Retention and Cleanup, and the retained third-subject `<root>`
+`C:\Temp\azureauth-real-host-20261016`, deleted after the variant's results were recorded in
+the local ledger and before this Results append was committed; the executor treated
+local-ledger recording as "the variant's Results are recorded" (an interpretation of the
+trigger under Resumed confirmation). No process ran from either. The local launchers (including the variant
+copies), `roles.json`, Profile, ledger and the machine-local restore configuration are
+retained until the Wave entry ends, then deleted. WAM sessions and caches are retained;
+deleting local files reverses no provider-side change.
