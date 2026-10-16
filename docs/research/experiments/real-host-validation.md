@@ -427,8 +427,10 @@ coordinator):
   that stop condition. The relayed text contained no token, email, tenant or other
   identifier; the screenshots were not shared with the executor; the quotes were removed
   from the local ledger and never committed. Only the yes/no projection above is
-  recorded. Whether calls #9 to #24 are accepted as evidence is an owner disposition
-  linked here: pending.
+  recorded. The repository owner's
+  [disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/491#issuecomment-6208392178)
+  accepts calls #9 to #24 as evidence; text already in chat and agent traces is retained
+  there and must not enter the repository.
 - **CORE-01 (inference).** Each of the 14 validated successes (#5 to #8, #11 to #13,
   #17 to #20, #22 to #24) passed the coordinator's fail-closed correlation check, so the
   MSAL result returned the sent correlation ID and the check did not reject a real broker
