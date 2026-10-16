@@ -25,11 +25,17 @@ under [Corrected Builds](#corrected-builds) to the commit defined in Source belo
 repeats B1 to B4, the artifact checks and S1 in a new `<root>` with the shared limits and
 recorded consumption; S1-2 now fixes its argument form.
 
+**Amendment (2026-10-16, F1 confirmation).** Finding F1 was corrected by
+[PR #492](https://github.com/hcoona/microsoft-authentication-cli/pull/492) (merge
+`3477534`): the forced call now carries the requested email as login hint. Execution
+rebinds under [Corrected Builds](#corrected-builds) to a third subject defined in Source
+below and runs only the cases in [F1 Confirmation](#f1-confirmation-third-subject).
+
 ## Subject and Inputs
 
 - **Source.** Execution binds this protocol's merge commit on `main-v2`, or a later
-  `main-v2` commit whose copy of this file is unchanged; either contains `edc9ce0`, the
-  merge of PR #489. Record the full commit hash in the ledger before the first build.
+  `main-v2` commit whose copy of this file is unchanged; either contains `3477534`, the
+  merge of PR #492. Record the full commit hash in the ledger before the first build.
   Materialize it with
   `git archive <commit> | tar -x -C <root>/src` into a fresh
   `C:\Temp\azureauth-real-host-YYYYMMDD[-n]\src` (`<root>` below; add the lowest free
@@ -255,6 +261,33 @@ under the Wave entry. Before further real calls, a reviewed amendment to this fi
 the new commit and any changed steps or cases; the new subject repeats B1 to B4, S1 and the
 artifact checks in a new `<root>`, and continues the same ledger and limits.
 Earlier evidence stays attributed to its own commit and artifact hashes.
+
+## F1 Confirmation (Third Subject)
+
+- **Preparation.** Before B1, reconcile the local ledger to 10 I and 30 N remaining
+  (otherwise stop). Then repeat B1 to B4, the native artifact checks (two N units) and S1
+  in a new `<root>`; S1-1 covers the changed `MsalCompositionScenarios`. B1 uses the
+  owner's standalone machine-local restore exemption
+  ([PR #487 closure](https://github.com/hcoona/microsoft-authentication-cli/pull/487#issuecomment-6207448294),
+  [PR #491 disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/491#issuecomment-6208285632))
+  instead of the nuget.org-only rule. This protocol neither grants nor changes that
+  exemption; no feed identifier is recorded, the result is not a public-restore result,
+  and implicit runtime packages keep the not-lock-verified limitation.
+- **Cases.** Only P3 (`force-interactive`), in order: personal native, personal WSL,
+  work native; 3 I. No other case runs. With the artifact checks, at most 3 I and 2 N
+  are used from the shared limits. The fresh readiness answer is given immediately before
+  each call, with no other counted call in between.
+- **Acceptance (owner decision).** A call is accepted only when the validator pass rule
+  holds and the owner answers yes to both: WAM presented its interactive UI (a UI
+  pre-filled from the hint is acceptable); the designated account completed sign-in on
+  it. For the personal role the owner also answers whether the second provider surface
+  of F1 appeared. If WAM completed without presenting its interactive UI, record a
+  defect of the forced mode, stop all real calls and do not accept the call.
+- **Yes/no only.** The executor asks only these yes/no questions and records only yes or
+  no. The stop condition for raw provider text applies without exception: if the owner
+  or a relay describes or quotes provider UI text, the executor records none of it in
+  the ledger, Results, launcher output or its own messages, stops all real calls and
+  preserves state.
 
 ## Results
 
