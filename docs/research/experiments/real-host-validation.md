@@ -45,8 +45,8 @@ Wave limits are now 48 I and 64 N.
 review concluded "No material findings." This amendment records that hash and satisfies
 the variant gate. Variant calls bind this amendment's merge commit under Protocol
 revision. In #29 (work native P3) the owner answered Q1 no; the executor recorded a
-forced-mode defect and stopped all real calls under F1 Confirmation, and its Results are
-appended separately. The repository owner dispositioned that stop (chat, 2026-10-16,
+forced-mode defect and stopped all real calls under F1 Confirmation; its Results are
+recorded under [Results](#results) (PR #499). The repository owner dispositioned that stop (chat, 2026-10-16,
 quoted in the pull request adding this amendment): run the variant first, each of its
 three cases once, to see whether it meets all of "interactive UI must appear", "no second
 page" and "no defaulted security key", then decide the product change. The stop
@@ -348,8 +348,10 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   Before #28 the executor checks the third subject's recorded values in the local ledger
   (`<root>`, byte size and SHA-256 of every file in `<root>\run`, and the Profile and
   validator SHA-256) against the files and records the check in the ledger; a missing value, a missing `<root>` or any mismatch stops real calls, and
-  rebuilding then requires a new reviewed amendment. The third `<root>` is deleted under
-  Retention and Cleanup only after #29 is recorded. The values are copied unchanged into
+  rebuilding then requires a new reviewed amendment. The third `<root>` is intentionally
+  retained unchanged, with no process run from it, until the variant's Results are
+  recorded or the Wave entry ends, whichever comes first; it is then deleted under
+  Retention and Cleanup and the deletion is recorded. The values are copied unchanged into
   Results in the pull request that records #28 and #29; that append does not change the
   protocol revision #28 and #29 bound.
 - **Variant subject (experiment only).** A commit on the dedicated branch
@@ -395,7 +397,10 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   S1; S1 must pass before any variant call. Cases, all `force-interactive` with the P3
   validator expectations (`Success/Interactive`, 0): personal native, personal WSL, work
   native; 3 I. Observations: Q1 to Q5 for every variant call, Q3 recorded as not
-  applicable for the work role. Unlike F1 Confirmation, a Q1 no in any variant case
+  applicable for the work role. When Q1 is no, Q2 and Q5 (and Q3 for the personal role)
+  are recorded as not applicable, not as yes or no; Q4 is still asked. Except for the
+  not-reached outcomes and the variant-defect stop under Variant subject, and unlike F1
+  Confirmation, a Q1 no in any variant case
   records only that the variant does not satisfy the requirement and does not stop the
   remaining variant cases, because that is the question under test. Every other stop
   condition (raw provider text, an unexpected account or prompt, token exposure and the
