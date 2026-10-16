@@ -28,8 +28,12 @@ Results are appended under [Results](#results) through reviewed pull requests.
 - **Profile.** A Windows-local file `%LOCALAPPDATA%\azureauth-real-host\profile.json`
   whose content is exactly the `visual-studio-legacy-wam` example in
   [`client-profile.schema.json`](../../../contracts/v1/client-profile.schema.json), copied
-  from the bound commit. Public Cloud, `common` authority and the Azure DevOps default
-  scope `499b84ac-1321-427f-aa17-267ca6975798/.default` are the only request inputs.
+  from the bound commit. Requests use Public Cloud, `--tenant common` (or the work role's
+  exact tenant GUID when `roles.json` supplies one) and the Azure DevOps default scope
+  `499b84ac-1321-427f-aa17-267ca6975798/.default`. Source finding
+  (`MsalAuthenticationProvider.cs`): for this Profile, `common` resolves to the
+  `https://login.microsoftonline.com/organizations` authority with MSA passthrough, and a
+  GUID resolves to that tenant's authority.
 
 ## Build and Synthetic Steps
 
@@ -40,16 +44,28 @@ All steps run sequentially in a Windows PowerShell 7 process of the designated u
 directories under `<root>`. Every restore passes `--configfile <root>\src\nuget.config`,
 which admits only nuget.org; no credential provider, feed credential or private package
 is used. Builds pass `--disable-build-servers -nr:false -p:UseSharedCompilation=false`.
-These steps are not counted against the Wave call limits. The MSVC linker may start its
-own telemetry helper; its documented opt-out is a machine registry setting, which this
-protocol does not change, so that helper's effects are an accepted unknown.
+These steps are not counted against the Wave call limits.
+
+**Toolchain telemetry preflight.** Earlier Native AOT evidence observed the MSVC
+`vctip.exe` telemetry helper during publish. Its documented control is the machine-wide
+[Visual Studio Experience Improvement Program](https://learn.microsoft.com/visualstudio/ide/visual-studio-experience-improvement-program)
+`OptIn` registry value (or its policy key). Before B1, read that value without changing
+it. Continue only if it shows opt-out; otherwise stop before B1 and escalate to the owner,
+because enabling the opt-out or accepting the upload is outside this protocol.
+
+**Step termination.** Each step runs as one foreground process tree. On overrun, stop
+that tree, record the step as failed and stop the experiment. After B3 and S1, list
+processes whose image path is under `<root>` or the pinned MSVC directory; a remaining
+`vctip.exe` from that directory is terminated and recorded, and any other survivor stops
+the experiment with state preserved. No outer Job object is used; the scenario fixture's
+comment assumes one, so its absence is recorded as a limitation of S1.
 
 | Step | Command (from `<root>\src`) | Bound |
 | --- | --- | --- |
-| B1 restore | `dotnet restore Windows.slnx --locked-mode` | 600 s |
+| B1 restore | `dotnet restore Windows.slnx --locked-mode --configfile nuget.config` | 600 s |
 | B2 build | `dotnet build Windows.slnx -c Release --no-restore` | 900 s |
 | B3 publish | `dotnet publish src\Authentication.Cli -c Release -r win-x64 --no-restore -o <root>\publish` | 1,200 s |
-| B4 validator | `dotnet build tools\result-validation\cli -c Release -o <root>\validator` | 300 s |
+| B4 validator | `dotnet restore tools\result-validation\cli --configfile nuget.config`, then `dotnet build tools\result-validation\cli -c Release --no-restore -o <root>\validator` | 300 s |
 | S1 scenarios | See below | 900 s |
 
 **Runtime binding.** Source finding: framework-dependent outputs pin
@@ -62,7 +78,9 @@ version `10.0.12` with `10.0.13` in the built
 `Authentication.Windows.Scenarios.runtimeconfig.json` only, recording its SHA-256 before
 and after. The validator launches as `dotnet --fx-version 10.0.13 ResultValidation.dll`,
 the binding accepted for the earlier Slice. The Native AOT product is self-contained and
-keeps its locked 10.0.12 packages. No other output is edited.
+keeps its locked 10.0.12 packages. No other output is edited. The validator project has
+no package reference and therefore no lock file; B4 records that its restore resolved no
+packages.
 
 **Native artifact checks.** Record byte size and SHA-256 of every file in
 `<root>\publish`, then copy it unchanged to `<root>\run`. Run `dumpbin /DEPENDENTS` on
@@ -79,7 +97,10 @@ non-`broker_initialization` outcome.
 `dotnet <dll>` and no filter, covering all categories including `WindowsHostTiming`;
 then once with `--native-cli-executable <root>\run\Authentication.Cli.exe` and
 `--filter "Name=RootHelpCompletesWithoutAuthentication|Name=MalformedAuthenticationReturnsTheBootstrapFailure"`;
-then `--native-profile-cases <root>\run\Authentication.Cli.exe` once. Record only the runner
+then `--native-profile-cases <root>\run\Authentication.Cli.exe` once. The fixture refuses
+to reuse a `%TEMP%\process-<scenario>` directory and latches a `process-safety-stop.json`
+there, so each of the three runs sets `TEMP` and `TMP` to its own new empty directory
+`<root>\tmp\s1-1`, `s1-2` or `s1-3`; a nonempty directory stops S1. Record only the runner
 exit codes and passed, failed and skipped counts. A failure is recorded and stops real
 calls until reviewed; S1 is not repeated on the same subject.
 
@@ -113,13 +134,17 @@ Every call uses `authenticate --protocol 1 --profile <profile> --account-email <
 below, default deadline 120 s unless stated. WSL calls also pass `--cancel-on-stdin-close`,
 with stdin a dedicated pipe whose only writer the launcher holds until completion. Units:
 **I** = interactive-capable, **N** = `non-interactive-only`. External bound = product
-deadline + 10 s, after which the launcher ends only its own product process and records a
-transport failure.
+deadline + 10 s. At the bound the native launcher ends its own product process; the WSL
+launcher closes the lifetime writer so the product's cancellation and deadline end it, and
+does not rely on a Linux signal. After every call, and 10 s after any bound, the launcher
+checks from Windows that no process with image path `<root>\run\Authentication.Cli.exe`
+remains (calls never overlap, so any such process belongs to this attempt). A remaining
+process stops the experiment with state preserved; an overrun is a transport failure.
 
 | Case | Interaction and action | Expected (outcome/route, exit) | Unit | Bound |
 | --- | --- | --- | --- | --- |
 | P7 | Native only, first call per role: `non-interactive-only` | `InteractionRequired/None`, 1 | N | 130 s |
-| P1 | `interactive-if-needed`; owner completes any prompt | `Success`, Silent or Interactive, 0 | I | 130 s |
+| P1 | `interactive-if-needed`; owner completes any account choice, credential or MFA prompt | `Success`, Silent or Interactive, 0 | I | 130 s |
 | P2 | Fresh process after accepted P1: `non-interactive-only` | `Success/Silent`, 0 | N | 130 s |
 | P3 | `force-interactive`; owner chooses the designated account | `Success/Interactive`, 0 | I | 130 s |
 | P4 | `force-interactive`; owner cancels on the WAM surface | `Cancelled/None`, 1 | I | 130 s |
@@ -131,8 +156,9 @@ Personal native (P7, P1, P2, P3, P4, P6), personal WSL (P1, P2, P3, P4,
 P5, P6), then the same for work: 18 I and 6 N, plus the 2 N artifact runs, within the
 Wave's 24 I and 40 N. A P7 result of `Success/Silent` means existing state already permits
 silent use: record P7 as **not reached** for that role. It is not repeated, and no state is
-changed to reach it. After P5 and P6 the owner closes any WAM surface left open. Calls
-never overlap.
+changed to reach it. A consent or permission prompt in any case is cancelled by the owner
+and recorded as an unexpected outcome. After P5 and P6 the owner closes any WAM surface
+left open. Calls never overlap.
 
 **Repeats.** No automatic retry. A case may be repeated once, from the remaining capacity,
 only when its first attempt failed for a recorded operator-side reason (for example,
@@ -156,9 +182,11 @@ Because the product exit code is a validator argument, the validator starts afte
 product exits. The caller holds product stdout only in bounded process memory (at most
 1 MiB) and writes it into the validator's stdin pipe; it is never written to a file,
 terminal or log. The native launcher reads stdout bytes through
-`System.Diagnostics.Process` and clears its buffer afterwards. The WSL launcher captures
-stdout with a sentinel (`out=$(product; printf x)`, then strips the `x`) so trailing bytes
-are preserved, and pipes it through interop to
+`System.Diagnostics.Process`, rejects more than 1 MiB and clears its buffer afterwards.
+The WSL launcher captures stdout, product exit and trailing bytes with
+`out=$(product | head -c 1048577; s=${PIPESTATUS[0]}; printf x; exit "$s"); status=$?`,
+strips the `x`, treats more than 1 MiB as a validation failure, and pipes it through
+interop to
 `dotnet.exe --fx-version 10.0.13 <validator dll>`, as the owner risk decision permits.
 A call passes only with validator exit 0, `Passed` and `ProtocolValid` true, matching
 product exit, and for success also `MetadataValid` and `PersistenceUnconfirmed` true.
@@ -167,7 +195,9 @@ product exit, and for success also `MetadataValid` and `PersistenceUnconfirmed` 
 provider-returned correlation ID differs from the ID it sent, as
 `identity_validation_failed` (`RequestCoordinator.ValidateCandidate`,
 `MsalBoundary.Project`). A validated success is therefore recorded as an **inference**
-that the provider echoed the request correlation ID; the ID itself is not recorded.
+that the MSAL result returned the sent correlation ID and that this fail-closed check
+did not reject a real broker success. The pinned MSAL source builds that value from its
+own request context, so broker-level echo is not established. The ID is not recorded.
 
 **Evidence allowlist.** Only these items are recorded: the validator projection and exit;
 product exit; wall durations; from `--telemetry stderr`, the `event`, `stage`,
