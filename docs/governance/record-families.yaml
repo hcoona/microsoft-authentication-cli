@@ -474,6 +474,21 @@ families:
     failure_mode: Synthetic or partial observations are substituted for real-platform acceptance, or their limitations are lost.
     review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
+  - id: real-host-validation-protocol
+    state: current
+    concern: Accepted protocol, attempt ledger, and sanitized results for the 2026-10-15 real-host validation of the main-v2 Windows product
+    carrier: repository-file
+    path: docs/research/experiments/real-host-validation.md
+    format: markdown
+    producer: Validation maintainer
+    maintainer: Validation maintainer
+    consumers:
+      - Repository owner and operator executing the bounded real-host calls
+      - Validation, design, and security reviewers relying on the recorded observations and their limitations
+    creation_trigger: The Real-Host Validation Delivery Wave entry requires an accepted protocol before any build or real call on the designated host.
+    failure_mode: Real calls run outside the accepted subject, effects, or limits, or their evidence leaks private data or overstates scope.
+    review_point: Independent research-evidence review of every protocol amendment and results change
+
   - id: developer-tooling-evidence
     state: current
     concern: Completed developer-tool installation, client discovery, and public Learn retrieval observations
