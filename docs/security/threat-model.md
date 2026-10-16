@@ -290,17 +290,28 @@ file. The 2026-10-15 security re-review against the implemented Slice at `main-v
   the Slice exports no network telemetry. Selecting network export must re-disposition
   them.
 
-**Evidence provenance.** The cited real-host observations were made on earlier accepted
-builds, not on `563c262`: the visible-parent build from source `af05460` (Native AOT
-SHA-256 `4a393afd…`) and the hidden-parent build identical to `68c5175` (Native AOT
-SHA-256 `b9ecea4f…`). They still apply because `WindowsLifetimePipe.cs` and
-`WindowsProfileSource.cs` are unchanged since `af05460`, and the later source changes
-(result-before-diagnostics ordering, correlation binding, the single provider-failure
-filter, tightened request/Profile validation and the hidden parent) preserve or narrow
-the observed properties and are covered by the named executed Core scenarios. The
-research record already accepts reusing lifetime evidence for the hidden parent. A
-deadline expiring while WAM is pending and hidden-parent lifetime-pipe EOF remain
-real-host items of this Wave.
+**Evidence provenance.** The cited real-host observations ran on earlier accepted builds,
+not on `563c262`. The research records own each observation and its binding:
+
+| Observation | Build |
+| --- | --- |
+| Native personal R1/R6 and work R7/R8 acquisition with fresh-process reuse; WSL success and reuse; initially closed lifetime pipe | Selected candidate before `2d79f3a`; its exact source and executable are at the [pinned research revision](https://github.com/hcoona/microsoft-authentication-cli/blob/242cd292a10ee5626e783f42349e570c2e5a19a1/docs/research/experiments/windows-slice-validation.md), not in current records |
+| Typed WSL timeout; timed lifetime-pipe EOF; caller death without a lifetime pipe | Corrected candidate from source `2d79f3a` (Native AOT `f6a04588…`); caller death ran on the unchanged candidate at `cef5e13`, whose `src` equals `2d79f3a` |
+| EOF during actual WAM; human WAM close | Source `af05460` (Native AOT `4a393afd…`) |
+| Hidden-parent WAM cancellation; locked-state no-UI rejection | Tree identical to `68c5175` (Native AOT `b9ecea4f…`) |
+
+Why they still bear on `563c262`: `WindowsLifetimePipe.cs`, `WindowsStandardHandles.cs`
+and `WindowsProfileSource.cs` are unchanged across every observed build, and
+`RequestLifetime.cs` is unchanged since the `2d79f3a` dispatch fix, after which the
+timeout, EOF, caller-death and WAM-cancellation observations ran. Later changes to
+`RequestCoordinator.cs` and `ResultProjection.cs` (explicit account selection, provider
+failure categories and the single failure filter, correlation binding, the tenant-conflict
+reason) narrow acceptance and are exercised by the named executed Core scenarios. Changes
+to `WindowsProcess.cs` (result written before diagnostics, help text, notice path) rest
+on source review only; their executed evidence awaits this Wave's Windows
+`ProcessScenarios` run. Earlier success transport is therefore supplementary: token
+containment rests on the executed Core scenarios. A deadline expiring while WAM is pending
+and hidden-parent lifetime-pipe EOF remain real-host items of this Wave.
 
 `Mitigated` means the named control is implemented and exercised by that evidence
 within the declared threat model; it is not a support claim, release readiness or proof
