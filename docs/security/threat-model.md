@@ -289,9 +289,9 @@ Windows scenario execution now cites that run. `src` at `69d9a72` is identical t
 `563c262` and to the real-host subject `8d9be27`, so the run and the real calls
 exercise the re-reviewed source. The F1 correction
 ([PR #492](https://github.com/hcoona/microsoft-authentication-cli/pull/492)) later made
-`force-interactive` supply the requested email as login hint; its real calls (#27 to
-#29) and an experiment-only account-bound variant (#32 to #34) completed forced calls
-without WAM UI, so by repository-owner decision (2026-10-16 UTC) the forced call again
+`force-interactive` supply the requested email as login hint; one of its real calls
+(#29, work role) and all calls of an experiment-only account-bound variant (#32 to #34)
+completed forced calls without WAM UI, so by repository-owner decision (2026-10-16 UTC) the forced call again
 supplies neither account nor login hint, and F1 is a
 [known limitation](../designs/windows-ado-authentication.md#validation-and-explicit-unsupported-cases).
 The reverted builder scenarios await Windows execution; see ID 29 in the native file.
