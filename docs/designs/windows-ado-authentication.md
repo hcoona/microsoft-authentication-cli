@@ -592,7 +592,7 @@ state (runtime observations; each covers only the role and caller combinations l
 The hinted and account-bound implementations completed forced calls without presenting
 WAM UI, which forced interaction does not accept. With the hint, the personal role's
 forced calls also defaulted to a security-key credential method that the operator had
-to cancel (F3 candidate, #27 and #28). By repository-owner decision (2026-10-17, quoted
+to cancel (F3 candidate, #27 and #28). By repository-owner decision (2026-10-16 UTC, quoted
 verbatim in the pull request that made this change), forced interaction reverts to the
 original implementation, supplying neither hint nor account, and F1 is recorded as a
 [known limitation](#validation-and-explicit-unsupported-cases). That the hint or the
@@ -1150,8 +1150,7 @@ See [request lifetime](#uml-ui-ownership-and-cancellation-sequence) and the
 Known limitation (finding F1): for `force-interactive` with the
 `visual-studio-legacy-wam` Profile (`organizations` authority with MSA passthrough), a
 personal Microsoft account can reach a second provider page that does not offer it for
-direct selection (by the repository owner's categorical description, the page lists
-only work accounts), so the user enters the requested account manually. This was observed
+direct selection, so the user enters the requested account manually. This was observed
 for the personal role from native and WSL callers on the designated host (calls #8 and
 #13); the work role did not reach it. Forced interaction supplies neither account nor
 login hint because both alternatives completed forced calls without WAM UI (see
@@ -1159,9 +1158,11 @@ login hint because both alternatives completed forced calls without WAM UI (see
 identity is still bound by strict validation: any returned account other than the
 requested email fails with `identity_validation_failed`. The F3 candidate (a
 provider-defaulted security-key credential method) was observed only with the login
-hint (#27, #28) and is expected not to occur after this revert; that expectation is an
-**inference** from the owner's later recollection of the earlier no-hint calls, not an
-observation recorded at the time, and no real call has exercised the reverted source.
+hint (#27, #28) and is expected not to occur for the personal role after this revert;
+that expectation is an **inference** from the owner's later recollection of the earlier
+personal-role no-hint calls, not an observation recorded at the time. For the work role
+the credential method was never observed, and no real call has exercised the reverted
+source.
 
 Profile activation, platform support and release each retain their own authorization
 and evidence gates; the [validation strategy](../validation/strategy.md#release-gates)

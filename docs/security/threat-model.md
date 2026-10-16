@@ -291,7 +291,7 @@ exercise the re-reviewed source. The F1 correction
 ([PR #492](https://github.com/hcoona/microsoft-authentication-cli/pull/492)) later made
 `force-interactive` supply the requested email as login hint; its real calls (#27 to
 #29) and an experiment-only account-bound variant (#32 to #34) completed forced calls
-without WAM UI, so by repository-owner decision (2026-10-17) the forced call again
+without WAM UI, so by repository-owner decision (2026-10-16 UTC) the forced call again
 supplies neither account nor login hint, and F1 is a
 [known limitation](../designs/windows-ado-authentication.md#validation-and-explicit-unsupported-cases).
 The reverted builder scenarios await Windows execution; see ID 29 in the native file.
