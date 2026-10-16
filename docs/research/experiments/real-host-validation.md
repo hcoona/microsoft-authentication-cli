@@ -329,21 +329,26 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   its full hash is recorded before the variant's B1.
 - **Resumed confirmation.** On the third subject, without repeating B1 to S1: #28
   personal WSL P3, then #29 work native P3, each under F1 Confirmation with Q1 to Q5.
-  Before #28 the executor copies the third subject's recorded values unchanged from the
-  local ledger into Results (`<root>`, byte size and SHA-256 of every file in
-  `<root>\run`, and the Profile and validator SHA-256) and checks each against the
-  files; a missing value, a missing `<root>` or any mismatch stops real calls, and
+  Before #28 the executor checks the third subject's recorded values in the local ledger
+  (`<root>`, byte size and SHA-256 of every file in `<root>\run`, and the Profile and
+  validator SHA-256) against the files and records the check in the ledger; a missing value, a missing `<root>` or any mismatch stops real calls, and
   rebuilding then requires a new reviewed amendment. The third `<root>` is deleted under
-  Retention and Cleanup only after #29 is recorded.
+  Retention and Cleanup only after #29 is recorded. The values are copied unchanged into
+  Results in the pull request that records #28 and #29; that append does not change the
+  protocol revision #28 and #29 bound.
 - **Variant subject (experiment only).** A commit on the dedicated branch
   `experiment/forced-bound-account` whose parent is the third subject and whose only
   change is: when `force-interactive` finds exactly one discovered account matching the
   requested email, the adapter passes that account and `BuildInteractiveRequest` calls
-  `WithAccount` and no `WithLoginHint`; a forced call with no matching account fails
-  before interaction and is recorded as not reached; more than one matching account
-  returns `AccountAmbiguous` before interaction through the unchanged coordinator
-  (`RequestCoordinator.AcquireAsync`) and is likewise recorded as not reached, charged
-  1 I and not repeated; the forced `MsalCompositionScenarios` are updated to match. It
+  `WithAccount` and no `WithLoginHint`; with no matching account the adapter fails
+  before calling WAM (after the coordinator has opened its hidden owned parent and
+  printed the notice line), expected `InternalFailure/None`, exit 1, `error.type`
+  `invalid_operation`; more than one matching account returns `AccountAmbiguous` before
+  interaction through the unchanged coordinator (`RequestCoordinator.AcquireAsync`).
+  Either is recorded as not reached, charged 1 I, not repeated and outside Repeats, but
+  only when that exact outcome is observed and Q1 is no; otherwise it is a variant
+  defect and stops variant calls. The variant review checks that the implementation
+  yields these outcomes; the forced `MsalCompositionScenarios` are updated to match. It
   never merges into `main-v2` and is not a product correction. Source finding (pinned
   RuntimeBroker, cited in the Windows design): a bound account enters
   `AcquireTokenInteractivelyAsync` for that account instead of `SignInInteractivelyAsync`.
