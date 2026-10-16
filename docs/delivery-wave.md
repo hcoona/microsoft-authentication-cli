@@ -11,11 +11,18 @@ owner-authorized Wave amendment does not perform the work it proposes to add.
 
 **Outcome:** For the current `main-v2` product, (1) obtain bounded real-host evidence on
 the designated machine for the items listed below, recorded in a new accepted research
-record and mapped in the validation strategy; and (2) re-review the native threat-model
+record and mapped in the validation strategy; (2) re-review the native threat-model
 candidate dispositions in `docs/security/threat-model.md` and
 `docs/security/authentication-engine.tm7` against the implemented Slice. Release gates
 stay tracked in [Issue #482](https://github.com/hcoona/microsoft-authentication-cli/issues/482);
-this entry claims no release readiness or support.
+this entry claims no release readiness or support. Additionally, (3) on the same host, observe one experiment-only variant subject - forced interaction
+that binds the discovered account and supplies no login hint, built from a dedicated
+experiment branch never merged into main-v2 - for the personal and work roles, to
+answer: does this variant reach a visible interactive surface without the second
+provider page (F1) and without a provider-defaulted credential method the operator must
+cancel (F3 candidate)? Variant evidence is recorded and labeled separately, is not mapped
+as main-v2 validation, and does not by itself authorize a product behavior change; any
+such change requires a separate owner decision.
 
 Real-host evidence items:
 
@@ -59,10 +66,8 @@ correct product defects and design records that the evidence exposes, with their
 inside this entry; re-review and re-disposition TMT candidates. A corrected build is a
 new subject: rebind it through a reviewed protocol amendment before further real calls,
 sharing the same limits.
-The owner also authorizes one experiment-only product variant subject: forced
-interaction that binds the discovered account and supplies no login hint, built from a
-dedicated experiment branch that is never merged into main-v2, executed only under a
-reviewed protocol amendment and sharing the same limits.
+Build and run the experiment-only variant subject of outcome (3) under that protocol
+amendment, sharing the same limits.
 
 **Exclusions:** No account addition or removal, sign-out, consent revocation, cache
 clearing or import, administrator consent, registration change, authenticated service
@@ -74,5 +79,5 @@ private data in committed records, logs or chat.
 **External effects:** Token acquisition against Microsoft Entra for the two existing
 accounts with ordinary session/cache updates; public package restore; ordinary CI.
 
-**Completion:** Remove this entry through a reviewed Wave change once both outcomes merge,
+**Completion:** Remove this entry through a reviewed Wave change once all outcomes merge,
 the call limits are exhausted, or the owner ends it.
