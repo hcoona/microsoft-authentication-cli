@@ -295,7 +295,7 @@ not on `563c262`. The research records own each observation and its binding:
 
 | Observation | Build |
 | --- | --- |
-| Native personal R1/R6 and work R7/R8 acquisition with fresh-process reuse; WSL success and reuse; initially closed lifetime pipe | Selected candidate before `2d79f3a`; its exact source and executable are at the [pinned research revision](https://github.com/hcoona/microsoft-authentication-cli/blob/242cd292a10ee5626e783f42349e570c2e5a19a1/docs/research/experiments/windows-slice-validation.md), not in current records |
+| Native personal R1/R6 and work R7/R8 acquisition with fresh-process reuse; WSL success and reuse; initially closed lifetime pipe | Selected candidate built before `2d79f3a` (runs on or before 2026-10-09, recorded in the [PR #420](https://github.com/hcoona/microsoft-authentication-cli/pull/420) and [PR #421](https://github.com/hcoona/microsoft-authentication-cli/pull/421) completion comments); no committed record names its exact source or executable, so these observations are supplementary only |
 | Typed WSL timeout; timed lifetime-pipe EOF; caller death without a lifetime pipe | Corrected candidate from source `2d79f3a` (Native AOT `f6a04588…`); caller death ran on the unchanged candidate at `cef5e13`, whose `src` equals `2d79f3a` |
 | EOF during actual WAM; human WAM close | Source `af05460` (Native AOT `4a393afd…`) |
 | Hidden-parent WAM cancellation; locked-state no-UI rejection | Tree identical to `68c5175` (Native AOT `b9ecea4f…`) |
