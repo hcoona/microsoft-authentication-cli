@@ -9,12 +9,12 @@ acceptance; it adds no product, support or release claim. The Wave entry owns
 the owner risk decision, call limits and exclusions; this record only narrows them.
 Results are appended under [Results](#results) through reviewed pull requests.
 
-**Amendment (2026-10-16).** Per the repository owner's clarification of the experiment
-policy's telemetry rule (it covers the upstream AzureAuth product and the documented
-controls of tools this procedure runs, not host-wide product programs such as the Visual
-Studio Experience Improvement Program), the former toolchain telemetry preflight and its
-stop condition are removed, the `vctip.exe` termination rationale is restated as process
-hygiene, and Results state host-wide telemetry as uncontrolled. No execution had occurred.
+**Amendment (2026-10-16).** Per the
+[repository-owner disposition](https://github.com/hcoona/microsoft-authentication-cli/pull/486#issuecomment-6206595584),
+the experiment policy's telemetry rule governs only the upstream AzureAuth v1 binary,
+which this procedure does not run. The former toolchain telemetry preflight and its stop
+condition are removed, and the `vctip.exe` termination rationale is restated as process
+hygiene. No execution had occurred.
 
 ## Subject and Inputs
 
@@ -44,7 +44,8 @@ hygiene, and Results state host-wide telemetry as uncontrolled. No execution had
 
 ## Build and Synthetic Steps
 
-All steps run sequentially in a Windows PowerShell 7 process of the designated user with
+All steps run sequentially in a Windows PowerShell 7 process of the designated user. Its
+ordinary command environment sets
 `DOTNET_CLI_TELEMETRY_OPTOUT=1`, `DOTNET_NOLOGO=1`, `TESTINGPLATFORM_TELEMETRY_OPTOUT=1`,
 `POWERSHELL_TELEMETRY_OPTOUT=1`, `DOTNET_CLI_USE_MSBUILD_SERVER=0` and
 `MSBUILDDISABLENODEREUSE=1`. `NUGET_PACKAGES` and `NUGET_HTTP_CACHE_PATH` point to new empty
@@ -238,14 +239,6 @@ artifact checks in a new `<root>`, and continues the same ledger and limits.
 Earlier evidence stays attributed to its own commit and artifact hashes.
 
 ## Results
-
-**Telemetry controls.** The recorded results state the applied controls as the
-per-invocation opt-outs listed under [Build and Synthetic Steps](#build-and-synthetic-steps).
-They state as a limitation that host-wide programs are neither read nor changed,
-including the Visual Studio Experience Improvement Program and any VC++ Technology
-Improvement Program upload by the MSVC toolchain
-([public context](windows-native-aot.md#historical-stops-and-preserved-unknowns)), so
-that telemetry is uncontrolled in this experiment.
 
 No execution has occurred. Record the bound commit, OS build, WSL version and
 sanitized initial state before B1; then B1 to S1 outcomes, hashes, imports and the ledger:
