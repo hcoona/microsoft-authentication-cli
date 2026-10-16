@@ -54,18 +54,19 @@ under `HKLM\SOFTWARE\Wow6432Node\Microsoft\VSCommon\17.0\SQM` or the Group Polic
 no precedence and excludes required diagnostic data. Inference: whether it governs the
 MSVC `vctip.exe` helper seen in earlier Native AOT publishes is unproven. Before B1, read
 both keys without changing them (never an undocumented `18.0` key). Continue only if the
-policy value is DWORD `0`, or it is absent and the `17.0` value is DWORD `0`; otherwise
-stop before B1 and escalate to the owner. Record only "documented opt-out present:
-yes/no". Even when present, the opt-out does not prove that the toolchain sends nothing;
-any residual toolchain upload is a stated limitation that requires the owner's
-acceptance or a Wave amendment before B1.
+policy value is DWORD `0`, or it is absent and the `17.0` value is DWORD `0`. Record
+only "documented opt-out present: yes/no". When present, the documented control is
+applied; any remaining upload and the unproven `vctip.exe` link are recorded as a stated
+limitation. Otherwise stop before B1; only a merged Wave amendment with an owner risk
+decision naming toolchain telemetry resolves that stop, never a comment, Issue or pull
+request. This protocol neither sets the opt-out nor assumes the owner will.
 
 **Step termination.** Each step runs as one foreground process tree. On overrun, stop
 that tree, record the step as failed and stop the experiment. After B3 and S1, list
 processes whose image path is under `<root>` or the pinned MSVC directory; a remaining
 `vctip.exe` from that directory is terminated and recorded (this limits its run time, not
-what it may already have sent); any other survivor stops the experiment. No outer Job object is used; the scenario fixture's
-comment assumes one, so its absence is recorded as a limitation of S1.
+what it may already have sent); any other survivor stops the experiment. No outer Job
+object is used although the scenario fixture's comment assumes one; S1 records that.
 
 | Step | Command (from `<root>\src`) | Bound |
 | --- | --- | --- |
@@ -126,9 +127,9 @@ calls until reviewed; S1 is not repeated on the same subject.
   optional work tenant GUID exist only in `%LOCALAPPDATA%\azureauth-real-host\roles.json`.
 - **Launchers.** Two small local launchers in that directory (PowerShell 7 for native,
   bash for WSL) read `roles.json`, pass the values and the Windows-form Profile path as
-  product and validator arguments, and print only the evidence allowlist. They are not committed, never echo arguments,
-  and run with tracing disabled. Emails, tenants, tokens, raw stderr and provider text
-  never enter logs, records, agent traces or chat.
+  product and validator arguments, and print only the evidence allowlist. They are not
+  committed, never echo arguments, and run with tracing disabled. Emails, tenants,
+  tokens, raw stderr and provider text never enter logs, records, agent traces or chat.
 - **Effects.** Token acquisition for the two existing accounts; WAM sessions and caches
   receive ordinary updates and are retained. No account addition or removal, sign-out,
   consent change, cache clearing or resource request.
@@ -158,8 +159,8 @@ process stops the experiment with state preserved; an overrun is a transport fai
 | P6 | `force-interactive --timeout-seconds 30`; owner confirms WAM and does not act | `Timeout/None`, 1 | I | 40 s |
 
 **Order and plan.** P7 comes first because a P1 success would make it unreachable.
-Personal native (P7, P1, P2, P3, P4, P6), personal WSL (P1, P2, P3, P4, P5, P6), then the same for work: 18 I and 6 N, plus the 2 N artifact runs, within the
-Wave's 24 I and 40 N. A P7 result of `Success/Silent` means existing state already permits
+Personal native (P7, P1, P2, P3, P4, P6), personal WSL (P1, P2, P3, P4, P5, P6), then
+work likewise: 18 I and 6 N, plus 2 N artifact runs, within the Wave's 24 I and 40 N. A P7 result of `Success/Silent` means existing state already permits
 silent use: record P7 as **not reached** for that role. It is not repeated, and no state is
 changed to reach it. A consent or permission prompt in any case is cancelled by the owner
 and recorded as an unexpected outcome. After P5 and P6 the owner closes any WAM surface
