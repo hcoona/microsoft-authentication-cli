@@ -307,10 +307,13 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   consent or permission prompt or any unexpected window appear? Q5 (every role), did
   the provider default to a credential method the operator did not want, so that the
   operator had to cancel that step and choose another? A Q4 yes follows the consent rule
-  under Order and plan.
+  under Order and plan. A Q3 or Q5 yes is recorded as evidence only: it does not make a
+  call unaccepted, is not an unexpected outcome, does not stop calls and is not a reason
+  to repeat.
 - **Yes/no only.** The executor asks only these yes/no questions and records only yes or
-  no, except one fixed category: after a Q5 yes, the operator may name the defaulted and
-  the chosen credential method, each recorded as exactly one of `security key`,
+  no, except one fixed category: after a Q5 yes, the executor offers the closed options
+  below, separately for the defaulted and the chosen credential method, and the operator
+  picks one of each without describing them; each is recorded as exactly one of `security key`,
   `Windows Hello`, `password`, `authenticator` or `other`. Any other description is
   provider text. The stop condition for raw provider text applies without exception: if
   the owner or a relay describes or quotes provider UI text, the executor records none of it in
@@ -319,6 +322,11 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
 
 ## F3 Investigation
 
+- **Protocol revision.** #28 and #29 bind the merge commit of this F3 amendment on
+  `main-v2`, or a later `main-v2` commit whose copy of this file is unchanged; the
+  executor records its full hash in the ledger before #28 and in Results. Variant calls
+  bind, in the same way, the merge commit of the amendment that records the variant hash;
+  its full hash is recorded before the variant's B1.
 - **Resumed confirmation.** On the third subject, without repeating B1 to S1: #28
   personal WSL P3, then #29 work native P3, each under F1 Confirmation with Q1 to Q5.
   Before #28 the executor copies the third subject's recorded values unchanged from the
@@ -332,7 +340,10 @@ Earlier evidence stays attributed to its own commit and artifact hashes.
   change is: when `force-interactive` finds exactly one discovered account matching the
   requested email, the adapter passes that account and `BuildInteractiveRequest` calls
   `WithAccount` and no `WithLoginHint`; a forced call with no matching account fails
-  before interaction and is recorded as not reached; the forced `MsalCompositionScenarios` are updated to match. It
+  before interaction and is recorded as not reached; more than one matching account
+  returns `AccountAmbiguous` before interaction through the unchanged coordinator
+  (`RequestCoordinator.AcquireAsync`) and is likewise recorded as not reached, charged
+  1 I and not repeated; the forced `MsalCompositionScenarios` are updated to match. It
   never merges into `main-v2` and is not a product correction. Source finding (pinned
   RuntimeBroker, cited in the Windows design): a bound account enters
   `AcquireTokenInteractivelyAsync` for that account instead of `SignInInteractivelyAsync`.
