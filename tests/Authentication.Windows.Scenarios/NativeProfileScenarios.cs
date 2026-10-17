@@ -37,9 +37,9 @@ internal static class NativeProfileScenarios
                 await child.FinishAsync();
                 Assert.IsFalse(child.Forced, "Fixture enforcement cannot establish product completion.");
                 Assert.AreEqual(1u, child.ExitCode);
-                // Without telemetry, stderr may carry only a prefix of the fixed completion
-                // indication: its best-effort writer can end with the process.
-                Assert.IsTrue("Authentication request completed.\n"u8.StartsWith(child.Error),
+                // Without telemetry, the drained process still waits for its fixed
+                // completion indication within the shutdown bound.
+                Assert.IsTrue("Authentication request completed.\n"u8.SequenceEqual(child.Error),
                     "Native Profile negatives emit at most the fixed completion indication.");
                 var bytes = child.Output;
                 Assert.IsTrue(bytes.Length > 1 && bytes[^1] == (byte)'\n');

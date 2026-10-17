@@ -67,6 +67,39 @@ public sealed class MsalConstructionScenarios
             "ms-appx-web://microsoft.aad.brokerplugin/" + ClientId,
             ListOperatingSystemAccounts: true, MsaPassthrough: legacy);
 
+    [TestMethod]
+    public void UnavailableBrokerStopsSessionCreationWithItsFixedCategory()
+    {
+        // Only the availability answer is substituted; the real application is built
+        // from the admitted settings and handed to the probe before the decision.
+        using var http = new ConstructionHttp();
+        var trace = new WindowsMechanismTrace();
+        PublicClientApplication? probed = null;
+        var factory = new MsalSessionFactory(trace, application => { probed = application; return false; });
+
+        var failure = Assert.ThrowsExactly<Authentication.Core.ProviderFailureException>(() =>
+            factory.Create(Settings("common", false), http, CancellationToken.None));
+
+        Assert.AreEqual(Authentication.Core.AuthenticationFailure.MechanismUnavailable, failure.Failure);
+        Assert.AreEqual(WindowsMechanismFailure.BrokerUnavailable, trace.Failure);
+        Assert.IsNotNull(probed);
+        Assert.IsTrue(probed.AppConfig.IsBrokerEnabled);
+        Assert.AreEqual(0, http.Transport.Sends, "An unavailable broker must not lead to any HTTP request.");
+    }
+
+    [TestMethod]
+    public void CancellationDuringTheAvailabilityProbeWinsOverItsAnswer()
+    {
+        using var http = new ConstructionHttp();
+        using var original = new CancellationTokenSource();
+        var trace = new WindowsMechanismTrace();
+        var factory = new MsalSessionFactory(trace, _ => { original.Cancel(); return false; });
+
+        Assert.ThrowsExactly<OperationCanceledException>(() =>
+            factory.Create(Settings("common", false), http, original.Token));
+        Assert.AreEqual(WindowsMechanismFailure.Unavailable, trace.Failure);
+    }
+
     private sealed class ConstructionHttp : IMsalHttpClientFactory, IDisposable
     {
         private readonly MsalHttpClientFactory owner;

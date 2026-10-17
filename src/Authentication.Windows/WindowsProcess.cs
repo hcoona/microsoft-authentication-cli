@@ -6,6 +6,9 @@ namespace Authentication.Windows;
 // prefixes, callbacks, native I/O and cleanup never execute on that thread.
 public static class WindowsProcess
 {
+    // The unofficial display name shared by help and the hidden owned parent.
+    internal const string DisplayName = "AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)";
+
     public static int Run(string[] arguments, long entryTimestamp)
     {
         var trace = new WindowsMechanismTrace();
@@ -15,7 +18,7 @@ public static class WindowsProcess
             () => new MsalHttpClientFactory(new HttpClientHandler()), trace: trace);
     }
 
-    public static int Run(string[] arguments, long entryTimestamp, IRequestHost host,
+    internal static int Run(string[] arguments, long entryTimestamp, IRequestHost host,
         Func<ClientProfile, IAuthenticationProvider> createProvider, IProfileSource? profiles = null) =>
         RunCore(arguments, entryTimestamp, _ => host, (profile, _) => createProvider(profile), profiles, null);
 
@@ -70,8 +73,11 @@ public static class WindowsProcess
                 var completion = process.Completion;
                 if (process.ExceededBound(completion?.Timestamp ?? TimeProvider.System.GetTimestamp()))
                 {
-                    WindowsStandardHandles.Terminate();
-                    return 2;
+                    // Once request work has drained, only optional diagnostics can still
+                    // be pending; they cannot replace the published typed exit status.
+                    var drained = process.Drained;
+                    WindowsStandardHandles.Terminate(drained?.ExitCode ?? 2);
+                    return drained?.ExitCode ?? 2;
                 }
                 if (completion is not null) return completion.ExitCode;
                 Thread.Sleep(5);
@@ -136,8 +142,8 @@ public static class WindowsProcess
             // including the token-shape observation, can consume the shutdown bound.
             exitCode = WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json)
                 ? result.ExitCode : 2;
-            WindowsDiagnostics.Completed(result, invocation.Request?.TelemetryStderr == true,
-                entryTimestamp, trace, observation);
+            process.TrackDiagnostic(WindowsDiagnostics.Completed(result, invocation.Request?.TelemetryStderr == true,
+                entryTimestamp, trace, observation));
         }
         catch (Exception)
         {
@@ -174,12 +180,21 @@ public static class WindowsProcess
                 process.Ending();
             }
             observation?.Dispose();
-            if (drained) process.Finish(exitCode);
+            if (drained)
+            {
+                // Publish the drained status before any diagnostic wait. If the bound
+                // expires while only diagnostics are pending, the watchdog exits with
+                // this status, so a blocked writer cannot change it.
+                process.PublishDrained(exitCode);
+                checkpoint?.Invoke(OwnedProcessCheckpoint.BeforeDiagnosticDrain);
+                process.WaitForDiagnostics(observation);
+                process.Finish(exitCode);
+            }
         }
     }
 
-    private static byte[] Help => """
-        AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)
+    private static byte[] Help => System.Text.Encoding.UTF8.GetBytes($"""
+        {DisplayName}
         Unofficial project: not a Microsoft product and not supported by Microsoft.
 
         Usage:
@@ -193,7 +208,8 @@ public static class WindowsProcess
         --profile selects an explicit, existing Client Profile file.
         --cancel-on-stdin-close requires a dedicated caller-owned lifetime pipe.
         Authentication writes one protocol 1 JSON result to stdout.
-        """u8.ToArray().Concat(new byte[] { (byte)'\n' }).ToArray();
+
+        """);
 
     private sealed record ProcessCompletion(int ExitCode, long Timestamp);
 
@@ -211,12 +227,34 @@ public static class WindowsProcess
 
         internal CancellationToken CancellationToken => callerCancellation.Token;
         internal ProcessCompletion? Completion => Volatile.Read(ref completion);
+        private ProcessCompletion? drained;
+        internal ProcessCompletion? Drained => Volatile.Read(ref drained);
+        internal void PublishDrained(int exitCode) => Volatile.Write(ref drained,
+            new ProcessCompletion(exitCode, TimeProvider.System.GetTimestamp()));
         internal Task CancellationCompletion => Volatile.Read(ref cancellationTimestamp) == long.MinValue
             ? Task.CompletedTask : cancelled.Task;
 
         private LocalActivityTelemetry? observation;
+        private readonly List<Task> diagnostics = [];
 
         internal void PublishObservation(LocalActivityTelemetry? value) => Volatile.Write(ref observation, value);
+
+        internal void TrackDiagnostic(Task write)
+        {
+            lock (diagnostics) diagnostics.Add(write);
+        }
+
+        internal void WaitForDiagnostics(LocalActivityTelemetry? local)
+        {
+            try
+            {
+                Task[] pending;
+                lock (diagnostics) pending = [.. diagnostics];
+                if (local is not null) pending = [.. pending, local.Completion];
+                _ = Task.WaitAll(pending, RemainingShutdown());
+            }
+            catch (Exception) { }
+        }
 
         // Never blocks the owned UI thread: telemetry enqueues, otherwise a
         // background thread performs the one bounded stderr write.
@@ -227,11 +265,7 @@ public static class WindowsProcess
                 _ = local.TryWriteNotice(bytes);
                 return;
             }
-            new Thread(() =>
-            {
-                try { _ = WindowsStandardHandles.Write(WindowsStandardHandles.Error, bytes); }
-                catch (Exception) { }
-            }) { IsBackground = true }.Start();
+            TrackDiagnostic(WindowsDiagnostics.WriteError(bytes));
         }
 
         internal void Publish(RequestInvocation request, OwnedRequestHost? host)
@@ -308,18 +342,33 @@ public static class WindowsProcess
 
         internal bool ExceededBound(long timestamp)
         {
-            var clock = TimeProvider.System;
-            if (clock.GetElapsedTime(entryTimestamp, timestamp)
-                > TimeSpan.FromSeconds(Volatile.Read(ref timeoutSeconds) + 1)) return true;
+            return RemainingBound(timestamp) < TimeSpan.Zero;
+        }
 
+        // Time left before the earliest armed process bound, less a fixed margin
+        // that keeps Finish observably inside it for the watchdog's next poll.
+        internal TimeSpan RemainingShutdown()
+        {
+            var remaining = RemainingBound(TimeProvider.System.GetTimestamp()) - TimeSpan.FromMilliseconds(50);
+            return remaining > TimeSpan.Zero ? remaining : TimeSpan.Zero;
+        }
+
+        private TimeSpan RemainingBound(long timestamp)
+        {
+            var clock = TimeProvider.System;
+            var remaining = TimeSpan.FromSeconds(Volatile.Read(ref timeoutSeconds) + 1)
+                - clock.GetElapsedTime(entryTimestamp, timestamp);
             var terminal = Volatile.Read(ref invocation)?.TerminalTimestamp;
             var cancellation = Volatile.Read(ref cancellationTimestamp);
             var ending = Volatile.Read(ref endingTimestamp);
             var hostEnding = Volatile.Read(ref ownedHost)?.EndingTimestamp;
-            return terminal is { } selected && clock.GetElapsedTime(selected, timestamp) > TimeSpan.FromSeconds(1)
-                || cancellation != long.MinValue && clock.GetElapsedTime(cancellation, timestamp) > TimeSpan.FromSeconds(1)
-                || ending != long.MinValue && clock.GetElapsedTime(ending, timestamp) > TimeSpan.FromSeconds(1)
-                || hostEnding is { } closing && clock.GetElapsedTime(closing, timestamp) > TimeSpan.FromSeconds(1);
+            foreach (var start in new[] { terminal ?? long.MinValue, cancellation, ending, hostEnding ?? long.MinValue })
+            {
+                if (start == long.MinValue) continue;
+                var left = TimeSpan.FromSeconds(1) - clock.GetElapsedTime(start, timestamp);
+                if (left < remaining) remaining = left;
+            }
+            return remaining;
         }
 
         internal void Finish(int exitCode) => Volatile.Write(ref completion,
@@ -332,4 +381,5 @@ internal enum OwnedProcessCheckpoint
     BeforeCommit,
     AfterCommit,
     BeforeHttpDisposal,
+    BeforeDiagnosticDrain,
 }

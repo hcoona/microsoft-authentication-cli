@@ -73,7 +73,9 @@ internal static class WindowsDiagnostics
         catch (Exception) { return null; }
     }
 
-    internal static void Completed(SerializedResult result, bool telemetry, long entryTimestamp,
+    // Returns the pending raw stderr write, if any. The process host waits for it,
+    // and for local telemetry, only within its remaining shutdown bound.
+    internal static Task Completed(SerializedResult result, bool telemetry, long entryTimestamp,
         WindowsMechanismTrace? trace = null, LocalActivityTelemetry? observation = null)
     {
         try
@@ -121,22 +123,37 @@ internal static class WindowsDiagnostics
                 buffer.WriteByte((byte)'\n');
             }
 
-            if (buffer.Length > 8192) return;
+            if (buffer.Length > 8192) return Task.CompletedTask;
             var bytes = buffer.ToArray();
             if (observation is not null)
             {
                 _ = observation.TryWriteFinal(bytes);
-                return;
+                return Task.CompletedTask;
             }
-            new Thread(() =>
-            {
-                try { _ = WindowsStandardHandles.Write(WindowsStandardHandles.Error, bytes); }
-                catch (Exception) { }
-            }) { IsBackground = true }.Start();
+            return WriteError(bytes);
         }
         catch (Exception)
         {
             // Optional diagnostics cannot alter authentication or process status.
+            return Task.CompletedTask;
         }
+    }
+
+    // One background stderr write. A blocked sink never holds an authentication or
+    // UI thread; the returned task completes when the write ends.
+    internal static Task WriteError(byte[] bytes)
+    {
+        var written = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        try
+        {
+            new Thread(() =>
+            {
+                try { _ = WindowsStandardHandles.Write(WindowsStandardHandles.Error, bytes); }
+                catch (Exception) { }
+                finally { written.TrySetResult(); }
+            }) { IsBackground = true }.Start();
+        }
+        catch (Exception) { written.TrySetResult(); }
+        return written.Task;
     }
 }

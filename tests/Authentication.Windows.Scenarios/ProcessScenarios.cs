@@ -130,6 +130,25 @@ public sealed class ProcessScenarios
     }
 
     [TestMethod]
+    [DataRow("diagnostic-stall", 0u)]
+    [DataRow("diagnostic-stall-denied", 1u)]
+    public async Task PendingDiagnosticsCannotReplaceTheDrainedTypedExit(string scenario, uint expected)
+    {
+        // The diagnostic drain never completes, so the process bound always ends the
+        // process; this asserts only which exit status it reports, not when.
+        using var child = new ProcessFixture(scenario);
+        await child.FinishAsync();
+        Assert.IsTrue(child.Marked("diagnostic-stall"), "The never-completing diagnostic drain was not reached.");
+        AssertNormalExit(child, expected);
+        if (expected == 0) AssertSuccessBytes(child);
+        else
+        {
+            using var json = ParseOne(child.Output);
+            Assert.AreEqual("denied", json.RootElement.GetProperty("outcome").GetString());
+        }
+    }
+
+    [TestMethod]
     [TestCategory(WindowsHostTiming.Category)]
     public async Task UndrainedResultPipeCannotKeepTheProcessAlive()
     {
@@ -168,8 +187,9 @@ public sealed class ProcessScenarios
     private static void AssertExitInterval(ProcessFixture child, long start, int seconds)
     {
         // Same-host Windows QPC underlies TimeProvider.System in both processes.
-        // The fixed 100 ms observation tolerance includes 10 ms polling and
-        // scheduling uncertainty; it does not enlarge the product's allowance.
+        // The exit observation is taken when the process handle is signaled; the
+        // fixed 100 ms tolerance covers only scheduling of that waiting thread and
+        // does not enlarge the product's allowance.
         Assert.IsTrue(start > 0 && child.ExitObservedTimestamp >= start);
         var interval = TimeProvider.System.GetElapsedTime(start, child.ExitObservedTimestamp);
         Assert.IsTrue(interval <= TimeSpan.FromSeconds(seconds) + TimeSpan.FromMilliseconds(100),

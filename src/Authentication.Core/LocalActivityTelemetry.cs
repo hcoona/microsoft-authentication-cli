@@ -8,15 +8,18 @@ namespace Authentication.Core;
 // Producers enqueue bounded, allowlisted bytes; only the background writer does I/O.
 public sealed class LocalActivityTelemetry : IDisposable
 {
-    private const int Limit = 8192, FinalReserve = 1024;
+    // Limit is the total for one invocation. The final line keeps FinalReserve and
+    // the owned request span's stop event keeps RequestStopReserve, so phase events
+    // and the notice cannot exhaust either, in whichever order the two arrive.
+    private const int Limit = 8192, FinalReserve = 1024, RequestStopReserve = 512;
     private readonly object gate = new();
     private readonly ConcurrentQueue<byte[]> pending = new();
     private readonly AutoResetEvent wake = new(false);
     private readonly TaskCompletionSource finished = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private readonly ActivityListener listener;
     private readonly long entryTimestamp;
-    private int reserved;
-    private bool finalWritten, closed;
+    private int ordinary, requestStop, final;
+    private bool closed;
 
     // This means local writer completion only, never application/process closure.
     public Task Completion => finished.Task;
@@ -79,7 +82,8 @@ public sealed class LocalActivityTelemetry : IDisposable
                 writer.Flush();
             }
             buffer.WriteByte((byte)'\n');
-            _ = Enqueue(buffer.ToArray(), terminal: false);
+            _ = Enqueue(buffer.ToArray(), !started && activity.OperationName == "request"
+                ? Allocation.RequestStop : Allocation.Ordinary);
         }
         catch (Exception) { }
     }
@@ -89,23 +93,32 @@ public sealed class LocalActivityTelemetry : IDisposable
 
     // Only the host's fixed indication/allowlisted completion projection belongs here.
     // Leave room for it even when phase observations exhaust their allocation.
-    public bool TryWriteFinal(byte[] bytes) => Enqueue(bytes, terminal: true);
+    public bool TryWriteFinal(byte[] bytes) => Enqueue(bytes, Allocation.Final);
 
     // The host's one bounded pre-interaction notice shares the ordinary allocation.
-    public bool TryWriteNotice(byte[] bytes) => Enqueue(bytes, terminal: false);
+    public bool TryWriteNotice(byte[] bytes) => Enqueue(bytes, Allocation.Ordinary);
 
-    private bool Enqueue(byte[] bytes, bool terminal)
+    private enum Allocation { Ordinary, RequestStop, Final }
+
+    private bool Enqueue(byte[] bytes, Allocation allocation)
     {
         try
         {
             lock (gate)
             {
-                var ceiling = terminal ? Limit : Limit - FinalReserve;
-                if (closed || bytes.Length == 0 || bytes.Length > ceiling - reserved
-                    || terminal && finalWritten) return false;
+                if (closed || bytes.Length == 0) return false;
+                var admitted = ordinary + requestStop + final + bytes.Length <= Limit && allocation switch
+                {
+                    Allocation.Ordinary => ordinary + bytes.Length <= Limit - FinalReserve - RequestStopReserve,
+                    Allocation.RequestStop => requestStop == 0
+                        && ordinary + bytes.Length <= Limit - FinalReserve,
+                    _ => final == 0 && (requestStop != 0 || ordinary + bytes.Length <= Limit - RequestStopReserve),
+                };
+                if (!admitted) return false;
                 pending.Enqueue(bytes.ToArray());
-                reserved += bytes.Length;
-                if (terminal) finalWritten = true;
+                if (allocation == Allocation.Ordinary) ordinary += bytes.Length;
+                else if (allocation == Allocation.RequestStop) requestStop = bytes.Length;
+                else final = bytes.Length;
                 wake.Set();
                 return true;
             }
@@ -150,6 +163,7 @@ public sealed class LocalActivityTelemetry : IDisposable
             try { wake.Set(); }
             catch (Exception) { }
         }
-        // Never join the writer or wait for a flush on an authentication thread.
+        // Never join the writer or wait for a flush on an authentication thread. The
+        // process host may wait for Completion within its remaining shutdown bound.
     }
 }

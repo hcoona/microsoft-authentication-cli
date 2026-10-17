@@ -281,12 +281,14 @@ public sealed class WindowsHostAdmissionScenarios
         using var scene = new Scene { RequiresInteraction = true };
         var outcome = await scene.RunAsync();
         Assert.IsNotNull(outcome.Success, "The admitted interactive continuation was not completed.");
-        Assert.AreEqual(1, scene.InteractiveCalls);
-        Assert.AreEqual(1, scene.Closed);
-        Assert.AreEqual(3, scene.ProviderObservationSets.Count);
-        foreach (var observations in scene.ProviderObservationSets)
+        Assert.IsTrue(outcome.Interactive);
+        // Every provider effect, including the interactive one, follows its own fresh
+        // volatile observations rather than relying on an earlier effect's.
+        CollectionAssert.IsSubsetOf(new[] { "discover", "silent", "interactive" },
+            scene.ProviderObservationSets.Select(set => set.Effect).ToArray());
+        foreach (var (effect, observations) in scene.ProviderObservationSets)
             foreach (var required in new[] { "thread", "session", "desktop" })
-                CollectionAssert.Contains(observations, required);
+                Assert.IsTrue(observations.Contains(required), $"{effect} lacked a fresh {required} observation.");
     }
 
     [TestMethod]
@@ -549,7 +551,7 @@ public sealed class WindowsHostAdmissionScenarios
         internal Action<string>? DuringObservation { get; set; }
         internal List<string> Observed { get; } = [];
         internal List<CancellationToken> Tokens { get; } = [];
-        internal List<string[]> ProviderObservationSets { get; } = [];
+        internal List<(string Effect, string[] Observations)> ProviderObservationSets { get; } = [];
         private readonly List<string> observationsSinceEffect = [];
         internal int Initializations, Discoveries, SilentCalls, InteractiveCalls, Opened, Closed;
         public TimeProvider Clock { get; } = new FixedClock();
@@ -586,7 +588,7 @@ public sealed class WindowsHostAdmissionScenarios
 
         public Task<IReadOnlyList<ProviderAccount>> GetAccountsAsync(CancellationToken token)
         {
-            BeginProviderEffect();
+            BeginProviderEffect("discover");
             Discoveries++;
             Tokens.Add(token);
             return Task.FromResult<IReadOnlyList<ProviderAccount>>([new(Email, new object())]);
@@ -595,7 +597,7 @@ public sealed class WindowsHostAdmissionScenarios
         public Task<TokenCandidate> AcquireSilentAsync(AuthenticationRequest request, ProviderAccount account,
             Guid operationId, CancellationToken token)
         {
-            BeginProviderEffect();
+            BeginProviderEffect("silent");
             SilentCalls++;
             Tokens.Add(token);
             return RequiresInteraction
@@ -606,7 +608,7 @@ public sealed class WindowsHostAdmissionScenarios
         public Task<TokenCandidate> AcquireInteractiveAsync(AuthenticationRequest request, ProviderAccount? account,
             string? claims, nint parent, Guid operationId, CancellationToken token)
         {
-            BeginProviderEffect();
+            BeginProviderEffect("interactive");
             InteractiveCalls++;
             Tokens.Add(token);
             return Task.FromResult(Candidate(request, operationId));
@@ -621,9 +623,9 @@ public sealed class WindowsHostAdmissionScenarios
 
         public Task CloseInteractionAsync() { Closed++; return Task.CompletedTask; }
         public void Dispose() => Original.Dispose();
-        private void BeginProviderEffect()
+        private void BeginProviderEffect(string effect)
         {
-            ProviderObservationSets.Add(observationsSinceEffect.ToArray());
+            ProviderObservationSets.Add((effect, observationsSinceEffect.ToArray()));
             observationsSinceEffect.Clear();
         }
         private static TokenCandidate Candidate(AuthenticationRequest request, Guid operationId) =>

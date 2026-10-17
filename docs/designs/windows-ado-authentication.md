@@ -209,6 +209,9 @@ reordered or hidden.
 
 `--profile` is the sole lookup mechanism. Open that file once, read at most 64 KiB as
 strict UTF-8 JSON, validate it, and retain an immutable in-memory snapshot for the request.
+One leading UTF-8 byte order mark (`EF BB BF`), as common Windows editors write, is
+accepted and skipped before parsing; it counts toward the 64 KiB bound. Any other byte
+order mark, a repeated one, or one after other content remains invalid.
 The path must be an absolute drive-qualified path on a local fixed Windows volume;
 relative, drive-relative, UNC, device, and Linux paths are invalid. No environment or home
 expansion, directory search, URL retrieval, symlink-management policy, or Profile writer
@@ -469,6 +472,13 @@ after ambiguity. Count exact full-email matches: zero permits interaction only i
 request and host/Profile allow it, one selects that `IAccount`, and more than one is
 terminal `account_ambiguous` in every mode. Missing account email is not a match.
 
+A provider failure raised during account discovery is terminal in every mode, including
+a provider interaction requirement: discovery has no claims challenge for this request,
+so the request ends with that classified outcome (`interaction_required` keeps its safe
+reason) and does not open owned UI or make an interactive call, even when interaction
+is permitted or forced. Only a no-match discovery result or a silent-call interaction
+requirement can advance to interaction.
+
 For a unique real account in `non-interactive-only` or `interactive-if-needed`, call
 `AcquireTokenSilent(scopes, account)` before considering interaction. Preserve the
 normalized tenant constraint separately from the provider route. Under the legacy
@@ -500,7 +510,8 @@ cancellation/deadline boundary.
 | Observation | Coordinator outcome/action |
 | --- | --- |
 | Admission or Profile semantic error | `invalid_request`; no provider call. |
-| No visible match or provider interaction requirement | `interaction_required`, or the one compatible interactive call when permitted. |
+| No visible match or silent-call interaction requirement | `interaction_required`, or the one compatible interactive call when permitted. |
+| Provider interaction requirement during account discovery | `interaction_required` with its safe reason; terminal, no owned UI or interactive call in any mode. |
 | Explicit `force-interactive` with zero or one exact match | One provider interactive call through the sign-in/account-selection route with neither account nor login hint; no engine silent acquisition or fallback. |
 | Multiple exact visible matches | `account_ambiguous`; no silent call or picker. |
 | Broker unavailable, unsupported session, or rejected web fallback | `mechanism_unavailable`; no alternate mechanism. |
@@ -709,8 +720,12 @@ private diagnostic path is introduced.
 
 The exact custom-UI interface spelling is
 `Microsoft.Identity.Client.Extensibility.ICustomWebUi`. Its implementation always
-rejects navigation with the sanitized mechanism-unavailable failure. Directly
-testing that callback does not prove real broker-disappearance behavior.
+rejects navigation with the sanitized mechanism-unavailable failure. A scenario runs
+the production interactive builder through a real MSAL public-client application
+built without a broker, over a synthetic transport that answers only instance
+discovery and fails on any other request; MSAL reaches the rejecting UI and the
+request maps to `mechanism_unavailable` with `rejected_web_ui`. That establishes the
+pinned fallback route, not real broker-disappearance behavior.
 
 The exact source basis is MSAL 4.83.1 commit
 `d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f`:
@@ -825,6 +840,11 @@ with a message loop, only when interaction is both needed and permitted. It supp
 stable nonzero HWND and has no child controls: no label, button, font, layout, dialog
 message routing, `WM_COMMAND` or Escape handling. It does not ask for account email,
 passwords, URLs, or credentials; those belong to the caller's request and provider UI.
+Its window text is the fixed unofficial display name
+`AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)`, the same constant as
+the first help line, so any surface that names the owner window names the unofficial
+product rather than Microsoft or the registration owner. The window is never shown, so
+the text is not a user-facing claim.
 Parent WAM with that HWND and let WAM choose sign-in/MFA/consent methods. Failure to
 create the parent makes the path unavailable before the interactive call.
 
@@ -905,6 +925,10 @@ cancel, and `WM_CLOSE` delivered to the hidden parent. With
 file before provider work. The caller must retain the sole writer and avoid leaking it
 to descendants. Data is not interpreted or logged; the reader only observes closure.
 An already closed pipe cancels before authentication.
+Console cancellation is exercised by a synthetic scenario whose child process has its
+own hidden console and raises `GenerateConsoleCtrlEvent(1, 0)` (Ctrl+Break to that
+console's processes) rather than starting in a new process group; this establishes
+delivery to the product's handler, not real terminal behavior.
 
 Without that flag, stdin is unused. WSL Linux signals and Linux parent-process death are
 not assumed to become Windows cancellation notifications. A caller needing prompt
@@ -931,6 +955,10 @@ process termination releases its threads and handles; external WAM services rema
 owned. A forced termination or incomplete write is a transport failure, not a fabricated
 typed result. This is the exceptional fail-closed boundary, not a resident watchdog
 process or a mechanism for making unsupported platforms work.
+The watchdog exits `2` only when the bound expires before request work drains. After
+drain, the typed status `0` or `1` that matches the written result is published first;
+if the bound then expires while only optional diagnostics are still pending, the
+watchdog terminates with that published status.
 
 The managed process host keeps its entry thread as the watchdog and moves request
 work, native handle I/O, and cleanup onto dedicated background work. It reads the
@@ -988,11 +1016,28 @@ stateDiagram-v2
 ## Result, Diagnostics, and Compatibility
 
 The [result schema](../../contracts/v1/result.schema.json) defines one UTF-8 JSON object
-followed by LF, with no BOM. Exit `0` means a complete `success` object; exit `1` is
-shared by every complete typed failure. Failure objects contain no token or account
-metadata. A success with `persistence_unconfirmed` still exits zero. Invalid/partial
-JSON, process kill, absent output, or mismatched exit status is a caller-observed
-transport/protocol failure and must not be converted into an engine outcome.
+followed by LF, with no BOM. For an `authenticate` invocation, exit status has three
+meanings:
+
+- `0`: a complete `success` object on stdout.
+- `1`: a complete typed failure object on stdout; every typed failure shares it.
+- Any other status: no typed result. The caller treats the run as a transport failure,
+  whatever stdout contains. The product itself uses `2` for this: a broken result pipe,
+  or the process watchdog when its bound expires before request work drains, including
+  a failed or stalled owned cleanup after a result was written. A bound that expires
+  after drain, while only optional diagnostics are pending, keeps the published `0` or
+  `1`. The OS or runtime may produce other values, for example when the process is
+  killed.
+
+Failure objects contain no token or account metadata. A success with
+`persistence_unconfirmed` still exits zero. Invalid/partial JSON, absent output, or an
+object whose outcome does not match the exit status is also a caller-observed
+transport/protocol failure and must not be converted into an engine outcome. Result
+projection fails closed: a selected success whose access token, token type or account
+email is empty, or whose scope list is absent, is projected as `internal_failure`
+rather than as a success the schema would reject. `help` and root `--help` are not
+part of the `authenticate` protocol; their exit status reports only whether help was
+written.
 
 Build the result from an allowlist of fields, not by serializing an MSAL result or
 exception. Only `accessToken` in a validated success may expose authentication material.
@@ -1047,10 +1092,16 @@ from the parent selection decision, and, only with `--telemetry stderr`, local
 JSON event lines containing `event`, `stage`, `outcome`, and elapsed milliseconds. Events
 contain no token, email, path, Profile/client/account identifier, tenant, resource, scope,
 claims, or provider text. This is optional local telemetry; network export and persistent
-telemetry identifiers are not provided by this Slice. Bound pending diagnostic/event
-output to 8 KiB, drop excess, never await a flush at result delivery, and ignore sink
-failure without changing authentication or exit status. The process watchdog covers a
-blocked diagnostic writer too. No upstream telemetry configuration is read.
+telemetry identifiers are not provided by this Slice. With `--telemetry stderr`, all
+event and indication bytes accepted for one invocation total at most 8 KiB. Of that
+total, 1 KiB stays reserved for the final completion line and a further 512 bytes for
+the owned request span's stop event, so phase events and the pre-interaction notice
+cannot exhaust either; excess is dropped, not queued. A sink that fails or refuses a
+write ends local output for the invocation. Never await a flush before result delivery.
+After the result is written and request work has drained, the process host waits for
+the local writer, and for any best-effort stderr indication, only within the remaining
+process shutdown bound; a blocked or failed sink cannot change authentication or exit
+status. No upstream telemetry configuration is read.
 
 ### Local OpenTelemetry-Compatible Observation
 
@@ -1062,9 +1113,12 @@ These APIs are the [.NET OpenTelemetry instrumentation boundary](https://learn.m
 not an assertion that an OpenTelemetry SDK/exporter has been installed or run.
 No new dependency, exporter endpoint or Collector service is needed for local observation.
 
-`--telemetry stderr` installs a request-local `ActivityListener` that listens only
-to that source and projects fixed stage-start and stage-completion JSON lines to
-the existing bounded stderr sink. Start notifications supply immediate progress;
+`--telemetry stderr` installs one `ActivityListener` for the invocation that listens
+only to that source and projects fixed stage-start and stage-completion JSON lines to
+the existing bounded stderr sink. .NET registers activity listeners process-wide, so
+the listener observes any activity of that source in the process, not only this
+request's; the product runs one request per process, and the projection still emits
+only allowlisted fields of owned stage names. Start notifications supply immediate progress;
 completed spans supply durations. A pending span is not evidence of completion.
 Keep the existing `request_completed` event and fixed human indications. The local
 projection permits fixed event/stage/outcome names, nonnegative relative durations,

@@ -20,7 +20,8 @@ public static class ResultProjection
         {
             writer.WriteStartObject();
             writer.WriteNumber("protocol", 1);
-            if (outcome is { Success: { Tenant: { } tenant } token, Failure: null, Reason: AuthenticationReason.None })
+            if (outcome is { Success: { Tenant: { } tenant } token, Failure: null, Reason: AuthenticationReason.None }
+                && IsComplete(token))
             {
                 writer.WriteString("outcome", "success");
                 writer.WriteString("accessToken", token.AccessToken);
@@ -61,6 +62,13 @@ public static class ResultProjection
         buffer.WriteByte((byte)'\n');
         return new(buffer.ToArray(), exitCode);
     }
+
+    // The coordinator validates these fields before selection. Projection still fails
+    // closed to internal_failure rather than emitting a success the schema rejects.
+    private static bool IsComplete(TokenCandidate token) =>
+        !string.IsNullOrEmpty(token.AccessToken) && !string.IsNullOrEmpty(token.TokenType)
+        && !string.IsNullOrEmpty(token.Email) && token.Scopes is not null
+        && token.Scopes.All(scope => !string.IsNullOrEmpty(scope));
 
     private static (string Outcome, string Reason) FailureFields(AuthenticationOutcome outcome)
     {

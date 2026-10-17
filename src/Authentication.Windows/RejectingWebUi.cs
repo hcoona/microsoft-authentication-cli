@@ -3,10 +3,9 @@ using Microsoft.Identity.Client.Extensibility;
 
 namespace Authentication.Windows;
 
-public sealed class RejectingWebUi : ICustomWebUi
+internal sealed class RejectingWebUi : ICustomWebUi
 {
     private readonly WindowsMechanismTrace? trace;
-    public RejectingWebUi() { }
     internal RejectingWebUi(WindowsMechanismTrace? trace) => this.trace = trace;
 
     // A lost broker cannot enable browser navigation through MSAL's fallback callback.

@@ -24,6 +24,14 @@ public static class ProfileSyntax
             return null;
         }
 
+        // Accept and skip exactly one leading UTF-8 byte order mark, which common
+        // Windows editors write. The byte bound above includes it; any further BOM
+        // remains invalid JSON for the reader below.
+        if (utf8.Span.StartsWith("\uFEFF"u8))
+        {
+            utf8 = utf8[3..];
+        }
+
         try
         {
             var reader = new Utf8JsonReader(utf8.Span, new JsonReaderOptions { MaxDepth = 2 });

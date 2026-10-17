@@ -179,7 +179,8 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         // Providers need not return the literal /.default spelling among grants, so
         // granted scopes cannot be compared here. The operation ID check above only
         // binds the candidate to the provider call that carried this request; it does
-        // not prove the granted resource. Dynamic scopes are compared exactly below.
+        // not prove the granted resource. Otherwise each requested dynamic scope must
+        // appear among the granted scopes, compared ordinally; extra grants are allowed.
         if (requested.Count == 1 && requested[0].EndsWith("/.default", StringComparison.Ordinal))
         {
             return true;

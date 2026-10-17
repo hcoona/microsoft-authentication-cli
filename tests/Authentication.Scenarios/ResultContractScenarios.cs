@@ -190,6 +190,51 @@ public sealed class ResultContractScenarios
             "internal_failure", "internal_failure");
     }
 
+    [TestMethod]
+    [DataRow(AuthenticationFailure.Denied, AuthenticationReason.ConsentRequired)]
+    [DataRow(AuthenticationFailure.InteractionRequired, AuthenticationReason.NetworkTransient)]
+    [DataRow(AuthenticationFailure.MechanismUnavailable, AuthenticationReason.ProviderTransient)]
+    public async Task ProviderReasonThatDoesNotMatchItsFailureBecomesInternalFailure(
+        AuthenticationFailure failure, AuthenticationReason reason)
+    {
+        var provider = new ContractProvider("personal@example.test") { Failure = failure, Reason = reason };
+
+        var serialized = ResultProjection.Serialize(await Acquire(provider));
+
+        AssertFailure(serialized, "internal_failure", "internal_failure");
+        Assert.IsFalse(Encoding.UTF8.GetString(serialized.Utf8Json).Contains("synthetic-private-claims",
+            StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    [DataRow("empty-token")]
+    [DataRow("empty-token-type")]
+    [DataRow("missing-email")]
+    [DataRow("empty-email")]
+    [DataRow("null-scopes")]
+    [DataRow("empty-scope")]
+    public void IncompleteSuccessCannotBeProjected(string defect)
+    {
+        var candidate = new TokenCandidate(Token, "personal@example.test", Tenant, [Scope], "Bearer", Expires,
+            Correlation);
+        candidate = defect switch
+        {
+            "empty-token" => candidate with { AccessToken = "" },
+            "empty-token-type" => candidate with { TokenType = "" },
+            "missing-email" => candidate with { Email = null },
+            "empty-email" => candidate with { Email = "" },
+            "null-scopes" => candidate with { Scopes = null! },
+            "empty-scope" => candidate with { Scopes = [Scope, ""] },
+            _ => throw new InvalidOperationException("Unknown synthetic defect."),
+        };
+
+        var serialized = ResultProjection.Serialize(new(candidate, null, PersistenceUnconfirmed: true));
+
+        AssertFailure(serialized, "internal_failure", "internal_failure");
+        Assert.IsFalse(Encoding.UTF8.GetString(serialized.Utf8Json).Contains("synthetic-opaque",
+            StringComparison.Ordinal));
+    }
+
     private static async Task<AuthenticationOutcome> Acquire(ContractProvider provider, bool interactionAllowed = false)
     {
         var host = new ContractHost();

@@ -101,6 +101,59 @@ public sealed class CandidateValidationScenarios
         Assert.IsEmpty(outcome.Success.Scopes);
     }
 
+    [TestMethod]
+    public async Task DefaultPermissionsAcceptExpandedGrantsFromTheSameOperation()
+    {
+        var provider = new CandidateProvider(candidate => candidate with { Scopes = [Scope] });
+
+        var outcome = await new RequestCoordinator(provider, new ScenarioHost())
+            .AuthenticateAsync(new AuthenticationRequest(
+                Email, ["499b84ac-1321-427f-aa17-267ca6975798/.default"], false, null));
+
+        Assert.IsNull(outcome.Failure);
+        Assert.IsNotNull(outcome.Success);
+        CollectionAssert.AreEqual(new[] { Scope }, outcome.Success.Scopes.ToArray());
+    }
+
+    [TestMethod]
+    public async Task DefaultPermissionsCannotAcceptAnUnrelatedOperation()
+    {
+        var provider = new CandidateProvider(candidate => candidate with { OperationId = Guid.Empty });
+
+        var outcome = await new RequestCoordinator(provider, new ScenarioHost())
+            .AuthenticateAsync(new AuthenticationRequest(
+                Email, ["499b84ac-1321-427f-aa17-267ca6975798/.default"], false, null));
+
+        Assert.AreEqual(AuthenticationFailure.IdentityValidationFailed, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+    }
+
+    [TestMethod]
+    public async Task PartialGrantOfSeveralDynamicScopesCannotSucceed()
+    {
+        const string second = "499b84ac-1321-427f-aa17-267ca6975798/vso.code";
+        var provider = new CandidateProvider(candidate => candidate with { Scopes = [Scope] });
+
+        var outcome = await new RequestCoordinator(provider, new ScenarioHost())
+            .AuthenticateAsync(new AuthenticationRequest(Email, [Scope, second], false, null));
+
+        Assert.AreEqual(AuthenticationFailure.IdentityValidationFailed, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+    }
+
+    [TestMethod]
+    public async Task CompleteGrantOfSeveralDynamicScopesSucceeds()
+    {
+        const string second = "499b84ac-1321-427f-aa17-267ca6975798/vso.code";
+        var provider = new CandidateProvider(candidate => candidate with { Scopes = [second, Scope] });
+
+        var outcome = await new RequestCoordinator(provider, new ScenarioHost())
+            .AuthenticateAsync(new AuthenticationRequest(Email, [Scope, second], false, null));
+
+        Assert.IsNull(outcome.Failure);
+        Assert.IsNotNull(outcome.Success);
+    }
+
     private sealed class CandidateProvider(Func<TokenCandidate, TokenCandidate> transform)
         : IAuthenticationProvider
     {

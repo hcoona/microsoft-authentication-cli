@@ -364,18 +364,67 @@ public sealed class MsalAdapterScenarios
     }
 
     [TestMethod]
-    public async Task RejectedCustomUiCannotReturnAuthorizationUri()
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task RealNonBrokerInteractiveCallReachesTheRejectingWebUi(bool forced)
     {
+        // A real MSAL public-client application without a broker models broker loss:
+        // its interactive call falls back to the web UI the production builder installs.
+        // The canned transport answers only instance discovery and fails the test on any
+        // other request, so no browser, account or identity endpoint is reached.
+        var transport = new CannedDiscoveryTransport();
+        using var http = new MsalHttpClientFactory(transport);
+        var application = (PublicClientApplication)PublicClientApplicationBuilder
+            .Create("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+            .WithAuthority("https://login.microsoftonline.com/" + Tenant.ToString("D"))
+            .WithRedirectUri("http://localhost")
+            .WithHttpClientFactory(http)
+            .Build();
+        var trace = new WindowsMechanismTrace();
+        var operation = new MsalInteractiveOperation([Scope], null, forced ? null : Email,
+            Tenant.ToString("D"), null, (nint)42, Guid.NewGuid(), forced);
+        var builder = MsalSessionFactory.BuildInteractiveRequest(application, operation, trace, CancellationToken.None);
+
+        Exception? observed = null;
         try
         {
-            await new RejectingWebUi().AcquireAuthorizationCodeAsync(new("https://login.example.test/authorize"),
-                new("https://app.example.test/callback"), CancellationToken.None);
-            Assert.Fail("Rejected fallback cannot return an authorization URI.");
+            _ = await builder.ExecuteAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(30));
+            Assert.Fail("A rejected web UI cannot produce an authentication result.");
         }
-        catch (ProviderFailureException failure)
+        catch (Exception exception) when (exception is not AssertFailedException) { observed = exception; }
+
+        Assert.IsNull(transport.Unexpected, transport.Unexpected);
+        Assert.AreEqual(WindowsMechanismFailure.RejectedWebUi, trace.Failure, "The rejecting web UI was not reached.");
+        var mapped = MsalBoundary.MapFailure(observed!, CancellationToken.None, trace);
+        Assert.AreEqual(AuthenticationFailure.MechanismUnavailable, mapped.Failure);
+        Assert.AreEqual("Mechanism unavailable at rejected_web_ui.\n",
+            Encoding.ASCII.GetString(WindowsDiagnostics.MechanismIndication(trace.Failure)));
+    }
+
+    // Terminal synthetic transport: no inner handler and no socket.
+    private sealed class CannedDiscoveryTransport : HttpMessageHandler
+    {
+        internal string? Unexpected { get; private set; }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+            CancellationToken cancellationToken)
         {
-            Assert.AreEqual(AuthenticationFailure.MechanismUnavailable, failure.Failure);
-            Assert.IsFalse(failure.Message.Contains(PrivateMarker, StringComparison.Ordinal));
+            var uri = request.RequestUri;
+            if (request.Method == HttpMethod.Get && uri is { Host: "login.microsoftonline.com" }
+                && uri.AbsolutePath == "/common/discovery/instance")
+            {
+                return Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+                {
+                    Content = new StringContent("""
+                        {"tenant_discovery_endpoint":"https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration",
+                         "api-version":"1.1","metadata":[{"preferred_network":"login.microsoftonline.com",
+                         "preferred_cache":"login.windows.net","aliases":["login.microsoftonline.com","login.windows.net"]}]}
+                        """, Encoding.UTF8, "application/json"),
+                });
+            }
+
+            Unexpected ??= request.Method + " " + uri?.GetLeftPart(UriPartial.Path);
+            throw new InvalidOperationException("The synthetic transport forbids this request.");
         }
     }
 

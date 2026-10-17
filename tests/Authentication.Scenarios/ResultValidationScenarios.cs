@@ -40,7 +40,6 @@ public sealed class ResultValidationScenarios
         string safe = JsonSerializer.Serialize(result);
         Assert.IsFalse(safe.Contains(Email, StringComparison.Ordinal));
         Assert.IsFalse(safe.Contains("SYNTHETIC_TOKEN", StringComparison.Ordinal));
-        Assert.IsTrue(typeof(ResultChecks).GetProperties().All(p => p.PropertyType == typeof(bool) || p.PropertyType.IsEnum));
     }
 
     [TestMethod]

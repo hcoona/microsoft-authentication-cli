@@ -23,7 +23,11 @@ internal sealed partial class ProcessFixture : IDisposable
     internal bool Forced { get; private set; }
     internal uint ExitCode { get; private set; }
     internal double Seconds => elapsed.Elapsed.TotalSeconds;
-    internal long ExitObservedTimestamp { get; private set; }
+    // Recorded by a dedicated thread blocked on the process handle, at signal time.
+    internal long ExitObservedTimestamp => exitObserved.Task.IsCompletedSuccessfully ? exitObserved.Task.Result : 0;
+    private readonly TaskCompletionSource<long> exitObserved = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private Thread? exitWaiter;
+    private volatile bool closing;
     internal long WriterCloseBefore { get; private set; }
     internal long WriterCloseAfter { get; private set; }
     internal long BufferedObservedTimestamp { get; private set; }
@@ -33,10 +37,16 @@ internal sealed partial class ProcessFixture : IDisposable
         get
         {
             if (process == 0) return false;
+            if (exitObserved.Task.IsCompleted) return true;
             var wait = WaitForSingleObject(process, 0);
             if (wait is not (0 or 258)) throw StopSuite("child-state");
-            if (wait == 0 && ExitObservedTimestamp == 0) ExitObservedTimestamp = TimeProvider.System.GetTimestamp();
-            return wait == 0;
+            if (wait == 0)
+            {
+                // The handle waiter records the signal time; wait for that record.
+                if (!exitObserved.Task.Wait(TimeSpan.FromSeconds(2))) throw StopSuite("child-exit-observation");
+                return true;
+            }
+            return false;
         }
     }
     internal byte[] Output { get; private set; } = [];
@@ -62,7 +72,8 @@ internal sealed partial class ProcessFixture : IDisposable
         if (!nativeProfile && !DefaultHttpProcessChild.Supports(scenario) && !OwnedProcessChild.Supports(scenario)
             && scenario is not ("help" or "malformed" or "success" or "file-stdin" or "closed-stdin"
             or "close-pending" or "unused-stdin" or "data-close" or "deadline"
-            or "broken-output" or "blocked-output" or "blocked-diagnostics"))
+            or "broken-output" or "blocked-output" or "blocked-diagnostics"
+            or "diagnostic-stall" or "diagnostic-stall-denied"))
             throw new InvalidOperationException("Unallocated child scenario.");
 
         // Resolve every launch input before reserving the scenario directory.
@@ -72,6 +83,8 @@ internal sealed partial class ProcessFixture : IDisposable
 
         blockedOutput = scenario == "blocked-output";
         blockedError = scenario is "blocked-diagnostics" or "host-notice-blocked";
+        // Each scenario reserves one fixed directory under TEMP and the safety latch
+        // is a TEMP file, so every suite run needs its own fresh TEMP root.
         DirectoryPath = Path.Combine(Path.GetTempPath(), "process-" + scenario);
         if (Directory.Exists(DirectoryPath)) throw new InvalidOperationException("Scenario already reserved.");
         Directory.CreateDirectory(DirectoryPath);
@@ -180,9 +193,36 @@ internal sealed partial class ProcessFixture : IDisposable
 
     internal async Task FinishAsync()
     {
-        while (!Exited && Seconds < 6) await Task.Delay(10);
+        if (process != 0)
+            await Task.WhenAny(exitObserved.Task, Task.Delay(TimeSpan.FromSeconds(Math.Max(0, 6 - Seconds))));
         StopIfNeeded();
         await FinalizeEvidenceAsync();
+    }
+
+    // Block on the process handle itself, so exit time is taken when the kernel
+    // signals it rather than at the next poll. The waiter stops before the handle
+    // is closed.
+    private void StartExitWaiter()
+    {
+        var handle = process;
+        exitWaiter = new Thread(() =>
+        {
+            while (!closing)
+            {
+                var wait = WaitForSingleObject(handle, 100);
+                if (wait == 0)
+                {
+                    exitObserved.TrySetResult(TimeProvider.System.GetTimestamp());
+                    return;
+                }
+                if (wait != 258)
+                {
+                    exitObserved.TrySetException(new InvalidOperationException("Child state unavailable."));
+                    return;
+                }
+            }
+        }) { IsBackground = true };
+        exitWaiter.Start();
     }
 
     private async Task FinalizeEvidenceAsync()
@@ -250,6 +290,8 @@ internal sealed partial class ProcessFixture : IDisposable
             Close(ref outputRead); Close(ref errorRead);
             throw StopSuite("child-start");
         }
+        closing = true;
+        exitWaiter?.Join();
         Close(ref outputRead); Close(ref errorRead); Close(ref process);
     }
 
@@ -377,6 +419,7 @@ internal sealed partial class ProcessFixture : IDisposable
                     environmentPointer, DirectoryPath, ref startup, out var information) == 0) throw Failure();
                 process = information.Process;
                 CloseHandle(information.Thread);
+                StartExitWaiter();
                 File.WriteAllText(Path.Combine(DirectoryPath, "started.json"), JsonSerializer.Serialize(new
                 {
                     pid = information.ProcessId, executable, arguments, environment, utc = DateTimeOffset.UtcNow,

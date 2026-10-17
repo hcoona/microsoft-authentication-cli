@@ -21,8 +21,21 @@ internal static class ProcessChild
 
     internal static int Run(string scenario, string[] arguments, long entry)
     {
+        if (NativeProcessChild.Supports(scenario)) return NativeProcessChild.Run(scenario, arguments, entry);
         if (DefaultHttpProcessChild.Supports(scenario)) return DefaultHttpProcessChild.Run(scenario, arguments, entry);
         if (OwnedProcessChild.Supports(scenario)) return OwnedProcessChild.Run(scenario, arguments, entry);
+        if (scenario is "diagnostic-stall" or "diagnostic-stall-denied")
+        {
+            // Request work drains normally; the diagnostic drain then never completes.
+            Mark("entered", entry);
+            return WindowsProcess.RunOwned(arguments, entry, (_, _) => new Provider(scenario), new ProfileSource(),
+                checkpoint: stage =>
+                {
+                    if (stage != OwnedProcessCheckpoint.BeforeDiagnosticDrain) return;
+                    Mark("diagnostic-stall");
+                    Thread.Sleep(Timeout.Infinite);
+                });
+        }
         if (scenario is not ("success" or "file-stdin" or "closed-stdin" or "close-pending"
             or "unused-stdin" or "data-close" or "deadline" or "broken-output"
             or "blocked-output" or "blocked-diagnostics")) return 90;
@@ -77,6 +90,7 @@ internal static class ProcessChild
             }
 
             Mark("provider-ready");
+            if (scenario == "diagnostic-stall-denied") throw new ProviderFailureException(AuthenticationFailure.Denied);
             if (scenario == "deadline")
             {
                 // Ignore cancellation and keep both work and a callback pending.

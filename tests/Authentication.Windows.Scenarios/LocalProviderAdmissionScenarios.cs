@@ -4,9 +4,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Authentication.Windows.Scenarios;
 
-// The real coordinator and proposed provider boundary use synthetic observation,
-// initialization and acquisition outcomes. No Windows query, MSAL application,
-// account store, native window, process, file or network is accessed by these cases.
+// The real coordinator and provider boundary use synthetic admission, initialization
+// and acquisition outcomes. Admission gate behavior is exercised through the real
+// WindowsHostAdmission in WindowsHostAdmissionScenarios; these cases cover only the
+// provider boundary's own construction, initialization and continuation. No Windows
+// query, MSAL application, account store, window, process, file or network is used.
 [TestClass]
 public sealed class LocalProviderAdmissionScenarios
 {
@@ -23,67 +25,6 @@ public sealed class LocalProviderAdmissionScenarios
         _ = scene.CreateBoundary();
         Assert.AreEqual(0, scene.Admissions);
         Assert.AreEqual(0, scene.Rechecks);
-        NoProviderEffects(scene);
-    }
-
-    [TestMethod]
-    public async Task PrecancelledRequestStopsBeforeHostAdmission()
-    {
-        using var scene = new Scene();
-        scene.Original.Cancel();
-        Failure(AuthenticationFailure.Cancelled, await scene.RunAsync());
-        Assert.AreEqual(0, scene.Admissions);
-        NoProviderEffects(scene);
-    }
-
-    [TestMethod]
-    public async Task RejectedHostPreventsInitializationAndOwnedUi()
-    {
-        using var scene = new Scene { DuringAdmission = _ => throw Unavailable() };
-        Failure(AuthenticationFailure.MechanismUnavailable, await scene.RunAsync());
-        Assert.AreEqual(1, scene.Admissions, "The local host observation was not reached.");
-        NoProviderEffects(scene);
-        Assert.AreEqual(0, scene.Opened);
-    }
-
-    [TestMethod]
-    public async Task AdmittedHostAllowsOneSelectedAccountSilentResult()
-    {
-        using var scene = new Scene();
-        var result = await scene.RunAsync();
-        Assert.IsNotNull(result.Success, "Local admission did not release the selected-account request.");
-        Assert.AreEqual(Email, result.Success.Email);
-        Assert.AreEqual(Tenant, result.Success.Tenant);
-        Assert.AreEqual(1, scene.Admissions);
-        Assert.AreEqual(1, scene.Initializations);
-        Assert.AreEqual(1, scene.Discoveries);
-        Assert.AreEqual(1, scene.SilentCalls);
-        Assert.AreEqual(0, scene.InteractiveCalls);
-        Assert.AreEqual(0, scene.Opened);
-        Assert.IsTrue(scene.Tokens.All(token => token == scene.Original.Token));
-    }
-
-    [TestMethod]
-    public async Task CancellationDuringAdmissionPreventsInitialization()
-    {
-        using var scene = new Scene();
-        scene.DuringAdmission = _ => scene.Original.Cancel();
-        Failure(AuthenticationFailure.Cancelled, await scene.RunAsync());
-        Assert.AreEqual(1, scene.Admissions);
-        NoProviderEffects(scene);
-    }
-
-    [TestMethod]
-    public async Task OriginalCancellationWinsOverAdmissionRejection()
-    {
-        using var scene = new Scene();
-        scene.DuringAdmission = _ =>
-        {
-            scene.Original.Cancel();
-            throw Unavailable();
-        };
-        Failure(AuthenticationFailure.Cancelled, await scene.RunAsync());
-        Assert.AreEqual(1, scene.Admissions);
         NoProviderEffects(scene);
     }
 
@@ -121,63 +62,6 @@ public sealed class LocalProviderAdmissionScenarios
         Failure(AuthenticationFailure.InternalFailure, await scene.RunAsync());
         Assert.AreEqual(1, scene.Initializations);
         Assert.AreEqual(0, scene.Discoveries);
-        Assert.AreEqual(0, scene.Opened);
-    }
-
-    [TestMethod]
-    public async Task UnexpectedHostObservationFaultStaysInternalFailure()
-    {
-        using var scene = new Scene
-        {
-            DuringAdmission = _ => throw new InvalidOperationException(PrivateMarker),
-        };
-        Failure(AuthenticationFailure.InternalFailure, await scene.RunAsync());
-        Assert.AreEqual(1, scene.Admissions);
-        NoProviderEffects(scene);
-    }
-
-    [TestMethod]
-    public async Task LostEligibilityBeforeSilentPreventsAcquisition()
-    {
-        using var scene = new Scene();
-        scene.DuringRecheck = _ =>
-        {
-            if (scene.Discoveries != 0) throw Unavailable();
-        };
-        Failure(AuthenticationFailure.MechanismUnavailable, await scene.RunAsync());
-        Assert.AreEqual(1, scene.Discoveries, "The selected-account discovery was not reached.");
-        Assert.AreEqual(0, scene.SilentCalls);
-        Assert.AreEqual(0, scene.InteractiveCalls);
-        Assert.AreEqual(0, scene.Opened);
-    }
-
-    [TestMethod]
-    public async Task LostEligibilityAfterReadinessPreventsInteractionAndClosesHost()
-    {
-        using var scene = new Scene { RequiresInteraction = true };
-        scene.DuringRecheck = _ =>
-        {
-            if (scene.Opened != 0) throw Unavailable();
-        };
-        Failure(AuthenticationFailure.MechanismUnavailable, await scene.RunAsync());
-        Assert.AreEqual(1, scene.Opened, "The controlled readiness boundary was not reached.");
-        Assert.AreEqual(1, scene.Closed);
-        Assert.AreEqual(1, scene.Discoveries);
-        Assert.AreEqual(1, scene.SilentCalls);
-        Assert.AreEqual(0, scene.InteractiveCalls);
-    }
-
-    [TestMethod]
-    public async Task CancellationDuringVolatileRecheckPreventsNextEffect()
-    {
-        using var scene = new Scene();
-        scene.DuringRecheck = _ =>
-        {
-            if (scene.Discoveries != 0) scene.Original.Cancel();
-        };
-        Failure(AuthenticationFailure.Cancelled, await scene.RunAsync());
-        Assert.AreEqual(1, scene.Discoveries);
-        Assert.AreEqual(0, scene.SilentCalls);
         Assert.AreEqual(0, scene.Opened);
     }
 

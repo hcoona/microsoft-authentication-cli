@@ -266,11 +266,117 @@ public sealed class InteractionScenarios
         if (phase == "interactive") Assert.AreEqual("close", scene.Effects[^1]);
     }
 
+    [TestMethod]
+    [DataRow(AuthenticationFailure.Cancelled)]
+    [DataRow(AuthenticationFailure.Denied)]
+    [DataRow(AuthenticationFailure.MechanismUnavailable)]
+    [DataRow(AuthenticationFailure.TemporarilyUnavailable)]
+    [DataRow(AuthenticationFailure.IdentityValidationFailed)]
+    public async Task TypedDiscoveryFailureEndsTheRequestBeforeAnyAcquisition(AuthenticationFailure failure)
+    {
+        var scene = new Scene { DiscoveryFailure = new ProviderFailureException(failure, "synthetic-claims") };
+        var outcome = await scene.RunAsync();
+
+        Assert.AreEqual(failure, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+        CollectionAssert.AreEqual(new[] { "discover" }, scene.Effects.ToArray());
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task DiscoveryStageInteractionRequirementIsTerminalEvenWhenInteractionIsPermitted(bool forced)
+    {
+        var scene = new Scene
+        {
+            DiscoveryFailure = new ProviderFailureException(AuthenticationFailure.InteractionRequired,
+                "synthetic-claims", AuthenticationReason.ConsentRequired),
+        };
+        var outcome = await scene.RunAsync(forceInteractive: forced);
+
+        Assert.AreEqual(AuthenticationFailure.InteractionRequired, outcome.Failure);
+        Assert.AreEqual(AuthenticationReason.ConsentRequired, outcome.Reason);
+        Assert.IsNull(outcome.Success);
+        Assert.IsFalse(outcome.Interactive);
+        CollectionAssert.AreEqual(new[] { "discover" }, scene.Effects.ToArray());
+    }
+
+    [TestMethod]
+    public async Task DiscoveredAccountWithoutEmailIsNotTheRequestedAccount()
+    {
+        var scene = new Scene { Accounts = [new(null, new object())] };
+        var outcome = await scene.RunAsync(interactionAllowed: false);
+
+        Assert.AreEqual(AuthenticationFailure.InteractionRequired, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+        CollectionAssert.AreEqual(new[] { "discover" }, scene.Effects.ToArray());
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task NullProviderCandidateCannotBecomeSuccess(bool interactive)
+    {
+        var scene = new Scene { Accounts = interactive ? [] : [new(Email, new object())], NullCandidate = true };
+        var outcome = await scene.RunAsync();
+
+        Assert.AreEqual(AuthenticationFailure.IdentityValidationFailed, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+        Assert.AreEqual(interactive, outcome.Interactive);
+    }
+
+    [TestMethod]
+    public async Task FailingInteractionOpeningPreventsTheInteractiveCallAndStillCloses()
+    {
+        var scene = new Scene { Accounts = [], OpenFailure = new InvalidOperationException("synthetic-private-marker") };
+        var outcome = await scene.RunAsync();
+
+        Assert.AreEqual(AuthenticationFailure.InternalFailure, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+        Assert.IsFalse(outcome.Interactive);
+        CollectionAssert.AreEqual(new[] { "discover", "open", "close" }, scene.Effects.ToArray());
+    }
+
+    [TestMethod]
+    public async Task CloseFailureAfterInteractiveSuccessWithholdsTheToken()
+    {
+        var scene = new Scene { Accounts = [], CloseFailure = new InvalidOperationException("synthetic-private-marker") };
+        var outcome = await scene.RunAsync();
+
+        Assert.AreEqual(AuthenticationFailure.InternalFailure, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+        Assert.IsTrue(outcome.Interactive);
+        Assert.AreEqual(1, ResultProjection.Serialize(outcome).ExitCode);
+        CollectionAssert.AreEqual(new[] { "discover", "open", "interactive", "close" }, scene.Effects.ToArray());
+    }
+
+    [TestMethod]
+    [DataRow(AuthenticationFailure.Denied)]
+    [DataRow(AuthenticationFailure.Cancelled)]
+    public async Task CloseFailureAfterInteractiveFailureKeepsTheEarlierFailure(AuthenticationFailure failure)
+    {
+        var scene = new Scene
+        {
+            Accounts = [],
+            InteractiveFailure = new ProviderFailureException(failure),
+            CloseFailure = new InvalidOperationException("synthetic-private-marker"),
+        };
+        var outcome = await scene.RunAsync();
+
+        Assert.AreEqual(failure, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+        CollectionAssert.AreEqual(new[] { "discover", "open", "interactive", "close" }, scene.Effects.ToArray());
+    }
+
     private sealed class Scene : IAuthenticationProvider, IRequestHost
     {
         public IReadOnlyList<ProviderAccount> Accounts { get; init; } = [new(Email, new object())];
+        public Exception? DiscoveryFailure { get; init; }
         public Exception? SilentFailure { get; init; }
         public Exception? InteractiveFailure { get; init; }
+        public Exception? OpenFailure { get; init; }
+        public Exception? CloseFailure { get; init; }
+        public bool NullCandidate { get; init; }
         public string? UnexpectedFailurePhase { get; init; }
         public string? InteractiveDefect { get; init; }
         public nint ParentWindow { get; init; } = 42;
@@ -304,6 +410,7 @@ public sealed class InteractionScenarios
         {
             Effects.Add("discover");
             FailIfRequested("discover");
+            if (DiscoveryFailure is not null) throw DiscoveryFailure;
             return Task.FromResult(Accounts);
         }
 
@@ -313,7 +420,7 @@ public sealed class InteractionScenarios
             Effects.Add("silent");
             FailIfRequested("silent");
             if (SilentFailure is not null) throw SilentFailure;
-            return Task.FromResult(Candidate(operationId));
+            return Task.FromResult(NullCandidate ? null! : Candidate(operationId));
         }
 
         public Task<TokenCandidate> AcquireInteractiveAsync(AuthenticationRequest request, ProviderAccount? account,
@@ -329,6 +436,7 @@ public sealed class InteractionScenarios
             DuringInteraction?.Invoke();
             FailIfRequested("interactive");
             if (InteractiveFailure is not null) throw InteractiveFailure;
+            if (NullCandidate) return Task.FromResult<TokenCandidate>(null!);
             var candidate = Candidate(operationId);
             return Task.FromResult(InteractiveDefect switch
             {
@@ -342,12 +450,14 @@ public sealed class InteractionScenarios
         public Task<nint> OpenInteractionAsync(CancellationToken cancellationToken)
         {
             Effects.Add("open");
+            if (OpenFailure is not null) throw OpenFailure;
             return ParentReadiness ?? Task.FromResult(ParentWindow);
         }
 
         public Task CloseInteractionAsync()
         {
             Effects.Add("close");
+            if (CloseFailure is not null) throw CloseFailure;
             return Task.CompletedTask;
         }
 

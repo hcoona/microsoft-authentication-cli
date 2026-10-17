@@ -58,9 +58,11 @@ public sealed class MsalCompositionScenarios
         Assert.IsTrue(scene.Settings.ListOperatingSystemAccounts);
         Assert.AreEqual(legacy, scene.Settings.MsaPassthrough);
         Assert.AreSame(scene, scene.HttpFactory);
-        Assert.AreEqual(1, scene.Initializations);
-        Assert.AreEqual(1, scene.Discoveries);
-        Assert.AreEqual(1, scene.Silent.Count);
+        // Discovery and the silent call use the session created for this request.
+        foreach (var name in new[] { "session", "discover", "silent" })
+            CollectionAssert.Contains(scene.Events, name, $"The {name} event was not observed.");
+        Assert.IsTrue(scene.Events.IndexOf("session") < scene.Events.IndexOf("discover"));
+        Assert.IsTrue(scene.Events.IndexOf("discover") < scene.Events.IndexOf("silent"));
         Assert.AreSame(scene.Selected, scene.Silent[0].Account, "The nonmatching first account must not be selected.");
         Assert.AreEqual(silentTenant, scene.Silent[0].Tenant);
         CollectionAssert.AreEqual(new[] { Scope }, scene.Silent[0].Scopes.ToArray());
@@ -72,6 +74,8 @@ public sealed class MsalCompositionScenarios
         Assert.AreEqual(0, scene.Interactive.Count);
         Assert.AreEqual(0, scene.Opened);
         Assert.IsTrue(scene.Tokens.All(token => token == scene.Original.Token));
+        foreach (var name in new[] { "admitted", "loader" })
+            CollectionAssert.Contains(scene.Events, name, $"The {name} event was not observed.");
         Assert.IsTrue(scene.Events.IndexOf("admitted") < scene.Events.IndexOf("loader"));
         Assert.IsTrue(scene.Events.IndexOf("loader") < scene.Events.IndexOf("session"));
     }
@@ -417,7 +421,7 @@ public sealed class MsalCompositionScenarios
 
         public Task<IReadOnlyList<IAccount>> GetAccountsAsync(CancellationToken token)
         {
-            Discoveries++; Tokens.Add(token); DuringDiscovery?.Invoke();
+            Discoveries++; Events.Add("discover"); Tokens.Add(token); DuringDiscovery?.Invoke();
             if (DiscoveryFailure is { } failure) return Task.FromException<IReadOnlyList<IAccount>>(failure);
             IReadOnlyList<IAccount> accounts = IncludeSelectedAccount
                 ? [new SyntheticAccount("other@example.test", Tenant), Selected]
@@ -427,7 +431,7 @@ public sealed class MsalCompositionScenarios
 
         public Task<AuthenticationResult> AcquireSilentAsync(MsalSilentOperation operation, CancellationToken token)
         {
-            Silent.Add(operation); Tokens.Add(token);
+            Silent.Add(operation); Events.Add("silent"); Tokens.Add(token);
             return SilentFailure is { } failure ? Task.FromException<AuthenticationResult>(failure)
                 : Task.FromResult(Result(operation.CorrelationId));
         }
