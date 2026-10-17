@@ -73,8 +73,11 @@ public static class WindowsProcess
                 var completion = process.Completion;
                 if (process.ExceededBound(completion?.Timestamp ?? TimeProvider.System.GetTimestamp()))
                 {
-                    WindowsStandardHandles.Terminate();
-                    return 2;
+                    // Once request work has drained, only optional diagnostics can still
+                    // be pending; they cannot replace the published typed exit status.
+                    var drained = process.Drained;
+                    WindowsStandardHandles.Terminate(drained?.ExitCode ?? 2);
+                    return drained?.ExitCode ?? 2;
                 }
                 if (completion is not null) return completion.ExitCode;
                 Thread.Sleep(5);
@@ -177,10 +180,16 @@ public static class WindowsProcess
                 process.Ending();
             }
             observation?.Dispose();
-            // Local diagnostics may finish only within the remaining shutdown bound:
-            // a blocked diagnostic writer cannot change the authentication exit status.
-            if (drained) process.WaitForDiagnostics(observation);
-            if (drained) process.Finish(exitCode);
+            if (drained)
+            {
+                // Publish the drained status before any diagnostic wait. If the bound
+                // expires while only diagnostics are pending, the watchdog exits with
+                // this status, so a blocked writer cannot change it.
+                process.PublishDrained(exitCode);
+                checkpoint?.Invoke(OwnedProcessCheckpoint.BeforeDiagnosticDrain);
+                process.WaitForDiagnostics(observation);
+                process.Finish(exitCode);
+            }
         }
     }
 
@@ -218,6 +227,10 @@ public static class WindowsProcess
 
         internal CancellationToken CancellationToken => callerCancellation.Token;
         internal ProcessCompletion? Completion => Volatile.Read(ref completion);
+        private ProcessCompletion? drained;
+        internal ProcessCompletion? Drained => Volatile.Read(ref drained);
+        internal void PublishDrained(int exitCode) => Volatile.Write(ref drained,
+            new ProcessCompletion(exitCode, TimeProvider.System.GetTimestamp()));
         internal Task CancellationCompletion => Volatile.Read(ref cancellationTimestamp) == long.MinValue
             ? Task.CompletedTask : cancelled.Task;
 
@@ -368,4 +381,5 @@ internal enum OwnedProcessCheckpoint
     BeforeCommit,
     AfterCommit,
     BeforeHttpDisposal,
+    BeforeDiagnosticDrain,
 }

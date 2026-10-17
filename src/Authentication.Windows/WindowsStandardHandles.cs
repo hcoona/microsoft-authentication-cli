@@ -126,12 +126,12 @@ internal static partial class WindowsStandardHandles
         return true;
     }
 
-    internal static void Terminate()
+    internal static void Terminate(int exitCode = 2)
     {
         // Self termination normally does not return. The fallback also emits no
         // exception or CLR diagnostic containing request/provider information.
-        _ = TerminateProcess(GetCurrentProcess(), 2);
-        Environment.Exit(2);
+        _ = TerminateProcess(GetCurrentProcess(), unchecked((uint)exitCode));
+        Environment.Exit(exitCode);
     }
 
     [LibraryImport("kernel32.dll", SetLastError = true)]

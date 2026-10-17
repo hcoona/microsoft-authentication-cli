@@ -154,7 +154,7 @@ internal sealed class OwnedProcessChild(string scenario) : IAuthenticationProvid
                 host!.Completion.WaitAsync(Limit).GetAwaiter().GetResult();
             ProcessChild.Mark("before-commit");
         }
-        else
+        else if (stage == OwnedProcessCheckpoint.AfterCommit)
         {
             ProcessChild.Mark("after-commit");
             cleanupRelease.TrySetResult();
