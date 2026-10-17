@@ -104,11 +104,9 @@ controls:
       The public-build source baseline and Lasso manifest retain canonical source
       identity, hashes, identifiers, ordering, and cross-record consistency under
       duplicate-rejecting JSON parsing. The recorded Issue 1 bundle is frozen evidence:
-      its bytes match the digest pinned in the repository checker, it validates against
-      its schema, binds both source authorities by hash, retains exactly the asset files
-      it references with matching hashes, and keeps its embedded receipt digest
-      consistent. The retired runner is not replayed; its components and the
-      historical policy remain recoverable at the pinned revision named by the schema.
+      its bytes match the digest pinned in the repository checker, it binds both source
+      authorities by hash, and the retained asset files are exactly the ones it
+      references, with matching hashes.
     runner: hk
     implementation:
       kind: hk-steps
@@ -120,7 +118,7 @@ controls:
     execution_points:
       - local-fast
       - ci
-    failure_mode: A fixed-source authority or the frozen recorded evidence is silently edited, loses an admitted asset, or becomes internally inconsistent while still passing schema validation.
+    failure_mode: A fixed-source authority or the frozen recorded evidence is silently edited, loses or gains a retained asset, or stops matching the source authorities it binds.
 
   - id: requirement-id-uniqueness
     state: current

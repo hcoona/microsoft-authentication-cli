@@ -6,7 +6,6 @@
 from __future__ import annotations
 
 import argparse
-import copy
 import hashlib
 import math
 import json
@@ -1136,14 +1135,14 @@ def validate_public_build_lasso_manifest(path: Path) -> list[str]:
         path.relative_to(ROOT).as_posix(),
         baseline["source"],
     )
-def frozen_receipt_digest(bundle: dict[str, Any]) -> str:
-    value = copy.deepcopy(bundle)
-    del value["runtime_evidence"]["receipt_binding"]["digest"]
-    return canonical_sha256(value)
-
-
 def validate_public_build_frozen_evidence(path: Path) -> list[str]:
-    """Check the recorded bundle as frozen evidence without replaying its runner."""
+    """Check what still protects the frozen bundle without replaying its runner.
+
+    The byte digest pin fixes the bundle's own content, so checks that are a pure
+    function of those bytes (its ID and embedded receipt digest) are redundant. The
+    remaining checks bind it to inputs that can still change: its path, the source
+    authorities, and the retained asset files.
+    """
     relative_path = path.relative_to(ROOT).as_posix()
     try:
         bundle = load_strict_json_path(path)
@@ -1156,8 +1155,10 @@ def validate_public_build_frozen_evidence(path: Path) -> list[str]:
         errors.append(
             f"{relative_path}: frozen bundle bytes differ from the reviewed digest"
         )
-    if relative_path != PUBLIC_BUILD_BUNDLE_PATH or bundle.get("id") != path.stem:
-        errors.append(f"{relative_path}: frozen bundle path and ID must match")
+    if relative_path != PUBLIC_BUILD_BUNDLE_PATH:
+        errors.append(f"{relative_path}: frozen bundle path differs from the reviewed path")
+    if errors:
+        return errors
     authorities = bundle["authorities"]
     if (
         authorities["source_baseline"]["path"] != PUBLIC_BUILD_SOURCE_BASELINE_PATH
@@ -1194,11 +1195,6 @@ def validate_public_build_frozen_evidence(path: Path) -> list[str]:
             f"{relative_path}: retained assets must be exactly the assets the bundle "
             "references"
         )
-    if (
-        bundle["runtime_evidence"]["receipt_binding"]["digest"]
-        != frozen_receipt_digest(bundle)
-    ):
-        errors.append(f"{relative_path}: frozen receipt digest does not match the bundle")
     return errors
 
 
