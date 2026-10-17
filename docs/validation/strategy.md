@@ -80,7 +80,7 @@ The unresolved obligations include:
 - secure persistence, safe recovery, and accurate persistence warnings for the exact
   supported combination.
 
-The [bounded Windows probe](../research/v1-public-contract-baseline.md#observed-msa-token-git-discovery-and-silent-reuse)
+The [bounded Windows probe](../research/experiments/windows-msal-account-metadata.md#observed-msa-token-git-discovery-and-silent-reuse)
 now demonstrates unique exact-account resolution, matching token-result metadata,
 authenticated Git discovery, and one fresh-process silent reuse in existing state.
 This is mechanism evidence for that configuration, not completion of the engine/adapter
@@ -361,7 +361,7 @@ automatic Linux fallback. Cancellation and caller disconnection must be assessed
 Windows process boundary, including the CLI's own finite request deadline.
 
 Azure Artifacts consumes the same Azure DevOps token-acquisition capability under the
-[public source assessment](../research/v1-public-contract-baseline.md#wsl-direct-invocation-and-azure-artifacts).
+[public source assessment](../research/experiments/windows-slice-validation.md#wsl-direct-invocation).
 Cross-consumer scenarios cover reuse with compatible account, Profile, tenant, and scopes,
 and separation when any relevant context differs. Downstream integration evidence must
 identify whether the adapter presents the access token directly or uses a separately
@@ -461,7 +461,7 @@ prove resource equivalence, tenant precedence, provider behavior, or lifecycle c
 | Local OpenTelemetry-compatible observation | Owned request/phase activities have explicit parentage; phase starts are observable before an awaited operation finishes. Only allowlisted local observations are emitted. Ambient activity, outgoing HTTP headers, ordinary result/exit, cancellation and process bounds are preserved. | Controlled listeners and safe-sink scenarios with synthetic private markers, listener/sink failure and overflow, parentage and ambient-context checks; exact Windows artifact/lifetime checks before dependent real use. Telemetry is not an independent proof of process exit, visible UI, normal stdout or actual WSL credential transport. |
 | Token-shape validation observation under [`V2-REQ-038`](../product/requirements/result-and-process-protocol.md#v2-req-038-local-token-shape-validation-observation) | Runs only with `--telemetry stderr` and only after the complete success result is written to stdout. Emits fixed categories plus provider-reported expiration and remaining lifetime only; opaque, malformed, duplicate-member or oversized tokens cannot change success or expose token material. | Code-ordered delivery (stdout before diagnostics, source review); Windows scenarios assert opt-in field presence/absence (executed in the unfiltered Windows scenario run of the [real-host results](../research/experiments/real-host-validation.md#results)); Core scenarios cover opaque/duplicate/oversized interpretation. |
 
-The [research evidence for the Windows Slice](../research/v1-public-contract-baseline.md#windows-slice-dependency-and-host-contracts)
+The [research evidence for the Windows Slice](../research/experiments/windows-slice-validation.md#windows-slice-dependency-and-host-contracts)
 owns each observation, its exact candidate/request binding and its limits. This
 strategy owns only the mapping below from scenarios to that evidence; it does not
 restate the observations.
@@ -475,7 +475,7 @@ sub-condition and the sub-condition that remains unobserved.
 
 | Scenario | Status | Evidence and exact sub-condition |
 | --- | --- | --- |
-| Personal request with a different corporate OS default | Satisfied | Native and WSL personal acquisition and reuse in the [selected-role observations](../research/v1-public-contract-baseline.md#selected-role-windows-and-wsl-acceptance-observations). |
+| Personal request with a different corporate OS default | Satisfied | Native and WSL personal acquisition and reuse in the [selected-role observations](../research/experiments/windows-slice-validation.md#selected-role-windows-and-wsl-acceptance-observations). |
 | Work request for company Azure DevOps | Partially satisfied | Work acquisition and reuse with `common` observed; an explicit work-tenant GUID combination was not observed and is not claimed by owner decision. |
 | First use and later invocation | Partially satisfied | Existing-state first engine use and fresh-process silent reuse observed; clean-state first use was not observed and is not claimed by owner decision. |
 | Git followed by Artifacts acquisition | Partially satisfied | Fresh-process reuse with the same request observed; a change of downstream consumer was not itself exercised, and Git/feed operations remain downstream evidence. |
@@ -485,8 +485,8 @@ sub-condition and the sub-condition that remains unobserved.
 | Lifetime pipe closes before discovery or during WAM | Satisfied | Initially closed pipe and EOF during actual WAM. |
 | Linux caller dies without the optional lifetime pipe | Satisfied | Finite scoped Windows completion after caller-only SIGTERM. |
 | Deadline during Profile reading, discovery, silent, interaction, or validation | Partially satisfied | Typed timeout and timed cancellation observed at their recorded stages; the [real-host results](../research/experiments/real-host-validation.md#results) add, for the personal role only, a 30-second deadline expiring while WAM was shown, native and WSL, with a typed timeout and a WAM window left for the operator to close (finding F2); work-role P6 was not executed by [owner decision](https://github.com/hcoona/microsoft-authentication-cli/pull/491#issuecomment-6208285632), and role-independence of the deadline is an inference. Deadlines during Profile reading, discovery or validation have controlled evidence only. Hidden-parent EOF and deadline reuse the visible-parent lifetime evidence, which does not depend on owned controls. |
-| Noninteractive request in locked or expired state | Partially satisfied | A disconnected Remote Desktop session was rejected at local admission with no UI ([locked-state observation](../research/v1-public-contract-baseline.md#locked-state-non-interactive-observation)); expired-credential broker handling was not observed and is not claimed. |
-| Hidden owned parent | Partially satisfied | The [hidden-parent observation](../research/v1-public-contract-baseline.md#hidden-owned-parent-interactive-observation) found no exposed product window, WAM presentation and human WAM cancellation, but on a build whose hidden parent still had child controls. That removing the never-shown controls does not affect those observations is an inference, not an observation of the current build. The no-child-controls and never-visible assertions come from controlled Windows scenarios only. |
+| Noninteractive request in locked or expired state | Partially satisfied | A disconnected Remote Desktop session was rejected at local admission with no UI ([locked-state observation](../research/experiments/windows-slice-validation.md#locked-state-non-interactive-observation)); expired-credential broker handling was not observed and is not claimed. |
+| Hidden owned parent | Partially satisfied | The [hidden-parent observation](../research/experiments/windows-slice-validation.md#hidden-owned-parent-interactive-observation) found no exposed product window, WAM presentation and human WAM cancellation, but on a build whose hidden parent still had child controls. That removing the never-shown controls does not affect those observations is an inference, not an observation of the current build. The no-child-controls and never-visible assertions come from controlled Windows scenarios only. |
 | Unofficial identity indication | Partially satisfied | The stderr indication was written before interaction; its visibility to users depends on the caller and is not claimed. WAM title presentation and focus are not acceptance obligations by owner decision; the [real-host results](../research/experiments/real-host-validation.md#results) record that the WAM account picker showed the fixed broker title on that host. |
 | No match, duplicate match, alias-only visibility; tenant and scope normalization; wrong/missing provider metadata; local host admission; cancellation and eligibility races; blocked output; output and telemetry allowlists; local OpenTelemetry observation | Satisfied by controlled evidence | Core and Windows scenario suites; controlled results are recorded at a [pinned research revision](https://github.com/hcoona/microsoft-authentication-cli/blob/06ab8855e4fc4c3144852f4cadeb12086531c388/docs/research/experiments/windows-slice-validation.md). |
 | Token-shape validation observation | Partially satisfied | Core scenarios cover opaque/duplicate/oversized interpretation and source review establishes stdout-before-diagnostics ordering; the Windows opt-in field presence/absence scenarios passed in the unfiltered Windows scenario run of the [real-host results](../research/experiments/real-host-validation.md#results). Real-token field values were excluded from that evidence. |
@@ -564,7 +564,7 @@ UI/MSAL host; the [concrete disposition](../designs/windows-ado-authentication.m
 selects Native AOT for the .NET 10 Windows x64 Win32 host. No non-AOT exception is
 accepted. That selection is separate from the later evidence required for support.
 
-The [Native AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
+The [Native AOT assessment](../research/experiments/windows-native-aot.md#windows-native-aot-assessment)
 owns the synthetic observations that closed the bounded obligations below for their
 exact pinned source, toolchain, artifacts and host; it does not validate the complete
 application.

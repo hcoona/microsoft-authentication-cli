@@ -159,7 +159,7 @@ integrity or DLL-loading guarantee. A conflict makes the affected target unavail
 The native TMT model's process, UI, broker, caller, Profile and data flows do not change:
 these are internal host and deployment mitigations of its existing execution, tampering,
 disclosure and availability threats. The
-[Native AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
+[Native AOT assessment](../research/experiments/windows-native-aot.md#windows-native-aot-assessment)
 supports the bounded loader/allocation/observable-cleanup premise; it does not mark
 product controls effective. Complete-application, Profile and security acceptance gates
 remain applicable.
@@ -308,7 +308,7 @@ validation; see ID 29 in the native file. No state changed: ID 29 was already
   AOT import and loading checks, both in the
   [real-host results](../research/experiments/real-host-validation.md#results); or a
   recorded real-host observation in those results or the
-  [Windows Slice research](../research/v1-public-contract-baseline.md#selected-role-windows-and-wsl-acceptance-observations).
+  [Windows Slice research](../research/experiments/windows-slice-validation.md#selected-role-windows-and-wsl-acceptance-observations).
   Each native justification names the control and those scenarios or observations.
 - **`NeedsInvestigation`** now covers only candidates whose remaining evidence depends
   on an open [Issue #482](https://github.com/hcoona/microsoft-authentication-cli/issues/482)

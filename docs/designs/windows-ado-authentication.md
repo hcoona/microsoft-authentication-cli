@@ -26,7 +26,7 @@ applies to every operation, configuration, and failure path.
 | Host | Windows 11 x64 in an active interactive user session, with WAM available. WSL 2 callers use normal Windows executable interoperability. Service, impersonated, disconnected desktop, and native Linux hosts are outside this Slice. |
 | Distribution | Executable basename, installer, signing, and update channel remain release identities under the [registry](../governance/operational-identities.yaml). `<windows-cli>` below denotes the caller-selected executable, not a new installed command. |
 
-The [dependency assessment](../research/v1-public-contract-baseline.md#windows-slice-dependency-and-host-contracts)
+The [dependency assessment](../research/experiments/windows-slice-validation.md#windows-slice-dependency-and-host-contracts)
 binds these choices to public source. Future upgrades must use the existing dependency
 review/validation matrix.
 
@@ -39,14 +39,14 @@ Retain SDK 10.0.402/runtime 10.0.12, MSAL/Broker 4.83.1 and NativeInterop 0.20.3
 No non-AOT exception is needed. This selection is not complete-application
 compatibility, release or support acceptance.
 
-The [Native AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
+The [Native AOT assessment](../research/experiments/windows-native-aot.md#windows-native-aot-assessment)
 owns the public toolchain/Win32 contracts and the bounded synthetic observations that
 support this path without changing authentication dependencies or relaxing DLL search,
 together with their limits. The [validation basis](../validation/strategy.md#native-aot-publishing)
 retains complete-application, WAM/UI, account/Profile, dynamic-dependency, symbol,
 performance, release and support obligations.
 
-The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
+The [public AOT assessment](../research/experiments/windows-native-aot.md#windows-native-aot-assessment)
 distinguishes the following alternatives:
 
 | Alternative | Disposition and reason |
@@ -830,8 +830,8 @@ The repository owner selects a hidden owned parent as the WAM parent. The
 requires an explicit parent HWND, but no visible V2 window. A visible parent's Cancel
 action cannot stop a pending WAM prompt while WAM disables its owner, and it adds a
 DPI-unaware surface the product does not otherwise need. The research record owns the
-[console-parent comparison](../research/v1-public-contract-baseline.md#console-parent-versus-a-separate-desktop-surface)
-and [hidden-parent observations](../research/v1-public-contract-baseline.md#hidden-owned-parent-candidate-observations)
+[console-parent comparison](../research/experiments/windows-slice-validation.md#console-parent-versus-a-separate-desktop-surface)
+and [hidden-parent observations](../research/experiments/windows-slice-validation.md#hidden-owned-parent-candidate-observations)
 that informed this decision; borrowed console or foreground windows are not parent
 sources.
 
