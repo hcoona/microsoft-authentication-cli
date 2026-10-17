@@ -304,7 +304,8 @@ deadline. Interaction intent does not select token format or downstream service 
 Owns final success validation against the same normalized request, using provider metadata
 supplied by the adapters. An adapter's reported success is a candidate until validation
 completes. Only the validated result reaches protocol serialization; access-token contents
-are not a second identity source. Per-platform mechanism ordering remains unselected until
+are not a second identity source. The Windows Slice design selects its single WAM
+mechanism and order; per-platform ordering for any other platform remains unselected until
 the corresponding capability and evidence prerequisites are satisfied.
 
 ### Account Resolution
@@ -387,7 +388,7 @@ to the first-release commitment.
 | Background requests without UI | Policy carries interaction permission through account/state access and all provider operations; host integration excludes UI-requiring paths. | Includes secure-state unlock; unavailable silent capability does not permit interaction. |
 | Direct protected-service access | The same protocol boundary accepts explicit target intent and returns a validated token. | The caller owns service access; no general personal-account/resource eligibility is assumed. |
 | Authentication inside a remote-tool workflow | External integrations use the same request/result boundary. | MCP and other host protocols remain outside the engine. |
-| Upgrade without changing a compatible adapter | Protocol boundary owns supported-major dispatch, serialization, and process semantics. | Internal provider changes do not redefine a supported public protocol; the Windows design and schemas define protocol 1 before implementation. |
+| Upgrade without changing a compatible adapter | Protocol boundary owns supported-major dispatch, serialization, and process semantics. | Internal provider changes do not redefine a supported public protocol; the Windows design and schemas define protocol 1, which the Windows Slice implements. |
 
 ## Decision-Critical Open Questions
 
@@ -429,10 +430,10 @@ declared complete by relabeling it unsupported.
 Behavioral obligations, including identity validation, interaction, deadlines, secure
 storage, output discipline, and trusted authority selection, are defined by the
 [`product requirements`](../product/requirements/product-boundary.md) and their sibling
-capability modules. Serialized contracts are created only when a future Delivery Wave
-entry authorizes a bounded public-contract outcome.
-The Windows Slice's protocol 1 and Profile contracts already exist under
+capability modules. The Windows Slice's protocol 1 and Profile contracts exist under
 [`contracts/v1`](../../contracts/v1/request.schema.json) and are owned by its design.
+Another serialized contract is created only when a Delivery Wave entry authorizes a
+bounded public-contract outcome.
 
 ## Scoped Architecture Views
 
