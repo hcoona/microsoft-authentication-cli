@@ -85,6 +85,9 @@ The sequence shows the successful path, not permission to bypass exceptional out
 Zero matching accounts never initiates an ambient silent request. If permitted interaction
 could satisfy the request, policy may enter the interaction path below; otherwise it
 returns the applicable typed failure. Multiple matching accounts are terminal ambiguity.
+A classified provider failure during account resolution is terminal, including an
+interaction requirement: resolution supplies no request-local challenge, so policy
+returns that outcome and does not enter the interaction path in any mode.
 A missing provider capability is unavailability, not proof that interaction will work.
 A reported success lacking a required identity or scope postcondition is terminal
 validation failure and does not reach the caller or another mechanism.

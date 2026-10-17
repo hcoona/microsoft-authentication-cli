@@ -472,6 +472,13 @@ after ambiguity. Count exact full-email matches: zero permits interaction only i
 request and host/Profile allow it, one selects that `IAccount`, and more than one is
 terminal `account_ambiguous` in every mode. Missing account email is not a match.
 
+A provider failure raised during account discovery is terminal in every mode, including
+a provider interaction requirement: discovery has no claims challenge for this request,
+so the request ends with that classified outcome (`interaction_required` keeps its safe
+reason) and does not open owned UI or make an interactive call, even when interaction
+is permitted or forced. Only a no-match discovery result or a silent-call interaction
+requirement can advance to interaction.
+
 For a unique real account in `non-interactive-only` or `interactive-if-needed`, call
 `AcquireTokenSilent(scopes, account)` before considering interaction. Preserve the
 normalized tenant constraint separately from the provider route. Under the legacy
@@ -503,7 +510,8 @@ cancellation/deadline boundary.
 | Observation | Coordinator outcome/action |
 | --- | --- |
 | Admission or Profile semantic error | `invalid_request`; no provider call. |
-| No visible match or provider interaction requirement | `interaction_required`, or the one compatible interactive call when permitted. |
+| No visible match or silent-call interaction requirement | `interaction_required`, or the one compatible interactive call when permitted. |
+| Provider interaction requirement during account discovery | `interaction_required` with its safe reason; terminal, no owned UI or interactive call in any mode. |
 | Explicit `force-interactive` with zero or one exact match | One provider interactive call through the sign-in/account-selection route with neither account nor login hint; no engine silent acquisition or fallback. |
 | Multiple exact visible matches | `account_ambiguous`; no silent call or picker. |
 | Broker unavailable, unsupported session, or rejected web fallback | `mechanism_unavailable`; no alternate mechanism. |
