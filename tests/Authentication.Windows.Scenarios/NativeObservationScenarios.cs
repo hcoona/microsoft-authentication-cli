@@ -80,16 +80,18 @@ public sealed partial class NativeObservationScenarios
         // restriction the default search reaches it (bad image format); afterward it
         // is not searched (module not found). No image is mapped or executed.
         var (exit, _) = RunChild(NativeProcessChild.RestrictSearch);
-        Assert.AreEqual(0, exit, exit == NativeProcessChild.ProbeUnreachable
-            ? "The default search did not reach the working-directory probe; the check is inconclusive."
-            : "The restricted search still reached the working-directory probe.");
+        if (exit == NativeProcessChild.ProbeUnreachable)
+            Assert.Inconclusive("The default search did not reach the working-directory probe on this host.");
+        Assert.AreEqual(0, exit, "The restricted search still reached the working-directory probe.");
     }
 
     [TestMethod]
     public void ConsoleBreakCancelsThePendingRequestWithATypedResult()
     {
-        // The child has its own hidden console, so the break event it raises reaches
-        // only processes attached to that console: the child itself.
+        // Deviation from the accepted wording "a new process group": the child gets its
+        // own hidden console through CreateNoWindow and raises GenerateConsoleCtrlEvent
+        // (CTRL_BREAK_EVENT, process group 0), which reaches only processes attached to
+        // that console, the child itself. No separate process group is created.
         var (exit, output) = RunChild(NativeProcessChild.ConsoleBreak);
         Assert.AreEqual(1, exit, "Console cancellation must end with one typed failure.");
         using var json = JsonDocument.Parse(output);

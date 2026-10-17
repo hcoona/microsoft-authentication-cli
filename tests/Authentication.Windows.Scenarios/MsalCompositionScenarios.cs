@@ -59,6 +59,8 @@ public sealed class MsalCompositionScenarios
         Assert.AreEqual(legacy, scene.Settings.MsaPassthrough);
         Assert.AreSame(scene, scene.HttpFactory);
         // Discovery and the silent call use the session created for this request.
+        foreach (var name in new[] { "session", "discover", "silent" })
+            CollectionAssert.Contains(scene.Events, name, $"The {name} event was not observed.");
         Assert.IsTrue(scene.Events.IndexOf("session") < scene.Events.IndexOf("discover"));
         Assert.IsTrue(scene.Events.IndexOf("discover") < scene.Events.IndexOf("silent"));
         Assert.AreSame(scene.Selected, scene.Silent[0].Account, "The nonmatching first account must not be selected.");
@@ -72,6 +74,8 @@ public sealed class MsalCompositionScenarios
         Assert.AreEqual(0, scene.Interactive.Count);
         Assert.AreEqual(0, scene.Opened);
         Assert.IsTrue(scene.Tokens.All(token => token == scene.Original.Token));
+        foreach (var name in new[] { "admitted", "loader" })
+            CollectionAssert.Contains(scene.Events, name, $"The {name} event was not observed.");
         Assert.IsTrue(scene.Events.IndexOf("admitted") < scene.Events.IndexOf("loader"));
         Assert.IsTrue(scene.Events.IndexOf("loader") < scene.Events.IndexOf("session"));
     }
