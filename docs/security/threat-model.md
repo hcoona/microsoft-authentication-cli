@@ -159,7 +159,7 @@ integrity or DLL-loading guarantee. A conflict makes the affected target unavail
 The native TMT model's process, UI, broker, caller, Profile and data flows do not change:
 these are internal host and deployment mitigations of its existing execution, tampering,
 disclosure and availability threats. The
-[Native AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
+[Native AOT assessment](../research/experiments/windows-native-aot.md#windows-native-aot-assessment)
 supports the bounded loader/allocation/observable-cleanup premise; it does not mark
 product controls effective. Complete-application, Profile and security acceptance gates
 remain applicable.
@@ -286,38 +286,39 @@ and 22 `NotApplicable` (previously 76 `NeedsInvestigation`, 20 `NotApplicable` a
 moved from `NeedsInvestigation` to `Mitigated` (IDs 6, 8, 14, 15, 19, 23, 25, 26, 29,
 37, 39, 40, 51, 53, 54, 77, 80, 89, 92 and 94), and every justification that awaited the
 Windows scenario execution now cites that run. `src` at `69d9a72` is identical to
-`563c262` and to the real-host subject `8d9be27`, so the run and the real calls
-exercise the re-reviewed source. The F1 correction
-([PR #492](https://github.com/hcoona/microsoft-authentication-cli/pull/492)) later made
-`force-interactive` supply the requested email as login hint; one of its real calls
-(#29, work role) and all calls of an experiment-only account-bound variant (#32 to #34)
-completed forced calls without WAM UI, so by repository-owner decision (2026-10-16 UTC) the forced call again
-supplies neither account nor login hint, and F1 is a
-[known limitation](../designs/windows-ado-authentication.md#validation-and-explicit-unsupported-cases).
-On the reverted source (fourth subject `3ae2554`), the unfiltered Windows scenario run
-(S1-1: 186 passed, 0 failed, 0 skipped) executed the reverted builder scenarios, and
-forced calls #37 to #40 (personal and work roles, native and WSL) each presented WAM's
-interactive UI and completed sign-in with the designated account under strict
-validation; see ID 29 in the native file. No state changed: ID 29 was already
-`Mitigated` on its hidden-parent and rejected-custom-web-UI basis.
+`563c262` and to the real-host subject `8d9be27`. The later forced-interaction change and
+its revert, decided by the repository owner on 2026-10-16, changed no disposition; the
+fourth real-host subject `3ae2554` contains that revert, and its unfiltered Windows
+scenario run is the S1-1 run cited below. Scenarios added after that run are cited with
+the CI job that executes them. The design records the forced-interaction
+[known limitations](../designs/windows-ado-authentication.md#validation-and-explicit-unsupported-cases),
+and the real-host record owns the observations.
 
 - **`Mitigated`** requires an implemented control with executed evidence: the Linux CI
-  run of `tests/Authentication.Scenarios` (378 cases at `563c262`); the unfiltered
-  `tests/Authentication.Windows.Scenarios` run on the designated Windows host (S1-1: 183
-  passed, 0 failed, 0 skipped, including `WindowsHostTiming`) or the published Native
+  run of `tests/Authentication.Scenarios` (job `linux-scenarios`; 378 cases at `563c262`); the
+  unfiltered `tests/Authentication.Windows.Scenarios` run on the designated Windows host
+  (S1-1 at subject `3ae2554`: 186 passed, 0 failed, 0 skipped, including
+  `WindowsHostTiming`) or the published Native
   AOT import and loading checks, both in the
   [real-host results](../research/experiments/real-host-validation.md#results); or a
   recorded real-host observation in those results or the
-  [Windows Slice research](../research/v1-public-contract-baseline.md#selected-role-windows-and-wsl-acceptance-observations).
+  [Windows Slice research](../research/experiments/windows-slice-validation.md#selected-role-windows-and-wsl-acceptance-observations).
   Each native justification names the control and those scenarios or observations.
+  The Windows scenarios also run in the GitHub Actions job `windows-scenarios` (Windows
+  Scenario Tests), which excludes `WindowsHostTiming` and the published-executable cases.
+  Many Windows scenarios run the real classification code against substitutes: a
+  synthetic `IWindowsHostObservations`, a substitute `IMsalSessionFactory`, a substitute
+  loader-restriction delegate, or, in `LocalProviderAdmissionScenarios`, substituted host
+  admission and provider initializer. Such a scenario establishes how the engine
+  classifies the condition, not that the native control detects it. `NativeObservationScenarios`
+  runs some native reads and controls directly; where no scenario does, the native
+  success path is established only by real-host calls that passed it. Justifications
+  state which applies.
 - **`NeedsInvestigation`** now covers only candidates whose remaining evidence depends
   on an open [Issue #482](https://github.com/hcoona/microsoft-authentication-cli/issues/482)
   release gate: independent distribution identity, real broker failure or concurrency,
   and real-WAM correlation-echo confirmation (CORE-01). Each justification names that
   gate. No candidate disposition depends on still-pending Windows scenario execution.
-  ID 29 also cites the reverted forced builder scenarios, executed in the fourth
-  subject's S1-1 run (186 passed); its `Mitigated` basis (hidden parent and rejected
-  custom web UI) was executed in both S1-1 runs.
 - **`NotApplicable`** adds the two optional telemetry-endpoint candidates (IDs 85 and 87):
   the Slice exports no network telemetry. Selecting network export must re-disposition
   them.
@@ -342,10 +343,9 @@ reason) narrow acceptance and are exercised by the named executed Core scenarios
 to `WindowsProcess.cs` (result written before diagnostics, help text, notice path) are
 executed by the Windows `ProcessScenarios` in the S1-1 run. Earlier success transport is
 supplementary: token containment rests on the executed Core and Windows scenarios. On the
-current source, the real-host results add, for the personal role, a deadline expiring
-while WAM was shown (native and WSL) and lifetime-pipe EOF while WAM was shown (WSL), both
-under the hidden parent; the corresponding work-role cases were not executed by owner
-decision.
+current source, the [real-host results](../research/experiments/real-host-validation.md#results)
+add deadline and lifetime-pipe EOF observations under the hidden parent for the roles
+and callers they list.
 
 `Mitigated` means the named control is implemented and exercised by that evidence
 within the declared threat model; it is not a support claim, release readiness or proof
@@ -354,18 +354,18 @@ OAuth handling) remain trusted rather than verified.
 
 | Candidate group | Disposition after the 2026-10-16 follow-up |
 | --- | --- |
-| Caller, identity-service and broker-completion spoofing; input validation (IDs 2, 3, 20, 33, 34, 43, 47, 48) | `Mitigated`: closed request/Profile syntax, cloud and tenant admission and strict email/tenant/scope/operation validation, executed in Core scenarios; the production correlation binding is executed in the Windows S1-1 run. Construction of the fixed Public Cloud authority is Windows code exercised by the recorded real-host acquisitions on earlier accepted builds (see the provenance table above). |
+| Caller, identity-service and broker-completion spoofing; input validation (IDs 2, 3, 20, 33, 34, 43, 47, 48) | `Mitigated`: closed request/Profile syntax, cloud and tenant admission and strict email/tenant/scope/operation validation, executed in Core scenarios; the production correlation binding is executed in the Windows S1-1 run. Construction of the fixed Public Cloud authority is executed in the S1-1 run by `MsalConstructionScenarios`, which build the real MSAL application and assert its authority, and is exercised by every recorded real-host acquisition. |
 | Process spoofing (IDs 1, 18, 32, 46, 65, 73) | `NeedsInvestigation`: operation binding is executed, but executable identity depends on the open distribution-identity release gate under decision 0005. |
-| Broker and interaction-surface spoofing (IDs 15, 19, 29) | `Mitigated`: DLL-search restriction, broker-availability check, rejected custom web UI and hidden-parent construction executed in the Windows S1-1 run; the published Native AOT application imports only Windows DLLs and its real calls loaded the broker from the application directory with System32 imports and reported no `dll_search` or `broker_initialization` indication; validated `force-interactive` success with WAM shown for both roles on the pre-F1 source, which passed neither account nor login hint, as the reverted source again does; on the reverted source (fourth subject `3ae2554`) the reverted builder scenarios passed in S1-1 (186 of 186) and forced calls #37 to #40 showed WAM and succeeded with the designated account for both roles, native and WSL. The hinted (#29) and account-bound variant (#32 to #34) forced calls completed without WAM UI, which is why the forced call reverted; F1 is a known limitation, and the final identity remains bound by strict validation ([real-host results](../research/experiments/real-host-validation.md#results)). Deployment without development-machine dependencies remains a separate Native AOT release gate. |
+| Broker and interaction-surface spoofing (IDs 15, 19, 29) | `Mitigated`: `MsalCompositionScenarios` classify loader and initialization failures with a substitute loader delegate and session factory; `NativeObservationScenarios.RestrictedDllSearchExcludesTheWorkingDirectory` runs the real `WindowsLoader.RestrictSearch` in a child process, and `MsalConstructionScenarios.UnavailableBrokerStopsSessionCreationWithItsFixedCategory` runs the real session factory with only the `IsBrokerAvailable` answer replaced; `MsalAdapterScenarios.RealNonBrokerInteractiveCallReachesTheRejectingWebUi` drives a real non-broker MSAL interactive call against a synthetic transport into `RejectingWebUi`; the last three were added after S1-1 and run in `windows-scenarios`; the hidden parent is a real Win32 window in `OwnedHostScenarios`. On the real host, the published Native AOT application imports only Windows DLLs, and every real call loaded the broker from the application directory with System32 imports and reported no `dll_search` or `broker_initialization` indication, which observes the native success path of both controls. Forced interaction is WAM-owned under the hidden parent with strict final validation; its provider-owned UI behavior is a design known limitation ([real-host results](../research/experiments/real-host-validation.md#results)). Deployment without development-machine dependencies remains a separate Native AOT release gate. |
 | Data-flow disclosure; token and diagnostic destinations (IDs 5, 12, 22, 36, 50, 69, 76, 82) | `Mitigated`: no credential input, no application token store, token only in a validated success, allowlisted diagnostics; executed in Core scenarios with synthetic markers and recorded real-host transport. |
-| Interrupted flows (IDs 7, 14, 17, 24, 31, 38, 45, 52, 58, 60, 62, 64, 71, 78, 84, 93) | `Mitigated`: original deadline, single terminal latch and no retry/fallback in Core scenarios, plus recorded closed-pipe, EOF-during-WAM, human-cancellation, caller-death and timeout observations, and on the current source a deadline and lifetime-pipe EOF while WAM was shown ([real-host results](../research/experiments/real-host-validation.md#results)). ID 14, result delivery, now rests on the Windows `ProcessScenarios` executed in S1-1. A provider window left after non-human termination is a [known limitation](#known-limitation-provider-window-after-non-human-termination), not an unmitigated interruption. |
+| Interrupted flows (IDs 7, 14, 17, 24, 31, 38, 45, 52, 58, 60, 62, 64, 71, 78, 84, 93) | `Mitigated`: original deadline, single terminal latch and no retry/fallback in Core scenarios, plus recorded closed-pipe, EOF-during-WAM, human-cancellation, caller-death and timeout observations ([real-host results](../research/experiments/real-host-validation.md#results)). ID 14, result delivery, now rests on the Windows `ProcessScenarios` executed in S1-1. A provider window left after non-human termination is a [known limitation](#known-limitation-provider-window-after-non-human-termination), not an unmitigated interruption. |
 | Process crash/stop and Profile-read bounds (IDs 6, 23, 37, 51, 77, 92) | `Mitigated`: typed outcomes and Profile bounds are executed in Core, and the process watchdog, broken or undrained result pipe and Profile size limit are executed in the Windows S1-1 run. |
-| Impersonation (IDs 8, 25, 39, 53) | `Mitigated`: no privileged helper exists; the impersonation and logon-kind admission checks are executed in the Windows S1-1 run. |
+| Impersonation (IDs 8, 25, 39, 53) | `Mitigated`: no privileged helper exists. The impersonation and logon-kind classification is executed by `WindowsHostAdmissionScenarios` against synthetic `IWindowsHostObservations` (S1-1 and `windows-scenarios`). The native thread-identity read is executed in `windows-scenarios` by `NativeObservationScenarios.ThreadIdentityDistinguishesImpersonationOnTheCallingThread`, with and without `ImpersonateSelf`. The native logon-kind, session and desktop reads have only their success path (an ordinary interactive logon) observed, on the real host by every call that passed admission. |
 | Remote code execution (IDs 9, 26, 40, 54, 80, 95) | `Mitigated`: request and Profile input (IDs 9, 95) in Core; bounded provider error-body and broker-status parsing (IDs 26, 40, 54, 80) in the Windows S1-1 run. |
 | Execution-flow changes (IDs 10, 27, 41, 55, 81, 96) | `Mitigated`: explicit policy state, one safe provider-failure filter and Profile fields that cannot select policy, executed in Core scenarios. |
 | OAuth response CSRF (IDs 42, 56) | `NeedsInvestigation`: correlation binding is executed in Core and the MSAL composition scenarios in the Windows S1-1 run, and every validated real success passed the fail-closed correlation check; broker-level echo remains an inference, so real-WAM confirmation (CORE-01) stays an Issue #482 release gate. No parallel OAuth verifier. |
 | Reusable-state spoofing, persistence status and resources (IDs 66, 68, 70, 74) | `Mitigated`: no application-owned store, persistence always reported as unconfirmed, no coordination or retry outside the deadline; recorded fresh-process reuse. |
-| Store corruption and inaccessibility (IDs 67, 72, 79) | `NeedsInvestigation`: unavailable-broker scenarios are executed in the Windows S1-1 run, but real broker failure, disappearance and concurrency remain Issue #482 release gates. |
+| Store corruption and inaccessibility (IDs 67, 72, 79) | `NeedsInvestigation`: the classification of an unavailable broker is executed with synthetic initialization results: `LocalProviderAdmissionScenarios` substitutes host admission and the provider initializer, and `MsalCompositionScenarios` substitutes the session factory. `MsalConstructionScenarios.UnavailableBrokerStopsSessionCreationWithItsFixedCategory` runs the real session factory with only the `IsBrokerAvailable` answer replaced (added after S1-1; `windows-scenarios`); real broker failure, disappearance and concurrency remain Issue #482 release gates. |
 | Profile source and reads (IDs 89, 94) | `Mitigated`: admission of a reported failure is executed in Core, and source substitution and the translation of real file-store failures in the Windows file-snapshot scenarios of the S1-1 run. |
 | Optional telemetry endpoint (IDs 85, 87) | `NotApplicable`: the Slice exports no network telemetry. |
 | Generic nonrepudiation candidates (`R6`/`R7`, 16 items) | Not applicable: the engine promises typed results and sanitized diagnostics, not signed delivery receipts or an identity-rich audit ledger. Persistence-status accuracy remains applicable under the separate storage candidate. |
@@ -379,11 +379,10 @@ suggested control.
 
 ### Known Limitation: Provider Window After Non-Human Termination
 
-The [real-host results](../research/experiments/real-host-validation.md#results) record
-finding F2: after a product timeout or a lifetime-pipe cancellation while WAM was shown,
-a WAM window remained after the CLI process ended, in 3 of 3 such terminations (two
-timeouts and one lifetime-pipe EOF, personal role). Human cancellation on the WAM surface
-left no window.
+After a product timeout or a lifetime-pipe cancellation while WAM is shown, a WAM window
+can remain after the CLI process ends (finding F2 in the
+[real-host results](../research/experiments/real-host-validation.md#results), which own
+the observations and their scope).
 
 That window belongs to the provider. The product forwards cancellation through MSAL,
 destroys its hidden parent and invalidates the pending request; it does not wait for, or

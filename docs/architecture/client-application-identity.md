@@ -62,7 +62,7 @@ The [2026-09-04 RECHECK-007 desk finding](../research/v1-public-contract-baselin
 records Azure DevOps guidance and its limits. The upstream source proves that AzureAuth
 uses a Microsoft-owned Visual Studio client; it does not prove current MSA behavior,
 intended reuse, or support status for this fork. The subsequent
-[bounded Windows observation](../research/v1-public-contract-baseline.md#observed-msa-token-git-discovery-and-silent-reuse)
+[bounded Windows observation](../research/experiments/windows-msal-account-metadata.md#observed-msa-token-git-discovery-and-silent-reuse)
 demonstrates exact personal-account acquisition, authenticated Git discovery, and
 fresh-process silent reuse for one existing configuration. This supplies concrete
 mechanism evidence. The [external dependency boundary](#external-dependency-boundary)
@@ -115,7 +115,7 @@ with no caller tenant resolves to `common`, and caller tenant selectors are `com
 an exact tenant GUID. An exact selector constrains the token/resource tenant, not the
 account's home tenant. `common` imposes no particular result tenant; it does not require
 every provider operation to address a literal `/common` endpoint. The
-[public source assessment](../research/v1-public-contract-baseline.md#client-profile-and-tenant-mapping-assessment)
+[public source assessment](../research/experiments/windows-msal-account-metadata.md#client-profile-and-tenant-mapping-assessment)
 shows that MSAL itself resolves tenantless authorities during acquisition.
 
 Policy retains the normalized tenant constraint separately from the mechanism's provider
@@ -145,7 +145,7 @@ from an email domain, requested resource, or arbitrary client ID. MSA home-accou
 is used only after strict real-account resolution to choose the documented silent route;
 it is not another caller selector or a replacement identity check.
 
-The [GCM workaround](../research/v1-public-contract-baseline.md#client-profile-and-tenant-mapping-assessment)
+The [GCM workaround](../research/experiments/windows-msal-account-metadata.md#client-profile-and-tenant-mapping-assessment)
 does not guard against an explicit caller resource-tenant constraint. V2's exact-tenant
 branch therefore takes precedence over that workaround. If the requested tenant cannot
 satisfy the request, apply the existing failure classification without trying a different
@@ -165,7 +165,7 @@ mapping and exact-tenant scenarios before an implementation or support claim is 
 ### External Dependency Boundary
 
 Decision `0003` already permits an explicitly named compatibility Profile for the
-Microsoft-owned registration. The [public evidence](../research/v1-public-contract-baseline.md#client-profile-and-tenant-mapping-assessment)
+Microsoft-owned registration. The [public evidence](../research/experiments/windows-msal-account-metadata.md#client-profile-and-tenant-mapping-assessment)
 establishes the following boundary:
 
 - Microsoft owns the Visual Studio registration. AzureAuth and GCM publicly use it for

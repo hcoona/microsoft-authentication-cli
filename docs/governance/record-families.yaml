@@ -269,7 +269,7 @@ families:
     consumers:
       - Requirements, compatibility, architecture, and validation maintainers
     creation_trigger: V2 requirements analysis needs a fixed caller-visible v1 evidence baseline.
-    failure_mode: V1 behavior is omitted, misclassified, or elevated into a v2 product or compatibility commitment.
+    failure_mode: V1 behavior is omitted, misclassified, or elevated into a v2 product or compatibility commitment, or v2 evidence is mixed into the v1 baseline.
     review_point: Pull requests that rely on or materially revise the v1 public-contract baseline
 
   - id: experiment-safety
@@ -434,21 +434,21 @@ families:
 
   - id: windows-msal-account-metadata-evidence
     state: current
-    concern: Completed bounded Windows MSAL account-visibility, result-metadata, and designated Git discovery observations
+    concern: Completed bounded Windows MSAL account-visibility, result-metadata, and designated Git discovery observations, with the public-source probe basis, Client Profile and tenant mapping, and Azure Artifacts token-path findings that interpret them
     carrier: repository-file
     path: docs/research/experiments/windows-msal-account-metadata.md
     format: markdown
     producer: Research maintainer
     maintainer: Research maintainer
     consumers:
-      - Architecture and requirements reviewers relying on the observed account, metadata, and broker-reuse conclusions through the v1 baseline and client-identity architecture
+      - Architecture and requirements reviewers relying on the observed account, metadata, broker-reuse, tenant-mapping, and token-path conclusions through the client-identity architecture, architecture overview, and validation strategy
     creation_trigger: Issue #35 produced runtime observations that current architecture and research records cite; its procedure and history remain in Git.
     failure_mode: Current conclusions cite observations whose scope, evidence level, or limitations can no longer be read.
     review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
   - id: windows-native-aot-evidence
     state: current
-    concern: Completed synthetic Windows Native AOT publish and upstream native-import observations
+    concern: Completed synthetic Windows Native AOT publish and upstream native-import observations, with the public-source Native AOT assessment and RECHECK-008 refresh
     carrier: repository-file
     path: docs/research/experiments/windows-native-aot.md
     format: markdown
@@ -462,7 +462,7 @@ families:
 
   - id: windows-slice-validation-evidence
     state: current
-    concern: Completed selected-account, WSL, and parent-window observations from the first Windows authentication Slice
+    concern: Completed selected-account, WSL, and parent-window observations from the first Windows authentication Slice, with their dated observation records, public-source dependency, host, and WSL findings, and Slice recheck evaluations
     carrier: repository-file
     path: docs/research/experiments/windows-slice-validation.md
     format: markdown
@@ -470,22 +470,22 @@ families:
     maintainer: Validation maintainer
     consumers:
       - Validation, design, and research reviewers relying on the recorded Windows Slice observations and their limitations
-    creation_trigger: Issue #108 produced real-host observations that the validation strategy, Windows design, and v1 baseline cite; the procedure and history remain in Git.
+    creation_trigger: Issue #108 produced real-host observations that the validation strategy, Windows design, threat model, and architecture cite; the procedure and history remain in Git.
     failure_mode: Synthetic or partial observations are substituted for real-platform acceptance, or their limitations are lost.
     review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
-  - id: real-host-validation-protocol
+  - id: real-host-validation-evidence
     state: current
-    concern: Accepted protocol, attempt ledger, and sanitized results for the 2026-10-15 real-host validation of the main-v2 Windows product
+    concern: Completed 2026-10-15 real-host validation of the main-v2 Windows product, with its observation method, sanitized results, bounded conclusions, limitations, and deviation dispositions
     carrier: repository-file
     path: docs/research/experiments/real-host-validation.md
     format: markdown
     producer: Validation maintainer
     maintainer: Validation maintainer
     consumers:
-      - Validation, design, and security reviewers relying on the recorded observations and their limitations
-    creation_trigger: The Real-Host Validation Delivery Wave entry required an accepted protocol before any build or real call on the designated host; the entry completed and the protocol, ledger, and results remain as evidence.
-    failure_mode: Real calls run outside the accepted subject, effects, or limits, or their evidence leaks private data or overstates scope.
+      - Validation, design, and security reviewers relying on the recorded real-host observations and their limitations
+    creation_trigger: Issue #482 produced real-host observations that the validation strategy, Windows design, and threat model cite; the protocol, amendments, and execution history remain in Git.
+    failure_mode: Current conclusions cite real-host observations whose scope, evidence level, limitations, or deviations can no longer be read, or the observations are extended beyond the observed roles, callers, subjects, host, and existing state.
     review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
   - id: developer-tooling-evidence

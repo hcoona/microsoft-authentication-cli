@@ -26,7 +26,7 @@ applies to every operation, configuration, and failure path.
 | Host | Windows 11 x64 in an active interactive user session, with WAM available. WSL 2 callers use normal Windows executable interoperability. Service, impersonated, disconnected desktop, and native Linux hosts are outside this Slice. |
 | Distribution | Executable basename, installer, signing, and update channel remain release identities under the [registry](../governance/operational-identities.yaml). `<windows-cli>` below denotes the caller-selected executable, not a new installed command. |
 
-The [dependency assessment](../research/v1-public-contract-baseline.md#windows-slice-dependency-and-host-contracts)
+The [dependency assessment](../research/experiments/windows-slice-validation.md#windows-slice-dependency-and-host-contracts)
 binds these choices to public source. Future upgrades must use the existing dependency
 review/validation matrix.
 
@@ -39,14 +39,14 @@ Retain SDK 10.0.402/runtime 10.0.12, MSAL/Broker 4.83.1 and NativeInterop 0.20.3
 No non-AOT exception is needed. This selection is not complete-application
 compatibility, release or support acceptance.
 
-The [Native AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
+The [Native AOT assessment](../research/experiments/windows-native-aot.md#windows-native-aot-assessment)
 owns the public toolchain/Win32 contracts and the bounded synthetic observations that
 support this path without changing authentication dependencies or relaxing DLL search,
 together with their limits. The [validation basis](../validation/strategy.md#native-aot-publishing)
 retains complete-application, WAM/UI, account/Profile, dynamic-dependency, symbol,
 performance, release and support obligations.
 
-The [public AOT assessment](../research/v1-public-contract-baseline.md#windows-native-aot-assessment)
+The [public AOT assessment](../research/experiments/windows-native-aot.md#windows-native-aot-assessment)
 distinguishes the following alternatives:
 
 | Alternative | Disposition and reason |
@@ -235,6 +235,14 @@ acquisition order:
   `872cd9fa-d31f-45e0-9eab-6e460a02d1f1`, multitenant policy, and the legacy mapping
   already defined by the [client-identity architecture](../architecture/client-application-identity.md#provider-mapping).
   Only this integration enables the provider's legacy MSA passthrough option.
+
+The client ID check of `visual-studio-legacy-wam` is an integration-specific identity pin
+permitted by
+[V2-REQ-042](../product/requirements/cache-security-and-operational-identity.md#v2-req-042-client-registration-as-configuration):
+the Profile still supplies the client ID, and the pin only rejects a Profile whose value
+differs from that registration. Both integrations and the single-tenant policy are defined
+here; only the legacy integration with multitenant policy has real-host evidence (see the
+[known limitations](#validation-and-explicit-unsupported-cases)).
 
 Both derive the broker redirect URI as `ms-appx-web://microsoft.aad.brokerplugin/<client-id>`.
 Authority validation is enabled, multi-cloud behavior is disabled, and the trusted cloud
@@ -555,11 +563,12 @@ scenarios cover this projection, single-call effects, identity rejection and ori
 cancellation/deadline.
 
 The adapter enters the WAM interactive path through its sign-in/account-selection route,
-even when the engine could acquire silently. The mode requires WAM to actually present
-its interactive UI; the adapter cannot enforce that, and it is not a guarantee that the
-provider renews credentials or displays a particular surface. WAM may reuse an existing
-session inside the presented UI. Success reports `interaction: interactive` for the
-invoked path; whether WAM presents its UI requires separate runtime observation.
+even when the engine could acquire silently. Whether WAM then presents interactive UI is
+provider behavior that the adapter cannot enforce (see the
+[known limitations](#validation-and-explicit-unsupported-cases)); entering the path is
+not a guarantee that the provider renews credentials or displays a particular surface.
+WAM may reuse an existing session. Success reports `interaction: interactive` for the
+invoked path, not proof of visible UI.
 
 Do not implement this intent with `WithPrompt` alone. In pinned MSAL/Broker 4.83.1,
 the [interactive builder](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/ApiConfig/AcquireTokenInteractiveParameterBuilder.cs#L177-L180)
@@ -590,34 +599,13 @@ not establish pinned .NET or Windows runtime behavior. No supported builder inpu
 pinned .NET broker path is found that forces the WAM UI: `WithPrompt` is not transported
 (above), so this design controls only whether an account or hint is supplied.
 
-The [real-host results](../research/experiments/real-host-validation.md#results)
-compare three implementations of this mode, the first on two subjects, on the designated
-host and existing account state (runtime observations; each covers only the role and
-caller combinations listed):
-
-| Implementation | Subject | Interactive UI presented | Second provider page (F1) |
-| --- | --- | --- | --- |
-| Neither account nor hint (this design) | `8d9be27`, calls #8, #13, #20, #24 | Yes for the personal and work roles, native and WSL | Yes for the personal role (#8, #13); no for the work role |
-| Neither account nor hint (this design, after the revert) | `3ae2554`, calls #37 to #40 | Yes for the personal and work roles, native and WSL | Yes for the personal role (#37, #39); not asked for the work role |
-| Requested email as login hint, no account | `0eb257a`, calls #27 to #29 | Yes for the personal role (#27 native, #28 WSL); **no** for the work role (#29 native) | No for the personal role |
-| Discovered account bound, no hint (experiment-only variant) | `389f85a`, calls #32 to #34 | **No** for all three (personal native and WSL, work native) | Not observable |
-
-The hinted implementation (in one of three observed combinations, #29) and the
-account-bound implementation (in all three, #32 to #34) completed forced calls without
-presenting WAM UI, which forced interaction does not accept. With the hint, the personal role's
-forced calls also defaulted to a security-key credential method that the operator had
-to cancel (F3 candidate, #27 and #28). By repository-owner decision (2026-10-16 UTC, quoted
-verbatim in the pull request that made this change), forced interaction reverts to the
-original implementation, supplying neither hint nor account, and F1 is recorded as a
-[known limitation](#validation-and-explicit-unsupported-cases). That the hint or the
-bound account caused the skipped UI is an **inference**; the source findings above are
-consistent with it but do not establish broker behavior. The reverted implementation
-(fourth subject `3ae2554`) passed its unfiltered Windows scenario run (186 of 186,
-including the reverted `MsalCompositionScenarios`), and its forced calls #37 to #40
-presented WAM's interactive UI and completed sign-in with the designated account for
-both roles from native and WSL callers; the #29 defect did not recur, and no call had a
-provider-defaulted credential method the operator had to cancel. That it will continue
-to present UI on other hosts or account states is not established.
+By repository-owner decision (2026-10-16 UTC, quoted verbatim in the pull request that
+made this change), forced interaction supplies neither the login hint nor the discovered
+account. The [real-host results](../research/experiments/real-host-validation.md#results)
+compare this choice with a hinted implementation and an experiment-only account-bound
+variant; with either alternative, WAM completed some forced calls without presenting
+interactive UI. That the hint or the bound account caused this is an **inference**; the
+source findings above are consistent with it but do not establish broker behavior.
 
 The Microsoft [WAM API reference](https://learn.microsoft.com/entra/identity-platform/reference-entra-id-wam-api)
 documents a `prompt` request property (`no_select` or `select_account`) and a
@@ -792,6 +780,21 @@ the provider's email spelling, tenant, token type, expiration, granted scopes, a
 correlation GUID when nonempty. Reject already expired candidates; impose no additional
 minimum remaining lifetime. Use provider metadata rather than parsing an access or ID
 token in application code.
+
+Two postconditions rely on provider-call binding rather than on a returned value. The
+coordinator accepts a candidate only when its operation identifier, returned as the MSAL
+correlation ID, equals the one it sent with the provider call that carried the admitted
+Profile, client, authority and scopes (`RequestCoordinator.ValidateCandidate`). For a `/.default` request,
+scope satisfaction is then accepted without comparing granted scopes, because providers
+need not report the literal `/.default` value (`SatisfiesScopes`). Profile and client
+identity are likewise not read back from the result: the request-local application
+instance carries them. This binding establishes only that the candidate came from that
+provider call. It does not prove the resource or client for which the token was issued,
+does not detect a provider that ignored a request parameter, and rests on MSAL and WAM
+as trusted dependencies. For dynamic scopes, each requested scope must be among the
+granted scopes, compared ordinally; extra grants are allowed. The token is never parsed
+to fill the gap.
+
 Missing account email and invalid or missing tenant metadata remain missing in the
 adapter projection; requested values must not fill them. Keep the request-local
 operation identifier separately from the observed correlation ID. The pinned
@@ -830,8 +833,8 @@ The repository owner selects a hidden owned parent as the WAM parent. The
 requires an explicit parent HWND, but no visible V2 window. A visible parent's Cancel
 action cannot stop a pending WAM prompt while WAM disables its owner, and it adds a
 DPI-unaware surface the product does not otherwise need. The research record owns the
-[console-parent comparison](../research/v1-public-contract-baseline.md#console-parent-versus-a-separate-desktop-surface)
-and [hidden-parent observations](../research/v1-public-contract-baseline.md#hidden-owned-parent-candidate-observations)
+[console-parent comparison](../research/experiments/windows-slice-validation.md#console-parent-versus-a-separate-desktop-surface)
+and [hidden-parent observations](../research/experiments/windows-slice-validation.md#hidden-owned-parent-candidate-observations)
 that informed this decision; borrowed console or foreground windows are not parent
 sources.
 
@@ -987,11 +990,9 @@ completion/cancellation indication to stderr when available. Do not wait for the
 dismiss an external surface before ending the CLI process.
 
 The product forwards cancellation but does not guarantee that WAM closes its window. The
-[real-host results](../research/experiments/real-host-validation.md#results) (finding F2)
-observed a WAM window remaining after the process ended in 3 of 3 non-human
-terminations while WAM was shown: product timeout (twice) and lifetime-pipe EOF. Human
-cancellation on the WAM surface left none. The window is provider-owned; the user closes
-it manually. The typed `timeout` or `cancelled` result is already committed, no token is
+window is provider-owned and can remain after the process ends (finding F2 in the
+[known limitations](#validation-and-explicit-unsupported-cases)); the user closes it
+manually. The typed `timeout` or `cancelled` result is already committed, no token is
 delivered and a late completion cannot resume the request. By repository-owner decision
 no window-closing mechanism is added; the
 [threat model](../security/threat-model.md#known-limitation-provider-window-after-non-human-termination)
@@ -1201,29 +1202,34 @@ suppression, network telemetry export, Profile auto-discovery/activation, and im
 Linux-parent-death detection without the lifetime pipe. Git clone and NuGet restore
 remain downstream service tests, not operations of this engine.
 
-Known limitation: closing a provider-owned WAM window after a product timeout or caller
-cancellation (lifetime-pipe EOF or caller cancellation) is unsupported. Such a window can
-remain after the process ends (finding F2, 3 of 3 observed non-human terminations) and
-the user closes it; the committed typed result and its no-token outcome are unaffected.
-See [request lifetime](#uml-ui-ownership-and-cancellation-sequence) and the
-[threat model](../security/threat-model.md#known-limitation-provider-window-after-non-human-termination).
+Known limitations recorded from the
+[real-host results](../research/experiments/real-host-validation.md#results), which own
+the observations and their role, caller and subject scope:
 
-Known limitation (finding F1): for `force-interactive` with the
-`visual-studio-legacy-wam` Profile (`organizations` authority with MSA passthrough), a
-personal Microsoft account can reach a second provider page that does not offer it for
-direct selection, so the user enters the requested account manually. This was observed
-for the personal role from native and WSL callers on the designated host (calls #8 and
-#13, and again on the reverted source in #37 and #39); the work role did not reach it.
-Forced interaction supplies neither account nor login hint because both alternatives
-completed some observed forced calls without WAM UI (#29; #32 to #34; see
-[Forced Interactive Authentication](#forced-interactive-authentication)). The final
-identity is still bound by strict validation: any returned account other than the
-requested email fails with `identity_validation_failed`. The F3 candidate (a
-provider-defaulted security-key credential method) was observed only with the login
-hint (#27, #28). On the reverted source, no forced call (#37 to #40: personal and work
-roles, native and WSL) had a provider-defaulted credential method that the operator had
-to cancel; these runtime observations cover only those combinations on that host and
-existing state, draw no F3 conclusion and are recorded for a later owner decision.
+- **Interactive UI is provider behavior.** `force-interactive` enters the WAM interactive
+  path, makes no silent call and supplies neither account nor login hint; whether WAM
+  presents interactive UI is provider behavior that the engine cannot enforce or
+  verify. With this implementation WAM presented its UI in every observed forced call;
+  with a login hint or a bound account it completed some forced calls without UI. That
+  this continues on other hosts or account states is not established.
+- **Finding F1.** With the `visual-studio-legacy-wam` Profile (`organizations` authority
+  with MSA passthrough), a personal Microsoft account can reach a second provider page
+  that does not offer it for direct selection, so the user enters the requested account
+  manually. The final identity remains bound by strict validation: any returned account
+  other than the requested email fails with `identity_validation_failed`.
+- **Finding F2.** Closing a provider-owned WAM window after a product timeout or caller
+  cancellation (lifetime-pipe EOF or caller cancellation) is unsupported. Such a window
+  can remain after the process ends and the user closes it; the committed typed result
+  and its no-token outcome are unaffected. See
+  [request lifetime](#uml-ui-ownership-and-cancellation-sequence) and the
+  [threat model](../security/threat-model.md#known-limitation-provider-window-after-non-human-termination).
+- **Credential-method default.** The F3 candidate, a provider-defaulted credential
+  method the user had to change, was observed only with the login hint; its cause is
+  not established and it is recorded for a later owner decision.
+- **Defined but not validated by real-host evidence.** The `windows-wam` integration and
+  the single-tenant (fixed-tenant) policy are defined by this design and covered only by
+  controlled scenarios. Every real-host observation used the `visual-studio-legacy-wam`
+  Profile with multitenant policy and `common`.
 
 Profile activation, platform support and release each retain their own authorization
 and evidence gates; the [validation strategy](../validation/strategy.md#release-gates)

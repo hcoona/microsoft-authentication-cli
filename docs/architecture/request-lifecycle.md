@@ -106,9 +106,9 @@ Multiple exact matches remain terminal ambiguity. With zero or one exact match, 
 the owned interaction context and perform one provider interactive call through its
 sign-in/account-selection route with the original request constraints. That call
 supplies neither the discovered account nor a login hint, so the engine pre-fills
-nothing. The provider must actually present its interactive UI;
-the engine cannot enforce that, it remains runtime behavior, and completion without
-that UI is a defect of this mode, not accepted behavior. Final identity validation
+nothing. Whether the provider presents interactive UI is provider behavior that the
+engine cannot enforce; the Windows design records it as a known limitation. Final
+identity validation
 still rejects any account other than the
 requested email. Do not attempt silent token acquisition,
 fabricate a silent failure, relax identity validation, or fall back to silent reuse.

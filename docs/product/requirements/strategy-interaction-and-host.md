@@ -23,22 +23,15 @@ and ambient state must not permit interaction that the request prohibits.
 
 The first version has three modes: `non-interactive-only`, `interactive-if-needed`, and
 `force-interactive`. The existing modes retain their behavior. Forced interaction must
-enter the provider interactive path through its supported sign-in and account-selection
-route, supplying neither a discovered account nor a login hint, even when
-reusable credentials are available. The engine must not call silent acquisition or fall
+enter the provider's interactive path through its supported sign-in and account-selection
+route, even when reusable credentials are available, and must supply neither a
+discovered account nor a login hint. The engine must not call silent acquisition or fall
 back to it. A provider/host combination that cannot honor this invocation intent is
-unavailable. Forced interaction requires the provider to actually present its
-interactive UI and must not complete without it. The engine cannot enforce that
-presentation; whether the provider presents it is runtime behavior that requires
-real-host observation. If a provider completes a forced call without presenting its
-interactive UI, that is a defect of this mode that requires another approach, not
-accepted behavior. The other modes may complete without UI. Finding F1, manual entry of
-the requested account inside the presented UI, is a known limitation of this mode. The
-provider may
-reuse its session within the presented interactive UI;
-success reports the invoked path, not proof of visible UI or renewed credentials. V2 must not
-expose a caller-selected prompt-type whitelist or promise a password, MFA method, or
-exact UI.
+unavailable. Whether the provider then presents interactive UI, and which UI, is provider
+behavior that the engine cannot enforce; the Windows design records it with its known
+limitations. The provider may reuse its session; success reports the invoked path, not
+proof of visible UI or renewed credentials. V2 must not expose a caller-selected
+prompt-type whitelist or promise a password, MFA method, or exact UI.
 
 Forced interaction is not token-cache refresh, logout, account removal, consent
 revocation, or cache clearing. Normal provider-managed session/state updates may occur;
@@ -76,9 +69,7 @@ initiate unmanaged interaction.
 For `interactive-if-needed`, when the provider supports a login hint, interactive
 acquisition must use the requested email, or the uniquely resolved account, as that hint.
 For `force-interactive`, interactive acquisition must supply neither the discovered
-account nor a login hint, because forced calls carrying either completed without the
-interactive UI required under `V2-REQ-014` on the designated host; the engine pre-fills
-nothing.
+account nor a login hint; the engine pre-fills nothing.
 In both modes a hint, or its absence, does not replace final identity validation under
 `V2-REQ-022`; a returned account other than the requested one must be rejected.
 
@@ -96,9 +87,7 @@ The identity-opaque `OperatingSystemAccount` sentinel is not a resolved account.
 permitted interaction under `V2-REQ-023`; it is terminal without interaction permission.
 `force-interactive` uses the same exact account resolution, but proceeds directly to its
 interactive path after zero or one exact match, supplying neither the discovered account
-nor a login hint under `V2-REQ-016`; the forced call must still present the provider's
-interactive UI under `V2-REQ-014`.
-The requested email remains the strict selector for
+nor a login hint under `V2-REQ-016`. The requested email remains the strict selector for
 final validation under `V2-REQ-022`, which rejects any other account chosen during
 provider account selection. Account ambiguity must not fall back to another account or
 a picker that bypasses the strict-email ambiguity.
