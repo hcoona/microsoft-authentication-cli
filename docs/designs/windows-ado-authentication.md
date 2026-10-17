@@ -925,6 +925,10 @@ cancel, and `WM_CLOSE` delivered to the hidden parent. With
 file before provider work. The caller must retain the sole writer and avoid leaking it
 to descendants. Data is not interpreted or logged; the reader only observes closure.
 An already closed pipe cancels before authentication.
+Console cancellation is exercised by a synthetic scenario whose child process has its
+own hidden console and raises `GenerateConsoleCtrlEvent(1, 0)` (Ctrl+Break to that
+console's processes) rather than starting in a new process group; this establishes
+delivery to the product's handler, not real terminal behavior.
 
 Without that flag, stdin is unused. WSL Linux signals and Linux parent-process death are
 not assumed to become Windows cancellation notifications. A caller needing prompt
@@ -951,6 +955,10 @@ process termination releases its threads and handles; external WAM services rema
 owned. A forced termination or incomplete write is a transport failure, not a fabricated
 typed result. This is the exceptional fail-closed boundary, not a resident watchdog
 process or a mechanism for making unsupported platforms work.
+The watchdog exits `2` only when the bound expires before request work drains. After
+drain, the typed status `0` or `1` that matches the written result is published first;
+if the bound then expires while only optional diagnostics are still pending, the
+watchdog terminates with that published status.
 
 The managed process host keeps its entry thread as the watchdog and moves request
 work, native handle I/O, and cleanup onto dedicated background work. It reads the
@@ -1014,9 +1022,11 @@ meanings:
 - `0`: a complete `success` object on stdout.
 - `1`: a complete typed failure object on stdout; every typed failure shares it.
 - Any other status: no typed result. The caller treats the run as a transport failure,
-  whatever stdout contains. The product itself uses `2` for this (for example, a broken
-  result pipe, the process watchdog, or a failed owned cleanup after a result was
-  written). The OS or runtime may produce other values, for example when the process is
+  whatever stdout contains. The product itself uses `2` for this: a broken result pipe,
+  or the process watchdog when its bound expires before request work drains, including
+  a failed or stalled owned cleanup after a result was written. A bound that expires
+  after drain, while only optional diagnostics are pending, keeps the published `0` or
+  `1`. The OS or runtime may produce other values, for example when the process is
   killed.
 
 Failure objects contain no token or account metadata. A success with
