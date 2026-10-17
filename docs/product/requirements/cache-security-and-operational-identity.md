@@ -60,7 +60,12 @@ Account List operations.
 Public-client application IDs must be treated as nonsecret configuration and supplied
 through Client Profiles rather than hard-coded into the authentication core. A profile
 using an externally owned registration must make its ownership and external-dependency
-status explicit. V2 must not imply ownership of that registration or its owner's
+status explicit. An integration whose provider mapping is defined for one specific
+registration may pin that identity: it validates that the Profile-supplied client ID
+equals the registration's fixed value and rejects any other value. The client ID is
+still supplied by the Profile; such a pin restricts which Profiles the integration
+admits and does not make the engine supply a client ID. V2 must not imply ownership of
+that registration or its owner's
 endorsement or support for the project.
 
 ## V2-REQ-043: No Upstream Telemetry Reuse
