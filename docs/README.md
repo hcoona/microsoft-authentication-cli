@@ -48,7 +48,7 @@ is navigation, not an independent authority.
 | Contributors and reviewers | Completed developer-tool installation, discovery, and public Learn retrieval evidence | [`developer-tooling.md`](research/experiments/developer-tooling.md) |
 | Design and validation reviewers | Completed synthetic Native AOT publish and upstream native-import evidence | [`windows-native-aot.md`](research/experiments/windows-native-aot.md) |
 | Validation and design reviewers | Completed Windows Slice selected-account and host observation evidence | [`windows-slice-validation.md`](research/experiments/windows-slice-validation.md) |
-| Experiment operators and validation reviewers | Real-host validation protocol, attempt ledger, and results for the current Windows product | [`real-host-validation.md`](research/experiments/real-host-validation.md) |
+| Validation, design, and security reviewers | Completed 2026-10-15 real-host validation protocol, attempt ledger, and results for the `main-v2` Windows product | [`real-host-validation.md`](research/experiments/real-host-validation.md) |
 | Public-build evidence consumers and reviewers | Frozen WSL2-Linux-x64 public-build runtime evidence, including the retained dependency assets it references | [`research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`](research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json) |
 | Research and release reviewers | Mutable public facts and their recheck triggers | [`research/rechecks.yaml`](research/rechecks.yaml) |
 | Maintainers and upstream-source consumers | Upstream baseline and import policy | [`../UPSTREAM.md`](../UPSTREAM.md) |
