@@ -720,8 +720,12 @@ private diagnostic path is introduced.
 
 The exact custom-UI interface spelling is
 `Microsoft.Identity.Client.Extensibility.ICustomWebUi`. Its implementation always
-rejects navigation with the sanitized mechanism-unavailable failure. Directly
-testing that callback does not prove real broker-disappearance behavior.
+rejects navigation with the sanitized mechanism-unavailable failure. A scenario runs
+the production interactive builder through a real MSAL public-client application
+built without a broker, over a synthetic transport that answers only instance
+discovery and fails on any other request; MSAL reaches the rejecting UI and the
+request maps to `mechanism_unavailable` with `rejected_web_ui`. That establishes the
+pinned fallback route, not real broker-disappearance behavior.
 
 The exact source basis is MSAL 4.83.1 commit
 `d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f`:

@@ -8,13 +8,23 @@ namespace Authentication.Windows;
 internal sealed class MsalSessionFactory : IMsalSessionFactory
 {
     private readonly WindowsMechanismTrace? trace;
-    internal MsalSessionFactory(WindowsMechanismTrace? trace = null) => this.trace = trace;
+    private readonly Func<PublicClientApplication, bool> brokerAvailable;
+
+    // The availability probe is the pinned IsBrokerAvailable() call; scenarios may
+    // replace only its answer to exercise the unavailable branch deterministically.
+    internal MsalSessionFactory(WindowsMechanismTrace? trace = null,
+        Func<PublicClientApplication, bool>? brokerAvailable = null)
+    {
+        this.trace = trace;
+        this.brokerAvailable = brokerAvailable ?? (static application => application.IsBrokerAvailable());
+    }
+
     public IMsalSession Create(MsalClientSettings settings, IMsalHttpClientFactory http,
         CancellationToken cancellationToken)
     {
         var application = BuildApplication(settings, http, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
-        var available = application.IsBrokerAvailable();
+        var available = brokerAvailable(application);
         cancellationToken.ThrowIfCancellationRequested();
         if (!available)
         {
