@@ -143,11 +143,6 @@ jobs:
       MISE_EXEC_AUTO_INSTALL: "false"
 
     steps:
-      - name: Keep repository line endings
-        # The runner's Git defaults to core.autocrlf=true; sources use LF, and raw
-        # string literals such as the CLI help text compile with the checked-out bytes.
-        run: git config --global core.autocrlf false
-
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

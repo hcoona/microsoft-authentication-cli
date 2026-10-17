@@ -20,6 +20,16 @@ public sealed class ProcessScenarios
         StringAssert.Contains(text, "authenticate");
         StringAssert.Contains(text, "--profile");
         Assert.IsFalse(text.Contains("SYNTHETIC_INVALID_VERSION", StringComparison.Ordinal));
+        Assert.IsFalse(child.Output.Contains((byte)'\r'), "Help output must use LF line endings only.");
+        Assert.IsTrue(text.EndsWith("stdout.\n", StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    public void HelpBytesUseLineFeedsOnly()
+    {
+        var help = WindowsProcess.Help;
+        Assert.IsFalse(help.Contains((byte)'\r'), "Help must not depend on the checkout line endings.");
+        Assert.AreEqual((byte)'\n', help[^1]);
     }
 
     [TestMethod]

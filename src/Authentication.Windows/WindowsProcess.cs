@@ -193,7 +193,9 @@ public static class WindowsProcess
         }
     }
 
-    private static byte[] Help => System.Text.Encoding.UTF8.GetBytes($"""
+    // Raw string literals take the line endings of the checked-out source. Normalize
+    // them so the help bytes are LF-only whatever the checkout line-ending setting.
+    internal static byte[] Help => System.Text.Encoding.UTF8.GetBytes($"""
         {DisplayName}
         Unofficial project: not a Microsoft product and not supported by Microsoft.
 
@@ -209,7 +211,7 @@ public static class WindowsProcess
         --cancel-on-stdin-close requires a dedicated caller-owned lifetime pipe.
         Authentication writes one protocol 1 JSON result to stdout.
 
-        """);
+        """.ReplaceLineEndings("\n"));
 
     private sealed record ProcessCompletion(int ExitCode, long Timestamp);
 

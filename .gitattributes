@@ -6,3 +6,6 @@ src/Authentication.Core/packages.lock.json -text whitespace=cr-at-eol
 src/Authentication.Windows/packages.lock.json -text whitespace=cr-at-eol
 src/Authentication.Cli/packages.lock.json -text whitespace=cr-at-eol
 tests/Authentication.Windows.Scenarios/packages.lock.json -text whitespace=cr-at-eol
+
+# C# sources compile with their checked-out bytes; keep them LF on every host.
+*.cs text eol=lf
