@@ -102,13 +102,26 @@ bundled with that SDK (`TargetLatestRuntimePatch`) with roll-forward disabled, s
 project states a runtime patch version. Shared MSBuild/package files wait for a concrete
 product consumer.
 
-To change the SDK, edit its version and archive URLs in `mise.toml`, then regenerate the
-lock and `global.json`, and restore so the package lock files follow the new runtime:
+`mise.lock` is generator output: never edit it by hand. Generate it with the mise
+version that CI pins, the `version:` input of the `jdx/mise-action` steps in
+`.github/workflows/check.yml`; `mise.toml` sets the same `min_version`. Another mise
+version can rewrite unrelated entries.
+
+To change the SDK, edit its version and archive URLs in `mise.toml`. With that mise
+version, regenerate the lock and `global.json`, then refresh the package lock files so
+they follow the new runtime:
 
 ```text
 mise lock http:dotnet-development --platform linux-x64,windows-x64
 mise exec -- pkl eval -f json global.pkl -o global.json
+mise exec -- dotnet restore Windows.slnx --force-evaluate -p:EnableWindowsTargeting=true
 ```
+
+Keep the SDK lock to the two platforms whose archives `mise.toml` names; without
+`--platform`, mise also adds entries for other locked platforms, such as a glibc archive
+under `linux-x64-musl`. A restore on Linux writes each changed `packages.lock.json` with
+LF line endings. Restore the CRLF bytes of the lock files that were CRLF before
+committing, so that only the package selections change.
 
 This section is the single authority for contributor tooling setup. These development
 tools have Linux x64 and Windows x64 lock entries. The completed
