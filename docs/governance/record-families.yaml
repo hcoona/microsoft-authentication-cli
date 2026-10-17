@@ -474,18 +474,18 @@ families:
     failure_mode: Synthetic or partial observations are substituted for real-platform acceptance, or their limitations are lost.
     review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
-  - id: real-host-validation-protocol
+  - id: real-host-validation-evidence
     state: current
-    concern: Accepted protocol, attempt ledger, and sanitized results for the 2026-10-15 real-host validation of the main-v2 Windows product
+    concern: Completed 2026-10-15 real-host validation of the main-v2 Windows product, with its observation method, sanitized results, bounded conclusions, limitations, and deviation dispositions
     carrier: repository-file
     path: docs/research/experiments/real-host-validation.md
     format: markdown
     producer: Validation maintainer
     maintainer: Validation maintainer
     consumers:
-      - Validation, design, and security reviewers relying on the recorded observations and their limitations
-    creation_trigger: The Real-Host Validation Delivery Wave entry required an accepted protocol before any build or real call on the designated host; the entry completed and the protocol, ledger, and results remain as evidence.
-    failure_mode: Real calls run outside the accepted subject, effects, or limits, or their evidence leaks private data or overstates scope.
+      - Validation, design, and security reviewers relying on the recorded real-host observations and their limitations
+    creation_trigger: Issue #482 produced real-host observations that the validation strategy, Windows design, and threat model cite; the protocol, amendments, and execution history remain in Git.
+    failure_mode: Current conclusions cite real-host observations whose scope, evidence level, limitations, or deviations can no longer be read, or the observations are extended beyond the observed roles, callers, subjects, host, and existing state.
     review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
   - id: developer-tooling-evidence
