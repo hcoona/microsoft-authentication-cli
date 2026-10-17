@@ -95,8 +95,18 @@ mise exec -- dotnet build Windows.slnx --configuration Release --no-restore -p:E
 ## .NET and Agent Tooling
 
 The same toolchain selects .NET SDK 10.0.402 (`http:dotnet-development`), APM v0.29.0,
-and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. Shared
-MSBuild/package files wait for a concrete product consumer.
+and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. It is
+generated from the `mise.lock` SDK entry by `global.pkl` and is never edited by hand;
+the `global-json` hk step fails when it differs. Shared MSBuild/package files wait
+for a concrete product consumer.
+
+To change the SDK, edit its version and archive URLs in `mise.toml`, then regenerate the
+lock and `global.json`:
+
+```text
+mise lock http:dotnet-development --platform linux-x64,windows-x64
+mise exec -- pkl eval -f json global.pkl -o global.json
+```
 
 This section is the single authority for contributor tooling setup. These development
 tools have Linux x64 and Windows x64 lock entries. The completed
