@@ -1,5 +1,11 @@
 # Real-Host Validation Protocol
 
+**Closed (2026-10-17).** The governing Wave entry is complete and was removed by
+[PR #507](https://github.com/hcoona/microsoft-authentication-cli/pull/507); its text
+remains in
+[`docs/delivery-wave.md` at commit `4c4b023`](https://github.com/hcoona/microsoft-authentication-cli/blob/4c4b023a3574a7d07f6bc2d24c2e06d0ee531f14/docs/delivery-wave.md).
+No further call runs under this protocol. See [Wave closure](#wave-closure).
+
 This protocol governs the real-host evidence items of the Delivery Wave entry
 [Real-Host Validation and Threat-Model Re-Review (2026-10-15)](../../delivery-wave.md),
 coordinated in
@@ -1060,3 +1066,16 @@ ran from it. The local launchers (including the fourth-subject copies), `roles.j
 Profile, ledger and the machine-local restore configuration are retained until the Wave
 entry ends, then deleted. WAM sessions and caches are retained; deleting local files
 reverses no provider-side change.
+
+### Wave closure
+
+On 2026-10-17, at the end of the Wave entry, the local launchers (`native.ps1`,
+`native-variant.ps1`, `native-revert.ps1`, `wsl.sh`, `wsl-variant.sh`,
+`wsl-revert.sh`), `roles.json`, `profile.json`, `ledger.md`, `ledger.py` and
+`stderr_filter.py` were deleted under Retention and Cleanup; no product process remained.
+The machine-local restore configuration and the restore credential cache are not deleted:
+they stay on the host under the owner's
+[PR #494 restore exemption](https://github.com/hcoona/microsoft-authentication-cli/pull/494#issuecomment-6222226699),
+which supersedes the "then deleted" statements above for that configuration. WAM
+sessions and caches are retained. At the end of the Wave, 24 I and 48 N of the 48 I and
+64 N limits remained unused.
