@@ -269,6 +269,34 @@ controls:
       - ci
     failure_mode: A core, contract or scenario change merges without its platform-neutral scenarios compiling or passing.
 
+  - id: windows-build-and-scenarios
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: GitHub Actions Windows Build on Linux and Windows Scenario Tests jobs
+    maintainer: Control maintainer
+    consumers:
+      - GitHub Actions and reviewers at CI before merge
+    governing_rules:
+      - docs/governance/governance-system.md#gov-005-controls-implement-policy
+      - docs/validation/strategy.md#test-design-and-evidence-selection
+      - docs/product/requirements/quality-build-and-validation.md#v2-req-053-public-build-chain
+      - docs/validation/strategy.md#continuous-integration-and-host-timing-evidence
+    invariant: >-
+      Every pull request and main-v2 push restores Windows.slnx from public package
+      sources only and builds it on Linux with Windows targeting, and on a GitHub-hosted
+      windows-latest runner restores and builds it and passes every
+      tests/Authentication.Windows.Scenarios scenario outside the WindowsHostTiming
+      category. Windows host-timing evidence, published-executable scenarios, real
+      accounts, WAM UI and broker sign-in are outside this control.
+    runner: github-platform
+    implementation:
+      kind: repository-path
+      value: .github/workflows/check.yml
+    execution_points:
+      - ci
+    failure_mode: A Windows adapter, CLI or Windows scenario change merges without compiling, or with a synthetic Windows scenario failing, because only the platform-neutral projects ran in CI.
+
   - id: record-system-review
     state: current
     class: procedural-review

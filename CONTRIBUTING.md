@@ -82,6 +82,16 @@ The record checker's Python dependencies are locked in
 reviewed change to its inline dependency list, regenerate that lock with
 `mise exec -- uv lock --script tools/check_repository_records.py`.
 
+CI also runs the scenario and Windows jobs described in the
+[validation strategy](docs/validation/strategy.md#continuous-integration-and-host-timing-evidence).
+With the .NET SDK below installed, these commands reproduce the Windows build check on a
+Linux host:
+
+```text
+mise exec -- dotnet restore Windows.slnx --locked-mode -p:EnableWindowsTargeting=true
+mise exec -- dotnet build Windows.slnx --configuration Release --no-restore -p:EnableWindowsTargeting=true
+```
+
 ## .NET and Agent Tooling
 
 The same toolchain selects .NET SDK 10.0.402 (`http:dotnet-development`), APM v0.29.0,

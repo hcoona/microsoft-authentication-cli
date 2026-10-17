@@ -85,3 +85,87 @@ jobs:
         run: mise exec -- dotnet tests/Authentication.Scenarios/bin/Release/net10.0/Authentication.Scenarios.dll
         env:
           DOTNET_ROLL_FORWARD: LatestPatch
+
+  # Implementation notes (not part of the windows-build-and-scenarios control invariant):
+  # restore uses the committed package lock files in locked mode, and the job uses the
+  # pinned .NET SDK (http:dotnet-development) from mise.lock.
+  windows-build-on-linux:
+    name: Windows Build on Linux
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+      # Install only the explicitly named SDK; never auto-install Node or APM.
+      MISE_EXEC_AUTO_INSTALL: "false"
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install mise
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        with:
+          version: 2026.8.10
+          install: false
+          cache: true
+          # Keep a separate cache so this job never restores tools another job installed.
+          cache_key_prefix: mise-v1-windows-build
+
+      - name: Install the pinned .NET SDK
+        run: mise install --locked http:dotnet-development
+
+      - name: Restore with the committed lock files
+        run: mise exec -- dotnet restore Windows.slnx --locked-mode -p:EnableWindowsTargeting=true
+
+      - name: Build with Windows targeting
+        run: mise exec -- dotnet build Windows.slnx --configuration Release --no-restore -p:EnableWindowsTargeting=true
+
+  # Implementation notes (not part of the windows-build-and-scenarios control invariant):
+  # restore uses the committed package lock files in locked mode, and the job uses the
+  # pinned .NET SDK (http:dotnet-development) from mise.lock. The published-executable
+  # scenarios run only through explicit --native-cli-executable and
+  # --native-profile-cases modes, which this job never passes.
+  windows-scenarios:
+    name: Windows Scenario Tests
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      TESTINGPLATFORM_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+      # Install only the explicitly named SDK; never auto-install Node or APM.
+      MISE_EXEC_AUTO_INSTALL: "false"
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install mise
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        with:
+          version: 2026.8.10
+          install: false
+          cache: true
+          # Keep a separate cache so this job never restores tools another job installed.
+          cache_key_prefix: mise-v1-windows-scenarios
+
+      - name: Install the pinned .NET SDK
+        run: mise install --locked http:dotnet-development
+
+      - name: Restore with the committed lock files
+        run: mise exec -- dotnet restore Windows.slnx --locked-mode
+
+      - name: Build
+        run: mise exec -- dotnet build Windows.slnx --configuration Release --no-restore
+
+      - name: Run the Windows synthetic scenarios without host-timing assertions
+        # SDK 10.0.402 carries runtime 10.0.13; the projects pin 10.0.12 without
+        # roll-forward. Only this test host and its managed scenario children roll
+        # forward to the newest patch.
+        run: >-
+          mise exec -- dotnet
+          tests/Authentication.Windows.Scenarios/bin/Release/net10.0-windows/Authentication.Windows.Scenarios.dll
+          --filter "TestCategory!=WindowsHostTiming"
+        env:
+          DOTNET_ROLL_FORWARD: LatestPatch
