@@ -500,12 +500,39 @@ merely to manufacture rejection evidence.
 
 ### Continuous Integration and Host-Timing Evidence
 
-CI restores, builds and runs the platform-neutral `tests/Authentication.Scenarios`
-project on Linux, alongside the schema and record checks. The
-`tests/Authentication.Windows.Scenarios` project runs only on a Windows host and is not
-part of CI. Its wall-clock process assertions, such as the one-second shutdown
-allowance and process-exit bounds, are Windows host-timing evidence: they establish
-timing only on the host where they ran and are not reproduced by Linux CI.
+Every CI job below restores from public package sources with the committed lock files in
+locked mode and uses the pinned SDK. CI runs these jobs alongside the schema and record
+checks:
+
+- **Linux Scenario Tests** restores, builds and runs the platform-neutral
+  `tests/Authentication.Scenarios` project on Linux.
+- **Windows Build on Linux** restores and builds `Windows.slnx` on Linux with Windows
+  targeting enabled. It compiles the Windows adapter, the CLI and the Windows scenarios
+  but runs none of them.
+- **Windows Scenario Tests** restores and builds `Windows.slnx` on a GitHub-hosted
+  `windows-latest` runner and runs `tests/Authentication.Windows.Scenarios`, excluding
+  the `WindowsHostTiming` category. It never passes the published-executable modes
+  (`--native-cli-executable` and `--native-profile-cases`), so no published Native AOT
+  executable runs. The scenarios use synthetic providers and HTTP handlers and touch no
+  account, WAM UI or broker sign-in.
+
+The Windows scenarios' wall-clock process assertions, such as the one-second shutdown
+allowance and process-exit bounds, carry the `WindowsHostTiming` category. They are
+Windows host-timing evidence: they establish timing only on the host where they ran. No
+CI job runs them, and the `windows-latest` job makes no host-timing claim. A passing
+Windows CI run establishes the synthetic Windows behavior on that runner image only; it
+is not real-platform, broker or published-executable evidence.
+The scenario jobs run the framework-dependent outputs on the SDK's newest patch runtime
+through `DOTNET_ROLL_FORWARD=LatestPatch`, which their child processes inherit, so CI is
+not evidence for the pinned 10.0.12 runtime.
+
+A failed Windows host-timing assertion is not yet a product defect. Rerun the failed
+scenario once on the same host and record the host load (processor and memory
+utilization and other active workloads) around both runs. The validation reviewer, who
+must be independent of the change author, decides whether the recorded load explains the
+exceeded bound. Classify the failure as a product defect only when the rerun also fails
+and that reviewer finds the recorded load does not explain it; otherwise record it as a
+host-timing observation of that host.
 
 ### Slice Closure Versus Release Readiness
 

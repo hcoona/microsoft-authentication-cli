@@ -214,6 +214,13 @@ marker. Never assign an established identifier to a different requirement. Mecha
 checks enforce the two representations and target existence; review determines whether
 the requirement's meaning was preserved.
 
+### Decision Record Numbers
+
+Each accepted decision record in `docs/decisions/` has a unique four-digit number, and
+its file name begins with that number followed by a hyphen. Never reuse a number for a
+different decision, even after the earlier record is deleted. Mechanical checks enforce
+uniqueness among current records; review determines whether a number was reused.
+
 ## Enforcement
 
 Use:
