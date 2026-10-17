@@ -11,7 +11,9 @@ namespace Authentication.Scenarios;
 [DoNotParallelize]
 public sealed class TelemetryScenarios
 {
-    private static readonly TimeSpan Limit = TimeSpan.FromSeconds(3);
+    // Failure-only harness bound shared with the other scenario suites; a passing
+    // case completes far sooner, and a slow shared runner must not turn it red.
+    private static readonly TimeSpan Limit = TimeSpan.FromSeconds(30);
     private const string PrivateMarker = "SYNTHETIC_PRIVATE_OBSERVATION_MARKER";
     private const string Email = "personal@example.test";
     private const string Scope = "499b84ac-1321-427f-aa17-267ca6975798/user_impersonation";
@@ -196,6 +198,53 @@ public sealed class TelemetryScenarios
         Assert.IsFalse(interpretation.ToString().Contains(PrivateMarker, StringComparison.Ordinal));
         using var result = JsonDocument.Parse(serialized.Utf8Json);
         Assert.AreEqual(token, result.RootElement.GetProperty("accessToken").GetString());
+    }
+
+    [TestMethod]
+    public async Task SinkThatStopsAcceptingEndsTheWriterWithoutChangingAuthentication()
+    {
+        var writes = 0;
+        using var observer = new LocalActivityTelemetry(TimeProvider.System.GetTimestamp(), _ =>
+        {
+            Interlocked.Increment(ref writes);
+            return false;
+        });
+        var outcome = await new RequestCoordinator(new Provider(Task.CompletedTask), new Host())
+            .AuthenticateAsync(Request()).WaitAsync(Limit);
+
+        Assert.IsNotNull(outcome.Success);
+        Assert.AreEqual(0, ResultProjection.Serialize(outcome).ExitCode);
+        await observer.Completion.WaitAsync(Limit);
+        Assert.AreEqual(1, Volatile.Read(ref writes), "A refused write must end the local writer.");
+        Assert.IsFalse(observer.TryWriteFinal("Authentication request completed.\n"u8.ToArray()));
+    }
+
+    [TestMethod]
+    public async Task ExhaustedPhaseBudgetRefusesTheNoticeButKeepsRequestStopAndFinalCapacity()
+    {
+        var messages = new ConcurrentQueue<byte[]>();
+        using var observer = new LocalActivityTelemetry(TimeProvider.System.GetTimestamp(), bytes =>
+        { messages.Enqueue(bytes); return true; });
+        using (var trace = AuthenticationTrace.Start())
+        {
+            for (var index = 0; index < 100; index++)
+                using (trace.Begin(AuthenticationStage.AccountDiscovery)) { }
+            // Larger than any one phase event, so it cannot fit the remainder they leave.
+            Assert.IsFalse(observer.TryWriteNotice(new byte[400]), "The notice shares the exhausted phase allocation.");
+        }
+        var final = "Authentication request completed.\n"u8.ToArray();
+        Assert.IsTrue(observer.TryWriteFinal(final));
+        observer.Dispose();
+        await observer.Completion.WaitAsync(Limit);
+
+        Assert.IsTrue(messages.Sum(bytes => bytes.Length) <= 8192);
+        CollectionAssert.AreEqual(final, messages.Last());
+        var stops = messages.Where(bytes => bytes[0] == (byte)'{').Count(bytes =>
+        {
+            using var json = JsonDocument.Parse(bytes);
+            return Text(json, "event") == "stage_completed" && Text(json, "stage") == "request";
+        });
+        Assert.AreEqual(1, stops, "The request span stop event keeps its reserved capacity.");
     }
 
     [TestMethod]

@@ -162,6 +162,10 @@ public sealed class OwnedProcessScenarios
         // Telemetry on: the completion event carries the token-shape category but
         // never token material or an accessToken member.
         var events = lines.Where(line => line.StartsWith('{')).ToArray();
+        // The process waits for the local writer before finishing, so the request
+        // span's stop event and the completion event are both present, not raced.
+        Assert.AreEqual(1, events.Count(line => line.Contains("\"stage_completed\"", StringComparison.Ordinal)
+            && line.Contains("\"stage\":\"request\"", StringComparison.Ordinal)));
         using var completion = JsonDocument.Parse(events.Single(line => line.Contains("\"request_completed\"", StringComparison.Ordinal)));
         Assert.AreEqual("success", completion.RootElement.GetProperty("outcome").GetString());
         Assert.IsTrue(completion.RootElement.TryGetProperty("tokenFormat", out var format));
@@ -234,8 +238,10 @@ public sealed class OwnedProcessScenarios
                 _ => "Authentication request completed.\n"u8,
             };
         }
-        // Optional diagnostics may end with the process before their writer drains.
-        Assert.IsTrue(indication.StartsWith(child.Error), "Unexpected diagnostic bytes.");
+        // A drained process waits for its fixed indication within the shutdown bound,
+        // so a typed exit carries it whole. Watchdog exits may cut it short.
+        if (code is 0 or 1) Assert.IsTrue(indication.SequenceEqual(child.Error), "Incomplete diagnostic bytes.");
+        else Assert.IsTrue(indication.StartsWith(child.Error), "Unexpected diagnostic bytes.");
     }
 
     internal static void AssertExitBound(ProcessFixture child, string firstEnding)

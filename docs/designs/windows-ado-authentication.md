@@ -1065,10 +1065,16 @@ from the parent selection decision, and, only with `--telemetry stderr`, local
 JSON event lines containing `event`, `stage`, `outcome`, and elapsed milliseconds. Events
 contain no token, email, path, Profile/client/account identifier, tenant, resource, scope,
 claims, or provider text. This is optional local telemetry; network export and persistent
-telemetry identifiers are not provided by this Slice. Bound pending diagnostic/event
-output to 8 KiB, drop excess, never await a flush at result delivery, and ignore sink
-failure without changing authentication or exit status. The process watchdog covers a
-blocked diagnostic writer too. No upstream telemetry configuration is read.
+telemetry identifiers are not provided by this Slice. With `--telemetry stderr`, all
+event and indication bytes accepted for one invocation total at most 8 KiB. Of that
+total, 1 KiB stays reserved for the final completion line and a further 512 bytes for
+the owned request span's stop event, so phase events and the pre-interaction notice
+cannot exhaust either; excess is dropped, not queued. A sink that fails or refuses a
+write ends local output for the invocation. Never await a flush before result delivery.
+After the result is written and request work has drained, the process host waits for
+the local writer, and for any best-effort stderr indication, only within the remaining
+process shutdown bound; a blocked or failed sink cannot change authentication or exit
+status. No upstream telemetry configuration is read.
 
 ### Local OpenTelemetry-Compatible Observation
 
@@ -1080,9 +1086,12 @@ These APIs are the [.NET OpenTelemetry instrumentation boundary](https://learn.m
 not an assertion that an OpenTelemetry SDK/exporter has been installed or run.
 No new dependency, exporter endpoint or Collector service is needed for local observation.
 
-`--telemetry stderr` installs a request-local `ActivityListener` that listens only
-to that source and projects fixed stage-start and stage-completion JSON lines to
-the existing bounded stderr sink. Start notifications supply immediate progress;
+`--telemetry stderr` installs one `ActivityListener` for the invocation that listens
+only to that source and projects fixed stage-start and stage-completion JSON lines to
+the existing bounded stderr sink. .NET registers activity listeners process-wide, so
+the listener observes any activity of that source in the process, not only this
+request's; the product runs one request per process, and the projection still emits
+only allowlisted fields of owned stage names. Start notifications supply immediate progress;
 completed spans supply durations. A pending span is not evidence of completion.
 Keep the existing `request_completed` event and fixed human indications. The local
 projection permits fixed event/stage/outcome names, nonnegative relative durations,
