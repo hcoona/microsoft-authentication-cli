@@ -58,7 +58,7 @@ Repository checks need only the check tools, so install those and the hooks with
 downloading the .NET SDK, APM, or Node.js:
 
 ```sh
-mise install --locked actionlint gitleaks hk lychee pipx:check-jsonschema python uv
+mise install --locked actionlint gitleaks hk lychee pipx:check-jsonschema pkl python shellcheck uv
 mise run hooks:install
 ```
 
@@ -95,8 +95,33 @@ mise exec -- dotnet build Windows.slnx --configuration Release --no-restore -p:E
 ## .NET and Agent Tooling
 
 The same toolchain selects .NET SDK 10.0.402 (`http:dotnet-development`), APM v0.29.0,
-and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. Shared
-MSBuild/package files wait for a concrete product consumer.
+and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. It is
+generated from the `mise.lock` SDK entry by `global.pkl` and is never edited by hand;
+the `global-json` hk step fails when it differs. Every project targets the runtime
+bundled with that SDK (`TargetLatestRuntimePatch`) with roll-forward disabled, so no
+project states a runtime patch version. Shared MSBuild/package files wait for a concrete
+product consumer.
+
+`mise.lock` is generator output: never edit it by hand. Generate it with the mise
+version that CI pins, the `version:` input of the `jdx/mise-action` steps in
+`.github/workflows/check.yml`; `mise.toml` sets the same `min_version`. Another mise
+version can rewrite unrelated entries.
+
+To change the SDK, edit its version and archive URLs in `mise.toml`. With that mise
+version, regenerate the lock and `global.json`, then refresh the package lock files so
+they follow the new runtime:
+
+```text
+mise lock http:dotnet-development --platform linux-x64,windows-x64
+mise exec -- pkl eval -f json global.pkl -o global.json
+mise exec -- dotnet restore Windows.slnx --force-evaluate -p:EnableWindowsTargeting=true
+```
+
+Keep the SDK lock to the two platforms whose archives `mise.toml` names; without
+`--platform`, mise also adds entries for other locked platforms, such as a glibc archive
+under `linux-x64-musl`. A restore on Linux writes each changed `packages.lock.json` with
+LF line endings. Restore the CRLF bytes of the lock files that were CRLF before
+committing, so that only the package selections change.
 
 This section is the single authority for contributor tooling setup. These development
 tools have Linux x64 and Windows x64 lock entries. The completed

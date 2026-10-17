@@ -36,7 +36,7 @@ jobs:
           version: 2026.8.10
           # Install only the check tools; the development SDK, APM, and Node.js are
           # not needed for repository controls.
-          install_args: actionlint gitleaks hk lychee pipx:check-jsonschema python uv
+          install_args: actionlint gitleaks hk lychee pipx:check-jsonschema pkl python shellcheck uv
           cache: true
 
       - name: Run repository controls
@@ -83,11 +83,7 @@ jobs:
         run: mise exec -- dotnet build Linux.slnx --configuration Release --no-restore
 
       - name: Run the platform-neutral scenario tests
-        # SDK 10.0.402 carries runtime 10.0.13; the projects pin 10.0.12 without
-        # roll-forward. Only this test host rolls forward to the newest patch.
         run: mise exec -- dotnet tests/Authentication.Scenarios/bin/Release/net10.0/Authentication.Scenarios.dll
-        env:
-          DOTNET_ROLL_FORWARD: LatestPatch
 
   # Implementation notes (not part of the windows-build-and-scenarios control invariant):
   # restore uses the committed package lock files in locked mode, and the job uses the
@@ -172,14 +168,10 @@ jobs:
         run: New-Item -ItemType Directory -Path "${{ runner.temp }}\scenarios-${{ github.run_id }}-${{ github.run_attempt }}"
 
       - name: Run the Windows synthetic scenarios without host-timing assertions
-        # SDK 10.0.402 carries runtime 10.0.13; the projects pin 10.0.12 without
-        # roll-forward. Only this test host and its managed scenario children roll
-        # forward to the newest patch.
         run: >-
           mise exec -- dotnet
           tests/Authentication.Windows.Scenarios/bin/Release/net10.0-windows/Authentication.Windows.Scenarios.dll
           --filter "TestCategory!=WindowsHostTiming"
         env:
-          DOTNET_ROLL_FORWARD: LatestPatch
           TEMP: ${{ runner.temp }}\scenarios-${{ github.run_id }}-${{ github.run_attempt }}
           TMP: ${{ runner.temp }}\scenarios-${{ github.run_id }}-${{ github.run_attempt }}

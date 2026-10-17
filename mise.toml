@@ -1,3 +1,5 @@
+min_version = "2026.8.10"
+
 [tools]
 actionlint = "1.7.12"
 "github:microsoft/apm" = "v0.29.0"
@@ -6,7 +8,9 @@ hk = "1.56.1"
 lychee = "0.24.2"
 node = "22.22.2"
 "pipx:check-jsonschema" = "0.38.0"
+pkl = "0.32.1"
 python = "3.13.15"
+shellcheck = "0.11.0"
 uv = "0.12.7"
 
 [tools."http:dotnet-development"]

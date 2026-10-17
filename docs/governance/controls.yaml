@@ -195,6 +195,34 @@ controls:
       - ci
     failure_mode: A canonical record is orphaned, duplicated, or omitted from review routing.
 
+  - id: generated-global-json
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: hk and pkl
+    maintainer: Control maintainer
+    consumers:
+      - Contributors at local-fast before commit
+      - GitHub Actions and reviewers at CI before merge
+    governing_rules:
+      - docs/governance/governance-system.md#gov-002-one-canonical-authority
+      - CONTRIBUTING.md#net-and-agent-tooling
+    invariant: >-
+      global.json is byte-identical to the evaluation of global.pkl, which derives the
+      .NET SDK version from the http:dotnet-development entry in mise.lock.
+    runner: hk
+    implementation:
+      kind: hk-steps
+      steps:
+        local-fast:
+          - global-json
+        ci:
+          - global-json
+    execution_points:
+      - local-fast
+      - ci
+    failure_mode: global.json is edited by hand or left stale after an SDK change, so dotnet selects an SDK other than the one mise installs and locks.
+
   - id: secret-shape
     state: current
     class: mechanical

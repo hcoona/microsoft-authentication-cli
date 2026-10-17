@@ -66,6 +66,14 @@ local fastSteps = new Mapping<String, Step> {
       )
     }
   }
+  // global.json is generated from the SDK locked in mise.lock (global.pkl).
+  ["global-json"] {
+    glob = List("global.pkl", "global.json", "mise.lock")
+    // The fix regenerates only global.json; restage nothing else.
+    stage = List("global.json")
+    check = "pkl eval -f json global.pkl | git diff --no-index --exit-code -- global.json -"
+    fix = "pkl eval -f json global.pkl -o global.json"
+  }
 }
 
 local preCommitSteps = new Mapping<String, Step> {
