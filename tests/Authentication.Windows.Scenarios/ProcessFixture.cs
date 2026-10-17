@@ -65,6 +65,11 @@ internal sealed partial class ProcessFixture : IDisposable
             or "broken-output" or "blocked-output" or "blocked-diagnostics"))
             throw new InvalidOperationException("Unallocated child scenario.");
 
+        // Resolve every launch input before reserving the scenario directory.
+        var executable = nativeCliExecutable ?? DotnetHost.Value;
+        var managedAssembly = nativeCliExecutable is not null ? null
+            : cli ? CliAssembly.Value : Path.Combine(AppContext.BaseDirectory, "Authentication.Windows.Scenarios.dll");
+
         blockedOutput = scenario == "blocked-output";
         blockedError = scenario is "blocked-diagnostics" or "host-notice-blocked";
         DirectoryPath = Path.Combine(Path.GetTempPath(), "process-" + scenario);
@@ -101,15 +106,10 @@ internal sealed partial class ProcessFixture : IDisposable
                 DiagnosticPrefill = capacity;
             }
 
-            var executable = nativeCliExecutable ?? @"C:\Program Files\dotnet\dotnet.exe";
             var arguments = new List<string>();
-            if (nativeCliExecutable is null)
+            if (managedAssembly is not null)
             {
-                var assembly = cli
-                    ? Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                        "../../../../../src/Authentication.Cli/bin/Release/net10.0-windows/win-x64/Authentication.Cli.dll"))
-                    : Path.Combine(AppContext.BaseDirectory, "Authentication.Windows.Scenarios.dll");
-                arguments.Add(assembly);
+                arguments.Add(managedAssembly);
                 if (!cli) arguments.AddRange(["--scenario-child", scenario]);
             }
             if (scenario == "help") arguments.Add("--help");
@@ -279,6 +279,46 @@ internal sealed partial class ProcessFixture : IDisposable
         return completion.Task;
     }
 
+    // Managed children use the same .NET host as this scenario process: the host that
+    // started it as "dotnet <dll>", else the SDK-provided DOTNET_HOST_PATH, else the host
+    // at the root of the runtime this process loaded. No machine-wide path is assumed.
+    private static readonly Lazy<string> DotnetHost = new(() =>
+    {
+        var runtimeDirectory = Path.GetDirectoryName(typeof(object).Assembly.Location);
+        string?[] candidates =
+        [
+            Environment.ProcessPath,
+            Environment.GetEnvironmentVariable("DOTNET_HOST_PATH"),
+            runtimeDirectory is null ? null : Path.Combine(runtimeDirectory, "..", "..", "..", "dotnet.exe"),
+        ];
+        foreach (var candidate in candidates)
+        {
+            if (string.IsNullOrEmpty(candidate) || !Path.IsPathFullyQualified(candidate)) continue;
+            var host = Path.GetFullPath(candidate);
+            if (string.Equals(Path.GetFileName(host), "dotnet.exe", StringComparison.OrdinalIgnoreCase)
+                && File.Exists(host)) return host;
+        }
+        throw new InvalidOperationException("The .NET host for managed scenario children was not found.");
+    });
+
+    // The CLI build output of this scenario build's configuration, at the fixed target
+    // framework and runtime identifier of src/Authentication.Cli. The scenario output is
+    // <repository>/tests/Authentication.Windows.Scenarios/bin/<configuration>/<framework>/.
+    private static readonly Lazy<string> CliAssembly = new(() =>
+    {
+        var output = new DirectoryInfo(Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory));
+        var configuration = output.Parent;
+        var bin = configuration?.Parent;
+        var repository = bin?.Parent?.Parent?.Parent;
+        if (configuration is null || bin?.Name != "bin" || repository is null)
+            throw new InvalidOperationException("The scenario build output layout is not recognized.");
+        var assembly = Path.Combine(repository.FullName, "src", "Authentication.Cli", "bin", configuration.Name,
+            "net10.0-windows", "win-x64", "Authentication.Cli.dll");
+        if (!File.Exists(assembly))
+            throw new InvalidOperationException("Build src/Authentication.Cli in the scenario build configuration.");
+        return assembly;
+    });
+
     internal static string RequireNativeCliExecutable(string executable)
     {
         // The separately accepted controller binds artifact bytes, assets, and ownership.
@@ -294,11 +334,16 @@ internal sealed partial class ProcessFixture : IDisposable
     {
         RequireActiveSuite();
         var command = (string.Join(' ', new[] { executable }.Concat(arguments).Select(Quote)) + '\0').ToCharArray();
+        var dotnetRoot = Path.GetDirectoryName(DotnetHost.Value)!;
+        // Children never roll forward unless this scenario process itself was started with
+        // the latest-patch policy, as CI does when the pinned SDK carries a newer patch.
+        var rollForward = Environment.GetEnvironmentVariable("DOTNET_ROLL_FORWARD") == "LatestPatch"
+            ? "LatestPatch" : "Disable";
         var environment = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             ["SystemRoot"] = @"C:\Windows", ["WINDIR"] = @"C:\Windows", ["OS"] = "Windows_NT",
-            ["PROCESSOR_ARCHITECTURE"] = "AMD64", ["PATH"] = @"C:\Program Files\dotnet;C:\Windows\System32",
-            ["DOTNET_ROOT"] = @"C:\Program Files\dotnet", ["DOTNET_ROLL_FORWARD"] = "Disable",
+            ["PROCESSOR_ARCHITECTURE"] = "AMD64", ["PATH"] = dotnetRoot + @";C:\Windows\System32",
+            ["DOTNET_ROOT"] = dotnetRoot, ["DOTNET_ROLL_FORWARD"] = rollForward,
             ["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1", ["TESTINGPLATFORM_TELEMETRY_OPTOUT"] = "1",
             ["DOTNET_NOLOGO"] = "1", ["TEMP"] = DirectoryPath, ["TMP"] = DirectoryPath,
             ["USERPROFILE"] = DirectoryPath, ["APPDATA"] = DirectoryPath, ["LOCALAPPDATA"] = DirectoryPath,
