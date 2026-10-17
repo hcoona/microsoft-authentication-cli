@@ -58,7 +58,7 @@ Repository checks need only the check tools, so install those and the hooks with
 downloading the .NET SDK, APM, or Node.js:
 
 ```sh
-mise install --locked actionlint gitleaks hk lychee pipx:check-jsonschema python uv
+mise install --locked actionlint gitleaks hk lychee pipx:check-jsonschema pkl python shellcheck uv
 mise run hooks:install
 ```
 
