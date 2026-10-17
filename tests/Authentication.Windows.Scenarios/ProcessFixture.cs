@@ -377,15 +377,11 @@ internal sealed partial class ProcessFixture : IDisposable
         RequireActiveSuite();
         var command = (string.Join(' ', new[] { executable }.Concat(arguments).Select(Quote)) + '\0').ToCharArray();
         var dotnetRoot = Path.GetDirectoryName(DotnetHost.Value)!;
-        // Children never roll forward unless this scenario process itself was started with
-        // the latest-patch policy, as CI does when the pinned SDK carries a newer patch.
-        var rollForward = Environment.GetEnvironmentVariable("DOTNET_ROLL_FORWARD") == "LatestPatch"
-            ? "LatestPatch" : "Disable";
         var environment = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             ["SystemRoot"] = @"C:\Windows", ["WINDIR"] = @"C:\Windows", ["OS"] = "Windows_NT",
             ["PROCESSOR_ARCHITECTURE"] = "AMD64", ["PATH"] = dotnetRoot + @";C:\Windows\System32",
-            ["DOTNET_ROOT"] = dotnetRoot, ["DOTNET_ROLL_FORWARD"] = rollForward,
+            ["DOTNET_ROOT"] = dotnetRoot, ["DOTNET_ROLL_FORWARD"] = "Disable",
             ["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1", ["TESTINGPLATFORM_TELEMETRY_OPTOUT"] = "1",
             ["DOTNET_NOLOGO"] = "1", ["TEMP"] = DirectoryPath, ["TMP"] = DirectoryPath,
             ["USERPROFILE"] = DirectoryPath, ["APPDATA"] = DirectoryPath, ["LOCALAPPDATA"] = DirectoryPath,

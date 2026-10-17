@@ -97,11 +97,13 @@ mise exec -- dotnet build Windows.slnx --configuration Release --no-restore -p:E
 The same toolchain selects .NET SDK 10.0.402 (`http:dotnet-development`), APM v0.29.0,
 and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. It is
 generated from the `mise.lock` SDK entry by `global.pkl` and is never edited by hand;
-the `global-json` hk step fails when it differs. Shared MSBuild/package files wait
-for a concrete product consumer.
+the `global-json` hk step fails when it differs. Every project targets the runtime
+bundled with that SDK (`TargetLatestRuntimePatch`) with roll-forward disabled, so no
+project states a runtime patch version. Shared MSBuild/package files wait for a concrete
+product consumer.
 
 To change the SDK, edit its version and archive URLs in `mise.toml`, then regenerate the
-lock and `global.json`:
+lock and `global.json`, and restore so the package lock files follow the new runtime:
 
 ```text
 mise lock http:dotnet-development --platform linux-x64,windows-x64

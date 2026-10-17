@@ -19,7 +19,7 @@ applies to every operation, configuration, and failure path.
 
 | Choice | Concrete design and reason |
 | --- | --- |
-| Runtime and UI | C# on .NET 10 LTS, `net10.0-windows`, `win-x64`; SDK 10.0.402 and runtime 10.0.12. A small in-process Win32 window replaces the Windows Forms host in the design below. It requires no Windows Desktop managed framework. |
+| Runtime and UI | C# on .NET 10 LTS, `net10.0-windows`, `win-x64`; SDK 10.0.402 and the runtime it bundles, 10.0.13, with roll-forward disabled. A small in-process Win32 window replaces the Windows Forms host in the design below. It requires no Windows Desktop managed framework. |
 | Authentication dependencies | `Microsoft.Identity.Client` and `Microsoft.Identity.Client.Broker` 4.83.1, with `Microsoft.Identity.Client.NativeInterop` 0.20.3. Preserve this authentication dependency baseline. |
 | Provider | Windows WAM only. One real-account discovery, at most one selected-account silent call for the two existing modes, and at most one permitted or explicitly required interactive call. Forced interaction skips silent acquisition. No application-level network retry or second provider. |
 | State | Broker-owned reusable state; a fresh in-memory MSAL application per invocation. No MSAL Extensions cache helper, serialized MSAL cache, shadow refresh-token store, engine account binding, or cross-process lock. |
@@ -35,7 +35,8 @@ review/validation matrix.
 Select **Native AOT** for the one .NET 10 `net10.0-windows` / `win-x64` executable
 with the small in-process Win32 host, under
 [V2-REQ-055](../product/requirements/quality-build-and-validation.md#v2-req-055-native-aot-publishing).
-Retain SDK 10.0.402/runtime 10.0.12, MSAL/Broker 4.83.1 and NativeInterop 0.20.3.
+Retain SDK 10.0.402 with its bundled runtime 10.0.13, MSAL/Broker 4.83.1 and
+NativeInterop 0.20.3.
 No non-AOT exception is needed. This selection is not complete-application
 compatibility, release or support acceptance.
 
