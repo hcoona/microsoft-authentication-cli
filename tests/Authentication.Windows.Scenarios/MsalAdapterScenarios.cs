@@ -368,7 +368,7 @@ public sealed class MsalAdapterScenarios
     {
         try
         {
-            await new RejectingWebUi().AcquireAuthorizationCodeAsync(new("https://login.example.test/authorize"),
+            await new RejectingWebUi(null).AcquireAuthorizationCodeAsync(new("https://login.example.test/authorize"),
                 new("https://app.example.test/callback"), CancellationToken.None);
             Assert.Fail("Rejected fallback cannot return an authorization URI.");
         }

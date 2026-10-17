@@ -18,7 +18,7 @@ public static class WindowsProcess
             () => new MsalHttpClientFactory(new HttpClientHandler()), trace: trace);
     }
 
-    public static int Run(string[] arguments, long entryTimestamp, IRequestHost host,
+    internal static int Run(string[] arguments, long entryTimestamp, IRequestHost host,
         Func<ClientProfile, IAuthenticationProvider> createProvider, IProfileSource? profiles = null) =>
         RunCore(arguments, entryTimestamp, _ => host, (profile, _) => createProvider(profile), profiles, null);
 

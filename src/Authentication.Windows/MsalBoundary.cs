@@ -8,7 +8,7 @@ namespace Authentication.Windows;
 // Interpret public provider observations without exporting provider diagnostics.
 public static class MsalBoundary
 {
-    public static ProviderFailureException MapFailure(Exception exception, CancellationToken cancellationToken) =>
+    internal static ProviderFailureException MapFailure(Exception exception, CancellationToken cancellationToken) =>
         MapFailure(exception, cancellationToken, null);
 
     internal static ProviderFailureException MapFailure(Exception exception, CancellationToken cancellationToken,

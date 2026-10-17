@@ -1,3 +1,8 @@
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Authentication.Scenarios")]
+[assembly: InternalsVisibleTo("Authentication.Windows.Scenarios")]
+
 namespace Authentication.Core;
 
 // The Windows implementation owns fixed-volume admission, one bounded file read,
@@ -39,7 +44,8 @@ public sealed class RequestInvocation : IDisposable
     }
 
     // The returned observation is provisional. Only TryCommitResult can prepare output.
-    public Task<AuthenticationOutcome> RunAsync(IProfileSource profiles,
+    // This Profile-only factory form is a scenario seam; the product binds the request.
+    internal Task<AuthenticationOutcome> RunAsync(IProfileSource profiles,
         Func<ClientProfile, IAuthenticationProvider> createProvider,
         Task<bool>? hostAdmission = null) =>
         RunAsync(profiles, (profile, _) => createProvider(profile), hostAdmission);
