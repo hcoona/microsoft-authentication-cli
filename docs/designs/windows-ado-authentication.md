@@ -209,6 +209,9 @@ reordered or hidden.
 
 `--profile` is the sole lookup mechanism. Open that file once, read at most 64 KiB as
 strict UTF-8 JSON, validate it, and retain an immutable in-memory snapshot for the request.
+One leading UTF-8 byte order mark (`EF BB BF`), as common Windows editors write, is
+accepted and skipped before parsing; it counts toward the 64 KiB bound. Any other byte
+order mark, a repeated one, or one after other content remains invalid.
 The path must be an absolute drive-qualified path on a local fixed Windows volume;
 relative, drive-relative, UNC, device, and Linux paths are invalid. No environment or home
 expansion, directory search, URL retrieval, symlink-management policy, or Profile writer

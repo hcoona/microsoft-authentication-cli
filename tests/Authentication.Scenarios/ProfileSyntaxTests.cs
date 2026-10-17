@@ -131,6 +131,52 @@ public sealed class ProfileSyntaxTests
     }
 
     [TestMethod]
+    public void OneLeadingUtf8ByteOrderMarkIsSkipped()
+    {
+        byte[] document = [0xef, 0xbb, 0xbf, .. Encoding.UTF8.GetBytes(ProfileJson)];
+        var profile = ProfileSyntax.Parse(document);
+
+        Assert.IsNotNull(profile);
+        Assert.AreEqual("synthetic-selected-profile", profile.Name);
+        Assert.AreEqual(new Guid(ClientId), profile.ClientId);
+    }
+
+    [TestMethod]
+    [DataRow("repeated")]
+    [DataRow("not-leading")]
+    [DataRow("bom-only")]
+    [DataRow("utf16")]
+    public void OtherByteOrderMarksRemainInvalid(string kind)
+    {
+        byte[] bom = [0xef, 0xbb, 0xbf];
+        var json = Encoding.UTF8.GetBytes(ProfileJson);
+        byte[] document = kind switch
+        {
+            "repeated" => [.. bom, .. bom, .. json],
+            "not-leading" => [(byte)' ', .. bom, .. json],
+            "bom-only" => bom,
+            "utf16" => [0xff, 0xfe, .. Encoding.Unicode.GetBytes(ProfileJson)],
+            _ => throw new InvalidOperationException("Unknown synthetic case."),
+        };
+
+        Assert.IsNull(ProfileSyntax.Parse(document));
+    }
+
+    [TestMethod]
+    public void ByteOrderMarkCountsTowardTheByteLimit()
+    {
+        var payload = new byte[64 * 1024 + 1];
+        payload.AsSpan().Fill((byte)' ');
+        payload[0] = 0xef;
+        payload[1] = 0xbb;
+        payload[2] = 0xbf;
+        Encoding.UTF8.GetBytes(ProfileJson).CopyTo(payload, 3);
+
+        Assert.IsNull(ProfileSyntax.Parse(payload));
+        Assert.IsNotNull(ProfileSyntax.Parse(payload.AsMemory(0, 64 * 1024)));
+    }
+
+    [TestMethod]
     [DataRow(null, null)]
     [DataRow("common", null)]
     [DataRow(Tenant, Tenant)]
