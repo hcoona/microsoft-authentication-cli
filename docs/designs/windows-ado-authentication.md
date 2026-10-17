@@ -991,11 +991,26 @@ stateDiagram-v2
 ## Result, Diagnostics, and Compatibility
 
 The [result schema](../../contracts/v1/result.schema.json) defines one UTF-8 JSON object
-followed by LF, with no BOM. Exit `0` means a complete `success` object; exit `1` is
-shared by every complete typed failure. Failure objects contain no token or account
-metadata. A success with `persistence_unconfirmed` still exits zero. Invalid/partial
-JSON, process kill, absent output, or mismatched exit status is a caller-observed
-transport/protocol failure and must not be converted into an engine outcome.
+followed by LF, with no BOM. For an `authenticate` invocation, exit status has three
+meanings:
+
+- `0`: a complete `success` object on stdout.
+- `1`: a complete typed failure object on stdout; every typed failure shares it.
+- Any other status: no typed result. The caller treats the run as a transport failure,
+  whatever stdout contains. The product itself uses `2` for this (for example, a broken
+  result pipe, the process watchdog, or a failed owned cleanup after a result was
+  written). The OS or runtime may produce other values, for example when the process is
+  killed.
+
+Failure objects contain no token or account metadata. A success with
+`persistence_unconfirmed` still exits zero. Invalid/partial JSON, absent output, or an
+object whose outcome does not match the exit status is also a caller-observed
+transport/protocol failure and must not be converted into an engine outcome. Result
+projection fails closed: a selected success whose access token, token type or account
+email is empty, or whose scope list is absent, is projected as `internal_failure`
+rather than as a success the schema would reject. `help` and root `--help` are not
+part of the `authenticate` protocol; their exit status reports only whether help was
+written.
 
 Build the result from an allowlist of fields, not by serializing an MSAL result or
 exception. Only `accessToken` in a validated success may expose authentication material.

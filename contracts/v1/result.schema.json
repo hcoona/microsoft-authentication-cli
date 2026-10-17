@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/hcoona/microsoft-authentication-cli/contracts/v1/result.schema.json",
   "title": "Protocol 1 Terminal Authentication Result",
-  "description": "One UTF-8 JSON object plus LF. Complete success exits 0; all complete typed failures exit 1. Consumers tolerate unknown additional fields; producers emit only defined fields. Failure never exposes authentication material or account metadata. Process kill or incomplete output is a transport failure.",
+  "description": "One UTF-8 JSON object plus LF for an authenticate invocation. Exit 0 means a complete success object; exit 1 means a complete typed failure object. Any other exit status means no typed result, so the caller treats the run as a transport failure: the product itself uses 2, and the OS or runtime may produce other values, for example when the process is killed. Incomplete output or an outcome that does not match the exit status is also a transport failure. Help is outside this protocol. Consumers tolerate unknown additional fields; producers emit only defined fields. Failure never exposes authentication material or account metadata.",
   "oneOf": [
     {
       "type": "object",
