@@ -157,7 +157,7 @@ controls:
       - Decision authors at local-fast
       - GitHub Actions and reviewers at CI before merge
     governing_rules:
-      - docs/governance/record-system.md#lifecycle-through-git-and-github
+      - docs/governance/record-system.md#decision-record-numbers
     invariant: Each decision record number and file prefix is unique.
     runner: hk
     implementation:
