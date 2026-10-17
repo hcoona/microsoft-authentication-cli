@@ -39,7 +39,7 @@ internal sealed partial class OwnedRequestHost
 
         // No WS_VISIBLE, and the product never shows it. The creating thread's
         // finally block destroys it.
-        nativeParent = CreateWindowExW(0, className, "hcoona/microsoft-authentication-cli",
+        nativeParent = CreateWindowExW(0, className, WindowsProcess.DisplayName,
             ParentStyle, DefaultPlacement, DefaultPlacement, DefaultPlacement, DefaultPlacement,
             0, 0, instance, 0);
         if (nativeParent == 0) throw new InvalidOperationException("Owned window creation failed.");

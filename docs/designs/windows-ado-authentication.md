@@ -828,6 +828,11 @@ with a message loop, only when interaction is both needed and permitted. It supp
 stable nonzero HWND and has no child controls: no label, button, font, layout, dialog
 message routing, `WM_COMMAND` or Escape handling. It does not ask for account email,
 passwords, URLs, or credentials; those belong to the caller's request and provider UI.
+Its window text is the fixed unofficial display name
+`AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)`, the same constant as
+the first help line, so any surface that names the owner window names the unofficial
+product rather than Microsoft or the registration owner. The window is never shown, so
+the text is not a user-facing claim.
 Parent WAM with that HWND and let WAM choose sign-in/MFA/consent methods. Failure to
 create the parent makes the path unavailable before the interactive call.
 

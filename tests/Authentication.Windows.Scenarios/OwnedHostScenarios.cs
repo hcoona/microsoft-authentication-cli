@@ -72,7 +72,8 @@ public sealed class OwnedHostScenarios
             Assert.IsTrue(fixture.UiThread.IsBackground);
             // The hidden owner has no label, button or other owned control.
             Assert.IsEmpty(OwnedWindowObservation.ReadControls(parent));
-            Assert.AreEqual("hcoona/microsoft-authentication-cli", OwnedWindowObservation.ReadText(parent));
+            Assert.AreEqual("AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)",
+                OwnedWindowObservation.ReadText(parent));
             var notice = Encoding.UTF8.GetString(fixture.Notices.Single());
             Assert.AreEqual("Unofficial hcoona/microsoft-authentication-cli. Profile: synthetic-owned-host-profile. "
                 + "Registration owner: Synthetic external owner. Sign-in continues in the provider display.\n", notice);

@@ -6,6 +6,9 @@ namespace Authentication.Windows;
 // prefixes, callbacks, native I/O and cleanup never execute on that thread.
 public static class WindowsProcess
 {
+    // The unofficial display name shared by help and the hidden owned parent.
+    internal const string DisplayName = "AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)";
+
     public static int Run(string[] arguments, long entryTimestamp)
     {
         var trace = new WindowsMechanismTrace();
@@ -181,8 +184,8 @@ public static class WindowsProcess
         }
     }
 
-    private static byte[] Help => """
-        AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)
+    private static byte[] Help => System.Text.Encoding.UTF8.GetBytes($"""
+        {DisplayName}
         Unofficial project: not a Microsoft product and not supported by Microsoft.
 
         Usage:
@@ -196,7 +199,8 @@ public static class WindowsProcess
         --profile selects an explicit, existing Client Profile file.
         --cancel-on-stdin-close requires a dedicated caller-owned lifetime pipe.
         Authentication writes one protocol 1 JSON result to stdout.
-        """u8.ToArray().Concat(new byte[] { (byte)'\n' }).ToArray();
+
+        """);
 
     private sealed record ProcessCompletion(int ExitCode, long Timestamp);
 
