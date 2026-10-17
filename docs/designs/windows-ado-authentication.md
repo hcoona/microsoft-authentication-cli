@@ -37,6 +37,8 @@ with the small in-process Win32 host, under
 [V2-REQ-055](../product/requirements/quality-build-and-validation.md#v2-req-055-native-aot-publishing).
 Retain SDK 10.0.402 with its bundled runtime 10.0.13, MSAL/Broker 4.83.1 and
 NativeInterop 0.20.3.
+The existing Native AOT and real-host evidence is bound to the 10.0.12 runtime packs
+and the source revisions its records name; it is not evidence for 10.0.13.
 No non-AOT exception is needed. This selection is not complete-application
 compatibility, release or support acceptance.
 
