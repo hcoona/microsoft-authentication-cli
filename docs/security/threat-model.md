@@ -266,6 +266,16 @@ removed afterwards. `ModelLoadHasIssues` was false; generation produced and reco
 `NeedsInvestigation` and 22 `NotApplicable`. A native `SaveAs` output reloaded without
 issues and preserved those states.
 
+On **2026-10-17 UTC**, the desktop application of the same installed TMT **7.3.51110.1**
+opened a copy of this model as merged at `main-v2` `9aeff3d`, in a dedicated temporary
+directory removed afterwards. The application was driven through Windows UI Automation.
+It reported no load error, and Analysis View listed **96 threats**: 63 `Mitigated`, 11
+`NeedsInvestigation`, 22 `NotApplicable` and none `NotStarted`. In this run, the
+threat list's State column displayed `NeedsInvestigation` as *Needs Investigation*. Every
+justification loaded nonempty. Each displayed ID, state and justification length matched
+the committed XML. A desktop `Save As` round trip was not performed, so this run does not
+show whether a tool save would rewrite the file.
+
 Desktop reproduction remains possible by opening `authentication-engine.tm7` and switching
 to Analysis View. The file embeds its template; importing an Azure template or regenerating
 from Markdown is unnecessary. Review candidate justification and status in the native file
