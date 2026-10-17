@@ -49,7 +49,6 @@ provenance = "github-attestations"
 [[tools."github:microsoft/apm"]]
 version = "0.29.0"
 backend = "github:microsoft/apm"
-specifiers = ["v0.29.0"]
 
 [tools."github:microsoft/apm"."platforms.linux-x64"]
 checksum = "sha256:53c98c50f436a8b5ac1d6a3cf443f94d29ed1e5385af52859cf1b1b512f71578"
@@ -137,7 +136,6 @@ url_api = "https://api.github.com/repos/jdx/hk/releases/assets/525632118"
 [[tools."http:dotnet-development"]]
 version = "10.0.402"
 backend = "http:dotnet-development"
-specifiers = ["10.0.402"]
 
 [tools."http:dotnet-development"."platforms.linux-x64"]
 checksum = "sha512:1904a98dda2db34ba78ba3c4fb1b224455329af91c341d83547843c1839e112b04ae699ee92fa2449a8f62249196a938723078c0c60b9f65c88539d5687729c2"
@@ -189,7 +187,6 @@ url_api = "https://api.github.com/repos/lycheeverse/lychee/releases/assets/40995
 [[tools.node]]
 version = "22.22.2"
 backend = "core:node"
-specifiers = ["22.22.2"]
 
 [tools.node."platforms.linux-x64"]
 checksum = "sha256:978978a635eef872fa68beae09f0aad0bbbae6757e444da80b570964a97e62a3"

@@ -1,3 +1,5 @@
+min_version = "2026.8.10"
+
 [tools]
 actionlint = "1.7.12"
 "github:microsoft/apm" = "v0.29.0"
