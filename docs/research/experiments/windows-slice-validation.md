@@ -1073,3 +1073,35 @@ retrieved; issue descriptions are reports or proposals, not observed platform fa
 These outcomes preserve the existing source/observation distinctions. The runtime release
 and source commits above are immutable design baselines, not promises that they remain the
 latest versions. Upgrade and release review must refresh the applicable dependency facts.
+
+### Registry Evaluation for the Review Remediation (2026-10-17)
+
+All ten registry entries were evaluated on **2026-10-17 UTC**. Two events require it:
+the merged Delivery Wave change that authorized the
+[review remediation](https://github.com/hcoona/microsoft-authentication-cli/issues/509),
+and the repository owner's 2026-10-16 decision to revert forced interaction to supply
+neither a discovered account nor a login hint. That decision is an `interaction-policy`
+decision, so it fired RECHECK-001 and RECHECK-010; no evaluation was recorded when it was
+made, and this entry records it. The remediation also restates V2-REQ-014, V2-REQ-016 and
+V2-REQ-020 as behavior only and amends V2-REQ-042.
+
+GitHub Issue and pull-request state was retrieved anonymously from the public REST API.
+Microsoft Learn state was retrieved from the public page metadata (`updated_at` and
+source `git_commit_id`) and the page text. Issue descriptions remain reports or
+proposals, not observed platform facts.
+
+| Entry | Retrieved public state | Outcome |
+| --- | --- | --- |
+| RECHECK-001 | [Issue #464](https://github.com/AzureAD/microsoft-authentication-cli/issues/464): open, zero comments, updated `2026-08-17T21:12:04Z`. | Fired. Upstream still documents no no-interaction contract. The revert and the behavior-only requirement text do not rely on an upstream feature; explicit interaction permission and the no-interaction guarantee are unchanged. |
+| RECHECK-002 | [Issue #465](https://github.com/AzureAD/microsoft-authentication-cli/issues/465): open, zero comments, updated `2026-08-27T22:02:13Z`. | Not fired. Strict account discovery and final validation are unchanged; a forced call without a hint still fails on any other returned account. |
+| RECHECK-003 | [Issue #460](https://github.com/AzureAD/microsoft-authentication-cli/issues/460): open, zero comments, updated `2026-05-13T17:25:51Z`. [MSAL.NET WSL guidance](https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/linux-dotnet-sdk-wsl): updated `2026-03-31T12:00:00Z`, source commit `5311d7a`; it still describes a Linux broker with an unlocked keyring and WSL 2.4.13 or later. | Not fired. Direct Windows invocation is unchanged; no Linux broker or forwarding layer is selected. |
+| RECHECK-004 | Issues [#459](https://github.com/AzureAD/microsoft-authentication-cli/issues/459) and [#461](https://github.com/AzureAD/microsoft-authentication-cli/issues/461): open, two comments each, updated `2026-05-14T00:13:01Z` and `2026-05-14T00:12:30Z`. | Not fired. No browser or callback mechanism is selected. |
+| RECHECK-005 | [PR #462](https://github.com/AzureAD/microsoft-authentication-cli/pull/462): merged `2026-09-17T19:33:15Z`, as recorded in the [bounded WSL transport recheck](#bounded-wsl-transport-recheck). | Not fired. Its Linux broker path is not selected. |
+| RECHECK-006 | [Issue #398](https://github.com/AzureAD/microsoft-authentication-cli/issues/398): open, zero comments, updated `2024-08-13T16:18:59Z`. | Not fired. WAM-owned state and the persistence warning are unchanged. |
+| RECHECK-007 | [Azure DevOps Entra OAuth guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth): updated `2026-05-08T17:05:00Z`, source commit `f7bd73f`, the revision recorded on 2026-09-04; it still states that Entra apps do not natively support MSA users for Azure DevOps. | Not fired. The V2-REQ-042 amendment permits an integration-specific identity pin that validates a Profile-supplied client ID; it selects, enables and distributes no Profile, and the external Profile gate is unchanged. |
+| RECHECK-008 | [Native AOT guidance](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/): updated `2026-07-27T16:18:00Z`, source commit `45d2254`; it still lists Windows x64 and Visual Studio 2022 or later with Desktop development with C++. [Trimming incompatibilities](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/incompatibilities): updated `2025-12-03T09:19:00Z`, source commit `020cd4a`; Windows Forms and WPF trimming remain unsupported. MSAL issues [5226](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/issues/5226) and [5248](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/issues/5248): closed as completed, four comments each, updated `2025-08-11T22:15:10Z` and `2025-09-11T21:47:37Z`. | Not fired. The publishing mode, target and dependency pins are unchanged, and no exception is accepted or renewed. |
+| RECHECK-009 | [Entra error-code reference](https://learn.microsoft.com/en-us/entra/identity-platform/reference-error-codes): updated `2026-06-15T17:40:00Z`, source commit `a4be4ac`; it still lists AADSTS65004 as declined consent and warns that error codes can change. | Not fired. The provider-failure mapping is unchanged. |
+| RECHECK-010 | [WAM API reference](https://learn.microsoft.com/en-us/entra/identity-platform/reference-entra-id-wam-api): updated `2026-06-15T17:40:00Z`, source commit `a4be4ac`; it still documents the `prompt` request property (`no_select` or `select_account`) and `LoginHint`. The pinned MSAL and Broker 4.83.1 and NativeInterop 0.20.3 are unchanged. | Fired. The documented prompt values are a request contract; the [Windows design](../../designs/windows-ado-authentication.md#forced-interactive-authentication) records that the pinned transport does not carry `Prompt`, so forced interaction controls only whether an account or hint is supplied. The revert rests on the [real-host observations](real-host-validation.md#results), not on prompt metadata. Whether WAM presents UI remains provider behavior recorded as a design known limitation, and an interactive result is not treated as renewed credentials. |
+
+No entry changes a current conclusion. The remediation changes no dependency, SDK,
+runtime, Profile, platform or release, and authorizes no experiment.

@@ -1114,6 +1114,8 @@ authorized source set was searched.
 `V2-REQ-013`, `V2-REQ-020`, `V2-REQ-021`, `V2-REQ-023`, and the interaction-required
 outcome under `V2-REQ-032`. Replace V1 global interaction filtering and combined broker
 orchestration. This remains the 2026-09-04 source outcome, not a fresh source-status claim.
+The latest dated evaluation of this and every other registry entry is the
+[2026-10-17 registry evaluation](experiments/windows-slice-validation.md#registry-evaluation-for-the-review-remediation-2026-10-17).
 
 ### `RECHECK-002`: strict account selection
 
