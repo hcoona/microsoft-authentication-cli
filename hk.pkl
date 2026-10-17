@@ -47,12 +47,12 @@ local fastSteps = new Mapping<String, Step> {
   }
   ["structured-record-schema"] {
     check = new Command {
-      argv = List("uv", "run", "tools/check_repository_records.py", "schemas")
+      argv = List("uv", "run", "--locked", "tools/check_repository_records.py", "schemas")
     }
   }
   ["record-identifiers"] {
     check = new Command {
-      argv = List("uv", "run", "tools/check_repository_records.py", "identifiers")
+      argv = List("uv", "run", "--locked", "tools/check_repository_records.py", "identifiers")
     }
   }
   ["record-family-path-consistency"] {
@@ -60,6 +60,7 @@ local fastSteps = new Mapping<String, Step> {
       argv = List(
         "uv",
         "run",
+        "--locked",
         "tools/check_repository_records.py",
         "catalog-paths",
       )

@@ -77,6 +77,11 @@ The hook fails closed while any unstaged or untracked path remains. Stage the fi
 intended snapshot or temporarily set other work aside before committing so repository-wide
 path-based checks inspect the same tree Git will record.
 
+The record checker's Python dependencies are locked in
+`tools/check_repository_records.py.lock`, and hk runs it with `uv run --locked`. After a
+reviewed change to its inline dependency list, regenerate that lock with
+`mise exec -- uv lock --script tools/check_repository_records.py`.
+
 ## .NET and Agent Tooling
 
 The same toolchain selects .NET SDK 10.0.402 (`http:dotnet-development`), APM v0.29.0,

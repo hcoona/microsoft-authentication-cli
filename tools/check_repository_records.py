@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.13,<3.14"
-# dependencies = ["PyYAML==6.0.3", "jsonschema==4.25.1", "markdown-it-py==4.2.0"]
+# dependencies = ["PyYAML==6.0.3", "markdown-it-py==4.2.0"]
 # ///
 
 from __future__ import annotations
