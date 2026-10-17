@@ -28,6 +28,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Install the pinned toolchain
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
@@ -60,6 +61,8 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Install mise
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
@@ -102,6 +105,8 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Install mise
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
@@ -145,6 +150,8 @@ jobs:
 
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Install mise
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
@@ -164,6 +171,11 @@ jobs:
       - name: Build
         run: mise exec -- dotnet build Windows.slnx --configuration Release --no-restore
 
+      - name: Create a fresh scenario temporary directory
+        # The fixture reserves %TEMP%\process-<scenario> and latches a safety stop there,
+        # so each run attempt starts from its own new, empty directory.
+        run: New-Item -ItemType Directory -Path "${{ runner.temp }}\scenarios-${{ github.run_id }}-${{ github.run_attempt }}"
+
       - name: Run the Windows synthetic scenarios without host-timing assertions
         # SDK 10.0.402 carries runtime 10.0.13; the projects pin 10.0.12 without
         # roll-forward. Only this test host and its managed scenario children roll
@@ -174,3 +186,5 @@ jobs:
           --filter "TestCategory!=WindowsHostTiming"
         env:
           DOTNET_ROLL_FORWARD: LatestPatch
+          TEMP: ${{ runner.temp }}\scenarios-${{ github.run_id }}-${{ github.run_attempt }}
+          TMP: ${{ runner.temp }}\scenarios-${{ github.run_id }}-${{ github.run_attempt }}

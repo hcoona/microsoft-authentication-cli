@@ -522,12 +522,17 @@ Windows host-timing evidence: they establish timing only on the host where they 
 CI job runs them, and the `windows-latest` job makes no host-timing claim. A passing
 Windows CI run establishes the synthetic Windows behavior on that runner image only; it
 is not real-platform, broker or published-executable evidence.
+The scenario jobs run the framework-dependent outputs on the SDK's newest patch runtime
+through `DOTNET_ROLL_FORWARD=LatestPatch`, which their child processes inherit, so CI is
+not evidence for the pinned 10.0.12 runtime.
 
 A failed Windows host-timing assertion is not yet a product defect. Rerun the failed
 scenario once on the same host and record the host load (processor and memory
-utilization and other active workloads) around both runs. Classify the failure as a
-product defect only when the rerun also fails and the recorded load does not explain the
-exceeded bound; otherwise record it as a host-timing observation of that host.
+utilization and other active workloads) around both runs. The validation reviewer, who
+must be independent of the change author, decides whether the recorded load explains the
+exceeded bound. Classify the failure as a product defect only when the rerun also fails
+and that reviewer finds the recorded load does not explain it; otherwise record it as a
+host-timing observation of that host.
 
 ### Slice Closure Versus Release Readiness
 
