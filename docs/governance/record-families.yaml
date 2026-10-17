@@ -483,11 +483,10 @@ families:
     producer: Validation maintainer
     maintainer: Validation maintainer
     consumers:
-      - Repository owner and operator executing the bounded real-host calls
       - Validation, design, and security reviewers relying on the recorded observations and their limitations
-    creation_trigger: The Real-Host Validation Delivery Wave entry requires an accepted protocol before any build or real call on the designated host.
+    creation_trigger: The Real-Host Validation Delivery Wave entry required an accepted protocol before any build or real call on the designated host; the entry completed and the protocol, ledger, and results remain as evidence.
     failure_mode: Real calls run outside the accepted subject, effects, or limits, or their evidence leaks private data or overstates scope.
-    review_point: Independent research-evidence review of every protocol amendment and results change
+    review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
   - id: developer-tooling-evidence
     state: current
