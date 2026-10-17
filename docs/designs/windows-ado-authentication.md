@@ -791,8 +791,10 @@ identity are likewise not read back from the result: the request-local applicati
 instance carries them. This binding establishes only that the candidate came from that
 provider call. It does not prove the resource or client for which the token was issued,
 does not detect a provider that ignored a request parameter, and rests on MSAL and WAM
-as trusted dependencies. Dynamic scopes are still compared exactly, and the token is
-never parsed to fill the gap.
+as trusted dependencies. For dynamic scopes, each requested scope must be among the
+granted scopes, compared ordinally; extra grants are allowed. The token is never parsed
+to fill the gap.
+
 Missing account email and invalid or missing tenant metadata remain missing in the
 adapter projection; requested values must not fill them. Keep the request-local
 operation identifier separately from the observed correlation ID. The pinned

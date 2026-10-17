@@ -225,7 +225,10 @@ concurrent calls and any other host.
   with no capacity charged; the protocol had no skip route. That they add no
   role-dependent behavior is an **inference**.
 - **Third subject.** A first B1 invocation failed in a local wrapper before any restore;
-  B4 first ran with the wrong restore configuration and was repeated as specified. The
+  B4 first ran with the wrong restore configuration and was repeated as specified. For
+  #27 the executor asked Q4 before the protocol defined it, carrying it over from the
+  earlier operator-observation practice; the F3 amendment then made Q4 part of the
+  protocol. The
   owner described the credential-method steps after #27, so the executor stopped under
   the yes/no-only rule; the owner dispositioned that description as non-sensitive and
   the F3 amendment added Q4, Q5 and a fixed vocabulary. The ledger lacked a Profile
