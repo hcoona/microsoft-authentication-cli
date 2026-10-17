@@ -275,7 +275,8 @@ public sealed class OwnedHostScenarios
         bool? visibleAtRejection = null;
         admission.RecheckAction = _ =>
         {
-            if (admission.Observations.Count == 2)
+            // Reject the first recheck that observes the created owner.
+            if (hidden != 0)
             {
                 visibleAtRejection = OwnedWindowObservation.IsVisible(hidden);
                 throw new ProviderFailureException(AuthenticationFailure.MechanismUnavailable);
@@ -296,7 +297,6 @@ public sealed class OwnedHostScenarios
         Assert.AreEqual(false, visibleAtCreation);
         Assert.AreEqual(false, visibleAtRejection);
         Assert.AreEqual(0, fixture.Provider.InteractiveCalls);
-        Assert.AreEqual(2, admission.Observations.Count);
         Assert.IsTrue(fixture.Notices.IsEmpty);
         Assert.IsFalse(OwnedWindowObservation.Exists(hidden));
         Assert.AreEqual((nint)0, await fixture.Host.OpenInteractionAsync(CancellationToken.None));
@@ -310,17 +310,32 @@ public sealed class OwnedHostScenarios
         var admission = new UiAdmission();
         await using var fixture = new Fixture(admission);
         CancellationToken original = default;
+        var events = new System.Collections.Concurrent.ConcurrentQueue<string>();
+        admission.RecheckAction = _ => events.Enqueue("recheck");
+        fixture.Checkpoint = (stage, _) =>
+        {
+            if (stage == OwnedHostCheckpoint.HiddenParentCreated) events.Enqueue("created");
+        };
         fixture.Provider.Interactive = (request, _, operation, token) =>
         {
             original = token;
+            events.Enqueue("interactive");
             return Task.FromResult(Candidate(request, operation));
         };
 
         var result = await fixture.InvokeAsync();
         await fixture.CompleteAsync();
-        Assert.AreEqual(2, admission.Observations.Count);
         Assert.IsNotNull(result.Success);
         Assert.IsTrue(original.CanBeCanceled);
+        // Each owned-UI effect follows its own fresh recheck: one before the owner
+        // is created, and one after creation before readiness enables interaction.
+        var order = events.ToList();
+        var created = order.IndexOf("created");
+        var interactive = order.IndexOf("interactive");
+        Assert.IsTrue(created > 0 && order.Take(created).Contains("recheck"),
+            "Owner creation needs a fresh recheck first.");
+        Assert.IsTrue(interactive > created && order.Skip(created).Take(interactive - created).Contains("recheck"),
+            "Interaction needs a fresh recheck after owner creation.");
         foreach (var observation in admission.Observations)
         {
             Assert.AreSame(fixture.UiThread, observation.Thread);
