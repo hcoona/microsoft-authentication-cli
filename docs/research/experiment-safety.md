@@ -135,7 +135,7 @@ account store, or create another planned side effect.
 ### Interaction and Telemetry
 
 - Before running an upstream AzureAuth v1
-  ([microsoft/microsoft-authentication-cli](https://github.com/microsoft/microsoft-authentication-cli))
+  ([AzureAD/microsoft-authentication-cli](https://github.com/AzureAD/microsoft-authentication-cli))
   binary, disable its telemetry through its documented controls. This policy does not
   govern telemetry from the toolchain, experiment tools, or host-wide programs.
 - When the behavior of a telemetry switch is under test, isolate network access and
