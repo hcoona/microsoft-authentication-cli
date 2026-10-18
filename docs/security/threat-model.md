@@ -249,10 +249,10 @@ disclosure and 5 tampering. Their stored states are 63 `Mitigated`, 11
 `NeedsInvestigation`, 22 `NotApplicable` and none `NotStarted`. Analysis View displays
 the stored value `NeedsInvestigation` as *Needs Investigation*, the status name in the
 [TMT getting-started guide](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-getting-started#analyzing-threats).
-These counts come from the 2026-10-17 desktop run in
-[PR #517](https://github.com/hcoona/microsoft-authentication-cli/pull/517), which drove
-the installed tool through Windows UI Automation on a copy of the model as merged at
-`9aeff3d`; every displayed ID, state and justification length matched the committed
+These counts come from the 2026-10-18 desktop run in
+[PR #529](https://github.com/hcoona/microsoft-authentication-cli/pull/529), which drove
+the installed tool through Windows UI Automation on a copy of the model as changed by
+that pull request; every displayed ID, state and justification matched the committed
 XML. That run performed no desktop `Save As` round trip, so it does not show whether a
 tool save would rewrite the file. Analysis is a design review aid, not an authentication experiment,
 implementation test, or proof of platform security.
