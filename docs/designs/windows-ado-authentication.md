@@ -118,9 +118,8 @@ flowchart LR
             caller["Git or package adapter<br/>[External system instance]"]
         end
         subgraph windows["Windows interactive user session [Execution environment]"]
-            cli["Windows CLI + MSAL<br/>[Container instance: .NET 10 process]<br/>Native AOT"]
+            cli["Windows CLI + MSAL<br/>[Container instance: .NET 10 process]<br/>Native AOT; owns a hidden Win32 parent HWND, no controls"]
             profile[("Explicitly selected Profile file<br/>[External data store: caller-managed JSON]")]
-            ui["Hidden Win32 parent HWND, no controls<br/>[Component in the CLI process]"]
             wam["WAM and protected reusable state<br/>[External OS system]"]
         end
     end
@@ -128,14 +127,13 @@ flowchart LR
     resource["Azure DevOps Git / Artifacts<br/>[External system]"]
     caller <-->|Arguments, result, stderr, exit<br/>Optional stdin lifetime pipe| cli
     profile -->|One bounded read| cli
-    cli -->|Permission-gated hidden parent| ui
     cli <-->|Real accounts, token operations, cancellation| wam
     wam <-->|Authentication and issuance| identity
     cli -->|Authority discovery through MSAL| identity
     caller -->|Direct token presentation and service operations| resource
     classDef owned fill:#1168bd,color:#fff,stroke:#0b4884
     classDef external fill:#e5e7eb,color:#111827,stroke:#6b7280
-    class cli,ui owned
+    class cli owned
     class caller,profile,wam,identity,resource external
 ```
 
@@ -824,8 +822,9 @@ cloud/tenant, not a network trace, home-tenant claim, or the initial `common`,
 not expose a literal final endpoint URI; the contract does not invent one. A missing
 actual tenant or unverifiable cloud association fails validation.
 
-The adapter reports `wam` and whether the successful API operation was `silent` or
-`interactive`. This describes the API used, not a claim about which MFA option the user
+Result projection writes `mechanism: wam` and `interaction` as `silent` or `interactive`,
+from whether the coordinator completed the request through the provider's silent or
+interactive operation. This describes the API used, not a claim about which MFA option the user
 saw or whether an interactive API happened to complete without a visible prompt.
 
 WAM owns persistence, locking, corruption handling, and account/session state. Use its
@@ -1028,10 +1027,10 @@ records this known limitation.
 ```mermaid
 stateDiagram-v2
     [*] --> Admission
-    Admission --> Active: Valid arguments/Profile/host
-    Admission --> Ending: Invalid request or cancellation
+    Admission --> Active: Valid arguments/Profile
+    Admission --> Ending: Invalid request, cancellation, or timeout
     Active --> Validated: Candidate passes all postconditions before deadline
-    Active --> Ending: Failure, denial, cancellation, or timeout
+    Active --> Ending: Host admission rejected or unobservable at first discovery, failure, denial, cancellation, or timeout
     Validated --> Ending: Success with available warning, cancellation, or permitted incidental timeout
     Ending --> Delivering: Latch outcome, invalidate callbacks, close owned UI
     Delivering --> Exited: Complete JSON fixes the matching exit, even if cleanup is later forced, or failed write and exit 2
@@ -1108,19 +1107,22 @@ for a non-active connection. The
 [connection-state contract](https://learn.microsoft.com/windows/win32/api/wtsapi32/ne-wtsapi32-wts_connectstate_class)
 defines `WTSActive` and the other states; an inactive category alone does not select a
 particular non-active state or prove how the operator is connected.
-The existing confidential validator may project only an exact bounded indication
-to a fixed safe enum; absent or invalid diagnostics remain unavailable or invalid.
-They neither establish authentication success nor relax any passing expectation.
+Absent or invalid diagnostics remain unavailable or invalid. They neither establish
+authentication success nor relax any passing expectation.
 
 The consuming scenario for this vocabulary is a bounded Windows host observation in
-which an otherwise valid request returns `mechanism_unavailable`: the operator or
-validator needs the first failed boundary to decide which ordinary host condition (for
+which an otherwise valid request returns `mechanism_unavailable`: the operator needs
+the first failed boundary to decide which ordinary host condition (for
 example, an inactive session) to restore before another permitted attempt, without
 exporting native details. The vocabulary changes no product behavior.
 
 Stderr carries bounded fixed human indications, the bounded pre-interaction indication
 from the parent selection decision, and, only with `--telemetry stderr`, local
-JSON event lines containing `event`, `stage`, `outcome`, and elapsed milliseconds. Events
+JSON event lines. Stage events carry `event`, `stage`, request-local trace and span IDs
+and elapsed milliseconds; a completed stage adds its duration and `status`, and the
+completed request stage may add the `error.type` described below; the
+final `request_completed` event carries `event`, `stage`, `outcome` and elapsed
+milliseconds, plus the token-shape fields below for a success. Events
 contain no token, email, path, Profile/client/account identifier, tenant, resource, scope,
 claims, or provider text. Under
 [V2-REQ-036](../product/requirements/result-and-process-protocol.md#v2-req-036-account-and-host-identifier-privacy),
