@@ -51,7 +51,7 @@ reserved_upstream:
     identifiers:
       - azureauth-ado-pat.lock
       - azureauth-pat.cache
-      - Microsoft-labelled Keychain and keyring values
+      - Microsoft-labeled Keychain and keyring values
     rule: Use distinct names if PAT support is later accepted.
 
   - area: telemetry

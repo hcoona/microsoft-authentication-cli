@@ -259,6 +259,21 @@ public sealed class TelemetryScenarios
         Assert.IsFalse(value.HasScopes);
     }
 
+    // Synthetic unsigned payloads only. Each expected claim, in its expected type, is
+    // reported present; the interpretation still carries no claim value.
+    [TestMethod]
+    [DataRow("{\"exp\":1767225600,\"aud\":\"" + PrivateMarker + "\",\"scp\":\"synthetic.read\"}")]
+    [DataRow("{\"exp\":1767225600,\"aud\":[\"" + PrivateMarker + "\"],\"scp\":\"synthetic.read\"}")]
+    public void ExpectedClaimsInTheirExpectedTypesAreReportedPresent(string payload)
+    {
+        var value = TokenDiagnostics.Describe(Jwt(payload));
+        Assert.AreEqual(TokenDiagnosticFormat.DecodedUnverified, value.Format);
+        Assert.IsTrue(value.HasExpiration);
+        Assert.IsTrue(value.HasAudience);
+        Assert.IsTrue(value.HasScopes);
+        Assert.IsFalse(value.ToString().Contains(PrivateMarker, StringComparison.Ordinal));
+    }
+
     [TestMethod]
     [DataRow(ProviderDiagnosticError.QueryParameterConflict, "query_parameter_conflict", false)]
     [DataRow(ProviderDiagnosticError.BrokerContract, "broker_contract", false)]

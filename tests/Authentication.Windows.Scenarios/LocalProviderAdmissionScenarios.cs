@@ -116,9 +116,7 @@ public sealed class LocalProviderAdmissionScenarios
     {
         internal CancellationTokenSource Original { get; } = new();
         internal List<CancellationToken> Tokens { get; } = [];
-        internal Action<CancellationToken>? DuringAdmission { get; set; }
         internal Action<CancellationToken>? DuringInitialization { get; set; }
-        internal Action<CancellationToken>? DuringRecheck { get; set; }
         internal bool RequiresInteraction { get; set; }
         internal int Admissions, Rechecks, Initializations, Discoveries, SilentCalls, InteractiveCalls, Opened, Closed;
         private readonly ProviderAccount account = new(Email, new object());
@@ -140,14 +138,12 @@ public sealed class LocalProviderAdmissionScenarios
         {
             Admissions++;
             Tokens.Add(cancellationToken);
-            DuringAdmission?.Invoke(cancellationToken);
         }
 
         public void Recheck(CancellationToken cancellationToken)
         {
             Rechecks++;
             Tokens.Add(cancellationToken);
-            DuringRecheck?.Invoke(cancellationToken);
         }
 
         // These fixtures deliberately return after cancellation: the production
