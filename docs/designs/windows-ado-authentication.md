@@ -972,17 +972,22 @@ process termination releases its threads and handles; external WAM services rema
 owned. A forced termination or incomplete write is a transport failure, not a fabricated
 typed result. This is the exceptional fail-closed boundary, not a resident watchdog
 process or a mechanism for making unsupported platforms work.
-The watchdog exits `2` only when the bound expires before request work drains. After
-drain, the typed status `0` or `1` that matches the written result is published first;
-if the bound then expires while only optional diagnostics are still pending, the
-watchdog terminates with that published status.
+Under [V2-REQ-030](../product/requirements/result-and-process-protocol.md#v2-req-030-versioned-result-and-exit-status),
+the complete written result fixes the exit status. Once the result's bytes are fully
+written to stdout, the typed status `0` or `1` that matches it is published before any
+drain or diagnostic wait. If the bound then expires because owned cleanup, required
+drain or optional diagnostics have not finished, the watchdog terminates with that
+published status. The watchdog exits `2` only when no complete result has been
+written. A failed result write publishes no status, so no completion indication or
+token-shape observation follows it, and the process exits `2`.
 
 The managed process host keeps its entry thread as the watchdog and moves request
 work, native handle I/O, and cleanup onto dedicated background work. It reads the
 original deadline and first terminal/cancellation timestamps without waiting on
-request locks. Result commitment is serialized with host cancellation; complete
-native transfer and required operation, cancellation-callback, and lifetime-pipe
-drain are prerequisites for a matching result exit. Pipe admission runs within the
+request locks. Result commitment is serialized with host cancellation. Complete
+native transfer of the result fixes the exit status; required operation,
+cancellation-callback, and lifetime-pipe drain are prerequisites for ending the
+process normally before the bound, not for that status. Pipe admission runs within the
 original request lifetime and precedes Profile access. An initially closed pipe
 cannot release Profile work while cancellation propagation is pending. Optional
 diagnostics have separate bounded bytes and do not participate in required drain.
@@ -995,8 +1000,8 @@ before effects, and its `finally` must publish actual operation completion even
 when cancellation occurred before execution. ExecutionContext continues to flow;
 native admission checks the actual executing request thread, and owned UI remains
 on its dedicated STA. Scheduling delay or an uncooperative dependency may still
-prevent required drain. A selected terminal task does not establish cleanup or a
-matching result exit, and the unchanged watchdog remains the process bound.
+prevent required drain. A selected terminal task does not establish cleanup or result
+delivery, and the unchanged watchdog remains the process bound.
 
 External broker windows/session changes are not forcibly rolled back. Forward cancellation
 through MSAL, destroy the hidden parent, invalidate completion, and write a fixed sanitized
@@ -1023,7 +1028,7 @@ stateDiagram-v2
     Active --> Ending: Failure, denial, cancellation, or timeout
     Validated --> Ending: Success with available warning, cancellation, or permitted incidental timeout
     Ending --> Delivering: Latch outcome, invalidate callbacks, close owned UI
-    Delivering --> Exited: Complete JSON and matching exit, or transport failure/termination
+    Delivering --> Exited: Complete JSON fixes the matching exit, even if cleanup is later forced, or failed write and exit 2
     Ending --> Exited: Shutdown watchdog or process termination
     Exited --> [*]
 ```
@@ -1037,13 +1042,15 @@ three meanings:
 
 - `0`: a complete `success` object on stdout.
 - `1`: a complete typed failure object on stdout; every typed failure shares it.
-- Any other status: no typed result. The caller treats the run as a transport failure,
-  whatever stdout contains. The product itself uses `2` for this: a broken result pipe,
-  or the process watchdog when its bound expires before request work drains, including
-  a failed or stalled owned cleanup after a result was written. A bound that expires
-  after drain, while only optional diagnostics are pending, keeps the published `0` or
-  `1`. The OS or runtime may produce other values, for example when the process is
-  killed.
+- Any other status: V2 could not guarantee a complete, parseable result. The caller
+  treats the run as a transport failure, whatever stdout contains. The product itself
+  uses `2` when no complete result was written: a broken or failed result write, or the
+  process watchdog when its bound expires before the result is written. The OS or
+  runtime may produce other values, for example when the process is killed.
+
+Once the complete result is written, the exit status follows it. A later failed or
+stalled owned cleanup, required drain, watchdog termination or diagnostic keeps the
+`0` or `1` that matches the written result and may be reported only on stderr.
 
 Failure objects contain no token or account metadata. A success with
 `persistence_unconfirmed` still exits zero. Invalid/partial JSON, absent output, or an

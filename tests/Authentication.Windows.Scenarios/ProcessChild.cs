@@ -38,7 +38,7 @@ internal static class ProcessChild
         }
         if (scenario is not ("success" or "file-stdin" or "closed-stdin" or "close-pending"
             or "unused-stdin" or "data-close" or "deadline" or "broken-output"
-            or "blocked-output" or "blocked-diagnostics")) return 90;
+            or "blocked-output" or "blocked-diagnostics" or "drain-stall" or "drain-stall-denied")) return 90;
 
         Mark("entered", entry);
         return WindowsProcess.Run(arguments, entry, new Host(), profile =>
@@ -90,7 +90,14 @@ internal static class ProcessChild
             }
 
             Mark("provider-ready");
-            if (scenario == "diagnostic-stall-denied") throw new ProviderFailureException(AuthenticationFailure.Denied);
+            if (scenario is "drain-stall" or "drain-stall-denied")
+            {
+                // Terminal selection cancels this token; the callback never returns,
+                // so required drain stalls only after the result is committed.
+                token.Register(() => { Mark("callback-pending"); Thread.Sleep(Timeout.Infinite); });
+            }
+            if (scenario is "diagnostic-stall-denied" or "drain-stall-denied")
+                throw new ProviderFailureException(AuthenticationFailure.Denied);
             if (scenario == "deadline")
             {
                 // Ignore cancellation and keep both work and a callback pending.

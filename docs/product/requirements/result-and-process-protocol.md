@@ -3,14 +3,20 @@
 ## V2-REQ-030: Versioned Result and Exit Status
 
 Every terminal authentication result emitted by V2 must use a versioned structured
-protocol that represents both success and failure. When a complete result is emitted,
-the process exit status must be zero for success and one documented nonzero value shared
-by all failures. The payload must carry the specific outcome, and the exit status must
-not contradict it.
+protocol that represents both success and failure. Once a complete result has been
+written to stdout, the process exit status must follow it: zero for success and one
+documented nonzero value shared by all typed failures. The payload must carry the
+specific outcome, and the exit status must not contradict it. A later failure or stall
+of owned cleanup, a process watchdog, or diagnostics must not change that status; V2
+may report such a failure only on its diagnostic channel.
+
+Any other exit status means that V2 could not guarantee a complete, parseable result.
+Callers treat it as a transport failure, not as a typed outcome. V2 documents one such
+value for its own use.
 
 A success with a persistence warning remains success. Operating-system termination or
 incomplete or malformed output is not a normally emitted typed failure. The concrete
-nonzero value and serialized schema are not selected here.
+nonzero values and serialized schema are not selected here.
 
 ## V2-REQ-031: Complete Success Metadata
 

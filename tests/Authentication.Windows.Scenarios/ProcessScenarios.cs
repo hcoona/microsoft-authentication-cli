@@ -117,15 +117,19 @@ public sealed class ProcessScenarios
         await child.FinishAsync();
         Assert.IsFalse(child.Forced, "The product must end before fixture enforcement.");
         AssertExitInterval(child, child.EntryTimestamp, 2);
-        Assert.AreEqual(2u, child.ExitCode, "Forced product shutdown is a transport failure.");
         Assert.IsTrue(child.Marked("callback-pending"));
         Assert.IsFalse(child.Marked("candidate-returned"));
-        if (child.Output.Length > 0)
+        // Undrained work forces termination. A typed timeout written before then
+        // keeps its exit status; without a complete result the exit is a transport failure.
+        if (child.Output.Length == 0)
         {
-            using var json = ParseOne(child.Output);
-            Assert.AreEqual("timeout", json.RootElement.GetProperty("outcome").GetString());
-            Assert.IsFalse(json.RootElement.TryGetProperty("accessToken", out _));
+            Assert.AreEqual(2u, child.ExitCode, "Forced shutdown without a result is a transport failure.");
+            return;
         }
+        using var json = ParseOne(child.Output);
+        Assert.AreEqual("timeout", json.RootElement.GetProperty("outcome").GetString());
+        Assert.IsFalse(json.RootElement.TryGetProperty("accessToken", out _));
+        Assert.AreEqual(1u, child.ExitCode, "A written typed timeout fixes the exit status.");
     }
 
     [TestMethod]
@@ -156,6 +160,26 @@ public sealed class ProcessScenarios
         using var child = new ProcessFixture(scenario);
         await child.FinishAsync();
         Assert.IsTrue(child.Marked("diagnostic-stall"), "The never-completing diagnostic drain was not reached.");
+        AssertNormalExit(child, expected);
+        if (expected == 0) AssertSuccessBytes(child);
+        else
+        {
+            using var json = ParseOne(child.Output);
+            Assert.AreEqual("denied", json.RootElement.GetProperty("outcome").GetString());
+        }
+    }
+
+    [TestMethod]
+    [DataRow("drain-stall", 0u)]
+    [DataRow("drain-stall-denied", 1u)]
+    public async Task StalledRequiredDrainCannotReplaceTheWrittenTypedExit(string scenario, uint expected)
+    {
+        // A provider cancellation callback never returns, so required drain never
+        // completes and the process bound always ends the process after the result is
+        // written; this asserts only which exit status it reports, not when.
+        using var child = new ProcessFixture(scenario);
+        await child.FinishAsync();
+        Assert.IsTrue(child.Marked("callback-pending"), "The never-completing cancellation callback was not reached.");
         AssertNormalExit(child, expected);
         if (expected == 0) AssertSuccessBytes(child);
         else

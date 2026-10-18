@@ -73,7 +73,7 @@ internal sealed partial class ProcessFixture : IDisposable
             && scenario is not ("help" or "malformed" or "success" or "file-stdin" or "closed-stdin"
             or "close-pending" or "unused-stdin" or "data-close" or "deadline"
             or "broken-output" or "blocked-output" or "blocked-diagnostics"
-            or "diagnostic-stall" or "diagnostic-stall-denied"))
+            or "diagnostic-stall" or "diagnostic-stall-denied" or "drain-stall" or "drain-stall-denied"))
             throw new InvalidOperationException("Unallocated child scenario.");
 
         // Resolve every launch input before reserving the scenario directory.

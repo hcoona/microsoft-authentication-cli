@@ -115,7 +115,9 @@ evidence that a mechanism or platform passes the corresponding tests.
 - Fixed profile and trust conflicts rejected; only applicable product deadline and tenant
   defaults applied.
 - Zero exit status for success, including persistence warnings, and one stable nonzero
-  value for every normally emitted typed failure, consistent with the payload.
+  value for every normally emitted typed failure, consistent with the payload. Once the
+  complete result is written, a later cleanup, watchdog or diagnostic failure keeps that
+  status; any other status means no complete result was guaranteed.
 - Complete success metadata under
   [`V2-REQ-031`](../product/requirements/result-and-process-protocol.md#v2-req-031-complete-success-metadata),
   one opaque access token, and no public stable account ID or reusable credential artifact.
@@ -454,7 +456,7 @@ prove resource equivalence, tenant precedence, provider behavior, or lifecycle c
 | Lifetime pipe closes before discovery or during WAM | Cancel without late success, destroy the hidden parent, end the process, and expose no token. Reject console/file stdin when the pipe flag is selected. | Deterministic lifecycle scenario and actual WSL-to-Windows pipe integration, including writer-handle inheritance. |
 | Linux caller dies without the optional lifetime pipe | Do not assert Linux signal delivery to Windows. Windows work ends through detected transport failure or the original finite deadline. | Bounded WSL process-lifetime test; no immediate-disconnect support claim for this combination. |
 | Deadline during Profile reading, discovery, silent, interaction, or validation | Original deadline is never restarted. Incomplete validation yields timeout; late candidates cannot resume. | Clock-driven scenarios and bounded real host tests for dependency cancellation and process exit. |
-| Blocked stdout/stderr or uncooperative completion | The shutdown watchdog ends the one process within the defined local shutdown allowance. Incomplete output is a transport failure, never a complete typed result. | Controlled process/pipe scenario before shipping; no tests using real credentials are needed for this transport condition. |
+| Blocked stdout/stderr or uncooperative completion | The shutdown watchdog ends the one process within the defined local shutdown allowance. Incomplete output is a transport failure, never a complete typed result. A result already written completely keeps its typed exit status when cleanup, drain or diagnostics force that termination. | Controlled process/pipe scenario before shipping; no tests using real credentials are needed for this transport condition. |
 | Validated token with no broker persistence receipt | Return success with `persistence_unconfirmed`, no readback, extra acquisition, write, or persistence wait. Next invocation may still reuse usable state. | Scenario and real reuse evidence; do not infer durable-write confirmation from provider success. |
 | Concurrent invocations | Broker integrity is preserved through supported APIs; no app-owned cache or locking is introduced. Duplicate prompts are not suppressed by contract. | Concurrent Windows integration before that support claim; trust broker internals within their documented boundary. |
 | Explicit Profile file and compatibility candidate | Same parser for user-provided and eventually provisioned files; no implicit selection, hot reread, external URL, inherited configuration, or upstream cache import. Show external ownership without claiming Microsoft endorsement. Profile name and owner reject control and Unicode format characters. | Admission scenarios, contract examples, and later bounded consent/audit/branding validation under the external Profile gate. |

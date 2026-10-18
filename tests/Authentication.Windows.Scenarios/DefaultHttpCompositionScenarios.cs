@@ -63,7 +63,7 @@ public sealed class DefaultHttpCompositionScenarios
         RequireMarkers(child, "candidate-returned");
         AssertOrdered(child, "http-send-entered", "candidate-returned", "before-commit", "after-commit", "drain-boundary");
         AssertSuccess(child);
-        // Exit 2 comes from the watchdog here, so the indication may be cut short.
+        // The watchdog ends this process, so the indication may be cut short.
         Assert.IsTrue("Authentication request completed.\n"u8.StartsWith(child.Error), "Unexpected diagnostic bytes.");
         foreach (var name in new[] { "host-callback-pending", "http-cancel-observed", "provider-callback-pending",
             "host-callback-forwarded", "pending-drain-observed", "drain-release-observed", "release-drain" })
@@ -73,7 +73,8 @@ public sealed class DefaultHttpCompositionScenarios
             "Shared process ownership must enter HTTP disposal before completion.");
         RequireMarkers(child, "dispose-stall-entered");
         AssertOrdered(child, "drain-boundary", "http-dispose-entered", "dispose-stall-entered");
-        AssertExit(child, 2);
+        // The stalled disposal follows a complete success, which keeps exit status 0.
+        AssertExit(child, 0, watchdog: true);
         AssertExitBound(child, "host-closing");
         Assert.IsFalse(child.Marked("http-dispose-completed"));
         Assert.IsFalse(child.Marked("process-returned"));
