@@ -275,10 +275,11 @@ Visual Studio, AzureAuth, or GCM serialized caches. No app-owned persisted state
 to collide with those products. Changing Profile names alone neither changes the OAuth
 client identity nor creates a new broker cache partition.
 
-Before activation/distribution, this candidate must satisfy the existing
+Before activation/distribution, the existing
 [external Profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate)
-and still needs strict-result and reuse evidence. Registration rejection returns the
-existing failure outcome; there is no alternate registration, PAT, or SelfDescribing fallback. Those acceptance
+still needs bounded personal/work-account, host/redirect, consent/audit/branding, strict
+result, and reuse evidence. Registration rejection returns the existing failure outcome;
+there is no alternate registration, PAT, or SelfDescribing fallback. Those acceptance
 obligations are distinct from selecting this candidate's concrete design.
 
 ## Cohesive Request Implementation

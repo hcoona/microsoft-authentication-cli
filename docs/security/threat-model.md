@@ -241,8 +241,12 @@ disclosure and 5 tampering. Their stored states are 63 `Mitigated`, 11
 `NeedsInvestigation`, 22 `NotApplicable` and none `NotStarted`. Analysis View displays
 the stored value `NeedsInvestigation` as *Needs Investigation*, the status name in the
 [TMT getting-started guide](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-getting-started#analyzing-threats).
-The pull request that last validated the model in TMT records the run behind these
-counts. Analysis is a design review aid, not an authentication experiment,
+These counts come from the 2026-10-17 desktop run in
+[PR #517](https://github.com/hcoona/microsoft-authentication-cli/pull/517), which drove
+the installed tool through Windows UI Automation on a copy of the model as merged at
+`9aeff3d`; every displayed ID, state and justification length matched the committed
+XML. That run performed no desktop `Save As` round trip, so it does not show whether a
+tool save would rewrite the file. Analysis is a design review aid, not an authentication experiment,
 implementation test, or proof of platform security.
 
 Prefer a supported command-line analyzer when available. The official getting-started
@@ -353,7 +357,7 @@ OAuth handling) remain trusted rather than verified.
 | Execution-flow changes (IDs 10, 27, 41, 55, 81, 96) | `Mitigated`: explicit policy state, one safe provider-failure filter and Profile fields that cannot select policy, executed in Core scenarios. |
 | OAuth response CSRF (IDs 42, 56) | `NeedsInvestigation`: correlation binding is executed in Core and the MSAL composition scenarios in the Windows S1-1 run, and every validated real success passed the fail-closed correlation check; broker-level echo remains an inference, so real-WAM confirmation (CORE-01) stays open under the [release gates](../validation/strategy.md#slice-closure-versus-release-readiness). No parallel OAuth verifier. |
 | Reusable-state spoofing, persistence status and resources (IDs 66, 68, 70, 74) | `Mitigated`: no application-owned store, persistence always reported as unconfirmed, no coordination or retry outside the deadline; recorded fresh-process reuse. |
-| Store corruption and inaccessibility (IDs 67, 72, 79) | `NeedsInvestigation`: the classification of an unavailable broker is executed with synthetic initialization results: `LocalProviderAdmissionScenarios` substitutes host admission and the provider initializer, and `MsalCompositionScenarios` substitutes the session factory. `MsalConstructionScenarios.UnavailableBrokerStopsSessionCreationWithItsFixedCategory` runs the real session factory with only the `IsBrokerAvailable` answer replaced (added after S1-1; `windows-scenarios`); real broker failure, disappearance and concurrency remain Issue #482 release gates. |
+| Store corruption and inaccessibility (IDs 67, 72, 79) | `NeedsInvestigation`: the classification of an unavailable broker is executed with synthetic initialization results: `LocalProviderAdmissionScenarios` substitutes host admission and the provider initializer, and `MsalCompositionScenarios` substitutes the session factory. `MsalConstructionScenarios.UnavailableBrokerStopsSessionCreationWithItsFixedCategory` runs the real session factory with only the `IsBrokerAvailable` answer replaced (added after S1-1; `windows-scenarios`); real broker failure, disappearance and concurrency stay open under the [release gates](../validation/strategy.md#slice-closure-versus-release-readiness). |
 | Profile source and reads (IDs 89, 94) | `Mitigated`: admission of a reported failure is executed in Core, and source substitution and the translation of real file-store failures in the Windows file-snapshot scenarios of the S1-1 run. |
 | Optional telemetry endpoint (IDs 85, 87) | `NotApplicable`: the Slice exports no network telemetry. |
 | Generic nonrepudiation candidates (`R6`/`R7`, 16 items) | Not applicable: the engine promises typed results and sanitized diagnostics, not signed delivery receipts or an identity-rich audit ledger. Persistence-status accuracy remains applicable under the separate storage candidate. |
