@@ -28,6 +28,9 @@ controls:
         ci:
           - merge-conflict
           - trailing-whitespace
+      # Checks the local staged snapshot, which a CI checkout does not have.
+      local_only:
+        - staged-worktree-consistency
     execution_points:
       - local-fast
       - ci

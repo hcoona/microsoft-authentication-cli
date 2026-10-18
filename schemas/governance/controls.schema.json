@@ -81,6 +81,9 @@
               "$ref": "#/$defs/hkStepList"
             }
           }
+        },
+        "local_only": {
+          "$ref": "#/$defs/hkStepList"
         }
       }
     },
