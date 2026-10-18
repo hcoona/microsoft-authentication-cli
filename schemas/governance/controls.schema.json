@@ -213,7 +213,6 @@
               "ci",
               "pull-request-review",
               "recheck-trigger",
-              "issue-closure",
               "pull-request-merge",
               "release"
             ]
