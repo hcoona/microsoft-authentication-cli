@@ -86,9 +86,11 @@ fixed credential-method vocabulary after a Q5 yes.
 - **Restore.** B1 used the owner's machine-local restore exemption
   ([PR #491](https://github.com/hcoona/microsoft-authentication-cli/pull/491#issuecomment-6208285632),
   [PR #494](https://github.com/hcoona/microsoft-authentication-cli/pull/494#issuecomment-6222226699)),
-  not the protocol's nuget.org-only rule. Lock closure was verified for 26 of 26
-  lock-file packages; three implicit 10.0.12 runtime packs were not lock-verified. This
-  is not a public-restore result and bounds the provenance of every published artifact.
+  not the protocol's nuget.org-only rule. That exemption was a
+  [deviation](#deviations-and-dispositions) outside the Wave's authorization. Lock
+  closure was verified for 26 of 26 lock-file packages; three implicit 10.0.12 runtime
+  packs were not lock-verified. This is not a public-restore result and bounds the
+  provenance of every published artifact.
 - **Account state.** Existing personal (Microsoft account) and work (organizational)
   roles with unknown prior broker state; each later subject carried the earlier
   subjects' ordinary updates. Selectors stayed in a local file and were never recorded.
@@ -206,6 +208,12 @@ concurrent calls and any other host.
 
 ## Deviations and Dispositions
 
+- **Restore exemption.** The Wave entry permitted only public package restore, but B1
+  used a machine-local, credential-bearing restore configuration under owner
+  dispositions given in pull-request comments. A comment cannot grant work authorization
+  ([experiment policy](../experiment-safety.md#source-and-build)), so every B1 restore
+  ran outside the Wave's authorization. The owner's dispositions in those pull requests
+  admit the resulting artifacts as evidence, bounded as stated under Restore above.
 - **First subject stop.** S1-2 ran no tests because a local wrapper split the filter
   argument (operator error), and S1-3 failed on an outdated test assertion, corrected by
   [PR #489](https://github.com/hcoona/microsoft-authentication-cli/pull/489). No real call
@@ -259,7 +267,10 @@ no call overlapped, overran its bound, was repeated or left a product process.
 At the end of the Wave, 24 I and 48 N remained unused. No account, consent, cache or
 remote state changed beyond ordinary token acquisition. Each subject's directory was
 deleted after its hashes, scenario counts and ledger rows were recorded. On 2026-10-17
-the local launchers, role file, Profile and ledger were deleted. The machine-local
-restore configuration and its credential cache stay on the host under the owner's
-PR #494 exemption. WAM sessions and caches are retained; deleting local files reverses
-no provider-side change.
+the local launchers, role file, Profile and ledger were deleted. On 2026-10-18 the
+coordinator removed the experiment-owned machine-local NuGet configuration file from the
+experiment directory under the owner's risk decision in the
+[Delivery Wave](https://github.com/hcoona/microsoft-authentication-cli/blob/0f5716e1078c6c302d374676524db1b216b42633/docs/delivery-wave.md#w2-governance-record-authority-and-experiment-policy-2026-10-18).
+The user-wide credential-provider token cache is pre-existing user state shared with
+unrelated work; it was neither read nor removed. WAM sessions and caches are retained;
+deleting local files reverses no provider-side change.

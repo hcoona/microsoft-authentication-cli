@@ -3,12 +3,46 @@
 ## Scope
 
 This policy applies before running an upstream or v2 authentication binary, restore,
-build, cache, installer, or migration experiment.
+build, cache, installer, or migration experiment. [Development
+validation](#development-validation) is not an experiment.
 
 Experiments may use repository-owner-designated existing machines and authorized account
 state. They must keep effects within the accepted experiment boundary, protect unrelated
 state, and publish only sanitized evidence. Disposable accounts, operating-system users,
 VMs, and a fresh-state environment are not general prerequisites.
+
+## Development Validation
+
+Development validation checks repository source without observing real platform,
+account, or service behavior. It is not an experiment and needs no protocol, but the
+work it validates still needs Delivery Wave authorization. It is limited to:
+
+- ordinary credential-free restore, build, tool evaluation, and synthetic scenario runs,
+  using the pinned toolchain, the public package sources named by the repository
+  configuration, and the existing local package cache, on a contributor host, a
+  repository-owner-designated host, or a GitHub-hosted runner;
+- deterministic operating-system checks in those scenarios that read the current
+  process or thread state, or that create temporary files, junctions, child processes,
+  console process groups, and hidden windows owned by the test process under a fresh
+  temporary root and destroyed before it exits;
+- a provider-library call whose HTTP transport is a synthetic handler that returns
+  canned responses and fails the test on any unexpected request, that uses no account
+  or credential, and that opens no browser, operator surface, or window not owned by
+  the test process;
+- opening and analyzing a repository record in its native desktop tool when its record
+  family requires that validation, under the conditions the authorizing Wave entry
+  states.
+
+A run that uses an account or credential, starts real interactive or broker
+authentication, contacts an identity or authority-discovery endpoint, uses a
+credential-bearing or non-public dependency source, or changes state outside its
+checkout, build output, the local package cache, its temporary root, and any
+tool-owned state the Wave entry names is not development validation. An existing local
+package cache is not a non-public source by itself: restore runs in locked mode against
+the committed lock files and configures no credential-bearing or non-public source.
+Development
+validation supports claims only about the tested source. It supports no public-restore,
+real-platform, or support claim.
 
 ## Experiment Authorization
 
@@ -61,6 +95,11 @@ account store, or create another planned side effect.
 - For other experiment preparation, declare public dependency sources, existing cache
   use, toolchain and artifact locations, and their evidence limits in the protocol.
   Do not silently use ambient credentials or infer a clean restore from a warm cache.
+- A credential-bearing or non-public dependency source, such as a private feed, a
+  credential provider, or an experiment cache seeded from either, requires an explicit
+  repository-owner risk decision in the Delivery Wave entry and protocol coverage. An
+  Issue, pull-request comment, or other disposition outside the merged Wave cannot grant
+  it.
 - Keep build output and experiment package caches outside production install paths.
 - Record publicly reviewable nonpublic-dependency blockers without accessing private
   feeds, packages, service connections, or signing identities.
@@ -178,7 +217,7 @@ observations have the same protocol, provenance, and review requirements as auto
 ones. Existing-state success cannot establish fresh-state behavior, another host's
 behavior, or broader platform/Profile support.
 
-## Stop Conditions
+## Stop Conditions and Deviations
 
 Stop the experiment if:
 
@@ -196,3 +235,11 @@ Stop the experiment if:
   ownership cannot be established for cleanup;
 - the subject's source or artifact identity no longer matches the accepted protocol; or
 - continuing would mutate an unrelated account, installation, or remote resource.
+
+A deviation is execution outside the accepted Wave entry or protocol, including
+continuing after a stop condition fires. After a deviation, stop. Make no further attempt
+until a merged Wave or protocol change covers it. Evidence from the deviating attempt or
+produced after it is admitted only by repository-owner disposition with rationale in the
+experiment's governing carrier; that disposition cannot authorize further execution. The
+experiment record states each deviation, its disposition, and the cleanup performed or
+state intentionally retained because of it.

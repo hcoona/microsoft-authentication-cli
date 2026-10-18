@@ -6,6 +6,42 @@ governance:
     Complete the entry's required outcome and update or explicitly disposition every
     current record whose conclusion is materially affected.
   fallback_review: Evaluate every entry when a merged change modifies docs/delivery-wave.md.
+  # The observable event for each trigger kind and value used below.
+  trigger_events:
+    decision:
+      interaction-policy: >-
+        A pull request proposes to accept or change a requirement, architecture, design,
+        or decision record that defines when V2 may, must, or must not show interaction,
+        including explicitly forced interaction.
+      account-contract: >-
+        A pull request proposes to accept or change a requirement, architecture, design,
+        or decision record that defines account selection or result identity validation.
+      cache-design: >-
+        A pull request proposes to accept or change a requirement, architecture, design,
+        or decision record that selects or changes reusable authentication-state storage
+        or its fallback.
+      client-profile: >-
+        A pull request proposes to select, enable, distribute, or change a Client Profile
+        or the externally owned Client Profile gate.
+      native-aot-publishing: >-
+        A pull request proposes to select or change a publishing mode or to accept or
+        renew a Native AOT exception.
+      provider-failure-mapping: >-
+        A pull request proposes to accept or change a design's mapping from provider
+        failures to V2 results.
+    workstream:
+      wsl: >-
+        A pull request or Delivery Wave change proposes to select, design, implement,
+        experiment with, or claim support for a WSL caller or WSL-hosted acquisition.
+      system-browser: >-
+        A pull request or Delivery Wave change proposes to select, design, implement,
+        experiment with, or claim support for a system-browser or redirect-callback
+        mechanism.
+      linux-broker: >-
+        A pull request or Delivery Wave change proposes to select, design, implement,
+        experiment with, or claim support for a Linux broker integration.
+    release:
+      any: Release review for any release.
 
 rechecks:
   - id: RECHECK-001

@@ -207,13 +207,23 @@ Architecture uses a global overview and scoped views. Designs are created only f
 coherent implementation boundaries that need independent review. Research is organized
 by question and baseline; experiments are organized by reproducible protocol.
 
-Requirement identifiers are permanent once merged into the accepted target branch. An
+Requirement identifiers are permanent once merged into the accepted target branch. In
+`V2-REQ-NNN`, `NNN` is three digits; a requirement inserted after an established
+identifier may instead append one uppercase letter to it, as in `V2-REQ-011A`. An
 active requirement heading uses `V2-REQ-NNN: Nonempty title`. If a requirement is
 retired, replaced, or moved, retain its identifier exactly once as a nonnormative
 `V2-REQ-NNN: Retired - current authority: <requirement ID or repository path#anchor>`
 marker. Never assign an established identifier to a different requirement. Mechanical
 checks enforce the two representations and target existence; review determines whether
 the requirement's meaning was preserved.
+
+### Decision Records
+
+An accepted decision record in `docs/decisions/` is required for a choice that constrains
+a future Slice, the product boundary, or a public contract. Another durable choice with
+high reversal cost or non-obvious rationale may also use one. A repository-owner choice
+confined to one Slice stays in that Slice's design and links to the carrier where the
+owner made it. Earlier owner choices are not converted retroactively.
 
 ### Decision Record Numbers
 
