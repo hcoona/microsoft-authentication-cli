@@ -85,9 +85,10 @@ structured evidence when it adds a distinct conclusion, limitation, or decision 
 Structured records require a real consumer, a schema or equivalent typed contract, and a
 defined validation point.
 
-Generated dependency lock files retain the exact bytes their generator produced,
-including line endings. Repository text checks may inspect them but must not rewrite
-them; a changed lock is reviewed as a regenerated dependency selection.
+Generated dependency lock files retain their generator's content. The repository
+normalizes their line endings to LF; no other byte is rewritten. Repository text checks
+may inspect them but must not rewrite them; a changed lock is reviewed as a regenerated
+dependency selection.
 
 ## Work Authorization and Concurrency
 
@@ -241,10 +242,13 @@ routes every retained record directly, except that an evidence-only file referen
 path from a portal-linked structured record is routed through that parent record.
 
 Every current hk control maps each declared hk execution point to the concrete step names
-that implement it. The repository checker evaluates HK's actual `pre-commit` and `check`
+that implement it. The repository checker evaluates hk's actual `pre-commit` and `check`
 plans and verifies those steps are reachable at the declared execution point.
 
-The full CI hk set must include every check in the local fast subset. Local hooks may omit
+The full CI hk set must include every check in the local fast subset, except a local-only
+step that checks the local staged snapshot, which a CI checkout does not have. The
+control that a local-only step implements declares it in `controls.yaml`, and the
+repository checker verifies the subset relation against both plans. Local hooks may omit
 slower checks but must not implement different semantics.
 
 Agent Skills reference this policy and the policies for their domains. They do not become

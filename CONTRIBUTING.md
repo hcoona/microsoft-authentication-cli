@@ -99,16 +99,18 @@ and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. 
 generated from the `mise.lock` SDK entry by `global.pkl` and is never edited by hand;
 the `global-json` hk step fails when it differs. Every project targets the runtime
 bundled with that SDK (`TargetLatestRuntimePatch`) with roll-forward disabled, so no
-project states a runtime patch version. Shared MSBuild/package files wait for a concrete
-product consumer.
+project states a runtime patch version. `src/Directory.Build.props` holds the shared
+build properties, and `tests/Directory.Build.props` imports it. Central package
+management waits for a concrete product consumer.
 
 `mise.lock` is generator output: never edit it by hand. Generate it with the mise
 version that CI pins, the `version:` input of the `jdx/mise-action` steps in
 `.github/workflows/check.yml`; `mise.toml` sets the same `min_version`. Another mise
 version can rewrite unrelated entries.
 
-To change the SDK, edit its version and archive URLs in `mise.toml`. With that mise
-version, regenerate the lock and `global.json`, then refresh the package lock files so
+To change the SDK, edit its version and each platform's archive URL and `checksum` in
+`mise.toml`, taking the checksums from the SDK's published release checksums. With that
+mise version, regenerate the lock and `global.json`, then refresh the package lock files so
 they follow the new runtime:
 
 ```text
@@ -119,12 +121,12 @@ mise exec -- dotnet restore Windows.slnx --force-evaluate -p:EnableWindowsTarget
 
 Keep the SDK lock to the two platforms whose archives `mise.toml` names; without
 `--platform`, mise also adds entries for other locked platforms, such as a glibc archive
-under `linux-x64-musl`. A restore on Linux writes each changed `packages.lock.json` with
-LF line endings. Restore the CRLF bytes of the lock files that were CRLF before
-committing, so that only the package selections change.
+under `linux-x64-musl`. `.gitattributes` normalizes every `packages.lock.json` to LF line
+endings, so a lock regenerated on either host differs only in its package selections.
 
-This section is the single authority for contributor tooling setup. These development
-tools have Linux x64 and Windows x64 lock entries. The completed
+Together with [Local Checks](#local-checks), this section is the single authority for
+contributor tooling setup. These development tools have Linux x64 and Windows x64 lock
+entries. The completed
 [developer-tooling evidence](docs/research/experiments/developer-tooling.md) records the
 WSL Linux installation, discovery, and retrieval observations behind it; Windows runtime
 discovery is not established.

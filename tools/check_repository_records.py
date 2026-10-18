@@ -723,6 +723,7 @@ def check_control_references(catalog: dict[str, Any]) -> list[str]:
         family for family in catalog["families"] if family["state"] == "current"
     ]
     hk_execution_steps = hk_steps_by_execution_point(errors)
+    local_only_steps: set[str] = set()
     for control in controls:
         if control["state"] != "current":
             continue
@@ -782,6 +783,17 @@ def check_control_references(catalog: dict[str, Any]) -> list[str]:
                         f"control {control['id']} is not wired at {execution_point}: "
                         f"{', '.join(missing_steps)}"
                     )
+            declared_local_only = set(implementation.get("local_only", []))
+            misdeclared = sorted(
+                (declared_local_only - set(implementation["steps"].get("local-fast", [])))
+                | (declared_local_only & set(implementation["steps"].get("ci", [])))
+            )
+            if misdeclared:
+                errors.append(
+                    f"control {control['id']} declares local-only steps that are not "
+                    f"local-fast-only: {', '.join(misdeclared)}"
+                )
+            local_only_steps |= declared_local_only
         elif implementation["kind"] == "hk-steps":
             errors.append(f"non-hk control {control['id']} must not declare hk steps")
         elif implementation["kind"] == "repository-path":
@@ -789,6 +801,17 @@ def check_control_references(catalog: dict[str, Any]) -> list[str]:
                 implementation["value"],
                 f"control {control['id']} implementation",
                 errors,
+            )
+    if "local-fast" in hk_execution_steps and "ci" in hk_execution_steps:
+        missing_from_ci = sorted(
+            hk_execution_steps["local-fast"]
+            - hk_execution_steps["ci"]
+            - local_only_steps
+        )
+        if missing_from_ci:
+            errors.append(
+                "local-fast hk steps missing from the CI set without a local-only "
+                f"declaration: {', '.join(missing_from_ci)}"
             )
     return errors
 

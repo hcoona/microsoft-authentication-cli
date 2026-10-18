@@ -19,14 +19,6 @@ local fastSteps = new Mapping<String, Step> {
   ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
     types = null
     match_any = textRecordSelectors
-    // Generated dependency locks keep their generator's CRLF bytes (record-system.md,
-    // Formats); hk's whitespace fixer would otherwise rewrite them.
-    exclude = List(
-      "src/Authentication.Core/packages.lock.json",
-      "src/Authentication.Cli/packages.lock.json",
-      "src/Authentication.Windows/packages.lock.json",
-      "tests/Authentication.Windows.Scenarios/packages.lock.json",
-    )
   }
   ["gitleaks"] = (Builtins.gitleaks) {
     types = null
