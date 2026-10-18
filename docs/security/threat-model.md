@@ -284,7 +284,8 @@ file. The dispositions rest on the security re-review against the implemented Sl
 [real-host results](../research/experiments/real-host-validation.md#results): **63 are
 `Mitigated`, 11 are `NeedsInvestigation` and 22 are `NotApplicable`**. `src` at
 `69d9a72` is identical to `563c262` and to the real-host subject `8d9be27`. The later
-forced-interaction change and its revert, decided by the repository owner on 2026-10-16,
+forced-interaction change and its revert, decided by the repository owner on 2026-10-16
+(quoted in [PR #501](https://github.com/hcoona/microsoft-authentication-cli/pull/501)),
 changed no disposition; the fourth real-host subject `3ae2554` contains that revert, and
 its unfiltered Windows scenario run is the S1-1 run cited below. Scenarios added after
 that run are cited with the CI job that executes them. The `WindowsHostTiming` scenarios
