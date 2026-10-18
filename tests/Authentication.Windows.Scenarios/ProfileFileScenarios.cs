@@ -8,8 +8,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Authentication.Windows.Scenarios;
 
-// These scenarios need the separately accepted Windows execution protocol. Files
-// stay beneath the action's dedicated TEMP directory and are intentionally retained.
+// These scenarios need a Windows host. Files stay beneath the run's TEMP directory
+// and are intentionally retained; the suite runs under a fresh TEMP root (see ProcessFixture).
 // Only the file reader uses Windows; provider and UI are controlled substitutes.
 [TestClass]
 public sealed class ProfileFileScenarios
