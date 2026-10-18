@@ -137,6 +137,13 @@ public sealed class ProcessScenarios
         Assert.IsTrue(child.Marked("candidate-returned"));
         Assert.AreEqual(0, child.Output.Length);
         Assert.AreEqual(2u, child.ExitCode);
+        // Telemetry is on: an undelivered result has no completion indication or
+        // token-shape observation.
+        var error = Encoding.UTF8.GetString(child.Error);
+        Assert.IsFalse(error.Contains("tokenFormat", StringComparison.Ordinal), "A token-shape observation followed failed delivery.");
+        Assert.IsFalse(error.Contains("request_completed", StringComparison.Ordinal));
+        Assert.IsFalse(error.Contains("Authentication request completed.", StringComparison.Ordinal));
+        Assert.IsFalse(error.Contains(ProcessChild.Token, StringComparison.Ordinal));
     }
 
     [TestMethod]

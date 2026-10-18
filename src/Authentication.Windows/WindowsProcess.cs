@@ -140,8 +140,10 @@ public static class WindowsProcess
             pipe?.Stop();
             // Deliver the authoritative result before any optional diagnostic work,
             // including the token-shape observation, can consume the shutdown bound.
-            exitCode = WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json)
-                ? result.ExitCode : 2;
+            // A failed write delivers no result, so no completion indication or
+            // token-shape observation may follow it.
+            if (!WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json)) return;
+            exitCode = result.ExitCode;
             process.TrackDiagnostic(WindowsDiagnostics.Completed(result, invocation.Request?.TelemetryStderr == true,
                 entryTimestamp, trace, observation));
         }

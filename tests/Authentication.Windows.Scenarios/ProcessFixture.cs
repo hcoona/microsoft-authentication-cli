@@ -138,7 +138,7 @@ internal sealed partial class ProcessFixture : IDisposable
                 if (DefaultHttpProcessChild.Supports(scenario)
                     || scenario is "file-stdin" or "closed-stdin" or "close-pending" or "data-close")
                     arguments.Add("--cancel-on-stdin-close");
-                if (scenario is "success" or "blocked-diagnostics" or "host-notice")
+                if (scenario is "success" or "broken-output" or "blocked-diagnostics" or "host-notice")
                     arguments.AddRange(["--telemetry", "stderr"]);
                 if (nativeProfile) arguments.AddRange(["--telemetry", "off"]);
             }

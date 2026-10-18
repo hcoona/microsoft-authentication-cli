@@ -181,7 +181,8 @@ material, and none of the account or host identifiers that
 [`V2-REQ-036`](../product/requirements/result-and-process-protocol.md#v2-req-036-account-and-host-identifier-privacy)
 excludes. The opt-in token-shape observation under
 [`V2-REQ-038`](../product/requirements/result-and-process-protocol.md#v2-req-038-local-token-shape-validation-observation)
-runs only after the result is written and emits fixed categories only. Network telemetry
+runs only after the complete result is written, never after a failed write, and emits
+fixed categories only. Network telemetry
 is not selected. The externally owned Visual Studio registration remains an explicit
 dependency limit under the
 [external Client Profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate).
