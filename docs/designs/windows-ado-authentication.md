@@ -544,9 +544,14 @@ never message substring parsing. Safe reason strings identify categories such as
 `invalid_configuration`, `tenant_conflict`, `consent_required`, `provider_transient`,
 `network_transient` or `service_transient`; otherwise the reason repeats the outcome
 name. They never contain arbitrary provider text. Provider-reported timeout or invalid
-request observations, and failure to construct the provider, pass through the same safe
-filter and map to `internal_failure`; only the request's own deadline produces
-`timeout` and only admission produces `invalid_request`. An interactive call that again requires interaction terminates
+request observations map to `internal_failure`. A failure to construct or initialize
+the provider passes through the same safe filter as any other provider observation:
+broker unavailability and the recognized broker failures in the
+[observation table](#adapter-observation-boundary) map to `mechanism_unavailable`, a
+recognized transient such as `network_not_available` maps to
+`temporarily_unavailable`, and any other failure maps to `internal_failure`. Only the
+request's own deadline produces `timeout` and only admission produces
+`invalid_request`. An interactive call that again requires interaction terminates
 as `interaction_required`. State-related interaction requirements follow the same
 permission policy; an unexplained broker failure does not authorize account deletion,
 cache repair, or retries.
