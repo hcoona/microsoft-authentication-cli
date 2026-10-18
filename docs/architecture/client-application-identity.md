@@ -179,11 +179,11 @@ establishes the following boundary:
   endorsement or blanket prohibition on third-party reuse is inferred from these sources.
 
 This records the known reuse and the limits of support evidence without claiming
-Microsoft approval of the fork. It does not waive the external-client-profile gate:
-actual host/redirect/broker combinations, consent and audit behavior, branding, state
-partitioning, explicit user selection, and failure behavior still need their applicable
-validation and acceptance before distribution. No Microsoft support contract is asserted
-or required to treat an identifier as public configuration under decision `0003`.
+Microsoft approval of the fork. It does not waive the
+[external-client-profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate),
+whose conditions still need validation and acceptance before distribution. No Microsoft
+support contract is asserted or required to treat an identifier as public configuration
+under decision `0003`.
 
 ## Governing Evidence and Gates
 

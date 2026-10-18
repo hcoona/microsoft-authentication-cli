@@ -177,10 +177,10 @@ telemetry use an allowlist, have bounded buffering, and carry no email or authen
 material. The opt-in token-shape observation under
 [`V2-REQ-038`](../product/requirements/result-and-process-protocol.md#v2-req-038-local-token-shape-validation-observation)
 runs only after the result is written and emits fixed categories only. Network telemetry
-is not selected. Externally owned Visual Studio registration
-branding, consent, audit attribution, and availability remain explicit dependency limits
-under the candidate Profile gate. The Slice scenario matrix tests these application
-boundaries.
+is not selected. The externally owned Visual Studio registration remains an explicit
+dependency limit under the
+[external Client Profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate).
+The Slice scenario matrix tests these application boundaries.
 
 The normative release evidence requirements are defined by
 [`validation/strategy.md`](../validation/strategy.md). Security review prioritizes its
@@ -232,49 +232,32 @@ stored in the model.
 
 ### Tool and Reproduction
 
-On **2026-09-11 UTC**, the native model was opened and analyzed with installed Windows
-TMT **7.3.51110.1** using **SDL TM Knowledge Base (Core) 4.1.0.11**. Both desktop Analysis
-View and the tool's native model API generated the same candidate count. The embedded knowledge
-base comes from Microsoft's
+The current reproduction basis is installed Windows TMT **7.3.51110.1** with the embedded
+**SDL TM Knowledge Base (Core) 4.1.0.11**, which comes from Microsoft's
 [public default template at `0ece9c7`](https://github.com/microsoft/threat-modeling-templates/blob/0ece9c71b6f3710b10d497bd1ef63e57805e7c3e/default.tb7).
-The tool generated **96 candidates**. Analysis is a design review aid, not an
-authentication experiment, implementation test, or proof of platform security.
+With that tool, the model loads without issues and generates **96 candidates**: 27 denial
+of service, 20 elevation of privilege, 20 spoofing, 17 repudiation, 7 information
+disclosure and 5 tampering. Their stored states are 63 `Mitigated`, 11
+`NeedsInvestigation`, 22 `NotApplicable` and none `NotStarted`. Analysis View displays
+the stored value `NeedsInvestigation` as *Needs Investigation*, the status name in the
+[TMT getting-started guide](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-getting-started#analyzing-threats).
+These counts come from the 2026-10-17 desktop run in
+[PR #517](https://github.com/hcoona/microsoft-authentication-cli/pull/517), which drove
+the installed tool through Windows UI Automation on a copy of the model as merged at
+`9aeff3d`; every displayed ID, state and justification length matched the committed
+XML. That run performed no desktop `Save As` round trip, so it does not show whether a
+tool save would rewrite the file. Analysis is a design review aid, not an authentication experiment,
+implementation test, or proof of platform security.
 
 Prefer a supported command-line analyzer when available. The official getting-started
-and feature documentation consulted for this version did not identify one. This review
-therefore used 32-bit Windows PowerShell in STA mode to load the installed TMT model,
-view-model, and local-storage assemblies, initialize WPF, and open a separate model copy
-with `ObjectModel(LocalFile, false)`. `ModelLoadHasIssues` was false;
-`GenerateThreats()` and `ProcessModelImmediately(FullModel)` produced and reconciled all
-96 candidates, followed by native `SaveAs` to a separate output. This is a version-specific
-native API workflow, not a supported public CLI contract. The pull request records the
-reproduction commands, input hash, tool/template versions, and observed counts.
-
-On **2026-10-15 UTC**, the security re-review below reopened the re-dispositioned model
-with the same installed TMT **7.3.51110.1** through the same native API workflow, in a
-dedicated temporary directory removed afterwards and without installing or reconfiguring
-the tool. `ModelLoadHasIssues` was false, and generation again produced and reconciled
-**96 candidates** with unchanged categories: 27 denial of service, 20 elevation of
-privilege, 20 spoofing, 17 repudiation, 7 information disclosure and 5 tampering. The
-native `SaveAs` output preserved every disposition. TMT 7.3 stores `NeedsInvestigation`
-under the same value it displays as *Needs Mitigation*.
-
-On **2026-10-16 UTC**, the follow-up below reopened its model with the same installed
-TMT **7.3.51110.1** and native API workflow, again in a dedicated temporary directory
-removed afterwards. `ModelLoadHasIssues` was false; generation produced and reconciled
-**96 candidates**, and the states were 63 `Mitigated`, 11
-`NeedsInvestigation` and 22 `NotApplicable`. A native `SaveAs` output reloaded without
-issues and preserved those states.
-
-On **2026-10-17 UTC**, the desktop application of the same installed TMT **7.3.51110.1**
-opened a copy of this model as merged at `main-v2` `9aeff3d`, in a dedicated temporary
-directory removed afterwards. The application was driven through Windows UI Automation.
-It reported no load error, and Analysis View listed **96 threats**: 63 `Mitigated`, 11
-`NeedsInvestigation`, 22 `NotApplicable` and none `NotStarted`. In this run, the
-threat list's State column displayed `NeedsInvestigation` as *Needs Investigation*. Every
-justification loaded nonempty. Each displayed ID, state and justification length matched
-the committed XML. A desktop `Save As` round trip was not performed, so this run does not
-show whether a tool save would rewrite the file.
+and feature documentation consulted for this version did not identify one. The native API
+workflow therefore uses 32-bit Windows PowerShell in STA mode to load the installed TMT
+model, view-model, and local-storage assemblies, initialize WPF, and open a separate
+model copy with `ObjectModel(LocalFile, false)`; `GenerateThreats()` and
+`ProcessModelImmediately(FullModel)` then produce and reconcile the candidates. This is a
+version-specific workflow, not a supported public CLI contract. A pull request that
+changes the model records its validation method, input hash, tool and template versions,
+and observed counts.
 
 Desktop reproduction remains possible by opening `authentication-engine.tm7` and switching
 to Analysis View. The file embeds its template; importing an Azure template or regenerating
@@ -287,20 +270,15 @@ required for every unrelated CI change.
 ### Candidate Dispositions
 
 All 96 candidates have a scenario-specific or threat-family justification in the native
-file. The 2026-10-15 security re-review against the implemented Slice at `main-v2`
-`563c262` (Issue #482) re-dispositioned them to 43 `Mitigated`, 31 `NeedsInvestigation`
-and 22 `NotApplicable` (previously 76 `NeedsInvestigation`, 20 `NotApplicable` and none
-`Mitigated`). The 2026-10-16 follow-up against `main-v2` `69d9a72` applied the
+file. The dispositions rest on the security re-review against the implemented Slice at
+`main-v2` `563c262` and its follow-up against `main-v2` `69d9a72`, which applied the
 [real-host results](../research/experiments/real-host-validation.md#results): **63 are
-`Mitigated`, 11 are `NeedsInvestigation` and 22 are `NotApplicable`**. Twenty candidates
-moved from `NeedsInvestigation` to `Mitigated` (IDs 6, 8, 14, 15, 19, 23, 25, 26, 29,
-37, 39, 40, 51, 53, 54, 77, 80, 89, 92 and 94), and every justification that awaited the
-Windows scenario execution now cites that run. `src` at `69d9a72` is identical to
-`563c262` and to the real-host subject `8d9be27`. The later forced-interaction change and
-its revert, decided by the repository owner on 2026-10-16, changed no disposition; the
-fourth real-host subject `3ae2554` contains that revert, and its unfiltered Windows
-scenario run is the S1-1 run cited below. Scenarios added after that run are cited with
-the CI job that executes them. The design records the forced-interaction
+`Mitigated`, 11 are `NeedsInvestigation` and 22 are `NotApplicable`**. `src` at
+`69d9a72` is identical to `563c262` and to the real-host subject `8d9be27`. The later
+forced-interaction change and its revert, decided by the repository owner on 2026-10-16,
+changed no disposition; the fourth real-host subject `3ae2554` contains that revert, and
+its unfiltered Windows scenario run is the S1-1 run cited below. Scenarios added after
+that run are cited with the CI job that executes them. The design records the forced-interaction
 [known limitations](../designs/windows-ado-authentication.md#validation-and-explicit-unsupported-cases),
 and the real-host record owns the observations.
 
@@ -325,10 +303,14 @@ and the real-host record owns the observations.
   success path is established only by real-host calls that passed it. Justifications
   state which applies.
 - **`NeedsInvestigation`** now covers only candidates whose remaining evidence depends
-  on an open [Issue #482](https://github.com/hcoona/microsoft-authentication-cli/issues/482)
-  release gate: independent distribution identity, real broker failure or concurrency,
-  and real-WAM correlation-echo confirmation (CORE-01). Each justification names that
-  gate. No candidate disposition depends on still-pending Windows scenario execution.
+  on a release gate that the
+  [validation strategy](../validation/strategy.md#slice-closure-versus-release-readiness)
+  keeps open, tracked by
+  [Issue #482](https://github.com/hcoona/microsoft-authentication-cli/issues/482):
+  independent distribution identity, real broker failure or concurrency, or real-WAM
+  correlation-echo confirmation (CORE-01), which the strategy carries as a candidate left
+  `NeedsInvestigation`. Each justification names that gate. No candidate disposition
+  depends on still-pending Windows scenario execution.
 - **`NotApplicable`** adds the two optional telemetry-endpoint candidates (IDs 85 and 87):
   the Slice exports no network telemetry. Selecting network export must re-disposition
   them.
@@ -373,9 +355,9 @@ OAuth handling) remain trusted rather than verified.
 | Impersonation (IDs 8, 25, 39, 53) | `Mitigated`: no privileged helper exists. The impersonation and logon-kind classification is executed by `WindowsHostAdmissionScenarios` against synthetic `IWindowsHostObservations` (S1-1 and `windows-scenarios`). The native thread-identity read is executed in `windows-scenarios` by `NativeObservationScenarios.ThreadIdentityDistinguishesImpersonationOnTheCallingThread`, with and without `ImpersonateSelf`. The native logon-kind, session and desktop reads have only their success path (an ordinary interactive logon) observed, on the real host by every call that passed admission. |
 | Remote code execution (IDs 9, 26, 40, 54, 80, 95) | `Mitigated`: request and Profile input (IDs 9, 95) in Core; bounded provider error-body and broker-status parsing (IDs 26, 40, 54, 80) in the Windows S1-1 run. |
 | Execution-flow changes (IDs 10, 27, 41, 55, 81, 96) | `Mitigated`: explicit policy state, one safe provider-failure filter and Profile fields that cannot select policy, executed in Core scenarios. |
-| OAuth response CSRF (IDs 42, 56) | `NeedsInvestigation`: correlation binding is executed in Core and the MSAL composition scenarios in the Windows S1-1 run, and every validated real success passed the fail-closed correlation check; broker-level echo remains an inference, so real-WAM confirmation (CORE-01) stays an Issue #482 release gate. No parallel OAuth verifier. |
+| OAuth response CSRF (IDs 42, 56) | `NeedsInvestigation`: correlation binding is executed in Core and the MSAL composition scenarios in the Windows S1-1 run, and every validated real success passed the fail-closed correlation check; broker-level echo remains an inference, so real-WAM confirmation (CORE-01) stays open under the [release gates](../validation/strategy.md#slice-closure-versus-release-readiness). No parallel OAuth verifier. |
 | Reusable-state spoofing, persistence status and resources (IDs 66, 68, 70, 74) | `Mitigated`: no application-owned store, persistence always reported as unconfirmed, no coordination or retry outside the deadline; recorded fresh-process reuse. |
-| Store corruption and inaccessibility (IDs 67, 72, 79) | `NeedsInvestigation`: the classification of an unavailable broker is executed with synthetic initialization results: `LocalProviderAdmissionScenarios` substitutes host admission and the provider initializer, and `MsalCompositionScenarios` substitutes the session factory. `MsalConstructionScenarios.UnavailableBrokerStopsSessionCreationWithItsFixedCategory` runs the real session factory with only the `IsBrokerAvailable` answer replaced (added after S1-1; `windows-scenarios`); real broker failure, disappearance and concurrency remain Issue #482 release gates. |
+| Store corruption and inaccessibility (IDs 67, 72, 79) | `NeedsInvestigation`: the classification of an unavailable broker is executed with synthetic initialization results: `LocalProviderAdmissionScenarios` substitutes host admission and the provider initializer, and `MsalCompositionScenarios` substitutes the session factory. `MsalConstructionScenarios.UnavailableBrokerStopsSessionCreationWithItsFixedCategory` runs the real session factory with only the `IsBrokerAvailable` answer replaced (added after S1-1; `windows-scenarios`); real broker failure, disappearance and concurrency stay open under the [release gates](../validation/strategy.md#slice-closure-versus-release-readiness). |
 | Profile source and reads (IDs 89, 94) | `Mitigated`: admission of a reported failure is executed in Core, and source substitution and the translation of real file-store failures in the Windows file-snapshot scenarios of the S1-1 run. |
 | Optional telemetry endpoint (IDs 85, 87) | `NotApplicable`: the Slice exports no network telemetry. |
 | Generic nonrepudiation candidates (`R6`/`R7`, 16 items) | Not applicable: the engine promises typed results and sanitized diagnostics, not signed delivery receipts or an identity-rich audit ledger. Persistence-status accuracy remains applicable under the separate storage candidate. |

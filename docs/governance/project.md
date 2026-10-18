@@ -27,9 +27,10 @@ or Microsoft sponsorship.
 ## Naming and Branding
 
 The public display name does not authorize `AzureAuth`, `azureauth`, or a Microsoft
-publisher namespace as an operational identifier. A distributed v2 product must use an
-independently selected executable, package, installation, cache, configuration,
-diagnostic, signing, and update identity.
+publisher namespace as an operational identifier. A distributed v2 product must use the
+independent operational identities that
+[`V2-REQ-044`](../product/requirements/cache-security-and-operational-identity.md#v2-req-044-independent-distribution-identity)
+requires.
 
 Until those identities are selected:
 

@@ -4,7 +4,7 @@ This record owns user context and motivation for requirements work. It does not 
 normative behavior, realization choices, validation procedures, or current support.
 Those concerns belong to [requirements](requirements/),
 [architecture](../architecture/overview.md), [validation](../validation/strategy.md), and
-[research](../research/v1-public-contract-baseline.md).
+the [support and release policy](../governance/project.md#support-and-release).
 
 ## Primary Journey: Personal Azure DevOps Git Access
 

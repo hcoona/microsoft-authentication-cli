@@ -405,17 +405,18 @@ accepting the [runtime view](request-lifecycle.md) as a high-level allocation.
 
 | Remaining question | Existing basis and decision impact | Smallest evidence route and disposition |
 | --- | --- | --- |
-| What remains before the compatibility Profile can be accepted? | The [Windows observation](../research/experiments/windows-msal-account-metadata.md#observed-msa-token-git-discovery-and-silent-reuse) supplies mechanism evidence. The [client-identity view](client-application-identity.md#provider-mapping) defines common/exact tenant mapping and records the public legacy-registration dependency and support limits. | Complete the concrete host, redirect/broker, consent/audit/branding, partitioning, explicit-selection, and failure obligations under the [Profile gate](client-application-identity.md#governing-evidence-and-gates). RECHECK-007 applies; no Profile is enabled or distributed by this architecture. |
+| What remains before the compatibility Profile can be accepted? | The [Windows observation](../research/experiments/windows-msal-account-metadata.md#observed-msa-token-git-discovery-and-silent-reuse) supplies mechanism evidence. The [client-identity view](client-application-identity.md#provider-mapping) defines common/exact tenant mapping and records the public legacy-registration dependency and support limits. | Satisfy the [external Client Profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate). RECHECK-007 applies; no Profile is enabled or distributed by this architecture. |
 | Does the chosen profile expose the required full email, including on first use of OS state? | MSAL exposes accounts and result metadata, but documents a nullable UPN-format username. The Windows probe observed exact email and unique selection in existing state; first-use, alias, and same-email cases remain distinct. | Inspect the chosen provider/profile contract and applicable public experience; use a bounded primary-journey observation only for remaining uncertainty. No opaque-default substitution or alias inference. |
 | Does the chosen state integration satisfy recovery, integrity, and request lifetime? | The [result boundary](request-lifecycle.md#state-ownership-and-persistence-observation) uses already available completion evidence and warns when persistence failed or is unconfirmed. The pinned managed path awaits callbacks but can hide a write failure. | Assess the selected integration's documented state and cancellation contracts. Missing confirmation alone is handled by a warning; secure-only storage, safe recovery, and bounded owned work still require a compatible integration. Use a probe only for a decision left unresolved by source and contracts. |
 | Which host integrations meet owned completion and finite termination? | Existing silent and interactive mechanisms can be reused behind separate policy stages. | Closed for the Windows Slice: its [design](../designs/windows-ado-authentication.md#windows-ui-and-request-lifetime) selects a hidden owned parent, caller cancellation, lifetime-pipe EOF, the original deadline and a bounded shutdown watchdog, with evidence in the [Slice ledger](../validation/strategy.md#windows-slice-requirement-to-evidence-ledger). Other hosts remain open under applicable rechecks and [interaction evidence](../validation/strategy.md#interaction-matrix); no automatic all-platform experiment matrix. |
 | Which state integration permits compatible reuse across V2 callers? | Existing platform stores and MSAL caches are the starting point. V2 removes plaintext fallback and upstream namespaces and preserves compatible request contexts. | Assess the chosen store's documented isolation and update contract, then targeted [reuse scenarios](../validation/strategy.md#cross-consumer-reuse-scenarios). Do not rebuild OS storage guarantees. |
 
 The [architecture recheck assessment](../research/v1-public-contract-baseline.md#architecture-boundary-recheck-assessment)
-records the current desk inputs and their limits. Experiments still require the separately
-accepted policy alignment and exact protocols in the current Wave. A missing required
-capability keeps the affected choice unselected; a blocked primary journey cannot be
-declared complete by relabeling it unsupported.
+records the current desk inputs and their limits. Experiments still require an accepted
+Delivery Wave entry and protocol under the
+[experiment policy](../research/experiment-safety.md). A missing required capability
+keeps the affected choice unselected; a blocked primary journey cannot be declared
+complete by relabeling it unsupported.
 
 ## Architecture Invariants
 
