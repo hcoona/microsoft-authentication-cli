@@ -286,7 +286,11 @@ file. The dispositions rest on the security re-review against the implemented Sl
 forced-interaction change and its revert, decided by the repository owner on 2026-10-16,
 changed no disposition; the fourth real-host subject `3ae2554` contains that revert, and
 its unfiltered Windows scenario run is the S1-1 run cited below. Scenarios added after
-that run are cited with the CI job that executes them. The design records the forced-interaction
+that run are cited with the CI job that executes them. The `WindowsHostTiming` scenarios
+run in no CI job; their current evidence is the HT-1 run on the same host at `main-v2`
+`9f426ed`, which the
+[validation strategy](../validation/strategy.md#recorded-host-timing-runs) records as
+synthetic host-timing evidence for that commit only. The design records the forced-interaction
 [known limitations](../designs/windows-ado-authentication.md#validation-and-explicit-unsupported-cases),
 and the real-host record owns the observations.
 
@@ -296,7 +300,9 @@ and the real-host record owns the observations.
   (S1-1 at subject `3ae2554`: 186 passed, 0 failed, 0 skipped, including
   `WindowsHostTiming`) or the published Native
   AOT import and loading checks, both in the
-  [real-host results](../research/experiments/real-host-validation.md#results); or a
+  [real-host results](../research/experiments/real-host-validation.md#results); the
+  [HT-1 run](../validation/strategy.md#recorded-host-timing-runs) of the same project on
+  that host at `9f426ed`; or a
   recorded real-host observation in those results or the
   [Windows Slice research](../research/experiments/windows-slice-validation.md#selected-role-windows-and-wsl-acceptance-observations).
   Each native justification names the control and those scenarios or observations.
@@ -341,7 +347,12 @@ timeout, EOF, caller-death and WAM-cancellation observations ran. Later changes 
 failure categories and the single failure filter, correlation binding, the tenant-conflict
 reason) narrow acceptance and are exercised by the named executed Core scenarios. Changes
 to `WindowsProcess.cs` (result written before diagnostics, help text, notice path) are
-executed by the Windows `ProcessScenarios` in the S1-1 run. Earlier success transport is
+executed by the Windows `ProcessScenarios` in the S1-1 run. Later changes to
+`WindowsProcess.cs` (local diagnostics drained within the shutdown bound, the typed exit
+status kept once the result is written, no completion diagnostics after a failed write)
+postdate S1-1. HT-1 executes the Windows scenarios on that source at `9f426ed`,
+including the `WindowsHostTiming` watchdog, closure and undrained-pipe bounds that no CI
+job runs. Earlier success transport is
 supplementary: token containment rests on the executed Core and Windows scenarios. On the
 current source, the [real-host results](../research/experiments/real-host-validation.md#results)
 add deadline and lifetime-pipe EOF observations under the hidden parent for the roles
@@ -358,8 +369,8 @@ OAuth handling) remain trusted rather than verified.
 | Process spoofing (IDs 1, 18, 32, 46, 65, 73) | `NeedsInvestigation`: operation binding is executed, but executable identity depends on the open distribution-identity release gate under decision 0005. |
 | Broker and interaction-surface spoofing (IDs 15, 19, 29) | `Mitigated`: `MsalCompositionScenarios` classify loader and initialization failures with a substitute loader delegate and session factory; `NativeObservationScenarios.RestrictedDllSearchExcludesTheWorkingDirectory` runs the real `WindowsLoader.RestrictSearch` in a child process, and `MsalConstructionScenarios.UnavailableBrokerStopsSessionCreationWithItsFixedCategory` runs the real session factory with only the `IsBrokerAvailable` answer replaced; `MsalAdapterScenarios.RealNonBrokerInteractiveCallReachesTheRejectingWebUi` drives a real non-broker MSAL interactive call against a synthetic transport into `RejectingWebUi`; the last three were added after S1-1 and run in `windows-scenarios`; the hidden parent is a real Win32 window in `OwnedHostScenarios`. On the real host, the published Native AOT application imports only Windows DLLs, and every real call loaded the broker from the application directory with System32 imports and reported no `dll_search` or `broker_initialization` indication, which observes the native success path of both controls. Forced interaction is WAM-owned under the hidden parent with strict final validation; its provider-owned UI behavior is a design known limitation ([real-host results](../research/experiments/real-host-validation.md#results)). Deployment without development-machine dependencies remains a separate Native AOT release gate. |
 | Data-flow disclosure; token and diagnostic destinations (IDs 5, 12, 22, 36, 50, 69, 76, 82) | `Mitigated`: no credential input, no application token store, token only in a validated success, allowlisted diagnostics; executed in Core scenarios with synthetic markers and recorded real-host transport. |
-| Interrupted flows (IDs 7, 14, 17, 24, 31, 38, 45, 52, 58, 60, 62, 64, 71, 78, 84, 93) | `Mitigated`: original deadline, single terminal latch and no retry/fallback in Core scenarios, plus recorded closed-pipe, EOF-during-WAM, human-cancellation, caller-death and timeout observations ([real-host results](../research/experiments/real-host-validation.md#results)). ID 14, result delivery, now rests on the Windows `ProcessScenarios` executed in S1-1. A provider window left after non-human termination is a [known limitation](#known-limitation-provider-window-after-non-human-termination), not an unmitigated interruption. |
-| Process crash/stop and Profile-read bounds (IDs 6, 23, 37, 51, 77, 92) | `Mitigated`: typed outcomes and Profile bounds are executed in Core, and the process watchdog, broken or undrained result pipe and Profile size limit are executed in the Windows S1-1 run. |
+| Interrupted flows (IDs 7, 14, 17, 24, 31, 38, 45, 52, 58, 60, 62, 64, 71, 78, 84, 93) | `Mitigated`: original deadline, single terminal latch and no retry/fallback in Core scenarios, plus recorded closed-pipe, EOF-during-WAM, human-cancellation, caller-death and timeout observations ([real-host results](../research/experiments/real-host-validation.md#results)). ID 14, result delivery, now rests on the Windows `ProcessScenarios` executed in S1-1 and, for the current `WindowsProcess.cs`, in HT-1. A provider window left after non-human termination is a [known limitation](#known-limitation-provider-window-after-non-human-termination), not an unmitigated interruption. |
+| Process crash/stop and Profile-read bounds (IDs 6, 23, 37, 51, 77, 92) | `Mitigated`: typed outcomes and Profile bounds are executed in Core, and the process watchdog, broken or undrained result pipe and Profile size limit are executed in the Windows S1-1 run. For the current `WindowsProcess.cs`, the watchdog and the broken and undrained result-pipe bounds are executed in HT-1 at `9f426ed`. |
 | Impersonation (IDs 8, 25, 39, 53) | `Mitigated`: no privileged helper exists. The impersonation and logon-kind classification is executed by `WindowsHostAdmissionScenarios` against synthetic `IWindowsHostObservations` (S1-1 and `windows-scenarios`). The native thread-identity read is executed in `windows-scenarios` by `NativeObservationScenarios.ThreadIdentityDistinguishesImpersonationOnTheCallingThread`, with and without `ImpersonateSelf`. The native logon-kind, session and desktop reads have only their success path (an ordinary interactive logon) observed, on the real host by every call that passed admission. |
 | Remote code execution (IDs 9, 26, 40, 54, 80, 95) | `Mitigated`: request and Profile input (IDs 9, 95) in Core; bounded provider error-body and broker-status parsing (IDs 26, 40, 54, 80) in the Windows S1-1 run. |
 | Execution-flow changes (IDs 10, 27, 41, 55, 81, 96) | `Mitigated`: explicit policy state, one safe provider-failure filter and Profile fields that cannot select policy, executed in Core scenarios. |
