@@ -198,6 +198,12 @@ expecting its literal spelling in returned permissions.
 These are deterministic core rules with table-driven unit-test value. They do not parse
 access tokens or infer service authorization.
 
+Every GUID in the request or Profile, namely the `--tenant` value, a GUID resource
+prefix, and the Profile `clientId` and `tenantId`, must use the canonical 8-4-4-4-12
+hexadecimal form that the contracts' patterns state, in either letter case. Reject any
+other spelling, such as braces, `0x` or `+` segment prefixes, or whitespace, instead of
+parsing and rewriting it.
+
 ## Profile Contract and Ownership
 
 The [Profile schema](../../contracts/v1/client-profile.schema.json) owns configuration
