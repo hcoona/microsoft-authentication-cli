@@ -412,10 +412,11 @@ accepting the [runtime view](request-lifecycle.md) as a high-level allocation.
 | Which state integration permits compatible reuse across V2 callers? | Existing platform stores and MSAL caches are the starting point. V2 removes plaintext fallback and upstream namespaces and preserves compatible request contexts. | Assess the chosen store's documented isolation and update contract, then targeted [reuse scenarios](../validation/strategy.md#cross-consumer-reuse-scenarios). Do not rebuild OS storage guarantees. |
 
 The [architecture recheck assessment](../research/v1-public-contract-baseline.md#architecture-boundary-recheck-assessment)
-records the current desk inputs and their limits. Experiments still require the separately
-accepted policy alignment and exact protocols in the current Wave. A missing required
-capability keeps the affected choice unselected; a blocked primary journey cannot be
-declared complete by relabeling it unsupported.
+records the current desk inputs and their limits. Experiments still require an accepted
+Delivery Wave entry and protocol under the
+[experiment policy](../research/experiment-safety.md). A missing required capability
+keeps the affected choice unselected; a blocked primary journey cannot be declared
+complete by relabeling it unsupported.
 
 ## Architecture Invariants
 
