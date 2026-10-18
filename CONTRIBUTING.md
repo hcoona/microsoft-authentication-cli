@@ -59,7 +59,7 @@ Repository checks need only the check tools, so install those and the hooks with
 downloading the .NET SDK, APM, or Node.js:
 
 ```sh
-mise install --locked actionlint gitleaks hk lychee pipx:check-jsonschema pkl python shellcheck uv
+mise install --locked actionlint gitleaks hk lychee pkl python shellcheck uv
 mise run hooks:install
 ```
 
@@ -74,11 +74,27 @@ set before requesting review:
 mise run check
 ```
 
+By default, mise installs a missing tool automatically when `mise exec` or a task
+needs it. The repository job in `.github/workflows/check.yml` turns off both
+automatic installs
+([`exec_auto_install`](https://mise.jdx.dev/configuration/settings.html#exec_auto_install)
+and
+[`task.run_auto_install`](https://mise.jdx.dev/configuration/settings.html#task.run_auto_install)),
+so a check run never downloads the development SDK, APM, or Node.js. To match CI, set
+the same variables for local check runs; mise then leaves a missing tool uninstalled
+instead of downloading it:
+
+```sh
+export MISE_EXEC_AUTO_INSTALL=false
+export MISE_TASK_RUN_AUTO_INSTALL=false
+```
+
 The hook fails closed while any unstaged or untracked path remains. Stage the final
 intended snapshot or temporarily set other work aside before committing so repository-wide
 path-based checks inspect the same tree Git will record.
 
-The record checker's Python dependencies are locked in
+The record checker's Python dependencies, including `check-jsonschema` for
+structured-record schema validation, are locked in
 `tools/check_repository_records.py.lock`, and hk runs it with `uv run --locked`. After a
 reviewed change to its inline dependency list, regenerate that lock with
 `mise exec -- uv lock --script tools/check_repository_records.py`.
