@@ -366,8 +366,9 @@ does not choose a shared-cache design or establish provider-state availability.
 ### Diagnostics and Optional Telemetry
 
 Receives sanitized diagnostic and outcome information through a separate output boundary.
-It does not receive token material, raw emails, or stable email-derived identifiers and
-cannot trigger acquisition, fallback, or interaction. The protocol boundary alone owns
+It does not receive token material or the account and host identifiers excluded by
+[`V2-REQ-036`](../product/requirements/result-and-process-protocol.md#v2-req-036-account-and-host-identifier-privacy),
+and cannot trigger acquisition, fallback, or interaction. The protocol boundary alone owns
 authentication stdout. Optional export remains disabled without explicit configuration
 and cannot change the result or exceed its finite termination budget under
 [`V2-REQ-046`](../product/requirements/cache-security-and-operational-identity.md#v2-req-046-optional-telemetry-semantics).

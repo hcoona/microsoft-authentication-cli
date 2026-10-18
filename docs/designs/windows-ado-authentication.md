@@ -1102,8 +1102,14 @@ Stderr carries bounded fixed human indications, the bounded pre-interaction indi
 from the parent selection decision, and, only with `--telemetry stderr`, local
 JSON event lines containing `event`, `stage`, `outcome`, and elapsed milliseconds. Events
 contain no token, email, path, Profile/client/account identifier, tenant, resource, scope,
-claims, or provider text. This is optional local telemetry; network export and persistent
-telemetry identifiers are not provided by this Slice. With `--telemetry stderr`, all
+claims, or provider text. Under
+[V2-REQ-036](../product/requirements/result-and-process-protocol.md#v2-req-036-account-and-host-identifier-privacy),
+no stderr indication, telemetry event or exception output carries an account email,
+stable provider account identifier, tenant identifier, Windows security or logon-session
+identifier, machine name, or local path that can contain a user name. Only the stdout
+result carries the email and tenant that its contract requires. This is optional local
+telemetry; network export and persistent telemetry identifiers are not provided by this
+Slice. With `--telemetry stderr`, all
 event and indication bytes accepted for one invocation total at most 8 KiB. Of that
 total, 1 KiB stays reserved for the final completion line and a further 512 bytes for
 the owned request span's stop event, so phase events and the pre-interaction notice

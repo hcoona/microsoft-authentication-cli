@@ -46,6 +46,8 @@ guarantee, or expanded product boundary needs an explicit accepted decision.
 - Access tokens, refresh-token cache material, authorization codes, and device codes.
 - Request and provider-observed account emails, internal provider account metadata, and
   token/resource-tenant identity.
+- Host identifiers: Windows security and logon-session identifiers, the machine name,
+  and local paths that can contain a user name.
 - Client application and authority configuration.
 - Interaction-policy decisions and acquisition-stage order.
 - Secure reusable-state integrity, recovery, and persistence-warning accuracy.
@@ -77,7 +79,7 @@ threat model owns their security assumptions and mitigation tradeoffs.
 | A nominally silent request opens authentication or secure-state unlock UI. | [`V2-REQ-014`](../product/requirements/strategy-interaction-and-host.md#v2-req-014-explicit-per-request-interaction-permission), [`V2-REQ-021`](../product/requirements/strategy-interaction-and-host.md#v2-req-021-no-interaction-guarantee), and [`V2-REQ-025`](../product/requirements/strategy-interaction-and-host.md#v2-req-025-no-orphaned-work) |
 | Ambiguous failure causes unsafe fallback to another identity or mechanism. | [`V2-REQ-023`](../product/requirements/strategy-interaction-and-host.md#v2-req-023-classified-fallback), [`V2-REQ-024`](../product/requirements/strategy-interaction-and-host.md#v2-req-024-request-bounded-claims-handling), and [`V2-REQ-032`](../product/requirements/result-and-process-protocol.md#v2-req-032-caller-action-failure-taxonomy) |
 | A token or code leaks through arguments, logs, telemetry, crash output, or protocol noise. | [`V2-REQ-034`](../product/requirements/result-and-process-protocol.md#v2-req-034-output-discipline) and [`V2-REQ-035`](../product/requirements/result-and-process-protocol.md#v2-req-035-authentication-material-containment) |
-| Email or a stable email-derived hash creates a diagnostic or telemetry identity trail. | [`V2-REQ-036`](../product/requirements/result-and-process-protocol.md#v2-req-036-account-email-privacy) |
+| An email, an email-derived hash, a stable provider account or tenant identifier, a Windows security or logon-session identifier, the machine name, or a user-bearing local path creates a diagnostic, exception or telemetry identity trail. | [`V2-REQ-036`](../product/requirements/result-and-process-protocol.md#v2-req-036-account-and-host-identifier-privacy) |
 | Another local user reads or modifies reusable state, unsafe state is consumed, or storage silently falls back to plaintext. | [`V2-REQ-040`](../product/requirements/cache-security-and-operational-identity.md#v2-req-040-secure-authentication-state) and [`V2-REQ-041`](../product/requirements/cache-security-and-operational-identity.md#v2-req-041-safe-reusable-state-recovery-and-concurrency) |
 | Reuse across consumers confuses account, tenant, client, resource, or security contexts, or OS sign-in is mistaken for permission to use an opaque default. | [`V2-REQ-041`](../product/requirements/cache-security-and-operational-identity.md#v2-req-041-safe-reusable-state-recovery-and-concurrency), [`V2-REQ-020`](../product/requirements/strategy-interaction-and-host.md#v2-req-020-pre-resolved-account-for-silent-acquisition), and [`V2-REQ-022`](../product/requirements/strategy-interaction-and-host.md#v2-req-022-strict-result-identity) |
 | Authentication work outlives cancellation or timeout. | [`V2-REQ-015`](../product/requirements/strategy-interaction-and-host.md#v2-req-015-common-deadline) and [`V2-REQ-025`](../product/requirements/strategy-interaction-and-host.md#v2-req-025-no-orphaned-work) |
@@ -99,8 +101,9 @@ This threat model records why those requirements are security-relevant; it does 
 restate them as an independent policy.
 
 The explicit email in a command-line request is visible to local process inspection;
-email privacy is a diagnostic and telemetry boundary, not a promise to conceal process
-arguments. Non-enumerated same-email accounts and provider alias metadata remain
+account and host identifier privacy is a diagnostic, exception and telemetry boundary,
+not a promise to conceal process arguments or the result the caller requested.
+Non-enumerated same-email accounts and provider alias metadata remain
 visibility limits, not justification for ambient-account fallback. The
 [secure-store desk finding](../research/v1-public-contract-baseline.md#recheck-006-secure-store-availability)
 is reported evidence, not proof that V2 recovery works on a platform.
@@ -174,7 +177,9 @@ fail-closed response to the actual transport limitation, without an additional d
 
 Only the validated result contains a token. Fixed stderr indications and optional local
 telemetry use an allowlist, have bounded buffering, and carry no email or authentication
-material. The opt-in token-shape observation under
+material, and none of the account or host identifiers that
+[`V2-REQ-036`](../product/requirements/result-and-process-protocol.md#v2-req-036-account-and-host-identifier-privacy)
+excludes. The opt-in token-shape observation under
 [`V2-REQ-038`](../product/requirements/result-and-process-protocol.md#v2-req-038-local-token-shape-validation-observation)
 runs only after the result is written and emits fixed categories only. Network telemetry
 is not selected. The externally owned Visual Studio registration remains an explicit

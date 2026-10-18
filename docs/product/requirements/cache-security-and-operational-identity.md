@@ -97,6 +97,7 @@ bounded-flush failure must not change the authentication result or its process s
 trigger authentication retry, fallback, or interaction, or prevent process termination
 beyond a finite bound.
 
-Telemetry remains subject to the authentication-material and email containment in
-`V2-REQ-035` and `V2-REQ-036` and the independent identity requirements in `V2-REQ-043`
+Telemetry remains subject to the authentication-material containment in `V2-REQ-035`,
+the account and host identifier exclusions in `V2-REQ-036`, and the independent
+identity requirements in `V2-REQ-043`
 and `V2-REQ-044`.

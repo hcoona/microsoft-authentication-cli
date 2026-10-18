@@ -124,7 +124,9 @@ evidence that a mechanism or platform passes the corresponding tests.
   consent and transient origins confined to safe reason details.
 - Synthetic token/code and email redaction, including stable email-derived hashes,
   nested exceptions, diagnostics, and telemetry; permitted request/success email channels
-  distinguished from prohibited diagnostic propagation.
+  distinguished from prohibited diagnostic propagation. The same applies to the other
+  account and host identifiers under
+  [`V2-REQ-036`](../product/requirements/result-and-process-protocol.md#v2-req-036-account-and-host-identifier-privacy).
 - Unchanged adapter fixtures across engine updates for every still-supported protocol
   major under
   [`V2-REQ-037`](../product/requirements/result-and-process-protocol.md#v2-req-037-supported-protocol-compatibility).

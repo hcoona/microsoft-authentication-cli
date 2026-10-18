@@ -66,12 +66,21 @@ the provider, operating-system, or owned user-interaction channels required for
 authentication. They must not appear in command-line arguments, logs, telemetry, or
 V2-generated diagnostic, exception, or crash output.
 
-## V2-REQ-036: Account Email Privacy
+## V2-REQ-036: Account and Host Identifier Privacy
 
-V2 must exclude raw request and provider-observed account emails, and stable identifiers
-derived from them, from its diagnostics, logs, exception output, and telemetry.
-Necessary authentication processing and secure authentication state may retain the
-email. The command-line request and structured success result may carry the email as
+V2 must exclude the following from its diagnostics, logs, exception output, and
+telemetry:
+
+- raw request and provider-observed account emails, and stable identifiers derived from
+  them;
+- stable provider account identifiers;
+- tenant identifiers;
+- Windows security and logon-session identifiers;
+- machine names;
+- local paths that can contain a user name.
+
+Necessary authentication processing and secure authentication state may retain these
+values. The command-line request and structured success result may carry them as
 required by their respective contracts.
 
 This does not promise to hide command-line arguments from local process inspection.
