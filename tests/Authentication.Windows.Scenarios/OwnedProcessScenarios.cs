@@ -58,7 +58,9 @@ public sealed class OwnedProcessScenarios
             "local-close-returned", "native-cleanup-completed");
         Assert.IsFalse(child.Marked("provider-ready"));
         AssertFailure(child, "cancelled");
-        AssertExit(child, 2); // Failed owned cleanup cannot be marked normally drained.
+        // Failed owned cleanup is never marked drained, so the watchdog ends the
+        // process; the complete result already written still fixes the exit status.
+        AssertExit(child, 1, watchdog: true);
         AssertExitBound(child, "host-closing");
     }
 
@@ -84,7 +86,7 @@ public sealed class OwnedProcessScenarios
             "cleanup-fault-injected", "fault-pending", "fault-drained");
         AssertOrdered(child, "host-closing", "fault-pending", "before-commit", "after-commit");
         AssertFailure(child, "internal_failure");
-        AssertExit(child, 2);
+        AssertExit(child, 1, watchdog: true);
         AssertExitBound(child, "host-closing");
     }
 
@@ -97,7 +99,7 @@ public sealed class OwnedProcessScenarios
         RequireMarkers(child, "candidate-returned", "after-commit", "cleanup-fault-injected", "fault-drained");
         AssertOrdered(child, "after-commit", "cleanup-fault-injected", "fault-drained");
         AssertSuccess(child);
-        AssertExit(child, 2);
+        AssertExit(child, 0, watchdog: true);
         AssertExitBound(child, "host-closing");
     }
 
@@ -109,7 +111,7 @@ public sealed class OwnedProcessScenarios
         await child.FinishAsync();
         RequireMarkers(child, "native-cleanup-completed", "after-commit");
         AssertSuccess(child);
-        AssertExit(child, 2);
+        AssertExit(child, 0, watchdog: true);
         Assert.IsFalse(child.Marked("host-drained"));
         AssertExitBound(child, "host-closing");
     }
@@ -125,7 +127,7 @@ public sealed class OwnedProcessScenarios
         AssertOrdered(child, "native-cleanup-completed", "ui-thread-exited", "before-commit");
         AssertOrdered(child, "cancel-pending", "candidate-returned", "after-commit", "cancel-forwarded");
         AssertFailure(child, "cancelled");
-        AssertExit(child, 2);
+        AssertExit(child, 1, watchdog: true);
         Assert.IsFalse(child.Marked("cancel-drained"));
         AssertExitBound(child, "host-closing");
     }
@@ -137,6 +139,7 @@ public sealed class OwnedProcessScenarios
         using var child = new ProcessFixture("host-close-stall");
         await child.FinishAsync();
         RequireMarkers(child, "provider-ready", "candidate-returned", "host-closing");
+        // No result was committed or written, so the watchdog reports transport failure.
         AssertExit(child, 2);
         AssertExitBound(child, "host-closing");
         Assert.AreEqual(0, child.Output.Length);
@@ -222,15 +225,20 @@ public sealed class OwnedProcessScenarios
                 "The required actual event ordering was not established.");
     }
 
-    internal static void AssertExit(ProcessFixture child, uint code)
+    // A watchdog exit ends the process before the diagnostic drain. With a written
+    // result it keeps that result's typed status, but the indication may be cut short.
+    internal static void AssertExit(ProcessFixture child, uint code, bool watchdog = false)
     {
         Assert.IsFalse(child.Forced, "The product must end before fixture enforcement.");
         Assert.AreEqual(code, child.ExitCode);
         ReadOnlySpan<byte> indication = [];
         if (child.Output.Length != 0)
         {
+            Assert.AreNotEqual(2u, code, "A complete written result must fix a typed exit status.");
             using var result = ParseOne(child.Output);
-            indication = result.RootElement.GetProperty("outcome").GetString() switch
+            var outcome = result.RootElement.GetProperty("outcome").GetString();
+            Assert.AreEqual(outcome == "success" ? 0u : 1u, code, "The exit status must follow the written result.");
+            indication = outcome switch
             {
                 "cancelled" => "Authentication request cancelled.\n"u8,
                 // Synthetic hosts record no fixed mechanism reason.
@@ -239,8 +247,8 @@ public sealed class OwnedProcessScenarios
             };
         }
         // A drained process waits for its fixed indication within the shutdown bound,
-        // so a typed exit carries it whole. Watchdog exits may cut it short.
-        if (code is 0 or 1) Assert.IsTrue(indication.SequenceEqual(child.Error), "Incomplete diagnostic bytes.");
+        // so a normally drained exit carries it whole. Watchdog exits may cut it short.
+        if (!watchdog && code is 0 or 1) Assert.IsTrue(indication.SequenceEqual(child.Error), "Incomplete diagnostic bytes.");
         else Assert.IsTrue(indication.StartsWith(child.Error), "Unexpected diagnostic bytes.");
     }
 

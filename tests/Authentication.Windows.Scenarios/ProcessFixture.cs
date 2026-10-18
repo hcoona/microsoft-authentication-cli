@@ -73,7 +73,7 @@ internal sealed partial class ProcessFixture : IDisposable
             && scenario is not ("help" or "malformed" or "success" or "file-stdin" or "closed-stdin"
             or "close-pending" or "unused-stdin" or "data-close" or "deadline"
             or "broken-output" or "blocked-output" or "blocked-diagnostics"
-            or "diagnostic-stall" or "diagnostic-stall-denied"))
+            or "diagnostic-stall" or "diagnostic-stall-denied" or "drain-stall" or "drain-stall-denied"))
             throw new InvalidOperationException("Unallocated child scenario.");
 
         // Resolve every launch input before reserving the scenario directory.
@@ -138,7 +138,7 @@ internal sealed partial class ProcessFixture : IDisposable
                 if (DefaultHttpProcessChild.Supports(scenario)
                     || scenario is "file-stdin" or "closed-stdin" or "close-pending" or "data-close")
                     arguments.Add("--cancel-on-stdin-close");
-                if (scenario is "success" or "blocked-diagnostics" or "host-notice")
+                if (scenario is "success" or "broken-output" or "blocked-diagnostics" or "host-notice")
                     arguments.AddRange(["--telemetry", "stderr"]);
                 if (nativeProfile) arguments.AddRange(["--telemetry", "off"]);
             }

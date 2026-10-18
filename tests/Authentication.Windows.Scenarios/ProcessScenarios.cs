@@ -117,15 +117,19 @@ public sealed class ProcessScenarios
         await child.FinishAsync();
         Assert.IsFalse(child.Forced, "The product must end before fixture enforcement.");
         AssertExitInterval(child, child.EntryTimestamp, 2);
-        Assert.AreEqual(2u, child.ExitCode, "Forced product shutdown is a transport failure.");
         Assert.IsTrue(child.Marked("callback-pending"));
         Assert.IsFalse(child.Marked("candidate-returned"));
-        if (child.Output.Length > 0)
+        // Undrained work forces termination. A typed timeout written before then
+        // keeps its exit status; without a complete result the exit is a transport failure.
+        if (child.Output.Length == 0)
         {
-            using var json = ParseOne(child.Output);
-            Assert.AreEqual("timeout", json.RootElement.GetProperty("outcome").GetString());
-            Assert.IsFalse(json.RootElement.TryGetProperty("accessToken", out _));
+            Assert.AreEqual(2u, child.ExitCode, "Forced shutdown without a result is a transport failure.");
+            return;
         }
+        using var json = ParseOne(child.Output);
+        Assert.AreEqual("timeout", json.RootElement.GetProperty("outcome").GetString());
+        Assert.IsFalse(json.RootElement.TryGetProperty("accessToken", out _));
+        Assert.AreEqual(1u, child.ExitCode, "A written typed timeout fixes the exit status.");
     }
 
     [TestMethod]
@@ -137,6 +141,15 @@ public sealed class ProcessScenarios
         Assert.IsTrue(child.Marked("candidate-returned"));
         Assert.AreEqual(0, child.Output.Length);
         Assert.AreEqual(2u, child.ExitCode);
+        // Telemetry is on: an undelivered result has no completion indication,
+        // token-shape observation or request-span stop event.
+        var error = Encoding.UTF8.GetString(child.Error);
+        Assert.IsFalse(error.Contains("tokenFormat", StringComparison.Ordinal), "A token-shape observation followed failed delivery.");
+        Assert.IsFalse(error.Contains("request_completed", StringComparison.Ordinal));
+        Assert.IsFalse(error.Contains("Authentication request completed.", StringComparison.Ordinal));
+        Assert.IsFalse(error.Split('\n').Any(line => line.Contains("\"stage_completed\"", StringComparison.Ordinal)
+            && line.Contains("\"stage\":\"request\"", StringComparison.Ordinal)), "A request-span event followed failed delivery.");
+        Assert.IsFalse(error.Contains(ProcessChild.Token, StringComparison.Ordinal));
     }
 
     [TestMethod]
@@ -149,6 +162,26 @@ public sealed class ProcessScenarios
         using var child = new ProcessFixture(scenario);
         await child.FinishAsync();
         Assert.IsTrue(child.Marked("diagnostic-stall"), "The never-completing diagnostic drain was not reached.");
+        AssertNormalExit(child, expected);
+        if (expected == 0) AssertSuccessBytes(child);
+        else
+        {
+            using var json = ParseOne(child.Output);
+            Assert.AreEqual("denied", json.RootElement.GetProperty("outcome").GetString());
+        }
+    }
+
+    [TestMethod]
+    [DataRow("drain-stall", 0u)]
+    [DataRow("drain-stall-denied", 1u)]
+    public async Task StalledRequiredDrainCannotReplaceTheWrittenTypedExit(string scenario, uint expected)
+    {
+        // A provider cancellation callback never returns, so required drain never
+        // completes and the process bound always ends the process after the result is
+        // written; this asserts only which exit status it reports, not when.
+        using var child = new ProcessFixture(scenario);
+        await child.FinishAsync();
+        Assert.IsTrue(child.Marked("callback-pending"), "The never-completing cancellation callback was not reached.");
         AssertNormalExit(child, expected);
         if (expected == 0) AssertSuccessBytes(child);
         else

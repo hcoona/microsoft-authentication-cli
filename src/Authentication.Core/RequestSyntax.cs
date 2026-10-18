@@ -100,10 +100,19 @@ public static class RequestSyntax
     private static bool IsUnsignedDecimal(string value) =>
         value.Length is >= 1 and <= 3 && value[0] is >= '1' and <= '9' && value.All(char.IsAsciiDigit);
 
+    // Only the canonical 8-4-4-4-12 hexadecimal spelling. Guid's "D" parser alone
+    // also accepts 0x and + segment prefixes, which would silently rewrite input.
     internal static bool TryGuid(string value, out Guid result)
     {
         result = default;
-        return value.Length == 36 && Guid.TryParseExact(value, "D", out result);
+        if (value.Length != 36) return false;
+        for (var index = 0; index < value.Length; index++)
+        {
+            if (index is 8 or 13 or 18 or 23 ? value[index] != '-' : !char.IsAsciiHexDigit(value[index]))
+                return false;
+        }
+
+        return Guid.TryParseExact(value, "D", out result);
     }
 
     internal static bool HasCharacterLength(string value, int minimum, int maximum)

@@ -373,7 +373,7 @@ families:
 
   - id: public-contracts
     state: current
-    concern: Versioned public request, result, and process contracts
+    concern: Serialized field shapes of versioned public request, result, and Profile contracts
     carrier: repository-files
     path: contracts/**/*.schema.json
     format: json-schema

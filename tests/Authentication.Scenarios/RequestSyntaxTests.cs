@@ -226,6 +226,59 @@ public sealed class RequestSyntaxTests
         Assert.IsNull(RequestSyntax.Parse(arguments));
     }
 
+    // .NET's "D" GUID parser alone accepts 0x and + segment prefixes and would
+    // silently rewrite them; only the canonical 8-4-4-4-12 hexadecimal form passes.
+    [TestMethod]
+    [DataRow("0x111111-2222-3333-4444-555555555555")]
+    [DataRow("0X111111-2222-3333-4444-555555555555")]
+    [DataRow("11111111-0x22-3333-4444-555555555555")]
+    [DataRow("11111111-2222-3333-4444-0x5555555555")]
+    [DataRow("+1111111-2222-3333-4444-555555555555")]
+    [DataRow("11111111-+222-3333-4444-555555555555")]
+    [DataRow("{1111111-2222-3333-4444-55555555555}")]
+    [DataRow("{11111111-2222-3333-4444-555555555555}")]
+    [DataRow(" 1111111-2222-3333-4444-555555555555")]
+    [DataRow("11111111-2222-3333-4444-55555555555 ")]
+    [DataRow("11111111-222 -3333-4444-555555555555")]
+    [DataRow("11111111222233334444555555555555")]
+    [DataRow("11111111-2222-3333-4444-55555555555\u0661")]
+    public void NonCanonicalTenantGuidIsRejected(string tenant)
+    {
+        var arguments = Arguments();
+        arguments.AddRange(["--tenant", tenant]);
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    [DataRow("0x9b84ac-1321-427f-aa17-267ca6975798")]
+    [DataRow("499b84ac-0x21-427f-aa17-267ca6975798")]
+    [DataRow("+99b84ac-1321-427f-aa17-267ca6975798")]
+    [DataRow("499b84ac-1321-+27f-aa17-267ca6975798")]
+    [DataRow("{99b84ac-1321-427f-aa17-267ca697579}")]
+    [DataRow("499b84ac-1321-427f-aa17-0x7ca6975798")]
+    public void NonCanonicalResourceGuidPrefixIsRejected(string resource)
+    {
+        var arguments = Arguments();
+        Set(arguments, "--scope", resource + "/user_impersonation");
+
+        Assert.IsNull(RequestSyntax.Parse(arguments));
+    }
+
+    [TestMethod]
+    public void UppercaseCanonicalGuidsRemainValidAndUnchanged()
+    {
+        var arguments = Arguments();
+        Set(arguments, "--scope", Resource.ToUpperInvariant() + "/user_impersonation");
+        arguments.AddRange(["--tenant", "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"]);
+
+        var request = RequestSyntax.Parse(arguments);
+
+        Assert.IsNotNull(request);
+        Assert.AreEqual("AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE", request.Tenant);
+        CollectionAssert.AreEqual(new[] { Resource.ToUpperInvariant() + "/user_impersonation" }, request.Scopes.ToArray());
+    }
+
     [TestMethod]
     [DataRow(Scope)]
     [DataRow("api://different.example.test/read")]

@@ -3,14 +3,20 @@
 ## V2-REQ-030: Versioned Result and Exit Status
 
 Every terminal authentication result emitted by V2 must use a versioned structured
-protocol that represents both success and failure. When a complete result is emitted,
-the process exit status must be zero for success and one documented nonzero value shared
-by all failures. The payload must carry the specific outcome, and the exit status must
-not contradict it.
+protocol that represents both success and failure. Once V2 observes that the complete
+result has been written to stdout, the process exit status must follow it: zero for
+success and one documented nonzero value shared by all typed failures. The payload must
+carry the specific outcome, and the exit status must not contradict it. A later failure
+or stall of owned cleanup, a process watchdog, or diagnostics must not change that
+status; V2 may report such a failure only on its diagnostic channel.
+
+Any other exit status means that V2 could not guarantee a complete, parseable result.
+Callers treat it as a transport failure, not as a typed outcome. V2 documents one such
+value for its own use.
 
 A success with a persistence warning remains success. Operating-system termination or
 incomplete or malformed output is not a normally emitted typed failure. The concrete
-nonzero value and serialized schema are not selected here.
+nonzero values and serialized schema are not selected here.
 
 ## V2-REQ-031: Complete Success Metadata
 
@@ -66,12 +72,21 @@ the provider, operating-system, or owned user-interaction channels required for
 authentication. They must not appear in command-line arguments, logs, telemetry, or
 V2-generated diagnostic, exception, or crash output.
 
-## V2-REQ-036: Account Email Privacy
+## V2-REQ-036: Account and Host Identifier Privacy
 
-V2 must exclude raw request and provider-observed account emails, and stable identifiers
-derived from them, from its diagnostics, logs, exception output, and telemetry.
-Necessary authentication processing and secure authentication state may retain the
-email. The command-line request and structured success result may carry the email as
+V2 must exclude the following from its diagnostics, logs, exception output, and
+telemetry:
+
+- raw request and provider-observed account emails, and stable identifiers derived from
+  them;
+- stable provider account identifiers;
+- tenant identifiers;
+- Windows security and logon-session identifiers;
+- machine names;
+- local paths that can contain a user name.
+
+Necessary authentication processing and secure authentication state may retain these
+values. The command-line request and structured success result may carry them as
 required by their respective contracts.
 
 This does not promise to hide command-line arguments from local process inspection.

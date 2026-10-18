@@ -198,6 +198,12 @@ expecting its literal spelling in returned permissions.
 These are deterministic core rules with table-driven unit-test value. They do not parse
 access tokens or infer service authorization.
 
+Every GUID in the request or Profile, namely the `--tenant` value, a GUID resource
+prefix, and the Profile `clientId` and `tenantId`, must use the canonical 8-4-4-4-12
+hexadecimal form that the contracts' patterns state, in either letter case. Reject any
+other spelling, such as braces, `0x` or `+` segment prefixes, or whitespace, instead of
+parsing and rewriting it.
+
 ## Profile Contract and Ownership
 
 The [Profile schema](../../contracts/v1/client-profile.schema.json) owns configuration
@@ -538,9 +544,14 @@ never message substring parsing. Safe reason strings identify categories such as
 `invalid_configuration`, `tenant_conflict`, `consent_required`, `provider_transient`,
 `network_transient` or `service_transient`; otherwise the reason repeats the outcome
 name. They never contain arbitrary provider text. Provider-reported timeout or invalid
-request observations, and failure to construct the provider, pass through the same safe
-filter and map to `internal_failure`; only the request's own deadline produces
-`timeout` and only admission produces `invalid_request`. An interactive call that again requires interaction terminates
+request observations map to `internal_failure`. A failure to construct or initialize
+the provider passes through the same safe filter as any other provider observation:
+broker unavailability and the recognized broker failures in the
+[observation table](#adapter-observation-boundary) map to `mechanism_unavailable`, a
+recognized transient such as `network_not_available` maps to
+`temporarily_unavailable`, and any other failure maps to `internal_failure`. Only the
+request's own deadline produces `timeout` and only admission produces
+`invalid_request`. An interactive call that again requires interaction terminates
 as `interaction_required`. State-related interaction requirements follow the same
 permission policy; an unexplained broker failure does not authorize account deletion,
 cache repair, or retries.
@@ -958,20 +969,28 @@ At cancellation or expiry, allow at most one second for local closure/result del
 no acquisition, retry, persistence wait, or renewed deadline occurs in this shutdown
 interval. If owned cleanup or transport cannot finish, terminate the one process. OS
 process termination releases its threads and handles; external WAM services remain OS
-owned. A forced termination or incomplete write is a transport failure, not a fabricated
-typed result. This is the exceptional fail-closed boundary, not a resident watchdog
+owned. A forced termination before a complete result has been written, or an
+incomplete write, is a transport failure, not a fabricated typed result. This is the exceptional fail-closed boundary, not a resident watchdog
 process or a mechanism for making unsupported platforms work.
-The watchdog exits `2` only when the bound expires before request work drains. After
-drain, the typed status `0` or `1` that matches the written result is published first;
-if the bound then expires while only optional diagnostics are still pending, the
-watchdog terminates with that published status.
+Under [V2-REQ-030](../product/requirements/result-and-process-protocol.md#v2-req-030-versioned-result-and-exit-status),
+the complete written result fixes the exit status. The status is fixed when the host
+observes that the write of all the result's bytes to stdout has completed: the typed
+status `0` or `1` that matches the result is then published before any drain or
+diagnostic wait. If the bound then expires because owned cleanup, required drain or
+optional diagnostics have not finished, the watchdog terminates with that published
+status. If the bound expires before the host observes write completion, even when the
+bytes have in fact reached the pipe, the watchdog exits `2`: a fail-closed transport
+failure. A failed result write publishes no status, so no completion indication,
+token-shape observation or request-span stop event follows it, and the process exits
+`2`.
 
 The managed process host keeps its entry thread as the watchdog and moves request
 work, native handle I/O, and cleanup onto dedicated background work. It reads the
 original deadline and first terminal/cancellation timestamps without waiting on
-request locks. Result commitment is serialized with host cancellation; complete
-native transfer and required operation, cancellation-callback, and lifetime-pipe
-drain are prerequisites for a matching result exit. Pipe admission runs within the
+request locks. Result commitment is serialized with host cancellation. The observed
+completion of the result's native transfer fixes the exit status; required operation,
+cancellation-callback, and lifetime-pipe drain are prerequisites for ending the
+process normally before the bound, not for that status. Pipe admission runs within the
 original request lifetime and precedes Profile access. An initially closed pipe
 cannot release Profile work while cancellation propagation is pending. Optional
 diagnostics have separate bounded bytes and do not participate in required drain.
@@ -984,8 +1003,8 @@ before effects, and its `finally` must publish actual operation completion even
 when cancellation occurred before execution. ExecutionContext continues to flow;
 native admission checks the actual executing request thread, and owned UI remains
 on its dedicated STA. Scheduling delay or an uncooperative dependency may still
-prevent required drain. A selected terminal task does not establish cleanup or a
-matching result exit, and the unchanged watchdog remains the process bound.
+prevent required drain. A selected terminal task does not establish cleanup or result
+delivery, and the unchanged watchdog remains the process bound.
 
 External broker windows/session changes are not forcibly rolled back. Forward cancellation
 through MSAL, destroy the hidden parent, invalidate completion, and write a fixed sanitized
@@ -1012,26 +1031,31 @@ stateDiagram-v2
     Active --> Ending: Failure, denial, cancellation, or timeout
     Validated --> Ending: Success with available warning, cancellation, or permitted incidental timeout
     Ending --> Delivering: Latch outcome, invalidate callbacks, close owned UI
-    Delivering --> Exited: Complete JSON and matching exit, or transport failure/termination
+    Delivering --> Exited: Complete JSON fixes the matching exit, even if cleanup is later forced, or failed write and exit 2
     Ending --> Exited: Shutdown watchdog or process termination
     Exited --> [*]
 ```
 
 ## Result, Diagnostics, and Compatibility
 
-The [result schema](../../contracts/v1/result.schema.json) defines one UTF-8 JSON object
-followed by LF, with no BOM. For an `authenticate` invocation, exit status has three
-meanings:
+The [result schema](../../contracts/v1/result.schema.json) owns the result object's
+serialized fields. This design owns how it is delivered: an `authenticate` invocation
+writes one UTF-8 JSON object followed by LF to stdout, with no BOM. Exit status has
+three meanings:
 
 - `0`: a complete `success` object on stdout.
 - `1`: a complete typed failure object on stdout; every typed failure shares it.
-- Any other status: no typed result. The caller treats the run as a transport failure,
-  whatever stdout contains. The product itself uses `2` for this: a broken result pipe,
-  or the process watchdog when its bound expires before request work drains, including
-  a failed or stalled owned cleanup after a result was written. A bound that expires
-  after drain, while only optional diagnostics are pending, keeps the published `0` or
-  `1`. The OS or runtime may produce other values, for example when the process is
-  killed.
+- Any other status: V2 could not guarantee a complete, parseable result. The caller
+  treats the run as a transport failure, whatever stdout contains. The product itself
+  uses `2` when no complete result was written: a broken or failed result write, or the
+  process watchdog when its bound expires before the result is written. The OS or
+  runtime may produce other values, for example when the process is killed.
+
+Once the host observes that the complete result has been written, the exit status
+follows it. A later failed or stalled owned cleanup, required drain, watchdog
+termination or diagnostic keeps the `0` or `1` that matches the written result and
+may be reported only on stderr. A bound that expires before that observation yields
+`2`, the fail-closed transport failure, even if the caller can read a complete object.
 
 Failure objects contain no token or account metadata. A success with
 `persistence_unconfirmed` still exits zero. Invalid/partial JSON, absent output, or an
@@ -1095,8 +1119,14 @@ Stderr carries bounded fixed human indications, the bounded pre-interaction indi
 from the parent selection decision, and, only with `--telemetry stderr`, local
 JSON event lines containing `event`, `stage`, `outcome`, and elapsed milliseconds. Events
 contain no token, email, path, Profile/client/account identifier, tenant, resource, scope,
-claims, or provider text. This is optional local telemetry; network export and persistent
-telemetry identifiers are not provided by this Slice. With `--telemetry stderr`, all
+claims, or provider text. Under
+[V2-REQ-036](../product/requirements/result-and-process-protocol.md#v2-req-036-account-and-host-identifier-privacy),
+no stderr indication, telemetry event or exception output carries an account email,
+stable provider account identifier, tenant identifier, Windows security or logon-session
+identifier, machine name, or local path that can contain a user name. Only the stdout
+result carries the email and tenant that its contract requires. This is optional local
+telemetry; network export and persistent telemetry identifiers are not provided by this
+Slice. With `--telemetry stderr`, all
 event and indication bytes accepted for one invocation total at most 8 KiB. Of that
 total, 1 KiB stays reserved for the final completion line and a further 512 bytes for
 the owned request span's stop event, so phase events and the pre-interaction notice

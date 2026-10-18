@@ -73,11 +73,11 @@ public static class WindowsProcess
                 var completion = process.Completion;
                 if (process.ExceededBound(completion?.Timestamp ?? TimeProvider.System.GetTimestamp()))
                 {
-                    // Once request work has drained, only optional diagnostics can still
-                    // be pending; they cannot replace the published typed exit status.
-                    var drained = process.Drained;
-                    WindowsStandardHandles.Terminate(drained?.ExitCode ?? 2);
-                    return drained?.ExitCode ?? 2;
+                    // A complete written result fixes the exit status. Later cleanup,
+                    // drain or diagnostic failure ends the process but cannot change it.
+                    var exitCode = process.Delivered?.ExitCode ?? 2;
+                    WindowsStandardHandles.Terminate(exitCode);
+                    return exitCode;
                 }
                 if (completion is not null) return completion.ExitCode;
                 Thread.Sleep(5);
@@ -85,8 +85,9 @@ public static class WindowsProcess
         }
         catch (Exception)
         {
-            WindowsStandardHandles.Terminate();
-            return 2;
+            var exitCode = process.Delivered?.ExitCode ?? 2;
+            WindowsStandardHandles.Terminate(exitCode);
+            return exitCode;
         }
     }
 
@@ -140,8 +141,18 @@ public static class WindowsProcess
             pipe?.Stop();
             // Deliver the authoritative result before any optional diagnostic work,
             // including the token-shape observation, can consume the shutdown bound.
-            exitCode = WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json)
-                ? result.ExitCode : 2;
+            // A failed write delivers no result, so no completion indication,
+            // token-shape observation or request-span stop event may follow it.
+            // Closing local telemetry before the drain drops that later event.
+            if (!WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json))
+            {
+                observation?.Dispose();
+                return;
+            }
+            exitCode = result.ExitCode;
+            // Publish before any drain or diagnostic wait: from here on, the
+            // watchdog can end the process only with this typed status.
+            process.PublishDelivered(exitCode);
             process.TrackDiagnostic(WindowsDiagnostics.Completed(result, invocation.Request?.TelemetryStderr == true,
                 entryTimestamp, trace, observation));
         }
@@ -150,7 +161,8 @@ public static class WindowsProcess
             // Request-body exceptions already have the core's safe typed mapping.
             // Host/transport failure cannot fabricate a replacement result.
             process.Ending();
-            exitCode = 2;
+            // Nor can it replace a result already delivered.
+            exitCode = process.Delivered?.ExitCode ?? 2;
         }
         finally
         {
@@ -177,15 +189,15 @@ public static class WindowsProcess
             }
             catch (Exception)
             {
+                // Required drain failed. A delivered result keeps its published status;
+                // the watchdog ends the process when the shutdown bound expires.
                 process.Ending();
             }
             observation?.Dispose();
             if (drained)
             {
-                // Publish the drained status before any diagnostic wait. If the bound
-                // expires while only diagnostics are pending, the watchdog exits with
-                // this status, so a blocked writer cannot change it.
-                process.PublishDrained(exitCode);
+                // If the bound expires while only diagnostics are pending, the watchdog
+                // exits with the delivered status, so a blocked writer cannot change it.
                 checkpoint?.Invoke(OwnedProcessCheckpoint.BeforeDiagnosticDrain);
                 process.WaitForDiagnostics(observation);
                 process.Finish(exitCode);
@@ -229,9 +241,10 @@ public static class WindowsProcess
 
         internal CancellationToken CancellationToken => callerCancellation.Token;
         internal ProcessCompletion? Completion => Volatile.Read(ref completion);
-        private ProcessCompletion? drained;
-        internal ProcessCompletion? Drained => Volatile.Read(ref drained);
-        internal void PublishDrained(int exitCode) => Volatile.Write(ref drained,
+        // Set only after the complete typed result has been written to stdout.
+        private ProcessCompletion? delivered;
+        internal ProcessCompletion? Delivered => Volatile.Read(ref delivered);
+        internal void PublishDelivered(int exitCode) => Volatile.Write(ref delivered,
             new ProcessCompletion(exitCode, TimeProvider.System.GetTimestamp()));
         internal Task CancellationCompletion => Volatile.Read(ref cancellationTimestamp) == long.MinValue
             ? Task.CompletedTask : cancelled.Task;

@@ -121,6 +121,47 @@ public sealed class ProfileSyntaxTests
         Assert.IsNull(Parse(ProfileJson + new string(' ', 64 * 1024)));
     }
 
+    // .NET's "D" GUID parser alone accepts 0x and + segment prefixes and would
+    // silently rewrite them; only the canonical 8-4-4-4-12 hexadecimal form passes.
+    [TestMethod]
+    [DataRow("0xaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")]
+    [DataRow("aaaaaaaa-0xbb-cccc-dddd-eeeeeeeeeeee")]
+    [DataRow("aaaaaaaa-bbbb-cccc-dddd-0xeeeeeeeeee")]
+    [DataRow("+aaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")]
+    [DataRow("aaaaaaaa-bbbb-+ccc-dddd-eeeeeeeeeeee")]
+    [DataRow("{aaaaaaa-bbbb-cccc-dddd-eeeeeeeeeee}")]
+    [DataRow(" aaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")]
+    [DataRow("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeee ")]
+    public void NonCanonicalClientIdIsRejected(string clientId)
+    {
+        Assert.IsNull(Parse(ProfileJson.Replace(ClientId, clientId)));
+    }
+
+    [TestMethod]
+    [DataRow("0x111111-2222-3333-4444-555555555555")]
+    [DataRow("11111111-2222-0x33-4444-555555555555")]
+    [DataRow("+1111111-2222-3333-4444-555555555555")]
+    [DataRow("11111111-2222-3333-+444-555555555555")]
+    [DataRow("{1111111-2222-3333-4444-55555555555}")]
+    [DataRow("11111111-2222-3333-4444-55555555555 ")]
+    public void NonCanonicalFixedTenantIsRejected(string tenant)
+    {
+        Assert.IsNull(Parse(WithSingleTenant(ProfileJson).Replace(Tenant, tenant)));
+    }
+
+    // Each selector would otherwise parse to the fixed tenant's value.
+    [TestMethod]
+    [DataRow("0x111111-0222-0333-0444-055555555555")]
+    [DataRow("+0111111-0222-0333-0444-055555555555")]
+    [DataRow("00111111-0x22-0333-0444-055555555555")]
+    [DataRow("00111111-0222-0333-0444-+55555555555")]
+    public void NonCanonicalTenantSelectorIsRejected(string selector)
+    {
+        var fixedTenant = new Guid("00111111-0222-0333-0444-055555555555");
+        Assert.IsFalse(ProfileSyntax.TryResolveTenant(SyntheticProfile(fixedTenant), selector, out _));
+        Assert.IsFalse(ProfileSyntax.TryResolveTenant(SyntheticProfile(null), selector, out _));
+    }
+
     [TestMethod]
     public void MalformedUtf8CannotBeSilentlyReplaced()
     {
