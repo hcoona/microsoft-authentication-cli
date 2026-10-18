@@ -408,8 +408,10 @@ Result correctness is unaffected. The terminal outcome is latched and the typed
 delivered for that request, and a late provider completion cannot resume it. Whether
 acting in the leftover window changes provider-managed session state was not observed;
 the requirement does not promise to revoke independently completed provider changes. By
-repository-owner decision, no window-closing mechanism will be added; this is a known
-limitation, not an open candidate.
+repository-owner decision, recorded as a non-goal in
+[PR #493](https://github.com/hcoona/microsoft-authentication-cli/pull/493) (commit
+`fe6fbc8`) without a verbatim owner quotation, no window-closing mechanism will be added;
+this is a known limitation, not an open candidate.
 
 ### Scenario Review Beyond STRIDE Generation
 

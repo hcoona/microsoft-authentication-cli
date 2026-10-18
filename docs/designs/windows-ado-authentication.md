@@ -613,8 +613,9 @@ not establish pinned .NET or Windows runtime behavior. No supported builder inpu
 pinned .NET broker path is found that forces the WAM UI: `WithPrompt` is not transported
 (above), so this design controls only whether an account or hint is supplied.
 
-By repository-owner decision (2026-10-16 UTC, quoted verbatim in the pull request that
-made this change), forced interaction supplies neither the login hint nor the discovered
+By repository-owner decision (2026-10-16 UTC, quoted verbatim in
+[PR #501](https://github.com/hcoona/microsoft-authentication-cli/pull/501), which made
+this change), forced interaction supplies neither the login hint nor the discovered
 account. The [real-host results](../research/experiments/real-host-validation.md#results)
 compare this choice with a hinted implementation and an experiment-only account-bound
 variant; with either alternative, WAM completed some forced calls without presenting
@@ -1015,8 +1016,10 @@ The product forwards cancellation but does not guarantee that WAM closes its win
 window is provider-owned and can remain after the process ends (finding F2 in the
 [known limitations](#validation-and-explicit-unsupported-cases)); the user closes it
 manually. The typed `timeout` or `cancelled` result is already committed, no token is
-delivered and a late completion cannot resume the request. By repository-owner decision
-no window-closing mechanism is added; the
+delivered and a late completion cannot resume the request. By repository-owner decision,
+recorded as a non-goal in
+[PR #493](https://github.com/hcoona/microsoft-authentication-cli/pull/493) without a
+verbatim owner quotation, no window-closing mechanism is added; the
 [threat model](../security/threat-model.md#known-limitation-provider-window-after-non-human-termination)
 records this known limitation.
 
