@@ -47,6 +47,8 @@ only when:
 - availability, explicit user opt-in, and failure behavior are decided consistently with
   [`V2-REQ-018`](requirements/request-identity-and-authority.md#v2-req-018-explicit-client-profile-selection),
   which excludes implicit or default profile selection;
+- consent, audit attribution, and branding under that registration are publicly reviewed
+  and validated for the intended hosts;
 - cache and configuration partitioning prevent silent identity collisions;
 - public documentation states ownership, support, and availability limits.
 

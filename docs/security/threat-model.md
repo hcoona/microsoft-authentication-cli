@@ -177,10 +177,10 @@ telemetry use an allowlist, have bounded buffering, and carry no email or authen
 material. The opt-in token-shape observation under
 [`V2-REQ-038`](../product/requirements/result-and-process-protocol.md#v2-req-038-local-token-shape-validation-observation)
 runs only after the result is written and emits fixed categories only. Network telemetry
-is not selected. Externally owned Visual Studio registration
-branding, consent, audit attribution, and availability remain explicit dependency limits
-under the candidate Profile gate. The Slice scenario matrix tests these application
-boundaries.
+is not selected. The externally owned Visual Studio registration remains an explicit
+dependency limit under the
+[external Client Profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate).
+The Slice scenario matrix tests these application boundaries.
 
 The normative release evidence requirements are defined by
 [`validation/strategy.md`](../validation/strategy.md). Security review prioritizes its
