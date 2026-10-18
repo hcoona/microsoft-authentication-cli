@@ -3,6 +3,10 @@ docs/research/experiments/assets/*.project.assets.json -text
 
 # Generated dependency locks are stored and checked out with LF on every host.
 packages.lock.json text eol=lf
+mise.lock text eol=lf
+apm.lock.yaml text eol=lf
+tools/check_repository_records.py.lock text eol=lf
+tools/learn-cli/package-lock.json text eol=lf
 
 # C# sources compile with their checked-out bytes; keep them LF on every host.
 *.cs text eol=lf
