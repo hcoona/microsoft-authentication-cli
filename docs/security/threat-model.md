@@ -170,10 +170,10 @@ remain applicable.
 The optional lifetime pipe gives a cooperating caller a concrete cancellation signal.
 Its contract depends on ordinary writer-handle closure, not Linux-to-Windows signal
 translation. Without that channel, the original deadline bounds a lost caller. A blocked
-output pipe or uncooperative dependency may require process termination. Without a
-complete written result the process exits with a non-typed status and the caller must
-recognize that as transport failure; once the complete result is written, its typed
-exit status survives a later forced termination. A one-second local shutdown
+output pipe or uncooperative dependency may require process termination. Unless V2 has
+observed the complete result written, the process exits with a non-typed status and the
+caller must recognize that as transport failure; once V2 observes the complete result
+written, its typed exit status survives a later forced termination. A one-second local shutdown
 allowance cannot resume authentication or extend its deadline. This is the bounded
 fail-closed response to the actual transport limitation, without an additional daemon.
 

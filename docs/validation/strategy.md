@@ -115,9 +115,9 @@ evidence that a mechanism or platform passes the corresponding tests.
 - Fixed profile and trust conflicts rejected; only applicable product deadline and tenant
   defaults applied.
 - Zero exit status for success, including persistence warnings, and one stable nonzero
-  value for every normally emitted typed failure, consistent with the payload. Once the
-  complete result is written, a later cleanup, watchdog or diagnostic failure keeps that
-  status; any other status means no complete result was guaranteed.
+  value for every normally emitted typed failure, consistent with the payload. Once V2
+  observes the complete result written, a later cleanup, watchdog or diagnostic failure
+  keeps that status; any other status means no complete result was guaranteed.
 - Complete success metadata under
   [`V2-REQ-031`](../product/requirements/result-and-process-protocol.md#v2-req-031-complete-success-metadata),
   one opaque access token, and no public stable account ID or reusable credential artifact.
