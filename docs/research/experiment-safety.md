@@ -37,7 +37,10 @@ A run that uses an account or credential, starts real interactive or broker
 authentication, contacts an identity or authority-discovery endpoint, uses a
 credential-bearing or non-public dependency source, or changes state outside its
 checkout, build output, the local package cache, its temporary root, and any
-tool-owned state the Wave entry names is not development validation. Development
+tool-owned state the Wave entry names is not development validation. An existing local
+package cache is not a non-public source by itself: restore runs in locked mode against
+the committed lock files and configures no credential-bearing or non-public source.
+Development
 validation supports claims only about the tested source. It supports no public-restore,
 real-platform, or support claim.
 
@@ -93,7 +96,7 @@ account store, or create another planned side effect.
   use, toolchain and artifact locations, and their evidence limits in the protocol.
   Do not silently use ambient credentials or infer a clean restore from a warm cache.
 - A credential-bearing or non-public dependency source, such as a private feed, a
-  credential provider, or a cache seeded from either, requires an explicit
+  credential provider, or an experiment cache seeded from either, requires an explicit
   repository-owner risk decision in the Delivery Wave entry and protocol coverage. An
   Issue, pull-request comment, or other disposition outside the merged Wave cannot grant
   it.
