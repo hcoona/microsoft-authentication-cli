@@ -141,12 +141,14 @@ public sealed class ProcessScenarios
         Assert.IsTrue(child.Marked("candidate-returned"));
         Assert.AreEqual(0, child.Output.Length);
         Assert.AreEqual(2u, child.ExitCode);
-        // Telemetry is on: an undelivered result has no completion indication or
-        // token-shape observation.
+        // Telemetry is on: an undelivered result has no completion indication,
+        // token-shape observation or request-span stop event.
         var error = Encoding.UTF8.GetString(child.Error);
         Assert.IsFalse(error.Contains("tokenFormat", StringComparison.Ordinal), "A token-shape observation followed failed delivery.");
         Assert.IsFalse(error.Contains("request_completed", StringComparison.Ordinal));
         Assert.IsFalse(error.Contains("Authentication request completed.", StringComparison.Ordinal));
+        Assert.IsFalse(error.Split('\n').Any(line => line.Contains("\"stage_completed\"", StringComparison.Ordinal)
+            && line.Contains("\"stage\":\"request\"", StringComparison.Ordinal)), "A request-span event followed failed delivery.");
         Assert.IsFalse(error.Contains(ProcessChild.Token, StringComparison.Ordinal));
     }
 

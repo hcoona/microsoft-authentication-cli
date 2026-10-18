@@ -141,9 +141,14 @@ public static class WindowsProcess
             pipe?.Stop();
             // Deliver the authoritative result before any optional diagnostic work,
             // including the token-shape observation, can consume the shutdown bound.
-            // A failed write delivers no result, so no completion indication or
-            // token-shape observation may follow it.
-            if (!WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json)) return;
+            // A failed write delivers no result, so no completion indication,
+            // token-shape observation or request-span stop event may follow it.
+            // Closing local telemetry before the drain drops that later event.
+            if (!WindowsStandardHandles.Write(WindowsStandardHandles.Output, result!.Utf8Json))
+            {
+                observation?.Dispose();
+                return;
+            }
             exitCode = result.ExitCode;
             // Publish before any drain or diagnostic wait: from here on, the
             // watchdog can end the process only with this typed status.

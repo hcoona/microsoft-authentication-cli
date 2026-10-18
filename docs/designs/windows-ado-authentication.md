@@ -969,23 +969,26 @@ At cancellation or expiry, allow at most one second for local closure/result del
 no acquisition, retry, persistence wait, or renewed deadline occurs in this shutdown
 interval. If owned cleanup or transport cannot finish, terminate the one process. OS
 process termination releases its threads and handles; external WAM services remain OS
-owned. A forced termination or incomplete write is a transport failure, not a fabricated
-typed result. This is the exceptional fail-closed boundary, not a resident watchdog
+owned. A forced termination before a complete result has been written, or an
+incomplete write, is a transport failure, not a fabricated typed result. This is the exceptional fail-closed boundary, not a resident watchdog
 process or a mechanism for making unsupported platforms work.
 Under [V2-REQ-030](../product/requirements/result-and-process-protocol.md#v2-req-030-versioned-result-and-exit-status),
-the complete written result fixes the exit status. Once the result's bytes are fully
-written to stdout, the typed status `0` or `1` that matches it is published before any
-drain or diagnostic wait. If the bound then expires because owned cleanup, required
-drain or optional diagnostics have not finished, the watchdog terminates with that
-published status. The watchdog exits `2` only when no complete result has been
-written. A failed result write publishes no status, so no completion indication or
-token-shape observation follows it, and the process exits `2`.
+the complete written result fixes the exit status. The status is fixed when the host
+observes that the write of all the result's bytes to stdout has completed: the typed
+status `0` or `1` that matches the result is then published before any drain or
+diagnostic wait. If the bound then expires because owned cleanup, required drain or
+optional diagnostics have not finished, the watchdog terminates with that published
+status. If the bound expires before the host observes write completion, even when the
+bytes have in fact reached the pipe, the watchdog exits `2`: a fail-closed transport
+failure. A failed result write publishes no status, so no completion indication,
+token-shape observation or request-span stop event follows it, and the process exits
+`2`.
 
 The managed process host keeps its entry thread as the watchdog and moves request
 work, native handle I/O, and cleanup onto dedicated background work. It reads the
 original deadline and first terminal/cancellation timestamps without waiting on
-request locks. Result commitment is serialized with host cancellation. Complete
-native transfer of the result fixes the exit status; required operation,
+request locks. Result commitment is serialized with host cancellation. The observed
+completion of the result's native transfer fixes the exit status; required operation,
 cancellation-callback, and lifetime-pipe drain are prerequisites for ending the
 process normally before the bound, not for that status. Pipe admission runs within the
 original request lifetime and precedes Profile access. An initially closed pipe
@@ -1048,9 +1051,11 @@ three meanings:
   process watchdog when its bound expires before the result is written. The OS or
   runtime may produce other values, for example when the process is killed.
 
-Once the complete result is written, the exit status follows it. A later failed or
-stalled owned cleanup, required drain, watchdog termination or diagnostic keeps the
-`0` or `1` that matches the written result and may be reported only on stderr.
+Once the host observes that the complete result has been written, the exit status
+follows it. A later failed or stalled owned cleanup, required drain, watchdog
+termination or diagnostic keeps the `0` or `1` that matches the written result and
+may be reported only on stderr. A bound that expires before that observation yields
+`2`, the fail-closed transport failure, even if the caller can read a complete object.
 
 Failure objects contain no token or account metadata. A success with
 `persistence_unconfirmed` still exits zero. Invalid/partial JSON, absent output, or an
