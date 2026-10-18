@@ -1,7 +1,7 @@
-using Authentication.Core;
-using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 using System.Security;
+using Authentication.Core;
+using Microsoft.Win32.SafeHandles;
 
 namespace Authentication.Windows;
 
