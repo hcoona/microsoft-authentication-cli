@@ -85,9 +85,10 @@ structured evidence when it adds a distinct conclusion, limitation, or decision 
 Structured records require a real consumer, a schema or equivalent typed contract, and a
 defined validation point.
 
-Generated dependency lock files retain the exact bytes their generator produced,
-including line endings. Repository text checks may inspect them but must not rewrite
-them; a changed lock is reviewed as a regenerated dependency selection.
+Generated dependency lock files retain their generator's content. The repository
+normalizes their line endings to LF; no other byte is rewritten. Repository text checks
+may inspect them but must not rewrite them; a changed lock is reviewed as a regenerated
+dependency selection.
 
 ## Work Authorization and Concurrency
 

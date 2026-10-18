@@ -119,9 +119,8 @@ mise exec -- dotnet restore Windows.slnx --force-evaluate -p:EnableWindowsTarget
 
 Keep the SDK lock to the two platforms whose archives `mise.toml` names; without
 `--platform`, mise also adds entries for other locked platforms, such as a glibc archive
-under `linux-x64-musl`. A restore on Linux writes each changed `packages.lock.json` with
-LF line endings. Restore the CRLF bytes of the lock files that were CRLF before
-committing, so that only the package selections change.
+under `linux-x64-musl`. `.gitattributes` normalizes every `packages.lock.json` to LF line
+endings, so a lock regenerated on either host differs only in its package selections.
 
 This section is the single authority for contributor tooling setup. These development
 tools have Linux x64 and Windows x64 lock entries. The completed

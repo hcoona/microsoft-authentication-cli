@@ -16,11 +16,7 @@ controls:
       - docs/governance/record-system.md#formats
     invariant: >-
       Pre-commit checks run only when the worktree matches the staged snapshot, and
-      tracked text has no unresolved conflict markers or whitespace errors. The generated
-      CRLF dependency lock paths named in the trailing-whitespace step retain their
-      generator bytes instead of undergoing whitespace rewriting; review of a regenerated
-      lock, not hk, establishes its content. All other applicable checks still include
-      them.
+      tracked text has no unresolved conflict markers or whitespace errors.
     runner: hk
     implementation:
       kind: hk-steps
