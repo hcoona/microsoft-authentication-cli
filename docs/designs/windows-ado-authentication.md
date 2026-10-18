@@ -1025,9 +1025,10 @@ stateDiagram-v2
 
 ## Result, Diagnostics, and Compatibility
 
-The [result schema](../../contracts/v1/result.schema.json) defines one UTF-8 JSON object
-followed by LF, with no BOM. For an `authenticate` invocation, exit status has three
-meanings:
+The [result schema](../../contracts/v1/result.schema.json) owns the result object's
+serialized fields. This design owns how it is delivered: an `authenticate` invocation
+writes one UTF-8 JSON object followed by LF to stdout, with no BOM. Exit status has
+three meanings:
 
 - `0`: a complete `success` object on stdout.
 - `1`: a complete typed failure object on stdout; every typed failure shares it.

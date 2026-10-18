@@ -98,7 +98,7 @@
     }
   },
   "title": "Client Profile Configuration Version 1",
-  "description": "Nonsecret public-client configuration selected by one explicit Windows file path. The caller owns the file, read as at most 64 KiB of strict UTF-8 JSON; the reader accepts and skips one leading UTF-8 byte order mark, which counts toward that bound. This schema and its examples neither activate nor distribute a Profile.",
+  "description": "Fields of a nonsecret public-client configuration document. docs/designs/windows-ado-authentication.md owns Profile selection, file reading (size bound, encoding and byte order mark) and semantic validation. This schema and its examples neither activate nor distribute a Profile.",
   "allOf": [
     {
       "if": {
