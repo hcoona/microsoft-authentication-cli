@@ -7,8 +7,8 @@ using Microsoft.Win32.SafeHandles;
 
 namespace Authentication.Windows.Scenarios;
 
-// Finite, sequential child scenarios inside the existing outer experiment Job.
-// This fixture never starts a shell, changes account state, or breaks out of that Job.
+// Finite, sequential child scenarios started by the test process.
+// This fixture never starts a shell or changes account state.
 internal sealed partial class ProcessFixture : IDisposable
 {
     private static int safetyStopped;

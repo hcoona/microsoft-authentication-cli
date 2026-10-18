@@ -1105,3 +1105,23 @@ proposals, not observed platform facts.
 
 No entry changes a current conclusion. The remediation changes no dependency, SDK,
 runtime, Profile, platform or release, and authorizes no experiment.
+
+### Registry Evaluation for the Toolchain Alignment (2026-10-18)
+
+The [toolchain alignment](https://github.com/hcoona/microsoft-authentication-cli/pull/520)
+moved the runtime pin from 10.0.12 to the 10.0.13 runtime bundled with SDK 10.0.402. Its
+pull request recorded a desk-only RECHECK-008 evaluation, using sources retrieved on
+2026-10-17. This record makes the evaluation of all ten registry entries on
+**2026-10-18 UTC**. Only RECHECK-008 needed an assessment, and only on the desk. Its publishing
+mode, target, SDK, MSAL, Broker and NativeInterop pins are unchanged; only the runtime
+patch and its ILCompiler and ILLink packs moved.
+
+The [.NET 10.0.13 release notes](https://github.com/dotnet/core/blob/50e60dcd5ba76509fe472278ba9fe299a411efa6/release-notes/10.0/10.0.13/10.0.13.md)
+(dated 2026-10-13) list SDK 10.0.402 and the 10.0.13 ILCompiler and ILLink packages, with
+no NativeAOT- or ILCompiler-specific breaking change or known issue. The
+[.NET 10 known issues](https://github.com/dotnet/core/blob/50e60dcd5ba76509fe472278ba9fe299a411efa6/release-notes/10.0/known-issues.md)
+list no NativeAOT or ILCompiler issue for 10.0.13. The Native AOT disposition stands.
+Existing Native AOT and real-host evidence stays bound to the configuration its records
+name and is not evidence for 10.0.13. The other nine entries did not fire: the change
+makes no interaction, account, WSL, browser, broker, cache, Profile or failure-mapping
+decision and is not a release.
