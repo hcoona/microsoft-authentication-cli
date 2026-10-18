@@ -51,10 +51,9 @@ requiring a new grant, amendment, owner decision, or GitHub-dependent acceptance
 
 ## Public and Sensitive Information
 
-- Use only public, reviewable evidence in committed records.
-- Never commit credentials, tokens, authorization codes, private account or tenant
-  information, private conversations, unpublished downstream observations, or raw broker
-  diagnostics.
+- Follow the [public record boundary](docs/governance/project.md#public-record-boundary),
+  which defines the evidence committed records may use and the information they must
+  never contain.
 - Do not present a Microsoft-owned client ID as a secret or as an asset owned by this
   fork.
 
@@ -81,8 +80,9 @@ experiment crosses a material effects boundary identified by the experiment poli
 - If the target branch materially changes a relied-on prerequisite or shared authority,
   pause dependent work and refresh its gate evidence, validation, and review.
 - Apply lifecycle dependencies per Slice. Implementation requires accepted Slice
-  requirements, applicable architecture and contracts, a validation basis, and explicit
-  unsupported cases. Another authorized Slice may concurrently remain in requirements or
+  requirements, applicable architecture and contracts, a validation basis, explicit
+  unsupported cases, and every preimplementation condition owned by an applicable domain
+  record. Another authorized Slice may concurrently remain in requirements or
   architecture work.
 - Use the smallest record, control, or implementation mechanism that prevents the
   identified failure.

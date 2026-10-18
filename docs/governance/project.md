@@ -54,10 +54,11 @@ Current compatibility and migration commitments are defined only in
 Committed rationale must use public source, public standards and documentation, public
 Issues or pull requests, or reproducible sanitized experiments.
 
-Do not commit credentials, private identities, internal company information, private
-conversations, or unpublished downstream observations. If private information motivates
-work, restate the public technical question and collect publishable evidence before using
-it as repository rationale.
+Do not commit credentials, tokens, authorization codes, private identities, private
+account or tenant information, internal company information, private conversations,
+unpublished downstream observations, or raw broker diagnostics. If private information
+motivates work, restate the public technical question and collect publishable evidence
+before using it as repository rationale.
 
 ## Governance Authority
 
