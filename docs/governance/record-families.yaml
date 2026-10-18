@@ -240,7 +240,7 @@ families:
     maintainer: Repository owner
     consumers:
       - Maintainers revisiting choices with material reversal cost
-    creation_trigger: A durable choice has high reversal cost or non-obvious rationale.
+    creation_trigger: A durable choice constrains a future Slice, the product boundary, or a public contract, or otherwise has high reversal cost or non-obvious rationale.
     failure_mode: A future change repeats settled analysis or violates a foundational choice.
     review_point: Pull requests that introduce or reverse a qualifying decision
 

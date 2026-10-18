@@ -216,6 +216,14 @@ marker. Never assign an established identifier to a different requirement. Mecha
 checks enforce the two representations and target existence; review determines whether
 the requirement's meaning was preserved.
 
+### Decision Records
+
+An accepted decision record in `docs/decisions/` is required for a choice that constrains
+a future Slice, the product boundary, or a public contract. Another durable choice with
+high reversal cost or non-obvious rationale may also use one. A repository-owner choice
+confined to one Slice stays in that Slice's design and links to the carrier where the
+owner made it. Earlier owner choices are not converted retroactively.
+
 ### Decision Record Numbers
 
 Each accepted decision record in `docs/decisions/` has a unique four-digit number, and
