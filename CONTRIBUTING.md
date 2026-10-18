@@ -43,7 +43,8 @@ requirements or architecture work. If the target branch materially changes a rel
 prerequisite or shared canonical authority, pause dependent work and refresh its gate
 evidence, validation, and review before merge.
 
-Before an experiment runs, its accepted Wave entry must bound the outcome and maximum
+[Development validation](docs/research/experiment-safety.md#development-validation) is not
+an experiment. Before an experiment runs, its accepted Wave entry must bound the outcome and maximum
 effects and its accepted protocol must define environment, account-state and effects
 boundaries, observations, finite attempt/time limits, stop conditions, and cleanup or
 intentional retention. Owner-operated steps and machine switches use the same protocol

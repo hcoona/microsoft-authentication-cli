@@ -61,7 +61,8 @@ requiring a new grant, amendment, owner decision, or GitHub-dependent acceptance
 ## Experiments
 
 Before any build, authentication, cache, installer, or migration experiment, read and
-follow `docs/research/experiment-safety.md`.
+follow `docs/research/experiment-safety.md`. Development validation as defined there is
+not an experiment, but the work it validates still needs Wave authorization.
 
 Do not run an experiment unless the accepted Delivery Wave explicitly authorizes its
 bounded outcome and maximum effects and an accepted protocol defines its environment,
