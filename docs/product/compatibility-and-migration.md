@@ -19,8 +19,9 @@ or supported protocol-major set is selected by this policy.
 
 Any future v2 artifact must:
 
-- use a distinct executable and installation root;
-- use independent configuration, cache, lock, telemetry, and update namespaces;
+- use the independent operational identities that
+  [`V2-REQ-044`](requirements/cache-security-and-operational-identity.md#v2-req-044-independent-distribution-identity)
+  requires;
 - avoid placing an `azureauth` compatibility shim by default;
 - leave upstream installation and state untouched during install, authentication, upgrade,
   downgrade, uninstall, and cleanup.

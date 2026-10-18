@@ -76,7 +76,8 @@ identity or use upstream ingestion configuration.
 ## V2-REQ-044: Independent Distribution Identity
 
 Any distributed v2 artifact must use independently defined package, executable,
-installation, cache, signing, diagnostic, and update identities.
+installation, configuration, cache, lock, telemetry, diagnostic, signing, and update
+identities.
 
 ## V2-REQ-045: Headless-Linux Reusable-State Support
 
