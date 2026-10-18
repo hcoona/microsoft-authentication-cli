@@ -30,7 +30,8 @@
       "required": [
         "evaluator",
         "trigger_action",
-        "fallback_review"
+        "fallback_review",
+        "trigger_events"
       ],
       "properties": {
         "evaluator": {
@@ -44,7 +45,38 @@
         "fallback_review": {
           "type": "string",
           "minLength": 1
+        },
+        "trigger_events": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "decision",
+            "release",
+            "workstream"
+          ],
+          "properties": {
+            "decision": {
+              "$ref": "#/$defs/triggerEventMap"
+            },
+            "release": {
+              "$ref": "#/$defs/triggerEventMap"
+            },
+            "workstream": {
+              "$ref": "#/$defs/triggerEventMap"
+            }
+          }
         }
+      }
+    },
+    "triggerEventMap": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
       }
     },
     "recheck": {
