@@ -59,7 +59,7 @@ Repository checks need only the check tools, so install those and the hooks with
 downloading the .NET SDK, APM, or Node.js:
 
 ```sh
-mise install --locked actionlint gitleaks hk lychee pipx:check-jsonschema pkl python shellcheck uv
+mise install --locked actionlint gitleaks hk lychee pkl python shellcheck uv
 mise run hooks:install
 ```
 
@@ -78,7 +78,8 @@ The hook fails closed while any unstaged or untracked path remains. Stage the fi
 intended snapshot or temporarily set other work aside before committing so repository-wide
 path-based checks inspect the same tree Git will record.
 
-The record checker's Python dependencies are locked in
+The record checker's Python dependencies, including `check-jsonschema` for
+structured-record schema validation, are locked in
 `tools/check_repository_records.py.lock`, and hk runs it with `uv run --locked`. After a
 reviewed change to its inline dependency list, regenerate that lock with
 `mise exec -- uv lock --script tools/check_repository_records.py`.

@@ -38,7 +38,7 @@ jobs:
           version: 2026.8.10
           # Install only the check tools; the development SDK, APM, and Node.js are
           # not needed for repository controls.
-          install_args: actionlint gitleaks hk lychee pipx:check-jsonschema pkl python shellcheck uv
+          install_args: actionlint gitleaks hk lychee pkl python shellcheck uv
           cache: true
 
       - name: Run repository controls

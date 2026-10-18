@@ -1,6 +1,10 @@
 # /// script
 # requires-python = ">=3.13,<3.14"
-# dependencies = ["PyYAML==6.0.3", "markdown-it-py==4.2.0"]
+# dependencies = [
+#     "PyYAML==6.0.3",
+#     "check-jsonschema==0.38.0",
+#     "markdown-it-py==4.2.0",
+# ]
 # ///
 
 from __future__ import annotations
@@ -1221,10 +1225,15 @@ def validate_public_build_frozen_evidence(path: Path) -> list[str]:
     return errors
 
 
+# Run check-jsonschema from this script's locked environment rather than a separately
+# installed tool, so its version and dependencies come from the script's uv lock.
+CHECK_JSONSCHEMA = (sys.executable, "-m", "check_jsonschema")
+
+
 def run_schema_validation(schema: str, instances: list[Path]) -> int:
     result = subprocess.run(
         [
-            "check-jsonschema",
+            *CHECK_JSONSCHEMA,
             "--schemafile",
             schema,
             *(path.relative_to(ROOT_RESOLVED).as_posix() for path in instances),
@@ -1238,7 +1247,7 @@ def run_schema_validation(schema: str, instances: list[Path]) -> int:
 def run_metaschema_validation(instances: list[Path]) -> int:
     result = subprocess.run(
         [
-            "check-jsonschema",
+            *CHECK_JSONSCHEMA,
             "--check-metaschema",
             *(path.relative_to(ROOT_RESOLVED).as_posix() for path in instances),
         ],
