@@ -74,6 +74,21 @@ set before requesting review:
 mise run check
 ```
 
+By default, mise installs a missing tool automatically when `mise exec` or a task
+needs it. The repository job in `.github/workflows/check.yml` turns off both
+automatic installs
+([`exec_auto_install`](https://mise.jdx.dev/configuration/settings.html#exec_auto_install)
+and
+[`task.run_auto_install`](https://mise.jdx.dev/configuration/settings.html#task.run_auto_install)),
+so a check run never downloads the development SDK, APM, or Node.js. To match CI, set
+the same variables for local check runs; mise then leaves a missing tool uninstalled
+instead of downloading it:
+
+```sh
+export MISE_EXEC_AUTO_INSTALL=false
+export MISE_TASK_RUN_AUTO_INSTALL=false
+```
+
 The hook fails closed while any unstaged or untracked path remains. Stage the final
 intended snapshot or temporarily set other work aside before committing so repository-wide
 path-based checks inspect the same tree Git will record.
