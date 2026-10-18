@@ -95,7 +95,7 @@ public sealed class SelectedAccountScenarios
         Assert.IsNull(outcome.Success);
     }
 
-    // Account matching is exact apart from ASCII-insensitive case: no plus or dot
+    // Account matching is exact apart from ordinal case-insensitive comparison: no plus or dot
     // alias folding and no cross-domain equivalence, in discovery or final validation.
     [TestMethod]
     [DataRow("personal+alias@example.test")]
