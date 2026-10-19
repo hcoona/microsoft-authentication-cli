@@ -250,12 +250,16 @@ disclosure and 5 tampering. Their stored states are 63 `Mitigated`, 11
 `NeedsInvestigation`, 22 `NotApplicable` and none `NotStarted`. Analysis View displays
 the stored value `NeedsInvestigation` as *Needs Investigation*, the status name in the
 [TMT getting-started guide](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-getting-started#analyzing-threats).
-These counts come from the 2026-10-18 desktop run in
-[PR #529](https://github.com/hcoona/microsoft-authentication-cli/pull/529), which drove
+These counts come from the 2026-10-19 desktop run in
+[PR #531](https://github.com/hcoona/microsoft-authentication-cli/pull/531), which drove
 the installed tool through Windows UI Automation on a copy of the model as changed by
 that pull request; every displayed ID, state and justification matched the committed
-XML. That run performed no desktop `Save As` round trip, so it does not show whether a
-tool save would rewrite the file. Analysis is a design review aid, not an authentication experiment,
+XML. In that run the repository owner performed one desktop `Save As` to a temporary
+copy, which was not committed. TMT 7.3.51110.1 kept every threat ID, state and
+justification but rewrote the file: it dropped the license comment and indentation,
+reordered properties, wrote the duplicated state information as nil, renumbered
+serialization IDs and moved one connector. A tool save therefore needs its full diff
+reviewed before it replaces the committed text. Analysis is a design review aid, not an authentication experiment,
 implementation test, or proof of platform security.
 
 Prefer a supported command-line analyzer when available. The official getting-started
