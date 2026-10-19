@@ -200,7 +200,7 @@ concurrent calls and any other host.
   UI in every observed combination on two subjects; supplying the login hint (one of
   three combinations) or binding the account (all three) let WAM complete a forced call
   without UI. These observations informed the repository owner's 2026-10-16 decision to
-  revert; they are not a guarantee that WAM presents UI on other hosts or states.
+  revert, quoted in [PR #501](https://github.com/hcoona/microsoft-authentication-cli/pull/501); they are not a guarantee that WAM presents UI on other hosts or states.
 - F1 and F2 are provider behaviors observed for the stated combinations; their causes
   are not established.
 - Existing-state success does not establish clean first use, another host, deployment

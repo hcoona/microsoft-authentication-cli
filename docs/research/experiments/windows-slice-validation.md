@@ -494,8 +494,9 @@ comparison preserves all failures, unused charges and historical
 
 **Limit:** These observations neither validate nor reject hidden-parent WAM behavior.
 The later [interactive observation](#hidden-owned-parent-interactive-observation)
-covers presentation and human cancellation; by owner decision WAM title and focus
-are not required. Notice delivery to users and the remaining real lifetime
+covers presentation and human cancellation; by
+[owner decision](https://github.com/hcoona/microsoft-authentication-cli/issues/108#issuecomment-6182996452)
+WAM title and focus are not required. Notice delivery to users and the remaining real lifetime
 obligations stay open. Reuse sufficient accepted native,
 work and prior WSL evidence within its original limits.
 
