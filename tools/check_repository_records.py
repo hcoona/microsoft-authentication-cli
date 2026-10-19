@@ -15,6 +15,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 from collections import Counter
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -776,6 +777,42 @@ def run_metaschema_validation(instances: list[Path]) -> int:
     return result.returncode
 
 
+def validate_contract_examples(schemas: list[Path]) -> int:
+    """Validate each embedded example of a public contract schema against that schema."""
+    with tempfile.TemporaryDirectory(prefix="contract-examples-") as directory:
+        for schema in schemas:
+            try:
+                examples = json.loads(schema.read_text(encoding="utf-8")).get("examples", [])
+            except json.JSONDecodeError as error:
+                print(f"ERROR: cannot read {schema}: {error}", file=sys.stderr)
+                return 1
+            if not isinstance(examples, list):
+                print(f"ERROR: {schema} examples must be a list", file=sys.stderr)
+                return 1
+            instances: list[Path] = []
+            for index, example in enumerate(examples):
+                instance = Path(directory) / f"{schema.stem}-example-{index}.json"
+                instance.write_text(json.dumps(example), encoding="utf-8")
+                instances.append(instance)
+            if not instances:
+                continue
+            # check-jsonschema enables format checking by default.
+            result = subprocess.run(
+                [
+                    *CHECK_JSONSCHEMA,
+                    "--schemafile",
+                    schema.relative_to(ROOT_RESOLVED).as_posix(),
+                    *(str(instance) for instance in instances),
+                ],
+                cwd=ROOT,
+                check=False,
+            )
+            if result.returncode != 0:
+                print(f"ERROR: an embedded example does not validate: {schema}", file=sys.stderr)
+                return 1
+    return 0
+
+
 def validate_structured_records() -> int:
     errors: list[str] = []
     for schema, instance in BOOTSTRAP_SCHEMA_BINDINGS:
@@ -817,6 +854,8 @@ def validate_structured_records() -> int:
 
         if family["format"] == "json-schema":
             if run_metaschema_validation(instances) != 0:
+                return 1
+            if family["path"].startswith("contracts/") and validate_contract_examples(instances) != 0:
                 return 1
         elif run_schema_validation(family["schema"], instances) != 0:
             return 1

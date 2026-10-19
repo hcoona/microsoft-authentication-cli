@@ -257,7 +257,8 @@ Before merge:
 ## Commits
 
 Use Conventional Commits. Keep each commit focused on one human-reviewable semantic
-concern and include a nonempty body and final footer block.
+concern and include a nonempty body and final footer block. CI reports a non-merge commit
+that misses this shape as an advisory warning.
 
 ## Upstream Source
 
