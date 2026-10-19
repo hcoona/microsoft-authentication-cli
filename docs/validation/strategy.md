@@ -545,8 +545,10 @@ Windows host-timing evidence: they establish timing only on the host where they 
 CI job runs them, and the `windows-latest` job makes no host-timing claim. A passing
 Windows CI run establishes the synthetic Windows behavior on that runner image only; it
 is not real-platform, broker or published-executable evidence.
-The scenario jobs run the framework-dependent outputs on the runtime bundled with the
-pinned SDK, with roll-forward disabled.
+The scenario test projects are framework-dependent and run on the runtime bundled with
+the pinned SDK, with roll-forward disabled. The Windows process scenarios launch the CLI
+from its self-contained `win-x64` build output through that SDK's `dotnet` host; these
+records make no claim about which runtime copy that launch loads.
 
 A failed Windows host-timing assertion is not yet a product defect. Rerun the failed
 scenario once on the same host and record the host load (processor and memory

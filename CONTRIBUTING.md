@@ -64,8 +64,9 @@ mise run hooks:install
 ```
 
 `mise install --locked` without tool names also installs the development tools below.
-The check tools are supported on platforms represented for each of them in `mise.lock`. The pinned hk release has no Intel macOS binary; use CI or another supported
-development host on Intel macOS.
+`mise.lock` locks each check tool for the platforms listed in its entries; CI runs the
+checks on Linux x64 only. The pinned hk release has no Intel macOS binary; use CI or
+another host on Intel macOS.
 
 The pre-commit hook runs the local fast set through hk. Run the complete CI-equivalent
 set before requesting review:

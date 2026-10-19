@@ -113,7 +113,7 @@ still rejects any account other than the
 requested email. Do not attempt silent token acquisition,
 fabricate a silent failure, relax identity validation, or fall back to silent reuse.
 An unsupported host/provider combination is unavailable. The provider may reuse its
-session inside the presented UI; an interactive result identifies the invoked path and
+session within that interactive call; an interactive result identifies the invoked path and
 does not prove visible UI or renewed credentials.
 
 Use the same completion, strict validation, state-observation and terminal-lifecycle
