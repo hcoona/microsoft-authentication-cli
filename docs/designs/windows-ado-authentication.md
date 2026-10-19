@@ -541,8 +541,11 @@ Map codes through an explicit bounded table using structured provider codes/stat
 never message substring parsing. Safe reason strings identify categories such as
 `invalid_configuration`, `tenant_conflict`, `consent_required`, `provider_transient`,
 `network_transient` or `service_transient`; otherwise the reason repeats the outcome
-name. They never contain arbitrary provider text. Provider-reported timeout or invalid
-request observations map to `internal_failure`. A failure to construct or initialize
+name. They never contain arbitrary provider text. A provider-reported invalid request,
+and any provider timeout that the [observation table](#adapter-observation-boundary)
+does not classify, map to `internal_failure`; an HTTP timeout while the original
+operation token remains active is `temporarily_unavailable` with `network_transient`,
+as that table states. A failure to construct or initialize
 the provider passes through the same safe filter as any other provider observation:
 broker unavailability and the recognized broker failures in the
 [observation table](#adapter-observation-boundary) map to `mechanism_unavailable`, a
