@@ -42,14 +42,11 @@ is navigation, not an independent authority.
 | Architects and research reviewers | Evidence for not using the v1 core as the v2 foundation | [`research/v1-architecture-audit.md`](research/v1-architecture-audit.md) |
 | Requirements, compatibility, architecture, and validation maintainers | Caller-visible AzureAuth v1 public-contract evidence | [`research/v1-public-contract-baseline.md`](research/v1-public-contract-baseline.md) |
 | Experiment authors and reviewers | Experiment authorization, environment/effects boundaries, safety, and evidence rules | [`research/experiment-safety.md`](research/experiment-safety.md) |
-| Public-build evidence maintainers and reviewers | Fixed solution targets, source dependencies, and build-stage applicability | [`research/public-build-source-baseline.json`](research/public-build-source-baseline.json) |
-| Public-build evidence maintainers and reviewers | Fixed source-level Lasso usage manifest | [`research/public-build-lasso-reference-manifest.json`](research/public-build-lasso-reference-manifest.json) |
 | Architecture and evidence reviewers | Completed Windows MSAL account visibility, token metadata, broker-reuse, Client Profile tenant-mapping, and token-path evidence | [`windows-msal-account-metadata.md`](research/experiments/windows-msal-account-metadata.md) |
 | Contributors and reviewers | Completed developer-tool installation, discovery, and public Learn retrieval evidence | [`developer-tooling.md`](research/experiments/developer-tooling.md) |
 | Design and validation reviewers | Completed synthetic Native AOT publish, upstream native-import, and public Native AOT assessment evidence | [`windows-native-aot.md`](research/experiments/windows-native-aot.md) |
 | Validation and design reviewers | Completed Windows Slice selected-account, WSL, and host observation evidence and its public-source basis | [`windows-slice-validation.md`](research/experiments/windows-slice-validation.md) |
 | Validation, design, and security reviewers | Completed 2026-10-15 real-host validation method, results, limitations, and deviation dispositions for the `main-v2` Windows product | [`real-host-validation.md`](research/experiments/real-host-validation.md) |
-| Public-build evidence consumers and reviewers | Frozen WSL2-Linux-x64 public-build runtime evidence, including the retained dependency assets it references | [`research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json`](research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json) |
 | Research and release reviewers | Mutable public facts and their recheck triggers | [`research/rechecks.yaml`](research/rechecks.yaml) |
 | Maintainers and upstream-source consumers | Upstream baseline and import policy | [`../UPSTREAM.md`](../UPSTREAM.md) |
 
@@ -78,10 +75,6 @@ is navigation, not an independent authority.
 | Control automation | Control catalog schema | [`controls.schema.json`](../schemas/governance/controls.schema.json) |
 | Packaging and runtime automation | Operational-identity registry schema | [`operational-identities.schema.json`](../schemas/governance/operational-identities.schema.json) |
 | Research automation | Mutable-source recheck schema | [`rechecks.schema.json`](../schemas/research/rechecks.schema.json) |
-| Public-build source-audit automation | Public-build source-baseline schema | [`public-build-source-baseline.schema.json`](../schemas/research/public-build-source-baseline.schema.json) |
-| Public-build source-audit automation | Public-build Lasso-reference schema | [`public-build-lasso-reference-manifest.schema.json`](../schemas/research/public-build-lasso-reference-manifest.schema.json) |
-| Public-build evidence automation | Retained `project.assets.json` evidence schema | [`public-build-assets-evidence.schema.json`](../schemas/research/public-build-assets-evidence.schema.json) |
-| Public-build evidence automation and reviewers | Strict shape of the frozen recorded public-build evidence | [`public-build-experiment-bundle.schema.json`](../schemas/research/public-build-experiment-bundle.schema.json) |
 
 The root [`README.md`](../README.md) is the public landing page. The root
 [`AGENTS.md`](../AGENTS.md) is an AI-agent interface and is not human onboarding

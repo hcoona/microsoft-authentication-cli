@@ -188,13 +188,16 @@ clears package sources and selects an authenticated Office Azure Artifacts feed.
 references `Microsoft.Office.Lasso`.
 
 **Source finding - build input.** The source declares `Microsoft.Office.Lasso`
-`2024.10.23.1` and selects a credentialed Office package feed. The accepted
-[Lasso reference manifest](public-build-lasso-reference-manifest.json) inventories all
+`2024.10.23.1` and selects a credentialed Office package feed. The
+[Lasso reference manifest](https://github.com/hcoona/microsoft-authentication-cli/blob/2d2c15f907218ea5390d1ed8876fa2433ecc92ae/docs/research/public-build-lasso-reference-manifest.json),
+retired from the current tree and kept at that revision, inventories all
 261 references at the audited commit: 133 references in 13 production files and 128
 references in seven test files.
 
 **Runtime observation.** In the accepted
-[WSL2 Linux x64 experiment](experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json),
+[WSL2 Linux x64 experiment](https://github.com/hcoona/microsoft-authentication-cli/blob/2d2c15f907218ea5390d1ed8876fa2433ecc92ae/docs/research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json),
+retired from the current tree with its source baseline and retained assets and kept at
+that revision,
 the isolated public-only restore used NuGet.org and exited `1` with `NU1101` for
 `Microsoft.Office.Lasso` in `AzureAuth.csproj` and `AzureAuth.Test.csproj`. Its seven
 dependent build, filtered-test, and non-publishing package commands were blocked. The

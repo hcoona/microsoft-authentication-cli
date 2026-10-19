@@ -248,8 +248,7 @@ requires updating the checker and catalog in the same change. A catalog edit the
 cannot remove a retained record from family, schema, or portal validation merely by
 deleting its family entry. Governed records must use direct repository paths; symbolic
 links are rejected rather than treated as authority routing. The documentation portal
-routes every retained record directly, except that an evidence-only file referenced by
-path from a portal-linked structured record is routed through that parent record.
+routes every retained record directly.
 
 Every current hk control maps each declared hk execution point to the concrete step names
 that implement it. The repository checker evaluates hk's actual `pre-commit` and `check`

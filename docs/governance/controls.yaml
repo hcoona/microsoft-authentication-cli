@@ -87,38 +87,6 @@ controls:
       - ci
     failure_mode: A structured record becomes ambiguous or unreadable by its consumer.
 
-  - id: public-build-evidence-consistency
-    state: current
-    class: mechanical
-    enforcement: blocking
-    producer: hk and the repository record checker
-    maintainer: Research maintainer
-    consumers:
-      - Repository checker and research maintainers when preserving the fixed source baseline, Lasso manifest, and frozen Issue 1 evidence
-      - Research reviewers when relying on or correcting the recorded public-build conclusions
-    governing_rules:
-      - docs/governance/record-system.md#formats
-      - docs/governance/record-system.md#record-system-gate
-    invariant: >-
-      The public-build source baseline and Lasso manifest retain canonical source
-      identity, hashes, identifiers, ordering, and cross-record consistency under
-      duplicate-rejecting JSON parsing. The recorded Issue 1 bundle is frozen evidence:
-      its bytes match the digest pinned in the repository checker, it binds both source
-      authorities by hash, and the retained asset files are exactly the ones it
-      references, with matching hashes.
-    runner: hk
-    implementation:
-      kind: hk-steps
-      steps:
-        local-fast:
-          - structured-record-schema
-        ci:
-          - structured-record-schema
-    execution_points:
-      - local-fast
-      - ci
-    failure_mode: A fixed-source authority or the frozen recorded evidence is silently edited, loses or gains a retained asset, or stops matching the source authorities it binds.
-
   - id: requirement-id-uniqueness
     state: current
     class: mechanical
