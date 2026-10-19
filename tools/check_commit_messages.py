@@ -16,10 +16,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ZERO_SHA = "0" * 40
-HEADER = re.compile(
-    r"^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)"
-    r"(\([a-z0-9][a-z0-9-]*\))?!?: \S.*$"
-)
+# Conventional Commits 1.0.0: a type noun, an optional parenthesized scope, an optional
+# "!", then ": " and a description. Types are case-insensitive.
+HEADER = re.compile(r"^[A-Za-z]+(\([^()\s]+\))?!?: \S.*$")
 
 
 def git(*args: str) -> str | None:
