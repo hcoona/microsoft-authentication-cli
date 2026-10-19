@@ -133,7 +133,7 @@ public sealed class RequestCoordinator(IAuthenticationProvider provider, IReques
         using var phase = observation.Begin(AuthenticationStage.CandidateValidation);
         if (candidate is null || string.IsNullOrEmpty(candidate.AccessToken)
             || !string.Equals(candidate.Email, request.AccountEmail, StringComparison.OrdinalIgnoreCase)
-            || candidate.Tenant is null
+            || candidate.Tenant is null || candidate.Tenant == Guid.Empty
             || (request.ExactTenant is not null && candidate.Tenant != request.ExactTenant)
             || string.IsNullOrEmpty(candidate.TokenType)
             || candidate.ExpiresOn <= host.Clock.GetUtcNow()

@@ -96,7 +96,9 @@ public static class MsalBoundary
     // not, every success would fail closed as identity_validation_failed.
     public static TokenCandidate Project(AuthenticationResult result) =>
         new(result.AccessToken, result.Account?.Username,
-            Guid.TryParse(result.TenantId, out var tenant) ? tenant : null,
+            // An all-zero tenant identifies no tenant; it remains missing like any other
+            // invalid tenant metadata.
+            Guid.TryParse(result.TenantId, out var tenant) && tenant != Guid.Empty ? tenant : null,
             // Missing scopes must reach the coordinator's metadata rejection. An empty
             // observed list has distinct /.default semantics and cannot replace null.
             result.Scopes?.ToArray()!, result.TokenType, result.ExpiresOn, result.CorrelationId,

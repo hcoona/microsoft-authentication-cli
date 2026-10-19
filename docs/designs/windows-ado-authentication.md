@@ -808,8 +808,9 @@ as trusted dependencies. For dynamic scopes, each requested scope must be among 
 granted scopes, compared ordinally; extra grants are allowed. The token is never parsed
 to fill the gap.
 
-Missing account email and invalid or missing tenant metadata remain missing in the
-adapter projection; requested values must not fill them. Keep the request-local
+Missing account email and invalid or missing tenant metadata, including an all-zero
+tenant GUID, remain missing in the adapter projection; requested values must not fill
+them. Validation independently rejects an all-zero actual tenant. Keep the request-local
 operation identifier separately from the observed correlation ID. The pinned
 [public result shape](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/AuthenticationResult.cs)
 provides the observed fields; projection does not establish persistence.

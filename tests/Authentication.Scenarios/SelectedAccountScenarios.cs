@@ -146,6 +146,20 @@ public sealed class SelectedAccountScenarios
         Assert.IsNull(outcome.Success);
     }
 
+    [TestMethod]
+    public async Task AllZeroActualTenantCannotSucceedWithoutAnExactTenant()
+    {
+        var provider = new ScenarioProvider([new ProviderAccount(WorkEmail, new object())])
+        {
+            ReturnedTenant = Guid.Empty,
+        };
+
+        var outcome = await Application(provider).AuthenticateAsync(Request(WorkEmail));
+
+        Assert.AreEqual(AuthenticationFailure.IdentityValidationFailed, outcome.Failure);
+        Assert.IsNull(outcome.Success);
+    }
+
     private static RequestCoordinator Application(IAuthenticationProvider provider) =>
         new(provider, new ScenarioHost());
 
