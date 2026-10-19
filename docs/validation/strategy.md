@@ -545,6 +545,10 @@ Windows host-timing evidence: they establish timing only on the host where they 
 CI job runs them, and the `windows-latest` job makes no host-timing claim. A passing
 Windows CI run establishes the synthetic Windows behavior on that runner image only; it
 is not real-platform, broker or published-executable evidence.
+Every Windows scenario run, in CI or on a host, uses a new empty temporary directory as
+`TEMP` and `TMP`: the scenarios keep their files and junctions there as
+[development validation](../research/experiment-safety.md#development-validation)
+permits, and the run's owner disposes of it.
 The scenario test projects are framework-dependent and run on the runtime bundled with
 the pinned SDK, with roll-forward disabled. The Windows process scenarios launch the CLI
 from its self-contained `win-x64` build output through that SDK's `dotnet` host; these

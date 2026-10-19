@@ -102,6 +102,9 @@ reviewed change to its inline dependency list, regenerate that lock with
 
 CI also runs the scenario and Windows jobs described in the
 [validation strategy](docs/validation/strategy.md#continuous-integration-and-host-timing-evidence).
+The Windows scenarios keep their files under `TEMP` and refuse to reuse a scenario
+directory, so run them with `TEMP` and `TMP` set to a new empty directory, and dispose
+of that directory afterward.
 With the .NET SDK below installed, these commands reproduce the Windows build check on a
 Linux host:
 

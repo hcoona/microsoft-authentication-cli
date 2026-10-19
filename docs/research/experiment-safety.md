@@ -22,9 +22,13 @@ work it validates still needs Delivery Wave authorization. It is limited to:
   configuration, and the existing local package cache, on a contributor host, a
   repository-owner-designated host, or a GitHub-hosted runner;
 - deterministic operating-system checks in those scenarios that read the current
-  process or thread state, or that create temporary files, junctions, child processes,
-  console process groups, and hidden windows owned by the test process under a fresh
-  temporary root and destroyed before it exits;
+  process or thread state; that temporarily change the state of the test process, its
+  own threads or its child processes and revert or end that change before the test
+  exits; or that create, under a fresh temporary root for the run, temporary files,
+  junctions, child processes, console process groups, and hidden windows owned by the
+  test process. Child processes, console process groups and windows are destroyed
+  before the test process exits. Files and junctions may remain inside that root, and
+  whoever runs the scenarios disposes of the root;
 - a provider-library call whose HTTP transport is a synthetic handler that returns
   canned responses and fails the test on any unexpected request, that uses no account
   or credential, and that opens no browser, operator surface, or window not owned by
