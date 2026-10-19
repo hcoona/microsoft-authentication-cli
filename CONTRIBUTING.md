@@ -68,8 +68,8 @@ mise run hooks:install
 checks on Linux x64 only. The pinned hk release has no Intel macOS binary; use CI or
 another host on Intel macOS.
 
-The pre-commit hook runs the local fast set through hk. Run the complete CI-equivalent
-set before requesting review:
+The pre-commit hook runs the local fast set through hk. Run the complete repository
+check set, which CI's Repository Controls job runs, before requesting review:
 
 ```sh
 mise run check
@@ -105,8 +105,15 @@ CI also runs the scenario and Windows jobs described in the
 The Windows scenarios keep their files under `TEMP` and refuse to reuse a scenario
 directory, so run them with `TEMP` and `TMP` set to a new empty directory, and dispose
 of that directory afterward.
-With the .NET SDK below installed, these commands reproduce the Windows build check on a
-Linux host:
+With the .NET SDK below installed, these commands reproduce the Linux scenario check:
+
+```text
+mise exec -- dotnet restore Linux.slnx --locked-mode
+mise exec -- dotnet build Linux.slnx --configuration Release --no-restore
+mise exec -- dotnet tests/Authentication.Scenarios/bin/Release/net10.0/Authentication.Scenarios.dll
+```
+
+These reproduce the Windows build check on a Linux host:
 
 ```text
 mise exec -- dotnet restore Windows.slnx --locked-mode -p:EnableWindowsTargeting=true
@@ -125,8 +132,8 @@ build properties, and `tests/Directory.Build.props` imports it. Central package
 management waits for a concrete product consumer.
 
 `mise.lock` is generator output: never edit it by hand. Generate it with the mise
-version that CI pins, the `version:` input of the `jdx/mise-action` steps in
-`.github/workflows/check.yml`; `mise.toml` sets the same `min_version`. Another mise
+version that CI pins, the `MISE_VERSION` value in `.github/workflows/check.yml`;
+`mise.toml` sets the same `min_version`. Another mise
 version can rewrite unrelated entries.
 
 To change the SDK, edit its version and each platform's archive URL and `checksum` in

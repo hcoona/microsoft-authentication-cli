@@ -101,8 +101,8 @@ OS prerequisites; an AOT executable does not imply one-file deployment or no OS 
 Debug symbols have a separate diagnostic/release treatment and are included when
 comparing total development and distribution costs.
 
-The implemented application is verified against the existing Windows scenario basis and
-release gates. Synthetic success does not satisfy real WAM, account, UI or cancellation
+The implemented application must be verified against the existing Windows scenario
+basis and the release gates before the corresponding claim. Synthetic success does not satisfy real WAM, account, UI or cancellation
 gates. Investigate precise supported dependency or host corrections if application
 validation finds a blocker, before proposing a scoped exception.
 
@@ -778,7 +778,7 @@ sequenceDiagram
             WAM-->>MSAL: Candidate or failure
             MSAL-->>CLI: Candidate or typed provider observation
         end
-        CLI->>CLI: Validate identity, tenant, client/context, scopes, and metadata
+        CLI->>CLI: Validate identity, tenant, operation binding, scopes, and metadata
         CLI->>CLI: Classify already available persistence observation
         CLI->>UI: Destroy hidden parent#59; invalidate acquisition completion
         CLI-->>Caller: One JSON result#59; success 0 or failure 1
@@ -792,8 +792,10 @@ denial, cancellation, timeout, and invalid candidates do not continue to it.
 ### Authoritative Result and State Observations
 
 Validate `AuthenticationResult.Account?.Username`, `TenantId`, `Scopes`, `TokenType`,
-`ExpiresOn`, nonempty access token, and operation context. Require the requested email,
-the exact tenant when constrained, and the same client/cloud/resource context. Preserve
+`ExpiresOn`, nonempty access token, and operation context. Require the requested email
+and the exact tenant when constrained. The client, cloud and resource context is
+established only by the operation binding described below, not by a returned value.
+Preserve
 the provider's email spelling, tenant, token type, expiration, granted scopes, and
 correlation GUID when nonempty. Reject already expired candidates; impose no additional
 minimum remaining lifetime. Use provider metadata rather than parsing an access or ID
@@ -848,7 +850,9 @@ future reuse, or require a readback. Do no post-validation persistence I/O or wa
 The CLI product boundary remains governed by
 [V2-REQ-002](../product/requirements/product-boundary.md#v2-req-002-no-implicit-product-expansion);
 an in-process Win32 implementation does not justify an extra user-facing desktop surface.
-The repository owner selects a hidden owned parent as the WAM parent. The
+The repository owner selects a hidden owned parent as the WAM parent, as recorded in
+[PR #462](https://github.com/hcoona/microsoft-authentication-cli/pull/462) without a
+verbatim owner quotation. The
 [Microsoft WAM guide](https://learn.microsoft.com/entra/msal/dotnet/acquiring-tokens/desktop-mobile/wam#parent-window-handles)
 requires an explicit parent HWND, but no visible V2 window. A visible parent's Cancel
 action cannot stop a pending WAM prompt while WAM disables its owner, and it adds a
@@ -1130,12 +1134,10 @@ completed request stage may add the `error.type` described below; the
 final `request_completed` event carries `event`, `stage`, `outcome` and elapsed
 milliseconds, plus the token-shape fields below for a success. Events
 contain no token, email, path, Profile/client/account identifier, tenant, resource, scope,
-claims, or provider text. Under
-[V2-REQ-036](../product/requirements/result-and-process-protocol.md#v2-req-036-account-and-host-identifier-privacy),
-no stderr indication, telemetry event or exception output carries an account email,
-stable provider account identifier, tenant identifier, Windows security or logon-session
-identifier, machine name, or local path that can contain a user name. Only the stdout
-result carries the email and tenant that its contract requires. This is optional local
+claims, or provider text. Stderr indications, telemetry events and exception output
+follow the exclusions of
+[V2-REQ-036](../product/requirements/result-and-process-protocol.md#v2-req-036-account-and-host-identifier-privacy).
+Only the stdout result carries the email and tenant that its contract requires. This is optional local
 telemetry; network export and persistent telemetry identifiers are not provided by this
 Slice. With `--telemetry stderr`, all
 event and indication bytes accepted for one invocation total at most 8 KiB. Of that
@@ -1267,9 +1269,11 @@ the observations and their role, caller and subject scope:
   and its no-token outcome are unaffected. See
   [request lifetime](#uml-ui-ownership-and-cancellation-sequence) and the
   [threat model](../security/threat-model.md#known-limitation-provider-window-after-non-human-termination).
-- **Credential-method default.** The F3 candidate, a provider-defaulted credential
-  method the user had to change, was observed only with the login hint; its cause is
-  not established and it is recorded for a later owner decision.
+- **Credential-method default (F3).** Observed only with the login hint, which forced
+  interaction no longer supplies: WAM defaulted to a credential method the user then
+  changed. The credential method WAM offers is provider behavior the engine does not
+  select. The cause is not established, and no product change or owner decision is
+  pending.
 - **Defined but not validated by real-host evidence.** The `windows-wam` integration and
   the single-tenant (fixed-tenant) policy are defined by this design and covered only by
   controlled scenarios. Every real-host observation used the `visual-studio-legacy-wam`

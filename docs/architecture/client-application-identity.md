@@ -85,8 +85,8 @@ constant.
    application tenant eligibility, ownership, and platform-integration configuration.
    Redirect, broker-registration, signing, and bundle-identity constraints are integration
    concerns, not a selected file schema. The Visual Studio compatibility candidate is
-   Public Cloud only; its concrete candidate is defined by the Windows design and remains
-   unavailable until the external Profile gate passes.
+   Public Cloud only; its concrete candidate is defined by the Windows design and is not
+   activated, provided, distributed or supported until the external Profile gate passes.
 5. Resource/scopes, strict email, and interaction permission belong to each request.
    Profiles do not own resource presets, scope catalogs, acquisition order, deadline
    defaults, or cache modes. Effective tenant resolution follows
@@ -157,10 +157,12 @@ repository URLs, Git discovery, organization lookup, or a resource catalog to im
 this mapping. A `common` request accepts provider tenant resolution; a caller needing a
 particular resource tenant must supply its exact GUID.
 
-The architecture resolves how tenant intent and provider routing coexist. The existing
-experiment validates only the declared legacy configuration, not all rows above. The
+The architecture resolves how tenant intent and provider routing coexist. Real-host
+evidence, from the [probe](../research/experiments/windows-msal-account-metadata.md) and the
+[real-host results](../research/experiments/real-host-validation.md#results), covers
+only the declared legacy configuration with `common`, not all rows above. The
 [validation strategy](../validation/strategy.md#policy-tests) carries the remaining
-mapping and exact-tenant scenarios before an implementation or support claim is accepted.
+mapping and exact-tenant scenarios before a support claim is accepted.
 
 ### External Dependency Boundary
 
