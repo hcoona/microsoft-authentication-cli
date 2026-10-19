@@ -354,10 +354,12 @@ public sealed class MsalAdapterScenarios
     }
 
     [TestMethod]
-    public void MissingAccountAndInvalidTenantRemainMissing()
+    [DataRow("not-a-guid")]
+    [DataRow("00000000-0000-0000-0000-000000000000")]
+    public void MissingAccountAndInvalidTenantRemainMissing(string tenantId)
     {
         var result = new AuthenticationResult("synthetic-access", false, PrivateMarker, Now.AddHours(1), Now.AddHours(1),
-            "not-a-guid", null, PrivateMarker, [Scope], Guid.Empty, tokenType: "Bearer");
+            tenantId, null, PrivateMarker, [Scope], Guid.Empty, tokenType: "Bearer");
         var candidate = MsalBoundary.Project(result);
         Assert.IsNull(candidate.Email);
         Assert.IsNull(candidate.Tenant);

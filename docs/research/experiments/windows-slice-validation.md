@@ -57,8 +57,13 @@ interactive call followed it.
 selected-account success and a fresh-process silent reuse (scenarios R1/R6 and R7/R8).
 Actual WSL calls through ordinary interop then established complete result transport,
 silent reuse and an initially closed lifetime pipe returning `Cancelled/None` with
-exit 1 and no token. The baseline's selected-role observations record the dates, scopes
-and candidates.
+exit 1 and no token. These ran on or before 2026-10-09 on a selected candidate built
+before `2d79f3a`. The native pairs are recorded in the
+[Issue #108](https://github.com/hcoona/microsoft-authentication-cli/issues/108) body
+revision of 2026-10-09T18:24:55Z, kept in its edit history; the WSL calls are recorded
+in the [PR #420](https://github.com/hcoona/microsoft-authentication-cli/pull/420) and
+[PR #421](https://github.com/hcoona/microsoft-authentication-cli/pull/421) completion
+comments. No committed record names their exact source or executable.
 
 **Limits:** A silent route, no-interaction permission, telemetry or process exit alone
 does not prove that no UI appeared. Reuse is fresh-process reuse of existing state, not a

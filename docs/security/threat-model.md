@@ -185,7 +185,7 @@ material, and none of the account or host identifiers that
 excludes. The opt-in token-shape observation under
 [`V2-REQ-038`](../product/requirements/result-and-process-protocol.md#v2-req-038-local-token-shape-validation-observation)
 runs only after the complete result is written, never after a failed write, and emits
-fixed categories only. Network telemetry
+fixed categories plus the provider-reported expiration and remaining lifetime only. Network telemetry
 is not selected. The externally owned Visual Studio registration remains an explicit
 dependency limit under the
 [external Client Profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate).
@@ -340,7 +340,7 @@ not on `563c262`. The research records own each observation and its binding:
 
 | Observation | Build |
 | --- | --- |
-| Native personal R1/R6 and work R7/R8 acquisition with fresh-process reuse; WSL success and reuse; initially closed lifetime pipe | Selected candidate built before `2d79f3a` (runs on or before 2026-10-09, recorded in the [PR #420](https://github.com/hcoona/microsoft-authentication-cli/pull/420) and [PR #421](https://github.com/hcoona/microsoft-authentication-cli/pull/421) completion comments); no committed record names its exact source or executable, so these observations are supplementary only |
+| Native personal R1/R6 and work R7/R8 acquisition with fresh-process reuse; WSL success and reuse; initially closed lifetime pipe | Selected candidate built before `2d79f3a` (runs on or before 2026-10-09; the native pairs are recorded in the [Issue #108](https://github.com/hcoona/microsoft-authentication-cli/issues/108) body revision of 2026-10-09T18:24:55Z in its edit history, and the WSL calls in the [PR #420](https://github.com/hcoona/microsoft-authentication-cli/pull/420) and [PR #421](https://github.com/hcoona/microsoft-authentication-cli/pull/421) completion comments); no committed record names its exact source or executable, so these observations are supplementary only |
 | Typed WSL timeout; timed lifetime-pipe EOF; caller death without a lifetime pipe | Corrected candidate from source `2d79f3a` (Native AOT `f6a04588…`); caller death ran on the unchanged candidate at `cef5e13`, whose `src` equals `2d79f3a` |
 | EOF during actual WAM; human WAM close | Source `af05460` (Native AOT `4a393afd…`) |
 | Hidden-parent WAM cancellation; locked-state no-UI rejection | Tree identical to `68c5175` (Native AOT `b9ecea4f…`) |
@@ -359,10 +359,13 @@ status kept once the result is written, no completion diagnostics after a failed
 postdate S1-1. HT-1 executes the Windows scenarios on that source at `9f426ed`,
 including the `WindowsHostTiming` watchdog, closure and undrained-pipe bounds that no CI
 job runs. Earlier success transport is
-supplementary: token containment rests on the executed Core and Windows scenarios. On the
-current source, the [real-host results](../research/experiments/real-host-validation.md#results)
-add deadline and lifetime-pipe EOF observations under the hidden parent for the roles
-and callers they list.
+supplementary: token containment rests on the executed Core and Windows scenarios. The
+[real-host results](../research/experiments/real-host-validation.md#results) add deadline
+and lifetime-pipe EOF observations under the hidden parent on subject `8d9be27`, for the
+roles and callers they list. `RequestLifetime.cs` and `WindowsLifetimePipe.cs` are
+unchanged from `8d9be27` through the current source. The `WindowsProcess.cs` changes
+after `3ae2554`, the last real-host subject, rest on HT-1 as above; no real-host call
+ran on source after `3ae2554`.
 
 `Mitigated` means the named control is implemented and exercised by that evidence
 within the declared threat model; it is not a support claim, release readiness or proof
@@ -375,7 +378,7 @@ OAuth handling) remain trusted rather than verified.
 | Process spoofing (IDs 1, 18, 32, 46, 65, 73) | `NeedsInvestigation`: operation binding is executed, but executable identity depends on the open distribution-identity release gate under decision 0005. |
 | Broker and interaction-surface spoofing (IDs 15, 19, 29) | `Mitigated`: `MsalCompositionScenarios` classify loader and initialization failures with a substitute loader delegate and session factory; `NativeObservationScenarios.RestrictedDllSearchExcludesTheWorkingDirectory` runs the real `WindowsLoader.RestrictSearch` in a child process, and `MsalConstructionScenarios.UnavailableBrokerStopsSessionCreationWithItsFixedCategory` runs the real session factory with only the `IsBrokerAvailable` answer replaced; `MsalAdapterScenarios.RealNonBrokerInteractiveCallReachesTheRejectingWebUi` drives a real non-broker MSAL interactive call against a synthetic transport into `RejectingWebUi`; the last three were added after S1-1 and run in `windows-scenarios`; the hidden parent is a real Win32 window in `OwnedHostScenarios`. On the real host, the published Native AOT application imports only Windows DLLs, and every real call loaded the broker from the application directory with System32 imports and reported no `dll_search` or `broker_initialization` indication, which observes the native success path of both controls. Forced interaction is WAM-owned under the hidden parent with strict final validation; its provider-owned UI behavior is a design known limitation ([real-host results](../research/experiments/real-host-validation.md#results)). Deployment without development-machine dependencies remains a separate Native AOT release gate. |
 | Data-flow disclosure; token and diagnostic destinations (IDs 5, 12, 22, 36, 50, 69, 76, 82) | `Mitigated`: no credential input, no application token store, token only in a validated success, allowlisted diagnostics; executed in Core scenarios with synthetic markers and recorded real-host transport. |
-| Interrupted flows (IDs 7, 14, 17, 24, 31, 38, 45, 52, 58, 60, 62, 64, 71, 78, 84, 93) | `Mitigated`: original deadline, single terminal latch and no retry/fallback in Core scenarios, plus recorded closed-pipe, EOF-during-WAM, human-cancellation, caller-death and timeout observations ([real-host results](../research/experiments/real-host-validation.md#results)). ID 14, result delivery, now rests on the Windows `ProcessScenarios` executed in S1-1 and, for the current `WindowsProcess.cs`, in HT-1. A provider window left after non-human termination is a [known limitation](#known-limitation-provider-window-after-non-human-termination), not an unmitigated interruption. |
+| Interrupted flows (IDs 7, 14, 17, 24, 31, 38, 45, 52, 58, 60, 62, 64, 71, 78, 84, 93) | `Mitigated`: original deadline, single terminal latch and no retry/fallback in Core scenarios, plus recorded EOF-during-WAM, human-cancellation and timeout observations ([real-host results](../research/experiments/real-host-validation.md#results)) and the earlier initially closed lifetime pipe ([Windows Slice record](../research/experiments/windows-slice-validation.md#selected-account-scenarios)) and caller-death ([Windows Slice record](../research/experiments/windows-slice-validation.md#remaining-wsl-lifetime-and-action-cases)) observations, bound to the builds in the evidence-provenance table above. ID 14, result delivery, now rests on the Windows `ProcessScenarios` executed in S1-1 and, for the current `WindowsProcess.cs`, in HT-1. A provider window left after non-human termination is a [known limitation](#known-limitation-provider-window-after-non-human-termination), not an unmitigated interruption. |
 | Process crash/stop and Profile-read bounds (IDs 6, 23, 37, 51, 77, 92) | `Mitigated`: typed outcomes and Profile bounds are executed in Core, and the process watchdog, broken or undrained result pipe and Profile size limit are executed in the Windows S1-1 run. For the current `WindowsProcess.cs`, the watchdog and the broken and undrained result-pipe bounds are executed in HT-1 at `9f426ed`. |
 | Impersonation (IDs 8, 25, 39, 53) | `Mitigated`: no privileged helper exists. The impersonation and logon-kind classification is executed by `WindowsHostAdmissionScenarios` against synthetic `IWindowsHostObservations` (S1-1 and `windows-scenarios`). The native thread-identity read is executed in `windows-scenarios` by `NativeObservationScenarios.ThreadIdentityDistinguishesImpersonationOnTheCallingThread`, with and without `ImpersonateSelf`. The native logon-kind, session and desktop reads have only their success path (an ordinary interactive logon) observed, on the real host by every call that passed admission. |
 | Remote code execution (IDs 9, 26, 40, 54, 80, 95) | `Mitigated`: request and Profile input (IDs 9, 95) in Core; bounded provider error-body and broker-status parsing (IDs 26, 40, 54, 80) in the Windows S1-1 run. |

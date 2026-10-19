@@ -541,8 +541,13 @@ Map codes through an explicit bounded table using structured provider codes/stat
 never message substring parsing. Safe reason strings identify categories such as
 `invalid_configuration`, `tenant_conflict`, `consent_required`, `provider_transient`,
 `network_transient` or `service_transient`; otherwise the reason repeats the outcome
-name. They never contain arbitrary provider text. Provider-reported timeout or invalid
-request observations map to `internal_failure`. A failure to construct or initialize
+name. They never contain arbitrary provider text. Provider timeouts follow the
+[observation table](#adapter-observation-boundary): a retryable MSAL timeout, such as
+`request_timeout` for an STS request, is `temporarily_unavailable` with
+`provider_transient`; an HTTP cancellation with an inner `TimeoutException` while the
+original operation token remains active is `temporarily_unavailable` with
+`network_transient`. Any other provider-reported timeout, and a provider-reported
+invalid request, map to `internal_failure`. A failure to construct or initialize
 the provider passes through the same safe filter as any other provider observation:
 broker unavailability and the recognized broker failures in the
 [observation table](#adapter-observation-boundary) map to `mechanism_unavailable`, a
@@ -808,8 +813,9 @@ as trusted dependencies. For dynamic scopes, each requested scope must be among 
 granted scopes, compared ordinally; extra grants are allowed. The token is never parsed
 to fill the gap.
 
-Missing account email and invalid or missing tenant metadata remain missing in the
-adapter projection; requested values must not fill them. Keep the request-local
+Missing account email and invalid or missing tenant metadata, including an all-zero
+tenant GUID, remain missing in the adapter projection; requested values must not fill
+them. Validation independently rejects an all-zero actual tenant. Keep the request-local
 operation identifier separately from the observed correlation ID. The pinned
 [public result shape](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/blob/d5d7de6b103f0d9dd7bca9bf13cbb9f3da37bc9f/src/client/Microsoft.Identity.Client/AuthenticationResult.cs)
 provides the observed fields; projection does not establish persistence.

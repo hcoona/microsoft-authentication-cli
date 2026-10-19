@@ -446,7 +446,7 @@ prove resource equivalence, tenant precedence, provider behavior, or lifecycle c
 | Git followed by Artifacts acquisition | Changing the downstream consumer alone does not force another sign-in. Different account/client/tenant/resource contexts are not substituted. | Two-process broker integration; actual Git and feed/package operations remain downstream evidence. |
 | No match, duplicate match, and alias-only visibility | No match follows permission policy; duplicate exact matches stop as ambiguity; an alias or missing email does not pass identity validation. | Scenario tests of calls and outcomes; unit tests only for the pure matching rule. |
 | Tenant and scope normalization | Fixed or explicit tenant wins over legacy MSA routing. `common` uses the selected integration's mapping. Mixed resources/default-plus-dynamic scopes fail admission; dynamic coverage uses provider metadata. | Table-driven core tests plus scenario tests that preserve constraints through both calls. |
-| Wrong/missing provider metadata | No token reaches stdout after wrong email, exact-tenant mismatch, missing actual tenant, insufficient scope coverage, or a mismatched operation/client context. | Candidate-validation scenarios and core validation tests; real result metadata coverage before activation. |
+| Wrong/missing provider metadata | No token reaches stdout after wrong email, exact-tenant mismatch, missing or all-zero actual tenant, insufficient scope coverage, or a mismatched operation/client context. | Candidate-validation scenarios and core validation tests; real result metadata coverage before activation. |
 | Noninteractive request in locked or expired state | No owned UI, broker interaction, browser, device-code instruction, or unlock prompt is initiated. Return the applicable interaction/unavailability outcome. | Scenario call assertions and attended real-platform no-UI observation; do not infer this solely from API names. |
 | Broker unavailable or disappears between checks | Return `mechanism_unavailable`; rejecting custom web UI prevents automatic browser fallback. | Provider/host scenario, then bounded Windows failure test before support. |
 | Local Windows host admission rejects or cannot observe required state | Return the existing unavailable outcome before real provider initialization, with no account discovery or owned UI. Cover rejected OS/client/architecture, thread impersonation or query failure, service/batch/new-credentials logon, station-user mismatch, disconnected/unobservable session and non-input desktop; retain a valid ordinary-user path. | Scenario fixtures at the local-observation/provider boundary; inspect actual native ABI and bounded resource ownership. Real-host observation of own-logon metadata access follows the experiment policy. |
@@ -545,8 +545,14 @@ Windows host-timing evidence: they establish timing only on the host where they 
 CI job runs them, and the `windows-latest` job makes no host-timing claim. A passing
 Windows CI run establishes the synthetic Windows behavior on that runner image only; it
 is not real-platform, broker or published-executable evidence.
-The scenario jobs run the framework-dependent outputs on the runtime bundled with the
-pinned SDK, with roll-forward disabled.
+Every Windows scenario run, in CI or on a host, uses a new empty temporary directory as
+`TEMP` and `TMP`: the scenarios keep their files and junctions there as
+[development validation](../research/experiment-safety.md#development-validation)
+permits, and the run's owner disposes of it.
+The scenario test projects are framework-dependent and run on the runtime bundled with
+the pinned SDK, with roll-forward disabled. The Windows process scenarios launch the CLI
+from its self-contained `win-x64` build output through that SDK's `dotnet` host; these
+records make no claim about which runtime copy that launch loads.
 
 A failed Windows host-timing assertion is not yet a product defect. Rerun the failed
 scenario once on the same host and record the host load (processor and memory

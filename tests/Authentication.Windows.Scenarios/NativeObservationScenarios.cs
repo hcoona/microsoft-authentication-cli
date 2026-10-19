@@ -6,10 +6,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Authentication.Windows.Scenarios;
 
 // Deterministic checks of the real native observations, loader restriction, Profile
-// reader and console cancellation on any Windows host. They read only this process's
-// or thread's own state, use files and one junction under a fresh TEMP root, or run
-// one owned child process with its own hidden console. No account, broker, provider
-// display or network is used.
+// reader and console cancellation on any Windows host. They read this process's or
+// thread's own state, temporarily impersonate on a dedicated thread and revert it, keep
+// files and one junction under the run's fresh TEMP root, or run one owned child process
+// with its own hidden console. No account, broker, provider display or network is used.
 [TestClass]
 [DoNotParallelize]
 public sealed partial class NativeObservationScenarios

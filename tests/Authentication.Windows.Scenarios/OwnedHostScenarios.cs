@@ -5,8 +5,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Authentication.Windows.Scenarios;
 
-// This suite requires its own accepted Windows HWND protocol and exact source
-// admission. No test loads WAM, enumerates accounts, or starts a child process.
+// Development validation (docs/research/experiment-safety.md): hidden windows owned by
+// the test process. No test loads WAM, enumerates accounts, or starts a child process.
 [TestClass]
 [DoNotParallelize]
 public sealed class OwnedHostScenarios

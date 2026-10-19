@@ -4,9 +4,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Authentication.Windows.Scenarios;
 
-// Exact child selection and effects require their own accepted protocol. These
-// scenarios exercise the production process with synthetic providers and real
-// owned windows; no account, broker, token-cache or external UI operation occurs.
+// Development validation (docs/research/experiment-safety.md). These scenarios exercise
+// the production process with synthetic providers and real owned windows; no account,
+// broker, token-cache or external UI operation occurs.
 [TestClass]
 [DoNotParallelize]
 public sealed class OwnedProcessScenarios
