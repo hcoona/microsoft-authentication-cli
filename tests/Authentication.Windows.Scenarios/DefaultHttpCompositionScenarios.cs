@@ -83,10 +83,10 @@ public sealed class DefaultHttpCompositionScenarios
     private static void RequireCommonDrain(ProcessFixture child)
     {
         Assert.IsFalse(child.Forced, "The product must finish before fixture enforcement.");
-        RequireMarkers(child, "provider-created", "http-owner-created", "loader-entered", "session-created",
+        RequireMarkers(child, "host-created", "http-owner-created", "loader-entered", "session-created",
             "ui-thread-started", "hidden-parent-created", "provider-ready", "http-send-entered",
             "host-closing", "native-cleanup-completed", "before-commit", "after-commit", "drain-boundary");
-        AssertOrdered(child, "entered", "provider-created", "http-owner-created", "loader-entered",
+        AssertOrdered(child, "entered", "host-created", "http-owner-created", "loader-entered",
             "session-created", "ui-thread-started", "hidden-parent-created", "provider-ready", "http-send-entered");
         AssertOrdered(child, "host-closing", "native-cleanup-completed", "drain-boundary");
         AssertOrdered(child, "before-commit", "after-commit", "drain-boundary");
