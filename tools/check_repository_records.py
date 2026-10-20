@@ -10,13 +10,12 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
-import math
 import json
 import os
 import re
 import subprocess
 import sys
+import tempfile
 from collections import Counter
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -64,159 +63,6 @@ HK_EXECUTION_PLANS = {
     "local-fast": ("run", "pre-commit"),
     "ci": ("check",),
 }
-PUBLIC_BUILD_SOURCE_BASELINE_PATH = (
-    "docs/research/public-build-source-baseline.json"
-)
-PUBLIC_BUILD_LASSO_MANIFEST_PATH = (
-    "docs/research/public-build-lasso-reference-manifest.json"
-)
-PUBLIC_BUILD_BUNDLE_PATH = (
-    "docs/research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json"
-)
-# Frozen evidence: a reviewed correction must change this constant visibly.
-PUBLIC_BUILD_BUNDLE_SHA256 = (
-    "065fd6a315dfbd8c329609489062bd6242ae282d464ac0ca73311fc111fa84e1"
-)
-EVIDENCE_ROUTED_PATTERN = "docs/research/experiments/assets/*.project.assets.json"
-
-
-class ExtractionError(ValueError):
-    pass
-
-
-def unique_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
-    value: dict[str, Any] = {}
-    for key, item in pairs:
-        if key in value:
-            raise ExtractionError(f"JSON object contains duplicate key {key!r}")
-        value[key] = item
-    return value
-
-
-def reject_non_json_constant(value: str) -> None:
-    raise ExtractionError(f"JSON contains non-standard numeric constant {value}")
-
-
-def parse_finite_json_float(value: str) -> float:
-    parsed = float(value)
-    if not math.isfinite(parsed):
-        raise ExtractionError(
-            f"JSON number is outside the supported finite range: {value}"
-        )
-    return parsed
-
-
-def parse_json_object_bytes(content: bytes, label: str) -> dict[str, Any]:
-    try:
-        value = json.loads(
-            content.decode("utf-8-sig"),
-            object_pairs_hook=unique_json_object,
-            parse_constant=reject_non_json_constant,
-            parse_float=parse_finite_json_float,
-        )
-    except (UnicodeDecodeError, json.JSONDecodeError) as error:
-        raise ExtractionError(f"cannot read JSON from {label}: {error}") from error
-    if not isinstance(value, dict):
-        raise ExtractionError(f"{label} must contain a JSON object")
-    return value
-
-
-def canonical_json_bytes(value: Any) -> bytes:
-    return json.dumps(
-        value,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-        allow_nan=False,
-    ).encode("utf-8")
-
-
-def canonical_sha256(value: Any) -> str:
-    return hashlib.sha256(canonical_json_bytes(value)).hexdigest()
-
-
-def source_manifest_payload(
-    stage_applicability: dict[str, Any],
-    targets: list[dict[str, Any]],
-    package_targets: list[dict[str, Any]],
-    declarations: list[dict[str, Any]],
-) -> dict[str, Any]:
-    return {
-        "stage_applicability": {
-            stage: {
-                "applicable": value["applicable"],
-                "source_references": sorted(value["source_references"]),
-            }
-            for stage, value in sorted(stage_applicability.items())
-        },
-        "attempted_targets": sorted(
-            (
-                {
-                    "id": target["id"],
-                    "project_path": target["project_path"],
-                    "target_framework": target["target_framework"],
-                    "sdk": target["sdk"],
-                    "project_references": sorted(target["project_references"]),
-                    "source_references": sorted(target["source_references"]),
-                }
-                for target in targets
-            ),
-            key=lambda target: target["id"],
-        ),
-        "package_targets": sorted(
-            (
-                {
-                    "target_id": package_target["target_id"],
-                    "package_id": package_target["package_id"],
-                    "source_references": sorted(
-                        package_target["source_references"]
-                    ),
-                }
-                for package_target in package_targets
-            ),
-            key=lambda package_target: package_target["target_id"],
-        ),
-        "source_declared_direct": sorted(
-            (
-                {
-                    "declaration_id": declaration["declaration_id"],
-                    "id": declaration["id"],
-                    "kind": declaration["kind"],
-                    "version_constraint": declaration["version_constraint"],
-                    "path_property": declaration.get("path_property"),
-                    "assembly_relative_path": declaration.get(
-                        "assembly_relative_path"
-                    ),
-                    "declaration_location": declaration["declaration_location"],
-                    "auxiliary_locations": sorted(
-                        declaration["auxiliary_locations"]
-                    ),
-                    "targets": sorted(declaration["targets"]),
-                    "condition": declaration["condition"],
-                }
-                for declaration in declarations
-            ),
-            key=lambda declaration: declaration["declaration_location"],
-        ),
-    }
-
-
-def lasso_reference_manifest_payload(
-    references: list[dict[str, Any]],
-) -> list[dict[str, Any]]:
-    return sorted(
-        (
-            {
-                "id": reference["id"],
-                "path": reference["path"],
-                "line": reference["line"],
-                "symbol": reference["symbol"],
-                "kind": reference["kind"],
-            }
-            for reference in references
-        ),
-        key=lambda reference: reference["id"],
-    )
 
 
 def load_yaml_path(path: Path) -> dict[str, Any]:
@@ -229,17 +75,6 @@ def load_yaml_path(path: Path) -> dict[str, Any]:
 
 def load_yaml(relative_path: str) -> dict[str, Any]:
     return load_yaml_path(ROOT / relative_path)
-
-
-def load_strict_json_path(path: Path) -> dict[str, Any]:
-    try:
-        return parse_json_object_bytes(path.read_bytes(), str(path))
-    except OSError as error:
-        raise ExtractionError(f"cannot read JSON from {path}: {error}") from error
-
-
-def load_strict_json(relative_path: str) -> dict[str, Any]:
-    return load_strict_json_path(ROOT / relative_path)
 
 
 def duplicates(values: list[str]) -> list[str]:
@@ -820,34 +655,6 @@ def check_control_references(catalog: dict[str, Any]) -> list[str]:
     return errors
 
 
-def json_string_values(value: Any) -> list[str]:
-    if isinstance(value, str):
-        return [value]
-    if isinstance(value, dict):
-        return [item for child in value.values() for item in json_string_values(child)]
-    if isinstance(value, list):
-        return [item for child in value for item in json_string_values(child)]
-    return []
-
-
-def evidence_routed_records(linked_records: set[str]) -> set[str]:
-    """Return evidence-only asset files that a portal-linked JSON record names."""
-    routed: set[str] = set()
-    for relative_path in linked_records:
-        if not relative_path.endswith(".json"):
-            continue
-        try:
-            record = load_strict_json(relative_path)
-        except ExtractionError:
-            continue
-        routed.update(
-            value
-            for value in json_string_values(record)
-            if matches(value, EVIDENCE_ROUTED_PATTERN) and (ROOT / value).is_file()
-        )
-    return routed
-
-
 def check_documentation_portal(
     current_family_paths: dict[str, set[Path]],
 ) -> list[str]:
@@ -867,7 +674,6 @@ def check_documentation_portal(
         if resolved.is_file():
             linked_records.add(relative_path.as_posix())
 
-    linked_records |= evidence_routed_records(linked_records)
     retained_records = {
         path.relative_to(ROOT_RESOLVED).as_posix()
         for paths in current_family_paths.values()
@@ -939,292 +745,6 @@ def check_catalog_paths() -> list[str]:
     return errors
 
 
-def validate_public_build_source_baseline_value(
-    baseline: dict[str, Any],
-    relative_path: str,
-) -> list[str]:
-    errors: list[str] = []
-    source_commit_prefix = f"{baseline['source']['commit']}:"
-    source_references = [
-        reference
-        for stage in baseline["stage_applicability"].values()
-        for reference in stage["source_references"]
-    ]
-    targets = baseline["attempted_targets"]
-    source_references.extend(
-        reference
-        for target in targets
-        for reference in target["source_references"]
-    )
-    target_ids = [target["id"] for target in targets]
-    target_paths = [target["project_path"] for target in targets]
-    for identifier in duplicates(target_ids):
-        errors.append(f"{relative_path}: duplicate attempted target id: {identifier}")
-    for project_path in duplicates(target_paths):
-        errors.append(f"{relative_path}: duplicate attempted project path: {project_path}")
-    target_id_set = set(target_ids)
-    for target in targets:
-        unknown_references = sorted(
-            set(target["project_references"]) - target_id_set
-        )
-        if unknown_references:
-            errors.append(
-                f"{relative_path}: target {target['id']} references projects outside "
-                f"the fixed solution baseline: {unknown_references}"
-            )
-
-    package_targets = baseline["package_targets"]
-    source_references.extend(
-        reference
-        for package_target in package_targets
-        for reference in package_target["source_references"]
-    )
-    package_target_ids = [
-        package_target["target_id"] for package_target in package_targets
-    ]
-    for target_id in duplicates(package_target_ids):
-        errors.append(f"{relative_path}: duplicate package target id: {target_id}")
-    unknown_package_targets = sorted(set(package_target_ids) - target_id_set)
-    if unknown_package_targets:
-        errors.append(
-            f"{relative_path}: package targets reference unknown attempted targets "
-            f"{unknown_package_targets}"
-        )
-    package_ids = [
-        package_target["package_id"].casefold()
-        for package_target in package_targets
-    ]
-    for package_id in duplicates(package_ids):
-        errors.append(f"{relative_path}: duplicate package identity: {package_id}")
-
-    declarations = baseline["source_declared_direct"]
-    source_references.extend(
-        reference
-        for declaration in declarations
-        for reference in [
-            declaration["declaration_location"],
-            *declaration["auxiliary_locations"],
-        ]
-    )
-    for reference in source_references:
-        if not reference.startswith(source_commit_prefix):
-            errors.append(
-                f"{relative_path}: source reference does not use the canonical "
-                f"source commit: {reference}"
-            )
-    declaration_ids = [
-        declaration["declaration_id"] for declaration in declarations
-    ]
-    declaration_locations = [
-        declaration["declaration_location"] for declaration in declarations
-    ]
-    for identifier in duplicates(declaration_ids):
-        errors.append(f"{relative_path}: duplicate dependency declaration id: {identifier}")
-    for location in duplicates(declaration_locations):
-        errors.append(
-            f"{relative_path}: duplicate dependency declaration location: {location}"
-        )
-    for declaration in declarations:
-        unknown_targets = sorted(set(declaration["targets"]) - target_id_set)
-        if unknown_targets:
-            errors.append(
-                f"{relative_path}: declaration {declaration['declaration_id']} "
-                f"references unknown targets {unknown_targets}"
-            )
-        if declaration["kind"] == "package":
-            unexpected_assembly_fields = sorted(
-                field
-                for field in ("path_property", "assembly_relative_path")
-                if field in declaration
-            )
-            if unexpected_assembly_fields:
-                errors.append(
-                    f"{relative_path}: package declaration "
-                    f"{declaration['declaration_id']} contains package-backed "
-                    f"assembly fields {unexpected_assembly_fields}"
-                )
-        else:
-            assembly_relative_path = PurePosixPath(
-                declaration["assembly_relative_path"]
-            )
-            if (
-                assembly_relative_path.is_absolute()
-                or ".." in assembly_relative_path.parts
-                or assembly_relative_path.as_posix()
-                != declaration["assembly_relative_path"]
-            ):
-                errors.append(
-                    f"{relative_path}: package-backed assembly declaration "
-                    f"{declaration['declaration_id']} must use a normalized relative "
-                    "assembly path"
-                )
-
-    actual_source_manifest_sha256 = canonical_sha256(
-        source_manifest_payload(
-            baseline["stage_applicability"],
-            targets,
-            package_targets,
-            declarations,
-        )
-    )
-    if baseline["source_manifest_sha256"] != actual_source_manifest_sha256:
-        errors.append(
-            f"{relative_path}: source manifest SHA-256 does not match its canonical "
-            "stage applicability, targets, and declarations"
-        )
-    lasso_declarations = [
-        declaration
-        for declaration in declarations
-        if declaration["kind"] == "package"
-        and declaration["id"].casefold() == "microsoft.office.lasso"
-    ]
-    if len(lasso_declarations) != 1:
-        errors.append(
-            f"{relative_path}: source baseline must contain exactly one "
-            "Microsoft.Office.Lasso package declaration"
-        )
-    return errors
-
-
-def validate_public_build_source_baseline(path: Path) -> list[str]:
-    try:
-        baseline = load_strict_json_path(path)
-    except ExtractionError as error:
-        return [str(error)]
-    return validate_public_build_source_baseline_value(
-        baseline,
-        path.relative_to(ROOT).as_posix(),
-    )
-
-
-def validate_public_build_lasso_manifest_value(
-    manifest: dict[str, Any],
-    relative_path: str,
-    expected_source: dict[str, Any] | None = None,
-) -> list[str]:
-    errors: list[str] = []
-    if expected_source is not None and manifest["source"] != expected_source:
-        errors.append(
-            f"{relative_path}: Lasso manifest source differs from the canonical "
-            "public-build source baseline"
-        )
-    references = manifest["references"]
-    reference_ids = [reference["id"] for reference in references]
-    for identifier in duplicates(reference_ids):
-        errors.append(f"{relative_path}: duplicate Lasso reference id: {identifier}")
-    expected_ids = [
-        f"lasso-ref-{index:03d}" for index in range(1, len(references) + 1)
-    ]
-    if set(reference_ids) != set(expected_ids):
-        errors.append(
-            f"{relative_path}: Lasso reference IDs must form a contiguous set"
-        )
-    reference_locations = [
-        (
-            reference["path"],
-            reference["line"],
-            reference["kind"],
-            reference["symbol"],
-        )
-        for reference in references
-    ]
-    for reference in duplicates(
-        ["\0".join(map(str, location)) for location in reference_locations]
-    ):
-        errors.append(
-            f"{relative_path}: duplicate Lasso source-reference tuple: "
-            f"{reference.replace(chr(0), ':')}"
-        )
-    if reference_locations != sorted(reference_locations):
-        errors.append(
-            f"{relative_path}: Lasso references must be sorted by path, line, kind, "
-            "and symbol"
-        )
-    actual_manifest_sha256 = canonical_sha256(
-        lasso_reference_manifest_payload(references)
-    )
-    if manifest["lasso_reference_manifest_sha256"] != actual_manifest_sha256:
-        errors.append(
-            f"{relative_path}: Lasso manifest SHA-256 does not match its canonical "
-            "source references"
-        )
-    return errors
-
-
-def validate_public_build_lasso_manifest(path: Path) -> list[str]:
-    try:
-        baseline = load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH)
-        manifest = load_strict_json_path(path)
-    except ExtractionError as error:
-        return [str(error)]
-    return validate_public_build_lasso_manifest_value(
-        manifest,
-        path.relative_to(ROOT).as_posix(),
-        baseline["source"],
-    )
-def validate_public_build_frozen_evidence(path: Path) -> list[str]:
-    """Check what still protects the frozen bundle without replaying its runner.
-
-    The byte digest pin fixes the bundle's own content, so checks that are a pure
-    function of those bytes (its ID and embedded receipt digest) are redundant. The
-    remaining checks bind it to inputs that can still change: its path, the source
-    authorities, and the retained asset files.
-    """
-    relative_path = path.relative_to(ROOT).as_posix()
-    try:
-        bundle = load_strict_json_path(path)
-        baseline = load_strict_json(PUBLIC_BUILD_SOURCE_BASELINE_PATH)
-        lasso_manifest = load_strict_json(PUBLIC_BUILD_LASSO_MANIFEST_PATH)
-    except ExtractionError as error:
-        return [str(error)]
-    errors: list[str] = []
-    if hashlib.sha256(path.read_bytes()).hexdigest() != PUBLIC_BUILD_BUNDLE_SHA256:
-        errors.append(
-            f"{relative_path}: frozen bundle bytes differ from the reviewed digest"
-        )
-    if relative_path != PUBLIC_BUILD_BUNDLE_PATH:
-        errors.append(f"{relative_path}: frozen bundle path differs from the reviewed path")
-    if errors:
-        return errors
-    authorities = bundle["authorities"]
-    if (
-        authorities["source_baseline"]["path"] != PUBLIC_BUILD_SOURCE_BASELINE_PATH
-        or authorities["source_baseline"]["payload_sha256"]
-        != baseline["source_manifest_sha256"]
-    ):
-        errors.append(f"{relative_path}: source authority differs from the baseline")
-    if (
-        authorities["lasso_manifest"]["path"] != PUBLIC_BUILD_LASSO_MANIFEST_PATH
-        or authorities["lasso_manifest"]["payload_sha256"]
-        != lasso_manifest["lasso_reference_manifest_sha256"]
-    ):
-        errors.append(f"{relative_path}: Lasso authority differs from the manifest")
-    retained_assets = sorted(
-        candidate.relative_to(ROOT).as_posix()
-        for candidate in (ROOT / "docs/research/experiments/assets").glob("*")
-    )
-    referenced_assets: list[str] = []
-    for mode in bundle["runtime_evidence"]["dependency_evidence"]["modes"]:
-        for target in mode["targets"]:
-            asset = target.get("asset")
-            if not isinstance(asset, dict):
-                continue
-            referenced_assets.append(asset["path"])
-            asset_path = resolve_repository_file(
-                asset["path"], f"{relative_path} retained asset", errors
-            )
-            if asset_path is None:
-                continue
-            if hashlib.sha256(asset_path.read_bytes()).hexdigest() != asset["sha256"]:
-                errors.append(f"{relative_path}: retained asset hash differs: {asset['path']}")
-    if sorted(referenced_assets) != retained_assets:
-        errors.append(
-            f"{relative_path}: retained assets must be exactly the assets the bundle "
-            "references"
-        )
-    return errors
-
-
 # Run check-jsonschema from this script's locked environment rather than a separately
 # installed tool, so its version and dependencies come from the script's uv lock.
 CHECK_JSONSCHEMA = (sys.executable, "-m", "check_jsonschema")
@@ -1255,6 +775,42 @@ def run_metaschema_validation(instances: list[Path]) -> int:
         check=False,
     )
     return result.returncode
+
+
+def validate_contract_examples(schemas: list[Path]) -> int:
+    """Validate each embedded example of a public contract schema against that schema."""
+    with tempfile.TemporaryDirectory(prefix="contract-examples-") as directory:
+        for schema in schemas:
+            try:
+                examples = json.loads(schema.read_text(encoding="utf-8")).get("examples", [])
+            except json.JSONDecodeError as error:
+                print(f"ERROR: cannot read {schema}: {error}", file=sys.stderr)
+                return 1
+            if not isinstance(examples, list):
+                print(f"ERROR: {schema} examples must be a list", file=sys.stderr)
+                return 1
+            instances: list[Path] = []
+            for index, example in enumerate(examples):
+                instance = Path(directory) / f"{schema.stem}-example-{index}.json"
+                instance.write_text(json.dumps(example), encoding="utf-8")
+                instances.append(instance)
+            if not instances:
+                continue
+            # check-jsonschema enables format checking by default.
+            result = subprocess.run(
+                [
+                    *CHECK_JSONSCHEMA,
+                    "--schemafile",
+                    schema.relative_to(ROOT_RESOLVED).as_posix(),
+                    *(str(instance) for instance in instances),
+                ],
+                cwd=ROOT,
+                check=False,
+            )
+            if result.returncode != 0:
+                print(f"ERROR: an embedded example does not validate: {schema}", file=sys.stderr)
+                return 1
+    return 0
 
 
 def validate_structured_records() -> int:
@@ -1299,18 +855,10 @@ def validate_structured_records() -> int:
         if family["format"] == "json-schema":
             if run_metaschema_validation(instances) != 0:
                 return 1
+            if family["path"].startswith("contracts/") and validate_contract_examples(instances) != 0:
+                return 1
         elif run_schema_validation(family["schema"], instances) != 0:
             return 1
-
-        if family["id"] == "public-build-experiment-bundles":
-            for instance in instances:
-                errors.extend(validate_public_build_frozen_evidence(instance))
-        elif family["id"] == "public-build-source-baseline":
-            for instance in instances:
-                errors.extend(validate_public_build_source_baseline(instance))
-        elif family["id"] == "public-build-lasso-reference-manifest":
-            for instance in instances:
-                errors.extend(validate_public_build_lasso_manifest(instance))
 
         if family["state"] == "scheduled":
             errors.append(

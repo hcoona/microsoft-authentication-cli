@@ -94,7 +94,18 @@ hooks {
   }
   ["fix"] {
     fix = true
-    steps = fastSteps
+    // Generated dependency locks are inspected but never rewritten (record-system Formats).
+    steps = (fastSteps) {
+      ["trailing-whitespace"] {
+        exclude = List(
+          "**/packages.lock.json",
+          "mise.lock",
+          "apm.lock.yaml",
+          "tools/check_repository_records.py.lock",
+          "tools/learn-cli/package-lock.json",
+        )
+      }
+    }
   }
   ["check"] {
     steps = fullSteps

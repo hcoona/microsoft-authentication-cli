@@ -2,7 +2,7 @@ using System.Net.Http.Headers;
 
 namespace Authentication.Windows;
 
-public sealed class ManagedUserAgentHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
+internal sealed class ManagedUserAgentHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
 {
     private const string ProductName = "hcoona-microsoft-authentication-cli";
 

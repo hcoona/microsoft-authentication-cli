@@ -167,6 +167,8 @@ internal sealed partial class OwnedRequestHost : IRequestHost
         if (terminal) return;
         Ending();
         terminal = true;
+        // Test-only hook (null in production). It runs under gate, so it must not wait
+        // for another thread that takes gate.
         checkpoint?.Invoke(OwnedHostCheckpoint.Closing, parent);
         ready.TrySetResult(0);
         // Detachment and posting share this lock, so a recycled HWND cannot receive

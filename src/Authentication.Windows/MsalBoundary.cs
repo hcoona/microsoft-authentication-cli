@@ -6,7 +6,7 @@ using Microsoft.Identity.Client;
 namespace Authentication.Windows;
 
 // Interpret public provider observations without exporting provider diagnostics.
-public static class MsalBoundary
+internal static class MsalBoundary
 {
     internal static ProviderFailureException MapFailure(Exception exception, CancellationToken cancellationToken) =>
         MapFailure(exception, cancellationToken, null);
@@ -94,7 +94,7 @@ public static class MsalBoundary
     // (retryable-failure cache fallback). That a real WAM/runtime-broker success
     // carries the sent ID is unverified until an authorized experiment; if it did
     // not, every success would fail closed as identity_validation_failed.
-    public static TokenCandidate Project(AuthenticationResult result) =>
+    internal static TokenCandidate Project(AuthenticationResult result) =>
         new(result.AccessToken, result.Account?.Username,
             // An all-zero tenant identifies no tenant; it remains missing like any other
             // invalid tenant metadata.

@@ -190,7 +190,7 @@ public sealed class MsalCompositionScenarios
             MsalSessionFactory.BuildInteractiveRequest(application, operation, null, scene.Original.Token));
     }
 
-    private static object? BuilderMember(object instance, string name)
+    internal static object? BuilderMember(object instance, string name)
     {
         for (var type = instance.GetType(); type is not null; type = type.BaseType)
         {

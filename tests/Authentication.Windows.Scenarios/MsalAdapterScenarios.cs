@@ -7,8 +7,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Authentication.Windows.Scenarios;
 
-// Public synthetic MSAL values cross our adapter seam and the real coordinator.
-// No application, account store, broker, window, process, or network is constructed.
+// Public synthetic MSAL values cross our adapter seam and the real coordinator. No
+// account store, broker, window, process, or network is used; only the real non-broker
+// interactive scenario builds an MSAL application, against a synthetic transport.
 [TestClass]
 public sealed class MsalAdapterScenarios
 {
@@ -386,6 +387,10 @@ public sealed class MsalAdapterScenarios
         var operation = new MsalInteractiveOperation([Scope], null, forced ? null : Email,
             Tenant.ToString("D"), null, (nint)42, Guid.NewGuid(), forced);
         var builder = MsalSessionFactory.BuildInteractiveRequest(application, operation, trace, CancellationToken.None);
+        // Refuse to execute unless the production builder installed the rejecting web UI,
+        // so a regression cannot open the default browser or web view.
+        Assert.IsInstanceOfType<RejectingWebUi>(MsalCompositionScenarios.BuilderMember(
+            MsalCompositionScenarios.BuilderMember(builder, "Parameters")!, "CustomWebUi"));
 
         Exception? observed = null;
         try

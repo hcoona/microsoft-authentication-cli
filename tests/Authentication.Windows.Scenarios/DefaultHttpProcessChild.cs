@@ -41,7 +41,7 @@ internal sealed class DefaultHttpProcessChild(string scenario) : IWindowsHostAdm
     private OwnedRequestHost CreateHost(Func<Task> cancel, Action fault, IWindowsHostAdmission admission)
     {
         Require(ReferenceEquals(admission, this));
-        ProcessChild.Mark("provider-created");
+        ProcessChild.Mark("host-created");
         host = new OwnedRequestHost(() =>
         {
             var pending = ForwardCancelAsync(cancel);

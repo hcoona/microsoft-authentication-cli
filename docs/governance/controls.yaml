@@ -73,39 +73,10 @@ controls:
     governing_rules:
       - docs/governance/record-system.md#formats
       - docs/governance/record-system.md#record-system-gate
-    invariant: Every active YAML or JSON record validates against its declared schema, and every active JSON Schema validates against its metaschema.
-    runner: hk
-    implementation:
-      kind: hk-steps
-      steps:
-        local-fast:
-          - structured-record-schema
-        ci:
-          - structured-record-schema
-    execution_points:
-      - local-fast
-      - ci
-    failure_mode: A structured record becomes ambiguous or unreadable by its consumer.
-
-  - id: public-build-evidence-consistency
-    state: current
-    class: mechanical
-    enforcement: blocking
-    producer: hk and the repository record checker
-    maintainer: Research maintainer
-    consumers:
-      - Repository checker and research maintainers when preserving the fixed source baseline, Lasso manifest, and frozen Issue 1 evidence
-      - Research reviewers when relying on or correcting the recorded public-build conclusions
-    governing_rules:
-      - docs/governance/record-system.md#formats
-      - docs/governance/record-system.md#record-system-gate
     invariant: >-
-      The public-build source baseline and Lasso manifest retain canonical source
-      identity, hashes, identifiers, ordering, and cross-record consistency under
-      duplicate-rejecting JSON parsing. The recorded Issue 1 bundle is frozen evidence:
-      its bytes match the digest pinned in the repository checker, it binds both source
-      authorities by hash, and the retained asset files are exactly the ones it
-      references, with matching hashes.
+      Every active YAML or JSON record validates against its declared schema, every
+      active JSON Schema validates against its metaschema, and every embedded example
+      of a public contract schema validates against that schema with format checking.
     runner: hk
     implementation:
       kind: hk-steps
@@ -117,7 +88,7 @@ controls:
     execution_points:
       - local-fast
       - ci
-    failure_mode: A fixed-source authority or the frozen recorded evidence is silently edited, loses or gains a retained asset, or stops matching the source authorities it binds.
+    failure_mode: A structured record becomes ambiguous or unreadable by its consumer, or a published contract example stops matching its contract.
 
   - id: requirement-id-uniqueness
     state: current
@@ -155,7 +126,10 @@ controls:
       - GitHub Actions and reviewers at CI before merge
     governing_rules:
       - docs/governance/record-system.md#decision-record-numbers
-    invariant: Each decision record number and file prefix is unique.
+      - docs/governance/governance-system.md#gov-002-one-canonical-authority
+    invariant: >-
+      Each decision record number and file prefix is unique, and identifiers are unique
+      within the record-family, control, operational-identity and recheck registries.
     runner: hk
     implementation:
       kind: hk-steps
@@ -180,7 +154,13 @@ controls:
     governing_rules:
       - docs/governance/governance-system.md#gov-002-one-canonical-authority
       - docs/governance/record-system.md#authority-by-concern
-    invariant: Current record-family paths exist, governed records match one declared family, and the documentation portal routes to every retained current record directly or, for an evidence-only file, through a portal-linked structured record that references its path.
+      - docs/governance/record-system.md#enforcement
+    invariant: >-
+      Current record-family paths exist, governed records match one declared family, the
+      documentation portal routes to every retained current record directly, and every
+      current control's governing rules resolve to current governed Markdown headings and
+      its hk steps are reachable at each declared execution point, with the CI set
+      including every local-fast step except declared local-only steps.
     runner: hk
     implementation:
       kind: hk-steps
@@ -269,6 +249,28 @@ controls:
     execution_points:
       - ci
     failure_mode: The repository merges a workflow that cannot execute its declared checks.
+
+  - id: commit-message-shape
+    state: current
+    class: mechanical
+    enforcement: advisory
+    producer: GitHub Actions Repository Controls job
+    maintainer: Control maintainer
+    consumers:
+      - Pull-request authors and reviewers at CI before merge
+    governing_rules:
+      - CONTRIBUTING.md#commits
+    invariant: >-
+      Every non-merge commit in the pull-request or push range has a Conventional
+      Commits header, a nonempty body and a final trailer block. A miss is reported as
+      a warning annotation and does not fail the job.
+    runner: github-platform
+    implementation:
+      kind: repository-path
+      value: tools/check_commit_messages.py
+    execution_points:
+      - ci
+    failure_mode: Commits merge without the body or footer that reviewers and history consumers rely on, and nobody notices.
 
   - id: linux-scenario-tests
     state: current

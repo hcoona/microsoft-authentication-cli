@@ -5,7 +5,7 @@ using Microsoft.Win32.SafeHandles;
 
 namespace Authentication.Windows;
 
-public sealed partial class WindowsProfileSource : IProfileSource
+internal sealed partial class WindowsProfileSource : IProfileSource
 {
     private const int MaximumProfileBytes = 65536;
     private const int PathBufferCharacters = 32768;

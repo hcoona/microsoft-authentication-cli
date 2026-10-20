@@ -400,38 +400,6 @@ families:
     failure_mode: Material implementation choices remain implicit or fragmented across pull requests.
     review_point: Independent architecture, consistency, minimality, and security review at design acceptance and before implementation of the bounded design
 
-  - id: public-build-source-baseline
-    state: current
-    concern: Fixed solution targets, source-declared direct dependencies, and stage applicability for the issue #1 audited upstream commit
-    carrier: repository-file
-    path: docs/research/public-build-source-baseline.json
-    format: json
-    schema: schemas/research/public-build-source-baseline.schema.json
-    producer: Public-source auditor
-    maintainer: Research maintainer
-    consumers:
-      - Repository checker and research reviewers when validating the frozen recorded dependency evidence
-      - Research reviewers when comparing runtime records with the fixed upstream source
-    creation_trigger: The accepted issue #2 governance change authorized the immutable public-source audit used by the completed issue #1 experiment.
-    failure_mode: Current evidence consumers must reconstruct target and dependency identity from an opaque hash or may omit a source-declared build input.
-    review_point: Changes that correct the fixed source audit or change the issue #1 audited commit
-
-  - id: public-build-lasso-reference-manifest
-    state: current
-    concern: Fixed source-level Microsoft.Office.Lasso usage locations for issue #1 responsibility analysis
-    carrier: repository-file
-    path: docs/research/public-build-lasso-reference-manifest.json
-    format: json
-    schema: schemas/research/public-build-lasso-reference-manifest.schema.json
-    producer: Public-source auditor
-    maintainer: Research maintainer
-    consumers:
-      - Architecture and research reviewers mapping every Lasso source usage to an apparent responsibility
-      - The repository checker and research reviewers validating coverage
-    creation_trigger: The accepted issue #2 governance change authorized the immutable public-source audit, and text-only package-name search omitted unqualified symbols imported from Lasso namespaces.
-    failure_mode: Lasso responsibility analysis can omit operational call sites while still matching an incomplete hash.
-    review_point: Changes that correct source-reference attribution or change the issue #1 audited commit
-
   - id: windows-msal-account-metadata-evidence
     state: current
     concern: Completed bounded Windows MSAL account-visibility, result-metadata, and designated Git discovery observations, with the public-source probe basis, Client Profile and tenant mapping, and Azure Artifacts token-path findings that interpret them
@@ -501,53 +469,3 @@ families:
     creation_trigger: Issue #68 produced installation and discovery observations behind the locked contributor tooling; the procedure and history remain in Git.
     failure_mode: Tooling setup is claimed to cover hosts, clients, or cache states it was never observed on.
     review_point: Independent research-evidence review when the contributor tooling selection or its claimed coverage changes
-
-  - id: public-build-experiment-bundles
-    state: current
-    concern: Frozen strict-JSON runtime evidence for the recorded issue #1 public-build experiment
-    carrier: repository-file
-    path: docs/research/experiments/public-build-wsl2-linux-x64-dotnet-8-0-424.json
-    format: json
-    schema: schemas/research/public-build-experiment-bundle.schema.json
-    producer: Retired issue #1 experiment runner
-    maintainer: Research maintainer
-    consumers:
-      - The v1 architecture audit and research reviewers relying on the bounded recorded public-build conclusions
-      - Repository checker when validating the frozen evidence
-    creation_trigger: The completed issue #1 experiment produced runtime evidence cited by current research conclusions.
-    failure_mode: Current conclusions rely on recorded evidence that was silently edited, lost its source binding or retained assets, or no longer matches its embedded receipt.
-    review_point: When a current conclusion relying on the bundle changes, or a correction to the frozen evidence is proposed with independent research-evidence review; the retired runner is not replayed
-
-  - id: public-build-assets-evidence
-    state: current
-    concern: Sanitized project.assets.json inputs retained as part of the frozen issue #1 evidence
-    carrier: repository-files
-    path: docs/research/experiments/assets/*.project.assets.json
-    format: json
-    schema: schemas/research/public-build-assets-evidence.schema.json
-    producer: Retired issue #1 experiment runner
-    maintainer: Research maintainer
-    consumers:
-      - Research reviewers validating dependency claims against retained restore evidence, routed through the recorded bundle that references each file
-    creation_trigger: The completed issue #1 restore produced project.assets.json inputs referenced by the recorded dependency projections.
-    failure_mode: A recorded projection loses or misattributes the restore artifact it claims to represent.
-    review_point: When retained assets or the recorded evidence that references them are corrected
-
-  - id: validation-cases
-    state: scheduled
-    concern: Reusable validation scenarios and expected evidence
-    carrier: repository-files
-    path: docs/validation/cases/*.md
-    format: markdown
-    producer: Validation maintainer
-    maintainer: Validation maintainer
-    consumers:
-      - Implementers, reviewers, and release qualification
-    creation_trigger: A behavior or claim needs a stable reusable validation scenario.
-    failure_mode: Validation depends on transient commands or undocumented expectations.
-    review_point: Before a scenario becomes a release or support gate
-    activation:
-      trigger: A requirement or contract has a reusable scenario not covered by an existing record.
-      evaluator: Validation maintainer
-      action: Create the case and bind its execution evidence to the applicable gate.
-      fallback_review: Every merged Delivery Wave change
