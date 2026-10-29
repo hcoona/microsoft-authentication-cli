@@ -19,12 +19,20 @@ the designated host from native Windows and WSL callers with the bundled Profile
   (`<root>` below), in `<root>\src`. A local `main-v2` branch is reset to that commit and
   checked out, so `HEAD` is on `refs/heads/main-v2`; the worktree is clean. Record the full
   commit hash in the ledger before the first build. No `PublicRelease` override is used.
-- **Toolchain.** .NET SDK 10.0.403 with runtime 10.0.14 from `mise install --locked` on the
-  Windows side (`%LOCALAPPDATA%\mise\installs\http-dotnet-development\10.0.403`), called by
-  its absolute path with `DOTNET_ROOT` set to it and `DOTNET_MULTILEVEL_LOOKUP=0`; the
-  same SDK from `mise install --locked` in WSL, called through `mise exec` for R1; the installed Visual Studio 18 C++ tools (MSVC
-  14.51.36231) for Native AOT and `dumpbin`; PowerShell 7 as the native caller; bash in
-  the host's WSL 2 distribution as the WSL caller. Record each version before B1.
+- **Toolchain.** .NET SDK 10.0.403 with runtime 10.0.14, installed by `mise install --locked`
+  on both sides and always called by its absolute install path with `DOTNET_ROOT` set to
+  that directory: on Windows
+  `%LOCALAPPDATA%\mise\installs\http-dotnet-development\10.0.403\dotnet.exe`, and in WSL
+  `~/.local/share/mise/installs/http-dotnet-development/10.0.403/dotnet`. For B1 and B2 the
+  Windows SDK directory is also first in `PATH`, because `package.ps1` and the validator
+  build call `dotnet` by name; the host also has a system SDK 10.0.403 that would
+  otherwise satisfy `global.json`. Before R1 and B1, record on each side the resolved
+  `dotnet` (`Get-Command dotnet` on Windows), `dotnet --version` and the base path from
+  `dotnet --info`; stop if any is not under that mise install directory. The protocol
+  runs no `mise exec` or `mise trust` and writes no mise state. The other tools are the
+  installed Visual Studio 18 C++ tools (MSVC 14.51.36231) for Native AOT and `dumpbin`,
+  PowerShell 7 as the native caller, and bash in the host's WSL 2 distribution as the WSL
+  caller. Record each version before R1.
 - **Dependencies.** MSAL and Broker 4.83.1, NativeInterop 0.20.3, Nerdbank.GitVersioning
   3.10.94 and the rest of the committed `packages.lock.json` files.
 - **Profile.** `profiles\visual-studio-legacy-wam.json` from the extracted archive, passed by
