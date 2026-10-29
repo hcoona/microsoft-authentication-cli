@@ -54,11 +54,28 @@ on 2026-10-29, and decides:
   stdout to the trusted Linux caller's bounded process memory and ordinary interop
   pipes; the owner accepts that exposure, while captured output, logs, and agent traces
   still exclude the token.
+- Toolchain (2026-10-29): move the pinned .NET SDK to 10.0.403 with its bundled runtime
+  10.0.14, the latest .NET 10 release, through the existing `http:dotnet-development`
+  pin, and install it with `mise install --locked` on the designated host's Windows and
+  WSL sides. This runtime-patch upgrade is not a Dependency Upgrade Matrix evaluation;
+  existing real-host and Native AOT evidence stays bound to the runtime packs its
+  records name.
+- mise (2026-10-29): move the mise version that CI pins (`MISE_VERSION` and
+  `min_version`) to 2026.10.22, and update the host's mise on the Windows and WSL
+  sides to that version with `mise self-update -y 2026.10.22`, which also updates
+  the installed mise plugins. The SDK keeps the checksum-pinned
+  `http:dotnet-development` tool and the generated `global.json`.
+- Windows restore route (2026-10-29): the designated Windows host cannot complete a TLS
+  connection to `api.nuget.org`. A locked-mode restore under the host's WSL fetches
+  the packages from nuget.org into a fresh package folder on the Windows drive. The
+  Windows restore then resolves every package from that folder alone, in locked mode,
+  with NuGet audit disabled for that step only. The folder is deleted after the test.
 
-**Accepted inputs:** current `main-v2` source; .NET SDK 10.0.402 with runtime 10.0.13;
+**Accepted inputs:** current `main-v2` source; .NET SDK 10.0.403 with runtime 10.0.14;
 MSAL/Broker 4.83.1 and NativeInterop 0.20.3; Nerdbank.GitVersioning 3.10.94 as a
 build-only package; the designated Windows 11 x64 host with its existing development
-tools and package cache, and its WSL2 environment; the Azure DevOps default scope.
+tools, and its WSL2 environment; the package folder of the Windows restore route; the
+Azure DevOps default scope.
 
 **Delegated work:**
 
@@ -96,6 +113,16 @@ tools and package cache, and its WSL2 environment; the Azure DevOps default scop
    A defect that needs such a change stops the test and requires a new entry. Each
    corrected archive is a new subject, rebound through a reviewed protocol amendment and
    sharing the same limits.
+6. Toolchain: change `mise.toml`, `mise.lock`, the generated `global.json`, the
+   package lock files that the runtime patch regenerates, and the Windows design,
+   `CONTRIBUTING.md`, `UPSTREAM.md` and package notices where they name the SDK or
+   runtime; record the RECHECK-008 evaluation. Move `MISE_VERSION` in
+   `.github/workflows/check.yml` and `min_version` in `mise.toml` to 2026.10.22, and
+   regenerate `mise.lock` and `global.json` with that version; the pull request
+   records it. This lands before the item 4 build.
+   Item 6 lands in the same pull request as items 1 to 3 (#543), so their records,
+   notices and lock files are written once at 10.0.403 and validated there; no item 1
+   to 3 change merges before it. Historical research records are not rewritten.
 
 **Native threat-model validation:** Validating `authentication-engine.tm7` in Microsoft
 Threat Modeling Tool 7, as its record family requires, is development validation under
@@ -134,17 +161,25 @@ publication of a locally built archive. No installer, MSIX, WinGet, PATH, regist
 shell integration, signing, automatic update, non-`win-x64` artifact, Git credential
 helper or other adapter, persistent configuration, cache or lock, or telemetry export.
 No authentication behavior, result contract, or request protocol change other than
-`--version`. No SDK, runtime, or MSAL upgrade, and no additional Profile. No account
-addition or removal, sign-out, consent revocation, or cache clearing. No TMT
-installation or update. No tokens, account or tenant identifiers, raw provider
-diagnostics, or private screenshots in committed records, logs, or chat.
+`--version`. No SDK or runtime change other than item 6, no MSAL upgrade, and no
+additional Profile. No account addition or removal, sign-out, consent revocation, or
+cache clearing. No TMT installation or update. No tokens, account or tenant
+identifiers, raw provider diagnostics, or private screenshots in committed records,
+logs, or chat.
 
 **External effects:** Token acquisition against Microsoft Entra for the two existing
 accounts with ordinary broker updates; public package restore; ordinary CI on
-GitHub-hosted runners; one extraction directory on the host, deleted after the test;
-the TMT process and its windows on the owner's interactive desktop, closed after
-validation, TMT's own recent-file and application-data writes, and any update check the
-installed tool makes on its own, with any update prompt declined.
+GitHub-hosted runners; tool downloads verified by `mise.lock` on the host and the
+runners, and the .NET SDK 10.0.403 that `mise install --locked` installs in mise's tool
+directories on the host's Windows and WSL sides, retained; the host's mise binaries on
+both sides replaced in place by `mise self-update -y 2026.10.22`, and the installed
+mise plugins it updates, retained (on Windows the WinGet package record keeps its older
+version until WinGet next updates it; if self-update refuses, the work stops rather
+than forcing it or using another route); the Windows restore route's package folder
+and one extraction directory on the host, both deleted after the test; the TMT process
+and its windows on the owner's interactive desktop, closed after validation, TMT's own
+recent-file and application-data writes, and any update check the installed tool makes
+on its own, with any update prompt declined.
 
 **Completion:** Remove this entry through a reviewed Wave change once the packaging
 changes and test evidence merge, or the owner ends it.
