@@ -33,12 +33,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-.NET Runtime 10.0.13 (compiled into azureauth-unofficial.exe by Native AOT)
+.NET Runtime 10.0.14 (compiled into azureauth-unofficial.exe by Native AOT)
 -------------------------------------------------------------------------------
 
 Copyright (c) .NET Foundation and Contributors. All rights reserved.
 
 The .NET Runtime is distributed under the MIT License, whose text is above. Its own
 third-party notices follow, as published in the
-runtime.win-x64.Microsoft.DotNet.ILCompiler 10.0.13 package.
+runtime.win-x64.Microsoft.DotNet.ILCompiler 10.0.14 package.
 

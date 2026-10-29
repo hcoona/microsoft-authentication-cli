@@ -134,7 +134,7 @@ owns the package content and checks.
 
 ## .NET and Agent Tooling
 
-The same toolchain selects .NET SDK 10.0.402 (`http:dotnet-development`), APM v0.29.0,
+The same toolchain selects .NET SDK 10.0.403 (`http:dotnet-development`), APM v0.29.0,
 and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. It is
 generated from the `mise.lock` SDK entry by `global.pkl` and is never edited by hand;
 the `global-json` hk step fails when it differs. Every project targets the runtime
