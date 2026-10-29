@@ -89,12 +89,14 @@ try {
 
     dotnet publish $Project -c Release -r win-x64 --no-restore -o $publish
 
-    # Archive content allowlist. The publish output may add only the native symbol file,
-    # which stays out of the archive.
+    # Archive content allowlist. The publish output may add only symbol files: the
+    # native one and the managed ones of the project's own assemblies. They stay out of
+    # the archive.
     $published = @(Get-ChildItem -LiteralPath $publish -Recurse -File | ForEach-Object {
         [IO.Path]::GetRelativePath($publish, $_.FullName) })
     $expected = @("$CommandName.exe", 'msalruntime.dll')
-    $unexpected = @($published | Where-Object { $_ -notin $expected -and $_ -ne "$CommandName.pdb" })
+    $symbols = @("$CommandName.pdb", 'Authentication.Core.pdb', 'Authentication.Windows.pdb')
+    $unexpected = @($published | Where-Object { $_ -notin $expected -and $_ -notin $symbols })
     if ($unexpected) { Fail "unexpected publish output: $($unexpected -join ', ')" }
     foreach ($name in $expected) {
         if ($name -notin $published) { Fail "missing publish output: $name" }

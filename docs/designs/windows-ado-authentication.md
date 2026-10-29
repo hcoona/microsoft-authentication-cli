@@ -154,8 +154,9 @@ Native AOT, and admits exactly this content:
 | `LICENSE.txt` | The repository license. |
 | `THIRD-PARTY-NOTICES.txt` | A fixed header for the MSAL components and the .NET runtime notices from the locked ILCompiler runtime package. |
 
-The native symbol file stays out of the archive; any other publish output fails the
-script. Before writing the zip, the script checks with `dumpbin /dependents` that both
+Symbol files (the native one and those of the project's own managed assemblies) stay out
+of the archive; any other publish output fails the script. Before writing the zip, the
+script checks with `dumpbin /dependents` that both
 native images import only System32 DLLs and API sets, rejecting Visual C++
 redistributable DLLs by name because they are not part of Windows even when a
 development host has them in System32. The script then checks the version resource
