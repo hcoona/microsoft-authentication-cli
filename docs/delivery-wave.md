@@ -7,182 +7,98 @@ owner-authorized Wave amendment does not perform the work it proposes to add.
 
 ## Authorized Advancements
 
-### Windows Portable Package, Local Build and Test (2026-10-29)
+### Windows 0.1.0-alpha Prereleases (2026-10-29)
 
-**Outcome:** Make the current `main-v2` Windows product buildable as an unsigned
-`win-x64` portable zip through a repository packaging script, build that zip locally on
-the designated host, and record bounded real-host evidence for the exact built archive
-after extracting it into a fresh directory. Packaging is tracked in
+**Outcome:** Add a GitHub release workflow that builds the `azureauth-unofficial`
+portable package from `main-v2` on a GitHub-hosted Windows runner, and publish
+`0.1.0-alpha` prereleases from it as GitHub prereleases of this repository.
+Packaging is tracked in
 [Issue #506](https://github.com/hcoona/microsoft-authentication-cli/issues/506); release
 gates stay tracked in
-[Issue #482](https://github.com/hcoona/microsoft-authentication-cli/issues/482). A later
-entry adds the GitHub release workflow and publishes the first prerelease from it. This
-entry claims no support, production readiness, compatibility, clean-machine deployment,
-public-restore reproducibility, or satisfaction of the validation strategy's release
-gates.
+[Issue #482](https://github.com/hcoona/microsoft-authentication-cli/issues/482). The
+prereleases claim no support, production readiness, compatibility, clean-machine
+deployment or satisfaction of the validation strategy's release gates.
 
-**Owner decisions:** The repository owner approved this entry on 2026-10-28, amended it
-on 2026-10-29, and decides:
+**Owner decisions:** The repository owner approved this entry on 2026-10-29 and decides:
 
-- Operational identities: product, command, and package name `azureauth-unofficial`;
-  executable `azureauth-unofficial.exe`; archive
-  `azureauth-unofficial-<version>-win-x64.zip`. There is no default installation root:
-  the user extracts the archive into a directory of their choice, and deleting that
-  directory uninstalls it. Diagnostic identity: the existing source name
-  `hcoona.microsoft-authentication-cli`. Update channel: manual download from this
-  repository's GitHub Releases, with no automatic update. Signing identity: none; the
-  prerelease line ships unsigned
-  ([Issue #505](https://github.com/hcoona/microsoft-authentication-cli/issues/505)).
-  Configuration, cache, lock, and telemetry identities remain unselected because the
-  package adds no persistent configuration, cache, lock, or remote telemetry.
-- Version: Nerdbank.GitVersioning computes the SemVer 2.0 version
-  `0.1.0-alpha.{height}+{commit}`, with `main-v2` as the only public-release ref. Builds
-  from another ref carry the tool's commit-ID prerelease suffix.
-- Bundled Profile: the archive contains the existing Visual Studio legacy compatibility
-  Profile as a file. It is selected only through an explicit `--profile` argument and
-  has no default selection. For the prerelease line, the owner accepts that sign-in,
-  consent, and audit records attribute activity to the Microsoft-owned Visual Studio
-  application, that Microsoft provides no support or availability commitment, and that
-  the remaining items of the externally owned Client Profile gate stay open. The package
-  README states these limits. Item 3 records this decision in decision 0003, the
-  compatibility policy, and the client-application identity view, limited to this
-  bundled file in prerelease archives.
-- Real-host risk: the owner accepts using the existing personal and work accounts on
-  the designated host. Provider-managed sessions, broker state, and caches may receive
-  ordinary authentication updates and are retained. Each interactive call needs the
-  owner at the desktop. A successful WSL-launched call returns the access token through
-  stdout to the trusted Linux caller's bounded process memory and ordinary interop
-  pipes; the owner accepts that exposure, while captured output, logs, and agent traces
-  still exclude the token.
-- Toolchain (2026-10-29): move the pinned .NET SDK to 10.0.403 with its bundled runtime
-  10.0.14, the latest .NET 10 release, through the existing `http:dotnet-development`
-  pin, and install it with `mise install --locked` on the designated host's Windows and
-  WSL sides. This runtime-patch upgrade is not a Dependency Upgrade Matrix evaluation;
-  existing real-host and Native AOT evidence stays bound to the runtime packs its
-  records name.
-- mise (2026-10-29): move the mise version that CI pins (`MISE_VERSION` and
-  `min_version`) to 2026.10.22, and update the host's mise on the Windows and WSL
-  sides to that version with `mise self-update -y 2026.10.22`, which also updates
-  the installed mise plugins. The SDK keeps the checksum-pinned
-  `http:dotnet-development` tool and the generated `global.json`.
-- Windows restore route (2026-10-29): the designated Windows host cannot complete a TLS
-  connection to `api.nuget.org`. A locked-mode restore under the host's WSL fetches
-  the packages from nuget.org into a fresh package folder on the Windows drive. The
-  Windows restore then resolves every package from that folder alone, in locked mode,
-  with NuGet audit disabled for that step only. The folder is deleted after the test.
-
-**Accepted inputs:** current `main-v2` source; .NET SDK 10.0.403 with runtime 10.0.14;
-MSAL/Broker 4.83.1 and NativeInterop 0.20.3; Nerdbank.GitVersioning 3.10.94 as a
-build-only package; the designated Windows 11 x64 host with its existing development
-tools, and its WSL2 environment; the package folder of the Windows restore route; the
-Azure DevOps default scope.
+- Workflow: started manually (`workflow_dispatch`) and refused unless the ref is
+  `refs/heads/main-v2`; runs on a GitHub-hosted `windows-latest` runner with the
+  checksum-pinned SDK from `mise.lock`; runs the Windows scenario project excluding
+  `WindowsHostTiming`, as the `windows-scenarios` CI job does, then
+  `packaging/windows/package.ps1` without `-AllowNonPublicRelease` or
+  `-DisableNuGetAudit`; creates a GitHub build-provenance attestation for both zips;
+  and creates a **draft** prerelease whose target is the built commit, refusing a version
+  whose tag or release already exists. Only the job that creates the draft receives
+  `contents: write`, and only the job that attests receives `id-token: write` and
+  `attestations: write`. Files pass between jobs as workflow artifacts uploaded with
+  `retention-days: 1` and left to expire; no job deletes them.
+- Native build chain: the hosted runner image floats, so its Visual Studio C++ tools,
+  Windows SDK and `link.exe` change over time. The owner accepts this for the
+  `0.1.0-alpha` series instead of pinning them: each run records the MSVC, Windows SDK,
+  `link.exe` and .NET SDK versions and the runner image version, and the release review
+  checks them.
+- First release: the primary journey's first-release blocker applies to the first
+  supported, non-prerelease release. `0.1.0-alpha` prereleases are exempt from it and
+  remain unsupported.
+- Release identity: tag `v<version>`, where `<version>` is the computed SemVer 2.0
+  version without build metadata (for example `v0.1.0-alpha.42`), on the built commit.
+  Assets: the package zip, the symbols zip and their `.sha256` files. Release notes link
+  the package README, state the unofficial, unsigned and unsupported status and the
+  bundled Visual Studio Profile's limits, and link the release review.
+- Publication: the repository owner reviews each draft and publishes it manually as a
+  prerelease; publication is the owner's release decision. No local verification of a
+  downloaded draft is required; Mark-of-the-Web, SmartScreen and Smart App Control
+  behavior is not evaluated or claimed.
+- Scope: this entry covers every `0.1.0-alpha` prerelease. A version other than
+  `0.1.0-alpha.{height}`, a non-prerelease, or a change to the release workflow's
+  inputs, permissions or assets needs a new entry.
+- Risk: the owner accepts publishing unsigned executables, the bundled Visual Studio
+  Profile under decision 0003's prerelease exception, and the native and managed symbol
+  files of each build; that each run's unreviewed outputs are downloadable by signed-in
+  GitHub users as workflow artifacts until they expire after one day; and that completed
+  downloads cannot be recalled.
 
 **Delegated work:**
 
-1. Product: rename the executable; add Nerdbank.GitVersioning; replace the `0.0.0`
-   User-Agent and ActivitySource versions with the computed SemVer version without
-   build metadata; set the Windows file version resource; add `--version`, which prints
-   the full version; update lock files and tests; set `fetch-depth: 0` in the existing
-   CI jobs that build.
-2. Packaging: under `packaging/windows/`, add the Profile file, a README (unofficial
-   notice, extraction, a WSL invocation example, Profile ownership, unsigned and
-   SmartScreen notes, uninstall), and third-party license notices. Add one packaging
-   script that refuses a dirty worktree, restores in locked mode, publishes Native AOT,
-   enforces an archive-content allowlist, checks that native imports come only from
-   system DLLs and API sets, and writes the zip and its SHA-256. The script also writes
-   the publish output's symbol files (the native one and the project's managed ones)
-   into a separate symbols zip with its own SHA-256, beside the package archive and
-   never inside it (owner decision, 2026-10-29).
-3. Records: update `operational-identities.yaml`, decision 0003, the compatibility
-   policy, the client-application identity view, the Windows design (distribution,
-   Profile, `--version`, version mapping), the validation strategy, the threat model
-   and `authentication-engine.tm7` (including candidate states and justifications,
-   kept identical between the two), the record-family catalog for new governed records,
-   `CONTRIBUTING.md`, the root README, and `docs/README.md`. The identity, Profile,
-   decision 0003, and compatibility policy updates merge before or together with items
-   1 and 2, and before the item 4 protocol relies on them.
-4. Real-host test: merge an independently reviewed protocol, then build the archive on
-   the designated host from a recorded `main-v2` commit, extract it into a fresh
-   directory, run help and version checks, and make native Windows and WSL calls for both
-   roles covering silent success, fresh-process silent reuse, `non-interactive-only`
-   with interaction required, and `force-interactive` success. A case that existing
-   state does not reach is recorded as not reached and never simulated. Record whether
-   Windows blocked the unsigned executable; this archive was never downloaded and has
-   no Mark-of-the-Web, so the observation says nothing about a downloaded archive, and
-   the README's SmartScreen notes rely on public Microsoft documentation. Record
-   sanitized results in a research record and evaluate RECHECK-007 and RECHECK-008.
-5. Corrections: fix packaging defects, and product defects that do not change
-   authentication behavior, the result contract, or the request protocol, with tests.
-   A defect that needs such a change stops the test and requires a new entry. Each
-   corrected archive is a new subject, rebound through a reviewed protocol amendment and
-   sharing the same limits.
-6. Toolchain: change `mise.toml`, `mise.lock`, the generated `global.json`, the
-   package lock files that the runtime patch regenerates, and the Windows design,
-   `CONTRIBUTING.md`, `UPSTREAM.md` and package notices where they name the SDK or
-   runtime; record the RECHECK-008 evaluation. Move `MISE_VERSION` in
-   `.github/workflows/check.yml` and `min_version` in `mise.toml` to 2026.10.22, and
-   regenerate `mise.lock` and `global.json` with that version; the pull request
-   records it. This lands before the item 4 build.
-   Item 6 lands in the same pull request as items 1 to 3 (#543), so their records,
-   notices and lock files are written once at 10.0.403 and validated there; no item 1
-   to 3 change merges before it. Historical research records are not rewritten.
+1. Add `.github/workflows/release.yml` as above, with actions pinned by commit SHA as in
+   the existing workflow, and full Git history for version computation.
+2. Records: update the support and release posture in `docs/governance/project.md`; the
+   `update-channel` and `package-name` selection evidence in
+   `operational-identities.yaml` (tag scheme, symbols zip); the Windows design's
+   package section and its Native AOT build-chain pinning sentence (recorded versions for
+   hosted `0.1.0-alpha` builds); the validation strategy's CI section, release-readiness
+   note and Primary Journey Gate, and `docs/product/user-stories.md`, for the
+   first-release decision; the threat model's build and CI-token row for the release
+   workflow's permissions and attestation (the `.tm7` stays unchanged); a
+   `controls.yaml` entry for the release workflow's mechanical gates at the `release`
+   execution point, subject to its governance review; the package README and root
+   README where they say no package has been published; `CONTRIBUTING.md`; and the
+   completed host test: convert `docs/research/experiments/portable-package-host-test.md`
+   into a completed evidence record, with its record family and `docs/README.md` row,
+   modeled on `real-host-validation-evidence`.
+3. Release review for each prerelease, before the owner publishes the draft: an
+   independent research-evidence review at the `release` execution point that
+   evaluates the whole recheck registry, checks that the draft's assets match the
+   workflow run's outputs and attestation and that its target is the built commit,
+   checks the recorded build-chain versions, and checks that the symbols and executable
+   embed no user-identifying build path; independent triage of any finding; recorded as
+   a comment on Issue #506 that the release notes link.
+4. Correct defects in the workflow, the packaging script or the records that a run
+   exposes, with tests where applicable.
 
-**Native threat-model validation:** Validating `authentication-engine.tm7` in Microsoft
-Threat Modeling Tool 7, as its record family requires, is development validation under
-all of these conditions:
+**Exclusions:** No real-account authentication, WAM UI or experiment on any host. No
+signing, installer, MSIX, WinGet, Scoop, automatic update, PATH or registry integration,
+non-`win-x64` artifact, or upload outside this repository's GitHub Releases. No
+authentication behavior, result contract, request protocol or Profile change. No SDK,
+runtime or dependency change. No tag or release outside the `v0.1.0-alpha.*` series, and
+no release from a ref other than `main-v2`.
 
-- it launches the tool already installed on the owner's Windows host, on the owner's
-  interactive desktop, then opens, analyzes, and saves a copy of the model under a fresh
-  temporary root;
-- UI Automation reads and acts only on windows of the TMT process that the run started,
-  identified by process ID, and stops if another window is in the foreground;
-- screenshots capture only the bounds of a TMT window while it is in the foreground and
-  not overlapped, are stored under the temporary root for private review, are never
-  committed or published, and are deleted before the implementing pull request merges;
-- the run declines any update prompt and makes no deliberate change to TMT settings;
-- if TMT does not close within 60 seconds after the close request, the run ends only
-  the TMT process it started, identified by process ID.
+**External effects:** GitHub Actions runs on GitHub-hosted runners with public package
+restore and tool downloads verified by `mise.lock`; build-provenance attestations
+recorded in this repository and, for this public repository, in the public Sigstore
+transparency log; workflow artifacts of each run, downloadable by signed-in GitHub users
+for at most one day; public tags and GitHub prereleases with their assets (the owner can
+delete them, but completed downloads and transparency-log entries cannot be recalled).
 
-A repository change to the model comes only from reviewed text edits or from a save in
-the tool whose full diff is reviewed.
-
-**Limits (circuit breakers):** These bound runaway real-host execution; they are not a
-test budget. At most 40 interactive-capable and 60 `non-interactive-only` product calls
-in total across all candidate archives, counting failed and interrupted starts. A call
-is interactive-capable when its interaction permission allows UI, whether or not UI
-appears. The protocol stops a case after two consecutive unexpected outcomes and
-requires a recorded diagnosis before that case runs again. No automatic retry. Help and
-version checks, development validation, synthetic scenario runs, builds, and packaging
-are not counted. Reaching a limit pauses real calls until the owner raises it through a
-Wave amendment.
-The circuit breaker adds to, and does not relax, the experiment policy's stop
-conditions; an unexpected effect, stop condition, or deviation stops all real calls as
-that policy requires.
-
-**Exclusions:** No GitHub release workflow, tag, GitHub Release, or upload or other
-publication of a locally built archive. No installer, MSIX, WinGet, PATH, registry or
-shell integration, signing, automatic update, non-`win-x64` artifact, Git credential
-helper or other adapter, persistent configuration, cache or lock, or telemetry export.
-No authentication behavior, result contract, or request protocol change other than
-`--version`. No SDK or runtime change other than item 6, no MSAL upgrade, and no
-additional Profile. No account addition or removal, sign-out, consent revocation, or
-cache clearing. No TMT installation or update. No tokens, account or tenant
-identifiers, raw provider diagnostics, or private screenshots in committed records,
-logs, or chat.
-
-**External effects:** Token acquisition against Microsoft Entra for the two existing
-accounts with ordinary broker updates; public package restore; ordinary CI on
-GitHub-hosted runners; tool downloads verified by `mise.lock` on the host and the
-runners, and the .NET SDK 10.0.403 that `mise install --locked` installs in mise's tool
-directories on the host's Windows and WSL sides, retained; the host's mise binaries on
-both sides replaced in place by `mise self-update -y 2026.10.22`, and the installed
-mise plugins it updates, retained (on Windows the WinGet package record keeps its older
-version until WinGet next updates it; if self-update refuses, the work stops rather
-than forcing it or using another route); the Windows restore route's package folder
-and one extraction directory on the host, both deleted after the test; the TMT process
-and its windows on the owner's interactive desktop, closed after validation, TMT's own
-recent-file and application-data writes, and any update check the installed tool makes
-on its own, with any update prompt declined.
-
-**Completion:** Remove this entry through a reviewed Wave change once the packaging
-changes and test evidence merge, or the owner ends it.
+**Completion:** Remove this entry through a reviewed Wave change when the owner ends the
+`0.1.0-alpha` series or replaces it with a new entry.
