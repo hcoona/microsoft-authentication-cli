@@ -307,7 +307,7 @@ answer in chat.
 unexpected window. #3: no WAM account picker; a Windows Hello PIN prompt appeared with
 the personal account preselected, and the owner entered the PIN. This description goes
 beyond the protocol's yes/no answers; the
-[repository owner admitted it](https://github.com/hcoona/microsoft-authentication-cli/pull/548)
+[repository owner admitted it](https://github.com/hcoona/microsoft-authentication-cli/pull/548#issuecomment-6507561844)
 as an additional operator observation. No consent prompt appeared in any call.
 
 **Coverage.** Silent success and fresh-process silent reuse passed for both roles and
@@ -321,7 +321,7 @@ for either work caller (existing state), and no state was changed to reach it.
 Classified against this protocol and the experiment policy's
 [Stop Conditions and Deviations](../experiment-safety.md#stop-conditions-and-deviations).
 The repository owner's disposition is recorded in
-[PR #548](https://github.com/hcoona/microsoft-authentication-cli/pull/548).
+[PR #548](https://github.com/hcoona/microsoft-authentication-cli/pull/548#issuecomment-6507561844).
 
 - **#1, launcher failure (in-protocol failed attempt).** The native launcher failed
   after the product call, on a ledger write that its PowerShell host did not bind, so the
@@ -347,7 +347,8 @@ The repository owner's disposition is recorded in
   protocol's "cannot identify a prompt" stop condition applied. No product process
   remained, and the owner later reported seeing no remaining WAM window. As a manual
   step outside the protocol, the owner minimized all other windows before the case ran
-  once more (#6), which passed. Inference: an unseen WAM surface behind other windows
+  once more (#6), which passed. Continuing with #6 to #17 after this stop condition, and
+  the owner's manual minimizing of other windows before #6, are deviations. Inference: an unseen WAM surface behind other windows
   would explain #5, but whether WAM presented UI in #5 is undetermined. #5 does not bear
   on the Windows design's known-limitation sentence, which is scoped to the earlier
   real-host record.
