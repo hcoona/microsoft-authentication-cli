@@ -62,8 +62,9 @@ on 2026-10-29, and decides:
   records name.
 - mise (2026-10-29): move the mise version that CI pins (`MISE_VERSION` and
   `min_version`) to 2026.10.22, and update the host's mise on the Windows and WSL
-  sides to that version with `mise self-update -y 2026.10.22`. The SDK keeps the
-  checksum-pinned `http:dotnet-development` tool and the generated `global.json`.
+  sides to that version with `mise self-update -y --no-plugins 2026.10.22`. The SDK
+  keeps the checksum-pinned `http:dotnet-development` tool and the generated
+  `global.json`.
 - Windows restore route (2026-10-29): the designated Windows host cannot complete a TLS
   connection to `api.nuget.org`. A locked-mode restore under the host's WSL fetches
   the packages from nuget.org into a fresh package folder on the Windows drive. The
@@ -171,13 +172,14 @@ accounts with ordinary broker updates; public package restore; ordinary CI on
 GitHub-hosted runners; tool downloads verified by `mise.lock` on the host and the
 runners, and the .NET SDK 10.0.403 that `mise install --locked` installs in mise's tool
 directories on the host's Windows and WSL sides, retained; the host's mise binaries on
-both sides replaced in place by `mise self-update -y 2026.10.22`, retained (on Windows
-the WinGet package record keeps its older version until WinGet next updates it); the
-Windows restore route's package folder and one extraction directory on the host, both
-deleted after the test; the TMT process and its windows on the owner's interactive
-desktop, closed after validation, TMT's own recent-file and application-data writes,
-and any update check the installed tool makes on its own, with any update prompt
-declined.
+both sides replaced in place by `mise self-update -y --no-plugins 2026.10.22`,
+retained, with installed mise plugins not updated (on Windows the WinGet package record
+keeps its older version until WinGet next updates it; if self-update refuses, the work
+stops rather than forcing it or using another route); the Windows restore route's
+package folder and one extraction directory on the host, both deleted after the test;
+the TMT process and its windows on the owner's interactive desktop, closed after
+validation, TMT's own recent-file and application-data writes, and any update check the
+installed tool makes on its own, with any update prompt declined.
 
 **Completion:** Remove this entry through a reviewed Wave change once the packaging
 changes and test evidence merge, or the owner ends it.
