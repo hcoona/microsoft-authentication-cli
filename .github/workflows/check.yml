@@ -12,7 +12,7 @@ permissions:
 env:
   # The mise version CI pins; regenerate mise.lock with it (CONTRIBUTING.md).
   # mise.toml sets the same min_version.
-  MISE_VERSION: 2026.8.10
+  MISE_VERSION: 2026.10.22
 
 concurrency:
   # A newer pull-request push supersedes its earlier run. Each main-v2 push gets its own
