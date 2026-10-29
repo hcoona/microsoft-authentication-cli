@@ -112,7 +112,9 @@ Azure DevOps default scope.
    package lock files that the runtime patch regenerates, and the Windows design,
    `CONTRIBUTING.md`, `UPSTREAM.md` and package notices where they name the SDK or
    runtime; record the RECHECK-008 evaluation. This lands before the item 4 build.
-   Historical research records are not rewritten.
+   Item 6 lands in the same pull request as items 1 to 3 (#543), so their records,
+   notices and lock files are written once at 10.0.403 and validated there; no item 1
+   to 3 change merges before it. Historical research records are not rewritten.
 
 **Native threat-model validation:** Validating `authentication-engine.tm7` in Microsoft
 Threat Modeling Tool 7, as its record family requires, is development validation under
@@ -160,11 +162,13 @@ logs, or chat.
 **External effects:** Token acquisition against Microsoft Entra for the two existing
 accounts with ordinary broker updates; public package restore; ordinary CI on
 GitHub-hosted runners; tool downloads verified by `mise.lock` on the host and the
-runners; the Windows restore route's package folder and one extraction directory on the
-host, both deleted after the test; the TMT process and its windows on the owner's
-interactive desktop, closed after validation, TMT's own recent-file and
-application-data writes, and any update check the installed tool makes on its own,
-with any update prompt declined.
+runners, and the .NET SDK 10.0.403 that `mise install --locked` installs in mise's tool
+directories on the host's Windows and WSL sides, retained (the existing mise
+installations are used; installing or updating mise is out of scope); the Windows
+restore route's package folder and one extraction directory on the host, both deleted
+after the test; the TMT process and its windows on the owner's interactive desktop,
+closed after validation, TMT's own recent-file and application-data writes, and any
+update check the installed tool makes on its own, with any update prompt declined.
 
 **Completion:** Remove this entry through a reviewed Wave change once the packaging
 changes and test evidence merge, or the owner ends it.
