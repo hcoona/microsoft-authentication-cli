@@ -49,7 +49,10 @@ gates.
 - Real-host risk: the owner accepts using the existing personal and work accounts on
   the designated host. Provider-managed sessions, broker state, and caches may receive
   ordinary authentication updates and are retained. Each interactive call needs the
-  owner at the desktop.
+  owner at the desktop. A successful WSL-launched call returns the access token through
+  stdout to the trusted Linux caller's bounded process memory and ordinary interop
+  pipes; the owner accepts that exposure, while captured output, logs, and agent traces
+  still exclude the token.
 
 **Accepted inputs:** current `main-v2` source; .NET SDK 10.0.402 with runtime 10.0.13;
 MSAL/Broker 4.83.1 and NativeInterop 0.20.3; Nerdbank.GitVersioning 3.10.94 as a
@@ -72,34 +75,55 @@ tools and package cache, and its WSL2 environment; the Azure DevOps default scop
 3. Records: update `operational-identities.yaml`, decision 0003, the compatibility
    policy, the client-application identity view, the Windows design (distribution,
    Profile, `--version`, version mapping), the validation strategy, the threat model
-   where it describes distribution, the record-family catalog for new governed records,
-   `CONTRIBUTING.md`, the root README, and `docs/README.md`. Do not change
-   `authentication-engine.tm7` or any candidate disposition, meaning a candidate's state
-   or its justification text; if one needs to change, stop for a Wave amendment. The
-   identity, Profile, decision 0003, and compatibility policy updates merge before or
-   together with items 1 and 2, and before the item 4 protocol relies on them.
+   and `authentication-engine.tm7` (including candidate states and justifications,
+   kept identical between the two), the record-family catalog for new governed records,
+   `CONTRIBUTING.md`, the root README, and `docs/README.md`. The identity, Profile,
+   decision 0003, and compatibility policy updates merge before or together with items
+   1 and 2, and before the item 4 protocol relies on them.
 4. Real-host test: merge an independently reviewed protocol, then build the archive on
    the designated host from a recorded `main-v2` commit, extract it into a fresh
    directory, run help and version checks, and make native Windows and WSL calls for both
-   roles. The cases form a coverage set: silent success, fresh-process silent reuse,
-   `non-interactive-only` with interaction required, and `force-interactive` success.
-   The protocol selects the combinations within the limits. A case that existing state
-   does not reach is recorded as not reached and never simulated. Record whether Windows
-   blocked the unsigned executable; this archive was never downloaded and has no
-   Mark-of-the-Web, so the observation says nothing about a downloaded archive, and the
-   README's SmartScreen notes rely on public Microsoft documentation. Record sanitized
-   results in a research record and evaluate RECHECK-007 and RECHECK-008.
+   roles covering silent success, fresh-process silent reuse, `non-interactive-only`
+   with interaction required, and `force-interactive` success. A case that existing
+   state does not reach is recorded as not reached and never simulated. Record whether
+   Windows blocked the unsigned executable; this archive was never downloaded and has
+   no Mark-of-the-Web, so the observation says nothing about a downloaded archive, and
+   the README's SmartScreen notes rely on public Microsoft documentation. Record
+   sanitized results in a research record and evaluate RECHECK-007 and RECHECK-008.
 5. Corrections: fix packaging defects, and product defects that do not change
    authentication behavior, the result contract, or the request protocol, with tests.
    A defect that needs such a change stops the test and requires a new entry. Each
    corrected archive is a new subject, rebound through a reviewed protocol amendment and
    sharing the same limits.
 
-**Limits:** At most 10 non-interactive and 3 interactive product calls in total across
-all candidate archives, counting failed and interrupted starts. An interactive call is
-any call whose interaction permission allows UI, whether or not UI appears; every other
-product call is non-interactive. No automatic retry. Help and version checks, synthetic
-scenario runs, builds, and packaging are not counted.
+**Native threat-model validation:** Validating `authentication-engine.tm7` in Microsoft
+Threat Modeling Tool 7, as its record family requires, is development validation under
+all of these conditions:
+
+- it launches the tool already installed on the owner's Windows host, on the owner's
+  interactive desktop, then opens, analyzes, and saves a copy of the model under a fresh
+  temporary root;
+- UI Automation reads and acts only on windows of the TMT process that the run started,
+  identified by process ID, and stops if another window is in the foreground;
+- screenshots capture only the bounds of a TMT window while it is in the foreground and
+  not overlapped, are stored under the temporary root for private review, are never
+  committed or published, and are deleted before the implementing pull request merges;
+- the run declines any update prompt and makes no deliberate change to TMT settings;
+- if TMT does not close within 60 seconds after the close request, the run ends only
+  the TMT process it started, identified by process ID.
+
+A repository change to the model comes only from reviewed text edits or from a save in
+the tool whose full diff is reviewed.
+
+**Limits (circuit breakers):** These bound runaway real-host execution; they are not a
+test budget. At most 40 interactive-capable and 60 `non-interactive-only` product calls
+in total across all candidate archives, counting failed and interrupted starts. A call
+is interactive-capable when its interaction permission allows UI, whether or not UI
+appears. The protocol stops a case after two consecutive unexpected outcomes and
+requires a recorded diagnosis before that case runs again. No automatic retry. Help and
+version checks, development validation, synthetic scenario runs, builds, and packaging
+are not counted. Reaching a limit pauses real calls until the owner raises it through a
+Wave amendment.
 
 **Exclusions:** No GitHub release workflow, tag, GitHub Release, or upload or other
 publication of a locally built archive. No installer, MSIX, WinGet, PATH, registry or
@@ -107,13 +131,16 @@ shell integration, signing, automatic update, non-`win-x64` artifact, Git creden
 helper or other adapter, persistent configuration, cache or lock, or telemetry export.
 No authentication behavior, result contract, or request protocol change other than
 `--version`. No SDK, runtime, or MSAL upgrade, and no additional Profile. No account
-addition or removal, sign-out, consent revocation, or cache clearing. No tokens, account
-or tenant identifiers, raw provider diagnostics, or private screenshots in committed
-records, logs, or chat.
+addition or removal, sign-out, consent revocation, or cache clearing. No TMT
+installation or update. No tokens, account or tenant identifiers, raw provider
+diagnostics, or private screenshots in committed records, logs, or chat.
 
 **External effects:** Token acquisition against Microsoft Entra for the two existing
 accounts with ordinary broker updates; public package restore; ordinary CI on
-GitHub-hosted runners; one extraction directory on the host, deleted after the test.
+GitHub-hosted runners; one extraction directory on the host, deleted after the test;
+the TMT process and its windows on the owner's interactive desktop, closed after
+validation, TMT's own recent-file and application-data writes, and any update check the
+installed tool makes on its own, with any update prompt declined.
 
 **Completion:** Remove this entry through a reviewed Wave change once the packaging
 changes and test evidence merge, the call limits are exhausted, or the owner ends it.
