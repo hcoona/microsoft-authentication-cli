@@ -605,8 +605,10 @@ only claims bounded by its accepted protocol. Core `ProductVersionTests` (Linux 
 Windows `ProcessScenarios.RootVersionCompletesWithoutAuthentication` (Windows CI)
 cover the version forms.
 The [host test of the locally built archive](../research/experiments/portable-package-host-test.md#results)
-passed for both roles from native and WSL callers in existing state on the designated
-host; it is that bounded evidence only.
+passed every case it reached for both roles from native and WSL callers in existing state
+on the designated host; interaction-required was reached only for the personal native
+caller, and one forced-interactive call timed out with its prompt unidentified. It is
+that bounded evidence only.
 
 The Slice explicitly excludes browser/device code, Linux forwarding/native brokers,
 non-Public Cloud, service/impersonated/disconnected Windows sessions, ARM64, Profile

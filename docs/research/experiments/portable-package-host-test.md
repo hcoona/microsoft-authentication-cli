@@ -214,7 +214,7 @@ labeled otherwise. "Personal" and "work" name roles; "native" and "WSL" name cal
   `C:\Temp\azureauth-pkgtest-20261029`. Product version
   `0.1.0-alpha.18+6f7fadbafa`, a public-release build.
 - **Host.** Windows 11 x64 build 10.0.26300.9711, the designated user's active Remote
-  Desktop session; WSL 3.0.4.0 (kernel 6.18.54.1-1) with Ubuntu under WSL 2. Account
+  Desktop session; WSL 3.0.4.0 (kernel 6.18.54.1-1) with Ubuntu 26.04.1 LTS under WSL 2. Account
   state, WAM and UI belonged to the Windows session in every call.
 - **Toolchain.** SDK 10.0.403 with runtime 10.0.14 from `mise install --locked` on both
   sides. Before R1 and B1 each side's resolved `dotnet` and its `dotnet --info` base path
@@ -224,6 +224,7 @@ labeled otherwise. "Personal" and "work" name roles; "native" and "WSL" name cal
   3.10.94, as locked by the subject.
 - **Profile and request.** The archive's `profiles\visual-studio-legacy-wam.json`
   (Visual Studio legacy compatibility Profile, Public Cloud, multitenant), `--tenant common`,
+  which for this Profile resolves to the `organizations` authority with MSA passthrough,
   scope `499b84ac-1321-427f-aa17-267ca6975798/.default`, `--telemetry stderr`; WSL calls
   also used `--cancel-on-stdin-close` with a launcher-held pipe.
 - **Initial account state.** Existing personal (Microsoft account) and work
@@ -275,9 +276,12 @@ labeled otherwise. "Personal" and "work" name roles; "native" and "WSL" name cal
 
 Units: I is interactive-capable, N is `non-interactive-only`. Every passing call had validator
 exit 0 with `Passed` and `ProtocolValid` true; every success also had `MetadataValid` and
-`PersistenceUnconfirmed` true and `PersistenceFailed` false. After every call no product
-process remained. The pre-interaction notice line appeared in every interactive call
-and in no other; no `Mechanism unavailable` indication appeared.
+`PersistenceUnconfirmed` true and `PersistenceFailed` false. After every call whose launcher
+completed (all but #1, #7 and #8) the process check found no product process; a check
+after #8 and before #9 also found none. In those calls the pre-interaction notice line
+appeared in every interactive call and in no other, and no `Mechanism unavailable`
+indication appeared. Before each interactive call the owner gave a fresh readiness
+answer in chat.
 
 | # | Case | Role | Caller | Unit | Start (UTC) | Outcome and exits | I left | N left |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -299,10 +303,12 @@ and in no other; no `Mechanism unavailable` indication appeared.
 | 16 | D | work | native | I | 2026-10-29T20:02:54Z | Success/Interactive, exit 0, pass; interactive stage 5.3 s | 35 | 49 |
 | 17 | D | work | WSL | I | 2026-10-29T20:03:19Z | Success/Interactive, exit 0, pass; interactive stage 4.5 s | 34 | 49 |
 
-**Operator observations.** #3: no WAM account picker; a Windows Hello PIN prompt
-appeared with the personal account preselected, and the owner entered the PIN. #6, #11,
-#16, #17: WAM's account picker appeared and the owner chose the requested account. No
-consent prompt and no unexpected window appeared in any call.
+**Operator observations.** #6, #11, #16, #17: WAM shown, requested account chosen, no
+unexpected window. #3: no WAM account picker; a Windows Hello PIN prompt appeared with
+the personal account preselected, and the owner entered the PIN. This description goes
+beyond the protocol's yes/no answers; the
+[repository owner admitted it](https://github.com/hcoona/microsoft-authentication-cli/pull/548)
+as an additional operator observation. No consent prompt appeared in any call.
 
 **Coverage.** Silent success and fresh-process silent reuse passed for both roles and
 callers. `non-interactive-only` with interaction required passed for personal native (#2);
@@ -312,33 +318,56 @@ for either work caller (existing state), and no state was changed to reach it.
 
 ### Deviations and Dispositions
 
-- **Launcher defects (#1, #7, #8).** The native launcher failed after #1 on a ledger-write
-  call that its PowerShell host did not bind; the WSL launcher exited after #7 and #8 when
-  an empty stderr match ended the script under `set -e`. The product calls had
-  completed; their outcomes were not captured. All three were non-interactive, so no UI
-  was possible, and product stdout was already released before the failing line, so no
-  token was exposed. The calls were charged, the defects fixed in the local launchers and
-  the cases rerun once (#2, #9, #10). These are launcher defects, not product defects;
-  their outcomes are excluded from the evidence.
-- **Timeout (#5).** `force-interactive` ended at the 120 s deadline with a typed
-  `Timeout`. The owner had not noticed any prompt and cannot say whether WAM showed none
-  or showed one behind other windows. No product process remained. After this recorded
-  diagnosis, and with other windows minimized, the case ran once more (#6) and passed.
-  Whether WAM presented UI in #5 is undetermined; it is consistent with the provider-owned
-  UI known limitation in the Windows design.
-- **Smart App Control mode.** `citool.exe -lp` needed elevation, so the protocol's labeled
-  registry fallback was used.
+Classified against this protocol and the experiment policy's
+[Stop Conditions and Deviations](../experiment-safety.md#stop-conditions-and-deviations).
+The repository owner's disposition is recorded in
+[PR #548](https://github.com/hcoona/microsoft-authentication-cli/pull/548).
 
-No stop condition fired and no effect outside the protocol was observed.
+- **#1, launcher failure (in-protocol failed attempt).** The native launcher failed
+  after the product call, on a ledger write that its PowerShell host did not bind, so the
+  outcome and the after-call process check were not captured. The call was charged
+  before it started and was non-interactive, so no UI was possible. Product stdout had
+  already been released. The author fixed the write (using `[IO.File]::WriteAllText`)
+  and wrote the diagnosis into the local ledger row for #1 before starting #2. The
+  outcome is excluded from the evidence.
+- **#7 and #8, launcher failure (deviation).** The WSL launcher exited after each
+  product call when an empty `grep` in the stderr projection ended the script under
+  `set -e`; outcomes and after-call process checks were not captured. #8 started 2 s
+  after #7 in the same shell loop, without a recorded diagnosis, and case C ran while
+  case A's outcome was unknown, so the "B when needed" rule could not be applied. A
+  process check before #9 found no product process. After a recorded diagnosis the
+  `grep` was made to tolerate no match, a synthetic test confirmed the projection, and A
+  and C ran once more (#9, #10). Their outcomes are excluded from the evidence.
+- **#14 and #15 before #16 (deviation).** Work WSL cases A and C ran before work native
+  case D, against the protocol's per-role-and-caller order. All were separate processes
+  in existing state.
+- **#5, timeout (stop condition: prompt not identified).** `force-interactive` ended at
+  the 120 s deadline with a typed `Timeout`. The owner had not noticed any prompt and
+  could not say whether WAM showed none or showed one behind other windows, so the
+  protocol's "cannot identify a prompt" stop condition applied. No product process
+  remained, and the owner later reported seeing no remaining WAM window. As a manual
+  step outside the protocol, the owner minimized all other windows before the case ran
+  once more (#6), which passed. Inference: an unseen WAM surface behind other windows
+  would explain #5, but whether WAM presented UI in #5 is undetermined. #5 does not bear
+  on the Windows design's known-limitation sentence, which is scoped to the earlier
+  real-host record.
+- **Smart App Control mode (in protocol).** `citool.exe -lp` needed elevation, so the
+  protocol's labeled registry fallback was used.
+
+**Disposition.** The repository owner admitted calls #2 to #17 as evidence despite
+these deviations and the #5 stop condition, and ended the experiment: no further real
+call runs under this protocol without a merged amendment. No account, cache,
+installation or remote effect outside the protocol was observed.
 
 ### Conclusions
 
 - On this host and existing state, the locally built portable archive, extracted into
   a fresh directory, authenticated both roles from native and WSL callers with the
-  bundled Visual Studio Profile, with strict result validation and no product process
-  left behind. The Native AOT executable built with runtime 10.0.14 loaded the broker
-  from its own directory: every call reached a typed provider outcome without a
-  `dll_search` or `broker_initialization` indication.
+  bundled Visual Studio Profile in every case reached, with strict result validation and
+  no product process left behind; one forced-interactive call timed out with its prompt
+  unidentified. Inference: the Native AOT executable built with runtime 10.0.14 loaded
+  the broker from its own directory, because every captured call reached a typed provider
+  outcome without a `dll_search` or `broker_initialization` indication.
 - This is existing-state evidence for one host. It does not establish clean first use,
   another host, a downloaded archive (Mark of the Web, SmartScreen or Smart App Control
   enforcement), deployment without development tools, or any support claim.
