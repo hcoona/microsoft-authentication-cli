@@ -89,7 +89,10 @@ Azure DevOps default scope.
    SmartScreen notes, uninstall), and third-party license notices. Add one packaging
    script that refuses a dirty worktree, restores in locked mode, publishes Native AOT,
    enforces an archive-content allowlist, checks that native imports come only from
-   system DLLs and API sets, and writes the zip and its SHA-256.
+   system DLLs and API sets, and writes the zip and its SHA-256. The script also writes
+   the publish output's symbol files (the native one and the project's managed ones)
+   into a separate symbols zip with its own SHA-256, beside the package archive and
+   never inside it (owner decision, 2026-10-29).
 3. Records: update `operational-identities.yaml`, decision 0003, the compatibility
    policy, the client-application identity view, the Windows design (distribution,
    Profile, `--version`, version mapping), the validation strategy, the threat model
