@@ -24,7 +24,7 @@ applies to every operation, configuration, and failure path.
 | Provider | Windows WAM only. One real-account discovery, at most one selected-account silent call for the two existing modes, and at most one permitted or explicitly required interactive call. Forced interaction skips silent acquisition. No application-level network retry or second provider. |
 | State | Broker-owned reusable state; a fresh in-memory MSAL application per invocation. No MSAL Extensions cache helper, serialized MSAL cache, shadow refresh-token store, engine account binding, or cross-process lock. |
 | Host | Windows 11 x64 in an active interactive user session, with WAM available. WSL 2 callers use normal Windows executable interoperability. Service, impersonated, disconnected desktop, and native Linux hosts are outside this Slice. |
-| Distribution | Executable basename, installer, signing, and update channel remain release identities under the [registry](../governance/operational-identities.yaml). `<windows-cli>` below denotes the caller-selected executable, not a new installed command. |
+| Distribution | An unsigned portable `win-x64` zip, `azureauth-unofficial-<version>-win-x64.zip`, that the user extracts into a directory of their choice; see [Portable Package and Version](#portable-package-and-version). The [registry](../governance/operational-identities.yaml) owns the selected identities. `<windows-cli>` below denotes the caller-selected path of `azureauth-unofficial.exe`; nothing is placed on `PATH`. |
 
 The [dependency assessment](../research/experiments/windows-slice-validation.md#windows-slice-dependency-and-host-contracts)
 binds these choices to public source. Future upgrades must use the existing dependency
@@ -137,6 +137,43 @@ flowchart LR
     class caller,profile,wam,identity,resource external
 ```
 
+### Portable Package and Version
+
+The CLI project's assembly name makes the published executable
+`azureauth-unofficial.exe`. `packaging/windows/package.ps1` builds the portable archive on
+Windows x64 from a clean full Git clone: it refuses a dirty or shallow worktree,
+restores in locked mode from the repository's nuget.org-only configuration, publishes
+Native AOT, and admits exactly this content:
+
+| Archive path | Source |
+| --- | --- |
+| `azureauth-unofficial.exe` | Native AOT publish output. |
+| `msalruntime.dll` | NativeInterop's `win-x64` asset from the same publish; it must stay beside the executable because loading is restricted to the application directory and System32. |
+| `profiles/visual-studio-legacy-wam.json` | `packaging/windows/profiles/`, byte-for-byte the schema's [Visual Studio legacy candidate](#visual-studio-legacy-candidate); a test asserts that equality and that the product reader accepts the file. |
+| `README.md` | `packaging/windows/README.md`: unofficial notice, extraction, Windows and WSL use, the bundled Profile's ownership and limits, unsigned and SmartScreen notes, and removal. |
+| `LICENSE.txt` | The repository license. |
+| `THIRD-PARTY-NOTICES.txt` | A fixed header for the MSAL components and the .NET runtime notices from the locked ILCompiler runtime package. |
+
+The native symbol file stays out of the archive; any other publish output fails the
+script. Before writing the zip, the script checks with `dumpbin /dependents` that both
+native images import only System32 DLLs and API sets, and runs the staged executable's
+`--version` from its own directory with `PATH` limited to System32. It then writes
+the zip and a SHA-256 file. These checks are packaging checks on the build host, not
+evidence of deployment without development-machine dependencies.
+
+Nerdbank.GitVersioning, a build-only package, computes the version from
+`version.json` and Git history: `0.1.0-alpha.{height}` in SemVer 2.0, with `main-v2`
+as the only public-release ref; a build from another ref appends a `g<commit>`
+prerelease identifier. The product uses two forms:
+
+- the version without build metadata for the archive name, the managed User-Agent
+  product token and the `ActivitySource` version;
+- that version plus `+<10-hex commit>` build metadata for `--version` and help.
+
+The Win32 version resource carries the numeric `0.1.0` file version and the
+informational version. Version computation needs full history, so CI checks out with
+`fetch-depth: 0`.
+
 ## Protocol 1 Command-Line Contract
 
 Invoke `<windows-cli> authenticate` followed by the arguments below. Options and enum
@@ -167,6 +204,9 @@ No environment variable supplies request intent or Profile selection.
 `help` and root `--help` are non-authentication entry points and may print help to stdout.
 The help text states that the project is unofficial and not a Microsoft release, under
 [V2-REQ-003](../product/requirements/product-boundary.md#v2-req-003-unofficial-product-identity).
+Root `--version` is the third non-authentication entry point: it prints one LF-terminated
+line, `azureauth-unofficial <version>` with the full version defined under
+[Portable Package and Version](#portable-package-and-version).
 Every attempted authentication invocation, including malformed ones, uses the terminal
 result contract. An unsupported or absent version returns a protocol 1 `invalid_request`
 envelope with a safe reason; it does not echo the unsupported input. This bootstrap
@@ -261,8 +301,11 @@ telemetry destinations, or PAT behavior. Unsupported integrations fail admission
 
 The named example in the Profile schema is the concrete candidate definition. It is
 schema documentation, not an installed/enabled Profile. An implementation must not
-silently materialize or select it. Any eventual provisioned file uses the same parser
-and explicit path selection as a user-created file.
+silently materialize or select it. Under decision
+[0003](../decisions/0003-treat-client-registration-as-an-external-dependency.md)'s
+prerelease exception, the [portable package](#portable-package-and-version) carries the
+same document as a file; it uses the same parser and explicit path selection as a
+user-created file, and nothing selects it by default.
 
 Microsoft owns the registration. AzureAuth and GCM publicly use it; this fork has no
 upstream endorsement, support commitment, or control over account eligibility, consent,
@@ -279,7 +322,7 @@ Visual Studio, AzureAuth, or GCM serialized caches. No app-owned persisted state
 to collide with those products. Changing Profile names alone neither changes the OAuth
 client identity nor creates a new broker cache partition.
 
-Before activation/distribution, the existing
+Before activation or general distribution, the existing
 [external Profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate)
 still needs bounded personal/work-account, host/redirect, consent/audit/branding, strict
 result, and reuse evidence. Registration rejection returns the existing failure outcome;
@@ -1075,9 +1118,9 @@ object whose outcome does not match the exit status is also a caller-observed
 transport/protocol failure and must not be converted into an engine outcome. Result
 projection fails closed: a selected success whose access token, token type or account
 email is empty, or whose scope list is absent, is projected as `internal_failure`
-rather than as a success the schema would reject. `help` and root `--help` are not
-part of the `authenticate` protocol; their exit status reports only whether help was
-written.
+rather than as a success the schema would reject. `help`, root `--help` and root
+`--version` are not part of the `authenticate` protocol; their exit status reports only
+whether their text was written.
 
 Build the result from an allowlist of fields, not by serializing an MSAL result or
 exception. Only `accessToken` in a validated success may expose authentication material.
@@ -1155,7 +1198,8 @@ status. No upstream telemetry configuration is read.
 Instrument the request and its Profile read, account discovery, silent acquisition,
 owned interaction, interactive acquisition, candidate validation and owned-UI close
 with .NET `ActivitySource`/`Activity`. Use the fork-owned source name
-`hcoona.microsoft-authentication-cli`, version `0.0.0` for this undistributed Slice.
+`hcoona.microsoft-authentication-cli`, versioned with the product version without build
+metadata ([Portable Package and Version](#portable-package-and-version)).
 These APIs are the [.NET OpenTelemetry instrumentation boundary](https://learn.microsoft.com/dotnet/core/diagnostics/observability-with-otel#net-implementation-of-opentelemetry),
 not an assertion that an OpenTelemetry SDK/exporter has been installed or run.
 No new dependency, exporter endpoint or Collector service is needed for local observation.

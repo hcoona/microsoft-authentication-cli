@@ -18,6 +18,13 @@ Start with:
 - [Human contribution workflow](CONTRIBUTING.md)
 - [Security reporting](SECURITY.md)
 
+## Windows Portable Package
+
+The Windows x64 command is `azureauth-unofficial`, built as an unsigned portable zip
+that you extract into a directory of your choice. No package has been published yet. The
+[package README](packaging/windows/README.md) covers installation, use from Windows and
+WSL, the bundled Visual Studio compatibility Profile and its limits, and removal.
+
 ## Upstream and License
 
 See [`UPSTREAM.md`](UPSTREAM.md) for the canonical upstream relationship and import

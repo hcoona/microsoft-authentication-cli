@@ -120,6 +120,18 @@ mise exec -- dotnet restore Windows.slnx --locked-mode -p:EnableWindowsTargeting
 mise exec -- dotnet build Windows.slnx --configuration Release --no-restore -p:EnableWindowsTargeting=true
 ```
 
+Builds compute the product version with Nerdbank.GitVersioning from `version.json` and
+the Git history, so build from a full clone; a shallow clone yields a wrong version
+height. The Windows portable package is built on Windows x64, from a clean full clone,
+with the Visual Studio C++ tools that Native AOT needs:
+
+```text
+pwsh packaging/windows/package.ps1
+```
+
+The [Windows design](docs/designs/windows-ado-authentication.md#portable-package-and-version)
+owns the package content and checks.
+
 ## .NET and Agent Tooling
 
 The same toolchain selects .NET SDK 10.0.402 (`http:dotnet-development`), APM v0.29.0,

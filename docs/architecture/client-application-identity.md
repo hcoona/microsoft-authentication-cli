@@ -86,7 +86,8 @@ constant.
    Redirect, broker-registration, signing, and bundle-identity constraints are integration
    concerns, not a selected file schema. The Visual Studio compatibility candidate is
    Public Cloud only; its concrete candidate is defined by the Windows design and is not
-   activated, provided, distributed or supported until the external Profile gate passes.
+   activated or supported until the external Profile gate passes. Decision 0003's
+   prerelease exception lets prerelease archives bundle it as an explicit opt-in file.
 5. Resource/scopes, strict email, and interaction permission belong to each request.
    Profiles do not own resource presets, scope catalogs, acquisition order, deadline
    defaults, or cache modes. Effective tenant resolution follows
@@ -183,9 +184,10 @@ establishes the following boundary:
 This records the known reuse and the limits of support evidence without claiming
 Microsoft approval of the fork. It does not waive the
 [external-client-profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate),
-whose conditions still need validation and acceptance before distribution. No Microsoft
-support contract is asserted or required to treat an identifier as public configuration
-under decision `0003`.
+whose conditions still need validation and acceptance before general distribution;
+decision `0003` records the owner's prerelease exception. No Microsoft support
+contract is asserted or required to treat an identifier as public configuration under
+decision `0003`.
 
 ## Governing Evidence and Gates
 
