@@ -201,11 +201,164 @@ own commit and archive hashes.
 
 ## Results
 
-No execution has occurred. Record the bound commit, OS build, WSL version, toolchain
-versions and sanitized initial state before R1; then R1 and B1 to B4 outcomes, hashes,
-the first-run observations and the ledger. The results state every field the experiment
-policy's Authentication Experiment Records section requires, including this protocol's
-revision, and each deviation with its disposition:
+Executed on 2026-10-29 under this protocol as merged at
+`6f7fadbafa9af6b9cd565cbee92ff89f07030294` ([PR #547](https://github.com/hcoona/microsoft-authentication-cli/pull/547)).
+All results are runtime observations on this host and its existing account state unless
+labeled otherwise. "Personal" and "work" name roles; "native" and "WSL" name callers.
+
+### Context
+
+- **Subject.** `main-v2` at `6f7fadbafa9af6b9cd565cbee92ff89f07030294`, which is this
+  protocol's merge commit, cloned in full and checked out as a local `main-v2` branch
+  (`HEAD` on `refs/heads/main-v2`, clean, not shallow) under
+  `C:\Temp\azureauth-pkgtest-20261029`. Product version
+  `0.1.0-alpha.18+6f7fadbafa`, a public-release build.
+- **Host.** Windows 11 x64 build 10.0.26300.9711, the designated user's active Remote
+  Desktop session; WSL 3.0.4.0 (kernel 6.18.54.1-1) with Ubuntu under WSL 2. Account
+  state, WAM and UI belonged to the Windows session in every call.
+- **Toolchain.** SDK 10.0.403 with runtime 10.0.14 from `mise install --locked` on both
+  sides. Before R1 and B1 each side's resolved `dotnet` and its `dotnet --info` base path
+  were under the mise install directory. Visual Studio 18.11.2 with MSVC 14.51.36231;
+  PowerShell 7.6.9; bash 5.3.9. No `mise exec` or `mise trust` ran.
+- **Dependencies.** MSAL and Broker 4.83.1, NativeInterop 0.20.3, Nerdbank.GitVersioning
+  3.10.94, as locked by the subject.
+- **Profile and request.** The archive's `profiles\visual-studio-legacy-wam.json`
+  (Visual Studio legacy compatibility Profile, Public Cloud, multitenant), `--tenant common`,
+  scope `499b84ac-1321-427f-aa17-267ca6975798/.default`, `--telemetry stderr`; WSL calls
+  also used `--cancel-on-stdin-close` with a launcher-held pipe.
+- **Initial account state.** Existing personal (Microsoft account) and work
+  (organizational) accounts with unknown prior broker state. The first personal call
+  required interaction; every first work call was silent.
+- **Application files and access.** The product's only file input was the Profile; it
+  has no own cache or configuration. WAM sessions and caches received ordinary updates
+  and are retained.
+- **Telemetry and sensitive output.** Toolchain telemetry opt-out variables were set.
+  Product stdout stayed in launcher memory and went only to the validator's stdin.
+  Launchers printed only the evidence allowlist; emails stayed in the local
+  `roles.json`. No token, email, tenant, provider text, screenshot or crash dump entered
+  any output, trace or record.
+- **Expected UI.** Case A and C: none. Case B: whatever WAM needs for the discovered
+  account. Case D: WAM's interactive account selection.
+
+### Restore and Build
+
+- **R1.** 19:19:35 UTC, locked WSL restore into fresh folders with NuGet audit at its
+  default: exit 0, 0 warnings, 0 errors, 1 min 36 s. The audit fetched the nuget.org
+  vulnerability index. The three implicit runtime packs are not lock-verified.
+- **B1.** 19:21:44 to 19:22:31 UTC, `package.ps1 -DisableNuGetAudit` without
+  `-AllowNonPublicRelease`: exit 0. Public release true; `azureauth-unofficial.exe` imports
+  17 and `msalruntime.dll` 50 System32 DLLs and API sets; the version resource and the
+  staged `--version` matched. This `--version` was the first run of the executable's
+  bytes; Windows did not block or warn.
+- **B2.** Validator build exit 0, 0 warnings. After B1 and B2 the build servers were
+  stopped and no process remained under the root.
+- **B3.** Both `.sha256` files verified.
+
+| Artifact | Bytes | SHA-256 |
+| --- | --- | --- |
+| `azureauth-unofficial-0.1.0-alpha.18-win-x64.zip` | 5,168,952 | `68c2dc524c576d0b442d06cc7f13d8ee423f28ae32509d678538cb329c2d6f95` |
+| `azureauth-unofficial-0.1.0-alpha.18-win-x64-symbols.zip` | 7,973,908 | `2b0674224fec000d71e2d9f4fefd5225eaa62d8ee1d280eddf34c11e4f14e7b9` |
+| `azureauth-unofficial.exe` (extracted) | 8,933,888 | `fc791de5bec10e0db2d1dfa1b879673cd9009b2b3f37920f78380d87e4a46d30` |
+| `msalruntime.dll` (extracted) | 2,949,656 | `9df30b54b7af974a072b1d55fee3590a5562c77ebc46f47016f0dd5199cd0c79` |
+
+  The archive held exactly the six allowlisted files; `msalruntime.dll` is the same
+  file the earlier [real-host results](real-host-validation.md#method) recorded.
+- **B4.** From an empty directory with `PATH` limited to System32, the extracted
+  `--version` printed `azureauth-unofficial 0.1.0-alpha.18+6f7fadbafa` and `--help` printed
+  the unofficial first lines, both exit 0. This first run from the extracted directory was
+  not blocked or warned. The extracted executable had no `Zone.Identifier` stream.
+  `citool.exe -lp` failed without elevation (`0x80070005`); the configured
+  `VerifiedAndReputablePolicyState` value is 0 (Off), a configured value, not the verified
+  mode.
+
+### Calls
+
+Units: I is interactive-capable, N is `non-interactive-only`. Every passing call had validator
+exit 0 with `Passed` and `ProtocolValid` true; every success also had `MetadataValid` and
+`PersistenceUnconfirmed` true and `PersistenceFailed` false. After every call no product
+process remained. The pre-interaction notice line appeared in every interactive call
+and in no other; no `Mechanism unavailable` indication appeared.
 
 | # | Case | Role | Caller | Unit | Start (UTC) | Outcome and exits | I left | N left |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | A | personal | native | N | 2026-10-29T19:32:59Z | Not captured: launcher defect after the call (see Deviations) | 40 | 59 |
+| 2 | A | personal | native | N | 2026-10-29T19:33:56Z | InteractionRequired/None, exit 1, pass | 40 | 58 |
+| 3 | B | personal | native | I | 2026-10-29T19:39:04Z | Success/Interactive, exit 0, pass; interactive stage 21.2 s | 39 | 58 |
+| 4 | C | personal | native | N | 2026-10-29T19:39:32Z | Success/Silent, exit 0, pass | 39 | 57 |
+| 5 | D | personal | native | I | 2026-10-29T19:40:57Z | Timeout/None, exit 1, FAIL (see Deviations) | 38 | 57 |
+| 6 | D | personal | native | I | 2026-10-29T19:44:40Z | Success/Interactive, exit 0, pass; interactive stage 24.2 s | 37 | 57 |
+| 7 | A | personal | WSL | N | 2026-10-29T19:45:39Z | Not captured: launcher defect after the call | 37 | 56 |
+| 8 | C | personal | WSL | N | 2026-10-29T19:45:41Z | Not captured: launcher defect after the call | 37 | 55 |
+| 9 | A | personal | WSL | N | 2026-10-29T19:46:46Z | Success/Silent, exit 0, pass | 37 | 54 |
+| 10 | C | personal | WSL | N | 2026-10-29T19:46:49Z | Success/Silent, exit 0, pass | 37 | 53 |
+| 11 | D | personal | WSL | I | 2026-10-29T20:01:05Z | Success/Interactive, exit 0, pass; interactive stage 25.4 s | 36 | 53 |
+| 12 | A | work | native | N | 2026-10-29T20:01:42Z | Success/Silent, exit 0, pass | 36 | 52 |
+| 13 | C | work | native | N | 2026-10-29T20:01:53Z | Success/Silent, exit 0, pass | 36 | 51 |
+| 14 | A | work | WSL | N | 2026-10-29T20:01:54Z | Success/Silent, exit 0, pass | 36 | 50 |
+| 15 | C | work | WSL | N | 2026-10-29T20:01:56Z | Success/Silent, exit 0, pass | 36 | 49 |
+| 16 | D | work | native | I | 2026-10-29T20:02:54Z | Success/Interactive, exit 0, pass; interactive stage 5.3 s | 35 | 49 |
+| 17 | D | work | WSL | I | 2026-10-29T20:03:19Z | Success/Interactive, exit 0, pass; interactive stage 4.5 s | 34 | 49 |
+
+**Operator observations.** #3: no WAM account picker; a Windows Hello PIN prompt
+appeared with the personal account preselected, and the owner entered the PIN. #6, #11,
+#16, #17: WAM's account picker appeared and the owner chose the requested account. No
+consent prompt and no unexpected window appeared in any call.
+
+**Coverage.** Silent success and fresh-process silent reuse passed for both roles and
+callers. `non-interactive-only` with interaction required passed for personal native (#2);
+it was **not reached** for personal WSL (state from #3 already permitted silent use) or
+for either work caller (existing state), and no state was changed to reach it.
+`force-interactive` success passed for both roles and callers.
+
+### Deviations and Dispositions
+
+- **Launcher defects (#1, #7, #8).** The native launcher failed after #1 on a ledger-write
+  call that its PowerShell host did not bind; the WSL launcher exited after #7 and #8 when
+  an empty stderr match ended the script under `set -e`. The product calls had
+  completed; their outcomes were not captured. All three were non-interactive, so no UI
+  was possible, and product stdout was already released before the failing line, so no
+  token was exposed. The calls were charged, the defects fixed in the local launchers and
+  the cases rerun once (#2, #9, #10). These are launcher defects, not product defects;
+  their outcomes are excluded from the evidence.
+- **Timeout (#5).** `force-interactive` ended at the 120 s deadline with a typed
+  `Timeout`. The owner had not noticed any prompt and cannot say whether WAM showed none
+  or showed one behind other windows. No product process remained. After this recorded
+  diagnosis, and with other windows minimized, the case ran once more (#6) and passed.
+  Whether WAM presented UI in #5 is undetermined; it is consistent with the provider-owned
+  UI known limitation in the Windows design.
+- **Smart App Control mode.** `citool.exe -lp` needed elevation, so the protocol's labeled
+  registry fallback was used.
+
+No stop condition fired and no effect outside the protocol was observed.
+
+### Conclusions
+
+- On this host and existing state, the locally built portable archive, extracted into
+  a fresh directory, authenticated both roles from native and WSL callers with the
+  bundled Visual Studio Profile, with strict result validation and no product process
+  left behind. The Native AOT executable built with runtime 10.0.14 loaded the broker
+  from its own directory: every call reached a typed provider outcome without a
+  `dll_search` or `broker_initialization` indication.
+- This is existing-state evidence for one host. It does not establish clean first use,
+  another host, a downloaded archive (Mark of the Web, SmartScreen or Smart App Control
+  enforcement), deployment without development tools, or any support claim.
+
+### Recheck Evaluations (2026-10-29)
+
+- **RECHECK-007.** The Azure DevOps Entra OAuth guidance is unchanged (updated
+  `2026-05-08T17:05:00Z`, `f7bd73f`). These calls add bounded existing-state evidence that
+  the bundled Profile works for a personal and a work account; the external Client Profile
+  gate stays open. No conclusion changes.
+- **RECHECK-008.** The Native AOT guide (`45d2254`), trimming incompatibilities
+  (`020cd4a`) and MSAL issues #5226 and #5248 (closed) are unchanged. The published
+  application with the 10.0.14 runtime packs loaded its broker and completed every
+  outcome above. The Native AOT disposition stands.
+- **RECHECK-003 and RECHECK-005.** Evaluated with the protocol in
+  [PR #547](https://github.com/hcoona/microsoft-authentication-cli/pull/547); unchanged.
+
+### Retention
+
+The package and symbols zips with their `.sha256` files stay in
+`C:\Temp\azureauth-pkgtest-20261029\out` until this record merges, then the root is deleted
+as Retention and Cleanup requires. The local launchers, `roles.json` and ledger stay until
+the Wave entry ends. Capacity remaining under the Wave limits: 34 I and 49 N.
