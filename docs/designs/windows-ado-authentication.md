@@ -154,15 +154,18 @@ Native AOT, and admits exactly this content:
 | `LICENSE.txt` | The repository license. |
 | `THIRD-PARTY-NOTICES.txt` | A fixed header for the MSAL components and the .NET runtime notices from the locked ILCompiler runtime package. |
 
-Symbol files (the native one and those of the project's own managed assemblies) stay out
-of the archive; any other publish output fails the script. Before writing the zip, the
-script checks with `dumpbin /dependents` that both
-native images import only System32 DLLs and API sets, rejecting Visual C++
-redistributable DLLs by name because they are not part of Windows even when a
-development host has them in System32. The script then checks the version resource
+Symbol files (the native `azureauth-unofficial.pdb`, which native debugging and
+profiling of the build require, and those of the project's own managed assemblies) stay
+out of the archive; any other publish output fails the script. Before writing the zip,
+the script checks with `dumpbin /dependents` that both native images import only
+System32 DLLs and API sets, rejecting Visual C++ redistributable DLLs by name because
+they are not part of Windows even when a development host has them in System32. The
+script then checks the version resource
 described below and runs the staged executable's `--version` from its own directory
-with `PATH` limited to System32, and finally writes the zip and a SHA-256 file. These
-checks are packaging checks on the build host, not evidence of deployment without
+with `PATH` limited to System32, and finally writes the zip and a SHA-256 file. Beside
+them it writes `azureauth-unofficial-<version>-win-x64-symbols.zip`, holding the symbol
+files, with its own SHA-256 file; the script refuses to overwrite any of these outputs.
+These checks are packaging checks on the build host, not evidence of deployment without
 development-machine dependencies.
 
 Nerdbank.GitVersioning, a build-only package, computes the version from
