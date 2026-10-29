@@ -173,8 +173,15 @@ prerelease identifier. The product uses two forms:
   product token and the `ActivitySource` version;
 - that version plus `+<10-hex commit>` build metadata for `--version` and help.
 
-The Win32 version resource carries the numeric `0.1.0` file version and the full version
-as its product version; the packaging script checks both on the published executable.
+The Win32 version resource carries the numeric `0.1.0` file version and
+Nerdbank.GitVersioning's informational version, `<version>+<10-hex commit>`, as its
+product version; the packaging script checks both on the published executable. The
+informational version omits the `g<commit>` prerelease identifier, so it equals the
+`--version` output only on a public-release build. The script therefore refuses a
+build that is not a public release unless `-AllowNonPublicRelease` is passed for
+development validation. A public-release build needs `main-v2` checked out, with
+`HEAD` on `refs/heads/main-v2`; a detached `HEAD` at the same commit is not a
+public release, and the `PublicRelease` property override is not used.
 Version computation needs a full Git clone: a shallow clone fails the build, and a tree
 without `.git`, such as a `git archive` copy, does not build. CI therefore checks out
 with `fetch-depth: 0`.

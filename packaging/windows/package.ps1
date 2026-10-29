@@ -21,11 +21,17 @@ Directory for the zip and checksum; created if missing. Default: artifacts\packa
 .PARAMETER DisableNuGetAudit
 Turns off NuGet audit for the restore, for hosts that cannot reach the audit source.
 Locked mode still requires every package to match the committed lock files.
+
+.PARAMETER AllowNonPublicRelease
+Packages a build from a ref other than main-v2, whose version carries the commit-ID
+prerelease suffix. Use it only for development validation; a packaged release or a
+real-host test subject is built with main-v2 checked out.
 #>
 [CmdletBinding()]
 param(
     [string] $OutputDirectory,
-    [switch] $DisableNuGetAudit
+    [switch] $DisableNuGetAudit,
+    [switch] $AllowNonPublicRelease
 )
 
 Set-StrictMode -Version Latest
@@ -57,12 +63,17 @@ try {
     dotnet @restore
 
     $versionJson = dotnet msbuild $Project -nologo -target:GetBuildVersion `
-        -getProperty:NuGetPackageVersion -getProperty:GitCommitId -getProperty:PublicRelease
+        -getProperty:NuGetPackageVersion -getProperty:GitCommitId -getProperty:PublicRelease `
+        -getProperty:AssemblyInformationalVersion -getProperty:AssemblyFileVersion
     $build = ($versionJson -join "`n" | ConvertFrom-Json).Properties
+    $publicRelease = $build.PublicRelease -eq 'True'
+    if (-not $publicRelease -and -not $AllowNonPublicRelease) {
+        Fail 'not a public-release build; check out main-v2, or pass -AllowNonPublicRelease for development validation.'
+    }
     $version = $build.NuGetPackageVersion
     if ($version -notmatch '^0\.1\.0-alpha\.(0|[1-9][0-9]*)(\.g[0-9a-f]{10})?$') { Fail "unexpected version '$version'." }
     $full = "$version+$($build.GitCommitId.Substring(0, 10))"
-    Write-Host "Packaging $CommandName $full (public release: $($build.PublicRelease))"
+    Write-Host "Packaging $CommandName $full (public release: $publicRelease)"
 
     if (-not $OutputDirectory) { $OutputDirectory = Join-Path $Repository 'artifacts\package' }
     $OutputDirectory = [IO.Path]::GetFullPath($OutputDirectory)
@@ -117,11 +128,13 @@ try {
         Write-Host "$name imports $($imports.Count) System32 DLLs and API sets."
     }
 
-    # The Win32 version resource carries the numeric file version and the full version.
+    # The Win32 version resource carries the numeric file version and Nerdbank.GitVersioning's
+    # informational version, which omits the commit-ID prerelease suffix of non-public builds.
     $resource = (Get-Item -LiteralPath (Join-Path $stage "$CommandName.exe")).VersionInfo
-    $numeric = ($version -split '-')[0]
-    if ($resource.FileVersion -ne $numeric -or $resource.ProductVersion -ne $full) {
-        Fail "version resource is '$($resource.FileVersion)' / '$($resource.ProductVersion)', expected '$numeric' / '$full'."
+    $numeric = $build.AssemblyFileVersion
+    $informational = $build.AssemblyInformationalVersion
+    if ($resource.FileVersion -ne $numeric -or $resource.ProductVersion -ne $informational) {
+        Fail "version resource is '$($resource.FileVersion)' / '$($resource.ProductVersion)', expected '$numeric' / '$informational'."
     }
 
     # The packaged executable reports the computed version from its own directory, with
