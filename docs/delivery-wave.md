@@ -60,6 +60,10 @@ on 2026-10-29, and decides:
   WSL sides. This runtime-patch upgrade is not a Dependency Upgrade Matrix evaluation;
   existing real-host and Native AOT evidence stays bound to the runtime packs its
   records name.
+- mise (2026-10-29): move the mise version that CI pins (`MISE_VERSION` and
+  `min_version`) to 2026.10.22, and update the host's mise installations on the
+  Windows and WSL sides to that version. The SDK keeps the checksum-pinned
+  `http:dotnet-development` tool and the generated `global.json`.
 - Windows restore route (2026-10-29): the designated Windows host cannot complete a TLS
   connection to `api.nuget.org`. A locked-mode restore under the host's WSL fetches
   the packages from nuget.org into a fresh package folder on the Windows drive. The
@@ -111,14 +115,13 @@ Azure DevOps default scope.
 6. Toolchain: change `mise.toml`, `mise.lock`, the generated `global.json`, the
    package lock files that the runtime patch regenerates, and the Windows design,
    `CONTRIBUTING.md`, `UPSTREAM.md` and package notices where they name the SDK or
-   runtime; record the RECHECK-008 evaluation. This lands before the item 4 build.
+   runtime; record the RECHECK-008 evaluation. Move `MISE_VERSION` in
+   `.github/workflows/check.yml` and `min_version` in `mise.toml` to 2026.10.22, and
+   regenerate `mise.lock` and `global.json` with that version; the pull request
+   records it. This lands before the item 4 build.
    Item 6 lands in the same pull request as items 1 to 3 (#543), so their records,
    notices and lock files are written once at 10.0.403 and validated there; no item 1
    to 3 change merges before it. Historical research records are not rewritten.
-   Generate `mise.lock` and `global.json` with the CI-pinned mise version,
-   downloaded into a fresh temporary directory, checked against its published release
-   checksum, run with its data, cache and state directories inside that directory, and
-   deleted afterward; the pull request records that version.
 
 **Native threat-model validation:** Validating `authentication-engine.tm7` in Microsoft
 Threat Modeling Tool 7, as its record family requires, is development validation under
@@ -167,9 +170,9 @@ logs, or chat.
 accounts with ordinary broker updates; public package restore; ordinary CI on
 GitHub-hosted runners; tool downloads verified by `mise.lock` on the host and the
 runners, and the .NET SDK 10.0.403 that `mise install --locked` installs in mise's tool
-directories on the host's Windows and WSL sides, retained (the host's persistent mise
-installations are not installed or updated); the temporary CI-pinned mise of item 6,
-deleted after use; the Windows restore route's package folder and one extraction
+directories on the host's Windows and WSL sides, retained; the host's mise installations
+updated to 2026.10.22 through their existing install method (`mise self-update` or
+WinGet), retained; the Windows restore route's package folder and one extraction
 directory on the host, both deleted after the test; the TMT process and its windows on
 the owner's interactive desktop, closed after validation, TMT's own recent-file and
 application-data writes, and any update check the installed tool makes on its own,
