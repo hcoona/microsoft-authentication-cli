@@ -156,10 +156,13 @@ Native AOT, and admits exactly this content:
 
 The native symbol file stays out of the archive; any other publish output fails the
 script. Before writing the zip, the script checks with `dumpbin /dependents` that both
-native images import only System32 DLLs and API sets, and runs the staged executable's
-`--version` from its own directory with `PATH` limited to System32. It then writes
-the zip and a SHA-256 file. These checks are packaging checks on the build host, not
-evidence of deployment without development-machine dependencies.
+native images import only System32 DLLs and API sets, rejecting Visual C++
+redistributable DLLs by name because they are not part of Windows even when a
+development host has them in System32. The script then checks the version resource
+described below and runs the staged executable's `--version` from its own directory
+with `PATH` limited to System32, and finally writes the zip and a SHA-256 file. These
+checks are packaging checks on the build host, not evidence of deployment without
+development-machine dependencies.
 
 Nerdbank.GitVersioning, a build-only package, computes the version from
 `version.json` and Git history: `0.1.0-alpha.{height}` in SemVer 2.0, with `main-v2`
@@ -170,9 +173,11 @@ prerelease identifier. The product uses two forms:
   product token and the `ActivitySource` version;
 - that version plus `+<10-hex commit>` build metadata for `--version` and help.
 
-The Win32 version resource carries the numeric `0.1.0` file version and the
-informational version. Version computation needs full history, so CI checks out with
-`fetch-depth: 0`.
+The Win32 version resource carries the numeric `0.1.0` file version and the full version
+as its product version; the packaging script checks both on the published executable.
+Version computation needs a full Git clone: a shallow clone fails the build, and a tree
+without `.git`, such as a `git archive` copy, does not build. CI therefore checks out
+with `fetch-depth: 0`.
 
 ## Protocol 1 Command-Line Contract
 

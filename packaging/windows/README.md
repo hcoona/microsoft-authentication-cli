@@ -36,16 +36,19 @@ Each release is published with a SHA-256 checksum. Before extracting, compare it
 ```
 
 The files are not code-signed. Windows marks files downloaded from the internet with the
-Mark of the Web, and extraction with File Explorer passes the mark to the extracted
-files. Microsoft Defender SmartScreen may then warn before the first run, and Smart App
-Control, where it is on, may block unsigned code. If you trust the archive whose
-checksum you verified, you can clear the mark on the archive before extracting it, as
-described in Microsoft's
+Mark of the Web, and the extracted files may carry the mark too. Microsoft Defender
+SmartScreen may then warn before the first run. If you trust the archive whose checksum
+you verified, you can clear the mark on the archive before extracting it, as described
+in Microsoft's
 [Unblock-File documentation](https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/unblock-file):
 
 ```powershell
 Unblock-File .\azureauth-unofficial-<version>-win-x64.zip
 ```
+
+Clearing the mark does not help with Smart App Control: where it is on in enforcement
+mode, it blocks unsigned code that Microsoft's app intelligence service does not
+recognize, whether or not the file has the mark.
 
 See [Microsoft Defender SmartScreen](https://learn.microsoft.com/windows/security/operating-system-security/virus-and-threat-protection/microsoft-defender-smartscreen/)
 and [Smart App Control](https://learn.microsoft.com/windows/apps/develop/smart-app-control/overview)

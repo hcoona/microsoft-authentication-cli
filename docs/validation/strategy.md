@@ -588,7 +588,9 @@ readiness. The following [release gates](#release-gates) remain open: the primar
 gate for a release, real broker failure and concurrency evidence, external Profile
 consent/audit/branding acceptance and Profile activation/distribution, minimal
 deployment without development-machine dependencies, independent distribution and
-installation identity under decision 0005, resolution of the native threat-model
+installation identity under decision 0005 (selected for the portable package except its
+signing identity, which stays unsigned until
+[Issue #505](https://github.com/hcoona/microsoft-authentication-cli/issues/505)), resolution of the native threat-model
 candidates that the [re-review](../security/threat-model.md#candidate-dispositions)
 left `NeedsInvestigation`, and downstream service operations.
 

@@ -210,8 +210,8 @@ selected_v2:
         Prerelease assets of this repository's GitHub Releases. The product never checks
         for, downloads or applies updates.
       version_behavior: >-
-        Each prerelease is tagged v<version> with the computed SemVer 2.0 version without
-        build metadata.
+        Each prerelease archive carries the computed SemVer 2.0 version without build
+        metadata in its name. The later release entry selects the tag scheme.
       collision_test: >-
         Upstream update channels are the AzureAD/microsoft-authentication-cli releases and
         their installers; this channel is a different repository and archive name.

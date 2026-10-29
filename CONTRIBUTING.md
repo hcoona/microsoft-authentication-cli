@@ -121,8 +121,8 @@ mise exec -- dotnet build Windows.slnx --configuration Release --no-restore -p:E
 ```
 
 Builds compute the product version with Nerdbank.GitVersioning from `version.json` and
-the Git history, so build from a full clone; a shallow clone yields a wrong version
-height. The Windows portable package is built on Windows x64, from a clean full clone,
+the Git history, so build from a full clone. A shallow clone fails the build, and a tree
+without `.git`, such as a `git archive` copy, does not build. The Windows portable package is built on Windows x64, from a clean full clone,
 with the Visual Studio C++ tools that Native AOT needs:
 
 ```text

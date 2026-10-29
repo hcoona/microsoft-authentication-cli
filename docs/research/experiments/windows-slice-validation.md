@@ -1150,3 +1150,24 @@ Existing Native AOT and real-host evidence stays bound to the configuration its 
 name and is not evidence for 10.0.13 or 10.0.14. The other nine entries did not fire for
 this change: it makes no interaction, account, WSL, browser, broker, cache, Profile or
 failure-mapping decision and is not a release.
+
+### Registry Evaluation for the Bundled Profile (2026-10-29)
+
+The [portable package](../../designs/windows-ado-authentication.md#portable-package-and-version)
+bundles the Visual Studio legacy compatibility Profile as an explicit opt-in file under
+the repository owner's prerelease exception in decision
+[0003](../../decisions/0003-treat-client-registration-as-an-external-dependency.md).
+That fires RECHECK-007's `client-profile` trigger. This record evaluates it on
+**2026-10-29 UTC**.
+
+The [Azure DevOps Entra OAuth guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth)
+was last updated `2026-05-08T17:05:00Z` (source commit `f7bd73f`), the revision the
+[Slice evaluations above](#recheck-evaluations) already recorded. It still says an
+ordinary Microsoft Entra application cannot natively support Microsoft-account users for
+Azure DevOps. The bounded account-type evidence for this registration stays the
+[Windows probe](windows-msal-account-metadata.md#observed-msa-token-git-discovery-and-silent-reuse)
+and the [real-host results](real-host-validation.md#results), both in existing account
+state. No conclusion changes: the bundled file uses the existing candidate unchanged,
+nothing selects it by default, and the external Client Profile gate stays open. The
+owner's exception is a risk decision, not new evidence. The other nine entries did not
+fire for this change.
