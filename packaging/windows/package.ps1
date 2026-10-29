@@ -10,13 +10,14 @@ AOT requires. The script refuses a dirty worktree, restores in locked mode from 
 repository's nuget.org-only configuration, publishes Native AOT, enforces the archive
 content allowlist, checks that native imports resolve only to inbox System32 DLLs and
 API sets, checks the executable's version resource, runs the packaged --version, and
-writes the zip and its SHA-256.
+writes the zip and its SHA-256. It also writes the publish output's symbol files into a
+separate symbols zip with its own SHA-256, beside the package and never inside it.
 
 The script runs no authentication. It writes only under -OutputDirectory, the
 repository's ignored obj and bin directories, and the NuGet package folder.
 
 .PARAMETER OutputDirectory
-Directory for the zip and checksum; created if missing. Default: artifacts\package.
+Directory for the zips and checksums; created if missing. Default: artifacts\package.
 
 .PARAMETER DisableNuGetAudit
 Turns off NuGet audit for the restore, for hosts that cannot reach the audit source.
@@ -79,8 +80,9 @@ try {
     $OutputDirectory = [IO.Path]::GetFullPath($OutputDirectory)
     $packageName = "$CommandName-$version-win-x64"
     $zip = Join-Path $OutputDirectory "$packageName.zip"
+    $symbolsZip = Join-Path $OutputDirectory "$packageName-symbols.zip"
     $work = Join-Path $OutputDirectory $packageName
-    foreach ($path in @($zip, "$zip.sha256", $work)) {
+    foreach ($path in @($zip, "$zip.sha256", $symbolsZip, "$symbolsZip.sha256", $work)) {
         if (Test-Path -LiteralPath $path) { Fail "output already exists: $path" }
     }
     $publish = Join-Path $work 'publish'
@@ -90,8 +92,8 @@ try {
     dotnet publish $Project -c Release -r win-x64 --no-restore -o $publish
 
     # Archive content allowlist. The publish output may add only symbol files: the
-    # native one and the managed ones of the project's own assemblies. They stay out of
-    # the archive.
+    # native one and the managed ones of the project's own assemblies. They go into the
+    # separate symbols zip, never into the package archive.
     $published = @(Get-ChildItem -LiteralPath $publish -Recurse -File | ForEach-Object {
         [IO.Path]::GetRelativePath($publish, $_.FullName) })
     $expected = @("$CommandName.exe", 'msalruntime.dll')
@@ -102,6 +104,8 @@ try {
         if ($name -notin $published) { Fail "missing publish output: $name" }
         Copy-Item -LiteralPath (Join-Path $publish $name) -Destination $stage
     }
+    if ("$CommandName.pdb" -notin $published) { Fail "missing publish output: $CommandName.pdb" }
+    $symbolFiles = @($published | Where-Object { $_ -in $symbols })
 
     # Native imports must resolve to System32 or API-set contracts, never to a DLL
     # found through the application directory, PATH or the working directory. The
@@ -177,10 +181,18 @@ try {
     Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip -CompressionLevel Optimal
     $hash = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
     [IO.File]::WriteAllText("$zip.sha256", "$hash  $packageName.zip`n", [Text.UTF8Encoding]::new($false))
+
+    Compress-Archive -LiteralPath ($symbolFiles | ForEach-Object { Join-Path $publish $_ }) `
+        -DestinationPath $symbolsZip -CompressionLevel Optimal
+    $symbolsHash = (Get-FileHash -LiteralPath $symbolsZip -Algorithm SHA256).Hash.ToLowerInvariant()
+    [IO.File]::WriteAllText("$symbolsZip.sha256", "$symbolsHash  $packageName-symbols.zip`n",
+        [Text.UTF8Encoding]::new($false))
     Remove-Item -LiteralPath $work -Recurse -Force
 
     Write-Host "Wrote $zip"
     Write-Host "SHA-256 $hash"
+    Write-Host "Wrote $symbolsZip ($($symbolFiles -join ', '))"
+    Write-Host "SHA-256 $symbolsHash"
 }
 finally {
     Pop-Location
