@@ -21,7 +21,8 @@ entry claims no support, production readiness, compatibility, clean-machine depl
 public-restore reproducibility, or satisfaction of the validation strategy's release
 gates.
 
-**Owner decisions:** The repository owner approved this entry on 2026-10-28 and decides:
+**Owner decisions:** The repository owner approved this entry on 2026-10-28, amended it
+on 2026-10-29, and decides:
 
 - Operational identities: product, command, and package name `azureauth-unofficial`;
   executable `azureauth-unofficial.exe`; archive
@@ -124,6 +125,9 @@ requires a recorded diagnosis before that case runs again. No automatic retry. H
 version checks, development validation, synthetic scenario runs, builds, and packaging
 are not counted. Reaching a limit pauses real calls until the owner raises it through a
 Wave amendment.
+The circuit breaker adds to, and does not relax, the experiment policy's stop
+conditions; an unexpected effect, stop condition, or deviation stops all real calls as
+that policy requires.
 
 **Exclusions:** No GitHub release workflow, tag, GitHub Release, or upload or other
 publication of a locally built archive. No installer, MSIX, WinGet, PATH, registry or
@@ -143,4 +147,4 @@ validation, TMT's own recent-file and application-data writes, and any update ch
 installed tool makes on its own, with any update prompt declined.
 
 **Completion:** Remove this entry through a reviewed Wave change once the packaging
-changes and test evidence merge, the call limits are exhausted, or the owner ends it.
+changes and test evidence merge, or the owner ends it.
