@@ -43,8 +43,9 @@ gates.
   consent, and audit records attribute activity to the Microsoft-owned Visual Studio
   application, that Microsoft provides no support or availability commitment, and that
   the remaining items of the externally owned Client Profile gate stay open. The package
-  README states these limits. This decision narrows the distribution block in decision
-  0003 and the compatibility policy only for this bundled file in prerelease archives.
+  README states these limits. Item 3 records this decision in decision 0003, the
+  compatibility policy, and the client-application identity view, limited to this
+  bundled file in prerelease archives.
 - Real-host risk: the owner accepts using the existing personal and work accounts on
   the designated host. Provider-managed sessions, broker state, and caches may receive
   ordinary authentication updates and are retained. Each interactive call needs the
@@ -70,21 +71,34 @@ tools and package cache, and its WSL2 environment; the Azure DevOps default scop
    system DLLs and API sets, and writes the zip and its SHA-256.
 3. Records: update `operational-identities.yaml`, decision 0003, the compatibility
    policy, the client-application identity view, the Windows design (distribution,
-   Profile, `--version`, version mapping), the validation strategy, the record-family
-   catalog for new governed records, the root README, and `docs/README.md`.
+   Profile, `--version`, version mapping), the validation strategy, the threat model
+   (and `authentication-engine.tm7` only if a candidate disposition changes), the
+   record-family catalog for new governed records, `CONTRIBUTING.md`, the root README,
+   and `docs/README.md`. The identity, Profile, decision 0003, and compatibility
+   policy updates merge before or together with items 1 and 2, and before the item 4
+   protocol relies on them.
 4. Real-host test: merge an independently reviewed protocol, then build the archive on
    the designated host from a recorded `main-v2` commit, extract it into a fresh
    directory, run help and version checks, and make native Windows and WSL calls for both
-   roles covering silent success, fresh-process silent reuse, `non-interactive-only`
-   with interaction required, and `force-interactive` success. Record whether Windows
-   blocked the unsigned executable. Record sanitized results in a research record,
-   evaluate RECHECK-007 and RECHECK-008, and fix product or packaging defects that the
-   test exposes, with tests.
+   roles. The cases form a coverage set: silent success, fresh-process silent reuse,
+   `non-interactive-only` with interaction required, and `force-interactive` success.
+   The protocol selects the combinations within the limits. A case that existing state
+   does not reach is recorded as not reached and never simulated. Record whether Windows
+   blocked the unsigned executable; this archive was never downloaded and has no
+   Mark-of-the-Web, so the observation says nothing about a downloaded archive, and the
+   README's SmartScreen notes rely on public Microsoft documentation. Record sanitized
+   results in a research record and evaluate RECHECK-007 and RECHECK-008.
+5. Corrections: fix packaging defects, and product defects that do not change
+   authentication behavior, the result contract, or the request protocol, with tests.
+   A defect that needs such a change stops the test and requires a new entry. Each
+   corrected archive is a new subject, rebound through a reviewed protocol amendment and
+   sharing the same limits.
 
 **Limits:** At most 10 non-interactive and 3 interactive product calls in total across
-all candidate archives, counting failed and interrupted starts. No automatic retry.
-Help and version checks, synthetic scenario runs, builds, and packaging are not
-counted.
+all candidate archives, counting failed and interrupted starts. An interactive call is
+any call whose interaction permission allows UI, whether or not UI appears; every other
+product call is non-interactive. No automatic retry. Help and version checks, synthetic
+scenario runs, builds, and packaging are not counted.
 
 **Exclusions:** No GitHub release workflow, tag, GitHub Release, or upload or other
 publication of a locally built archive. No installer, MSIX, WinGet, PATH, registry or
