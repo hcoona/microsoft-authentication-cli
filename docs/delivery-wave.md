@@ -72,11 +72,12 @@ tools and package cache, and its WSL2 environment; the Azure DevOps default scop
 3. Records: update `operational-identities.yaml`, decision 0003, the compatibility
    policy, the client-application identity view, the Windows design (distribution,
    Profile, `--version`, version mapping), the validation strategy, the threat model
-   (and `authentication-engine.tm7` only if a candidate disposition changes), the
-   record-family catalog for new governed records, `CONTRIBUTING.md`, the root README,
-   and `docs/README.md`. The identity, Profile, decision 0003, and compatibility
-   policy updates merge before or together with items 1 and 2, and before the item 4
-   protocol relies on them.
+   where it describes distribution, the record-family catalog for new governed records,
+   `CONTRIBUTING.md`, the root README, and `docs/README.md`. Do not change
+   `authentication-engine.tm7` or any candidate disposition, meaning a candidate's state
+   or its justification text; if one needs to change, stop for a Wave amendment. The
+   identity, Profile, decision 0003, and compatibility policy updates merge before or
+   together with items 1 and 2, and before the item 4 protocol relies on them.
 4. Real-host test: merge an independently reviewed protocol, then build the archive on
    the designated host from a recorded `main-v2` commit, extract it into a fresh
    directory, run help and version checks, and make native Windows and WSL calls for both
