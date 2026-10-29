@@ -30,8 +30,8 @@ deployment or satisfaction of the validation strategy's release gates.
   and creates a **draft** prerelease whose target is the built commit, refusing a version
   whose tag or release already exists. Only the job that creates the draft receives
   `contents: write`, and only the job that attests receives `id-token: write` and
-  `attestations: write`. Files pass between jobs as workflow artifacts kept for one
-  day and deleted once the draft exists.
+  `attestations: write`. Files pass between jobs as workflow artifacts uploaded with
+  `retention-days: 1` and left to expire; no job deletes them.
 - Native build chain: the hosted runner image floats, so its Visual Studio C++ tools,
   Windows SDK and `link.exe` change over time. The owner accepts this for the
   `0.1.0-alpha` series instead of pinning them: each run records the MSVC, Windows SDK,
@@ -55,7 +55,7 @@ deployment or satisfaction of the validation strategy's release gates.
 - Risk: the owner accepts publishing unsigned executables, the bundled Visual Studio
   Profile under decision 0003's prerelease exception, and the native and managed symbol
   files of each build; that each run's unreviewed outputs are downloadable by signed-in
-  GitHub users as workflow artifacts until they are deleted or expire; and that completed
+  GitHub users as workflow artifacts until they expire after one day; and that completed
   downloads cannot be recalled.
 
 **Delegated work:**
