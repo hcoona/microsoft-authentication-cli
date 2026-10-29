@@ -26,7 +26,9 @@ engine under [decision 0004](../decisions/0004-keep-the-authentication-engine-se
 The engine's PAT prohibition is governed by
 [V2-REQ-005](requirements/product-boundary.md#v2-req-005-no-personal-access-tokens).
 
-This is the primary first-release blocking journey. Its acceptance evidence belongs to
+This is the primary first-release blocking journey; "first release" means the first
+supported, non-prerelease release, so unsupported `0.1.0-alpha` prereleases are exempt.
+Its acceptance evidence belongs to
 the [primary-journey validation gate](../validation/strategy.md#primary-journey-gate).
 The WAM context explains the wrong-default risk; it does not select WAM as the required
 implementation or establish that any Client Profile or platform supports this journey.

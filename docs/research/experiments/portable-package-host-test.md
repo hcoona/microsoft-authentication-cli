@@ -1,12 +1,14 @@
-# Portable Package Host Test Protocol
+# Portable Package Host Test Evidence
 
-This protocol governs item 4 of the Delivery Wave entry
-[Windows Portable Package, Local Build and Test](../../delivery-wave.md), coordinated in
-[Issue #506](https://github.com/hcoona/microsoft-authentication-cli/issues/506). It follows
-the [experiment policy](../experiment-safety.md). Merging it into `main-v2` is the protocol
-acceptance; it adds no product, support or release claim. The Wave entry owns the owner
-risk decisions, the circuit-breaker limits and the exclusions; this record only narrows
-them. Results are appended under [Results](#results) through reviewed pull requests.
+This is a completed experiment record for
+[Issue #506](https://github.com/hcoona/microsoft-authentication-cli/issues/506), retained as
+evidence cited by current records. It authorizes no execution. It ran under the Delivery
+Wave entry "Windows Portable Package, Local Build and Test", whose text remains in
+[`docs/delivery-wave.md` at commit `a7ece22`](https://github.com/hcoona/microsoft-authentication-cli/blob/a7ece22222480d4938a48a2ade803f3728ed97ff/docs/delivery-wave.md);
+[PR #549](https://github.com/hcoona/microsoft-authentication-cli/pull/549) removed that
+entry on 2026-10-29. The accepted protocol below is kept as the method of the recorded
+results; the [experiment policy](../experiment-safety.md) governs any future experiment,
+and another run requires a new accepted protocol and authorization.
 
 The question is whether the archive that `packaging/windows/package.ps1` builds, once
 extracted into a fresh directory, authenticates the existing personal and work roles on
@@ -388,7 +390,9 @@ installation or remote effect outside the protocol was observed.
 
 ### Retention
 
-The package and symbols zips with their `.sha256` files stay in
-`C:\Temp\azureauth-pkgtest-20261029\out` until this record merges, then the root is deleted
-as Retention and Cleanup requires. The local launchers, `roles.json` and ledger stay until
-the Wave entry ends. Capacity remaining under the Wave limits: 34 I and 49 N.
+After [PR #548](https://github.com/hcoona/microsoft-authentication-cli/pull/548) merged on
+2026-10-29, the SDK build servers were stopped and `C:\Temp\azureauth-pkgtest-20261029` (source,
+packages, HTTP cache, both zips, extraction directory and validator) was deleted, together
+with the local launchers, `roles.json`, ledger and the WSL launcher's temporary
+directories. WAM sessions and caches were retained. The experiment ended with 34 I and
+49 N unused.

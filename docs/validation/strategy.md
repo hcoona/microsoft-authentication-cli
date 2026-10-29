@@ -56,7 +56,10 @@ manual assistance cannot substitute for a capability the product itself must pro
 ## Primary Journey Gate
 
 The [personal Azure DevOps Git journey](../product/user-stories.md#primary-journey-personal-azure-devops-git-access)
-is a first-release blocker. Before release, bounded evidence must demonstrate that an
+is a first-release blocker: it blocks the first supported, non-prerelease release.
+Unsupported `0.1.0-alpha` prereleases are exempt by
+[owner decision](https://github.com/hcoona/microsoft-authentication-cli/pull/549#issuecomment-6510282012).
+Before that release, bounded evidence must demonstrate that an
 external adapter can request the selected personal Microsoft account's Azure DevOps
 access token without silently receiving the corporate default account, and that usable
 state enables strict selected-account silent reuse across invocations.
@@ -542,7 +545,9 @@ checks:
 The Windows scenarios' wall-clock process assertions, such as the one-second shutdown
 allowance and process-exit bounds, carry the `WindowsHostTiming` category. They are
 Windows host-timing evidence: they establish timing only on the host where they ran. No
-CI job runs them, and the `windows-latest` job makes no host-timing claim. A passing
+CI job runs them, and the `windows-latest` job makes no host-timing claim. The
+[release workflow](../designs/windows-ado-authentication.md#release-workflow) runs the same
+scenarios with the same filter before packaging and makes the same limited claim. A passing
 Windows CI run establishes the synthetic Windows behavior on that runner image only; it
 is not real-platform, broker or published-executable evidence.
 Every Windows scenario run, in CI or on a host, uses a new empty temporary directory as
@@ -608,7 +613,8 @@ The [host test of the locally built archive](../research/experiments/portable-pa
 passed every case it reached for both roles from native and WSL callers in existing state
 on the designated host; interaction-required was reached only for the personal native
 caller, and one forced-interactive call timed out with its prompt unidentified. It is
-that bounded evidence only.
+that bounded evidence only. Publishing `0.1.0-alpha` prereleases from the release workflow
+closes none of these gates either.
 
 The Slice explicitly excludes browser/device code, Linux forwarding/native brokers,
 non-Public Cloud, service/impersonated/disconnected Windows sessions, ARM64, Profile

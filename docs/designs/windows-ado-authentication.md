@@ -92,11 +92,15 @@ exact upstream loader, its dependencies, and the process search restriction must
 validated together on the actual application; an incompatible loader makes the target
 unavailable rather than silently weakening search rules or copying private runtime internals.
 
-A product publish must pin the Windows x64 public native build chain
-(Visual Studio C++ tools, Windows SDK, and `link.exe`), SDK/runtime inputs, resolved
-NuGet graph, and publish properties before execution. Microsoft's documented Windows
-prerequisite is Visual Studio 2022 or later with Desktop development with C++ and its default
-components; this record does not select a floating installed compiler. Artifact closure must include the native broker and
+A product publish must pin the SDK/runtime inputs, resolved NuGet graph, and publish
+properties before execution, and must pin or record the Windows x64 public native build
+chain (Visual Studio C++ tools, Windows SDK, and `link.exe`). Microsoft's documented
+Windows prerequisite is Visual Studio 2022 or later with Desktop development with C++ and
+its default components. A local build records the installed chain before execution. For
+`0.1.0-alpha` prereleases the repository owner accepted the floating chain of the
+GitHub-hosted runner image instead of pinning it; the
+[release workflow](#release-workflow) records its versions on every run and the release
+review checks them. Artifact closure must include the native broker and
 OS prerequisites; an AOT executable does not imply one-file deployment or no OS dependency.
 Debug symbols have a separate diagnostic/release treatment and are included when
 comparing total development and distribution costs.
@@ -189,6 +193,23 @@ public release, and the `PublicRelease` property override is not used.
 Version computation needs a full Git clone: a shallow clone fails the build, and a tree
 without `.git`, such as a `git archive` copy, does not build. CI therefore checks out
 with `fetch-depth: 0`.
+
+
+### Release Workflow
+
+`.github/workflows/release.yml` builds `0.1.0-alpha` prereleases. It starts only by hand and
+refuses any ref other than `refs/heads/main-v2`, so the build is a public release. Its jobs
+have least privilege: the build job reads contents only; it restores in locked mode with
+the checksum-pinned SDK, runs the Windows scenarios excluding `WindowsHostTiming`, runs
+`package.ps1` without its development switches, and records the runner image, .NET SDK,
+Visual Studio, MSVC, `link.exe` and Windows SDK versions in `build-info.json` and the run
+summary. A second job holds only `id-token: write` and `attestations: write` and creates
+a GitHub build-provenance attestation for both zips. A third holds only
+`contents: write`: it verifies the checksums and the recorded commit, refuses a version
+whose tag or release exists, and creates a draft prerelease `v<version>` targeting the
+built commit, with the package zip, the symbols zip and their `.sha256` files. The jobs
+pass files as workflow artifacts kept for one day. The repository owner publishes each
+draft after the release review.
 
 ## Protocol 1 Command-Line Contract
 

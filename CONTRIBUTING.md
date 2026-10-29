@@ -132,7 +132,9 @@ pwsh packaging/windows/package.ps1
 ```
 
 The [Windows design](docs/designs/windows-ado-authentication.md#portable-package-and-version)
-owns the package content and checks.
+owns the package content and checks. Prereleases are built only by the
+[release workflow](docs/designs/windows-ado-authentication.md#release-workflow), started by
+hand from `main-v2`; the repository owner publishes each draft after its release review.
 
 ## .NET and Agent Tooling
 
@@ -147,7 +149,8 @@ management waits for a concrete product consumer.
 
 `mise.lock` is generator output: never edit it by hand. Generate it with the mise
 version that CI pins, the `MISE_VERSION` value in `.github/workflows/check.yml`;
-`mise.toml` sets the same `min_version`. Another mise
+`mise.toml` sets the same `min_version`, and `.github/workflows/release.yml` uses the same
+`MISE_VERSION`. Another mise
 version can rewrite unrelated entries.
 
 To change the SDK, edit its version and each platform's archive URL and `checksum` in

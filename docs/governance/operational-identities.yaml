@@ -122,7 +122,9 @@ selected_v2:
       owning_component: packaging/windows/package.ps1
       location: >-
         Archive file name, with a SHA-256 checksum file named after the archive with a
-        .sha256 suffix.
+        .sha256 suffix. A symbols archive azureauth-unofficial-<version>-win-x64-symbols.zip
+        with its own .sha256 file holds the build's native and managed symbol files and is
+        published beside it.
       version_behavior: >-
         <version> is the computed SemVer 2.0 version without build metadata, for example
         0.1.0-alpha.42; the archive name changes with each version.
@@ -210,8 +212,9 @@ selected_v2:
         Prerelease assets of this repository's GitHub Releases. The product never checks
         for, downloads or applies updates.
       version_behavior: >-
-        Each prerelease archive carries the computed SemVer 2.0 version without build
-        metadata in its name. The later release entry selects the tag scheme.
+        Each prerelease is tagged v<version>, where <version> is the computed SemVer 2.0
+        version without build metadata (for example v0.1.0-alpha.42), on the built commit;
+        its archives carry the same version in their names.
       collision_test: >-
         Upstream update channels are the AzureAD/microsoft-authentication-cli releases and
         their installers; this channel is a different repository and archive name.
