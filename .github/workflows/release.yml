@@ -176,7 +176,9 @@ jobs:
           test "$(jq -r .commit build-info.json)" = "$COMMIT"
           test "$(jq -r .version build-info.json)" = "$VERSION"
 
-      - name: Refuse an existing tag or release
+      - name: Refuse an existing tag, release or draft
+        # bash -eo pipefail, so a failed lookup in a pipeline stops the run.
+        shell: bash
         run: |
           # Only a 404 means absent; any other failure stops the run.
           absent() {

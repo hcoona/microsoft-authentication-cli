@@ -345,7 +345,7 @@ controls:
       checksum-pinned SDK, passed every tests/Authentication.Windows.Scenarios scenario
       outside the WindowsHostTiming category, passed every package.ps1 check without its
       development switches, recorded its installed native build chain, attested both zips, targets
-      the built commit, and uses a version with no existing tag or release. Each job holds
+      the built commit, and uses a version with no existing tag, release or draft. Each job holds
       only the token permissions its step needs. Publication stays the repository owner's
       decision after the release review, which also checks that the run and its attestation
       come from that workflow at refs/heads/main-v2.
