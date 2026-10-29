@@ -26,9 +26,21 @@ Microsoft-owned public-client ID, but:
 - identity or capability changes fail visibly;
 - user-facing material does not imply Microsoft sponsorship.
 
-Default enablement or distribution of that profile remains blocked until its account,
-resource, consent, audit, and branding behavior is publicly reviewed and validated for
-the intended hosts.
+Default enablement of that profile remains excluded, and its general distribution
+remains blocked until its account, resource, consent, audit, and branding behavior is
+publicly reviewed and validated for the intended hosts.
+
+One exception applies. On 2026-10-28 the repository owner decided, in the Delivery
+Wave entry merged through
+[PR #542](https://github.com/hcoona/microsoft-authentication-cli/pull/542), that
+`azureauth-unofficial` prerelease archives may contain that profile as an explicit
+opt-in file. The owner accepts that sign-in, consent, and audit records attribute such
+use to the Microsoft-owned Visual Studio application, that Microsoft provides no
+support or availability commitment, and that the remaining items of the
+[externally owned Client Profile gate](../product/compatibility-and-migration.md#externally-owned-client-profile-gate)
+stay open. The bundled file is selected only through an explicit `--profile` argument,
+and the package README states these limits. The exception covers no default
+selection, no other profile, and no supported release.
 
 ## Consequences
 
@@ -37,4 +49,5 @@ the intended hosts.
 - An independently owned client registration may have different MSA and Azure DevOps
   capabilities.
 - Cache namespace and migration must include client application identity.
-- Public distribution and opt-in behavior remain open decisions.
+- Opt-in behavior is explicit selection only. Distribution beyond the prerelease
+  exception above remains an open decision.

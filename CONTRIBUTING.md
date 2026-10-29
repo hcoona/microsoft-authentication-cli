@@ -120,9 +120,23 @@ mise exec -- dotnet restore Windows.slnx --locked-mode -p:EnableWindowsTargeting
 mise exec -- dotnet build Windows.slnx --configuration Release --no-restore -p:EnableWindowsTargeting=true
 ```
 
+Builds compute the product version with Nerdbank.GitVersioning from `version.json` and
+the Git history, so build from a full clone. A shallow clone fails the build, and a tree
+without `.git`, such as a `git archive` copy, does not build. The Windows portable
+package is built on Windows x64, from a clean full clone with `main-v2` checked out, with
+the Visual Studio C++ tools that Native AOT needs. On another branch, add
+`-AllowNonPublicRelease` for development validation only:
+
+```text
+pwsh packaging/windows/package.ps1
+```
+
+The [Windows design](docs/designs/windows-ado-authentication.md#portable-package-and-version)
+owns the package content and checks.
+
 ## .NET and Agent Tooling
 
-The same toolchain selects .NET SDK 10.0.402 (`http:dotnet-development`), APM v0.29.0,
+The same toolchain selects .NET SDK 10.0.403 (`http:dotnet-development`), APM v0.29.0,
 and Node.js 22.22.2. Root `global.json` requires that SDK without roll-forward. It is
 generated from the `mise.lock` SDK entry by `global.pkl` and is never edited by hand;
 the `global-json` hk step fails when it differs. Every project targets the runtime

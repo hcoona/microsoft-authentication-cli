@@ -58,6 +58,12 @@ does not satisfy this gate or select the Visual Studio compatibility candidate. 
 MSA behavior, strict-email feasibility, and reusable-state behavior remain evidence
 obligations under the [validation strategy](../validation/strategy.md#primary-journey-gate).
 
+Decision [0003](../decisions/0003-treat-client-registration-as-an-external-dependency.md)
+records the one owner exception to this gate: `azureauth-unofficial` prerelease archives
+bundle the Visual Studio compatibility candidate as an explicit opt-in file while the
+gate's remaining conditions stay open. The exception does not accept the profile, enable
+it by default, or support it.
+
 ## Compatibility Adapter Gate
 
 A v1 compatibility adapter may be accepted only when:

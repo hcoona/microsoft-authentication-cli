@@ -1,4 +1,5 @@
 using System.Net;
+using Authentication.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Authentication.Windows.Scenarios;
@@ -29,7 +30,7 @@ public sealed class MsalHttpOwnershipScenarios
             foreach (var observed in transport.UserAgents)
                 CollectionAssert.AreEquivalent(new[]
                 {
-                    "synthetic-msal/4.83.1", "hcoona-microsoft-authentication-cli/0.0.0",
+                    "synthetic-msal/4.83.1", "hcoona-microsoft-authentication-cli/" + ProductVersion.Semantic,
                 }, observed);
 
             transport.Hold = true;

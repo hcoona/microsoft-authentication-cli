@@ -514,7 +514,7 @@ controlled entry states whether it exercises the real control or a substitute.
 | No match, duplicate match, alias-only visibility; tenant and scope normalization; wrong/missing provider metadata; local host admission; cancellation and eligibility races; blocked output; output and telemetry allowlists; local OpenTelemetry observation | V2-REQ-012, 016, 019, 022, 027, 030, 034, 035, 046 | Satisfied by controlled evidence | Core `SelectedAccountScenarios`, `CandidateValidationScenarios`, `RequestSyntaxTests`, `ProfileSyntaxTests`, `ResultContractScenarios`, `RequestLifetimeScenarios` and `TelemetryScenarios` (Linux CI; substitute provider and host). Windows `WindowsHostAdmissionScenarios` (Windows CI and S1-1; real admission against synthetic `IWindowsHostObservations`), `LocalProviderAdmissionScenarios` (Windows CI and S1-1; substituted host admission and provider initializer), `MsalCompositionScenarios` (Windows CI and S1-1; substitute `IMsalSessionFactory` and loader-restriction delegate), `ProcessScenarios.BrokenResultReaderEndsWithTransportFailure` (Windows CI and S1-1; real process and pipes, substitute provider), and `ProcessScenarios.UndrainedResultPipeCannotKeepTheProcessAlive` and `BlockedDiagnosticsDoNotChangeTheAuthenticationResultOrKeepTheProcessAlive` (S1-1 and HT-1, `WindowsHostTiming`; real process and pipes, substitute provider). Native controls run directly in Windows CI only: `NativeObservationScenarios.ThreadIdentityDistinguishesImpersonationOnTheCallingThread` (real thread-identity read, with and without `ImpersonateSelf`), `RestrictedDllSearchExcludesTheWorkingDirectory` (real `WindowsLoader.RestrictSearch` in a child process) and `PlatformObservationReportsThisProcess` (real platform read), and `MsalConstructionScenarios.UnavailableBrokerStopsSessionCreationWithItsFixedCategory` (real session factory, only the `IsBrokerAvailable` answer replaced). The native logon-kind, session and desktop reads are run by no scenario; their success path is observed only by real-host calls passing admission. |
 | Token-shape validation observation | V2-REQ-038 | Partially satisfied | Core `TelemetryScenarios.ExpectedClaimsInTheirExpectedTypesAreReportedPresent`, `InterpretationDoesNotChangeOpaqueTokenSuccessOrExposePayload` and `InvalidOrUnexpectedClaimsHaveOnlyFixedDiagnosticInterpretation` (Linux CI). Windows `OwnedProcessScenarios.DefaultHostQueuesTheNoticeBeforeTheCompletionIndication` (field present) and `DefaultHostWritesTheExactNoticeWithoutTelemetry` (field absent) (Windows CI and S1-1; synthetic token). Stdout-before-diagnostics ordering is source review; `ProcessScenarios.BrokenResultReaderEndsWithTransportFailure` asserts that a failed write emits neither. Real-token field values were excluded. |
 | Broker unavailable or disappears; concurrent invocations | V2-REQ-032, 041 | Outside Slice closure | Retain their "before support" claim gates. |
-| Explicit Profile file and compatibility candidate | V2-REQ-018, 042 | Outside Slice closure | Consent, audit and branding remain under the external Profile gate. |
+| Explicit Profile file and compatibility candidate | V2-REQ-018, 042 | Outside Slice closure | Consent, audit and branding remain under the external Profile gate. The prerelease package bundles the candidate as an explicit opt-in file only under decision 0003's owner exception; Core `BundledProfileTests` (Linux CI) assert that the bundled file equals the schema candidate and that the product reader accepts it. |
 | Minimal deployment without development-machine dependencies | V2-REQ-055 | Outside Slice closure | Retains the deployment support claim gate. |
 
 The local host predicates do not prove continuing eligibility, every alternate-launch
@@ -588,9 +588,22 @@ readiness. The following [release gates](#release-gates) remain open: the primar
 gate for a release, real broker failure and concurrency evidence, external Profile
 consent/audit/branding acceptance and Profile activation/distribution, minimal
 deployment without development-machine dependencies, independent distribution and
-installation identity under decision 0005, resolution of the native threat-model
+installation identity under decision 0005 (selected for the portable package except its
+signing identity, which stays unsigned until
+[Issue #505](https://github.com/hcoona/microsoft-authentication-cli/issues/505)), resolution of the native threat-model
 candidates that the [re-review](../security/threat-model.md#candidate-dispositions)
 left `NeedsInvestigation`, and downstream service operations.
+
+The [portable package](../designs/windows-ado-authentication.md#portable-package-and-version)
+selects the distribution identities in the
+[registry](../governance/operational-identities.yaml) and bundles the compatibility
+candidate under decision 0003's prerelease exception. It closes none of these gates:
+the packaging script's import and `--version` checks run on the build host, which has
+development tools installed, so they are not deployment evidence; a locally built
+archive is not public-restore evidence; and a real-host test of that archive supports
+only claims bounded by its accepted protocol. Core `ProductVersionTests` (Linux CI) and
+Windows `ProcessScenarios.RootVersionCompletesWithoutAuthentication` (Windows CI)
+cover the version forms.
 
 The Slice explicitly excludes browser/device code, Linux forwarding/native brokers,
 non-Public Cloud, service/impersonated/disconnected Windows sessions, ARM64, Profile

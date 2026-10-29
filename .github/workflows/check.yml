@@ -12,7 +12,7 @@ permissions:
 env:
   # The mise version CI pins; regenerate mise.lock with it (CONTRIBUTING.md).
   # mise.toml sets the same min_version.
-  MISE_VERSION: 2026.8.10
+  MISE_VERSION: 2026.10.22
 
 concurrency:
   # A newer pull-request push supersedes its earlier run. Each main-v2 push gets its own
@@ -74,6 +74,8 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # Nerdbank.GitVersioning computes the product version from the full history.
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Install mise
@@ -114,6 +116,8 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # Nerdbank.GitVersioning computes the product version from the full history.
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Install mise
@@ -154,6 +158,8 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # Nerdbank.GitVersioning computes the product version from the full history.
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Install mise

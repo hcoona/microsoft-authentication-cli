@@ -59,7 +59,7 @@ internal sealed partial class ProcessFixture : IDisposable
         RequireActiveSuite();
         if (!OperatingSystem.IsWindows()) throw new InvalidOperationException("Windows scenario required.");
         var nativeProfile = NativeProfileScenarios.Supports(scenario);
-        var cli = scenario is "help" or "malformed" || nativeProfile;
+        var cli = scenario is "help" or "version" or "malformed" || nativeProfile;
         if (nativeCliExecutable is not null)
         {
             if (!cli) throw new InvalidOperationException("Controlled children require the managed scenario executable.");
@@ -70,7 +70,7 @@ internal sealed partial class ProcessFixture : IDisposable
             throw new InvalidOperationException("Native Profile cases require an explicitly bound executable.");
         }
         if (!nativeProfile && !DefaultHttpProcessChild.Supports(scenario) && !OwnedProcessChild.Supports(scenario)
-            && scenario is not ("help" or "malformed" or "success" or "file-stdin" or "closed-stdin"
+            && scenario is not ("help" or "version" or "malformed" or "success" or "file-stdin" or "closed-stdin"
             or "close-pending" or "unused-stdin" or "data-close" or "deadline"
             or "broken-output" or "blocked-output" or "blocked-diagnostics"
             or "diagnostic-stall" or "diagnostic-stall-denied" or "drain-stall" or "drain-stall-denied"))
@@ -126,6 +126,7 @@ internal sealed partial class ProcessFixture : IDisposable
                 if (!cli) arguments.AddRange(["--scenario-child", scenario]);
             }
             if (scenario == "help") arguments.Add("--help");
+            else if (scenario == "version") arguments.Add("--version");
             else if (scenario == "malformed") arguments.AddRange(["authenticate", "--protocol", "SYNTHETIC_INVALID_VERSION"]);
             else
             {
@@ -355,7 +356,7 @@ internal sealed partial class ProcessFixture : IDisposable
         if (configuration is null || bin?.Name != "bin" || repository is null)
             throw new InvalidOperationException("The scenario build output layout is not recognized.");
         var assembly = Path.Combine(repository.FullName, "src", "Authentication.Cli", "bin", configuration.Name,
-            "net10.0-windows", "win-x64", "Authentication.Cli.dll");
+            "net10.0-windows", "win-x64", "azureauth-unofficial.dll");
         if (!File.Exists(assembly))
             throw new InvalidOperationException("Build src/Authentication.Cli in the scenario build configuration.");
         return assembly;

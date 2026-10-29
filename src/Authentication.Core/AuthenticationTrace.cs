@@ -14,7 +14,7 @@ public sealed class AuthenticationTrace : IDisposable
     public const string SourceName = "hcoona.microsoft-authentication-cli";
     private static readonly Lazy<ActivitySource?> Source = new(() =>
     {
-        try { return new(SourceName, "0.0.0"); }
+        try { return new(SourceName, ProductVersion.Semantic); }
         catch (Exception) { return null; }
     });
     private Activity? request;

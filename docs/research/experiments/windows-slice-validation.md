@@ -1131,3 +1131,43 @@ Existing Native AOT and real-host evidence stays bound to the configuration its 
 name and is not evidence for 10.0.13. The other nine entries did not fire: the change
 makes no interaction, account, WSL, browser, broker, cache, Profile or failure-mapping
 decision and is not a release.
+
+### Registry Evaluation for the SDK 10.0.403 Move (2026-10-29)
+
+The Delivery Wave entry "Windows Portable Package, Local Build and Test" (item 6) moves
+the pinned SDK from 10.0.402 to 10.0.403 and the runtime from 10.0.13 to its bundled
+10.0.14, with the ILCompiler and ILLink packs. This record evaluates all ten registry
+entries on **2026-10-29 UTC**. Only RECHECK-008 needed an assessment, and only on the
+desk. The publishing mode, target, MSAL, Broker and NativeInterop pins are unchanged.
+
+The [.NET 10.0.14 release notes](https://github.com/dotnet/core/blob/60871330fce2b3da383461be027ebdf3ce30f8fb/release-notes/10.0/10.0.14/10.0.14.md)
+(an out-of-band security release dated 2026-10-25) list SDK 10.0.403 and the 10.0.14
+ILCompiler and ILLink packages; their notable changes concern the Brotli decoder and
+source-built Linux tarball ownership, with no NativeAOT- or ILCompiler-specific change.
+The [.NET 10 known issues](https://github.com/dotnet/core/blob/3860c130e11c7feb24511e6ac3dd1694b25efda1/release-notes/10.0/known-issues.md)
+list no NativeAOT or ILCompiler issue for 10.0.14. The Native AOT disposition stands.
+Existing Native AOT and real-host evidence stays bound to the configuration its records
+name and is not evidence for 10.0.13 or 10.0.14. The other nine entries did not fire for
+this change: it makes no interaction, account, WSL, browser, broker, cache, Profile or
+failure-mapping decision and is not a release.
+
+### Registry Evaluation for the Bundled Profile (2026-10-29)
+
+The [portable package](../../designs/windows-ado-authentication.md#portable-package-and-version)
+bundles the Visual Studio legacy compatibility Profile as an explicit opt-in file under
+the repository owner's prerelease exception in decision
+[0003](../../decisions/0003-treat-client-registration-as-an-external-dependency.md).
+That fires RECHECK-007's `client-profile` trigger. This record evaluates it on
+**2026-10-29 UTC**.
+
+The [Azure DevOps Entra OAuth guidance](https://learn.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/entra-oauth)
+was last updated `2026-05-08T17:05:00Z` (source commit `f7bd73f`), the revision the
+[Slice evaluations above](#recheck-evaluations) already recorded. It still says an
+ordinary Microsoft Entra application cannot natively support Microsoft-account users for
+Azure DevOps. The bounded account-type evidence for this registration stays the
+[Windows probe](windows-msal-account-metadata.md#observed-msa-token-git-discovery-and-silent-reuse)
+and the [real-host results](real-host-validation.md#results), both in existing account
+state. No conclusion changes: the bundled file uses the existing candidate unchanged,
+nothing selects it by default, and the external Client Profile gate stays open. The
+owner's exception is a risk decision, not new evidence. The other nine entries did not
+fire for this change.
