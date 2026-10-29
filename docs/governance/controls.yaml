@@ -340,14 +340,15 @@ controls:
       - docs/product/requirements/quality-build-and-validation.md#v2-req-053-public-build-chain
       - docs/designs/windows-ado-authentication.md#release-workflow
     invariant: >-
-      A draft 0.1.0-alpha prerelease exists only for a manually started run on
-      refs/heads/main-v2 that restored from public package sources in locked mode with the
+      The main-v2 copy of the workflow drafts a 0.1.0-alpha prerelease only for a manually
+      started run on refs/heads/main-v2 that restored from public package sources in locked mode with the
       checksum-pinned SDK, passed every tests/Authentication.Windows.Scenarios scenario
       outside the WindowsHostTiming category, passed every package.ps1 check without its
-      development switches, recorded its native build chain, attested both zips, targets
+      development switches, recorded its installed native build chain, attested both zips, targets
       the built commit, and uses a version with no existing tag or release. Each job holds
       only the token permissions its step needs. Publication stays the repository owner's
-      decision after the release review.
+      decision after the release review, which also checks that the run and its attestation
+      come from that workflow at refs/heads/main-v2.
     runner: github-platform
     implementation:
       kind: repository-path

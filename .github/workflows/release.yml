@@ -95,7 +95,8 @@ jobs:
           $version = $Matches[1]
           $commit = (git rev-parse HEAD).Trim()
           $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
-          $vsArgs = @('-latest', '-products', '*', '-requires', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')
+          # The ILCompiler package finds Visual Studio with vswhere -latest -prerelease; match it.
+          $vsArgs = @('-latest', '-prerelease', '-products', '*', '-requires', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64')
           $vs = & $vswhere @vsArgs -property installationPath
           $vsVersion = & $vswhere @vsArgs -property catalog_productDisplayVersion
           $msvc = (Get-Content -LiteralPath (Join-Path $vs 'VC\Auxiliary\Build\Microsoft.VCToolsVersion.default.txt')).Trim()
@@ -177,14 +178,18 @@ jobs:
 
       - name: Refuse an existing tag or release
         run: |
-          if gh api "repos/$GH_REPO/git/ref/tags/v$VERSION" >/dev/null 2>&1; then
-            echo "Tag v$VERSION already exists." >&2
+          # Only a 404 means absent; any other failure stops the run.
+          absent() {
+            local err
+            if err=$(gh api "$1" 2>&1 >/dev/null); then return 1; fi
+            if grep -q 'HTTP 404' <<<"$err"; then return 0; fi
+            echo "$err" >&2
             exit 1
-          fi
-          if gh release view "v$VERSION" >/dev/null 2>&1; then
-            echo "Release v$VERSION already exists." >&2
-            exit 1
-          fi
+          }
+          absent "repos/$GH_REPO/git/ref/tags/v$VERSION" || { echo "Tag v$VERSION already exists." >&2; exit 1; }
+          absent "repos/$GH_REPO/releases/tags/v$VERSION" || { echo "A published release v$VERSION already exists." >&2; exit 1; }
+          drafts=$(gh api --paginate "repos/$GH_REPO/releases" --jq "[.[] | select(.tag_name == \"v$VERSION\")] | length" | awk '{ n += $1 } END { print n + 0 }')
+          if [ "$drafts" -ne 0 ]; then echo "A release or draft for v$VERSION already exists." >&2; exit 1; fi
 
       - name: Create the draft prerelease
         run: |
