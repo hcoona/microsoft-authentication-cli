@@ -8,8 +8,9 @@ Run on Windows x64 from a full Git clone (Nerdbank.GitVersioning needs the histo
 with the .NET SDK that global.json selects and the Visual Studio C++ tools that Native
 AOT requires. The script refuses a dirty worktree, restores in locked mode from the
 repository's nuget.org-only configuration, publishes Native AOT, enforces the archive
-content allowlist, checks that native imports resolve only to System32 DLLs and API
-sets, runs the packaged --version, and writes the zip and its SHA-256.
+content allowlist, checks that native imports resolve only to inbox System32 DLLs and
+API sets, checks the executable's version resource, runs the packaged --version, and
+writes the zip and its SHA-256.
 
 The script runs no authentication. It writes only under -OutputDirectory, the
 repository's ignored obj and bin directories, and the NuGet package folder.
@@ -37,7 +38,9 @@ $Project = Join-Path $Repository 'src\Authentication.Cli\Authentication.Cli.cspr
 
 function Fail([string] $Message) { throw "package.ps1: $Message" }
 
-if (-not $IsWindows -or [Environment]::Is64BitOperatingSystem -eq $false) { Fail 'run on Windows x64.' }
+if (-not $IsWindows -or [Runtime.InteropServices.RuntimeInformation]::OSArchitecture -ne 'X64') {
+    Fail 'run on Windows x64.'
+}
 
 Push-Location $Repository
 try {
@@ -88,7 +91,10 @@ try {
     }
 
     # Native imports must resolve to System32 or API-set contracts, never to a DLL
-    # found through the application directory, PATH or the working directory.
+    # found through the application directory, PATH or the working directory. The
+    # Visual C++ redistributable also installs into System32 on development hosts but is
+    # not part of Windows, so its DLLs are rejected by name.
+    $redistributable = '^(vcruntime|msvcp|concrt|vccorlib|vcomp|ucrtbased)[0-9_a-z]*\.dll$'
     $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
     $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
     if (-not $vs) { Fail 'Visual Studio C++ tools were not found.' }
@@ -101,11 +107,21 @@ try {
         if (-not $imports) { Fail "no imports were read from $name." }
         foreach ($import in $imports) {
             $apiSet = $import -match '^(api|ext)-ms-'
+            if ($import -match $redistributable) {
+                Fail "$name imports $import, a Visual C++ redistributable DLL that Windows does not include."
+            }
             if (-not $apiSet -and -not (Test-Path -LiteralPath (Join-Path $system32 $import))) {
                 Fail "$name imports $import, which is not a System32 DLL or an API set."
             }
         }
         Write-Host "$name imports $($imports.Count) System32 DLLs and API sets."
+    }
+
+    # The Win32 version resource carries the numeric file version and the full version.
+    $resource = (Get-Item -LiteralPath (Join-Path $stage "$CommandName.exe")).VersionInfo
+    $numeric = ($version -split '-')[0]
+    if ($resource.FileVersion -ne $numeric -or $resource.ProductVersion -ne $full) {
+        Fail "version resource is '$($resource.FileVersion)' / '$($resource.ProductVersion)', expected '$numeric' / '$full'."
     }
 
     # The packaged executable reports the computed version from its own directory, with
