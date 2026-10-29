@@ -115,6 +115,10 @@ Azure DevOps default scope.
    Item 6 lands in the same pull request as items 1 to 3 (#543), so their records,
    notices and lock files are written once at 10.0.403 and validated there; no item 1
    to 3 change merges before it. Historical research records are not rewritten.
+   Generate `mise.lock` and `global.json` with the CI-pinned mise version,
+   downloaded into a fresh temporary directory, checked against its published release
+   checksum, run with its data, cache and state directories inside that directory, and
+   deleted afterward; the pull request records that version.
 
 **Native threat-model validation:** Validating `authentication-engine.tm7` in Microsoft
 Threat Modeling Tool 7, as its record family requires, is development validation under
@@ -163,12 +167,13 @@ logs, or chat.
 accounts with ordinary broker updates; public package restore; ordinary CI on
 GitHub-hosted runners; tool downloads verified by `mise.lock` on the host and the
 runners, and the .NET SDK 10.0.403 that `mise install --locked` installs in mise's tool
-directories on the host's Windows and WSL sides, retained (the existing mise
-installations are used; installing or updating mise is out of scope); the Windows
-restore route's package folder and one extraction directory on the host, both deleted
-after the test; the TMT process and its windows on the owner's interactive desktop,
-closed after validation, TMT's own recent-file and application-data writes, and any
-update check the installed tool makes on its own, with any update prompt declined.
+directories on the host's Windows and WSL sides, retained (the host's persistent mise
+installations are not installed or updated); the temporary CI-pinned mise of item 6,
+deleted after use; the Windows restore route's package folder and one extraction
+directory on the host, both deleted after the test; the TMT process and its windows on
+the owner's interactive desktop, closed after validation, TMT's own recent-file and
+application-data writes, and any update check the installed tool makes on its own,
+with any update prompt declined.
 
 **Completion:** Remove this entry through a reviewed Wave change once the packaging
 changes and test evidence merge, or the owner ends it.
