@@ -8,6 +8,8 @@ public static class WindowsProcess
 {
     // The unofficial display name shared by help and the hidden owned parent.
     internal const string DisplayName = "AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)";
+    // The command name selected in docs/governance/operational-identities.yaml.
+    internal const string CommandName = "azureauth-unofficial";
 
     public static int Run(string[] arguments, long entryTimestamp)
     {
@@ -117,6 +119,13 @@ public static class WindowsProcess
                 return;
             }
 
+            if (arguments.Length == 1 && arguments[0] == "--version")
+            {
+                process.Ending();
+                exitCode = WindowsStandardHandles.Write(WindowsStandardHandles.Output, VersionText) ? 0 : 2;
+                return;
+            }
+
             var host = createHost(process);
             ownedHost = host as OwnedRequestHost;
             invocation = new RequestInvocation(arguments, host, entryTimestamp, process.CancellationToken);
@@ -210,20 +219,26 @@ public static class WindowsProcess
     internal static byte[] Help => System.Text.Encoding.UTF8.GetBytes($"""
         {DisplayName}
         Unofficial project: not a Microsoft product and not supported by Microsoft.
+        Version {ProductVersion.Full}
 
         Usage:
-          authenticate --protocol 1 --profile <absolute-Windows-path>
+          {CommandName} authenticate --protocol 1 --profile <absolute-Windows-path>
             --account-email <full-email> --scope <scope>
             --interaction <non-interactive-only|interactive-if-needed|force-interactive>
             [--scope <scope> ...] [--tenant <common|tenant-guid>]
             [--timeout-seconds <1..600>] [--cancel-on-stdin-close]
             [--telemetry <off|stderr>]
+          {CommandName} --version
 
         --profile selects an explicit, existing Client Profile file.
         --cancel-on-stdin-close requires a dedicated caller-owned lifetime pipe.
         Authentication writes one protocol 1 JSON result to stdout.
 
         """.ReplaceLineEndings("\n"));
+
+    // One line: the command name and the full SemVer 2.0 version with build metadata.
+    internal static byte[] VersionText =>
+        System.Text.Encoding.UTF8.GetBytes($"{CommandName} {ProductVersion.Full}\n");
 
     private sealed record ProcessCompletion(int ExitCode, long Timestamp);
 

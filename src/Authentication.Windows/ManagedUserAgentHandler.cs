@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using Authentication.Core;
 
 namespace Authentication.Windows;
 
@@ -14,7 +15,7 @@ internal sealed class ManagedUserAgentHandler(HttpMessageHandler innerHandler) :
             string.Equals(value.Product?.Name, ProductName, StringComparison.Ordinal)).ToArray())
             headers.Remove(prior);
 
-        headers.Add(new ProductInfoHeaderValue(ProductName, "0.0.0"));
+        headers.Add(new ProductInfoHeaderValue(ProductName, ProductVersion.Semantic));
         return base.SendAsync(request, cancellationToken);
     }
 }

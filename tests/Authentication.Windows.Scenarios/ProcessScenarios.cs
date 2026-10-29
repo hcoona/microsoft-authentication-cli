@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using Authentication.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Authentication.Windows.Scenarios;
@@ -16,12 +17,24 @@ public sealed class ProcessScenarios
         AssertNormalExit(child, 0);
         var text = Encoding.UTF8.GetString(child.Output);
         StringAssert.StartsWith(text, "AzureAuth Unofficial V2 (hcoona/microsoft-authentication-cli)\n"
-            + "Unofficial project: not a Microsoft product and not supported by Microsoft.\n");
+            + "Unofficial project: not a Microsoft product and not supported by Microsoft.\n"
+            + "Version " + ProductVersion.Full + "\n");
         StringAssert.Contains(text, "authenticate");
         StringAssert.Contains(text, "--profile");
+        StringAssert.Contains(text, "azureauth-unofficial --version");
         Assert.IsFalse(text.Contains("SYNTHETIC_INVALID_VERSION", StringComparison.Ordinal));
         Assert.IsFalse(child.Output.Contains((byte)'\r'), "Help output must use LF line endings only.");
         Assert.IsTrue(text.EndsWith("stdout.\n", StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    public async Task RootVersionCompletesWithoutAuthentication()
+    {
+        using var child = new ProcessFixture("version", Program.NativeCliExecutable);
+        await child.FinishAsync();
+        AssertNormalExit(child, 0);
+        Assert.AreEqual("azureauth-unofficial " + ProductVersion.Full + "\n", Encoding.UTF8.GetString(child.Output));
+        Assert.AreEqual(0, child.Error.Length);
     }
 
     [TestMethod]

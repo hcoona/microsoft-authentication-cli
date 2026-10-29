@@ -1,4 +1,5 @@
 using System.Net;
+using Authentication.Core;
 using Authentication.Windows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,7 +11,7 @@ public sealed class ManagedTransportScenarios
     [TestMethod]
     public async Task ManagedUserAgentIsSingleStableAndForwardsCancellation()
     {
-        const string product = "hcoona-microsoft-authentication-cli/0.0.0";
+        var product = "hcoona-microsoft-authentication-cli/" + ProductVersion.Semantic;
         using var original = new CancellationTokenSource();
         using var terminal = new CaptureHandler();
         using var handler = new ManagedUserAgentHandler(terminal);
