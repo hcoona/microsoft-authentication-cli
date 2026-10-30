@@ -19,7 +19,8 @@ gates stay tracked in
 prereleases claim no support, production readiness, compatibility, clean-machine
 deployment or satisfaction of the validation strategy's release gates.
 
-**Owner decisions:** The repository owner approved this entry on 2026-10-29 and decides:
+**Owner decisions:** The repository owner approved this entry on 2026-10-29, amended it
+on 2026-10-30, and decides:
 
 - Workflow: started manually (`workflow_dispatch`) and refused unless the ref is
   `refs/heads/main-v2`; runs on a GitHub-hosted `windows-latest` runner with the
@@ -45,9 +46,19 @@ deployment or satisfaction of the validation strategy's release gates.
   Assets: the package zip, the symbols zip and their `.sha256` files. Release notes link
   the package README, state the unofficial, unsigned and unsupported status and the
   bundled Visual Studio Profile's limits, and link the release review.
+- Asset contents (2026-10-30): the symbols zip also carries the package's `LICENSE.txt`
+  and `THIRD-PARTY-NOTICES.txt`, and the text files of both zips use LF line endings
+  regardless of the build host's Git configuration. The draft of `v0.1.0-alpha.31`,
+  built before this change, is not published and is deleted.
 - Publication: the repository owner reviews each draft and publishes it manually as a
-  prerelease; publication is the owner's release decision. No local verification of a
-  downloaded draft is required; Mark-of-the-Web, SmartScreen and Smart App Control
+  prerelease; publication is the owner's release decision. The owner may instead
+  instruct the authoring agent to publish a draft through the owner's GitHub session.
+  The instruction names the version and is an owner comment, or an owner-attributed
+  disposition, on Issue #506 posted before publication; the agent publishes only when
+  that version's release review and independent triage record no unresolved finding
+  and no finding that needs an owner decision. Such a publication is the owner's
+  publication decision, carried out through the owner's session. No local verification
+  of a downloaded draft is required; Mark-of-the-Web, SmartScreen and Smart App Control
   behavior is not evaluated or claimed.
 - Scope: this entry covers every `0.1.0-alpha` prerelease. A version other than
   `0.1.0-alpha.{height}`, a non-prerelease, or a change to the release workflow's
@@ -84,7 +95,9 @@ deployment or satisfaction of the validation strategy's release gates.
    embed no user-identifying build path; independent triage of any finding; recorded as
    a comment on Issue #506 that the release notes link.
 4. Correct defects in the workflow, the packaging script or the records that a run
-   exposes, with tests where applicable.
+   exposes, with tests where applicable. Implement the asset-contents decision in
+   `package.ps1`, `.gitattributes` and the Windows design, and delete the
+   `v0.1.0-alpha.31` draft.
 
 **Exclusions:** No real-account authentication, WAM UI or experiment on any host. No
 signing, installer, MSIX, WinGet, Scoop, automatic update, PATH or registry integration,
