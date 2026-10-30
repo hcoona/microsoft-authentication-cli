@@ -9,3 +9,8 @@ tools/learn-cli/package-lock.json text eol=lf
 
 # C# sources compile with their checked-out bytes; keep them LF on every host.
 *.cs text eol=lf
+
+# Files copied into the Windows package keep LF on every host; package.ps1 also
+# normalizes them.
+packaging/windows/** text eol=lf
+LICENSE.txt text eol=lf
