@@ -52,8 +52,12 @@ on 2026-10-30, and decides:
   built before this change, is not published and is deleted.
 - Publication: the repository owner reviews each draft and publishes it manually as a
   prerelease; publication is the owner's release decision. The owner may instead
-  instruct the authoring agent to publish a reviewed draft through the owner's GitHub
-  session; the release review comment records that instruction. No local verification
+  instruct the authoring agent to publish a draft through the owner's GitHub session.
+  The instruction names the version and is an owner comment, or an owner-attributed
+  disposition, on Issue #506 posted before publication; the agent publishes only when
+  that version's release review and independent triage record no unresolved finding
+  and no finding that needs an owner decision. Such a publication is the owner's
+  publication decision, carried out through the owner's session. No local verification
   of a downloaded draft is required; Mark-of-the-Web, SmartScreen and Smart App Control
   behavior is not evaluated or claimed.
 - Scope: this entry covers every `0.1.0-alpha` prerelease. A version other than
