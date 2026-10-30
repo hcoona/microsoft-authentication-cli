@@ -456,20 +456,19 @@ families:
     failure_mode: Current conclusions cite real-host observations whose scope, evidence level, limitations, or deviations can no longer be read, or the observations are extended beyond the observed roles, callers, subjects, host, and existing state.
     review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
-  - id: portable-package-host-test-protocol
+  - id: portable-package-host-test-evidence
     state: current
-    concern: Accepted protocol, attempt ledger, and sanitized results for the host test of the locally built Windows portable package
+    concern: Completed 2026-10-29 host test of the locally built Windows portable package, with its accepted protocol as method, sanitized results, bounded conclusions, limitations, and deviation dispositions
     carrier: repository-file
     path: docs/research/experiments/portable-package-host-test.md
     format: markdown
     producer: Validation maintainer
     maintainer: Validation maintainer
     consumers:
-      - Repository owner and operator executing the bounded host calls
       - Validation, design, and security reviewers relying on the recorded observations and their limitations
-    creation_trigger: The Delivery Wave entry "Windows Portable Package, Local Build and Test" requires an accepted protocol before any real call with the packaged archive.
-    failure_mode: Real calls run outside the accepted subject, effects, or limits, or their evidence leaks private data or overstates scope.
-    review_point: Independent research-evidence review of every protocol amendment and results change
+    creation_trigger: Issue #506 produced host-test observations of the portable package that the validation strategy cites; the protocol and its execution history remain in Git.
+    failure_mode: Current conclusions cite host-test observations whose scope, evidence level, limitations, or deviations can no longer be read, or the observations are extended beyond the observed roles, callers, subject, host, and existing state.
+    review_point: Independent research-evidence review when a citing conclusion changes or the evidence is corrected
 
   - id: developer-tooling-evidence
     state: current

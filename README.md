@@ -21,7 +21,8 @@ Start with:
 ## Windows Portable Package
 
 The Windows x64 command is `azureauth-unofficial`, built as an unsigned portable zip
-that you extract into a directory of your choice. No package has been published yet. The
+that you extract into a directory of your choice. Unsupported `0.1.0-alpha` prereleases
+may be published on this repository's GitHub Releases page after a release review. The
 [package README](packaging/windows/README.md) covers installation, use from Windows and
 WSL, the bundled Visual Studio compatibility Profile and its limits, and removal.
 

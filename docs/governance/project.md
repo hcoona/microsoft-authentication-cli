@@ -41,8 +41,12 @@ Until those identities are selected:
 
 ## Support and Release
 
-The repository currently provides no published v2 release, production-readiness claim,
-or service-level objective.
+Unsupported `0.1.0-alpha` prereleases of the Windows `azureauth-unofficial` package may
+be published as GitHub prereleases, built by the
+[release workflow](../../.github/workflows/release.yml) and published by the repository
+owner after a release review. They carry no support, production-readiness or
+compatibility claim, and the repository provides no supported v2 release or
+service-level objective.
 
 A future support claim must identify the exact release, platform, account state, client
 application, mechanism, dependency set, and validation evidence to which it applies.

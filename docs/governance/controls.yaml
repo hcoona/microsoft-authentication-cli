@@ -326,6 +326,37 @@ controls:
       - ci
     failure_mode: A Windows adapter, CLI or Windows scenario change merges without compiling, or with a synthetic Windows scenario failing, because only the platform-neutral projects ran in CI.
 
+  - id: windows-release-workflow
+    state: current
+    class: mechanical
+    enforcement: blocking
+    producer: GitHub Actions Release workflow
+    maintainer: Control maintainer
+    consumers:
+      - Repository owner and the independent release reviewer before a draft prerelease is published
+    governing_rules:
+      - docs/governance/governance-system.md#gov-005-controls-implement-policy
+      - docs/governance/project.md#support-and-release
+      - docs/product/requirements/quality-build-and-validation.md#v2-req-053-public-build-chain
+      - docs/designs/windows-ado-authentication.md#release-workflow
+    invariant: >-
+      The main-v2 copy of the workflow drafts a 0.1.0-alpha prerelease only for a manually
+      started run on refs/heads/main-v2 that restored from public package sources in locked mode with the
+      checksum-pinned SDK, passed every tests/Authentication.Windows.Scenarios scenario
+      outside the WindowsHostTiming category, passed every package.ps1 check without its
+      development switches, recorded its installed native build chain, attested both zips, targets
+      the built commit, and uses a version with no existing tag, release or draft. Each job holds
+      only the token permissions its step needs. Publication stays the repository owner's
+      decision after the release review, which also checks that the run and its attestation
+      come from that workflow at refs/heads/main-v2.
+    runner: github-platform
+    implementation:
+      kind: repository-path
+      value: .github/workflows/release.yml
+    execution_points:
+      - release
+    failure_mode: A prerelease is drafted from an unreviewed ref, a failing build, an unattested or mismatched asset, or a token broader than the step needs.
+
   - id: record-system-review
     state: current
     class: procedural-review

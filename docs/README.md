@@ -47,7 +47,7 @@ is navigation, not an independent authority.
 | Design and validation reviewers | Completed synthetic Native AOT publish, upstream native-import, and public Native AOT assessment evidence | [`windows-native-aot.md`](research/experiments/windows-native-aot.md) |
 | Validation and design reviewers | Completed Windows Slice selected-account, WSL, and host observation evidence and its public-source basis | [`windows-slice-validation.md`](research/experiments/windows-slice-validation.md) |
 | Validation, design, and security reviewers | Completed 2026-10-15 real-host validation method, results, limitations, and deviation dispositions for the `main-v2` Windows product | [`real-host-validation.md`](research/experiments/real-host-validation.md) |
-| Experiment operators and validation reviewers | Host test protocol, attempt ledger, and results for the locally built Windows portable package | [`portable-package-host-test.md`](research/experiments/portable-package-host-test.md) |
+| Validation, design, and security reviewers | Completed 2026-10-29 host test method, results, limitations, and deviation dispositions for the locally built Windows portable package | [`portable-package-host-test.md`](research/experiments/portable-package-host-test.md) |
 | Research and release reviewers | Mutable public facts and their recheck triggers | [`research/rechecks.yaml`](research/rechecks.yaml) |
 | Maintainers and upstream-source consumers | Upstream baseline and import policy | [`../UPSTREAM.md`](../UPSTREAM.md) |
 
