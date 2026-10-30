@@ -153,7 +153,7 @@ Native AOT, and admits exactly this content:
 | --- | --- |
 | `azureauth-unofficial.exe` | Native AOT publish output. |
 | `msalruntime.dll` | NativeInterop's `win-x64` asset from the same publish; it must stay beside the executable because loading is restricted to the application directory and System32. |
-| `profiles/visual-studio-legacy-wam.json` | `packaging/windows/profiles/`, byte-for-byte the schema's [Visual Studio legacy candidate](#visual-studio-legacy-candidate); a test asserts that equality and that the product reader accepts the file. |
+| `profiles/visual-studio-legacy-wam.json` | `packaging/windows/profiles/`, JSON-equal to the schema's [Visual Studio legacy candidate](#visual-studio-legacy-candidate) (same members and values); a test asserts that equality and that the product reader accepts the file. |
 | `README.md` | `packaging/windows/README.md`: unofficial notice, extraction, Windows and WSL use, the bundled Profile's ownership and limits, unsigned and SmartScreen notes, and removal. |
 | `LICENSE.txt` | The repository license. |
 | `THIRD-PARTY-NOTICES.txt` | A fixed header for the MSAL components and the .NET runtime notices from the locked ILCompiler runtime package. |
@@ -166,9 +166,12 @@ System32 DLLs and API sets, rejecting Visual C++ redistributable DLLs by name be
 they are not part of Windows even when a development host has them in System32. The
 script then checks the version resource
 described below and runs the staged executable's `--version` from its own directory
-with `PATH` limited to System32, and finally writes the zip and a SHA-256 file. Beside
-them it writes `azureauth-unofficial-<version>-win-x64-symbols.zip`, holding the symbol
-files, with its own SHA-256 file; the script refuses to overwrite any of these outputs.
+with `PATH` limited to System32, and finally writes the zip and a SHA-256 file. The
+four text files are written with LF line endings whatever the checkout's Git
+configuration, and the script fails if any contains a carriage return. Beside them it
+writes `azureauth-unofficial-<version>-win-x64-symbols.zip`, holding the symbol files and
+the same `LICENSE.txt` and `THIRD-PARTY-NOTICES.txt`, with its own SHA-256 file; the
+script refuses to overwrite any of these outputs.
 These checks are packaging checks on the build host, not evidence of deployment without
 development-machine dependencies.
 
