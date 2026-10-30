@@ -10,8 +10,9 @@ AOT requires. The script refuses a dirty worktree, restores in locked mode from 
 repository's nuget.org-only configuration, publishes Native AOT, enforces the archive
 content allowlist, checks that native imports resolve only to inbox System32 DLLs and
 API sets, checks the executable's version resource, runs the packaged --version, and
-writes the zip and its SHA-256. It also writes the publish output's symbol files into a
-separate symbols zip with its own SHA-256, beside the package and never inside it.
+writes the zip and its SHA-256. It also writes the publish output's symbol files, with the
+same license and notices, into a separate symbols zip with its own SHA-256, beside the
+package and never inside it. Packaged text files use LF line endings.
 
 The script runs no authentication. It writes only under -OutputDirectory, the
 repository's ignored obj and bin directories, and the NuGet package folder.
@@ -153,10 +154,19 @@ try {
     } finally { $env:PATH = $savedPath }
     if ($reported -ne "$CommandName $full") { Fail "packaged --version reported '$reported', expected '$CommandName $full'." }
 
+    # Packaged text files use LF line endings whatever the checkout's Git configuration.
+    function Write-LfText([string] $Text, [string] $Destination) {
+        $lf = $Text.Replace("`r`n", "`n").Replace("`r", "`n")
+        [IO.File]::WriteAllText($Destination, $lf, [Text.UTF8Encoding]::new($false))
+    }
+    function Copy-LfText([string] $Source, [string] $Destination) {
+        Write-LfText ([IO.File]::ReadAllText($Source)) $Destination
+    }
+
     New-Item -ItemType Directory -Path (Join-Path $stage 'profiles') | Out-Null
-    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'profiles\visual-studio-legacy-wam.json') -Destination (Join-Path $stage 'profiles')
-    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'README.md') -Destination $stage
-    Copy-Item -LiteralPath (Join-Path $Repository 'LICENSE.txt') -Destination $stage
+    Copy-LfText (Join-Path $PSScriptRoot 'profiles\visual-studio-legacy-wam.json') (Join-Path $stage 'profiles\visual-studio-legacy-wam.json')
+    Copy-LfText (Join-Path $PSScriptRoot 'README.md') (Join-Path $stage 'README.md')
+    Copy-LfText (Join-Path $Repository 'LICENSE.txt') (Join-Path $stage 'LICENSE.txt')
 
     # Third-party notices: the fixed header, then the .NET runtime notices from the
     # ILCompiler runtime package that the lock file pins.
@@ -170,20 +180,31 @@ try {
     if (-not (Test-Path -LiteralPath $runtimeNotices)) { Fail "runtime notices not found: $runtimeNotices" }
     $notices = (Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'THIRD-PARTY-NOTICES.header.txt')) +
         (Get-Content -Raw -LiteralPath $runtimeNotices)
-    [IO.File]::WriteAllText((Join-Path $stage 'THIRD-PARTY-NOTICES.txt'), $notices, [Text.UTF8Encoding]::new($false))
+    Write-LfText $notices (Join-Path $stage 'THIRD-PARTY-NOTICES.txt')
 
     $archive = @(Get-ChildItem -LiteralPath $stage -Recurse -File | ForEach-Object {
         [IO.Path]::GetRelativePath($stage, $_.FullName) } | Sort-Object)
     $allowed = @("$CommandName.exe", 'LICENSE.txt', 'README.md', 'THIRD-PARTY-NOTICES.txt', 'msalruntime.dll',
         'profiles\visual-studio-legacy-wam.json') | Sort-Object
     if (Compare-Object $archive $allowed) { Fail "archive content differs from the allowlist: $($archive -join ', ')" }
+    $textFiles = @('LICENSE.txt', 'README.md', 'THIRD-PARTY-NOTICES.txt', 'profiles\visual-studio-legacy-wam.json')
+    foreach ($name in $textFiles) {
+        if ([IO.File]::ReadAllBytes((Join-Path $stage $name)) -contains 13) { Fail "$name contains a carriage return." }
+    }
+
+    # The symbols zip holds the symbol files and the same license and notices.
+    $symbolsStage = Join-Path $work 'symbols'
+    New-Item -ItemType Directory -Path $symbolsStage | Out-Null
+    foreach ($name in $symbolFiles) { Copy-Item -LiteralPath (Join-Path $publish $name) -Destination $symbolsStage }
+    foreach ($name in @('LICENSE.txt', 'THIRD-PARTY-NOTICES.txt')) {
+        Copy-Item -LiteralPath (Join-Path $stage $name) -Destination $symbolsStage
+    }
 
     Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip -CompressionLevel Optimal
     $hash = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
     [IO.File]::WriteAllText("$zip.sha256", "$hash  $packageName.zip`n", [Text.UTF8Encoding]::new($false))
 
-    Compress-Archive -LiteralPath ($symbolFiles | ForEach-Object { Join-Path $publish $_ }) `
-        -DestinationPath $symbolsZip -CompressionLevel Optimal
+    Compress-Archive -Path (Join-Path $symbolsStage '*') -DestinationPath $symbolsZip -CompressionLevel Optimal
     $symbolsHash = (Get-FileHash -LiteralPath $symbolsZip -Algorithm SHA256).Hash.ToLowerInvariant()
     [IO.File]::WriteAllText("$symbolsZip.sha256", "$symbolsHash  $packageName-symbols.zip`n",
         [Text.UTF8Encoding]::new($false))
@@ -191,7 +212,7 @@ try {
 
     Write-Host "Wrote $zip"
     Write-Host "SHA-256 $hash"
-    Write-Host "Wrote $symbolsZip ($($symbolFiles -join ', '))"
+    Write-Host "Wrote $symbolsZip ($(($symbolFiles + 'LICENSE.txt', 'THIRD-PARTY-NOTICES.txt') -join ', '))"
     Write-Host "SHA-256 $symbolsHash"
 }
 finally {
